@@ -18,6 +18,7 @@ export default function GalleryView() {
                             alt={`Gallery ${i + 1}`}
                             fill
                             className="object-cover transition-transform hover:scale-105 duration-500"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         />
                     </div>
                 ))}

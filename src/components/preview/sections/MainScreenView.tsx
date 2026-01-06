@@ -28,7 +28,7 @@ export default function MainScreenView() {
                     style={mainScreen.showBorder ? { borderColor: accentColor } : {}}
                 >
                     {imageUrl ? (
-                        <Image src={imageUrl} alt={`${groom.firstName}와 ${bride.firstName}의 결혼식 메인 사진`} fill className="object-cover" />
+                        <Image src={imageUrl} alt={`${groom.firstName}와 ${bride.firstName}의 결혼식 메인 사진`} fill className="object-cover" priority />
                     ) : (
                         <div className="flex flex-col items-center justify-center h-full opacity-30 text-gray-400">
                             <Heart size={48} />

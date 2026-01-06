@@ -69,6 +69,9 @@ interface InvitationState {
     };
 
     // Gallery State
+    galleryTitle: string;
+    galleryType: 'swipe' | 'thumbnail' | 'grid';
+    galleryPopup: boolean;
     gallery: string[];
 
     // Account State
@@ -100,6 +103,9 @@ interface InvitationState {
     setImageUrl: (url: string | null) => void;
     setTheme: (theme: Partial<InvitationState['theme']>) => void;
     setGallery: (images: string[]) => void;
+    setGalleryTitle: (title: string) => void;
+    setGalleryType: (type: 'swipe' | 'thumbnail' | 'grid') => void;
+    setGalleryPopup: (use: boolean) => void;
     setAccounts: (accounts: InvitationState['accounts']) => void;
     setMainScreen: (data: Partial<InvitationState['mainScreen']>) => void;
     setShowCalendar: (show: boolean) => void;
@@ -170,6 +176,9 @@ export const useInvitationStore = create<InvitationState>((set) => ({
     },
 
     gallery: [],
+    galleryTitle: '웨딩 갤러리',
+    galleryType: 'swipe',
+    galleryPopup: false,
     accounts: [
         { type: 'groom', bank: '카카오뱅크', accountNumber: '3333-01-2345678', holder: '이도현' },
         { type: 'bride', bank: '신한은행', accountNumber: '110-123-456789', holder: '김지수' },
@@ -212,6 +221,9 @@ export const useInvitationStore = create<InvitationState>((set) => ({
     setImageUrl: (url) => set({ imageUrl: url }),
     setTheme: (newTheme) => set((state) => ({ theme: { ...state.theme, ...newTheme } })),
     setGallery: (images) => set({ gallery: images }),
+    setGalleryTitle: (title) => set({ galleryTitle: title }),
+    setGalleryType: (type) => set({ galleryType: type }),
+    setGalleryPopup: (popup) => set({ galleryPopup: popup }),
     setAccounts: (accounts) => set({ accounts }),
     setMainScreen: (data) => set((state) => ({ mainScreen: { ...state.mainScreen, ...data } })),
     setShowCalendar: (show) => set({ showCalendar: show }),

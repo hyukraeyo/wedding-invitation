@@ -1,36 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Map, MapMarker } from 'react-kakao-maps-sdk';
+import { Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk';
 import { MapPin, Navigation, Copy } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 
 export default function LocationView() {
     const { location, address, detailAddress } = useInvitationStore();
     const [coords, setCoords] = useState<{ lat: number; lng: number }>({ lat: 37.5665, lng: 126.9780 }); // Default: Seoul City Hall
-    const [isMapLoaded, setIsMapLoaded] = useState(false);
+
+    const [loading, error] = useKakaoLoader({
+        appkey: process.env.NEXT_PUBLIC_KAKAO_APP_KEY!,
+        libraries: ["services", "clusterer"],
+    });
 
     useEffect(() => {
-        const checkKakao = () => {
-            if (window.kakao && window.kakao.maps) {
-                window.kakao.maps.load(() => {
-                    setIsMapLoaded(true);
-                });
-                return true;
-            }
-            return false;
-        };
-
-        if (!checkKakao()) {
-            const timer = setInterval(() => {
-                if (checkKakao()) {
-                    clearInterval(timer);
-                }
-            }, 500);
-            return () => clearInterval(timer);
-        }
-    }, []);
-
-    useEffect(() => {
-        if (isMapLoaded && address) {
+        if (!loading && window.kakao && window.kakao.maps && window.kakao.maps.services && address) {
             // Geocoding
             const geocoder = new window.kakao.maps.services.Geocoder();
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -41,12 +24,14 @@ export default function LocationView() {
                 }
             });
         }
-    }, [address, isMapLoaded]);
+    }, [address, loading]);
 
     const handleCopyAddress = () => {
         navigator.clipboard.writeText(`${address} ${detailAddress}`);
         alert('주소가 복사되었습니다.');
     };
+
+    if (error) return <div>Error loading map</div>;
 
     return (
         <div className="w-full">
@@ -56,7 +41,7 @@ export default function LocationView() {
             </div>
 
             <div className="w-full h-[300px] rounded-lg overflow-hidden border border-gray-100 shadow-sm relative bg-gray-50">
-                {isMapLoaded ? (
+                {!loading ? (
                     <Map
                         center={coords}
                         style={{ width: '100%', height: '100%' }}
@@ -87,7 +72,7 @@ export default function LocationView() {
                 ) : (
                     <div className="flex flex-col items-center justify-center h-full text-gray-400 gap-2">
                         <MapPin size={32} />
-                        <span className="text-xs">지도를 불러올 수 없습니다. API 키를 확인해주세요.</span>
+                        <span className="text-xs">지도를 불러오는 중...</span>
                     </div>
                 )}
             </div>
