@@ -29,6 +29,20 @@ interface InvitationState {
     location: string; // Wedding Hall Name e.g. "The Convention"
     address: string; // Basic Address e.g. "Seoul ..."
     detailAddress: string; // e.g. "2nd Floor"
+
+    mapType: 'kakao' | 'naver';
+
+    // New Location Fields
+    locationTitle: string; // e.g. "오시는 길"
+    locationContact: string;
+    showMap: boolean;
+    lockMap: boolean;
+    showNavigation: boolean;
+    mapHeight: 'default' | 'small';
+    mapZoom: number;
+    showSketch: boolean;
+    sketchUrl: string | null;
+
     coordinates: { lat: number; lng: number } | null; // For Map
     message: string;
     greetingTitle: string;
@@ -46,6 +60,11 @@ interface InvitationState {
         title: string;
         subtitle: string;
         customDatePlace: string;
+        // Visibility Flags
+        showTitle: boolean;
+        showGroomBride: boolean;
+        showSubtitle: boolean;
+        showDatePlace: boolean;
     };
 
     // Date & Time Display Options
@@ -95,6 +114,18 @@ interface InvitationState {
     setDetailAddress: (detail: string) => void;
     setCoordinates: (lat: number, lng: number) => void;
 
+    // New Location Setters
+    setLocationTitle: (title: string) => void;
+    setLocationContact: (contact: string) => void;
+    setShowMap: (show: boolean) => void;
+    setLockMap: (lock: boolean) => void;
+    setShowNavigation: (show: boolean) => void;
+    setMapHeight: (height: 'default' | 'small') => void;
+    setMapZoom: (zoom: number) => void;
+    setMapType: (type: 'kakao' | 'naver') => void;
+    setShowSketch: (show: boolean) => void;
+    setSketchUrl: (url: string | null) => void;
+
     setMessage: (message: string) => void;
     setGreetingTitle: (title: string) => void;
     setShowNamesAtBottom: (show: boolean) => void;
@@ -139,6 +170,18 @@ export const useInvitationStore = create<InvitationState>((set) => ({
     location: '더 컨벤션 웨딩홀',
     address: '서울 송파구 올림픽로 319',
     detailAddress: '교통회관 1층 그랜드볼룸',
+    mapType: 'kakao',
+
+    locationTitle: '오시는 길',
+    locationContact: '02-000-0000',
+    showMap: true,
+    lockMap: true,
+    showNavigation: true,
+    mapHeight: 'default',
+    mapZoom: 4, // Default Kakao map level
+    showSketch: false,
+    sketchUrl: null,
+
     coordinates: { lat: 37.515, lng: 127.102 }, // Default: Jamsil
     message: '서로의 빛이 되어\n평생을 함께 걸어가겠습니다.\n저희 두 사람의 시작을\n축복해 주시면 감사하겠습니다.',
     greetingTitle: '소중한 분들을 초대합니다',
@@ -156,6 +199,10 @@ export const useInvitationStore = create<InvitationState>((set) => ({
         title: 'THE NEW BEGINNING',
         subtitle: 'We are getting married',
         customDatePlace: '0000.00.00. Sunday 00:00 PM\nOOO예식장 1F, OOO홀',
+        showTitle: true,
+        showGroomBride: true,
+        showSubtitle: true,
+        showDatePlace: true,
     },
 
     showCalendar: true,
@@ -211,6 +258,18 @@ export const useInvitationStore = create<InvitationState>((set) => ({
     setLocation: (location) => set({ location }),
     setAddress: (address) => set({ address }),
     setDetailAddress: (detailAddress) => set({ detailAddress }),
+
+    setLocationTitle: (title) => set({ locationTitle: title }),
+    setLocationContact: (contact) => set({ locationContact: contact }),
+    setShowMap: (show) => set({ showMap: show }),
+    setLockMap: (lock) => set({ lockMap: lock }),
+    setShowNavigation: (show) => set({ showNavigation: show }),
+    setMapHeight: (height) => set({ mapHeight: height }),
+    setMapZoom: (zoom) => set({ mapZoom: zoom }),
+    setMapType: (type) => set({ mapType: type }),
+    setShowSketch: (show) => set({ showSketch: show }),
+    setSketchUrl: (url) => set({ sketchUrl: url }),
+
     setCoordinates: (lat, lng) => set({ coordinates: { lat, lng } }),
     setMessage: (message) => set({ message }),
     setGreetingTitle: (title) => set({ greetingTitle: title }),

@@ -1,6 +1,6 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import Image from 'next/image';
-import { LayoutTemplate, Check, Image as ImageIcon, Type } from 'lucide-react';
+import { LayoutTemplate, Check, Image as ImageIcon, Type, ChevronDown, ChevronUp, Info } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 
@@ -15,6 +15,8 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
         imageUrl, setImageUrl,
         groom, bride
     } = useInvitationStore();
+
+    const [isTextSectionOpen, setIsTextSectionOpen] = useState(true);
 
     const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -141,68 +143,136 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                     </div>
                 </div>
 
-                {/* Custom Text */}
-                <div className="space-y-4 pt-4 border-t border-gray-100">
-                    <div className="flex items-center gap-2 mb-2">
-                        <Type size={16} className="text-gray-500" />
-                        <span className="text-sm font-bold text-gray-800">문구</span>
+                {/* Custom Text (Collapsible) */}
+                <div className="pt-4 border-t border-gray-100">
+                    <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center gap-2">
+                            <Type size={16} className="text-gray-500" />
+                            <span className="text-sm font-bold text-gray-800">문구</span>
+                        </div>
+
+                        <button
+                            onClick={() => setIsTextSectionOpen(!isTextSectionOpen)}
+                            className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
+                        >
+                            <span className="text-xs font-medium text-gray-600">메인화면 문구 커스텀</span>
+                            {isTextSectionOpen ? <ChevronUp size={14} className="text-gray-500" /> : <ChevronDown size={14} className="text-gray-500" />}
+                        </button>
                     </div>
 
-                    <div className="space-y-3">
-                        <div className="grid grid-cols-[40px_1fr] gap-2 items-center">
-                            <span className="text-xs text-gray-400 text-center border p-1 rounded">기본</span>
-                            <input
-                                type="text"
-                                value={mainScreen.title}
-                                onChange={(e) => setMainScreen({ title: e.target.value })}
-                                className="w-full px-3 py-2 border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green outline-none uppercase"
-                                placeholder="THE NEW BEGINNING"
-                            />
-                        </div>
+                    {isTextSectionOpen && (
+                        <div className="space-y-6 animate-in slide-in-from-top-2 fade-in duration-200">
+                            <div className="space-y-3">
+                                {/* Title */}
+                                <div className="flex items-center gap-3">
+                                    <input
+                                        type="checkbox"
+                                        checked={mainScreen.showTitle}
+                                        onChange={(e) => setMainScreen({ showTitle: e.target.checked })}
+                                        className="w-5 h-5 rounded border-gray-300 text-gray-800 focus:ring-gray-800"
+                                    />
+                                    <div className="grid grid-cols-[40px_1fr] gap-2 items-center flex-1">
+                                        <span className="text-xs text-gray-400 text-center border p-1 rounded">기본</span>
+                                        <input
+                                            type="text"
+                                            value={mainScreen.title}
+                                            onChange={(e) => setMainScreen({ title: e.target.value })}
+                                            className="w-full px-3 py-2 border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green outline-none uppercase"
+                                            placeholder="THE NEW BEGINNING"
+                                            disabled={!mainScreen.showTitle}
+                                        />
+                                    </div>
+                                </div>
 
-                        <div className="grid grid-cols-[40px_1fr_60px_1fr] gap-2 items-center">
-                            <span className="text-xs text-gray-400 text-center border p-1 rounded">기본</span>
-                            <input
-                                type="text"
-                                value={groom.firstName || '신랑'}
-                                readOnly
-                                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm text-gray-500"
-                            />
-                            <input
-                                type="text"
-                                value="그리고"
-                                readOnly
-                                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm text-gray-500 text-center"
-                            />
-                            <input
-                                type="text"
-                                value={bride.firstName || '신부'}
-                                readOnly
-                                className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm text-gray-500"
-                            />
-                        </div>
+                                {/* Groom & Bride Name */}
+                                <div className="flex items-center gap-3">
+                                    <input
+                                        type="checkbox"
+                                        checked={mainScreen.showGroomBride}
+                                        onChange={(e) => setMainScreen({ showGroomBride: e.target.checked })}
+                                        className="w-5 h-5 rounded border-gray-300 text-gray-800 focus:ring-gray-800 shrink-0"
+                                    />
+                                    <div className="grid grid-cols-[40px_1fr_60px_1fr] gap-2 items-center flex-1">
+                                        <span className="text-xs text-gray-400 text-center border p-1 rounded">기본</span>
+                                        <input
+                                            type="text"
+                                            value={groom.firstName || '신랑'}
+                                            readOnly
+                                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm text-gray-500"
+                                            disabled={!mainScreen.showGroomBride}
+                                        />
+                                        <input
+                                            type="text"
+                                            value="그리고"
+                                            readOnly
+                                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm text-gray-500 text-center"
+                                            disabled={!mainScreen.showGroomBride}
+                                        />
+                                        <input
+                                            type="text"
+                                            value={bride.firstName || '신부'}
+                                            readOnly
+                                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm text-gray-500"
+                                            disabled={!mainScreen.showGroomBride}
+                                        />
+                                    </div>
+                                </div>
 
-                        <div className="grid grid-cols-[40px_1fr] gap-2 items-center">
-                            <span className="text-xs text-gray-400 text-center border p-1 rounded">기본</span>
-                            <input
-                                type="text"
-                                value={mainScreen.subtitle}
-                                onChange={(e) => setMainScreen({ subtitle: e.target.value })}
-                                className="w-full px-3 py-2 border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green outline-none"
-                                placeholder="We are getting married"
-                            />
-                        </div>
+                                {/* Subtitle */}
+                                <div className="flex items-center gap-3">
+                                    <input
+                                        type="checkbox"
+                                        checked={mainScreen.showSubtitle}
+                                        onChange={(e) => setMainScreen({ showSubtitle: e.target.checked })}
+                                        className="w-5 h-5 rounded border-gray-300 text-gray-800 focus:ring-gray-800"
+                                    />
+                                    <div className="grid grid-cols-[40px_1fr] gap-2 items-center flex-1">
+                                        <span className="text-xs text-gray-400 text-center border p-1 rounded">기본</span>
+                                        <input
+                                            type="text"
+                                            value={mainScreen.subtitle}
+                                            onChange={(e) => setMainScreen({ subtitle: e.target.value })}
+                                            className="w-full px-3 py-2 border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green outline-none"
+                                            placeholder="We are getting married"
+                                            disabled={!mainScreen.showSubtitle}
+                                        />
+                                    </div>
+                                </div>
 
-                        <div className="grid grid-cols-[40px_1fr] gap-2 items-start">
-                            <span className="text-xs text-gray-400 text-center border p-1 rounded mt-1">기본</span>
-                            <textarea
-                                value={mainScreen.customDatePlace}
-                                onChange={(e) => setMainScreen({ customDatePlace: e.target.value })}
-                                className="w-full px-3 py-2 border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green outline-none min-h-[60px] resize-none leading-snug"
-                                placeholder="0000.00.00 ..."
-                            />
+                                {/* Custom Date & Place */}
+                                <div className="flex items-start gap-3">
+                                    <input
+                                        type="checkbox"
+                                        checked={mainScreen.showDatePlace}
+                                        onChange={(e) => setMainScreen({ showDatePlace: e.target.checked })}
+                                        className="w-5 h-5 rounded border-gray-300 text-gray-800 focus:ring-gray-800 mt-2"
+                                    />
+                                    <div className="grid grid-cols-[40px_1fr] gap-2 items-start flex-1">
+                                        <span className="text-xs text-gray-400 text-center border p-1 rounded mt-1">기본</span>
+                                        <textarea
+                                            value={mainScreen.customDatePlace}
+                                            onChange={(e) => setMainScreen({ customDatePlace: e.target.value })}
+                                            className="w-full px-3 py-2 border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green outline-none min-h-[60px] resize-none leading-snug"
+                                            placeholder="0000.00.00 ..."
+                                            disabled={!mainScreen.showDatePlace}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Info Text */}
+                            <div className="space-y-1 text-xs text-gray-400">
+                                <div className="flex items-center gap-1">
+                                    <Info size={12} />
+                                    <span>내용을 입력하지 않아도 됩니다.</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <Info size={12} />
+                                    <span>문구 체크박스를 해제하면 해당 영역이 완전 사라집니다.</span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
 
             </div>

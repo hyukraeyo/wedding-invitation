@@ -64,26 +64,34 @@ export default function MainScreenView() {
            ${mainScreen.layout === 'fill' ? 'absolute bottom-12 left-0 right-0 text-white' : 'mt-8'}
         `}>
                     {/* Title */}
-                    <div className={`text-sm tracking-[0.2em] uppercase mb-4 ${mainScreen.layout === 'fill' ? 'opacity-80' : 'opacity-60 text-forest-green'}`}>
-                        {mainScreen.title}
-                    </div>
+                    {mainScreen.showTitle && (
+                        <div className={`text-sm tracking-[0.2em] uppercase mb-4 ${mainScreen.layout === 'fill' ? 'opacity-80' : 'opacity-60 text-forest-green'}`}>
+                            {mainScreen.title}
+                        </div>
+                    )}
 
                     {/* Names */}
-                    <div className={`font-serif text-2xl mb-4 flex items-center gap-3 ${mainScreen.layout === 'fill' ? 'font-light' : 'font-normal'}`}>
-                        <span>{groom.firstName}</span>
-                        <span className="text-xs opacity-60">and</span>
-                        <span>{bride.firstName}</span>
-                    </div>
+                    {mainScreen.showGroomBride && (
+                        <div className={`font-serif text-2xl mb-4 flex items-center gap-3 ${mainScreen.layout === 'fill' ? 'font-light' : 'font-normal'}`}>
+                            <span>{groom.firstName}</span>
+                            <span className="text-xs opacity-60">and</span>
+                            <span>{bride.firstName}</span>
+                        </div>
+                    )}
 
                     {/* Subtitle */}
-                    <div className={`text-sm mb-6 ${mainScreen.layout === 'fill' ? 'opacity-90 font-light' : 'text-gray-600'}`}>
-                        {mainScreen.subtitle}
-                    </div>
+                    {mainScreen.showSubtitle && (
+                        <div className={`text-sm mb-6 ${mainScreen.layout === 'fill' ? 'opacity-90 font-light' : 'text-gray-600'}`}>
+                            {mainScreen.subtitle}
+                        </div>
+                    )}
 
                     {/* Date & Place */}
-                    <div className={`text-xs leading-relaxed whitespace-pre-wrap ${mainScreen.layout === 'fill' ? 'opacity-80' : 'text-gray-400'}`}>
-                        {mainScreen.customDatePlace}
-                    </div>
+                    {mainScreen.showDatePlace && (
+                        <div className={`text-xs leading-relaxed whitespace-pre-wrap ${mainScreen.layout === 'fill' ? 'opacity-80' : 'text-gray-400'}`}>
+                            {mainScreen.customDatePlace}
+                        </div>
+                    )}
                 </div>
 
             </div>
