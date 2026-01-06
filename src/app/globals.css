@@ -1,15 +1,23 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F9F8E6;
+  --foreground: #4A5D45;
+  --accent: #E2E2C7;
+  --ivory: #F9F8E6;
+  --forest-green: #4A5D45;
+  --muted-sand: #E2E2C7;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-accent: var(--accent);
+  --color-ivory: var(--ivory);
+  --color-forest-green: var(--forest-green);
+  --color-muted-sand: var(--muted-sand);
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,5 +30,73 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+}
+
+.serif {
+  font-family: var(--font-serif);
+}
+
+.sans {
+  font-family: var(--font-sans);
+}
+
+/* Particle Animations */
+@keyframes fall {
+  0% { transform: translateY(-10px) translateX(0); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(800px) translateX(20px); opacity: 0; }
+}
+
+@keyframes fall-sway {
+  0% { transform: translateY(-10px) translateX(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  25% { transform: translateY(200px) translateX(30px) rotate(10deg); }
+  50% { transform: translateY(400px) translateX(-30px) rotate(-10deg); }
+  75% { transform: translateY(600px) translateX(30px) rotate(10deg); }
+  100% { transform: translateY(800px) translateX(0) rotate(0deg); opacity: 0; }
+}
+
+@keyframes fall-rotate {
+  0% { transform: translateY(-10px) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(800px) rotate(360deg); opacity: 0; }
+}
+
+@keyframes float-mist {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  20% { opacity: 0.8; }
+  50% { transform: translateY(20px) translateX(10px); opacity: 0.5; }
+  80% { opacity: 0.8; }
+  100% { transform: translateY(50px) translateX(-10px); opacity: 0; }
+}
+
+.animate-fall {
+  animation-name: fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.animate-fall-sway {
+  animation-name: fall-sway;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+.animate-fall-rotate {
+  animation-name: fall-sway; /* Use sway for leaves too, but maybe override rotation via inline styles if needed, or just use this */
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.animate-fall-tumbling {
+  animation-name: fall-rotate;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.animate-float-slow {
+  animation-name: float-mist;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
 }
