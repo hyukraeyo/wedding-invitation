@@ -16,7 +16,9 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
         imageUrl, setImageUrl,
         showNamesAtBottom, setShowNamesAtBottom,
         sortNames, setSortNames,
-        enableFreeformNames, setEnableFreeformNames
+        enableFreeformNames, setEnableFreeformNames,
+        groomNameCustom, setGroomNameCustom,
+        brideNameCustom, setBrideNameCustom
     } = useInvitationStore();
 
     const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -138,10 +140,33 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                             type="checkbox"
                             checked={enableFreeformNames}
                             onChange={(e) => setEnableFreeformNames(e.target.checked)}
-                            className="w-4 h-4 rounded border-gray-300 text-gray-400 focus:ring-gray-400"
+                            className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black bg-gray-800 border-none checked:bg-black"
                         />
-                        <span className="text-sm text-gray-400">성함 자유 입력</span>
+                        <span className="text-sm text-gray-800">성함 자유 입력</span>
                     </label>
+
+                    {enableFreeformNames && (
+                        <div className="space-y-3 pl-6 animate-fadeIn">
+                            <div className="space-y-1">
+                                <label className="text-xs text-gray-500">신랑측 표기</label>
+                                <textarea
+                                    value={groomNameCustom}
+                                    onChange={(e) => setGroomNameCustom(e.target.value)}
+                                    className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-xs leading-relaxed text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none resize-none h-16"
+                                    placeholder="예: 아버님 성함 · 어머님 성함 의 장남 OOO"
+                                />
+                            </div>
+                            <div className="space-y-1">
+                                <label className="text-xs text-gray-500">신부측 표기</label>
+                                <textarea
+                                    value={brideNameCustom}
+                                    onChange={(e) => setBrideNameCustom(e.target.value)}
+                                    className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-xs leading-relaxed text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none resize-none h-16"
+                                    placeholder="예: 아버님 성함 · 어머님 성함 의 장녀 OOO"
+                                />
+                            </div>
+                        </div>
+                    )}
                 </div>
 
             </div>

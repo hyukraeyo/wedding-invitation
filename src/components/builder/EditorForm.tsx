@@ -9,6 +9,7 @@ import LocationSection from './sections/LocationSection';
 import GreetingSection from './sections/GreetingSection';
 import GallerySection from './sections/GallerySection';
 import AccountsSection from './sections/AccountsSection';
+import KakaoShareSection from './sections/KakaoShareSection';
 
 export default function EditorForm() {
   // State to track open accordion section
@@ -69,6 +70,12 @@ export default function EditorForm() {
         <AccountsSection
           isOpen={openSection === 'account'}
           onToggle={() => handleToggle('account')}
+        />
+
+        {/* Kakao Share Thumbnail */}
+        <KakaoShareSection
+          isOpen={openSection === 'kakao'}
+          onToggle={() => handleToggle('kakao')}
         />
       </div>
     </div>

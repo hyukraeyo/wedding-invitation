@@ -50,6 +50,8 @@ interface InvitationState {
     showNamesAtBottom: boolean;
     sortNames: boolean;
     enableFreeformNames: boolean;
+    groomNameCustom: string; // Freeform text for groom side
+    brideNameCustom: string; // Freeform text for bride side
 
     // Main Screen State
     mainScreen: {
@@ -131,6 +133,8 @@ interface InvitationState {
     setShowNamesAtBottom: (show: boolean) => void;
     setSortNames: (sort: boolean) => void;
     setEnableFreeformNames: (enable: boolean) => void;
+    setGroomNameCustom: (name: string) => void;
+    setBrideNameCustom: (name: string) => void;
     setImageUrl: (url: string | null) => void;
     setTheme: (theme: Partial<InvitationState['theme']>) => void;
     setGallery: (images: string[]) => void;
@@ -142,9 +146,28 @@ interface InvitationState {
     setShowCalendar: (show: boolean) => void;
     setShowDday: (show: boolean) => void;
     setDdayMessage: (message: string) => void;
+
+    // Kakao Share State
+    kakaoShare: {
+        title: string;
+        description: string;
+        imageUrl: string | null;
+        imageRatio: 'portrait' | 'landscape';
+        buttonType: 'none' | 'location' | 'rsvp';
+        showShareButton: boolean;
+    };
+    setKakao: (data: Partial<InvitationState['kakaoShare']>) => void;
 }
 
 export const useInvitationStore = create<InvitationState>((set) => ({
+    kakaoShare: {
+        title: '',
+        description: '',
+        imageUrl: null,
+        imageRatio: 'portrait',
+        buttonType: 'location',
+        showShareButton: true,
+    },
     groom: {
         firstName: '도현',
         lastName: '이',
@@ -163,6 +186,7 @@ export const useInvitationStore = create<InvitationState>((set) => ({
             mother: { name: '최지우', isDeceased: false },
         },
     },
+
     useFlowerIcon: true,
     order: 'groom-first',
     date: '2024-10-25',
@@ -178,7 +202,7 @@ export const useInvitationStore = create<InvitationState>((set) => ({
     lockMap: true,
     showNavigation: true,
     mapHeight: 'default',
-    mapZoom: 4, // Default Kakao map level
+    mapZoom: 17, // Zoom Level (higher is closer)
     showSketch: false,
     sketchUrl: null,
 
@@ -188,6 +212,8 @@ export const useInvitationStore = create<InvitationState>((set) => ({
     showNamesAtBottom: true,
     sortNames: true,
     enableFreeformNames: false,
+    groomNameCustom: '신랑측 혼주 성함 \n 신랑 이름',
+    brideNameCustom: '신부측 혼주 성함 \n 신부 이름',
 
     imageUrl: null,
 
@@ -276,6 +302,8 @@ export const useInvitationStore = create<InvitationState>((set) => ({
     setShowNamesAtBottom: (show) => set({ showNamesAtBottom: show }),
     setSortNames: (sort) => set({ sortNames: sort }),
     setEnableFreeformNames: (enable) => set({ enableFreeformNames: enable }),
+    setGroomNameCustom: (name) => set({ groomNameCustom: name }),
+    setBrideNameCustom: (name) => set({ brideNameCustom: name }),
 
     setImageUrl: (url) => set({ imageUrl: url }),
     setTheme: (newTheme) => set((state) => ({ theme: { ...state.theme, ...newTheme } })),
@@ -288,4 +316,18 @@ export const useInvitationStore = create<InvitationState>((set) => ({
     setShowCalendar: (show) => set({ showCalendar: show }),
     setShowDday: (show) => set({ showDday: show }),
     setDdayMessage: (ddayMessage) => set({ ddayMessage }),
+
+
+    setKakao: (data) => set((state) => ({
+        kakaoShare: {
+            ...(state.kakaoShare || {
+                title: '',
+                description: '',
+                imageUrl: null,
+                imageRatio: 'portrait',
+                buttonType: 'location',
+                showShareButton: true,
+            }), ...data
+        }
+    })),
 }));

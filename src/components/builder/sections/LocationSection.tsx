@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from 'react';
-import { MapPin, Search, ChevronDown, ImagePlus, Trash2 } from 'lucide-react';
+import { MapPin, ImagePlus, Trash2 } from 'lucide-react';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';

@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import Image from 'next/image';
 import Script from 'next/script';
 import { Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk';
 import { MapPin, Navigation, Copy } from 'lucide-react';
@@ -68,7 +69,7 @@ export default function LocationView() {
         <div className="w-full space-y-8">
             {/* Load Naver Map Script */}
             <Script
-                src={`https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID}`}
+                src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID}`}
                 onLoad={() => setIsNaverLoaded(true)}
             />
 
@@ -122,7 +123,14 @@ export default function LocationView() {
             {/* Sketch Map Area */}
             {showSketch && sketchUrl && (
                 <div className="w-full rounded-lg overflow-hidden border border-gray-100 shadow-xs">
-                    <img src={sketchUrl} alt="약도" className="w-full h-auto object-contain" />
+                    <Image
+                        src={sketchUrl}
+                        alt="약도"
+                        width={0}
+                        height={0}
+                        sizes="100vw"
+                        className="w-full h-auto object-contain"
+                    />
                 </div>
             )}
 
