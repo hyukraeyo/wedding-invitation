@@ -43,36 +43,114 @@ body {
 
 /* Particle Animations */
 @keyframes fall {
-  0% { transform: translateY(-10px) translateX(0); opacity: 0; }
-  10% { opacity: 1; }
-  100% { transform: translateY(800px) translateX(20px); opacity: 0; }
+  0% {
+    transform: translateY(-10px) translateX(0);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(800px) translateX(20px);
+    opacity: 0;
+  }
 }
 
 @keyframes fall-sway {
-  0% { transform: translateY(-10px) translateX(0) rotate(0deg); opacity: 0; }
-  10% { opacity: 1; }
-  25% { transform: translateY(200px) translateX(30px) rotate(10deg); }
-  50% { transform: translateY(400px) translateX(-30px) rotate(-10deg); }
-  75% { transform: translateY(600px) translateX(30px) rotate(10deg); }
-  100% { transform: translateY(800px) translateX(0) rotate(0deg); opacity: 0; }
+  0% {
+    transform: translateY(-10px) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  25% {
+    transform: translateY(200px) translateX(30px) rotate(10deg);
+  }
+
+  50% {
+    transform: translateY(400px) translateX(-30px) rotate(-10deg);
+  }
+
+  75% {
+    transform: translateY(600px) translateX(30px) rotate(10deg);
+  }
+
+  100% {
+    transform: translateY(800px) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
 }
 
 @keyframes fall-rotate {
-  0% { transform: translateY(-10px) rotate(0deg); opacity: 0; }
-  10% { opacity: 1; }
-  100% { transform: translateY(800px) rotate(360deg); opacity: 0; }
+  0% {
+    transform: translateY(-10px) rotate(0deg);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(800px) rotate(360deg);
+    opacity: 0;
+  }
 }
 
 @keyframes float-mist {
-  0% { transform: translateY(0) translateX(0); opacity: 0; }
-  20% { opacity: 0.8; }
-  50% { transform: translateY(20px) translateX(10px); opacity: 0.5; }
-  80% { opacity: 0.8; }
-  100% { transform: translateY(50px) translateX(-10px); opacity: 0; }
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: translateY(20px) translateX(10px);
+    opacity: 0.5;
+  }
+
+  80% {
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: translateY(50px) translateX(-10px);
+    opacity: 0;
+  }
+}
+
+@keyframes fall-diagonal {
+  0% {
+    transform: translateY(-10px) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(800px) translateX(150px) rotate(90deg);
+    opacity: 0;
+  }
 }
 
 .animate-fall {
   animation-name: fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.animate-fall-diagonal {
+  animation-name: fall-diagonal;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
@@ -84,7 +162,8 @@ body {
 }
 
 .animate-fall-rotate {
-  animation-name: fall-sway; /* Use sway for leaves too, but maybe override rotation via inline styles if needed, or just use this */
+  animation-name: fall-sway;
+  /* Use sway for leaves too, but maybe override rotation via inline styles if needed, or just use this */
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 }

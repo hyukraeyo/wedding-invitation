@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { X, MessageCircle } from 'lucide-react';
+import { X } from 'lucide-react';
 
 interface LoginModalProps {
     isOpen: boolean;

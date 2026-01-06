@@ -4,7 +4,7 @@ export default function PrivacyPage() {
             <h1 className="text-3xl font-bold mb-8">개인정보 처리방침</h1>
 
             <p className="text-gray-600 mb-8">
-                '웨딩 청첩장 빌더'(이하 '서비스')는 정보주체의 자유와 권리 보호를 위해 「개인정보 보호법」 및 관계 법령이 정한 바를 준수하여,
+                &apos;웨딩 청첩장 빌더&apos;(이하 &apos;서비스&apos;)는 정보주체의 자유와 권리 보호를 위해 「개인정보 보호법」 및 관계 법령이 정한 바를 준수하여,
                 적법하게 개인정보를 처리하고 안전하게 관리하고 있습니다.
             </p>
 
@@ -24,7 +24,7 @@ export default function PrivacyPage() {
                 </ul>
             </div>
             <p className="text-sm text-gray-500">
-                * 카카오 로그인 시 제공되는 정보 중 '휴대폰 번호'는 부정 이용 방지 및 1인 1계정 원칙 준수를 위한 본인 확인 용도로만 사용되며, 마케팅 목적으로 활용되지 않습니다.
+                * 카카오 로그인 시 제공되는 정보 중 &apos;휴대폰 번호&apos;는 부정 이용 방지 및 1인 1계정 원칙 준수를 위한 본인 확인 용도로만 사용되며, 마케팅 목적으로 활용되지 않습니다.
             </p>
 
             <h3 className="text-xl font-bold mt-8 mb-4">3. 개인정보의 보유 및 이용 기간</h3>
