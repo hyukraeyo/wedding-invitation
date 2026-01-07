@@ -116,10 +116,13 @@ export default function CalendarSectionView() {
                                                 ></div>
                                             )}
                                             <div
-                                                className={`flex items-center justify-center rounded-full text-[14px] transition-all duration-500 z-10
+                                                className={`flex items-center justify-center rounded-full transition-all duration-500 z-10
                                    ${isWedding ? 'text-white w-8 h-8 font-medium' : (isSun ? 'text-red-300' : 'text-gray-600 font-light')}
                                 `}
-                                                style={isWedding ? { backgroundColor: theme.accentColor } : {}}
+                                                style={{
+                                                    fontSize: 'calc(14px * var(--font-scale))',
+                                                    ...(isWedding ? { backgroundColor: theme.accentColor } : {})
+                                                }}
                                             >
                                                 {i}
                                             </div>
