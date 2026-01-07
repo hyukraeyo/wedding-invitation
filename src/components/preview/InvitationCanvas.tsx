@@ -1,3 +1,5 @@
+'use client';
+
 import React, { memo, useMemo, useEffect } from 'react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import MainScreenView from './sections/MainScreenView';
@@ -7,6 +9,7 @@ import GreetingView from './sections/GreetingView';
 import LocationView from './sections/LocationView';
 import GalleryView from './sections/GalleryView';
 import AccountsView from './sections/AccountsView';
+import ClosingView from './sections/ClosingView';
 import EffectsOverlay from './sections/EffectsOverlay';
 
 const InvitationCanvas = memo(() => {
@@ -77,6 +80,11 @@ const InvitationCanvas = memo(() => {
         {/* 7. Accounts */}
         <div id="section-account" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000 fill-mode-backwards pb-10">
           <AccountsView />
+        </div>
+
+        {/* 8. Closing / Ending */}
+        <div id="section-closing" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000 fill-mode-backwards pb-10">
+          <ClosingView />
         </div>
 
         {/* Footer Padding */}

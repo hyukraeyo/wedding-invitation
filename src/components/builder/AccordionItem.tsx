@@ -8,9 +8,10 @@ interface AccordionItemProps {
     onToggle: () => void;
     children: React.ReactNode;
     isCompleted?: boolean;
+    badge?: string;
 }
 
-export const AccordionItem = ({ title, icon: Icon, isOpen, onToggle, children, isCompleted = false }: AccordionItemProps) => {
+export const AccordionItem = ({ title, icon: Icon, isOpen, onToggle, children, isCompleted = false, badge }: AccordionItemProps) => {
     return (
         <div className="bg-white rounded-xl mb-3 shadow-[0_2px_8px_rgba(0,0,0,0.04)] border border-gray-100 overflow-hidden transition-all duration-300">
             <button
@@ -20,7 +21,12 @@ export const AccordionItem = ({ title, icon: Icon, isOpen, onToggle, children, i
                 <div className="flex items-center gap-3">
                     {Icon && <Icon size={18} className={`text-forest-green ${isOpen ? 'opacity-100' : 'opacity-70'}`} />}
                     <span className={`font-medium text-gray-800 ${isOpen ? 'text-forest-green font-semibold' : ''}`}>{title}</span>
-                    {isCompleted && (
+                    {badge && (
+                        <span className="bg-yellow-100 text-yellow-800 text-[10px] font-bold px-1.5 py-0.5 rounded border border-yellow-200">
+                            {badge}
+                        </span>
+                    )}
+                    {isCompleted && !badge && (
                         <div className="flex items-center justify-center w-5 h-5 bg-forest-green rounded-full ml-1">
                             <Check size={12} className="text-white" strokeWidth={4} />
                         </div>

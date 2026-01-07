@@ -3,6 +3,7 @@ import { MapPin, ImagePlus, Trash2 } from 'lucide-react';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
+import { BuilderInput } from '../BuilderInput';
 import Image from 'next/image';
 
 interface SectionProps {
@@ -74,12 +75,11 @@ export default function LocationSection({ isOpen, onToggle }: SectionProps) {
                 {/* 1. 제목 (Title) */}
                 <div className="flex items-center">
                     <label className="w-20 text-sm font-bold text-gray-800 shrink-0">제목</label>
-                    <input
+                    <BuilderInput
                         type="text"
                         value={locationTitle}
                         onChange={(e) => setLocationTitle(e.target.value)}
                         placeholder="오시는 길"
-                        className="w-full bg-gray-100 border-none rounded-md px-4 py-3 text-sm text-gray-900 focus:ring-1 focus:ring-gray-300 outline-none"
                     />
                 </div>
 
@@ -106,36 +106,33 @@ export default function LocationSection({ isOpen, onToggle }: SectionProps) {
                 {/* 3. 예식장명 (Wedding Hall Name) */}
                 <div className="flex items-center">
                     <label className="w-20 text-sm font-bold text-gray-800 shrink-0">예식장명</label>
-                    <input
+                    <BuilderInput
                         type="text"
                         value={location}
                         onChange={(e) => setLocation(e.target.value)}
                         placeholder="예식장 이름 입력"
-                        className="w-full bg-gray-100 border-none rounded-md px-4 py-3 text-sm text-gray-900 focus:ring-1 focus:ring-gray-300 outline-none"
                     />
                 </div>
 
                 {/* 4. 층과 홀 (Floor & Hall) */}
                 <div className="flex items-center">
                     <label className="w-20 text-sm font-bold text-gray-800 shrink-0">층과 홀</label>
-                    <input
+                    <BuilderInput
                         type="text"
                         value={detailAddress}
                         onChange={(e) => setDetailAddress(e.target.value)}
                         placeholder="층과 웨딩홀 이름 입력"
-                        className="w-full bg-gray-100 border-none rounded-md px-4 py-3 text-sm text-gray-900 focus:ring-1 focus:ring-gray-300 outline-none"
                     />
                 </div>
 
                 {/* 5. 연락처 (Contact) */}
                 <div className="flex items-center">
                     <label className="w-20 text-sm font-bold text-gray-800 shrink-0">연락처</label>
-                    <input
+                    <BuilderInput
                         type="text"
                         value={locationContact}
                         onChange={(e) => setLocationContact(e.target.value)}
                         placeholder="예식장 연락처, 02-000-0000"
-                        className="w-full bg-gray-100 border-none rounded-md px-4 py-3 text-sm text-gray-900 focus:ring-1 focus:ring-gray-300 outline-none"
                     />
                 </div>
 
@@ -150,9 +147,9 @@ export default function LocationSection({ isOpen, onToggle }: SectionProps) {
                             className={`px-3 py-2 text-sm border rounded hover:bg-gray-50 transition-colors flex items-center gap-2 ${mapType === 'kakao' ? 'border-gray-800 bg-yellow-50' : 'border-gray-200 bg-white'}`}
                         >
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect width="24" height="24" rx="4" fill="#FAE100"/>
-                                <path d="M12 6C8.7 6 6 8.7 6 12C6 15.3 8.7 18 12 18C15.3 18 18 15.3 18 12C18 8.7 15.3 6 12 6ZM12 16C9.8 16 8 14.2 8 12C8 9.8 9.8 8 12 8C14.2 8 16 9.8 16 12C16 14.2 14.2 16 12 16Z" fill="#000000"/>
-                                <circle cx="12" cy="12" r="2" fill="#000000"/>
+                                <rect width="24" height="24" rx="4" fill="#FAE100" />
+                                <path d="M12 6C8.7 6 6 8.7 6 12C6 15.3 8.7 18 12 18C15.3 18 18 15.3 18 12C18 8.7 15.3 6 12 6ZM12 16C9.8 16 8 14.2 8 12C8 9.8 9.8 8 12 8C14.2 8 16 9.8 16 12C16 14.2 14.2 16 12 16Z" fill="#000000" />
+                                <circle cx="12" cy="12" r="2" fill="#000000" />
                             </svg>
                             <span className={`${mapType === 'kakao' ? 'font-bold text-gray-900' : 'text-gray-400'}`}>카카오맵</span>
                         </button>
@@ -161,8 +158,8 @@ export default function LocationSection({ isOpen, onToggle }: SectionProps) {
                             className={`px-3 py-2 text-sm border rounded hover:bg-gray-50 transition-colors flex items-center gap-2 ${mapType === 'naver' ? 'border-gray-800 bg-green-50' : 'border-gray-200 bg-white'}`}
                         >
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect width="24" height="24" rx="4" fill="#03C75A"/>
-                                <path d="M7 8H10V16H7V8ZM14 8H17V16H14V8Z" fill="white"/>
+                                <rect width="24" height="24" rx="4" fill="#03C75A" />
+                                <path d="M7 8H10V16H7V8ZM14 8H17V16H14V8Z" fill="white" />
                             </svg>
                             <span className={`${mapType === 'naver' ? 'font-bold text-gray-900' : 'text-gray-400'}`}>네이버지도</span>
                         </button>

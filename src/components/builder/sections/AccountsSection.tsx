@@ -3,6 +3,7 @@ import { CreditCard, Plus, Trash2 } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderLabel } from '../BuilderLabel';
+import { BuilderInput } from '../BuilderInput';
 
 interface SectionProps {
     isOpen: boolean;
@@ -172,30 +173,30 @@ function AccountEntry({
                 <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-1.5">
                         <BuilderLabel className="!mb-0 text-[10px] text-gray-400">은행명</BuilderLabel>
-                        <input
+                        <BuilderInput
                             placeholder="은행 입력"
                             value={acc.bank}
                             onChange={(e) => onUpdate({ bank: e.target.value })}
-                            className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-900 focus:border-forest-green outline-none"
+                            className="bg-white"
                         />
                     </div>
                     <div className="space-y-1.5">
                         <BuilderLabel className="!mb-0 text-[10px] text-gray-400">예금주</BuilderLabel>
-                        <input
+                        <BuilderInput
                             placeholder="이름 입력"
                             value={acc.holder}
                             onChange={(e) => onUpdate({ holder: e.target.value })}
-                            className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-900 focus:border-forest-green outline-none"
+                            className="bg-white"
                         />
                     </div>
                 </div>
                 <div className="space-y-1.5">
                     <BuilderLabel className="!mb-0 text-[10px] text-gray-400">계좌번호</BuilderLabel>
-                    <input
+                    <BuilderInput
                         placeholder="하이픈(-) 포함하여 입력"
                         value={acc.accountNumber}
                         onChange={(e) => onUpdate({ accountNumber: e.target.value })}
-                        className="w-full px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm text-gray-900 focus:border-forest-green outline-none"
+                        className="bg-white"
                     />
                 </div>
             </div>

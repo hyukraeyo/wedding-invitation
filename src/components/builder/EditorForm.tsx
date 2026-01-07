@@ -41,6 +41,10 @@ const KakaoShareSection = dynamic(() => import('./sections/KakaoShareSection'), 
   loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded-lg" />
 });
 
+const ClosingSection = dynamic(() => import('./sections/ClosingSection'), {
+  loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded-lg" />
+});
+
 const EditorForm = memo(function EditorForm() {
   // State to track open accordion section
   const [openSection, setOpenSection] = useState<string | null>(null);
@@ -65,59 +69,65 @@ const EditorForm = memo(function EditorForm() {
         ))}
       </div>}>
         <div className="space-y-1">
-        {/* Theme Settings */}
-        <ThemeSection
-          isOpen={openSection === 'theme'}
-          onToggle={() => handleToggle('theme')}
-        />
+          {/* Theme Settings */}
+          <ThemeSection
+            isOpen={openSection === 'theme'}
+            onToggle={() => handleToggle('theme')}
+          />
 
-        {/* Main Screen */}
-        <MainScreenSection
-          isOpen={openSection === 'mainScreen'}
-          onToggle={() => handleToggle('mainScreen')}
-        />
+          {/* Main Screen */}
+          <MainScreenSection
+            isOpen={openSection === 'mainScreen'}
+            onToggle={() => handleToggle('mainScreen')}
+          />
 
-        {/* Basic Info */}
-        <BasicInfoSection
-          isOpen={openSection === 'basic'}
-          onToggle={() => handleToggle('basic')}
-        />
+          {/* Basic Info */}
+          <BasicInfoSection
+            isOpen={openSection === 'basic'}
+            onToggle={() => handleToggle('basic')}
+          />
 
-        {/* Date & Time */}
-        <DateTimeSection
-          isOpen={openSection === 'date'}
-          onToggle={() => handleToggle('date')}
-        />
+          {/* Date & Time */}
+          <DateTimeSection
+            isOpen={openSection === 'date'}
+            onToggle={() => handleToggle('date')}
+          />
 
-        {/* Location */}
-        <LocationSection
-          isOpen={openSection === 'location'}
-          onToggle={() => handleToggle('location')}
-        />
+          {/* Location */}
+          <LocationSection
+            isOpen={openSection === 'location'}
+            onToggle={() => handleToggle('location')}
+          />
 
-        {/* Greeting */}
-        <GreetingSection
-          isOpen={openSection === 'message'}
-          onToggle={() => handleToggle('message')}
-        />
+          {/* Greeting */}
+          <GreetingSection
+            isOpen={openSection === 'message'}
+            onToggle={() => handleToggle('message')}
+          />
 
-        {/* Gallery */}
-        <GallerySection
-          isOpen={openSection === 'gallery'}
-          onToggle={() => handleToggle('gallery')}
-        />
+          {/* Gallery */}
+          <GallerySection
+            isOpen={openSection === 'gallery'}
+            onToggle={() => handleToggle('gallery')}
+          />
 
-        {/* Accounts */}
-        <AccountsSection
-          isOpen={openSection === 'account'}
-          onToggle={() => handleToggle('account')}
-        />
+          {/* Accounts */}
+          <AccountsSection
+            isOpen={openSection === 'account'}
+            onToggle={() => handleToggle('account')}
+          />
 
-        {/* Kakao Share Thumbnail */}
-        <KakaoShareSection
-          isOpen={openSection === 'kakao'}
-          onToggle={() => handleToggle('kakao')}
-        />
+          {/* Closing Section */}
+          <ClosingSection
+            isOpen={openSection === 'closing'}
+            onToggle={() => handleToggle('closing')}
+          />
+
+          {/* Kakao Share Thumbnail */}
+          <KakaoShareSection
+            isOpen={openSection === 'kakao'}
+            onToggle={() => handleToggle('kakao')}
+          />
         </div>
       </Suspense>
     </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import { Calendar, ChevronDown } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
+import { BuilderInput } from '../BuilderInput';
 
 interface SectionProps {
     isOpen: boolean;
@@ -42,11 +43,10 @@ export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
                 {/* Date */}
                 <div className="grid grid-cols-[80px_1fr] items-center gap-4">
                     <label className="text-sm text-gray-700">예식일</label>
-                    <input
+                    <BuilderInput
                         type="date"
                         value={date}
                         onChange={(e) => setDate(e.target.value)}
-                        className="w-full px-4 py-3 bg-gray-50 border-none rounded-lg text-sm text-gray-900 focus:ring-1 focus:ring-forest-green"
                     />
                 </div>
 

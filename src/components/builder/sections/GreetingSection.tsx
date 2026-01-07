@@ -4,6 +4,8 @@ import { MessageSquare, Image as ImageIcon } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderLabel } from '../BuilderLabel';
+import { BuilderInput } from '../BuilderInput';
+import { BuilderTextarea } from '../BuilderTextarea';
 
 interface SectionProps {
     isOpen: boolean;
@@ -42,11 +44,10 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                 {/* Title */}
                 <div className="space-y-3">
                     <BuilderLabel>제목</BuilderLabel>
-                    <input
+                    <BuilderInput
                         type="text"
                         value={greetingTitle}
                         onChange={(e) => setGreetingTitle(e.target.value)}
-                        className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none"
                         placeholder="예: 소중한 분들을 초대합니다"
                     />
                 </div>
@@ -150,19 +151,19 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                         <div className="space-y-3 pl-6 animate-fadeIn">
                             <div className="space-y-1">
                                 <label className="text-xs text-gray-500">신랑측 표기</label>
-                                <textarea
+                                <BuilderTextarea
                                     value={groomNameCustom}
                                     onChange={(e) => setGroomNameCustom(e.target.value)}
-                                    className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-xs leading-relaxed text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none resize-none h-16"
+                                    className="h-16 text-xs"
                                     placeholder="예: 아버님 성함 · 어머님 성함 의 장남 OOO"
                                 />
                             </div>
                             <div className="space-y-1">
                                 <label className="text-xs text-gray-500">신부측 표기</label>
-                                <textarea
+                                <BuilderTextarea
                                     value={brideNameCustom}
                                     onChange={(e) => setBrideNameCustom(e.target.value)}
-                                    className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-xs leading-relaxed text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none resize-none h-16"
+                                    className="h-16 text-xs"
                                     placeholder="예: 아버님 성함 · 어머님 성함 의 장녀 OOO"
                                 />
                             </div>

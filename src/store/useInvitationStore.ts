@@ -163,6 +163,16 @@ interface InvitationState {
         showShareButton: boolean;
     };
     setKakao: (data: Partial<InvitationState['kakaoShare']>) => void;
+
+    // Closing Section State (New)
+    closing: {
+        title: string;
+        imageUrl: string | null;
+        effect: 'none' | 'mist' | 'ripple' | 'paper';
+        ratio: 'fixed' | 'auto';
+        content: string;
+    };
+    setClosing: (data: Partial<InvitationState['closing']>) => void;
 }
 
 export const useInvitationStore = create<InvitationState>((set) => ({
@@ -339,4 +349,17 @@ export const useInvitationStore = create<InvitationState>((set) => ({
             }), ...data
         }
     })),
+
+    // Closing State Initial Value and Reducer
+    closing: {
+        title: '엔딩 사진, 문구',
+        imageUrl: null,
+        effect: 'none',
+        ratio: 'auto',
+        content: `장담하건대, 세상이 다 겨울이어도
+우리 사랑은 늘 봄처럼 따뜻하고
+간혹, 여름처럼 뜨거울 겁니다.
+이수동, 사랑가`,
+    },
+    setClosing: (data) => set((state) => ({ closing: { ...state.closing, ...data } })),
 }));

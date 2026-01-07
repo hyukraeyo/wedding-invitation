@@ -2,6 +2,7 @@ import React from 'react';
 import { User2 } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
+import { BuilderInput } from '../BuilderInput';
 
 interface SectionProps {
     isOpen: boolean;
@@ -32,38 +33,34 @@ export default function BasicInfoSection({ isOpen, onToggle }: SectionProps) {
                     </div>
                     <div className="grid grid-cols-[60px_1fr_1fr_1fr] gap-2 items-center">
                         <span className="text-xs text-gray-500 font-medium pl-1">신랑</span>
-                        <input
+                        <BuilderInput
                             type="text"
                             placeholder="성"
                             value={groom.lastName}
                             onChange={(e) => setGroom({ lastName: e.target.value })}
-                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none"
                         />
-                        <input
+                        <BuilderInput
                             type="text"
                             placeholder="이름"
                             value={groom.firstName}
                             onChange={(e) => setGroom({ firstName: e.target.value })}
-                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none"
                         />
-                        <input
+                        <BuilderInput
                             type="text"
                             placeholder="관계"
                             value={groom.relation}
                             onChange={(e) => setGroom({ relation: e.target.value })}
-                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none"
                         />
                     </div>
 
                     {/* Groom Parents */}
                     <div className="grid grid-cols-[60px_1fr_60px] gap-2 items-center">
                         <span className="text-xs text-gray-500 font-medium pl-1">아버지</span>
-                        <input
+                        <BuilderInput
                             type="text"
                             placeholder="성함"
                             value={groom.parents.father.name}
                             onChange={(e) => setGroomParents('father', { name: e.target.value })}
-                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none"
                         />
                         <label className="flex items-center gap-3 cursor-pointer">
                             <input
@@ -77,12 +74,11 @@ export default function BasicInfoSection({ isOpen, onToggle }: SectionProps) {
                     </div>
                     <div className="grid grid-cols-[60px_1fr_60px] gap-2 items-center">
                         <span className="text-xs text-gray-500 font-medium pl-1">어머니</span>
-                        <input
+                        <BuilderInput
                             type="text"
                             placeholder="성함"
                             value={groom.parents.mother.name}
                             onChange={(e) => setGroomParents('mother', { name: e.target.value })}
-                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none"
                         />
                         <label className="flex items-center gap-3 cursor-pointer">
                             <input
@@ -105,38 +101,34 @@ export default function BasicInfoSection({ isOpen, onToggle }: SectionProps) {
                     </div>
                     <div className="grid grid-cols-[60px_1fr_1fr_1fr] gap-2 items-center">
                         <span className="text-xs text-gray-500 font-medium pl-1">신부</span>
-                        <input
+                        <BuilderInput
                             type="text"
                             placeholder="성"
                             value={bride.lastName}
                             onChange={(e) => setBride({ lastName: e.target.value })}
-                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none"
                         />
-                        <input
+                        <BuilderInput
                             type="text"
                             placeholder="이름"
                             value={bride.firstName}
                             onChange={(e) => setBride({ firstName: e.target.value })}
-                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none"
                         />
-                        <input
+                        <BuilderInput
                             type="text"
                             placeholder="관계"
                             value={bride.relation}
                             onChange={(e) => setBride({ relation: e.target.value })}
-                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none"
                         />
                     </div>
 
                     {/* Bride Parents */}
                     <div className="grid grid-cols-[60px_1fr_60px] gap-2 items-center">
                         <span className="text-xs text-gray-500 font-medium pl-1">아버지</span>
-                        <input
+                        <BuilderInput
                             type="text"
                             placeholder="성함"
                             value={bride.parents.father.name}
                             onChange={(e) => setBrideParents('father', { name: e.target.value })}
-                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none"
                         />
                         <label className="flex items-center gap-3 cursor-pointer">
                             <input
@@ -150,12 +142,11 @@ export default function BasicInfoSection({ isOpen, onToggle }: SectionProps) {
                     </div>
                     <div className="grid grid-cols-[60px_1fr_60px] gap-2 items-center">
                         <span className="text-xs text-gray-500 font-medium pl-1">어머니</span>
-                        <input
+                        <BuilderInput
                             type="text"
                             placeholder="성함"
                             value={bride.parents.mother.name}
                             onChange={(e) => setBrideParents('mother', { name: e.target.value })}
-                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none"
                         />
                         <label className="flex items-center gap-3 cursor-pointer">
                             <input

@@ -4,6 +4,8 @@ import { LayoutTemplate, Check, Image as ImageIcon, Type, ChevronDown, ChevronUp
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderLabel } from '../BuilderLabel';
+import { BuilderInput } from '../BuilderInput';
+import { BuilderTextarea } from '../BuilderTextarea';
 
 interface SectionProps {
     isOpen: boolean;
@@ -174,11 +176,11 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                     />
                                     <div className="grid grid-cols-[40px_1fr] gap-2 items-center flex-1">
                                         <span className="text-xs text-gray-400 text-center border p-1 rounded">기본</span>
-                                        <input
+                                        <BuilderInput
                                             type="text"
                                             value={mainScreen.title}
                                             onChange={(e) => setMainScreen({ title: e.target.value })}
-                                            className="w-full px-3 py-2 border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green outline-none uppercase"
+                                            className="uppercase"
                                             placeholder="THE NEW BEGINNING"
                                             disabled={!mainScreen.showTitle}
                                         />
@@ -195,25 +197,25 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                     />
                                     <div className="grid grid-cols-[40px_1fr_60px_1fr] gap-2 items-center flex-1">
                                         <span className="text-xs text-gray-400 text-center border p-1 rounded">기본</span>
-                                        <input
+                                        <BuilderInput
                                             type="text"
                                             value={groom.firstName || '신랑'}
                                             readOnly
-                                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm text-gray-500"
+                                            className="text-gray-500"
                                             disabled={!mainScreen.showGroomBride}
                                         />
-                                        <input
+                                        <BuilderInput
                                             type="text"
                                             value="그리고"
                                             readOnly
-                                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm text-gray-500 text-center"
+                                            className="text-gray-500 text-center"
                                             disabled={!mainScreen.showGroomBride}
                                         />
-                                        <input
+                                        <BuilderInput
                                             type="text"
                                             value={bride.firstName || '신부'}
                                             readOnly
-                                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm text-gray-500"
+                                            className="text-gray-500"
                                             disabled={!mainScreen.showGroomBride}
                                         />
                                     </div>
@@ -229,11 +231,10 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                     />
                                     <div className="grid grid-cols-[40px_1fr] gap-2 items-center flex-1">
                                         <span className="text-xs text-gray-400 text-center border p-1 rounded">기본</span>
-                                        <input
+                                        <BuilderInput
                                             type="text"
                                             value={mainScreen.subtitle}
                                             onChange={(e) => setMainScreen({ subtitle: e.target.value })}
-                                            className="w-full px-3 py-2 border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green outline-none"
                                             placeholder="We are getting married"
                                             disabled={!mainScreen.showSubtitle}
                                         />
@@ -250,10 +251,10 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                     />
                                     <div className="grid grid-cols-[40px_1fr] gap-2 items-start flex-1">
                                         <span className="text-xs text-gray-400 text-center border p-1 rounded mt-1">기본</span>
-                                        <textarea
+                                        <BuilderTextarea
                                             value={mainScreen.customDatePlace}
                                             onChange={(e) => setMainScreen({ customDatePlace: e.target.value })}
-                                            className="w-full px-3 py-2 border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green outline-none min-h-[60px] resize-none leading-snug"
+                                            className="min-h-[60px] leading-snug"
                                             placeholder="0000.00.00 ..."
                                             disabled={!mainScreen.showDatePlace}
                                         />
