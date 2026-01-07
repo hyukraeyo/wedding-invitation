@@ -26,7 +26,7 @@ export const AccordionItem = ({ title, icon: Icon, isOpen, onToggle, children, i
                             {badge}
                         </span>
                     )}
-                    {isCompleted && !badge && (
+                    {isCompleted && (
                         <div className="flex items-center justify-center w-5 h-5 bg-forest-green rounded-full ml-1">
                             <Check size={12} className="text-white" strokeWidth={4} />
                         </div>
