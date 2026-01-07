@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, memo, Suspense } from 'react';
+import React, { useState, useCallback, memo, Suspense, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useInvitationStore } from '@/store/useInvitationStore';
 
@@ -46,13 +46,14 @@ const EditorForm = memo(function EditorForm() {
   const [openSection, setOpenSection] = useState<string | null>(null);
   const setEditingSection = useInvitationStore(state => state.setEditingSection);
 
+  // Update editing section when openSection changes
+  useEffect(() => {
+    setEditingSection(openSection);
+  }, [openSection, setEditingSection]);
+
   const handleToggle = useCallback((section: string) => {
-    setOpenSection(prev => {
-      const newSection = prev === section ? null : section;
-      setEditingSection(newSection);
-      return newSection;
-    });
-  }, [setEditingSection]);
+    setOpenSection(prev => prev === section ? null : section);
+  }, []);
 
   return (
     <div className="h-full overflow-y-auto px-1 py-2">
