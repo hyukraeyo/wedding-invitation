@@ -263,7 +263,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                         <BuilderInput
                                             type="text"
                                             value={mainScreen.andText}
-                                            onChange={(value) => setMainScreen({ andText: value })}
+                                            onChange={(e) => setMainScreen({ andText: e.target.value })}
                                             className="text-xs text-gray-400 text-center font-medium border-none bg-transparent text-center"
                                             placeholder="그리고"
                                         />
