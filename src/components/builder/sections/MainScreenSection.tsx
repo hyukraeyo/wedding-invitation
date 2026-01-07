@@ -278,7 +278,6 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                                     setGroom({ firstName: parts[0] });
                                                 }
                                             }}
-                                            className="w-full text-center text-gray-700"
                                             disabled={!mainScreen.showGroomBride}
                                             placeholder="신랑 그리고 신부"
                                         />
