@@ -90,7 +90,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                 <div>
                     <BuilderLabel>강조 색상</BuilderLabel>
                     <div className="flex gap-3">
-                        {['#4A5D45', '#D4AF37', '#9A8C98', '#2C3E50', '#C0392B'].map((color) => (
+                        {['#FFD700', '#D4AF37', '#9A8C98', '#2C3E50', '#C0392B'].map((color) => (
                             <button
                                 key={color}
                                 onClick={() => setTheme({ accentColor: color })}
