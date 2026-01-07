@@ -40,7 +40,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Font Scale */}
                 <div>
-                    <BuilderLabel>폰트 크기 ({theme.fontScale}x)</BuilderLabel>
+                    <BuilderLabel>폰트 크기 ({theme.fontScale.toFixed(1)}x)</BuilderLabel>
                     <div className="flex items-center gap-4">
                         <input
                             type="range"
