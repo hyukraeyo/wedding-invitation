@@ -47,39 +47,75 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                             onClick={() => setMainScreen({ layout: l as 'basic' | 'fill' | 'arch' | 'oval' | 'frame' })}
                             className={`flex-shrink-0 w-20 flex flex-col items-center gap-2 group`}
                         >
-                            <div className={`w-20 h-32 rounded-lg border-2 transition-all relative overflow-hidden bg-white ${mainScreen.layout === l ? 'border-forest-green ring-2 ring-forest-green ring-offset-2' : 'border-gray-100 group-hover:border-forest-green/50 hover:bg-gray-50'}`}>
-                                {/* Realistic Mini Previews */}
+                            <div className={`w-20 h-32 rounded-lg border-2 transition-all relative overflow-hidden bg-white ${mainScreen.layout === l ? 'border-forest-green shadow-md' : 'border-gray-100 group-hover:border-forest-green/50 hover:bg-gray-50'}`}>
+                                {/* Skeleton Wireframe Previews */}
                                 {l === 'basic' && (
-                                    <div className="absolute inset-0 flex flex-col items-center pt-3 scale-[0.6] origin-top">
-                                        <div className="w-8 h-[2px] bg-coral-pink/50 mb-2" />
-                                        <div className="text-[14px] font-bold text-gray-400 mb-2">05.25</div>
-                                        <div className="w-12 h-[2px] bg-gray-200 mb-3" />
-                                        <div className="w-16 aspect-[4/5] bg-gray-100 rounded-md shadow-sm mb-3"></div>
-                                        <div className="w-10 h-[2px] bg-gray-100 mb-1" />
-                                        <div className="w-8 h-[2px] bg-gray-100" />
+                                    <div className="absolute inset-0 flex flex-col items-center pt-3 scale-[0.55] origin-top">
+                                        {/* Top Text Group */}
+                                        <div className="flex flex-col items-center gap-1.5 mb-4">
+                                            <div className="w-10 h-[2.5px] bg-coral-pink/50" />
+                                            <div className="w-16 h-[7px] bg-gray-300 rounded-[1px]" />
+                                            <div className="w-14 h-[2.5px] bg-gray-200" />
+                                        </div>
+                                        {/* Image Group */}
+                                        <div className="w-20 aspect-[4/5] bg-gray-100 rounded-lg shadow-sm mb-4"></div>
+                                        {/* Bottom Text Group */}
+                                        <div className="flex flex-col items-center gap-1">
+                                            <div className="w-12 h-[2px] bg-gray-200" />
+                                            <div className="w-16 h-[2.5px] bg-gray-100" />
+                                        </div>
                                     </div>
                                 )}
                                 {l === 'fill' && (
-                                    <div className="absolute inset-0 bg-gray-100 flex flex-col justify-end items-center pb-4 scale-[0.8]">
-                                        <div className="w-10 h-[2px] bg-white/60 mb-1" />
-                                        <div className="w-8 h-[2px] bg-white/60 mb-1" />
-                                        <div className="w-12 h-[2px] bg-white/80" />
+                                    <div className="absolute inset-0 bg-gray-100 flex flex-col justify-end items-center pb-8 scale-[0.8] origin-bottom">
+                                        {/* Overlay Text indicators */}
+                                        <div className="flex flex-col items-center gap-2">
+                                            <div className="w-10 h-[2px] bg-white/40" />
+                                            <div className="w-14 h-[5px] bg-white/70 rounded-[1px]" />
+                                            <div className="w-16 h-[2px] bg-white/50" />
+                                        </div>
                                     </div>
                                 )}
                                 {l === 'arch' && (
-                                    <div className="absolute inset-x-2 top-2 bottom-0 bg-gray-100 rounded-t-[40px] flex items-center justify-center">
-                                        <div className="w-6 h-[2px] bg-white/60" />
+                                    <div className="absolute inset-0 flex flex-col items-center pt-4 scale-[0.55] origin-top">
+                                        {/* Arched Image */}
+                                        <div className="w-20 aspect-[4/5] bg-gray-100 rounded-t-[40px] mb-6 flex items-center justify-center">
+                                            <div className="w-6 h-[1.5px] bg-white/60" />
+                                        </div>
+                                        {/* Text below shape */}
+                                        <div className="flex flex-col items-center gap-1.5">
+                                            <div className="w-12 h-[5px] bg-gray-300 rounded-[1px]" />
+                                            <div className="w-16 h-[2px] bg-gray-200" />
+                                            <div className="w-14 h-[2px] bg-gray-100" />
+                                        </div>
                                     </div>
                                 )}
                                 {l === 'oval' && (
-                                    <div className="absolute inset-2 bg-gray-100 rounded-full flex items-center justify-center">
-                                        <div className="w-6 h-[2px] bg-white/60" />
+                                    <div className="absolute inset-0 flex flex-col items-center pt-4 scale-[0.55] origin-top">
+                                        {/* Oval Image */}
+                                        <div className="w-22 aspect-[2/3] bg-gray-100 rounded-full mb-6 flex items-center justify-center">
+                                            <div className="w-6 h-[1.5px] bg-white/60" />
+                                        </div>
+                                        {/* Text below shape */}
+                                        <div className="flex flex-col items-center gap-1.5">
+                                            <div className="w-12 h-[5px] bg-gray-300 rounded-[1px]" />
+                                            <div className="w-16 h-[2px] bg-gray-200" />
+                                            <div className="w-14 h-[2px] bg-gray-100" />
+                                        </div>
                                     </div>
                                 )}
                                 {l === 'frame' && (
-                                    <div className="absolute inset-2 border-2 border-gray-200 flex flex-col items-center justify-center gap-2">
-                                        <div className="w-8 aspect-square bg-gray-50"></div>
-                                        <div className="w-10 h-[2px] bg-gray-100" />
+                                    <div className="absolute inset-0 flex flex-col items-center pt-6 scale-[0.55] origin-top">
+                                        {/* Inner Frame Image */}
+                                        <div className="w-20 aspect-square border-2 border-gray-100 bg-gray-50 mb-7 flex items-center justify-center p-2">
+                                            <div className="w-full h-full bg-gray-100/50 border border-gray-200/30" />
+                                        </div>
+                                        {/* Text below shape */}
+                                        <div className="flex flex-col items-center gap-1.5">
+                                            <div className="w-12 h-[5px] bg-gray-300 rounded-[1px]" />
+                                            <div className="w-16 h-[2px] bg-gray-200" />
+                                            <div className="w-14 h-[2px] bg-gray-100" />
+                                        </div>
                                     </div>
                                 )}
 

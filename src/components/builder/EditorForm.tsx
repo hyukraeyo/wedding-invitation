@@ -81,6 +81,12 @@ const EditorForm = memo(function EditorForm() {
             onToggle={() => handleToggle('mainScreen')}
           />
 
+          {/* Greeting */}
+          <GreetingSection
+            isOpen={openSection === 'message'}
+            onToggle={() => handleToggle('message')}
+          />
+
           {/* Basic Info */}
           <BasicInfoSection
             isOpen={openSection === 'basic'}
@@ -97,12 +103,6 @@ const EditorForm = memo(function EditorForm() {
           <LocationSection
             isOpen={openSection === 'location'}
             onToggle={() => handleToggle('location')}
-          />
-
-          {/* Greeting */}
-          <GreetingSection
-            isOpen={openSection === 'message'}
-            onToggle={() => handleToggle('message')}
           />
 
           {/* Gallery */}
