@@ -102,7 +102,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                 {/* Design Options */}
                 <div className="space-y-3">
                     <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">디자인 변형</label>
-                    <div className="flex gap-6">
+                    <div className="flex gap-4 mt-2">
                         <label className="flex items-center gap-2 cursor-pointer">
                             <input
                                 type="checkbox"
