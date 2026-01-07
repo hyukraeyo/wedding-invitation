@@ -17,7 +17,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
     const {
         mainScreen, setMainScreen,
         imageUrl, setImageUrl,
-        groom, bride
+        groom, bride, setGroom, setBride
     } = useInvitationStore();
 
     const [isTextSectionOpen, setIsTextSectionOpen] = useState(false);
@@ -259,11 +259,11 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                             onChange={(e) => {
                                                 const value = e.target.value;
                                                 // 입력값을 공백으로 분리해서 신랑, 연결어, 신부로 파싱
-                                                const parts = value.split(' ');
+                                                const parts = value.split(' ').filter(part => part.trim() !== '');
                                                 if (parts.length >= 3) {
-                                                    const groomName = parts[0];
-                                                    const brideName = parts[parts.length - 1];
-                                                    const andText = parts.slice(1, -1).join(' ');
+                                                    const groomName = parts[0] || '신랑';
+                                                    const brideName = parts[parts.length - 1] || '신부';
+                                                    const andText = parts.slice(1, -1).join(' ') || '그리고';
 
                                                     // groom과 bride 이름 업데이트
                                                     setGroom({ firstName: groomName });
@@ -271,9 +271,9 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                                     setMainScreen({ andText: andText });
                                                 } else if (parts.length === 2) {
                                                     // 두 단어만 있는 경우 (신랑 신부)
-                                                    setGroom({ firstName: parts[0] });
-                                                    setBride({ firstName: parts[1] });
-                                                } else if (parts.length === 1) {
+                                                    setGroom({ firstName: parts[0] || '신랑' });
+                                                    setBride({ firstName: parts[1] || '신부' });
+                                                } else if (parts.length === 1 && parts[0]) {
                                                     // 한 단어만 있는 경우
                                                     setGroom({ firstName: parts[0] });
                                                 }
