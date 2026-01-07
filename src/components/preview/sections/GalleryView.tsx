@@ -29,7 +29,7 @@ export default function GalleryView() {
                     <div className="relative w-full max-w-2xl mx-auto">
                         <div className="aspect-[4/3] relative rounded-lg overflow-hidden">
                             <Image
-                                src={gallery[currentIndex]}
+                                src={gallery[currentIndex] || ''}
                                 alt={`Gallery ${currentIndex + 1}`}
                                 fill
                                 className="object-cover"
@@ -76,7 +76,7 @@ export default function GalleryView() {
                         {/* Main image */}
                         <div className="aspect-[16/10] relative rounded-lg overflow-hidden mb-4">
                             <Image
-                                src={gallery[currentIndex]}
+                                src={gallery[currentIndex] || ''}
                                 alt={`Gallery ${currentIndex + 1}`}
                                 fill
                                 className="object-cover"

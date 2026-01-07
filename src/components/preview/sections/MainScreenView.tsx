@@ -16,9 +16,9 @@ export default function MainScreenView() {
 
                 {/* Image Area */}
                 <div className={`
-           relative w-full transition-all duration-300
+           relative w-full transition-all duration-300 overflow-hidden
            ${mainScreen.layout === 'fill' ? 'absolute inset-0 h-full' : 'aspect-[3/4] shadow-sm'}
-           ${!mainScreen.layout.startsWith('fill') && 'bg-gray-100'}
+           ${!mainScreen.layout.startsWith('fill') && mainScreen.layout !== 'arch' && mainScreen.layout !== 'oval' && 'bg-gray-100'}
            ${mainScreen.layout === 'arch' ? 'rounded-t-[100px] rounded-b-xl' : ''}
            ${mainScreen.layout === 'oval' ? 'rounded-[100px]' : ''}
            ${mainScreen.layout === 'basic' || mainScreen.layout === 'frame' ? 'rounded-md' : ''}
