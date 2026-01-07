@@ -53,7 +53,7 @@ export default function MainScreenView() {
                     {mainScreen.effect === 'ripple' && (
                         <div className="absolute inset-0 z-10 opacity-30 bg-[url('https://www.transparenttextures.com/patterns/water.png')] animate-pulse"></div>
                     )}
-                    {mainScreen.effect === 'paper' && (
+                    {mainScreen.effect === 'paper' && mainScreen.layout !== 'oval' && (
                         <div className="absolute inset-0 z-10 opacity-40 bg-[url('https://www.transparenttextures.com/patterns/paper.png')] mix-blend-multiply"></div>
                     )}
                 </div>

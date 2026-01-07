@@ -10,6 +10,7 @@
 ## ✨ 주요 특징
 
 ### 🎨 디자인 및 사용자 경험
+
 - 🚀 **Next.js 16 App Router** - 서버 컴포넌트 우선 아키텍처로 최고의 성능
 - 📱 **모바일 퍼스트 디자인** - iPhone 15 Pro 목업으로 실시간 미리보기
 - 🎨 **실시간 커스터마이징** - 직관적인 UI로 즉시 디자인 변경 가능
@@ -17,6 +18,7 @@
 - 🎭 **계절별 테마 효과** - 벚꽃, 눈, 잎사귀, 개나리 등 다이나믹 애니메이션
 
 ### 🛠️ 기능 및 기술
+
 - 🗺️ **듀얼 지도 시스템** - 카카오맵과 네이버 지도 동시 지원
 - 📸 **다중 갤러리 뷰** - 스와이프, 썸네일, 그리드 뷰 유연한 선택
 - 💰 **스마트 계좌 관리** - 신랑/신부 측 계좌번호 체계적 분류
@@ -24,6 +26,7 @@
 - 🎯 **SEO 최적화** - 메타 태그, JSON-LD, 사이트맵 자동 생성
 
 ### ⚡ 성능 및 품질
+
 - 🏃‍♂️ **초고속 로딩** - 서버 사이드 렌더링과 최적화된 번들
 - 🔒 **TypeScript 엄격 모드** - 완벽한 타입 안전성과 개발 경험
 - 📊 **성능 모니터링** - Core Web Vitals 기반 최적화
@@ -65,21 +68,23 @@
 
 ### 📋 사전 요구사항
 
-| 요구사항 | 버전 | 설명 |
-|---------|------|------|
-| **Node.js** | 18.17+ | LTS 버전 권장 |
-| **패키지 매니저** | npm/yarn/pnpm/bun | npm 9.0+ 권장 |
-| **OS** | Windows/macOS/Linux | 크로스 플랫폼 지원 |
+| 요구사항          | 버전                | 설명               |
+| ----------------- | ------------------- | ------------------ |
+| **Node.js**       | 18.17+              | LTS 버전 권장      |
+| **패키지 매니저** | npm/yarn/pnpm/bun   | npm 9.0+ 권장      |
+| **OS**            | Windows/macOS/Linux | 크로스 플랫폼 지원 |
 
 ### 📦 설치 및 설정
 
 #### 1. 저장소 클론
+
 ```bash
 git clone https://github.com/hyukraeyo/wedding-invitation.git
 cd wedding-invitation
 ```
 
 #### 2. 의존성 설치
+
 ```bash
 # npm 사용 (권장)
 npm install
@@ -95,6 +100,7 @@ bun install
 ```
 
 #### 3. 환경 변수 설정 (선택사항)
+
 ```bash
 # .env.local 파일 생성 (지도 API 키 등)
 cp .env.example .env.local
@@ -121,6 +127,7 @@ bun run dev
 ### 🏗️ 빌드 및 배포
 
 #### 프로덕션 빌드
+
 ```bash
 # 타입 검사 및 빌드
 npm run build
@@ -130,6 +137,7 @@ npm run start
 ```
 
 #### 배포 준비 확인
+
 ```bash
 # 모든 테스트 통과 확인
 npm run lint
@@ -176,32 +184,36 @@ src/
 ### 🚀 App Router 아키텍처 최적화
 
 #### 서버 컴포넌트 우선 전략
+
 - **데이터 페칭 최적화**: 서버에서 직접 API 호출로 클라이언트 번들 감소
 - **병렬 데이터 로딩**: `Promise.all()`과 `Promise.allSettled()` 활용
 - **Request Memoization**: 동일 요청 자동 중복 제거
 - **스트리밍 UI**: `loading.tsx`로 점진적 콘텐츠 로딩
 
 #### 캐싱 및 렌더링 전략
+
 ```typescript
 // ISR (점진적 정적 재생성)
 export const revalidate = 3600; // 1시간마다 재생성
 
 // SSR (서버 사이드 렌더링)
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 // SSG (정적 생성)
-export const dynamic = 'force-static';
+export const dynamic = "force-static";
 ```
 
 ### 🖼️ 이미지 및 미디어 최적화
 
 #### Next.js Image 컴포넌트 활용
+
 - **자동 포맷 변환**: WebP/AVIF 지원으로 파일 크기 30% 감소
 - **반응형 이미지**: 디바이스 픽셀 비율에 따른 자동 크기 조정
 - **Lazy Loading**: Intersection Observer 기반 지연 로딩
 - **Priority Loading**: LCP 이미지 우선 로딩
 
 #### 고급 이미지 최적화
+
 ```typescript
 <Image
   src="/hero.jpg"
@@ -215,11 +227,13 @@ export const dynamic = 'force-static';
 ### 📦 번들 및 코드 최적화
 
 #### 코드 분할 전략
+
 - **동적 임포트**: `React.lazy()`와 `next/dynamic` 활용
 - **라우트 기반 분할**: 페이지별 자동 코드 분할
 - **컴포넌트 레벨 분할**: 무거운 컴포넌트 지연 로딩
 
 #### 번들 분석 및 최적화
+
 ```bash
 # 번들 크기 분석
 npm run build --analyze
@@ -229,6 +243,7 @@ ANALYZE=true npm run build
 ```
 
 #### 메모이제이션 전략
+
 - **React.memo**: props 변경 시에만 리렌더링
 - **useMemo**: 계산 비용이 큰 값 캐싱
 - **useCallback**: 이벤트 핸들러 함수 캐싱
