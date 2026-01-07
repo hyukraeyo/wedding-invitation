@@ -19,15 +19,24 @@ export default function MainScreenView() {
                     ${mainScreen.layout === 'basic' ? 'mb-12 opacity-100 translate-y-0 scale-100' : 'h-0 mb-0 opacity-0 -translate-y-4 scale-95 pointer-events-none overflow-hidden'}
                 `}>
                     {mainScreen.showTitle && (
-                        <div className="text-[11px] tracking-[0.4em] font-bold text-coral-pink mb-6 uppercase">
+                        <div
+                            className="tracking-[0.4em] font-bold text-coral-pink mb-6 uppercase"
+                            style={{ fontSize: 'calc(11px * var(--font-scale))' }}
+                        >
                             {mainScreen.title || 'THE MARRIAGE'}
                         </div>
                     )}
-                    <div className="text-5xl font-serif font-light text-gray-700 tracking-tighter mb-8 tabular-nums">
+                    <div
+                        className="font-serif font-light text-gray-700 tracking-tighter mb-8 tabular-nums"
+                        style={{ fontSize: 'calc(48px * var(--font-scale))' }}
+                    >
                         {date ? `${String(new Date(date).getMonth() + 1).padStart(2, '0')}.${String(new Date(date).getDate()).padStart(2, '0')}` : '00.00'}
                     </div>
                     {mainScreen.showGroomBride && (
-                        <div className="text-[17px] font-serif text-gray-800 font-medium tracking-tight">
+                        <div
+                            className="font-serif text-gray-800 font-medium tracking-tight"
+                            style={{ fontSize: 'calc(17px * var(--font-scale))' }}
+                        >
                             {groom.lastName}{groom.firstName}, {bride.lastName}{bride.firstName} <span className="text-gray-400 font-light ml-0.5">결혼합니다.</span>
                         </div>
                     )}
@@ -57,7 +66,10 @@ export default function MainScreenView() {
                     ) : (
                         <div className="flex flex-col items-center justify-center h-full opacity-20 text-gray-300 bg-gray-50/50">
                             <Heart size={48} strokeWidth={1} />
-                            <span className="text-[10px] mt-4 uppercase tracking-[0.2em] font-light">No Image Selected</span>
+                            <span
+                                className="mt-4 uppercase tracking-[0.2em] font-light"
+                                style={{ fontSize: 'calc(10px * var(--font-scale))' }}
+                            >No Image Selected</span>
                         </div>
                     )}
 
@@ -77,14 +89,23 @@ export default function MainScreenView() {
                     {mainScreen.layout !== 'basic' && (
                         <>
                             {mainScreen.showTitle && (
-                                <div className={`text-[10px] tracking-[0.4em] uppercase mb-6 font-medium ${mainScreen.layout === 'fill' ? 'opacity-80' : 'text-forest-green opacity-40'}`}>
+                                <div
+                                    className={`tracking-[0.4em] uppercase mb-6 font-medium ${mainScreen.layout === 'fill' ? 'opacity-80' : 'text-forest-green opacity-40'}`}
+                                    style={{ fontSize: 'calc(10px * var(--font-scale))' }}
+                                >
                                     {mainScreen.title}
                                 </div>
                             )}
                             {mainScreen.showGroomBride && (
-                                <div className={`font-serif text-3xl mb-6 flex items-center gap-4 ${mainScreen.layout === 'fill' ? 'font-light' : 'font-normal text-gray-800'}`}>
+                                <div
+                                    className={`font-serif mb-6 flex items-center gap-4 ${mainScreen.layout === 'fill' ? 'font-light' : 'font-normal text-gray-800'}`}
+                                    style={{ fontSize: 'calc(30px * var(--font-scale))' }}
+                                >
                                     <span>{groom.firstName}</span>
-                                    <span className="font-sans text-[10px] uppercase tracking-widest opacity-40 italic">and</span>
+                                    <span
+                                        className="font-sans uppercase tracking-widest opacity-40 italic"
+                                        style={{ fontSize: 'calc(10px * var(--font-scale))' }}
+                                    >and</span>
                                     <span>{bride.firstName}</span>
                                 </div>
                             )}
@@ -98,13 +119,19 @@ export default function MainScreenView() {
                     </div>
 
                     {mainScreen.showSubtitle && (
-                        <div className={`text-sm mb-6 tracking-wide ${mainScreen.layout === 'fill' ? 'opacity-95 font-light' : 'text-gray-500 font-light italic font-serif'}`}>
+                        <div
+                            className={`mb-6 tracking-wide ${mainScreen.layout === 'fill' ? 'opacity-95 font-light' : 'text-gray-500 font-light italic font-serif'}`}
+                            style={{ fontSize: 'calc(14px * var(--font-scale))' }}
+                        >
                             {mainScreen.subtitle}
                         </div>
                     )}
 
                     {mainScreen.showDatePlace && (
-                        <div className={`text-[12px] leading-[2.2] whitespace-pre-wrap tracking-wider ${mainScreen.layout === 'fill' ? 'opacity-80' : 'text-gray-500 font-medium font-serif'}`}>
+                        <div
+                            className={`leading-[2.2] whitespace-pre-wrap tracking-wider ${mainScreen.layout === 'fill' ? 'opacity-80' : 'text-gray-500 font-medium font-serif'}`}
+                            style={{ fontSize: 'calc(12px * var(--font-scale))' }}
+                        >
                             {(() => {
                                 if (mainScreen.customDatePlace && mainScreen.customDatePlace !== '0000.00.00. Sunday 00:00 PM\nOOO예식장 1F, OOO홀') {
                                     return mainScreen.customDatePlace;

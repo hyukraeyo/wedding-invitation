@@ -22,7 +22,10 @@ export default function GreetingView() {
                 {/* Title */}
                 {greetingTitle && (
                     <div className="flex flex-col items-center space-y-4">
-                        <h2 className="text-forest-green font-light text-xs tracking-[0.3em] uppercase opacity-50">
+                        <h2
+                            className="text-forest-green font-light tracking-[0.3em] uppercase opacity-50"
+                            style={{ fontSize: 'calc(12px * var(--font-scale))' }}
+                        >
                             {greetingTitle}
                         </h2>
                         <div className="w-12 h-[1px] bg-forest-green opacity-20"></div>
@@ -30,7 +33,10 @@ export default function GreetingView() {
                 )}
 
                 {/* Message */}
-                <div className="text-[15px] leading-[2.2] text-gray-700 whitespace-pre-wrap font-serif tracking-tight">
+                <div
+                    className="leading-[2.2] text-gray-700 whitespace-pre-wrap font-serif tracking-tight"
+                    style={{ fontSize: 'calc(15px * var(--font-scale))' }}
+                >
                     {message}
                 </div>
 
@@ -47,10 +53,16 @@ export default function GreetingView() {
                         {enableFreeformNames ? (
                             // Freeform Mode
                             <div className="space-y-4">
-                                <div className="leading-relaxed whitespace-pre-wrap text-[15px] text-gray-800 font-serif">
+                                <div
+                                    className="leading-relaxed whitespace-pre-wrap text-gray-800 font-serif"
+                                    style={{ fontSize: 'calc(15px * var(--font-scale))' }}
+                                >
                                     {groomNameCustom}
                                 </div>
-                                <div className="leading-relaxed whitespace-pre-wrap text-[15px] text-gray-800 font-serif">
+                                <div
+                                    className="leading-relaxed whitespace-pre-wrap text-gray-800 font-serif"
+                                    style={{ fontSize: 'calc(15px * var(--font-scale))' }}
+                                >
                                     {brideNameCustom}
                                 </div>
                             </div>
@@ -59,26 +71,44 @@ export default function GreetingView() {
                             <div className="space-y-4">
                                 {/* Groom */}
                                 <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 font-serif text-gray-800">
-                                    <div className="flex items-center gap-2 text-[14px] opacity-80">
+                                    <div
+                                        className="flex items-center gap-2 opacity-80"
+                                        style={{ fontSize: 'calc(14px * var(--font-scale))' }}
+                                    >
                                         <span>{formatParentName(groom.parents.father)}</span>
                                         <span className="text-gray-300">·</span>
                                         <span>{formatParentName(groom.parents.mother)}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <span className="text-gray-400 text-[11px] font-sans">의 {groom.relation}</span>
-                                        <span className="text-lg font-medium">{groom.firstName}</span>
+                                        <span
+                                            className="text-gray-400 font-sans"
+                                            style={{ fontSize: 'calc(11px * var(--font-scale))' }}
+                                        >의 {groom.relation}</span>
+                                        <span
+                                            className="font-medium"
+                                            style={{ fontSize: 'calc(18px * var(--font-scale))' }}
+                                        >{groom.firstName}</span>
                                     </div>
                                 </div>
                                 {/* Bride */}
                                 <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 font-serif text-gray-800">
-                                    <div className="flex items-center gap-2 text-[14px] opacity-80">
+                                    <div
+                                        className="flex items-center gap-2 opacity-80"
+                                        style={{ fontSize: 'calc(14px * var(--font-scale))' }}
+                                    >
                                         <span>{formatParentName(bride.parents.father)}</span>
                                         <span className="text-gray-300">·</span>
                                         <span>{formatParentName(bride.parents.mother)}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <span className="text-gray-400 text-[11px] font-sans">의 {bride.relation}</span>
-                                        <span className="text-lg font-medium">{bride.firstName}</span>
+                                        <span
+                                            className="text-gray-400 font-sans"
+                                            style={{ fontSize: 'calc(11px * var(--font-scale))' }}
+                                        >의 {bride.relation}</span>
+                                        <span
+                                            className="font-medium"
+                                            style={{ fontSize: 'calc(18px * var(--font-scale))' }}
+                                        >{bride.firstName}</span>
                                     </div>
                                 </div>
                             </div>

@@ -80,6 +80,7 @@ interface InvitationState {
         font: string;
         backgroundColor: string;
         accentColor: string;
+        fontScale: number;
         pattern: 'none' | 'flower-sm' | 'flower-lg';
         effect: 'none' | 'cherry-blossom' | 'snow' | 'leaves' | 'forsythia' | 'babys-breath';
         effectOnlyOnMain: boolean;
@@ -261,6 +262,7 @@ export const useInvitationStore = create<InvitationState>((set) => ({
         font: 'serif',
         backgroundColor: '#F9F8E6', // Warm Ivory
         accentColor: '#4A5D45', // Deep Forest Green
+        fontScale: 1,
         pattern: 'none',
         effect: 'none',
         effectOnlyOnMain: false,

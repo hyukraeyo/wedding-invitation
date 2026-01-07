@@ -38,6 +38,39 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                     </div>
                 </div>
 
+                {/* Font Scale */}
+                <div>
+                    <BuilderLabel>폰트 크기 ({theme.fontScale}x)</BuilderLabel>
+                    <div className="flex items-center gap-4">
+                        <input
+                            type="range"
+                            min="0.5"
+                            max="2"
+                            step="0.1"
+                            value={theme.fontScale}
+                            onChange={(e) => setTheme({ fontScale: parseFloat(e.target.value) })}
+                            className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                        />
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => setTheme({ fontScale: Math.max(0.5, theme.fontScale - 0.1) })}
+                                className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium transition-colors"
+                            >
+                                -
+                            </button>
+                            <button
+                                onClick={() => setTheme({ fontScale: Math.min(2, theme.fontScale + 0.1) })}
+                                className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium transition-colors"
+                            >
+                                +
+                            </button>
+                        </div>
+                    </div>
+                    <div className="text-xs text-gray-500 mt-1">
+                        0.5x ~ 2x 범위에서 조절 가능합니다
+                    </div>
+                </div>
+
                 {/* Background Color */}
                 <div>
                     <BuilderLabel>배경 색상</BuilderLabel>

@@ -34,16 +34,19 @@ const InvitationCanvas = memo(() => {
     [theme.font]
   );
 
-  const backgroundStyle = useMemo(
-    () => ({ backgroundColor: theme.backgroundColor }),
-    [theme.backgroundColor]
+  const canvasStyle = useMemo(
+    () => ({
+      backgroundColor: theme.backgroundColor,
+      '--font-scale': theme.fontScale,
+    }),
+    [theme.backgroundColor, theme.fontScale]
   );
 
   return (
     <div className="w-full h-full bg-white relative shadow-2xl overflow-hidden md:max-w-[430px] md:mx-auto">
       <div
         className={`w-full h-full relative flex flex-col overflow-y-auto overflow-x-hidden scrollbar-hide transition-colors duration-500 ${fontClass}`}
-        style={backgroundStyle}
+        style={canvasStyle}
       >
         <EffectsOverlay />
 

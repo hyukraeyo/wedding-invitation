@@ -49,10 +49,16 @@ export default function CalendarSectionView() {
                 {/* 2026.01.06 Header */}
                 <div className="text-center mb-12 space-y-3 relative z-10">
 
-                    <div className="text-3xl font-serif font-light tracking-widest text-gray-800">
+                    <div
+                        className="font-serif font-light tracking-widest text-gray-800"
+                        style={{ fontSize: 'calc(30px * var(--font-scale))' }}
+                    >
                         {date.replace(/-/g, '.')}
                     </div>
-                    <div className="text-[13px] text-gray-400 font-light tracking-wide">
+                    <div
+                        className="text-gray-400 font-light tracking-wide"
+                        style={{ fontSize: 'calc(13px * var(--font-scale))' }}
+                    >
                         {new Date(date).toLocaleDateString('ko-KR', { weekday: 'long' })}
                         <span className="mx-2 opacity-30">|</span>
                         {(() => {
@@ -71,7 +77,11 @@ export default function CalendarSectionView() {
                     <div className="mb-16 relative z-10 max-w-[320px] mx-auto">
                         <div className="grid grid-cols-7 mb-6">
                             {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map((d, i) => (
-                                <div key={d} className={`text-center text-[9px] tracking-tighter font-semibold ${i === 0 ? 'text-red-300' : 'text-gray-300'}`}>
+                                <div
+                                    key={d}
+                                    className={`text-center tracking-tighter font-semibold ${i === 0 ? 'text-red-300' : 'text-gray-300'}`}
+                                    style={{ fontSize: 'calc(9px * var(--font-scale))' }}
+                                >
                                     {d}
                                 </div>
                             ))}
