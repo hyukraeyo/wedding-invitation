@@ -194,7 +194,7 @@ export const useInvitationStore = create<InvitationState>((set) => ({
     location: '더 컨벤션 웨딩홀',
     address: '서울 송파구 올림픽로 319',
     detailAddress: '교통회관 1층 그랜드볼룸',
-    mapType: 'kakao',
+    mapType: 'naver',
 
     locationTitle: '오시는 길',
     locationContact: '02-000-0000',
