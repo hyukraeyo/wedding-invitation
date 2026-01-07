@@ -175,6 +175,12 @@ interface InvitationState {
     setClosing: (data: Partial<InvitationState['closing']>) => void;
 }
 
+const getDefaultDate = () => {
+    const d = new Date();
+    d.setDate(d.getDate() + 100);
+    return d.toISOString().split('T')[0];
+};
+
 export const useInvitationStore = create<InvitationState>((set) => ({
     kakaoShare: {
         title: '',
@@ -205,7 +211,7 @@ export const useInvitationStore = create<InvitationState>((set) => ({
 
     useFlowerIcon: true,
     order: 'groom-first',
-    date: '2024-10-25',
+    date: getDefaultDate(),
     time: '14:00',
     location: '더 컨벤션 웨딩홀',
     address: '서울 송파구 올림픽로 319',

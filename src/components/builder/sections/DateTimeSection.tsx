@@ -16,8 +16,11 @@ export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
         time, setTime,
         showCalendar, setShowCalendar,
         showDday, setShowDday,
-        ddayMessage, setDdayMessage
+        ddayMessage, setDdayMessage,
+        groom, bride
     } = useInvitationStore();
+
+    const dDay = date ? Math.ceil((new Date(date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)) : 0;
 
     // Calendar States
     const [viewDate, setViewDate] = useState(date ? new Date(date) : new Date());
@@ -225,13 +228,25 @@ export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
                                     const suffix = parts.slice(1).join('(D-Day)') || '';
                                     return (
                                         <div className="space-y-6">
+                                            {/* Preview area showing synced names */}
+                                            <div className="text-center px-4 py-2 bg-gray-50/50 rounded-xl mb-4 border border-gray-100/50">
+                                                <p className="text-[10px] text-gray-300 font-bold uppercase tracking-widest mb-1">Preview</p>
+                                                <p className="text-[13px] text-forest-green font-serif font-bold">
+                                                    {ddayMessage
+                                                        .replace('(신랑)', groom.firstName || '신랑')
+                                                        .replace('(신부)', bride.firstName || '신부')
+                                                        .replace('(D-Day)', dDay.toString())
+                                                    }
+                                                </p>
+                                            </div>
+
                                             <div className="relative group">
                                                 <input
                                                     type="text"
                                                     value={prefix}
                                                     onChange={(e) => setDdayMessage(`${e.target.value}(D-Day)${suffix}`)}
                                                     className="w-full bg-transparent border-b-2 border-gray-100 focus:border-forest-green outline-none py-3 text-center text-[16px] text-gray-800 transition-all font-serif font-bold placeholder:text-gray-200"
-                                                    placeholder="결혼식까지 남은 시간"
+                                                    placeholder="결혼식까지 남음"
                                                 />
                                                 <div className="absolute -top-4 left-1/2 -translate-x-1/2 opacity-0 group-focus-within:opacity-100 transition-opacity whitespace-nowrap">
                                                     <span className="text-[9px] font-black text-forest-green/50 uppercase tracking-widest">START TEXT</span>
