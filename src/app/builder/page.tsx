@@ -24,7 +24,7 @@ export default function BuilderPage() {
       {/* Workspace */}
       <div className="flex flex-1 overflow-hidden">
         {/* Left Panel: Editor */}
-        <section className="w-[400px] lg:w-[480px] h-full border-r border-gray-200 bg-white shadow-xl z-10 flex flex-col">
+        <section className="w-[400px] lg:w-[480px] h-full border-r border-gray-200 bg-white shadow-xl z-20 flex flex-col">
           <div className="flex-1 overflow-hidden p-6 bg-gray-50/50">
             <EditorForm />
           </div>
@@ -34,7 +34,7 @@ export default function BuilderPage() {
         <section className="flex-1 h-full bg-gray-200 flex items-center justify-center p-8 relative">
           <div className="absolute inset-0 pattern-grid-lg text-gray-300/[0.2] mask-gradient" />
 
-          <div className="flex flex-col items-center gap-6 z-10 transform scale-[0.85] lg:scale-95 transition-transform duration-500">
+          <div className="flex flex-col items-center gap-6 z-0 transform scale-[0.85] lg:scale-95 transition-transform duration-500">
 
             {/* Hyper-realistic iPhone 15 Pro Frame */}
             <div className="relative">

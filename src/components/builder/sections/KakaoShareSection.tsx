@@ -168,7 +168,7 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
 
             {/* Simple Preview Modal (Optional, if needed for "미리보기") */}
             {previewOpen && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setPreviewOpen(false)}>
+                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4" onClick={() => setPreviewOpen(false)}>
                     <div className="bg-white rounded-xl max-w-sm w-full p-4 space-y-4" onClick={e => e.stopPropagation()}>
                         <div className="flex justify-between items-center border-b pb-2 mb-2">
                             <h3 className="font-bold text-gray-900">카카오톡 공유 미리보기</h3>
