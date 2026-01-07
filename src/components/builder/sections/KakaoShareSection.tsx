@@ -44,7 +44,7 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                 </div>
 
                 {/* Photo Upload */}
-                <div className="space-y-3">
+                <div>
                     <BuilderLabel>사진</BuilderLabel>
                     <div className="border border-dashed border-gray-300 rounded-lg w-32 h-32 hover:border-forest-green hover:bg-gray-50 transition-all cursor-pointer relative overflow-hidden flex flex-col items-center justify-center gap-2 group bg-white">
                         <input
@@ -75,7 +75,7 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                 </div>
 
                 {/* Title */}
-                <div className="space-y-2">
+                <div>
                     <BuilderLabel>제목</BuilderLabel>
                     <input
                         type="text"
@@ -87,7 +87,7 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                 </div>
 
                 {/* Description */}
-                <div className="space-y-2">
+                <div>
                     <BuilderLabel>내용</BuilderLabel>
                     <input
                         type="text"
@@ -99,7 +99,7 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                 </div>
 
                 {/* Image Ratio */}
-                <div className="space-y-2">
+                <div>
                     <BuilderLabel>사진 비율</BuilderLabel>
                     <div className="flex gap-3">
                         <button
@@ -118,7 +118,7 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                 </div>
 
                 {/* Button Type */}
-                <div className="space-y-2">
+                <div>
                     <BuilderLabel>버튼 추가</BuilderLabel>
                     <div className="flex gap-3">
                         <button

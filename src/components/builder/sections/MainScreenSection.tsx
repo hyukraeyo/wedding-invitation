@@ -68,7 +68,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                 </div>
 
                 {/* Photo Upload */}
-                <div className="space-y-3">
+                <div>
                     <BuilderLabel>사진</BuilderLabel>
                     <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 hover:border-forest-green/40 transition-colors bg-gray-50 group cursor-pointer relative overflow-hidden min-h-[200px] flex items-center justify-center">
                         <input
@@ -103,7 +103,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                 </div>
 
                 {/* Design Options */}
-                <div className="space-y-3">
+                <div>
                     <BuilderLabel>디자인 변형</BuilderLabel>
                     <div className="flex gap-4 mt-2">
                         <label className="flex items-center gap-2 cursor-pointer">
@@ -128,7 +128,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                 </div>
 
                 {/* Effects */}
-                <div className="space-y-3">
+                <div>
                     <BuilderLabel>이펙트</BuilderLabel>
                     <div className="flex gap-2">
                         {['none', 'mist', 'ripple', 'paper'].map((eff) => (

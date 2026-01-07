@@ -171,8 +171,8 @@ function AccountEntry({
                     })}
                 </div>
                 <div className="grid grid-cols-2 gap-3">
-                    <div className="space-y-1.5">
-                        <BuilderLabel className="!mb-0 text-[10px] text-gray-400">은행명</BuilderLabel>
+                    <div>
+                        <BuilderLabel className="text-[10px] text-gray-400">은행명</BuilderLabel>
                         <BuilderInput
                             placeholder="은행 입력"
                             value={acc.bank}
@@ -180,8 +180,8 @@ function AccountEntry({
                             className="bg-white"
                         />
                     </div>
-                    <div className="space-y-1.5">
-                        <BuilderLabel className="!mb-0 text-[10px] text-gray-400">예금주</BuilderLabel>
+                    <div>
+                        <BuilderLabel className="text-[10px] text-gray-400">예금주</BuilderLabel>
                         <BuilderInput
                             placeholder="이름 입력"
                             value={acc.holder}
@@ -190,8 +190,8 @@ function AccountEntry({
                         />
                     </div>
                 </div>
-                <div className="space-y-1.5">
-                    <BuilderLabel className="!mb-0 text-[10px] text-gray-400">계좌번호</BuilderLabel>
+                <div>
+                    <BuilderLabel className="text-[10px] text-gray-400">계좌번호</BuilderLabel>
                     <BuilderInput
                         placeholder="하이픈(-) 포함하여 입력"
                         value={acc.accountNumber}

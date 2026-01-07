@@ -38,7 +38,7 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
         >
             <div className="space-y-8">
                 {/* Photo Upload */}
-                <div className="space-y-3">
+                <div>
                     <BuilderLabel>사진</BuilderLabel>
                     <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 hover:border-forest-green/40 transition-colors bg-gray-50 group cursor-pointer relative overflow-hidden min-h-[200px] flex items-center justify-center">
                         <input
@@ -75,7 +75,7 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
                 </div>
 
                 {/* Effect Selection */}
-                <div className="space-y-3">
+                <div>
                     <BuilderLabel>이펙트</BuilderLabel>
                     <div className="flex gap-2">
                         {['none', 'mist', 'ripple', 'paper'].map((eff) => (
@@ -94,7 +94,7 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
                 </div>
 
                 {/* Ratio Selection */}
-                <div className="space-y-3">
+                <div>
                     <BuilderLabel>사진 비율</BuilderLabel>
                     <div className="flex gap-2">
                         <button
@@ -119,7 +119,7 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
                 </div>
 
                 {/* Content Editor */}
-                <div className="space-y-3">
+                <div>
                     <div className="flex justify-between items-end">
                         <BuilderLabel>문구 내용</BuilderLabel>
                         <button

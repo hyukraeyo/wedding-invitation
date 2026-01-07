@@ -23,7 +23,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
             <div className="space-y-6">
 
                 {/* Font */}
-                <div className="space-y-3">
+                <div>
                     <BuilderLabel>글꼴</BuilderLabel>
                     <div className="flex gap-3">
                         <select
@@ -38,7 +38,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                 </div>
 
                 {/* Background Color */}
-                <div className="space-y-3">
+                <div>
                     <BuilderLabel>배경 색상</BuilderLabel>
                     <div className="flex gap-3">
                         {['#F9F8E6', '#FFEFF4', '#F4F1EA', '#EDF2F7', '#FFFFFF'].map((color) => (
@@ -53,7 +53,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                 </div>
 
                 {/* Accent Color */}
-                <div className="space-y-3">
+                <div>
                     <BuilderLabel>강조 색상</BuilderLabel>
                     <div className="flex gap-3">
                         {['#4A5D45', '#D4AF37', '#9A8C98', '#2C3E50', '#C0392B'].map((color) => (
@@ -68,7 +68,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                 </div>
 
                 {/* Pattern */}
-                <div className="space-y-3">
+                <div>
                     <BuilderLabel>배경 패턴</BuilderLabel>
                     <div className="flex gap-3">
                         {['none', 'flower-sm', 'flower-lg'].map((opt) => (
@@ -87,7 +87,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                 </div>
 
                 {/* Effect */}
-                <div className="space-y-3">
+                <div>
                     <BuilderLabel>배경 이펙트</BuilderLabel>
                     <div className="flex flex-wrap gap-2">
                         {['none', 'cherry-blossom', 'snow', 'leaves', 'forsythia', 'babys-breath'].map((opt) => (

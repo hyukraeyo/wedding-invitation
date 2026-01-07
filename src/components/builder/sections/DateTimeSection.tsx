@@ -3,6 +3,7 @@ import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-reac
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderSelect } from '../BuilderSelect';
+import { BuilderLabel } from '../BuilderLabel';
 
 interface SectionProps {
     isOpen: boolean;
@@ -121,8 +122,8 @@ export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
         >
             <div className="space-y-8">
                 {/* Custom Date Picker */}
-                <div className="space-y-3" ref={datePickerRef}>
-                    <label className="text-[11px] font-bold text-gray-400 uppercase tracking-widest px-1">예식일</label>
+                <div ref={datePickerRef}>
+                    <BuilderLabel>예식일</BuilderLabel>
                     <div className="relative">
                         <button
                             onClick={() => setShowPicker(!showPicker)}
@@ -166,8 +167,8 @@ export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
                 </div>
 
                 {/* Refined Time Picker (Using BuilderSelect) */}
-                <div className="space-y-3">
-                    <label className="text-[11px] font-bold text-gray-400 uppercase tracking-widest px-1">예식시간</label>
+                <div>
+                    <BuilderLabel>예식시간</BuilderLabel>
                     <div className="flex gap-4 p-1 bg-gray-100/30 rounded-[28px] border border-gray-50">
                         <BuilderSelect
                             value={currentHour}
@@ -183,8 +184,8 @@ export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
                 </div>
 
                 {/* Display Options */}
-                <div className="space-y-4 pt-2">
-                    <label className="text-[11px] font-bold text-gray-400 uppercase tracking-widest px-1">표시 설정</label>
+                <div className="pt-2">
+                    <BuilderLabel>표시 설정</BuilderLabel>
                     <div className="flex flex-wrap gap-2.5 px-1">
                         <button
                             onClick={() => setShowCalendar(!showCalendar)}
@@ -211,9 +212,9 @@ export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* D-Day Message Editor */}
                 {showDday && (
-                    <div className="space-y-4 pt-4 border-t border-gray-50">
-                        <div className="flex items-center justify-between px-1">
-                            <label className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">디데이 문구 커스텀</label>
+                    <div className="pt-4 border-t border-gray-50">
+                        <div className="flex items-center justify-between px-1 mb-1">
+                            <BuilderLabel className="!mb-0 text-[10px] tracking-[0.2em]">디데이 문구 커스텀</BuilderLabel>
                             <div className="px-2 py-0.5 bg-gray-100 rounded text-[9px] text-gray-400 font-bold tracking-tighter">PREMIUM</div>
                         </div>
                         <div className="border border-gray-100 rounded-[28px] overflow-hidden bg-white shadow-xl shadow-black/[0.02] ring-1 ring-black/[0.01]">
