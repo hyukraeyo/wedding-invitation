@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import Script from 'next/script';
 import { Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk';
-import { MapPin, Navigation, Copy } from 'lucide-react';
+import { MapPin, Copy } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 
 export default function LocationView() {
@@ -150,7 +150,11 @@ export default function LocationView() {
                         rel="noopener noreferrer"
                         className="flex-1 py-3 bg-[#FAE100] rounded-lg text-[11px] text-[#3C1E1E] font-medium flex flex-col items-center justify-center gap-1 hover:bg-[#FCE620] transition-colors"
                     >
-                        <MapPin size={14} />
+                        {/* Kakao Map Icon - Blue Pin with White Dot */}
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#0475F4" />
+                            <circle cx="12" cy="9" r="2.5" fill="white" />
+                        </svg>
                         카카오맵
                     </a>
                     <a
@@ -159,7 +163,26 @@ export default function LocationView() {
                         rel="noopener noreferrer"
                         className="flex-1 py-3 bg-[#03C75A] rounded-lg text-[11px] text-white font-medium flex flex-col items-center justify-center gap-1 hover:bg-[#02b351] transition-colors"
                     >
-                        <Navigation size={14} />
+                        {/* Naver Map Icon - Custom Gradient */}
+                        <svg width="14" height="14" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="mapGradient" x1="50%" y1="0%" x2="50%" y2="100%">
+                                    <stop offset="0%" stopColor="#007CFF" />
+                                    <stop offset="100%" stopColor="#00D930" />
+                                </linearGradient>
+                                <filter id="gloss" x="-20%" y="-20%" width="140%" height="140%">
+                                    <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur" />
+                                    <feSpecularLighting in="blur" surfaceScale="5" specularConstant="0.5" specularExponent="15" lightingColor="#ffffff" result="specOut">
+                                        <fePointLight x="128" y="0" z="100" />
+                                    </feSpecularLighting>
+                                    <feComposite in="specOut" in2="SourceAlpha" operator="in" result="specOut" />
+                                    <feComposite in="SourceGraphic" in2="specOut" operator="arithmetic" k1="0" k2="1" k3="1" k4="0" />
+                                </filter>
+                            </defs>
+                            <path d="M128 245 C 80 170 28 130 28 85 A 100 100 0 1 1 228 85 C 228 130 176 170 128 245 Z" fill="url(#mapGradient)" />
+                            <ellipse cx="128" cy="60" rx="60" ry="30" fill="white" opacity="0.15" />
+                            <path d="M88 65 L112 65 L144 110 L144 65 L168 65 L168 135 L144 135 L112 90 L112 135 L88 135 Z" fill="white" />
+                        </svg>
                         네이버지도
                     </a>
                 </div>

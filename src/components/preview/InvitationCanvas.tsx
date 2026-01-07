@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from 'react';
+import React, { memo, useMemo, useEffect } from 'react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import MainScreenView from './sections/MainScreenView';
 import CalendarSectionView from './sections/CalendarSectionView';
@@ -10,7 +10,21 @@ import AccountsView from './sections/AccountsView';
 import EffectsOverlay from './sections/EffectsOverlay';
 
 const InvitationCanvas = memo(() => {
-  const { theme } = useInvitationStore();
+  const { theme, editingSection } = useInvitationStore();
+
+  // Scroll to editing section
+  useEffect(() => {
+    if (editingSection) {
+      const element = document.getElementById(`section-${editingSection}`);
+      if (element) {
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+          inline: 'nearest'
+        });
+      }
+    }
+  }, [editingSection]);
 
   const fontClass = useMemo(
     () => (theme.font === 'serif' ? 'font-serif' : 'font-sans'),
@@ -31,35 +45,37 @@ const InvitationCanvas = memo(() => {
         <EffectsOverlay />
 
         {/* 1. Main Screen */}
-        <MainScreenView />
+        <div id="section-mainScreen">
+          <MainScreenView />
+        </div>
 
         {/* 2. Message / Greeting */}
-        <div className="mt-10 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-backwards">
+        <div id="section-greeting" className="mt-10 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-backwards">
           <GreetingView />
         </div>
 
         {/* 3. Detailed Names */}
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500 fill-mode-backwards">
+        <div id="section-basic" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500 fill-mode-backwards">
           <NamesView />
         </div>
 
         {/* 4. Calendar & D-Day */}
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-700 fill-mode-backwards">
+        <div id="section-date" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-700 fill-mode-backwards">
           <CalendarSectionView />
         </div>
 
         {/* 5. Location */}
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-900 fill-mode-backwards px-6 pb-10">
+        <div id="section-location" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-900 fill-mode-backwards px-6 pb-10">
           <LocationView />
         </div>
 
         {/* 6. Gallery */}
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000 fill-mode-backwards">
+        <div id="section-gallery" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000 fill-mode-backwards">
           <GalleryView />
         </div>
 
         {/* 7. Accounts */}
-        <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000 fill-mode-backwards pb-10">
+        <div id="section-account" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000 fill-mode-backwards pb-10">
           <AccountsView />
         </div>
 

@@ -42,11 +42,16 @@ const KakaoShareSection = dynamic(() => import('./sections/KakaoShareSection'), 
 
 const EditorForm = memo(function EditorForm() {
   // State to track open accordion section
-  const [openSection, setOpenSection] = useState<string | null>('basic');
+  const [openSection, setOpenSection] = useState<string | null>(null);
+  const setEditingSection = useInvitationStore(state => state.setEditingSection);
 
   const handleToggle = useCallback((section: string) => {
-    setOpenSection(prev => prev === section ? null : section);
-  }, []);
+    setOpenSection(prev => {
+      const newSection = prev === section ? null : section;
+      setEditingSection(newSection);
+      return newSection;
+    });
+  }, [setEditingSection]);
 
   return (
     <div className="h-full overflow-y-auto px-1 py-2">

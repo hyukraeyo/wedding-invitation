@@ -147,6 +147,10 @@ interface InvitationState {
     setShowDday: (show: boolean) => void;
     setDdayMessage: (message: string) => void;
 
+    // UI State
+    editingSection: string | null;
+    setEditingSection: (section: string | null) => void;
+
     // Kakao Share State
     kakaoShare: {
         title: string;
@@ -317,6 +321,9 @@ export const useInvitationStore = create<InvitationState>((set) => ({
     setShowDday: (show) => set({ showDday: show }),
     setDdayMessage: (ddayMessage) => set({ ddayMessage }),
 
+    // UI State
+    editingSection: null,
+    setEditingSection: (section) => set({ editingSection: section }),
 
     setKakao: (data) => set((state) => ({
         kakaoShare: {
