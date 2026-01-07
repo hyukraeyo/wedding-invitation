@@ -39,7 +39,7 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
         >
             <div className="space-y-6">
                 {/* Title */}
-                <div className="space-y-2">
+                <div className="space-y-3">
                     <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">제목</label>
                     <input
                         type="text"
@@ -51,7 +51,7 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                 </div>
 
                 {/* Content with Toolbar */}
-                <div className="space-y-2">
+                <div className="space-y-3">
                     <div className="flex items-center justify-between">
                         <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">내용</label>
                         <button className="text-xs text-red-500 underline hover:text-red-600 font-medium">샘플 문구 보기</button>
@@ -82,7 +82,7 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                 </div>
 
                 {/* Photo Upload */}
-                <div className="space-y-2">
+                <div className="space-y-3">
                     <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">사진</label>
                     <div className="border-2 border-dashed border-gray-200 rounded-xl w-32 h-32 hover:border-forest-green/40 transition-colors bg-gray-50 group cursor-pointer relative overflow-hidden">
                         <input

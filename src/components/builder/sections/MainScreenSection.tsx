@@ -65,7 +65,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                 </div>
 
                 {/* Photo Upload */}
-                <div className="space-y-2">
+                <div className="space-y-3">
                     <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">사진</label>
                     <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 hover:border-forest-green/40 transition-colors bg-gray-50 group cursor-pointer relative overflow-hidden min-h-[200px] flex items-center justify-center">
                         <input

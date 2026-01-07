@@ -43,7 +43,7 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                 </div>
 
                 {/* Photo Upload */}
-                <div className="space-y-2">
+                <div className="space-y-3">
                     <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">사진</label>
                     <div className="border border-dashed border-gray-300 rounded-lg w-32 h-32 hover:border-forest-green hover:bg-gray-50 transition-all cursor-pointer relative overflow-hidden flex flex-col items-center justify-center gap-2 group bg-white">
                         <input
