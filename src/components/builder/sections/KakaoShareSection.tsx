@@ -148,7 +148,7 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                             type="checkbox"
                             checked={kakao.showShareButton}
                             onChange={(e) => setKakao({ showShareButton: e.target.checked })}
-                            className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black border-none checked:bg-black"
+                            className="w-4 h-4 rounded border-gray-300 accent-forest-green focus:ring-forest-green"
                         />
                         <span className="text-sm text-gray-800">청첩장 하단에 카카오톡 공유하기 버튼 노출</span>
                     </label>

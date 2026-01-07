@@ -108,7 +108,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                 type="checkbox"
                                 checked={mainScreen.showBorder}
                                 onChange={(e) => setMainScreen({ showBorder: e.target.checked })}
-                                className="w-5 h-5 rounded border-gray-300 text-black focus:ring-black bg-gray-200 border-none checked:bg-black"
+                                className="w-5 h-5 rounded border-gray-300 accent-forest-green focus:ring-forest-green"
                             />
                             <span className="text-sm text-gray-700">테두리 선</span>
                         </label>
@@ -117,7 +117,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                 type="checkbox"
                                 checked={mainScreen.expandPhoto}
                                 onChange={(e) => setMainScreen({ expandPhoto: e.target.checked })}
-                                className="w-5 h-5 rounded border-gray-300 text-black focus:ring-black bg-gray-200 border-none checked:bg-black"
+                                className="w-5 h-5 rounded border-gray-300 accent-forest-green focus:ring-forest-green"
                             />
                             <span className="text-sm text-gray-700">사진 확장</span>
                         </label>
