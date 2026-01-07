@@ -120,7 +120,7 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                             type="checkbox"
                             checked={showNamesAtBottom}
                             onChange={(e) => setShowNamesAtBottom(e.target.checked)}
-                            className="w-4 h-4 rounded border-2 border-gray-300 bg-white accent-forest-green focus:ring-forest-green"
+                            className="w-4 h-4 rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
                         />
                         <span className="text-sm text-gray-800">인사말 하단에 신랑신부&혼주 성함 표시</span>
                     </label>
@@ -130,7 +130,7 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                             type="checkbox"
                             checked={sortNames}
                             onChange={(e) => setSortNames(e.target.checked)}
-                            className="w-4 h-4 rounded border-2 border-gray-300 bg-white accent-forest-green focus:ring-forest-green"
+                            className="w-4 h-4 rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
                         />
                         <span className="text-sm text-gray-800">각 항목 정렬</span>
                     </label>
@@ -140,7 +140,7 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                             type="checkbox"
                             checked={enableFreeformNames}
                             onChange={(e) => setEnableFreeformNames(e.target.checked)}
-                            className="w-4 h-4 rounded border-2 border-gray-300 bg-white accent-forest-green focus:ring-forest-green"
+                            className="w-4 h-4 rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
                         />
                         <span className="text-sm text-gray-800">성함 자유 입력</span>
                     </label>

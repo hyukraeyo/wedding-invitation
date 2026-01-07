@@ -182,7 +182,7 @@ export default function LocationSection({ isOpen, onToggle }: SectionProps) {
                             type="checkbox"
                             checked={lockMap}
                             onChange={(e) => setLockMap(e.target.checked)}
-                            className="w-5 h-5 rounded border-2 border-gray-300 bg-white accent-forest-green focus:ring-forest-green"
+                            className="w-5 h-5 rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
                             // Custom checkbox style/color requires Tailwind form plugin or custom CSS, using standard for now but accent black
                             style={{ accentColor: 'black' }}
                         />
@@ -198,7 +198,7 @@ export default function LocationSection({ isOpen, onToggle }: SectionProps) {
                             type="checkbox"
                             checked={showNavigation}
                             onChange={(e) => setShowNavigation(e.target.checked)}
-                            className="w-5 h-5 rounded border-2 border-gray-300 bg-white accent-forest-green focus:ring-forest-green"
+                            className="w-5 h-5 rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
                             style={{ accentColor: 'black' }}
                         />
                         <span className="text-sm text-gray-500">내비 앱 바로가기 버튼 표시 (카카오,티맵,네이버)</span>
@@ -254,7 +254,7 @@ export default function LocationSection({ isOpen, onToggle }: SectionProps) {
                                 type="checkbox"
                                 checked={showSketch}
                                 onChange={(e) => setShowSketch(e.target.checked)}
-                                className="w-5 h-5 rounded border-2 border-gray-300 bg-white accent-forest-green focus:ring-forest-green"
+                                className="w-5 h-5 rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
                                 style={{ accentColor: 'black' }}
                             />
                             <span className="text-sm text-gray-800">약도 사진 표시</span>

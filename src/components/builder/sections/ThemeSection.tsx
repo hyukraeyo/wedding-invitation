@@ -114,7 +114,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                                 type="checkbox"
                                 checked={theme.effectOnlyOnMain}
                                 onChange={(e) => setTheme({ effectOnlyOnMain: e.target.checked })}
-                                className="w-3.5 h-3.5 rounded border-2 border-gray-300 bg-white accent-forest-green focus:ring-forest-green"
+                                className="w-3.5 h-3.5 rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
                             />
                             <span className="text-xs text-gray-500 hover:text-forest-green transition-colors">메인 화면에만 이펙트 보이게 설정</span>
                         </label>
@@ -128,7 +128,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                             type="checkbox"
                             checked={theme.animateEntrance}
                             onChange={(e) => setTheme({ animateEntrance: e.target.checked })}
-                            className="w-4 h-4 rounded border-2 border-gray-300 bg-white accent-forest-green focus:ring-forest-green"
+                            className="w-4 h-4 rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
                         />
                         <span className="text-sm text-gray-700 group-hover:text-forest-green transition-colors">스크롤 샤르륵 등장 효과</span>
                     </label>
@@ -138,7 +138,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                             type="checkbox"
                             checked={theme.showSubtitleEng}
                             onChange={(e) => setTheme({ showSubtitleEng: e.target.checked })}
-                            className="w-4 h-4 rounded border-2 border-gray-300 bg-white accent-forest-green focus:ring-forest-green"
+                            className="w-4 h-4 rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
                         />
                         <span className="text-sm text-gray-700 group-hover:text-forest-green transition-colors">영문 소제목 표시</span>
                     </label>
