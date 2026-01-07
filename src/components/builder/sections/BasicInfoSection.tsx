@@ -70,7 +70,7 @@ export default function BasicInfoSection({ isOpen, onToggle }: SectionProps) {
                                 type="checkbox"
                                 checked={groom.parents.father.isDeceased}
                                 onChange={(e) => setGroomParents('father', { isDeceased: e.target.checked })}
-                                className="rounded border-gray-300 accent-forest-green focus:ring-forest-green"
+                                className="rounded border-2 border-gray-300 bg-white accent-forest-green focus:ring-forest-green"
                             />
                             <span className="text-xs text-gray-500">故</span>
                         </label>
@@ -89,7 +89,7 @@ export default function BasicInfoSection({ isOpen, onToggle }: SectionProps) {
                                 type="checkbox"
                                 checked={groom.parents.mother.isDeceased}
                                 onChange={(e) => setGroomParents('mother', { isDeceased: e.target.checked })}
-                                className="rounded border-gray-300 accent-forest-green focus:ring-forest-green"
+                                className="rounded border-2 border-gray-300 bg-white accent-forest-green focus:ring-forest-green"
                             />
                             <span className="text-xs text-gray-500">故</span>
                         </label>
@@ -143,7 +143,7 @@ export default function BasicInfoSection({ isOpen, onToggle }: SectionProps) {
                                 type="checkbox"
                                 checked={bride.parents.father.isDeceased}
                                 onChange={(e) => setBrideParents('father', { isDeceased: e.target.checked })}
-                                className="rounded border-gray-300 accent-forest-green focus:ring-forest-green"
+                                className="rounded border-2 border-gray-300 bg-white accent-forest-green focus:ring-forest-green"
                             />
                             <span className="text-xs text-gray-500">故</span>
                         </label>
@@ -162,7 +162,7 @@ export default function BasicInfoSection({ isOpen, onToggle }: SectionProps) {
                                 type="checkbox"
                                 checked={bride.parents.mother.isDeceased}
                                 onChange={(e) => setBrideParents('mother', { isDeceased: e.target.checked })}
-                                className="rounded border-gray-300 accent-forest-green focus:ring-forest-green"
+                                className="rounded border-2 border-gray-300 bg-white accent-forest-green focus:ring-forest-green"
                             />
                             <span className="text-xs text-gray-500">故</span>
                         </label>

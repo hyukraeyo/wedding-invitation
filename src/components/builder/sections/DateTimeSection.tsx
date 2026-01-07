@@ -92,7 +92,7 @@ export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
                                 type="checkbox"
                                 checked={showCalendar}
                                 onChange={(e) => setShowCalendar(e.target.checked)}
-                                className="w-5 h-5 rounded border-gray-300 accent-forest-green focus:ring-forest-green"
+                                className="w-5 h-5 rounded border-2 border-gray-300 bg-white accent-forest-green focus:ring-forest-green"
                             />
                             <span className="text-sm text-gray-800">캘린더</span>
                         </label>
@@ -102,7 +102,7 @@ export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
                                 type="checkbox"
                                 checked={showDday}
                                 onChange={(e) => setShowDday(e.target.checked)}
-                                className="w-5 h-5 rounded border-gray-300 accent-forest-green focus:ring-forest-green"
+                                className="w-5 h-5 rounded border-2 border-gray-300 bg-white accent-forest-green focus:ring-forest-green"
                             />
                             <span className="text-sm text-gray-800">디데이 & 카운트다운</span>
                         </label>
