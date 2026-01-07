@@ -45,7 +45,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                         <input
                             type="range"
                             min="0.5"
-                            max="2"
+                            max="1.5"
                             step="0.1"
                             value={theme.fontScale}
                             onChange={(e) => setTheme({ fontScale: parseFloat(e.target.value) })}
@@ -59,7 +59,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                                 -
                             </button>
                             <button
-                                onClick={() => setTheme({ fontScale: Math.min(2, theme.fontScale + 0.1) })}
+                                onClick={() => setTheme({ fontScale: Math.min(1.5, theme.fontScale + 0.1) })}
                                 className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium transition-colors"
                             >
                                 +
@@ -67,7 +67,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                         </div>
                     </div>
                     <div className="text-xs text-gray-500 mt-1">
-                        0.5x ~ 2x 범위에서 조절 가능합니다
+                        0.5x ~ 1.5x 범위에서 조절 가능합니다
                     </div>
                 </div>
 
