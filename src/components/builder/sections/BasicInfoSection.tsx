@@ -10,7 +10,7 @@ interface SectionProps {
     onToggle: () => void;
 }
 
-export default function BasicInfoSection({ isOpen, onToggle }: SectionProps) {
+const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ isOpen, onToggle }) {
     const {
         groom, setGroom,
         bride, setBride,
@@ -152,4 +152,6 @@ export default function BasicInfoSection({ isOpen, onToggle }: SectionProps) {
             </div>
         </AccordionItem>
     );
-}
+});
+
+export default BasicInfoSection;

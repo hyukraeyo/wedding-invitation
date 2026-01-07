@@ -49,6 +49,8 @@ const nextConfig: NextConfig = {
     serverActions: {
       allowedOrigins: ['localhost:3000', 'wedding-invitation.vercel.app'],
     },
+    // 패키지 임포트 최적화 (트리셰이킹)
+    optimizePackageImports: ['lucide-react', '@tiptap/react', 'clsx'],
   },
 
   // Turbopack 설정

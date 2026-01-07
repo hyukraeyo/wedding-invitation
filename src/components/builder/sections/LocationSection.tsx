@@ -12,7 +12,7 @@ interface SectionProps {
     onToggle: () => void;
 }
 
-export default function LocationSection({ isOpen, onToggle }: SectionProps) {
+const LocationSection = React.memo<SectionProps>(function LocationSection({ isOpen, onToggle }) {
     const {
         location, setLocation, // 예식장명
         address, setAddress,
@@ -289,7 +289,9 @@ export default function LocationSection({ isOpen, onToggle }: SectionProps) {
             </div>
         </AccordionItem>
     );
-}
+});
+
+export default LocationSection;
 
 // Helper for Daum Postcode is same as before
 

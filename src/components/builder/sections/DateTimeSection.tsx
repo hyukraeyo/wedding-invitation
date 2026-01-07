@@ -10,7 +10,7 @@ interface SectionProps {
     onToggle: () => void;
 }
 
-export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
+const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOpen, onToggle }) {
     const {
         date, setDate,
         time, setTime,
@@ -298,4 +298,6 @@ export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
             </div>
         </AccordionItem>
     );
-}
+});
+
+export default DateTimeSection;

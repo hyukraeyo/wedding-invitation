@@ -10,7 +10,7 @@ interface SectionProps {
     onToggle: () => void;
 }
 
-export default function GallerySection({ isOpen, onToggle }: SectionProps) {
+const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen, onToggle }) {
     const {
         gallery,
         setGallery,
@@ -144,4 +144,6 @@ export default function GallerySection({ isOpen, onToggle }: SectionProps) {
             </div>
         </AccordionItem>
     );
-}
+});
+
+export default GallerySection;
