@@ -62,6 +62,7 @@ interface InvitationState {
         title: string;
         subtitle: string;
         customDatePlace: string;
+        andText: string;
         // Visibility Flags
         showTitle: boolean;
         showGroomBride: boolean;
@@ -248,6 +249,7 @@ export const useInvitationStore = create<InvitationState>((set) => ({
         title: 'THE MARRIAGE',
         subtitle: 'We are getting married',
         customDatePlace: '0000.00.00. Sunday 00:00 PM\nOOO예식장 1F, OOO홀',
+        andText: '그리고',
         showTitle: true,
         showGroomBride: true,
         showSubtitle: true,

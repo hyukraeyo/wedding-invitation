@@ -105,7 +105,7 @@ export default function MainScreenView() {
                                     <span
                                         className="font-sans uppercase tracking-widest opacity-40 italic"
                                         style={{ fontSize: 'calc(10px * var(--font-scale))' }}
-                                    >and</span>
+                                    >{mainScreen.andText || 'and'}</span>
                                     <span>{bride.firstName}</span>
                                 </div>
                             )}

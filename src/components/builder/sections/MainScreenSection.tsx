@@ -260,7 +260,13 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                             className="text-gray-500 bg-gray-50/50"
                                             disabled={!mainScreen.showGroomBride}
                                         />
-                                        <div className="text-xs text-gray-400 text-center font-medium">그리고</div>
+                                        <BuilderInput
+                                            type="text"
+                                            value={mainScreen.andText}
+                                            onChange={(value) => setMainScreen({ andText: value })}
+                                            className="text-xs text-gray-400 text-center font-medium border-none bg-transparent text-center"
+                                            placeholder="그리고"
+                                        />
                                         <BuilderInput
                                             type="text"
                                             value={bride.firstName || '신부'}
