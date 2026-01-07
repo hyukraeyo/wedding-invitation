@@ -217,48 +217,66 @@ export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
                             <BuilderLabel className="!mb-0 text-[10px] tracking-[0.2em]">디데이 문구 커스텀</BuilderLabel>
                             <div className="px-2 py-0.5 bg-gray-100 rounded text-[9px] text-gray-400 font-bold tracking-tighter">PREMIUM</div>
                         </div>
-                        <div className="border border-gray-100 rounded-[28px] overflow-hidden bg-white shadow-xl shadow-black/[0.02] ring-1 ring-black/[0.01]">
-                            <div className="flex items-center gap-1.5 p-3 bg-gray-50/30 border-b border-gray-50/50">
-                                <div className="flex gap-1.5 ml-1 mr-3">
-                                    <div className="w-2 h-2 rounded-full bg-red-200" />
-                                    <div className="w-2 h-2 rounded-full bg-amber-200" />
-                                    <div className="w-2 h-2 rounded-full bg-emerald-200" />
-                                </div>
-                                <div className="w-[1px] h-3 bg-gray-200 mx-1" />
-                                <button className="px-3 py-1.5 hover:bg-white rounded-xl text-forest-green text-[10px] font-black tracking-tight transition-all bg-white shadow-sm border border-gray-100 active:scale-95">
-                                    (신랑)
+                        <div className="border border-gray-100 rounded-[32px] overflow-hidden bg-white shadow-xl shadow-black/[0.02] ring-1 ring-black/[0.01]">
+                            <div className="flex items-center gap-2 p-4 bg-gray-50/30 border-b border-gray-50/50">
+                                <span className="text-[10px] font-bold text-gray-400 ml-1 mr-auto">자동완성 태그</span>
+                                <button
+                                    onClick={() => {
+                                        const parts = ddayMessage.split('(D-Day)');
+                                        setDdayMessage(`${parts[0]}(신랑)${parts[1] || ''}(D-Day)${parts[2] || ''}`);
+                                    }}
+                                    className="px-3 py-1.5 hover:bg-white rounded-xl text-forest-green text-[10px] font-black tracking-tight transition-all bg-white shadow-sm border border-gray-100 active:scale-95"
+                                >
+                                    신랑이름
                                 </button>
-                                <button className="px-3 py-1.5 hover:bg-white rounded-xl text-forest-green text-[10px] font-black tracking-tight transition-all bg-white shadow-sm border border-gray-100 active:scale-95">
-                                    (신부)
+                                <button
+                                    onClick={() => {
+                                        const parts = ddayMessage.split('(D-Day)');
+                                        setDdayMessage(`${parts[0]}(신부)${parts[1] || ''}(D-Day)${parts[2] || ''}`);
+                                    }}
+                                    className="px-3 py-1.5 hover:bg-white rounded-xl text-forest-green text-[10px] font-black tracking-tight transition-all bg-white shadow-sm border border-gray-100 active:scale-95"
+                                >
+                                    신부이름
                                 </button>
                             </div>
-                            <div className="p-6 bg-white space-y-4">
+                            <div className="p-8 bg-white">
                                 {(() => {
                                     const parts = ddayMessage.split('(D-Day)');
                                     const prefix = parts[0] || '';
                                     const suffix = parts.slice(1).join('(D-Day)') || '';
                                     return (
-                                        <div className="flex flex-col gap-4">
-                                            <input
-                                                type="text"
-                                                value={prefix}
-                                                onChange={(e) => setDdayMessage(`${e.target.value}(D-Day)${suffix}`)}
-                                                className="w-full bg-gray-50/50 border border-transparent focus:border-forest-green/20 focus:bg-white outline-none p-4 rounded-2xl text-[14px] text-gray-800 transition-all font-medium placeholder:text-gray-300"
-                                                placeholder="앞 문구 (예: 저희의 시작이)"
-                                            />
-                                            <div className="flex items-center justify-center relative">
-                                                <div className="absolute inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-gray-100 to-transparent" />
-                                                <div className="relative px-6 py-2 bg-white border border-forest-green/10 text-forest-green rounded-full text-[10px] font-black tracking-[0.25em] shadow-sm select-none">
+                                        <div className="space-y-6">
+                                            <div className="relative group">
+                                                <input
+                                                    type="text"
+                                                    value={prefix}
+                                                    onChange={(e) => setDdayMessage(`${e.target.value}(D-Day)${suffix}`)}
+                                                    className="w-full bg-transparent border-b-2 border-gray-100 focus:border-forest-green outline-none py-3 text-center text-[16px] text-gray-800 transition-all font-serif font-bold placeholder:text-gray-200"
+                                                    placeholder="결혼식까지 남은 시간"
+                                                />
+                                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 opacity-0 group-focus-within:opacity-100 transition-opacity whitespace-nowrap">
+                                                    <span className="text-[9px] font-black text-forest-green/50 uppercase tracking-widest">START TEXT</span>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex items-center justify-center">
+                                                <div className="px-6 py-2.5 bg-forest-green/[0.03] border border-forest-green/10 text-forest-green rounded-full text-[11px] font-black tracking-[0.3em] shadow-sm animate-pulse-subtle">
                                                     D - DAY
                                                 </div>
                                             </div>
-                                            <input
-                                                type="text"
-                                                value={suffix}
-                                                onChange={(e) => setDdayMessage(`${prefix}(D-Day)${e.target.value}`)}
-                                                className="w-full bg-gray-50/50 border border-transparent focus:border-forest-green/20 focus:bg-white outline-none p-4 rounded-2xl text-[14px] text-gray-800 transition-all font-medium placeholder:text-gray-300"
-                                                placeholder="뒷 문구 (예: 일 남았습니다)"
-                                            />
+
+                                            <div className="relative group">
+                                                <input
+                                                    type="text"
+                                                    value={suffix}
+                                                    onChange={(e) => setDdayMessage(`${prefix}(D-Day)${e.target.value}`)}
+                                                    className="w-full bg-transparent border-b-2 border-gray-100 focus:border-forest-green outline-none py-3 text-center text-[16px] text-gray-800 transition-all font-serif font-bold placeholder:text-gray-200"
+                                                    placeholder="남았습니다"
+                                                />
+                                                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 opacity-0 group-focus-within:opacity-100 transition-opacity whitespace-nowrap">
+                                                    <span className="text-[9px] font-black text-forest-green/50 uppercase tracking-widest">END TEXT</span>
+                                                </div>
+                                            </div>
                                         </div>
                                     );
                                 })()}
