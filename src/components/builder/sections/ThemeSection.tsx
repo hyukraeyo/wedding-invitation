@@ -44,7 +44,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                     <div className="flex items-center gap-4">
                         <input
                             type="range"
-                            min="0.5"
+                            min="1"
                             max="1.5"
                             step="0.1"
                             value={theme.fontScale}
@@ -53,7 +53,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                         />
                         <div className="flex gap-2">
                             <button
-                                onClick={() => setTheme({ fontScale: Math.max(0.5, theme.fontScale - 0.1) })}
+                                onClick={() => setTheme({ fontScale: Math.max(1, theme.fontScale - 0.1) })}
                                 className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium transition-colors"
                             >
                                 -
@@ -67,7 +67,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                         </div>
                     </div>
                     <div className="text-xs text-gray-500 mt-1">
-                        0.5x ~ 1.5x 범위에서 조절 가능합니다
+                        1.0x ~ 1.5x 범위에서 조절 가능합니다
                     </div>
                 </div>
 
