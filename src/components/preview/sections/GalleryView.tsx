@@ -54,14 +54,13 @@ export default function GalleryView() {
                                 </button>
 
                                 {/* Dots indicator */}
-                                <div className="flex justify-center mt-4 space-x-2">
+                                <div className="flex justify-center mt-6 space-x-1.5">
                                     {gallery.map((_, index) => (
                                         <button
                                             key={index}
                                             onClick={() => goToSlide(index)}
-                                            className={`w-2 h-2 rounded-full transition-colors ${
-                                                index === currentIndex ? 'bg-gray-800' : 'bg-gray-300'
-                                            }`}
+                                            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${index === currentIndex ? 'bg-forest-green w-4 opacity-100' : 'bg-forest-green/20'
+                                                }`}
                                         />
                                     ))}
                                 </div>
@@ -74,7 +73,7 @@ export default function GalleryView() {
                 return (
                     <div className="w-full max-w-4xl mx-auto">
                         {/* Main image */}
-                        <div className="aspect-[16/10] relative rounded-lg overflow-hidden mb-4">
+                        <div className="aspect-[16/10] relative rounded-2xl overflow-hidden mb-4 shadow-sm">
                             <Image
                                 src={gallery[currentIndex] || ''}
                                 alt={`Gallery ${currentIndex + 1}`}
@@ -85,14 +84,13 @@ export default function GalleryView() {
                         </div>
 
                         {/* Thumbnail strip */}
-                        <div className="flex space-x-2 overflow-x-auto pb-2">
+                        <div className="flex space-x-2 overflow-x-auto pb-2 scrollbar-hide">
                             {gallery.map((img, index) => (
                                 <button
                                     key={index}
                                     onClick={() => goToSlide(index)}
-                                    className={`flex-shrink-0 w-16 h-16 relative rounded overflow-hidden border-2 transition-colors ${
-                                        index === currentIndex ? 'border-gray-800' : 'border-gray-200'
-                                    }`}
+                                    className={`flex-shrink-0 w-14 h-14 relative rounded-lg overflow-hidden transition-all duration-300 ${index === currentIndex ? 'ring-2 ring-forest-green ring-offset-2 opacity-100' : 'opacity-40 grayscale-[50%]'
+                                        }`}
                                 >
                                     <Image
                                         src={img}
@@ -128,8 +126,13 @@ export default function GalleryView() {
     };
 
     return (
-        <div className="py-16 px-6 bg-white/50">
-            <h3 className="text-center font-serif text-xl mb-8 text-gray-800 tracking-widest">GALLERY</h3>
+        <div className="py-24 px-6">
+            <div className="text-center space-y-4 mb-10">
+                <div className="flex flex-col items-center space-y-2">
+                    <span className="text-[10px] tracking-[0.4em] text-forest-green/40 font-medium uppercase">Wedding Gallery</span>
+                    <div className="w-8 h-[1px] bg-forest-green opacity-10"></div>
+                </div>
+            </div>
             {renderGallery()}
         </div>
     );

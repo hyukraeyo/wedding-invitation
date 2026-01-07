@@ -61,34 +61,41 @@ export default function MainScreenView() {
                 {/* Text Overlay (Position varies by layout) */}
                 <div className={`
            z-20 flex flex-col items-center text-center transition-all duration-300
-           ${mainScreen.layout === 'fill' ? 'absolute bottom-12 left-0 right-0 text-white' : 'mt-8'}
+           ${mainScreen.layout === 'fill' ? 'absolute bottom-12 left-0 right-0 text-white' : 'mt-10 mb-6'}
         `}>
                     {/* Title */}
                     {mainScreen.showTitle && (
-                        <div className={`text-sm tracking-[0.2em] uppercase mb-4 ${mainScreen.layout === 'fill' ? 'opacity-80' : 'opacity-60 text-forest-green'}`}>
+                        <div className={`text-[10px] tracking-[0.4em] uppercase mb-6 font-medium ${mainScreen.layout === 'fill' ? 'opacity-80' : 'text-forest-green opacity-40'}`}>
                             {mainScreen.title}
                         </div>
                     )}
 
                     {/* Names */}
                     {mainScreen.showGroomBride && (
-                        <div className={`font-serif text-2xl mb-4 flex items-center gap-3 ${mainScreen.layout === 'fill' ? 'font-light' : 'font-normal'}`}>
+                        <div className={`font-serif text-3xl mb-6 flex items-center gap-4 ${mainScreen.layout === 'fill' ? 'font-light' : 'font-normal text-gray-800'}`}>
                             <span>{groom.firstName}</span>
-                            <span className="text-xs opacity-60">and</span>
+                            <span className="font-sans text-[10px] uppercase tracking-widest opacity-40 italic">and</span>
                             <span>{bride.firstName}</span>
                         </div>
                     )}
 
+                    {/* Decorative Ornament */}
+                    <div className="mb-6 opacity-20">
+                        <svg width="60" height="20" viewBox="0 0 100 20" fill="none" stroke="currentColor">
+                            <path d="M0 10h40M60 10h40M45 10l5-5 5 5-5 5-5-5z" strokeWidth="0.5" />
+                        </svg>
+                    </div>
+
                     {/* Subtitle */}
                     {mainScreen.showSubtitle && (
-                        <div className={`text-sm mb-6 ${mainScreen.layout === 'fill' ? 'opacity-90 font-light' : 'text-gray-600'}`}>
+                        <div className={`text-sm mb-6 tracking-wide ${mainScreen.layout === 'fill' ? 'opacity-95 font-light' : 'text-gray-500 font-light italic'}`}>
                             {mainScreen.subtitle}
                         </div>
                     )}
 
                     {/* Date & Place */}
                     {mainScreen.showDatePlace && (
-                        <div className={`text-xs leading-relaxed whitespace-pre-wrap ${mainScreen.layout === 'fill' ? 'opacity-80' : 'text-gray-400'}`}>
+                        <div className={`text-[11px] leading-relaxed whitespace-pre-wrap tracking-wider ${mainScreen.layout === 'fill' ? 'opacity-80' : 'text-gray-400 font-light'}`}>
                             {mainScreen.customDatePlace}
                         </div>
                     )}

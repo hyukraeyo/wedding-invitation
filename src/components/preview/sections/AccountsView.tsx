@@ -17,65 +17,70 @@ export default function AccountsView() {
     if (accounts.length === 0) return null;
 
     return (
-        <div className="py-16 px-6 bg-white/50">
-            <h3 className="text-center font-serif text-xl mb-8 text-gray-800 tracking-widest">GROOM & BRIDE</h3>
-            <div className="space-y-3">
+        <div className="py-24 px-8">
+            <div className="text-center space-y-4 mb-10">
+                <div className="flex flex-col items-center space-y-2">
+                    <span className="text-[10px] tracking-[0.4em] text-forest-green/40 font-medium uppercase">Gift for Groom & Bride</span>
+                    <div className="w-8 h-[1px] bg-forest-green opacity-10"></div>
+                </div>
+            </div>
+            <div className="space-y-4 max-w-[320px] mx-auto">
                 {/* Groom Side */}
-                <div className="rounded-xl border border-gray-200 overflow-hidden bg-white/80">
+                <div className="rounded-2xl border border-gray-100 overflow-hidden bg-white/50 backdrop-blur-sm shadow-sm">
                     <button
                         onClick={() => setOpenSide(openSide === 'groom' ? null : 'groom')}
-                        className="w-full flex items-center justify-between p-4 text-sm font-medium text-gray-700 hover:bg-gray-50 bg-[#F4F9FF]"
+                        className={`w-full flex items-center justify-between p-5 text-[14px] font-medium transition-colors ${openSide === 'groom' ? 'text-gray-900 bg-gray-50/50' : 'text-gray-600 hover:bg-gray-50/30'}`}
                     >
                         <span>신랑측 마음 전하실 곳</span>
-                        <ChevronDown size={16} className={`transition-transform ${openSide === 'groom' ? 'rotate-180' : ''}`} />
+                        <ChevronDown size={14} className={`transition-transform duration-500 opacity-40 ${openSide === 'groom' ? 'rotate-180' : ''}`} />
                     </button>
                     {openSide === 'groom' && (
-                        <div className="p-4 bg-white/50 space-y-3">
+                        <div className="px-5 pb-5 pt-1 space-y-4 animate-in fade-in slide-in-from-top-2 duration-500">
                             {groomAccounts.map((acc, i) => (
-                                <div key={i} className="flex items-center justify-between text-sm py-2 border-b border-gray-100 last:border-0">
-                                    <div className="flex flex-col">
-                                        <span className="text-gray-500 text-xs">{acc.bank} (예금주: {acc.holder})</span>
-                                        <span className="text-gray-800 font-medium">{acc.accountNumber}</span>
+                                <div key={i} className="flex items-center justify-between text-sm py-3 border-b border-gray-50 last:border-0">
+                                    <div className="flex flex-col space-y-1">
+                                        <span className="text-gray-400 text-[10px] font-sans tracking-wide">{acc.bank} | 예금주 {acc.holder}</span>
+                                        <span className="text-gray-700 font-medium tracking-tight text-[13px]">{acc.accountNumber}</span>
                                     </div>
                                     <button
                                         onClick={() => handleCopy(acc.accountNumber)}
-                                        className="px-3 py-1.5 bg-gray-100 rounded text-xs text-gray-600 hover:bg-gray-200"
+                                        className="px-3 py-1.5 bg-gray-50 border border-gray-100 rounded-lg text-[10px] text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-all font-medium uppercase tracking-tighter shadow-xs"
                                     >
-                                        복사
+                                        Copy
                                     </button>
                                 </div>
                             ))}
-                            {groomAccounts.length === 0 && <p className="text-xs text-gray-400 text-center py-2">등록된 계좌가 없습니다.</p>}
+                            {groomAccounts.length === 0 && <p className="text-[11px] text-gray-400 text-center py-4 italic">등록된 계좌가 없습니다.</p>}
                         </div>
                     )}
                 </div>
 
                 {/* Bride Side */}
-                <div className="rounded-xl border border-gray-200 overflow-hidden bg-white/80">
+                <div className="rounded-2xl border border-gray-100 overflow-hidden bg-white/50 backdrop-blur-sm shadow-sm">
                     <button
                         onClick={() => setOpenSide(openSide === 'bride' ? null : 'bride')}
-                        className="w-full flex items-center justify-between p-4 text-sm font-medium text-gray-700 hover:bg-gray-50 bg-[#FFF4F4]"
+                        className={`w-full flex items-center justify-between p-5 text-[14px] font-medium transition-colors ${openSide === 'bride' ? 'text-gray-900 bg-gray-50/50' : 'text-gray-600 hover:bg-gray-50/30'}`}
                     >
                         <span>신부측 마음 전하실 곳</span>
-                        <ChevronDown size={16} className={`transition-transform ${openSide === 'bride' ? 'rotate-180' : ''}`} />
+                        <ChevronDown size={14} className={`transition-transform duration-500 opacity-40 ${openSide === 'bride' ? 'rotate-180' : ''}`} />
                     </button>
                     {openSide === 'bride' && (
-                        <div className="p-4 bg-white/50 space-y-3">
+                        <div className="px-5 pb-5 pt-1 space-y-4 animate-in fade-in slide-in-from-top-2 duration-500">
                             {brideAccounts.map((acc, i) => (
-                                <div key={i} className="flex items-center justify-between text-sm py-2 border-b border-gray-100 last:border-0">
-                                    <div className="flex flex-col">
-                                        <span className="text-gray-500 text-xs">{acc.bank} (예금주: {acc.holder})</span>
-                                        <span className="text-gray-800 font-medium">{acc.accountNumber}</span>
+                                <div key={i} className="flex items-center justify-between text-sm py-3 border-b border-gray-50 last:border-0">
+                                    <div className="flex flex-col space-y-1">
+                                        <span className="text-gray-400 text-[10px] font-sans tracking-wide">{acc.bank} | 예금주 {acc.holder}</span>
+                                        <span className="text-gray-700 font-medium tracking-tight text-[13px]">{acc.accountNumber}</span>
                                     </div>
                                     <button
                                         onClick={() => handleCopy(acc.accountNumber)}
-                                        className="px-3 py-1.5 bg-gray-100 rounded text-xs text-gray-600 hover:bg-gray-200"
+                                        className="px-3 py-1.5 bg-gray-50 border border-gray-100 rounded-lg text-[10px] text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-all font-medium uppercase tracking-tighter shadow-xs"
                                     >
-                                        복사
+                                        Copy
                                     </button>
                                 </div>
                             ))}
-                            {brideAccounts.length === 0 && <p className="text-xs text-gray-400 text-center py-2">등록된 계좌가 없습니다.</p>}
+                            {brideAccounts.length === 0 && <p className="text-[11px] text-gray-400 text-center py-4 italic">등록된 계좌가 없습니다.</p>}
                         </div>
                     )}
                 </div>

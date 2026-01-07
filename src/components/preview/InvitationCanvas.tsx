@@ -52,8 +52,13 @@ const InvitationCanvas = memo(() => {
           <MainScreenView />
         </div>
 
+        {/* Divider */}
+        <div className="flex justify-center py-6 opacity-5">
+          <div className="w-16 h-[1px] bg-forest-green"></div>
+        </div>
+
         {/* 2. Message / Greeting */}
-        <div id="section-greeting" className="mt-10 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-backwards">
+        <div id="section-greeting" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-backwards">
           <GreetingView />
         </div>
 
@@ -62,13 +67,18 @@ const InvitationCanvas = memo(() => {
           <NamesView />
         </div>
 
+        {/* Divider */}
+        <div className="flex justify-center py-10 opacity-5">
+          <div className="w-24 h-[1px] bg-forest-green"></div>
+        </div>
+
         {/* 4. Calendar & D-Day */}
         <div id="section-date" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-700 fill-mode-backwards">
           <CalendarSectionView />
         </div>
 
         {/* 5. Location */}
-        <div id="section-location" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-900 fill-mode-backwards px-6 pb-10">
+        <div id="section-location" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-900 fill-mode-backwards px-6 pb-20">
           <LocationView />
         </div>
 
@@ -78,18 +88,19 @@ const InvitationCanvas = memo(() => {
         </div>
 
         {/* 7. Accounts */}
-        <div id="section-account" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000 fill-mode-backwards pb-10">
+        <div id="section-account" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000 fill-mode-backwards pb-20">
           <AccountsView />
         </div>
 
         {/* 8. Closing / Ending */}
-        <div id="section-closing" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000 fill-mode-backwards pb-10">
+        <div id="section-closing" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000 fill-mode-backwards pb-20">
           <ClosingView />
         </div>
 
         {/* Footer Padding */}
-        <div className="h-20 flex items-center justify-center text-xs text-black/20 pb-10">
-          Designed by Antigravity
+        <div className="h-40 flex flex-col items-center justify-center text-[10px] text-black/10 tracking-[0.2em] font-light pb-20">
+          <div className="mb-4">COPYRIGHT © 2026 ANTIGRAVITY</div>
+          <div>ALL RIGHTS RESERVED</div>
         </div>
       </div>
     </div>

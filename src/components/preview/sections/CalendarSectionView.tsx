@@ -44,16 +44,17 @@ export default function CalendarSectionView() {
     if ((!showCalendar && !showDday) || !date) return null;
 
     return (
-        <div className="my-16 px-6 w-full">
-            <div className="bg-white/50 backdrop-blur-sm rounded-3xl p-8 border border-gray-100 shadow-sm relative overflow-hidden">
+        <div className="py-24 px-8 w-full">
+            <div className="relative overflow-hidden">
                 {/* 2026.01.06 Header */}
-                <div className="text-center mb-8 space-y-2 relative z-10">
-                    <div className="text-2xl font-serif tracking-widest text-gray-700">
+                <div className="text-center mb-12 space-y-3 relative z-10">
+                    <div className="text-sm tracking-[0.4em] text-forest-green/40 font-medium uppercase mb-2">Save the Date</div>
+                    <div className="text-3xl font-serif font-light tracking-widest text-gray-800">
                         {date.replace(/-/g, '.')}
                     </div>
-                    <div className="text-sm text-gray-500 font-medium">
+                    <div className="text-[13px] text-gray-400 font-light tracking-wide">
                         {new Date(date).toLocaleDateString('ko-KR', { weekday: 'long' })}
-                        {' '}
+                        <span className="mx-2 opacity-30">|</span>
                         {(() => {
                             if (!time) return '';
                             const [h, m] = time.split(':').map(Number);
@@ -65,20 +66,17 @@ export default function CalendarSectionView() {
                     </div>
                 </div>
 
-                {/* Divider Line */}
-                <div className="w-full h-[1px] bg-gray-200/60 mb-8" />
-
                 {/* Calendar Grid */}
                 {showCalendar && (
-                    <div className="mb-10 relative z-10">
-                        <div className="grid grid-cols-7 mb-4">
-                            {['일', '월', '화', '수', '목', '금', '토'].map((d, i) => (
-                                <div key={d} className={`text-center text-xs font-medium ${i === 0 ? 'text-red-400' : 'text-gray-600'}`}>
+                    <div className="mb-16 relative z-10 max-w-[320px] mx-auto">
+                        <div className="grid grid-cols-7 mb-6">
+                            {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map((d, i) => (
+                                <div key={d} className={`text-center text-[9px] tracking-tighter font-semibold ${i === 0 ? 'text-red-300' : 'text-gray-300'}`}>
                                     {d}
                                 </div>
                             ))}
                         </div>
-                        <div className="grid grid-cols-7 gap-y-4">
+                        <div className="grid grid-cols-7 gap-y-3">
                             {(() => {
                                 const d = new Date(date);
                                 const year = d.getFullYear();
@@ -100,11 +98,17 @@ export default function CalendarSectionView() {
                                     const isSun = current.getDay() === 0;
 
                                     days.push(
-                                        <div key={i} className="flex items-center justify-center">
+                                        <div key={i} className="flex items-center justify-center relative h-10">
+                                            {isWedding && (
+                                                <div
+                                                    className="absolute inset-0 m-auto w-8 h-8 rounded-full opacity-10 animate-pulse-slow scale-125"
+                                                    style={{ backgroundColor: theme.accentColor }}
+                                                ></div>
+                                            )}
                                             <div
-                                                className={`w-8 h-8 flex items-center justify-center rounded-full text-sm
-                                  ${isWedding ? 'text-white shadow-md transform scale-110' : (isSun ? 'text-red-400 opacity-80' : 'text-gray-700')}
-                               `}
+                                                className={`flex items-center justify-center rounded-full text-[14px] transition-all duration-500 z-10
+                                   ${isWedding ? 'text-white w-8 h-8 font-medium' : (isSun ? 'text-red-300' : 'text-gray-600 font-light')}
+                                `}
                                                 style={isWedding ? { backgroundColor: theme.accentColor } : {}}
                                             >
                                                 {i}
@@ -118,43 +122,32 @@ export default function CalendarSectionView() {
                     </div>
                 )}
 
-                {theme.pattern !== 'none' && (
-                    <div className="absolute top-10 right-10 opacity-20 pointer-events-none">
-                        <Heart size={100} fill={theme.accentColor} stroke="none" />
-                    </div>
-                )}
-
-                {/* Divider Line (only if D-Day follows) */}
-                {showDday && showCalendar && <div className="w-full h-[1px] bg-gray-200/60 mb-10" />}
-
                 {/* D-Day Countdown */}
                 {showDday && (
-                    <div className="text-center relative z-10">
-                        <div className="flex justify-center gap-6 mb-6 font-serif">
-                            <div className="flex flex-col items-center">
-                                <span className="text-[10px] text-gray-400 uppercase tracking-widest mb-1">Days</span>
-                                <span className="text-2xl text-gray-800">{timeLeft?.days || 0}</span>
+                    <div className="text-center relative z-10 animate-in fade-in duration-1000">
+                        <div className="inline-block px-10 py-8 border border-forest-green/10 rounded-full">
+                            <div className="flex justify-center gap-8 mb-4 font-serif">
+                                <div className="flex flex-col items-center">
+                                    <span className="text-[9px] text-gray-300 uppercase tracking-widest mb-1 font-sans">Days</span>
+                                    <span className="text-2xl text-gray-700 font-light">{timeLeft?.days || 0}</span>
+                                </div>
+                                <div className="flex flex-col items-center">
+                                    <span className="text-[9px] text-gray-300 uppercase tracking-widest mb-1 font-sans">Hours</span>
+                                    <span className="text-2xl text-gray-700 font-light">{timeLeft?.hours || 0}</span>
+                                </div>
+                                <div className="flex flex-col items-center">
+                                    <span className="text-[9px] text-gray-300 uppercase tracking-widest mb-1 font-sans">Mins</span>
+                                    <span className="text-2xl text-gray-700 font-light">{timeLeft?.minutes || 0}</span>
+                                </div>
                             </div>
-                            <div className="flex flex-col items-center">
-                                <span className="text-[10px] text-gray-400 uppercase tracking-widest mb-1">Hour</span>
-                                <span className="text-2xl text-gray-800">{timeLeft?.hours || 0}</span>
-                            </div>
-                            <div className="flex flex-col items-center">
-                                <span className="text-[10px] text-gray-400 uppercase tracking-widest mb-1">Min</span>
-                                <span className="text-2xl text-gray-800">{timeLeft?.minutes || 0}</span>
-                            </div>
-                            <div className="flex flex-col items-center">
-                                <span className="text-[10px] text-gray-400 uppercase tracking-widest mb-1">Sec</span>
-                                <span className="text-2xl text-gray-800">{timeLeft?.seconds || 0}</span>
-                            </div>
-                        </div>
 
-                        <div className="text-sm text-gray-600 font-medium whitespace-pre-wrap">
-                            {ddayMessage
-                                .replace('(신랑)', groom.firstName)
-                                .replace('(신부)', bride.firstName)
-                                .replace('(D-Day)', dDay.toString())
-                            }
+                            <div className="text-[13px] text-gray-500 font-light tracking-wide whitespace-pre-wrap">
+                                {ddayMessage
+                                    .replace('(신랑)', groom.firstName)
+                                    .replace('(신부)', bride.firstName)
+                                    .replace('(D-Day)', dDay.toString())
+                                }
+                            </div>
                         </div>
                     </div>
                 )}
