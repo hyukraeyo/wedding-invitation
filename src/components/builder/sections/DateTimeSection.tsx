@@ -226,25 +226,40 @@ export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
                                     const parts = ddayMessage.split('(D-Day)');
                                     const prefix = parts[0] || '';
                                     const suffix = parts.slice(1).join('(D-Day)') || '';
+
+                                    // Replace tags with real names for the input value
+                                    const displayPrefix = prefix
+                                        .replace(/\(신랑\)/g, groom.firstName || '신랑')
+                                        .replace(/\(신부\)/g, bride.firstName || '신부');
+
+                                    const displaySuffix = suffix
+                                        .replace(/\(신랑\)/g, groom.firstName || '신랑')
+                                        .replace(/\(신부\)/g, bride.firstName || '신부');
+
+                                    const handleInputChange = (newVal: string, isPrefix: boolean) => {
+                                        // Reverse mapping: replace names back with tags for storage
+                                        // We escape regex special characters in name just in case
+                                        const escGroom = (groom.firstName || '신랑').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                                        const escBride = (bride.firstName || '신부').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+                                        const mappedValue = newVal
+                                            .replace(new RegExp(escGroom, 'g'), '(신랑)')
+                                            .replace(new RegExp(escBride, 'g'), '(신부)');
+
+                                        if (isPrefix) {
+                                            setDdayMessage(`${mappedValue}(D-Day)${suffix}`);
+                                        } else {
+                                            setDdayMessage(`${prefix}(D-Day)${mappedValue}`);
+                                        }
+                                    };
+
                                     return (
                                         <div className="space-y-6">
-                                            {/* Preview area showing synced names */}
-                                            <div className="text-center px-4 py-2 bg-gray-50/50 rounded-xl mb-4 border border-gray-100/50">
-                                                <p className="text-[10px] text-gray-300 font-bold uppercase tracking-widest mb-1">Preview</p>
-                                                <p className="text-[13px] text-forest-green font-serif font-bold">
-                                                    {ddayMessage
-                                                        .replace('(신랑)', groom.firstName || '신랑')
-                                                        .replace('(신부)', bride.firstName || '신부')
-                                                        .replace('(D-Day)', dDay.toString())
-                                                    }
-                                                </p>
-                                            </div>
-
                                             <div className="relative group">
                                                 <input
                                                     type="text"
-                                                    value={prefix}
-                                                    onChange={(e) => setDdayMessage(`${e.target.value}(D-Day)${suffix}`)}
+                                                    value={displayPrefix}
+                                                    onChange={(e) => handleInputChange(e.target.value, true)}
                                                     className="w-full bg-transparent border-b-2 border-gray-100 focus:border-forest-green outline-none py-3 text-center text-[16px] text-gray-800 transition-all font-serif font-bold placeholder:text-gray-200"
                                                     placeholder="결혼식까지 남음"
                                                 />
@@ -254,16 +269,18 @@ export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
                                             </div>
 
                                             <div className="flex items-center justify-center">
-                                                <div className="px-6 py-2.5 bg-forest-green/[0.03] border border-forest-green/10 text-forest-green rounded-full text-[11px] font-black tracking-[0.3em] shadow-sm animate-pulse-subtle">
-                                                    D - DAY
+                                                <div className="flex flex-col items-center">
+                                                    <div className="px-6 py-2.5 bg-forest-green/[0.03] border border-forest-green/10 text-forest-green rounded-full text-[11px] font-black tracking-[0.3em] shadow-sm animate-pulse-subtle">
+                                                        D - {dDay}
+                                                    </div>
                                                 </div>
                                             </div>
 
                                             <div className="relative group">
                                                 <input
                                                     type="text"
-                                                    value={suffix}
-                                                    onChange={(e) => setDdayMessage(`${prefix}(D-Day)${e.target.value}`)}
+                                                    value={displaySuffix}
+                                                    onChange={(e) => handleInputChange(e.target.value, false)}
                                                     className="w-full bg-transparent border-b-2 border-gray-100 focus:border-forest-green outline-none py-3 text-center text-[16px] text-gray-800 transition-all font-serif font-bold placeholder:text-gray-200"
                                                     placeholder="남았습니다"
                                                 />
