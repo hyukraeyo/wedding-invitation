@@ -2,7 +2,7 @@ import React from 'react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 
 export default function NamesView() {
-    const { groom, bride, showNamesAtBottom } = useInvitationStore();
+    const { groom, bride } = useInvitationStore();
 
     return (
         <div className="py-16 px-8 text-center">
@@ -29,20 +29,6 @@ export default function NamesView() {
                 </div>
             </div>
 
-            {showNamesAtBottom && (
-                <div className="text-[14px] text-gray-500 leading-relaxed font-serif space-y-2 opacity-80">
-                    <div className="flex items-center justify-center gap-3">
-                        <span className="font-light">{groom.parents.father.name} · {groom.parents.mother.name}</span>
-                        <span className="text-[11px] text-gray-300 font-sans italic lowercase">의 {groom.relation}</span>
-                        <span className="font-medium text-gray-700">{groom.firstName}</span>
-                    </div>
-                    <div className="flex items-center justify-center gap-3">
-                        <span className="font-light">{bride.parents.father.name} · {bride.parents.mother.name}</span>
-                        <span className="text-[11px] text-gray-300 font-sans italic lowercase">의 {bride.relation}</span>
-                        <span className="font-medium text-gray-700">{bride.firstName}</span>
-                    </div>
-                </div>
-            )}
         </div>
     );
 }

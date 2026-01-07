@@ -4,6 +4,7 @@ import { useDaumPostcodePopup } from 'react-daum-postcode';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderInput } from '../BuilderInput';
+import { BuilderCheckbox } from '../BuilderCheckbox';
 import Image from 'next/image';
 
 interface SectionProps {
@@ -138,92 +139,86 @@ export default function LocationSection({ isOpen, onToggle }: SectionProps) {
 
                 <hr className="border-gray-100 my-6" />
 
-                {/* 5.5 지도 종류 (Map Type) */}
                 <div className="flex items-center">
-                    <label className="w-20 text-sm font-medium text-gray-700 shrink-0">지도 종류</label>
-                    <div className="flex gap-3">
+                    <label className="w-20 text-sm font-bold text-gray-800 shrink-0">지도 종류</label>
+                    <div className="flex gap-2">
                         <button
                             onClick={() => setMapType('kakao')}
-                            className={`px-3 py-2 text-sm border rounded hover:bg-gray-50 transition-colors flex items-center gap-2 ${mapType === 'kakao' ? 'border-gray-800 bg-yellow-50' : 'border-gray-200 bg-white'}`}
+                            className={`
+                                flex items-center gap-2 px-4 py-2.5 rounded-xl border transition-all duration-200
+                                ${mapType === 'kakao'
+                                    ? 'bg-[#FAE100] border-[#FAE100] text-black shadow-md ring-2 ring-[#FAE100]/20'
+                                    : 'bg-white border-gray-100 text-gray-400 hover:border-gray-200'}
+                            `}
                         >
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect width="24" height="24" rx="4" fill="#FAE100" />
-                                <path d="M12 6C8.7 6 6 8.7 6 12C6 15.3 8.7 18 12 18C15.3 18 18 15.3 18 12C18 8.7 15.3 6 12 6ZM12 16C9.8 16 8 14.2 8 12C8 9.8 9.8 8 12 8C14.2 8 16 9.8 16 12C16 14.2 14.2 16 12 16Z" fill="#000000" />
-                                <circle cx="12" cy="12" r="2" fill="#000000" />
-                            </svg>
-                            <span className={`${mapType === 'kakao' ? 'font-bold text-gray-900' : 'text-gray-400'}`}>카카오맵</span>
+                            <div className={`w-5 h-5 rounded-full flex items-center justify-center ${mapType === 'kakao' ? 'bg-black' : 'bg-[#FAE100]'}`}>
+                                <div className={`w-1.5 h-1.5 rounded-full ${mapType === 'kakao' ? 'bg-[#FAE100]' : 'bg-black'}`} />
+                            </div>
+                            <span className="text-[13px] font-bold">카카오맵</span>
                         </button>
                         <button
                             onClick={() => setMapType('naver')}
-                            className={`px-3 py-2 text-sm border rounded hover:bg-gray-50 transition-colors flex items-center gap-2 ${mapType === 'naver' ? 'border-gray-800 bg-green-50' : 'border-gray-200 bg-white'}`}
+                            className={`
+                                flex items-center gap-2 px-4 py-2.5 rounded-xl border transition-all duration-200
+                                ${mapType === 'naver'
+                                    ? 'bg-[#03C75A] border-[#03C75A] text-white shadow-md ring-2 ring-[#03C75A]/20'
+                                    : 'bg-white border-gray-100 text-gray-400 hover:border-gray-200'}
+                            `}
                         >
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect width="24" height="24" rx="4" fill="#03C75A" />
-                                <path d="M7 8H10V16H7V8ZM14 8H17V16H14V8Z" fill="white" />
-                            </svg>
-                            <span className={`${mapType === 'naver' ? 'font-bold text-gray-900' : 'text-gray-400'}`}>네이버지도</span>
+                            <div className={`w-5 h-5 rounded-[4px] flex items-center justify-center ${mapType === 'naver' ? 'bg-white' : 'bg-[#03C75A]'}`}>
+                                <span className={`text-[10px] font-black ${mapType === 'naver' ? 'text-[#03C75A]' : 'text-white'}`}>N</span>
+                            </div>
+                            <span className="text-[13px] font-bold">네이버지도</span>
                         </button>
                     </div>
                 </div>
 
                 {/* 6. 지도 표시 (Show Map) */}
                 <div className="flex items-center">
-                    <label className="w-20 text-sm font-medium text-gray-700 shrink-0">지도 표시</label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                            type="checkbox"
-                            checked={showMap}
-                            onChange={(e) => setShowMap(e.target.checked)}
-                            className="w-5 h-5 rounded border-gray-300 text-gray-800 focus:ring-gray-800"
-                        />
-                        <span className="text-sm text-gray-500">지도를 표시합니다.</span>
-                    </label>
+                    <label className="w-20 text-sm font-bold text-gray-800 shrink-0">지도 표시</label>
+                    <BuilderCheckbox
+                        checked={showMap}
+                        onChange={setShowMap}
+                    >
+                        지도를 표시합니다.
+                    </BuilderCheckbox>
                 </div>
 
                 {/* 7. 지도 잠금 (Lock Map) */}
                 <div className="flex items-center">
-                    <label className="w-20 text-sm font-medium text-gray-700 shrink-0">지도 잠금</label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                            type="checkbox"
-                            checked={lockMap}
-                            onChange={(e) => setLockMap(e.target.checked)}
-                            className="w-5 h-5 rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
-                            // Custom checkbox style/color requires Tailwind form plugin or custom CSS, using standard for now but accent black
-                            style={{ accentColor: 'black' }}
-                        />
-                        <span className="text-sm text-gray-500">지도 터치 및 줌 조정이 안되도록 막습니다.</span>
-                    </label>
+                    <label className="w-20 text-sm font-bold text-gray-800 shrink-0">지도 잠금</label>
+                    <BuilderCheckbox
+                        checked={lockMap}
+                        onChange={setLockMap}
+                    >
+                        지도 터치 및 줌 조정이 안되도록 막습니다.
+                    </BuilderCheckbox>
                 </div>
 
                 {/* 8. 내비게이션 (Navigation) */}
                 <div className="flex items-center">
-                    <label className="w-20 text-sm font-medium text-gray-700 shrink-0">내비게이션</label>
-                    <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                            type="checkbox"
-                            checked={showNavigation}
-                            onChange={(e) => setShowNavigation(e.target.checked)}
-                            className="w-5 h-5 rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
-                            style={{ accentColor: 'black' }}
-                        />
-                        <span className="text-sm text-gray-500">내비 앱 바로가기 버튼 표시 (카카오,티맵,네이버)</span>
-                    </label>
+                    <label className="w-20 text-sm font-bold text-gray-800 shrink-0">내비게이션</label>
+                    <BuilderCheckbox
+                        checked={showNavigation}
+                        onChange={setShowNavigation}
+                    >
+                        내비 앱 바로가기 버튼 표시 (카카오,티맵,네이버)
+                    </BuilderCheckbox>
                 </div>
 
                 {/* 9. 지도 높이 (Map Height) */}
                 <div className="flex items-center">
-                    <label className="w-20 text-sm font-medium text-gray-700 shrink-0">지도 높이</label>
-                    <div className="flex gap-3">
+                    <label className="w-20 text-sm font-bold text-gray-800 shrink-0">지도 높이</label>
+                    <div className="flex gap-2">
                         <button
                             onClick={() => setMapHeight('default')}
-                            className={`px-4 py-2 text-sm border rounded hover:bg-gray-50 transition-colors ${mapHeight === 'default' ? 'border-gray-800 font-bold text-gray-900 bg-white' : 'border-gray-200 text-gray-400 bg-white'}`}
+                            className={`px-5 py-2.5 text-sm rounded-xl border transition-all duration-200 ${mapHeight === 'default' ? 'border-black bg-black text-white shadow-md' : 'border-gray-100 text-gray-400 bg-white hover:border-gray-200'}`}
                         >
                             기본
                         </button>
                         <button
                             onClick={() => setMapHeight('small')}
-                            className={`px-4 py-2 text-sm border rounded hover:bg-gray-50 transition-colors ${mapHeight === 'small' ? 'border-gray-800 font-bold text-gray-900 bg-white' : 'border-gray-200 text-gray-400 bg-white'}`}
+                            className={`px-5 py-2.5 text-sm rounded-xl border transition-all duration-200 ${mapHeight === 'small' ? 'border-black bg-black text-white shadow-md' : 'border-gray-100 text-gray-400 bg-white hover:border-gray-200'}`}
                         >
                             축소
                         </button>
@@ -232,15 +227,15 @@ export default function LocationSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* 10. 줌 레벨 (Zoom Level) */}
                 <div className="flex items-center">
-                    <label className="w-20 text-sm font-medium text-gray-700 shrink-0">줌 레벨</label>
-                    <div className="flex gap-3">
+                    <label className="w-20 text-sm font-bold text-gray-800 shrink-0">줌 레벨</label>
+                    <div className="flex gap-2">
                         {[15, 16, 17, 18, 19].map((level) => (
                             <button
                                 key={level}
-                                onClick={() => setMapZoom(level)} // Store existing numbers for now
+                                onClick={() => setMapZoom(level)}
                                 className={`
-                                    w-10 h-10 flex items-center justify-center text-sm border rounded hover:bg-gray-50 transition-colors
-                                     ${mapZoom === level ? 'border-gray-800 font-bold text-gray-900 bg-white' : 'border-gray-200 text-gray-400 bg-white'}
+                                    w-10 h-10 flex items-center justify-center text-[13px] rounded-xl border transition-all duration-200
+                                     ${mapZoom === level ? 'border-black bg-black text-white shadow-md font-bold' : 'border-gray-100 text-gray-400 bg-white hover:border-gray-200'}
                                 `}
                             >
                                 {level}
@@ -253,18 +248,14 @@ export default function LocationSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* 11. 약도 (Sketch Map) */}
                 <div className="flex items-start">
-                    <label className="w-20 text-sm font-medium text-gray-700 shrink-0 mt-0.5">약도</label>
+                    <label className="w-20 text-sm font-bold text-gray-800 shrink-0 mt-0.5">약도</label>
                     <div className="w-full space-y-4">
-                        <label className="flex items-center gap-2 cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={showSketch}
-                                onChange={(e) => setShowSketch(e.target.checked)}
-                                className="w-5 h-5 rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
-                                style={{ accentColor: 'black' }}
-                            />
-                            <span className="text-sm text-gray-800">약도 사진 표시</span>
-                        </label>
+                        <BuilderCheckbox
+                            checked={showSketch}
+                            onChange={setShowSketch}
+                        >
+                            약도 사진 표시
+                        </BuilderCheckbox>
 
                         {showSketch && (
                             <div className="mt-2">

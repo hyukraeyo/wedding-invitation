@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { ImagePlus, Trash2, Plus, Info } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
+import { BuilderCheckbox } from '../BuilderCheckbox';
 
 interface SectionProps {
     isOpen: boolean;
@@ -73,20 +74,16 @@ export default function GallerySection({ isOpen, onToggle }: SectionProps) {
                     </div>
                 </div>
 
-                {/* 팝업뷰어 */}
                 <div className="flex items-start">
-                    <label className="w-24 text-sm font-medium text-gray-800 shrink-0 mt-0.5">팝업뷰어</label>
-                    <div className="flex items-center gap-2">
-                        <label className="relative inline-flex items-center cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={galleryPopup}
-                                onChange={(e) => setGalleryPopup(e.target.checked)}
-                                className="sr-only peer"
-                            />
-                            <div className="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-blue-100 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-gray-800"></div>
-                        </label>
-                        <span className="text-sm text-gray-400">갤러리 사진을 터치하면, 갤러리 전용 팝업 뷰어가 나타납니다.</span>
+                    <label className="w-24 text-sm font-bold text-gray-800 shrink-0 mt-0.5">팝업뷰어</label>
+                    <div className="flex-1">
+                        <BuilderCheckbox
+                            checked={galleryPopup}
+                            onChange={(checked) => setGalleryPopup(checked)}
+                            className="!items-start"
+                        >
+                            <span className="text-sm text-gray-400">갤러리 사진을 터치하면, 갤러리 전용 팝업 뷰어가 나타납니다.</span>
+                        </BuilderCheckbox>
                     </div>
                 </div>
 

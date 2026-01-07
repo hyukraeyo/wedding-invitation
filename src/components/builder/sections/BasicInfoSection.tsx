@@ -3,6 +3,7 @@ import { User2 } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderInput } from '../BuilderInput';
+import { BuilderCheckbox } from '../BuilderCheckbox';
 
 interface SectionProps {
     isOpen: boolean;
@@ -62,15 +63,12 @@ export default function BasicInfoSection({ isOpen, onToggle }: SectionProps) {
                             value={groom.parents.father.name}
                             onChange={(e) => setGroomParents('father', { name: e.target.value })}
                         />
-                        <label className="flex items-center gap-3 cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={groom.parents.father.isDeceased}
-                                onChange={(e) => setGroomParents('father', { isDeceased: e.target.checked })}
-                                className="rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
-                            />
-                            <span className="text-xs text-gray-500">故</span>
-                        </label>
+                        <BuilderCheckbox
+                            checked={groom.parents.father.isDeceased}
+                            onChange={(checked) => setGroomParents('father', { isDeceased: checked })}
+                        >
+                            <span className="text-xs text-gray-400 font-serif">故</span>
+                        </BuilderCheckbox>
                     </div>
                     <div className="grid grid-cols-[60px_1fr_60px] gap-2 items-center">
                         <span className="text-xs text-gray-500 font-medium pl-1">어머니</span>
@@ -80,15 +78,12 @@ export default function BasicInfoSection({ isOpen, onToggle }: SectionProps) {
                             value={groom.parents.mother.name}
                             onChange={(e) => setGroomParents('mother', { name: e.target.value })}
                         />
-                        <label className="flex items-center gap-3 cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={groom.parents.mother.isDeceased}
-                                onChange={(e) => setGroomParents('mother', { isDeceased: e.target.checked })}
-                                className="rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
-                            />
-                            <span className="text-xs text-gray-500">故</span>
-                        </label>
+                        <BuilderCheckbox
+                            checked={groom.parents.mother.isDeceased}
+                            onChange={(checked) => setGroomParents('mother', { isDeceased: checked })}
+                        >
+                            <span className="text-xs text-gray-400 font-serif">故</span>
+                        </BuilderCheckbox>
                     </div>
                 </div>
 
@@ -130,15 +125,12 @@ export default function BasicInfoSection({ isOpen, onToggle }: SectionProps) {
                             value={bride.parents.father.name}
                             onChange={(e) => setBrideParents('father', { name: e.target.value })}
                         />
-                        <label className="flex items-center gap-3 cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={bride.parents.father.isDeceased}
-                                onChange={(e) => setBrideParents('father', { isDeceased: e.target.checked })}
-                                className="rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
-                            />
-                            <span className="text-xs text-gray-500">故</span>
-                        </label>
+                        <BuilderCheckbox
+                            checked={bride.parents.father.isDeceased}
+                            onChange={(checked) => setBrideParents('father', { isDeceased: checked })}
+                        >
+                            <span className="text-xs text-gray-400 font-serif">故</span>
+                        </BuilderCheckbox>
                     </div>
                     <div className="grid grid-cols-[60px_1fr_60px] gap-2 items-center">
                         <span className="text-xs text-gray-500 font-medium pl-1">어머니</span>
@@ -148,15 +140,12 @@ export default function BasicInfoSection({ isOpen, onToggle }: SectionProps) {
                             value={bride.parents.mother.name}
                             onChange={(e) => setBrideParents('mother', { name: e.target.value })}
                         />
-                        <label className="flex items-center gap-3 cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={bride.parents.mother.isDeceased}
-                                onChange={(e) => setBrideParents('mother', { isDeceased: e.target.checked })}
-                                className="rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
-                            />
-                            <span className="text-xs text-gray-500">故</span>
-                        </label>
+                        <BuilderCheckbox
+                            checked={bride.parents.mother.isDeceased}
+                            onChange={(checked) => setBrideParents('mother', { isDeceased: checked })}
+                        >
+                            <span className="text-xs text-gray-400 font-serif">故</span>
+                        </BuilderCheckbox>
                     </div>
                 </div>
 

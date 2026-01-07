@@ -6,6 +6,7 @@ import { AccordionItem } from '../AccordionItem';
 import { BuilderLabel } from '../BuilderLabel';
 import { BuilderInput } from '../BuilderInput';
 import { BuilderTextarea } from '../BuilderTextarea';
+import { BuilderCheckbox } from '../BuilderCheckbox';
 
 interface SectionProps {
     isOpen: boolean;
@@ -46,16 +47,44 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                             onClick={() => setMainScreen({ layout: l as 'basic' | 'fill' | 'arch' | 'oval' | 'frame' })}
                             className={`flex-shrink-0 w-20 flex flex-col items-center gap-2 group`}
                         >
-                            <div className={`w-20 h-32 rounded-lg border-2 transition-all relative overflow-hidden bg-gray-50 ${mainScreen.layout === l ? 'border-forest-green ring-2 ring-forest-green ring-offset-2' : 'border-gray-200 group-hover:border-forest-green/50'}`}>
-                                {/* Visual hints for layouts */}
-                                <div className="absolute inset-0 flex items-center justify-center text-xs text-gray-400 uppercase">{l}</div>
-                                {l === 'fill' && <div className="absolute inset-0 bg-gray-200"></div>}
-                                {l === 'arch' && <div className="absolute inset-x-2 top-2 bottom-0 bg-gray-200 rounded-t-[40px]"></div>}
-                                {l === 'oval' && <div className="absolute inset-2 bg-gray-200 rounded-full"></div>}
-                                {l === 'frame' && <div className="absolute inset-2 border-2 border-gray-300"></div>}
+                            <div className={`w-20 h-32 rounded-lg border-2 transition-all relative overflow-hidden bg-white ${mainScreen.layout === l ? 'border-forest-green ring-2 ring-forest-green ring-offset-2' : 'border-gray-100 group-hover:border-forest-green/50 hover:bg-gray-50'}`}>
+                                {/* Realistic Mini Previews */}
+                                {l === 'basic' && (
+                                    <div className="absolute inset-0 flex flex-col items-center pt-3 scale-[0.6] origin-top">
+                                        <div className="w-8 h-[2px] bg-coral-pink/50 mb-2" />
+                                        <div className="text-[14px] font-bold text-gray-400 mb-2">05.25</div>
+                                        <div className="w-12 h-[2px] bg-gray-200 mb-3" />
+                                        <div className="w-16 aspect-[4/5] bg-gray-100 rounded-md shadow-sm mb-3"></div>
+                                        <div className="w-10 h-[2px] bg-gray-100 mb-1" />
+                                        <div className="w-8 h-[2px] bg-gray-100" />
+                                    </div>
+                                )}
+                                {l === 'fill' && (
+                                    <div className="absolute inset-0 bg-gray-100 flex flex-col justify-end items-center pb-4 scale-[0.8]">
+                                        <div className="w-10 h-[2px] bg-white/60 mb-1" />
+                                        <div className="w-8 h-[2px] bg-white/60 mb-1" />
+                                        <div className="w-12 h-[2px] bg-white/80" />
+                                    </div>
+                                )}
+                                {l === 'arch' && (
+                                    <div className="absolute inset-x-2 top-2 bottom-0 bg-gray-100 rounded-t-[40px] flex items-center justify-center">
+                                        <div className="w-6 h-[2px] bg-white/60" />
+                                    </div>
+                                )}
+                                {l === 'oval' && (
+                                    <div className="absolute inset-2 bg-gray-100 rounded-full flex items-center justify-center">
+                                        <div className="w-6 h-[2px] bg-white/60" />
+                                    </div>
+                                )}
+                                {l === 'frame' && (
+                                    <div className="absolute inset-2 border-2 border-gray-200 flex flex-col items-center justify-center gap-2">
+                                        <div className="w-8 aspect-square bg-gray-50"></div>
+                                        <div className="w-10 h-[2px] bg-gray-100" />
+                                    </div>
+                                )}
 
                                 {mainScreen.layout === l && (
-                                    <div className="absolute top-1 right-1 bg-forest-green text-white rounded-full p-0.5">
+                                    <div className="absolute top-1.5 right-1.5 bg-forest-green text-white rounded-full p-0.5 shadow-sm z-10">
                                         <Check size={10} strokeWidth={3} />
                                     </div>
                                 )}
@@ -106,24 +135,18 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                 <div>
                     <BuilderLabel>디자인 변형</BuilderLabel>
                     <div className="flex gap-4 mt-2">
-                        <label className="flex items-center gap-2 cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={mainScreen.showBorder}
-                                onChange={(e) => setMainScreen({ showBorder: e.target.checked })}
-                                className="w-5 h-5 rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
-                            />
-                            <span className="text-sm text-gray-700">테두리 선</span>
-                        </label>
-                        <label className="flex items-center gap-2 cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={mainScreen.expandPhoto}
-                                onChange={(e) => setMainScreen({ expandPhoto: e.target.checked })}
-                                className="w-5 h-5 rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
-                            />
-                            <span className="text-sm text-gray-700">사진 확장</span>
-                        </label>
+                        <BuilderCheckbox
+                            checked={mainScreen.showBorder}
+                            onChange={(checked) => setMainScreen({ showBorder: checked })}
+                        >
+                            테두리 선
+                        </BuilderCheckbox>
+                        <BuilderCheckbox
+                            checked={mainScreen.expandPhoto}
+                            onChange={(checked) => setMainScreen({ expandPhoto: checked })}
+                        >
+                            사진 확장
+                        </BuilderCheckbox>
                     </div>
                 </div>
 
@@ -168,20 +191,17 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                             <div className="space-y-3">
                                 {/* Title */}
                                 <div className="flex items-center gap-3">
-                                    <input
-                                        type="checkbox"
+                                    <BuilderCheckbox
                                         checked={mainScreen.showTitle}
-                                        onChange={(e) => setMainScreen({ showTitle: e.target.checked })}
-                                        className="w-5 h-5 rounded border-gray-300 text-gray-800 focus:ring-gray-800"
+                                        onChange={(checked) => setMainScreen({ showTitle: checked })}
                                     />
-                                    <div className="grid grid-cols-[40px_1fr] gap-2 items-center flex-1">
-                                        <span className="text-xs text-gray-400 text-center border p-1 rounded">기본</span>
+                                    <div className="flex-1">
                                         <BuilderInput
                                             type="text"
                                             value={mainScreen.title}
                                             onChange={(e) => setMainScreen({ title: e.target.value })}
                                             className="uppercase"
-                                            placeholder="THE NEW BEGINNING"
+                                            placeholder="THE MARRIAGE"
                                             disabled={!mainScreen.showTitle}
                                         />
                                     </div>
@@ -189,33 +209,25 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
 
                                 {/* Groom & Bride Name */}
                                 <div className="flex items-center gap-3">
-                                    <input
-                                        type="checkbox"
+                                    <BuilderCheckbox
                                         checked={mainScreen.showGroomBride}
-                                        onChange={(e) => setMainScreen({ showGroomBride: e.target.checked })}
-                                        className="w-5 h-5 rounded border-gray-300 text-gray-800 focus:ring-gray-800 shrink-0"
+                                        onChange={(checked) => setMainScreen({ showGroomBride: checked })}
+                                        className="shrink-0"
                                     />
-                                    <div className="grid grid-cols-[40px_1fr_60px_1fr] gap-2 items-center flex-1">
-                                        <span className="text-xs text-gray-400 text-center border p-1 rounded">기본</span>
+                                    <div className="grid grid-cols-[1fr_60px_1fr] gap-2 items-center flex-1">
                                         <BuilderInput
                                             type="text"
                                             value={groom.firstName || '신랑'}
                                             readOnly
-                                            className="text-gray-500"
+                                            className="text-gray-500 bg-gray-50/50"
                                             disabled={!mainScreen.showGroomBride}
                                         />
-                                        <BuilderInput
-                                            type="text"
-                                            value="그리고"
-                                            readOnly
-                                            className="text-gray-500 text-center"
-                                            disabled={!mainScreen.showGroomBride}
-                                        />
+                                        <div className="text-xs text-gray-400 text-center font-medium">그리고</div>
                                         <BuilderInput
                                             type="text"
                                             value={bride.firstName || '신부'}
                                             readOnly
-                                            className="text-gray-500"
+                                            className="text-gray-500 bg-gray-50/50"
                                             disabled={!mainScreen.showGroomBride}
                                         />
                                     </div>
@@ -223,14 +235,11 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
 
                                 {/* Subtitle */}
                                 <div className="flex items-center gap-3">
-                                    <input
-                                        type="checkbox"
+                                    <BuilderCheckbox
                                         checked={mainScreen.showSubtitle}
-                                        onChange={(e) => setMainScreen({ showSubtitle: e.target.checked })}
-                                        className="w-5 h-5 rounded border-gray-300 text-gray-800 focus:ring-gray-800"
+                                        onChange={(checked) => setMainScreen({ showSubtitle: checked })}
                                     />
-                                    <div className="grid grid-cols-[40px_1fr] gap-2 items-center flex-1">
-                                        <span className="text-xs text-gray-400 text-center border p-1 rounded">기본</span>
+                                    <div className="flex-1">
                                         <BuilderInput
                                             type="text"
                                             value={mainScreen.subtitle}
@@ -243,18 +252,16 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
 
                                 {/* Custom Date & Place */}
                                 <div className="flex items-start gap-3">
-                                    <input
-                                        type="checkbox"
+                                    <BuilderCheckbox
                                         checked={mainScreen.showDatePlace}
-                                        onChange={(e) => setMainScreen({ showDatePlace: e.target.checked })}
-                                        className="w-5 h-5 rounded border-gray-300 text-gray-800 focus:ring-gray-800 mt-2"
+                                        onChange={(checked) => setMainScreen({ showDatePlace: checked })}
+                                        className="mt-2"
                                     />
-                                    <div className="grid grid-cols-[40px_1fr] gap-2 items-start flex-1">
-                                        <span className="text-xs text-gray-400 text-center border p-1 rounded mt-1">기본</span>
+                                    <div className="flex-1">
                                         <BuilderTextarea
                                             value={mainScreen.customDatePlace}
                                             onChange={(e) => setMainScreen({ customDatePlace: e.target.value })}
-                                            className="min-h-[60px] leading-snug"
+                                            className="min-h-[80px] leading-relaxed"
                                             placeholder="0000.00.00 ..."
                                             disabled={!mainScreen.showDatePlace}
                                         />

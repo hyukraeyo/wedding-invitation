@@ -7,6 +7,7 @@
   --ivory: #F9F8E6;
   --forest-green: #4A5D45;
   --muted-sand: #E2E2C7;
+  --coral-pink: #FF8A8A;
 }
 
 @theme inline {
@@ -16,6 +17,7 @@
   --color-ivory: var(--ivory);
   --color-forest-green: var(--forest-green);
   --color-muted-sand: var(--muted-sand);
+  --color-coral-pink: #FF8A8A;
   --font-serif: var(--font-serif);
   --font-sans: var(--font-sans);
 }

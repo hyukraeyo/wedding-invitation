@@ -4,103 +4,117 @@ import { Heart } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 
 export default function MainScreenView() {
-    const { mainScreen, imageUrl, groom, bride } = useInvitationStore();
+    const { mainScreen, imageUrl, groom, bride, date, time, location, detailAddress } = useInvitationStore();
     const accentColor = useInvitationStore(state => state.theme.accentColor);
 
     return (
-        <div className={`relative w-full ${mainScreen.layout === 'fill' ? 'h-[600px]' : 'pb-10'}`}>
+        <div className={`relative w-full ${mainScreen.layout === 'fill' ? 'h-[650px]' : 'pb-16'}`}>
             <div className={`
-        relative w-full overflow-hidden flex flex-col items-center justify-center
-        ${mainScreen.layout === 'fill' ? 'h-full' : 'p-6'}
-      `}>
+                relative w-full overflow-hidden flex flex-col items-center
+                ${mainScreen.layout === 'fill' ? 'h-full justify-center' : 'pt-20'}
+            `}>
+                {/* 1. Header Text Area (For Basic Layout, appears before image) */}
+                {mainScreen.layout === 'basic' && (
+                    <div className="flex flex-col items-center text-center px-6 mb-12 animate-in fade-in slide-in-from-top-4 duration-1000">
+                        {mainScreen.showTitle && (
+                            <div className="text-[11px] tracking-[0.4em] font-bold text-coral-pink mb-6 uppercase">
+                                {mainScreen.title || 'THE MARRIAGE'}
+                            </div>
+                        )}
+                        <div className="text-5xl font-serif font-light text-gray-700 tracking-tighter mb-8 tabular-nums">
+                            {date ? `${String(new Date(date).getMonth() + 1).padStart(2, '0')}.${String(new Date(date).getDate()).padStart(2, '0')}` : '00.00'}
+                        </div>
+                        {mainScreen.showGroomBride && (
+                            <div className="text-[17px] font-serif text-gray-800 font-medium tracking-tight">
+                                {groom.lastName}{groom.firstName}, {bride.lastName}{bride.firstName} <span className="text-gray-400 font-light ml-0.5">결혼합니다.</span>
+                            </div>
+                        )}
+                    </div>
+                )}
 
                 {/* Image Area */}
                 <div className={`
-           relative w-full transition-all duration-300 overflow-hidden
-           ${mainScreen.layout === 'fill' ? 'absolute inset-0 h-full' : 'aspect-[3/4] shadow-sm'}
-           ${!mainScreen.layout.startsWith('fill') && mainScreen.layout !== 'arch' && mainScreen.layout !== 'oval' && 'bg-gray-100'}
-           ${mainScreen.layout === 'arch' ? 'rounded-t-[100px] rounded-b-xl' : ''}
-           ${mainScreen.layout === 'oval' ? 'rounded-[100px]' : ''}
-           ${mainScreen.layout === 'basic' || mainScreen.layout === 'frame' ? 'rounded-md' : ''}
-           ${mainScreen.showBorder ? 'border-4 border-double' : ''}
-           ${mainScreen.expandPhoto && mainScreen.layout !== 'fill' ? 'scale-105' : ''}
-        `}
+                    relative w-full transition-all duration-700 overflow-hidden
+                    ${mainScreen.layout === 'fill' ? 'absolute inset-0 h-full' : 'max-w-[340px] aspect-[4/5] shadow-2xl shadow-black/10'}
+                    ${!mainScreen.layout.startsWith('fill') && mainScreen.layout !== 'arch' && mainScreen.layout !== 'oval' && 'bg-gray-50'}
+                    ${mainScreen.layout === 'arch' ? 'rounded-t-[200px] rounded-b-2xl' : ''}
+                    ${mainScreen.layout === 'oval' ? 'rounded-full' : ''}
+                    ${mainScreen.layout === 'basic' ? 'rounded-2xl mx-auto' : ''}
+                    ${mainScreen.layout === 'frame' ? 'rounded-sm' : ''}
+                    ${mainScreen.showBorder ? 'border-4 border-double' : ''}
+                    ${mainScreen.expandPhoto && mainScreen.layout !== 'fill' ? 'scale-105' : ''}
+                `}
                     style={mainScreen.showBorder ? { borderColor: accentColor } : {}}
                 >
                     {imageUrl ? (
                         <Image src={imageUrl} alt={`${groom.firstName}와 ${bride.firstName}의 결혼식 메인 사진`} fill className="object-cover" priority />
                     ) : (
-                        <div className="flex flex-col items-center justify-center h-full opacity-30 text-gray-400">
-                            <Heart size={48} />
-                            <span className="text-sm mt-2">No Image</span>
+                        <div className="flex flex-col items-center justify-center h-full opacity-20 text-gray-300 bg-gray-50/50">
+                            <Heart size={48} strokeWidth={1} />
+                            <span className="text-[10px] mt-4 uppercase tracking-[0.2em] font-light">No Image Selected</span>
                         </div>
                     )}
 
-                    {/* Frame Layout Inner Border */}
-                    {mainScreen.layout === 'frame' && (
-                        <div className="absolute inset-4 border border-white/50 z-10"></div>
-                    )}
+                    {mainScreen.layout === 'frame' && <div className="absolute inset-4 border border-white/40 z-10"></div>}
+                    {mainScreen.layout === 'fill' && <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10 z-10" />}
 
-                    {/* Fill Layout Gradient Overlay */}
-                    {mainScreen.layout === 'fill' && (
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10 z-10" />
-                    )}
-
-                    {/* Effects Overlay (Main Screen Specific) */}
-                    {mainScreen.effect === 'mist' && (
-                        <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px] z-10 animate-pulse-slow"></div>
-                    )}
-                    {mainScreen.effect === 'ripple' && (
-                        <div className="absolute inset-0 z-10 opacity-30 bg-[url('https://www.transparenttextures.com/patterns/water.png')] animate-pulse"></div>
-                    )}
-                    {mainScreen.effect === 'paper' && mainScreen.layout !== 'oval' && (
-                        <div className="absolute inset-0 z-10 opacity-40 bg-[url('https://www.transparenttextures.com/patterns/paper.png')] mix-blend-multiply"></div>
-                    )}
+                    {mainScreen.effect === 'mist' && <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px] z-10 animate-pulse-slow"></div>}
+                    {mainScreen.effect === 'ripple' && <div className="absolute inset-0 z-10 opacity-30 bg-[url('https://www.transparenttextures.com/patterns/water.png')] animate-pulse"></div>}
+                    {mainScreen.effect === 'paper' && mainScreen.layout !== 'oval' && <div className="absolute inset-0 z-10 opacity-40 bg-[url('https://www.transparenttextures.com/patterns/paper.png')] mix-blend-multiply"></div>}
                 </div>
 
-                {/* Text Overlay (Position varies by layout) */}
+                {/* Bottom Text Area */}
                 <div className={`
-           z-20 flex flex-col items-center text-center transition-all duration-300
-           ${mainScreen.layout === 'fill' ? 'absolute bottom-12 left-0 right-0 text-white' : 'mt-10 mb-6'}
-        `}>
-                    {/* Title */}
-                    {mainScreen.showTitle && (
-                        <div className={`text-[10px] tracking-[0.4em] uppercase mb-6 font-medium ${mainScreen.layout === 'fill' ? 'opacity-80' : 'text-forest-green opacity-40'}`}>
-                            {mainScreen.title}
-                        </div>
+                    z-20 flex flex-col items-center text-center transition-all duration-700
+                    ${mainScreen.layout === 'fill' ? 'absolute bottom-12 left-0 right-0 text-white' : 'mt-14 mb-6 px-10'}
+                `}>
+                    {mainScreen.layout !== 'basic' && (
+                        <>
+                            {mainScreen.showTitle && (
+                                <div className={`text-[10px] tracking-[0.4em] uppercase mb-6 font-medium ${mainScreen.layout === 'fill' ? 'opacity-80' : 'text-forest-green opacity-40'}`}>
+                                    {mainScreen.title}
+                                </div>
+                            )}
+                            {mainScreen.showGroomBride && (
+                                <div className={`font-serif text-3xl mb-6 flex items-center gap-4 ${mainScreen.layout === 'fill' ? 'font-light' : 'font-normal text-gray-800'}`}>
+                                    <span>{groom.firstName}</span>
+                                    <span className="font-sans text-[10px] uppercase tracking-widest opacity-40 italic">and</span>
+                                    <span>{bride.firstName}</span>
+                                </div>
+                            )}
+                        </>
                     )}
 
-                    {/* Names */}
-                    {mainScreen.showGroomBride && (
-                        <div className={`font-serif text-3xl mb-6 flex items-center gap-4 ${mainScreen.layout === 'fill' ? 'font-light' : 'font-normal text-gray-800'}`}>
-                            <span>{groom.firstName}</span>
-                            <span className="font-sans text-[10px] uppercase tracking-widest opacity-40 italic">and</span>
-                            <span>{bride.firstName}</span>
-                        </div>
-                    )}
-
-                    {/* Decorative Ornament */}
-                    <div className="mb-6 opacity-20">
+                    <div className="mb-8 opacity-10">
                         <svg width="60" height="20" viewBox="0 0 100 20" fill="none" stroke="currentColor">
                             <path d="M0 10h40M60 10h40M45 10l5-5 5 5-5 5-5-5z" strokeWidth="0.5" />
                         </svg>
                     </div>
 
-                    {/* Subtitle */}
                     {mainScreen.showSubtitle && (
-                        <div className={`text-sm mb-6 tracking-wide ${mainScreen.layout === 'fill' ? 'opacity-95 font-light' : 'text-gray-500 font-light italic'}`}>
+                        <div className={`text-sm mb-6 tracking-wide ${mainScreen.layout === 'fill' ? 'opacity-95 font-light' : 'text-gray-500 font-light italic font-serif'}`}>
                             {mainScreen.subtitle}
                         </div>
                     )}
 
-                    {/* Date & Place */}
                     {mainScreen.showDatePlace && (
-                        <div className={`text-[11px] leading-relaxed whitespace-pre-wrap tracking-wider ${mainScreen.layout === 'fill' ? 'opacity-80' : 'text-gray-400 font-light'}`}>
-                            {mainScreen.customDatePlace}
+                        <div className={`text-[12px] leading-[2.2] whitespace-pre-wrap tracking-wider ${mainScreen.layout === 'fill' ? 'opacity-80' : 'text-gray-500 font-medium font-serif'}`}>
+                            {(() => {
+                                if (mainScreen.customDatePlace && mainScreen.customDatePlace !== '0000.00.00. Sunday 00:00 PM\nOOO예식장 1F, OOO홀') {
+                                    return mainScreen.customDatePlace;
+                                }
+                                const dateObj = date ? new Date(date) : new Date();
+                                const weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dateObj.getDay()];
+                                const formattedDate = `${dateObj.getFullYear()}. ${String(dateObj.getMonth() + 1).padStart(2, '0')}. ${String(dateObj.getDate()).padStart(2, '0')}. ${weekday}`;
+                                const [h = '12', m = '00'] = (time || '12:00').split(':');
+                                const hour = parseInt(h);
+                                const ampm = hour >= 12 ? 'PM' : 'AM';
+                                const displayHour = hour > 12 ? hour - 12 : (hour === 0 ? 12 : hour);
+                                return `${formattedDate} ${String(displayHour).padStart(2, '0')}:${m} ${ampm}\n${location}${detailAddress ? `, ${detailAddress}` : ''}`;
+                            })()}
                         </div>
                     )}
                 </div>
-
             </div>
         </div>
     );

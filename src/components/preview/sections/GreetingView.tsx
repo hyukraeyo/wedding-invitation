@@ -9,9 +9,10 @@ export default function GreetingView() {
         groomNameCustom, brideNameCustom
     } = useInvitationStore();
 
-    if (!message) return null;
+    if (!message && !showNamesAtBottom) return null;
 
-    const formatParentSearch = (parent: { name: string; isDeceased: boolean }) => {
+    const formatParentName = (parent: { name: string; isDeceased: boolean }) => {
+        if (!parent.name) return '';
         return parent.isDeceased ? `故 ${parent.name}` : parent.name;
     };
 
@@ -59,9 +60,9 @@ export default function GreetingView() {
                                 {/* Groom */}
                                 <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 font-serif text-gray-800">
                                     <div className="flex items-center gap-2 text-[14px] opacity-80">
-                                        <span>{formatParentSearch(groom.parents.father)}</span>
+                                        <span>{formatParentName(groom.parents.father)}</span>
                                         <span className="text-gray-300">·</span>
-                                        <span>{formatParentSearch(groom.parents.mother)}</span>
+                                        <span>{formatParentName(groom.parents.mother)}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <span className="text-gray-400 text-[11px] font-sans">의 {groom.relation}</span>
@@ -71,9 +72,9 @@ export default function GreetingView() {
                                 {/* Bride */}
                                 <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-3 font-serif text-gray-800">
                                     <div className="flex items-center gap-2 text-[14px] opacity-80">
-                                        <span>{formatParentSearch(bride.parents.father)}</span>
+                                        <span>{formatParentName(bride.parents.father)}</span>
                                         <span className="text-gray-300">·</span>
-                                        <span>{formatParentSearch(bride.parents.mother)}</span>
+                                        <span>{formatParentName(bride.parents.mother)}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <span className="text-gray-400 text-[11px] font-sans">의 {bride.relation}</span>

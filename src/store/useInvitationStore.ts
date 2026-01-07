@@ -178,7 +178,7 @@ interface InvitationState {
 const getDefaultDate = () => {
     const d = new Date();
     d.setDate(d.getDate() + 100);
-    return d.toISOString().split('T')[0];
+    return d.toISOString().split('T')[0] || '';
 };
 
 export const useInvitationStore = create<InvitationState>((set) => ({
@@ -244,7 +244,7 @@ export const useInvitationStore = create<InvitationState>((set) => ({
         showBorder: false,
         expandPhoto: true,
         effect: 'paper',
-        title: 'THE NEW BEGINNING',
+        title: 'THE MARRIAGE',
         subtitle: 'We are getting married',
         customDatePlace: '0000.00.00. Sunday 00:00 PM\nOOO예식장 1F, OOO홀',
         showTitle: true,

@@ -4,7 +4,7 @@ import React, { memo, useMemo, useEffect } from 'react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import MainScreenView from './sections/MainScreenView';
 import CalendarSectionView from './sections/CalendarSectionView';
-import NamesView from './sections/NamesView';
+// import NamesView from './sections/NamesView';
 import GreetingView from './sections/GreetingView';
 import LocationView from './sections/LocationView';
 import GalleryView from './sections/GalleryView';
@@ -62,10 +62,8 @@ const InvitationCanvas = memo(() => {
           <GreetingView />
         </div>
 
-        {/* 3. Detailed Names */}
-        <div id="section-basic" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500 fill-mode-backwards">
-          <NamesView />
-        </div>
+        {/* 3. Detailed Names - Removed as it's redundant with signatures in GreetingView */}
+
 
         {/* Divider */}
         <div className="flex justify-center py-10 opacity-5">

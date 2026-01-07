@@ -3,6 +3,7 @@ import { Palette } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderLabel } from '../BuilderLabel';
+import { BuilderCheckbox } from '../BuilderCheckbox';
 
 interface SectionProps {
     isOpen: boolean;
@@ -108,41 +109,33 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                         ))}
                     </div>
 
-                    {/* Effect Option */}
                     {theme.effect !== 'none' && (
-                        <label className="flex items-center gap-2 cursor-pointer mt-2 pl-1 animate-in fade-in slide-in-from-top-1">
-                            <input
-                                type="checkbox"
+                        <div className="mt-4 pl-1 animate-in fade-in slide-in-from-top-1">
+                            <BuilderCheckbox
                                 checked={theme.effectOnlyOnMain}
-                                onChange={(e) => setTheme({ effectOnlyOnMain: e.target.checked })}
-                                className="w-3.5 h-3.5 rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
-                            />
-                            <span className="text-xs text-gray-500 hover:text-forest-green transition-colors">메인 화면에만 이펙트 보이게 설정</span>
-                        </label>
+                                onChange={(checked) => setTheme({ effectOnlyOnMain: checked })}
+                                className="!items-start"
+                            >
+                                <span className="text-xs text-gray-400 group-hover:text-forest-green transition-colors">메인 화면에만 이펙트 보이게 설정</span>
+                            </BuilderCheckbox>
+                        </div>
                     )}
                 </div>
 
-                {/* Options */}
-                <div className="space-y-3 pt-2 border-t border-gray-100">
-                    <label className="flex items-center gap-3 cursor-pointer group">
-                        <input
-                            type="checkbox"
-                            checked={theme.animateEntrance}
-                            onChange={(e) => setTheme({ animateEntrance: e.target.checked })}
-                            className="w-4 h-4 rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
-                        />
-                        <span className="text-sm text-gray-700 group-hover:text-forest-green transition-colors">스크롤 샤르륵 등장 효과</span>
-                    </label>
+                <div className="flex flex-col gap-3 pt-2 border-t border-gray-100">
+                    <BuilderCheckbox
+                        checked={theme.animateEntrance}
+                        onChange={(checked) => setTheme({ animateEntrance: checked })}
+                    >
+                        스크롤 샤르륵 등장 효과
+                    </BuilderCheckbox>
 
-                    <label className="flex items-center gap-3 cursor-pointer group">
-                        <input
-                            type="checkbox"
-                            checked={theme.showSubtitleEng}
-                            onChange={(e) => setTheme({ showSubtitleEng: e.target.checked })}
-                            className="w-4 h-4 rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
-                        />
-                        <span className="text-sm text-gray-700 group-hover:text-forest-green transition-colors">영문 소제목 표시</span>
-                    </label>
+                    <BuilderCheckbox
+                        checked={theme.showSubtitleEng}
+                        onChange={(checked) => setTheme({ showSubtitleEng: checked })}
+                    >
+                        영문 소제목 표시
+                    </BuilderCheckbox>
                 </div>
 
             </div>

@@ -6,6 +6,7 @@ import { AccordionItem } from '../AccordionItem';
 import { BuilderLabel } from '../BuilderLabel';
 import { BuilderInput } from '../BuilderInput';
 import { BuilderTextarea } from '../BuilderTextarea';
+import { BuilderCheckbox } from '../BuilderCheckbox';
 
 interface SectionProps {
     isOpen: boolean;
@@ -117,35 +118,28 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                 <div className="pt-2">
                     <BuilderLabel>성함 표기</BuilderLabel>
 
-                    <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                            type="checkbox"
+                    <div className="flex flex-col gap-3">
+                        <BuilderCheckbox
                             checked={showNamesAtBottom}
-                            onChange={(e) => setShowNamesAtBottom(e.target.checked)}
-                            className="w-4 h-4 rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
-                        />
-                        <span className="text-sm text-gray-800">인사말 하단에 신랑신부&혼주 성함 표시</span>
-                    </label>
+                            onChange={setShowNamesAtBottom}
+                        >
+                            인사말 하단에 신랑신부&혼주 성함 표시
+                        </BuilderCheckbox>
 
-                    <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                            type="checkbox"
+                        <BuilderCheckbox
                             checked={sortNames}
-                            onChange={(e) => setSortNames(e.target.checked)}
-                            className="w-4 h-4 rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
-                        />
-                        <span className="text-sm text-gray-800">각 항목 정렬</span>
-                    </label>
+                            onChange={setSortNames}
+                        >
+                            각 항목 정렬
+                        </BuilderCheckbox>
 
-                    <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                            type="checkbox"
+                        <BuilderCheckbox
                             checked={enableFreeformNames}
-                            onChange={(e) => setEnableFreeformNames(e.target.checked)}
-                            className="w-4 h-4 rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
-                        />
-                        <span className="text-sm text-gray-800">성함 자유 입력</span>
-                    </label>
+                            onChange={setEnableFreeformNames}
+                        >
+                            성함 자유 입력
+                        </BuilderCheckbox>
+                    </div>
 
                     {enableFreeformNames && (
                         <div className="space-y-3 pl-6 animate-fadeIn">

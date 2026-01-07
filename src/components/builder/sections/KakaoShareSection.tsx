@@ -3,6 +3,7 @@ import { MessageCircle } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderLabel } from '../BuilderLabel';
+import { BuilderCheckbox } from '../BuilderCheckbox';
 import Image from 'next/image';
 
 interface SectionProps {
@@ -144,15 +145,12 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Share Exposure */}
                 <div className="pt-2">
-                    <label className="flex items-center gap-2 cursor-pointer">
-                        <input
-                            type="checkbox"
-                            checked={kakao.showShareButton}
-                            onChange={(e) => setKakao({ showShareButton: e.target.checked })}
-                            className="w-4 h-4 rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
-                        />
-                        <span className="text-sm text-gray-800">청첩장 하단에 카카오톡 공유하기 버튼 노출</span>
-                    </label>
+                    <BuilderCheckbox
+                        checked={kakao.showShareButton}
+                        onChange={(checked) => setKakao({ showShareButton: checked })}
+                    >
+                        청첩장 하단에 카카오톡 공유하기 버튼 노출
+                    </BuilderCheckbox>
                 </div>
 
                 {/* Footer Note */}

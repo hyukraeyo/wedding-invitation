@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Heart } from 'lucide-react';
+// import { Heart } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 
 export default function CalendarSectionView() {
@@ -48,7 +48,7 @@ export default function CalendarSectionView() {
             <div className="relative overflow-hidden">
                 {/* 2026.01.06 Header */}
                 <div className="text-center mb-12 space-y-3 relative z-10">
-                    <div className="text-sm tracking-[0.4em] text-forest-green/40 font-medium uppercase mb-2">Save the Date</div>
+
                     <div className="text-3xl font-serif font-light tracking-widest text-gray-800">
                         {date.replace(/-/g, '.')}
                     </div>
