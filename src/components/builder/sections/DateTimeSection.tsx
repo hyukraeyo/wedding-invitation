@@ -2,7 +2,6 @@ import React from 'react';
 import { Calendar, ChevronDown } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
-import { BuilderInput } from '../BuilderInput';
 
 interface SectionProps {
     isOpen: boolean;
@@ -39,26 +38,35 @@ export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
             onToggle={onToggle}
             isCompleted={!!date && !!time}
         >
-            <div className="space-y-6">
-                {/* Date */}
-                <div className="grid grid-cols-[80px_1fr] items-center gap-4">
-                    <label className="text-sm text-gray-700">예식일</label>
-                    <BuilderInput
-                        type="date"
-                        value={date}
-                        onChange={(e) => setDate(e.target.value)}
-                    />
+            <div className="space-y-8">
+                {/* Date Selection */}
+                <div className="space-y-3">
+                    <label className="text-[11px] font-bold text-gray-400 uppercase tracking-widest px-1">예식일</label>
+                    <div className="relative group">
+                        <div className="w-full flex items-center justify-between px-5 py-4 bg-gray-50/50 border border-gray-100 rounded-2xl group-hover:bg-gray-50 transition-all cursor-pointer shadow-sm">
+                            <span className="text-[15px] font-medium text-gray-800">
+                                {date ? date.split('-').join('. ') + '.' : '날짜를 선택해주세요'}
+                            </span>
+                            <Calendar size={18} className="text-forest-green opacity-40 group-hover:opacity-100 transition-opacity" />
+                        </div>
+                        <input
+                            type="date"
+                            value={date}
+                            onChange={(e) => setDate(e.target.value)}
+                            className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                        />
+                    </div>
                 </div>
 
-                {/* Time */}
-                <div className="grid grid-cols-[80px_1fr] items-center gap-4">
-                    <label className="text-sm text-gray-700">예식시간</label>
+                {/* Time Selection */}
+                <div className="space-y-3">
+                    <label className="text-[11px] font-bold text-gray-400 uppercase tracking-widest px-1">예식시간</label>
                     <div className="flex gap-3">
-                        <div className="relative flex-1">
+                        <div className="flex-1 relative group">
                             <select
                                 value={currentHour}
                                 onChange={(e) => handleTimeChange('hour', parseInt(e.target.value))}
-                                className="w-full appearance-none px-4 py-3 bg-gray-50 border-none rounded-lg text-sm text-gray-900 focus:ring-1 focus:ring-forest-green pr-8"
+                                className="w-full appearance-none px-5 py-4 bg-gray-50/50 border border-gray-100 rounded-2xl text-[14px] text-gray-800 font-medium focus:ring-2 focus:ring-forest-green/10 outline-none transition-all cursor-pointer shadow-sm"
                             >
                                 {Array.from({ length: 24 }).map((_, i) => (
                                     <option key={i} value={i}>
@@ -66,46 +74,48 @@ export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
                                     </option>
                                 ))}
                             </select>
-                            <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                            <ChevronDown size={14} className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none group-hover:text-forest-green transition-colors" />
                         </div>
-                        <div className="relative flex-1">
+                        <div className="flex-1 relative group">
                             <select
                                 value={currentMinute}
                                 onChange={(e) => handleTimeChange('minute', parseInt(e.target.value))}
-                                className="w-full appearance-none px-4 py-3 bg-gray-50 border-none rounded-lg text-sm text-gray-900 focus:ring-1 focus:ring-forest-green pr-8"
+                                className="w-full appearance-none px-5 py-4 bg-gray-50/50 border border-gray-100 rounded-2xl text-[14px] text-gray-800 font-medium focus:ring-2 focus:ring-forest-green/10 outline-none transition-all cursor-pointer shadow-sm"
                             >
                                 {['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'].map((m) => (
                                     <option key={m} value={parseInt(m)}>{m}분</option>
                                 ))}
                             </select>
-                            <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+                            <ChevronDown size={14} className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-300 pointer-events-none group-hover:text-forest-green transition-colors" />
                         </div>
                     </div>
                 </div>
 
-                {/* Display Options */}
-                <div className="grid grid-cols-[80px_1fr] items-start gap-4">
-                    <label className="text-sm text-gray-700 pt-1">표시</label>
-                    <div className="space-y-3">
-                        <label className="flex items-center gap-2 cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={showCalendar}
-                                onChange={(e) => setShowCalendar(e.target.checked)}
-                                className="w-5 h-5 rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
-                            />
-                            <span className="text-sm text-gray-800">캘린더</span>
-                        </label>
+                {/* Display Options (Minimal Chips) */}
+                <div className="space-y-4">
+                    <label className="text-[11px] font-bold text-gray-400 uppercase tracking-widest px-1">표시 설정</label>
+                    <div className="flex flex-wrap gap-2">
+                        <button
+                            onClick={() => setShowCalendar(!showCalendar)}
+                            className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-semibold transition-all border ${showCalendar
+                                ? 'bg-forest-green border-forest-green text-white shadow-md'
+                                : 'bg-white border-gray-100 text-gray-400 hover:border-gray-200'
+                                }`}
+                        >
+                            <div className={`w-1.5 h-1.5 rounded-full ${showCalendar ? 'bg-white' : 'bg-gray-200'}`} />
+                            캘린더 표시
+                        </button>
 
-                        <label className="flex items-center gap-2 cursor-pointer">
-                            <input
-                                type="checkbox"
-                                checked={showDday}
-                                onChange={(e) => setShowDday(e.target.checked)}
-                                className="w-5 h-5 rounded border-2 border-gray-300 bg-white checked:bg-forest-green checked:border-forest-green focus:ring-forest-green cursor-pointer"
-                            />
-                            <span className="text-sm text-gray-800">디데이 & 카운트다운</span>
-                        </label>
+                        <button
+                            onClick={() => setShowDday(!showDday)}
+                            className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-semibold transition-all border ${showDday
+                                ? 'bg-forest-green border-forest-green text-white shadow-md'
+                                : 'bg-white border-gray-100 text-gray-400 hover:border-gray-200'
+                                }`}
+                        >
+                            <div className={`w-1.5 h-1.5 rounded-full ${showDday ? 'bg-white' : 'bg-gray-200'}`} />
+                            디데이 & 카운트다운
+                        </button>
                     </div>
                 </div>
 
