@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback, memo, Suspense } from 'react';
 import dynamic from 'next/dynamic';
+import { useInvitationStore } from '@/store/useInvitationStore';
 
 // Dynamic imports for code splitting
 const ThemeSection = dynamic(() => import('./sections/ThemeSection'), {
