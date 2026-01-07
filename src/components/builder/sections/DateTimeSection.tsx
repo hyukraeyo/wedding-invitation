@@ -111,31 +111,55 @@ export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* D-Day Message Editor */}
                 {showDday && (
-                    <div className="border border-gray-200 rounded-lg overflow-hidden bg-white mt-2">
-                        {/* Visual Toolbar */}
-                        <div className="flex items-center gap-1 p-2 border-b border-gray-100 bg-white">
-                            <button className="p-1.5 hover:bg-gray-100 rounded text-gray-600"><span className="font-bold text-xs serif">B</span></button>
-                            <button className="p-1.5 hover:bg-gray-100 rounded text-gray-600"><span className="italic text-xs serif">I</span></button>
-                            <button className="p-1.5 hover:bg-gray-100 rounded text-gray-600"><span className="underline text-xs serif">U</span></button>
-                            <div className="w-[1px] h-4 bg-gray-200 mx-1"></div>
-                            <button className="flex items-center gap-1 p-1.5 hover:bg-gray-100 rounded text-gray-600 text-xs">
-                                <span className="underline decoration-black decoration-2">A</span>
-                                <ChevronDown size={10} />
-                            </button>
-                            <button className="flex items-center gap-1 p-1.5 hover:bg-gray-100 rounded text-gray-600 text-xs bg-gray-800 text-white">
-                                <span>A</span>
-                                <ChevronDown size={10} />
-                            </button>
+                    <div className="space-y-2">
+                        <div className="flex items-center justify-between px-1">
+                            <label className="text-xs text-gray-500 font-medium">디데이 문구 수정</label>
+                            <span className="text-[10px] text-gray-400">*(D-Day) 자리는 자동으로 숫자가 표시됩니다</span>
                         </div>
+                        <div className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm">
+                            {/* Visual Toolbar */}
+                            <div className="flex items-center gap-1 p-2 border-b border-gray-50 bg-gray-50/30">
+                                <button className="p-1.5 hover:bg-white rounded text-gray-400 transition-colors cursor-not-allowed"><span className="font-bold text-xs serif">B</span></button>
+                                <button className="p-1.5 hover:bg-white rounded text-gray-400 transition-colors cursor-not-allowed"><span className="italic text-xs serif">I</span></button>
+                                <button className="p-1.5 hover:bg-white rounded text-gray-400 transition-colors cursor-not-allowed"><span className="underline text-xs serif">U</span></button>
+                                <div className="w-[1px] h-3 bg-gray-200 mx-1"></div>
+                                <button className="p-1.5 hover:bg-white rounded text-forest-green text-xs font-medium bg-white shadow-sm px-2">
+                                    (신랑)
+                                </button>
+                                <button className="p-1.5 hover:bg-white rounded text-forest-green text-xs font-medium bg-white shadow-sm px-2">
+                                    (신부)
+                                </button>
+                            </div>
 
-                        <div className="bg-gray-50 p-4">
-                            <input
-                                type="text"
-                                value={ddayMessage}
-                                onChange={(e) => setDdayMessage(e.target.value)}
-                                className="w-full bg-transparent border-none outline-none text-sm text-gray-900 placeholder-gray-400"
-                                placeholder="디데이 메시지를 입력하세요"
-                            />
+                            <div className="p-4 bg-white">
+                                {(() => {
+                                    const parts = ddayMessage.split('(D-Day)');
+                                    const prefix = parts[0] || '';
+                                    const suffix = parts.slice(1).join('(D-Day)') || '';
+
+                                    return (
+                                        <div className="flex flex-wrap items-center gap-y-2 text-sm">
+                                            <input
+                                                type="text"
+                                                value={prefix}
+                                                onChange={(e) => setDdayMessage(`${e.target.value}(D-Day)${suffix}`)}
+                                                className="min-w-[60px] flex-1 bg-gray-50/50 border-none outline-none p-2 rounded-lg text-gray-900 focus:bg-gray-50 transition-colors"
+                                                placeholder="앞 문구"
+                                            />
+                                            <div className="mx-2 px-3 py-1 bg-forest-green text-white rounded-full text-[11px] font-bold shadow-sm select-none">
+                                                D-Day
+                                            </div>
+                                            <input
+                                                type="text"
+                                                value={suffix}
+                                                onChange={(e) => setDdayMessage(`${prefix}(D-Day)${e.target.value}`)}
+                                                className="min-w-[60px] flex-1 bg-gray-50/50 border-none outline-none p-2 rounded-lg text-gray-900 focus:bg-gray-50 transition-colors"
+                                                placeholder="뒷 문구"
+                                            />
+                                        </div>
+                                    );
+                                })()}
+                            </div>
                         </div>
                     </div>
                 )}

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import Script from 'next/script';
 import { Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk';
-import { MapPin, Copy } from 'lucide-react';
+import { Copy } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 
 export default function LocationView() {
