@@ -252,28 +252,39 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                         onChange={(checked) => setMainScreen({ showGroomBride: checked })}
                                         className="shrink-0"
                                     />
-                                    <div className="grid grid-cols-[1fr_60px_1fr] gap-2 items-center flex-1">
+                                    <div className="flex-1">
                                         <BuilderInput
                                             type="text"
-                                            value={groom.firstName || '신랑'}
-                                            readOnly
-                                            className="text-gray-500 bg-gray-50/50"
+                                            value={`${groom.firstName || '신랑'} ${mainScreen.andText || '그리고'} ${bride.firstName || '신부'}`}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                // 입력값을 공백으로 분리해서 신랑, 연결어, 신부로 파싱
+                                                const parts = value.split(' ');
+                                                if (parts.length >= 3) {
+                                                    const groomName = parts[0];
+                                                    const brideName = parts[parts.length - 1];
+                                                    const andText = parts.slice(1, -1).join(' ');
+
+                                                    // groom과 bride 이름 업데이트
+                                                    setGroom({ firstName: groomName });
+                                                    setBride({ firstName: brideName });
+                                                    setMainScreen({ andText: andText });
+                                                } else if (parts.length === 2) {
+                                                    // 두 단어만 있는 경우 (신랑 신부)
+                                                    setGroom({ firstName: parts[0] });
+                                                    setBride({ firstName: parts[1] });
+                                                } else if (parts.length === 1) {
+                                                    // 한 단어만 있는 경우
+                                                    setGroom({ firstName: parts[0] });
+                                                }
+                                            }}
+                                            className="w-full text-center text-gray-700"
                                             disabled={!mainScreen.showGroomBride}
+                                            placeholder="신랑 그리고 신부"
                                         />
-                                        <BuilderInput
-                                            type="text"
-                                            value={mainScreen.andText}
-                                            onChange={(e) => setMainScreen({ andText: e.target.value })}
-                                            className="text-xs text-gray-400 text-center font-medium border-none bg-transparent text-center"
-                                            placeholder="그리고"
-                                        />
-                                        <BuilderInput
-                                            type="text"
-                                            value={bride.firstName || '신부'}
-                                            readOnly
-                                            className="text-gray-500 bg-gray-50/50"
-                                            disabled={!mainScreen.showGroomBride}
-                                        />
+                                        <div className="text-xs text-gray-400 text-center mt-1">
+                                            신랑, 연결어, 신부 순으로 입력하세요 (예: 도현 그리고 지수)
+                                        </div>
                                     </div>
                                 </div>
 
