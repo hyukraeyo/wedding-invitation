@@ -1,5 +1,5 @@
 import React from 'react';
-import { CreditCard, Plus, Trash2, RefreshCw } from 'lucide-react';
+import { CreditCard, Plus, Trash2 } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderLabel } from '../BuilderLabel';
@@ -15,33 +15,17 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
         groom, bride
     } = useInvitationStore();
 
-    const syncNames = () => {
-        const newAcc = accounts.map(acc => {
-            let holder = acc.holder;
-            if (acc.type === 'groom') {
-                if (acc.relation === '본인') holder = `${groom.lastName}${groom.firstName}`;
-                else if (acc.relation === '아버지') holder = groom.parents.father.name;
-                else if (acc.relation === '어머니') holder = groom.parents.mother.name;
-            } else {
-                if (acc.relation === '본인') holder = `${bride.lastName}${bride.firstName}`;
-                else if (acc.relation === '아버지') holder = bride.parents.father.name;
-                else if (acc.relation === '어머니') holder = bride.parents.mother.name;
-            }
-            return { ...acc, holder };
-        });
-        setAccounts(newAcc);
-    };
-
     const addAccount = (type: 'groom' | 'bride') => {
         const id = `${type}-${Date.now()}`;
-        setAccounts([...accounts, { id, type, relation: '본인', bank: '', accountNumber: '', holder: '' }]);
+        const defaultName = type === 'groom' ? `${groom.lastName}${groom.firstName}` : `${bride.lastName}${bride.firstName}`;
+        setAccounts([...accounts, { id, type, relation: '본인', bank: '', accountNumber: '', holder: defaultName }]);
     };
 
     const removeAccount = (id: string) => {
         setAccounts(accounts.filter(a => a.id !== id));
     };
 
-    const updateAccount = (id: string, data: Partial<typeof accounts[0]>) => {
+    const updateAccount = (id: string, data: Partial<Account>) => {
         setAccounts(accounts.map(a => a.id === id ? { ...a, ...data } : a));
     };
 
@@ -57,16 +41,6 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
             isCompleted={accounts.every(a => a.bank && a.accountNumber)}
         >
             <div className="space-y-8">
-                <div className="flex justify-end px-1">
-                    <button
-                        onClick={syncNames}
-                        className="text-[11px] font-bold text-forest-green hover:bg-forest-green/5 px-2.5 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 border border-forest-green/20"
-                    >
-                        <RefreshCw size={12} />
-                        성함 동기화
-                    </button>
-                </div>
-
                 {/* Groom Side */}
                 <div className="space-y-4">
                     <div className="flex items-center justify-between px-1">
@@ -83,7 +57,14 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
                     </div>
                     <div className="space-y-4">
                         {groomAccs.map((acc) => (
-                            <AccountEntry key={acc.id} acc={acc} onUpdate={(data) => updateAccount(acc.id, data)} onRemove={() => removeAccount(acc.id)} />
+                            <AccountEntry
+                                key={acc.id}
+                                acc={acc}
+                                groom={groom}
+                                bride={bride}
+                                onUpdate={(data) => updateAccount(acc.id, data)}
+                                onRemove={() => removeAccount(acc.id)}
+                            />
                         ))}
                     </div>
                 </div>
@@ -106,7 +87,14 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
                     </div>
                     <div className="space-y-4">
                         {brideAccs.map((acc) => (
-                            <AccountEntry key={acc.id} acc={acc} onUpdate={(data) => updateAccount(acc.id, data)} onRemove={() => removeAccount(acc.id)} />
+                            <AccountEntry
+                                key={acc.id}
+                                acc={acc}
+                                groom={groom}
+                                bride={bride}
+                                onUpdate={(data) => updateAccount(acc.id, data)}
+                                onRemove={() => removeAccount(acc.id)}
+                            />
                         ))}
                     </div>
                 </div>
@@ -124,7 +112,37 @@ interface Account {
     holder: string;
 }
 
-function AccountEntry({ acc, onUpdate, onRemove }: { acc: Account; onUpdate: (data: Partial<Account>) => void; onRemove: () => void }) {
+interface Person {
+    firstName: string;
+    lastName: string;
+    parents: {
+        father: { name: string };
+        mother: { name: string };
+    };
+}
+
+function AccountEntry({
+    acc, groom, bride, onUpdate, onRemove
+}: {
+    acc: Account;
+    groom: Person;
+    bride: Person;
+    onUpdate: (data: Partial<Account>) => void;
+    onRemove: () => void
+}) {
+    const getName = (rel: '본인' | '아버지' | '어머니') => {
+        if (acc.type === 'groom') {
+            if (rel === '본인') return `${groom.lastName}${groom.firstName}`;
+            if (rel === '아버지') return groom.parents.father.name;
+            if (rel === '어머니') return groom.parents.mother.name;
+        } else {
+            if (rel === '본인') return `${bride.lastName}${bride.firstName}`;
+            if (rel === '아버지') return bride.parents.father.name;
+            if (rel === '어머니') return bride.parents.mother.name;
+        }
+        return '';
+    };
+
     return (
         <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 relative group">
             <button
@@ -134,18 +152,22 @@ function AccountEntry({ acc, onUpdate, onRemove }: { acc: Account; onUpdate: (da
                 <Trash2 size={14} />
             </button>
             <div className="space-y-4">
-                <div className="flex gap-2 mb-2">
-                    {(['본인', '아버지', '어머니'] as const).map((rel) => (
-                        <button
-                            key={rel}
-                            onClick={() => onUpdate({ relation: rel })}
-                            className={`px-3 py-1 text-[11px] rounded-full border transition-all ${acc.relation === rel
-                                ? 'bg-forest-green border-forest-green text-white font-bold'
-                                : 'bg-white border-gray-100 text-gray-400 hover:border-gray-200'}`}
-                        >
-                            {rel === '본인' ? (acc.type === 'groom' ? '신랑' : '신부') : rel}
-                        </button>
-                    ))}
+                <div className="flex flex-wrap gap-2 mb-2">
+                    {(['본인', '아버지', '어머니'] as const).map((rel) => {
+                        const name = getName(rel);
+                        return (
+                            <button
+                                key={rel}
+                                onClick={() => onUpdate({ relation: rel, holder: name || acc.holder })}
+                                className={`px-3 py-1 text-[11px] rounded-full border transition-all ${acc.relation === rel
+                                    ? 'bg-forest-green border-forest-green text-white font-bold'
+                                    : 'bg-white border-gray-100 text-gray-400 hover:border-gray-200'}`}
+                            >
+                                {rel === '본인' ? (acc.type === 'groom' ? '신랑' : '신부') : rel}
+                                {name && <span className="ml-1 opacity-70">({name})</span>}
+                            </button>
+                        );
+                    })}
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                     <div className="space-y-1.5">
