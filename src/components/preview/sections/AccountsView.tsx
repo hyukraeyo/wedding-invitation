@@ -17,7 +17,7 @@ export default function AccountsView() {
     if (accounts.length === 0) return null;
 
     return (
-        <div className="py-24 px-8">
+        <div className="py-16 px-8">
             <div className="text-center space-y-4 mb-10">
                 <div className="flex flex-col items-center space-y-2">
                     <span

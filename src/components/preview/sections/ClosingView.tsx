@@ -8,7 +8,7 @@ export default function ClosingView() {
     if (!closing.imageUrl && !closing.content) return null;
 
     return (
-        <div className="w-full pb-20 px-6">
+        <div className="w-full pb-12 px-6">
             <div className="flex flex-col items-center space-y-8">
                 {/* Image Section */}
                 {closing.imageUrl && (

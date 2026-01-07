@@ -17,7 +17,7 @@ export default function GreetingView() {
     };
 
     return (
-        <div className="py-20 px-10 text-center mx-4">
+        <div className="py-12 px-10 text-center mx-4">
             <div className="space-y-12">
                 {/* Title */}
                 {greetingTitle && (

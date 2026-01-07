@@ -56,7 +56,7 @@ const InvitationCanvas = memo(() => {
         </div>
 
         {/* Divider */}
-        <div className="flex justify-center py-6 opacity-5">
+        <div className="flex justify-center py-4 opacity-5">
           <div className="w-16 h-[1px] bg-forest-green"></div>
         </div>
 
@@ -69,7 +69,7 @@ const InvitationCanvas = memo(() => {
 
 
         {/* Divider */}
-        <div className="flex justify-center py-10 opacity-5">
+        <div className="flex justify-center py-6 opacity-5">
           <div className="w-24 h-[1px] bg-forest-green"></div>
         </div>
 
@@ -79,7 +79,7 @@ const InvitationCanvas = memo(() => {
         </div>
 
         {/* 5. Location */}
-        <div id="section-location" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-900 fill-mode-backwards px-6 pb-20">
+        <div id="section-location" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-900 fill-mode-backwards px-6 pb-12">
           <LocationView />
         </div>
 
@@ -89,12 +89,12 @@ const InvitationCanvas = memo(() => {
         </div>
 
         {/* 7. Accounts */}
-        <div id="section-account" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000 fill-mode-backwards pb-20">
+        <div id="section-account" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000 fill-mode-backwards pb-12">
           <AccountsView />
         </div>
 
         {/* 8. Closing / Ending */}
-        <div id="section-closing" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000 fill-mode-backwards pb-20">
+        <div id="section-closing" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000 fill-mode-backwards pb-12">
           <ClosingView />
         </div>
 

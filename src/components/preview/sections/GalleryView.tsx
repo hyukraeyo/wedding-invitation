@@ -126,7 +126,7 @@ export default function GalleryView() {
     };
 
     return (
-        <div className="py-24 px-6">
+        <div className="py-16 px-6">
             <div className="text-center space-y-4 mb-10">
                 <div className="flex flex-col items-center space-y-2">
                     <span
