@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useMemo } from 'react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import MainScreenView from './sections/MainScreenView';
 import CalendarSectionView from './sections/CalendarSectionView';
@@ -9,16 +9,24 @@ import GalleryView from './sections/GalleryView';
 import AccountsView from './sections/AccountsView';
 import EffectsOverlay from './sections/EffectsOverlay';
 
-const InvitationCanvas = () => {
+const InvitationCanvas = memo(() => {
   const { theme } = useInvitationStore();
 
-  const fontClass = theme.font === 'serif' ? 'font-serif' : 'font-sans';
+  const fontClass = useMemo(
+    () => (theme.font === 'serif' ? 'font-serif' : 'font-sans'),
+    [theme.font]
+  );
+
+  const backgroundStyle = useMemo(
+    () => ({ backgroundColor: theme.backgroundColor }),
+    [theme.backgroundColor]
+  );
 
   return (
     <div className="w-full h-full bg-white relative shadow-2xl overflow-hidden md:max-w-[430px] md:mx-auto">
       <div
         className={`w-full h-full relative flex flex-col overflow-y-auto overflow-x-hidden scrollbar-hide transition-colors duration-500 ${fontClass}`}
-        style={{ backgroundColor: theme.backgroundColor }}
+        style={backgroundStyle}
       >
         <EffectsOverlay />
 
@@ -62,6 +70,8 @@ const InvitationCanvas = () => {
       </div>
     </div>
   );
-};
+});
+
+InvitationCanvas.displayName = 'InvitationCanvas';
 
 export default InvitationCanvas;

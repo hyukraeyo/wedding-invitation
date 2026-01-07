@@ -1,0 +1,200 @@
+# Cursor Rules for Wedding Invitation Project
+# Next.js 16+ 공식 권장사항을 최우선으로 따르는 프로젝트 규칙
+
+## 🚀 Next.js 16+ 공식 권장사항 (최우선 준수)
+
+### 1. App Router 패턴 (필수)
+- **서버 컴포넌트 우선**: 모든 컴포넌트를 기본적으로 서버 컴포넌트로 작성
+- **'use client' 지시어**: 클라이언트 기능이 필요할 때만 명시적 선언 (인터랙션, 브라우저 API, 상태 관리 시)
+- **레이아웃 최적화**: `layout.tsx`를 활용한 중첩 레이아웃 구현
+- **페이지별 데이터 로딩**: 각 페이지 최상단에서 서버 사이드 데이터 호출
+- **로딩 및 에러 처리**: `loading.tsx`, `error.tsx`로 사용자 경험 향상
+
+### 2. 데이터 페칭 전략 (Next.js 16 권장)
+- **서버 컴포넌트 우선**: API 호출을 서버 컴포넌트에서 수행하여 클라이언트 번들 감소
+- **Request Memoization**: 동일 요청 자동 중복 제거
+- **캐싱 전략**: `fetch`의 `next.revalidate`, `next.tags` 옵션 활용
+- **병렬 데이터 로딩**: `Promise.all()`로 병렬 요청 처리
+- **스트리밍**: `loading.tsx`와 함께 점진적 UI 업데이트
+- **에러 처리**: `error.tsx`로 서버 컴포넌트 에러 처리
+
+### 3. 렌더링 최적화 (React 19 + Next.js 16)
+- **서버 사이드 렌더링**: 동적 콘텐츠는 서버에서 렌더링하여 FCP 향상
+- **정적 생성**: 정적 콘텐츠는 빌드 시점에 생성 (`export const dynamic = 'force-static'`)
+- **하이드레이션 최적화**: 클라이언트 컴포넌트 최소화로 하이드레이션 비용 절감
+- **React 19 기능 활용**: 새로운 컴파일러와 자동 배치 처리 활용
+
+## 📁 프로젝트 구조 및 컨벤션
+
+### 폴더 구조
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── (auth)/            # 라우트 그룹
+│   ├── api/               # API 라우트
+│   ├── globals.css        # 글로벌 스타일
+│   ├── layout.tsx         # 루트 레이아웃
+│   └── page.tsx           # 홈 페이지
+├── components/            # 재사용 컴포넌트
+│   ├── ui/               # 기초 UI 컴포넌트
+│   ├── forms/            # 폼 컴포넌트
+│   └── layout/           # 레이아웃 컴포넌트
+├── lib/                  # 유틸리티 함수
+├── hooks/               # 커스텀 훅
+├── types/               # TypeScript 타입 정의
+└── constants/           # 상수 정의
+```
+
+### 네이밍 컨벤션
+- **컴포넌트**: PascalCase (`Button.tsx`, `UserProfile.tsx`)
+- **파일/폴더**: kebab-case (`user-profile.tsx`, `api-routes/`)
+- **함수/변수**: camelCase (`getUserData`, `userName`)
+- **타입**: PascalCase (`User`, `ApiResponse`)
+
+## 🎯 TypeScript 엄격 모드 (Next.js 16 필수)
+
+### 설정 요구사항
+```json
+{
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": false,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true
+  }
+}
+```
+
+### 타입 정의 규칙
+- **인터페이스 우선**: `interface`를 기본으로 사용, `type`은 유니온/매핑 타입에만 사용
+- **유니온 타입**: 가능한 모든 케이스 명시, `never`로 불가능한 케이스 처리
+- **제네릭 활용**: 재사용 가능한 타입 정의, 제약 조건 명확히 지정
+- **매핑 타입**: 객체 타입 변환에 활용, 키 프리징으로 불변성 보장
+- **브랜딩 타입**: `unique symbol`로 타입 안전성 강화
+- **템플릿 리터럴 타입**: 문자열 조합 타입에 활용
+
+## 🔧 코드 품질 및 성능 (React 19 + Next.js 16)
+
+### 컴포넌트 작성 규칙
+- **단일 책임**: 각 컴포넌트는 하나의 역할만 담당, 200줄 이내 유지
+- **Props 인터페이스**: 모든 props에 대한 타입 정의, `React.FC` 지양
+- **메모이제이션**: 불필요한 리렌더링 방지 (`React.memo`, `useMemo`, `useCallback`)
+- **서버/클라이언트 분리**: 서버 컴포넌트는 데이터 페칭, 클라이언트는 인터랙션
+- **에러 경계**: `ErrorBoundary`로 사용자 경험 향상
+- **접근성**: ARIA 속성과 키보드 네비게이션 지원
+
+### 성능 최적화 전략
+- **이미지 최적화**: Next.js `<Image>` 컴포넌트 필수 사용, WebP/AVIF 자동 변환
+- **코드 분할**: 동적 임포트와 `React.lazy()`로 번들 크기 최적화
+- **번들 분석**: Webpack Bundle Analyzer와 Next.js 분석 도구 활용
+- **캐싱 전략**: ISR, SSR, SWR 패턴에 따른 적절한 캐싱 구현
+- **컴파일러 활용**: React 19 컴파일러의 자동 최적화 활용
+
+## 🧪 테스트 전략
+
+### 단위 테스트
+- **컴포넌트**: React Testing Library 사용
+- **커스텀 훅**: `@testing-library/react-hooks`
+- **유틸리티**: Jest 단위 테스트
+
+### 통합 테스트
+- **사용자 플로우**: Playwright E2E 테스트
+- **API 통합**: MSW로 API 모킹
+
+## 🚀 배포 및 모니터링 (Next.js 16)
+
+### Vercel 최적화
+- **Edge Runtime**: API 라우트에 Edge Runtime 사용으로 전역 배포
+- **ISR/SSR**: `next.revalidate`, `export const dynamic`으로 캐싱 전략 최적화
+- **Analytics**: Vercel Analytics와 Web Vitals 통합
+- **Edge Config**: 환경별 설정 관리
+
+### 모니터링 및 품질 보증
+- **에러 추적**: Sentry 통합으로 런타임 에러 모니터링
+- **성능 모니터링**: Core Web Vitals와 사용자 경험 지표 측정
+- **A/B 테스트**: Vercel Edge Functions로 실험적 기능 테스트
+- **사용자 피드백**: 사용자 행동 분석과 피드백 수집
+
+## 📋 커밋 컨벤션
+
+### 커밋 메시지 형식
+```
+type(scope): description
+
+[optional body]
+
+[optional footer]
+```
+
+### 타입 종류
+- `feat`: 새로운 기능
+- `fix`: 버그 수정
+- `docs`: 문서 변경
+- `style`: 코드 스타일 변경
+- `refactor`: 코드 리팩토링
+- `test`: 테스트 추가/수정
+- `chore`: 빌드/도구 설정 변경
+
+## 🔒 보안 및 개인정보 (Next.js 16)
+
+### 데이터 보호
+- **민감 정보**: 환경 변수와 Vercel Edge Config로 관리
+- **API 키**: 서버 컴포넌트/서버 액션에서만 사용
+- **CORS**: Middleware로 오리진 제한 구현
+- **인증**: NextAuth.js 또는 Clerk 활용
+- **HTTPS**: 모든 외부 리소스 HTTPS 강제
+
+### 개인정보 보호 (GDPR/KISA 준수)
+- **데이터 최소화**: 필요한 데이터만 수집 및 저장
+- **동의 기반**: 명확한 사용자 동의 획득
+- **보존 기간**: 데이터 보존 정책 명확히 정의
+- **쿠키 관리**: GDPR 준수를 위한 쿠키 배너 구현
+
+## 🏗️ 아키텍처 패턴
+
+### 서버 컴포넌트 패턴
+- **데이터 페칭**: 서버 컴포넌트에서 비동기 데이터 호출
+- **컴포넌트 합성**: 서버/클라이언트 컴포넌트 적절한 조합
+- **스트리밍**: `loading.tsx`와 함께 점진적 UI 로딩
+
+### 상태 관리 전략
+- **서버 상태**: TanStack Query/SWR로 서버 상태 관리
+- **클라이언트 상태**: Zustand로 로컬 상태 관리
+- **글로벌 상태**: Context API 최소화, Props 드릴링 방지
+
+### API 설계 원칙
+- **RESTful API**: Next.js API Routes로 구현
+- **GraphQL**: 필요시 Apollo Client 통합
+- **타입 안전성**: tRPC로 엔드투엔드 타입 안전성 보장
+
+## 📚 참고 자료 및 베스트 프랙티스
+
+### 공식 문서
+- [Next.js 16 공식 문서](https://nextjs.org/docs) - 최신 App Router 가이드
+- [React 19 공식 문서](https://react.dev) - 새로운 컴파일러와 기능
+- [TypeScript 핸드북](https://www.typescriptlang.org/docs/) - 엄격 모드 설정
+- [Vercel 배포 가이드](https://vercel.com/docs) - Edge Runtime과 ISR
+
+### 성능 및 품질
+- [Web Vitals](https://web.dev/vitals/) - 사용자 경험 지표
+- [Lighthouse](https://developers.google.com/web/tools/lighthouse) - 성능 감사
+- [Bundle Analyzer](https://github.com/vercel/next-bundle-analyzer) - 번들 크기 분석
+
+### 보안 및 접근성
+- [OWASP](https://owasp.org/) - 웹 애플리케이션 보안
+- [WCAG 2.1](https://www.w3.org/TR/WCAG21/) - 웹 접근성 가이드라인
+- [MDN 접근성](https://developer.mozilla.org/en-US/docs/Web/Accessibility) - 접근성 구현
+
+### 개발 도구
+- [ESLint](https://eslint.org/) - 코드 품질 도구
+- [Prettier](https://prettier.io/) - 코드 포맷터
+- [Husky](https://github.com/typicorn/husky) - Git 훅 자동화

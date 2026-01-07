@@ -1,29 +1,63 @@
 "use client";
 
-import React, { useState } from 'react';
-import ThemeSection from './sections/ThemeSection';
-import MainScreenSection from './sections/MainScreenSection';
-import BasicInfoSection from './sections/BasicInfoSection';
-import DateTimeSection from './sections/DateTimeSection';
-import LocationSection from './sections/LocationSection';
-import GreetingSection from './sections/GreetingSection';
-import GallerySection from './sections/GallerySection';
-import AccountsSection from './sections/AccountsSection';
-import KakaoShareSection from './sections/KakaoShareSection';
+import React, { useState, useCallback, memo, Suspense } from 'react';
+import dynamic from 'next/dynamic';
 
-export default function EditorForm() {
+// Dynamic imports for code splitting
+const ThemeSection = dynamic(() => import('./sections/ThemeSection'), {
+  loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded-lg" />
+});
+
+const MainScreenSection = dynamic(() => import('./sections/MainScreenSection'), {
+  loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded-lg" />
+});
+
+const BasicInfoSection = dynamic(() => import('./sections/BasicInfoSection'), {
+  loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded-lg" />
+});
+
+const DateTimeSection = dynamic(() => import('./sections/DateTimeSection'), {
+  loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded-lg" />
+});
+
+const LocationSection = dynamic(() => import('./sections/LocationSection'), {
+  loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded-lg" />
+});
+
+const GreetingSection = dynamic(() => import('./sections/GreetingSection'), {
+  loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded-lg" />
+});
+
+const GallerySection = dynamic(() => import('./sections/GallerySection'), {
+  loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded-lg" />
+});
+
+const AccountsSection = dynamic(() => import('./sections/AccountsSection'), {
+  loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded-lg" />
+});
+
+const KakaoShareSection = dynamic(() => import('./sections/KakaoShareSection'), {
+  loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded-lg" />
+});
+
+const EditorForm = memo(function EditorForm() {
   // State to track open accordion section
   const [openSection, setOpenSection] = useState<string | null>('basic');
 
-  const handleToggle = (section: string) => {
-    setOpenSection(openSection === section ? null : section);
-  };
+  const handleToggle = useCallback((section: string) => {
+    setOpenSection(prev => prev === section ? null : section);
+  }, []);
 
   return (
     <div className="h-full overflow-y-auto px-1 py-2">
       <h2 className="text-xl font-serif font-bold text-gray-900 mb-6 px-1">청첩장 정보 입력</h2>
 
-      <div className="space-y-1">
+      <Suspense fallback={<div className="space-y-1">
+        {Array.from({ length: 9 }, (_, i) => (
+          <div key={i} className="animate-pulse h-20 bg-gray-100 rounded-lg" />
+        ))}
+      </div>}>
+        <div className="space-y-1">
         {/* Theme Settings */}
         <ThemeSection
           isOpen={openSection === 'theme'}
@@ -77,7 +111,12 @@ export default function EditorForm() {
           isOpen={openSection === 'kakao'}
           onToggle={() => handleToggle('kakao')}
         />
-      </div>
+        </div>
+      </Suspense>
     </div>
   );
-}
+});
+
+EditorForm.displayName = 'EditorForm';
+
+export default EditorForm;
