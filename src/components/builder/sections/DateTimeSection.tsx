@@ -18,8 +18,9 @@ export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
     } = useInvitationStore();
 
     // Helper for Time
-    const currentHour = time ? parseInt(time.split(':')[0]) : 12;
-    const currentMinute = time ? parseInt(time.split(':')[1]) : 0;
+    const [hourStr, minuteStr] = time ? time.split(':') : ['', ''];
+    const currentHour = hourStr ? parseInt(hourStr, 10) : 12;
+    const currentMinute = minuteStr ? parseInt(minuteStr, 10) : 0;
 
     const handleTimeChange = (type: 'hour' | 'minute', val: number) => {
         let newH = currentHour;

@@ -20,13 +20,13 @@ declare global {
                 fitBounds(bounds: LatLngBounds | LatLngBoundsLiteral, margin?: number | Margin, animate?: boolean): void;
                 panBy(offset: Point | PointLiteral): void;
                 panTo(latlng: LatLng | LatLngLiteral, animate?: boolean): void;
-                addListener(eventName: string, listener: (...args: any[]) => void): MapEventListener;
+                addListener(eventName: string, listener: (...args: unknown[]) => void): MapEventListener;
                 removeListener(listeners: MapEventListener | MapEventListener[]): void;
-                trigger(eventName: string, ...eventObject: any[]): void;
+                trigger(eventName: string, ...eventObject: unknown[]): void;
                 destroy(): void;
-                setOptions(key: string, value: any): void;
+                setOptions(key: string, value: unknown): void;
                 setOptions(options: Partial<MapOptions>): void;
-                getOptions(key?: string): any;
+                getOptions(key?: string): unknown;
                 getProjection(): Projection;
                 getPanes(): MapPanes;
             }
@@ -76,7 +76,7 @@ declare global {
                 getZIndex(): number;
                 setAnimation(animation: Animation): void;
                 getAnimation(): Animation;
-                addListener(eventName: string, listener: (...args: any[]) => void): MapEventListener;
+                addListener(eventName: string, listener: (...args: unknown[]) => void): MapEventListener;
                 removeListener(listeners: MapEventListener | MapEventListener[]): void;
             }
 
@@ -96,9 +96,9 @@ declare global {
                 getContent(): string | HTMLElement;
                 setZIndex(zIndex: number): void;
                 getZIndex(): number;
-                setOptions(key: string, value: any): void;
+                setOptions(key: string, value: unknown): void;
                 setOptions(options: Partial<InfoWindowOptions>): void;
-                getOptions(key?: string): any;
+                getOptions(key?: string): unknown;
             }
 
             // Services
@@ -385,7 +385,7 @@ declare global {
             // Event Types
             interface MapEventListener {
                 eventName: string;
-                listener: (...args: any[]) => void;
+                listener: (...args: unknown[]) => void;
                 listenerId: string;
             }
 

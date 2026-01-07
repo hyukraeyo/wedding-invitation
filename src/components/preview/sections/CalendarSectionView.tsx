@@ -57,6 +57,7 @@ export default function CalendarSectionView() {
                         {(() => {
                             if (!time) return '';
                             const [h, m] = time.split(':').map(Number);
+                            if (h == null || m == null) return '';
                             const amp = h < 12 ? '오전' : (h === 12 ? '낮' : '오후');
                             const displayH = h <= 12 ? h : h - 12;
                             return `${amp} ${displayH === 0 ? 12 : displayH}시${m > 0 ? ` ${m}분` : ''}`;

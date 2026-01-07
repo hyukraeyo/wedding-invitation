@@ -10,11 +10,6 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: false,
   },
 
-  // ESLint 설정
-  eslint: {
-    // 빌드 시 ESLint 에러 무시하지 않음
-    ignoreDuringBuilds: false,
-  },
 
   // 이미지 최적화 설정
   images: {
@@ -54,16 +49,10 @@ const nextConfig: NextConfig = {
     serverActions: {
       allowedOrigins: ['localhost:3000', 'wedding-invitation.vercel.app'],
     },
-    // Turbopack 최적화
-    turbo: {
-      rules: {
-        '*.svg': {
-          loaders: ['@svgr/webpack'],
-          as: '*.js',
-        },
-      },
-    },
   },
+
+  // Turbopack 설정
+  turbopack: {},
 
   // 보안 헤더
   async headers() {
@@ -110,6 +99,7 @@ const nextConfig: NextConfig = {
 
     // 번들 분석 (개발 시에만)
     if (!isServer && process.env.ANALYZE === 'true') {
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
       config.plugins.push(
         new BundleAnalyzerPlugin({

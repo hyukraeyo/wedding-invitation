@@ -16,10 +16,12 @@ export function formatDate(date: Date | string, options?: Intl.DateTimeFormatOpt
 
 export function formatTime(time: string): string {
   const [hours, minutes] = time.split(':');
+  if (!hours || !minutes) return '';
   const hour = parseInt(hours, 10);
+  const minute = parseInt(minutes, 10);
   const ampm = hour >= 12 ? 'PM' : 'AM';
   const displayHour = hour % 12 || 12;
-  return `${displayHour}:${minutes} ${ampm}`;
+  return `${displayHour}:${minute.toString().padStart(2, '0')} ${ampm}`;
 }
 
 export function calculateDday(targetDate: Date): number {
@@ -71,7 +73,7 @@ export function isValidUrl(url: string): boolean {
 }
 
 // Array Utilities
-export function groupBy<T, K extends keyof any>(
+export function groupBy<T, K extends PropertyKey>(
   array: T[],
   keyFn: (item: T) => K
 ): Record<K, T[]> {
@@ -101,7 +103,7 @@ export function sortBy<T>(
 }
 
 // Object Utilities
-export function pick<T, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
+export function pick<T extends Record<string, unknown>, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
   const result = {} as Pick<T, K>;
   keys.forEach(key => {
     if (key in obj) {
@@ -111,13 +113,13 @@ export function pick<T, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
   return result;
 }
 
-export function omit<T, K extends keyof T>(obj: T, keys: K[]): Omit<T, K> {
+export function omit<T extends Record<string, unknown>, K extends keyof T>(obj: T, keys: K[]): Omit<T, K> {
   const result = { ...obj };
   keys.forEach(key => delete result[key]);
   return result;
 }
 
-export function isEmpty(obj: any): boolean {
+export function isEmpty(obj: unknown): boolean {
   if (obj == null) return true;
   if (Array.isArray(obj) || typeof obj === 'string') return obj.length === 0;
   if (typeof obj === 'object') return Object.keys(obj).length === 0;
@@ -134,20 +136,20 @@ export async function retry<T>(
   maxRetries: number = 3,
   delay: number = 1000
 ): Promise<T> {
-  let lastError: Error;
+  let lastError: Error | undefined;
 
   for (let i = 0; i <= maxRetries; i++) {
     try {
       return await fn();
     } catch (error) {
-      lastError = error as Error;
+      lastError = error instanceof Error ? error : new Error(String(error));
       if (i < maxRetries) {
         await sleep(delay * Math.pow(2, i)); // Exponential backoff
       }
     }
   }
 
-  throw lastError!;
+  throw lastError || new Error('All retry attempts failed');
 }
 
 // Image Utilities
@@ -201,13 +203,12 @@ export function compressImage(
 // Color Utilities
 export function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? {
-        r: parseInt(result[1], 16),
-        g: parseInt(result[2], 16),
-        b: parseInt(result[3], 16),
-      }
-    : null;
+  if (!result || !result[1] || !result[2] || !result[3]) return null;
+  return {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16),
+  };
 }
 
 export function rgbToHex(r: number, g: number, b: number): string {

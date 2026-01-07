@@ -31,8 +31,10 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
                                 value={acc.bank}
                                 onChange={(e) => {
                                     const newAcc = [...accounts];
-                                    newAcc[i].bank = e.target.value;
-                                    setAccounts(newAcc);
+                                    if (newAcc[i]) {
+                                        newAcc[i].bank = e.target.value;
+                                        setAccounts(newAcc);
+                                    }
                                 }}
                                 className="px-3 py-2 bg-white border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none"
                             />
@@ -41,8 +43,10 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
                                 value={acc.holder}
                                 onChange={(e) => {
                                     const newAcc = [...accounts];
-                                    newAcc[i].holder = e.target.value;
-                                    setAccounts(newAcc);
+                                    if (newAcc[i]) {
+                                        newAcc[i].holder = e.target.value;
+                                        setAccounts(newAcc);
+                                    }
                                 }}
                                 className="px-3 py-2 bg-white border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none"
                             />
@@ -50,11 +54,13 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
                         <input
                             placeholder="계좌번호 (- 포함)"
                             value={acc.accountNumber}
-                            onChange={(e) => {
-                                const newAcc = [...accounts];
-                                newAcc[i].accountNumber = e.target.value;
-                                setAccounts(newAcc);
-                            }}
+                                onChange={(e) => {
+                                    const newAcc = [...accounts];
+                                    if (newAcc[i]) {
+                                        newAcc[i].accountNumber = e.target.value;
+                                        setAccounts(newAcc);
+                                    }
+                                }}
                             className="w-full px-3 py-2 bg-white border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none"
                         />
                     </div>

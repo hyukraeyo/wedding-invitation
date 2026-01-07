@@ -74,9 +74,9 @@ export interface ImageUploadOptions {
 // Validation Types
 export type ValidationRule<T> = (value: T) => string | null;
 
-export interface ValidationSchema<T extends Record<string, unknown>> {
+export type ValidationSchema<T extends Record<string, unknown>> = {
   [K in keyof T]?: ValidationRule<T[K]>[];
-}
+};
 
 // Component Props Types
 export interface BaseComponentProps {
@@ -201,7 +201,7 @@ export type NonNullable<T> = T extends null | undefined ? never : T;
 
 // Array Utilities
 export type Head<T extends readonly unknown[]> = T extends readonly [infer H, ...unknown[]] ? H : never;
-export type Tail<T extends readonly unknown[]> = T extends readonly [unknown, ...infer T] ? T : [];
+export type Tail<T extends readonly unknown[]> = T extends readonly [unknown, ...infer U] ? U : [];
 export type Length<T extends readonly unknown[]> = T['length'];
 
 // Object Utilities
@@ -214,7 +214,7 @@ export type DeepRequired<T> = {
 };
 
 // Function Types
-export type AnyFunction = (...args: any[]) => any;
+export type AnyFunction = (...args: unknown[]) => unknown;
 export type Predicate<T> = (value: T) => boolean;
 export type Comparator<T> = (a: T, b: T) => number;
 

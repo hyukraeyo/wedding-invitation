@@ -3,7 +3,6 @@
 
 import { cache } from 'react';
 import { API_CONFIG, CACHE_CONFIG } from './constants';
-import { ServerActionResponse } from './actions';
 
 // Base fetch function with error handling
 async function fetchWithErrorHandling<T>(
@@ -76,7 +75,12 @@ export const getWeddingStats = cache(async (invitationId: string) => {
   try {
     const url = `${API_CONFIG.baseUrl}/invitations/${invitationId}/stats`;
 
-    const data = await fetchWithErrorHandling(url, {
+    const data = await fetchWithErrorHandling<{
+      totalGuests?: number;
+      rsvpCount?: number;
+      attendingCount?: number;
+      pendingCount?: number;
+    }>(url, {
       next: {
         revalidate: CACHE_CONFIG.revalidation.api,
         tags: [CACHE_CONFIG.tags.invitation],
@@ -138,7 +142,7 @@ export const getKakaoMapData = cache(async (query: string) => {
 
     return {
       success: true as const,
-      data: data.documents.map((place: any) => ({
+      data: data.documents.map((place: { id: string; place_name: string; address_name: string; road_address_name: string; phone: string; x: string; y: string }) => ({
         id: place.id,
         name: place.place_name,
         address: place.address_name,
@@ -156,7 +160,7 @@ export const getKakaoMapData = cache(async (query: string) => {
   }
 });
 
-export const getWeatherData = cache(async (lat: number, lng: number, date: string) => {
+export const getWeatherData = cache(async (lat: number, lng: number) => {
   try {
     // Weather API integration (example with OpenWeatherMap)
     const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${process.env.OPENWEATHER_API_KEY}&units=metric`;
@@ -191,7 +195,28 @@ export const getWeatherData = cache(async (lat: number, lng: number, date: strin
 });
 
 // Utility functions for data processing
-export function processInvitationData(rawData: any) {
+interface RawInvitationData {
+  id: string;
+  groom: {
+    firstName: string;
+    lastName: string;
+    [key: string]: unknown;
+  };
+  bride: {
+    firstName: string;
+    lastName: string;
+    [key: string]: unknown;
+  };
+  ceremony: {
+    date: string;
+    [key: string]: unknown;
+  };
+  theme?: unknown;
+  gallery?: unknown[];
+  accounts?: unknown[];
+}
+
+export function processInvitationData(rawData: RawInvitationData) {
   return {
     id: rawData.id,
     groom: {
@@ -212,7 +237,14 @@ export function processInvitationData(rawData: any) {
   };
 }
 
-export function calculateRSVPStats(guests: any[]) {
+interface GuestWithRSVP {
+  rsvp: {
+    responded: boolean;
+    attending: boolean;
+  };
+}
+
+export function calculateRSVPStats(guests: GuestWithRSVP[]) {
   const total = guests.length;
   const responded = guests.filter(g => g.rsvp.responded).length;
   const attending = guests.filter(g => g.rsvp.attending).length;
@@ -241,6 +273,8 @@ export function createServiceError(
   };
 }
 
-export function isServiceError(result: any): result is { success: false; error: string } {
-  return result && typeof result === 'object' && 'success' in result && result.success === false;
+export function isServiceError(result: unknown): result is { success: false; error: string } {
+  if (!result || typeof result !== 'object') return false;
+  const obj = result as Record<string, unknown>;
+  return 'success' in obj && obj.success === false && 'error' in obj && typeof obj.error === 'string';
 }
