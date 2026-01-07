@@ -138,20 +138,41 @@ export default function CalendarSectionView() {
                         <div className="inline-block px-10 py-8 border border-forest-green/10 rounded-full">
                             <div className="flex justify-center gap-8 mb-4 font-serif">
                                 <div className="flex flex-col items-center">
-                                    <span className="text-[9px] text-gray-300 uppercase tracking-widest mb-1 font-sans">Days</span>
-                                    <span className="text-2xl text-gray-700 font-light">{timeLeft?.days || 0}</span>
+                                    <span
+                                        className="text-gray-300 uppercase tracking-widest mb-1 font-sans"
+                                        style={{ fontSize: 'calc(9px * var(--font-scale))' }}
+                                    >Days</span>
+                                    <span
+                                        className="text-gray-700 font-light"
+                                        style={{ fontSize: 'calc(24px * var(--font-scale))' }}
+                                    >{timeLeft?.days || 0}</span>
                                 </div>
                                 <div className="flex flex-col items-center">
-                                    <span className="text-[9px] text-gray-300 uppercase tracking-widest mb-1 font-sans">Hours</span>
-                                    <span className="text-2xl text-gray-700 font-light">{timeLeft?.hours || 0}</span>
+                                    <span
+                                        className="text-gray-300 uppercase tracking-widest mb-1 font-sans"
+                                        style={{ fontSize: 'calc(9px * var(--font-scale))' }}
+                                    >Hours</span>
+                                    <span
+                                        className="text-gray-700 font-light"
+                                        style={{ fontSize: 'calc(24px * var(--font-scale))' }}
+                                    >{timeLeft?.hours || 0}</span>
                                 </div>
                                 <div className="flex flex-col items-center">
-                                    <span className="text-[9px] text-gray-300 uppercase tracking-widest mb-1 font-sans">Mins</span>
-                                    <span className="text-2xl text-gray-700 font-light">{timeLeft?.minutes || 0}</span>
+                                    <span
+                                        className="text-gray-300 uppercase tracking-widest mb-1 font-sans"
+                                        style={{ fontSize: 'calc(9px * var(--font-scale))' }}
+                                    >Mins</span>
+                                    <span
+                                        className="text-gray-700 font-light"
+                                        style={{ fontSize: 'calc(24px * var(--font-scale))' }}
+                                    >{timeLeft?.minutes || 0}</span>
                                 </div>
                             </div>
 
-                            <div className="text-[13px] text-gray-500 font-light tracking-wide whitespace-pre-wrap">
+                            <div
+                                className="text-gray-500 font-light tracking-wide whitespace-pre-wrap"
+                                style={{ fontSize: 'calc(13px * var(--font-scale))' }}
+                            >
                                 {ddayMessage
                                     .replace('(신랑)', groom.firstName)
                                     .replace('(신부)', bride.firstName)
