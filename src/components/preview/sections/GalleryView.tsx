@@ -129,7 +129,10 @@ export default function GalleryView() {
         <div className="py-24 px-6">
             <div className="text-center space-y-4 mb-10">
                 <div className="flex flex-col items-center space-y-2">
-                    <span className="text-[10px] tracking-[0.4em] text-forest-green/40 font-medium uppercase">Wedding Gallery</span>
+                    <span
+                        className="tracking-[0.4em] text-forest-green/40 font-medium uppercase"
+                        style={{ fontSize: 'calc(10px * var(--font-scale))' }}
+                    >Wedding Gallery</span>
                     <div className="w-8 h-[1px] bg-forest-green opacity-10"></div>
                 </div>
             </div>

@@ -76,16 +76,28 @@ export default function LocationView() {
             {/* Header */}
             <div className="text-center space-y-4 mb-2">
                 <div className="flex flex-col items-center space-y-2">
-                    <span className="text-[10px] tracking-[0.4em] text-forest-green/40 font-medium uppercase">{locationTitle || 'LOCATION'}</span>
+                    <span
+                        className="tracking-[0.4em] text-forest-green/40 font-medium uppercase"
+                        style={{ fontSize: 'calc(10px * var(--font-scale))' }}
+                    >{locationTitle || 'LOCATION'}</span>
                     <div className="w-8 h-[1px] bg-forest-green opacity-10"></div>
                 </div>
-                <h3 className="font-serif text-[20px] text-gray-800 font-medium">{location}</h3>
+                <h3
+                    className="font-serif text-gray-800 font-medium"
+                    style={{ fontSize: 'calc(20px * var(--font-scale))' }}
+                >{location}</h3>
                 <div className="space-y-1">
-                    <p className="text-[13px] text-gray-500 font-light leading-relaxed tracking-tight">
+                    <p
+                        className="text-gray-500 font-light leading-relaxed tracking-tight"
+                        style={{ fontSize: 'calc(13px * var(--font-scale))' }}
+                    >
                         {address} {detailAddress}
                     </p>
                     {locationContact && (
-                        <p className="text-[11px] text-gray-400 font-light italic">Tel. {locationContact}</p>
+                        <p
+                            className="text-gray-400 font-light italic"
+                            style={{ fontSize: 'calc(11px * var(--font-scale))' }}
+                        >Tel. {locationContact}</p>
                     )}
                 </div>
             </div>
@@ -107,7 +119,10 @@ export default function LocationView() {
                         ) : (
                             <div className="flex flex-col items-center justify-center h-full text-gray-300 gap-2">
                                 <div className="w-8 h-8 rounded-full border-2 border-gray-100 border-t-forest-green animate-spin"></div>
-                                <span className="text-[10px] tracking-widest uppercase">Loading Map...</span>
+                                <span
+                                    className="tracking-widest uppercase"
+                                    style={{ fontSize: 'calc(10px * var(--font-scale))' }}
+                                >Loading Map...</span>
                             </div>
                         )
                     ) : (
@@ -116,7 +131,10 @@ export default function LocationView() {
                             {!isNaverLoaded && (
                                 <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-300 gap-2 bg-gray-50">
                                     <div className="w-8 h-8 rounded-full border-2 border-gray-100 border-t-forest-green animate-spin"></div>
-                                    <span className="text-[10px] tracking-widest uppercase">Loading Map...</span>
+                                    <span
+                                        className="tracking-widest uppercase"
+                                        style={{ fontSize: 'calc(10px * var(--font-scale))' }}
+                                    >Loading Map...</span>
                                 </div>
                             )}
                         </div>
@@ -143,7 +161,8 @@ export default function LocationView() {
                 <div className="flex gap-3 mt-4">
                     <button
                         onClick={handleCopyAddress}
-                        className="flex-1 py-3 bg-white border border-gray-100 rounded-xl text-[11px] text-gray-500 font-medium flex items-center justify-center gap-2 hover:bg-gray-50 transition-all shadow-sm active:scale-95"
+                        className="flex-1 py-3 bg-white border border-gray-100 rounded-xl text-gray-500 font-medium flex items-center justify-center gap-2 hover:bg-gray-50 transition-all shadow-sm active:scale-95"
+                        style={{ fontSize: 'calc(11px * var(--font-scale))' }}
                     >
                         <Copy size={12} className="opacity-40" />
                         주소 복사
@@ -152,7 +171,8 @@ export default function LocationView() {
                         href={`https://map.kakao.com/link/search/${address}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 py-3 bg-white border border-gray-100 rounded-xl text-[11px] text-gray-500 font-medium flex items-center justify-center gap-2 hover:bg-gray-50 transition-all shadow-sm active:scale-95"
+                        className="flex-1 py-3 bg-white border border-gray-100 rounded-xl text-gray-500 font-medium flex items-center justify-center gap-2 hover:bg-gray-50 transition-all shadow-sm active:scale-95"
+                        style={{ fontSize: 'calc(11px * var(--font-scale))' }}
                     >
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
                             <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#FAE100" />
@@ -164,7 +184,8 @@ export default function LocationView() {
                         href={`https://map.naver.com/v5/search/${address}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 py-3 bg-white border border-gray-100 rounded-xl text-[11px] text-gray-500 font-medium flex items-center justify-center gap-2 hover:bg-gray-50 transition-all shadow-sm active:scale-95"
+                        className="flex-1 py-3 bg-white border border-gray-100 rounded-xl text-gray-500 font-medium flex items-center justify-center gap-2 hover:bg-gray-50 transition-all shadow-sm active:scale-95"
+                        style={{ fontSize: 'calc(11px * var(--font-scale))' }}
                     >
                         <svg width="12" height="12" viewBox="0 0 256 256">
                             <path d="M128 245 C 80 170 28 130 28 85 A 100 100 0 1 1 228 85 C 228 130 176 170 128 245 Z" fill="#03C75A" />

@@ -49,7 +49,10 @@ export default function ClosingView() {
 
                 {/* Text Content */}
                 {closing.content && (
-                    <div className="text-center whitespace-pre-wrap leading-loose text-sm text-gray-700 font-serif">
+                    <div
+                        className="text-center whitespace-pre-wrap leading-loose text-gray-700 font-serif"
+                        style={{ fontSize: 'calc(14px * var(--font-scale))' }}
+                    >
                         {closing.content}
                     </div>
                 )}
