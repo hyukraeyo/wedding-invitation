@@ -67,13 +67,15 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                     </div>
                                 )}
                                 {l === 'fill' && (
-                                    <div className="absolute inset-0 bg-gray-100 flex flex-col justify-end items-center pb-8 scale-[0.8] origin-bottom">
-                                        {/* Overlay Text indicators */}
-                                        <div className="flex flex-col items-center gap-2">
+                                    <div className="absolute inset-0 bg-gray-100 flex flex-col justify-end items-center pb-6">
+                                        {/* Overlay Text indicators at the bottom */}
+                                        <div className="flex flex-col items-center gap-2 mb-4">
                                             <div className="w-10 h-[2px] bg-white/40" />
                                             <div className="w-14 h-[5px] bg-white/70 rounded-[1px]" />
                                             <div className="w-16 h-[2px] bg-white/50" />
                                         </div>
+                                        {/* Gradient-like overlay at the bottom */}
+                                        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
                                     </div>
                                 )}
                                 {l === 'arch' && (

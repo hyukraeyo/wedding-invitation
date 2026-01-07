@@ -8,43 +8,49 @@ export default function MainScreenView() {
     const accentColor = useInvitationStore(state => state.theme.accentColor);
 
     return (
-        <div className={`relative w-full ${mainScreen.layout === 'fill' ? 'h-[650px]' : 'pb-16'}`}>
+        <div className={`relative w-full transition-all duration-700 ease-in-out ${mainScreen.layout === 'fill' ? 'h-[650px]' : 'pb-16'}`}>
             <div className={`
-                relative w-full overflow-hidden flex flex-col items-center
+                relative w-full overflow-hidden flex flex-col items-center transition-all duration-700 ease-in-out
                 ${mainScreen.layout === 'fill' ? 'h-full justify-center' : 'pt-20'}
             `}>
                 {/* 1. Header Text Area (For Basic Layout, appears before image) */}
-                {mainScreen.layout === 'basic' && (
-                    <div className="flex flex-col items-center text-center px-6 mb-12 animate-in fade-in slide-in-from-top-4 duration-1000">
-                        {mainScreen.showTitle && (
-                            <div className="text-[11px] tracking-[0.4em] font-bold text-coral-pink mb-6 uppercase">
-                                {mainScreen.title || 'THE MARRIAGE'}
-                            </div>
-                        )}
-                        <div className="text-5xl font-serif font-light text-gray-700 tracking-tighter mb-8 tabular-nums">
-                            {date ? `${String(new Date(date).getMonth() + 1).padStart(2, '0')}.${String(new Date(date).getDate()).padStart(2, '0')}` : '00.00'}
+                <div className={`
+                    flex flex-col items-center text-center px-6 transition-all duration-700 ease-in-out
+                    ${mainScreen.layout === 'basic' ? 'mb-12 opacity-100 translate-y-0 scale-100' : 'h-0 mb-0 opacity-0 -translate-y-4 scale-95 pointer-events-none overflow-hidden'}
+                `}>
+                    {mainScreen.showTitle && (
+                        <div className="text-[11px] tracking-[0.4em] font-bold text-coral-pink mb-6 uppercase">
+                            {mainScreen.title || 'THE MARRIAGE'}
                         </div>
-                        {mainScreen.showGroomBride && (
-                            <div className="text-[17px] font-serif text-gray-800 font-medium tracking-tight">
-                                {groom.lastName}{groom.firstName}, {bride.lastName}{bride.firstName} <span className="text-gray-400 font-light ml-0.5">결혼합니다.</span>
-                            </div>
-                        )}
+                    )}
+                    <div className="text-5xl font-serif font-light text-gray-700 tracking-tighter mb-8 tabular-nums">
+                        {date ? `${String(new Date(date).getMonth() + 1).padStart(2, '0')}.${String(new Date(date).getDate()).padStart(2, '0')}` : '00.00'}
                     </div>
-                )}
+                    {mainScreen.showGroomBride && (
+                        <div className="text-[17px] font-serif text-gray-800 font-medium tracking-tight">
+                            {groom.lastName}{groom.firstName}, {bride.lastName}{bride.firstName} <span className="text-gray-400 font-light ml-0.5">결혼합니다.</span>
+                        </div>
+                    )}
+                </div>
 
                 {/* Image Area */}
                 <div className={`
-                    relative w-full transition-all duration-700 overflow-hidden
-                    ${mainScreen.layout === 'fill' ? 'absolute inset-0 h-full' : 'max-w-[340px] aspect-[4/5] shadow-2xl shadow-black/10'}
-                    ${!mainScreen.layout.startsWith('fill') && mainScreen.layout !== 'arch' && mainScreen.layout !== 'oval' && 'bg-gray-50'}
-                    ${mainScreen.layout === 'arch' ? 'rounded-t-[200px] rounded-b-2xl' : ''}
-                    ${mainScreen.layout === 'oval' ? 'rounded-full' : ''}
-                    ${mainScreen.layout === 'basic' ? 'rounded-2xl mx-auto' : ''}
-                    ${mainScreen.layout === 'frame' ? 'rounded-sm' : ''}
-                    ${mainScreen.showBorder ? 'border-4 border-double' : ''}
-                    ${mainScreen.expandPhoto && mainScreen.layout !== 'fill' ? 'scale-105' : ''}
+                    relative w-full transition-all duration-700 ease-in-out overflow-hidden
+                    ${mainScreen.layout === 'fill' ? 'absolute inset-0 h-full w-full' : 'max-w-[340px] aspect-[4/5] shadow-2xl shadow-black/10 mx-auto'}
+                    ${(!mainScreen.layout.startsWith('fill') && mainScreen.layout !== 'arch' && mainScreen.layout !== 'oval') ? 'bg-gray-50' : ''}
                 `}
-                    style={mainScreen.showBorder ? { borderColor: accentColor } : {}}
+                    style={{
+                        borderColor: mainScreen.showBorder ? accentColor : 'transparent',
+                        borderWidth: mainScreen.showBorder ? '4px' : '0px',
+                        borderStyle: mainScreen.showBorder ? 'double' : 'solid',
+                        borderRadius:
+                            mainScreen.layout === 'arch' ? '170px 170px 20px 20px' :
+                                mainScreen.layout === 'oval' ? '170px 170px 170px 170px' :
+                                    mainScreen.layout === 'basic' ? '20px 20px 20px 20px' :
+                                        mainScreen.layout === 'frame' ? '4px 4px 4px 4px' :
+                                            mainScreen.layout === 'fill' ? '0px 0px 0px 0px' : '20px 20px 20px 20px',
+                        transform: mainScreen.expandPhoto && mainScreen.layout !== 'fill' ? 'scale(1.05)' : 'scale(1)'
+                    }}
                 >
                     {imageUrl ? (
                         <Image src={imageUrl} alt={`${groom.firstName}와 ${bride.firstName}의 결혼식 메인 사진`} fill className="object-cover" priority />
