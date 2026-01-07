@@ -218,27 +218,6 @@ export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
                             <div className="px-2 py-0.5 bg-gray-100 rounded text-[9px] text-gray-400 font-bold tracking-tighter">PREMIUM</div>
                         </div>
                         <div className="border border-gray-100 rounded-[32px] overflow-hidden bg-white shadow-xl shadow-black/[0.02] ring-1 ring-black/[0.01]">
-                            <div className="flex items-center gap-2 p-4 bg-gray-50/30 border-b border-gray-50/50">
-                                <span className="text-[10px] font-bold text-gray-400 ml-1 mr-auto">자동완성 태그</span>
-                                <button
-                                    onClick={() => {
-                                        const parts = ddayMessage.split('(D-Day)');
-                                        setDdayMessage(`${parts[0]}(신랑)${parts[1] || ''}(D-Day)${parts[2] || ''}`);
-                                    }}
-                                    className="px-3 py-1.5 hover:bg-white rounded-xl text-forest-green text-[10px] font-black tracking-tight transition-all bg-white shadow-sm border border-gray-100 active:scale-95"
-                                >
-                                    신랑이름
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        const parts = ddayMessage.split('(D-Day)');
-                                        setDdayMessage(`${parts[0]}(신부)${parts[1] || ''}(D-Day)${parts[2] || ''}`);
-                                    }}
-                                    className="px-3 py-1.5 hover:bg-white rounded-xl text-forest-green text-[10px] font-black tracking-tight transition-all bg-white shadow-sm border border-gray-100 active:scale-95"
-                                >
-                                    신부이름
-                                </button>
-                            </div>
                             <div className="p-8 bg-white">
                                 {(() => {
                                     const parts = ddayMessage.split('(D-Day)');
