@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { LayoutTemplate, Check, Image as ImageIcon, Type, ChevronDown, ChevronUp, Info } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
+import { BuilderLabel } from '../BuilderLabel';
 
 interface SectionProps {
     isOpen: boolean;
@@ -16,7 +17,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
         groom, bride
     } = useInvitationStore();
 
-    const [isTextSectionOpen, setIsTextSectionOpen] = useState(true);
+    const [isTextSectionOpen, setIsTextSectionOpen] = useState(false);
 
     const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -66,7 +67,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Photo Upload */}
                 <div className="space-y-3">
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">사진</label>
+                    <BuilderLabel>사진</BuilderLabel>
                     <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 hover:border-forest-green/40 transition-colors bg-gray-50 group cursor-pointer relative overflow-hidden min-h-[200px] flex items-center justify-center">
                         <input
                             type="file"
@@ -101,7 +102,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Design Options */}
                 <div className="space-y-3">
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">디자인 변형</label>
+                    <BuilderLabel>디자인 변형</BuilderLabel>
                     <div className="flex gap-4 mt-2">
                         <label className="flex items-center gap-2 cursor-pointer">
                             <input
@@ -126,7 +127,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Effects */}
                 <div className="space-y-3">
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">이펙트</label>
+                    <BuilderLabel>이펙트</BuilderLabel>
                     <div className="flex gap-2">
                         {['none', 'mist', 'ripple', 'paper'].map((eff) => (
                             <button

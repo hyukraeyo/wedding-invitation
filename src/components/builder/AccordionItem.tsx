@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronDown, ChevronUp, CheckCircle2 } from 'lucide-react';
+import { ChevronDown, ChevronUp, Check } from 'lucide-react';
 
 interface AccordionItemProps {
     title: string;
@@ -20,7 +20,11 @@ export const AccordionItem = ({ title, icon: Icon, isOpen, onToggle, children, i
                 <div className="flex items-center gap-3">
                     {Icon && <Icon size={18} className={`text-forest-green ${isOpen ? 'opacity-100' : 'opacity-70'}`} />}
                     <span className={`font-medium text-gray-800 ${isOpen ? 'text-forest-green font-semibold' : ''}`}>{title}</span>
-                    {isCompleted && !isOpen && <CheckCircle2 size={16} className="text-forest-green/60 ml-2" />}
+                    {isCompleted && (
+                        <div className="flex items-center justify-center w-5 h-5 bg-forest-green rounded-full ml-1">
+                            <Check size={12} className="text-white" strokeWidth={4} />
+                        </div>
+                    )}
                 </div>
                 {isOpen ? <ChevronUp size={18} className="text-gray-400" /> : <ChevronDown size={18} className="text-gray-400" />}
             </button>

@@ -97,7 +97,9 @@ interface InvitationState {
 
     // Account State
     accounts: {
+        id: string;
         type: 'groom' | 'bride';
+        relation: '본인' | '아버지' | '어머니';
         bank: string;
         accountNumber: string;
         holder: string;
@@ -257,8 +259,8 @@ export const useInvitationStore = create<InvitationState>((set) => ({
     galleryType: 'swipe',
     galleryPopup: false,
     accounts: [
-        { type: 'groom', bank: '카카오뱅크', accountNumber: '3333-01-2345678', holder: '이도현' },
-        { type: 'bride', bank: '신한은행', accountNumber: '110-123-456789', holder: '김지수' },
+        { id: 'g1', type: 'groom', relation: '본인', bank: '카카오뱅크', accountNumber: '3333-01-2345678', holder: '이도현' },
+        { id: 'b1', type: 'bride', relation: '본인', bank: '신한은행', accountNumber: '110-123-456789', holder: '김지수' },
     ],
 
     setGroom: (data) => set((state) => ({ groom: { ...state.groom, ...data } })),

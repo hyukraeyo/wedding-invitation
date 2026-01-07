@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { MessageSquare, Image as ImageIcon } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
+import { BuilderLabel } from '../BuilderLabel';
 
 interface SectionProps {
     isOpen: boolean;
@@ -40,7 +41,7 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
             <div className="space-y-6">
                 {/* Title */}
                 <div className="space-y-3">
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">제목</label>
+                    <BuilderLabel>제목</BuilderLabel>
                     <input
                         type="text"
                         value={greetingTitle}
@@ -53,7 +54,7 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                 {/* Content with Toolbar */}
                 <div className="space-y-3">
                     <div className="flex items-center justify-between">
-                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">내용</label>
+                        <BuilderLabel>내용</BuilderLabel>
                         <button className="text-xs text-red-500 underline hover:text-red-600 font-medium">샘플 문구 보기</button>
                     </div>
 
@@ -83,7 +84,7 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Photo Upload */}
                 <div className="space-y-3">
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">사진</label>
+                    <BuilderLabel>사진</BuilderLabel>
                     <div className="border-2 border-dashed border-gray-200 rounded-xl w-32 h-32 hover:border-forest-green/40 transition-colors bg-gray-50 group cursor-pointer relative overflow-hidden">
                         <input
                             type="file"
@@ -113,7 +114,7 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Name Options */}
                 <div className="space-y-3 pt-2">
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 block">성함 표기</label>
+                    <BuilderLabel>성함 표기</BuilderLabel>
 
                     <label className="flex items-center gap-2 cursor-pointer">
                         <input

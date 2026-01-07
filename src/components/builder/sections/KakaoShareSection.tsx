@@ -2,6 +2,7 @@ import React, { ChangeEvent, useState } from 'react';
 import { MessageCircle } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
+import { BuilderLabel } from '../BuilderLabel';
 import Image from 'next/image';
 
 interface SectionProps {
@@ -44,7 +45,7 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Photo Upload */}
                 <div className="space-y-3">
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">사진</label>
+                    <BuilderLabel>사진</BuilderLabel>
                     <div className="border border-dashed border-gray-300 rounded-lg w-32 h-32 hover:border-forest-green hover:bg-gray-50 transition-all cursor-pointer relative overflow-hidden flex flex-col items-center justify-center gap-2 group bg-white">
                         <input
                             type="file"
@@ -75,7 +76,7 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Title */}
                 <div className="space-y-2">
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">제목</label>
+                    <BuilderLabel>제목</BuilderLabel>
                     <input
                         type="text"
                         value={kakao.title}
@@ -87,7 +88,7 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Description */}
                 <div className="space-y-2">
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">내용</label>
+                    <BuilderLabel>내용</BuilderLabel>
                     <input
                         type="text"
                         value={kakao.description}
@@ -99,7 +100,7 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Image Ratio */}
                 <div className="space-y-2">
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">사진 비율</label>
+                    <BuilderLabel>사진 비율</BuilderLabel>
                     <div className="flex gap-3">
                         <button
                             onClick={() => setKakao({ imageRatio: 'portrait' })}
@@ -118,7 +119,7 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Button Type */}
                 <div className="space-y-2">
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">버튼 추가</label>
+                    <BuilderLabel>버튼 추가</BuilderLabel>
                     <div className="flex gap-3">
                         <button
                             onClick={() => setKakao({ buttonType: 'none' })}

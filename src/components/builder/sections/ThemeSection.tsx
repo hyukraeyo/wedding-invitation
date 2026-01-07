@@ -2,6 +2,7 @@ import React from 'react';
 import { Palette } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
+import { BuilderLabel } from '../BuilderLabel';
 
 interface SectionProps {
     isOpen: boolean;
@@ -23,7 +24,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Font */}
                 <div className="space-y-3">
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">글꼴</label>
+                    <BuilderLabel>글꼴</BuilderLabel>
                     <div className="flex gap-3">
                         <select
                             value={theme.font}
@@ -38,7 +39,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Background Color */}
                 <div className="space-y-3">
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">배경 색상</label>
+                    <BuilderLabel>배경 색상</BuilderLabel>
                     <div className="flex gap-3">
                         {['#F9F8E6', '#FFEFF4', '#F4F1EA', '#EDF2F7', '#FFFFFF'].map((color) => (
                             <button
@@ -53,7 +54,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Accent Color */}
                 <div className="space-y-3">
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">강조 색상</label>
+                    <BuilderLabel>강조 색상</BuilderLabel>
                     <div className="flex gap-3">
                         {['#4A5D45', '#D4AF37', '#9A8C98', '#2C3E50', '#C0392B'].map((color) => (
                             <button
@@ -68,7 +69,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Pattern */}
                 <div className="space-y-3">
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">배경 패턴</label>
+                    <BuilderLabel>배경 패턴</BuilderLabel>
                     <div className="flex gap-3">
                         {['none', 'flower-sm', 'flower-lg'].map((opt) => (
                             <button
@@ -87,7 +88,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Effect */}
                 <div className="space-y-3">
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">배경 이펙트</label>
+                    <BuilderLabel>배경 이펙트</BuilderLabel>
                     <div className="flex flex-wrap gap-2">
                         {['none', 'cherry-blossom', 'snow', 'leaves', 'forsythia', 'babys-breath'].map((opt) => (
                             <button
