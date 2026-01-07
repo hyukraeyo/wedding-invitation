@@ -24,7 +24,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                 {/* Font */}
                 <div className="space-y-3">
                     <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">글꼴</label>
-                    <div className="flex gap-2">
+                    <div className="flex gap-3">
                         <select
                             value={theme.font}
                             onChange={(e) => setTheme({ font: e.target.value as 'serif' | 'sans' })}
@@ -69,7 +69,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                 {/* Pattern */}
                 <div className="space-y-3">
                     <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">배경 패턴</label>
-                    <div className="flex gap-2">
+                    <div className="flex gap-3">
                         {['none', 'flower-sm', 'flower-lg'].map((opt) => (
                             <button
                                 key={opt}

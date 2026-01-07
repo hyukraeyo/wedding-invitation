@@ -53,7 +53,7 @@ export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
                 {/* Time */}
                 <div className="grid grid-cols-[80px_1fr] items-center gap-4">
                     <label className="text-sm text-gray-700">예식시간</label>
-                    <div className="flex gap-2">
+                    <div className="flex gap-3">
                         <div className="relative flex-1">
                             <select
                                 value={currentHour}

@@ -53,7 +53,7 @@ export default function GallerySection({ isOpen, onToggle }: SectionProps) {
                 {/* 갤러리 타입 */}
                 <div className="flex items-center">
                     <label className="w-24 text-sm font-medium text-gray-800 shrink-0">갤러리 타입</label>
-                    <div className="flex gap-2">
+                    <div className="flex gap-3">
                         {(['swipe', 'thumbnail', 'grid'] as const).map((type) => (
                             <button
                                 key={type}

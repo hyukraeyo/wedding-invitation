@@ -100,7 +100,7 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                 {/* Image Ratio */}
                 <div className="space-y-2">
                     <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">사진 비율</label>
-                    <div className="flex gap-2">
+                    <div className="flex gap-3">
                         <button
                             onClick={() => setKakao({ imageRatio: 'portrait' })}
                             className={`px-4 py-2 border rounded-md text-sm transition-colors ${kakao.imageRatio === 'portrait' ? 'border-gray-800 text-gray-900 font-medium' : 'border-gray-200 text-gray-400 hover:bg-gray-50'}`}
@@ -119,7 +119,7 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                 {/* Button Type */}
                 <div className="space-y-2">
                     <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">버튼 추가</label>
-                    <div className="flex gap-2">
+                    <div className="flex gap-3">
                         <button
                             onClick={() => setKakao({ buttonType: 'none' })}
                             className={`px-3 py-2 border rounded-md text-xs transition-colors ${kakao.buttonType === 'none' ? 'border-gray-800 text-gray-900 font-medium' : 'border-gray-200 text-gray-400 hover:bg-gray-50'}`}

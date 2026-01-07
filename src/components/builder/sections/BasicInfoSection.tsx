@@ -65,7 +65,7 @@ export default function BasicInfoSection({ isOpen, onToggle }: SectionProps) {
                             onChange={(e) => setGroomParents('father', { name: e.target.value })}
                             className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none"
                         />
-                        <label className="flex items-center gap-1 cursor-pointer">
+                        <label className="flex items-center gap-3 cursor-pointer">
                             <input
                                 type="checkbox"
                                 checked={groom.parents.father.isDeceased}
@@ -84,7 +84,7 @@ export default function BasicInfoSection({ isOpen, onToggle }: SectionProps) {
                             onChange={(e) => setGroomParents('mother', { name: e.target.value })}
                             className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none"
                         />
-                        <label className="flex items-center gap-1 cursor-pointer">
+                        <label className="flex items-center gap-3 cursor-pointer">
                             <input
                                 type="checkbox"
                                 checked={groom.parents.mother.isDeceased}
@@ -138,7 +138,7 @@ export default function BasicInfoSection({ isOpen, onToggle }: SectionProps) {
                             onChange={(e) => setBrideParents('father', { name: e.target.value })}
                             className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none"
                         />
-                        <label className="flex items-center gap-1 cursor-pointer">
+                        <label className="flex items-center gap-3 cursor-pointer">
                             <input
                                 type="checkbox"
                                 checked={bride.parents.father.isDeceased}
@@ -157,7 +157,7 @@ export default function BasicInfoSection({ isOpen, onToggle }: SectionProps) {
                             onChange={(e) => setBrideParents('mother', { name: e.target.value })}
                             className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded text-sm text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none"
                         />
-                        <label className="flex items-center gap-1 cursor-pointer">
+                        <label className="flex items-center gap-3 cursor-pointer">
                             <input
                                 type="checkbox"
                                 checked={bride.parents.mother.isDeceased}

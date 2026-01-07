@@ -87,7 +87,7 @@ export default function LocationSection({ isOpen, onToggle }: SectionProps) {
                 <div className="flex items-start">
                     <label className="w-20 text-sm font-bold text-gray-800 shrink-0 mt-3">주소</label>
                     <div className="w-full space-y-2">
-                        <div className="flex gap-2">
+                        <div className="flex gap-3">
                             <div className={`flex-1 min-w-0 bg-gray-100 rounded-md px-3 py-3 text-sm truncate cursor-not-allowed ${address ? 'text-gray-900' : 'text-gray-400'}`}>
                                 {address || "주소를 검색해주세요"}
                             </div>
@@ -144,7 +144,7 @@ export default function LocationSection({ isOpen, onToggle }: SectionProps) {
                 {/* 5.5 지도 종류 (Map Type) */}
                 <div className="flex items-center">
                     <label className="w-20 text-sm font-medium text-gray-700 shrink-0">지도 종류</label>
-                    <div className="flex gap-2">
+                    <div className="flex gap-3">
                         <button
                             onClick={() => setMapType('kakao')}
                             className={`px-3 py-2 text-sm border rounded hover:bg-gray-50 transition-colors flex items-center gap-2 ${mapType === 'kakao' ? 'border-gray-800 bg-yellow-50' : 'border-gray-200 bg-white'}`}
@@ -217,7 +217,7 @@ export default function LocationSection({ isOpen, onToggle }: SectionProps) {
                 {/* 9. 지도 높이 (Map Height) */}
                 <div className="flex items-center">
                     <label className="w-20 text-sm font-medium text-gray-700 shrink-0">지도 높이</label>
-                    <div className="flex gap-2">
+                    <div className="flex gap-3">
                         <button
                             onClick={() => setMapHeight('default')}
                             className={`px-4 py-2 text-sm border rounded hover:bg-gray-50 transition-colors ${mapHeight === 'default' ? 'border-gray-800 font-bold text-gray-900 bg-white' : 'border-gray-200 text-gray-400 bg-white'}`}
@@ -236,7 +236,7 @@ export default function LocationSection({ isOpen, onToggle }: SectionProps) {
                 {/* 10. 줌 레벨 (Zoom Level) */}
                 <div className="flex items-center">
                     <label className="w-20 text-sm font-medium text-gray-700 shrink-0">줌 레벨</label>
-                    <div className="flex gap-2">
+                    <div className="flex gap-3">
                         {[15, 16, 17, 18, 19].map((level) => (
                             <button
                                 key={level}
