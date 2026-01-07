@@ -11,6 +11,11 @@ interface SectionProps {
     onToggle: () => void;
 }
 
+const RECOMMENDED_TEXT = `장담하건대, 세상이 다 겨울이어도
+우리 사랑은 늘 봄처럼 따뜻하고
+간혹, 여름처럼 뜨거울 겁니다.
+이수동, 사랑가`;
+
 export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
     const { closing, setClosing } = useInvitationStore();
 
@@ -28,7 +33,7 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
             icon={Camera}
             isOpen={isOpen}
             onToggle={onToggle}
-            isCompleted={!!closing.imageUrl}
+            isCompleted={!!closing.imageUrl || !!closing.content}
             badge="강력추천😎"
         >
             <div className="space-y-8">
@@ -115,7 +120,15 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Content Editor */}
                 <div className="space-y-3">
-                    <BuilderLabel>문구 내용</BuilderLabel>
+                    <div className="flex justify-between items-end">
+                        <BuilderLabel>문구 내용</BuilderLabel>
+                        <button
+                            onClick={() => setClosing({ content: RECOMMENDED_TEXT })}
+                            className="text-xs text-gray-500 hover:text-forest-green hover:underline mb-2 transition-colors flex items-center gap-1"
+                        >
+                            <span>✨ 추천 문구 넣기</span>
+                        </button>
+                    </div>
                     <div className="relative">
                         <BuilderTextarea
                             value={closing.content}

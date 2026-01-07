@@ -356,10 +356,7 @@ export const useInvitationStore = create<InvitationState>((set) => ({
         imageUrl: null,
         effect: 'none',
         ratio: 'auto',
-        content: `장담하건대, 세상이 다 겨울이어도
-우리 사랑은 늘 봄처럼 따뜻하고
-간혹, 여름처럼 뜨거울 겁니다.
-이수동, 사랑가`,
+        content: '',
     },
     setClosing: (data) => set((state) => ({ closing: { ...state.closing, ...data } })),
 }));
