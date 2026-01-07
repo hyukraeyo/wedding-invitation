@@ -17,9 +17,11 @@ export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
         ddayMessage, setDdayMessage
     } = useInvitationStore();
 
-    // Calendar States
+    // Calendar & Picker States
     const [viewDate, setViewDate] = useState(date ? new Date(date) : new Date());
     const [showPicker, setShowPicker] = useState(false);
+    const [showHourPicker, setShowHourPicker] = useState(false);
+    const [showMinutePicker, setShowMinutePicker] = useState(false);
 
     // Time Helpers
     const [hourStr, minuteStr] = (time || '12:00').split(':').concat(['00']).slice(0, 2);
@@ -140,42 +142,81 @@ export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
                     </div>
                 </div>
 
-                {/* Refined Time Picker */}
+                {/* Refined Time Picker (Custom Dropdowns) */}
                 <div className="space-y-3">
                     <label className="text-[11px] font-bold text-gray-400 uppercase tracking-widest px-1">예식시간</label>
                     <div className="flex gap-4 p-1 bg-gray-100/30 rounded-[28px] border border-gray-50">
-                        {/* Hour Dropdown (Custom Styled) */}
-                        <div className="flex-1 relative group bg-white rounded-[24px] shadow-sm border border-gray-100 overflow-hidden group">
-                            <select
-                                value={currentHour}
-                                onChange={(e) => handleTimeChange('hour', parseInt(e.target.value))}
-                                className="w-full appearance-none px-6 py-4.5 bg-transparent text-[15px] text-gray-800 font-serif font-bold outline-none cursor-pointer pr-12 transition-all focus:bg-gray-50/50"
+                        {/* Hour Dropdown */}
+                        <div className="flex-1 relative">
+                            <button
+                                onClick={() => {
+                                    setShowHourPicker(!showHourPicker);
+                                    setShowMinutePicker(false);
+                                }}
+                                className={`w-full flex items-center justify-between px-6 py-4.5 rounded-[24px] shadow-sm border transition-all
+                                    ${showHourPicker ? 'bg-white border-forest-green ring-4 ring-forest-green/5' : 'bg-white border-gray-100'}`}
                             >
-                                {Array.from({ length: 24 }).map((_, i) => (
-                                    <option key={i} value={i} className="font-sans">
-                                        {i < 12 ? `오전 ${i === 0 ? 12 : i}시` : `오후 ${i === 12 ? 12 : i - 12}시`}
-                                    </option>
-                                ))}
-                            </select>
-                            <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-300 group-hover:text-forest-green transition-colors">
-                                <ChevronDown size={14} />
-                            </div>
+                                <span className="text-[15px] text-gray-800 font-serif font-bold">
+                                    {currentHour < 12 ? `오전 ${currentHour === 0 ? 12 : currentHour}시` : `오후 ${currentHour === 12 ? 12 : currentHour - 12}시`}
+                                </span>
+                                <ChevronDown size={14} className={`transition-transform duration-200 ${showHourPicker ? 'rotate-180 text-forest-green' : 'text-gray-300'}`} />
+                            </button>
+
+                            {showHourPicker && (
+                                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-2xl shadow-xl z-40 max-h-[240px] overflow-y-auto scrollbar-hide animate-in fade-in slide-in-from-top-2 duration-200">
+                                    {Array.from({ length: 24 }).map((_, i) => (
+                                        <button
+                                            key={i}
+                                            onClick={() => {
+                                                handleTimeChange('hour', i);
+                                                setShowHourPicker(false);
+                                            }}
+                                            className={`w-full px-5 py-3.5 text-left text-[14px] transition-colors hover:bg-gray-50
+                                                ${currentHour === i ? 'text-forest-green font-bold bg-forest-green/[0.03]' : 'text-gray-600'}`}
+                                        >
+                                            {i < 12 ? `오전 ${i === 0 ? 12 : i}시` : `오후 ${i === 12 ? 12 : i - 12}시`}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
-                        {/* Minute Dropdown (Custom Styled) */}
-                        <div className="flex-1 relative group bg-white rounded-[24px] shadow-sm border border-gray-100 overflow-hidden group">
-                            <select
-                                value={currentMinute}
-                                onChange={(e) => handleTimeChange('minute', parseInt(e.target.value))}
-                                className="w-full appearance-none px-6 py-4.5 bg-transparent text-[15px] text-gray-800 font-serif font-bold outline-none cursor-pointer pr-12 transition-all focus:bg-gray-50/50"
+                        {/* Minute Dropdown */}
+                        <div className="flex-1 relative">
+                            <button
+                                onClick={() => {
+                                    setShowMinutePicker(!showMinutePicker);
+                                    setShowHourPicker(false);
+                                }}
+                                className={`w-full flex items-center justify-between px-6 py-4.5 rounded-[24px] shadow-sm border transition-all
+                                    ${showMinutePicker ? 'bg-white border-forest-green ring-4 ring-forest-green/5' : 'bg-white border-gray-100'}`}
                             >
-                                {['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'].map((m) => (
-                                    <option key={m} value={parseInt(m)} className="font-sans">{m}분</option>
-                                ))}
-                            </select>
-                            <div className="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-300 group-hover:text-forest-green transition-colors">
-                                <ChevronDown size={14} />
-                            </div>
+                                <span className="text-[15px] text-gray-800 font-serif font-bold">
+                                    {String(currentMinute).padStart(2, '0')}분
+                                </span>
+                                <ChevronDown size={14} className={`transition-transform duration-200 ${showMinutePicker ? 'rotate-180 text-forest-green' : 'text-gray-300'}`} />
+                            </button>
+
+                            {showMinutePicker && (
+                                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-2xl shadow-xl z-40 max-h-[240px] overflow-y-auto scrollbar-hide animate-in fade-in slide-in-from-top-2 duration-200">
+                                    {['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55'].map((m) => {
+                                        const val = parseInt(m);
+                                        return (
+                                            <button
+                                                key={m}
+                                                onClick={() => {
+                                                    handleTimeChange('minute', val);
+                                                    setShowMinutePicker(false);
+                                                }}
+                                                className={`w-full px-5 py-3.5 text-left text-[14px] transition-colors hover:bg-gray-50
+                                                    ${currentMinute === val ? 'text-forest-green font-bold bg-forest-green/[0.03]' : 'text-gray-600'}`}
+                                            >
+                                                {m}분
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>
