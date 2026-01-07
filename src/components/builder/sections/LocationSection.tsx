@@ -147,15 +147,24 @@ export default function LocationSection({ isOpen, onToggle }: SectionProps) {
                     <div className="flex gap-2">
                         <button
                             onClick={() => setMapType('kakao')}
-                            className={`px-4 py-2 text-sm border rounded hover:bg-gray-50 transition-colors ${mapType === 'kakao' ? 'border-gray-800 font-bold text-gray-900 bg-white' : 'border-gray-200 text-gray-400 bg-white'}`}
+                            className={`px-3 py-2 text-sm border rounded hover:bg-gray-50 transition-colors flex items-center gap-2 ${mapType === 'kakao' ? 'border-gray-800 bg-yellow-50' : 'border-gray-200 bg-white'}`}
                         >
-                            카카오맵
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="24" height="24" rx="4" fill="#FAE100"/>
+                                <path d="M12 6C8.7 6 6 8.7 6 12C6 15.3 8.7 18 12 18C15.3 18 18 15.3 18 12C18 8.7 15.3 6 12 6ZM12 16C9.8 16 8 14.2 8 12C8 9.8 9.8 8 12 8C14.2 8 16 9.8 16 12C16 14.2 14.2 16 12 16Z" fill="#000000"/>
+                                <circle cx="12" cy="12" r="2" fill="#000000"/>
+                            </svg>
+                            <span className={`${mapType === 'kakao' ? 'font-bold text-gray-900' : 'text-gray-400'}`}>카카오맵</span>
                         </button>
                         <button
                             onClick={() => setMapType('naver')}
-                            className={`px-4 py-2 text-sm border rounded hover:bg-gray-50 transition-colors ${mapType === 'naver' ? 'border-gray-800 font-bold text-gray-900 bg-white' : 'border-gray-200 text-gray-400 bg-white'}`}
+                            className={`px-3 py-2 text-sm border rounded hover:bg-gray-50 transition-colors flex items-center gap-2 ${mapType === 'naver' ? 'border-gray-800 bg-green-50' : 'border-gray-200 bg-white'}`}
                         >
-                            네이버지도
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect width="24" height="24" rx="4" fill="#03C75A"/>
+                                <path d="M7 8H10V16H7V8ZM14 8H17V16H14V8Z" fill="white"/>
+                            </svg>
+                            <span className={`${mapType === 'naver' ? 'font-bold text-gray-900' : 'text-gray-400'}`}>네이버지도</span>
                         </button>
                     </div>
                 </div>
