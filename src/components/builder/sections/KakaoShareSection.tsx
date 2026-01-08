@@ -52,7 +52,7 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                 {/* Photo Upload */}
                 <div>
                     <BuilderLabel>사진</BuilderLabel>
-                    <div className="border-2 border-dashed border-gray-200 rounded-xl w-32 h-32 hover:border-forest-green/40 hover:bg-gray-50 transition-all cursor-pointer relative overflow-hidden flex flex-col items-center justify-center gap-2 group bg-gray-50">
+                    <div className="border-2 border-dashed border-gray-200 rounded-xl w-32 h-32 hover:border-gray-300 hover:bg-gray-50 transition-all cursor-pointer relative overflow-hidden flex flex-col items-center justify-center gap-2 group bg-gray-50">
                         <input
                             type="file"
                             accept="image/*"
@@ -73,7 +73,7 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                         ) : (
                             <>
                                 <div className="w-8 h-8 flex items-center justify-center">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-400 group-hover:text-forest-green"><path d="M12 5v14M5 12h14" /></svg>
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-400 group-hover:text-gray-600"><path d="M12 5v14M5 12h14" /></svg>
                                 </div>
                             </>
                         )}

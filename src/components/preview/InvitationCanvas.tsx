@@ -71,7 +71,7 @@ const InvitationCanvas = memo(() => {
 
         {/* Divider */}
         <div className="flex justify-center py-4 opacity-5">
-          <div className="w-16 h-[1px] bg-forest-green"></div>
+          <div className="w-16 h-[1px]" style={{ backgroundColor: theme.accentColor }}></div>
         </div>
 
         {/* 2. Message / Greeting */}
@@ -84,7 +84,7 @@ const InvitationCanvas = memo(() => {
 
         {/* Divider */}
         <div className="flex justify-center py-6 opacity-5">
-          <div className="w-24 h-[1px] bg-forest-green"></div>
+          <div className="w-24 h-[1px]" style={{ backgroundColor: theme.accentColor }}></div>
         </div>
 
         {/* 4. Calendar & D-Day */}

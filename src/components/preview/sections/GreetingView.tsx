@@ -4,7 +4,7 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 export default function GreetingView() {
     const {
         greetingTitle, greetingSubtitle, message, imageUrl,
-        showNamesAtBottom, sortNames, enableFreeformNames,
+        showNamesAtBottom, enableFreeformNames,
         groom, bride,
         groomNameCustom
     } = useInvitationStore();
@@ -19,19 +19,23 @@ export default function GreetingView() {
 
     return (
         <div className="py-14 px-10 text-center mx-4 relative overflow-hidden">
-            <div className="space-y-8">
+            <div className="space-y-6">
                 {/* Section Header */}
                 <div className="flex flex-col items-center space-y-1">
                     {greetingSubtitle && (
                         <div
-                            className="font-script text-gray-400 opacity-50 tracking-[0.2em]"
-                            style={{ fontSize: 'calc(24px * var(--font-scale))' }}
+                            className="font-serif uppercase tracking-[0.3em]"
+                            style={{
+                                fontSize: 'calc(13px * var(--font-scale))',
+                                color: accentColor,
+                                opacity: 0.6
+                            }}
                         >
                             {greetingSubtitle}
                         </div>
                     )}
                     {greetingTitle && (
-                        <div className="flex flex-col items-center space-y-6">
+                        <div className="flex flex-col items-center space-y-3">
                             <h2
                                 className="font-serif tracking-[0.15em] font-medium leading-relaxed"
                                 style={{
@@ -41,7 +45,7 @@ export default function GreetingView() {
                             >
                                 {greetingTitle}
                             </h2>
-                            <div className="w-16 h-[1px] bg-gray-100"></div>
+                            <div className="w-12 h-[1px] bg-gray-100"></div>
                         </div>
                     )}
                 </div>
@@ -55,14 +59,14 @@ export default function GreetingView() {
 
                 {/* Optional Photo */}
                 {imageUrl && (
-                    <div className="relative w-full aspect-[4/5] rounded-lg overflow-hidden shadow-2xl shadow-black/5 mx-auto max-w-[280px] my-12 animate-in fade-in zoom-in duration-700">
+                    <div className="relative -mx-10 w-[calc(100%+5rem)] aspect-[3/2] overflow-hidden mt-8 mb-0 animate-in fade-in zoom-in duration-700">
                         <Image src={imageUrl} alt="Greeting" fill className="object-cover" />
                     </div>
                 )}
 
                 {/* Signatures */}
                 {showNamesAtBottom && (
-                    <div className="mt-16 pt-12 border-t border-gray-50">
+                    <div className="mt-10 pt-10 border-t border-gray-50">
                         {enableFreeformNames ? (
                             // Freeform Mode
                             <div

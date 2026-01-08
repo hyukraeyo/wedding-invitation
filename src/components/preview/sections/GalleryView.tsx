@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 
 export default function GalleryView() {
-    const { gallery, galleryType } = useInvitationStore();
+    const { gallery, galleryType, theme } = useInvitationStore();
     const [currentIndex, setCurrentIndex] = useState(0);
 
     if (!gallery || gallery.length === 0) return null;
@@ -59,8 +59,8 @@ export default function GalleryView() {
                                         <button
                                             key={index}
                                             onClick={() => goToSlide(index)}
-                                            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${index === currentIndex ? 'bg-forest-green w-4 opacity-100' : 'bg-forest-green/20'
-                                                }`}
+                                            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${index === currentIndex ? 'w-4' : ''}`}
+                                            style={{ backgroundColor: theme.accentColor, opacity: index === currentIndex ? 1 : 0.2 }}
                                         />
                                     ))}
                                 </div>
@@ -89,8 +89,8 @@ export default function GalleryView() {
                                 <button
                                     key={index}
                                     onClick={() => goToSlide(index)}
-                                    className={`flex-shrink-0 w-14 h-14 relative rounded-lg overflow-hidden transition-all duration-300 ${index === currentIndex ? 'ring-2 ring-forest-green ring-offset-2 opacity-100' : 'opacity-40 grayscale-[50%]'
-                                        }`}
+                                    className={`flex-shrink-0 w-14 h-14 relative rounded-lg overflow-hidden transition-all duration-300 ${index === currentIndex ? 'ring-2 ring-offset-2 opacity-100' : 'opacity-40 grayscale-[50%]'}`}
+                                    style={index === currentIndex ? { '--tw-ring-color': theme.accentColor } as React.CSSProperties : {}}
                                 >
                                     <Image
                                         src={img}
@@ -130,10 +130,10 @@ export default function GalleryView() {
             <div className="text-center space-y-4 mb-10">
                 <div className="flex flex-col items-center space-y-2">
                     <span
-                        className="tracking-[0.4em] text-forest-green/40 font-medium uppercase"
-                        style={{ fontSize: 'calc(10px * var(--font-scale))' }}
+                        className="tracking-[0.4em] font-medium uppercase"
+                        style={{ fontSize: 'calc(10px * var(--font-scale))', color: theme.accentColor, opacity: 0.4 }}
                     >Wedding Gallery</span>
-                    <div className="w-8 h-[1px] bg-forest-green opacity-10"></div>
+                    <div className="w-8 h-[1px]" style={{ backgroundColor: theme.accentColor, opacity: 0.1 }}></div>
                 </div>
             </div>
             {renderGallery()}

@@ -138,7 +138,7 @@ export default function CalendarSectionView() {
                 {/* D-Day Countdown */}
                 {showDday && (
                     <div className="text-center relative z-10 animate-in fade-in duration-1000">
-                        <div className="inline-block px-10 py-8 border border-forest-green/10 rounded-full">
+                        <div className="inline-block px-10 py-8 border rounded-full" style={{ borderColor: `${theme.accentColor}1A` }}>
                             <div className="flex justify-center gap-8 mb-4 font-serif">
                                 <div className="flex flex-col items-center">
                                     <span

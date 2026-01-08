@@ -11,7 +11,8 @@ export default function LocationView() {
         location, address, detailAddress,
         locationTitle, locationContact,
         mapType, mapHeight, mapZoom, showMap, showNavigation,
-        showSketch, sketchUrl, lockMap
+        showSketch, sketchUrl, lockMap,
+        theme
     } = useInvitationStore();
     const [coords, setCoords] = useState<{ lat: number; lng: number }>({ lat: 37.5665, lng: 126.9780 }); // Default: Seoul City Hall
 
@@ -78,10 +79,10 @@ export default function LocationView() {
             <div className="text-center space-y-4 mb-2">
                 <div className="flex flex-col items-center space-y-2">
                     <span
-                        className="tracking-[0.4em] text-forest-green/40 font-medium uppercase"
-                        style={{ fontSize: 'calc(10px * var(--font-scale))' }}
+                        className="tracking-[0.4em] font-medium uppercase"
+                        style={{ fontSize: 'calc(10px * var(--font-scale))', color: theme.accentColor, opacity: 0.4 }}
                     >{locationTitle || 'LOCATION'}</span>
-                    <div className="w-8 h-[1px] bg-forest-green opacity-10"></div>
+                    <div className="w-8 h-[1px]" style={{ backgroundColor: theme.accentColor, opacity: 0.1 }}></div>
                 </div>
                 <h3
                     className="font-serif text-gray-800 font-medium"
@@ -119,7 +120,7 @@ export default function LocationView() {
                             </Map>
                         ) : (
                             <div className="flex flex-col items-center justify-center h-full text-gray-300 gap-2">
-                                <div className="w-8 h-8 rounded-full border-2 border-gray-100 border-t-forest-green animate-spin"></div>
+                                <div className="w-8 h-8 rounded-full border-2 border-gray-100 animate-spin" style={{ borderTopColor: theme.accentColor }}></div>
                                 <span
                                     className="tracking-widest uppercase"
                                     style={{ fontSize: 'calc(10px * var(--font-scale))' }}
@@ -131,7 +132,7 @@ export default function LocationView() {
                             <div ref={naverMapRef} className="w-full h-full" />
                             {!isNaverLoaded && (
                                 <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-300 gap-2 bg-gray-50">
-                                    <div className="w-8 h-8 rounded-full border-2 border-gray-100 border-t-forest-green animate-spin"></div>
+                                    <div className="w-8 h-8 rounded-full border-2 border-gray-100 animate-spin" style={{ borderTopColor: theme.accentColor }}></div>
                                     <span
                                         className="tracking-widest uppercase"
                                         style={{ fontSize: 'calc(10px * var(--font-scale))' }}

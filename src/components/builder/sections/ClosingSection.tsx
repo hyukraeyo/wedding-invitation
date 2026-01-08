@@ -42,7 +42,7 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
                 {/* Photo Upload */}
                 <div>
                     <BuilderLabel>사진</BuilderLabel>
-                    <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 hover:border-forest-green/40 transition-colors bg-gray-50 group cursor-pointer relative overflow-hidden min-h-[200px] flex items-center justify-center">
+                    <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 hover:border-gray-300 transition-colors bg-gray-50 group cursor-pointer relative overflow-hidden min-h-[200px] flex items-center justify-center">
                         <input
                             type="file"
                             accept="image/*"
@@ -65,7 +65,7 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
                         ) : (
                             <div className="flex flex-col items-center justify-center text-center space-y-3">
                                 <div className="w-12 h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <ImageIcon size={24} className="text-gray-400 group-hover:text-forest-green" />
+                                    <ImageIcon size={24} className="text-gray-400 group-hover:text-gray-600" />
                                 </div>
                                 <div>
                                     <p className="text-sm font-medium text-gray-700">사진 업로드</p>
@@ -110,7 +110,7 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
                         <BuilderLabel>문구 내용</BuilderLabel>
                         <button
                             onClick={() => setClosing({ content: RECOMMENDED_TEXT })}
-                            className="text-xs text-gray-500 hover:text-forest-green hover:underline mb-2 transition-colors flex items-center gap-1"
+                            className="text-xs text-gray-500 hover:text-gray-800 hover:underline mb-2 transition-colors flex items-center gap-1"
                         >
                             <span>✨ 추천 문구 넣기</span>
                         </button>

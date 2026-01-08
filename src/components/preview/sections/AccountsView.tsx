@@ -3,7 +3,7 @@ import { ChevronDown } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 
 export default function AccountsView() {
-    const { accounts } = useInvitationStore();
+    const { accounts, theme } = useInvitationStore();
     const [openSide, setOpenSide] = useState<'groom' | 'bride' | null>(null);
 
     const groomAccounts = accounts.filter(a => a.type === 'groom');
@@ -21,10 +21,10 @@ export default function AccountsView() {
             <div className="text-center space-y-4 mb-10">
                 <div className="flex flex-col items-center space-y-2">
                     <span
-                        className="tracking-[0.4em] text-forest-green/40 font-medium uppercase"
-                        style={{ fontSize: 'calc(10px * var(--font-scale))' }}
+                        className="tracking-[0.4em] font-medium uppercase"
+                        style={{ fontSize: 'calc(10px * var(--font-scale))', color: theme.accentColor, opacity: 0.4 }}
                     >Gift for Groom & Bride</span>
-                    <div className="w-8 h-[1px] bg-forest-green opacity-10"></div>
+                    <div className="w-8 h-[1px]" style={{ backgroundColor: theme.accentColor, opacity: 0.1 }}></div>
                 </div>
             </div>
             <div className="space-y-4 max-w-[320px] mx-auto">

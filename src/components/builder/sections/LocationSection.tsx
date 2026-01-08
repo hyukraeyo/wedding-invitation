@@ -88,8 +88,10 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                         <div className="flex gap-2">
                             <div
                                 onClick={handleAddressSearch}
-                                className={`flex-1 min-w-0 bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-[14px] truncate cursor-pointer hover:bg-white hover:border-forest-green hover:ring-4 hover:ring-forest-green/5 transition-all
-                                ${address ? 'text-gray-900 border-gray-200' : 'text-gray-300'}`}
+                                className={`flex-1 min-w-0 bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-[14px] truncate cursor-pointer transition-all hover:bg-white`}
+                                style={{
+                                    color: address ? '#111827' : '#D1D5DB'
+                                }}
                             >
                                 {address || "주소를 검색해주세요"}
                             </div>
@@ -232,18 +234,18 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                                 </button>
                             </div>
                         ) : (
-                            <label className="flex flex-col items-center justify-center w-full max-w-sm aspect-[4/3] border-2 border-dashed border-gray-200 rounded-2xl cursor-pointer hover:border-forest-green/40 hover:bg-gray-50 transition-all group">
+                            <label className="flex flex-col items-center justify-center w-full max-w-sm aspect-[4/3] border-2 border-dashed border-gray-100 rounded-3xl cursor-pointer hover:bg-gray-50 transition-all group bg-gray-50/50">
                                 <input
                                     type="file"
                                     className="hidden"
                                     accept="image/*"
                                     onChange={handleSketchUpload}
                                 />
-                                <div className="w-12 h-12 rounded-full bg-white border border-gray-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                    <ImagePlus className="text-gray-400 group-hover:text-forest-green" size={24} />
+                                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                    <ImagePlus className="text-gray-400 group-hover:text-gray-600 transition-colors" size={24} />
                                 </div>
-                                <span className="text-sm font-bold text-gray-700">약도 이미지 업로드</span>
-                                <span className="text-xs text-gray-400 mt-1 text-center">직접 그린 약도나 이미지를 업로드하세요</span>
+                                <span className="text-[13px] font-bold text-gray-700">약도 이미지 업로드</span>
+                                <span className="text-[11px] text-gray-400 mt-1 text-center font-medium opacity-70 px-6 leading-relaxed">직접 그린 약도나 이미지를 업로드하세요</span>
                             </label>
                         )}
                     </div>

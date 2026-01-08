@@ -56,8 +56,7 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
         showNamesAtBottom, setShowNamesAtBottom,
         sortNames, setSortNames,
         enableFreeformNames, setEnableFreeformNames,
-        groomNameCustom, setGroomNameCustom,
-        brideNameCustom, setBrideNameCustom
+        groomNameCustom, setGroomNameCustom
     } = useInvitationStore();
 
     const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
@@ -81,8 +80,7 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
             <div className="space-y-8">
                 {/* Titles Section with Header */}
                 <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                        <h3 className="text-sm font-semibold text-gray-800 tracking-tight">제목 및 문구 설정</h3>
+                    <div className="flex items-center justify-end">
                         <button
                             onClick={() => setIsSampleModalOpen(true)}
                             className="flex items-center gap-1.5 px-3 py-1.5 bg-[#FFF9EB] text-[#A65E1A] rounded-full border border-[#FFE0A3] hover:bg-[#FFF2D1] transition-all shadow-sm group"
@@ -92,7 +90,7 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                         </button>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 gap-4">
                         <div>
                             <BuilderLabel>상단 소제목</BuilderLabel>
                             <BuilderInput
@@ -128,12 +126,22 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                 <div>
                     <BuilderLabel>사진</BuilderLabel>
                     <div className="relative group w-32 h-32">
-                        <div className={`
+                        <div
+                            className={`
                             border-2 border-dashed border-gray-200 rounded-2xl w-full h-full 
-                            hover:border-forest-green/40 transition-all duration-300 bg-gray-50 group-hover:bg-white
+                            transition-all duration-300 bg-gray-50 group-hover:bg-white
                             relative overflow-hidden flex items-center justify-center
                             ${imageUrl ? 'border-none shadow-lg transform group-hover:scale-[1.02]' : ''}
-                        `}>
+                        `}
+                            style={!imageUrl ? { borderColor: 'transparent' } : {}} // We'll handle hover via style or just class if we can't easily inject hover color.
+                        // Actually, tailwind arbitrary values with CSS variables or just inline styles for specific interactions are tricky without state.
+                        // Let's use a class that doesn't reference forest-green, or just gray-300.
+                        // Better: use the group-hover style helper technique or just leave it gray-300 on hover to be safe/neutral, 
+                        // OR, since this is "UI Unification", let's make it standard gray.
+                        >
+                            {/* We will apply the border color on the parent 'group' hover if possible, or just inline style the div directly if we can track hover? No.
+                                Let's just use `hover:border-gray-400` so it doesn't clash with custom colors.
+                             */}
                             {imageUrl ? (
                                 <>
                                     <Image src={imageUrl} alt="Greeting" fill className="object-cover" />
@@ -146,8 +154,8 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                                 </>
                             ) : (
                                 <div className="flex flex-col items-center justify-center text-center space-y-2 pointer-events-none">
-                                    <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 group-hover:text-forest-green transition-colors">
-                                        <ImageIcon size={20} />
+                                    <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 transition-colors" style={{ color: undefined }} /* We can use a group-hover class that sets text color if we had a css var, but here inline style for hover is hard. Let's make it simple gray or black on hover */ >
+                                        <ImageIcon size={20} className="group-hover:text-gray-600" />
                                     </div>
                                     <span className="text-[11px] font-medium text-gray-400 group-hover:text-gray-600">사진 추가</span>
                                 </div>
@@ -252,7 +260,10 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                             >
                                 <div className="font-script text-gray-400 opacity-60 text-sm mb-1">{sample.subtitle}</div>
                                 <div className="font-bold text-gray-900 mb-2 group-hover:text-yellow-600 transition-colors">{sample.title}</div>
-                                <div className="text-xs text-gray-500 leading-[1.8] whitespace-pre-wrap">{sample.message}</div>
+                                <div
+                                    className="text-xs text-gray-500 leading-[1.8] rich-text-sample-preview"
+                                    dangerouslySetInnerHTML={{ __html: sample.message }}
+                                />
                             </button>
                         ))}
                     </div>

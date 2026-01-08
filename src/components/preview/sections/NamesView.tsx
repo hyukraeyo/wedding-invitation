@@ -2,7 +2,7 @@ import React from 'react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 
 export default function NamesView() {
-    const { groom, bride } = useInvitationStore();
+    const { groom, bride, theme } = useInvitationStore();
 
     return (
         <div className="py-16 px-8 text-center">
@@ -17,7 +17,7 @@ export default function NamesView() {
                 </div>
 
                 {/* Elegant Ampersand Divider */}
-                <div className="text-forest-green opacity-20 font-serif italic text-xl">&</div>
+                <div className="opacity-20 font-serif italic text-xl" style={{ color: theme.accentColor }}>&</div>
 
                 {/* Bride */}
                 <div className="flex flex-col items-center space-y-2">

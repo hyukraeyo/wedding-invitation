@@ -59,7 +59,8 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                             step="0.1"
                             value={theme.fontScale}
                             onChange={(e) => setTheme({ fontScale: parseFloat(e.target.value) })}
-                            className="flex-1 h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-forest-green"
+                            className="flex-1 h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer"
+                            style={{ accentColor: theme.accentColor }}
                         />
                         <div className="flex gap-2">
                             <BuilderButton
@@ -105,7 +106,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                 <div>
                     <BuilderLabel>강조 색상</BuilderLabel>
                     <div className="flex gap-3 px-1">
-                        {['#FFD700', '#D4AF37', '#9A8C98', '#2C3E50', '#C0392B'].map((color) => (
+                        {['#D4AF37', '#9A8C98', '#2C3E50', '#C0392B'].map((color) => (
                             <button
                                 key={color}
                                 onClick={() => setTheme({ accentColor: color })}

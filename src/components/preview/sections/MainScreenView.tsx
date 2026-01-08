@@ -111,8 +111,11 @@ export default function MainScreenView() {
                         <>
                             {mainScreen.showTitle && (
                                 <div
-                                    className={`tracking-[0.4em] uppercase mb-6 font-medium ${mainScreen.layout === 'fill' ? 'opacity-80' : 'text-forest-green opacity-40'}`}
-                                    style={{ fontSize: 'calc(10px * var(--font-scale))' }}
+                                    className={`tracking-[0.4em] uppercase mb-6 font-medium ${mainScreen.layout === 'fill' ? 'opacity-80' : 'opacity-40'}`}
+                                    style={{
+                                        fontSize: 'calc(10px * var(--font-scale))',
+                                        color: mainScreen.layout === 'fill' ? undefined : accentColor
+                                    }}
                                 >
                                     {mainScreen.title}
                                 </div>
@@ -150,23 +153,24 @@ export default function MainScreenView() {
 
                     {mainScreen.showDatePlace && (
                         <div
-                            className={`leading-[2.2] whitespace-pre-wrap tracking-wider ${mainScreen.layout === 'fill' ? 'opacity-80' : 'text-gray-500 font-medium font-serif'}`}
+                            className={`leading-[2.2] whitespace-pre-wrap tracking-wider rich-text-content ${mainScreen.layout === 'fill' ? 'opacity-80' : 'text-gray-500 font-medium font-serif'}`}
                             style={{ fontSize: 'calc(14px * var(--font-scale))' }}
-                        >
-                            {(() => {
-                                if (mainScreen.customDatePlace && mainScreen.customDatePlace !== '0000.00.00. Sunday 00:00 PM\nOOO예식장 1F, OOO홀') {
-                                    return mainScreen.customDatePlace;
-                                }
-                                const dateObj = date ? new Date(date) : new Date();
-                                const weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dateObj.getDay()];
-                                const formattedDate = `${dateObj.getFullYear()}. ${String(dateObj.getMonth() + 1).padStart(2, '0')}. ${String(dateObj.getDate()).padStart(2, '0')}. ${weekday}`;
-                                const [h = '12', m = '00'] = (time || '12:00').split(':');
-                                const hour = parseInt(h);
-                                const ampm = hour >= 12 ? 'PM' : 'AM';
-                                const displayHour = hour > 12 ? hour - 12 : (hour === 0 ? 12 : hour);
-                                return `${formattedDate} ${String(displayHour).padStart(2, '0')}:${m} ${ampm}\n${location}${detailAddress ? `, ${detailAddress}` : ''}`;
-                            })()}
-                        </div>
+                            dangerouslySetInnerHTML={{
+                                __html: (() => {
+                                    if (mainScreen.customDatePlace && mainScreen.customDatePlace !== '0000.00.00. Sunday 00:00 PM\nOOO예식장 1F, OOO홀') {
+                                        return mainScreen.customDatePlace;
+                                    }
+                                    const dateObj = date ? new Date(date) : new Date();
+                                    const weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dateObj.getDay()];
+                                    const formattedDate = `${dateObj.getFullYear()}. ${String(dateObj.getMonth() + 1).padStart(2, '0')}. ${String(dateObj.getDate()).padStart(2, '0')}. ${weekday}`;
+                                    const [h = '12', m = '00'] = (time || '12:00').split(':');
+                                    const hour = parseInt(h);
+                                    const ampm = hour >= 12 ? 'PM' : 'AM';
+                                    const displayHour = hour > 12 ? hour - 12 : (hour === 0 ? 12 : hour);
+                                    return `${formattedDate} ${String(displayHour).padStart(2, '0')}:${m} ${ampm}\n${location}${detailAddress ? `, ${detailAddress}` : ''}`;
+                                })()
+                            }}
+                        />
                     )}
                 </div>
             </div>

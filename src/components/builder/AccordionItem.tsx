@@ -21,13 +21,14 @@ const hexToRgba = (hex: string, opacity: number) => {
 };
 
 export const AccordionItem = ({ title, icon: Icon, isOpen, onToggle, children, isCompleted = false, badge }: AccordionItemProps) => {
-    const accentColor = useInvitationStore(state => state.theme.accentColor);
+    const { theme } = useInvitationStore();
+    const accentColor = theme.accentColor;
 
     return (
         <div
-            className={`rounded-2xl mb-4 border transition-all duration-500 ${isOpen
-                ? 'bg-white shadow-[0_20px_40px_-12px_rgba(0,0,0,0.06)] ring-1'
-                : 'bg-white shadow-[0_4px_12px_rgba(0,0,0,0.02)] border-gray-100 hover:border-gray-200 hover:shadow-[0_8px_16px_rgba(0,0,0,0.04)]'
+            className={`rounded-2xl mb-4 border transition-all duration-500 bg-white ${isOpen
+                ? 'shadow-[0_20px_40px_-12px_rgba(0,0,0,0.06)] ring-1'
+                : 'shadow-[0_4px_12px_rgba(0,0,0,0.02)] border-gray-100 hover:border-gray-200 hover:shadow-[0_8px_16px_rgba(0,0,0,0.04)]'
                 }`}
             style={isOpen ? {
                 borderColor: hexToRgba(accentColor, 0.2),
@@ -50,12 +51,12 @@ export const AccordionItem = ({ title, icon: Icon, isOpen, onToggle, children, i
                             <Icon size={18} />
                         </div>
                     )}
-                    <div className="flex flex-col">
+                    <div className="flex flex-row items-center gap-2">
                         <span className={`text-[15px] transition-all duration-300 font-bold ${isOpen ? 'text-gray-900' : 'text-gray-700'}`}>
                             {title}
                         </span>
                         {badge && (
-                            <span className="text-[10px] text-yellow-600 font-black mt-0.5 tracking-tight">
+                            <span className="text-[10px] text-yellow-600 font-black tracking-tight bg-yellow-50 px-1.5 py-0.5 rounded-md border border-yellow-100">
                                 {badge}
                             </span>
                         )}

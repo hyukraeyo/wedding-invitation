@@ -15,18 +15,46 @@ import {
     AlignCenter,
     AlignRight,
     Highlighter,
-    Palette,
     Type
 } from 'lucide-react';
 import { useEffect } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 interface RichTextEditorProps {
     content: string;
     onChange: (content: string) => void;
     placeholder?: string;
+    className?: string; // Outer container class
+    minHeight?: string; // e.g. "min-h-[100px]"
 }
 
-export default function RichTextEditor({ content, onChange, placeholder }: RichTextEditorProps) {
+// ToolbarButton component - declared outside render to follow React Hooks rules
+const ToolbarButton = ({
+    onClick,
+    isActive = false,
+    children,
+    className = ""
+}: {
+    onClick: () => void;
+    isActive?: boolean;
+    children: React.ReactNode;
+    className?: string;
+}) => (
+    <button
+        onClick={(e) => {
+            e.preventDefault();
+            onClick();
+        }}
+        className={`w-9 h-9 flex items-center justify-center rounded-lg transition-all ${isActive
+            ? 'bg-gray-100 text-gray-900 border border-gray-200'
+            : 'text-gray-400 hover:bg-gray-50 hover:text-gray-600'
+            } ${className}`}
+    >
+        {children}
+    </button>
+);
+
+export default function RichTextEditor({ content, onChange, placeholder, className = "", minHeight = "min-h-[180px]" }: RichTextEditorProps) {
     const editor = useEditor({
         extensions: [
             StarterKit,
@@ -45,7 +73,8 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
         },
         editorProps: {
             attributes: {
-                class: 'prose prose-sm focus:outline-none max-w-none min-h-[180px] px-6 py-8 text-[15px] leading-[2.2] text-gray-700 font-serif whitespace-pre-wrap',
+                class: `prose prose-sm focus:outline-none max-w-none ${minHeight} px-6 py-6 text-[15px] leading-[1.8] text-gray-700 font-pretendard`,
+                placeholder: placeholder || '내용을 입력하세요...',
             },
         },
     });
@@ -59,33 +88,8 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
 
     if (!editor) return null;
 
-    const ToolbarButton = ({
-        onClick,
-        isActive = false,
-        children,
-        className = ""
-    }: {
-        onClick: () => void;
-        isActive?: boolean;
-        children: React.ReactNode;
-        className?: string;
-    }) => (
-        <button
-            onClick={(e) => {
-                e.preventDefault();
-                onClick();
-            }}
-            className={`w-9 h-9 flex items-center justify-center rounded-lg transition-all ${isActive
-                ? 'bg-gray-100 text-gray-900 border border-gray-200'
-                : 'text-gray-400 hover:bg-gray-50 hover:text-gray-600'
-                } ${className}`}
-        >
-            {children}
-        </button>
-    );
-
     return (
-        <div className="border border-gray-200 rounded-2xl overflow-hidden bg-white shadow-sm transition-all focus-within:border-gray-300">
+        <div className={twMerge("border border-gray-200 rounded-xl overflow-hidden bg-white transition-all focus-within:border-gray-400", className)}>
             {/* Minimal Toolbar - Minimalist / Modern Style */}
             <div className="flex items-center gap-0.5 p-1.5 border-b border-gray-100 bg-gray-50/50">
                 <ToolbarButton
@@ -113,14 +117,14 @@ export default function RichTextEditor({ content, onChange, placeholder }: RichT
 
                 <div className="flex items-center">
                     <ToolbarButton
-                        onClick={() => editor.chain().focus().setColor('#D97706').run()}
-                        isActive={editor.isActive('textStyle', { color: '#D97706' })}
+                        onClick={() => editor.chain().focus().setColor('#8B5E3C').run()}
+                        isActive={editor.isActive('textStyle', { color: '#8B5E3C' })}
                     >
                         <Type size={18} />
                     </ToolbarButton>
                     <ToolbarButton
-                        onClick={() => editor.chain().focus().toggleHighlight({ color: '#fff9eb' }).run()}
-                        isActive={editor.isActive('highlight', { color: '#fff9eb' })}
+                        onClick={() => editor.chain().focus().toggleHighlight({ color: '#FFECD1' }).run()}
+                        isActive={editor.isActive('highlight', { color: '#FFECD1' })}
                     >
                         <Highlighter size={18} />
                     </ToolbarButton>

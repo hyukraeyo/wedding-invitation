@@ -268,7 +268,7 @@ export const useInvitationStore = create<InvitationState>((set) => ({
     theme: {
         font: 'pretendard',
         backgroundColor: '#F9F8E6', // Warm Ivory
-        accentColor: '#FFD700', // Banana Yellow
+        accentColor: '#D4AF37', // Warm Gold
         fontScale: 1,
         pattern: 'none',
         effect: 'none',

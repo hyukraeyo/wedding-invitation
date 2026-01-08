@@ -118,6 +118,10 @@ body {
   margin-bottom: 0;
 }
 
+.rich-text-sample-preview p {
+  margin-bottom: 0;
+}
+
 .rich-text-content [style*="text-align: center"] {
   display: block;
   width: 100%;

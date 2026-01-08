@@ -20,7 +20,8 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
         showCalendar, setShowCalendar,
         showDday, setShowDday,
         ddayMessage, setDdayMessage,
-        groom, bride
+        groom, bride,
+        theme: { accentColor }
     } = useInvitationStore();
 
 
@@ -92,11 +93,17 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
                         setShowPicker(false);
                     }}
                     className={`h-10 w-10 rounded-full text-[13px] font-medium transition-all relative flex items-center justify-center
-                        ${isSelected ? 'bg-forest-green text-white shadow-lg shadow-forest-green/20 scale-105' : 'hover:bg-gray-50 text-gray-700'}
-                        ${isToday && !isSelected ? 'text-forest-green border border-forest-green/20' : ''}`}
+                        ${isSelected ? 'text-white shadow-lg scale-105' : 'hover:bg-gray-50 text-gray-700'}
+                        ${isToday && !isSelected ? 'border' : ''}`}
+                    style={{
+                        backgroundColor: isSelected ? accentColor : undefined,
+                        boxShadow: isSelected ? `0 4px 12px ${accentColor}40` : undefined,
+                        color: isToday && !isSelected ? accentColor : undefined,
+                        borderColor: isToday && !isSelected ? `${accentColor}40` : undefined
+                    }}
                 >
                     {day}
-                    {isToday && !isSelected && <div className="absolute bottom-1 w-1 h-1 bg-forest-green rounded-full" />}
+                    {isToday && !isSelected && <div className="absolute bottom-1 w-1 h-1 rounded-full" style={{ backgroundColor: accentColor }} />}
                 </button>
             );
         }
@@ -134,19 +141,27 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
                         <button
                             onClick={() => setShowPicker(!showPicker)}
                             className={`w-full flex items-center justify-between px-4 py-3 border rounded-xl transition-all
-                                ${showPicker ? 'bg-white border-forest-green ring-4 ring-forest-green/5' : 'bg-gray-50 border-gray-100 hover:border-gray-200 hover:bg-white'}`}
+                                ${showPicker ? 'bg-white ring-4' : 'bg-gray-50 border-gray-100 hover:border-gray-200 hover:bg-white'}`}
+                            style={showPicker ? {
+                                borderColor: accentColor,
+                                boxShadow: `0 0 0 4px ${accentColor}0D` // 5% opacity
+                            } : {}}
                         >
                             <span className={`text-[14px] font-bold ${date ? 'text-gray-900' : 'text-gray-300'}`}>
                                 {date ? date.split('-').join('. ') + '.' : '날짜를 선택해주세요'}
                             </span>
-                            <CalendarIcon size={18} className={`transition-colors shrink-0 ${showPicker ? 'text-forest-green' : 'text-gray-400'}`} />
+                            <CalendarIcon
+                                size={18}
+                                className={`transition-colors shrink-0 ${showPicker ? '' : 'text-gray-400'}`}
+                                style={showPicker ? { color: accentColor } : {}}
+                            />
                         </button>
 
                         {showPicker && (
                             <div className="mt-4 p-5 bg-white border border-gray-100 rounded-2xl shadow-xl animate-in fade-in zoom-in-95 duration-200 z-30 relative">
                                 <div className="flex items-center justify-between mb-6 px-1">
                                     <h4 className="font-serif text-lg text-gray-800 font-bold text-[15px]">
-                                        {viewDate.getFullYear()}년 <span className="text-forest-green ml-1 font-black">{viewDate.getMonth() + 1}월</span>
+                                        {viewDate.getFullYear()}년 <span className="ml-1 font-black" style={{ color: accentColor }}>{viewDate.getMonth() + 1}월</span>
                                     </h4>
                                     <div className="flex gap-2">
                                         <BuilderButton variant="outline" size="sm" onClick={() => changeMonth(-1)} className="w-8 h-8 p-0">

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
+import { useInvitationStore } from '@/store/useInvitationStore';
 
 interface Option<T> {
     label: string;
@@ -15,6 +16,14 @@ interface BuilderSelectProps<T> {
     labelClassName?: string;
 }
 
+// Helper to add opacity to hex colors
+const hexToRgba = (hex: string, opacity: number) => {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+};
+
 export const BuilderSelect = <T extends string | number>({
     value,
     options,
@@ -25,6 +34,7 @@ export const BuilderSelect = <T extends string | number>({
 }: BuilderSelectProps<T>) => {
     const [isOpen, setIsOpen] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
+    const accentColor = useInvitationStore(state => state.theme.accentColor);
 
     const selectedOption = options.find(opt => opt.value === value);
 
@@ -69,13 +79,21 @@ export const BuilderSelect = <T extends string | number>({
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
-                className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border transition-all text-left bg-gray-50
-                    ${isOpen ? 'border-forest-green bg-white ring-4 ring-forest-green/5' : 'border-gray-100 hover:border-gray-200 hover:bg-white'}`}
+                className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border transition-all text-left bg-white border-gray-200
+                    ${isOpen ? 'border-gray-400' : 'hover:border-gray-300 hover:bg-gray-50'}`}
+                style={isOpen ? {
+                    borderColor: accentColor,
+                    boxShadow: `0 0 0 4px ${hexToRgba(accentColor, 0.05)}`
+                } : {}}
             >
-                <span className={`text-[14px] font-bold ${selectedOption ? 'text-gray-900' : 'text-gray-300'} ${labelClassName}`}>
+                <span className={`text-[14px] ${selectedOption ? 'text-gray-900' : 'text-gray-300'} ${labelClassName}`}>
                     {selectedOption ? selectedOption.label : placeholder}
                 </span>
-                <ChevronDown size={14} className={`transition-transform duration-300 shrink-0 ${isOpen ? 'rotate-180 text-forest-green' : 'text-gray-400'}`} />
+                <ChevronDown
+                    size={14}
+                    className={`transition-transform duration-300 shrink-0 ${isOpen ? 'rotate-180' : 'text-gray-400'}`}
+                    style={isOpen ? { color: accentColor } : {}}
+                />
             </button>
 
             {isOpen && (
@@ -97,12 +115,22 @@ export const BuilderSelect = <T extends string | number>({
                                     }}
                                     className={`w-full flex items-center justify-between px-3.5 py-3 rounded-xl text-left text-[14px] transition-all
                                         ${isActive
-                                            ? 'text-forest-green font-bold bg-forest-green/[0.06]'
+                                            ? 'font-bold'
                                             : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 active:scale-[0.98]'}`}
+                                    style={isActive ? {
+                                        color: accentColor,
+                                        backgroundColor: hexToRgba(accentColor, 0.06)
+                                    } : {}}
                                 >
                                     <span>{option.label}</span>
                                     {isActive && (
-                                        <div className="w-1.5 h-1.5 rounded-full bg-forest-green shadow-[0_0_8px_rgba(74,93,69,0.4)]" />
+                                        <div
+                                            className="w-1.5 h-1.5 rounded-full shadow-sm"
+                                            style={{
+                                                backgroundColor: accentColor,
+                                                boxShadow: `0 0 8px ${hexToRgba(accentColor, 0.4)}`
+                                            }}
+                                        />
                                     )}
                                 </button>
                             );

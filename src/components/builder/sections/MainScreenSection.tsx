@@ -5,12 +5,12 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderLabel } from '../BuilderLabel';
 import { BuilderInput } from '../BuilderInput';
-import { BuilderTextarea } from '../BuilderTextarea';
 import { BuilderCheckbox } from '../BuilderCheckbox';
 import { BuilderModal } from '@/components/common/BuilderModal';
 
 import { BuilderButtonGroup } from '../BuilderButtonGroup';
 import { BuilderToggle } from '../BuilderToggle';
+import RichTextEditor from '@/components/common/RichTextEditor';
 
 interface SectionProps {
     isOpen: boolean;
@@ -53,7 +53,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                             onClick={() => setMainScreen({ layout: l as 'basic' | 'fill' | 'arch' | 'oval' | 'frame' })}
                             className={`flex-shrink-0 w-20 flex flex-col items-center gap-2 group`}
                         >
-                            <div className={`w-20 h-32 rounded-lg border-2 transition-all relative overflow-hidden bg-white ${mainScreen.layout === l ? 'border-forest-green shadow-md' : 'border-gray-100 group-hover:border-forest-green/50 hover:bg-gray-50'}`}>
+                            <div className={`w-20 h-32 rounded-lg border-2 transition-all relative overflow-hidden bg-white ${mainScreen.layout === l ? 'shadow-md' : 'border-gray-100 hover:bg-gray-50'}`} style={mainScreen.layout === l ? { borderColor: accentColor } : {}}>
                                 {/* Skeleton Wireframe Previews */}
                                 {l === 'basic' && (
                                     <div className="absolute inset-0 flex flex-col items-center pt-3 scale-[0.55] origin-top">
@@ -128,12 +128,12 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                 )}
 
                                 {mainScreen.layout === l && (
-                                    <div className="absolute top-1.5 right-1.5 bg-forest-green text-white rounded-full p-0.5 shadow-sm z-10">
+                                    <div className="absolute top-1.5 right-1.5 text-white rounded-full p-0.5 shadow-sm z-10" style={{ backgroundColor: accentColor }}>
                                         <Check size={10} strokeWidth={3} />
                                     </div>
                                 )}
                             </div>
-                            <span className={`text-xs font-medium ${mainScreen.layout === l ? 'text-forest-green' : 'text-gray-500'}`}>
+                            <span className={`text-[11px] font-bold mt-1 ${mainScreen.layout === l ? '' : 'text-gray-400'}`} style={mainScreen.layout === l ? { color: accentColor } : {}}>
                                 {l === 'basic' ? '기본' : l === 'fill' ? '채우기' : l === 'arch' ? '아치' : l === 'oval' ? '타원' : '액자'}
                             </span>
                         </button>
@@ -143,7 +143,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                 {/* Photo Upload */}
                 <div>
                     <BuilderLabel>사진</BuilderLabel>
-                    <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 hover:border-forest-green/40 transition-colors bg-gray-50 group cursor-pointer relative overflow-hidden min-h-[200px] flex items-center justify-center">
+                    <div className="border-2 border-dashed border-gray-100 rounded-2xl p-6 hover:bg-gray-50 transition-all bg-gray-50/50 group cursor-pointer relative overflow-hidden min-h-[200px] flex items-center justify-center">
                         <input
                             type="file"
                             accept="image/*"
@@ -163,8 +163,8 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                             </div>
                         ) : (
                             <div className="flex flex-col items-center justify-center text-center space-y-3">
-                                <div className="w-12 h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <ImageIcon size={24} className="text-gray-400 group-hover:text-forest-green" />
+                                <div className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <ImageIcon size={24} className="text-gray-400 group-hover:text-gray-600 transition-colors" />
                                 </div>
                                 <div>
                                     <p className="text-sm font-medium text-gray-700">사진 업로드</p>
@@ -217,55 +217,55 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
 
                         <button
                             onClick={() => setIsTextSectionOpen(!isTextSectionOpen)}
-                            className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full transition-colors"
+                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all border shadow-sm group ${isTextSectionOpen ? 'bg-gray-900 border-gray-900 text-white' : 'bg-gray-100 border-gray-100 text-gray-600 hover:bg-gray-200'}`}
                         >
-                            <span className="text-xs font-medium text-gray-600">메인화면 문구 커스텀</span>
-                            {isTextSectionOpen ? <ChevronUp size={14} className="text-gray-500" /> : <ChevronDown size={14} className="text-gray-500" />}
+                            <span className="text-xs font-bold">메인화면 문구 커스텀</span>
+                            {isTextSectionOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                         </button>
                     </div>
 
                     {isTextSectionOpen && (
                         <div className="space-y-6 animate-in slide-in-from-top-2 fade-in duration-200">
+                            {/* Example Phrases Button at Top */}
+                            <div className="flex justify-end pt-1">
+                                <button
+                                    onClick={() => setIsExampleModalOpen(true)}
+                                    className="flex items-center gap-1.5 px-3 py-1.5 bg-[#FFF9EB] text-[#A65E1A] rounded-full border border-[#FFE0A3] hover:bg-[#FFF2D1] transition-all shadow-sm group"
+                                >
+                                    <Sparkles size={14} className="group-hover:scale-110 transition-transform" />
+                                    <span className="text-xs font-bold">예시 문구</span>
+                                </button>
+                            </div>
                             <div className="space-y-3">
-                                {/* Title */}
-                                <div className="flex items-center gap-3">
-                                    <BuilderCheckbox
-                                        checked={mainScreen.showTitle}
-                                        onChange={(checked) => setMainScreen({ showTitle: checked })}
-                                    />
-                                    <div className="flex-1">
+                                {/* Title Row */}
+                                <div className="flex items-start gap-3">
+                                    <div className="mt-3.5">
+                                        <BuilderCheckbox
+                                            checked={mainScreen.showTitle}
+                                            onChange={(checked) => setMainScreen({ showTitle: checked })}
+                                        />
+                                    </div>
+                                    <div className={`flex-1 transition-all duration-300 ${mainScreen.showTitle ? '' : 'opacity-60'}`}>
                                         <BuilderInput
                                             type="text"
                                             value={mainScreen.title}
                                             onChange={(e) => setMainScreen({ title: e.target.value })}
-                                            className="uppercase"
                                             placeholder="THE MARRIAGE"
                                             disabled={!mainScreen.showTitle}
                                         />
                                     </div>
                                 </div>
 
-                                {/* Groom & Bride Name */}
-                                <div className="space-y-2">
-                                    <div className="flex items-center justify-between px-1">
-                                        <div className="flex items-center gap-2">
-                                            <BuilderCheckbox
-                                                checked={mainScreen.showGroomBride}
-                                                onChange={(checked) => setMainScreen({ showGroomBride: checked })}
-                                                className="shrink-0"
-                                            />
-                                            <span className="text-xs font-bold text-gray-500">신랑 & 신부 이름</span>
-                                        </div>
-                                        <button
-                                            onClick={() => setIsExampleModalOpen(true)}
-                                            className="flex items-center gap-1.5 px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-lg text-[11px] font-bold transition-colors border border-amber-100/50"
-                                        >
-                                            <Sparkles size={12} />
-                                            예시 문구
-                                        </button>
+                                {/* Groom & Bride Name Row */}
+                                <div className="flex items-start gap-3">
+                                    <div className="mt-3.5">
+                                        <BuilderCheckbox
+                                            checked={mainScreen.showGroomBride}
+                                            onChange={(checked) => setMainScreen({ showGroomBride: checked })}
+                                        />
                                     </div>
-                                    <div className="flex-1">
-                                        <div className="flex items-center gap-2">
+                                    <div className={`flex-1 flex flex-col gap-2 transition-all duration-300 ${mainScreen.showGroomBride ? '' : 'opacity-60'}`}>
+                                        <div className="flex gap-2">
                                             <div className="flex-[3]">
                                                 <BuilderInput
                                                     type="text"
@@ -280,17 +280,17 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                                     }}
                                                     disabled={!mainScreen.showGroomBride}
                                                     placeholder="신랑 성함"
-                                                    className="text-center"
+                                                    className="w-full"
                                                 />
                                             </div>
-                                            <div className="flex-[3] min-w-[50px]">
+                                            <div className="flex-[1] min-w-[60px]">
                                                 <BuilderInput
                                                     type="text"
                                                     value={mainScreen.andText || ''}
                                                     onChange={(e) => setMainScreen({ andText: e.target.value })}
                                                     disabled={!mainScreen.showGroomBride}
-                                                    placeholder="공백"
-                                                    className="text-center text-gray-400 placeholder:text-gray-200"
+                                                    placeholder="&"
+                                                    className="w-full text-center px-1"
                                                 />
                                             </div>
                                             <div className="flex-[3]">
@@ -307,25 +307,19 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                                     }}
                                                     disabled={!mainScreen.showGroomBride}
                                                     placeholder="신부 성함"
-                                                    className="text-center"
-                                                />
-                                            </div>
-                                            <div className="flex-[4.5]">
-                                                <BuilderInput
-                                                    type="text"
-                                                    value={mainScreen.suffixText || ''}
-                                                    onChange={(e) => setMainScreen({ suffixText: e.target.value })}
-                                                    disabled={!mainScreen.showGroomBride}
-                                                    placeholder="없음"
-                                                    className="text-center text-gray-500"
+                                                    className="w-full"
                                                 />
                                             </div>
                                         </div>
-                                        <div className="text-[10px] text-gray-400 mt-2 flex px-2 border-t border-gray-50 pt-2">
-                                            <span className="flex-[3] text-center">신랑 성함</span>
-                                            <span className="flex-[3] text-center">연결어</span>
-                                            <span className="flex-[3] text-center">신부 성함</span>
-                                            <span className="flex-[4.5] text-center">종결 어미</span>
+                                        <div className="w-full">
+                                            <BuilderInput
+                                                type="text"
+                                                value={mainScreen.suffixText || ''}
+                                                onChange={(e) => setMainScreen({ suffixText: e.target.value })}
+                                                disabled={!mainScreen.showGroomBride}
+                                                placeholder="종결 어미 (예: 결혼합니다)"
+                                                className="w-full"
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -336,61 +330,102 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                     onClose={() => setIsExampleModalOpen(false)}
                                     title="메인 화면 예시 문구"
                                 >
-                                    <div className="grid grid-cols-1 gap-3">
+                                    <div className="grid grid-cols-1 gap-4 max-h-[60vh] overflow-y-auto pr-2 scrollbar-hide py-1">
                                         {[
-                                            { g: (groom.lastName || '') + (groom.firstName || ''), a: '그리고', b: (bride.lastName || '') + (bride.firstName || ''), s: '' },
-                                            { g: (groom.lastName || '') + (groom.firstName || ''), a: '&', b: (bride.lastName || '') + (bride.firstName || ''), s: '' },
-                                            { g: (groom.lastName || '') + (groom.firstName || ''), a: '♥', b: (bride.lastName || '') + (bride.firstName || ''), s: '' },
-                                            { g: (groom.lastName || '') + (groom.firstName || ''), a: '·', b: (bride.lastName || '') + (bride.firstName || ''), s: '' },
-                                            { g: (groom.lastName || '') + (groom.firstName || ''), a: 'with', b: (bride.lastName || '') + (bride.firstName || ''), s: '' },
-                                            { g: `신랑 ${(groom.lastName || '') + (groom.firstName || '')}`, a: ',', b: `신부 ${(bride.lastName || '') + (bride.firstName || '')}`, s: '' },
-                                            { g: (groom.lastName || '') + (groom.firstName || ''), a: '그리고', b: (bride.lastName || '') + (bride.firstName || ''), s: '결혼합니다' },
+                                            {
+                                                title: 'THE MARRIAGE',
+                                                g: (groom.lastName || '') + (groom.firstName || ''),
+                                                a: '·',
+                                                b: (bride.lastName || '') + (bride.firstName || ''),
+                                                s: '결혼합니다',
+                                                sub: 'We are getting married',
+                                                dt: '2026.04.18. Saturday 12:00 PM\n서울 강남구 어느 예식장 1F, 그랜드홀'
+                                            },
+                                            {
+                                                title: 'INVITATION',
+                                                g: groom.firstName,
+                                                a: '&',
+                                                b: bride.firstName,
+                                                s: '',
+                                                sub: 'SAVE THE DATE',
+                                                dt: '2026.04.18. PM 12:00\n더 컨벤션 웨딩홀'
+                                            },
+                                            {
+                                                title: 'OUR WEDDING',
+                                                g: `신랑 ${(groom.lastName || '') + (groom.firstName || '')}`,
+                                                a: ',',
+                                                b: `신부 ${(bride.lastName || '') + (bride.firstName || '')}`,
+                                                s: '',
+                                                sub: 'Special Day',
+                                                dt: '2026.04.18. 토요일 오후 12시\n송파구 올림픽로 319'
+                                            },
+                                            {
+                                                title: 'WELCOME',
+                                                g: groom.firstName,
+                                                a: '♥',
+                                                b: bride.firstName,
+                                                s: '',
+                                                sub: 'Together Forever',
+                                                dt: '2026.04.18. 12:00'
+                                            },
                                         ].map((ex, i) => (
                                             <button
                                                 key={i}
                                                 onClick={() => {
-                                                    // Split name for ex.g
                                                     const gVal = ex.g;
                                                     if (gVal.length >= 2 && !gVal.startsWith('신랑 ')) {
                                                         setGroom({ lastName: gVal.substring(0, 1), firstName: gVal.substring(1) });
                                                     } else {
                                                         setGroom({ lastName: '', firstName: gVal });
                                                     }
-
-                                                    // Split name for ex.b
                                                     const bVal = ex.b;
                                                     if (bVal.length >= 2 && !bVal.startsWith('신부 ')) {
                                                         setBride({ lastName: bVal.substring(0, 1), firstName: bVal.substring(1) });
                                                     } else {
                                                         setBride({ lastName: '', firstName: bVal });
                                                     }
-
                                                     setMainScreen({
+                                                        title: ex.title,
                                                         andText: ex.a,
-                                                        suffixText: ex.s
+                                                        suffixText: ex.s,
+                                                        subtitle: ex.sub,
+                                                        customDatePlace: ex.dt,
+                                                        showTitle: true,
+                                                        showGroomBride: true,
+                                                        showSubtitle: true,
+                                                        showDatePlace: true
                                                     });
                                                     setIsExampleModalOpen(false);
                                                 }}
-                                                className="p-4 bg-gray-50 hover:bg-white hover:border-amber-200 border border-gray-100 rounded-2xl text-center transition-all group"
+                                                className="w-full p-6 bg-gray-50 hover:bg-white hover:shadow-xl hover:border-amber-200 border border-gray-100 rounded-[2rem] text-center transition-all group duration-300"
                                             >
-                                                <div className="text-lg font-serif text-gray-800 group-hover:text-amber-700 transition-colors">
-                                                    {ex.g} <span style={{ color: accentColor }} className="opacity-70 mx-1">{ex.a}</span> {ex.b} {ex.s}
+                                                <div className="space-y-3">
+                                                    <div className="text-[10px] tracking-[0.3em] font-bold text-gray-400 uppercase">{ex.title}</div>
+                                                    <div className="text-xl font-serif text-gray-800 group-hover:text-amber-700 transition-colors">
+                                                        {ex.g} <span style={{ color: accentColor }} className="opacity-70 mx-1">{ex.a}</span> {ex.b} {ex.s}
+                                                    </div>
+                                                    <div className="text-[14px] font-script text-gray-400 italic">{ex.sub}</div>
+                                                    <div className="w-8 h-[1px] bg-gray-200 mx-auto"></div>
+                                                    <div className="text-xs text-gray-500 whitespace-pre-wrap leading-relaxed">{ex.dt}</div>
                                                 </div>
                                             </button>
                                         ))}
                                     </div>
-                                    <p className="mt-6 text-xs text-gray-400 text-center">
-                                        원하는 스타일을 선택하면 입력창에 자동으로 반영됩니다.
+                                    <p className="mt-6 text-[11px] text-gray-400 text-center flex items-center justify-center gap-1.5">
+                                        <Info size={12} />
+                                        원하는 스타일을 선택하면 화면 전체 문구가 자동으로 구성됩니다.
                                     </p>
                                 </BuilderModal>
 
-                                {/* Subtitle */}
-                                <div className="flex items-center gap-3">
-                                    <BuilderCheckbox
-                                        checked={mainScreen.showSubtitle}
-                                        onChange={(checked) => setMainScreen({ showSubtitle: checked })}
-                                    />
-                                    <div className="flex-1">
+                                {/* Subtitle Row */}
+                                <div className="flex items-start gap-3">
+                                    <div className="mt-3.5">
+                                        <BuilderCheckbox
+                                            checked={mainScreen.showSubtitle}
+                                            onChange={(checked) => setMainScreen({ showSubtitle: checked })}
+                                        />
+                                    </div>
+                                    <div className={`flex-1 transition-all duration-300 ${mainScreen.showSubtitle ? '' : 'opacity-60'}`}>
                                         <BuilderInput
                                             type="text"
                                             value={mainScreen.subtitle}
@@ -401,20 +436,21 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                     </div>
                                 </div>
 
-                                {/* Custom Date & Place */}
+                                {/* Custom Date & Place Row */}
                                 <div className="flex items-start gap-3">
-                                    <BuilderCheckbox
-                                        checked={mainScreen.showDatePlace}
-                                        onChange={(checked) => setMainScreen({ showDatePlace: checked })}
-                                        className="mt-2"
-                                    />
-                                    <div className="flex-1">
-                                        <BuilderTextarea
-                                            value={mainScreen.customDatePlace}
-                                            onChange={(e) => setMainScreen({ customDatePlace: e.target.value })}
-                                            className="min-h-[80px] leading-relaxed"
+                                    <div className="mt-4">
+                                        <BuilderCheckbox
+                                            checked={mainScreen.showDatePlace}
+                                            onChange={(checked) => setMainScreen({ showDatePlace: checked })}
+                                        />
+                                    </div>
+                                    <div className={`flex-1 transition-all duration-300 ${mainScreen.showDatePlace ? '' : 'opacity-60 pointer-events-none'}`}>
+                                        <RichTextEditor
+                                            content={mainScreen.customDatePlace}
+                                            onChange={(val) => setMainScreen({ customDatePlace: val })}
                                             placeholder="0000.00.00 ..."
-                                            disabled={!mainScreen.showDatePlace}
+                                            className="text-[13px]"
+                                            minHeight="min-h-[86px]"
                                         />
                                     </div>
                                 </div>

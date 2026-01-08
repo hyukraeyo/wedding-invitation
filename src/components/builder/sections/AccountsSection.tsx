@@ -56,7 +56,7 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
                             variant="ghost"
                             size="sm"
                             onClick={() => addAccount('groom')}
-                            className="h-7 px-2 text-[11px] text-gray-500 hover:text-forest-green"
+                            className="h-7 px-2 text-[11px] text-gray-500 hover:text-gray-900 hover:bg-gray-100"
                         >
                             <Plus size={12} className="mr-1" /> 추가
                         </BuilderButton>
@@ -88,7 +88,7 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
                             variant="ghost"
                             size="sm"
                             onClick={() => addAccount('bride')}
-                            className="h-7 px-2 text-[11px] text-gray-500 hover:text-pink-500"
+                            className="h-7 px-2 text-[11px] text-gray-500 hover:text-gray-900 hover:bg-gray-100"
                         >
                             <Plus size={12} className="mr-1" /> 추가
                         </BuilderButton>
