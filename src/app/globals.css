@@ -265,7 +265,7 @@ body {
 
 .animate-fall-sway {
   animation-name: fall-sway;
-  animation-timing-function: ease-in-out;
+  animation-timing-function: linear;
   animation-iteration-count: infinite;
 }
 
@@ -304,4 +304,17 @@ body {
 
 .animate-pulse-subtle {
   animation: pulse-subtle 3s ease-in-out infinite;
+}
+
+/* Background Patterns */
+.pattern-flower-sm {
+  background-image: url("/images/embossed_floral.png");
+  background-repeat: repeat;
+  background-size: 150px;
+}
+
+.pattern-flower-lg {
+  background-image: url("/images/embossed_floral.png");
+  background-repeat: repeat;
+  background-size: 400px;
 }

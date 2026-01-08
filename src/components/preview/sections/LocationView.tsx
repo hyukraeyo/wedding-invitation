@@ -76,11 +76,11 @@ export default function LocationView() {
             />
 
             {/* Header */}
-            <div className="text-center space-y-4 mb-2">
+            <div className="text-center space-y-2 mb-2">
                 <div className="flex flex-col items-center space-y-2">
                     <span
                         className="tracking-[0.4em] font-medium uppercase"
-                        style={{ fontSize: 'calc(10px * var(--font-scale))', color: theme.accentColor, opacity: 0.4 }}
+                        style={{ fontSize: 'calc(18px * var(--font-scale))', color: theme.accentColor, opacity: 0.4 }}
                     >{locationTitle || 'LOCATION'}</span>
                     <div className="w-8 h-[1px]" style={{ backgroundColor: theme.accentColor, opacity: 0.1 }}></div>
                 </div>
@@ -91,7 +91,7 @@ export default function LocationView() {
                 <div className="space-y-1">
                     <p
                         className="text-gray-500 font-light leading-relaxed tracking-tight"
-                        style={{ fontSize: 'calc(13px * var(--font-scale))' }}
+                        style={{ fontSize: 'calc(16px * var(--font-scale))' }}
                     >
                         {address} {detailAddress}
                     </p>

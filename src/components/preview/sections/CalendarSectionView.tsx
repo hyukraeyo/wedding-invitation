@@ -57,7 +57,7 @@ export default function CalendarSectionView() {
                     </div>
                     <div
                         className="text-gray-400 font-light tracking-wide"
-                        style={{ fontSize: 'calc(13px * var(--font-scale))' }}
+                        style={{ fontSize: 'calc(15px * var(--font-scale))' }}
                     >
                         {new Date(date).toLocaleDateString('ko-KR', { weekday: 'long' })}
                         <span className="mx-2 opacity-30">|</span>
@@ -138,35 +138,35 @@ export default function CalendarSectionView() {
                 {/* D-Day Countdown */}
                 {showDday && (
                     <div className="text-center relative z-10 animate-in fade-in duration-1000">
-                        <div className="inline-block px-10 py-8 border rounded-full" style={{ borderColor: `${theme.accentColor}1A` }}>
+                        <div className="inline-block px-10 py-8 border rounded-full bg-white/90 backdrop-blur-sm" style={{ borderColor: theme.accentColor }}>
                             <div className="flex justify-center gap-8 mb-4 font-serif">
                                 <div className="flex flex-col items-center">
                                     <span
-                                        className="text-gray-300 uppercase tracking-widest mb-1 font-sans"
+                                        className="text-gray-500 uppercase tracking-widest mb-1 font-sans"
                                         style={{ fontSize: 'calc(9px * var(--font-scale))' }}
                                     >Days</span>
                                     <span
-                                        className="text-gray-700 font-light"
+                                        className="text-gray-700 font-medium"
                                         style={{ fontSize: 'calc(24px * var(--font-scale))' }}
                                     >{timeLeft?.days || 0}</span>
                                 </div>
                                 <div className="flex flex-col items-center">
                                     <span
-                                        className="text-gray-300 uppercase tracking-widest mb-1 font-sans"
+                                        className="text-gray-500 uppercase tracking-widest mb-1 font-sans"
                                         style={{ fontSize: 'calc(9px * var(--font-scale))' }}
                                     >Hours</span>
                                     <span
-                                        className="text-gray-700 font-light"
+                                        className="text-gray-700 font-medium"
                                         style={{ fontSize: 'calc(24px * var(--font-scale))' }}
                                     >{timeLeft?.hours || 0}</span>
                                 </div>
                                 <div className="flex flex-col items-center">
                                     <span
-                                        className="text-gray-300 uppercase tracking-widest mb-1 font-sans"
+                                        className="text-gray-500 uppercase tracking-widest mb-1 font-sans"
                                         style={{ fontSize: 'calc(9px * var(--font-scale))' }}
                                     >Mins</span>
                                     <span
-                                        className="text-gray-700 font-light"
+                                        className="text-gray-700 font-medium"
                                         style={{ fontSize: 'calc(24px * var(--font-scale))' }}
                                     >{timeLeft?.minutes || 0}</span>
                                 </div>
@@ -176,11 +176,22 @@ export default function CalendarSectionView() {
                                 className="text-gray-500 font-light tracking-wide whitespace-pre-wrap"
                                 style={{ fontSize: 'calc(13px * var(--font-scale))' }}
                             >
-                                {ddayMessage
-                                    .replace('(신랑)', groom.firstName)
-                                    .replace('(신부)', bride.firstName)
-                                    .replace('(D-Day)', dDay.toString())
-                                }
+                                {(() => {
+                                    const message = ddayMessage
+                                        .replace('(신랑)', groom.firstName)
+                                        .replace('(신부)', bride.firstName);
+
+                                    const parts = message.split('(D-Day)');
+                                    if (parts.length < 2) return message;
+
+                                    return (
+                                        <>
+                                            {parts[0]}
+                                            <span style={{ color: theme.accentColor, fontWeight: 'bold' }}>{dDay}</span>
+                                            {parts[1]}
+                                        </>
+                                    );
+                                })()}
                             </div>
                         </div>
                     </div>

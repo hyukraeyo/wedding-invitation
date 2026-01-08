@@ -21,8 +21,11 @@ export default function MainScreenView() {
                     {/* Subtitle removed from here as per user request */}
                     {mainScreen.showTitle && (
                         <div
-                            className="tracking-[0.4em] font-bold text-coral-pink mb-3 uppercase"
-                            style={{ fontSize: 'calc(11px * var(--font-scale))' }}
+                            className="tracking-[0.4em] font-bold mb-3 uppercase"
+                            style={{
+                                fontSize: 'calc(11px * var(--font-scale))',
+                                color: accentColor
+                            }}
                         >
                             {mainScreen.title || 'THE MARRIAGE'}
                         </div>

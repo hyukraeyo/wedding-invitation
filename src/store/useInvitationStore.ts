@@ -85,7 +85,7 @@ interface InvitationState {
         accentColor: string;
         fontScale: number;
         pattern: 'none' | 'flower-sm' | 'flower-lg';
-        effect: 'none' | 'cherry-blossom' | 'snow' | 'leaves' | 'forsythia' | 'babys-breath';
+        effect: 'none' | 'cherry-blossom' | 'snow';
         effectOnlyOnMain: boolean;
         preventZoom: boolean;
         animateEntrance: boolean;

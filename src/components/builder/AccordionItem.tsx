@@ -23,9 +23,22 @@ const hexToRgba = (hex: string, opacity: number) => {
 export const AccordionItem = ({ title, icon: Icon, isOpen, onToggle, children, isCompleted = false, badge }: AccordionItemProps) => {
     const { theme } = useInvitationStore();
     const accentColor = theme.accentColor;
+    const containerRef = React.useRef<HTMLDivElement>(null);
+
+    React.useEffect(() => {
+        if (isOpen && containerRef.current) {
+            // Small delay to ensure the accordion transition has started/layout updated
+            const timer = setTimeout(() => {
+                containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 200);
+            return () => clearTimeout(timer);
+        }
+        return undefined;
+    }, [isOpen]);
 
     return (
         <div
+            ref={containerRef}
             className={`rounded-2xl mb-4 border transition-all duration-500 bg-white ${isOpen
                 ? 'shadow-[0_20px_40px_-12px_rgba(0,0,0,0.06)] ring-1'
                 : 'shadow-[0_4px_12px_rgba(0,0,0,0.02)] border-gray-100 hover:border-gray-200 hover:shadow-[0_8px_16px_rgba(0,0,0,0.04)]'

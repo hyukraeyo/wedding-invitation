@@ -1,6 +1,6 @@
 import React from 'react';
 import { MapPin, ImagePlus, Trash2, Search } from 'lucide-react';
-import { useDaumPostcodePopup } from 'react-daum-postcode';
+import DaumPostcodeEmbed from 'react-daum-postcode';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderInput } from '../BuilderInput';
@@ -10,6 +10,7 @@ import { BuilderButton } from '../BuilderButton';
 import { BuilderButtonGroup } from '../BuilderButtonGroup';
 import { BuilderToggle } from '../BuilderToggle';
 import { BuilderLabel } from '../BuilderLabel';
+import { BuilderModal } from '../../common/BuilderModal';
 
 interface SectionProps {
     isOpen: boolean;
@@ -33,7 +34,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
         sketchUrl, setSketchUrl
     } = useInvitationStore();
 
-    const openPostcode = useDaumPostcodePopup();
+    const [isSearchOpen, setIsSearchOpen] = React.useState(false);
 
     const handleComplete = (data: { address: string; addressType: string; bname: string; buildingName: string }) => {
         let fullAddress = data.address;
@@ -46,10 +47,11 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
         }
 
         setAddress(fullAddress);
+        setIsSearchOpen(false);
     };
 
     const handleAddressSearch = () => {
-        openPostcode({ onComplete: handleComplete });
+        setIsSearchOpen(true);
     };
 
     const handleSketchUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,6 +60,36 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
             const url = URL.createObjectURL(file);
             setSketchUrl(url);
         }
+    };
+
+    const formatPhoneNumber = (value: string) => {
+        const clean = value.replace(/[^0-9]/g, '');
+        if (!clean) return '';
+
+        // 02 (Seoul)
+        if (clean.startsWith('02')) {
+            if (clean.length <= 2) return clean;
+            if (clean.length <= 5) return clean.replace(/(\d{2})(\d+)/, '$1-$2');
+            if (clean.length <= 9) return clean.replace(/(\d{2})(\d{3})(\d+)/, '$1-$2-$3');
+            return clean.replace(/(\d{2})(\d{4})(\d+)/, '$1-$2-$3').substring(0, 12);
+        }
+
+        // 1xxx (Hotline)
+        if (clean.startsWith('1')) {
+            if (clean.length <= 4) return clean;
+            return clean.replace(/(\d{4})(\d+)/, '$1-$2').substring(0, 9);
+        }
+
+        // 010/031/070 etc.
+        if (clean.length <= 3) return clean;
+        if (clean.length <= 6) return clean.replace(/(\d{3})(\d+)/, '$1-$2');
+        if (clean.length <= 10) return clean.replace(/(\d{3})(\d{3})(\d+)/, '$1-$2-$3');
+        return clean.replace(/(\d{3})(\d{4})(\d+)/, '$1-$2-$3').substring(0, 13);
+    };
+
+    const handleContactChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const formatted = formatPhoneNumber(e.target.value);
+        setLocationContact(formatted);
     };
 
     return (
@@ -85,25 +117,14 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                 <div className="flex items-start">
                     <label className="w-20 text-[13px] font-bold text-gray-800 shrink-0 mt-3.5">주소</label>
                     <div className="w-full space-y-2">
-                        <div className="flex gap-2">
-                            <div
-                                onClick={handleAddressSearch}
-                                className={`flex-1 min-w-0 bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-[14px] truncate cursor-pointer transition-all hover:bg-white`}
-                                style={{
-                                    color: address ? '#111827' : '#D1D5DB'
-                                }}
-                            >
+                        <div
+                            onClick={handleAddressSearch}
+                            className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-[14px] cursor-pointer transition-all hover:border-gray-400 flex items-center justify-between gap-2 group"
+                        >
+                            <span className={`flex-1 truncate ${!address ? 'text-gray-300' : 'text-gray-900'}`}>
                                 {address || "주소를 검색해주세요"}
-                            </div>
-
-                            <BuilderButton
-                                variant="outline"
-                                onClick={handleAddressSearch}
-                                className="shrink-0 h-[48px] w-[48px] p-0"
-                                title="주소 검색"
-                            >
-                                <Search size={18} />
-                            </BuilderButton>
+                            </span>
+                            <Search size={18} className="text-gray-400 group-hover:text-gray-600 transition-colors shrink-0" />
                         </div>
                     </div>
                 </div>
@@ -136,8 +157,9 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                     <BuilderInput
                         type="text"
                         value={locationContact}
-                        onChange={(e) => setLocationContact(e.target.value)}
+                        onChange={handleContactChange}
                         placeholder="예식장 연락처, 02-000-0000"
+                        maxLength={13}
                     />
                 </div>
 
@@ -252,6 +274,20 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                 )}
 
             </div>
+
+            <BuilderModal
+                isOpen={isSearchOpen}
+                onClose={() => setIsSearchOpen(false)}
+                title="주소 검색"
+            >
+                <div className="h-[400px] w-full border border-gray-100 rounded-xl overflow-hidden">
+                    <DaumPostcodeEmbed
+                        onComplete={handleComplete}
+                        style={{ height: '100%' }}
+                        autoClose={false}
+                    />
+                </div>
+            </BuilderModal>
         </AccordionItem>
     );
 });

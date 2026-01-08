@@ -144,11 +144,8 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                             { label: '없음', value: 'none' },
                             { label: '벚꽃', value: 'cherry-blossom' },
                             { label: '눈', value: 'snow' },
-                            { label: '낙엽', value: 'leaves' },
-                            { label: '개나리', value: 'forsythia' },
-                            { label: '안개꽃', value: 'babys-breath' },
                         ]}
-                        onChange={(val: 'none' | 'cherry-blossom' | 'snow' | 'leaves' | 'forsythia' | 'babys-breath') => setTheme({ effect: val })}
+                        onChange={(val: 'none' | 'cherry-blossom' | 'snow') => setTheme({ effect: val })}
                     />
 
                     {theme.effect !== 'none' && (

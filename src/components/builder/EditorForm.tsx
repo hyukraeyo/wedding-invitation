@@ -60,8 +60,8 @@ const EditorForm = memo(function EditorForm() {
   }, []);
 
   return (
-    <div className="h-full overflow-y-auto px-1 py-2">
-      <h2 className="text-xl font-serif font-bold text-gray-900 mb-6 px-1">청첩장 정보 입력</h2>
+    <div className="h-full overflow-y-auto">
+
 
       <Suspense fallback={<div className="space-y-1">
         {Array.from({ length: 9 }, (_, i) => (
@@ -69,6 +69,12 @@ const EditorForm = memo(function EditorForm() {
         ))}
       </div>}>
         <div className="space-y-1">
+          {/* Basic Info */}
+          <BasicInfoSection
+            isOpen={openSection === 'basic'}
+            onToggle={() => handleToggle('basic')}
+          />
+
           {/* Theme Settings */}
           <ThemeSection
             isOpen={openSection === 'theme'}
@@ -81,17 +87,15 @@ const EditorForm = memo(function EditorForm() {
             onToggle={() => handleToggle('mainScreen')}
           />
 
+
+
           {/* Greeting */}
           <GreetingSection
             isOpen={openSection === 'message'}
             onToggle={() => handleToggle('message')}
           />
 
-          {/* Basic Info */}
-          <BasicInfoSection
-            isOpen={openSection === 'basic'}
-            onToggle={() => handleToggle('basic')}
-          />
+
 
           {/* Date & Time */}
           <DateTimeSection

@@ -10,23 +10,115 @@ interface Particle {
     style: React.CSSProperties;
     pathIndex?: number;
     color?: string;
+    animationClass?: string;
 }
 
 // Simple and iconic leaf paths (Generic, Maple, Oak) - Fits 0 0 24 24
-const SINGLE_LEAF_PATHS = [
-    "M17,8C8,10,5.9,16.17,3.82,21.34L5.71,22l1-2.3A4.49,4.49,0,0,0,8,20C19,20,22,3,22,3,21,5,14,5.25,9,6.25S2,11.5,2,13.5a6.22,6.22,0,0,0,1.75,3.75C7,8,17,8,17,8Z", // Generic Leaf
-    "M12 2L9.5 7H4L6.5 11L4 16L9 14.5L12 19L15 14.5L20 16L17.5 11L20 7H14.5L12 2Z", // Distinct Maple Leaf
-    "M19.66,9.63c-0.61-0.64-1.6-0.37-1.89-0.39c0.46-0.86,0.68-2.07-0.06-2.69c-0.59-0.5-1.57-0.24-1.85-0.25c0.32-0.86,0.34-2.04-0.41-2.58C13.93,2.59,12.77,5.43,12.4,5.97c-0.27-1.87-2.64-2.45-3.39-0.72c-0.32,0.75,0.09,1.68,0.44,2.35c-0.9-0.07-2.03-0.28-2.5,0.63c-0.4,0.78,0.12,1.81,0.65,2.45c-0.95,0.38-1.97,0.63-1.76,1.85c0.15,0.88,1.32,1.15,2.05,1.18c-0.25,1.72,1.72,2.54,2.87,1.51c0.35,1.29,0.74,3.19,0.63,4.62c-0.04,0.53,1.72,0.53,1.76,0c0.11-1.43,0.49-3.34,0.84-4.62c1.15,1.03,3.12,0.21,2.87-1.51c0.72-0.03,1.89-0.3,2.05-1.18C19.36,11.09,18.96,10.91,19.66,9.63z" // Oak Leaf
+
+
+// New cherry blossom components
+// New cherry blossom components
+const CherryBlossomDefs = () => (
+    <svg width="0" height="0" className="absolute hidden">
+        <defs>
+            <filter id="blur-soft">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
+            </filter>
+            <linearGradient id="gradient-pink" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#FCD0E0" />
+                <stop offset="100%" stopColor="#F8B8D0" />
+            </linearGradient>
+        </defs>
+    </svg>
+);
+
+const CHERRY_BLOSSOM_VARIANTS = [
+    // Variant 1: Outlined
+    () => (
+        <svg viewBox="0 0 64 64" className="w-full h-full overflow-visible">
+            <g transform="translate(10, 0) scale(0.7, 1)">
+                <path d="M10 32C10 18 26 6 42 6C58 6 62 22 62 34C62 50 46 62 30 62C14 62 10 46 10 32Z" fill="#F8B8D0" opacity="0.7" />
+                <path d="M32 10C40 10 54 24 54 36C54 48 40 58 32 58C24 58 10 48 10 36C10 24 24 10 32 10Z" stroke="#FFFFFF" strokeWidth="0.5" fill="none" opacity="0.3" />
+            </g>
+        </svg>
+    ),
+    // Variant 2: Detailed Petal
+    () => (
+        <svg viewBox="0 0 64 64" className="w-full h-full overflow-visible">
+            <g transform="scale(0.5333)">
+                <path
+                    d="M62 12 C48 24, 34 44, 34 64 C34 84, 48 103, 62 108 C74 102, 92 84, 92 60 C92 40, 76 22, 62 12 Z M62 18 C67 30, 66 48, 58 62 C54 69, 51 74, 48 78"
+                    fill="#F7B6C7"
+                />
+                <path
+                    d="M60 18 C50 28, 40 46, 40 64 C40 80, 50 96, 60 104"
+                    stroke="#FFD7E2"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    opacity="0.8"
+                    fill="none"
+                />
+                <path
+                    d="M62 12 C59 16, 56 20, 54 25"
+                    stroke="#EFA1B8"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    opacity="0.9"
+                    fill="none"
+                />
+            </g>
+        </svg>
+    ),
+    // Variant 3: New Radial Gradient Petal
+    () => (
+        <svg viewBox="0 0 140 220" className="w-full h-full overflow-visible">
+            <defs>
+                <radialGradient id="grad-new-petal" cx="45%" cy="35%" r="75%" fx="45%" fy="35%">
+                    <stop offset="0%" stopColor="#ffffff" />
+                    <stop offset="40%" stopColor="#fff5f8" />
+                    <stop offset="100%" stopColor="#ff9eaa" />
+                </radialGradient>
+            </defs>
+            <path d="M 70 220 Q 15 160 35 70 Q 55 15 95 35 Q 140 75 120 160 Q 100 210 70 220 Z" fill="url(#grad-new-petal)" />
+        </svg>
+    ),
+    // Variant 4: Rotated Petal with Dual Gradients (User Provided)
+    () => (
+        <svg viewBox="0 0 120 180" className="w-full h-full overflow-visible">
+            <defs>
+                <linearGradient id="petal1_g" x1="20" y1="20" x2="95" y2="170" gradientUnits="userSpaceOnUse">
+                    <stop offset="0" stopColor="#FFF6FA" />
+                    <stop offset="0.5" stopColor="#FFD2DE" />
+                    <stop offset="1" stopColor="#F5A8C3" />
+                </linearGradient>
+
+                <radialGradient id="petal1_h" cx="42" cy="55" r="85" gradientUnits="userSpaceOnUse">
+                    <stop offset="0" stopColor="#FFFFFF" stopOpacity="0.55" />
+                    <stop offset="0.55" stopColor="#FFFFFF" stopOpacity="0.10" />
+                    <stop offset="1" stopColor="#FFFFFF" stopOpacity="0" />
+                </radialGradient>
+            </defs>
+
+            <g transform="rotate(18 60 90)">
+                <path d="M78 8
+                 C99 20 112 48 109 82
+                 C106 118 82 156 52 170
+                 C26 182 10 160 12 124
+                 C15 78 38 28 60 12
+                 C68 6 74 6 78 8 Z"
+                    fill="url(#petal1_g)" />
+                <path d="M78 8
+                 C99 20 112 48 109 82
+                 C106 118 82 156 52 170
+                 C26 182 10 160 12 124
+                 C15 78 38 28 60 12
+                 C68 6 74 6 78 8 Z"
+                    fill="url(#petal1_h)" />
+            </g>
+        </svg>
+    )
 ];
 
-// Soft petal paths for natural cherry blossom effect
-const CHERRY_PETAL_PATHS = [
-    "M12,21.35L10.55,20.03C5.4,15.36,2,12.27,2,8.5C2,5.41,4.42,3,7.5,3c1.74,0,3.41,0.81,4.5,2.08C13.09,3.81,14.76,3,16.5,3C19.58,3,22,5.41,22,8.5c0,3.77-3.4,6.86-8.55,11.53L12,21.35z", // Heart-like petal
-    "M12,22c4.97,0,9-4.03,9-9c0-4.97-9-13-9-13S3,8.03,3,13C3,17.97,7.03,22,12,22z", // Teardrop petal
-    "M12,20c4.42,0,8-3.58,8-8-8s-8,3.58-8,8C4,16.42,7.58,20,12,20z" // Simple oval petal
-];
-
-const LEAF_COLORS = ['#d97706', '#b45309', '#a16207', '#ca8a04']; // Autumn colors
 const PETAL_COLORS = ['#fce7f3', '#fbcfe8', '#f9a8d4', '#f472b6']; // Soft pinks
 
 function getRandomItem<T>(arr: T[]): T {
@@ -67,11 +159,14 @@ export default function EffectsOverlay() {
             }
         } else if (theme.effect === 'cherry-blossom') {
             for (let i = 0; i < 40; i++) {
-                const size = 10 + Math.random() * 8;
+                // Reduced size as requested (approx 16px to 28px)
+                const size = 16 + Math.random() * 12;
+                const animationType = getRandomItem(['animate-fall-tumbling', 'animate-fall-sway', 'animate-fall-diagonal']);
                 newParticles.push({
                     id: i,
-                    pathIndex: Math.floor(Math.random() * CHERRY_PETAL_PATHS.length),
+                    pathIndex: Math.floor(Math.random() * CHERRY_BLOSSOM_VARIANTS.length),
                     color: getRandomItem(PETAL_COLORS),
+                    animationClass: animationType,
                     style: {
                         left: `${Math.random() * 100}%`,
                         top: `-${Math.random() * 100 + 10}%`,
@@ -80,53 +175,6 @@ export default function EffectsOverlay() {
                         animationDuration: `${5 + Math.random() * 5}s`,
                         animationDelay: `${Math.random() * 5}s`,
                         opacity: 0.5 + Math.random() * 0.4
-                    }
-                });
-            }
-        } else if (theme.effect === 'leaves') {
-            for (let i = 0; i < 35; i++) {
-                const size = 18 + Math.random() * 12;
-                newParticles.push({
-                    id: i,
-                    pathIndex: Math.floor(Math.random() * SINGLE_LEAF_PATHS.length),
-                    color: getRandomItem(LEAF_COLORS),
-                    style: {
-                        left: `${Math.random() * 100}%`,
-                        top: `-${Math.random() * 100 + 20}%`,
-                        width: `${size}px`,
-                        height: `${size}px`,
-                        animationDuration: `${6 + Math.random() * 6}s`,
-                        animationDelay: `${Math.random() * 5}s`,
-                        opacity: 0.6 + Math.random() * 0.4
-                    }
-                });
-            }
-        } else if (theme.effect === 'forsythia') {
-            for (let i = 0; i < 30; i++) {
-                const size = 12 + Math.random() * 12;
-                newParticles.push({
-                    id: i,
-                    style: {
-                        left: `${Math.random() * 100}%`,
-                        top: `-${Math.random() * 100 + 10}%`,
-                        fontSize: `${size}px`,
-                        animationDuration: `${5 + Math.random() * 5}s`,
-                        animationDelay: `${Math.random() * 5}s`,
-                        opacity: 0.7 + Math.random() * 0.3
-                    }
-                });
-            }
-        } else if (theme.effect === 'babys-breath') {
-            for (let i = 0; i < 50; i++) {
-                newParticles.push({
-                    id: i,
-                    style: {
-                        width: Math.random() * 4 + 'px',
-                        height: Math.random() * 4 + 'px',
-                        left: Math.random() * 100 + '%',
-                        top: Math.random() * 100 + '%',
-                        animationDelay: Math.random() * 5 + 's',
-                        animationDuration: '3s'
                     }
                 });
             }
@@ -140,39 +188,21 @@ export default function EffectsOverlay() {
     return (
         <div className={`sticky top-0 left-0 w-full z-[100] pointer-events-none overflow-visible ${theme.effectOnlyOnMain ? 'h-0' : 'h-0'}`}>
             <div className={`absolute top-0 left-0 w-full overflow-hidden ${theme.effectOnlyOnMain ? 'h-[600px]' : 'h-screen'}`}>
+                {theme.effect === 'cherry-blossom' && <CherryBlossomDefs />}
+
                 {theme.effect === 'snow' && particles.map(p => (
                     <div key={p.id} className="absolute bg-white rounded-full animate-fall" style={p.style} />
                 ))}
 
-                {theme.effect === 'cherry-blossom' && particles.map(p => (
-                    <div key={p.id} className="absolute animate-fall-sway" style={{ ...p.style, color: p.color }}>
-                        <svg viewBox="0 0 24 24" className="w-full h-full fill-current transform rotate-45">
-                            <path d={CHERRY_PETAL_PATHS[p.pathIndex ?? 0]} />
-                        </svg>
-                    </div>
-                ))}
-
-                {theme.effect === 'leaves' && particles.map(p => (
-                    <div key={p.id} className="absolute animate-fall-tumbling" style={{ ...p.style, color: p.color }}>
-                        <svg viewBox="0 0 24 24" className="w-full h-full fill-current">
-                            <path d={SINGLE_LEAF_PATHS[p.pathIndex ?? 0]} />
-                        </svg>
-                    </div>
-                ))}
-
-                {theme.effect === 'forsythia' && particles.map(p => (
-                    <div key={p.id} className="absolute text-yellow-400/80 animate-fall-sway" style={p.style}>
-                        🌼
-                    </div>
-                ))}
-
-                {theme.effect === 'babys-breath' && (
-                    <div className="absolute inset-0 animate-float-slow backdrop-blur-[0.5px]">
-                        {particles.map(p => (
-                            <div key={p.id} className="absolute bg-white/40 rounded-full animate-pulse blur-[1px]" style={p.style} />
-                        ))}
-                    </div>
-                )}
+                {theme.effect === 'cherry-blossom' && particles.map(p => {
+                    const Variant = CHERRY_BLOSSOM_VARIANTS[p.pathIndex ?? 0] || CHERRY_BLOSSOM_VARIANTS[0];
+                    const Comp = Variant as React.ElementType; // Cast to fix TS error
+                    return (
+                        <div key={p.id} className={`absolute ${p.animationClass || 'animate-fall-sway'}`} style={{ ...p.style }}>
+                            <Comp />
+                        </div>
+                    );
+                })}
             </div>
         </div>
     );
