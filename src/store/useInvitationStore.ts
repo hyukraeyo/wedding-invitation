@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface InvitationState {
     // Basic Info
@@ -48,6 +49,7 @@ interface InvitationState {
     greetingTitle: string;
     greetingSubtitle: string;
     imageUrl: string | null;
+    greetingImage: string | null;
     showNamesAtBottom: boolean;
     sortNames: boolean;
     enableFreeformNames: boolean;
@@ -145,7 +147,9 @@ interface InvitationState {
     setEnableFreeformNames: (enable: boolean) => void;
     setGroomNameCustom: (name: string) => void;
     setBrideNameCustom: (name: string) => void;
+
     setImageUrl: (url: string | null) => void;
+    setGreetingImage: (url: string | null) => void;
     setTheme: (theme: Partial<InvitationState['theme']>) => void;
     setGallery: (images: string[]) => void;
     setGalleryTitle: (title: string) => void;
@@ -192,7 +196,7 @@ const getDefaultDate = () => {
     return d.toISOString().split('T')[0] || '';
 };
 
-export const useInvitationStore = create<InvitationState>((set) => ({
+export const useInvitationStore = create<InvitationState>()(persist((set) => ({
     kakaoShare: {
         title: '',
         description: '',
@@ -250,6 +254,7 @@ export const useInvitationStore = create<InvitationState>((set) => ({
     brideNameCustom: '신부측 혼주 성함 \n 신부 이름',
 
     imageUrl: null,
+    greetingImage: null,
 
     mainScreen: {
         layout: 'basic',
@@ -347,6 +352,7 @@ export const useInvitationStore = create<InvitationState>((set) => ({
     setBrideNameCustom: (name) => set({ brideNameCustom: name }),
 
     setImageUrl: (url) => set({ imageUrl: url }),
+    setGreetingImage: (url) => set({ greetingImage: url }),
     setTheme: (newTheme) => set((state) => ({ theme: { ...state.theme, ...newTheme } })),
     setGallery: (images) => set({ gallery: images }),
     setGalleryTitle: (title) => set({ galleryTitle: title }),
@@ -387,4 +393,10 @@ export const useInvitationStore = create<InvitationState>((set) => ({
         content: '',
     },
     setClosing: (data) => set((state) => ({ closing: { ...state.closing, ...data } })),
+}), {
+    name: 'wedding-invitation-storage', // Key for localStorage
+    partialize: (state) => {
+        // Exclude potentially problematic types if needed.
+        return state;
+    }
 }));

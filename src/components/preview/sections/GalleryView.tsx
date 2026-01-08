@@ -228,15 +228,15 @@ export default function GalleryView() {
                 <div className="flex flex-col items-center space-y-3">
                     <span
                         className="tracking-[0.4em] font-medium uppercase"
-                        style={{ fontSize: 'calc(10px * var(--font-scale))', color: theme.accentColor, opacity: 0.5 }}
+                        style={{ fontSize: 'calc(10px * var(--font-scale))', color: theme.accentColor, opacity: 0.4 }}
                     >GALLERY</span>
                     <h2
-                        className="text-2xl md:text-3xl font-light tracking-tight"
-                        style={{ color: '#1a1a1a' }}
+                        className="font-serif text-gray-900 font-medium"
+                        style={{ fontSize: 'calc(20px * var(--font-scale))' }}
                     >
-                        {galleryTitle || '웨딩 갤러리'}
+                        {galleryTitle}
                     </h2>
-                    <div className="w-8 h-[1px] mt-2" style={{ backgroundColor: theme.accentColor, opacity: 0.1 }}></div>
+                    <div className="w-8 h-[1px]" style={{ backgroundColor: theme.accentColor, opacity: 0.3 }}></div>
                 </div>
             </div>
 

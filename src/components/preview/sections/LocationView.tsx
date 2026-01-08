@@ -76,29 +76,38 @@ export default function LocationView() {
             />
 
             {/* Header */}
-            <div className="text-center space-y-2 mb-2">
+            <div className="text-center space-y-6 mb-6">
                 <div className="flex flex-col items-center space-y-2">
                     <span
-                        className="tracking-[0.4em] font-medium uppercase"
-                        style={{ fontSize: 'calc(18px * var(--font-scale))', color: theme.accentColor, opacity: 0.4 }}
-                    >{locationTitle || 'LOCATION'}</span>
-                    <div className="w-8 h-[1px]" style={{ backgroundColor: theme.accentColor, opacity: 0.1 }}></div>
+                        className="tracking-[0.3em] font-medium uppercase"
+                        style={{ fontSize: 'calc(12px * var(--font-scale))', color: theme.accentColor, opacity: 0.6 }}
+                    >
+                        LOCATION
+                    </span>
+                    <h2
+                        className="font-serif text-gray-900 font-medium"
+                        style={{ fontSize: 'calc(20px * var(--font-scale))' }}
+                    >
+                        {locationTitle}
+                    </h2>
+                    <div className="w-8 h-[1px]" style={{ backgroundColor: theme.accentColor, opacity: 0.3 }}></div>
                 </div>
-                <h3
-                    className="font-serif text-gray-800 font-medium"
-                    style={{ fontSize: 'calc(20px * var(--font-scale))' }}
-                >{location}</h3>
+
                 <div className="space-y-1">
+                    <h3
+                        className="font-serif text-gray-800 font-medium mb-1"
+                        style={{ fontSize: 'calc(18px * var(--font-scale))' }}
+                    >{location}</h3>
                     <p
                         className="text-gray-500 font-light leading-relaxed tracking-tight"
-                        style={{ fontSize: 'calc(16px * var(--font-scale))' }}
+                        style={{ fontSize: 'calc(15px * var(--font-scale))' }}
                     >
                         {address} {detailAddress}
                     </p>
                     {locationContact && (
                         <p
                             className="text-gray-400 font-light italic"
-                            style={{ fontSize: 'calc(11px * var(--font-scale))' }}
+                            style={{ fontSize: 'calc(12px * var(--font-scale))' }}
                         >Tel. {locationContact}</p>
                     )}
                 </div>

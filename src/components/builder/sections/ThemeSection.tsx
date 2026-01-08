@@ -164,11 +164,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                             label="스크롤 등장 효과"
                         />
 
-                        <BuilderToggle
-                            checked={theme.showSubtitleEng}
-                            onChange={(checked) => setTheme({ showSubtitleEng: checked })}
-                            label="영문 소제목 표시"
-                        />
+
                     </div>
                 </BuilderField>
 

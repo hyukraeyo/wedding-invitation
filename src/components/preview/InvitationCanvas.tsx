@@ -11,6 +11,7 @@ import GalleryView from './sections/GalleryView';
 import AccountsView from './sections/AccountsView';
 import ClosingView from './sections/ClosingView';
 import EffectsOverlay from './sections/EffectsOverlay';
+import ScrollReveal from './ScrollReveal';
 
 const InvitationCanvas = memo(() => {
   const { theme, editingSection } = useInvitationStore();
@@ -68,39 +69,44 @@ const InvitationCanvas = memo(() => {
         <EffectsOverlay />
 
         {/* 1. Main Screen */}
-        <div id="section-mainScreen" className="pb-28">
+        <ScrollReveal id="section-mainScreen">
           <MainScreenView />
-        </div>
+        </ScrollReveal>
 
         {/* 2. Message / Greeting */}
-        <div id="section-message" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-backwards pb-28">
+        <ScrollReveal id="section-message">
           <GreetingView />
+        </ScrollReveal>
+
+        {/* Divider */}
+        <div className="flex justify-center py-6 opacity-5">
+          <div className="w-24 h-[1px]" style={{ backgroundColor: theme.accentColor }}></div>
         </div>
 
         {/* 4. Calendar & D-Day */}
-        <div id="section-date" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500 fill-mode-backwards pb-28">
+        <ScrollReveal id="section-date">
           <CalendarSectionView />
-        </div>
+        </ScrollReveal>
 
         {/* 5. Location */}
-        <div id="section-location" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-700 fill-mode-backwards px-6 pb-28">
+        <ScrollReveal id="section-location" className="px-6 pb-12 pt-12">
           <LocationView />
-        </div>
+        </ScrollReveal>
 
         {/* 6. Gallery */}
-        <div id="section-gallery" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-900 fill-mode-backwards px-6 pb-28">
+        <ScrollReveal id="section-gallery">
           <GalleryView />
-        </div>
+        </ScrollReveal>
 
         {/* 7. Accounts */}
-        <div id="section-account" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000 fill-mode-backwards pb-28">
+        <ScrollReveal id="section-account" className="pb-12">
           <AccountsView />
-        </div>
+        </ScrollReveal>
 
         {/* 8. Closing / Ending */}
-        <div id="section-closing" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000 fill-mode-backwards pb-28">
+        <ScrollReveal id="section-closing" className="pb-12">
           <ClosingView />
-        </div>
+        </ScrollReveal>
 
         {/* Footer Padding */}
         <div className="h-40 flex flex-col items-center justify-center text-[10px] text-black/10 tracking-[0.2em] font-light pb-20">

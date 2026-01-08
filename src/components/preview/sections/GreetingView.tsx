@@ -3,7 +3,7 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 
 export default function GreetingView() {
     const {
-        greetingTitle, greetingSubtitle, message, imageUrl,
+        greetingTitle, greetingSubtitle, message, greetingImage,
         showNamesAtBottom, enableFreeformNames,
         groom, bride,
         groomNameCustom
@@ -58,9 +58,9 @@ export default function GreetingView() {
                 />
 
                 {/* Optional Photo */}
-                {imageUrl && (
+                {greetingImage && (
                     <div className="relative -mx-10 w-[calc(100%+5rem)] aspect-[3/2] overflow-hidden mt-8 mb-0 animate-in fade-in zoom-in duration-700">
-                        <Image src={imageUrl} alt="Greeting" fill className="object-cover" />
+                        <Image src={greetingImage} alt="Greeting" fill className="object-cover" />
                     </div>
                 )}
 

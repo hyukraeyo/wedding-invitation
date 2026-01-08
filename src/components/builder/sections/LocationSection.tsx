@@ -21,7 +21,6 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
         location, setLocation, // 예식장명
         address, setAddress,
         detailAddress, setDetailAddress, // 층과 홀 (기존 detailAddress 재활용 but UI 상 "층과 홀")
-        locationTitle, setLocationTitle,
         locationContact, setLocationContact,
         showMap, setShowMap,
         lockMap, setLockMap,
@@ -101,15 +100,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
         >
             <div className="space-y-6 py-2">
 
-                {/* 1. 제목 (Title) */}
-                <BuilderField label="제목">
-                    <BuilderInput
-                        type="text"
-                        value={locationTitle}
-                        onChange={(e) => setLocationTitle(e.target.value)}
-                        placeholder="오시는 길"
-                    />
-                </BuilderField>
+
 
                 {/* 2. 주소 (Address) */}
                 <BuilderField label="주소">

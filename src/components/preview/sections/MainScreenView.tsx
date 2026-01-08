@@ -81,12 +81,21 @@ export default function MainScreenView() {
                                 mainScreen.layout === 'oval' ? '170px 170px 170px 170px' :
                                     mainScreen.layout === 'basic' ? '20px 20px 20px 20px' :
                                         mainScreen.layout === 'frame' ? '4px 4px 4px 4px' :
-                                            mainScreen.layout === 'fill' ? '0px 0px 0px 0px' : '20px 20px 20px 20px',
-                        transform: mainScreen.expandPhoto && mainScreen.layout !== 'fill' ? 'scale(1.05)' : 'scale(1)'
+                                            mainScreen.layout === 'fill' ? '0px 0px 0px 0px' : '20px 20px 20px 20px'
                     }}
                 >
                     {imageUrl ? (
-                        <Image src={imageUrl} alt={`${groom.firstName}와 ${bride.firstName}의 결혼식 메인 사진`} fill className="object-cover" priority />
+                        <Image
+                            src={imageUrl}
+                            alt={`${groom.firstName}와 ${bride.firstName}의 결혼식 메인 사진`}
+                            fill
+                            className="object-cover transition-transform duration-700 ease-in-out"
+                            style={{
+                                transform: mainScreen.expandPhoto ? 'scale(1.1)' : 'scale(1)',
+                                transformOrigin: 'center center'
+                            }}
+                            priority
+                        />
                     ) : (
                         <div className="flex flex-col items-center justify-center h-full opacity-20 text-gray-300 bg-gray-50/50">
                             <Heart size={48} strokeWidth={1} />

@@ -6,7 +6,6 @@ import { AccordionItem } from '../AccordionItem';
 import { BuilderCheckbox } from '../BuilderCheckbox';
 import { BuilderInput } from '../BuilderInput';
 import { BuilderButtonGroup } from '../BuilderButtonGroup';
-import { BuilderLabel } from '../BuilderLabel';
 import { BuilderField } from '../BuilderField';
 import {
     DndContext,

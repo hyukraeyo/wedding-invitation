@@ -1,6 +1,5 @@
-import React, { ChangeEvent, useState } from 'react';
-import Image from 'next/image';
-import { LayoutTemplate, Check, Image as ImageIcon, Type, ChevronDown, ChevronUp, Info, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { LayoutTemplate, Check, Type, ChevronDown, ChevronUp, Info, Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderInput } from '../BuilderInput';
@@ -11,6 +10,7 @@ import { BuilderButtonGroup } from '../BuilderButtonGroup';
 import { BuilderToggle } from '../BuilderToggle';
 import { BuilderField } from '../BuilderField';
 import RichTextEditor from '@/components/common/RichTextEditor';
+import { ImageUploader } from '../ImageUploader';
 
 interface SectionProps {
     isOpen: boolean;
@@ -28,13 +28,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
     const [isTextSectionOpen, setIsTextSectionOpen] = useState(false);
     const [isExampleModalOpen, setIsExampleModalOpen] = useState(false);
 
-    const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            const url = URL.createObjectURL(file);
-            setImageUrl(url);
-        }
-    };
+
 
     return (
         <AccordionItem
@@ -144,36 +138,11 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Photo Upload */}
                 <BuilderField label="사진">
-                    <div className="border-2 border-dashed border-gray-100 rounded-2xl p-6 hover:bg-gray-50 transition-all bg-gray-50/50 group cursor-pointer relative overflow-hidden min-h-[200px] flex items-center justify-center">
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageUpload}
-                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                        />
-
-                        {imageUrl ? (
-                            <div className="absolute inset-0 bg-gray-900 group-hover:bg-gray-900/90 transition-colors flex items-center justify-center">
-                                <Image src={imageUrl} alt="Main" fill className="object-contain" />
-                                <button
-                                    onClick={(e) => { e.preventDefault(); setImageUrl(null); }}
-                                    className="absolute top-2 right-2 bg-white/20 hover:bg-white/40 text-white rounded-full p-2 backdrop-blur-sm z-20 transition-all"
-                                >
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="flex flex-col items-center justify-center text-center space-y-3">
-                                <div className="w-12 h-12 rounded-full bg-white shadow-sm flex items-center justify-center group-hover:scale-110 transition-transform">
-                                    <ImageIcon size={24} className="text-gray-400 group-hover:text-gray-600 transition-colors" />
-                                </div>
-                                <div>
-                                    <p className="text-sm font-medium text-gray-700">사진 업로드</p>
-                                    <p className="text-xs text-gray-400 mt-1">클릭하여 이미지를 선택하세요</p>
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                    <ImageUploader
+                        value={imageUrl}
+                        onChange={setImageUrl}
+                        placeholder="메인 사진 추가"
+                    />
                 </BuilderField>
 
                 {/* Design Options */}

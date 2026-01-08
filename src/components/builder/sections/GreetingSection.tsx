@@ -1,6 +1,5 @@
-import React, { ChangeEvent, useState } from 'react';
-import Image from 'next/image';
-import { MessageSquare, Image as ImageIcon, X, Sparkles } from 'lucide-react';
+import React, { useState } from 'react';
+import { MessageSquare, Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderInput } from '../BuilderInput';
@@ -8,6 +7,7 @@ import { BuilderToggle } from '../BuilderToggle';
 import { BuilderField } from '../BuilderField';
 import { BuilderModal } from '@/components/common/BuilderModal';
 import RichTextEditor from '@/components/common/RichTextEditor';
+import { ImageUploader } from '../ImageUploader';
 
 interface SectionProps {
     isOpen: boolean;
@@ -52,7 +52,7 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
         greetingTitle, setGreetingTitle,
         greetingSubtitle, setGreetingSubtitle,
         message, setMessage,
-        imageUrl, setImageUrl,
+        greetingImage, setGreetingImage,
         showNamesAtBottom, setShowNamesAtBottom,
         sortNames, setSortNames,
         enableFreeformNames, setEnableFreeformNames,
@@ -61,13 +61,6 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
 
     const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
 
-    const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            const url = URL.createObjectURL(file);
-            setImageUrl(url);
-        }
-    };
 
     return (
         <AccordionItem
@@ -120,42 +113,11 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Photo Upload */}
                 <BuilderField label="사진">
-                    <div className="relative group w-32 h-32">
-                        <div
-                            className={`
-                            border-2 border-dashed border-gray-200 rounded-2xl w-full h-full 
-                            transition-all duration-300 bg-gray-50 group-hover:bg-white
-                            relative overflow-hidden flex items-center justify-center
-                            ${imageUrl ? 'border-none shadow-lg transform group-hover:scale-[1.02]' : ''}
-                        `}
-                            style={!imageUrl ? { borderColor: 'transparent' } : {}}
-                        >
-                            {imageUrl ? (
-                                <>
-                                    <Image src={imageUrl} alt="Greeting" fill className="object-cover" />
-                                    <button
-                                        onClick={(e) => { e.preventDefault(); setImageUrl(null); }}
-                                        className="absolute top-2 right-2 bg-black/40 backdrop-blur-md text-white rounded-full p-1.5 hover:bg-black/60 transition-all shadow-lg z-20 group-hover:opacity-100"
-                                    >
-                                        <X size={14} />
-                                    </button>
-                                </>
-                            ) : (
-                                <div className="flex flex-col items-center justify-center text-center space-y-2 pointer-events-none">
-                                    <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 transition-colors">
-                                        <ImageIcon size={20} className="group-hover:text-gray-600" />
-                                    </div>
-                                    <span className="text-[11px] font-medium text-gray-400 group-hover:text-gray-600">사진 추가</span>
-                                </div>
-                            )}
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleImageUpload}
-                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                            />
-                        </div>
-                    </div>
+                    <ImageUploader
+                        value={greetingImage}
+                        onChange={setGreetingImage}
+                        placeholder="인사말 사진 추가"
+                    />
                 </BuilderField>
 
                 {/* Name Options */}

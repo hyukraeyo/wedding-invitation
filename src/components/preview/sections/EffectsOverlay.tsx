@@ -186,8 +186,12 @@ export default function EffectsOverlay() {
     if (!mounted || theme.effect === 'none') return null;
 
     return (
-        <div className={`sticky top-0 left-0 w-full z-[100] pointer-events-none overflow-visible ${theme.effectOnlyOnMain ? 'h-0' : 'h-0'}`}>
-            <div className={`absolute top-0 left-0 w-full overflow-hidden ${theme.effectOnlyOnMain ? 'h-[600px]' : 'h-screen'}`}>
+        <div className={
+            theme.effectOnlyOnMain
+                ? "absolute top-0 left-0 w-full h-[100vh] z-[20] pointer-events-none overflow-hidden"
+                : "sticky top-0 left-0 w-full z-[100] h-0 pointer-events-none overflow-visible"
+        }>
+            <div className={`absolute top-0 left-0 w-full ${theme.effectOnlyOnMain ? 'h-full' : 'h-screen overflow-hidden'}`}>
                 {theme.effect === 'cherry-blossom' && <CherryBlossomDefs />}
 
                 {theme.effect === 'snow' && particles.map(p => (
