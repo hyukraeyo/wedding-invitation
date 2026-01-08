@@ -283,22 +283,11 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
                         </DndContext>
 
                         {/* 안내 문구 */}
-                        <div className="bg-gray-50 rounded-lg p-3 space-y-1.5">
+                        <div className="bg-gray-50 rounded-lg p-3">
                             <div className="flex items-center gap-2 text-[11px] text-gray-500">
                                 <Info size={13} className="shrink-0 text-gray-400" />
                                 <span>사진을 길게 누르거나 드래그하여 순서를 변경할 수 있습니다.</span>
                             </div>
-                            {gallery.length >= 20 ? (
-                                <div className="flex items-center gap-2 text-[11px] text-red-500 font-medium">
-                                    <Info size={13} className="shrink-0" />
-                                    <span>최대 20장의 사진이 모두 등록되었습니다.</span>
-                                </div>
-                            ) : (
-                                <div className="flex items-center gap-2 text-[11px] text-gray-400">
-                                    <Info size={13} className="shrink-0 opacity-50" />
-                                    <span>앞으로 {20 - gallery.length}장 더 등록할 수 있습니다.</span>
-                                </div>
-                            )}
                         </div>
                     </div>
                 </BuilderField>
