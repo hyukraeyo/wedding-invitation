@@ -87,7 +87,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                 <div>
                     <BuilderLabel>배경 색상</BuilderLabel>
                     <div className="flex gap-3 px-1">
-                        {['#F9F8E6', '#FFEFF4', '#F4F1EA', '#EDF2F7', '#FFFFFF'].map((color) => (
+                        {['#FFFFFF', '#F9F8E6', '#FFEFF4', '#F4F1EA', '#EDF2F7'].map((color) => (
                             <button
                                 key={color}
                                 onClick={() => setTheme({ backgroundColor: color })}
