@@ -47,7 +47,7 @@ export default function GalleryView() {
                                 clickable: true,
                             }}
                             effect={galleryFade ? "fade" : "slide"}
-                            fadeEffect={galleryFade ? { crossFade: true } : undefined}
+                            {...(galleryFade && { fadeEffect: { crossFade: true } })}
                             autoplay={{
                                 delay: 3000,
                                 disableOnInteraction: false,
@@ -81,7 +81,7 @@ export default function GalleryView() {
                                     </button>
 
                                     {/* Custom Pagination */}
-                                    <div className="swiper-pagination-custom absolute bottom-4 left-1/2 -translate-x-1/2 z-10"></div>
+                                    <div className="swiper-pagination-custom absolute bottom-6 left-1/2 -translate-x-1/2 z-20"></div>
                                 </>
                             )}
                         </Swiper>
