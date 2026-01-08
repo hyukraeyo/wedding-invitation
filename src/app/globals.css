@@ -18,8 +18,16 @@
   --color-forest-green: var(--forest-green);
   --color-muted-sand: var(--muted-sand);
   --color-coral-pink: #FF8A8A;
-  --font-serif: var(--font-serif);
-  --font-sans: var(--font-sans);
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Inter", sans-serif;
+  --font-gowun-batang: "Gowun Batang", serif;
+  --font-gowun-dodum: "Gowun Dodum", sans-serif;
+  --font-nanum-myeongjo: "Nanum Myeongjo", serif;
+  --font-yeon-sung: "Yeon Sung", cursive;
+  --font-do-hyeon: "Do Hyeon", sans-serif;
+  --font-song-myung: "Song Myung", serif;
+  --font-pretendard: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  --font-gmarket-sans: "GmarketSansMedium", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -32,8 +40,41 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans);
+  font-family: var(--font-pretendard);
 }
+
+.font-pretendard {
+  font-family: var(--font-pretendard);
+}
+
+.font-gmarket {
+  font-family: var(--font-gmarket-sans);
+}
+
+.font-gowun-batang {
+  font-family: var(--font-gowun-batang);
+}
+
+.font-gowun-dodum {
+  font-family: var(--font-gowun-dodum);
+}
+
+.font-nanum-myeongjo {
+  font-family: var(--font-nanum-myeongjo);
+}
+
+.font-yeon-sung {
+  font-family: var(--font-yeon-sung);
+}
+
+.font-do-hyeon {
+  font-family: var(--font-do-hyeon);
+}
+
+.font-song-myung {
+  font-family: var(--font-song-myung);
+}
+
 
 .serif {
   font-family: var(--font-serif);
@@ -45,12 +86,15 @@ body {
 
 /* Scrollbar Hide Utility */
 .scrollbar-hide {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 .scrollbar-hide::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
+  display: none;
+  /* Chrome, Safari and Opera */
 }
 
 /* Particle Animations */
@@ -193,8 +237,17 @@ body {
 }
 
 @keyframes pulse-subtle {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(0.98); }
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(0.98);
+  }
 }
 
 .animate-pulse-subtle {

@@ -5,6 +5,9 @@ import { AccordionItem } from '../AccordionItem';
 import { BuilderLabel } from '../BuilderLabel';
 import { BuilderInput } from '../BuilderInput';
 
+import { BuilderButtonGroup } from '../BuilderButtonGroup';
+import { BuilderButton } from '../BuilderButton';
+
 interface SectionProps {
     isOpen: boolean;
     onToggle: () => void;
@@ -46,15 +49,17 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
                 <div className="space-y-4">
                     <div className="flex items-center justify-between px-1">
                         <div className="flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-blue-400"></span>
-                            <span className="text-sm font-bold text-gray-800">신랑측 계좌</span>
+                            <span className="w-2 h-2 rounded-full bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.5)]"></span>
+                            <span className="text-[13px] font-bold text-gray-800">신랑측 계좌</span>
                         </div>
-                        <button
+                        <BuilderButton
+                            variant="ghost"
+                            size="sm"
                             onClick={() => addAccount('groom')}
-                            className="text-[11px] font-bold text-gray-500 hover:text-gray-900 flex items-center gap-1"
+                            className="h-7 px-2 text-[11px] text-gray-500 hover:text-forest-green"
                         >
-                            <Plus size={12} /> 추가
-                        </button>
+                            <Plus size={12} className="mr-1" /> 추가
+                        </BuilderButton>
                     </div>
                     <div className="space-y-4">
                         {groomAccs.map((acc) => (
@@ -70,21 +75,23 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
                     </div>
                 </div>
 
-                <div className="h-[1px] bg-gray-100 mx-1"></div>
+                <div className="h-[1px] bg-gray-50 mx-1"></div>
 
                 {/* Bride Side */}
                 <div className="space-y-4">
                     <div className="flex items-center justify-between px-1">
                         <div className="flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-pink-400"></span>
-                            <span className="text-sm font-bold text-gray-800">신부측 계좌</span>
+                            <span className="w-2 h-2 rounded-full bg-pink-400 shadow-[0_0_8px_rgba(244,114,182,0.5)]"></span>
+                            <span className="text-[13px] font-bold text-gray-800">신부측 계좌</span>
                         </div>
-                        <button
+                        <BuilderButton
+                            variant="ghost"
+                            size="sm"
                             onClick={() => addAccount('bride')}
-                            className="text-[11px] font-bold text-gray-500 hover:text-gray-900 flex items-center gap-1"
+                            className="h-7 px-2 text-[11px] text-gray-500 hover:text-pink-500"
                         >
-                            <Plus size={12} /> 추가
-                        </button>
+                            <Plus size={12} className="mr-1" /> 추가
+                        </BuilderButton>
                     </div>
                     <div className="space-y-4">
                         {brideAccs.map((acc) => (
@@ -154,21 +161,21 @@ function AccountEntry({
             </button>
             <div className="space-y-4">
                 <div className="flex flex-wrap gap-2 mb-2">
-                    {(['본인', '아버지', '어머니'] as const).map((rel) => {
-                        const name = getName(rel);
-                        return (
-                            <button
-                                key={rel}
-                                onClick={() => onUpdate({ relation: rel, holder: name || acc.holder })}
-                                className={`px-3 py-1 text-[11px] rounded-full border transition-all ${acc.relation === rel
-                                    ? 'bg-forest-green border-forest-green text-white font-bold'
-                                    : 'bg-white border-gray-100 text-gray-400 hover:border-gray-200'}`}
-                            >
-                                {rel === '본인' ? (acc.type === 'groom' ? '신랑' : '신부') : rel}
-                                {name && <span className="ml-1 opacity-70">({name})</span>}
-                            </button>
-                        );
-                    })}
+                    <BuilderButtonGroup
+                        size="sm"
+                        value={acc.relation}
+                        options={(['본인', '아버지', '어머니'] as const).map((rel) => {
+                            const name = getName(rel);
+                            return {
+                                label: `${rel === '본인' ? (acc.type === 'groom' ? '신랑' : '신부') : rel}${name ? ` (${name})` : ''}`,
+                                value: rel
+                            };
+                        })}
+                        onChange={(val) => {
+                            const rel = val as '본인' | '아버지' | '어머니';
+                            onUpdate({ relation: rel, holder: getName(rel) || acc.holder });
+                        }}
+                    />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                     <div>

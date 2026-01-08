@@ -36,7 +36,7 @@ export default function Home() {
       {/* Footer / Copyright */}
       <footer className="absolute bottom-6 text-center">
         <p className="text-xs text-forest-green/40 uppercase tracking-widest">
-          © 2024 Invitation Studio
+          © 2026 nano banana
         </p>
       </footer>
     </div>

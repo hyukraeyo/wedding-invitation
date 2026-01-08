@@ -4,6 +4,7 @@ import Script from 'next/script';
 import { Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk';
 import { Copy } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
+import { NaverIcon, KakaoIcon } from '../../common/MapIcons';
 
 export default function LocationView() {
     const {
@@ -174,10 +175,7 @@ export default function LocationView() {
                         className="flex-1 py-3 bg-white border border-gray-100 rounded-xl text-gray-500 font-medium flex items-center justify-center gap-2 hover:bg-gray-50 transition-all shadow-sm active:scale-95"
                         style={{ fontSize: 'calc(11px * var(--font-scale))' }}
                     >
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" fill="#FAE100" />
-                            <circle cx="12" cy="9" r="2.5" fill="#3C1E1E" />
-                        </svg>
+                        <KakaoIcon size={12} showBackground={false} />
                         카카오맵
                     </a>
                     <a
@@ -187,10 +185,7 @@ export default function LocationView() {
                         className="flex-1 py-3 bg-white border border-gray-100 rounded-xl text-gray-500 font-medium flex items-center justify-center gap-2 hover:bg-gray-50 transition-all shadow-sm active:scale-95"
                         style={{ fontSize: 'calc(11px * var(--font-scale))' }}
                     >
-                        <svg width="12" height="12" viewBox="0 0 256 256">
-                            <path d="M128 245 C 80 170 28 130 28 85 A 100 100 0 1 1 228 85 C 228 130 176 170 128 245 Z" fill="#03C75A" />
-                            <path d="M88 65 L112 65 L144 110 L144 65 L168 65 L168 135 L144 135 L112 90 L112 135 L88 135 Z" fill="white" />
-                        </svg>
+                        <NaverIcon size={12} />
                         네이버 지도
                     </a>
                 </div>

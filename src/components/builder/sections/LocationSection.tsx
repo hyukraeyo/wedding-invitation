@@ -1,11 +1,15 @@
-import React, { ChangeEvent } from 'react';
-import { MapPin, ImagePlus, Trash2 } from 'lucide-react';
+import React from 'react';
+import { MapPin, ImagePlus, Trash2, Search } from 'lucide-react';
 import { useDaumPostcodePopup } from 'react-daum-postcode';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderInput } from '../BuilderInput';
-import { BuilderCheckbox } from '../BuilderCheckbox';
 import Image from 'next/image';
+import { NaverIcon, KakaoIcon } from '../../common/MapIcons';
+import { BuilderButton } from '../BuilderButton';
+import { BuilderButtonGroup } from '../BuilderButtonGroup';
+import { BuilderToggle } from '../BuilderToggle';
+import { BuilderLabel } from '../BuilderLabel';
 
 interface SectionProps {
     isOpen: boolean;
@@ -48,14 +52,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
         openPostcode({ onComplete: handleComplete });
     };
 
-    // 임시: Kakao Map Level (UI 15~19) -> Actual Level (Example mapping, assuming 15 is detail, 19 is more detailed? or standard zoom. 
-    // Standard Kakao: 1(close) ~ 14(far). 
-    // If the UI shows 15, 16, 17, 18, 19, let's treat them as discrete levels for the UI.
-    // We will save them as number. 
-    // It's possible the user thinks of Google maps where 15-19 are street level.
-    // For now, let's just make the UI buttons work.
-
-    const handleSketchUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleSketchUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
             const url = URL.createObjectURL(file);
@@ -75,7 +72,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
 
                 {/* 1. 제목 (Title) */}
                 <div className="flex items-center">
-                    <label className="w-20 text-sm font-bold text-gray-800 shrink-0">제목</label>
+                    <label className="w-20 text-[13px] font-bold text-gray-800 shrink-0">제목</label>
                     <BuilderInput
                         type="text"
                         value={locationTitle}
@@ -86,27 +83,32 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
 
                 {/* 2. 주소 (Address) */}
                 <div className="flex items-start">
-                    <label className="w-20 text-sm font-bold text-gray-800 shrink-0 mt-3">주소</label>
+                    <label className="w-20 text-[13px] font-bold text-gray-800 shrink-0 mt-3.5">주소</label>
                     <div className="w-full space-y-2">
-                        <div className="flex gap-3">
-                            <div className={`flex-1 min-w-0 bg-gray-100 rounded-md px-3 py-3 text-sm truncate cursor-not-allowed ${address ? 'text-gray-900' : 'text-gray-400'}`}>
+                        <div className="flex gap-2">
+                            <div
+                                onClick={handleAddressSearch}
+                                className={`flex-1 min-w-0 bg-gray-50 border border-gray-100 rounded-xl px-4 py-3 text-[14px] truncate cursor-pointer hover:bg-white hover:border-forest-green hover:ring-4 hover:ring-forest-green/5 transition-all
+                                ${address ? 'text-gray-900 border-gray-200' : 'text-gray-300'}`}
+                            >
                                 {address || "주소를 검색해주세요"}
                             </div>
 
-                            <button
-                                type="button"
+                            <BuilderButton
+                                variant="outline"
                                 onClick={handleAddressSearch}
-                                className="px-3 py-3 bg-white border border-gray-200 rounded-md text-sm font-bold hover:bg-gray-50 transition-colors whitespace-nowrap text-gray-800"
+                                className="shrink-0 h-[48px] w-[48px] p-0"
+                                title="주소 검색"
                             >
-                                검색
-                            </button>
+                                <Search size={18} />
+                            </BuilderButton>
                         </div>
                     </div>
                 </div>
 
                 {/* 3. 예식장명 (Wedding Hall Name) */}
                 <div className="flex items-center">
-                    <label className="w-20 text-sm font-bold text-gray-800 shrink-0">예식장명</label>
+                    <label className="w-20 text-[13px] font-bold text-gray-800 shrink-0">예식장명</label>
                     <BuilderInput
                         type="text"
                         value={location}
@@ -117,7 +119,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
 
                 {/* 4. 층과 홀 (Floor & Hall) */}
                 <div className="flex items-center">
-                    <label className="w-20 text-sm font-bold text-gray-800 shrink-0">층과 홀</label>
+                    <label className="w-20 text-[13px] font-bold text-gray-800 shrink-0">층과 홀</label>
                     <BuilderInput
                         type="text"
                         value={detailAddress}
@@ -128,7 +130,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
 
                 {/* 5. 연락처 (Contact) */}
                 <div className="flex items-center">
-                    <label className="w-20 text-sm font-bold text-gray-800 shrink-0">연락처</label>
+                    <label className="w-20 text-[13px] font-bold text-gray-800 shrink-0">연락처</label>
                     <BuilderInput
                         type="text"
                         value={locationContact}
@@ -140,151 +142,112 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                 <hr className="border-gray-100 my-6" />
 
                 <div className="flex items-center">
-                    <label className="w-20 text-sm font-bold text-gray-800 shrink-0">지도 종류</label>
-                    <div className="flex gap-2">
-                        <button
-                            onClick={() => setMapType('kakao')}
-                            className={`
-                                flex items-center gap-2 px-4 py-2.5 rounded-xl border transition-all duration-200
-                                ${mapType === 'kakao'
-                                    ? 'bg-[#FAE100] border-[#FAE100] text-black shadow-md ring-2 ring-[#FAE100]/20'
-                                    : 'bg-white border-gray-100 text-gray-400 hover:border-gray-200'}
-                            `}
-                        >
-                            <div className={`w-5 h-5 rounded-full flex items-center justify-center ${mapType === 'kakao' ? 'bg-black' : 'bg-[#FAE100]'}`}>
-                                <div className={`w-1.5 h-1.5 rounded-full ${mapType === 'kakao' ? 'bg-[#FAE100]' : 'bg-black'}`} />
-                            </div>
-                            <span className="text-[13px] font-bold">카카오맵</span>
-                        </button>
-                        <button
-                            onClick={() => setMapType('naver')}
-                            className={`
-                                flex items-center gap-2 px-4 py-2.5 rounded-xl border transition-all duration-200
-                                ${mapType === 'naver'
-                                    ? 'bg-[#03C75A] border-[#03C75A] text-white shadow-md ring-2 ring-[#03C75A]/20'
-                                    : 'bg-white border-gray-100 text-gray-400 hover:border-gray-200'}
-                            `}
-                        >
-                            <div className={`w-5 h-5 rounded-[4px] flex items-center justify-center ${mapType === 'naver' ? 'bg-white' : 'bg-[#03C75A]'}`}>
-                                <span className={`text-[10px] font-black ${mapType === 'naver' ? 'text-[#03C75A]' : 'text-white'}`}>N</span>
-                            </div>
-                            <span className="text-[13px] font-bold">네이버지도</span>
-                        </button>
-                    </div>
+                    <label className="w-20 text-[13px] font-bold text-gray-800 shrink-0">지도 종류</label>
+                    <BuilderButtonGroup
+                        className="flex-1"
+                        value={mapType}
+                        options={[
+                            {
+                                label: '네이버',
+                                value: 'naver',
+                                icon: <NaverIcon size={18} className="shrink-0" />
+                            },
+                            {
+                                label: '카카오',
+                                value: 'kakao',
+                                icon: <KakaoIcon size={18} showBackground={false} className="shrink-0" />
+                            },
+                        ]}
+                        onChange={(val: 'naver' | 'kakao') => setMapType(val)}
+                    />
                 </div>
 
-                {/* 6. 지도 표시 (Show Map) */}
-                <div className="flex items-center">
-                    <label className="w-20 text-sm font-bold text-gray-800 shrink-0">지도 표시</label>
-                    <BuilderCheckbox
+                <div className="flex flex-wrap gap-2 px-1 pt-2">
+                    <BuilderToggle
                         checked={showMap}
                         onChange={setShowMap}
-                    >
-                        지도를 표시합니다.
-                    </BuilderCheckbox>
-                </div>
-
-                {/* 7. 지도 잠금 (Lock Map) */}
-                <div className="flex items-center">
-                    <label className="w-20 text-sm font-bold text-gray-800 shrink-0">지도 잠금</label>
-                    <BuilderCheckbox
+                        label="지도 표시"
+                    />
+                    <BuilderToggle
                         checked={lockMap}
                         onChange={setLockMap}
-                    >
-                        지도 터치 및 줌 조정이 안되도록 막습니다.
-                    </BuilderCheckbox>
-                </div>
-
-                {/* 8. 내비게이션 (Navigation) */}
-                <div className="flex items-center">
-                    <label className="w-20 text-sm font-bold text-gray-800 shrink-0">내비게이션</label>
-                    <BuilderCheckbox
+                        label="지도 잠금"
+                    />
+                    <BuilderToggle
                         checked={showNavigation}
                         onChange={setShowNavigation}
-                    >
-                        내비 앱 바로가기 버튼 표시 (카카오,티맵,네이버)
-                    </BuilderCheckbox>
+                        label="내비게이션"
+                    />
+                    <BuilderToggle
+                        checked={showSketch}
+                        onChange={setShowSketch}
+                        label="약도 사진"
+                    />
                 </div>
 
-                {/* 9. 지도 높이 (Map Height) */}
-                <div className="flex items-center">
-                    <label className="w-20 text-sm font-bold text-gray-800 shrink-0">지도 높이</label>
-                    <div className="flex gap-2">
-                        <button
-                            onClick={() => setMapHeight('default')}
-                            className={`px-5 py-2.5 text-sm rounded-xl border transition-all duration-200 ${mapHeight === 'default' ? 'border-black bg-black text-white shadow-md' : 'border-gray-100 text-gray-400 bg-white hover:border-gray-200'}`}
-                        >
-                            기본
-                        </button>
-                        <button
-                            onClick={() => setMapHeight('small')}
-                            className={`px-5 py-2.5 text-sm rounded-xl border transition-all duration-200 ${mapHeight === 'small' ? 'border-black bg-black text-white shadow-md' : 'border-gray-100 text-gray-400 bg-white hover:border-gray-200'}`}
-                        >
-                            축소
-                        </button>
+                <div className="space-y-6 pt-4">
+                    {/* 9. 지도 높이 (Map Height) */}
+                    <div className="flex items-center">
+                        <BuilderLabel className="w-20 shrink-0 !mb-0">지도 높이</BuilderLabel>
+                        <BuilderButtonGroup
+                            className="flex-1"
+                            value={mapHeight}
+                            options={[
+                                { label: '기본', value: 'default' },
+                                { label: '축소', value: 'small' },
+                            ]}
+                            onChange={(val: 'default' | 'small') => setMapHeight(val)}
+                        />
+                    </div>
+
+                    {/* 10. 줌 레벨 (Zoom Level) */}
+                    <div className="flex items-center">
+                        <BuilderLabel className="w-20 shrink-0 !mb-0">줌 레벨</BuilderLabel>
+                        <BuilderButtonGroup
+                            className="flex-1"
+                            value={mapZoom}
+                            options={[
+                                { label: '15', value: 15 },
+                                { label: '16', value: 16 },
+                                { label: '17', value: 17 },
+                                { label: '18', value: 18 },
+                                { label: '19', value: 19 },
+                            ]}
+                            onChange={(val: number) => setMapZoom(val)}
+                        />
                     </div>
                 </div>
 
-                {/* 10. 줌 레벨 (Zoom Level) */}
-                <div className="flex items-center">
-                    <label className="w-20 text-sm font-bold text-gray-800 shrink-0">줌 레벨</label>
-                    <div className="flex gap-2">
-                        {[15, 16, 17, 18, 19].map((level) => (
-                            <button
-                                key={level}
-                                onClick={() => setMapZoom(level)}
-                                className={`
-                                    w-10 h-10 flex items-center justify-center text-[13px] rounded-xl border transition-all duration-200
-                                     ${mapZoom === level ? 'border-black bg-black text-white shadow-md font-bold' : 'border-gray-100 text-gray-400 bg-white hover:border-gray-200'}
-                                `}
-                            >
-                                {level}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-
-                <hr className="border-gray-100 my-6" />
-
-                {/* 11. 약도 (Sketch Map) */}
-                <div className="flex items-start">
-                    <label className="w-20 text-sm font-bold text-gray-800 shrink-0 mt-0.5">약도</label>
-                    <div className="w-full space-y-4">
-                        <BuilderCheckbox
-                            checked={showSketch}
-                            onChange={setShowSketch}
-                        >
-                            약도 사진 표시
-                        </BuilderCheckbox>
-
-                        {showSketch && (
-                            <div className="mt-2">
-                                {sketchUrl ? (
-                                    <div className="relative w-full max-w-[200px] aspect-[4/3] rounded-lg overflow-hidden border border-gray-200 group">
-                                        <Image src={sketchUrl} alt="약도" fill className="object-cover" />
-                                        <button
-                                            onClick={() => setSketchUrl(null)}
-                                            className="absolute inset-0 bg-black/40 text-white opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
-                                        >
-                                            <Trash2 size={20} />
-                                        </button>
-                                    </div>
-                                ) : (
-                                    <label className="flex flex-col items-center justify-center w-full max-w-[200px] aspect-[4/3] border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-gray-400 hover:bg-gray-50 transition-colors">
-                                        <input
-                                            type="file"
-                                            className="hidden"
-                                            accept="image/*"
-                                            onChange={handleSketchUpload}
-                                        />
-                                        <ImagePlus className="text-gray-400 mb-2" size={24} />
-                                        <span className="text-xs text-gray-500">약도 이미지 업로드</span>
-                                    </label>
-                                )}
+                {showSketch && (
+                    <div className="mt-6 pt-6 border-t border-gray-100">
+                        <BuilderLabel>약도 이미지</BuilderLabel>
+                        {sketchUrl ? (
+                            <div className="relative w-full max-w-sm aspect-[4/3] rounded-2xl overflow-hidden border border-gray-100 group bg-gray-50">
+                                <Image src={sketchUrl} alt="약도" fill className="object-contain" />
+                                <button
+                                    onClick={() => setSketchUrl(null)}
+                                    className="absolute inset-0 bg-black/40 text-white opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
+                                >
+                                    <Trash2 size={24} />
+                                </button>
                             </div>
+                        ) : (
+                            <label className="flex flex-col items-center justify-center w-full max-w-sm aspect-[4/3] border-2 border-dashed border-gray-200 rounded-2xl cursor-pointer hover:border-forest-green/40 hover:bg-gray-50 transition-all group">
+                                <input
+                                    type="file"
+                                    className="hidden"
+                                    accept="image/*"
+                                    onChange={handleSketchUpload}
+                                />
+                                <div className="w-12 h-12 rounded-full bg-white border border-gray-100 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                    <ImagePlus className="text-gray-400 group-hover:text-forest-green" size={24} />
+                                </div>
+                                <span className="text-sm font-bold text-gray-700">약도 이미지 업로드</span>
+                                <span className="text-xs text-gray-400 mt-1 text-center">직접 그린 약도나 이미지를 업로드하세요</span>
+                            </label>
                         )}
                     </div>
-                </div>
+                )}
 
             </div>
         </AccordionItem>

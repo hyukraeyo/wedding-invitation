@@ -1,9 +1,11 @@
-import React from 'react';
 import { Palette } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderLabel } from '../BuilderLabel';
-import { BuilderCheckbox } from '../BuilderCheckbox';
+import { BuilderButtonGroup } from '../BuilderButtonGroup';
+import { BuilderButton } from '../BuilderButton';
+import { BuilderSelect } from '../BuilderSelect';
+import { BuilderToggle } from '../BuilderToggle';
 
 interface SectionProps {
     isOpen: boolean;
@@ -12,6 +14,19 @@ interface SectionProps {
 
 export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
     const { theme, setTheme } = useInvitationStore();
+
+    const fontOptions = [
+        { label: '프리텐다드 (Pretendard)', value: 'pretendard' },
+        { label: 'Gmarket Sans', value: 'gmarket' },
+        { label: '고운 바탕', value: 'gowun-batang' },
+        { label: '고운 돋움', value: 'gowun-dodum' },
+        { label: '나눔 명조', value: 'nanum-myeongjo' },
+        { label: '연성체', value: 'yeon-sung' },
+        { label: '도현체', value: 'do-hyeon' },
+        { label: '송명체', value: 'song-myung' },
+        { label: '기본 명조 (Serif)', value: 'serif' },
+        { label: '기본 고딕 (Sans)', value: 'sans' },
+    ];
 
     return (
         <AccordionItem
@@ -26,16 +41,11 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                 {/* Font */}
                 <div>
                     <BuilderLabel>글꼴</BuilderLabel>
-                    <div className="flex gap-3">
-                        <select
-                            value={theme.font}
-                            onChange={(e) => setTheme({ font: e.target.value as 'serif' | 'sans' })}
-                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-forest-green text-gray-900"
-                        >
-                            <option value="serif">명조체 (Serif)</option>
-                            <option value="sans">고딕체 (Sans)</option>
-                        </select>
-                    </div>
+                    <BuilderSelect
+                        value={theme.font}
+                        options={fontOptions}
+                        onChange={(val: 'pretendard' | 'gmarket' | 'gowun-batang' | 'gowun-dodum' | 'nanum-myeongjo' | 'yeon-sung' | 'do-hyeon' | 'song-myung' | 'serif' | 'sans') => setTheme({ font: val })}
+                    />
                 </div>
 
                 {/* Font Scale */}
@@ -49,38 +59,43 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                             step="0.1"
                             value={theme.fontScale}
                             onChange={(e) => setTheme({ fontScale: parseFloat(e.target.value) })}
-                            className="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                            className="flex-1 h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-forest-green"
                         />
                         <div className="flex gap-2">
-                            <button
+                            <BuilderButton
+                                variant="outline"
+                                size="sm"
                                 onClick={() => setTheme({ fontScale: Math.max(1, theme.fontScale - 0.1) })}
-                                className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium transition-colors"
+                                className="w-8 h-8 p-0"
                             >
                                 -
-                            </button>
-                            <button
+                            </BuilderButton>
+                            <BuilderButton
+                                variant="outline"
+                                size="sm"
                                 onClick={() => setTheme({ fontScale: Math.min(1.5, theme.fontScale + 0.1) })}
-                                className="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded text-sm font-medium transition-colors"
+                                className="w-8 h-8 p-0"
                             >
                                 +
-                            </button>
+                            </BuilderButton>
                         </div>
-                    </div>
-                    <div className="text-xs text-gray-500 mt-1">
-                        1.0x ~ 1.5x 범위에서 조절 가능합니다
                     </div>
                 </div>
 
                 {/* Background Color */}
                 <div>
                     <BuilderLabel>배경 색상</BuilderLabel>
-                    <div className="flex gap-3">
+                    <div className="flex gap-3 px-1">
                         {['#F9F8E6', '#FFEFF4', '#F4F1EA', '#EDF2F7', '#FFFFFF'].map((color) => (
                             <button
                                 key={color}
                                 onClick={() => setTheme({ backgroundColor: color })}
-                                className={`w-8 h-8 rounded-full border shadow-sm transition-transform hover:scale-110 flex items-center justify-center ${theme.backgroundColor === color ? 'ring-2 ring-forest-green ring-offset-2' : 'border-gray-200'}`}
-                                style={{ backgroundColor: color }}
+                                className={`w-8 h-8 rounded-full border shadow-sm transition-transform hover:scale-110 flex items-center justify-center ${theme.backgroundColor === color ? 'ring-2 ring-offset-2' : 'border-gray-100'}`}
+                                style={{
+                                    backgroundColor: color,
+                                    borderColor: theme.backgroundColor === color ? theme.accentColor : '#F3F4F6',
+                                    boxShadow: theme.backgroundColor === color ? `0 0 0 2px white, 0 0 0 4px ${theme.accentColor}` : 'none'
+                                }}
                             />
                         ))}
                     </div>
@@ -89,13 +104,17 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                 {/* Accent Color */}
                 <div>
                     <BuilderLabel>강조 색상</BuilderLabel>
-                    <div className="flex gap-3">
+                    <div className="flex gap-3 px-1">
                         {['#FFD700', '#D4AF37', '#9A8C98', '#2C3E50', '#C0392B'].map((color) => (
                             <button
                                 key={color}
                                 onClick={() => setTheme({ accentColor: color })}
-                                className={`w-8 h-8 rounded-full border shadow-sm transition-transform hover:scale-110 flex items-center justify-center ${theme.accentColor === color ? 'ring-2 ring-forest-green ring-offset-2' : 'border-gray-200'}`}
-                                style={{ backgroundColor: color }}
+                                className={`w-8 h-8 rounded-full border shadow-sm transition-transform hover:scale-110 flex items-center justify-center ${theme.accentColor === color ? 'ring-2 ring-offset-2' : 'border-gray-100'}`}
+                                style={{
+                                    backgroundColor: color,
+                                    borderColor: theme.accentColor === color ? theme.accentColor : '#F3F4F6',
+                                    boxShadow: theme.accentColor === color ? `0 0 0 2px white, 0 0 0 4px ${theme.accentColor}` : 'none'
+                                }}
                             />
                         ))}
                     </div>
@@ -104,71 +123,56 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                 {/* Pattern */}
                 <div>
                     <BuilderLabel>배경 패턴</BuilderLabel>
-                    <div className="flex gap-3">
-                        {['none', 'flower-sm', 'flower-lg'].map((opt) => (
-                            <button
-                                key={opt}
-                                onClick={() => setTheme({ pattern: opt as 'none' | 'flower-sm' | 'flower-lg' })}
-                                className={`flex-1 py-2 text-xs rounded-lg border transition-all ${theme.pattern === opt
-                                    ? 'bg-forest-green text-white border-forest-green'
-                                    : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
-                                    }`}
-                            >
-                                {opt === 'none' ? '없음' : opt === 'flower-sm' ? '작은 꽃' : '큰 꽃'}
-                            </button>
-                        ))}
-                    </div>
+                    <BuilderButtonGroup
+                        value={theme.pattern}
+                        options={[
+                            { label: '없음', value: 'none' },
+                            { label: '작은 꽃', value: 'flower-sm' },
+                            { label: '큰 꽃', value: 'flower-lg' },
+                        ]}
+                        onChange={(val: 'none' | 'flower-sm' | 'flower-lg') => setTheme({ pattern: val })}
+                    />
                 </div>
 
                 {/* Effect */}
                 <div>
                     <BuilderLabel>배경 이펙트</BuilderLabel>
-                    <div className="flex flex-wrap gap-2">
-                        {['none', 'cherry-blossom', 'snow', 'leaves', 'forsythia', 'babys-breath'].map((opt) => (
-                            <button
-                                key={opt}
-                                onClick={() => setTheme({ effect: opt as 'none' | 'cherry-blossom' | 'snow' | 'leaves' | 'forsythia' | 'babys-breath' })}
-                                className={`flex-1 min-w-[60px] py-2 text-xs rounded-lg border transition-all ${theme.effect === opt
-                                    ? 'bg-forest-green text-white border-forest-green'
-                                    : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
-                                    }`}
-                            >
-                                {opt === 'none' ? '없음' :
-                                    opt === 'cherry-blossom' ? '벚꽃' :
-                                        opt === 'snow' ? '눈' :
-                                            opt === 'leaves' ? '낙엽' :
-                                                opt === 'forsythia' ? '개나리' : '안개꽃'}
-                            </button>
-                        ))}
-                    </div>
+                    <BuilderButtonGroup
+                        value={theme.effect}
+                        options={[
+                            { label: '없음', value: 'none' },
+                            { label: '벚꽃', value: 'cherry-blossom' },
+                            { label: '눈', value: 'snow' },
+                            { label: '낙엽', value: 'leaves' },
+                            { label: '개나리', value: 'forsythia' },
+                            { label: '안개꽃', value: 'babys-breath' },
+                        ]}
+                        onChange={(val: 'none' | 'cherry-blossom' | 'snow' | 'leaves' | 'forsythia' | 'babys-breath') => setTheme({ effect: val })}
+                    />
 
                     {theme.effect !== 'none' && (
-                        <div className="mt-4 pl-1 animate-in fade-in slide-in-from-top-1">
-                            <BuilderCheckbox
+                        <div className="mt-4 px-1">
+                            <BuilderToggle
                                 checked={theme.effectOnlyOnMain}
                                 onChange={(checked) => setTheme({ effectOnlyOnMain: checked })}
-                                className="!items-start"
-                            >
-                                <span className="text-xs text-gray-400 group-hover:text-forest-green transition-colors">메인 화면에만 이펙트 보이게 설정</span>
-                            </BuilderCheckbox>
+                                label="메인 화면에만 이펙트 노출"
+                            />
                         </div>
                     )}
                 </div>
 
-                <div className="flex flex-col gap-3 pt-2 border-t border-gray-100">
-                    <BuilderCheckbox
+                <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-100 px-1">
+                    <BuilderToggle
                         checked={theme.animateEntrance}
                         onChange={(checked) => setTheme({ animateEntrance: checked })}
-                    >
-                        스크롤 샤르륵 등장 효과
-                    </BuilderCheckbox>
+                        label="스크롤 등장 효과"
+                    />
 
-                    <BuilderCheckbox
+                    <BuilderToggle
                         checked={theme.showSubtitleEng}
                         onChange={(checked) => setTheme({ showSubtitleEng: checked })}
-                    >
-                        영문 소제목 표시
-                    </BuilderCheckbox>
+                        label="영문 소제목 표시"
+                    />
                 </div>
 
             </div>

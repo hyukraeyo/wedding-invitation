@@ -261,7 +261,7 @@ export const useInvitationStore = create<InvitationState>((set) => ({
     ddayMessage: '(신랑), (신부)의 결혼식이 (D-Day)일 남았습니다.',
 
     theme: {
-        font: 'serif',
+        font: 'pretendard',
         backgroundColor: '#F9F8E6', // Warm Ivory
         accentColor: '#FFD700', // Banana Yellow
         fontScale: 1,

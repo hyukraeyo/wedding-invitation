@@ -6,6 +6,8 @@ import { AccordionItem } from '../AccordionItem';
 import { BuilderLabel } from '../BuilderLabel';
 import { BuilderTextarea } from '../BuilderTextarea';
 
+import { BuilderButtonGroup } from '../BuilderButtonGroup';
+
 interface SectionProps {
     isOpen: boolean;
     onToggle: () => void;
@@ -77,45 +79,29 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
                 {/* Effect Selection */}
                 <div>
                     <BuilderLabel>이펙트</BuilderLabel>
-                    <div className="flex gap-2">
-                        {['none', 'mist', 'ripple', 'paper'].map((eff) => (
-                            <button
-                                key={eff}
-                                onClick={() => setClosing({ effect: eff as 'none' | 'mist' | 'ripple' | 'paper' })}
-                                className={`px-4 py-2 text-xs rounded-lg border transition-all ${closing.effect === eff
-                                    ? 'bg-black text-white border-black font-medium'
-                                    : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
-                                    }`}
-                            >
-                                {eff === 'none' ? '없음' : eff === 'mist' ? '안개' : eff === 'ripple' ? '물결' : '페이퍼'}
-                            </button>
-                        ))}
-                    </div>
+                    <BuilderButtonGroup
+                        value={closing.effect}
+                        options={[
+                            { label: '없음', value: 'none' },
+                            { label: '안개', value: 'mist' },
+                            { label: '물결', value: 'ripple' },
+                            { label: '페이퍼', value: 'paper' },
+                        ]}
+                        onChange={(val: 'none' | 'mist' | 'ripple' | 'paper') => setClosing({ effect: val })}
+                    />
                 </div>
 
                 {/* Ratio Selection */}
                 <div>
                     <BuilderLabel>사진 비율</BuilderLabel>
-                    <div className="flex gap-2">
-                        <button
-                            onClick={() => setClosing({ ratio: 'fixed' })}
-                            className={`px-4 py-2 text-xs rounded-lg border transition-all ${closing.ratio === 'fixed'
-                                ? 'bg-black text-white border-black font-medium'
-                                : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
-                                }`}
-                        >
-                            고정
-                        </button>
-                        <button
-                            onClick={() => setClosing({ ratio: 'auto' })}
-                            className={`px-4 py-2 text-xs rounded-lg border transition-all ${closing.ratio === 'auto'
-                                ? 'bg-black text-white border-black font-medium'
-                                : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
-                                }`}
-                        >
-                            사진 비율대로 높이 자동조절
-                        </button>
-                    </div>
+                    <BuilderButtonGroup
+                        value={closing.ratio}
+                        options={[
+                            { label: '고정 (기본)', value: 'fixed' },
+                            { label: '자동 (원본 비율)', value: 'auto' },
+                        ]}
+                        onChange={(val: 'fixed' | 'auto') => setClosing({ ratio: val })}
+                    />
                 </div>
 
                 {/* Content Editor */}

@@ -8,6 +8,9 @@ import { BuilderInput } from '../BuilderInput';
 import { BuilderTextarea } from '../BuilderTextarea';
 import { BuilderCheckbox } from '../BuilderCheckbox';
 
+import { BuilderButtonGroup } from '../BuilderButtonGroup';
+import { BuilderToggle } from '../BuilderToggle';
+
 interface SectionProps {
     isOpen: boolean;
     onToggle: () => void;
@@ -172,39 +175,33 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                 {/* Design Options */}
                 <div>
                     <BuilderLabel>디자인 변형</BuilderLabel>
-                    <div className="flex gap-4 mt-2">
-                        <BuilderCheckbox
+                    <div className="flex flex-wrap gap-2 px-1">
+                        <BuilderToggle
                             checked={mainScreen.showBorder}
                             onChange={(checked) => setMainScreen({ showBorder: checked })}
-                        >
-                            테두리 선
-                        </BuilderCheckbox>
-                        <BuilderCheckbox
+                            label="테두리 선"
+                        />
+                        <BuilderToggle
                             checked={mainScreen.expandPhoto}
                             onChange={(checked) => setMainScreen({ expandPhoto: checked })}
-                        >
-                            사진 확장
-                        </BuilderCheckbox>
+                            label="사진 확장"
+                        />
                     </div>
                 </div>
 
                 {/* Effects */}
                 <div>
                     <BuilderLabel>이펙트</BuilderLabel>
-                    <div className="flex gap-2">
-                        {['none', 'mist', 'ripple', 'paper'].map((eff) => (
-                            <button
-                                key={eff}
-                                onClick={() => setMainScreen({ effect: eff as 'none' | 'mist' | 'ripple' | 'paper' })}
-                                className={`px-4 py-2 text-xs rounded-lg border transition-all ${mainScreen.effect === eff
-                                    ? 'bg-black text-white border-black font-medium'
-                                    : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100'
-                                    }`}
-                            >
-                                {eff === 'none' ? '없음' : eff === 'mist' ? '안개' : eff === 'ripple' ? '물결' : '페이퍼'}
-                            </button>
-                        ))}
-                    </div>
+                    <BuilderButtonGroup
+                        value={mainScreen.effect}
+                        options={[
+                            { label: '없음', value: 'none' },
+                            { label: '안개', value: 'mist' },
+                            { label: '물결', value: 'ripple' },
+                            { label: '페이퍼', value: 'paper' },
+                        ]}
+                        onChange={(val: 'none' | 'mist' | 'ripple' | 'paper') => setMainScreen({ effect: val })}
+                    />
                 </div>
 
                 {/* Custom Text (Collapsible) */}

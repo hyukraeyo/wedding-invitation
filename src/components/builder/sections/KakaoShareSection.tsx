@@ -3,7 +3,10 @@ import { MessageCircle } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderLabel } from '../BuilderLabel';
-import { BuilderCheckbox } from '../BuilderCheckbox';
+import { BuilderInput } from '../BuilderInput';
+import { BuilderButton } from '../BuilderButton';
+import { BuilderButtonGroup } from '../BuilderButtonGroup';
+import { BuilderToggle } from '../BuilderToggle';
 import Image from 'next/image';
 
 interface SectionProps {
@@ -36,18 +39,20 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
             <div className="space-y-6">
                 {/* Header Preview Button */}
                 <div className="flex justify-end -mt-2 mb-2">
-                    <button
+                    <BuilderButton
+                        variant="ghost"
+                        size="sm"
                         onClick={() => setPreviewOpen(true)}
-                        className="flex items-center gap-1 text-xs text-gray-500 border border-gray-200 rounded-lg px-3 py-1.5 hover:bg-gray-50 transition-colors"
+                        className="text-gray-500 border border-gray-100 bg-white"
                     >
                         미리보기
-                    </button>
+                    </BuilderButton>
                 </div>
 
                 {/* Photo Upload */}
                 <div>
                     <BuilderLabel>사진</BuilderLabel>
-                    <div className="border border-dashed border-gray-300 rounded-lg w-32 h-32 hover:border-forest-green hover:bg-gray-50 transition-all cursor-pointer relative overflow-hidden flex flex-col items-center justify-center gap-2 group bg-white">
+                    <div className="border-2 border-dashed border-gray-200 rounded-xl w-32 h-32 hover:border-forest-green/40 hover:bg-gray-50 transition-all cursor-pointer relative overflow-hidden flex flex-col items-center justify-center gap-2 group bg-gray-50">
                         <input
                             type="file"
                             accept="image/*"
@@ -78,11 +83,10 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                 {/* Title */}
                 <div>
                     <BuilderLabel>제목</BuilderLabel>
-                    <input
+                    <BuilderInput
                         type="text"
                         value={kakao.title}
                         onChange={(e) => setKakao({ title: e.target.value })}
-                        className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none placeholder:text-gray-300"
                         placeholder="카카오톡 제목"
                     />
                 </div>
@@ -90,11 +94,10 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                 {/* Description */}
                 <div>
                     <BuilderLabel>내용</BuilderLabel>
-                    <input
+                    <BuilderInput
                         type="text"
                         value={kakao.description}
                         onChange={(e) => setKakao({ description: e.target.value })}
-                        className="w-full px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none placeholder:text-gray-300"
                         placeholder="카카오톡 내용"
                     />
                 </div>
@@ -102,55 +105,37 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                 {/* Image Ratio */}
                 <div>
                     <BuilderLabel>사진 비율</BuilderLabel>
-                    <div className="flex gap-3">
-                        <button
-                            onClick={() => setKakao({ imageRatio: 'portrait' })}
-                            className={`px-4 py-2 border rounded-md text-sm transition-colors ${kakao.imageRatio === 'portrait' ? 'border-gray-800 text-gray-900 font-medium' : 'border-gray-200 text-gray-400 hover:bg-gray-50'}`}
-                        >
-                            세로
-                        </button>
-                        <button
-                            onClick={() => setKakao({ imageRatio: 'landscape' })}
-                            className={`px-4 py-2 border rounded-md text-sm transition-colors ${kakao.imageRatio === 'landscape' ? 'border-gray-800 text-gray-900 font-medium' : 'border-gray-200 text-gray-400 hover:bg-gray-50'}`}
-                        >
-                            가로
-                        </button>
-                    </div>
+                    <BuilderButtonGroup
+                        value={kakao.imageRatio}
+                        options={[
+                            { label: '세로', value: 'portrait' },
+                            { label: '가로', value: 'landscape' },
+                        ]}
+                        onChange={(val: 'portrait' | 'landscape') => setKakao({ imageRatio: val })}
+                    />
                 </div>
 
                 {/* Button Type */}
                 <div>
                     <BuilderLabel>버튼 추가</BuilderLabel>
-                    <div className="flex gap-3">
-                        <button
-                            onClick={() => setKakao({ buttonType: 'none' })}
-                            className={`px-3 py-2 border rounded-md text-xs transition-colors ${kakao.buttonType === 'none' ? 'border-gray-800 text-gray-900 font-medium' : 'border-gray-200 text-gray-400 hover:bg-gray-50'}`}
-                        >
-                            설정안함
-                        </button>
-                        <button
-                            onClick={() => setKakao({ buttonType: 'location' })}
-                            className={`px-3 py-2 border rounded-md text-xs transition-colors ${kakao.buttonType === 'location' ? 'border-gray-800 text-gray-900 font-medium' : 'border-gray-200 text-gray-400 hover:bg-gray-50'}`}
-                        >
-                            위치보기 버튼
-                        </button>
-                        <button
-                            onClick={() => setKakao({ buttonType: 'rsvp' })}
-                            className={`px-3 py-2 border rounded-md text-xs transition-colors ${kakao.buttonType === 'rsvp' ? 'border-gray-800 text-gray-900 font-medium' : 'border-gray-200 text-gray-400 hover:bg-gray-50'}`}
-                        >
-                            참석의사 전달 버튼
-                        </button>
-                    </div>
+                    <BuilderButtonGroup
+                        value={kakao.buttonType}
+                        options={[
+                            { label: '설정안함', value: 'none' },
+                            { label: '위치보기', value: 'location' },
+                            { label: '참석의사', value: 'rsvp' },
+                        ]}
+                        onChange={(val: 'none' | 'location' | 'rsvp') => setKakao({ buttonType: val })}
+                    />
                 </div>
 
                 {/* Share Exposure */}
                 <div className="pt-2">
-                    <BuilderCheckbox
+                    <BuilderToggle
                         checked={kakao.showShareButton}
                         onChange={(checked) => setKakao({ showShareButton: checked })}
-                    >
-                        청첩장 하단에 카카오톡 공유하기 버튼 노출
-                    </BuilderCheckbox>
+                        label="공유 버튼 노출"
+                    />
                 </div>
 
                 {/* Footer Note */}

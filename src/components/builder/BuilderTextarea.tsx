@@ -8,7 +8,7 @@ export const BuilderTextarea = (props: BuilderTextareaProps) => {
         <textarea
             {...props}
             className={twMerge(
-                "w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 placeholder:text-gray-400 leading-relaxed focus:border-forest-green focus:ring-1 focus:ring-forest-green outline-none resize-none transition-colors",
+                "w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl text-[14px] text-gray-900 placeholder:text-gray-300 leading-relaxed focus:border-forest-green focus:bg-white focus:ring-4 focus:ring-forest-green/5 outline-none resize-none transition-all",
                 props.className
             )}
         />

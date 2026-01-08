@@ -1,9 +1,12 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { ImagePlus, Trash2, Plus, Info } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderCheckbox } from '../BuilderCheckbox';
+import { BuilderInput } from '../BuilderInput';
+import { BuilderButtonGroup } from '../BuilderButtonGroup';
+import { BuilderLabel } from '../BuilderLabel';
 
 interface SectionProps {
     isOpen: boolean;
@@ -22,7 +25,7 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
         setGalleryPopup
     } = useInvitationStore();
 
-    const handleUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
         if (files && files.length > 0) {
             const newImages = Array.from(files).map(file => URL.createObjectURL(file));
@@ -41,37 +44,28 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
             <div className="space-y-8 py-2">
                 {/* 제목 */}
                 <div className="flex items-center">
-                    <label className="w-24 text-sm font-medium text-gray-800 shrink-0">제목</label>
-                    <input
+                    <BuilderLabel className="w-24 shrink-0 !mb-0">제목</BuilderLabel>
+                    <BuilderInput
                         type="text"
                         value={galleryTitle}
                         onChange={(e) => setGalleryTitle(e.target.value)}
                         placeholder="웨딩 갤러리"
-                        className="w-full bg-gray-100 border-none rounded-md px-4 py-3 text-sm focus:ring-1 focus:ring-gray-300 outline-none"
                     />
                 </div>
 
                 {/* 갤러리 타입 */}
                 <div className="flex items-center">
-                    <label className="w-24 text-sm font-medium text-gray-800 shrink-0">갤러리 타입</label>
-                    <div className="flex gap-3">
-                        {(['swipe', 'thumbnail', 'grid'] as const).map((type) => (
-                            <button
-                                key={type}
-                                onClick={() => setGalleryType(type)}
-                                className={`
-                                    px-4 py-2 text-sm border rounded transition-colors
-                                    ${galleryType === type
-                                        ? 'border-gray-800 font-bold text-gray-900'
-                                        : 'border-gray-100 text-gray-400 font-normal hover:bg-gray-50'}
-                                `}
-                            >
-                                {type === 'swipe' && '스와이프'}
-                                {type === 'thumbnail' && '썸네일 스와이프'}
-                                {type === 'grid' && '그리드'}
-                            </button>
-                        ))}
-                    </div>
+                    <BuilderLabel className="w-24 shrink-0 !mb-0">갤러리 타입</BuilderLabel>
+                    <BuilderButtonGroup
+                        className="flex-1"
+                        value={galleryType}
+                        options={[
+                            { label: '스와이프', value: 'swipe' },
+                            { label: '썸네일', value: 'thumbnail' },
+                            { label: '그리드', value: 'grid' },
+                        ]}
+                        onChange={(val: 'swipe' | 'thumbnail' | 'grid') => setGalleryType(val)}
+                    />
                 </div>
 
                 <div className="flex items-start">

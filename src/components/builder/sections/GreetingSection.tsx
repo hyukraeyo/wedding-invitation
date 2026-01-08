@@ -6,8 +6,7 @@ import { AccordionItem } from '../AccordionItem';
 import { BuilderLabel } from '../BuilderLabel';
 import { BuilderInput } from '../BuilderInput';
 import { BuilderTextarea } from '../BuilderTextarea';
-import { BuilderCheckbox } from '../BuilderCheckbox';
-
+import { BuilderToggle } from '../BuilderToggle';
 interface SectionProps {
     isOpen: boolean;
     onToggle: () => void;
@@ -60,26 +59,26 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                         <button className="text-xs text-red-500 underline hover:text-red-600 font-medium">샘플 문구 보기</button>
                     </div>
 
-                    <div className="border border-gray-200 rounded-lg overflow-hidden bg-white">
+                    <div className="border border-gray-100 rounded-2xl overflow-hidden bg-white shadow-sm ring-1 ring-black/5">
                         {/* Toolbar */}
-                        <div className="flex items-center gap-1 p-2 border-b border-gray-100 bg-white">
-                            <button className="p-1.5 hover:bg-gray-100 rounded text-gray-600"><strong className="font-serif font-bold">B</strong></button>
-                            <button className="p-1.5 hover:bg-gray-100 rounded text-gray-600"><em className="font-serif italic">I</em></button>
-                            <button className="p-1.5 hover:bg-gray-100 rounded text-gray-600"><span className="underline">U</span></button>
+                        <div className="flex items-center gap-1 p-2 border-b border-gray-50 bg-gray-50/30">
+                            <button className="w-8 h-8 flex items-center justify-center hover:bg-white hover:shadow-sm rounded-lg text-gray-600 transition-all font-bold">B</button>
+                            <button className="w-8 h-8 flex items-center justify-center hover:bg-white hover:shadow-sm rounded-lg text-gray-600 transition-all italic font-serif">I</button>
+                            <button className="w-8 h-8 flex items-center justify-center hover:bg-white hover:shadow-sm rounded-lg text-gray-600 transition-all underline">U</button>
                             <div className="w-[1px] h-4 bg-gray-200 mx-1"></div>
-                            <button className="p-1.5 hover:bg-gray-100 rounded text-gray-600 text-sm">A</button>
-                            <button className="p-1.5 hover:bg-gray-100 rounded text-gray-600 bg-gray-800 text-white text-sm">A</button>
+                            <button className="w-8 h-8 flex items-center justify-center hover:bg-white hover:shadow-sm rounded-lg text-gray-600 transition-all text-sm">A</button>
+                            <button className="w-8 h-8 flex items-center justify-center bg-gray-900 text-white shadow-md shadow-black/10 rounded-lg text-sm">A</button>
                             <div className="w-[1px] h-4 bg-gray-200 mx-1"></div>
-                            <button className="p-1.5 hover:bg-gray-100 rounded text-gray-600">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="21" x2="3" y1="6" y2="6" /><line x1="21" x2="9" y1="12" y2="12" /><line x1="21" x2="7" y1="18" y2="18" /></svg>
+                            <button className="w-8 h-8 flex items-center justify-center hover:bg-white hover:shadow-sm rounded-lg text-gray-500 transition-all">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="21" x2="3" y1="6" y2="6" /><line x1="21" x2="9" y1="12" y2="12" /><line x1="21" x2="7" y1="18" y2="18" /></svg>
                             </button>
                         </div>
 
-                        <textarea
+                        <BuilderTextarea
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
-                            className="w-full px-4 py-4 bg-gray-50 focus:outline-none min-h-[200px] resize-y text-sm leading-relaxed text-gray-900 border-none"
-                            placeholder="내용을 입력하세요."
+                            className="bg-white px-5 py-5 min-h-[220px] text-[15px] leading-[1.8] border-none focus:ring-0"
+                            placeholder="축하해주시는 분들께 전할 소중한 메시지를 입력하세요."
                         />
                     </div>
                 </div>
@@ -118,27 +117,22 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                 <div className="pt-2">
                     <BuilderLabel>성함 표기</BuilderLabel>
 
-                    <div className="flex flex-col gap-3">
-                        <BuilderCheckbox
+                    <div className="flex flex-wrap gap-2 px-1">
+                        <BuilderToggle
                             checked={showNamesAtBottom}
                             onChange={setShowNamesAtBottom}
-                        >
-                            인사말 하단에 신랑신부&혼주 성함 표시
-                        </BuilderCheckbox>
-
-                        <BuilderCheckbox
+                            label="성함 표시"
+                        />
+                        <BuilderToggle
                             checked={sortNames}
                             onChange={setSortNames}
-                        >
-                            각 항목 정렬
-                        </BuilderCheckbox>
-
-                        <BuilderCheckbox
+                            label="항목 정렬"
+                        />
+                        <BuilderToggle
                             checked={enableFreeformNames}
                             onChange={setEnableFreeformNames}
-                        >
-                            성함 자유 입력
-                        </BuilderCheckbox>
+                            label="성함 자유 입력"
+                        />
                     </div>
 
                     {enableFreeformNames && (

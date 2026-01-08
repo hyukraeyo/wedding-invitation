@@ -29,24 +29,35 @@ const InvitationCanvas = memo(() => {
     }
   }, [editingSection]);
 
-  const fontClass = useMemo(
-    () => (theme.font === 'serif' ? 'font-serif' : 'font-sans'),
-    [theme.font]
-  );
+  const canvasStyle = useMemo(() => {
+    let selectedFont = 'var(--font-pretendard)';
+    switch (theme.font) {
+      case 'pretendard': selectedFont = 'var(--font-pretendard)'; break;
+      case 'gmarket': selectedFont = 'var(--font-gmarket-sans)'; break;
+      case 'gowun-batang': selectedFont = 'var(--font-gowun-batang)'; break;
+      case 'gowun-dodum': selectedFont = 'var(--font-gowun-dodum)'; break;
+      case 'nanum-myeongjo': selectedFont = 'var(--font-nanum-myeongjo)'; break;
+      case 'yeon-sung': selectedFont = 'var(--font-yeon-sung)'; break;
+      case 'do-hyeon': selectedFont = 'var(--font-do-hyeon)'; break;
+      case 'song-myung': selectedFont = 'var(--font-song-myung)'; break;
+      case 'serif': selectedFont = 'var(--font-serif)'; break;
+      case 'sans': selectedFont = 'var(--font-sans)'; break;
+    }
 
-  const canvasStyle = useMemo(
-    () => ({
+    return {
       backgroundColor: theme.backgroundColor,
       '--font-scale': theme.fontScale,
-    }),
-    [theme.backgroundColor, theme.fontScale]
-  );
+      '--font-serif': selectedFont,
+      '--font-sans': selectedFont,
+      fontFamily: selectedFont,
+    };
+  }, [theme.backgroundColor, theme.fontScale, theme.font]);
 
   return (
     <div className="w-full h-full bg-white relative shadow-2xl overflow-hidden md:max-w-[430px] md:mx-auto">
       <div
-        className={`w-full h-full relative flex flex-col overflow-y-auto overflow-x-hidden scrollbar-hide transition-colors duration-500 ${fontClass}`}
-        style={canvasStyle}
+        className="w-full h-full relative flex flex-col overflow-y-auto overflow-x-hidden scrollbar-hide transition-colors duration-500"
+        style={canvasStyle as React.CSSProperties}
       >
         <EffectsOverlay />
 
