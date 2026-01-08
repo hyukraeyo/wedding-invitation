@@ -95,7 +95,7 @@ interface InvitationState {
 
     // Gallery State
     galleryTitle: string;
-    galleryType: 'swipe' | 'thumbnail' | 'grid';
+    galleryType: 'swipe' | 'swiper' | 'thumbnail' | 'grid';
     galleryPopup: boolean;
     gallery: string[];
 
