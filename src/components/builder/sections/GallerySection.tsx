@@ -23,7 +23,11 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
         galleryType,
         setGalleryType,
         galleryPopup,
-        setGalleryPopup
+        setGalleryPopup,
+        galleryPreview,
+        setGalleryPreview,
+        galleryFade,
+        setGalleryFade
     } = useInvitationStore();
 
     const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,6 +79,29 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
                         <span className="text-sm text-gray-500">갤러리 사진을 터치하면 팝업 뷰어로 크게 봅니다.</span>
                     </BuilderCheckbox>
                 </BuilderField>
+
+                {/* 스와이퍼 옵션들 (스와이퍼 타입일 때만 표시) */}
+                {galleryType === 'swiper' && (
+                    <>
+                        <BuilderField label="스와이퍼 옵션">
+                            <BuilderCheckbox
+                                checked={galleryPreview}
+                                onChange={(checked) => setGalleryPreview(checked)}
+                            >
+                                <span className="text-sm text-gray-500">다음 슬라이드를 미리 볼 수 있습니다.</span>
+                            </BuilderCheckbox>
+                        </BuilderField>
+
+                        <BuilderField>
+                            <BuilderCheckbox
+                                checked={galleryFade}
+                                onChange={(checked) => setGalleryFade(checked)}
+                            >
+                                <span className="text-sm text-gray-500">페이드 효과를 사용합니다.</span>
+                            </BuilderCheckbox>
+                        </BuilderField>
+                    </>
+                )}
 
                 {/* 이미지 업로드 영역 */}
                 <BuilderField label="사진 관리">

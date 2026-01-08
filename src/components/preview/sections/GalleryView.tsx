@@ -10,7 +10,7 @@ import 'swiper/css/effect-fade';
 import { useInvitationStore } from '@/store/useInvitationStore';
 
 export default function GalleryView() {
-    const { gallery, galleryType, theme } = useInvitationStore();
+    const { gallery, galleryType, galleryPreview, galleryFade, theme } = useInvitationStore();
     const [currentIndex, setCurrentIndex] = useState(0);
 
     if (!gallery || gallery.length === 0) return null;
@@ -35,8 +35,9 @@ export default function GalleryView() {
                     <div className="w-full max-w-2xl mx-auto">
                         <Swiper
                             modules={[Navigation, Pagination, EffectFade, Autoplay]}
-                            spaceBetween={30}
-                            slidesPerView={1}
+                            spaceBetween={galleryPreview ? 20 : 30}
+                            slidesPerView={galleryPreview ? 1.2 : 1}
+                            centeredSlides={galleryPreview}
                             navigation={{
                                 nextEl: '.swiper-button-next-custom',
                                 prevEl: '.swiper-button-prev-custom',
@@ -45,8 +46,8 @@ export default function GalleryView() {
                                 el: '.swiper-pagination-custom',
                                 clickable: true,
                             }}
-                            effect="fade"
-                            fadeEffect={{ crossFade: true }}
+                            effect={galleryFade ? "fade" : "slide"}
+                            fadeEffect={galleryFade ? { crossFade: true } : undefined}
                             autoplay={{
                                 delay: 3000,
                                 disableOnInteraction: false,
