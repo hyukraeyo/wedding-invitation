@@ -8,7 +8,7 @@ interface Option<T> {
 
 interface BuilderSelectProps<T> {
     value: T;
-    options: Option<T>[];
+    options: readonly Option<T>[];
     onChange: (value: T) => void;
     placeholder?: string;
     className?: string;

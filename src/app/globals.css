@@ -8,16 +8,8 @@
   --forest-green: #4A5D45;
   --muted-sand: #E2E2C7;
   --coral-pink: #FF8A8A;
-}
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-accent: var(--accent);
-  --color-ivory: var(--ivory);
-  --color-forest-green: var(--forest-green);
-  --color-muted-sand: var(--muted-sand);
-  --color-coral-pink: #FF8A8A;
+  /* Font Families */
   --font-serif: "Playfair Display", serif;
   --font-sans: "Inter", sans-serif;
   --font-gowun-batang: "Gowun Batang", serif;
@@ -28,6 +20,26 @@
   --font-song-myung: "Song Myung", serif;
   --font-pretendard: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
   --font-gmarket-sans: "GmarketSansMedium", sans-serif;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-ivory: var(--ivory);
+  --color-forest-green: var(--forest-green);
+  --color-muted-sand: var(--muted-sand);
+  --color-coral-pink: #FF8A8A;
+  --font-serif: var(--font-serif);
+  --font-sans: var(--font-sans);
+  --font-gowun-batang: var(--font-gowun-batang);
+  --font-gowun-dodum: var(--font-gowun-dodum);
+  --font-nanum-myeongjo: var(--font-nanum-myeongjo);
+  --font-yeon-sung: var(--font-yeon-sung);
+  --font-do-hyeon: var(--font-do-hyeon);
+  --font-song-myung: var(--font-song-myung);
+  --font-pretendard: var(--font-pretendard);
+  --font-gmarket-sans: var(--font-gmarket-sans);
 }
 
 @media (prefers-color-scheme: dark) {

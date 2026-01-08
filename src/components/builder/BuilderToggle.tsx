@@ -36,8 +36,8 @@ export const BuilderToggle = ({
             )}
             style={checked ? {
                 backgroundColor: hexToRgba(accentColor, 0.1),
-                borderColor: hexToRgba(accentColor, 0.2),
-                color: accentColor
+                borderColor: hexToRgba(accentColor, 0.3),
+                color: '#111827'
             } : {}}
         >
             {label}

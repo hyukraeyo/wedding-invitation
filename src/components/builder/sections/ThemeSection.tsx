@@ -26,7 +26,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
         { label: '송명체', value: 'song-myung' },
         { label: '기본 명조 (Serif)', value: 'serif' },
         { label: '기본 고딕 (Sans)', value: 'sans' },
-    ];
+    ] as const;
 
     return (
         <AccordionItem

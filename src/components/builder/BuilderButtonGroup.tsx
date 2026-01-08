@@ -50,8 +50,8 @@ export const BuilderButtonGroup = <T extends string | number>({
                         )}
                         style={isActive ? {
                             backgroundColor: hexToRgba(accentColor, 0.1),
-                            borderColor: hexToRgba(accentColor, 0.2),
-                            color: accentColor
+                            borderColor: hexToRgba(accentColor, 0.3),
+                            color: '#111827'
                         } : {}}
                     >
                         {option.icon}

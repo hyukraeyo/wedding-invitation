@@ -78,7 +78,7 @@ interface InvitationState {
     // Theme State
     // Theme State
     theme: {
-        font: string;
+        font: 'pretendard' | 'gmarket' | 'gowun-batang' | 'gowun-dodum' | 'nanum-myeongjo' | 'yeon-sung' | 'do-hyeon' | 'song-myung' | 'serif' | 'sans';
         backgroundColor: string;
         accentColor: string;
         fontScale: number;

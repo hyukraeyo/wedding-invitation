@@ -30,26 +30,29 @@ const InvitationCanvas = memo(() => {
   }, [editingSection]);
 
   const canvasStyle = useMemo(() => {
-    let selectedFont = 'var(--font-pretendard)';
+    let selectedFontVar = '--font-pretendard';
     switch (theme.font) {
-      case 'pretendard': selectedFont = 'var(--font-pretendard)'; break;
-      case 'gmarket': selectedFont = 'var(--font-gmarket-sans)'; break;
-      case 'gowun-batang': selectedFont = 'var(--font-gowun-batang)'; break;
-      case 'gowun-dodum': selectedFont = 'var(--font-gowun-dodum)'; break;
-      case 'nanum-myeongjo': selectedFont = 'var(--font-nanum-myeongjo)'; break;
-      case 'yeon-sung': selectedFont = 'var(--font-yeon-sung)'; break;
-      case 'do-hyeon': selectedFont = 'var(--font-do-hyeon)'; break;
-      case 'song-myung': selectedFont = 'var(--font-song-myung)'; break;
-      case 'serif': selectedFont = 'var(--font-serif)'; break;
-      case 'sans': selectedFont = 'var(--font-sans)'; break;
+      case 'pretendard': selectedFontVar = '--font-pretendard'; break;
+      case 'gmarket': selectedFontVar = '--font-gmarket-sans'; break;
+      case 'gowun-batang': selectedFontVar = '--font-gowun-batang'; break;
+      case 'gowun-dodum': selectedFontVar = '--font-gowun-dodum'; break;
+      case 'nanum-myeongjo': selectedFontVar = '--font-nanum-myeongjo'; break;
+      case 'yeon-sung': selectedFontVar = '--font-yeon-sung'; break;
+      case 'do-hyeon': selectedFontVar = '--font-do-hyeon'; break;
+      case 'song-myung': selectedFontVar = '--font-song-myung'; break;
+      case 'serif': selectedFontVar = '--font-serif'; break;
+      case 'sans': selectedFontVar = '--font-sans'; break;
     }
+
+    const selectedFontValue = `var(${selectedFontVar})`;
 
     return {
       backgroundColor: theme.backgroundColor,
       '--font-scale': theme.fontScale,
-      '--font-serif': selectedFont,
-      '--font-sans': selectedFont,
-      fontFamily: selectedFont,
+      // Global overrides for Tailwind classes inside the canvas
+      '--font-serif': selectedFontValue,
+      '--font-sans': selectedFontValue,
+      fontFamily: selectedFontValue,
     };
   }, [theme.backgroundColor, theme.fontScale, theme.font]);
 
