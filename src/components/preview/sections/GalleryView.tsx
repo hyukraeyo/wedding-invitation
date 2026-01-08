@@ -32,62 +32,6 @@ export default function GalleryView() {
         switch (galleryType) {
             case 'swiper':
                 return (
-                    <div className="w-full max-w-2xl mx-auto">
-                        <Swiper
-                            modules={[Navigation, Pagination, EffectFade, Autoplay]}
-                            spaceBetween={30}
-                            slidesPerView={1}
-                            navigation={{
-                                nextEl: '.swiper-button-next-custom',
-                                prevEl: '.swiper-button-prev-custom',
-                            }}
-                            pagination={{
-                                el: '.swiper-pagination-custom',
-                                clickable: true,
-                            }}
-                            effect="fade"
-                            fadeEffect={{ crossFade: true }}
-                            autoplay={{
-                                delay: 3000,
-                                disableOnInteraction: false,
-                            }}
-                            loop={gallery.length > 1}
-                            className="aspect-[4/3] relative rounded-lg overflow-hidden"
-                        >
-                            {gallery.map((img, index) => (
-                                <SwiperSlide key={index}>
-                                    <div className="relative w-full h-full">
-                                        <Image
-                                            src={img}
-                                            alt={`Gallery ${index + 1}`}
-                                            fill
-                                            className="object-cover"
-                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                        />
-                                    </div>
-                                </SwiperSlide>
-                            ))}
-
-                            {/* Custom Navigation */}
-                            {gallery.length > 1 && (
-                                <>
-                                    <button className="swiper-button-prev-custom absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors z-10">
-                                        <ChevronLeft size={20} />
-                                    </button>
-                                    <button className="swiper-button-next-custom absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors z-10">
-                                        <ChevronRight size={20} />
-                                    </button>
-
-                                    {/* Custom Pagination */}
-                                    <div className="swiper-pagination-custom absolute bottom-4 left-1/2 -translate-x-1/2 z-10"></div>
-                                </>
-                            )}
-                        </Swiper>
-                    </div>
-                );
-
-            case 'swipe':
-                return (
                     <div className="relative w-full max-w-2xl mx-auto">
                         <div className="aspect-[4/3] relative rounded-lg overflow-hidden">
                             <Image

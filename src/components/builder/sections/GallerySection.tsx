@@ -58,12 +58,11 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
                     <BuilderButtonGroup
                         value={galleryType}
                         options={[
-                            { label: '스와이프', value: 'swipe' },
                             { label: '스와이퍼', value: 'swiper' },
                             { label: '썸네일', value: 'thumbnail' },
                             { label: '그리드', value: 'grid' },
                         ]}
-                        onChange={(val: 'swipe' | 'swiper' | 'thumbnail' | 'grid') => setGalleryType(val)}
+                        onChange={(val: 'swiper' | 'thumbnail' | 'grid') => setGalleryType(val)}
                     />
                 </BuilderField>
 
