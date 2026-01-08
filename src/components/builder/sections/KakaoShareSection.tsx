@@ -7,6 +7,7 @@ import { BuilderInput } from '../BuilderInput';
 import { BuilderButton } from '../BuilderButton';
 import { BuilderButtonGroup } from '../BuilderButtonGroup';
 import { BuilderToggle } from '../BuilderToggle';
+import { BuilderField } from '../BuilderField';
 import Image from 'next/image';
 
 interface SectionProps {
@@ -37,21 +38,22 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
             isCompleted={!!kakao.title}
         >
             <div className="space-y-6">
-                {/* Header Preview Button */}
-                <div className="flex justify-end -mt-2 mb-2">
-                    <BuilderButton
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setPreviewOpen(true)}
-                        className="text-gray-500 border border-gray-100 bg-white"
-                    >
-                        미리보기
-                    </BuilderButton>
-                </div>
-
-                {/* Photo Upload */}
-                <div>
-                    <BuilderLabel>사진</BuilderLabel>
+                {/* Photo Upload with Header Preview Button */}
+                <BuilderField
+                    label={
+                        <div className="flex justify-between items-end mb-2">
+                            <BuilderLabel className="!mb-0">사진</BuilderLabel>
+                            <BuilderButton
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setPreviewOpen(true)}
+                                className="h-6 text-[11px] text-gray-500 border border-gray-100 bg-white"
+                            >
+                                미리보기
+                            </BuilderButton>
+                        </div>
+                    }
+                >
                     <div className="border-2 border-dashed border-gray-200 rounded-xl w-32 h-32 hover:border-gray-300 hover:bg-gray-50 transition-all cursor-pointer relative overflow-hidden flex flex-col items-center justify-center gap-2 group bg-gray-50">
                         <input
                             type="file"
@@ -78,33 +80,30 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                             </>
                         )}
                     </div>
-                </div>
+                </BuilderField>
 
                 {/* Title */}
-                <div>
-                    <BuilderLabel>제목</BuilderLabel>
+                <BuilderField label="제목">
                     <BuilderInput
                         type="text"
                         value={kakao.title}
                         onChange={(e) => setKakao({ title: e.target.value })}
                         placeholder="카카오톡 제목"
                     />
-                </div>
+                </BuilderField>
 
                 {/* Description */}
-                <div>
-                    <BuilderLabel>내용</BuilderLabel>
+                <BuilderField label="내용">
                     <BuilderInput
                         type="text"
                         value={kakao.description}
                         onChange={(e) => setKakao({ description: e.target.value })}
                         placeholder="카카오톡 내용"
                     />
-                </div>
+                </BuilderField>
 
                 {/* Image Ratio */}
-                <div>
-                    <BuilderLabel>사진 비율</BuilderLabel>
+                <BuilderField label="사진 비율">
                     <BuilderButtonGroup
                         value={kakao.imageRatio}
                         options={[
@@ -113,11 +112,10 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                         ]}
                         onChange={(val: 'portrait' | 'landscape') => setKakao({ imageRatio: val })}
                     />
-                </div>
+                </BuilderField>
 
                 {/* Button Type */}
-                <div>
-                    <BuilderLabel>버튼 추가</BuilderLabel>
+                <BuilderField label="버튼 추가">
                     <BuilderButtonGroup
                         value={kakao.buttonType}
                         options={[
@@ -127,16 +125,16 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                         ]}
                         onChange={(val: 'none' | 'location' | 'rsvp') => setKakao({ buttonType: val })}
                     />
-                </div>
+                </BuilderField>
 
                 {/* Share Exposure */}
-                <div className="pt-2">
+                <BuilderField label="설정">
                     <BuilderToggle
                         checked={kakao.showShareButton}
                         onChange={(checked) => setKakao({ showShareButton: checked })}
                         label="공유 버튼 노출"
                     />
-                </div>
+                </BuilderField>
 
                 {/* Footer Note */}
                 <div className="flex items-start gap-1.5 pt-4 border-t border-gray-100">

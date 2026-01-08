@@ -7,6 +7,7 @@ import { BuilderInput } from '../BuilderInput';
 
 import { BuilderButtonGroup } from '../BuilderButtonGroup';
 import { BuilderButton } from '../BuilderButton';
+import { BuilderField } from '../BuilderField';
 
 interface SectionProps {
     isOpen: boolean;
@@ -44,7 +45,7 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
             onToggle={onToggle}
             isCompleted={accounts.every(a => a.bank && a.accountNumber)}
         >
-            <div className="space-y-8">
+            <div className="space-y-6">
                 {/* Groom Side */}
                 <div className="space-y-4">
                     <div className="flex items-center justify-between px-1">
@@ -178,34 +179,31 @@ function AccountEntry({
                     </button>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
-                    <div>
-                        <BuilderLabel className="text-[10px] text-gray-400">은행명</BuilderLabel>
+                    <BuilderField label="은행명">
                         <BuilderInput
                             placeholder="은행 입력"
                             value={acc.bank}
                             onChange={(e) => onUpdate({ bank: e.target.value })}
                             className="bg-white"
                         />
-                    </div>
-                    <div>
-                        <BuilderLabel className="text-[10px] text-gray-400">예금주</BuilderLabel>
+                    </BuilderField>
+                    <BuilderField label="예금주">
                         <BuilderInput
                             placeholder="이름 입력"
                             value={acc.holder}
                             onChange={(e) => onUpdate({ holder: e.target.value })}
                             className="bg-white"
                         />
-                    </div>
+                    </BuilderField>
                 </div>
-                <div>
-                    <BuilderLabel className="text-[10px] text-gray-400">계좌번호</BuilderLabel>
+                <BuilderField label="계좌번호">
                     <BuilderInput
                         placeholder="하이픈(-) 포함하여 입력"
                         value={acc.accountNumber}
                         onChange={(e) => onUpdate({ accountNumber: e.target.value })}
                         className="bg-white"
                     />
-                </div>
+                </BuilderField>
             </div>
         </div>
     );

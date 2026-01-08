@@ -7,6 +7,7 @@ import { BuilderLabel } from '../BuilderLabel';
 import { BuilderButton } from '../BuilderButton';
 import { BuilderToggle } from '../BuilderToggle';
 import { BuilderInput } from '../BuilderInput';
+import { BuilderField } from '../BuilderField';
 
 interface SectionProps {
     isOpen: boolean;
@@ -133,63 +134,63 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
             onToggle={onToggle}
             isCompleted={!!date && !!time}
         >
-            <div className="space-y-8">
+            <div className="space-y-6">
                 {/* Custom Date Picker */}
-                <div ref={datePickerRef}>
-                    <BuilderLabel>예식일</BuilderLabel>
-                    <div className="relative">
-                        <button
-                            onClick={() => setShowPicker(!showPicker)}
-                            className={`w-full flex items-center justify-between px-4 py-3 border rounded-xl transition-all
+                <BuilderField label="예식일">
+                    <div ref={datePickerRef}>
+                        <div className="relative">
+                            <button
+                                onClick={() => setShowPicker(!showPicker)}
+                                className={`w-full flex items-center justify-between px-4 py-3 border rounded-xl transition-all
                                 ${showPicker ? 'bg-white ring-4' : 'bg-gray-50 border-gray-100 hover:border-gray-200 hover:bg-white'}`}
-                            style={showPicker ? {
-                                borderColor: accentColor,
-                                boxShadow: `0 0 0 4px ${accentColor}0D` // 5% opacity
-                            } : {}}
-                        >
-                            <span className={`text-[14px] font-bold ${date ? 'text-gray-900' : 'text-gray-300'}`}>
-                                {date ? date.split('-').join('. ') + '.' : '날짜를 선택해주세요'}
-                            </span>
-                            <CalendarIcon
-                                size={18}
-                                className={`transition-colors shrink-0 ${showPicker ? '' : 'text-gray-400'}`}
-                                style={showPicker ? { color: accentColor } : {}}
-                            />
-                        </button>
+                                style={showPicker ? {
+                                    borderColor: accentColor,
+                                    boxShadow: `0 0 0 4px ${accentColor}0D` // 5% opacity
+                                } : {}}
+                            >
+                                <span className={`text-[14px] font-bold ${date ? 'text-gray-900' : 'text-gray-300'}`}>
+                                    {date ? date.split('-').join('. ') + '.' : '날짜를 선택해주세요'}
+                                </span>
+                                <CalendarIcon
+                                    size={18}
+                                    className={`transition-colors shrink-0 ${showPicker ? '' : 'text-gray-400'}`}
+                                    style={showPicker ? { color: accentColor } : {}}
+                                />
+                            </button>
 
-                        {showPicker && (
-                            <div className="mt-4 p-5 bg-white border border-gray-100 rounded-2xl shadow-xl animate-in fade-in zoom-in-95 duration-200 z-30 relative">
-                                <div className="flex items-center justify-between mb-6 px-1">
-                                    <h4 className="font-serif text-lg text-gray-800 font-bold text-[15px]">
-                                        {viewDate.getFullYear()}년 <span className="ml-1 font-black" style={{ color: accentColor }}>{viewDate.getMonth() + 1}월</span>
-                                    </h4>
-                                    <div className="flex gap-2">
-                                        <BuilderButton variant="outline" size="sm" onClick={() => changeMonth(-1)} className="w-8 h-8 p-0">
-                                            <ChevronLeft size={16} />
-                                        </BuilderButton>
-                                        <BuilderButton variant="outline" size="sm" onClick={() => changeMonth(1)} className="w-8 h-8 p-0">
-                                            <ChevronRight size={16} />
-                                        </BuilderButton>
+                            {showPicker && (
+                                <div className="mt-4 p-5 bg-white border border-gray-100 rounded-2xl shadow-xl animate-in fade-in zoom-in-95 duration-200 z-30 relative">
+                                    <div className="flex items-center justify-between mb-6 px-1">
+                                        <h4 className="font-serif text-lg text-gray-800 font-bold text-[15px]">
+                                            {viewDate.getFullYear()}년 <span className="ml-1 font-black" style={{ color: accentColor }}>{viewDate.getMonth() + 1}월</span>
+                                        </h4>
+                                        <div className="flex gap-2">
+                                            <BuilderButton variant="outline" size="sm" onClick={() => changeMonth(-1)} className="w-8 h-8 p-0">
+                                                <ChevronLeft size={16} />
+                                            </BuilderButton>
+                                            <BuilderButton variant="outline" size="sm" onClick={() => changeMonth(1)} className="w-8 h-8 p-0">
+                                                <ChevronRight size={16} />
+                                            </BuilderButton>
+                                        </div>
+                                    </div>
+                                    <div className="grid grid-cols-7 mb-4">
+                                        {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map((d, i) => (
+                                            <div key={d} className={`text-center text-[9px] font-black tracking-tighter ${i === 0 ? 'text-red-300' : 'text-gray-300'}`}>
+                                                {d}
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <div className="grid grid-cols-7 gap-y-1">
+                                        {renderCalendar()}
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-7 mb-4">
-                                    {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map((d, i) => (
-                                        <div key={d} className={`text-center text-[9px] font-black tracking-tighter ${i === 0 ? 'text-red-300' : 'text-gray-300'}`}>
-                                            {d}
-                                        </div>
-                                    ))}
-                                </div>
-                                <div className="grid grid-cols-7 gap-y-1">
-                                    {renderCalendar()}
-                                </div>
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </div>
-                </div>
+                </BuilderField>
 
                 {/* Refined Time Picker (Using BuilderSelect) */}
-                <div>
-                    <BuilderLabel>예식시간</BuilderLabel>
+                <BuilderField label="예식시간">
                     <div className="flex gap-3">
                         <BuilderSelect
                             value={currentHour}
@@ -202,11 +203,10 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
                             onChange={(val) => handleTimeChange('minute', val)}
                         />
                     </div>
-                </div>
+                </BuilderField>
 
                 {/* Display Options */}
-                <div className="pt-2">
-                    <BuilderLabel>표시 설정</BuilderLabel>
+                <BuilderField label="표시 설정">
                     <div className="flex flex-wrap gap-2 px-1">
                         <BuilderToggle
                             checked={showCalendar}
@@ -219,7 +219,7 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
                             label="디데이 & 카운트다운"
                         />
                     </div>
-                </div>
+                </BuilderField>
 
                 {/* D-Day Message Editor */}
                 {showDday && (

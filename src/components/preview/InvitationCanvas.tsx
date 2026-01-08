@@ -18,7 +18,10 @@ const InvitationCanvas = memo(() => {
   // Scroll to editing section
   useEffect(() => {
     if (editingSection) {
-      const element = document.getElementById(`section-${editingSection}`);
+      let targetId = editingSection;
+      if (targetId === 'basic') targetId = 'mainScreen';
+
+      const element = document.getElementById(`section-${targetId}`);
       if (element) {
         element.scrollIntoView({
           behavior: 'smooth',
@@ -75,7 +78,7 @@ const InvitationCanvas = memo(() => {
         </div>
 
         {/* 2. Message / Greeting */}
-        <div id="section-greeting" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-backwards">
+        <div id="section-message" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-backwards">
           <GreetingView />
         </div>
 

@@ -10,6 +10,7 @@ import { BuilderButton } from '../BuilderButton';
 import { BuilderButtonGroup } from '../BuilderButtonGroup';
 import { BuilderToggle } from '../BuilderToggle';
 import { BuilderLabel } from '../BuilderLabel';
+import { BuilderField } from '../BuilderField';
 import { BuilderModal } from '../../common/BuilderModal';
 
 interface SectionProps {
@@ -103,19 +104,17 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
             <div className="space-y-6 py-2">
 
                 {/* 1. 제목 (Title) */}
-                <div className="flex items-center">
-                    <label className="w-20 text-[13px] font-bold text-gray-800 shrink-0">제목</label>
+                <BuilderField label="제목">
                     <BuilderInput
                         type="text"
                         value={locationTitle}
                         onChange={(e) => setLocationTitle(e.target.value)}
                         placeholder="오시는 길"
                     />
-                </div>
+                </BuilderField>
 
                 {/* 2. 주소 (Address) */}
-                <div className="flex items-start">
-                    <label className="w-20 text-[13px] font-bold text-gray-800 shrink-0 mt-3.5">주소</label>
+                <BuilderField label="주소">
                     <div className="w-full space-y-2">
                         <div
                             onClick={handleAddressSearch}
@@ -127,33 +126,30 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                             <Search size={18} className="text-gray-400 group-hover:text-gray-600 transition-colors shrink-0" />
                         </div>
                     </div>
-                </div>
+                </BuilderField>
 
                 {/* 3. 예식장명 (Wedding Hall Name) */}
-                <div className="flex items-center">
-                    <label className="w-20 text-[13px] font-bold text-gray-800 shrink-0">예식장명</label>
+                <BuilderField label="예식장명">
                     <BuilderInput
                         type="text"
                         value={location}
                         onChange={(e) => setLocation(e.target.value)}
                         placeholder="예식장 이름 입력"
                     />
-                </div>
+                </BuilderField>
 
                 {/* 4. 층과 홀 (Floor & Hall) */}
-                <div className="flex items-center">
-                    <label className="w-20 text-[13px] font-bold text-gray-800 shrink-0">층과 홀</label>
+                <BuilderField label="층과 홀">
                     <BuilderInput
                         type="text"
                         value={detailAddress}
                         onChange={(e) => setDetailAddress(e.target.value)}
                         placeholder="층과 웨딩홀 이름 입력"
                     />
-                </div>
+                </BuilderField>
 
                 {/* 5. 연락처 (Contact) */}
-                <div className="flex items-center">
-                    <label className="w-20 text-[13px] font-bold text-gray-800 shrink-0">연락처</label>
+                <BuilderField label="연락처">
                     <BuilderInput
                         type="text"
                         value={locationContact}
@@ -161,12 +157,12 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                         placeholder="예식장 연락처, 02-000-0000"
                         maxLength={13}
                     />
-                </div>
+                </BuilderField>
 
                 <hr className="border-gray-100 my-6" />
 
-                <div className="flex items-center">
-                    <label className="w-20 text-[13px] font-bold text-gray-800 shrink-0">지도 종류</label>
+                {/* Map Type */}
+                <BuilderField label="지도 종류">
                     <BuilderButtonGroup
                         className="flex-1"
                         value={mapType}
@@ -184,67 +180,65 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                         ]}
                         onChange={(val: 'naver' | 'kakao') => setMapType(val)}
                     />
-                </div>
+                </BuilderField>
 
-                <div className="flex flex-wrap gap-2 px-1 pt-2">
-                    <BuilderToggle
-                        checked={showMap}
-                        onChange={setShowMap}
-                        label="지도 표시"
-                    />
-                    <BuilderToggle
-                        checked={lockMap}
-                        onChange={setLockMap}
-                        label="지도 잠금"
-                    />
-                    <BuilderToggle
-                        checked={showNavigation}
-                        onChange={setShowNavigation}
-                        label="내비게이션"
-                    />
-                    <BuilderToggle
-                        checked={showSketch}
-                        onChange={setShowSketch}
-                        label="약도 사진"
-                    />
-                </div>
-
-                <div className="space-y-6 pt-4">
-                    {/* 9. 지도 높이 (Map Height) */}
-                    <div className="flex items-center">
-                        <BuilderLabel className="w-20 shrink-0 !mb-0">지도 높이</BuilderLabel>
-                        <BuilderButtonGroup
-                            className="flex-1"
-                            value={mapHeight}
-                            options={[
-                                { label: '기본', value: 'default' },
-                                { label: '축소', value: 'small' },
-                            ]}
-                            onChange={(val: 'default' | 'small') => setMapHeight(val)}
+                {/* Map Options */}
+                <BuilderField label="지도 설정">
+                    <div className="flex flex-wrap gap-2 px-1">
+                        <BuilderToggle
+                            checked={showMap}
+                            onChange={setShowMap}
+                            label="지도 표시"
+                        />
+                        <BuilderToggle
+                            checked={lockMap}
+                            onChange={setLockMap}
+                            label="지도 잠금"
+                        />
+                        <BuilderToggle
+                            checked={showNavigation}
+                            onChange={setShowNavigation}
+                            label="내비게이션"
+                        />
+                        <BuilderToggle
+                            checked={showSketch}
+                            onChange={setShowSketch}
+                            label="약도 사진"
                         />
                     </div>
+                </BuilderField>
 
-                    {/* 10. 줌 레벨 (Zoom Level) */}
-                    <div className="flex items-center">
-                        <BuilderLabel className="w-20 shrink-0 !mb-0">줌 레벨</BuilderLabel>
-                        <BuilderButtonGroup
-                            className="flex-1"
-                            value={mapZoom}
-                            options={[
-                                { label: '15', value: 15 },
-                                { label: '16', value: 16 },
-                                { label: '17', value: 17 },
-                                { label: '18', value: 18 },
-                                { label: '19', value: 19 },
-                            ]}
-                            onChange={(val: number) => setMapZoom(val)}
-                        />
-                    </div>
-                </div>
+                {/* Map Detail Settings */}
+                {/* Map Detail Settings */}
+                <BuilderField label="지도 높이">
+                    <BuilderButtonGroup
+                        className="w-full"
+                        value={mapHeight}
+                        options={[
+                            { label: '기본', value: 'default' },
+                            { label: '축소', value: 'small' },
+                        ]}
+                        onChange={(val: 'default' | 'small') => setMapHeight(val)}
+                    />
+                </BuilderField>
+
+                <BuilderField label="줌 레벨">
+                    <BuilderButtonGroup
+                        className="w-full"
+                        value={mapZoom}
+                        options={[
+                            { label: '15', value: 15 },
+                            { label: '16', value: 16 },
+                            { label: '17', value: 17 },
+                            { label: '18', value: 18 },
+                            { label: '19', value: 19 },
+                        ]}
+                        onChange={(val: number) => setMapZoom(val)}
+                    />
+                </BuilderField>
 
                 {showSketch && (
-                    <div className="mt-6 pt-6 border-t border-gray-100">
-                        <BuilderLabel>약도 이미지</BuilderLabel>
+                    <BuilderField label="약도 이미지">
                         {sketchUrl ? (
                             <div className="relative w-full max-w-sm aspect-[4/3] rounded-2xl overflow-hidden border border-gray-100 group bg-gray-50">
                                 <Image src={sketchUrl} alt="약도" fill className="object-contain" />
@@ -270,7 +264,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                                 <span className="text-[11px] text-gray-400 mt-1 text-center font-medium opacity-70 px-6 leading-relaxed">직접 그린 약도나 이미지를 업로드하세요</span>
                             </label>
                         )}
-                    </div>
+                    </BuilderField>
                 )}
 
             </div>

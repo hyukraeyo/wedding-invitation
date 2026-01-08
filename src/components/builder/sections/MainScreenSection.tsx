@@ -10,6 +10,7 @@ import { BuilderModal } from '@/components/common/BuilderModal';
 
 import { BuilderButtonGroup } from '../BuilderButtonGroup';
 import { BuilderToggle } from '../BuilderToggle';
+import { BuilderField } from '../BuilderField';
 import RichTextEditor from '@/components/common/RichTextEditor';
 
 interface SectionProps {
@@ -44,105 +45,106 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
             onToggle={onToggle}
             isCompleted={!!mainScreen.title}
         >
-            <div className="space-y-8">
+            <div className="space-y-6">
                 {/* Layout Templates */}
-                <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-                    {['basic', 'fill', 'arch', 'oval', 'frame'].map((l) => (
-                        <button
-                            key={l}
-                            onClick={() => setMainScreen({ layout: l as 'basic' | 'fill' | 'arch' | 'oval' | 'frame' })}
-                            className={`flex-shrink-0 w-20 flex flex-col items-center gap-2 group`}
-                        >
-                            <div className={`w-20 h-32 rounded-lg border-2 transition-all relative overflow-hidden bg-white ${mainScreen.layout === l ? 'shadow-md' : 'border-gray-100 hover:bg-gray-50'}`} style={mainScreen.layout === l ? { borderColor: accentColor } : {}}>
-                                {/* Skeleton Wireframe Previews */}
-                                {l === 'basic' && (
-                                    <div className="absolute inset-0 flex flex-col items-center pt-3 scale-[0.55] origin-top">
-                                        {/* Top Text Group */}
-                                        <div className="flex flex-col items-center gap-1.5 mb-4">
-                                            <div className="w-10 h-[2.5px] bg-coral-pink/50" />
-                                            <div className="w-16 h-[7px] bg-gray-300 rounded-[1px]" />
-                                            <div className="w-14 h-[2.5px] bg-gray-200" />
+                <BuilderField label="레이아웃">
+                    <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+                        {['basic', 'fill', 'arch', 'oval', 'frame'].map((l) => (
+                            <button
+                                key={l}
+                                onClick={() => setMainScreen({ layout: l as 'basic' | 'fill' | 'arch' | 'oval' | 'frame' })}
+                                className={`flex-shrink-0 w-20 flex flex-col items-center gap-2 group`}
+                            >
+                                <div className={`w-20 h-32 rounded-lg border-2 transition-all relative overflow-hidden bg-white ${mainScreen.layout === l ? 'shadow-md' : 'border-gray-100 hover:bg-gray-50'}`} style={mainScreen.layout === l ? { borderColor: accentColor } : {}}>
+                                    {/* Skeleton Wireframe Previews */}
+                                    {l === 'basic' && (
+                                        <div className="absolute inset-0 flex flex-col items-center pt-3 scale-[0.55] origin-top">
+                                            {/* Top Text Group */}
+                                            <div className="flex flex-col items-center gap-1.5 mb-4">
+                                                <div className="w-10 h-[2.5px] bg-coral-pink/50" />
+                                                <div className="w-16 h-[7px] bg-gray-300 rounded-[1px]" />
+                                                <div className="w-14 h-[2.5px] bg-gray-200" />
+                                            </div>
+                                            {/* Image Group */}
+                                            <div className="w-20 aspect-[4/5] bg-gray-100 rounded-lg shadow-sm mb-4"></div>
+                                            {/* Bottom Text Group */}
+                                            <div className="flex flex-col items-center gap-1">
+                                                <div className="w-12 h-[2px] bg-gray-200" />
+                                                <div className="w-16 h-[2.5px] bg-gray-100" />
+                                            </div>
                                         </div>
-                                        {/* Image Group */}
-                                        <div className="w-20 aspect-[4/5] bg-gray-100 rounded-lg shadow-sm mb-4"></div>
-                                        {/* Bottom Text Group */}
-                                        <div className="flex flex-col items-center gap-1">
-                                            <div className="w-12 h-[2px] bg-gray-200" />
-                                            <div className="w-16 h-[2.5px] bg-gray-100" />
+                                    )}
+                                    {l === 'fill' && (
+                                        <div className="absolute inset-0 bg-gray-100 flex flex-col justify-end items-center pb-6">
+                                            {/* Overlay Text indicators at the bottom */}
+                                            <div className="flex flex-col items-center gap-2 mb-4">
+                                                <div className="w-10 h-[2px] bg-white/40" />
+                                                <div className="w-14 h-[5px] bg-white/70 rounded-[1px]" />
+                                                <div className="w-16 h-[2px] bg-white/50" />
+                                            </div>
+                                            {/* Gradient-like overlay at the bottom */}
+                                            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
                                         </div>
-                                    </div>
-                                )}
-                                {l === 'fill' && (
-                                    <div className="absolute inset-0 bg-gray-100 flex flex-col justify-end items-center pb-6">
-                                        {/* Overlay Text indicators at the bottom */}
-                                        <div className="flex flex-col items-center gap-2 mb-4">
-                                            <div className="w-10 h-[2px] bg-white/40" />
-                                            <div className="w-14 h-[5px] bg-white/70 rounded-[1px]" />
-                                            <div className="w-16 h-[2px] bg-white/50" />
+                                    )}
+                                    {l === 'arch' && (
+                                        <div className="absolute inset-0 flex flex-col items-center pt-4 scale-[0.55] origin-top">
+                                            {/* Arched Image */}
+                                            <div className="w-20 aspect-[4/5] bg-gray-100 rounded-t-[40px] mb-6 flex items-center justify-center">
+                                                <div className="w-6 h-[1.5px] bg-white/60" />
+                                            </div>
+                                            {/* Text below shape */}
+                                            <div className="flex flex-col items-center gap-1.5">
+                                                <div className="w-12 h-[5px] bg-gray-300 rounded-[1px]" />
+                                                <div className="w-16 h-[2px] bg-gray-200" />
+                                                <div className="w-14 h-[2px] bg-gray-100" />
+                                            </div>
                                         </div>
-                                        {/* Gradient-like overlay at the bottom */}
-                                        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
-                                    </div>
-                                )}
-                                {l === 'arch' && (
-                                    <div className="absolute inset-0 flex flex-col items-center pt-4 scale-[0.55] origin-top">
-                                        {/* Arched Image */}
-                                        <div className="w-20 aspect-[4/5] bg-gray-100 rounded-t-[40px] mb-6 flex items-center justify-center">
-                                            <div className="w-6 h-[1.5px] bg-white/60" />
+                                    )}
+                                    {l === 'oval' && (
+                                        <div className="absolute inset-0 flex flex-col items-center pt-4 scale-[0.55] origin-top">
+                                            {/* Oval Image */}
+                                            <div className="w-22 aspect-[2/3] bg-gray-100 rounded-full mb-6 flex items-center justify-center">
+                                                <div className="w-6 h-[1.5px] bg-white/60" />
+                                            </div>
+                                            {/* Text below shape */}
+                                            <div className="flex flex-col items-center gap-1.5">
+                                                <div className="w-12 h-[5px] bg-gray-300 rounded-[1px]" />
+                                                <div className="w-16 h-[2px] bg-gray-200" />
+                                                <div className="w-14 h-[2px] bg-gray-100" />
+                                            </div>
                                         </div>
-                                        {/* Text below shape */}
-                                        <div className="flex flex-col items-center gap-1.5">
-                                            <div className="w-12 h-[5px] bg-gray-300 rounded-[1px]" />
-                                            <div className="w-16 h-[2px] bg-gray-200" />
-                                            <div className="w-14 h-[2px] bg-gray-100" />
+                                    )}
+                                    {l === 'frame' && (
+                                        <div className="absolute inset-0 flex flex-col items-center pt-6 scale-[0.55] origin-top">
+                                            {/* Inner Frame Image */}
+                                            <div className="w-20 aspect-square border-2 border-gray-100 bg-gray-50 mb-7 flex items-center justify-center p-2">
+                                                <div className="w-full h-full bg-gray-100/50 border border-gray-200/30" />
+                                            </div>
+                                            {/* Text below shape */}
+                                            <div className="flex flex-col items-center gap-1.5">
+                                                <div className="w-12 h-[5px] bg-gray-300 rounded-[1px]" />
+                                                <div className="w-16 h-[2px] bg-gray-200" />
+                                                <div className="w-14 h-[2px] bg-gray-100" />
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
-                                {l === 'oval' && (
-                                    <div className="absolute inset-0 flex flex-col items-center pt-4 scale-[0.55] origin-top">
-                                        {/* Oval Image */}
-                                        <div className="w-22 aspect-[2/3] bg-gray-100 rounded-full mb-6 flex items-center justify-center">
-                                            <div className="w-6 h-[1.5px] bg-white/60" />
-                                        </div>
-                                        {/* Text below shape */}
-                                        <div className="flex flex-col items-center gap-1.5">
-                                            <div className="w-12 h-[5px] bg-gray-300 rounded-[1px]" />
-                                            <div className="w-16 h-[2px] bg-gray-200" />
-                                            <div className="w-14 h-[2px] bg-gray-100" />
-                                        </div>
-                                    </div>
-                                )}
-                                {l === 'frame' && (
-                                    <div className="absolute inset-0 flex flex-col items-center pt-6 scale-[0.55] origin-top">
-                                        {/* Inner Frame Image */}
-                                        <div className="w-20 aspect-square border-2 border-gray-100 bg-gray-50 mb-7 flex items-center justify-center p-2">
-                                            <div className="w-full h-full bg-gray-100/50 border border-gray-200/30" />
-                                        </div>
-                                        {/* Text below shape */}
-                                        <div className="flex flex-col items-center gap-1.5">
-                                            <div className="w-12 h-[5px] bg-gray-300 rounded-[1px]" />
-                                            <div className="w-16 h-[2px] bg-gray-200" />
-                                            <div className="w-14 h-[2px] bg-gray-100" />
-                                        </div>
-                                    </div>
-                                )}
+                                    )}
 
-                                {mainScreen.layout === l && (
-                                    <div className="absolute top-1.5 right-1.5 text-white rounded-full p-0.5 shadow-sm z-10" style={{ backgroundColor: accentColor }}>
-                                        <Check size={10} strokeWidth={3} />
-                                    </div>
-                                )}
-                            </div>
-                            <span className={`text-[11px] font-bold mt-1 ${mainScreen.layout === l ? '' : 'text-gray-400'}`} style={mainScreen.layout === l ? { color: accentColor } : {}}>
-                                {l === 'basic' ? '기본' : l === 'fill' ? '채우기' : l === 'arch' ? '아치' : l === 'oval' ? '타원' : '액자'}
-                            </span>
-                        </button>
-                    ))}
-                </div>
+                                    {mainScreen.layout === l && (
+                                        <div className="absolute top-1.5 right-1.5 text-white rounded-full p-0.5 shadow-sm z-10" style={{ backgroundColor: accentColor }}>
+                                            <Check size={10} strokeWidth={3} />
+                                        </div>
+                                    )}
+                                </div>
+                                <span className={`text-[11px] font-bold mt-1 ${mainScreen.layout === l ? '' : 'text-gray-400'}`} style={mainScreen.layout === l ? { color: accentColor } : {}}>
+                                    {l === 'basic' ? '기본' : l === 'fill' ? '채우기' : l === 'arch' ? '아치' : l === 'oval' ? '타원' : '액자'}
+                                </span>
+                            </button>
+                        ))}
+                    </div>
+                </BuilderField>
 
                 {/* Photo Upload */}
-                <div>
-                    <BuilderLabel>사진</BuilderLabel>
+                <BuilderField label="사진">
                     <div className="border-2 border-dashed border-gray-100 rounded-2xl p-6 hover:bg-gray-50 transition-all bg-gray-50/50 group cursor-pointer relative overflow-hidden min-h-[200px] flex items-center justify-center">
                         <input
                             type="file"
@@ -173,11 +175,10 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                             </div>
                         )}
                     </div>
-                </div>
+                </BuilderField>
 
                 {/* Design Options */}
-                <div>
-                    <BuilderLabel>디자인 변형</BuilderLabel>
+                <BuilderField label="디자인 변형">
                     <div className="flex flex-wrap gap-2 px-1">
                         <BuilderToggle
                             checked={mainScreen.showBorder}
@@ -190,11 +191,10 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                             label="사진 확장"
                         />
                     </div>
-                </div>
+                </BuilderField>
 
                 {/* Effects */}
-                <div>
-                    <BuilderLabel>이펙트</BuilderLabel>
+                <BuilderField label="이펙트">
                     <BuilderButtonGroup
                         value={mainScreen.effect}
                         options={[
@@ -205,7 +205,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                         ]}
                         onChange={(val: 'none' | 'mist' | 'ripple' | 'paper') => setMainScreen({ effect: val })}
                     />
-                </div>
+                </BuilderField>
 
                 {/* Custom Text (Collapsible) */}
                 <div className="pt-4 border-t border-gray-100">

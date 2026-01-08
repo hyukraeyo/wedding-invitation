@@ -7,6 +7,7 @@ import { BuilderLabel } from '../BuilderLabel';
 import { BuilderTextarea } from '../BuilderTextarea';
 
 import { BuilderButtonGroup } from '../BuilderButtonGroup';
+import { BuilderField } from '../BuilderField';
 
 interface SectionProps {
     isOpen: boolean;
@@ -38,10 +39,9 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
             isCompleted={!!closing.imageUrl || !!closing.content}
             badge="강력추천😎"
         >
-            <div className="space-y-8">
+            <div className="space-y-6">
                 {/* Photo Upload */}
-                <div>
-                    <BuilderLabel>사진</BuilderLabel>
+                <BuilderField label="사진">
                     <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 hover:border-gray-300 transition-colors bg-gray-50 group cursor-pointer relative overflow-hidden min-h-[200px] flex items-center justify-center">
                         <input
                             type="file"
@@ -74,11 +74,10 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
                             </div>
                         )}
                     </div>
-                </div>
+                </BuilderField>
 
                 {/* Effect Selection */}
-                <div>
-                    <BuilderLabel>이펙트</BuilderLabel>
+                <BuilderField label="이펙트">
                     <BuilderButtonGroup
                         value={closing.effect}
                         options={[
@@ -89,11 +88,10 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
                         ]}
                         onChange={(val: 'none' | 'mist' | 'ripple' | 'paper') => setClosing({ effect: val })}
                     />
-                </div>
+                </BuilderField>
 
                 {/* Ratio Selection */}
-                <div>
-                    <BuilderLabel>사진 비율</BuilderLabel>
+                <BuilderField label="사진 비율">
                     <BuilderButtonGroup
                         value={closing.ratio}
                         options={[
@@ -102,19 +100,22 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
                         ]}
                         onChange={(val: 'fixed' | 'auto') => setClosing({ ratio: val })}
                     />
-                </div>
+                </BuilderField>
 
                 {/* Content Editor */}
-                <div>
-                    <div className="flex justify-between items-end">
-                        <BuilderLabel>문구 내용</BuilderLabel>
-                        <button
-                            onClick={() => setClosing({ content: RECOMMENDED_TEXT })}
-                            className="text-xs text-gray-500 hover:text-gray-800 hover:underline mb-2 transition-colors flex items-center gap-1"
-                        >
-                            <span>✨ 추천 문구 넣기</span>
-                        </button>
-                    </div>
+                <BuilderField
+                    label={
+                        <div className="flex justify-between items-end mb-2">
+                            <BuilderLabel className="!mb-0">문구 내용</BuilderLabel>
+                            <button
+                                onClick={() => setClosing({ content: RECOMMENDED_TEXT })}
+                                className="text-xs text-gray-500 hover:text-gray-800 hover:underline transition-colors flex items-center gap-1"
+                            >
+                                <span>✨ 추천 문구 넣기</span>
+                            </button>
+                        </div>
+                    }
+                >
                     <div className="relative">
                         <BuilderTextarea
                             value={closing.content}
@@ -122,12 +123,8 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
                             className="h-40"
                             placeholder="마무리 문구를 입력하세요..."
                         />
-                        {/* Simple toolbar placeholder to match visual */}
-                        <div className="absolute top-2 right-2 flex gap-1 opacity-50">
-                            {/* Icons would go here if we implemented a full rich text editor, strictly following design */}
-                        </div>
                     </div>
-                </div>
+                </BuilderField>
             </div>
         </AccordionItem>
     );

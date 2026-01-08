@@ -6,6 +6,8 @@ import { AccordionItem } from '../AccordionItem';
 import { BuilderLabel } from '../BuilderLabel';
 import { BuilderInput } from '../BuilderInput';
 import { BuilderTextarea } from '../BuilderTextarea';
+import { BuilderToggle } from '../BuilderToggle';
+import { BuilderField } from '../BuilderField';
 import { BuilderModal } from '@/components/common/BuilderModal';
 import RichTextEditor from '@/components/common/RichTextEditor';
 
@@ -77,54 +79,49 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
             onToggle={onToggle}
             isCompleted={message.length > 0}
         >
-            <div className="space-y-8">
-                {/* Titles Section with Header */}
-                <div className="space-y-4">
-                    <div className="flex items-center justify-end">
-                        <button
-                            onClick={() => setIsSampleModalOpen(true)}
-                            className="flex items-center gap-1.5 px-3 py-1.5 bg-[#FFF9EB] text-[#A65E1A] rounded-full border border-[#FFE0A3] hover:bg-[#FFF2D1] transition-all shadow-sm group"
-                        >
-                            <Sparkles size={14} className="group-hover:scale-110 transition-transform" />
-                            <span className="text-xs font-bold">예시 문구</span>
-                        </button>
-                    </div>
-
-                    <div className="grid grid-cols-1 gap-4">
-                        <div>
-                            <BuilderLabel>상단 소제목</BuilderLabel>
-                            <BuilderInput
-                                type="text"
-                                value={greetingSubtitle}
-                                onChange={(e) => setGreetingSubtitle(e.target.value)}
-                                placeholder="예: INVITATION"
-                            />
-                        </div>
-                        <div>
-                            <BuilderLabel>제목</BuilderLabel>
-                            <BuilderInput
-                                type="text"
-                                value={greetingTitle}
-                                onChange={(e) => setGreetingTitle(e.target.value)}
-                                placeholder="예: 소중한 분들을 초대합니다"
-                            />
-                        </div>
-                    </div>
+            <div className="space-y-6">
+                {/* Header: Sample Phrases Button */}
+                <div className="flex items-center justify-end">
+                    <button
+                        onClick={() => setIsSampleModalOpen(true)}
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-[#FFF9EB] text-[#A65E1A] rounded-full border border-[#FFE0A3] hover:bg-[#FFF2D1] transition-all shadow-sm group"
+                    >
+                        <Sparkles size={14} className="group-hover:scale-110 transition-transform" />
+                        <span className="text-xs font-bold">예시 문구</span>
+                    </button>
                 </div>
 
-                {/* Content with Rich Text Editor */}
-                <div className="space-y-2">
-                    <BuilderLabel className="mb-0">내용</BuilderLabel>
+                {/* Subtitle */}
+                <BuilderField label="상단 소제목">
+                    <BuilderInput
+                        type="text"
+                        value={greetingSubtitle}
+                        onChange={(e) => setGreetingSubtitle(e.target.value)}
+                        placeholder="예: INVITATION"
+                    />
+                </BuilderField>
+
+                {/* Title */}
+                <BuilderField label="제목">
+                    <BuilderInput
+                        type="text"
+                        value={greetingTitle}
+                        onChange={(e) => setGreetingTitle(e.target.value)}
+                        placeholder="예: 소중한 분들을 초대합니다"
+                    />
+                </BuilderField>
+
+                {/* Content */}
+                <BuilderField label="내용">
                     <RichTextEditor
                         content={message}
                         onChange={setMessage}
                         placeholder="축하해주시는 분들께 전할 소중한 메시지를 입력하세요."
                     />
-                </div>
+                </BuilderField>
 
                 {/* Photo Upload */}
-                <div>
-                    <BuilderLabel>사진</BuilderLabel>
+                <BuilderField label="사진">
                     <div className="relative group w-32 h-32">
                         <div
                             className={`
@@ -133,15 +130,8 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                             relative overflow-hidden flex items-center justify-center
                             ${imageUrl ? 'border-none shadow-lg transform group-hover:scale-[1.02]' : ''}
                         `}
-                            style={!imageUrl ? { borderColor: 'transparent' } : {}} // We'll handle hover via style or just class if we can't easily inject hover color.
-                        // Actually, tailwind arbitrary values with CSS variables or just inline styles for specific interactions are tricky without state.
-                        // Let's use a class that doesn't reference forest-green, or just gray-300.
-                        // Better: use the group-hover style helper technique or just leave it gray-300 on hover to be safe/neutral, 
-                        // OR, since this is "UI Unification", let's make it standard gray.
+                            style={!imageUrl ? { borderColor: 'transparent' } : {}}
                         >
-                            {/* We will apply the border color on the parent 'group' hover if possible, or just inline style the div directly if we can track hover? No.
-                                Let's just use `hover:border-gray-400` so it doesn't clash with custom colors.
-                             */}
                             {imageUrl ? (
                                 <>
                                     <Image src={imageUrl} alt="Greeting" fill className="object-cover" />
@@ -154,7 +144,7 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                                 </>
                             ) : (
                                 <div className="flex flex-col items-center justify-center text-center space-y-2 pointer-events-none">
-                                    <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 transition-colors" style={{ color: undefined }} /* We can use a group-hover class that sets text color if we had a css var, but here inline style for hover is hard. Let's make it simple gray or black on hover */ >
+                                    <div className="w-10 h-10 rounded-full bg-white shadow-sm flex items-center justify-center text-gray-400 transition-colors">
                                         <ImageIcon size={20} className="group-hover:text-gray-600" />
                                     </div>
                                     <span className="text-[11px] font-medium text-gray-400 group-hover:text-gray-600">사진 추가</span>
@@ -168,77 +158,44 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                             />
                         </div>
                     </div>
-                </div>
+                </BuilderField>
 
                 {/* Name Options */}
-                <div className="pt-2">
-                    <BuilderLabel>성함 표기</BuilderLabel>
+                <BuilderField label="성함 표기">
+                    <div className="space-y-4">
+                        <div className="flex flex-wrap gap-2 px-1">
+                            <BuilderToggle
+                                checked={showNamesAtBottom}
+                                onChange={setShowNamesAtBottom}
+                                label="성함 표시"
+                            />
+                            <BuilderToggle
+                                checked={sortNames}
+                                onChange={setSortNames}
+                                label="항목 정렬"
+                            />
+                            <BuilderToggle
+                                checked={enableFreeformNames}
+                                onChange={setEnableFreeformNames}
+                                label="성함 자유 입력"
+                            />
+                        </div>
 
-                    {/* Segmented Control Style Toggles */}
-                    <div className="grid grid-cols-3 gap-1 bg-gray-50/50 p-1 rounded-xl border border-gray-100 ring-1 ring-black/5">
-                        <button
-                            onClick={() => setShowNamesAtBottom(!showNamesAtBottom)}
-                            className={`
-                                py-2 px-3 rounded-lg text-xs font-medium transition-all duration-200 text-center
-                                ${showNamesAtBottom
-                                    ? 'bg-white shadow-sm ring-1 ring-black/5 text-gray-900 text-yellow-600'
-                                    : 'text-gray-400 hover:text-gray-600 hover:bg-white/50'}
-                            `}
-                        >
-                            성함 표시
-                        </button>
-                        <button
-                            onClick={() => setSortNames(!sortNames)}
-                            className={`
-                                py-2 px-3 rounded-lg text-xs font-medium transition-all duration-200 text-center
-                                ${sortNames
-                                    ? 'bg-white shadow-sm ring-1 ring-black/5 text-gray-900 text-yellow-600'
-                                    : 'text-gray-400 hover:text-gray-600 hover:bg-white/50'}
-                            `}
-                        >
-                            항목 정렬
-                        </button>
-                        <button
-                            onClick={() => setEnableFreeformNames(!enableFreeformNames)}
-                            className={`
-                                py-2 px-3 rounded-lg text-xs font-medium transition-all duration-200 text-center
-                                ${enableFreeformNames
-                                    ? 'bg-white shadow-sm ring-1 ring-black/5 text-gray-900 text-yellow-600'
-                                    : 'text-gray-400 hover:text-gray-600 hover:bg-white/50'}
-                            `}
-                        >
-                            성함 자유 입력
-                        </button>
-                    </div>
-
-                    {enableFreeformNames && (
-                        <div className="mt-4 pt-4 border-t border-gray-50 flex flex-col gap-4 animate-in fade-in slide-in-from-top-2 duration-300">
-                            <div className="border border-gray-100 rounded-2xl overflow-hidden bg-white shadow-sm ring-1 ring-black/5">
-                                <div className="flex items-center gap-1 p-2 border-b border-gray-50 bg-gray-50/30">
-                                    <button className="w-7 h-7 flex items-center justify-center hover:bg-white hover:shadow-sm rounded-lg text-gray-600 transition-all font-bold text-[10px]">B</button>
-                                    <button className="w-7 h-7 flex items-center justify-center hover:bg-white hover:shadow-sm rounded-lg text-gray-600 transition-all italic font-serif text-[10px]">I</button>
-                                    <button className="w-7 h-7 flex items-center justify-center hover:bg-white hover:shadow-sm rounded-lg text-gray-600 transition-all underline text-[10px]">U</button>
-                                    <div className="w-[1px] h-3 bg-gray-200 mx-1"></div>
-                                    <button className="w-7 h-7 flex items-center justify-center bg-gray-900 text-white shadow-md shadow-black/10 rounded-lg text-[10px]">A</button>
-                                    <div className="w-[1px] h-3 bg-gray-200 mx-1"></div>
-                                    <button className="w-7 h-7 flex items-center justify-center hover:bg-white hover:shadow-sm rounded-lg text-gray-500 transition-all">
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="21" x2="3" y1="6" y2="6" /><line x1="21" x2="9" y1="12" y2="12" /><line x1="21" x2="7" y1="18" y2="18" /></svg>
-                                    </button>
-                                </div>
-                                <BuilderTextarea
-                                    value={groomNameCustom}
-                                    onChange={(e) => setGroomNameCustom(e.target.value)}
-                                    className="bg-white px-4 py-4 min-h-[140px] text-[13px] leading-[1.7] border-none focus:ring-0 resize-none"
+                        {enableFreeformNames && (
+                            <div className="pt-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                                <RichTextEditor
+                                    content={groomNameCustom}
+                                    onChange={setGroomNameCustom}
                                     placeholder="인사말 하단 성함부분을 자유롭게 입력할 수 있습니다."
                                 />
+                                <p className="flex items-start gap-2 text-[11px] text-gray-400 pl-1 mt-2">
+                                    <span className="mt-0.5 opacity-70">ⓘ</span>
+                                    <span>인사말 하단 성함부분을 자유롭게 입력할 수 있습니다.</span>
+                                </p>
                             </div>
-                            <p className="flex items-start gap-2 text-[11px] text-gray-400 pl-1">
-                                <span className="mt-0.5 opacity-70">ⓘ</span>
-                                <span>인사말 하단 성함부분을 자유롭게 입력할 수 있습니다.</span>
-                            </p>
-                        </div>
-                    )}
-                </div>
+                        )}
+                    </div>
+                </BuilderField>
 
                 {/* Sample Phrases Modal */}
                 <BuilderModal

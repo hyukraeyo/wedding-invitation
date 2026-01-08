@@ -70,11 +70,10 @@ export default function GreetingView() {
                         {enableFreeformNames ? (
                             // Freeform Mode
                             <div
-                                className="leading-[2.2] whitespace-pre-wrap text-gray-700 font-serif"
+                                className="leading-[2.2] text-gray-700 font-serif rich-text-content"
                                 style={{ fontSize: 'calc(15px * var(--font-scale))' }}
-                            >
-                                {groomNameCustom}
-                            </div>
+                                dangerouslySetInnerHTML={{ __html: groomNameCustom }}
+                            />
                         ) : (
                             // Standard Mode
                             <div className="space-y-6">

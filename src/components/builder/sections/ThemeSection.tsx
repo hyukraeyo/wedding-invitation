@@ -6,6 +6,7 @@ import { BuilderButtonGroup } from '../BuilderButtonGroup';
 import { BuilderButton } from '../BuilderButton';
 import { BuilderSelect } from '../BuilderSelect';
 import { BuilderToggle } from '../BuilderToggle';
+import { BuilderField } from '../BuilderField';
 
 interface SectionProps {
     isOpen: boolean;
@@ -39,18 +40,16 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
             <div className="space-y-6">
 
                 {/* Font */}
-                <div>
-                    <BuilderLabel>글꼴</BuilderLabel>
+                <BuilderField label="글꼴">
                     <BuilderSelect
                         value={theme.font}
                         options={fontOptions}
                         onChange={(val: 'pretendard' | 'gmarket' | 'gowun-batang' | 'gowun-dodum' | 'nanum-myeongjo' | 'yeon-sung' | 'do-hyeon' | 'song-myung' | 'serif' | 'sans') => setTheme({ font: val })}
                     />
-                </div>
+                </BuilderField>
 
                 {/* Font Scale */}
-                <div>
-                    <BuilderLabel>폰트 크기 ({theme.fontScale.toFixed(1)}x)</BuilderLabel>
+                <BuilderField label={`폰트 크기 (${theme.fontScale.toFixed(1)}x)`}>
                     <div className="flex items-center gap-4">
                         <input
                             type="range"
@@ -81,11 +80,10 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                             </BuilderButton>
                         </div>
                     </div>
-                </div>
+                </BuilderField>
 
                 {/* Background Color */}
-                <div>
-                    <BuilderLabel>배경 색상</BuilderLabel>
+                <BuilderField label="배경 색상">
                     <div className="flex gap-3 px-1">
                         {['#FFFFFF', '#F9F8E6', '#FFEFF4', '#F4F1EA', '#EDF2F7'].map((color) => (
                             <button
@@ -100,11 +98,10 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                             />
                         ))}
                     </div>
-                </div>
+                </BuilderField>
 
                 {/* Accent Color */}
-                <div>
-                    <BuilderLabel>강조 색상</BuilderLabel>
+                <BuilderField label="강조 색상">
                     <div className="flex gap-3 px-1">
                         {['#D4AF37', '#9A8C98', '#2C3E50', '#C0392B'].map((color) => (
                             <button
@@ -119,11 +116,10 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                             />
                         ))}
                     </div>
-                </div>
+                </BuilderField>
 
                 {/* Pattern */}
-                <div>
-                    <BuilderLabel>배경 패턴</BuilderLabel>
+                <BuilderField label="배경 패턴">
                     <BuilderButtonGroup
                         value={theme.pattern}
                         options={[
@@ -133,45 +129,49 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                         ]}
                         onChange={(val: 'none' | 'flower-sm' | 'flower-lg') => setTheme({ pattern: val })}
                     />
-                </div>
+                </BuilderField>
 
                 {/* Effect */}
-                <div>
-                    <BuilderLabel>배경 이펙트</BuilderLabel>
-                    <BuilderButtonGroup
-                        value={theme.effect}
-                        options={[
-                            { label: '없음', value: 'none' },
-                            { label: '벚꽃', value: 'cherry-blossom' },
-                            { label: '눈', value: 'snow' },
-                        ]}
-                        onChange={(val: 'none' | 'cherry-blossom' | 'snow') => setTheme({ effect: val })}
-                    />
+                <BuilderField label="배경 이펙트">
+                    <div className="space-y-4">
+                        <BuilderButtonGroup
+                            value={theme.effect}
+                            options={[
+                                { label: '없음', value: 'none' },
+                                { label: '벚꽃', value: 'cherry-blossom' },
+                                { label: '눈', value: 'snow' },
+                            ]}
+                            onChange={(val: 'none' | 'cherry-blossom' | 'snow') => setTheme({ effect: val })}
+                        />
 
-                    {theme.effect !== 'none' && (
-                        <div className="mt-4 px-1">
-                            <BuilderToggle
-                                checked={theme.effectOnlyOnMain}
-                                onChange={(checked) => setTheme({ effectOnlyOnMain: checked })}
-                                label="메인 화면에만 이펙트 노출"
-                            />
-                        </div>
-                    )}
-                </div>
+                        {theme.effect !== 'none' && (
+                            <div className="px-1">
+                                <BuilderToggle
+                                    checked={theme.effectOnlyOnMain}
+                                    onChange={(checked) => setTheme({ effectOnlyOnMain: checked })}
+                                    label="메인 화면에만 이펙트 노출"
+                                />
+                            </div>
+                        )}
+                    </div>
+                </BuilderField>
 
-                <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-100 px-1">
-                    <BuilderToggle
-                        checked={theme.animateEntrance}
-                        onChange={(checked) => setTheme({ animateEntrance: checked })}
-                        label="스크롤 등장 효과"
-                    />
+                {/* Additional Options */}
+                <BuilderField label="추가 설정">
+                    <div className="flex flex-wrap gap-2 px-1">
+                        <BuilderToggle
+                            checked={theme.animateEntrance}
+                            onChange={(checked) => setTheme({ animateEntrance: checked })}
+                            label="스크롤 등장 효과"
+                        />
 
-                    <BuilderToggle
-                        checked={theme.showSubtitleEng}
-                        onChange={(checked) => setTheme({ showSubtitleEng: checked })}
-                        label="영문 소제목 표시"
-                    />
-                </div>
+                        <BuilderToggle
+                            checked={theme.showSubtitleEng}
+                            onChange={(checked) => setTheme({ showSubtitleEng: checked })}
+                            label="영문 소제목 표시"
+                        />
+                    </div>
+                </BuilderField>
 
             </div>
         </AccordionItem>
