@@ -1,4 +1,5 @@
 import React, { useId } from 'react';
+import { useInvitationStore } from '@/store/useInvitationStore';
 
 interface BuilderCheckboxProps {
     id?: string;
@@ -8,9 +9,18 @@ interface BuilderCheckboxProps {
     className?: string;
 }
 
+// Helper to add opacity to hex colors
+const hexToRgba = (hex: string, opacity: number) => {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+};
+
 export function BuilderCheckbox({ id, checked, onChange, children, className = '' }: BuilderCheckboxProps) {
     const internalId = useId();
     const generatedId = id || internalId;
+    const accentColor = useInvitationStore(state => state.theme.accentColor);
 
     return (
         <label
@@ -27,11 +37,14 @@ export function BuilderCheckbox({ id, checked, onChange, children, className = '
                 />
                 <div
                     className={`
-                        w-[18px] h-[18px] rounded-[4px] border-2 transition-all duration-200 flex items-center justify-center
-                        ${checked
-                            ? 'bg-black border-black shadow-sm'
-                            : 'bg-white border-gray-200 group-hover:border-gray-300'}
+                        w-[18px] h-[18px] rounded-[5px] border-2 transition-all duration-300 flex items-center justify-center
+                        ${!checked ? 'bg-white border-gray-200 group-hover:border-gray-300' : ''}
                     `}
+                    style={checked ? {
+                        backgroundColor: accentColor,
+                        borderColor: accentColor,
+                        boxShadow: `0 2px 8px ${hexToRgba(accentColor, 0.25)}`
+                    } : {}}
                 >
                     {checked && (
                         <svg

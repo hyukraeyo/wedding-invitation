@@ -153,29 +153,29 @@ function AccountEntry({
 
     return (
         <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 relative group">
-            <button
-                onClick={onRemove}
-                className="absolute top-3 right-3 text-gray-300 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
-            >
-                <Trash2 size={14} />
-            </button>
             <div className="space-y-4">
-                <div className="flex flex-wrap gap-2 mb-2">
-                    <BuilderButtonGroup
-                        size="sm"
-                        value={acc.relation}
-                        options={(['본인', '아버지', '어머니'] as const).map((rel) => {
-                            const name = getName(rel);
-                            return {
-                                label: `${rel === '본인' ? (acc.type === 'groom' ? '신랑' : '신부') : rel}${name ? ` (${name})` : ''}`,
+                <div className="flex items-center gap-3 mb-2">
+                    <div className="flex-1">
+                        <BuilderButtonGroup
+                            size="sm"
+                            value={acc.relation}
+                            options={(['본인', '아버지', '어머니'] as const).map((rel) => ({
+                                label: rel === '본인' ? (acc.type === 'groom' ? '신랑' : '신부') : rel,
                                 value: rel
-                            };
-                        })}
-                        onChange={(val) => {
-                            const rel = val as '본인' | '아버지' | '어머니';
-                            onUpdate({ relation: rel, holder: getName(rel) || acc.holder });
-                        }}
-                    />
+                            }))}
+                            onChange={(val) => {
+                                const rel = val as '본인' | '아버지' | '어머니';
+                                onUpdate({ relation: rel, holder: getName(rel) || acc.holder });
+                            }}
+                        />
+                    </div>
+                    <button
+                        onClick={onRemove}
+                        className="p-2 text-gray-300 hover:text-red-400 hover:bg-red-50 rounded-xl transition-all shrink-0"
+                        title="삭제"
+                    >
+                        <Trash2 size={16} />
+                    </button>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                     <div>

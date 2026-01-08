@@ -46,6 +46,7 @@ interface InvitationState {
     coordinates: { lat: number; lng: number } | null; // For Map
     message: string;
     greetingTitle: string;
+    greetingSubtitle: string;
     imageUrl: string | null;
     showNamesAtBottom: boolean;
     sortNames: boolean;
@@ -63,6 +64,7 @@ interface InvitationState {
         subtitle: string;
         customDatePlace: string;
         andText: string;
+        suffixText: string;
         // Visibility Flags
         showTitle: boolean;
         showGroomBride: boolean;
@@ -134,6 +136,7 @@ interface InvitationState {
 
     setMessage: (message: string) => void;
     setGreetingTitle: (title: string) => void;
+    setGreetingSubtitle: (subtitle: string) => void;
     setShowNamesAtBottom: (show: boolean) => void;
     setSortNames: (sort: boolean) => void;
     setEnableFreeformNames: (enable: boolean) => void;
@@ -233,6 +236,7 @@ export const useInvitationStore = create<InvitationState>((set) => ({
     coordinates: { lat: 37.515, lng: 127.102 }, // Default: Jamsil
     message: '서로의 빛이 되어\n평생을 함께 걸어가겠습니다.\n저희 두 사람의 시작을\n축복해 주시면 감사하겠습니다.',
     greetingTitle: '소중한 분들을 초대합니다',
+    greetingSubtitle: 'INVITATION',
     showNamesAtBottom: true,
     sortNames: true,
     enableFreeformNames: false,
@@ -248,8 +252,9 @@ export const useInvitationStore = create<InvitationState>((set) => ({
         effect: 'paper',
         title: 'THE MARRIAGE',
         subtitle: 'We are getting married',
-        customDatePlace: '0000.00.00. Sunday 00:00 PM\nOOO예식장 1F, OOO홀',
-        andText: '그리고',
+        customDatePlace: '2026.01.06. Tuesday 12:00 PM\n서울 강남구 어느 예식장 1F, 그랜드홀',
+        andText: '·',
+        suffixText: '결혼합니다',
         showTitle: true,
         showGroomBride: true,
         showSubtitle: true,
@@ -325,6 +330,7 @@ export const useInvitationStore = create<InvitationState>((set) => ({
     setCoordinates: (lat, lng) => set({ coordinates: { lat, lng } }),
     setMessage: (message) => set({ message }),
     setGreetingTitle: (title) => set({ greetingTitle: title }),
+    setGreetingSubtitle: (subtitle) => set({ greetingSubtitle: subtitle }),
     setShowNamesAtBottom: (show) => set({ showNamesAtBottom: show }),
     setSortNames: (sort) => set({ sortNames: sort }),
     setEnableFreeformNames: (enable) => set({ enableFreeformNames: enable }),

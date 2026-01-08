@@ -11,33 +11,54 @@ export default function MainScreenView() {
         <div className={`relative w-full transition-all duration-700 ease-in-out ${mainScreen.layout === 'fill' ? 'h-[650px]' : 'pb-16'}`}>
             <div className={`
                 relative w-full overflow-hidden flex flex-col items-center transition-all duration-700 ease-in-out
-                ${mainScreen.layout === 'fill' ? 'h-full justify-center' : 'pt-20'}
+                ${mainScreen.layout === 'fill' ? 'h-full justify-center' : 'pt-14'}
             `}>
                 {/* 1. Header Text Area (For Basic Layout, appears before image) */}
                 <div className={`
                     flex flex-col items-center text-center px-6 transition-all duration-700 ease-in-out
-                    ${mainScreen.layout === 'basic' ? 'mb-12 opacity-100 translate-y-0 scale-100' : 'h-0 mb-0 opacity-0 -translate-y-4 scale-95 pointer-events-none overflow-hidden'}
+                    ${mainScreen.layout === 'basic' ? 'mb-10 opacity-100 translate-y-0 scale-100' : 'h-0 mb-0 opacity-0 -translate-y-4 scale-95 pointer-events-none overflow-hidden'}
                 `}>
+                    {/* Subtitle removed from here as per user request */}
                     {mainScreen.showTitle && (
                         <div
-                            className="tracking-[0.4em] font-bold text-coral-pink mb-6 uppercase"
+                            className="tracking-[0.4em] font-bold text-coral-pink mb-3 uppercase"
                             style={{ fontSize: 'calc(11px * var(--font-scale))' }}
                         >
                             {mainScreen.title || 'THE MARRIAGE'}
                         </div>
                     )}
                     <div
-                        className="font-serif font-light text-gray-700 tracking-tighter mb-8 tabular-nums"
+                        className="font-serif font-light text-gray-700 tracking-tighter mb-5 tabular-nums"
                         style={{ fontSize: 'calc(48px * var(--font-scale))' }}
                     >
                         {date ? `${String(new Date(date).getMonth() + 1).padStart(2, '0')}.${String(new Date(date).getDate()).padStart(2, '0')}` : '00.00'}
                     </div>
                     {mainScreen.showGroomBride && (
                         <div
-                            className="font-serif text-gray-800 font-medium tracking-tight"
+                            className={`font-serif text-gray-800 font-medium tracking-tight flex items-center justify-center flex-wrap ${(mainScreen.andText || '').length <= 2 ? 'gap-x-2' : 'gap-x-4'
+                                } gap-y-1`}
                             style={{ fontSize: 'calc(17px * var(--font-scale))' }}
                         >
-                            {groom.lastName}{groom.firstName}, {bride.lastName}{bride.firstName} <span className="text-gray-400 font-light ml-0.5">결혼합니다.</span>
+                            <span className="shrink-0">{groom.lastName}{groom.firstName}</span>
+                            <span
+                                className={`font-playfair uppercase opacity-100 shrink-0 inline-flex items-center justify-center ${(mainScreen.andText || '').length > 1 ? 'tracking-[0.2em]' : ''
+                                    }`}
+                                style={{
+                                    fontSize: (mainScreen.andText || '').length === 1
+                                        ? 'calc(20px * var(--font-scale))'
+                                        : 'calc(15px * var(--font-scale))',
+                                    color: accentColor,
+                                    transform: mainScreen.andText === '·' ? 'translateY(-15%)' : 'none'
+                                }}
+                            >
+                                {mainScreen.andText || 'and'}
+                            </span>
+                            <span className="shrink-0">{bride.lastName}{bride.firstName}</span>
+                            {mainScreen.suffixText && (
+                                <span className="text-gray-600 font-medium ml-[-2px] shrink-0" style={{ fontSize: 'calc(17px * var(--font-scale))' }}>
+                                    {mainScreen.suffixText}
+                                </span>
+                            )}
                         </div>
                     )}
                 </div>
@@ -120,8 +141,8 @@ export default function MainScreenView() {
 
                     {mainScreen.showSubtitle && (
                         <div
-                            className={`mb-6 tracking-wide ${mainScreen.layout === 'fill' ? 'opacity-95 font-light' : 'text-gray-500 font-light italic font-serif'}`}
-                            style={{ fontSize: 'calc(14px * var(--font-scale))' }}
+                            className={`mb-6 font-script ${mainScreen.layout === 'fill' ? 'text-white/90' : 'text-gray-500'}`}
+                            style={{ fontSize: 'calc(32px * var(--font-scale))' }}
                         >
                             {mainScreen.subtitle}
                         </div>
@@ -130,7 +151,7 @@ export default function MainScreenView() {
                     {mainScreen.showDatePlace && (
                         <div
                             className={`leading-[2.2] whitespace-pre-wrap tracking-wider ${mainScreen.layout === 'fill' ? 'opacity-80' : 'text-gray-500 font-medium font-serif'}`}
-                            style={{ fontSize: 'calc(12px * var(--font-scale))' }}
+                            style={{ fontSize: 'calc(14px * var(--font-scale))' }}
                         >
                             {(() => {
                                 if (mainScreen.customDatePlace && mainScreen.customDatePlace !== '0000.00.00. Sunday 00:00 PM\nOOO예식장 1F, OOO홀') {

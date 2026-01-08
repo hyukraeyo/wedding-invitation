@@ -79,12 +79,10 @@ export default function RootLayout({
       <head>
         {/* Pretendard CDN */}
         <link rel="stylesheet" as="style" crossOrigin="anonymous" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-        {/* Gmarket Sans CDN */}
-        <link href="https://fonts.cdnfonts.com/css/gmarket-sans-9" rel="stylesheet" />
         {/* Google Fonts - Offline 빌드 대응을 위해 CDN 사용 */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@400..900&family=Gowun+Batang:wght@400;700&family=Gowun+Dodum:wght@400&family=Nanum+Myeongjo:wght@400;700;800&family=Yeon+Sung:wght@400&family=Do+Hyeon:wght@400&family=Song+Myung:wght@400&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@400..900&family=Gowun+Batang:wght@400;700&family=Gowun+Dodum:wght@400&family=Nanum+Myeongjo:wght@400;700;800&family=Yeon+Sung:wght@400&family=Do+Hyeon:wght@400&family=Song+Myung:wght@400&family=Great+Vibes&display=swap" rel="stylesheet" />
       </head>
       <body className="antialiased">
 

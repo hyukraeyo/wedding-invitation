@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'GmarketSansMedium';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   --background: #F9F8E6;
   --foreground: #4A5D45;
@@ -20,6 +27,7 @@
   --font-song-myung: "Song Myung", serif;
   --font-pretendard: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
   --font-gmarket-sans: "GmarketSansMedium", sans-serif;
+  --font-script: "Great Vibes", cursive;
 }
 
 @theme inline {
@@ -40,6 +48,7 @@
   --font-song-myung: var(--font-song-myung);
   --font-pretendard: var(--font-pretendard);
   --font-gmarket-sans: var(--font-gmarket-sans);
+  --font-script: var(--font-script);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -94,6 +103,33 @@ body {
 
 .sans {
   font-family: var(--font-sans);
+}
+
+.font-playfair {
+  font-family: "Playfair Display", serif;
+}
+
+/* Rich Text Content */
+.rich-text-content p {
+  margin-bottom: 0.5em;
+}
+
+.rich-text-content p:last-child {
+  margin-bottom: 0;
+}
+
+.rich-text-content [style*="text-align: center"] {
+  display: block;
+  width: 100%;
+}
+
+.rich-text-content [style*="text-align: right"] {
+  display: block;
+  width: 100%;
+}
+
+.font-script {
+  font-family: var(--font-script);
 }
 
 /* Scrollbar Hide Utility */
