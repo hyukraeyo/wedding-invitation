@@ -2,7 +2,6 @@ import React from 'react';
 import { CreditCard, Plus, Trash2 } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
-import { BuilderLabel } from '../BuilderLabel';
 import { BuilderInput } from '../BuilderInput';
 
 import { BuilderButtonGroup } from '../BuilderButtonGroup';

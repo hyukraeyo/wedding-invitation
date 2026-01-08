@@ -68,50 +68,37 @@ const InvitationCanvas = memo(() => {
         <EffectsOverlay />
 
         {/* 1. Main Screen */}
-        <div id="section-mainScreen">
+        <div id="section-mainScreen" className="pb-28">
           <MainScreenView />
         </div>
 
-        {/* Divider */}
-        <div className="flex justify-center py-4 opacity-5">
-          <div className="w-16 h-[1px]" style={{ backgroundColor: theme.accentColor }}></div>
-        </div>
-
         {/* 2. Message / Greeting */}
-        <div id="section-message" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-backwards">
+        <div id="section-message" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 fill-mode-backwards pb-28">
           <GreetingView />
         </div>
 
-        {/* 3. Detailed Names - Removed as it's redundant with signatures in GreetingView */}
-
-
-        {/* Divider */}
-        <div className="flex justify-center py-6 opacity-5">
-          <div className="w-24 h-[1px]" style={{ backgroundColor: theme.accentColor }}></div>
-        </div>
-
         {/* 4. Calendar & D-Day */}
-        <div id="section-date" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-700 fill-mode-backwards">
+        <div id="section-date" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-500 fill-mode-backwards pb-28">
           <CalendarSectionView />
         </div>
 
         {/* 5. Location */}
-        <div id="section-location" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-900 fill-mode-backwards px-6 pb-12">
+        <div id="section-location" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-700 fill-mode-backwards px-6 pb-28">
           <LocationView />
         </div>
 
         {/* 6. Gallery */}
-        <div id="section-gallery" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000 fill-mode-backwards">
+        <div id="section-gallery" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-900 fill-mode-backwards px-6 pb-28">
           <GalleryView />
         </div>
 
         {/* 7. Accounts */}
-        <div id="section-account" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000 fill-mode-backwards pb-12">
+        <div id="section-account" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000 fill-mode-backwards pb-28">
           <AccountsView />
         </div>
 
         {/* 8. Closing / Ending */}
-        <div id="section-closing" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000 fill-mode-backwards pb-12">
+        <div id="section-closing" className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-1000 fill-mode-backwards pb-28">
           <ClosingView />
         </div>
 

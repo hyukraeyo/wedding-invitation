@@ -44,7 +44,7 @@ export default function CalendarSectionView() {
     if ((!showCalendar && !showDday) || !date) return null;
 
     return (
-        <div className="py-16 px-8 w-full">
+        <div className="px-8 w-full">
             <div className="relative overflow-hidden">
                 {/* 2026.01.06 Header */}
                 <div className="text-center mb-12 space-y-3 relative z-10">

@@ -3,7 +3,6 @@ import Image from 'next/image';
 import { LayoutTemplate, Check, Image as ImageIcon, Type, ChevronDown, ChevronUp, Info, Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
-import { BuilderLabel } from '../BuilderLabel';
 import { BuilderInput } from '../BuilderInput';
 import { BuilderCheckbox } from '../BuilderCheckbox';
 import { BuilderModal } from '@/components/common/BuilderModal';

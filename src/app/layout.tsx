@@ -82,6 +82,7 @@ export default function RootLayout({
         {/* Google Fonts - Offline 빌드 대응을 위해 CDN 사용 */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@400..900&family=Gowun+Batang:wght@400;700&family=Gowun+Dodum:wght@400&family=Nanum+Myeongjo:wght@400;700;800&family=Yeon+Sung:wght@400&family=Do+Hyeon:wght@400&family=Song+Myung:wght@400&family=Great+Vibes&display=swap" rel="stylesheet" />
       </head>
       <body className="antialiased">

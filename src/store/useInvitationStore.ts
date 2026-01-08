@@ -99,6 +99,7 @@ interface InvitationState {
     galleryPopup: boolean;
     galleryPreview: boolean; // 다음 슬라이드 미리보기
     galleryFade: boolean; // 페이드 효과 사용
+    galleryAutoplay: boolean; // 자동 재생 사용
     gallery: string[];
 
     // Account State
@@ -152,6 +153,7 @@ interface InvitationState {
     setGalleryPopup: (use: boolean) => void;
     setGalleryPreview: (preview: boolean) => void;
     setGalleryFade: (fade: boolean) => void;
+    setGalleryAutoplay: (autoplay: boolean) => void;
     setAccounts: (accounts: InvitationState['accounts']) => void;
     setMainScreen: (data: Partial<InvitationState['mainScreen']>) => void;
     setShowCalendar: (show: boolean) => void;
@@ -286,9 +288,10 @@ export const useInvitationStore = create<InvitationState>((set) => ({
     gallery: [],
     galleryTitle: '웨딩 갤러리',
     galleryType: 'swiper',
-    galleryPopup: false,
+    galleryPopup: true,
     galleryPreview: false,
-    galleryFade: true,
+    galleryFade: false,
+    galleryAutoplay: true,
     accounts: [
         { id: 'g1', type: 'groom', relation: '본인', bank: '카카오뱅크', accountNumber: '3333-01-2345678', holder: '이도현' },
         { id: 'b1', type: 'bride', relation: '본인', bank: '신한은행', accountNumber: '110-123-456789', holder: '김지수' },
@@ -351,6 +354,7 @@ export const useInvitationStore = create<InvitationState>((set) => ({
     setGalleryPopup: (popup) => set({ galleryPopup: popup }),
     setGalleryPreview: (preview) => set({ galleryPreview: preview }),
     setGalleryFade: (fade) => set({ galleryFade: fade }),
+    setGalleryAutoplay: (autoplay) => set({ galleryAutoplay: autoplay }),
     setAccounts: (accounts) => set({ accounts }),
     setMainScreen: (data) => set((state) => ({ mainScreen: { ...state.mainScreen, ...data } })),
     setShowCalendar: (show) => set({ showCalendar: show }),

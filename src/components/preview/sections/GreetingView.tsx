@@ -18,7 +18,7 @@ export default function GreetingView() {
     };
 
     return (
-        <div className="py-14 px-10 text-center mx-4 relative overflow-hidden">
+        <div className="px-10 text-center mx-4 relative overflow-hidden">
             <div className="space-y-6">
                 {/* Section Header */}
                 <div className="flex flex-col items-center space-y-1">
