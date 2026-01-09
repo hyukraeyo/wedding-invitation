@@ -16,8 +16,12 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진 �
     const handleUpload = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            const url = URL.createObjectURL(file);
-            onChange(url);
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = reader.result as string;
+                onChange(base64String);
+            };
+            reader.readAsDataURL(file);
         }
     };
 

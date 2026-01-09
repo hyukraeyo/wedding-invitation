@@ -4,11 +4,15 @@ import React, { useState } from 'react';
 import InvitationCanvas from '@/components/preview/InvitationCanvas';
 import EditorForm from '@/components/builder/EditorForm';
 import LoginModal from '@/components/auth/LoginModal';
+import { useInvitationStore } from '@/store/useInvitationStore';
+import { useAuth } from '@/hooks/useAuth';
 
 import Header from '@/components/common/Header';
 
+
 export default function BuilderPage() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const { user } = useAuth();
 
   return (
     <main className="flex flex-col h-screen w-full bg-gray-100 overflow-hidden">
@@ -19,14 +23,21 @@ export default function BuilderPage() {
       />
 
       {/* Common Header */}
-      <Header onSave={() => setIsLoginModalOpen(true)} />
+      <Header onSave={() => {
+        if (!user) {
+          setIsLoginModalOpen(true);
+        } else {
+          const setEditingSection = useInvitationStore.getState().setEditingSection;
+          setEditingSection('publish');
+        }
+      }} />
 
       {/* Workspace */}
       <div className="flex flex-1 overflow-hidden">
         {/* Left Panel: Editor */}
         <section className="w-[400px] lg:w-[480px] h-full border-r border-gray-200 bg-white shadow-xl z-20 flex flex-col">
           <div className="flex-1 overflow-hidden p-6 bg-gray-50/50">
-            <EditorForm />
+            <EditorForm requireLogin={() => setIsLoginModalOpen(true)} />
           </div>
         </section>
 

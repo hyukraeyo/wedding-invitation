@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 interface InvitationState {
     // Basic Info
@@ -188,7 +188,15 @@ interface InvitationState {
         content: string;
     };
     setClosing: (data: Partial<InvitationState['closing']>) => void;
+
+    // URL / Slug State
+    slug: string;
+    setSlug: (slug: string) => void;
 }
+
+export type InvitationData = {
+    [K in keyof InvitationState as InvitationState[K] extends (...args: unknown[]) => unknown ? never : K]: InvitationState[K];
+};
 
 const getDefaultDate = () => {
     const d = new Date();
@@ -301,6 +309,7 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
         { id: 'g1', type: 'groom', relation: '본인', bank: '카카오뱅크', accountNumber: '3333-01-2345678', holder: '이도현' },
         { id: 'b1', type: 'bride', relation: '본인', bank: '신한은행', accountNumber: '110-123-456789', holder: '김지수' },
     ],
+    slug: '',
 
     setGroom: (data) => set((state) => ({ groom: { ...state.groom, ...data } })),
     setBride: (data) => set((state) => ({ bride: { ...state.bride, ...data } })),
@@ -393,10 +402,16 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
         content: '',
     },
     setClosing: (data) => set((state) => ({ closing: { ...state.closing, ...data } })),
+    setSlug: (slug) => set({ slug }),
 }), {
-    name: 'wedding-invitation-storage', // Key for localStorage
+    name: 'wedding-invitation-storage',
+    storage: createJSONStorage(() => (typeof window !== 'undefined' ? localStorage : {
+        getItem: () => null,
+        setItem: () => { },
+        removeItem: () => { },
+    })),
     partialize: (state) => {
-        // Exclude potentially problematic types if needed.
+        // Exclude potentially problematic types from persistence if needed
         return state;
     }
 }));

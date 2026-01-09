@@ -1,14 +1,17 @@
 import React from 'react';
 import Image from 'next/image';
 import { useInvitationStore } from '@/store/useInvitationStore';
+import SectionContainer from '../SectionContainer';
 
-export default function ClosingView() {
+interface Props { id?: string; }
+
+export default function ClosingView({ id }: Props) {
     const { closing } = useInvitationStore();
 
-    if (!closing.imageUrl && !closing.content) return null;
+    if (!closing.imageUrl && !closing.content) return <div id={id} />;
 
     return (
-        <div className="w-full px-6">
+        <SectionContainer id={id} className="w-full">
             <div className="flex flex-col items-center space-y-8">
                 {/* Image Section */}
                 {closing.imageUrl && (
@@ -57,6 +60,6 @@ export default function ClosingView() {
                     </div>
                 )}
             </div>
-        </div>
+        </SectionContainer>
     );
 }

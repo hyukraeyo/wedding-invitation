@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { ImagePlus, Plus, Info } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
+import { BuilderLabel } from '../BuilderLabel';
 import { BuilderCheckbox } from '../BuilderCheckbox';
 import { BuilderInput } from '../BuilderInput';
 import { BuilderButtonGroup } from '../BuilderButtonGroup';
@@ -113,11 +114,19 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
         }
 
         const filesToProcess = validFiles.slice(0, remainingCount);
-        const newImageUrls = filesToProcess.map(file => URL.createObjectURL(file));
-        setGallery([...gallery, ...newImageUrls]);
 
-        // Reset input
-        e.target.value = '';
+        const readFileAsBase64 = (file: File): Promise<string> => {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.onloadend = () => resolve(reader.result as string);
+                reader.readAsDataURL(file);
+            });
+        };
+
+        Promise.all(filesToProcess.map(readFileAsBase64)).then(newImageUrls => {
+            setGallery([...gallery, ...newImageUrls]);
+            e.target.value = '';
+        });
     };
 
     const handleDragEnd = useCallback((event: DragEndEvent) => {
@@ -126,7 +135,10 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
         if (over && active.id !== over.id) {
             const oldIndex = gallery.indexOf(active.id as string);
             const newIndex = gallery.indexOf(over.id as string);
-            setGallery(arrayMove(gallery, oldIndex, newIndex));
+
+            if (oldIndex !== -1 && newIndex !== -1) {
+                setGallery(arrayMove(gallery, oldIndex, newIndex));
+            }
         }
         setActiveId(null);
     }, [gallery, setGallery]);

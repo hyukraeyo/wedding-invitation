@@ -5,8 +5,11 @@ import { Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk';
 import { Copy } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { NaverIcon, KakaoIcon } from '../../common/MapIcons';
+import SectionContainer from '../SectionContainer';
 
-export default function LocationView() {
+interface Props { id?: string; }
+
+export default function LocationView({ id }: Props) {
     const {
         location, address, detailAddress,
         locationTitle, locationContact,
@@ -68,7 +71,7 @@ export default function LocationView() {
     if (error) return <div>Error loading map</div>;
 
     return (
-        <div className="w-full space-y-8">
+        <SectionContainer id={id} className="w-full space-y-8">
             {/* Load Naver Map Script */}
             <Script
                 src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID}`}
@@ -200,6 +203,6 @@ export default function LocationView() {
                     </a>
                 </div>
             )}
-        </div>
+        </SectionContainer>
     );
 }

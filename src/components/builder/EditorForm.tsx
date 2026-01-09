@@ -45,7 +45,15 @@ const ClosingSection = dynamic(() => import('./sections/ClosingSection'), {
   loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded-lg" />
 });
 
-const EditorForm = memo(function EditorForm() {
+const PublishSection = dynamic(() => import('./sections/PublishSection'), {
+  loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded-lg" />
+});
+
+interface EditorFormProps {
+  requireLogin?: () => void;
+}
+
+const EditorForm = memo(function EditorForm({ requireLogin }: EditorFormProps) {
   // State to track open accordion section
   const [openSection, setOpenSection] = useState<string | null>(null);
   const setEditingSection = useInvitationStore(state => state.setEditingSection);
@@ -69,6 +77,13 @@ const EditorForm = memo(function EditorForm() {
         ))}
       </div>}>
         <div className="space-y-1">
+          {/* Publish & Status */}
+          <PublishSection
+            isOpen={openSection === 'publish'}
+            onToggle={() => handleToggle('publish')}
+            onRequireLogin={requireLogin}
+          />
+
           {/* Basic Info */}
           <BasicInfoSection
             isOpen={openSection === 'basic'}

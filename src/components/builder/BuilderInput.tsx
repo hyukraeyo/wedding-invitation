@@ -9,7 +9,7 @@ export const BuilderInput = (props: BuilderInputProps) => {
         <input
             {...props}
             className={twMerge(
-                "w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-[14px] text-gray-900 placeholder:text-gray-300 focus:border-gray-400 outline-none transition-all disabled:bg-gray-50 disabled:text-gray-400 disabled:border-gray-100 disabled:cursor-not-allowed",
+                "w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-[14px] text-gray-900 placeholder:text-gray-400 focus:border-gray-400 outline-none transition-all disabled:bg-gray-50 disabled:text-gray-400 disabled:border-gray-100 disabled:cursor-not-allowed",
                 props.className
             )}
             style={{

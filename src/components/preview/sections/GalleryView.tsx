@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -11,29 +11,72 @@ import 'swiper/css/free-mode';
 import 'swiper/css/thumbs';
 import type { Swiper as SwiperClass } from 'swiper';
 import { useInvitationStore } from '@/store/useInvitationStore';
+import SectionContainer from '../SectionContainer';
 
-export default function GalleryView() {
+interface Props { id?: string; }
+
+export default function GalleryView({ id }: Props) {
     const { gallery, galleryTitle, galleryType, galleryPreview, galleryFade, galleryAutoplay, galleryPopup, theme } = useInvitationStore();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isMounted, setIsMounted] = useState(false);
     const [popupIndex, setPopupIndex] = useState<number | null>(null);
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
 
+    // References for accessibility focus management
+    const closeBtnRef = useRef<HTMLButtonElement>(null);
+
     React.useEffect(() => {
         setIsMounted(true);
     }, []);
 
-    // Prevent scrolling when popup is open
+    // 1. Scroll Lock & Focus Trap (Accessibility Standard)
     React.useEffect(() => {
         if (popupIndex !== null) {
-            document.body.style.overflow = 'hidden';
+            // Lock Scroll
+            const scrollY = window.scrollY;
+            document.body.style.cssText = `
+                position: fixed; 
+                top: -${scrollY}px;
+                left: 0;
+                width: 100%;
+                overflow-y: hidden;
+            `;
+            document.documentElement.style.overflow = 'hidden';
+
+            // Focus Trap (Simple)
+            setTimeout(() => closeBtnRef.current?.focus(), 100);
         } else {
-            document.body.style.overflow = '';
+            const scrollY = document.body.style.top;
+            document.body.style.cssText = '';
+            document.documentElement.style.overflow = '';
+            if (scrollY) {
+                window.scrollTo(0, parseInt(scrollY || '0') * -1);
+            }
         }
-        return () => { document.body.style.overflow = ''; };
+        return () => {
+            document.body.style.cssText = '';
+            document.documentElement.style.overflow = '';
+        };
     }, [popupIndex]);
 
-    if (!gallery || gallery.length === 0) return null;
+    // 2. Keyboard Navigation (UX Standard)
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (popupIndex === null) return;
+            if (e.key === 'Escape') setPopupIndex(null);
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [popupIndex]);
+
+    // Prevent touch move on background
+    const handleTouchMove = useCallback((e: React.TouchEvent) => {
+        if (popupIndex !== null) {
+            e.stopPropagation();
+        }
+    }, [popupIndex]);
+
+    if (!gallery || gallery.length === 0) return <div id={id} />;
     if (!isMounted) return null;
 
     const handleImageClick = (index: number) => {
@@ -90,37 +133,26 @@ export default function GalleryView() {
                                         </div>
                                     </SwiperSlide>
                                 ))}
-
-                                {/* Custom Navigation (Desktop Only) */}
-                                {gallery.length > 1 && (
-                                    <>
-                                        <button className="swiper-button-prev-custom absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2.5 rounded-full shadow-lg transition-all z-30 opacity-0 group-hover:opacity-100 hidden md:flex items-center justify-center">
-                                            <ChevronLeft size={20} />
-                                        </button>
-                                        <button className="swiper-button-next-custom absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2.5 rounded-full shadow-lg transition-all z-30 opacity-0 group-hover:opacity-100 hidden md:flex items-center justify-center">
-                                            <ChevronRight size={20} />
-                                        </button>
-                                    </>
-                                )}
-
-                                {/* Fraction Indicator (Modern & Sleek for Mobile) */}
-                                {gallery.length > 1 && (
-                                    <div className="absolute bottom-4 right-4 bg-black/40 backdrop-blur-md text-white px-3 py-1 rounded-full z-40 text-[11px] font-medium tracking-tight pointer-events-none">
-                                        <span>{currentIndex + 1}</span>
-                                        <span className="mx-1 opacity-50">/</span>
-                                        <span className="opacity-70">{gallery.length}</span>
-                                    </div>
-                                )}
                             </Swiper>
-
-                            <style>
-                                {`
-                            .swiper-button-disabled {
-                                opacity: 0 !important;
-                                pointer-events: none;
-                            }
-                            `}
-                            </style>
+                            {/* Custom Navigation (Desktop Only) */}
+                            {gallery.length > 1 && (
+                                <>
+                                    <button className="swiper-button-prev-custom absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2.5 rounded-full shadow-lg transition-all z-30 opacity-0 group-hover:opacity-100 hidden md:flex items-center justify-center">
+                                        <ChevronLeft size={20} />
+                                    </button>
+                                    <button className="swiper-button-next-custom absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2.5 rounded-full shadow-lg transition-all z-30 opacity-0 group-hover:opacity-100 hidden md:flex items-center justify-center">
+                                        <ChevronRight size={20} />
+                                    </button>
+                                </>
+                            )}
+                            {/* Fraction Indicator */}
+                            {gallery.length > 1 && (
+                                <div className="absolute bottom-4 right-4 bg-black/40 backdrop-blur-md text-white px-3 py-1 rounded-full z-40 text-[11px] font-medium tracking-tight pointer-events-none">
+                                    <span>{currentIndex + 1}</span>
+                                    <span className="mx-1 opacity-50">/</span>
+                                    <span className="opacity-70">{gallery.length}</span>
+                                </div>
+                            )}
                         </div>
                     </div>
                 );
@@ -128,7 +160,6 @@ export default function GalleryView() {
             case 'thumbnail':
                 return (
                     <div className="w-full max-w-4xl mx-auto">
-                        {/* Main Swiper */}
                         <div className="relative group mb-4">
                             <Swiper
                                 spaceBetween={10}
@@ -156,8 +187,6 @@ export default function GalleryView() {
                                     </SwiperSlide>
                                 ))}
                             </Swiper>
-
-                            {/* Desktop Nav */}
                             <button className="thumb-prev absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 text-gray-800 p-2 rounded-full shadow-lg z-10 opacity-0 group-hover:opacity-100 transition-opacity hidden md:block">
                                 <ChevronLeft size={20} />
                             </button>
@@ -165,8 +194,6 @@ export default function GalleryView() {
                                 <ChevronRight size={20} />
                             </button>
                         </div>
-
-                        {/* Thumbnail Swiper */}
                         <Swiper
                             onSwiper={setThumbsSwiper}
                             spaceBetween={8}
@@ -223,8 +250,8 @@ export default function GalleryView() {
     };
 
     return (
-        <div className="">
-            <div className="text-center mb-10">
+        <SectionContainer id={id} className="overflow-hidden">
+            <div className="text-center mb-10 w-full">
                 <div className="flex flex-col items-center space-y-3">
                     <span
                         className="tracking-[0.4em] font-medium uppercase"
@@ -242,39 +269,55 @@ export default function GalleryView() {
 
             {renderGallery()}
 
-            {/* Popup Viewer */}
+            {/* 3. Modern Accessible Lightbox (Immersive & Minimal) */}
             {popupIndex !== null && (
-                <div className="fixed inset-0 z-[9999] bg-black/95 flex items-center justify-center p-0 m-0 animate-in fade-in duration-300">
-                    <button
-                        onClick={() => setPopupIndex(null)}
-                        className="absolute top-6 right-6 z-[10001] text-white/50 hover:text-white transition-colors bg-white/10 hover:bg-white/20 p-2 rounded-full backdrop-blur-sm"
-                    >
-                        <X size={24} />
-                    </button>
+                <div
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="Image Gallery"
+                    className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-black/95 backdrop-blur-md animate-modal-bg touch-none"
+                    onClick={() => setPopupIndex(null)}
+                    onTouchMove={handleTouchMove}
+                >
+                    {/* Minimal Top Bar */}
+                    <div className="absolute top-0 left-0 w-full p-4 flex justify-between items-center z-[10002] bg-gradient-to-b from-black/50 to-transparent">
+                        <span className="text-white/60 text-xs font-light tracking-[0.2em]">
+                            {currentIndex + 1} / {gallery.length}
+                        </span>
+                        <button
+                            ref={closeBtnRef}
+                            onClick={() => setPopupIndex(null)}
+                            className="p-2 text-white/80 hover:text-white transition-colors rounded-full hover:bg-white/10"
+                            aria-label="Close Gallery"
+                        >
+                            <X size={24} strokeWidth={1} />
+                        </button>
+                    </div>
 
-                    <div className="w-full h-full py-12 md:py-20">
+                    {/* Main Content Area - Maximized */}
+                    <div
+                        className="relative w-full h-full flex items-center justify-center p-2 sm:p-4"
+                        onClick={(e) => e.stopPropagation()}
+                    >
                         <Swiper
                             initialSlide={popupIndex}
                             modules={[Navigation, Pagination, EffectFade]}
                             spaceBetween={20}
                             slidesPerView={1}
                             navigation={{
-                                nextEl: '.popup-next',
-                                prevEl: '.popup-prev',
+                                nextEl: '.lux-next',
+                                prevEl: '.lux-prev',
                             }}
-                            pagination={{
-                                type: 'fraction',
-                                el: '.popup-pagination',
-                            }}
+                            onSlideChange={(swiper) => setCurrentIndex(swiper.activeIndex)}
                             className="w-full h-full"
                         >
                             {gallery.map((img, i) => (
-                                <SwiperSlide key={`popup-${i}`} className="flex items-center justify-center">
+                                <SwiperSlide key={`lux-${i}`} className="flex items-center justify-center">
                                     <div className="relative w-full h-full flex items-center justify-center">
-                                        <div className="relative w-full h-full">
+                                        <div className="relative w-full h-full max-w-5xl max-h-[85vh] transition-transform duration-500">
                                             <Image
                                                 src={img}
-                                                alt={`Gallery Large ${i + 1}`}
+                                                alt={`Full view ${i + 1}`}
                                                 fill
                                                 unoptimized
                                                 className="object-contain"
@@ -284,37 +327,22 @@ export default function GalleryView() {
                                     </div>
                                 </SwiperSlide>
                             ))}
-
-                            {/* Popup Navigation */}
-                            <button className="popup-prev absolute left-4 md:left-10 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-all z-[10001] hidden md:block">
-                                <ChevronLeft size={48} strokeWidth={1} />
-                            </button>
-                            <button className="popup-next absolute right-4 md:right-10 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-all z-[10001] hidden md:block">
-                                <ChevronRight size={48} strokeWidth={1} />
-                            </button>
-
-                            {/* Popup Fraction */}
-                            <div className="popup-pagination absolute bottom-10 left-1/2 -translate-x-1/2 text-white/80 font-light tracking-widest text-sm z-[10001]"></div>
                         </Swiper>
                     </div>
 
-                    <style>
-                        {`
-                        .popup-pagination.swiper-pagination-fraction {
-                            bottom: 40px !important;
-                        }
-                        .popup-pagination .swiper-pagination-current {
-                            font-weight: 500;
-                            color: white;
-                        }
-                        .popup-pagination .swiper-pagination-total {
-                            opacity: 0.5;
-                        }
-                        `}
-                    </style>
+                    {/* Minimal Floating Nav - Side (Desktop/Tablet) */}
+                    {gallery.length > 1 && (
+                        <>
+                            <button className="lux-prev absolute left-4 top-1/2 -translate-y-1/2 z-[10002] p-4 text-white/30 hover:text-white transition-all hidden md:block hover:bg-white/5 rounded-full">
+                                <ChevronLeft size={36} strokeWidth={0.5} />
+                            </button>
+                            <button className="lux-next absolute right-4 top-1/2 -translate-y-1/2 z-[10002] p-4 text-white/30 hover:text-white transition-all hidden md:block hover:bg-white/5 rounded-full">
+                                <ChevronRight size={36} strokeWidth={0.5} />
+                            </button>
+                        </>
+                    )}
                 </div>
             )}
-        </div>
+        </SectionContainer>
     );
 }
-

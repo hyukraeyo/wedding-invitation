@@ -1,7 +1,10 @@
 import Image from 'next/image';
 import { useInvitationStore } from '@/store/useInvitationStore';
+import SectionContainer from '../SectionContainer';
 
-export default function GreetingView() {
+interface Props { id?: string; }
+
+export default function GreetingView({ id }: Props) {
     const {
         greetingTitle, greetingSubtitle, message, greetingImage,
         showNamesAtBottom, enableFreeformNames,
@@ -10,7 +13,7 @@ export default function GreetingView() {
     } = useInvitationStore();
     const accentColor = useInvitationStore(state => state.theme.accentColor);
 
-    if (!message && !showNamesAtBottom) return null;
+    if (!message && !showNamesAtBottom) return <div id={id} />;
 
     const formatParentName = (parent: { name: string; isDeceased: boolean }) => {
         if (!parent.name) return '';
@@ -18,7 +21,7 @@ export default function GreetingView() {
     };
 
     return (
-        <div className="px-10 text-center mx-4 relative overflow-hidden">
+        <SectionContainer id={id} className="text-center overflow-hidden">
             <div className="space-y-6">
                 {/* Section Header */}
                 <div className="flex flex-col items-center space-y-1">
@@ -124,6 +127,6 @@ export default function GreetingView() {
                     </div>
                 )}
             </div>
-        </div>
+        </SectionContainer>
     );
 }

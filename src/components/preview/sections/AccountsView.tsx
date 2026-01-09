@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
+import SectionContainer from '../SectionContainer';
 
-export default function AccountsView() {
+interface Props { id?: string; }
+
+export default function AccountsView({ id }: Props) {
     const { accounts, theme } = useInvitationStore();
     const [openSide, setOpenSide] = useState<'groom' | 'bride' | null>(null);
 
@@ -14,10 +17,10 @@ export default function AccountsView() {
         alert('계좌번호가 복사되었습니다.');
     };
 
-    if (accounts.length === 0) return null;
+    if (accounts.length === 0) return <div id={id} />;
 
     return (
-        <div className="px-8">
+        <SectionContainer id={id}>
             <div className="text-center space-y-4 mb-10">
                 <div className="flex flex-col items-center space-y-2">
                     <span
@@ -27,7 +30,7 @@ export default function AccountsView() {
                     <div className="w-8 h-[1px]" style={{ backgroundColor: theme.accentColor, opacity: 0.1 }}></div>
                 </div>
             </div>
-            <div className="space-y-4 max-w-[320px] mx-auto">
+            <div className="space-y-4 max-w-[320px] mx-auto w-full">
                 {/* Groom Side */}
                 <div className="rounded-2xl border border-gray-100 overflow-hidden bg-white/50 backdrop-blur-sm shadow-sm">
                     <button
@@ -104,6 +107,6 @@ export default function AccountsView() {
                     )}
                 </div>
             </div>
-        </div>
+        </SectionContainer>
     );
 }

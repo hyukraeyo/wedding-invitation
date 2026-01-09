@@ -6,7 +6,7 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 interface ScrollRevealProps {
     children: React.ReactNode;
     className?: string;
-    id?: string;
+    id?: string | undefined;
 }
 
 export default function ScrollReveal({ children, className = "", id }: ScrollRevealProps) {

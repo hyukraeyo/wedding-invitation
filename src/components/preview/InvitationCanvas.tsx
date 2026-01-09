@@ -74,39 +74,22 @@ const InvitationCanvas = memo(() => {
         </ScrollReveal>
 
         {/* 2. Message / Greeting */}
-        <ScrollReveal id="section-message">
-          <GreetingView />
-        </ScrollReveal>
-
-        {/* Divider */}
-        <div className="flex justify-center py-6 opacity-5">
-          <div className="w-24 h-[1px]" style={{ backgroundColor: theme.accentColor }}></div>
-        </div>
+        <GreetingView id="section-message" />
 
         {/* 4. Calendar & D-Day */}
-        <ScrollReveal id="section-date">
-          <CalendarSectionView />
-        </ScrollReveal>
+        <CalendarSectionView id="section-date" />
 
         {/* 5. Location */}
-        <ScrollReveal id="section-location" className="px-6 pb-12 pt-12">
-          <LocationView />
-        </ScrollReveal>
+        <LocationView id="section-location" />
 
         {/* 6. Gallery */}
-        <ScrollReveal id="section-gallery">
-          <GalleryView />
-        </ScrollReveal>
+        <GalleryView id="section-gallery" />
 
         {/* 7. Accounts */}
-        <ScrollReveal id="section-account" className="pb-12">
-          <AccountsView />
-        </ScrollReveal>
+        <AccountsView id="section-account" />
 
         {/* 8. Closing / Ending */}
-        <ScrollReveal id="section-closing" className="pb-12">
-          <ClosingView />
-        </ScrollReveal>
+        <ClosingView id="section-closing" />
 
         {/* Footer Padding */}
         <div className="h-40 flex flex-col items-center justify-center text-[10px] text-black/10 tracking-[0.2em] font-light pb-20">

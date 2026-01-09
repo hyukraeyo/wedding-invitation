@@ -25,8 +25,11 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
     const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            const url = URL.createObjectURL(file);
-            setClosing({ imageUrl: url });
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setClosing({ imageUrl: reader.result as string });
+            };
+            reader.readAsDataURL(file);
         }
     };
 

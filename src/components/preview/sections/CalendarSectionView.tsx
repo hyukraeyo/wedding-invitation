@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-// import { Heart } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
+import SectionContainer from '../SectionContainer';
 
-export default function CalendarSectionView() {
+interface Props { id?: string; }
+
+export default function CalendarSectionView({ id }: Props) {
     const {
         date, time, theme,
         showCalendar, showDday, ddayMessage,
@@ -41,10 +43,10 @@ export default function CalendarSectionView() {
         return () => clearInterval(timer);
     }, [date, time]);
 
-    if ((!showCalendar && !showDday) || !date) return null;
+    if ((!showCalendar && !showDday) || !date) return <div id={id} />;
 
     return (
-        <div className="px-8 w-full">
+        <SectionContainer id={id} className="w-full">
             <div className="relative overflow-hidden">
                 {/* 2026.01.06 Header */}
                 <div className="text-center mb-12 space-y-3 relative z-10">
@@ -197,6 +199,6 @@ export default function CalendarSectionView() {
                     </div>
                 )}
             </div>
-        </div>
+        </SectionContainer>
     );
 }
