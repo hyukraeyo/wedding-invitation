@@ -1,19 +1,16 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { Calendar as CalendarIcon } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderSelect } from '../BuilderSelect';
-// BuilderLabel removed
-import { BuilderButton } from '../BuilderButton';
 import { BuilderToggle } from '../BuilderToggle';
-import { BuilderInput } from '../BuilderInput';
 import { BuilderField } from '../BuilderField';
 import { SubAccordion } from '../SubAccordion';
 import { BuilderCalendar } from '../BuilderCalendar';
 import { BuilderTextField } from '../BuilderTextField';
-
+import { Section, Stack, Row, Divider, Card } from '../BuilderLayout';
 
 interface SectionProps {
     isOpen: boolean;
@@ -28,11 +25,8 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
         showDday, setShowDday,
         ddayMessage, setDdayMessage,
         groom, bride,
-        theme: { accentColor }
     } = useInvitationStore();
 
-
-    // States
     const [showDdayEditor, setShowDdayEditor] = useState(false);
 
     // Time Helpers
@@ -66,8 +60,8 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
             onToggle={onToggle}
             isCompleted={!!date && !!time}
         >
-            <div className="space-y-6">
-                {/* Custom Date Picker */}
+            <Section>
+                {/* 예식일 */}
                 <BuilderField label="예식일">
                     <BuilderCalendar
                         value={date}
@@ -76,9 +70,9 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
                     />
                 </BuilderField>
 
-                {/* Refined Time Picker (Using BuilderSelect) */}
+                {/* 예식시간 */}
                 <BuilderField label="예식시간">
-                    <div className="flex gap-3">
+                    <Row gap="md">
                         <BuilderSelect
                             value={currentHour}
                             options={hourOptions}
@@ -89,12 +83,12 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
                             options={minuteOptions}
                             onChange={(val) => handleTimeChange('minute', val)}
                         />
-                    </div>
+                    </Row>
                 </BuilderField>
 
-                {/* Display Options */}
+                {/* 표시 설정 */}
                 <BuilderField label="표시 설정">
-                    <div className="flex flex-wrap gap-2 px-1">
+                    <Row wrap>
                         <BuilderToggle
                             checked={showCalendar}
                             onChange={setShowCalendar}
@@ -105,84 +99,93 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
                             onChange={setShowDday}
                             label="디데이 & 카운트다운"
                         />
-                    </div>
+                    </Row>
                 </BuilderField>
 
                 {/* D-Day Message Editor */}
                 {showDday && (
-                    <div className="pt-4 border-t border-gray-100 space-y-4">
-                        <SubAccordion
-                            label="디데이 문구 커스텀"
-                            isOpen={showDdayEditor}
-                            onClick={() => setShowDdayEditor(!showDdayEditor)}
-                        />
+                    <>
+                        <Divider />
+                        <Stack gap="md">
+                            <SubAccordion
+                                label="디데이 문구 커스텀"
+                                isOpen={showDdayEditor}
+                                onClick={() => setShowDdayEditor(!showDdayEditor)}
+                            />
 
+                            {showDdayEditor && (
+                                <Card>
+                                    {(() => {
+                                        const parts = ddayMessage.split('(D-Day)');
+                                        const prefix = parts[0] || '';
+                                        const suffix = parts.slice(1).join('(D-Day)') || '';
 
-                        {showDdayEditor && (
-                            <div className="rounded-2xl bg-gray-50/30 border border-gray-50 p-6 space-y-6 animate-in fade-in slide-in-from-top-2 duration-300">
-                                {(() => {
-                                    const parts = ddayMessage.split('(D-Day)');
-                                    const prefix = parts[0] || '';
-                                    const suffix = parts.slice(1).join('(D-Day)') || '';
+                                        const displayPrefix = prefix
+                                            .replace(/\(신랑\)/g, groom.firstName || '신랑')
+                                            .replace(/\(신부\)/g, bride.firstName || '신부');
 
-                                    // Replace tags with real names for the input value
-                                    const displayPrefix = prefix
-                                        .replace(/\(신랑\)/g, groom.firstName || '신랑')
-                                        .replace(/\(신부\)/g, bride.firstName || '신부');
+                                        const displaySuffix = suffix
+                                            .replace(/\(신랑\)/g, groom.firstName || '신랑')
+                                            .replace(/\(신부\)/g, bride.firstName || '신부');
 
-                                    const displaySuffix = suffix
-                                        .replace(/\(신랑\)/g, groom.firstName || '신랑')
-                                        .replace(/\(신부\)/g, bride.firstName || '신부');
+                                        const handleInputChange = (newVal: string, isPrefix: boolean) => {
+                                            const escGroom = (groom.firstName || '신랑').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                                            const escBride = (bride.firstName || '신부').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-                                    const handleInputChange = (newVal: string, isPrefix: boolean) => {
-                                        // Reverse mapping: replace names back with tags for storage
-                                        const escGroom = (groom.firstName || '신랑').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                                        const escBride = (bride.firstName || '신부').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                                            const mappedValue = newVal
+                                                .replace(new RegExp(escGroom, 'g'), '(신랑)')
+                                                .replace(new RegExp(escBride, 'g'), '(신부)');
 
-                                        const mappedValue = newVal
-                                            .replace(new RegExp(escGroom, 'g'), '(신랑)')
-                                            .replace(new RegExp(escBride, 'g'), '(신부)');
+                                            if (isPrefix) {
+                                                setDdayMessage(`${mappedValue}(D-Day)${suffix}`);
+                                            } else {
+                                                setDdayMessage(`${prefix}(D-Day)${mappedValue}`);
+                                            }
+                                        };
 
-                                        if (isPrefix) {
-                                            setDdayMessage(`${mappedValue}(D-Day)${suffix}`);
-                                        } else {
-                                            setDdayMessage(`${prefix}(D-Day)${mappedValue}`);
-                                        }
-                                    };
+                                        return (
+                                            <Stack gap="lg">
+                                                <BuilderTextField
+                                                    label="시작 문구"
+                                                    value={displayPrefix}
+                                                    onChange={(e) => handleInputChange(e.target.value, true)}
+                                                    className="text-center font-bold"
+                                                    placeholder="결혼식까지 남음"
+                                                    containerClassName="text-center"
+                                                />
 
-                                    return (
-                                        <div className="space-y-6">
-                                            <BuilderTextField
-                                                label="시작 문구"
-                                                value={displayPrefix}
-                                                onChange={(e) => handleInputChange(e.target.value, true)}
-                                                className="text-center font-bold !bg-white"
-                                                placeholder="결혼식까지 남음"
-                                                containerClassName="text-center"
-                                            />
+                                                <Row align="center">
+                                                    <div style={{
+                                                        padding: '0.5rem 1.25rem',
+                                                        border: '1px dashed #e5e7eb',
+                                                        color: '#9ca3af',
+                                                        borderRadius: '9999px',
+                                                        fontSize: '11px',
+                                                        fontWeight: 700,
+                                                        letterSpacing: '-0.01em',
+                                                        background: 'rgba(255,255,255,0.5)'
+                                                    }}>
+                                                        D-DAY 카운트 표시 위치
+                                                    </div>
+                                                </Row>
 
-                                            <div className="flex items-center justify-center">
-                                                <div className="px-5 py-2 border border-dashed border-gray-200 text-gray-400 rounded-full text-[11px] font-bold tracking-tight bg-white/50">
-                                                    D-DAY 카운트 표시 위치
-                                                </div>
-                                            </div>
-
-                                            <BuilderTextField
-                                                label="종료 문구"
-                                                value={displaySuffix}
-                                                onChange={(e) => handleInputChange(e.target.value, false)}
-                                                className="text-center font-bold !bg-white"
-                                                placeholder="남았습니다"
-                                                containerClassName="text-center"
-                                            />
-                                        </div>
-                                    );
-                                })()}
-                            </div>
-                        )}
-                    </div>
+                                                <BuilderTextField
+                                                    label="종료 문구"
+                                                    value={displaySuffix}
+                                                    onChange={(e) => handleInputChange(e.target.value, false)}
+                                                    className="text-center font-bold"
+                                                    placeholder="남았습니다"
+                                                    containerClassName="text-center"
+                                                />
+                                            </Stack>
+                                        );
+                                    })()}
+                                </Card>
+                            )}
+                        </Stack>
+                    </>
                 )}
-            </div>
+            </Section>
         </AccordionItem>
     );
 });

@@ -1,0 +1,178 @@
+// ============================================
+// Builder Layout System
+// 빌더 UI의 모든 레이아웃 관련 변수 및 스타일
+// ============================================
+
+@use "@/styles/variables" as *;
+
+// ----- Spacing & Sizing Variables -----
+$builder-gap-xs: 0.25rem;  // 4px
+$builder-gap-sm: 0.5rem;   // 8px
+$builder-gap-md: 0.75rem;  // 12px
+$builder-gap-lg: 1rem;     // 16px
+$builder-gap-xl: 1.25rem;  // 20px
+$builder-gap-2xl: 1.5rem;  // 24px
+
+$builder-radius-sm: 0.5rem;   // 8px
+$builder-radius-md: 0.75rem;  // 12px
+$builder-radius-lg: 1rem;     // 16px
+$builder-radius-xl: 1.5rem;   // 24px
+
+// ----- Color Variables -----
+$builder-border-light: #f3f4f6;
+$builder-border-default: #e5e7eb;
+$builder-border-dark: #d1d5db;
+$builder-bg-subtle: #f9fafb;
+$builder-bg-hover: #f3f4f6;
+$builder-text-muted: #9ca3af;
+$builder-text-secondary: #6b7280;
+$builder-text-default: #4b5563;
+$builder-text-dark: #374151;
+$builder-text-heading: #111827;
+
+// ----- Typography -----
+$builder-font-xs: 11px;
+$builder-font-sm: 12px;
+$builder-font-base: 13px;
+$builder-font-md: 14px;
+$builder-font-lg: 15px;
+
+// ----- Layout Mixins -----
+
+// Section container - 아코디언 내부 섹션용
+@mixin builder-section {
+  display: flex;
+  flex-direction: column;
+  gap: $builder-gap-lg;
+  padding: $builder-gap-lg;
+}
+
+// Field group - 라벨+인풋 그룹
+@mixin builder-field-group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: $builder-gap-sm;
+}
+
+// Row layout - 수평 나열
+@mixin builder-row($gap: $builder-gap-md) {
+  display: flex;
+  align-items: center;
+  gap: $gap;
+}
+
+// Grid layout - 그리드 기반
+@mixin builder-grid($cols: 2, $gap: $builder-gap-md) {
+  display: grid;
+  grid-template-columns: repeat($cols, 1fr);
+  gap: $gap;
+}
+
+// Stack layout - 수직 나열
+@mixin builder-stack($gap: $builder-gap-md) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+// Card style
+@mixin builder-card {
+  border-radius: $builder-radius-md;
+  border: 1px solid $builder-border-light;
+  background: white;
+  padding: $builder-gap-lg;
+}
+
+// Subtle divider
+@mixin builder-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    $builder-border-default 20%,
+    $builder-border-default 80%,
+    transparent 100%
+  );
+  margin-block: $builder-gap-md;
+}
+
+// Label style
+@mixin builder-label {
+  font-size: $builder-font-xs;
+  font-weight: 700;
+  color: $builder-text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  display: block;
+}
+
+// Sub-label (smaller, inline)
+@mixin builder-sub-label {
+  font-size: $builder-font-sm;
+  font-weight: 500;
+  color: $builder-text-secondary;
+  flex-shrink: 0;
+  min-width: 3rem;
+}
+
+// Input base style
+@mixin builder-input-base {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border: 1px solid $builder-border-default;
+  border-radius: $builder-radius-md;
+  font-size: $builder-font-md;
+  font-weight: 400;
+  color: $builder-text-dark;
+  background: white;
+  outline: none;
+  transition: $transition-fast;
+
+  &::placeholder {
+    color: $builder-text-muted;
+    font-weight: 400;
+  }
+
+  &:hover {
+    border-color: $builder-border-dark;
+  }
+
+  &:focus {
+    border-color: var(--accent-color, #6b7280);
+    box-shadow: 0 0 0 3px rgba(var(--accent-rgb, 0, 0, 0), 0.08);
+  }
+}
+
+// Button base style
+@mixin builder-button-base {
+  @include flex-center;
+  padding: 0.625rem 1rem;
+  border-radius: $builder-radius-md;
+  font-size: $builder-font-base;
+  font-weight: 600;
+  border: 1px solid $builder-border-light;
+  background: white;
+  color: $builder-text-secondary;
+  cursor: pointer;
+  transition: $transition-fast;
+  user-select: none;
+
+  &:hover {
+    border-color: $builder-border-default;
+    background: $builder-bg-subtle;
+    color: $builder-text-heading;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+// Active state for toggleable buttons
+@mixin builder-button-active {
+  color: var(--accent-color);
+  background: white;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 1px var(--accent-color) inset;
+}

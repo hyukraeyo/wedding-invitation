@@ -1,0 +1,202 @@
+// ============================================
+// Builder Layout Components SCSS
+// 레이아웃 컴포넌트들의 스타일 정의
+// ============================================
+
+@use "@/styles/_builder" as *;
+@use "@/styles/variables" as *;
+
+// ----- Layout: Section (아코디언 내부 최상위 컨테이너) -----
+.section {
+  @include builder-section;
+}
+
+// ----- Layout: Stack (수직 나열) -----
+.stack {
+  @include builder-stack;
+}
+
+.stackXs { @include builder-stack($builder-gap-xs); }
+.stackSm { @include builder-stack($builder-gap-sm); }
+.stackMd { @include builder-stack($builder-gap-md); }
+.stackLg { @include builder-stack($builder-gap-lg); }
+.stackXl { @include builder-stack($builder-gap-xl); }
+
+// ----- Layout: Row (수평 나열) -----
+.row {
+  @include builder-row;
+}
+
+.rowXs { @include builder-row($builder-gap-xs); }
+.rowSm { @include builder-row($builder-gap-sm); }
+.rowMd { @include builder-row($builder-gap-md); }
+.rowLg { @include builder-row($builder-gap-lg); }
+
+.rowStretch {
+  @include builder-row;
+  align-items: stretch;
+}
+
+.rowBetween {
+  @include builder-row;
+  justify-content: space-between;
+}
+
+.rowWrap {
+  @include builder-row;
+  flex-wrap: wrap;
+}
+
+// ----- Layout: Grid -----
+.grid2 { @include builder-grid(2); }
+.grid3 { @include builder-grid(3); }
+.grid4 { @include builder-grid(4); }
+.gridAuto {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: $builder-gap-md;
+}
+
+// ----- Flex utilities -----
+.flex1 { flex: 1; }
+.flexGrow { flex-grow: 1; }
+.flexShrink0 { flex-shrink: 0; }
+
+// ----- Divider -----
+.divider {
+  @include builder-divider;
+}
+
+.dividerVertical {
+  width: 1px;
+  height: 100%;
+  background: $builder-border-default;
+  margin-inline: $builder-gap-sm;
+}
+
+// ----- Card (박스 형태 컨테이너) -----
+.card {
+  @include builder-card;
+}
+
+.cardHover {
+  @include builder-card;
+  cursor: pointer;
+  transition: $transition-fast;
+
+  &:hover {
+    border-color: $builder-border-default;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+}
+
+// ----- SubLabel (인라인 라벨) -----
+.subLabel {
+  @include builder-sub-label;
+}
+
+// ----- Form Row (라벨 + 인풋이 가로로 배치) -----
+.formRow {
+  @include builder-row;
+  
+  .subLabel {
+    @include builder-sub-label;
+  }
+  
+  & > *:not(.subLabel) {
+    flex: 1;
+  }
+}
+
+// 3열 레이아웃: 라벨 | 인풋 | 체크박스
+.formRow3 {
+  @include builder-row;
+  
+  .subLabel {
+    @include builder-sub-label;
+    width: 3.5rem;
+  }
+  
+  & > *:nth-child(2) {
+    flex: 1;
+  }
+}
+
+// 4열 레이아웃: 라벨 | 인풋 | 인풋 | 인풋
+.formRow4 {
+  @include builder-row;
+  
+  .subLabel {
+    @include builder-sub-label;
+    width: 3rem;
+  }
+  
+  & > *:not(.subLabel) {
+    flex: 1;
+  }
+}
+
+// ----- Fieldset (그룹화된 필드들) -----
+.fieldset {
+  @include builder-stack($builder-gap-sm);
+  padding: $builder-gap-md;
+  background: $builder-bg-subtle;
+  border-radius: $builder-radius-md;
+  border: 1px solid $builder-border-light;
+}
+
+// ----- Image Grid (갤러리용) -----
+.imageGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $builder-gap-sm;
+}
+
+// ----- Gallery item -----
+.galleryItem {
+  aspect-ratio: 1;
+  position: relative;
+  border-radius: $builder-radius-md;
+  overflow: hidden;
+  cursor: grab;
+  transition: $transition-fast;
+  
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  &.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+  }
+}
+
+// ----- Sortable item wrapper -----
+.sortableItem {
+  position: relative;
+  touch-action: none; // for dnd-kit
+}
+
+// ----- Full width utility -----
+.fullWidth {
+  width: 100%;
+}
+
+// ----- Text alignment -----
+.textCenter { text-align: center; }
+.textRight { text-align: right; }
+
+// ----- Padding variants -----
+.p0 { padding: 0; }
+.pSm { padding: $builder-gap-sm; }
+.pMd { padding: $builder-gap-md; }
+.pLg { padding: $builder-gap-lg; }
+
+// ----- Margin variants -----
+.m0 { margin: 0; }
+.mtSm { margin-top: $builder-gap-sm; }
+.mtMd { margin-top: $builder-gap-md; }
+.mtLg { margin-top: $builder-gap-lg; }
+.mbSm { margin-bottom: $builder-gap-sm; }
+.mbMd { margin-bottom: $builder-gap-md; }
+.mbLg { margin-bottom: $builder-gap-lg; }

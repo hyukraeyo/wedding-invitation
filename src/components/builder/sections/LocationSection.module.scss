@@ -1,0 +1,145 @@
+@use "@/styles/_builder" as *;
+@use "@/styles/variables" as *;
+
+.addressButton {
+    width: 100%;
+    background: white;
+    border: 1px solid $builder-border-default;
+    border-radius: $builder-radius-md;
+    padding: 0.75rem 1rem;
+    font-size: $builder-font-md;
+    cursor: pointer;
+    transition: $transition-fast;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+
+    &:hover {
+        border-color: $builder-border-dark;
+    }
+}
+
+.addressText {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: $builder-text-heading;
+
+    &.placeholder {
+        color: $builder-text-muted;
+    }
+}
+
+.searchIcon {
+    color: $builder-text-muted;
+    flex-shrink: 0;
+    transition: color 0.2s;
+
+    .addressButton:hover & {
+        color: $builder-text-secondary;
+    }
+}
+
+.hiddenInput {
+    display: none !important;
+}
+
+.sketchPreview {
+    position: relative;
+    width: 100%;
+    max-width: 24rem;
+    aspect-ratio: 4 / 3;
+    border-radius: $builder-radius-lg;
+    overflow: hidden;
+    border: 1px solid $builder-border-light;
+    background: $builder-bg-subtle;
+
+    &:hover .sketchRemoveButton {
+        opacity: 1;
+    }
+}
+
+.sketchImage {
+    object-fit: contain;
+}
+
+.sketchRemoveButton {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+    cursor: pointer;
+    border: none;
+}
+
+.sketchUploader {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 24rem;
+    aspect-ratio: 4 / 3;
+    border: 2px dashed $builder-border-light;
+    border-radius: $builder-radius-xl;
+    cursor: pointer;
+    transition: $transition-fast;
+    background: rgba($builder-bg-subtle, 0.5);
+
+    &:hover {
+        background: $builder-bg-subtle;
+        border-color: $builder-border-default;
+
+        .uploaderIcon {
+            transform: scale(1.1);
+        }
+    }
+}
+
+.uploaderIcon {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    transition: transform 0.2s;
+    color: $builder-text-muted;
+
+    .sketchUploader:hover & {
+        color: $builder-text-secondary;
+    }
+}
+
+.uploaderTitle {
+    font-size: $builder-font-base;
+    font-weight: 700;
+    color: $builder-text-dark;
+}
+
+.uploaderSubtitle {
+    font-size: $builder-font-xs;
+    color: $builder-text-muted;
+    margin-top: 0.25rem;
+    text-align: center;
+    padding-inline: 1.5rem;
+    line-height: 1.5;
+    opacity: 0.7;
+    font-weight: 500;
+}
+
+.postcodeWrapper {
+    height: 400px;
+    width: 100%;
+    overflow: hidden;
+    padding: 0;
+}

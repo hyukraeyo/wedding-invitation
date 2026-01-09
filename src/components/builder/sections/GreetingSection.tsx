@@ -8,7 +8,7 @@ import { BuilderField } from '../BuilderField';
 import { BuilderModal } from '@/components/common/BuilderModal';
 import RichTextEditor from '@/components/common/RichTextEditor';
 import { ImageUploader } from '../ImageUploader';
-
+import { Section, Stack, Row, Card } from '../BuilderLayout';
 import styles from './GreetingSection.module.scss';
 
 interface SectionProps {
@@ -63,7 +63,6 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
 
     const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
 
-
     return (
         <AccordionItem
             title="인사말"
@@ -72,17 +71,17 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
             onToggle={onToggle}
             isCompleted={message.length > 0}
         >
-            <div className={styles.container}>
+            <Section>
                 {/* Header: Sample Phrases Button */}
-                <div className={styles.header}>
+                <Row align="end">
                     <button
                         onClick={() => setIsSampleModalOpen(true)}
-                        className={styles.exampleButton}
+                        className={styles.exampleButton ?? ''}
                     >
-                        <Sparkles size={14} className={styles.sparkle} />
+                        <Sparkles size={14} className={styles.sparkle ?? ''} />
                         <span>예시 문구</span>
                     </button>
-                </div>
+                </Row>
 
                 {/* Subtitle */}
                 <BuilderField label="상단 소제목">
@@ -124,8 +123,8 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Name Options */}
                 <BuilderField label="성함 표기">
-                    <div className={styles.nameOptions}>
-                        <div className={styles.toggles}>
+                    <Stack gap="md">
+                        <Row wrap>
                             <BuilderToggle
                                 checked={showNamesAtBottom}
                                 onChange={setShowNamesAtBottom}
@@ -141,22 +140,22 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                                 onChange={setEnableFreeformNames}
                                 label="성함 자유 입력"
                             />
-                        </div>
+                        </Row>
 
                         {enableFreeformNames && (
-                            <div className={styles.customNames}>
+                            <Stack gap="sm">
                                 <RichTextEditor
                                     content={groomNameCustom}
                                     onChange={setGroomNameCustom}
                                     placeholder="인사말 하단 성함부분을 자유롭게 입력할 수 있습니다."
                                 />
-                                <p className={styles.infoText}>
+                                <p className={styles.infoText ?? ''}>
                                     <span>ⓘ</span>
                                     <span>인사말 하단 성함부분을 자유롭게 입력할 수 있습니다.</span>
                                 </p>
-                            </div>
+                            </Stack>
                         )}
-                    </div>
+                    </Stack>
                 </BuilderField>
 
                 {/* Sample Phrases Modal */}
@@ -165,30 +164,34 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                     onClose={() => setIsSampleModalOpen(false)}
                     title="샘플 문구"
                 >
-                    <div className={styles.modalGrid}>
+                    <div className={styles.modalGrid ?? ''}>
                         {GREETING_SAMPLES.map((sample, idx) => (
-                            <button
+                            <Card
                                 key={idx}
-                                onClick={() => {
-                                    setGreetingSubtitle(sample.subtitle);
-                                    setGreetingTitle(sample.title);
-                                    setMessage(sample.message);
-                                    setIsSampleModalOpen(false);
-                                }}
-                                className={styles.sampleCard}
+                                hoverable
+                                className={styles.sampleCard ?? ''}
                             >
-                                <div className={styles.sampleSubtitle}>{sample.subtitle}</div>
-                                <div className={styles.sampleTitle}>{sample.title}</div>
-                                <div
-                                    className={styles.sampleMessage}
-                                    dangerouslySetInnerHTML={{ __html: sample.message }}
-                                />
-                            </button>
+                                <button
+                                    onClick={() => {
+                                        setGreetingSubtitle(sample.subtitle);
+                                        setGreetingTitle(sample.title);
+                                        setMessage(sample.message);
+                                        setIsSampleModalOpen(false);
+                                    }}
+                                    className={styles.sampleButton ?? ''}
+                                >
+                                    <div className={styles.sampleSubtitle ?? ''}>{sample.subtitle}</div>
+                                    <div className={styles.sampleTitle ?? ''}>{sample.title}</div>
+                                    <div
+                                        className={styles.sampleMessage ?? ''}
+                                        dangerouslySetInnerHTML={{ __html: sample.message }}
+                                    />
+                                </button>
+                            </Card>
                         ))}
                     </div>
                 </BuilderModal>
-
-            </div>
+            </Section>
         </AccordionItem>
     );
 }

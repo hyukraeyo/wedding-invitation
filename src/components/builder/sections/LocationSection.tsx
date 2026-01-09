@@ -1,15 +1,18 @@
 import React from 'react';
 import { MapPin, ImagePlus, Trash2, Search } from 'lucide-react';
 import DaumPostcodeEmbed from 'react-daum-postcode';
+import Image from 'next/image';
+import { clsx } from 'clsx';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderInput } from '../BuilderInput';
-import Image from 'next/image';
 import { NaverIcon, KakaoIcon } from '../../common/MapIcons';
 import { BuilderButtonGroup } from '../BuilderButtonGroup';
 import { BuilderToggle } from '../BuilderToggle';
 import { BuilderField } from '../BuilderField';
 import { BuilderModal } from '../../common/BuilderModal';
+import { Section, Stack, Row, Divider, Card } from '../BuilderLayout';
+import styles from './LocationSection.module.scss';
 
 interface SectionProps {
     isOpen: boolean;
@@ -18,9 +21,9 @@ interface SectionProps {
 
 const LocationSection = React.memo<SectionProps>(function LocationSection({ isOpen, onToggle }) {
     const {
-        location, setLocation, // 예식장명
+        location, setLocation,
         address, setAddress,
-        detailAddress, setDetailAddress, // 층과 홀 (기존 detailAddress 재활용 but UI 상 "층과 홀")
+        detailAddress, setDetailAddress,
         locationContact, setLocationContact,
         showMap, setShowMap,
         lockMap, setLockMap,
@@ -67,7 +70,6 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
         const clean = value.replace(/[^0-9]/g, '');
         if (!clean) return '';
 
-        // 02 (Seoul)
         if (clean.startsWith('02')) {
             if (clean.length <= 2) return clean;
             if (clean.length <= 5) return clean.replace(/(\d{2})(\d+)/, '$1-$2');
@@ -75,13 +77,11 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
             return clean.replace(/(\d{2})(\d{4})(\d+)/, '$1-$2-$3').substring(0, 12);
         }
 
-        // 1xxx (Hotline)
         if (clean.startsWith('1')) {
             if (clean.length <= 4) return clean;
             return clean.replace(/(\d{4})(\d+)/, '$1-$2').substring(0, 9);
         }
 
-        // 010/031/070 etc.
         if (clean.length <= 3) return clean;
         if (clean.length <= 6) return clean.replace(/(\d{3})(\d+)/, '$1-$2');
         if (clean.length <= 10) return clean.replace(/(\d{3})(\d{3})(\d+)/, '$1-$2-$3');
@@ -101,26 +101,21 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
             onToggle={onToggle}
             isCompleted={!!location && !!address}
         >
-            <div className="space-y-6 py-2">
-
-
-
-                {/* 2. 주소 (Address) */}
+            <Section>
+                {/* 주소 검색 */}
                 <BuilderField label="주소">
-                    <div className="w-full space-y-2">
-                        <div
-                            onClick={handleAddressSearch}
-                            className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-[14px] cursor-pointer transition-all hover:border-gray-400 flex items-center justify-between gap-2 group"
-                        >
-                            <span className={`flex-1 truncate ${!address ? 'text-gray-300' : 'text-gray-900'}`}>
-                                {address || "주소를 검색해주세요"}
-                            </span>
-                            <Search size={18} className="text-gray-400 group-hover:text-gray-600 transition-colors shrink-0" />
-                        </div>
+                    <div
+                        onClick={handleAddressSearch}
+                        className={styles.addressButton}
+                    >
+                        <span className={clsx(styles.addressText, !address && styles.placeholder)}>
+                            {address || "주소를 검색해주세요"}
+                        </span>
+                        <Search size={18} className={styles.searchIcon} />
                     </div>
                 </BuilderField>
 
-                {/* 3. 예식장명 (Wedding Hall Name) */}
+                {/* 예식장명 */}
                 <BuilderField label="예식장명">
                     <BuilderInput
                         type="text"
@@ -130,7 +125,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                     />
                 </BuilderField>
 
-                {/* 4. 층과 홀 (Floor & Hall) */}
+                {/* 층과 홀 */}
                 <BuilderField label="층과 홀">
                     <BuilderInput
                         type="text"
@@ -140,7 +135,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                     />
                 </BuilderField>
 
-                {/* 5. 연락처 (Contact) */}
+                {/* 연락처 */}
                 <BuilderField label="연락처">
                     <BuilderInput
                         type="text"
@@ -151,12 +146,11 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                     />
                 </BuilderField>
 
-                <hr className="border-gray-100 my-6" />
+                <Divider />
 
-                {/* Map Type */}
+                {/* 지도 종류 */}
                 <BuilderField label="지도 종류">
                     <BuilderButtonGroup
-                        className="flex-1"
                         value={mapType}
                         options={[
                             {
@@ -174,37 +168,19 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                     />
                 </BuilderField>
 
-                {/* Map Options */}
+                {/* 지도 설정 */}
                 <BuilderField label="지도 설정">
-                    <div className="flex flex-wrap gap-2 px-1">
-                        <BuilderToggle
-                            checked={showMap}
-                            onChange={setShowMap}
-                            label="지도 표시"
-                        />
-                        <BuilderToggle
-                            checked={lockMap}
-                            onChange={setLockMap}
-                            label="지도 잠금"
-                        />
-                        <BuilderToggle
-                            checked={showNavigation}
-                            onChange={setShowNavigation}
-                            label="내비게이션"
-                        />
-                        <BuilderToggle
-                            checked={showSketch}
-                            onChange={setShowSketch}
-                            label="약도 사진"
-                        />
-                    </div>
+                    <Row wrap>
+                        <BuilderToggle checked={showMap} onChange={setShowMap} label="지도 표시" />
+                        <BuilderToggle checked={lockMap} onChange={setLockMap} label="지도 잠금" />
+                        <BuilderToggle checked={showNavigation} onChange={setShowNavigation} label="내비게이션" />
+                        <BuilderToggle checked={showSketch} onChange={setShowSketch} label="약도 사진" />
+                    </Row>
                 </BuilderField>
 
-                {/* Map Detail Settings */}
-                {/* Map Detail Settings */}
+                {/* 지도 높이 */}
                 <BuilderField label="지도 높이">
                     <BuilderButtonGroup
-                        className="w-full"
                         value={mapHeight}
                         options={[
                             { label: '기본', value: 'default' },
@@ -214,9 +190,9 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                     />
                 </BuilderField>
 
+                {/* 줌 레벨 */}
                 <BuilderField label="줌 레벨">
                     <BuilderButtonGroup
-                        className="w-full"
                         value={mapZoom}
                         options={[
                             { label: '15', value: 15 },
@@ -229,56 +205,53 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                     />
                 </BuilderField>
 
+                {/* 약도 이미지 */}
                 {showSketch && (
                     <BuilderField label="약도 이미지">
                         {sketchUrl ? (
-                            <div className="relative w-full max-w-sm aspect-[4/3] rounded-2xl overflow-hidden border border-gray-100 group bg-gray-50">
-                                <Image src={sketchUrl} alt="약도" fill className="object-contain" />
+                            <div className={styles.sketchPreview}>
+                                <Image src={sketchUrl} alt="약도" fill className={styles.sketchImage} />
                                 <button
                                     onClick={() => setSketchUrl(null)}
-                                    className="absolute inset-0 bg-black/40 text-white opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
+                                    className={styles.sketchRemoveButton}
                                 >
                                     <Trash2 size={24} />
                                 </button>
                             </div>
                         ) : (
-                            <label className="flex flex-col items-center justify-center w-full max-w-sm aspect-[4/3] border-2 border-dashed border-gray-100 rounded-3xl cursor-pointer hover:bg-gray-50 transition-all group bg-gray-50/50">
+                            <label className={styles.sketchUploader}>
                                 <input
                                     type="file"
-                                    className="hidden"
+                                    className={styles.hiddenInput}
                                     accept="image/*"
                                     onChange={handleSketchUpload}
                                 />
-                                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                    <ImagePlus className="text-gray-400 group-hover:text-gray-600 transition-colors" size={24} />
+                                <div className={styles.uploaderIcon}>
+                                    <ImagePlus size={24} />
                                 </div>
-                                <span className="text-[13px] font-bold text-gray-700">약도 이미지 업로드</span>
-                                <span className="text-[11px] text-gray-400 mt-1 text-center font-medium opacity-70 px-6 leading-relaxed">직접 그린 약도나 이미지를 업로드하세요</span>
+                                <span className={styles.uploaderTitle}>약도 이미지 업로드</span>
+                                <span className={styles.uploaderSubtitle}>직접 그린 약도나 이미지를 업로드하세요</span>
                             </label>
                         )}
                     </BuilderField>
                 )}
-
-            </div>
+            </Section>
 
             <BuilderModal
                 isOpen={isSearchOpen}
                 onClose={() => setIsSearchOpen(false)}
                 title="주소 검색"
             >
-                <div className="h-[400px] w-full border border-gray-100 rounded-xl overflow-hidden">
+                <Card className={styles.postcodeWrapper ?? ''}>
                     <DaumPostcodeEmbed
                         onComplete={handleComplete}
                         style={{ height: '100%' }}
                         autoClose={false}
                     />
-                </div>
+                </Card>
             </BuilderModal>
         </AccordionItem>
     );
 });
 
 export default LocationSection;
-
-// Helper for Daum Postcode is same as before
-

@@ -3,10 +3,11 @@ import { CreditCard, Plus, Trash2 } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderInput } from '../BuilderInput';
-
 import { BuilderButtonGroup } from '../BuilderButtonGroup';
 import { BuilderButton } from '../BuilderButton';
 import { BuilderField } from '../BuilderField';
+import { Section, Stack, Row, Divider, Grid, Card } from '../BuilderLayout';
+import styles from './AccountsSection.module.scss';
 
 interface SectionProps {
     isOpen: boolean;
@@ -44,24 +45,24 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
             onToggle={onToggle}
             isCompleted={accounts.length > 0 && accounts.every(a => a.bank && a.accountNumber)}
         >
-            <div className="space-y-6">
+            <Section>
                 {/* Groom Side */}
-                <div className="space-y-4">
-                    <div className="flex items-center justify-between px-1">
-                        <div className="flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.5)]"></span>
-                            <span className="text-[13px] font-bold text-gray-800">신랑측 계좌</span>
-                        </div>
+                <Stack gap="md">
+                    <Row align="between">
+                        <Row gap="sm">
+                            <span className={styles.indicatorGroom ?? ''} />
+                            <span className={styles.sideLabel ?? ''}>신랑측 계좌</span>
+                        </Row>
                         <BuilderButton
                             variant="ghost"
                             size="sm"
                             onClick={() => addAccount('groom')}
-                            className="h-7 px-2 text-[11px] text-gray-500 hover:text-gray-900 hover:bg-gray-100"
+                            className={styles.addButton ?? ''}
                         >
-                            <Plus size={12} className="mr-1" /> 추가
+                            <Plus size={12} /> 추가
                         </BuilderButton>
-                    </div>
-                    <div className="space-y-4">
+                    </Row>
+                    <Stack gap="md">
                         {groomAccs.map((acc) => (
                             <AccountEntry
                                 key={acc.id}
@@ -72,28 +73,28 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
                                 onRemove={() => removeAccount(acc.id)}
                             />
                         ))}
-                    </div>
-                </div>
+                    </Stack>
+                </Stack>
 
-                <div className="h-[1px] bg-gray-50 mx-1"></div>
+                <Divider />
 
                 {/* Bride Side */}
-                <div className="space-y-4">
-                    <div className="flex items-center justify-between px-1">
-                        <div className="flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-pink-400 shadow-[0_0_8px_rgba(244,114,182,0.5)]"></span>
-                            <span className="text-[13px] font-bold text-gray-800">신부측 계좌</span>
-                        </div>
+                <Stack gap="md">
+                    <Row align="between">
+                        <Row gap="sm">
+                            <span className={styles.indicatorBride ?? ''} />
+                            <span className={styles.sideLabel ?? ''}>신부측 계좌</span>
+                        </Row>
                         <BuilderButton
                             variant="ghost"
                             size="sm"
                             onClick={() => addAccount('bride')}
-                            className="h-7 px-2 text-[11px] text-gray-500 hover:text-gray-900 hover:bg-gray-100"
+                            className={styles.addButton ?? ''}
                         >
-                            <Plus size={12} className="mr-1" /> 추가
+                            <Plus size={12} /> 추가
                         </BuilderButton>
-                    </div>
-                    <div className="space-y-4">
+                    </Row>
+                    <Stack gap="md">
                         {brideAccs.map((acc) => (
                             <AccountEntry
                                 key={acc.id}
@@ -104,9 +105,9 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
                                 onRemove={() => removeAccount(acc.id)}
                             />
                         ))}
-                    </div>
-                </div>
-            </div>
+                    </Stack>
+                </Stack>
+            </Section>
         </AccordionItem>
     );
 }
@@ -152,10 +153,10 @@ function AccountEntry({
     };
 
     return (
-        <div className="p-4 bg-gray-50 rounded-xl border border-gray-100 relative group">
-            <div className="space-y-4">
-                <div className="flex items-center gap-3 mb-2">
-                    <div className="flex-1">
+        <Card className={styles.accountCard ?? ''}>
+            <Stack gap="md">
+                <Row align="between">
+                    <div className={styles.buttonGroupWrapper ?? ''}>
                         <BuilderButtonGroup
                             size="sm"
                             value={acc.relation}
@@ -171,19 +172,18 @@ function AccountEntry({
                     </div>
                     <button
                         onClick={onRemove}
-                        className="p-2 text-gray-300 hover:text-red-400 hover:bg-red-50 rounded-xl transition-all shrink-0"
+                        className={styles.removeButton ?? ''}
                         title="삭제"
                     >
                         <Trash2 size={16} />
                     </button>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
+                </Row>
+                <Grid cols={2}>
                     <BuilderField label="은행명">
                         <BuilderInput
                             placeholder="은행 입력"
                             value={acc.bank}
                             onChange={(e) => onUpdate({ bank: e.target.value })}
-                            className="bg-white"
                         />
                     </BuilderField>
                     <BuilderField label="예금주">
@@ -191,19 +191,17 @@ function AccountEntry({
                             placeholder="이름 입력"
                             value={acc.holder}
                             onChange={(e) => onUpdate({ holder: e.target.value })}
-                            className="bg-white"
                         />
                     </BuilderField>
-                </div>
+                </Grid>
                 <BuilderField label="계좌번호">
                     <BuilderInput
                         placeholder="하이픈(-) 포함하여 입력"
                         value={acc.accountNumber}
                         onChange={(e) => onUpdate({ accountNumber: e.target.value })}
-                        className="bg-white"
                     />
                 </BuilderField>
-            </div>
-        </div>
+            </Stack>
+        </Card>
     );
 }

@@ -5,8 +5,7 @@ import { AccordionItem } from '../AccordionItem';
 import { BuilderInput } from '../BuilderInput';
 import { BuilderCheckbox } from '../BuilderCheckbox';
 import { BuilderField } from '../BuilderField';
-import styles from './BasicInfoSection.module.scss';
-import { clsx } from 'clsx';
+import { Section, Stack, FormRow, Divider, SubLabel } from '../BuilderLayout';
 
 interface SectionProps {
     isOpen: boolean;
@@ -29,12 +28,12 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
             onToggle={onToggle}
             isCompleted={!!groom.firstName && !!bride.firstName}
         >
-            <div className={styles.container}>
+            <Section>
                 {/* Groom Section */}
                 <BuilderField label="🤵 신랑">
-                    <div className={styles.section}>
-                        <div className={clsx(styles.row, styles.fourCols)}>
-                            <span className={styles.label}>신랑</span>
+                    <Stack gap="sm">
+                        <FormRow>
+                            <SubLabel>신랑</SubLabel>
                             <BuilderInput
                                 type="text"
                                 placeholder="성"
@@ -53,11 +52,11 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 value={groom.relation}
                                 onChange={(e) => setGroom({ relation: e.target.value })}
                             />
-                        </div>
+                        </FormRow>
 
                         {/* Groom Parents */}
-                        <div className={clsx(styles.row, styles.threeCols)}>
-                            <span className={styles.label}>아버지</span>
+                        <FormRow cols={3}>
+                            <SubLabel>아버지</SubLabel>
                             <BuilderInput
                                 type="text"
                                 placeholder="성함"
@@ -68,11 +67,11 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 checked={groom.parents.father.isDeceased}
                                 onChange={(checked) => setGroomParents('father', { isDeceased: checked })}
                             >
-                                <span className={styles.deceasedLabel}>故</span>
+                                故
                             </BuilderCheckbox>
-                        </div>
-                        <div className={clsx(styles.row, styles.threeCols)}>
-                            <span className={styles.label}>어머니</span>
+                        </FormRow>
+                        <FormRow cols={3}>
+                            <SubLabel>어머니</SubLabel>
                             <BuilderInput
                                 type="text"
                                 placeholder="성함"
@@ -83,19 +82,19 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 checked={groom.parents.mother.isDeceased}
                                 onChange={(checked) => setGroomParents('mother', { isDeceased: checked })}
                             >
-                                <span className={styles.deceasedLabel}>故</span>
+                                故
                             </BuilderCheckbox>
-                        </div>
-                    </div>
+                        </FormRow>
+                    </Stack>
                 </BuilderField>
 
-                <div className={styles.divider}></div>
+                <Divider />
 
                 {/* Bride Section */}
                 <BuilderField label="👰‍♀️ 신부">
-                    <div className={styles.section}>
-                        <div className={clsx(styles.row, styles.fourCols)}>
-                            <span className={styles.label}>신부</span>
+                    <Stack gap="sm">
+                        <FormRow>
+                            <SubLabel>신부</SubLabel>
                             <BuilderInput
                                 type="text"
                                 placeholder="성"
@@ -114,11 +113,11 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 value={bride.relation}
                                 onChange={(e) => setBride({ relation: e.target.value })}
                             />
-                        </div>
+                        </FormRow>
 
                         {/* Bride Parents */}
-                        <div className={clsx(styles.row, styles.threeCols)}>
-                            <span className={styles.label}>아버지</span>
+                        <FormRow cols={3}>
+                            <SubLabel>아버지</SubLabel>
                             <BuilderInput
                                 type="text"
                                 placeholder="성함"
@@ -129,11 +128,11 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 checked={bride.parents.father.isDeceased}
                                 onChange={(checked) => setBrideParents('father', { isDeceased: checked })}
                             >
-                                <span className={styles.deceasedLabel}>故</span>
+                                故
                             </BuilderCheckbox>
-                        </div>
-                        <div className={clsx(styles.row, styles.threeCols)}>
-                            <span className={styles.label}>어머니</span>
+                        </FormRow>
+                        <FormRow cols={3}>
+                            <SubLabel>어머니</SubLabel>
                             <BuilderInput
                                 type="text"
                                 placeholder="성함"
@@ -144,12 +143,12 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 checked={bride.parents.mother.isDeceased}
                                 onChange={(checked) => setBrideParents('mother', { isDeceased: checked })}
                             >
-                                <span className={styles.deceasedLabel}>故</span>
+                                故
                             </BuilderCheckbox>
-                        </div>
-                    </div>
+                        </FormRow>
+                    </Stack>
                 </BuilderField>
-            </div>
+            </Section>
         </AccordionItem>
     );
 });

@@ -7,8 +7,7 @@ import { BuilderToggle } from '../BuilderToggle';
 import { BuilderField } from '../BuilderField';
 import { BuilderSlider } from '../BuilderSlider';
 import { BuilderColorPicker } from '../BuilderColorPicker';
-import styles from './ThemeSection.module.scss';
-import { clsx } from 'clsx';
+import { Section, Stack, Row } from '../BuilderLayout';
 
 interface SectionProps {
     isOpen: boolean;
@@ -39,8 +38,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
             onToggle={onToggle}
             isCompleted={true}
         >
-            <div className={styles.container}>
-
+            <Section>
                 {/* Font */}
                 <BuilderField label="글꼴">
                     <BuilderSelect
@@ -94,7 +92,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Effect */}
                 <BuilderField label="배경 이펙트">
-                    <div className={styles.effectContainer}>
+                    <Stack gap="md">
                         <BuilderButtonGroup
                             value={theme.effect}
                             options={[
@@ -106,29 +104,26 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                         />
 
                         {theme.effect !== 'none' && (
-                            <div className={styles.toggleWrapper}>
-                                <BuilderToggle
-                                    checked={theme.effectOnlyOnMain}
-                                    onChange={(checked) => setTheme({ effectOnlyOnMain: checked })}
-                                    label="메인 화면에만 이펙트 노출"
-                                />
-                            </div>
+                            <BuilderToggle
+                                checked={theme.effectOnlyOnMain}
+                                onChange={(checked) => setTheme({ effectOnlyOnMain: checked })}
+                                label="메인 화면에만 이펙트 노출"
+                            />
                         )}
-                    </div>
+                    </Stack>
                 </BuilderField>
 
                 {/* Additional Options */}
                 <BuilderField label="추가 설정">
-                    <div className={styles.additionalOptions}>
+                    <Row wrap>
                         <BuilderToggle
                             checked={theme.animateEntrance}
                             onChange={(checked) => setTheme({ animateEntrance: checked })}
                             label="스크롤 등장 효과"
                         />
-                    </div>
+                    </Row>
                 </BuilderField>
-
-            </div>
+            </Section>
         </AccordionItem>
     );
 }
