@@ -1,6 +1,9 @@
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+'use client';
+
+import React, { useState, useRef, useEffect, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import Image from 'next/image';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, EffectFade, Autoplay, FreeMode, Thumbs } from 'swiper/modules';
 import 'swiper/css';
@@ -16,65 +19,107 @@ import SectionContainer from '../SectionContainer';
 interface Props { id?: string; }
 
 export default function GalleryView({ id }: Props) {
-    const { gallery, galleryTitle, galleryType, galleryPreview, galleryFade, galleryAutoplay, galleryPopup, theme } = useInvitationStore();
+    const {
+        gallery: rawGallery,
+        galleryTitle,
+        galleryType,
+        galleryPreview,
+        galleryFade,
+        galleryAutoplay,
+        galleryPopup,
+        theme
+    } = useInvitationStore();
+
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isMounted, setIsMounted] = useState(false);
     const [popupIndex, setPopupIndex] = useState<number | null>(null);
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
+    const [mainSwiper, setMainSwiper] = useState<SwiperClass | null>(null);
+    const [modalSwiper, setModalSwiper] = useState<SwiperClass | null>(null);
+    const [portalElement, setPortalElement] = useState<HTMLElement | null>(null);
 
-    // References for accessibility focus management
     const closeBtnRef = useRef<HTMLButtonElement>(null);
 
-    React.useEffect(() => {
-        setIsMounted(true);
+    // Normalize gallery data
+    const gallery = useMemo(() => {
+        if (!rawGallery) return [];
+        return (rawGallery as (string | { id: string; url: string })[]).map((item, index) => {
+            if (typeof item === 'string') {
+                return { id: `legacy-${index}-${item.substring(0, 10)}`, url: item };
+            }
+            return item;
+        });
+    }, [rawGallery]);
+
+    useEffect(() => {
+        // Use a slight delay or next tick to avoid synchronous setState warning
+        const timer = setTimeout(() => {
+            setIsMounted(true);
+            const root = document.getElementById('invitation-modal-root');
+            setPortalElement(root || document.body);
+        }, 0);
+        return () => clearTimeout(timer);
     }, []);
 
-    // 1. Scroll Lock & Focus Trap (Accessibility Standard)
-    React.useEffect(() => {
+    // 1. Scroll Lock & Autoplay Control
+    useEffect(() => {
         if (popupIndex !== null) {
-            // Lock Scroll
+            if (mainSwiper && !mainSwiper.destroyed) {
+                mainSwiper.autoplay?.stop();
+            }
+
             const scrollY = window.scrollY;
+            document.body.setAttribute('data-scroll-y', scrollY.toString());
             document.body.style.cssText = `
                 position: fixed; 
                 top: -${scrollY}px;
                 left: 0;
                 width: 100%;
-                overflow-y: hidden;
+                overflow: hidden;
             `;
             document.documentElement.style.overflow = 'hidden';
 
-            // Focus Trap (Simple)
+            const mockupContainer = document.getElementById('invitation-modal-root')?.previousElementSibling as HTMLElement;
+            if (mockupContainer) {
+                mockupContainer.style.overflowY = 'hidden';
+            }
+
             setTimeout(() => closeBtnRef.current?.focus(), 100);
         } else {
-            const scrollY = document.body.style.top;
+            if (mainSwiper && !mainSwiper.destroyed && galleryAutoplay) {
+                mainSwiper.autoplay?.start();
+            }
+
+            const scrollY = document.body.getAttribute('data-scroll-y');
             document.body.style.cssText = '';
             document.documentElement.style.overflow = '';
+            document.body.removeAttribute('data-scroll-y');
+
             if (scrollY) {
-                window.scrollTo(0, parseInt(scrollY || '0') * -1);
+                window.scrollTo(0, parseInt(scrollY || '0'));
+            }
+
+            const mockupContainer = document.getElementById('invitation-modal-root')?.previousElementSibling as HTMLElement;
+            if (mockupContainer) {
+                mockupContainer.style.overflowY = 'auto';
             }
         }
         return () => {
             document.body.style.cssText = '';
             document.documentElement.style.overflow = '';
+            const mockupContainer = document.getElementById('invitation-modal-root')?.previousElementSibling as HTMLElement;
+            if (mockupContainer) {
+                mockupContainer.style.overflowY = 'auto';
+            }
         };
-    }, [popupIndex]);
+    }, [popupIndex, mainSwiper, galleryAutoplay]);
 
-    // 2. Keyboard Navigation (UX Standard)
+    // 2. Sync Logic
     useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (popupIndex === null) return;
-            if (e.key === 'Escape') setPopupIndex(null);
-        };
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [popupIndex]);
-
-    // Prevent touch move on background
-    const handleTouchMove = useCallback((e: React.TouchEvent) => {
-        if (popupIndex !== null) {
-            e.stopPropagation();
+        if (popupIndex !== null && modalSwiper && !modalSwiper.destroyed) {
+            modalSwiper.slideTo(popupIndex, 0);
         }
-    }, [popupIndex]);
+    }, [popupIndex, modalSwiper]);
 
     if (!gallery || gallery.length === 0) return <div id={id} />;
     if (!isMounted) return null;
@@ -85,20 +130,17 @@ export default function GalleryView({ id }: Props) {
         }
     };
 
-    // Render different gallery types
     const renderGallery = () => {
         switch (galleryType) {
             case 'swiper':
                 return (
-                    <div className="w-full max-w-2xl mx-auto">
+                    <div className={`w-full ${galleryPreview ? 'overflow-visible' : 'max-w-[340px] mx-auto'}`}>
                         <div className="relative group">
                             <Swiper
                                 key={`${gallery.length}-${galleryType}-${galleryPreview}-${galleryFade}`}
                                 modules={[Navigation, Pagination, EffectFade, Autoplay]}
-                                observer={true}
-                                observeParents={true}
-                                spaceBetween={galleryPreview ? 20 : 30}
-                                slidesPerView={galleryPreview ? 1.2 : 1}
+                                spaceBetween={20}
+                                slidesPerView={galleryPreview ? 1.25 : 1}
                                 centeredSlides={galleryPreview}
                                 navigation={{
                                     nextEl: '.swiper-button-next-custom',
@@ -106,142 +148,83 @@ export default function GalleryView({ id }: Props) {
                                 }}
                                 effect={galleryFade ? "fade" : "slide"}
                                 {...(galleryFade && { fadeEffect: { crossFade: true } })}
-                                autoplay={galleryAutoplay ? {
-                                    delay: 3000,
-                                    disableOnInteraction: false,
-                                } : false}
+                                autoplay={galleryAutoplay ? { delay: 3000, disableOnInteraction: false } : false}
                                 loop={gallery.length > 1}
-                                grabCursor={true}
+                                onSwiper={setMainSwiper}
                                 onSlideChange={(swiper) => setCurrentIndex(swiper.realIndex)}
-                                className="w-full aspect-[4/3] relative rounded-2xl overflow-hidden bg-gray-50 shadow-sm"
-                                style={{ width: '100%', aspectRatio: '4/3' }}
+                                className="w-full aspect-[4/3] overflow-visible"
                             >
                                 {gallery.map((img, index) => (
-                                    <SwiperSlide key={`${index}-${img}`} className="h-full">
+                                    <SwiperSlide key={img.id}>
                                         <div
-                                            className={`relative w-full h-full ${galleryPopup ? 'cursor-zoom-in' : ''}`}
+                                            className={`relative w-full h-full rounded-2xl overflow-hidden ${galleryPopup ? 'cursor-pointer' : ''}`}
                                             onClick={() => handleImageClick(index)}
                                         >
-                                            <Image
-                                                src={img}
-                                                alt={`Gallery ${index + 1}`}
-                                                fill
-                                                unoptimized
-                                                className="object-cover"
-                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                            />
+                                            <Image src={img.url} alt="" fill unoptimized className="object-cover" />
                                         </div>
                                     </SwiperSlide>
                                 ))}
                             </Swiper>
-                            {/* Custom Navigation (Desktop Only) */}
                             {gallery.length > 1 && (
-                                <>
-                                    <button className="swiper-button-prev-custom absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2.5 rounded-full shadow-lg transition-all z-30 opacity-0 group-hover:opacity-100 hidden md:flex items-center justify-center">
-                                        <ChevronLeft size={20} />
-                                    </button>
-                                    <button className="swiper-button-next-custom absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2.5 rounded-full shadow-lg transition-all z-30 opacity-0 group-hover:opacity-100 hidden md:flex items-center justify-center">
-                                        <ChevronRight size={20} />
-                                    </button>
-                                </>
-                            )}
-                            {/* Fraction Indicator */}
-                            {gallery.length > 1 && (
-                                <div className="absolute bottom-4 right-4 bg-black/40 backdrop-blur-md text-white px-3 py-1 rounded-full z-40 text-[11px] font-medium tracking-tight pointer-events-none">
-                                    <span>{currentIndex + 1}</span>
-                                    <span className="mx-1 opacity-50">/</span>
-                                    <span className="opacity-70">{gallery.length}</span>
+                                <div className="absolute bottom-4 right-4 bg-black/40 backdrop-blur-md text-white px-3 py-1 rounded-full z-10 text-[10px] font-medium tracking-tight">
+                                    {currentIndex + 1} / {gallery.length}
                                 </div>
                             )}
                         </div>
                     </div>
                 );
-
             case 'thumbnail':
                 return (
-                    <div className="w-full max-w-4xl mx-auto">
-                        <div className="relative group mb-4">
-                            <Swiper
-                                spaceBetween={10}
-                                navigation={{
-                                    nextEl: '.thumb-next',
-                                    prevEl: '.thumb-prev',
-                                }}
-                                thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
-                                modules={[FreeMode, Navigation, Thumbs]}
-                                onSlideChange={(swiper) => setCurrentIndex(swiper.activeIndex)}
-                                className={`w-full aspect-[16/10] rounded-2xl overflow-hidden shadow-sm ${galleryPopup ? 'cursor-zoom-in' : ''}`}
-                            >
-                                {gallery.map((img, index) => (
-                                    <SwiperSlide key={index} onClick={() => handleImageClick(index)}>
-                                        <div className="relative w-full h-full">
-                                            <Image
-                                                src={img}
-                                                alt={`Gallery ${index + 1}`}
-                                                fill
-                                                unoptimized
-                                                className="object-cover"
-                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                            />
-                                        </div>
-                                    </SwiperSlide>
-                                ))}
-                            </Swiper>
-                            <button className="thumb-prev absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 text-gray-800 p-2 rounded-full shadow-lg z-10 opacity-0 group-hover:opacity-100 transition-opacity hidden md:block">
-                                <ChevronLeft size={20} />
-                            </button>
-                            <button className="thumb-next absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 text-gray-800 p-2 rounded-full shadow-lg z-10 opacity-0 group-hover:opacity-100 transition-opacity hidden md:block">
-                                <ChevronRight size={20} />
-                            </button>
-                        </div>
+                    <div className="w-full max-w-[340px] mx-auto">
+                        <Swiper
+                            spaceBetween={10}
+                            thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
+                            modules={[FreeMode, Navigation, Thumbs]}
+                            onSwiper={setMainSwiper}
+                            onSlideChange={(swiper) => setCurrentIndex(swiper.activeIndex)}
+                            className={`w-full aspect-[16/10] overflow-visible`}
+                        >
+                            {gallery.map((img, index) => (
+                                <SwiperSlide key={img.id} onClick={() => handleImageClick(index)}>
+                                    <div className={`relative w-full h-full rounded-2xl overflow-hidden ${galleryPopup ? 'cursor-pointer' : ''}`}>
+                                        <Image src={img.url} alt="" fill unoptimized className="object-cover" />
+                                    </div>
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
                         <Swiper
                             onSwiper={setThumbsSwiper}
                             spaceBetween={8}
-                            slidesPerView={5.5}
+                            slidesPerView={5}
                             freeMode={true}
                             watchSlidesProgress={true}
-                            modules={[FreeMode, Navigation, Thumbs]}
-                            className="thumbs-swiper !py-2 !px-1"
+                            modules={[FreeMode, Thumbs]}
+                            className="mt-3"
                         >
                             {gallery.map((img, index) => (
-                                <SwiperSlide key={index} className="cursor-pointer">
+                                <SwiperSlide key={img.id} className="cursor-pointer">
                                     <div
-                                        className={`relative aspect-square rounded-lg overflow-hidden transition-all duration-300 ${index === currentIndex ? 'ring-2 ring-offset-2 opacity-100 scale-[0.98]' : 'opacity-40 grayscale-[30%]'}`}
+                                        className={`relative aspect-square rounded-lg overflow-hidden transition-all ${index === currentIndex ? 'ring-2 ring-offset-1 opacity-100' : 'opacity-40'}`}
                                         style={index === currentIndex ? { '--tw-ring-color': theme.accentColor } as React.CSSProperties : {}}
                                     >
-                                        <Image
-                                            src={img}
-                                            alt={`Thumbnail ${index + 1}`}
-                                            fill
-                                            unoptimized
-                                            className="object-cover"
-                                            sizes="100px"
-                                        />
+                                        <Image src={img.url} alt="" fill unoptimized className="object-cover" />
                                     </div>
                                 </SwiperSlide>
                             ))}
                         </Swiper>
                     </div>
                 );
-
             case 'grid':
             default:
                 return (
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-3 gap-1 max-w-[340px] mx-auto">
                         {gallery.map((img, i) => (
                             <div
-                                key={i}
-                                className={`relative rounded-lg overflow-hidden ${i % 3 === 0 ? 'col-span-2 aspect-[16/9]' : 'aspect-square'} ${galleryPopup ? 'cursor-zoom-in' : ''}`}
+                                key={img.id}
+                                className={`relative aspect-square rounded-lg overflow-hidden ${galleryPopup ? 'cursor-pointer' : ''}`}
                                 onClick={() => handleImageClick(i)}
                             >
-                                <Image
-                                    src={img}
-                                    alt={`Gallery ${i + 1}`}
-                                    fill
-                                    unoptimized
-                                    className="object-cover transition-transform hover:scale-105 duration-500"
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                />
+                                <Image src={img.url} alt="" fill unoptimized className="object-cover" />
                             </div>
                         ))}
                     </div>
@@ -250,98 +233,78 @@ export default function GalleryView({ id }: Props) {
     };
 
     return (
-        <SectionContainer id={id} className="overflow-hidden">
-            <div className="text-center mb-10 w-full">
-                <div className="flex flex-col items-center space-y-3">
-                    <span
-                        className="tracking-[0.4em] font-medium uppercase"
-                        style={{ fontSize: 'calc(10px * var(--font-scale))', color: theme.accentColor, opacity: 0.4 }}
-                    >GALLERY</span>
-                    <h2
-                        className="font-serif text-gray-900 font-medium"
-                        style={{ fontSize: 'calc(20px * var(--font-scale))' }}
-                    >
-                        {galleryTitle}
-                    </h2>
-                    <div className="w-8 h-[1px]" style={{ backgroundColor: theme.accentColor, opacity: 0.3 }}></div>
-                </div>
+        <SectionContainer id={id} className="!px-0 overflow-visible">
+            <div className="text-center mb-10 max-w-[340px] mx-auto px-4">
+                <span className="text-[10px] tracking-[0.3em] font-medium opacity-40 uppercase" style={{ color: theme.accentColor }}>GALLERY</span>
+                <h2 className="text-xl font-serif text-gray-800 mt-2 font-medium">{galleryTitle}</h2>
+                <div className="w-6 h-[1px] mx-auto mt-4 opacity-20" style={{ backgroundColor: theme.accentColor }} />
             </div>
 
             {renderGallery()}
 
-            {/* 3. Modern Accessible Lightbox (Immersive & Minimal) */}
-            {popupIndex !== null && (
+            {/* Lightbox Modal */}
+            {popupIndex !== null && portalElement && createPortal(
                 <div
+                    className="fixed inset-0 z-[10000] bg-black/70 backdrop-blur-md flex flex-col pointer-events-auto animate-modal-bg"
+                    onClick={(e) => {
+                        if (e.target === e.currentTarget) setPopupIndex(null);
+                    }}
                     role="dialog"
                     aria-modal="true"
-                    aria-label="Image Gallery"
-                    className="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-black/95 backdrop-blur-md animate-modal-bg touch-none"
-                    onClick={() => setPopupIndex(null)}
-                    onTouchMove={handleTouchMove}
                 >
-                    {/* Minimal Top Bar */}
-                    <div className="absolute top-0 left-0 w-full p-4 flex justify-between items-center z-[10002] bg-gradient-to-b from-black/50 to-transparent">
-                        <span className="text-white/60 text-xs font-light tracking-[0.2em]">
+                    {/* Header */}
+                    <div className="flex justify-between items-center p-6 z-[10001]">
+                        <span className="text-white/60 text-[10px] tracking-widest pl-2">
                             {currentIndex + 1} / {gallery.length}
                         </span>
                         <button
                             ref={closeBtnRef}
                             onClick={() => setPopupIndex(null)}
-                            className="p-2 text-white/80 hover:text-white transition-colors rounded-full hover:bg-white/10"
-                            aria-label="Close Gallery"
+                            className="p-2 text-white/50 hover:text-white transition-colors"
                         >
-                            <X size={24} strokeWidth={1} />
+                            <X size={24} strokeWidth={1.5} />
                         </button>
                     </div>
 
-                    {/* Main Content Area - Maximized */}
-                    <div
-                        className="relative w-full h-full flex items-center justify-center p-2 sm:p-4"
-                        onClick={(e) => e.stopPropagation()}
-                    >
+                    {/* Content */}
+                    <div className="flex-1 relative w-full h-full overflow-hidden">
                         <Swiper
                             initialSlide={popupIndex}
-                            modules={[Navigation, Pagination, EffectFade]}
-                            spaceBetween={20}
+                            modules={[EffectFade]}
                             slidesPerView={1}
-                            navigation={{
-                                nextEl: '.lux-next',
-                                prevEl: '.lux-prev',
+                            observer={true}
+                            observeParents={true}
+                            onSwiper={setModalSwiper}
+                            onSlideChange={(swiper) => {
+                                setCurrentIndex(swiper.activeIndex);
+                                if (mainSwiper && !mainSwiper.destroyed) {
+                                    if (galleryType === 'swiper') {
+                                        mainSwiper.slideToLoop(swiper.activeIndex, 0);
+                                    } else {
+                                        mainSwiper.slideTo(swiper.activeIndex, 0);
+                                    }
+                                }
                             }}
-                            onSlideChange={(swiper) => setCurrentIndex(swiper.activeIndex)}
                             className="w-full h-full"
                         >
-                            {gallery.map((img, i) => (
-                                <SwiperSlide key={`lux-${i}`} className="flex items-center justify-center">
-                                    <div className="relative w-full h-full flex items-center justify-center">
-                                        <div className="relative w-full h-full max-w-5xl max-h-[85vh] transition-transform duration-500">
-                                            <Image
-                                                src={img}
-                                                alt={`Full view ${i + 1}`}
-                                                fill
-                                                unoptimized
-                                                className="object-contain"
-                                                priority
-                                            />
-                                        </div>
+                            {gallery.map((img) => (
+                                <SwiperSlide key={img.id} className="flex items-center justify-center p-4">
+                                    <div className="relative w-full h-full max-w-full max-h-full">
+                                        <Image
+                                            src={img.url}
+                                            alt=""
+                                            fill
+                                            unoptimized
+                                            className="object-contain"
+                                            priority
+                                        />
                                     </div>
                                 </SwiperSlide>
                             ))}
                         </Swiper>
                     </div>
-
-                    {/* Minimal Floating Nav - Side (Desktop/Tablet) */}
-                    {gallery.length > 1 && (
-                        <>
-                            <button className="lux-prev absolute left-4 top-1/2 -translate-y-1/2 z-[10002] p-4 text-white/30 hover:text-white transition-all hidden md:block hover:bg-white/5 rounded-full">
-                                <ChevronLeft size={36} strokeWidth={0.5} />
-                            </button>
-                            <button className="lux-next absolute right-4 top-1/2 -translate-y-1/2 z-[10002] p-4 text-white/30 hover:text-white transition-all hidden md:block hover:bg-white/5 rounded-full">
-                                <ChevronRight size={36} strokeWidth={0.5} />
-                            </button>
-                        </>
-                    )}
-                </div>
+                </div>,
+                portalElement
             )}
         </SectionContainer>
     );

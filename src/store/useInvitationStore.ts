@@ -102,7 +102,7 @@ interface InvitationState {
     galleryPreview: boolean; // 다음 슬라이드 미리보기
     galleryFade: boolean; // 페이드 효과 사용
     galleryAutoplay: boolean; // 자동 재생 사용
-    gallery: string[];
+    gallery: { id: string; url: string }[];
 
     // Account State
     accounts: {
@@ -151,7 +151,7 @@ interface InvitationState {
     setImageUrl: (url: string | null) => void;
     setGreetingImage: (url: string | null) => void;
     setTheme: (theme: Partial<InvitationState['theme']>) => void;
-    setGallery: (images: string[]) => void;
+    setGallery: (images: { id: string; url: string }[]) => void;
     setGalleryTitle: (title: string) => void;
     setGalleryType: (type: 'swiper' | 'thumbnail' | 'grid') => void;
     setGalleryPopup: (use: boolean) => void;

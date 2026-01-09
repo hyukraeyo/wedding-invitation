@@ -20,7 +20,15 @@ const hexToRgba = (hex: string, opacity: number) => {
     return `rgba(${r}, ${g}, ${b}, ${opacity})`;
 };
 
-export const AccordionItem = ({ title, icon: Icon, isOpen, onToggle, children, isCompleted = false, badge }: AccordionItemProps) => {
+export const AccordionItem = ({
+    title,
+    icon: Icon,
+    isOpen,
+    onToggle,
+    children,
+    isCompleted = false,
+    badge
+}: AccordionItemProps) => {
     const { theme } = useInvitationStore();
     const accentColor = theme.accentColor;
     const containerRef = React.useRef<HTMLDivElement>(null);

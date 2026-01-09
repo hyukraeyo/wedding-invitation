@@ -19,8 +19,8 @@ const InvitationCanvas = memo(() => {
   // Scroll to editing section
   useEffect(() => {
     if (editingSection) {
-      let targetId = editingSection;
-      if (targetId === 'basic') targetId = 'mainScreen';
+      const targetId = editingSection;
+      if (targetId === 'basic') return; // 기본 정보 클릭 시 프리뷰는 가만히 둠
 
       const element = document.getElementById(`section-${targetId}`);
       if (element) {
@@ -57,14 +57,17 @@ const InvitationCanvas = memo(() => {
       '--font-serif': selectedFontValue,
       '--font-sans': selectedFontValue,
       fontFamily: selectedFontValue,
+      transform: 'translate3d(0, 0, 0)', // Trap fixed elements like modals within the preview
     };
   }, [theme.backgroundColor, theme.fontScale, theme.font]);
 
   return (
-    <div className="w-full h-full bg-white relative shadow-2xl overflow-hidden md:max-w-[430px] md:mx-auto">
+    <div
+      className="w-full h-full bg-white relative shadow-2xl overflow-hidden md:max-w-[430px] md:mx-auto"
+      style={canvasStyle as React.CSSProperties}
+    >
       <div
         className={`w-full h-full relative flex flex-col overflow-y-auto overflow-x-hidden scrollbar-hide transition-colors duration-500 ${theme.pattern === 'flower-sm' ? 'pattern-flower-sm' : theme.pattern === 'flower-lg' ? 'pattern-flower-lg' : ''}`}
-        style={canvasStyle as React.CSSProperties}
       >
         <EffectsOverlay />
 
@@ -97,6 +100,9 @@ const InvitationCanvas = memo(() => {
           <div>ALL RIGHTS RESERVED</div>
         </div>
       </div>
+
+      {/* Portal Root for Modals (to keep them inside the mockup) */}
+      <div id="invitation-modal-root" className="absolute inset-0 pointer-events-none z-[10000]" />
     </div>
   );
 });

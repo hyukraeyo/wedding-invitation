@@ -69,6 +69,18 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
 
     const [activeId, setActiveId] = useState<string | null>(null);
 
+    const normalizedGallery = useMemo(() => {
+        if (!gallery) return [];
+        return (gallery as (string | { id: string; url: string })[]).map((item, index) => {
+            if (typeof item === 'string') {
+                return { id: `legacy-${index}-${item.substring(0, 10)}`, url: item };
+            }
+            return item;
+        });
+    }, [gallery]);
+
+    const galleryIds = useMemo(() => normalizedGallery.map(item => item.id), [normalizedGallery]);
+
     const handleDragStart = useCallback((event: DragStartEvent) => {
         setActiveId(event.active.id as string);
     }, []);
@@ -124,7 +136,11 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
         };
 
         Promise.all(filesToProcess.map(readFileAsBase64)).then(newImageUrls => {
-            setGallery([...gallery, ...newImageUrls]);
+            const newEntries = newImageUrls.map(url => ({
+                id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+                url
+            }));
+            setGallery([...gallery, ...newEntries]);
             e.target.value = '';
         });
     };
@@ -133,19 +149,19 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
         const { active, over } = event;
 
         if (over && active.id !== over.id) {
-            const oldIndex = gallery.indexOf(active.id as string);
-            const newIndex = gallery.indexOf(over.id as string);
+            const oldIndex = normalizedGallery.findIndex(item => item.id === active.id);
+            const newIndex = normalizedGallery.findIndex(item => item.id === over.id);
 
             if (oldIndex !== -1 && newIndex !== -1) {
-                setGallery(arrayMove(gallery, oldIndex, newIndex));
+                setGallery(arrayMove(normalizedGallery, oldIndex, newIndex));
             }
         }
         setActiveId(null);
-    }, [gallery, setGallery]);
+    }, [normalizedGallery, setGallery]);
 
     const activeImageUrl = useMemo(() =>
-        activeId ? gallery.find(url => url === activeId) : null
-        , [activeId, gallery]);
+        activeId ? normalizedGallery.find(item => item.id === activeId)?.url : null
+        , [activeId, normalizedGallery]);
 
     return (
         <AccordionItem
@@ -153,7 +169,7 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
             icon={ImagePlus}
             isOpen={isOpen}
             onToggle={onToggle}
-            isCompleted={gallery.length > 0}
+            isCompleted={normalizedGallery.length > 0}
         >
             <div className="space-y-6">
                 {/* 제목 */}
@@ -225,7 +241,7 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
                         <div className="flex justify-between items-center w-full mb-3">
                             <BuilderLabel className="!mb-0">사진 관리</BuilderLabel>
                             <span className="text-xs font-normal">
-                                <span style={{ color: gallery.length >= 20 ? '#EF4444' : theme.accentColor }}>{gallery.length}</span>
+                                <span style={{ color: normalizedGallery.length >= 20 ? '#EF4444' : theme.accentColor }}>{normalizedGallery.length}</span>
                                 <span className="text-gray-400"> / 20</span>
                             </span>
                         </div>
@@ -240,23 +256,23 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
                             modifiers={[restrictToWindowEdges]}
                         >
                             <SortableContext
-                                items={gallery}
+                                items={galleryIds}
                                 strategy={rectSortingStrategy}
                             >
                                 <div className="grid grid-cols-4 gap-3 mb-4">
                                     {/* 업로드된 이미지 리스트 */}
-                                    {gallery.map((img) => (
+                                    {normalizedGallery.map((img) => (
                                         <SortableImage
-                                            key={img}
-                                            id={img}
-                                            url={img}
+                                            key={img.id}
+                                            id={img.id}
+                                            url={img.url}
                                             onDelete={setGallery}
-                                            gallery={gallery}
+                                            gallery={normalizedGallery}
                                         />
                                     ))}
 
                                     {/* 추가 버튼 (20개 미만일 때만 표시) */}
-                                    {gallery.length < 20 && (
+                                    {normalizedGallery.length < 20 && (
                                         <label className="aspect-square border border-dashed border-gray-300 flex items-center justify-center rounded cursor-pointer hover:border-gray-400 hover:bg-gray-50 transition-colors">
                                             <input
                                                 type="file"
@@ -316,8 +332,8 @@ const SortableImage = React.memo(function SortableImage({
 }: {
     id: string;
     url: string;
-    onDelete: (images: string[]) => void;
-    gallery: string[];
+    onDelete: (images: { id: string; url: string }[]) => void;
+    gallery: { id: string; url: string }[];
 }) {
     const {
         attributes,
@@ -339,8 +355,8 @@ const SortableImage = React.memo(function SortableImage({
     const handleDelete = useCallback((e: React.MouseEvent) => {
         e.preventDefault();
         e.stopPropagation();
-        onDelete(gallery.filter(item => item !== url));
-    }, [url, gallery, onDelete]);
+        onDelete(gallery.filter(item => item.id !== id));
+    }, [id, gallery, onDelete]);
 
     return (
         <div

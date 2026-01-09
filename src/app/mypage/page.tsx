@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { invitationService } from '@/services/invitationService';
 import { useInvitationStore, InvitationData } from '@/store/useInvitationStore';
 import Header from '@/components/common/Header';
-import { Calendar, MapPin, ExternalLink, Edit2, Trash2, Plus, Loader2 } from 'lucide-react';
+import { Calendar, MapPin, ExternalLink, Edit2, Trash2, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface InvitationRecord {
