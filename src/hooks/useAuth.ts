@@ -12,7 +12,7 @@ export function useAuth() {
         // Get initial session
         supabase.auth.getSession().then(({ data: { session } }) => {
             setUser(session?.user ?? null);
-            setLoading(loading => false);
+            setLoading(false);
         });
 
         // Listen for auth changes

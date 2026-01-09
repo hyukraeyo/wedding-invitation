@@ -1,18 +1,57 @@
 "use client";
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import InvitationCanvas from '@/components/preview/InvitationCanvas';
 import EditorForm from '@/components/builder/EditorForm';
 import LoginModal from '@/components/auth/LoginModal';
-import { useInvitationStore } from '@/store/useInvitationStore';
+import { useInvitationStore, InvitationData } from '@/store/useInvitationStore';
 import { useAuth } from '@/hooks/useAuth';
-
+import { invitationService } from '@/services/invitationService';
 import Header from '@/components/common/Header';
 
-
 export default function BuilderPage() {
+  const router = useRouter();
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const { user } = useAuth();
+  const state = useInvitationStore();
+
+  const handleSave = async () => {
+    if (!user) {
+      setIsLoginModalOpen(true);
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      // 1. Prepare data
+      const cleanData = Object.fromEntries(
+        Object.entries(state).filter(([, value]) => typeof value !== 'function')
+      ) as unknown as InvitationData;
+
+      // 2. Handle Slug (if empty, generate one)
+      let currentSlug = state.slug;
+      if (!currentSlug) {
+        const randomStr = Math.random().toString(36).substring(2, 8);
+        const namePart = state.groom.firstName || 'wedding';
+        currentSlug = `${namePart}-${randomStr}`;
+        state.setSlug(currentSlug);
+      }
+
+      // 3. Save to Supabase
+      await invitationService.saveInvitation(currentSlug, cleanData, user.id);
+
+      // 4. Redirect to My Page
+      alert('저장이 완료되었습니다! 마이페이지로 이동합니다.');
+      router.push('/mypage');
+    } catch (error) {
+      console.error('Save error:', error);
+      alert('저장 도중 오류가 발생했습니다.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <main className="flex flex-col h-screen w-full bg-gray-100 overflow-hidden">
@@ -23,21 +62,14 @@ export default function BuilderPage() {
       />
 
       {/* Common Header */}
-      <Header onSave={() => {
-        if (!user) {
-          setIsLoginModalOpen(true);
-        } else {
-          const setEditingSection = useInvitationStore.getState().setEditingSection;
-          setEditingSection('publish');
-        }
-      }} />
+      <Header onSave={handleSave} onLogin={() => setIsLoginModalOpen(true)} isLoading={isSaving} />
 
       {/* Workspace */}
       <div className="flex flex-1 overflow-hidden">
         {/* Left Panel: Editor */}
         <section className="w-[400px] lg:w-[480px] h-full border-r border-gray-200 bg-white shadow-xl z-20 flex flex-col">
           <div className="flex-1 overflow-hidden p-6 bg-gray-50/50">
-            <EditorForm requireLogin={() => setIsLoginModalOpen(true)} />
+            <EditorForm />
           </div>
         </section>
 

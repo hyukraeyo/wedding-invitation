@@ -37,5 +37,14 @@ export const invitationService = {
 
         if (error) return null;
         return data;
+    },
+
+    async deleteInvitation(id: string) {
+        const { error } = await supabase
+            .from('invitations')
+            .delete()
+            .eq('id', id);
+
+        if (error) throw error;
     }
 };

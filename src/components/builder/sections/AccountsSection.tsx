@@ -42,7 +42,7 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
             icon={CreditCard}
             isOpen={isOpen}
             onToggle={onToggle}
-            isCompleted={accounts.every(a => a.bank && a.accountNumber)}
+            isCompleted={accounts.length > 0 && accounts.every(a => a.bank && a.accountNumber)}
         >
             <div className="space-y-6">
                 {/* Groom Side */}

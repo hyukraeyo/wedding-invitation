@@ -3,25 +3,56 @@ import Image from 'next/image';
 import { Heart } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 
+
+const AmpersandSVG = ({ className, style }: { className?: string; style?: React.CSSProperties }) => (
+    <svg
+        viewBox="0 0 36 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className={className}
+        style={{ width: '1.5em', height: '1em', display: 'inline-block', verticalAlign: 'middle', ...style }}
+    >
+        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5" />
+        <circle cx="24" cy="12" r="9" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
+);
+
+const HeartSVG = ({ className, style }: { className?: string; style?: React.CSSProperties }) => (
+    <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className={className}
+        style={{ width: '1em', height: '1em', display: 'inline-block', verticalAlign: 'middle', ...style }}
+    >
+        <path d="M12 8C14.21 5.5 17.5 5.5 19.5 7.5C21.5 9.5 21.5 12.8 19.5 14.8L12 21L4.5 14.8C2.5 12.8 2.5 9.5 4.5 7.5C6.5 5.5 9.79 5.5 12 8Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+);
+
+
+
+
 export default function MainScreenView() {
     const { mainScreen, imageUrl, groom, bride, date, time, location, detailAddress } = useInvitationStore();
     const accentColor = useInvitationStore(state => state.theme.accentColor);
 
     return (
-        <div className={`relative w-full transition-all duration-700 ease-in-out ${mainScreen.layout === 'fill' ? 'h-[650px]' : 'pb-16'}`}>
+        <div className={`relative w-full transition-all duration-700 ease-in-out ${mainScreen.layout === 'fill' ? 'h-[650px]' : 'pb-6'}`}>
             <div className={`
                 relative w-full overflow-hidden flex flex-col items-center transition-all duration-700 ease-in-out
-                ${mainScreen.layout === 'fill' ? 'h-full justify-center' : 'pt-14'}
+                ${mainScreen.layout === 'fill' ? 'h-full justify-center' : 'pt-10'}
             `}>
                 {/* 1. Header Text Area (For Basic Layout, appears before image) */}
                 <div className={`
                     flex flex-col items-center text-center px-6 transition-all duration-700 ease-in-out
-                    ${mainScreen.layout === 'basic' ? 'mb-10 opacity-100 translate-y-0 scale-100' : 'h-0 mb-0 opacity-0 -translate-y-4 scale-95 pointer-events-none overflow-hidden'}
+                    ${mainScreen.layout === 'basic' ? 'mb-8 opacity-100 translate-y-0 scale-100' : 'h-0 mb-0 opacity-0 -translate-y-4 scale-95 pointer-events-none overflow-hidden'}
                 `}>
                     {/* Subtitle removed from here as per user request */}
                     {mainScreen.showTitle && (
                         <div
-                            className="tracking-[0.4em] font-bold mb-3 uppercase"
+                            className="tracking-[0.4em] font-black mb-3 uppercase text-gray-900"
                             style={{
                                 fontSize: 'calc(11px * var(--font-scale))',
                                 color: accentColor
@@ -38,7 +69,7 @@ export default function MainScreenView() {
                     </div>
                     {mainScreen.showGroomBride && (
                         <div
-                            className={`font-serif text-gray-800 font-medium tracking-tight flex items-center justify-center flex-wrap ${(mainScreen.andText || '').length <= 2 ? 'gap-x-2' : 'gap-x-4'
+                            className={`font-serif text-gray-800 font-medium tracking-tight flex items-center justify-center flex-wrap ${mainScreen.andText === '·' ? 'gap-x-1.5' : (mainScreen.andText || '').length <= 2 ? 'gap-x-2' : 'gap-x-4'
                                 } gap-y-1`}
                             style={{ fontSize: 'calc(17px * var(--font-scale))' }}
                         >
@@ -54,11 +85,24 @@ export default function MainScreenView() {
                                     transform: mainScreen.andText === '·' ? 'translateY(-15%)' : 'none'
                                 }}
                             >
-                                {mainScreen.andText || 'and'}
+                                {mainScreen.andText === '&' ? (
+                                    <AmpersandSVG className="scale-125 translate-y-[-5%]" />
+                                ) : mainScreen.andText === 'ring' ? (
+                                    <Image
+                                        src="/images/wedding-ring.png"
+                                        alt="ring"
+                                        width={48}
+                                        height={48}
+                                        className="inline-block object-contain"
+                                        style={{ width: 'auto', height: '1.5em', transform: 'translateY(-10%)' }}
+                                    />
+                                ) : (
+                                    mainScreen.andText || 'and'
+                                )}
                             </span>
                             <span className="shrink-0">{bride.lastName}{bride.firstName}</span>
                             {mainScreen.suffixText && (
-                                <span className="text-gray-600 font-medium ml-[-2px] shrink-0" style={{ fontSize: 'calc(17px * var(--font-scale))' }}>
+                                <span className={`text-gray-600 font-medium shrink-0 ${mainScreen.andText === '·' ? 'ml-0.5' : 'ml-[-2px]'}`} style={{ fontSize: 'calc(17px * var(--font-scale))' }}>
                                     {mainScreen.suffixText}
                                 </span>
                             )}
@@ -89,9 +133,9 @@ export default function MainScreenView() {
                             src={imageUrl}
                             alt={`${groom.firstName}와 ${bride.firstName}의 결혼식 메인 사진`}
                             fill
-                            className="object-cover transition-transform duration-700 ease-in-out"
+                            className={`object-cover ${mainScreen.layout !== 'fill' ? 'transition-transform duration-700 ease-in-out' : ''}`}
                             style={{
-                                transform: mainScreen.expandPhoto ? 'scale(1.1)' : 'scale(1)',
+                                transform: (mainScreen.expandPhoto && mainScreen.layout !== 'fill') ? 'scale(1.1)' : 'scale(1)',
                                 transformOrigin: 'center center'
                             }}
                             priority
@@ -117,13 +161,13 @@ export default function MainScreenView() {
                 {/* Bottom Text Area */}
                 <div className={`
                     z-20 flex flex-col items-center text-center transition-all duration-700
-                    ${mainScreen.layout === 'fill' ? 'absolute bottom-12 left-0 right-0 text-white' : 'mt-14 mb-6 px-10'}
+                    ${mainScreen.layout === 'fill' ? 'absolute bottom-12 left-0 right-0 text-white' : 'mt-6 mb-2 px-10'}
                 `}>
                     {mainScreen.layout !== 'basic' && (
                         <>
                             {mainScreen.showTitle && (
                                 <div
-                                    className={`tracking-[0.4em] uppercase mb-6 font-medium ${mainScreen.layout === 'fill' ? 'opacity-80' : 'opacity-40'}`}
+                                    className={`tracking-[0.4em] uppercase mb-6 font-black ${mainScreen.layout === 'fill' ? 'opacity-90' : 'text-gray-900'}`}
                                     style={{
                                         fontSize: 'calc(10px * var(--font-scale))',
                                         color: mainScreen.layout === 'fill' ? undefined : accentColor
@@ -134,15 +178,38 @@ export default function MainScreenView() {
                             )}
                             {mainScreen.showGroomBride && (
                                 <div
-                                    className={`font-serif mb-6 flex items-center gap-4 ${mainScreen.layout === 'fill' ? 'font-light' : 'font-normal text-gray-800'}`}
-                                    style={{ fontSize: 'calc(30px * var(--font-scale))' }}
+                                    className={`font-serif mb-6 flex items-center ${mainScreen.andText === '·' ? 'gap-x-1.5' : 'gap-4'} ${mainScreen.layout === 'fill' ? 'font-light' : 'font-normal text-gray-800'}`}
+                                    style={{ fontSize: 'calc(24px * var(--font-scale))' }}
                                 >
-                                    <span>{groom.firstName}</span>
+                                    <span>{groom.lastName}{groom.firstName}</span>
                                     <span
-                                        className="font-sans uppercase tracking-widest opacity-40 italic"
-                                        style={{ fontSize: 'calc(10px * var(--font-scale))' }}
-                                    >{mainScreen.andText || 'and'}</span>
-                                    <span>{bride.firstName}</span>
+                                        className="font-serif uppercase tracking-widest opacity-60 inline-flex items-center justify-center"
+                                        style={{ fontSize: 'calc(16px * var(--font-scale))' }}
+                                    >
+                                        {mainScreen.andText === '&' ? (
+                                            <AmpersandSVG className="scale-150 translate-y-[-5%]" />
+                                        ) : mainScreen.andText === '♥' ? (
+                                            <HeartSVG className="scale-150 translate-y-[-5%]" />
+                                        ) : mainScreen.andText === 'ring' ? (
+                                            <Image
+                                                src="/images/wedding-ring.png"
+                                                alt="ring"
+                                                width={48}
+                                                height={48}
+                                                className="inline-block object-contain"
+                                                style={{ width: 'auto', height: '1.5em', transform: 'translateY(-10%)' }}
+                                            />
+                                        ) : (
+                                            <span>{mainScreen.andText || 'and'}</span>
+                                        )}
+
+                                    </span>
+                                    <span>{bride.lastName}{bride.firstName}</span>
+                                    {mainScreen.suffixText && (
+                                        <span className={`shrink-0 ${mainScreen.andText === '·' ? 'ml-0.5' : 'ml-2'} ${mainScreen.layout === 'fill' ? 'text-white/90' : 'text-gray-600'}`} style={{ fontSize: 'calc(17px * var(--font-scale))' }}>
+                                            {mainScreen.suffixText}
+                                        </span>
+                                    )}
                                 </div>
                             )}
                         </>
@@ -157,7 +224,7 @@ export default function MainScreenView() {
                     {mainScreen.showSubtitle && (
                         <div
                             className={`mb-6 font-script ${mainScreen.layout === 'fill' ? 'text-white/90' : 'text-gray-500'}`}
-                            style={{ fontSize: 'calc(32px * var(--font-scale))' }}
+                            style={{ fontSize: 'calc(24px * var(--font-scale))' }}
                         >
                             {mainScreen.subtitle}
                         </div>

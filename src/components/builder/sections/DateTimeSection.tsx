@@ -1,13 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Calendar as CalendarIcon, ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
+import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderSelect } from '../BuilderSelect';
-import { BuilderLabel } from '../BuilderLabel';
+// BuilderLabel removed
 import { BuilderButton } from '../BuilderButton';
 import { BuilderToggle } from '../BuilderToggle';
 import { BuilderInput } from '../BuilderInput';
 import { BuilderField } from '../BuilderField';
+import { SubAccordion } from '../SubAccordion';
+
 
 interface SectionProps {
     isOpen: boolean;
@@ -224,19 +226,12 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
                 {/* D-Day Message Editor */}
                 {showDday && (
                     <div className="pt-4 border-t border-gray-100 space-y-4">
-                        <button
+                        <SubAccordion
+                            label="디데이 문구 커스텀"
+                            isOpen={showDdayEditor}
                             onClick={() => setShowDdayEditor(!showDdayEditor)}
-                            className="w-full flex items-center justify-between px-4 py-3 bg-gray-50/50 hover:bg-white border border-gray-100 rounded-xl transition-all group"
-                        >
-                            <div className="flex items-center gap-2">
-                                <BuilderLabel className="!mb-0 text-gray-500">디데이 문구 커스텀</BuilderLabel>
-                                <span className="px-1.5 py-0.5 bg-white border border-gray-100 rounded text-[8px] text-gray-400 font-black tracking-tighter">PREMIUM</span>
-                            </div>
-                            <ChevronDown
-                                size={14}
-                                className={`text-gray-400 transition-transform duration-300 ${showDdayEditor ? 'rotate-180' : ''}`}
-                            />
-                        </button>
+                        />
+
 
                         {showDdayEditor && (
                             <div className="rounded-2xl bg-gray-50/30 border border-gray-50 p-6 space-y-6 animate-in fade-in slide-in-from-top-2 duration-300">

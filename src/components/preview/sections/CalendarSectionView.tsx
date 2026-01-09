@@ -179,7 +179,7 @@ export default function CalendarSectionView({ id }: Props) {
                                 style={{ fontSize: 'calc(13px * var(--font-scale))' }}
                             >
                                 {(() => {
-                                    const message = ddayMessage
+                                    const message = (ddayMessage || '결혼식까지 남음(D-Day)남았습니다')
                                         .replace('(신랑)', groom.firstName)
                                         .replace('(신부)', bride.firstName);
 
@@ -189,7 +189,7 @@ export default function CalendarSectionView({ id }: Props) {
                                     return (
                                         <>
                                             {parts[0]}
-                                            <span style={{ color: theme.accentColor, fontWeight: 'bold' }}>{dDay}</span>
+                                            <span style={{ color: theme.accentColor, fontWeight: 'bold' }}> {dDay}일 </span>
                                             {parts[1]}
                                         </>
                                     );

@@ -69,7 +69,7 @@ export default function GreetingView({ id }: Props) {
 
                 {/* Signatures */}
                 {showNamesAtBottom && (
-                    <div className="mt-10 pt-10 border-t border-gray-50">
+                    <div className={`${(greetingTitle || greetingSubtitle || message || greetingImage) ? 'mt-10 pt-10 border-t border-gray-50' : ''}`}>
                         {enableFreeformNames ? (
                             // Freeform Mode
                             <div

@@ -68,6 +68,11 @@ export default function LocationView({ id }: Props) {
         alert('주소가 복사되었습니다.');
     };
 
+    // If both location and address are empty, do not render the section
+    if (!location && !address) {
+        return <div id={id} />;
+    }
+
     if (error) return <div>Error loading map</div>;
 
     return (

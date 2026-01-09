@@ -31,8 +31,15 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         e.preventDefault();
         setLoading(true);
 
-        // Handle 'amin' (translated to admin@test.com for Supabase Auth)
-        const loginEmail = email === 'amin' || email === 'admin' ? 'admin@test.com' : email;
+        // Handle test accounts (translated to @test.com for Supabase Auth)
+        let loginEmail = email;
+        const isTestAccount = email === 'amin' || email === 'admin' || email === 'test_1';
+
+        if (email === 'amin' || email === 'admin') {
+            loginEmail = 'admin@test.com';
+        } else if (email === 'test_1') {
+            loginEmail = 'test_1@test.com';
+        }
 
         const { error } = await supabase.auth.signInWithPassword({
             email: loginEmail,
@@ -41,13 +48,13 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
         if (error) {
             // If user doesn't exist, try to sign them up (auto-create for test account)
-            if (error.status === 400 && (email === 'amin' || email === 'admin')) {
+            if (error.status === 400 && isTestAccount) {
                 const { error: signUpError } = await supabase.auth.signUp({
                     email: loginEmail,
                     password: password
                 });
                 if (signUpError) alert(signUpError.message);
-                else alert('마스터 계정이 생성되었습니다. 다시 로그인해주세요.');
+                else alert('테스트 계정이 생성되었습니다. 다시 로그인해주세요.');
             } else {
                 alert('로그인 정보가 올바르지 않습니다.');
             }
@@ -113,8 +120,9 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
                 {/* Kakao Login Button */}
                 <button
-                    className="w-full bg-[#FEE500] hover:bg-[#FDD835] text-[#191919] h-12 rounded-xl font-medium flex items-center justify-center gap-2 transition-colors duration-200 mb-6"
+                    className="w-full bg-[#FEE500] hover:bg-[#FDD835] text-[#191919] h-12 rounded-xl font-medium flex items-center justify-center gap-2 transition-colors duration-200 mb-6 disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={handleKakaoLogin}
+                    disabled={loading}
                 >
                     {/* Official Kakao Symbol SVG */}
                     <svg viewBox="0 0 24 24" width="20" height="20" className="text-[#191919]">
@@ -123,7 +131,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                             d="M12 3C6.477 3 2 6.916 2 11.75c0 3.06 1.77 5.794 4.545 7.425-.194.72-1.246 4.384-1.277 4.55-.045.244.09.239.376.157.172-.05 3.903-2.583 4.512-3.048.601.087 1.222.132 1.844.132 5.523 0 10-3.916 10-8.75S17.523 3 12 3z"
                         />
                     </svg>
-                    카카오로 3초 만에 시작하기
+                    {loading ? '처리 중...' : '카카오로 3초 만에 시작하기'}
                 </button>
 
                 {/* Privacy Link */}

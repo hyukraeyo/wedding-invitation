@@ -192,6 +192,9 @@ interface InvitationState {
     // URL / Slug State
     slug: string;
     setSlug: (slug: string) => void;
+
+    // Actions
+    reset: () => void;
 }
 
 export type InvitationData = {
@@ -204,76 +207,76 @@ const getDefaultDate = () => {
     return d.toISOString().split('T')[0] || '';
 };
 
-export const useInvitationStore = create<InvitationState>()(persist((set) => ({
+const INITIAL_STATE = {
     kakaoShare: {
         title: '',
         description: '',
         imageUrl: null,
-        imageRatio: 'portrait',
-        buttonType: 'location',
+        imageRatio: 'portrait' as const,
+        buttonType: 'location' as const,
         showShareButton: true,
     },
     groom: {
-        firstName: '도현',
-        lastName: '이',
+        firstName: '',
+        lastName: '',
         relation: '아들',
         parents: {
-            father: { name: '이철수', isDeceased: false },
-            mother: { name: '박영희', isDeceased: false },
+            father: { name: '', isDeceased: false },
+            mother: { name: '', isDeceased: false },
         },
     },
     bride: {
-        firstName: '지수',
-        lastName: '김',
+        firstName: '',
+        lastName: '',
         relation: '딸',
         parents: {
-            father: { name: '김민수', isDeceased: false },
-            mother: { name: '최지우', isDeceased: false },
+            father: { name: '', isDeceased: false },
+            mother: { name: '', isDeceased: false },
         },
     },
 
     useFlowerIcon: true,
-    order: 'groom-first',
+    order: 'groom-first' as const,
     date: getDefaultDate(),
-    time: '14:00',
-    location: '더 컨벤션 웨딩홀',
-    address: '서울 송파구 올림픽로 319',
-    detailAddress: '교통회관 1층 그랜드볼룸',
-    mapType: 'naver',
+    time: '12:00',
+    location: '',
+    address: '',
+    detailAddress: '',
+    mapType: 'naver' as const,
 
     locationTitle: '오시는 길',
-    locationContact: '02-000-0000',
+    locationContact: '',
     showMap: true,
     lockMap: true,
     showNavigation: true,
-    mapHeight: 'default',
+    mapHeight: 'default' as const,
     mapZoom: 17, // Zoom Level (higher is closer)
     showSketch: false,
     sketchUrl: null,
 
-    coordinates: { lat: 37.515, lng: 127.102 }, // Default: Jamsil
-    message: '서로의 빛이 되어\n평생을 함께 걸어가겠습니다.\n저희 두 사람의 시작을\n축복해 주시면 감사하겠습니다.',
-    greetingTitle: '소중한 분들을 초대합니다',
-    greetingSubtitle: 'INVITATION',
+    coordinates: { lat: 37.5665, lng: 126.9780 }, // Default: Seoul City Hall
+    message: '',
+    greetingTitle: '',
+    greetingSubtitle: '',
     showNamesAtBottom: true,
     sortNames: true,
     enableFreeformNames: false,
-    groomNameCustom: '신랑측 혼주 성함 \n 신랑 이름',
-    brideNameCustom: '신부측 혼주 성함 \n 신부 이름',
+    groomNameCustom: '',
+    brideNameCustom: '',
 
     imageUrl: null,
     greetingImage: null,
 
     mainScreen: {
-        layout: 'basic',
+        layout: 'basic' as const,
         showBorder: false,
-        expandPhoto: true,
-        effect: 'paper',
+        expandPhoto: false,
+        effect: 'none' as const,
         title: 'THE MARRIAGE',
-        subtitle: 'We are getting married',
-        customDatePlace: '2026.01.06. Tuesday 12:00 PM\n서울 강남구 어느 예식장 1F, 그랜드홀',
+        subtitle: '',
+        customDatePlace: '',
         andText: '·',
-        suffixText: '결혼합니다',
+        suffixText: '',
         showTitle: true,
         showGroomBride: true,
         showSubtitle: true,
@@ -282,34 +285,43 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
 
     showCalendar: true,
     showDday: true,
-    ddayMessage: '(신랑), (신부)의 결혼식이 (D-Day)일 남았습니다.',
+    ddayMessage: '결혼식까지 남음(D-Day)남았습니다',
 
     theme: {
-        font: 'pretendard',
+        font: 'pretendard' as const,
         backgroundColor: '#FFFFFF', // White
         accentColor: '#D4AF37', // Warm Gold
         fontScale: 1,
-        pattern: 'none',
-        effect: 'none',
+        pattern: 'none' as const,
+        effect: 'none' as const,
         effectOnlyOnMain: false,
         preventZoom: true,
         animateEntrance: true,
         showSubtitleEng: true,
-        privacy: 'public',
+        privacy: 'public' as const,
     },
 
     gallery: [],
     galleryTitle: '웨딩 갤러리',
-    galleryType: 'swiper',
+    galleryType: 'swiper' as const,
     galleryPopup: true,
     galleryPreview: false,
     galleryFade: false,
     galleryAutoplay: true,
-    accounts: [
-        { id: 'g1', type: 'groom', relation: '본인', bank: '카카오뱅크', accountNumber: '3333-01-2345678', holder: '이도현' },
-        { id: 'b1', type: 'bride', relation: '본인', bank: '신한은행', accountNumber: '110-123-456789', holder: '김지수' },
-    ],
+    accounts: [],
     slug: '',
+    editingSection: null,
+    closing: {
+        title: '엔딩 사진, 문구',
+        imageUrl: null,
+        effect: 'none' as const,
+        ratio: 'auto' as const,
+        content: '',
+    },
+};
+
+export const useInvitationStore = create<InvitationState>()(persist((set) => ({
+    ...INITIAL_STATE,
 
     setGroom: (data) => set((state) => ({ groom: { ...state.groom, ...data } })),
     setBride: (data) => set((state) => ({ bride: { ...state.bride, ...data } })),
@@ -377,7 +389,6 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
     setDdayMessage: (ddayMessage) => set({ ddayMessage }),
 
     // UI State
-    editingSection: null,
     setEditingSection: (section) => set({ editingSection: section }),
 
     setKakao: (data) => set((state) => ({
@@ -393,16 +404,9 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
         }
     })),
 
-    // Closing State Initial Value and Reducer
-    closing: {
-        title: '엔딩 사진, 문구',
-        imageUrl: null,
-        effect: 'none',
-        ratio: 'auto',
-        content: '',
-    },
     setClosing: (data) => set((state) => ({ closing: { ...state.closing, ...data } })),
     setSlug: (slug) => set({ slug }),
+    reset: () => set(INITIAL_STATE),
 }), {
     name: 'wedding-invitation-storage',
     storage: createJSONStorage(() => (typeof window !== 'undefined' ? localStorage : {

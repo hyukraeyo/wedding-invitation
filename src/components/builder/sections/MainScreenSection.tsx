@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { LayoutTemplate, Check, Type, ChevronDown, ChevronUp, Info, Sparkles } from 'lucide-react';
+import Image from 'next/image';
+import { LayoutTemplate, Check, Info, Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderInput } from '../BuilderInput';
@@ -11,11 +12,43 @@ import { BuilderToggle } from '../BuilderToggle';
 import { BuilderField } from '../BuilderField';
 import RichTextEditor from '@/components/common/RichTextEditor';
 import { ImageUploader } from '../ImageUploader';
+import { SubAccordion } from '../SubAccordion';
+
 
 interface SectionProps {
     isOpen: boolean;
     onToggle: () => void;
 }
+
+const AmpersandSVG = ({ className, style }: { className?: string; style?: React.CSSProperties }) => (
+    <svg
+        viewBox="0 0 36 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className={className}
+        style={{ width: '1.5em', height: '1em', display: 'inline-block', verticalAlign: 'middle', ...style }}
+    >
+        <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5" />
+        <circle cx="24" cy="12" r="9" stroke="currentColor" strokeWidth="1.5" />
+    </svg>
+);
+
+const HeartSVG = ({ className, style }: { className?: string; style?: React.CSSProperties }) => (
+    <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className={className}
+        style={{ width: '1em', height: '1em', display: 'inline-block', verticalAlign: 'middle', ...style }}
+    >
+        <path d="M12 8C14.21 5.5 17.5 5.5 19.5 7.5C21.5 9.5 21.5 12.8 19.5 14.8L12 21L4.5 14.8C2.5 12.8 2.5 9.5 4.5 7.5C6.5 5.5 9.79 5.5 12 8Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+);
+
+
+
 
 export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
     const {
@@ -176,21 +209,14 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                 </BuilderField>
 
                 {/* Custom Text (Collapsible) */}
-                <div className="pt-4 border-t border-gray-100">
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-2">
-                            <Type size={16} className="text-gray-500" />
-                            <span className="text-sm font-bold text-gray-800">문구</span>
-                        </div>
+                <div className="pt-4 border-t border-gray-100 space-y-4">
 
-                        <button
-                            onClick={() => setIsTextSectionOpen(!isTextSectionOpen)}
-                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full transition-all border shadow-sm group ${isTextSectionOpen ? 'bg-gray-900 border-gray-900 text-white' : 'bg-gray-100 border-gray-100 text-gray-600 hover:bg-gray-200'}`}
-                        >
-                            <span className="text-xs font-bold">메인화면 문구 커스텀</span>
-                            {isTextSectionOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-                        </button>
-                    </div>
+                    <SubAccordion
+                        label="메인 화면 문구 커스텀"
+                        isOpen={isTextSectionOpen}
+                        onClick={() => setIsTextSectionOpen(!isTextSectionOpen)}
+                    />
+
 
                     {isTextSectionOpen && (
                         <div className="space-y-6 animate-in slide-in-from-top-2 fade-in duration-200">
@@ -299,85 +325,104 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                     title="메인 화면 예시 문구"
                                 >
                                     <div className="grid grid-cols-1 gap-4 max-h-[60vh] overflow-y-auto pr-2 scrollbar-hide py-1">
-                                        {[
-                                            {
-                                                title: 'THE MARRIAGE',
-                                                g: (groom.lastName || '') + (groom.firstName || ''),
-                                                a: '·',
-                                                b: (bride.lastName || '') + (bride.firstName || ''),
-                                                s: '결혼합니다',
-                                                sub: 'We are getting married',
-                                                dt: '2026.04.18. Saturday 12:00 PM\n서울 강남구 어느 예식장 1F, 그랜드홀'
-                                            },
-                                            {
-                                                title: 'INVITATION',
-                                                g: groom.firstName,
-                                                a: '&',
-                                                b: bride.firstName,
-                                                s: '',
-                                                sub: 'SAVE THE DATE',
-                                                dt: '2026.04.18. PM 12:00\n더 컨벤션 웨딩홀'
-                                            },
-                                            {
-                                                title: 'OUR WEDDING',
-                                                g: `신랑 ${(groom.lastName || '') + (groom.firstName || '')}`,
-                                                a: ',',
-                                                b: `신부 ${(bride.lastName || '') + (bride.firstName || '')}`,
-                                                s: '',
-                                                sub: 'Special Day',
-                                                dt: '2026.04.18. 토요일 오후 12시\n송파구 올림픽로 319'
-                                            },
-                                            {
-                                                title: 'WELCOME',
-                                                g: groom.firstName,
-                                                a: '♥',
-                                                b: bride.firstName,
-                                                s: '',
-                                                sub: 'Together Forever',
-                                                dt: '2026.04.18. 12:00'
-                                            },
-                                        ].map((ex, i) => (
-                                            <button
-                                                key={i}
-                                                onClick={() => {
-                                                    const gVal = ex.g;
-                                                    if (gVal.length >= 2 && !gVal.startsWith('신랑 ')) {
-                                                        setGroom({ lastName: gVal.substring(0, 1), firstName: gVal.substring(1) });
-                                                    } else {
-                                                        setGroom({ lastName: '', firstName: gVal });
-                                                    }
-                                                    const bVal = ex.b;
-                                                    if (bVal.length >= 2 && !bVal.startsWith('신부 ')) {
-                                                        setBride({ lastName: bVal.substring(0, 1), firstName: bVal.substring(1) });
-                                                    } else {
-                                                        setBride({ lastName: '', firstName: bVal });
-                                                    }
-                                                    setMainScreen({
-                                                        title: ex.title,
-                                                        andText: ex.a,
-                                                        suffixText: ex.s,
-                                                        subtitle: ex.sub,
-                                                        customDatePlace: ex.dt,
-                                                        showTitle: true,
-                                                        showGroomBride: true,
-                                                        showSubtitle: true,
-                                                        showDatePlace: true
-                                                    });
-                                                    setIsExampleModalOpen(false);
-                                                }}
-                                                className="w-full p-6 bg-gray-50 hover:bg-white hover:shadow-xl hover:border-amber-200 border border-gray-100 rounded-[2rem] text-center transition-all group duration-300"
-                                            >
-                                                <div className="space-y-3">
-                                                    <div className="text-[10px] tracking-[0.3em] font-bold text-gray-400 uppercase">{ex.title}</div>
-                                                    <div className="text-xl font-serif text-gray-800 group-hover:text-amber-700 transition-colors">
-                                                        {ex.g} <span style={{ color: accentColor }} className="opacity-70 mx-1">{ex.a}</span> {ex.b} {ex.s}
+                                        {(() => {
+                                            const clean = (s: string) => s.replace(/신랑|신부/g, '').trim();
+                                            const gName = clean((groom.lastName || '') + (groom.firstName || ''));
+                                            const bName = clean((bride.lastName || '') + (bride.firstName || ''));
+
+                                            return [
+                                                {
+                                                    title: 'THE MARRIAGE',
+                                                    g: gName,
+                                                    a: '·',
+                                                    b: bName,
+                                                    s: '결혼합니다',
+                                                    sub: 'We are getting married',
+                                                    dt: '2026.04.18. Saturday 12:00 PM\n서울 강남구 어느 예식장 1F, 그랜드홀'
+                                                },
+                                                {
+                                                    title: 'INVITATION',
+                                                    g: gName,
+                                                    a: 'ring',
+                                                    b: bName,
+                                                    s: '',
+                                                    sub: 'SAVE THE DATE',
+                                                    dt: '2026.04.18. PM 12:00\n더 컨벤션 웨딩홀'
+                                                },
+                                                {
+                                                    title: 'OUR WEDDING',
+                                                    g: gName,
+                                                    a: '&',
+                                                    b: bName,
+                                                    s: '',
+                                                    sub: 'Special Day',
+                                                    dt: '2026.04.18. 토요일 오후 12시\n송파구 올림픽로 319'
+                                                },
+                                                {
+                                                    title: 'WELCOME',
+                                                    g: gName,
+                                                    a: '♥',
+                                                    b: bName,
+                                                    s: '',
+                                                    sub: 'Together Forever',
+                                                    dt: '2026.04.18. 12:00'
+                                                },
+                                            ].map((ex, i) => (
+                                                <button
+                                                    key={i}
+                                                    onClick={() => {
+                                                        const cleanG = clean(ex.g);
+                                                        const cleanB = clean(ex.b);
+
+                                                        if (cleanG.length >= 2) {
+                                                            setGroom({ lastName: cleanG.substring(0, 1), firstName: cleanG.substring(1) });
+                                                        } else {
+                                                            setGroom({ lastName: '', firstName: cleanG });
+                                                        }
+
+                                                        if (cleanB.length >= 2) {
+                                                            setBride({ lastName: cleanB.substring(0, 1), firstName: cleanB.substring(1) });
+                                                        } else {
+                                                            setBride({ lastName: '', firstName: cleanB });
+                                                        }
+
+                                                        setMainScreen({
+                                                            title: ex.title,
+                                                            andText: ex.a,
+                                                            suffixText: ex.s,
+                                                            subtitle: ex.sub,
+                                                            customDatePlace: ex.dt,
+                                                            showTitle: true,
+                                                            showGroomBride: true,
+                                                            showSubtitle: true,
+                                                            showDatePlace: true
+                                                        });
+                                                        setIsExampleModalOpen(false);
+                                                    }}
+                                                    className="w-full p-6 bg-gray-50 hover:bg-white hover:shadow-xl hover:border-amber-200 border border-gray-100 rounded-[2rem] text-center transition-all group duration-300"
+                                                >
+                                                    <div className="space-y-3">
+                                                        <div className="text-[10px] tracking-[0.3em] font-bold text-gray-400 uppercase">{ex.title}</div>
+                                                        <div className="text-xl font-serif text-gray-800 group-hover:text-amber-700 transition-colors">
+                                                            {ex.g} <span style={{ color: accentColor }} className="opacity-70 mx-1">
+                                                                {ex.a === '&' ? (
+                                                                    <AmpersandSVG className="scale-125 translate-y-[-10%]" />
+                                                                ) : ex.a === '♥' ? (
+                                                                    <HeartSVG className="scale-125 translate-y-[-10%]" />
+                                                                ) : ex.a === 'ring' ? (
+                                                                    <Image src="/images/wedding-ring.png" alt="ring" width={20} height={20} className="inline-block object-contain translate-y-[-10%]" />
+                                                                ) : (
+                                                                    ex.a
+                                                                )}
+                                                            </span> {ex.b} {ex.s}
+                                                        </div>
+                                                        <div className="text-[14px] font-script text-gray-400 italic">{ex.sub}</div>
+                                                        <div className="w-8 h-[1px] bg-gray-200 mx-auto"></div>
+                                                        <div className="text-xs text-gray-500 whitespace-pre-wrap leading-relaxed">{ex.dt}</div>
                                                     </div>
-                                                    <div className="text-[14px] font-script text-gray-400 italic">{ex.sub}</div>
-                                                    <div className="w-8 h-[1px] bg-gray-200 mx-auto"></div>
-                                                    <div className="text-xs text-gray-500 whitespace-pre-wrap leading-relaxed">{ex.dt}</div>
-                                                </div>
-                                            </button>
-                                        ))}
+                                                </button>
+                                            ));
+                                        })()}
                                     </div>
                                     <p className="mt-6 text-[11px] text-gray-400 text-center flex items-center justify-center gap-1.5">
                                         <Info size={12} />

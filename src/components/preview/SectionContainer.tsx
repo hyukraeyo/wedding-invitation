@@ -18,7 +18,7 @@ export default function SectionContainer({ children, className = "", id }: Secti
     return (
         <ScrollReveal id={id}>
             <section
-                className={`py-20 px-8 sm:px-10 flex flex-col relative items-center ${className}`}
+                className={`py-12 px-8 sm:px-10 flex flex-col relative items-center ${className}`}
             >
                 {/* Max width to keep content focused on larger mobile screens/desktops */}
                 <div className="w-full max-w-screen-sm">
