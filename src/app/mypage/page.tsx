@@ -115,13 +115,7 @@ export default function MyPage() {
                         <h1 className="text-3xl font-bold text-gray-900">나의 청첩장</h1>
                         <p className="text-gray-500">지금까지 제작한 소중한 청첩장 목록입니다.</p>
                     </div>
-                    <button
-                        onClick={handleCreateNew}
-                        className="flex items-center gap-2 px-6 py-3 bg-black text-white rounded-2xl font-bold hover:shadow-lg transition-all active:scale-95"
-                    >
-                        <Plus size={20} />
-                        <span>새 청첩장 만들기</span>
-                    </button>
+
                 </div>
 
                 {invitations.length === 0 ? (

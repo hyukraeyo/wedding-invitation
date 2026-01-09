@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Plus } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { supabase } from '@/lib/supabase';
@@ -32,13 +33,16 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
             {/* Actions */}
             <div className="flex items-center gap-6">
                 <nav className="flex items-center gap-6">
-                    <Link
-                        href="/builder"
-                        onClick={() => reset()}
-                        className="text-sm font-medium text-gray-500 hover:text-black transition-colors"
+                    <button
+                        onClick={() => {
+                            reset();
+                            router.push('/builder');
+                        }}
+                        className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-full font-bold text-sm hover:shadow-lg transition-all active:scale-95"
                     >
-                        초대장 만들기
-                    </Link>
+                        <Plus size={16} />
+                        <span>새 청첩장 만들기</span>
+                    </button>
                     {user ? (
                         <Link href="/mypage" className="text-sm font-medium text-gray-500 hover:text-black transition-colors">
                             마이페이지
