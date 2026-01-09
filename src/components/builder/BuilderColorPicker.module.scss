@@ -1,0 +1,25 @@
+@use "@/styles/variables" as *;
+
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+}
+
+.swatch {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    position: relative;
+
+    &:hover {
+        transform: scale(1.1);
+    }
+
+    &.selected {
+        transform: scale(1.1);
+    }
+}

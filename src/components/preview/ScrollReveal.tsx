@@ -3,6 +3,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 
+import styles from './ScrollReveal.module.scss';
+import { clsx } from 'clsx';
+
 interface ScrollRevealProps {
     children: React.ReactNode;
     className?: string;
@@ -48,10 +51,7 @@ export default function ScrollReveal({ children, className = "", id }: ScrollRev
         <div
             id={id}
             ref={ref}
-            className={`${className} transition-all duration-1000 ease-out transform ${isVisible
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-10'
-                }`}
+            className={clsx(className, styles.reveal, isVisible && styles.visible)}
         >
             {children}
         </div>

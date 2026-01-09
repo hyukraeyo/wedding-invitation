@@ -1,0 +1,132 @@
+@use "@/styles/variables" as *;
+
+.container {
+    position: relative;
+    flex: 1;
+}
+
+.button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0.875rem;
+    border-radius: 0.75rem;
+    border: 1px solid #e5e7eb;
+    background-color: white;
+    text-align: left;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+
+    &:hover {
+        border-color: #d1d5db;
+        background-color: #f9fafb;
+    }
+
+    &.open {
+        border-color: var(--accent-color, #111827);
+        box-shadow: 0 0 0 1px var(--accent-color, #111827), 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        background-color: white;
+    }
+}
+
+.label {
+    font-size: 0.875rem; // 14px
+    color: #6b7280; // text-gray-500
+    font-weight: 500;
+    
+    &.hasValue {
+        color: #1f2937; // text-gray-800
+    }
+}
+
+.icon {
+    color: #9ca3af;
+    transition: transform 0.2s;
+    
+    &.open {
+        transform: rotate(180deg);
+        color: var(--accent-color, #111827);
+    }
+}
+
+.dropdown {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #f3f4f6;
+    border-radius: 0.75rem;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+    z-index: 50;
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0.375rem;
+    
+    // Animation
+    animation: slideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-origin: top center;
+
+    @include scrollbar-hide;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: scale(0.98) translateY(-0.5rem);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.optionsList {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.optionItem {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.625rem 0.75rem;
+    border-radius: 0.5rem;
+    text-align: left;
+    font-size: 0.875rem;
+    color: #4b5563;
+    transition: all 0.15s;
+    cursor: pointer;
+    border: none; // Ensure no borders
+    background: transparent;
+
+    &:hover {
+        background-color: #f3f4f6;
+        color: #111827;
+    }
+
+    &:active {
+        transform: scale(0.99);
+    }
+
+    &.active {
+        color: var(--accent-color, #111827);
+        background-color: rgba(var(--accent-rgb, 0,0,0), 0.04);
+        font-weight: 600;
+
+        &:hover {
+            background-color: rgba(var(--accent-rgb, 0,0,0), 0.08);
+        }
+    }
+}
+
+.activeDot {
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 50%;
+    background-color: var(--accent-color, #111827);
+}

@@ -1,21 +1,29 @@
 import React from 'react';
-import { twMerge } from 'tailwind-merge';
+import styles from './BuilderTextarea.module.scss';
+import { clsx } from 'clsx';
+import { useInvitationStore } from '@/store/useInvitationStore';
 
 type BuilderTextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 
+const hexToRgbValues = (hex: string) => {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `${r}, ${g}, ${b}`;
+};
+
 export const BuilderTextarea = (props: BuilderTextareaProps) => {
+    const accentColor = useInvitationStore(state => state.theme.accentColor);
 
     return (
         <textarea
             {...props}
-            className={twMerge(
-                "w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-[14px] text-gray-900 placeholder:text-gray-300 leading-relaxed focus:border-gray-400 outline-none resize-none transition-all disabled:bg-gray-50 disabled:text-gray-400 disabled:border-gray-100 disabled:cursor-not-allowed",
-                props.className
-            )}
+            className={clsx(styles.textarea, props.className)}
             style={{
-                // Inline styles for focus color can optionally be handled via focus-within container wrapper or just keep it simple.
-                // For now, let's keep it clean without hard borders on focus for textarea unless needed.
-            }}
+                ...props.style,
+                '--accent-color': accentColor,
+                '--accent-rgb': hexToRgbValues(accentColor)
+            } as React.CSSProperties}
         />
     );
 };

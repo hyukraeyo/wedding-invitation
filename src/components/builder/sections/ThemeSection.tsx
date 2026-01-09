@@ -2,10 +2,13 @@ import { Palette } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderButtonGroup } from '../BuilderButtonGroup';
-import { BuilderButton } from '../BuilderButton';
 import { BuilderSelect } from '../BuilderSelect';
 import { BuilderToggle } from '../BuilderToggle';
 import { BuilderField } from '../BuilderField';
+import { BuilderSlider } from '../BuilderSlider';
+import { BuilderColorPicker } from '../BuilderColorPicker';
+import styles from './ThemeSection.module.scss';
+import { clsx } from 'clsx';
 
 interface SectionProps {
     isOpen: boolean;
@@ -36,7 +39,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
             onToggle={onToggle}
             isCompleted={true}
         >
-            <div className="space-y-6">
+            <div className={styles.container}>
 
                 {/* Font */}
                 <BuilderField label="글꼴">
@@ -49,72 +52,31 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Font Scale */}
                 <BuilderField label={`폰트 크기 (${theme.fontScale.toFixed(1)}x)`}>
-                    <div className="flex items-center gap-4">
-                        <input
-                            type="range"
-                            min="1"
-                            max="1.5"
-                            step="0.1"
-                            value={theme.fontScale}
-                            onChange={(e) => setTheme({ fontScale: parseFloat(e.target.value) })}
-                            className="flex-1 h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer"
-                            style={{ accentColor: theme.accentColor }}
-                        />
-                        <div className="flex gap-2">
-                            <BuilderButton
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setTheme({ fontScale: Math.max(1, theme.fontScale - 0.1) })}
-                                className="w-8 h-8 p-0"
-                            >
-                                -
-                            </BuilderButton>
-                            <BuilderButton
-                                variant="outline"
-                                size="sm"
-                                onClick={() => setTheme({ fontScale: Math.min(1.5, theme.fontScale + 0.1) })}
-                                className="w-8 h-8 p-0"
-                            >
-                                +
-                            </BuilderButton>
-                        </div>
-                    </div>
+                    <BuilderSlider
+                        min={1}
+                        max={1.5}
+                        step={0.1}
+                        value={theme.fontScale}
+                        onChange={(val) => setTheme({ fontScale: val })}
+                    />
                 </BuilderField>
 
                 {/* Background Color */}
                 <BuilderField label="배경 색상">
-                    <div className="flex gap-3 px-1">
-                        {['#FFFFFF', '#F9F8E6', '#FFEFF4', '#F4F1EA', '#EDF2F7'].map((color) => (
-                            <button
-                                key={color}
-                                onClick={() => setTheme({ backgroundColor: color })}
-                                className={`w-8 h-8 rounded-full border shadow-sm transition-transform hover:scale-110 flex items-center justify-center ${theme.backgroundColor === color ? 'ring-2 ring-offset-2' : 'border-gray-100'}`}
-                                style={{
-                                    backgroundColor: color,
-                                    borderColor: theme.backgroundColor === color ? theme.accentColor : '#F3F4F6',
-                                    boxShadow: theme.backgroundColor === color ? `0 0 0 2px white, 0 0 0 4px ${theme.accentColor}` : 'none'
-                                }}
-                            />
-                        ))}
-                    </div>
+                    <BuilderColorPicker
+                        value={theme.backgroundColor}
+                        colors={['#FFFFFF', '#F9F8E6', '#FFEFF4', '#F4F1EA', '#EDF2F7']}
+                        onChange={(color) => setTheme({ backgroundColor: color })}
+                    />
                 </BuilderField>
 
                 {/* Accent Color */}
                 <BuilderField label="강조 색상">
-                    <div className="flex gap-3 px-1">
-                        {['#D4AF37', '#9A8C98', '#2C3E50', '#C0392B'].map((color) => (
-                            <button
-                                key={color}
-                                onClick={() => setTheme({ accentColor: color })}
-                                className={`w-8 h-8 rounded-full border shadow-sm transition-transform hover:scale-110 flex items-center justify-center ${theme.accentColor === color ? 'ring-2 ring-offset-2' : 'border-gray-100'}`}
-                                style={{
-                                    backgroundColor: color,
-                                    borderColor: theme.accentColor === color ? theme.accentColor : '#F3F4F6',
-                                    boxShadow: theme.accentColor === color ? `0 0 0 2px white, 0 0 0 4px ${theme.accentColor}` : 'none'
-                                }}
-                            />
-                        ))}
-                    </div>
+                    <BuilderColorPicker
+                        value={theme.accentColor}
+                        colors={['#D4AF37', '#9A8C98', '#2C3E50', '#C0392B']}
+                        onChange={(color) => setTheme({ accentColor: color })}
+                    />
                 </BuilderField>
 
                 {/* Pattern */}
@@ -132,7 +94,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Effect */}
                 <BuilderField label="배경 이펙트">
-                    <div className="space-y-4">
+                    <div className={styles.effectContainer}>
                         <BuilderButtonGroup
                             value={theme.effect}
                             options={[
@@ -144,7 +106,7 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                         />
 
                         {theme.effect !== 'none' && (
-                            <div className="px-1">
+                            <div className={styles.toggleWrapper}>
                                 <BuilderToggle
                                     checked={theme.effectOnlyOnMain}
                                     onChange={(checked) => setTheme({ effectOnlyOnMain: checked })}
@@ -157,14 +119,12 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Additional Options */}
                 <BuilderField label="추가 설정">
-                    <div className="flex flex-wrap gap-2 px-1">
+                    <div className={styles.additionalOptions}>
                         <BuilderToggle
                             checked={theme.animateEntrance}
                             onChange={(checked) => setTheme({ animateEntrance: checked })}
                             label="스크롤 등장 효과"
                         />
-
-
                     </div>
                 </BuilderField>
 

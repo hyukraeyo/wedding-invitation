@@ -4,7 +4,7 @@ import React, { memo } from 'react';
 import Image from 'next/image';
 import { Map as KakaoMap, MapMarker } from 'react-kakao-maps-sdk';
 import SectionContainer from '../SectionContainer';
-import styles from './LocationView.module.css';
+import styles from './LocationView.module.scss';
 
 interface LocationViewProps {
     id?: string | undefined;
@@ -51,7 +51,7 @@ const LocationView = memo(({
                 <div className={styles.placeName}>{location}</div>
                 <div className={styles.address}>
                     {address}
-                    {detailAddress && <div className="mt-0.5">{detailAddress}</div>}
+                    {detailAddress && <div className={styles.detailAddress}>{detailAddress}</div>}
                 </div>
             </div>
 

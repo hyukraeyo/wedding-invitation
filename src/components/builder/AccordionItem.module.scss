@@ -1,0 +1,131 @@
+@use "@/styles/variables" as *;
+
+.accordion {
+    border-radius: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid #f3f4f6;
+    transition: $transition-smooth;
+    background-color: white;
+    overflow: hidden;
+
+    position: relative;
+    
+    &.open {
+        // Allow dropdowns to overflow
+        overflow: visible;
+        z-index: 10;
+        
+        // Shadow and ring are handled via inline style for accent color, 
+        // but we define base properties here
+        box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.06);
+    }
+
+    &:not(.open):hover {
+        border-color: #e5e7eb;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.04);
+        z-index: 1;
+    }
+}
+
+.trigger {
+    width: 100%;
+    @include flex-center;
+    justify-content: space-between;
+    padding: 1.25rem;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    
+    .headerInfo {
+        display: flex;
+        align-items: center;
+        gap: 0.875rem;
+    }
+}
+
+.iconWrapper {
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+    transition: $transition-smooth;
+    @include flex-center;
+    background-color: #f9fafb;
+    color: #9ca3af;
+
+    &.open {
+        background-color: rgba(var(--accent-rgb), 0.05);
+        color: var(--accent-color);
+        box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+    }
+}
+
+.titleWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+
+    .title {
+        font-size: 0.9375rem;
+        font-weight: 700;
+        transition: color 0.3s;
+        color: #374151;
+
+        &.open {
+            color: #111827;
+        }
+    }
+}
+
+.badge {
+    font-size: 10px;
+    color: #b45309;
+    font-weight: 900;
+    tracking-tight: -0.025em;
+    background-color: #fffbeb;
+    padding: 0.125rem 0.375rem;
+    border-radius: 0.375rem;
+    border: 1px solid #fef3c7;
+}
+
+.completedBadge {
+    @include flex-center;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    margin-left: 0.25rem;
+    color: white;
+}
+
+.arrowWrapper {
+    padding: 0.375rem;
+    border-radius: 0.5rem;
+    transition: $transition-smooth;
+    color: #d1d5db;
+
+    &.open {
+        background-color: #f9fafb;
+        color: var(--accent-color);
+        
+        .arrow {
+            transform: rotate(180deg);
+        }
+    }
+
+    .arrow {
+        transition: transform 0.5s;
+    }
+}
+
+.content {
+    padding: 0 1.25rem 1.5rem;
+    animation: modal-sheet-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+    .divider {
+        height: 1px;
+        background-color: #f9fafb;
+        margin-bottom: 1.5rem;
+        margin-inline: 0.25rem;
+    }
+}

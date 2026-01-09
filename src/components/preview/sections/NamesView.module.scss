@@ -1,0 +1,51 @@
+@use "@/styles/variables" as *;
+
+.container {
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.namesContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    margin-bottom: 2.5rem;
+}
+
+.person {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem; // space-y-2 approx
+}
+
+.relation {
+    font-size: 0.625rem; // 10px
+    letter-spacing: 0.2em;
+    color: #9ca3af; // gray-400
+    text-transform: uppercase;
+    font-weight: 300;
+    font-family: sans-serif;
+}
+
+.name {
+    font-size: 1.5rem; // 2xl
+    font-family: $font-serif;
+    font-weight: 300;
+    color: #1f2937; // gray-800
+    letter-spacing: 0.05em; // warning: tailwind tracking-wider is 0.05em
+}
+
+.lastName {
+    font-size: 1.125rem; // lg
+    opacity: 0.6;
+    margin-right: 0.25rem;
+}
+
+.divider {
+    opacity: 0.2;
+    font-family: $font-serif;
+    font-style: italic;
+    font-size: 1.25rem; // xl
+}

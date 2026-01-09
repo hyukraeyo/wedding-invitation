@@ -1,0 +1,220 @@
+@use "@/styles/variables" as *;
+
+.header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    max-width: $canvas-max-width;
+    margin-inline: auto;
+    padding-inline: 1rem;
+    
+    .headerSubtitle {
+        font-size: 0.6875rem; // 11px
+        letter-spacing: 0.2em;
+        font-weight: 600;
+        opacity: 0.5;
+        text-transform: uppercase;
+        margin-bottom: 0.25rem;
+    }
+}
+
+.galleryTitle {
+    font-size: 1.25rem;
+    font-family: $font-serif;
+    color: #1f2937;
+    margin-top: 0.5rem;
+    font-weight: 500;
+}
+
+.titleLine {
+    width: 1.5rem;
+    height: 1px;
+    margin-inline: auto;
+    margin-top: 1rem;
+    opacity: 0.2;
+}
+
+/* Swiper specific */
+.swiperContainer {
+    width: 100%;
+
+    &.swiperContainerLimited {
+        max-width: $canvas-max-width;
+        margin-inline: auto;
+    }
+}
+
+.galleryWrapper {
+    position: relative;
+    
+    // Equivalent to 'group' class for hover effects if needed
+}
+
+.swiperMain {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    overflow: visible;
+}
+
+.swiperThumbMain {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    overflow: visible;
+}
+
+.swiperThumbNav {
+    margin-top: 0.75rem;
+}
+
+.imageSlide {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border-radius: 1rem;
+    overflow: hidden;
+
+    &.cursorPointer {
+        cursor: pointer;
+    }
+    
+    img {
+        object-fit: cover;
+    }
+}
+
+.thumbItem {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    transition: all 0.2s;
+    opacity: 0.4;
+    cursor: pointer;
+    
+    img {
+        object-fit: cover;
+    }
+    
+    &.active {
+        opacity: 1;
+        box-shadow: 0 0 0 2px var(--tw-ring-color), 0 0 0 calc(2px + 1px) white; // ring-2 ring-offset-1 logic
+    }
+}
+
+.gridContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.25rem;
+    max-width: 340px;
+    margin-inline: auto;
+    padding-inline: 0.25rem;
+}
+
+.gridItem {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+    &.cursorPointer {
+        cursor: pointer;
+    }
+    
+    img {
+        object-fit: cover;
+    }
+}
+
+.counter {
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 10;
+    font-size: 0.625rem;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+}
+
+/* Modal */
+.modalBackdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background-color: rgba(0, 0, 0, 0.9); // Slightly more transparent
+    backdrop-filter: blur(20px); // Heavier blur for premium feel
+    display: flex;
+    flex-direction: column;
+    pointer-events: auto;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    z-index: 10001;
+    
+    .count {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.625rem;
+        letter-spacing: 0.1em;
+        padding-left: 0.5rem;
+    }
+    
+    .closeBtn {
+        padding: 0.5rem;
+        color: rgba(255, 255, 255, 0.5);
+        transition: color 0.2s;
+        background: none;
+        border: none;
+        cursor: pointer;
+        
+        &:hover {
+            color: white;
+        }
+    }
+}
+
+.modalSwiperContainer {
+    flex: 1;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    
+    // Override swiper container dimensions within modal
+    :global(.swiper) {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.modalSlide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    
+    .imageWrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
+        
+        img {
+            object-fit: contain;
+        }
+    }
+}

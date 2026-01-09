@@ -1,0 +1,74 @@
+/* Background Patterns */
+.pattern-flower-sm {
+  background-image: url("/images/embossed_floral.png");
+  background-repeat: repeat;
+  background-size: 150px;
+}
+
+.pattern-flower-lg {
+  background-image: url("/images/embossed_floral.png");
+  background-repeat: repeat;
+  background-size: 400px;
+}
+
+/* Animations from globals.css */
+@keyframes fall {
+  0% { transform: translateY(-10px) translateX(0); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(800px) translateX(20px); opacity: 0; }
+}
+
+@keyframes fall-sway {
+  0% { transform: translateY(-10px) translateX(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  25% { transform: translateY(200px) translateX(30px) rotate(10deg); }
+  50% { transform: translateY(400px) translateX(-30px) rotate(-10deg); }
+  75% { transform: translateY(600px) translateX(30px) rotate(10deg); }
+  100% { transform: translateY(800px) translateX(0) rotate(0deg); opacity: 0; }
+}
+
+@keyframes fall-rotate {
+  0% { transform: translateY(-10px) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(800px) rotate(360deg); opacity: 0; }
+}
+
+@keyframes float-mist {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  20% { opacity: 0.8; }
+  50% { transform: translateY(20px) translateX(10px); opacity: 0.5; }
+  80% { opacity: 0.8; }
+  100% { transform: translateY(50px) translateX(-10px); opacity: 0; }
+}
+
+@keyframes fall-diagonal {
+  0% { transform: translateY(-10px) translateX(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(800px) translateX(150px) rotate(90deg); opacity: 0; }
+}
+
+@keyframes pulse-subtle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(0.98); }
+}
+
+:global {
+  .animate-fall {
+    animation: fall linear infinite;
+  }
+  .animate-fall-diagonal {
+    animation: fall-diagonal linear infinite;
+  }
+  .animate-fall-sway {
+    animation: fall-sway linear infinite;
+  }
+  .animate-fall-tumbling {
+    animation: fall-rotate linear infinite;
+  }
+  .animate-float-slow {
+    animation: float-mist ease-in-out infinite;
+  }
+  .animate-pulse-subtle {
+    animation: pulse-subtle 3s ease-in-out infinite;
+  }
+}

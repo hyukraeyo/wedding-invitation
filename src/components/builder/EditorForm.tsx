@@ -60,7 +60,7 @@ const EditorForm = memo(function EditorForm() {
   }, []);
 
   return (
-    <div className="h-full overflow-y-auto">
+    <div className="h-full">
 
 
       <Suspense fallback={<div className="space-y-1">

@@ -1,4 +1,5 @@
-import React from 'react';
+import styles from './Builder.module.scss';
+import { clsx } from 'clsx';
 
 interface BuilderLabelProps {
     children: React.ReactNode;
@@ -7,7 +8,7 @@ interface BuilderLabelProps {
 
 export const BuilderLabel = ({ children, className = '' }: BuilderLabelProps) => {
     return (
-        <label className={`text-[11px] font-bold text-gray-400 uppercase tracking-[0.15em] mb-2 px-1 block ${className}`}>
+        <label className={clsx(styles.label, className)}>
             {children}
         </label>
     );

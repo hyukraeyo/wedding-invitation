@@ -12,6 +12,9 @@ import AccountsView from './sections/AccountsView';
 import ClosingView from './sections/ClosingView';
 import EffectsOverlay from './sections/EffectsOverlay';
 import ScrollReveal from './ScrollReveal';
+import styles from './InvitationCanvas.module.scss';
+import common from '@/styles/common.module.scss'; // Assuming you might want to use common patterns if needed, but let's stick to module.scss
+import { clsx } from 'clsx';
 
 const InvitationCanvas = memo(() => {
   const {
@@ -87,11 +90,15 @@ const InvitationCanvas = memo(() => {
 
   return (
     <div
-      className="w-full h-full bg-white relative shadow-2xl overflow-hidden md:max-w-[430px] md:mx-auto"
+      className={styles.canvasWrapper}
       style={canvasStyle as React.CSSProperties}
     >
       <div
-        className={`w-full h-full relative flex flex-col overflow-y-auto overflow-x-hidden scrollbar-hide transition-colors duration-500 ${theme.pattern === 'flower-sm' ? 'pattern-flower-sm' : theme.pattern === 'flower-lg' ? 'pattern-flower-lg' : ''}`}
+        className={clsx(
+          styles.scrollArea,
+          theme.pattern === 'flower-sm' ? 'pattern-flower-sm' :
+            theme.pattern === 'flower-lg' ? 'pattern-flower-lg' : ''
+        )}
       >
         <EffectsOverlay
           effect={theme.effect}
@@ -169,14 +176,14 @@ const InvitationCanvas = memo(() => {
         />
 
         {/* Footer Padding */}
-        <div className="h-40 flex flex-col items-center justify-center text-[10px] text-black/10 tracking-[0.2em] font-light pb-20">
-          <div className="mb-4">COPYRIGHT © 2026 ANTIGRAVITY</div>
+        <div className={styles.footerPadding}>
+          <div className={styles.copyright}>COPYRIGHT © 2026 ANTIGRAVITY</div>
           <div>ALL RIGHTS RESERVED</div>
         </div>
       </div>
 
       {/* Portal Root for Modals (to keep them inside the mockup) */}
-      <div id="invitation-modal-root" className="absolute inset-0 pointer-events-none z-[10000]" />
+      <div id="invitation-modal-root" className={styles.modalRoot} />
     </div>
   );
 });

@@ -34,17 +34,15 @@
     "react-dropzone": "^14.3.8",
     "react-kakao-maps-sdk": "^1.2.0",
     "swiper": "^11.1.14",
-    "tailwind-merge": "^3.4.0",
     "zustand": "^5.0.9"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
-    "tailwindcss": "^4",
+    "sass": "^1.97.2",
     "typescript": "^5"
   }
 }

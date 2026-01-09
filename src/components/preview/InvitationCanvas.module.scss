@@ -1,0 +1,48 @@
+@use "@/styles/variables" as *;
+
+.canvasWrapper {
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    
+    @media (min-width: 768px) {
+        max-width: $max-mobile;
+        margin-inline: auto;
+    }
+}
+
+.scrollArea {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    @include flex-col;
+    overflow-y: auto;
+    overflow-x: hidden;
+    @include scrollbar-hide;
+    transition: background-color 0.5s ease;
+}
+
+.footerPadding {
+    height: 10rem;
+    @include flex-col;
+    @include flex-center;
+    font-size: 10px;
+    color: rgba(0, 0, 0, 0.1);
+    letter-spacing: 0.2em;
+    font-weight: 300;
+    padding-bottom: 5rem;
+    
+    .copyright {
+        margin-bottom: 1rem;
+    }
+}
+
+.modalRoot {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10000;
+}

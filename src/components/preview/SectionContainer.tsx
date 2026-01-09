@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ScrollReveal from './ScrollReveal';
-import styles from './SectionContainer.module.css';
+import styles from './SectionContainer.module.scss';
 import { clsx } from 'clsx';
 
 interface SectionContainerProps {

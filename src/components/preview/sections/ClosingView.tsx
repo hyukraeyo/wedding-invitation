@@ -3,7 +3,7 @@
 import React, { memo } from 'react';
 import { MessageCircle, Share2 } from 'lucide-react';
 import SectionContainer from '../SectionContainer';
-import styles from './ClosingView.module.css';
+import styles from './ClosingView.module.scss';
 
 interface ClosingViewProps {
     id?: string | undefined;

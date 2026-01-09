@@ -2,7 +2,7 @@
 
 import React, { memo, useMemo } from 'react';
 import SectionContainer from '../SectionContainer';
-import styles from './CalendarSectionView.module.css';
+import styles from './CalendarSectionView.module.scss';
 import { clsx } from 'clsx';
 
 interface CalendarSectionViewProps {

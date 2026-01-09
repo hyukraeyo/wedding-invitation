@@ -9,6 +9,8 @@ import { BuilderModal } from '@/components/common/BuilderModal';
 import RichTextEditor from '@/components/common/RichTextEditor';
 import { ImageUploader } from '../ImageUploader';
 
+import styles from './GreetingSection.module.scss';
+
 interface SectionProps {
     isOpen: boolean;
     onToggle: () => void;
@@ -70,15 +72,15 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
             onToggle={onToggle}
             isCompleted={message.length > 0}
         >
-            <div className="space-y-6">
+            <div className={styles.container}>
                 {/* Header: Sample Phrases Button */}
-                <div className="flex items-center justify-end">
+                <div className={styles.header}>
                     <button
                         onClick={() => setIsSampleModalOpen(true)}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-[#FFF9EB] text-[#A65E1A] rounded-full border border-[#FFE0A3] hover:bg-[#FFF2D1] transition-all shadow-sm group"
+                        className={styles.exampleButton}
                     >
-                        <Sparkles size={14} className="group-hover:scale-110 transition-transform" />
-                        <span className="text-xs font-bold">예시 문구</span>
+                        <Sparkles size={14} className={styles.sparkle} />
+                        <span>예시 문구</span>
                     </button>
                 </div>
 
@@ -122,8 +124,8 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Name Options */}
                 <BuilderField label="성함 표기">
-                    <div className="space-y-4">
-                        <div className="flex flex-wrap gap-2 px-1">
+                    <div className={styles.nameOptions}>
+                        <div className={styles.toggles}>
                             <BuilderToggle
                                 checked={showNamesAtBottom}
                                 onChange={setShowNamesAtBottom}
@@ -142,14 +144,14 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                         </div>
 
                         {enableFreeformNames && (
-                            <div className="pt-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                            <div className={styles.customNames}>
                                 <RichTextEditor
                                     content={groomNameCustom}
                                     onChange={setGroomNameCustom}
                                     placeholder="인사말 하단 성함부분을 자유롭게 입력할 수 있습니다."
                                 />
-                                <p className="flex items-start gap-2 text-[11px] text-gray-400 pl-1 mt-2">
-                                    <span className="mt-0.5 opacity-70">ⓘ</span>
+                                <p className={styles.infoText}>
+                                    <span>ⓘ</span>
                                     <span>인사말 하단 성함부분을 자유롭게 입력할 수 있습니다.</span>
                                 </p>
                             </div>
@@ -163,7 +165,7 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                     onClose={() => setIsSampleModalOpen(false)}
                     title="샘플 문구"
                 >
-                    <div className="space-y-4 max-h-[60vh] overflow-y-auto px-1 pr-2 scrollbar-hide pt-2">
+                    <div className={styles.modalGrid}>
                         {GREETING_SAMPLES.map((sample, idx) => (
                             <button
                                 key={idx}
@@ -173,12 +175,12 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                                     setMessage(sample.message);
                                     setIsSampleModalOpen(false);
                                 }}
-                                className="w-full text-left p-5 rounded-3xl border border-gray-100 bg-gray-50/50 hover:bg-white hover:shadow-xl hover:shadow-black/5 hover:border-yellow-200 transition-all group duration-300"
+                                className={styles.sampleCard}
                             >
-                                <div className="font-script text-gray-400 opacity-60 text-sm mb-1">{sample.subtitle}</div>
-                                <div className="font-bold text-gray-900 mb-2 group-hover:text-yellow-600 transition-colors">{sample.title}</div>
+                                <div className={styles.sampleSubtitle}>{sample.subtitle}</div>
+                                <div className={styles.sampleTitle}>{sample.title}</div>
                                 <div
-                                    className="text-xs text-gray-500 leading-[1.8] rich-text-sample-preview"
+                                    className={styles.sampleMessage}
                                     dangerouslySetInnerHTML={{ __html: sample.message }}
                                 />
                             </button>

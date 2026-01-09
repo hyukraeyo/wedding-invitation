@@ -1,0 +1,63 @@
+@use "@/styles/variables" as *;
+
+.footer {
+    @include flex-col;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    padding-top: 2rem;
+    padding-bottom: 5rem;
+
+    .decorationLine {
+        width: 1px;
+        height: 40px;
+        background-color: var(--accent-light, #e5e7eb);
+        margin-bottom: 2rem;
+    }
+
+    .message {
+        font-size: 0.9375rem;
+        line-height: 2;
+        color: #4b5563;
+        font-family: $font-gowun-batang;
+        margin-bottom: 3rem;
+        word-break: keep-all;
+    }
+
+    .shareContainer {
+        @include flex-col;
+        align-items: center;
+        gap: 1rem;
+        width: 100%;
+
+        .shareButton {
+            width: 100%;
+            max-width: 240px;
+            @include flex-center;
+            gap: 0.75rem;
+            padding: 0.875rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: $transition-fast;
+
+            &.kakaoShare {
+                background-color: #FEE500;
+                color: #3C1E1E;
+                border: none;
+            }
+
+            &.linkShare {
+                background-color: white;
+                color: #4b5563;
+                border: 1px solid #e5e7eb;
+            }
+
+            &:active {
+                transform: scale(0.98);
+                opacity: 0.9;
+            }
+        }
+    }
+}

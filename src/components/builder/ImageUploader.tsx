@@ -1,17 +1,22 @@
 import React, { ChangeEvent, useRef } from 'react';
 import Image from 'next/image';
-import { Image as ImageIcon, X } from 'lucide-react';
+import { Trash2, UploadCloud } from 'lucide-react';
+import styles from './ImageUploader.module.scss';
+import { clsx } from 'clsx';
+import { BuilderLabel } from './BuilderLabel';
+import { useInvitationStore } from '@/store/useInvitationStore';
 
 interface ImageUploaderProps {
     value: string | null;
     onChange: (value: string | null) => void;
-    label?: string; // e.g. "사진"
-    placeholder?: string; // e.g. "사진 추가"
-    className?: string; // wrapper style
+    label?: string;
+    placeholder?: string;
+    className?: string;
 }
 
-export function ImageUploader({ value, onChange, label, placeholder = '사진 추가', className }: ImageUploaderProps) {
+export function ImageUploader({ value, onChange, label, placeholder = '사진을 업로드해주세요', className }: ImageUploaderProps) {
     const inputRef = useRef<HTMLInputElement>(null);
+    const accentColor = useInvitationStore(state => state.theme.accentColor);
 
     const handleUpload = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -34,43 +39,44 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진 �
         }
     };
 
+    const cssVars = {
+        '--accent-color': accentColor,
+    } as React.CSSProperties;
+
     return (
-        <div className={`space-y-3 ${className}`}>
-            {label && <label className="block text-sm font-bold text-gray-800">{label}</label>}
+        <div className={clsx(styles.container, className)} style={cssVars}>
+            {label && <BuilderLabel>{label}</BuilderLabel>}
 
             <div
-                className={`
-                    relative group w-32 h-32 
-                    ${!value ? 'cursor-pointer' : ''}
-                `}
+                className={clsx(styles.uploader, value && styles.hasImage)}
                 onClick={() => !value && inputRef.current?.click()}
             >
-                <div
-                    className={`
-                        w-full h-full rounded-[24px] overflow-hidden relative
-                        transition-all duration-300
-                        ${value
-                            ? 'shadow-lg ring-1 ring-black/5'
-                            : 'border-2 border-dashed border-gray-200 bg-gray-50 hover:bg-gray-100 hover:border-gray-300'
-                        }
-                    `}
-                >
+                <div className={styles.previewArea}>
                     {value ? (
                         <>
-                            <Image src={value} alt="Uploaded" fill className="object-cover" />
+                            <Image
+                                src={value}
+                                alt="Uploaded"
+                                fill
+                                className={styles.image}
+                            />
                             <button
                                 onClick={handleRemove}
-                                className="absolute top-2 right-2 w-7 h-7 bg-black/60 hover:bg-black/80 text-white rounded-full flex items-center justify-center transition-all shadow-sm backdrop-blur-sm z-10"
+                                className={styles.removeButton}
+                                title="사진 삭제"
                             >
-                                <X size={14} strokeWidth={2.5} />
+                                <Trash2 size={16} />
                             </button>
                         </>
                     ) : (
-                        <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400 space-y-1">
-                            <div className="w-8 h-8 rounded-full bg-white shadow-sm flex items-center justify-center mb-1">
-                                <ImageIcon size={16} className="text-gray-400" />
+                        <div className={styles.placeholder}>
+                            <div className={styles.iconWrapper}>
+                                <UploadCloud size={24} strokeWidth={1.5} />
                             </div>
-                            <span className="text-[11px] font-medium opacity-70">{placeholder}</span>
+                            <div>
+                                <div className={styles.text}>{placeholder}</div>
+                                <div className={styles.subText}>클릭하여 이미지를 선택하세요</div>
+                            </div>
                         </div>
                     )}
                 </div>
@@ -80,7 +86,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진 �
                     type="file"
                     accept="image/*"
                     onChange={handleUpload}
-                    className="hidden"
+                    className={styles.hiddenInput} // Force hidden via SCSS
                 />
             </div>
         </div>

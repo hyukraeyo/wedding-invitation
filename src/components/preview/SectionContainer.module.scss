@@ -1,3 +1,5 @@
+@use "@/styles/variables" as *;
+
 .container {
     padding-block: var(--section-padding-y, 3rem);
     padding-inline: var(--section-padding-x, 2rem);
@@ -6,17 +8,17 @@
     position: relative;
     align-items: center;
     width: 100%;
+    
+    &.fullWidth {
+        padding-inline: 0;
+
+        .inner {
+            max-width: none;
+        }
+    }
 }
 
 .inner {
     width: 100%;
     max-width: var(--section-max-width, 640px);
-}
-
-.fullWidth {
-    padding-inline: 0;
-}
-
-.fullWidth .inner {
-    max-width: none;
 }

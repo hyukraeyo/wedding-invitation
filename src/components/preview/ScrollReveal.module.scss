@@ -1,0 +1,12 @@
+@use "@/styles/variables" as *;
+
+.reveal {
+    transition: all 1s ease-out;
+    transform: translateY(2.5rem);
+    opacity: 0;
+
+    &.visible {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

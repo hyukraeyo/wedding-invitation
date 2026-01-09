@@ -1,0 +1,112 @@
+@use "@/styles/variables" as *;
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.uploader {
+    width: 100%;
+    position: relative;
+    cursor: pointer;
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background-color: #f9fafb; // bg-gray-50
+    border: 1px dashed #e5e7eb; // border-gray-200
+
+    &:hover {
+        background-color: #f3f4f6; // bg-gray-100
+        border-color: #d1d5db; // border-gray-300
+    }
+
+    &.hasImage {
+        border-style: solid;
+        border-color: transparent;
+        background-color: white;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+}
+
+.previewArea {
+    width: 100%;
+    aspect-ratio: 16 / 9; // Wide aspect ratio for better preview
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #9ca3af; // text-gray-400
+}
+
+.placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: center;
+    padding: 1.5rem;
+
+    .iconWrapper {
+        width: 3rem;
+        height: 3rem;
+        border-radius: 1rem;
+        background-color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        color: #9ca3af;
+        transition: transform 0.3s ease;
+    }
+
+    .text {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #6b7280;
+    }
+
+    .subText {
+        font-size: 0.75rem;
+        color: #9ca3af;
+    }
+}
+
+.uploader:hover .iconWrapper {
+    transform: scale(1.05);
+    color: var(--accent-color, #4b5563);
+}
+
+.image {
+    object-fit: contain;
+    z-index: 1;
+}
+
+.removeButton {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    padding: 0.5rem;
+    background-color: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0.75rem;
+    color: #ef4444; // red-500
+    z-index: 10;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+
+    &:hover {
+        background-color: #fee2e2; // red-100
+        transform: scale(1.05);
+    }
+}
+
+.hiddenInput {
+    display: none !important;
+}

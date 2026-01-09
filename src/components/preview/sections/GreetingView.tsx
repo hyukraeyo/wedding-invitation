@@ -2,7 +2,7 @@
 
 import React, { memo } from 'react';
 import SectionContainer from '../SectionContainer';
-import styles from './GreetingView.module.css';
+import styles from './GreetingView.module.scss';
 
 interface Person {
     lastName: string;
@@ -45,14 +45,14 @@ const GreetingView = memo(({
                 <div className={styles.parentsNames}>
                     {person.father && (
                         <span>
-                            {person.fatherIsDeceased && <span className="text-[10px] opacity-40 mr-1">故</span>}
+                            {person.fatherIsDeceased && <span className={styles.deceased}>故</span>}
                             {person.father}
                         </span>
                     )}
-                    {person.father && person.mother && <span className="mx-1.5 opacity-20">·</span>}
+                    {person.father && person.mother && <span className={styles.dotSeparator}>·</span>}
                     {person.mother && (
                         <span>
-                            {person.motherIsDeceased && <span className="text-[10px] opacity-40 mr-1">故</span>}
+                            {person.motherIsDeceased && <span className={styles.deceased}>故</span>}
                             {person.mother}
                         </span>
                     )}

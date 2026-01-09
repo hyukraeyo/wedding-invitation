@@ -3,7 +3,7 @@
 import React, { useState, memo } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import SectionContainer from '../SectionContainer';
-import styles from './AccountsView.module.css';
+import styles from './AccountsView.module.scss';
 
 interface Account {
     id: string;
@@ -64,7 +64,7 @@ const AccountsView = memo(({
                             </div>
                             <div className={styles.accountInfo}>
                                 <div className={styles.bankName}>{acc.bank}</div>
-                                <div className={styles.accountDetails}>{acc.accountNumber} <span className="font-normal opacity-60 ml-1">{acc.holder}</span></div>
+                                <div className={styles.accountDetails}>{acc.accountNumber} <span className={styles.holderName}>{acc.holder}</span></div>
                             </div>
                         </div>
                     ))}

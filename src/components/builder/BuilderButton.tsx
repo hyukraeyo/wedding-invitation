@@ -1,6 +1,7 @@
 import React from 'react';
-import { twMerge } from 'tailwind-merge';
+import { clsx } from 'clsx';
 import { useInvitationStore } from '@/store/useInvitationStore';
+import styles from './BuilderButton.module.scss';
 
 interface BuilderButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
@@ -26,22 +27,6 @@ export const BuilderButton = ({
 }: BuilderButtonProps) => {
     const accentColor = useInvitationStore(state => state.theme.accentColor);
 
-    const baseStyles = "inline-flex items-center justify-center gap-2 font-bold rounded-xl border transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed";
-
-    const sizes = {
-        sm: "px-3 py-1.5 text-xs",
-        md: "px-4 py-2.5 text-[13px]",
-        lg: "px-6 py-3 text-sm",
-    };
-
-    const variants = {
-        primary: "text-white border-transparent shadow-md hover:shadow-lg",
-        secondary: "bg-black text-white border-black hover:bg-gray-800",
-        outline: "bg-white border-gray-200 text-gray-700 hover:bg-gray-50 hover:border-gray-300",
-        ghost: "bg-transparent border-transparent text-gray-600 hover:bg-gray-100",
-        danger: "bg-red-50 text-red-600 border-red-100 hover:bg-red-100",
-    };
-
     const finalStyle = variant === 'primary' ? {
         backgroundColor: accentColor,
         boxShadow: `0 4px 12px ${hexToRgba(accentColor, 0.25)}`,
@@ -50,10 +35,10 @@ export const BuilderButton = ({
 
     return (
         <button
-            className={twMerge(
-                baseStyles,
-                variants[variant],
-                sizes[size],
+            className={clsx(
+                styles.base,
+                styles[`variant-${variant}`],
+                styles[`size-${size}`],
                 className
             )}
             style={finalStyle}

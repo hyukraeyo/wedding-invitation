@@ -4,7 +4,7 @@ import React, { memo } from 'react';
 import Image from 'next/image';
 import { Heart } from 'lucide-react';
 import { AmpersandSVG, HeartSVG, RingIcon } from '../../common/BrandIcons';
-import styles from './MainScreenView.module.css';
+import styles from './MainScreenView.module.scss';
 import { clsx } from 'clsx';
 import { formatShortDate } from '@/lib/utils/format';
 
@@ -65,14 +65,14 @@ const MainScreenView = memo(({
                 <div className={clsx(styles.headerArea, isBasicLayout ? styles.headerVisible : styles.headerHidden)}>
                     {mainScreen.showTitle && (
                         <div
-                            className="tracking-[0.4em] font-black mb-3 uppercase text-gray-900"
+                            className={styles.mainTitle}
                             style={{ fontSize: 'calc(11px * var(--font-scale))', color: accentColor }}
                         >
                             {mainScreen.title || 'THE MARRIAGE'}
                         </div>
                     )}
                     <div
-                        className="font-serif font-light text-gray-700 tracking-tighter mb-5 tabular-nums"
+                        className={styles.dateText}
                         style={{ fontSize: 'calc(48px * var(--font-scale))' }}
                     >
                         {formatShortDate(date)}
@@ -80,14 +80,14 @@ const MainScreenView = memo(({
                     {mainScreen.showGroomBride && (
                         <div
                             className={clsx(
-                                "font-serif text-gray-800 font-medium tracking-tight flex items-center justify-center flex-wrap gap-y-1",
-                                mainScreen.andText === '·' ? 'gap-x-1.5' : (mainScreen.andText || '').length <= 2 ? 'gap-x-2' : 'gap-x-4'
+                                styles.namesWrapper,
+                                mainScreen.andText === '·' ? styles.gapSmall : (mainScreen.andText || '').length <= 2 ? styles.gapMedium : styles.gapLarge
                             )}
                             style={{ fontSize: 'calc(17px * var(--font-scale))' }}
                         >
-                            <span className="shrink-0">{groom.lastName}{groom.firstName}</span>
+                            <span className={styles.nameText}>{groom.lastName}{groom.firstName}</span>
                             <span
-                                className="font-playfair uppercase opacity-100 shrink-0 inline-flex items-center justify-center"
+                                className={styles.connector}
                                 style={{
                                     fontSize: (mainScreen.andText || '').length === 1 ? 'calc(20px * var(--font-scale))' : 'calc(15px * var(--font-scale))',
                                     color: accentColor,
@@ -96,16 +96,16 @@ const MainScreenView = memo(({
                                 }}
                             >
                                 {mainScreen.andText === '&' ? (
-                                    <AmpersandSVG className="scale-125 translate-y-[-5%]" />
+                                    <AmpersandSVG className={clsx(styles.ampersand)} />
                                 ) : mainScreen.andText === 'ring' ? (
-                                    <RingIcon style={{ transform: 'translateY(-10%)' }} />
+                                    <RingIcon className={clsx(styles.ringIcon)} />
                                 ) : (
                                     mainScreen.andText || 'and'
                                 )}
                             </span>
-                            <span className="shrink-0">{bride.lastName}{bride.firstName}</span>
+                            <span className={styles.nameText}>{bride.lastName}{bride.firstName}</span>
                             {mainScreen.suffixText && (
-                                <span className={clsx("text-gray-600 font-medium shrink-0", mainScreen.andText === '·' ? 'ml-0.5' : 'ml-[-2px]')} style={{ fontSize: 'calc(17px * var(--font-scale))' }}>
+                                <span className={clsx(styles.suffix, mainScreen.andText === '·' ? styles.marginLeftSmall : styles.marginLeftStandard)} style={{ fontSize: 'calc(17px * var(--font-scale))' }}>
                                     {mainScreen.suffixText}
                                 </span>
                             )}
@@ -117,7 +117,7 @@ const MainScreenView = memo(({
                 <div className={clsx(
                     styles.imageFrame,
                     isFillLayout ? styles.imageFill : styles.imageStandard,
-                    (!isFillLayout && mainScreen.layout !== 'arch' && mainScreen.layout !== 'oval') && 'bg-gray-50'
+                    (!isFillLayout && mainScreen.layout !== 'arch' && mainScreen.layout !== 'oval') && styles.bgGray
                 )}
                     style={{
                         borderColor: mainScreen.showBorder ? accentColor : 'transparent',
@@ -136,7 +136,7 @@ const MainScreenView = memo(({
                             src={imageUrl}
                             alt={`${groom.firstName}와 ${bride.firstName}의 결혼식 메인 사진`}
                             fill
-                            className="object-cover transition-transform duration-700 ease-in-out"
+                            className={styles.mainImage}
                             style={{
                                 transform: (mainScreen.expandPhoto && !isFillLayout) ? 'scale(1.1)' : 'scale(1)',
                                 transformOrigin: 'center center'
@@ -144,18 +144,18 @@ const MainScreenView = memo(({
                             priority
                         />
                     ) : (
-                        <div className="flex flex-col items-center justify-center h-full opacity-20 text-gray-300 bg-gray-50/50">
+                        <div className={styles.emptyPlaceholder}>
                             <Heart size={48} strokeWidth={1} />
-                            <span className="mt-4 uppercase tracking-[0.2em] font-light" style={{ fontSize: 'calc(10px * var(--font-scale))' }}>No Image Selected</span>
+                            <span style={{ fontSize: 'calc(10px * var(--font-scale))' }}>No Image Selected</span>
                         </div>
                     )}
 
-                    {mainScreen.layout === 'frame' && <div className="absolute inset-4 border border-white/40 z-10"></div>}
-                    {isFillLayout && <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10 z-10" />}
+                    {mainScreen.layout === 'frame' && <div className={styles.frameBorder}></div>}
+                    {isFillLayout && <div className={styles.gradientOverlay} />}
 
-                    {mainScreen.effect === 'mist' && <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px] z-10 animate-pulse-slow"></div>}
-                    {mainScreen.effect === 'ripple' && <div className="absolute inset-0 z-10 opacity-30 bg-[url('https://www.transparenttextures.com/water.png')] animate-pulse"></div>}
-                    {mainScreen.effect === 'paper' && mainScreen.layout !== 'oval' && <div className="absolute inset-0 z-10 opacity-40 bg-[url('https://www.transparenttextures.com/paper.png')] mix-blend-multiply"></div>}
+                    {mainScreen.effect === 'mist' && <div className={clsx(styles.effectLayer, styles.mist)}></div>}
+                    {mainScreen.effect === 'ripple' && <div className={clsx(styles.effectLayer, styles.ripple)}></div>}
+                    {mainScreen.effect === 'paper' && mainScreen.layout !== 'oval' && <div className={clsx(styles.effectLayer, styles.paper)}></div>}
                 </div>
 
                 {/* 3. Bottom Area */}
@@ -164,7 +164,7 @@ const MainScreenView = memo(({
                         <>
                             {mainScreen.showTitle && (
                                 <div
-                                    className="tracking-[0.4em] uppercase mb-6 font-black"
+                                    className={styles.bottomTitle}
                                     style={{ fontSize: 'calc(10px * var(--font-scale))', color: isFillLayout ? 'inherit' : accentColor }}
                                 >
                                     {mainScreen.title}
@@ -172,22 +172,22 @@ const MainScreenView = memo(({
                             )}
                             {mainScreen.showGroomBride && (
                                 <div
-                                    className={clsx("font-serif mb-6 flex items-center", mainScreen.andText === '·' ? 'gap-x-1.5' : 'gap-4', isFillLayout ? 'font-light' : 'font-normal text-gray-800')}
+                                    className={clsx(styles.bottomNames, mainScreen.andText === '·' ? styles.gapSmall : styles.gapLarge, isFillLayout ? styles.light : styles.normal)}
                                     style={{ fontSize: 'calc(24px * var(--font-scale))' }}
                                 >
                                     <span>{groom.lastName}{groom.firstName}</span>
                                     <span
-                                        className="font-serif uppercase tracking-widest opacity-60 inline-flex items-center justify-center"
+                                        className={styles.connector}
                                         style={{ fontSize: 'calc(16px * var(--font-scale))' }}
                                     >
-                                        {mainScreen.andText === '&' ? <AmpersandSVG className="scale-150 translate-y-[-5%]" /> :
-                                            mainScreen.andText === '♥' ? <HeartSVG className="scale-150 translate-y-[-5%]" /> :
-                                                mainScreen.andText === 'ring' ? <RingIcon style={{ transform: 'translateY(-10%)' }} /> :
+                                        {mainScreen.andText === '&' ? <AmpersandSVG className={clsx(styles.ampersand)} /> :
+                                            mainScreen.andText === '♥' ? <HeartSVG className={clsx(styles.heartIcon)} /> :
+                                                mainScreen.andText === 'ring' ? <RingIcon className={clsx(styles.ringIcon)} /> :
                                                     <span>{mainScreen.andText || 'and'}</span>}
                                     </span>
                                     <span>{bride.lastName}{bride.firstName}</span>
                                     {mainScreen.suffixText && (
-                                        <span className={clsx("shrink-0", mainScreen.andText === '·' ? 'ml-0.5' : 'ml-2', isFillLayout ? 'text-white/90' : 'text-gray-600')} style={{ fontSize: 'calc(17px * var(--font-scale))' }}>
+                                        <span className={clsx(styles.suffix, mainScreen.andText === '·' ? styles.marginLeftSmall : styles.marginLeftStandard, isFillLayout ? styles.textWhite : styles.textGray)} style={{ fontSize: 'calc(17px * var(--font-scale))' }}>
                                             {mainScreen.suffixText}
                                         </span>
                                     )}
@@ -196,21 +196,21 @@ const MainScreenView = memo(({
                         </>
                     )}
 
-                    <div className="mb-8 opacity-10">
+                    <div className={styles.separator}>
                         <svg width="60" height="20" viewBox="0 0 100 20" fill="none" stroke="currentColor">
                             <path d="M0 10h40M60 10h40M45 10l5-5 5 5-5 5-5-5z" strokeWidth="0.5" />
                         </svg>
                     </div>
 
                     {mainScreen.showSubtitle && (
-                        <div className={clsx("mb-6 font-script", isFillLayout ? 'text-white/90' : 'text-gray-500')} style={{ fontSize: 'calc(24px * var(--font-scale))' }}>
+                        <div className={clsx(styles.subtitle, isFillLayout ? styles.textWhite : styles.textGray)} style={{ fontSize: 'calc(24px * var(--font-scale))' }}>
                             {mainScreen.subtitle}
                         </div>
                     )}
 
                     {mainScreen.showDatePlace && (
                         <div
-                            className={clsx("leading-[2.2] whitespace-pre-wrap tracking-wider rich-text-content", isFillLayout ? 'opacity-80' : 'text-gray-500 font-medium font-serif')}
+                            className={clsx(styles.datePlace, isFillLayout ? styles.textWhite : styles.textGray)}
                             style={{ fontSize: 'calc(14px * var(--font-scale))' }}
                             dangerouslySetInnerHTML={{
                                 __html: (() => {

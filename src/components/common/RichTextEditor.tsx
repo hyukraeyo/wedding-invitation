@@ -18,17 +18,18 @@ import {
     Type
 } from 'lucide-react';
 import { useEffect } from 'react';
-import { twMerge } from 'tailwind-merge';
+import styles from '../builder/Builder.module.scss';
+import { clsx } from 'clsx';
 
 interface RichTextEditorProps {
     content: string;
     onChange: (content: string) => void;
     placeholder?: string;
     className?: string; // Outer container class
-    minHeight?: string; // e.g. "min-h-[100px]"
+    minHeight?: string; // e.g. "min-h-[100px]" - handled via style in SCSS or inline
 }
 
-// ToolbarButton component - declared outside render to follow React Hooks rules
+// ToolbarButton component
 const ToolbarButton = ({
     onClick,
     isActive = false,
@@ -45,10 +46,7 @@ const ToolbarButton = ({
             e.preventDefault();
             onClick();
         }}
-        className={`w-9 h-9 flex items-center justify-center rounded-lg transition-all ${isActive
-            ? 'bg-gray-100 text-gray-900 border border-gray-200'
-            : 'text-gray-400 hover:bg-gray-50 hover:text-gray-600'
-            } ${className}`}
+        className={clsx(styles.toolbarButton, isActive && styles.active, className)}
     >
         {children}
     </button>
@@ -73,13 +71,14 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
         },
         editorProps: {
             attributes: {
-                class: `prose prose-sm focus:outline-none max-w-none ${minHeight} px-6 py-6 text-[15px] leading-[1.8] text-gray-700 font-pretendard`,
-                placeholder: placeholder || '내용을 입력하세요...',
+                // Classes are handled by :global(.ProseMirror) in SCSS, but placeholder might need Tiptap extension or CSS
+                class: `focus:outline-none`,
+                // placeholder: placeholder || '내용을 입력하세요...', // Tiptap placeholder extension needed for this to show visually via CSS
             },
         },
     });
 
-    // Handle external content updates (e.g. from samples)
+    // Handle external content updates
     useEffect(() => {
         if (editor && content !== editor.getHTML()) {
             editor.commands.setContent(content);
@@ -89,9 +88,9 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
     if (!editor) return null;
 
     return (
-        <div className={twMerge("border border-gray-200 rounded-xl overflow-hidden bg-white transition-all focus-within:border-gray-400", className)}>
-            {/* Minimal Toolbar - Minimalist / Modern Style */}
-            <div className="flex items-center gap-0.5 p-1.5 border-b border-gray-100 bg-gray-50/50">
+        <div className={clsx(styles.richTextEditor, className)}>
+            {/* Minimal Toolbar */}
+            <div className={styles.toolbar}>
                 <ToolbarButton
                     onClick={() => editor.chain().focus().toggleBold().run()}
                     isActive={editor.isActive('bold')}
@@ -113,9 +112,9 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
                     <UnderlineIcon size={18} />
                 </ToolbarButton>
 
-                <div className="w-[1px] h-4 bg-gray-200 mx-1.5 opacity-50"></div>
+                <div className={styles.separator}></div>
 
-                <div className="flex items-center">
+                <div className={styles.group}>
                     <ToolbarButton
                         onClick={() => editor.chain().focus().setColor('#8B5E3C').run()}
                         isActive={editor.isActive('textStyle', { color: '#8B5E3C' })}
@@ -130,7 +129,7 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
                     </ToolbarButton>
                 </div>
 
-                <div className="w-[1px] h-4 bg-gray-200 mx-1.5 opacity-50"></div>
+                <div className={styles.separator}></div>
 
                 <ToolbarButton
                     onClick={() => editor.chain().focus().setTextAlign('left').run()}
@@ -154,7 +153,13 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
                 </ToolbarButton>
             </div>
 
-            <EditorContent editor={editor} className="bg-white" />
+            <EditorContent
+                editor={editor}
+                className={styles.content}
+                style={{
+                    minHeight: minHeight.replace('min-h-[', '').replace(']', '')
+                }}
+            />
         </div>
     );
 }

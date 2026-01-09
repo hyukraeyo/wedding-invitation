@@ -2,7 +2,7 @@
 
 /* eslint-disable react-hooks/set-state-in-effect */
 import React, { useEffect, useState, memo } from 'react';
-import styles from './EffectsOverlay.module.css';
+import styles from './EffectsOverlay.module.scss';
 import { clsx } from 'clsx';
 
 interface Particle {
@@ -19,7 +19,7 @@ interface EffectsOverlayProps {
 }
 
 const CherryBlossomDefs = () => (
-    <svg width="0" height="0" className="absolute hidden">
+    <svg width="0" height="0" className={styles.hiddenSvg}>
         <defs>
             <filter id="blur-soft">
                 <feGaussianBlur in="SourceGraphic" stdDeviation="2" />
@@ -33,7 +33,7 @@ const CherryBlossomDefs = () => (
 );
 
 const Variant1 = () => (
-    <svg viewBox="0 0 64 64" className="w-full h-full overflow-visible">
+    <svg viewBox="0 0 64 64" className={styles.svgContainer}>
         <g transform="translate(10, 0) scale(0.7, 1)">
             <path d="M10 32C10 18 26 6 42 6C58 6 62 22 62 34C62 50 46 62 30 62C14 62 10 46 10 32Z" fill="#F8B8D0" opacity="0.7" />
             <path d="M32 10C40 10 54 24 54 36C54 48 40 58 32 58C24 58 10 48 10 36C10 24 24 10 32 10Z" stroke="#FFFFFF" strokeWidth="0.5" fill="none" opacity="0.3" />
@@ -42,7 +42,7 @@ const Variant1 = () => (
 );
 
 const Variant2 = () => (
-    <svg viewBox="0 0 64 64" className="w-full h-full overflow-visible">
+    <svg viewBox="0 0 64 64" className={styles.svgContainer}>
         <g transform="scale(0.5333)">
             <path d="M62 12 C48 24, 34 44, 34 64 C34 84, 48 103, 62 108 C74 102, 92 84, 92 60 C92 40, 76 22, 62 12 Z" fill="#F7B6C7" />
             <path d="M60 18 C50 28, 40 46, 40 64 C40 80, 50 96, 60 104" stroke="#FFD7E2" strokeWidth="3" strokeLinecap="round" opacity="0.8" fill="none" />
@@ -51,7 +51,7 @@ const Variant2 = () => (
 );
 
 const Variant3 = () => (
-    <svg viewBox="0 0 140 220" className="w-full h-full overflow-visible">
+    <svg viewBox="0 0 140 220" className={styles.svgContainer}>
         <defs>
             <radialGradient id="grad-new-petal" cx="45%" cy="35%" r="75%">
                 <stop offset="0%" stopColor="#ffffff" />
@@ -63,7 +63,7 @@ const Variant3 = () => (
 );
 
 const Variant4 = () => (
-    <svg viewBox="0 0 120 180" className="w-full h-full overflow-visible">
+    <svg viewBox="0 0 120 180" className={styles.svgContainer}>
         <path d="M78 8 C99 20 112 48 109 82 C106 118 82 156 52 170 C26 182 10 160 12 124 C15 78 38 28 60 12 C68 6 74 6 78 8 Z" fill="#FFD2DE" />
     </svg>
 );
@@ -114,7 +114,7 @@ const EffectsOverlay = memo(({
                         id: i,
                         pathIndex: Math.floor(Math.random() * 4),
                         color: PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)],
-                        animationClass: ['animate-fall-tumbling', 'animate-fall-sway', 'animate-fall-diagonal'][Math.floor(Math.random() * 3)],
+                        animationClass: [styles.animateFallTumbling, styles.animateFallSway, styles.animateFallDiagonal][Math.floor(Math.random() * 3)],
                         style: {
                             left: `${Math.random() * 100}%`,
                             top: `-${Math.random() * 100 + 10}%`,
@@ -142,11 +142,11 @@ const EffectsOverlay = memo(({
                 {effect === 'cherry-blossom' && <CherryBlossomDefs />}
 
                 {effect === 'snow' && particles.map(p => (
-                    <div key={p.id} className="absolute bg-white rounded-full animate-fall" style={p.style} />
+                    <div key={p.id} className={clsx(styles.snowParticle, styles.animateFall)} style={p.style} />
                 ))}
 
                 {effect === 'cherry-blossom' && particles.map(p => (
-                    <div key={p.id} className={clsx("absolute", p.animationClass || 'animate-fall-sway')} style={p.style}>
+                    <div key={p.id} className={clsx(styles.cherryParticle, p.animationClass || styles.animateFallSway)} style={p.style}>
                         {p.pathIndex === 0 && <Variant1 />}
                         {p.pathIndex === 1 && <Variant2 />}
                         {p.pathIndex === 2 && <Variant3 />}

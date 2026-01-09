@@ -14,7 +14,7 @@ import 'swiper/css/free-mode';
 import 'swiper/css/thumbs';
 import type { Swiper as SwiperClass } from 'swiper';
 import SectionContainer from '../SectionContainer';
-import styles from './GalleryView.module.css';
+import styles from './GalleryView.module.scss';
 import { clsx } from 'clsx';
 
 interface GalleryItem {
@@ -37,7 +37,7 @@ interface GalleryViewProps {
 /**
  * Presentational Component for Gallery View.
  * Receives all data via props as per Container/Presentational pattern.
- * Uses CSS Modules for styling.
+ * Uses SCSS Modules for styling.
  */
 const GalleryView = memo(({
     id,
@@ -146,7 +146,7 @@ const GalleryView = memo(({
             case 'swiper':
                 return (
                     <div className={clsx(styles.swiperContainer, !galleryPreview && styles.swiperContainerLimited)}>
-                        <div className="relative group">
+                        <div className={styles.galleryWrapper}>
                             <Swiper
                                 key={`${gallery.length}-${galleryType}-${galleryPreview}-${galleryFade}`}
                                 modules={[Navigation, Pagination, EffectFade, Autoplay]}
@@ -159,7 +159,7 @@ const GalleryView = memo(({
                                 loop={gallery.length > 1}
                                 onSwiper={setMainSwiper}
                                 onSlideChange={(swiper) => setCurrentIndex(swiper.realIndex)}
-                                className="w-full aspect-[4/3] overflow-visible"
+                                className={styles.swiperMain}
                             >
                                 {gallery.map((img, index) => (
                                     <SwiperSlide key={img.id}>
@@ -167,7 +167,7 @@ const GalleryView = memo(({
                                             className={clsx(styles.imageSlide, galleryPopup && styles.cursorPointer)}
                                             onClick={() => handleImageClick(index)}
                                         >
-                                            <Image src={img.url} alt="" fill unoptimized className="object-cover" />
+                                            <Image src={img.url} alt="" fill unoptimized />
                                         </div>
                                     </SwiperSlide>
                                 ))}
@@ -189,12 +189,12 @@ const GalleryView = memo(({
                             modules={[FreeMode, Navigation, Thumbs]}
                             onSwiper={setMainSwiper}
                             onSlideChange={(swiper) => setCurrentIndex(swiper.activeIndex)}
-                            className="w-full aspect-[16/10] overflow-visible"
+                            className={styles.swiperThumbMain}
                         >
                             {gallery.map((img, index) => (
                                 <SwiperSlide key={img.id} onClick={() => handleImageClick(index)}>
                                     <div className={clsx(styles.imageSlide, galleryPopup && styles.cursorPointer)}>
-                                        <Image src={img.url} alt="" fill unoptimized className="object-cover" />
+                                        <Image src={img.url} alt="" fill unoptimized />
                                     </div>
                                 </SwiperSlide>
                             ))}
@@ -206,18 +206,18 @@ const GalleryView = memo(({
                             freeMode={true}
                             watchSlidesProgress={true}
                             modules={[FreeMode, Thumbs]}
-                            className="mt-3"
+                            className={styles.swiperThumbNav}
                         >
                             {gallery.map((img, index) => (
-                                <SwiperSlide key={img.id} className="cursor-pointer">
+                                <SwiperSlide key={img.id} className={styles.cursorPointer}>
                                     <div
                                         className={clsx(
-                                            "relative aspect-square rounded-lg overflow-hidden transition-all",
-                                            index === currentIndex ? 'ring-2 ring-offset-1 opacity-100' : 'opacity-40'
+                                            styles.thumbItem,
+                                            index === currentIndex && styles.active
                                         )}
                                         style={index === currentIndex ? { '--tw-ring-color': accentColor } as React.CSSProperties : {}}
                                     >
-                                        <Image src={img.url} alt="" fill unoptimized className="object-cover" />
+                                        <Image src={img.url} alt="" fill unoptimized />
                                     </div>
                                 </SwiperSlide>
                             ))}
@@ -227,17 +227,17 @@ const GalleryView = memo(({
             case 'grid':
             default:
                 return (
-                    <div className="grid grid-cols-3 gap-1 max-w-[340px] mx-auto px-1">
+                    <div className={styles.gridContainer}>
                         {gallery.map((img, i) => (
                             <div
                                 key={img.id}
                                 className={clsx(
-                                    "relative aspect-square rounded-lg overflow-hidden shadow-sm",
+                                    styles.gridItem,
                                     galleryPopup && styles.cursorPointer
                                 )}
                                 onClick={() => handleImageClick(i)}
                             >
-                                <Image src={img.url} alt="" fill unoptimized className="object-cover" />
+                                <Image src={img.url} alt="" fill unoptimized />
                             </div>
                         ))}
                     </div>
@@ -246,9 +246,9 @@ const GalleryView = memo(({
     };
 
     return (
-        <SectionContainer id={id} fullWidth={galleryPreview && galleryType === 'swiper'} className="!px-0">
+        <SectionContainer id={id} fullWidth={galleryPreview && galleryType === 'swiper'} style={{ paddingInline: (galleryPreview && galleryType === 'swiper') ? '0' : undefined }}>
             <div className={styles.header}>
-                <span className="text-[10px] tracking-[0.3em] font-medium opacity-40 uppercase" style={{ color: accentColor }}>GALLERY</span>
+                <span className={styles.headerSubtitle} style={{ color: accentColor }}>GALLERY</span>
                 <h2 className={styles.galleryTitle}>{galleryTitle}</h2>
                 <div className={styles.titleLine} style={{ backgroundColor: accentColor }} />
             </div>
@@ -258,7 +258,7 @@ const GalleryView = memo(({
             {/* Lightbox Modal */}
             {popupIndex !== null && portalElement && createPortal(
                 <div
-                    className={clsx(styles.modalBackdrop, "animate-modal-bg")}
+                    className={clsx(styles.modalBackdrop)}
                     onClick={(e) => {
                         if (e.target === e.currentTarget) setPopupIndex(null);
                     }}
@@ -266,20 +266,20 @@ const GalleryView = memo(({
                     aria-modal="true"
                 >
                     <div className={styles.modalHeader}>
-                        <span className="text-white/60 text-[10px] tracking-widest pl-2">
+                        <span className={styles.count}>
                             {currentIndex + 1} / {gallery.length}
                         </span>
                         <button
                             ref={closeBtnRef}
                             onClick={() => setPopupIndex(null)}
-                            className="p-2 text-white/50 hover:text-white transition-colors"
+                            className={styles.closeBtn}
                             aria-label="창 닫기"
                         >
                             <X size={24} strokeWidth={1.5} />
                         </button>
                     </div>
 
-                    <div className="flex-1 relative w-full h-full overflow-hidden">
+                    <div className={styles.modalSwiperContainer}>
                         <Swiper
                             initialSlide={popupIndex}
                             modules={[EffectFade]}
@@ -297,17 +297,15 @@ const GalleryView = memo(({
                                     }
                                 }
                             }}
-                            className="w-full h-full"
                         >
                             {gallery.map((img) => (
-                                <SwiperSlide key={img.id} className="flex items-center justify-center p-4">
-                                    <div className="relative w-full h-full max-w-full max-h-full">
+                                <SwiperSlide key={img.id} className={styles.modalSlide}>
+                                    <div className={styles.imageWrapper}>
                                         <Image
                                             src={img.url}
                                             alt=""
                                             fill
                                             unoptimized
-                                            className="object-contain"
                                             priority
                                         />
                                     </div>
