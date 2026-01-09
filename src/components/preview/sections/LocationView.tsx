@@ -1,213 +1,88 @@
-import React, { useEffect, useState, useRef } from 'react';
+'use client';
+
+import React, { memo } from 'react';
 import Image from 'next/image';
-import Script from 'next/script';
-import { Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk';
-import { Copy } from 'lucide-react';
-import { useInvitationStore } from '@/store/useInvitationStore';
-import { NaverIcon, KakaoIcon } from '../../common/MapIcons';
+import { Map as KakaoMap, MapMarker } from 'react-kakao-maps-sdk';
 import SectionContainer from '../SectionContainer';
+import styles from './LocationView.module.css';
 
-interface Props { id?: string; }
+interface LocationViewProps {
+    id?: string | undefined;
+    location: string;
+    lat: number;
+    lng: number;
+    address: string;
+    detailAddress?: string;
+    accentColor: string;
+}
 
-export default function LocationView({ id }: Props) {
-    const {
-        location, address, detailAddress,
-        locationTitle, locationContact,
-        mapType, mapHeight, mapZoom, showMap, showNavigation,
-        showSketch, sketchUrl, lockMap,
-        theme
-    } = useInvitationStore();
-    const [coords, setCoords] = useState<{ lat: number; lng: number }>({ lat: 37.5665, lng: 126.9780 }); // Default: Seoul City Hall
+/**
+ * Presentational Component for the Location section.
+ * Integrates Kakao Maps and provides navigation shortcuts.
+ */
+const LocationView = memo(({
+    id,
+    location,
+    lat,
+    lng,
+    address,
+    detailAddress,
+    accentColor
+}: LocationViewProps) => {
 
-    // Map Height Logic
-    const heightClass = mapHeight === 'small' ? 'h-[200px]' : 'h-[300px]';
-    // Zoom Logic
-    const kakaoLevel = 22 - (mapZoom || 17);
-    const naverZoom = mapZoom || 16;
-
-    const [loading, error] = useKakaoLoader({
-        appkey: process.env.NEXT_PUBLIC_KAKAO_APP_KEY!,
-        libraries: ["services", "clusterer"],
-    });
-
-    const naverMapRef = useRef<HTMLDivElement>(null);
-    const [isNaverLoaded, setIsNaverLoaded] = useState(false);
-
-    useEffect(() => {
-        if (showMap && mapType === 'naver' && isNaverLoaded && naverMapRef.current && coords && window.naver?.maps) {
-            const mapOptions = {
-                center: new window.naver.maps.LatLng(coords.lat, coords.lng),
-                zoom: naverZoom,
-                draggable: !lockMap,
-                scrollWheel: !lockMap,
-            };
-            const map = new window.naver.maps.Map(naverMapRef.current, mapOptions);
-
-            new window.naver.maps.Marker({
-                position: new window.naver.maps.LatLng(coords.lat, coords.lng),
-                map: map,
-            });
-        }
-    }, [mapType, isNaverLoaded, coords, naverZoom, showMap, lockMap]);
-
-    useEffect(() => {
-        if (!loading && window.kakao && window.kakao.maps && window.kakao.maps.services && address) {
-            const geocoder = new window.kakao.maps.services.Geocoder();
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            geocoder.addressSearch(address, (result: any, status: any) => {
-                if (status === window.kakao.maps.services.Status.OK) {
-                    const newCoords = { lat: parseFloat(result[0].y), lng: parseFloat(result[0].x) };
-                    setCoords(newCoords);
-                }
-            });
-        }
-    }, [address, loading]);
-
-    const handleCopyAddress = () => {
-        navigator.clipboard.writeText(`${address} ${detailAddress}`);
-        alert('주소가 복사되었습니다.');
+    const handleNavClick = (type: 'kakao' | 'naver' | 'tmap') => {
+        const url = type === 'kakao'
+            ? `https://map.kakao.com/link/to/${location},${lat},${lng}`
+            : type === 'naver'
+                ? `https://map.naver.com/v5/directions/-/,,${lat},${lng},${location},,,ADDRESS_POI`
+                : `https://apis.openapi.sk.com/tmap/app/routes?appKey=yourkey&name=${location}&lon=${lng}&lat=${lat}`;
+        window.open(url, '_blank');
     };
 
-    // If both location and address are empty, do not render the section
-    if (!location && !address) {
-        return <div id={id} />;
-    }
-
-    if (error) return <div>Error loading map</div>;
-
     return (
-        <SectionContainer id={id} className="w-full space-y-8">
-            {/* Load Naver Map Script */}
-            <Script
-                src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID}`}
-                onLoad={() => setIsNaverLoaded(true)}
-            />
+        <SectionContainer id={id}>
+            <div className={styles.header}>
+                <span className={styles.subtitle} style={{ color: accentColor }}>LOCATION</span>
+                <h2 className={styles.title}>오시는 길</h2>
+                <div className={styles.decorationLine} style={{ backgroundColor: accentColor }} />
+            </div>
 
-            {/* Header */}
-            <div className="text-center space-y-6 mb-6">
-                <div className="flex flex-col items-center space-y-2">
-                    <span
-                        className="tracking-[0.3em] font-medium uppercase"
-                        style={{ fontSize: 'calc(12px * var(--font-scale))', color: theme.accentColor, opacity: 0.6 }}
-                    >
-                        LOCATION
-                    </span>
-                    <h2
-                        className="font-serif text-gray-900 font-medium"
-                        style={{ fontSize: 'calc(20px * var(--font-scale))' }}
-                    >
-                        {locationTitle}
-                    </h2>
-                    <div className="w-8 h-[1px]" style={{ backgroundColor: theme.accentColor, opacity: 0.3 }}></div>
-                </div>
-
-                <div className="space-y-1">
-                    <h3
-                        className="font-serif text-gray-800 font-medium mb-1"
-                        style={{ fontSize: 'calc(18px * var(--font-scale))' }}
-                    >{location}</h3>
-                    <p
-                        className="text-gray-500 font-light leading-relaxed tracking-tight"
-                        style={{ fontSize: 'calc(15px * var(--font-scale))' }}
-                    >
-                        {address} {detailAddress}
-                    </p>
-                    {locationContact && (
-                        <p
-                            className="text-gray-400 font-light italic"
-                            style={{ fontSize: 'calc(12px * var(--font-scale))' }}
-                        >Tel. {locationContact}</p>
-                    )}
+            <div className={styles.locationInfo}>
+                <div className={styles.placeName}>{location}</div>
+                <div className={styles.address}>
+                    {address}
+                    {detailAddress && <div className="mt-0.5">{detailAddress}</div>}
                 </div>
             </div>
 
-            {/* Map Area */}
-            {showMap && (
-                <div className={`w-full ${heightClass} rounded-2xl overflow-hidden border border-gray-100 shadow-sm relative bg-gray-50`}>
-                    {mapType === 'kakao' ? (
-                        !loading ? (
-                            <Map
-                                center={coords}
-                                style={{ width: '100%', height: '100%' }}
-                                level={kakaoLevel}
-                                draggable={!lockMap}
-                                zoomable={!lockMap}
-                            >
-                                <MapMarker position={coords} />
-                            </Map>
-                        ) : (
-                            <div className="flex flex-col items-center justify-center h-full text-gray-300 gap-2">
-                                <div className="w-8 h-8 rounded-full border-2 border-gray-100 animate-spin" style={{ borderTopColor: theme.accentColor }}></div>
-                                <span
-                                    className="tracking-widest uppercase"
-                                    style={{ fontSize: 'calc(10px * var(--font-scale))' }}
-                                >Loading Map...</span>
-                            </div>
-                        )
-                    ) : (
-                        <div className="w-full h-full relative">
-                            <div ref={naverMapRef} className="w-full h-full" />
-                            {!isNaverLoaded && (
-                                <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-300 gap-2 bg-gray-50">
-                                    <div className="w-8 h-8 rounded-full border-2 border-gray-100 animate-spin" style={{ borderTopColor: theme.accentColor }}></div>
-                                    <span
-                                        className="tracking-widest uppercase"
-                                        style={{ fontSize: 'calc(10px * var(--font-scale))' }}
-                                    >Loading Map...</span>
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
-            )}
+            <div className={styles.mapContainer}>
+                <KakaoMap
+                    center={{ lat, lng }}
+                    style={{ width: "100%", height: "100%" }}
+                    level={3}
+                >
+                    <MapMarker position={{ lat, lng }} />
+                </KakaoMap>
+            </div>
 
-            {/* Sketch Map Area */}
-            {showSketch && sketchUrl && (
-                <div className="w-full rounded-2xl overflow-hidden border border-gray-100 shadow-xs bg-white p-2">
-                    <Image
-                        src={sketchUrl}
-                        alt="약도"
-                        width={0}
-                        height={0}
-                        sizes="100vw"
-                        className="w-full h-auto object-contain rounded-xl"
-                    />
-                </div>
-            )}
-
-            {/* Navigation Buttons */}
-            {showNavigation && (
-                <div className="flex gap-3 mt-4">
-                    <button
-                        onClick={handleCopyAddress}
-                        className="flex-1 py-3 bg-white border border-gray-100 rounded-xl text-gray-500 font-medium flex items-center justify-center gap-2 hover:bg-gray-50 transition-all shadow-sm active:scale-95"
-                        style={{ fontSize: 'calc(11px * var(--font-scale))' }}
-                    >
-                        <Copy size={12} className="opacity-40" />
-                        주소 복사
-                    </button>
-                    <a
-                        href={`https://map.kakao.com/link/search/${address}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 py-3 bg-white border border-gray-100 rounded-xl text-gray-500 font-medium flex items-center justify-center gap-2 hover:bg-gray-50 transition-all shadow-sm active:scale-95"
-                        style={{ fontSize: 'calc(11px * var(--font-scale))' }}
-                    >
-                        <KakaoIcon size={12} showBackground={false} />
-                        카카오맵
-                    </a>
-                    <a
-                        href={`https://map.naver.com/v5/search/${address}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-1 py-3 bg-white border border-gray-100 rounded-xl text-gray-500 font-medium flex items-center justify-center gap-2 hover:bg-gray-50 transition-all shadow-sm active:scale-95"
-                        style={{ fontSize: 'calc(11px * var(--font-scale))' }}
-                    >
-                        <NaverIcon size={12} />
-                        네이버 지도
-                    </a>
-                </div>
-            )}
+            <div className={styles.navLinks}>
+                <button onClick={() => handleNavClick('kakao')} className={styles.navButton}>
+                    <Image src="/images/kakaomap_logo.png" alt="카카오맵" width={24} height={24} className={styles.navIcon} />
+                    <span className={styles.navLabel}>카카오맵</span>
+                </button>
+                <button onClick={() => handleNavClick('naver')} className={styles.navButton}>
+                    <Image src="/images/navermap_logo.png" alt="네이버지도" width={24} height={24} className={styles.navIcon} />
+                    <span className={styles.navLabel}>네이버지도</span>
+                </button>
+                <button onClick={() => handleNavClick('tmap')} className={styles.navButton}>
+                    <Image src="/images/tmap_logo.png" alt="티맵" width={24} height={24} className={styles.navIcon} />
+                    <span className={styles.navLabel}>티맵</span>
+                </button>
+            </div>
         </SectionContainer>
     );
-}
+});
+
+LocationView.displayName = 'LocationView';
+
+export default LocationView;

@@ -1,27 +1,40 @@
+'use client';
+
 import React from 'react';
 import ScrollReveal from './ScrollReveal';
+import styles from './SectionContainer.module.css';
+import { clsx } from 'clsx';
 
 interface SectionContainerProps {
     children: React.ReactNode;
     className?: string;
-    /** 
-     * Optional id for scroll navigation
-     */
     id?: string | undefined;
+    fullWidth?: boolean;
+    style?: React.CSSProperties;
 }
 
 /**
  * Common wrapper for preview sections to provide consistent padding and layout.
- * Includes ScrollReveal animation by default.
+ * Optimized with CSS Modules and flexible properties.
  */
-export default function SectionContainer({ children, className = "", id }: SectionContainerProps) {
+export default function SectionContainer({
+    children,
+    className = "",
+    id,
+    fullWidth = false,
+    style
+}: SectionContainerProps) {
     return (
         <ScrollReveal id={id}>
             <section
-                className={`py-12 px-8 sm:px-10 flex flex-col relative items-center ${className}`}
+                className={clsx(
+                    styles.container,
+                    fullWidth && styles.fullWidth,
+                    className
+                )}
+                style={style}
             >
-                {/* Max width to keep content focused on larger mobile screens/desktops */}
-                <div className="w-full max-w-screen-sm">
+                <div className={styles.inner}>
                     {children}
                 </div>
             </section>

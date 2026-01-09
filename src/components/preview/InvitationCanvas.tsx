@@ -14,7 +14,31 @@ import EffectsOverlay from './sections/EffectsOverlay';
 import ScrollReveal from './ScrollReveal';
 
 const InvitationCanvas = memo(() => {
-  const { theme, editingSection } = useInvitationStore();
+  const {
+    theme,
+    editingSection,
+    mainScreen,
+    imageUrl,
+    groom,
+    bride,
+    date,
+    time,
+    location,
+    coordinates,
+    address,
+    detailAddress,
+    greetingTitle,
+    message,
+    accounts,
+    closing,
+    gallery,
+    galleryTitle,
+    galleryType,
+    galleryPreview,
+    galleryFade,
+    galleryAutoplay,
+    galleryPopup
+  } = useInvitationStore();
 
   // Scroll to editing section
   useEffect(() => {
@@ -69,30 +93,80 @@ const InvitationCanvas = memo(() => {
       <div
         className={`w-full h-full relative flex flex-col overflow-y-auto overflow-x-hidden scrollbar-hide transition-colors duration-500 ${theme.pattern === 'flower-sm' ? 'pattern-flower-sm' : theme.pattern === 'flower-lg' ? 'pattern-flower-lg' : ''}`}
       >
-        <EffectsOverlay />
+        <EffectsOverlay
+          effect={theme.effect}
+          effectOnlyOnMain={theme.effectOnlyOnMain}
+        />
 
         {/* 1. Main Screen */}
         <ScrollReveal id="section-mainScreen">
-          <MainScreenView />
+          <MainScreenView
+            mainScreen={mainScreen}
+            imageUrl={imageUrl}
+            groom={groom}
+            bride={bride}
+            date={date}
+            time={time}
+            location={location}
+            detailAddress={detailAddress}
+            accentColor={theme.accentColor}
+          />
         </ScrollReveal>
 
         {/* 2. Message / Greeting */}
-        <GreetingView id="section-message" />
+        <GreetingView
+          id="section-message"
+          greetingTitle={greetingTitle}
+          greetingContent={message}
+          groom={groom}
+          bride={bride}
+          accentColor={theme.accentColor}
+        />
 
         {/* 4. Calendar & D-Day */}
-        <CalendarSectionView id="section-date" />
+        <CalendarSectionView
+          id="section-date"
+          date={date}
+          accentColor={theme.accentColor}
+        />
 
         {/* 5. Location */}
-        <LocationView id="section-location" />
+        <LocationView
+          id="section-location"
+          location={location}
+          lat={coordinates?.lat || 37.5665}
+          lng={coordinates?.lng || 126.9780}
+          address={address}
+          detailAddress={detailAddress}
+          accentColor={theme.accentColor}
+        />
 
         {/* 6. Gallery */}
-        <GalleryView id="section-gallery" />
+        <GalleryView
+          id="section-gallery"
+          gallery={gallery}
+          galleryTitle={galleryTitle}
+          galleryType={galleryType}
+          galleryPreview={galleryPreview}
+          galleryFade={galleryFade}
+          galleryAutoplay={galleryAutoplay}
+          galleryPopup={galleryPopup}
+          accentColor={theme.accentColor}
+        />
 
         {/* 7. Accounts */}
-        <AccountsView id="section-account" />
+        <AccountsView
+          id="section-account"
+          accounts={accounts}
+          accentColor={theme.accentColor}
+        />
 
         {/* 8. Closing / Ending */}
-        <ClosingView id="section-closing" />
+        <ClosingView
+          id="section-closing"
+          closingMessage={closing.content}
+          accentColor={theme.accentColor}
+        />
 
         {/* Footer Padding */}
         <div className="h-40 flex flex-col items-center justify-center text-[10px] text-black/10 tracking-[0.2em] font-light pb-20">

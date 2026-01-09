@@ -1,132 +1,94 @@
-import Image from 'next/image';
-import { useInvitationStore } from '@/store/useInvitationStore';
+'use client';
+
+import React, { memo } from 'react';
 import SectionContainer from '../SectionContainer';
+import styles from './GreetingView.module.css';
 
-interface Props { id?: string; }
+interface Person {
+    lastName: string;
+    firstName: string;
+    father?: string;
+    mother?: string;
+    fatherIsDeceased?: boolean;
+    motherIsDeceased?: boolean;
+    relation?: string;
+}
 
-export default function GreetingView({ id }: Props) {
-    const {
-        greetingTitle, greetingSubtitle, message, greetingImage,
-        showNamesAtBottom, enableFreeformNames,
-        groom, bride,
-        groomNameCustom
-    } = useInvitationStore();
-    const accentColor = useInvitationStore(state => state.theme.accentColor);
+interface GreetingViewProps {
+    id?: string | undefined;
+    greetingTitle: string;
+    greetingContent: string;
+    groom: Person;
+    bride: Person;
+    accentColor: string;
+}
 
-    if (!message && !showNamesAtBottom) return <div id={id} />;
+/**
+ * Presentational Component for the Greeting / Invitation message.
+ * Follows the Container/Presentational pattern and utilizes CSS Modules.
+ */
+const GreetingView = memo(({
+    id,
+    greetingTitle,
+    greetingContent,
+    groom,
+    bride,
+    accentColor
+}: GreetingViewProps) => {
 
-    const formatParentName = (parent: { name: string; isDeceased: boolean }) => {
-        if (!parent.name) return '';
-        return parent.isDeceased ? `故 ${parent.name}` : parent.name;
+    const renderFamilyRelation = (person: Person, role: '신랑' | '신부') => {
+        const hasParents = person.father || person.mother;
+        if (!hasParents) return null;
+
+        return (
+            <div className={styles.familyGroup}>
+                <div className={styles.parentsNames}>
+                    {person.father && (
+                        <span>
+                            {person.fatherIsDeceased && <span className="text-[10px] opacity-40 mr-1">故</span>}
+                            {person.father}
+                        </span>
+                    )}
+                    {person.father && person.mother && <span className="mx-1.5 opacity-20">·</span>}
+                    {person.mother && (
+                        <span>
+                            {person.motherIsDeceased && <span className="text-[10px] opacity-40 mr-1">故</span>}
+                            {person.mother}
+                        </span>
+                    )}
+                </div>
+                <div className={styles.relationSeparator} />
+                <div className={styles.relationLabel}>의 {person.relation || (role === '신랑' ? '장남' : '장녀')}</div>
+                <div className={styles.childName}>{person.firstName}</div>
+            </div>
+        );
     };
 
     return (
-        <SectionContainer id={id} className="text-center overflow-hidden">
-            <div className="space-y-6">
-                {/* Section Header */}
-                <div className="flex flex-col items-center space-y-1">
-                    {greetingSubtitle && (
-                        <div
-                            className="font-serif uppercase tracking-[0.3em]"
-                            style={{
-                                fontSize: 'calc(13px * var(--font-scale))',
-                                color: accentColor,
-                                opacity: 0.6
-                            }}
-                        >
-                            {greetingSubtitle}
-                        </div>
-                    )}
-                    {greetingTitle && (
-                        <div className="flex flex-col items-center space-y-3">
-                            <h2
-                                className="font-serif tracking-[0.15em] font-medium leading-relaxed"
-                                style={{
-                                    fontSize: 'calc(21px * var(--font-scale))',
-                                    color: accentColor
-                                }}
-                            >
-                                {greetingTitle}
-                            </h2>
-                            <div className="w-12 h-[1px] bg-gray-100"></div>
-                        </div>
-                    )}
+        <SectionContainer id={id}>
+            <div className={styles.header}>
+                <span className={styles.subtitle} style={{ color: accentColor }}>GREETING</span>
+                <h2 className={styles.title}>{greetingTitle}</h2>
+                <div className={styles.decorationLine} style={{ backgroundColor: accentColor }} />
+            </div>
+
+            <div className={styles.content}>
+                <div
+                    className={styles.greetingText}
+                    style={{ fontSize: 'calc(15px * var(--font-scale))' }}
+                >
+                    {greetingContent}
                 </div>
 
-                {/* Message */}
-                <div
-                    className="leading-[1.8] text-gray-700 font-serif tracking-tight px-2 rich-text-content"
-                    style={{ fontSize: 'calc(15px * var(--font-scale))' }}
-                    dangerouslySetInnerHTML={{ __html: message }}
-                />
-
-                {/* Optional Photo */}
-                {greetingImage && (
-                    <div className="relative -mx-10 w-[calc(100%+5rem)] aspect-[3/2] overflow-hidden mt-8 mb-0 animate-in fade-in zoom-in duration-700">
-                        <Image src={greetingImage} alt="Greeting" fill className="object-cover" />
-                    </div>
-                )}
-
-                {/* Signatures */}
-                {showNamesAtBottom && (
-                    <div className={`${(greetingTitle || greetingSubtitle || message || greetingImage) ? 'mt-10 pt-10 border-t border-gray-50' : ''}`}>
-                        {enableFreeformNames ? (
-                            // Freeform Mode
-                            <div
-                                className="leading-[2.2] text-gray-700 font-serif rich-text-content"
-                                style={{ fontSize: 'calc(15px * var(--font-scale))' }}
-                                dangerouslySetInnerHTML={{ __html: groomNameCustom }}
-                            />
-                        ) : (
-                            // Standard Mode
-                            <div className="space-y-6">
-                                {/* Groom */}
-                                <div className="flex flex-col items-center justify-center gap-2 font-serif text-gray-800">
-                                    <div className="flex items-center gap-3">
-                                        <div
-                                            className="flex items-center gap-2 opacity-70 text-gray-600"
-                                            style={{ fontSize: 'calc(14px * var(--font-scale))' }}
-                                        >
-                                            <span>{formatParentName(groom.parents.father)}</span>
-                                            <span className="text-gray-300">·</span>
-                                            <span>{formatParentName(groom.parents.mother)}</span>
-                                        </div>
-                                        <span
-                                            className="text-gray-400 font-sans mt-0.5"
-                                            style={{ fontSize: 'calc(11px * var(--font-scale))' }}
-                                        >의 {groom.relation}</span>
-                                        <span
-                                            className="font-medium text-gray-900"
-                                            style={{ fontSize: 'calc(17px * var(--font-scale))' }}
-                                        >{groom.firstName}</span>
-                                    </div>
-                                </div>
-                                {/* Bride */}
-                                <div className="flex flex-col items-center justify-center gap-2 font-serif text-gray-800">
-                                    <div className="flex items-center gap-3">
-                                        <div
-                                            className="flex items-center gap-2 opacity-70 text-gray-600"
-                                            style={{ fontSize: 'calc(14px * var(--font-scale))' }}
-                                        >
-                                            <span>{formatParentName(bride.parents.father)}</span>
-                                            <span className="text-gray-300">·</span>
-                                            <span>{formatParentName(bride.parents.mother)}</span>
-                                        </div>
-                                        <span
-                                            className="text-gray-400 font-sans mt-0.5"
-                                            style={{ fontSize: 'calc(11px * var(--font-scale))' }}
-                                        >의 {bride.relation}</span>
-                                        <span
-                                            className="font-medium text-gray-900"
-                                            style={{ fontSize: 'calc(17px * var(--font-scale))' }}
-                                        >{bride.firstName}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                )}
+                <div className={styles.relationArea}>
+                    {renderFamilyRelation(groom, '신랑')}
+                    {renderFamilyRelation(bride, '신부')}
+                </div>
             </div>
         </SectionContainer>
     );
-}
+});
+
+GreetingView.displayName = 'GreetingView';
+
+export default GreetingView;

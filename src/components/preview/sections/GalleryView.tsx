@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useMemo, memo } from 'react';
 import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { X } from 'lucide-react';
@@ -13,23 +13,43 @@ import 'swiper/css/effect-fade';
 import 'swiper/css/free-mode';
 import 'swiper/css/thumbs';
 import type { Swiper as SwiperClass } from 'swiper';
-import { useInvitationStore } from '@/store/useInvitationStore';
 import SectionContainer from '../SectionContainer';
+import styles from './GalleryView.module.css';
+import { clsx } from 'clsx';
 
-interface Props { id?: string; }
+interface GalleryItem {
+    id: string;
+    url: string;
+}
 
-export default function GalleryView({ id }: Props) {
-    const {
-        gallery: rawGallery,
-        galleryTitle,
-        galleryType,
-        galleryPreview,
-        galleryFade,
-        galleryAutoplay,
-        galleryPopup,
-        theme
-    } = useInvitationStore();
+interface GalleryViewProps {
+    id?: string | undefined;
+    gallery: (GalleryItem | string)[];
+    galleryTitle: string;
+    galleryType: 'swiper' | 'thumbnail' | 'grid';
+    galleryPreview: boolean;
+    galleryFade: boolean;
+    galleryAutoplay: boolean;
+    galleryPopup: boolean;
+    accentColor: string;
+}
 
+/**
+ * Presentational Component for Gallery View.
+ * Receives all data via props as per Container/Presentational pattern.
+ * Uses CSS Modules for styling.
+ */
+const GalleryView = memo(({
+    id,
+    gallery: rawGallery,
+    galleryTitle,
+    galleryType,
+    galleryPreview,
+    galleryFade,
+    galleryAutoplay,
+    galleryPopup,
+    accentColor
+}: GalleryViewProps) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isMounted, setIsMounted] = useState(false);
     const [popupIndex, setPopupIndex] = useState<number | null>(null);
@@ -40,10 +60,10 @@ export default function GalleryView({ id }: Props) {
 
     const closeBtnRef = useRef<HTMLButtonElement>(null);
 
-    // Normalize gallery data
+    // Normalize gallery data (handling potential legacy string arrays)
     const gallery = useMemo(() => {
         if (!rawGallery) return [];
-        return (rawGallery as (string | { id: string; url: string })[]).map((item, index) => {
+        return rawGallery.map((item, index) => {
             if (typeof item === 'string') {
                 return { id: `legacy-${index}-${item.substring(0, 10)}`, url: item };
             }
@@ -52,7 +72,6 @@ export default function GalleryView({ id }: Props) {
     }, [rawGallery]);
 
     useEffect(() => {
-        // Use a slight delay or next tick to avoid synchronous setState warning
         const timer = setTimeout(() => {
             setIsMounted(true);
             const root = document.getElementById('invitation-modal-root');
@@ -61,7 +80,7 @@ export default function GalleryView({ id }: Props) {
         return () => clearTimeout(timer);
     }, []);
 
-    // 1. Scroll Lock & Autoplay Control
+    // Scroll Lock & Autoplay Control
     useEffect(() => {
         if (popupIndex !== null) {
             if (mainSwiper && !mainSwiper.destroyed) {
@@ -104,17 +123,9 @@ export default function GalleryView({ id }: Props) {
                 mockupContainer.style.overflowY = 'auto';
             }
         }
-        return () => {
-            document.body.style.cssText = '';
-            document.documentElement.style.overflow = '';
-            const mockupContainer = document.getElementById('invitation-modal-root')?.previousElementSibling as HTMLElement;
-            if (mockupContainer) {
-                mockupContainer.style.overflowY = 'auto';
-            }
-        };
     }, [popupIndex, mainSwiper, galleryAutoplay]);
 
-    // 2. Sync Logic
+    // Sync Logic
     useEffect(() => {
         if (popupIndex !== null && modalSwiper && !modalSwiper.destroyed) {
             modalSwiper.slideTo(popupIndex, 0);
@@ -134,7 +145,7 @@ export default function GalleryView({ id }: Props) {
         switch (galleryType) {
             case 'swiper':
                 return (
-                    <div className={`w-full ${galleryPreview ? 'overflow-visible' : 'max-w-[340px] mx-auto'}`}>
+                    <div className={clsx(styles.swiperContainer, !galleryPreview && styles.swiperContainerLimited)}>
                         <div className="relative group">
                             <Swiper
                                 key={`${gallery.length}-${galleryType}-${galleryPreview}-${galleryFade}`}
@@ -142,10 +153,6 @@ export default function GalleryView({ id }: Props) {
                                 spaceBetween={20}
                                 slidesPerView={galleryPreview ? 1.25 : 1}
                                 centeredSlides={galleryPreview}
-                                navigation={{
-                                    nextEl: '.swiper-button-next-custom',
-                                    prevEl: '.swiper-button-prev-custom',
-                                }}
                                 effect={galleryFade ? "fade" : "slide"}
                                 {...(galleryFade && { fadeEffect: { crossFade: true } })}
                                 autoplay={galleryAutoplay ? { delay: 3000, disableOnInteraction: false } : false}
@@ -157,7 +164,7 @@ export default function GalleryView({ id }: Props) {
                                 {gallery.map((img, index) => (
                                     <SwiperSlide key={img.id}>
                                         <div
-                                            className={`relative w-full h-full rounded-2xl overflow-hidden ${galleryPopup ? 'cursor-pointer' : ''}`}
+                                            className={clsx(styles.imageSlide, galleryPopup && styles.cursorPointer)}
                                             onClick={() => handleImageClick(index)}
                                         >
                                             <Image src={img.url} alt="" fill unoptimized className="object-cover" />
@@ -166,7 +173,7 @@ export default function GalleryView({ id }: Props) {
                                 ))}
                             </Swiper>
                             {gallery.length > 1 && (
-                                <div className="absolute bottom-4 right-4 bg-black/40 backdrop-blur-md text-white px-3 py-1 rounded-full z-10 text-[10px] font-medium tracking-tight">
+                                <div className={styles.counter}>
                                     {currentIndex + 1} / {gallery.length}
                                 </div>
                             )}
@@ -175,18 +182,18 @@ export default function GalleryView({ id }: Props) {
                 );
             case 'thumbnail':
                 return (
-                    <div className="w-full max-w-[340px] mx-auto">
+                    <div className={styles.swiperContainerLimited}>
                         <Swiper
                             spaceBetween={10}
                             thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
                             modules={[FreeMode, Navigation, Thumbs]}
                             onSwiper={setMainSwiper}
                             onSlideChange={(swiper) => setCurrentIndex(swiper.activeIndex)}
-                            className={`w-full aspect-[16/10] overflow-visible`}
+                            className="w-full aspect-[16/10] overflow-visible"
                         >
                             {gallery.map((img, index) => (
                                 <SwiperSlide key={img.id} onClick={() => handleImageClick(index)}>
-                                    <div className={`relative w-full h-full rounded-2xl overflow-hidden ${galleryPopup ? 'cursor-pointer' : ''}`}>
+                                    <div className={clsx(styles.imageSlide, galleryPopup && styles.cursorPointer)}>
                                         <Image src={img.url} alt="" fill unoptimized className="object-cover" />
                                     </div>
                                 </SwiperSlide>
@@ -204,8 +211,11 @@ export default function GalleryView({ id }: Props) {
                             {gallery.map((img, index) => (
                                 <SwiperSlide key={img.id} className="cursor-pointer">
                                     <div
-                                        className={`relative aspect-square rounded-lg overflow-hidden transition-all ${index === currentIndex ? 'ring-2 ring-offset-1 opacity-100' : 'opacity-40'}`}
-                                        style={index === currentIndex ? { '--tw-ring-color': theme.accentColor } as React.CSSProperties : {}}
+                                        className={clsx(
+                                            "relative aspect-square rounded-lg overflow-hidden transition-all",
+                                            index === currentIndex ? 'ring-2 ring-offset-1 opacity-100' : 'opacity-40'
+                                        )}
+                                        style={index === currentIndex ? { '--tw-ring-color': accentColor } as React.CSSProperties : {}}
                                     >
                                         <Image src={img.url} alt="" fill unoptimized className="object-cover" />
                                     </div>
@@ -217,11 +227,14 @@ export default function GalleryView({ id }: Props) {
             case 'grid':
             default:
                 return (
-                    <div className="grid grid-cols-3 gap-1 max-w-[340px] mx-auto">
+                    <div className="grid grid-cols-3 gap-1 max-w-[340px] mx-auto px-1">
                         {gallery.map((img, i) => (
                             <div
                                 key={img.id}
-                                className={`relative aspect-square rounded-lg overflow-hidden ${galleryPopup ? 'cursor-pointer' : ''}`}
+                                className={clsx(
+                                    "relative aspect-square rounded-lg overflow-hidden shadow-sm",
+                                    galleryPopup && styles.cursorPointer
+                                )}
                                 onClick={() => handleImageClick(i)}
                             >
                                 <Image src={img.url} alt="" fill unoptimized className="object-cover" />
@@ -233,11 +246,11 @@ export default function GalleryView({ id }: Props) {
     };
 
     return (
-        <SectionContainer id={id} className="!px-0 overflow-visible">
-            <div className="text-center mb-10 max-w-[340px] mx-auto px-4">
-                <span className="text-[10px] tracking-[0.3em] font-medium opacity-40 uppercase" style={{ color: theme.accentColor }}>GALLERY</span>
-                <h2 className="text-xl font-serif text-gray-800 mt-2 font-medium">{galleryTitle}</h2>
-                <div className="w-6 h-[1px] mx-auto mt-4 opacity-20" style={{ backgroundColor: theme.accentColor }} />
+        <SectionContainer id={id} fullWidth={galleryPreview && galleryType === 'swiper'} className="!px-0">
+            <div className={styles.header}>
+                <span className="text-[10px] tracking-[0.3em] font-medium opacity-40 uppercase" style={{ color: accentColor }}>GALLERY</span>
+                <h2 className={styles.galleryTitle}>{galleryTitle}</h2>
+                <div className={styles.titleLine} style={{ backgroundColor: accentColor }} />
             </div>
 
             {renderGallery()}
@@ -245,15 +258,14 @@ export default function GalleryView({ id }: Props) {
             {/* Lightbox Modal */}
             {popupIndex !== null && portalElement && createPortal(
                 <div
-                    className="fixed inset-0 z-[10000] bg-black/70 backdrop-blur-md flex flex-col pointer-events-auto animate-modal-bg"
+                    className={clsx(styles.modalBackdrop, "animate-modal-bg")}
                     onClick={(e) => {
                         if (e.target === e.currentTarget) setPopupIndex(null);
                     }}
                     role="dialog"
                     aria-modal="true"
                 >
-                    {/* Header */}
-                    <div className="flex justify-between items-center p-6 z-[10001]">
+                    <div className={styles.modalHeader}>
                         <span className="text-white/60 text-[10px] tracking-widest pl-2">
                             {currentIndex + 1} / {gallery.length}
                         </span>
@@ -261,12 +273,12 @@ export default function GalleryView({ id }: Props) {
                             ref={closeBtnRef}
                             onClick={() => setPopupIndex(null)}
                             className="p-2 text-white/50 hover:text-white transition-colors"
+                            aria-label="창 닫기"
                         >
                             <X size={24} strokeWidth={1.5} />
                         </button>
                     </div>
 
-                    {/* Content */}
                     <div className="flex-1 relative w-full h-full overflow-hidden">
                         <Swiper
                             initialSlide={popupIndex}
@@ -308,4 +320,8 @@ export default function GalleryView({ id }: Props) {
             )}
         </SectionContainer>
     );
-}
+});
+
+GalleryView.displayName = 'GalleryView';
+
+export default GalleryView;

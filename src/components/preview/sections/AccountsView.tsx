@@ -1,13 +1,35 @@
-import React, { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
-import { useInvitationStore } from '@/store/useInvitationStore';
+'use client';
+
+import React, { useState, memo } from 'react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import SectionContainer from '../SectionContainer';
+import styles from './AccountsView.module.css';
 
-interface Props { id?: string; }
+interface Account {
+    id: string;
+    type: 'groom' | 'bride';
+    relation: '본인' | '아버지' | '어머니';
+    bank: string;
+    accountNumber: string;
+    holder: string;
+}
 
-export default function AccountsView({ id }: Props) {
-    const { accounts, theme } = useInvitationStore();
-    const [openSide, setOpenSide] = useState<'groom' | 'bride' | null>(null);
+interface AccountsViewProps {
+    id?: string | undefined;
+    accounts: Account[];
+    accentColor: string;
+}
+
+/**
+ * Presentational Component for the Accounts section.
+ * Features an accordion for Groom and Bride account details.
+ */
+const AccountsView = memo(({
+    id,
+    accounts,
+    accentColor
+}: AccountsViewProps) => {
+    const [openType, setOpenType] = useState<'groom' | 'bride' | null>(null);
 
     const groomAccounts = accounts.filter(a => a.type === 'groom');
     const brideAccounts = accounts.filter(a => a.type === 'bride');
@@ -17,96 +39,59 @@ export default function AccountsView({ id }: Props) {
         alert('계좌번호가 복사되었습니다.');
     };
 
-    if (accounts.length === 0) return <div id={id} />;
+    const renderAccountGroup = (title: string, type: 'groom' | 'bride', list: Account[]) => {
+        if (list.length === 0) return null;
+        const isOpen = openType === type;
+
+        return (
+            <div className={styles.groupContainer}>
+                <button
+                    className={styles.groupHeader}
+                    onClick={() => setOpenType(isOpen ? null : type)}
+                >
+                    <span className={styles.groupTitle}>{title} 측 마음 전하실 곳</span>
+                    {isOpen ? <ChevronUp size={20} opacity={0.3} /> : <ChevronDown size={20} opacity={0.3} />}
+                </button>
+                <div
+                    className={styles.groupContent}
+                    style={{ maxHeight: isOpen ? '1000px' : '0', opacity: isOpen ? 1 : 0 }}
+                >
+                    {list.map(acc => (
+                        <div key={acc.id} className={styles.accountCard}>
+                            <div className={styles.accountHeader}>
+                                <span className={styles.relationLabel}>{acc.relation}</span>
+                                <button className={styles.copyButton} onClick={() => handleCopy(acc.accountNumber)}>복사하기</button>
+                            </div>
+                            <div className={styles.accountInfo}>
+                                <div className={styles.bankName}>{acc.bank}</div>
+                                <div className={styles.accountDetails}>{acc.accountNumber} <span className="font-normal opacity-60 ml-1">{acc.holder}</span></div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    };
 
     return (
         <SectionContainer id={id}>
-            <div className="text-center space-y-4 mb-10">
-                <div className="flex flex-col items-center space-y-2">
-                    <span
-                        className="tracking-[0.4em] font-medium uppercase"
-                        style={{ fontSize: 'calc(10px * var(--font-scale))', color: theme.accentColor, opacity: 0.4 }}
-                    >Gift for Groom & Bride</span>
-                    <div className="w-8 h-[1px]" style={{ backgroundColor: theme.accentColor, opacity: 0.1 }}></div>
-                </div>
+            <div className={styles.header}>
+                <span className={styles.subtitle} style={{ color: accentColor }}>GIFT</span>
+                <h2 className={styles.title}>축하의 마음 전하실 곳</h2>
+                <div className={styles.decorationLine} style={{ backgroundColor: accentColor }} />
             </div>
-            <div className="space-y-4 max-w-[320px] mx-auto w-full">
-                {/* Groom Side */}
-                <div className="rounded-2xl border border-gray-100 overflow-hidden bg-white/50 backdrop-blur-sm shadow-sm">
-                    <button
-                        onClick={() => setOpenSide(openSide === 'groom' ? null : 'groom')}
-                        className={`w-full flex items-center justify-between p-5 font-medium transition-colors ${openSide === 'groom' ? 'text-gray-900 bg-gray-50/50' : 'text-gray-600 hover:bg-gray-50/30'}`}
-                        style={{ fontSize: 'calc(14px * var(--font-scale))' }}
-                    >
-                        <span>신랑측 마음 전하실 곳</span>
-                        <ChevronDown size={14} className={`transition-transform duration-500 opacity-40 ${openSide === 'groom' ? 'rotate-180' : ''}`} />
-                    </button>
-                    {openSide === 'groom' && (
-                        <div className="px-5 pb-5 pt-1 space-y-4 animate-in fade-in slide-in-from-top-2 duration-500">
-                            {groomAccounts.map((acc, i) => (
-                                <div key={i} className="flex items-center justify-between py-3 border-b border-gray-50 last:border-0" style={{ fontSize: 'calc(14px * var(--font-scale))' }}>
-                                    <div className="flex flex-col space-y-1">
-                                        <span
-                                            className="text-gray-400 font-sans tracking-wide"
-                                            style={{ fontSize: 'calc(10px * var(--font-scale))' }}
-                                        >{acc.bank} | 예금주 {acc.holder}</span>
-                                        <span
-                                            className="text-gray-700 font-medium tracking-tight"
-                                            style={{ fontSize: 'calc(13px * var(--font-scale))' }}
-                                        >{acc.accountNumber}</span>
-                                    </div>
-                                    <button
-                                        onClick={() => handleCopy(acc.accountNumber)}
-                                        className="px-3 py-1.5 bg-gray-50 border border-gray-100 rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-all font-medium uppercase tracking-tighter shadow-xs"
-                                        style={{ fontSize: 'calc(10px * var(--font-scale))' }}
-                                    >
-                                        Copy
-                                    </button>
-                                </div>
-                            ))}
-                            {groomAccounts.length === 0 && <p className="text-gray-400 text-center py-4 italic" style={{ fontSize: 'calc(11px * var(--font-scale))' }}>등록된 계좌가 없습니다.</p>}
-                        </div>
-                    )}
-                </div>
 
-                {/* Bride Side */}
-                <div className="rounded-2xl border border-gray-100 overflow-hidden bg-white/50 backdrop-blur-sm shadow-sm">
-                    <button
-                        onClick={() => setOpenSide(openSide === 'bride' ? null : 'bride')}
-                        className={`w-full flex items-center justify-between p-5 font-medium transition-colors ${openSide === 'bride' ? 'text-gray-900 bg-gray-50/50' : 'text-gray-600 hover:bg-gray-50/30'}`}
-                        style={{ fontSize: 'calc(14px * var(--font-scale))' }}
-                    >
-                        <span>신부측 마음 전하실 곳</span>
-                        <ChevronDown size={14} className={`transition-transform duration-500 opacity-40 ${openSide === 'bride' ? 'rotate-180' : ''}`} />
-                    </button>
-                    {openSide === 'bride' && (
-                        <div className="px-5 pb-5 pt-1 space-y-4 animate-in fade-in slide-in-from-top-2 duration-500">
-                            {brideAccounts.map((acc, i) => (
-                                <div key={i} className="flex items-center justify-between py-3 border-b border-gray-50 last:border-0" style={{ fontSize: 'calc(14px * var(--font-scale))' }}>
-                                    <div className="flex flex-col space-y-1">
-                                        <span
-                                            className="text-gray-400 font-sans tracking-wide"
-                                            style={{ fontSize: 'calc(10px * var(--font-scale))' }}
-                                        >{acc.bank} | 예금주 {acc.holder}</span>
-                                        <span
-                                            className="text-gray-700 font-medium tracking-tight"
-                                            style={{ fontSize: 'calc(13px * var(--font-scale))' }}
-                                        >{acc.accountNumber}</span>
-                                    </div>
-                                    <button
-                                        onClick={() => handleCopy(acc.accountNumber)}
-                                        className="px-3 py-1.5 bg-gray-50 border border-gray-100 rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-all font-medium uppercase tracking-tighter shadow-xs"
-                                        style={{ fontSize: 'calc(10px * var(--font-scale))' }}
-                                    >
-                                        Copy
-                                    </button>
-                                </div>
-                            ))}
-                            {brideAccounts.length === 0 && <p className="text-gray-400 text-center py-4 italic" style={{ fontSize: 'calc(11px * var(--font-scale))' }}>등록된 계좌가 없습니다.</p>}
-                        </div>
-                    )}
-                </div>
-            </div>
+            <p className={styles.description}>
+                축하의 마음을 담아 축의금을 전달하고자 하시는 분들을 위해<br />
+                계좌번호를 안내해 드립니다.
+            </p>
+
+            {renderAccountGroup('신랑', 'groom', groomAccounts)}
+            {renderAccountGroup('신부', 'bride', brideAccounts)}
         </SectionContainer>
     );
-}
+});
+
+AccountsView.displayName = 'AccountsView';
+
+export default AccountsView;

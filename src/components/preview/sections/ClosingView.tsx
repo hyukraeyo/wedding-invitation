@@ -1,65 +1,62 @@
-import React from 'react';
-import Image from 'next/image';
-import { useInvitationStore } from '@/store/useInvitationStore';
+'use client';
+
+import React, { memo } from 'react';
+import { MessageCircle, Share2 } from 'lucide-react';
 import SectionContainer from '../SectionContainer';
+import styles from './ClosingView.module.css';
 
-interface Props { id?: string; }
+interface ClosingViewProps {
+    id?: string | undefined;
+    closingMessage?: string;
+    accentColor: string;
+}
 
-export default function ClosingView({ id }: Props) {
-    const { closing } = useInvitationStore();
+/**
+ * Presentational Component for the Closing / Footer section.
+ * Provides social sharing and final remarks.
+ */
+const ClosingView = memo(({
+    id,
+    closingMessage,
+    accentColor
+}: ClosingViewProps) => {
 
-    if (!closing.imageUrl && !closing.content) return <div id={id} />;
+    const handleLinkShare = () => {
+        const url = window.location.href;
+        navigator.clipboard.writeText(url);
+        alert('청첩장 주소가 복사되었습니다.');
+    };
 
     return (
-        <SectionContainer id={id} className="w-full">
-            <div className="flex flex-col items-center space-y-8">
-                {/* Image Section */}
-                {closing.imageUrl && (
-                    <div
-                        className={`relative w-full overflow-hidden rounded-lg shadow-sm bg-gray-50 ${closing.ratio === 'fixed' ? 'aspect-square' : ''
-                            }`}
-                    >
-                        {closing.ratio === 'fixed' ? (
-                            <Image
-                                src={closing.imageUrl}
-                                alt="Closing"
-                                fill
-                                className="object-cover"
-                            />
-                        ) : (
-                            <Image
-                                src={closing.imageUrl}
-                                alt="Closing"
-                                width={0}
-                                height={0}
-                                sizes="100vw"
-                                style={{ width: '100%', height: 'auto' }}
-                            />
-                        )}
+        <SectionContainer id={id}>
+            <div className={styles.footer}>
+                <div className={styles.decorationLine} style={{ backgroundColor: accentColor, opacity: 0.2 }} />
 
-                        {/* Effects Overlay */}
-                        {closing.effect === 'mist' && (
-                            <div className="absolute inset-0 bg-white/20 backdrop-blur-[2px] z-10 pointer-events-none"></div>
-                        )}
-                        {closing.effect === 'ripple' && (
-                            <div className="absolute inset-0 z-10 opacity-30 bg-[url('https://www.transparenttextures.com/patterns/water.png')] pointer-events-none"></div>
-                        )}
-                        {closing.effect === 'paper' && (
-                            <div className="absolute inset-0 z-10 opacity-40 bg-[url('https://www.transparenttextures.com/patterns/paper.png')] mix-blend-multiply pointer-events-none"></div>
-                        )}
-                    </div>
-                )}
+                <div className={styles.message}>
+                    {closingMessage || "서로가 마주보며 다져온 사랑을\n이제 함께 한 곳을 바라보며 걸어가려 합니다.\n저희의 새 출발을 축복해 주세요."}
+                </div>
 
-                {/* Text Content */}
-                {closing.content && (
-                    <div
-                        className="text-center whitespace-pre-wrap leading-loose text-gray-700 font-serif"
-                        style={{ fontSize: 'calc(14px * var(--font-scale))' }}
+                <div className={styles.shareContainer}>
+                    <button
+                        className={`${styles.shareButton} ${styles.kakaoShare}`}
+                        onClick={() => alert('카카오톡 공유 기능은 현재 준비 중입니다.')}
                     >
-                        {closing.content}
-                    </div>
-                )}
+                        <MessageCircle size={18} fill="currentColor" />
+                        카카오톡 공유하기
+                    </button>
+                    <button
+                        className={`${styles.shareButton} ${styles.linkShare}`}
+                        onClick={handleLinkShare}
+                    >
+                        <Share2 size={18} />
+                        링크 주소 복사하기
+                    </button>
+                </div>
             </div>
         </SectionContainer>
     );
-}
+});
+
+ClosingView.displayName = 'ClosingView';
+
+export default ClosingView;
