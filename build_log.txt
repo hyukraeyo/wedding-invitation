@@ -1,0 +1,29 @@
+
+> wedding-invitation@0.1.0 build
+> next build
+
+▲ Next.js 16.1.1 (Turbopack)
+- Environments: .env.local
+- Experiments (use with caution):
+  · optimizePackageImports
+  · serverActions
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 3.4s
+  Running TypeScript ...
+Failed to compile.
+
+./src/components/builder/sections/DateTimeSection.tsx:119:34
+Type error: Type '{ children: Element; className: string | undefined; }' is not assignable to type 'CardProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+
+[0m [90m 117 |[39m
+ [90m 118 |[39m                             {showDdayEditor [33m&&[39m (
+[31m[1m>[22m[39m[90m 119 |[39m                                 [33m<[39m[33mCard[39m className[33m=[39m{sectionStyles[33m.[39mddayEditor}[33m>[39m
+ [90m     |[39m                                  [31m[1m^[22m[39m
+ [90m 120 |[39m                                     {(() [33m=>[39m {
+ [90m 121 |[39m                                         [36mconst[39m parts [33m=[39m ddayMessage[33m.[39msplit([32m'(D-Day)'[39m)[33m;[39m
+ [90m 122 |[39m                                         [36mconst[39m prefix [33m=[39m parts[[35m0[39m] [33m||[39m [32m''[39m[33m;[39m[0m
+Next.js build worker exited with code: 1 and signal: null

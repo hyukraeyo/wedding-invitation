@@ -8,17 +8,17 @@ $muted-sand: #E2E2C7;
 $coral-pink: #FF8A8A;
 
 // Font Families
-$font-pretendard: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
-$font-gmarket: "GmarketSansMedium", sans-serif;
-$font-gowun-batang: "Gowun Batang", serif;
-$font-gowun-dodum: "Gowun Dodum", sans-serif;
-$font-nanum-myeongjo: "Nanum Myeongjo", serif;
-$font-yeon-sung: "Yeon Sung", cursive;
-$font-do-hyeon: "Do Hyeon", sans-serif;
-$font-song-myung: "Song Myung", serif;
-$font-serif: "Playfair Display", serif;
-$font-sans: "Inter", sans-serif;
-$font-script: "Great Vibes", cursive;
+$font-pretendard: var(--font-pretendard);
+$font-gmarket: var(--font-gmarket-sans);
+$font-gowun-batang: var(--font-gowun-batang);
+$font-gowun-dodum: var(--font-gowun-dodum);
+$font-nanum-myeongjo: var(--font-nanum-myeongjo);
+$font-yeon-sung: var(--font-yeon-sung);
+$font-do-hyeon: var(--font-do-hyeon);
+$font-song-myung: var(--font-song-myung);
+$font-serif: var(--font-serif);
+$font-sans: var(--font-sans);
+$font-script: var(--font-script);
 
 // Spacing & Layout
 $max-mobile: 430px;

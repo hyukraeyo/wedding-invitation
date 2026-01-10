@@ -28,17 +28,17 @@
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    color: #9ca3af;
+    color: #d1d5db;
     position: relative;
 
     &:hover {
-        border-color: #d1d5db;
+        border-color: var(--accent-color);
         background-color: #f3f4f6;
-        color: #6b7280;
+        color: var(--accent-color);
     }
 
     &:active {
-        transform: scale(0.98);
+        transform: scale(0.96);
     }
 }
 
@@ -97,14 +97,14 @@
 
 .deleteButton {
     position: absolute;
-    top: 0.25rem;
-    right: 0.25rem;
+    top: 0.375rem;
+    right: 0.375rem;
     width: 1.5rem;
     height: 1.5rem;
     background-color: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    border-radius: 50%;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.5rem;
     color: #ef4444;
     display: flex;
     align-items: center;
@@ -112,14 +112,15 @@
     cursor: pointer;
     opacity: 0;
     transform: scale(0.8);
-    transition: all 0.2s;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 10;
-    border: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 
     &:hover {
-        background-color: #fee2e2;
+        background-color: white;
         color: #dc2626;
         transform: scale(1.1) !important;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
     }
 }
 

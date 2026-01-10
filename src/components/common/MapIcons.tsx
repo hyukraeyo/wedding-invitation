@@ -9,7 +9,7 @@ interface KakaoIconProps extends IconProps {
     showBackground?: boolean;
 }
 
-export const NaverIcon = ({ size = 12, className }: IconProps) => (
+export const NaverIcon = ({ size = 24, className }: IconProps) => (
     <svg width={size} height={size} viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
         <defs>
             <linearGradient id="naver_map_grad_comp" x1="256" y1="20" x2="256" y2="492" gradientUnits="userSpaceOnUse">
@@ -31,15 +31,14 @@ export const NaverIcon = ({ size = 12, className }: IconProps) => (
     </svg>
 );
 
-export const KakaoIcon = ({ size = 12, showBackground = true, className }: KakaoIconProps) => (
-    <svg width={size} height={size} viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-        {showBackground && <rect width="240" height="240" rx="20" fill="#FFD900" />}
+export const KakaoIcon = ({ size = 24, showBackground = true, className }: KakaoIconProps) => (
+    <svg width={size} height={size} viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+        {showBackground && <rect width="1024" height="1024" rx="160" fill="#FAE100" />}
         <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M120 30C81.3401 30 50 61.3401 50 100C50 138.66 81.3401 190 120 210C158.66 190 190 138.66 190 100C190 61.3401 158.66 30 120 30ZM120 130C103.431 130 90 116.569 90 100C90 83.4315 103.431 70 120 70C136.569 70 150 83.4315 150 100C150 116.569 136.569 130 120 130Z"
-            fill="#0091FF"
+            d="M512 880c0 0-300-300-300-470a300 300 0 1 1 600 0c0 170-300 470-300 470z M512 310a100 100 0 1 0 0 200 100 100 0 1 0 0 -200z"
+            fill="#1585F6"
         />
-        <circle cx="120" cy="100" r="20" fill={showBackground ? "#FFD900" : "white"} />
     </svg>
 );
+
+

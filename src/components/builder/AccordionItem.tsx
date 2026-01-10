@@ -46,8 +46,12 @@ export const AccordionItem = ({
         if (!isOpen || !containerRef.current) return;
 
         const timer = setTimeout(() => {
+            const rect = containerRef.current?.getBoundingClientRect();
+            // 이미 상단 근처(예: 40px 이내)에 있다면 굳이 스크롤하지 않음 (첫 항목 점프 방지)
+            if (rect && rect.top < 100 && rect.top > 0) return;
+
             containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 200);
+        }, 100);
 
         return () => clearTimeout(timer);
     }, [isOpen]);
@@ -80,7 +84,7 @@ export const AccordionItem = ({
                     </div>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className={styles.actions}>
                     {isCompleted && (
                         <div
                             className={styles.completedBadge}
@@ -98,12 +102,17 @@ export const AccordionItem = ({
                 </div>
             </button>
 
-            {isOpen && (
-                <div className={styles.content}>
-                    <div className={styles.divider} />
-                    {children}
+            <div
+                className={clsx(styles.collapseWrapper, isOpen && styles.open)}
+                aria-hidden={!isOpen}
+            >
+                <div className={styles.collapseInner}>
+                    <div className={styles.content}>
+                        <div className={styles.divider} />
+                        {children}
+                    </div>
                 </div>
-            )}
+            </div>
         </div>
     );
 };

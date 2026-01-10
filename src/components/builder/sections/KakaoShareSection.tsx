@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { useState } from 'react';
 import { MessageCircle } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
@@ -8,6 +8,8 @@ import { BuilderButton } from '../BuilderButton';
 import { BuilderButtonGroup } from '../BuilderButtonGroup';
 import { BuilderToggle } from '../BuilderToggle';
 import { BuilderField } from '../BuilderField';
+import { ImageUploader } from '../ImageUploader';
+import { Row, Stack } from '../BuilderLayout';
 import Image from 'next/image';
 
 interface SectionProps {
@@ -21,13 +23,6 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
 
     if (!kakao) return null;
 
-    const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            const url = URL.createObjectURL(file);
-            setKakao({ imageUrl: url });
-        }
-    };
 
     return (
         <AccordionItem
@@ -37,11 +32,11 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
             onToggle={onToggle}
             isCompleted={!!kakao.title}
         >
-            <div className="space-y-6">
+            <Stack gap="lg">
                 {/* Photo Upload with Header Preview Button */}
                 <BuilderField
                     label={
-                        <div className="flex justify-between items-end mb-2">
+                        <Row justify="space-between" align="center" className="mb-2">
                             <BuilderLabel className="!mb-0">사진</BuilderLabel>
                             <BuilderButton
                                 variant="ghost"
@@ -51,34 +46,16 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                             >
                                 미리보기
                             </BuilderButton>
-                        </div>
+                        </Row>
                     }
                 >
-                    <div className="border-2 border-dashed border-gray-200 rounded-xl w-32 h-32 hover:border-gray-300 hover:bg-gray-50 transition-all cursor-pointer relative overflow-hidden flex flex-col items-center justify-center gap-2 group bg-gray-50">
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageUpload}
-                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                    <div className="max-w-[160px]">
+                        <ImageUploader
+                            value={kakao.imageUrl}
+                            onChange={(url) => setKakao({ imageUrl: url })}
+                            aspectRatio={kakao.imageRatio === 'portrait' ? '3/4' : '16/9'}
+                            placeholder="썸네일 추가"
                         />
-
-                        {kakao.imageUrl ? (
-                            <div className="absolute inset-0">
-                                <Image src={kakao.imageUrl} alt="Kakao Thumbnail" fill className="object-cover" />
-                                <button
-                                    onClick={(e) => { e.preventDefault(); setKakao({ imageUrl: null }); }}
-                                    className="absolute top-1 right-1 bg-black/50 text-white rounded-full p-1 hover:bg-black/70 z-20"
-                                >
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
-                                </button>
-                            </div>
-                        ) : (
-                            <>
-                                <div className="w-8 h-8 flex items-center justify-center">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-gray-400 group-hover:text-gray-600"><path d="M12 5v14M5 12h14" /></svg>
-                                </div>
-                            </>
-                        )}
                     </div>
                 </BuilderField>
 
@@ -145,7 +122,7 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                         미입력해도 자동 설정되며, 변경이 필요한 경우에만 입력
                     </p>
                 </div>
-            </div>
+            </Stack>
 
             {/* Simple Preview Modal (Optional, if needed for "미리보기") */}
             {previewOpen && (

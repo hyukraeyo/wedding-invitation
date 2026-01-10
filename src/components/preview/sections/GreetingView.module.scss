@@ -36,12 +36,17 @@
 
     .greetingText {
         text-align: center;
-        white-space: pre-wrap;
         line-height: 2.2;
         color: #4b5563;
-        font-family: $font-gowun-batang;
         width: 100%;
         word-break: keep-all;
+
+        p {
+            margin-bottom: 0.5rem;
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
     }
 }
 

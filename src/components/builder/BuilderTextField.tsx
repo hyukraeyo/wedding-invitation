@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { BuilderInput } from './BuilderInput';
-import { BuilderField } from './BuilderField';
+import styles from './Builder.module.scss';
+import { clsx } from 'clsx';
 
 interface BuilderTextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string;
@@ -18,11 +19,11 @@ export const BuilderTextField = ({
     ...props
 }: BuilderTextFieldProps) => {
     return (
-        <div className={containerClassName}>
-            {label && <label className="block text-[11px] font-bold text-gray-400 uppercase tracking-widest mb-2 px-1">{label}</label>}
+        <div className={clsx(styles.field, containerClassName)}>
+            {label && <label className={styles.label}>{label}</label>}
             <BuilderInput className={className} {...props} />
             {helperText && (
-                <p className="mt-1.5 text-xs text-gray-500 px-1">{helperText}</p>
+                <p className={styles.helperText}>{helperText}</p>
             )}
         </div>
     );

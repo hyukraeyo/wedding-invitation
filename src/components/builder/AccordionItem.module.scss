@@ -2,13 +2,15 @@
 
 .accordion {
     border-radius: 2rem;
-    margin-bottom: 2rem;
-    border: 1px solid #f3f4f6;
+    margin-bottom: 0.75rem;
+    border: 1px solid #e5e7eb;
     transition: $transition-smooth;
     background-color: white;
     overflow: hidden;
 
     position: relative;
+    scroll-margin-top: 2.5rem;
+    scroll-margin-bottom: 2rem;
     
     &.open {
         // Allow dropdowns to overflow
@@ -89,24 +91,32 @@
     border: 1px solid #fef3c7;
 }
 
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
 .completedBadge {
     @include flex-center;
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.125rem;
+    height: 1.125rem;
     border-radius: 50%;
-    margin-left: 0.25rem;
     color: white;
+    flex-shrink: 0;
 }
 
 .arrowWrapper {
-    padding: 0.375rem;
+    @include flex-center;
+    width: 1.75rem;
+    height: 1.75rem;
     border-radius: 0.5rem;
     transition: $transition-smooth;
     color: #d1d5db;
 
     &.open {
         background-color: #f9fafb;
-        color: var(--accent-color);
+        color: #6b7280;
         
         .arrow {
             transform: rotate(180deg);
@@ -114,13 +124,37 @@
     }
 
     .arrow {
-        transition: transform 0.5s;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
+}
+
+.collapseWrapper {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    
+    &.open {
+        grid-template-rows: 1fr;
+    }
+}
+
+.collapseInner {
+    overflow: hidden;
 }
 
 .content {
     padding: 0 1.25rem 1.5rem;
-    animation: modal-sheet-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: 
+        opacity 0.3s ease,
+        transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    
+    .collapseWrapper.open & {
+        opacity: 1;
+        transform: translateY(0);
+        transition-delay: 0.05s;
+    }
 
     .divider {
         height: 1px;

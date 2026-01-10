@@ -42,6 +42,31 @@
   justify-content: space-between;
 }
 
+.rowJustifyStart {
+  @include builder-row;
+  justify-content: flex-start;
+}
+
+.rowJustifyCenter {
+  @include builder-row;
+  justify-content: center;
+}
+
+.rowJustifyEnd {
+  @include builder-row;
+  justify-content: flex-end;
+}
+
+.rowJustifyBetween {
+  @include builder-row;
+  justify-content: space-between;
+}
+
+.rowJustifyAround {
+  @include builder-row;
+  justify-content: space-around;
+}
+
 .rowWrap {
   @include builder-row;
   flex-wrap: wrap;
@@ -101,6 +126,7 @@
   
   .subLabel {
     @include builder-sub-label;
+    width: 3.5rem;
   }
   
   & > *:not(.subLabel) {
@@ -128,7 +154,7 @@
   
   .subLabel {
     @include builder-sub-label;
-    width: 3rem;
+    width: 3.5rem;
   }
   
   & > *:not(.subLabel) {

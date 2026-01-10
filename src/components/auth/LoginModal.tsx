@@ -27,6 +27,17 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         if (error) alert(error.message);
     };
 
+    const handleNaverLogin = async () => {
+        const { error } = await supabase.auth.signInWithOAuth({
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            provider: 'naver' as any,
+            options: {
+                redirectTo: `${window.location.origin}/builder`,
+            }
+        });
+        if (error) alert(error.message);
+    };
+
     const handleAdminLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -120,7 +131,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
                 {/* Kakao Login Button */}
                 <button
-                    className="w-full bg-[#FEE500] hover:bg-[#FDD835] text-[#191919] h-12 rounded-xl font-medium flex items-center justify-center gap-2 transition-colors duration-200 mb-6 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="w-full bg-[#FEE500] hover:bg-[#FDD835] text-[#191919] h-12 rounded-xl font-medium flex items-center justify-center gap-2 transition-colors duration-200 mb-3 disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={handleKakaoLogin}
                     disabled={loading}
                 >
@@ -132,6 +143,19 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                         />
                     </svg>
                     {loading ? '처리 중...' : '카카오로 3초 만에 시작하기'}
+                </button>
+
+                {/* Naver Login Button */}
+                <button
+                    className="w-full bg-[#03C75A] hover:bg-[#02b351] text-white h-12 rounded-xl font-medium flex items-center justify-center gap-2 transition-colors duration-200 mb-6 disabled:opacity-50 disabled:cursor-not-allowed"
+                    onClick={handleNaverLogin}
+                    disabled={loading}
+                >
+                    {/* Official Naver Symbol SVG */}
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="white">
+                        <path d="M16.273 12.845L7.376 0H0v24h7.726V11.156L16.624 24H24V0h-7.727v12.845z" />
+                    </svg>
+                    {loading ? '처리 중...' : '네이버로 시작하기'}
                 </button>
 
                 {/* Privacy Link */}

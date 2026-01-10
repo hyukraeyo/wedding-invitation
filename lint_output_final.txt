@@ -1,0 +1,33 @@
+
+> wedding-invitation@0.1.0 lint
+> eslint
+
+
+C:\Users\johr9\Documents\git\wedding-invitation\src\app\layout.tsx
+  92:9  warning  Custom fonts not added in `pages/_document.js` will only load for a single page. This is discouraged. See: https://nextjs.org/docs/messages/no-page-custom-font  @next/next/no-page-custom-font
+
+C:\Users\johr9\Documents\git\wedding-invitation\src\components\common\BuilderModal.tsx
+  19:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\johr9\Documents\git\wedding-invitation\src\components\common\BuilderModal.tsx:19:9
+  17 |
+  18 |     useEffect(() => {
+> 19 |         setMounted(true);
+     |         ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  20 |         return () => setMounted(false);
+  21 |     }, []);
+  22 |  react-hooks/set-state-in-effect
+
+C:\Users\johr9\Documents\git\wedding-invitation\src\components\preview\sections\MainScreenView.tsx
+  52:5  warning  'time' is defined but never used           @typescript-eslint/no-unused-vars
+  53:5  warning  'location' is defined but never used       @typescript-eslint/no-unused-vars
+  54:5  warning  'detailAddress' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 5 problems (1 error, 4 warnings)
+

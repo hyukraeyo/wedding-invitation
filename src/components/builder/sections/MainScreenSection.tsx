@@ -1,10 +1,11 @@
+'use client';
+
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { LayoutTemplate, Check, Info, Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderInput } from '../BuilderInput';
-import { BuilderCheckbox } from '../BuilderCheckbox';
 import { BuilderModal } from '@/components/common/BuilderModal';
 
 import { BuilderButtonGroup } from '../BuilderButtonGroup';
@@ -14,9 +15,12 @@ import RichTextEditor from '@/components/common/RichTextEditor';
 import { ImageUploader } from '../ImageUploader';
 import { SubAccordion } from '../SubAccordion';
 
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+
 import styles from './MainScreenSection.module.scss';
 import { clsx } from 'clsx';
-import commonStyles from '../Builder.module.scss'; // For shared utils if needed
+
 
 interface SectionProps {
     isOpen: boolean;
@@ -50,12 +54,7 @@ const HeartSVG = ({ className, style }: { className?: string; style?: React.CSSP
     </svg>
 );
 
-const hexToRgbValues = (hex: string) => {
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
-    return `${r}, ${g}, ${b}`;
-};
+
 
 export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
     const {
@@ -79,101 +78,99 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
             <div className={styles.container}>
                 {/* Layout Templates */}
                 <BuilderField label="레이아웃">
-                    <div className={styles.layoutGrid}>
+                    <Swiper
+                        slidesPerView="auto"
+                        spaceBetween={12}
+                        slidesOffsetBefore={20}
+                        slidesOffsetAfter={20}
+                        className={styles.layoutSwiper}
+                    >
                         {['basic', 'fill', 'arch', 'oval', 'frame'].map((l) => (
-                            <button
-                                key={l}
-                                onClick={() => setMainScreen({ layout: l as 'basic' | 'fill' | 'arch' | 'oval' | 'frame' })}
-                                className={styles.layoutButton}
-                            >
-                                <div
-                                    className={clsx(styles.preview, mainScreen.layout === l && styles.active)}
-                                    style={mainScreen.layout === l ? { borderColor: accentColor } : {}}
+                            <SwiperSlide key={l} style={{ width: 'auto' }}>
+                                <button
+                                    onClick={() => setMainScreen({ layout: l as 'basic' | 'fill' | 'arch' | 'oval' | 'frame' })}
+                                    className={styles.layoutButton}
                                 >
-                                    {/* Skeleton Wireframe Previews - Kept as inline Tailwind/style or moved to SCSS? 
-                                        For brevity and specific wireframes, inline styles or small classes in module are fine.
-                                        I'll keep the wireframe structure simple but use Tailwind classes if they are removed? 
-                                        Wait, I must remove Tailwind.
-                                        I will simplify the wireframes or use inline styles for these specific small distinctive shapes.
-                                    */}
+                                    <div
+                                        className={clsx(styles.preview, mainScreen.layout === l && styles.active)}
+                                        style={mainScreen.layout === l ? { borderColor: accentColor } : {}}
+                                    >
+                                        <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: l === 'fill' ? 0 : (l === 'frame' ? '1.5rem' : '0.75rem'), transform: l === 'fill' ? 'none' : 'scale(0.55)', transformOrigin: 'top', justifyContent: l === 'fill' ? 'flex-end' : 'flex-start' }}>
+                                            {l === 'basic' && (
+                                                <>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, marginBottom: 16 }}>
+                                                        <div style={{ width: 40, height: 2.5, backgroundColor: '#FF8A8A', opacity: 0.5 }} />
+                                                        <div style={{ width: 64, height: 7, backgroundColor: '#d1d5db', borderRadius: 1 }} />
+                                                        <div style={{ width: 56, height: 2.5, backgroundColor: '#e5e7eb' }} />
+                                                    </div>
+                                                    <div style={{ width: 80, aspectRatio: '4/5', backgroundColor: '#f3f4f6', borderRadius: 8, marginBottom: 16 }} />
+                                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                                                        <div style={{ width: 48, height: 2, backgroundColor: '#e5e7eb' }} />
+                                                        <div style={{ width: 64, height: 2.5, backgroundColor: '#f3f4f6' }} />
+                                                    </div>
+                                                </>
+                                            )}
+                                            {l === 'fill' && (
+                                                <div style={{ width: '100%', height: '100%', backgroundColor: '#f3f4f6', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center', paddingBottom: 24 }}>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, marginBottom: 16, zIndex: 10 }}>
+                                                        <div style={{ width: 40, height: 2, backgroundColor: 'rgba(255,255,255,0.4)' }} />
+                                                        <div style={{ width: 56, height: 5, backgroundColor: 'rgba(255,255,255,0.7)', borderRadius: 1 }} />
+                                                        <div style={{ width: 64, height: 2, backgroundColor: 'rgba(255,255,255,0.5)' }} />
+                                                    </div>
+                                                    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '50%', background: 'linear-gradient(to top, rgba(0,0,0,0.2), transparent)' }} />
+                                                </div>
+                                            )}
+                                            {(l === 'arch' || l === 'oval') && (
+                                                <>
+                                                    <div style={{
+                                                        width: l === 'oval' ? 88 : 80,
+                                                        aspectRatio: l === 'oval' ? '2/3' : '4/5',
+                                                        backgroundColor: '#f3f4f6',
+                                                        borderRadius: l === 'oval' ? '999px' : '40px 40px 0 0',
+                                                        marginBottom: 24,
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        justifyContent: 'center'
+                                                    }}>
+                                                        <div style={{ width: 24, height: 1.5, backgroundColor: 'rgba(255,255,255,0.6)' }} />
+                                                    </div>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+                                                        <div style={{ width: 48, height: 5, backgroundColor: '#d1d5db', borderRadius: 1 }} />
+                                                        <div style={{ width: 64, height: 2, backgroundColor: '#e5e7eb' }} />
+                                                        <div style={{ width: 56, height: 2, backgroundColor: '#f3f4f6' }} />
+                                                    </div>
+                                                </>
+                                            )}
+                                            {l === 'frame' && (
+                                                <>
+                                                    <div style={{ width: 80, aspectRatio: '1/1', border: '2px solid #f3f4f6', backgroundColor: '#f9fafb', marginBottom: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 8 }}>
+                                                        <div style={{ width: '100%', height: '100%', backgroundColor: 'rgba(243,244,246,0.5)', border: '1px solid rgba(229,231,235,0.3)' }} />
+                                                    </div>
+                                                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+                                                        <div style={{ width: 48, height: 5, backgroundColor: '#d1d5db', borderRadius: 1 }} />
+                                                        <div style={{ width: 64, height: 2, backgroundColor: '#e5e7eb' }} />
+                                                        <div style={{ width: 56, height: 2, backgroundColor: '#f3f4f6' }} />
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
 
-                                    {/* Simplified Wireframes using inline styles for logic as they are very specific visual indicators */}
-                                    <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: l === 'fill' ? 0 : (l === 'frame' ? '1.5rem' : '0.75rem'), transform: 'scale(0.55)', transformOrigin: 'top', justifyContent: l === 'fill' ? 'flex-end' : 'flex-start' }}>
-                                        {/* Content based on layout */}
-                                        {l === 'basic' && (
-                                            <>
-                                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, marginBottom: 16 }}>
-                                                    <div style={{ width: 40, height: 2.5, backgroundColor: '#FF8A8A', opacity: 0.5 }} />
-                                                    <div style={{ width: 64, height: 7, backgroundColor: '#d1d5db', borderRadius: 1 }} />
-                                                    <div style={{ width: 56, height: 2.5, backgroundColor: '#e5e7eb' }} />
-                                                </div>
-                                                <div style={{ width: 80, aspectRatio: '4/5', backgroundColor: '#f3f4f6', borderRadius: 8, marginBottom: 16 }} />
-                                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-                                                    <div style={{ width: 48, height: 2, backgroundColor: '#e5e7eb' }} />
-                                                    <div style={{ width: 64, height: 2.5, backgroundColor: '#f3f4f6' }} />
-                                                </div>
-                                            </>
-                                        )}
-                                        {l === 'fill' && (
-                                            <div style={{ width: '100%', height: '100%', backgroundColor: '#f3f4f6', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center', paddingBottom: 24 }}>
-                                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, marginBottom: 16, zIndex: 10 }}>
-                                                    <div style={{ width: 40, height: 2, backgroundColor: 'rgba(255,255,255,0.4)' }} />
-                                                    <div style={{ width: 56, height: 5, backgroundColor: 'rgba(255,255,255,0.7)', borderRadius: 1 }} />
-                                                    <div style={{ width: 64, height: 2, backgroundColor: 'rgba(255,255,255,0.5)' }} />
-                                                </div>
-                                                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '50%', background: 'linear-gradient(to top, rgba(0,0,0,0.2), transparent)' }} />
+                                        {mainScreen.layout === l && (
+                                            <div className={styles.checkBadge} style={{ backgroundColor: accentColor }}>
+                                                <Check size={10} strokeWidth={3} />
                                             </div>
                                         )}
-                                        {(l === 'arch' || l === 'oval') && (
-                                            <>
-                                                <div style={{
-                                                    width: l === 'oval' ? 88 : 80,
-                                                    aspectRatio: l === 'oval' ? '2/3' : '4/5',
-                                                    backgroundColor: '#f3f4f6',
-                                                    borderRadius: l === 'oval' ? '999px' : '40px 40px 0 0',
-                                                    marginBottom: 24,
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center'
-                                                }}>
-                                                    <div style={{ width: 24, height: 1.5, backgroundColor: 'rgba(255,255,255,0.6)' }} />
-                                                </div>
-                                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-                                                    <div style={{ width: 48, height: 5, backgroundColor: '#d1d5db', borderRadius: 1 }} />
-                                                    <div style={{ width: 64, height: 2, backgroundColor: '#e5e7eb' }} />
-                                                    <div style={{ width: 56, height: 2, backgroundColor: '#f3f4f6' }} />
-                                                </div>
-                                            </>
-                                        )}
-                                        {l === 'frame' && (
-                                            <>
-                                                <div style={{ width: 80, aspectRatio: '1/1', border: '2px solid #f3f4f6', backgroundColor: '#f9fafb', marginBottom: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 8 }}>
-                                                    <div style={{ width: '100%', height: '100%', backgroundColor: 'rgba(243,244,246,0.5)', border: '1px solid rgba(229,231,235,0.3)' }} />
-                                                </div>
-                                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-                                                    <div style={{ width: 48, height: 5, backgroundColor: '#d1d5db', borderRadius: 1 }} />
-                                                    <div style={{ width: 64, height: 2, backgroundColor: '#e5e7eb' }} />
-                                                    <div style={{ width: 56, height: 2, backgroundColor: '#f3f4f6' }} />
-                                                </div>
-                                            </>
-                                        )}
                                     </div>
-
-                                    {mainScreen.layout === l && (
-                                        <div className={styles.checkBadge} style={{ backgroundColor: accentColor }}>
-                                            <Check size={10} strokeWidth={3} />
-                                        </div>
-                                    )}
-                                </div>
-                                <span
-                                    className={clsx(styles.label, mainScreen.layout === l && styles.active)}
-                                    style={mainScreen.layout === l ? { color: accentColor } : {}}
-                                >
-                                    {l === 'basic' ? '기본' : l === 'fill' ? '채우기' : l === 'arch' ? '아치' : l === 'oval' ? '타원' : '액자'}
-                                </span>
-                            </button>
+                                    <span
+                                        className={clsx(styles.label, mainScreen.layout === l && styles.active)}
+                                        style={mainScreen.layout === l ? { color: accentColor } : {}}
+                                    >
+                                        {l === 'basic' ? '기본' : l === 'fill' ? '채우기' : l === 'arch' ? '아치' : l === 'oval' ? '타원' : '액자'}
+                                    </span>
+                                </button>
+                            </SwiperSlide>
                         ))}
-                    </div>
+                    </Swiper>
                 </BuilderField>
 
                 {/* Photo Upload */}
@@ -219,7 +216,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                 <div className={styles.customTextSection}>
 
                     <SubAccordion
-                        label="메인 화면 문구 커스텀"
+                        label="문구 커스텀"
                         isOpen={isTextSectionOpen}
                         onClick={() => setIsTextSectionOpen(!isTextSectionOpen)}
                     />
@@ -238,96 +235,75 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                             </div>
 
                             <div className={styles.inputGrid}>
-                                {/* Title Row */}
-                                <div className={styles.inputRow}>
-                                    <div className={styles.checkboxWrapper}>
-                                        <BuilderCheckbox
-                                            checked={mainScreen.showTitle}
-                                            onChange={(checked) => setMainScreen({ showTitle: checked })}
-                                        />
-                                    </div>
-                                    <div className={clsx(styles.fieldWrapper, !mainScreen.showTitle && styles.disabled)}>
-                                        <BuilderInput
-                                            type="text"
-                                            value={mainScreen.title}
-                                            onChange={(e) => setMainScreen({ title: e.target.value })}
-                                            placeholder="THE MARRIAGE"
-                                            disabled={!mainScreen.showTitle}
-                                        />
-                                    </div>
-                                </div>
+                                {/* Title */}
+                                <BuilderField label="메인 제목">
+                                    <BuilderInput
+                                        type="text"
+                                        value={mainScreen.title}
+                                        onChange={(e) => setMainScreen({ title: e.target.value })}
+                                        placeholder="THE MARRIAGE"
+                                    />
+                                </BuilderField>
 
-                                {/* Groom & Bride Name Row */}
-                                <div className={styles.inputRow}>
-                                    <div className={styles.checkboxWrapper}>
-                                        <BuilderCheckbox
-                                            checked={mainScreen.showGroomBride}
-                                            onChange={(checked) => setMainScreen({ showGroomBride: checked })}
-                                        />
-                                    </div>
-                                    <div className={clsx(styles.fieldWrapper, !mainScreen.showGroomBride && styles.disabled)}>
-                                        <div className={clsx(styles.container, styles.smallGap)}>
-                                            <div className={styles.nameInputs}>
-                                                <div className={styles.lastName}>
-                                                    <BuilderInput
-                                                        type="text"
-                                                        value={`${groom.lastName || ''}${groom.firstName || ''}`}
-                                                        onChange={(e) => {
-                                                            const val = e.target.value;
-                                                            if (val.length >= 2) {
-                                                                setGroom({ lastName: val.substring(0, 1), firstName: val.substring(1) });
-                                                            } else {
-                                                                setGroom({ lastName: '', firstName: val });
-                                                            }
-                                                        }}
-                                                        disabled={!mainScreen.showGroomBride}
-                                                        placeholder="신랑 성함"
-                                                    />
-                                                </div>
-                                                <div className={styles.andText}>
-                                                    <BuilderInput
-                                                        type="text"
-                                                        value={mainScreen.andText || ''}
-                                                        onChange={(e) => setMainScreen({ andText: e.target.value })}
-                                                        disabled={!mainScreen.showGroomBride}
-                                                        placeholder="&"
-                                                    />
-                                                </div>
-                                                <div className={styles.firstName}>
-                                                    <BuilderInput
-                                                        type="text"
-                                                        value={`${bride.lastName || ''}${bride.firstName || ''}`}
-                                                        onChange={(e) => {
-                                                            const val = e.target.value;
-                                                            if (val.length >= 2) {
-                                                                setBride({ lastName: val.substring(0, 1), firstName: val.substring(1) });
-                                                            } else {
-                                                                setBride({ lastName: '', firstName: val });
-                                                            }
-                                                        }}
-                                                        disabled={!mainScreen.showGroomBride}
-                                                        placeholder="신부 성함"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className={styles.fullWidth}>
+                                {/* Groom & Bride Name */}
+                                <BuilderField label="신랑 · 신부 성함">
+                                    <div className={clsx(styles.container, styles.smallGap)}>
+                                        <div className={styles.nameInputs}>
+                                            <div className={styles.lastName}>
                                                 <BuilderInput
                                                     type="text"
-                                                    value={mainScreen.suffixText || ''}
-                                                    onChange={(e) => setMainScreen({ suffixText: e.target.value })}
-                                                    disabled={!mainScreen.showGroomBride}
-                                                    placeholder="종결 어미 (예: 결혼합니다)"
+                                                    value={`${groom.lastName || ''}${groom.firstName || ''}`}
+                                                    onChange={(e) => {
+                                                        const val = e.target.value;
+                                                        if (val.length >= 2) {
+                                                            setGroom({ lastName: val.substring(0, 1), firstName: val.substring(1) });
+                                                        } else {
+                                                            setGroom({ lastName: '', firstName: val });
+                                                        }
+                                                    }}
+                                                    placeholder="신랑 성함"
+                                                />
+                                            </div>
+                                            <div className={styles.andText}>
+                                                <BuilderInput
+                                                    type="text"
+                                                    value={mainScreen.andText || ''}
+                                                    onChange={(e) => setMainScreen({ andText: e.target.value })}
+                                                    placeholder="&"
+                                                />
+                                            </div>
+                                            <div className={styles.firstName}>
+                                                <BuilderInput
+                                                    type="text"
+                                                    value={`${bride.lastName || ''}${bride.firstName || ''}`}
+                                                    onChange={(e) => {
+                                                        const val = e.target.value;
+                                                        if (val.length >= 2) {
+                                                            setBride({ lastName: val.substring(0, 1), firstName: val.substring(1) });
+                                                        } else {
+                                                            setBride({ lastName: '', firstName: val });
+                                                        }
+                                                    }}
+                                                    placeholder="신부 성함"
                                                 />
                                             </div>
                                         </div>
+                                        <div className={styles.fullWidth}>
+                                            <BuilderInput
+                                                type="text"
+                                                value={mainScreen.suffixText || ''}
+                                                onChange={(e) => setMainScreen({ suffixText: e.target.value })}
+                                                placeholder="종결 어미 (예: 결혼합니다)"
+                                            />
+                                        </div>
                                     </div>
-                                </div>
+                                </BuilderField>
 
                                 {/* Example Modal */}
                                 <BuilderModal
                                     isOpen={isExampleModalOpen}
                                     onClose={() => setIsExampleModalOpen(false)}
-                                    title="메인 화면 예시 문구"
+                                    title="샘플 문구"
                                 >
                                     <div className={styles.modalGrid}>
                                         {(() => {
@@ -396,11 +372,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                                             andText: ex.a,
                                                             suffixText: ex.s,
                                                             subtitle: ex.sub,
-                                                            customDatePlace: ex.dt,
-                                                            showTitle: true,
-                                                            showGroomBride: true,
-                                                            showSubtitle: true,
-                                                            showDatePlace: true
+                                                            customDatePlace: ex.dt
                                                         });
                                                         setIsExampleModalOpen(false);
                                                     }}
@@ -435,53 +407,32 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                     </p>
                                 </BuilderModal>
 
-                                {/* Subtitle Row */}
-                                <div className={styles.inputRow}>
-                                    <div className={styles.checkboxWrapper}>
-                                        <BuilderCheckbox
-                                            checked={mainScreen.showSubtitle}
-                                            onChange={(checked) => setMainScreen({ showSubtitle: checked })}
-                                        />
-                                    </div>
-                                    <div className={clsx(styles.fieldWrapper, !mainScreen.showSubtitle && styles.disabled)}>
-                                        <BuilderInput
-                                            type="text"
-                                            value={mainScreen.subtitle}
-                                            onChange={(e) => setMainScreen({ subtitle: e.target.value })}
-                                            placeholder="We are getting married"
-                                            disabled={!mainScreen.showSubtitle}
-                                        />
-                                    </div>
-                                </div>
+                                {/* Subtitle */}
+                                <BuilderField label="서브 제목">
+                                    <BuilderInput
+                                        type="text"
+                                        value={mainScreen.subtitle}
+                                        onChange={(e) => setMainScreen({ subtitle: e.target.value })}
+                                        placeholder="We are getting married"
+                                    />
+                                </BuilderField>
 
-                                {/* Custom Date & Place Row */}
-                                <div className={styles.inputRow}>
-                                    <div className={styles.checkboxWrapper}>
-                                        <BuilderCheckbox
-                                            checked={mainScreen.showDatePlace}
-                                            onChange={(checked) => setMainScreen({ showDatePlace: checked })}
-                                        />
-                                    </div>
-                                    <div className={clsx(styles.fieldWrapper, !mainScreen.showDatePlace && styles.disabled, !mainScreen.showDatePlace && "pointer-events-none")}>
-                                        <RichTextEditor
-                                            content={mainScreen.customDatePlace}
-                                            onChange={(val) => setMainScreen({ customDatePlace: val })}
-                                            placeholder="0000.00.00 ..."
-                                            minHeight="min-h-[86px]"
-                                        />
-                                    </div>
-                                </div>
+                                {/* Custom Date & Place */}
+                                <BuilderField label="날짜 및 장소">
+                                    <RichTextEditor
+                                        content={mainScreen.customDatePlace}
+                                        onChange={(val) => setMainScreen({ customDatePlace: val })}
+                                        placeholder="0000.00.00 ..."
+                                        minHeight="min-h-[140px]"
+                                    />
+                                </BuilderField>
                             </div>
 
                             {/* Info Text */}
                             <div className={styles.infoArea}>
                                 <div className={styles.infoItem}>
                                     <Info size={12} />
-                                    <span>내용을 입력하지 않아도 됩니다.</span>
-                                </div>
-                                <div className={styles.infoItem}>
-                                    <Info size={12} />
-                                    <span>문구 체크박스를 해제하면 해당 영역이 완전 사라집니다.</span>
+                                    <span>내용을 입력하지 않으면 프리뷰에 노출되지 않습니다.</span>
                                 </div>
                             </div>
                         </div>

@@ -69,7 +69,7 @@ export default function BuilderPage() {
       {/* Workspace */}
       <div className={styles.workspace}>
         {/* Left Panel: Editor */}
-        <section className={styles.sidebar}>
+        <section className={styles.sidebar} id="sidebar-portal-root">
           <div className={styles.scrollArea}>
             <EditorForm />
           </div>

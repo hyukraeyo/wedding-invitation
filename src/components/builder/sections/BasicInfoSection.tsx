@@ -64,6 +64,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 onChange={(e) => setGroomParents('father', { name: e.target.value })}
                             />
                             <BuilderCheckbox
+                                id="groom-father-deceased"
                                 checked={groom.parents.father.isDeceased}
                                 onChange={(checked) => setGroomParents('father', { isDeceased: checked })}
                             >
@@ -79,6 +80,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 onChange={(e) => setGroomParents('mother', { name: e.target.value })}
                             />
                             <BuilderCheckbox
+                                id="groom-mother-deceased"
                                 checked={groom.parents.mother.isDeceased}
                                 onChange={(checked) => setGroomParents('mother', { isDeceased: checked })}
                             >
@@ -125,6 +127,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 onChange={(e) => setBrideParents('father', { name: e.target.value })}
                             />
                             <BuilderCheckbox
+                                id="bride-father-deceased"
                                 checked={bride.parents.father.isDeceased}
                                 onChange={(checked) => setBrideParents('father', { isDeceased: checked })}
                             >
@@ -140,6 +143,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 onChange={(e) => setBrideParents('mother', { name: e.target.value })}
                             />
                             <BuilderCheckbox
+                                id="bride-mother-deceased"
                                 checked={bride.parents.mother.isDeceased}
                                 onChange={(checked) => setBrideParents('mother', { isDeceased: checked })}
                             >

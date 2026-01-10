@@ -9,12 +9,10 @@
     }
 }
 
-.layoutGrid {
-    display: flex;
-    gap: 0.75rem;
-    overflow-x: auto;
+.layoutSwiper {
+    margin-inline: -1.25rem;
     padding-bottom: 0.5rem;
-    @include scrollbar-hide;
+    width: calc(100% + 2.5rem);
 }
 
 .layoutButton {
@@ -186,7 +184,7 @@
     width: 100%;
     padding: 1.5rem;
     background-color: #f9fafb;
-    border: 1px solid #f3f4f6;
+    border: 1px solid #e5e7eb;
     border-radius: 2rem;
     text-align: center;
     transition: $transition-smooth;
@@ -224,9 +222,9 @@
 
         .exSubtitle {
             font-size: 14px;
-            font-family: $font-script;
+            font-family: $font-pretendard;
             color: #9ca3af; // text-gray-400
-            font-style: italic;
+            font-style: normal;
         }
 
         .exDivider {
@@ -243,15 +241,19 @@
             line-height: 1.625; // leading-relaxed
         }
     }
+}
 
-    .infoTextModal {
-        margin-top: 1.5rem; // mt-6
-        font-size: 11px;
-        color: #9ca3af; // text-gray-400
-        text-align: center;
-        @include flex-center;
-        gap: 0.375rem; // gap-1.5
-    }
+.infoTextModal {
+    margin-top: 1.5rem;
+    font-size: 13px;
+    color: #9ca3af;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    width: 100%;
+    font-weight: 500;
 }
 
 .infoArea {

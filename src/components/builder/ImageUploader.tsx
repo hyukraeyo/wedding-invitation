@@ -12,9 +12,10 @@ interface ImageUploaderProps {
     label?: string;
     placeholder?: string;
     className?: string;
+    aspectRatio?: '16/9' | '1/1' | '3/4' | '4/3';
 }
 
-export function ImageUploader({ value, onChange, label, placeholder = '사진을 업로드해주세요', className }: ImageUploaderProps) {
+export function ImageUploader({ value, onChange, label, placeholder = '사진을 업로드해주세요', className, aspectRatio = '16/9' }: ImageUploaderProps) {
     const inputRef = useRef<HTMLInputElement>(null);
     const accentColor = useInvitationStore(state => state.theme.accentColor);
 
@@ -41,6 +42,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
 
     const cssVars = {
         '--accent-color': accentColor,
+        '--aspect-ratio': aspectRatio.replace('/', ' / '),
     } as React.CSSProperties;
 
     return (

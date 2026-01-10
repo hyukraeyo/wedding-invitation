@@ -11,6 +11,8 @@ import { SubAccordion } from '../SubAccordion';
 import { BuilderCalendar } from '../BuilderCalendar';
 import { BuilderTextField } from '../BuilderTextField';
 import { Section, Stack, Row, Divider, Card } from '../BuilderLayout';
+import commonStyles from '../Builder.module.scss';
+import sectionStyles from './DateTimeSection.module.scss';
 
 interface SectionProps {
     isOpen: boolean;
@@ -114,7 +116,7 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
                             />
 
                             {showDdayEditor && (
-                                <Card>
+                                <Card className={sectionStyles.ddayEditor}>
                                     {(() => {
                                         const parts = ddayMessage.split('(D-Day)');
                                         const prefix = parts[0] || '';
@@ -149,22 +151,12 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
                                                     label="시작 문구"
                                                     value={displayPrefix}
                                                     onChange={(e) => handleInputChange(e.target.value, true)}
-                                                    className="text-center font-bold"
+                                                    className={sectionStyles.messageInput}
                                                     placeholder="결혼식까지 남음"
-                                                    containerClassName="text-center"
                                                 />
 
-                                                <Row align="center">
-                                                    <div style={{
-                                                        padding: '0.5rem 1.25rem',
-                                                        border: '1px dashed #e5e7eb',
-                                                        color: '#9ca3af',
-                                                        borderRadius: '9999px',
-                                                        fontSize: '11px',
-                                                        fontWeight: 700,
-                                                        letterSpacing: '-0.01em',
-                                                        background: 'rgba(255,255,255,0.5)'
-                                                    }}>
+                                                <Row align="center" justify="center">
+                                                    <div className={commonStyles.placeholderIndicator}>
                                                         D-DAY 카운트 표시 위치
                                                     </div>
                                                 </Row>
@@ -173,9 +165,8 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
                                                     label="종료 문구"
                                                     value={displaySuffix}
                                                     onChange={(e) => handleInputChange(e.target.value, false)}
-                                                    className="text-center font-bold"
+                                                    className={sectionStyles.messageInput}
                                                     placeholder="남았습니다"
-                                                    containerClassName="text-center"
                                                 />
                                             </Stack>
                                         );

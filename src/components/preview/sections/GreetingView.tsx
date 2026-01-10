@@ -7,16 +7,17 @@ import styles from './GreetingView.module.scss';
 interface Person {
     lastName: string;
     firstName: string;
-    father?: string;
-    mother?: string;
-    fatherIsDeceased?: boolean;
-    motherIsDeceased?: boolean;
-    relation?: string;
+    relation: string;
+    parents: {
+        father: { name: string; isDeceased: boolean };
+        mother: { name: string; isDeceased: boolean };
+    };
 }
 
 interface GreetingViewProps {
     id?: string | undefined;
     greetingTitle: string;
+    greetingSubtitle?: string;
     greetingContent: string;
     groom: Person;
     bride: Person;
@@ -30,6 +31,7 @@ interface GreetingViewProps {
 const GreetingView = memo(({
     id,
     greetingTitle,
+    greetingSubtitle = 'GREETING',
     greetingContent,
     groom,
     bride,
@@ -37,23 +39,24 @@ const GreetingView = memo(({
 }: GreetingViewProps) => {
 
     const renderFamilyRelation = (person: Person, role: '신랑' | '신부') => {
-        const hasParents = person.father || person.mother;
+        const { parents } = person;
+        const hasParents = parents.father.name || parents.mother.name;
         if (!hasParents) return null;
 
         return (
             <div className={styles.familyGroup}>
                 <div className={styles.parentsNames}>
-                    {person.father && (
+                    {parents.father.name && (
                         <span>
-                            {person.fatherIsDeceased && <span className={styles.deceased}>故</span>}
-                            {person.father}
+                            {parents.father.isDeceased && <span className={styles.deceased}>故</span>}
+                            {parents.father.name}
                         </span>
                     )}
-                    {person.father && person.mother && <span className={styles.dotSeparator}>·</span>}
-                    {person.mother && (
+                    {parents.father.name && parents.mother.name && <span className={styles.dotSeparator}>·</span>}
+                    {parents.mother.name && (
                         <span>
-                            {person.motherIsDeceased && <span className={styles.deceased}>故</span>}
-                            {person.mother}
+                            {parents.mother.isDeceased && <span className={styles.deceased}>故</span>}
+                            {parents.mother.name}
                         </span>
                     )}
                 </div>
@@ -67,7 +70,7 @@ const GreetingView = memo(({
     return (
         <SectionContainer id={id}>
             <div className={styles.header}>
-                <span className={styles.subtitle} style={{ color: accentColor }}>GREETING</span>
+                <span className={styles.subtitle} style={{ color: accentColor }}>{greetingSubtitle || 'GREETING'}</span>
                 <h2 className={styles.title}>{greetingTitle}</h2>
                 <div className={styles.decorationLine} style={{ backgroundColor: accentColor }} />
             </div>
@@ -76,9 +79,8 @@ const GreetingView = memo(({
                 <div
                     className={styles.greetingText}
                     style={{ fontSize: 'calc(15px * var(--font-scale))' }}
-                >
-                    {greetingContent}
-                </div>
+                    dangerouslySetInnerHTML={{ __html: greetingContent }}
+                />
 
                 <div className={styles.relationArea}>
                     {renderFamilyRelation(groom, '신랑')}

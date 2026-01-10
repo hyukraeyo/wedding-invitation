@@ -1,15 +1,8 @@
-import React, { useState, useRef, useEffect, forwardRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import styles from './BuilderCalendar.module.scss';
 import { clsx } from 'clsx';
 import { useInvitationStore } from '@/store/useInvitationStore';
-
-interface BuilderCalendarProps {
-    value: string | null;
-    onChange: (date: string) => void;
-    className?: string;
-    placeholder?: string;
-}
 
 interface BuilderCalendarProps {
     value: string | null;
@@ -28,7 +21,9 @@ export const BuilderCalendar = ({ value, onChange, className, placeholder = '날
     const [viewDate, setViewDate] = useState(selectedDate || new Date());
 
     useEffect(() => {
-        if (selectedDate) setViewDate(selectedDate);
+        if (value) {
+            setViewDate(new Date(value));
+        }
     }, [value]);
 
     useEffect(() => {
@@ -37,11 +32,19 @@ export const BuilderCalendar = ({ value, onChange, className, placeholder = '날
                 setIsOpen(false);
             }
         };
+
+        const handleScroll = () => {
+            if (isOpen) setIsOpen(false);
+        };
+
         if (isOpen) {
             document.addEventListener('mousedown', handleClickOutside);
+            // Capture scroll events from any container to close the popup
+            window.addEventListener('scroll', handleScroll, true);
         }
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
+            window.removeEventListener('scroll', handleScroll, true);
         };
     }, [isOpen]);
 
@@ -127,15 +130,15 @@ export const BuilderCalendar = ({ value, onChange, className, placeholder = '날
                 <div className={styles.popup}>
                     <div className={styles.header}>
                         <div className={styles.monthTitle}>
-                            {viewDate.getFullYear()}년
+                            <span className={styles.year}>{viewDate.getFullYear()}년</span>
                             <span className={styles.monthHighlight}>{viewDate.getMonth() + 1}월</span>
                         </div>
-                        <div className="flex gap-1">
+                        <div className={styles.navGroup}>
                             <button onClick={() => changeMonth(-1)} className={styles.navButton} type="button">
-                                <ChevronLeft size={16} />
+                                <ChevronLeft size={14} />
                             </button>
                             <button onClick={() => changeMonth(1)} className={styles.navButton} type="button">
-                                <ChevronRight size={16} />
+                                <ChevronRight size={14} />
                             </button>
                         </div>
                     </div>

@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import styles from './BuilderModal.module.scss';
 import { clsx } from 'clsx';
@@ -12,6 +13,14 @@ interface BuilderModalProps {
 }
 
 export const BuilderModal = ({ isOpen, onClose, title, children, className = "" }: BuilderModalProps) => {
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setMounted(true);
+        return () => setMounted(false);
+    }, []);
+
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
@@ -23,9 +32,11 @@ export const BuilderModal = ({ isOpen, onClose, title, children, className = "" 
         };
     }, [isOpen]);
 
-    if (!isOpen) return null;
+    if (!isOpen || !mounted) return null;
 
-    return (
+    const portalRoot = document.getElementById('sidebar-portal-root') || document.body;
+
+    return createPortal(
         <div
             className={styles.backdrop}
             onClick={(e) => {
@@ -52,6 +63,7 @@ export const BuilderModal = ({ isOpen, onClose, title, children, className = "" 
                     {children}
                 </div>
             </div>
-        </div>
+        </div>,
+        portalRoot
     );
 };

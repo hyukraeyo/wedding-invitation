@@ -1,7 +1,7 @@
 import React from 'react';
-import { MapPin, ImagePlus, Trash2, Search } from 'lucide-react';
+import { MapPin, Search } from 'lucide-react';
 import DaumPostcodeEmbed from 'react-daum-postcode';
-import Image from 'next/image';
+
 import { clsx } from 'clsx';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
@@ -11,7 +11,8 @@ import { BuilderButtonGroup } from '../BuilderButtonGroup';
 import { BuilderToggle } from '../BuilderToggle';
 import { BuilderField } from '../BuilderField';
 import { BuilderModal } from '../../common/BuilderModal';
-import { Section, Stack, Row, Divider, Card } from '../BuilderLayout';
+import { ImageUploader } from '../ImageUploader';
+import { Section, Row, Divider, Card } from '../BuilderLayout';
 import styles from './LocationSection.module.scss';
 
 interface SectionProps {
@@ -55,16 +56,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
         setIsSearchOpen(true);
     };
 
-    const handleSketchUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setSketchUrl(reader.result as string);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
+
 
     const formatPhoneNumber = (value: string) => {
         const clean = value.replace(/[^0-9]/g, '');
@@ -208,31 +200,11 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                 {/* 약도 이미지 */}
                 {showSketch && (
                     <BuilderField label="약도 이미지">
-                        {sketchUrl ? (
-                            <div className={styles.sketchPreview}>
-                                <Image src={sketchUrl} alt="약도" fill className={styles.sketchImage} />
-                                <button
-                                    onClick={() => setSketchUrl(null)}
-                                    className={styles.sketchRemoveButton}
-                                >
-                                    <Trash2 size={24} />
-                                </button>
-                            </div>
-                        ) : (
-                            <label className={styles.sketchUploader}>
-                                <input
-                                    type="file"
-                                    className={styles.hiddenInput}
-                                    accept="image/*"
-                                    onChange={handleSketchUpload}
-                                />
-                                <div className={styles.uploaderIcon}>
-                                    <ImagePlus size={24} />
-                                </div>
-                                <span className={styles.uploaderTitle}>약도 이미지 업로드</span>
-                                <span className={styles.uploaderSubtitle}>직접 그린 약도나 이미지를 업로드하세요</span>
-                            </label>
-                        )}
+                        <ImageUploader
+                            value={sketchUrl}
+                            onChange={setSketchUrl}
+                            placeholder="약도 이미지 추가"
+                        />
                     </BuilderField>
                 )}
             </Section>

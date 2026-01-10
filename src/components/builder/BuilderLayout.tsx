@@ -11,7 +11,7 @@ import { clsx } from 'clsx';
 
 interface LayoutProps {
     children: React.ReactNode;
-    className?: string;
+    className?: string | undefined;
 }
 
 // ----- Section: 아코디언 내부 최상위 컨테이너 -----
@@ -23,7 +23,7 @@ export const Section = ({ children, className }: LayoutProps) => (
 type StackGap = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 interface StackProps extends LayoutProps {
-    gap?: StackGap;
+    gap?: StackGap | undefined;
 }
 
 const stackGapMap: Record<StackGap, string> = {
@@ -41,11 +41,13 @@ export const Stack = ({ children, className, gap = 'md' }: StackProps) => (
 // ----- Row: 수평 나열 -----
 type RowGap = 'xs' | 'sm' | 'md' | 'lg';
 type RowAlign = 'start' | 'center' | 'end' | 'stretch' | 'between';
+type RowJustify = 'start' | 'center' | 'end' | 'space-between' | 'space-around';
 
 interface RowProps extends LayoutProps {
-    gap?: RowGap;
-    align?: RowAlign;
-    wrap?: boolean;
+    gap?: RowGap | undefined;
+    align?: RowAlign | undefined;
+    justify?: RowJustify | undefined;
+    wrap?: boolean | undefined;
 }
 
 const rowGapMap: Record<RowGap, string> = {
@@ -55,11 +57,20 @@ const rowGapMap: Record<RowGap, string> = {
     lg: styles.rowLg ?? '',
 };
 
-export const Row = ({ children, className, gap = 'md', align = 'center', wrap = false }: RowProps) => (
+const rowJustifyMap: Record<RowJustify, string> = {
+    start: styles.rowJustifyStart ?? '',
+    center: styles.rowJustifyCenter ?? '',
+    end: styles.rowJustifyEnd ?? '',
+    'space-between': styles.rowJustifyBetween ?? '',
+    'space-around': styles.rowJustifyAround ?? '',
+};
+
+export const Row = ({ children, className, gap = 'md', align = 'center', justify, wrap = false }: RowProps) => (
     <div className={clsx(
         rowGapMap[gap],
         align === 'stretch' && styles.rowStretch,
         align === 'between' && styles.rowBetween,
+        justify && rowJustifyMap[justify],
         wrap && styles.rowWrap,
         className
     )}>{children}</div>
@@ -69,7 +80,7 @@ export const Row = ({ children, className, gap = 'md', align = 'center', wrap = 
 type GridCols = 2 | 3 | 4 | 'auto';
 
 interface GridProps extends LayoutProps {
-    cols?: GridCols;
+    cols?: GridCols | undefined;
 }
 
 const gridColsMap: Record<GridCols, string> = {
@@ -85,8 +96,8 @@ export const Grid = ({ children, className, cols = 2 }: GridProps) => (
 
 // ----- Divider: 구분선 -----
 interface DividerProps {
-    className?: string;
-    vertical?: boolean;
+    className?: string | undefined;
+    vertical?: boolean | undefined;
 }
 
 export const Divider = ({ className, vertical = false }: DividerProps) => (
@@ -95,7 +106,7 @@ export const Divider = ({ className, vertical = false }: DividerProps) => (
 
 // ----- Card: 박스 형태 컨테이너 -----
 interface CardProps extends LayoutProps {
-    hoverable?: boolean;
+    hoverable?: boolean | undefined;
 }
 
 export const Card = ({ children, className, hoverable = false }: CardProps) => (
@@ -105,7 +116,7 @@ export const Card = ({ children, className, hoverable = false }: CardProps) => (
 // ----- SubLabel: 인라인 라벨 -----
 interface SubLabelProps {
     children: React.ReactNode;
-    className?: string;
+    className?: string | undefined;
 }
 
 export const SubLabel = ({ children, className }: SubLabelProps) => (
@@ -116,8 +127,8 @@ export const SubLabel = ({ children, className }: SubLabelProps) => (
 type FormRowCols = 2 | 3 | 4;
 
 interface FormRowProps extends LayoutProps {
-    cols?: FormRowCols;
-    label?: string;
+    cols?: FormRowCols | undefined;
+    label?: string | undefined;
 }
 
 export const FormRow = ({ children, className, cols = 2, label }: FormRowProps) => {
@@ -142,7 +153,7 @@ export const ImageGrid = ({ children, className }: LayoutProps) => (
 
 // ----- GalleryItem: 갤러리 아이템 래퍼 -----
 interface GalleryItemProps extends LayoutProps {
-    isDragging?: boolean;
+    isDragging?: boolean | undefined;
 }
 
 export const GalleryItem = ({ children, className, isDragging = false }: GalleryItemProps) => (

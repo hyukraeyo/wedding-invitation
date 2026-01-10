@@ -30,10 +30,10 @@ export const SubAccordion: React.FC<SubAccordionProps> = ({
                 '--accent-color': accentColor
             } as React.CSSProperties}
         >
-            <div className="flex items-center gap-2">
-                <span className={clsx(styles.label, isOpen && styles.open)}>{label}</span>
+            <div className={styles.subHeader}>
+                <span className={styles.subLabel}>{label}</span>
                 {showBadge && (
-                    <span className="px-1.5 py-0.5 bg-white border border-gray-100 rounded text-[8px] text-gray-400 font-black tracking-tighter uppercase">
+                    <span className={styles.subBadge}>
                         {badgeText}
                     </span>
                 )}

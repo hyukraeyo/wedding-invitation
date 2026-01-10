@@ -3,7 +3,7 @@
 import React from 'react';
 import styles from './BuilderColorPicker.module.scss';
 import { clsx } from 'clsx';
-import { useInvitationStore } from '@/store/useInvitationStore';
+
 
 interface BuilderColorPickerProps {
     value: string;
@@ -13,9 +13,6 @@ interface BuilderColorPickerProps {
 }
 
 export const BuilderColorPicker = ({ value, colors, onChange, className }: BuilderColorPickerProps) => {
-    // Only used for ring color of selected item if needed, but we typically use the item's own color or a standard ring
-    const accentColor = useInvitationStore(state => state.theme.accentColor);
-
     return (
         <div className={clsx(styles.grid, className)}>
             {colors.map((color) => (

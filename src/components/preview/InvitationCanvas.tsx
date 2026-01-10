@@ -1,20 +1,21 @@
 'use client';
 
 import React, { memo, useMemo, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import MainScreenView from './sections/MainScreenView';
 import CalendarSectionView from './sections/CalendarSectionView';
 // import NamesView from './sections/NamesView';
 import GreetingView from './sections/GreetingView';
-import LocationView from './sections/LocationView';
 import GalleryView from './sections/GalleryView';
 import AccountsView from './sections/AccountsView';
 import ClosingView from './sections/ClosingView';
 import EffectsOverlay from './sections/EffectsOverlay';
 import ScrollReveal from './ScrollReveal';
 import styles from './InvitationCanvas.module.scss';
-import common from '@/styles/common.module.scss'; // Assuming you might want to use common patterns if needed, but let's stick to module.scss
 import { clsx } from 'clsx';
+
+const LocationView = dynamic(() => import('./sections/LocationView'), { ssr: false });
 
 const InvitationCanvas = memo(() => {
   const {
@@ -40,7 +41,16 @@ const InvitationCanvas = memo(() => {
     galleryPreview,
     galleryFade,
     galleryAutoplay,
-    galleryPopup
+    galleryPopup,
+    mapZoom,
+    showMap,
+    showNavigation,
+    showSketch,
+    sketchUrl,
+    lockMap,
+    ddayMessage,
+    greetingSubtitle,
+    mapType,
   } = useInvitationStore();
 
   // Scroll to editing section
@@ -77,15 +87,35 @@ const InvitationCanvas = memo(() => {
 
     const selectedFontValue = `var(${selectedFontVar})`;
 
-    return {
+    const fontVars = [
+      '--font-serif',
+      '--font-sans',
+      '--font-gowun-batang',
+      '--font-gowun-dodum',
+      '--font-nanum-myeongjo',
+      '--font-yeon-sung',
+      '--font-do-hyeon',
+      '--font-song-myung',
+      '--font-pretendard',
+      '--font-gmarket-sans',
+      '--font-script',
+    ];
+
+    const styleOverrides: Record<string, string | number> = {
       backgroundColor: theme.backgroundColor,
       '--font-scale': theme.fontScale,
-      // Global overrides for Tailwind classes inside the canvas
-      '--font-serif': selectedFontValue,
-      '--font-sans': selectedFontValue,
       fontFamily: selectedFontValue,
-      transform: 'translate3d(0, 0, 0)', // Trap fixed elements like modals within the preview
+      transform: 'translate3d(0, 0, 0)',
     };
+
+    // 현재 선택된 폰트 변수를 제외한 모든 폰트 변수를 선택된 폰트로 오버라이드
+    fontVars.forEach(v => {
+      if (v !== selectedFontVar) {
+        styleOverrides[v] = selectedFontValue;
+      }
+    });
+
+    return styleOverrides;
   }, [theme.backgroundColor, theme.fontScale, theme.font]);
 
   return (
@@ -124,6 +154,7 @@ const InvitationCanvas = memo(() => {
         <GreetingView
           id="section-message"
           greetingTitle={greetingTitle}
+          greetingSubtitle={greetingSubtitle}
           greetingContent={message}
           groom={groom}
           bride={bride}
@@ -134,7 +165,11 @@ const InvitationCanvas = memo(() => {
         <CalendarSectionView
           id="section-date"
           date={date}
+          time={time}
           accentColor={theme.accentColor}
+          ddayMessage={ddayMessage}
+          groom={groom}
+          bride={bride}
         />
 
         {/* 5. Location */}
@@ -146,6 +181,13 @@ const InvitationCanvas = memo(() => {
           address={address}
           detailAddress={detailAddress}
           accentColor={theme.accentColor}
+          mapZoom={mapZoom}
+          showMap={showMap}
+          showNavigation={showNavigation}
+          showSketch={showSketch}
+          sketchUrl={sketchUrl}
+          lockMap={lockMap}
+          mapType={mapType}
         />
 
         {/* 6. Gallery */}

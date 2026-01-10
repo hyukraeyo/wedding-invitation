@@ -80,7 +80,6 @@ interface InvitationState {
     ddayMessage: string;
 
     // Theme State
-    // Theme State
     theme: {
         font: 'pretendard' | 'gmarket' | 'gowun-batang' | 'gowun-dodum' | 'nanum-myeongjo' | 'yeon-sung' | 'do-hyeon' | 'song-myung' | 'serif' | 'sans';
         backgroundColor: string;
@@ -285,7 +284,7 @@ const INITIAL_STATE = {
 
     showCalendar: true,
     showDday: true,
-    ddayMessage: '결혼식까지 남음(D-Day)남았습니다',
+    ddayMessage: '(신랑), (신부)의 결혼식이 (D-Day) 남았습니다',
 
     theme: {
         font: 'pretendard' as const,
@@ -415,7 +414,28 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
         removeItem: () => { },
     })),
     partialize: (state) => {
-        // Exclude potentially problematic types from persistence if needed
-        return state;
+        // Exclude large image data from persistence to prevent QuotaExceededError (localStorage limit 5MB)
+        /* eslint-disable @typescript-eslint/no-unused-vars */
+        const {
+            imageUrl: _imageUrl, // Exclude heavy images
+            greetingImage: _greetingImage,
+            sketchUrl: _sketchUrl,
+            gallery: _gallery, // Exclude gallery from localStorage due to size
+            kakaoShare,
+            closing,
+            ...rest
+        } = state;
+        /* eslint-enable @typescript-eslint/no-unused-vars */
+
+        return {
+            ...rest,
+            // Only persist text metadata for shares/closing, not the image data
+            kakaoShare: { ...kakaoShare, imageUrl: null },
+            closing: { ...closing, imageUrl: null },
+            imageUrl: null,
+            greetingImage: null,
+            sketchUrl: null,
+            gallery: [],
+        };
     }
 }));

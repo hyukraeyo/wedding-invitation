@@ -102,29 +102,62 @@
     to { transform: scale(1); opacity: 1; }
 }
 
-.ddaySection {
-    margin-top: 3.5rem;
-    padding: 1.5rem;
-    background-color: #f9fafb;
-    border-radius: 1.25rem;
-    width: 100%;
-    max-width: 320px;
-    margin-inline: auto;
-    text-align: center;
+.countdownArea {
+    margin-top: 3rem;
+    @include flex-center;
 
-    .ddayLabel {
-        font-size: 0.75rem;
-        color: #6b7280;
-        margin-bottom: 0.75rem;
-        font-weight: 500;
-        letter-spacing: 0.05em;
+    .timerGrid {
+        display: flex;
+        align-items: flex-end;
+        gap: 0.5rem;
+        
+        .column {
+            @include flex-col;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 3.5rem;
+
+            .label {
+                font-size: 0.625rem;
+                color: #9ca3af;
+                letter-spacing: 0.1em;
+                font-weight: 500;
+            }
+
+            .value {
+                font-size: 1.75rem;
+                font-family: $font-serif;
+                font-weight: 500;
+                color: #374151;
+            }
+        }
+
+        .divider {
+            color: var(--accent-color);
+            opacity: 0.5;
+            font-size: 1.25rem;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+        }
     }
+}
 
-    .ddayValue {
-        font-size: 1.75rem;
-        font-weight: 800;
-        font-family: $font-serif;
-        color: #111827;
-        letter-spacing: -0.025em;
+.ddaySection {
+    margin-top: 2rem;
+    text-align: center;
+    width: 100%;
+    padding-inline: 1rem;
+
+    .sentence {
+        font-size: 1rem;
+        line-height: 1.6;
+        color: #4b5563;
+        word-break: keep-all;
+
+        .highlight {
+            font-weight: 700;
+            font-family: $font-serif;
+            font-size: 1.125rem;
+        }
     }
 }

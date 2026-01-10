@@ -31,7 +31,7 @@
 
 .previewArea {
     width: 100%;
-    aspect-ratio: 16 / 9; // Wide aspect ratio for better preview
+    aspect-ratio: var(--aspect-ratio, 16 / 9);
     position: relative;
     display: flex;
     flex-direction: column;
@@ -85,25 +85,30 @@
 
 .removeButton {
     position: absolute;
-    top: 0.75rem;
-    right: 0.75rem;
-    padding: 0.5rem;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 2rem;
+    height: 2rem;
     background-color: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(4px);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 0.75rem;
-    color: #ef4444; // red-500
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.625rem;
+    color: #ef4444;
     z-index: 10;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    @include flex-center;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.02);
 
     &:hover {
-        background-color: #fee2e2; // red-100
+        background-color: white;
+        color: #dc2626;
         transform: scale(1.05);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+    }
+
+    &:active {
+        transform: scale(0.95);
     }
 }
 

@@ -23,6 +23,7 @@
         z-index: 20;
         display: flex;
         flex-direction: column;
+        position: relative;
 
         @media (min-width: 1024px) {
             width: 480px;
@@ -32,7 +33,7 @@
             flex: 1;
             overflow-y: auto; // Enable scrolling here
             overflow-x: hidden; // Prevent horizontal scroll
-            padding: 1.5rem;
+            padding: 2.5rem 1.5rem 1.5rem;
             background-color: rgba(249, 250, 251, 0.5);
         }
     }

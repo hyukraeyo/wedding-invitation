@@ -49,9 +49,6 @@ const MainScreenView = memo(({
     groom,
     bride,
     date,
-    time,
-    location,
-    detailAddress,
     accentColor
 }: MainScreenViewProps) => {
     const isFillLayout = mainScreen.layout === 'fill';
@@ -63,12 +60,12 @@ const MainScreenView = memo(({
 
                 {/* 1. Header Area (Basic Layout) */}
                 <div className={clsx(styles.headerArea, isBasicLayout ? styles.headerVisible : styles.headerHidden)}>
-                    {mainScreen.showTitle && (
+                    {mainScreen.title && (
                         <div
                             className={styles.mainTitle}
                             style={{ fontSize: 'calc(11px * var(--font-scale))', color: accentColor }}
                         >
-                            {mainScreen.title || 'THE MARRIAGE'}
+                            {mainScreen.title}
                         </div>
                     )}
                     <div
@@ -77,7 +74,7 @@ const MainScreenView = memo(({
                     >
                         {formatShortDate(date)}
                     </div>
-                    {mainScreen.showGroomBride && (
+                    {(groom.firstName || bride.firstName) && (
                         <div
                             className={clsx(
                                 styles.namesWrapper,
@@ -162,7 +159,7 @@ const MainScreenView = memo(({
                 <div className={clsx(styles.bottomArea, isFillLayout ? styles.bottomFill : styles.bottomStandard)}>
                     {!isBasicLayout && (
                         <>
-                            {mainScreen.showTitle && (
+                            {mainScreen.title && (
                                 <div
                                     className={styles.bottomTitle}
                                     style={{ fontSize: 'calc(10px * var(--font-scale))', color: isFillLayout ? 'inherit' : accentColor }}
@@ -170,7 +167,7 @@ const MainScreenView = memo(({
                                     {mainScreen.title}
                                 </div>
                             )}
-                            {mainScreen.showGroomBride && (
+                            {(groom.firstName || bride.firstName) && (
                                 <div
                                     className={clsx(styles.bottomNames, mainScreen.andText === '·' ? styles.gapSmall : styles.gapLarge, isFillLayout ? styles.light : styles.normal)}
                                     style={{ fontSize: 'calc(24px * var(--font-scale))' }}
@@ -202,30 +199,18 @@ const MainScreenView = memo(({
                         </svg>
                     </div>
 
-                    {mainScreen.showSubtitle && (
+                    {mainScreen.subtitle && (
                         <div className={clsx(styles.subtitle, isFillLayout ? styles.textWhite : styles.textGray)} style={{ fontSize: 'calc(24px * var(--font-scale))' }}>
                             {mainScreen.subtitle}
                         </div>
                     )}
 
-                    {mainScreen.showDatePlace && (
+                    {(mainScreen.customDatePlace && mainScreen.customDatePlace.replace(/<[^>]*>/g, '').trim().length > 0) && (
                         <div
                             className={clsx(styles.datePlace, isFillLayout ? styles.textWhite : styles.textGray)}
                             style={{ fontSize: 'calc(14px * var(--font-scale))' }}
                             dangerouslySetInnerHTML={{
-                                __html: (() => {
-                                    if (mainScreen.customDatePlace && mainScreen.customDatePlace !== '0000.00.00. Sunday 00:00 PM\nOOO예식장 1F, OOO홀') {
-                                        return mainScreen.customDatePlace;
-                                    }
-                                    const dateObj = date ? new Date(date) : new Date();
-                                    const weekday = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dateObj.getDay()];
-                                    const dayStr = `${dateObj.getFullYear()}. ${String(dateObj.getMonth() + 1).padStart(2, '0')}. ${String(dateObj.getDate()).padStart(2, '0')}. ${weekday}`;
-                                    const [h = '12', m = '00'] = (time || '12:00').split(':');
-                                    const hr = parseInt(h);
-                                    const ampm = hr >= 12 ? 'PM' : 'AM';
-                                    const dH = hr > 12 ? hr - 12 : (hr === 0 ? 12 : hr);
-                                    return `${dayStr} ${String(dH).padStart(2, '0')}:${m} ${ampm}\n${location}${detailAddress ? `, ${detailAddress}` : ''}`;
-                                })()
+                                __html: mainScreen.customDatePlace
                             }}
                         />
                     )}

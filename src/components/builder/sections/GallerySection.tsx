@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback, useState } from 'react';
 import Image from 'next/image';
-import { ImagePlus, Plus, Info } from 'lucide-react';
+import { ImagePlus, Plus, Info, Trash2 } from 'lucide-react';
 import styles from './GallerySection.module.scss';
 import { clsx } from 'clsx';
 import { useInvitationStore } from '@/store/useInvitationStore';
@@ -10,6 +10,7 @@ import { BuilderToggle } from '../BuilderToggle';
 import { BuilderInput } from '../BuilderInput';
 import { BuilderButtonGroup } from '../BuilderButtonGroup';
 import { BuilderField } from '../BuilderField';
+import commonStyles from '../Builder.module.scss';
 import {
     DndContext,
     closestCenter,
@@ -305,8 +306,8 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
                         </DndContext>
 
                         {/* 안내 문구 */}
-                        <div className={styles.infoBox}>
-                            <Info size={14} className={styles.icon} />
+                        <div className={commonStyles.notice}>
+                            <Info size={14} className={commonStyles.icon} />
                             <span>사진을 길게 누르거나 드래그하여 순서를 변경할 수 있습니다.</span>
                         </div>
                     </div>
@@ -372,7 +373,7 @@ const SortableImage = React.memo(function SortableImage({
                 title="삭제"
                 onPointerDown={(e) => e.stopPropagation()} // Prevent drag start when clicking delete
             >
-                <Plus size={12} className="rotate-45" />
+                <Trash2 size={12} />
             </button>
 
             <div

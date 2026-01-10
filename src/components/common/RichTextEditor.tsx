@@ -4,7 +4,6 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { Color } from '@tiptap/extension-color';
 import { TextStyle } from '@tiptap/extension-text-style';
-import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import Highlight from '@tiptap/extension-highlight';
 import {
@@ -52,13 +51,12 @@ const ToolbarButton = ({
     </button>
 );
 
-export default function RichTextEditor({ content, onChange, placeholder, className = "", minHeight = "min-h-[180px]" }: RichTextEditorProps) {
+export default function RichTextEditor({ content, onChange, placeholder, className = "", minHeight = "min-h-[240px]" }: RichTextEditorProps) {
     const editor = useEditor({
         extensions: [
             StarterKit,
             TextStyle,
             Color,
-            Underline,
             Highlight.configure({ multicolor: true }),
             TextAlign.configure({
                 types: ['heading', 'paragraph'],
@@ -73,7 +71,7 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
             attributes: {
                 // Classes are handled by :global(.ProseMirror) in SCSS, but placeholder might need Tiptap extension or CSS
                 class: `focus:outline-none`,
-                // placeholder: placeholder || '내용을 입력하세요...', // Tiptap placeholder extension needed for this to show visually via CSS
+                'data-placeholder': placeholder || '',
             },
         },
     });

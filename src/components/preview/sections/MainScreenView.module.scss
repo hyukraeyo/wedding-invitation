@@ -24,7 +24,7 @@
     transition: $transition-smooth;
 
     &.pt10 {
-        padding-top: 2.5rem;
+        padding-top: 3.5rem;
     }
 
     &.centerFill {
@@ -295,7 +295,8 @@
 
     .subtitle {
         margin-bottom: 1.5rem;
-        font-family: $font-script;
+        font-family: $font-pretendard;
+        font-weight: 400;
         
         &.textWhite { color: rgba(255,255,255,0.9); }
         &.textGray { color: #6b7280; }

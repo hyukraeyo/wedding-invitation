@@ -5,7 +5,6 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import styles from './Header.module.scss';
-import { clsx } from 'clsx';
 
 interface HeaderProps {
     onSave?: () => void;

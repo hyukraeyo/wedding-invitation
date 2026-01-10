@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MessageSquare, Sparkles } from 'lucide-react';
+import { MessageSquare, Sparkles, Info } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderInput } from '../BuilderInput';
@@ -9,6 +9,7 @@ import { BuilderModal } from '@/components/common/BuilderModal';
 import RichTextEditor from '@/components/common/RichTextEditor';
 import { ImageUploader } from '../ImageUploader';
 import { Section, Stack, Row, Card } from '../BuilderLayout';
+import commonStyles from '../Builder.module.scss';
 import styles from './GreetingSection.module.scss';
 
 interface SectionProps {
@@ -149,10 +150,10 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                                     onChange={setGroomNameCustom}
                                     placeholder="인사말 하단 성함부분을 자유롭게 입력할 수 있습니다."
                                 />
-                                <p className={styles.infoText ?? ''}>
-                                    <span>ⓘ</span>
+                                <div className={commonStyles.notice}>
+                                    <Info size={14} className={commonStyles.icon} />
                                     <span>인사말 하단 성함부분을 자유롭게 입력할 수 있습니다.</span>
-                                </p>
+                                </div>
                             </Stack>
                         )}
                     </Stack>
