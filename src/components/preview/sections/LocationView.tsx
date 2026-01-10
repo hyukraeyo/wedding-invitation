@@ -4,7 +4,7 @@ import React, { memo } from 'react';
 import Image from 'next/image';
 import { Map as KakaoMap, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk';
 import { NavermapsProvider, Container as NaverMapDiv, NaverMap, Marker as NaverMarker } from 'react-naver-maps';
-import { Copy } from 'lucide-react';
+import { Copy, Phone } from 'lucide-react';
 import SectionContainer from '../SectionContainer';
 import SectionHeader from '../SectionHeader';
 import { NaverIcon, KakaoIcon } from '../../common/MapIcons';
@@ -25,6 +25,7 @@ interface LocationViewProps {
     sketchUrl?: string | null | undefined;
     lockMap?: boolean;
     mapType?: 'naver' | 'kakao';
+    locationContact?: string;
 }
 
 /**
@@ -93,7 +94,8 @@ const LocationView = memo(({
     showSketch = false,
     sketchUrl = null,
     lockMap = true,
-    mapType = 'naver'
+    mapType = 'naver',
+    locationContact
 }: LocationViewProps) => {
 
     const handleNavClick = (type: 'kakao' | 'naver') => {
@@ -124,6 +126,12 @@ const LocationView = memo(({
                     {address}
                     {detailAddress && <div className={styles.detailAddress}>{detailAddress}</div>}
                 </div>
+                {locationContact && (
+                    <a href={`tel:${locationContact.replace(/[^0-9]/g, '')}`} className={styles.contact}>
+                        <Phone size={14} />
+                        {locationContact}
+                    </a>
+                )}
             </div>
 
             {showMap && (

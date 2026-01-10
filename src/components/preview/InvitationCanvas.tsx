@@ -31,6 +31,7 @@ const InvitationCanvas = memo(() => {
     coordinates,
     address,
     detailAddress,
+    locationContact,
     greetingTitle,
     greetingImage,
     message,
@@ -201,6 +202,7 @@ const InvitationCanvas = memo(() => {
           sketchUrl={sketchUrl || undefined}
           lockMap={lockMap}
           mapType={mapType}
+          locationContact={locationContact}
         />
 
         {/* 6. Gallery */}

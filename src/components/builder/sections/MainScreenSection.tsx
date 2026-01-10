@@ -19,7 +19,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 
 import styles from './MainScreenSection.module.scss';
-import commonStyles from '../Builder.module.scss';
+import common from '../Builder.module.scss';
 import { clsx } from 'clsx';
 
 
@@ -65,6 +65,8 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
         theme: { accentColor }
     } = useInvitationStore();
 
+    const [isAtStart, setIsAtStart] = useState(true);
+    const [isAtEnd, setIsAtEnd] = useState(false);
     const [isTextSectionOpen, setIsTextSectionOpen] = useState(false);
     const [isExampleModalOpen, setIsExampleModalOpen] = useState(false);
 
@@ -79,13 +81,27 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
             <div className={styles.container}>
                 {/* Layout Templates */}
                 <BuilderField label="레이아웃">
-                    <div className={styles.swiperWrapper}>
+                    <div className={clsx(styles.swiperWrapper, isAtStart && styles.atStart, isAtEnd && styles.atEnd)}>
                         <Swiper
                             slidesPerView="auto"
                             spaceBetween={12}
                             slidesOffsetBefore={20}
                             slidesOffsetAfter={40}
                             className={styles.layoutSwiper}
+                            onInit={(swiper) => {
+                                setIsAtStart(swiper.isBeginning);
+                                setIsAtEnd(swiper.isEnd);
+                            }}
+                            onSlideChange={(swiper) => {
+                                setIsAtStart(swiper.isBeginning);
+                                setIsAtEnd(swiper.isEnd);
+                            }}
+                            onReachBeginning={() => setIsAtStart(true)}
+                            onReachEnd={() => setIsAtEnd(true)}
+                            onFromEdge={() => {
+                                setIsAtStart(false);
+                                setIsAtEnd(false);
+                            }}
                         >
                             {['basic', 'fill', 'arch', 'oval', 'frame'].map((l) => (
                                 <SwiperSlide key={l} style={{ width: 'auto' }}>
@@ -321,8 +337,8 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                         </div>
 
                         {/* Info Text */}
-                        <div className={commonStyles.notice}>
-                            <Info size={14} className={commonStyles.icon} />
+                        <div className={common.notice}>
+                            <Info size={14} className={common.icon} />
                             <span>내용을 입력하지 않으면 프리뷰에 노출되지 않습니다.</span>
                         </div>
                     </SubAccordion>

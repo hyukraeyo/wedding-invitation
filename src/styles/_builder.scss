@@ -44,7 +44,7 @@ $builder-font-lg: 15px;
   display: flex;
   flex-direction: column;
   gap: $builder-gap-xl;
-  padding: $builder-gap-xl;
+  padding: $builder-gap-xl $builder-gap-sm;
 }
 
 // Field group - 라벨+인풋 그룹
@@ -81,7 +81,7 @@ $builder-font-lg: 15px;
   border-radius: $builder-radius-md;
   border: 1px solid $builder-border-light;
   background: white;
-  padding: $builder-gap-lg;
+  padding: $builder-gap-md;
   transition: all $transition-fast;
 }
 

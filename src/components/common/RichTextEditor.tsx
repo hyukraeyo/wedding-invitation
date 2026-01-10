@@ -89,26 +89,28 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
         <div className={clsx(styles.richTextEditor, className)}>
             {/* Minimal Toolbar */}
             <div className={styles.toolbar}>
-                <ToolbarButton
-                    onClick={() => editor.chain().focus().toggleBold().run()}
-                    isActive={editor.isActive('bold')}
-                >
-                    <Bold size={18} />
-                </ToolbarButton>
+                <div className={styles.group}>
+                    <ToolbarButton
+                        onClick={() => editor.chain().focus().toggleBold().run()}
+                        isActive={editor.isActive('bold')}
+                    >
+                        <Bold size={18} />
+                    </ToolbarButton>
 
-                <ToolbarButton
-                    onClick={() => editor.chain().focus().toggleItalic().run()}
-                    isActive={editor.isActive('italic')}
-                >
-                    <Italic size={18} />
-                </ToolbarButton>
+                    <ToolbarButton
+                        onClick={() => editor.chain().focus().toggleItalic().run()}
+                        isActive={editor.isActive('italic')}
+                    >
+                        <Italic size={18} />
+                    </ToolbarButton>
 
-                <ToolbarButton
-                    onClick={() => editor.chain().focus().toggleUnderline().run()}
-                    isActive={editor.isActive('underline')}
-                >
-                    <UnderlineIcon size={18} />
-                </ToolbarButton>
+                    <ToolbarButton
+                        onClick={() => editor.chain().focus().toggleUnderline().run()}
+                        isActive={editor.isActive('underline')}
+                    >
+                        <UnderlineIcon size={18} />
+                    </ToolbarButton>
+                </div>
 
                 <div className={styles.separator}></div>
 
@@ -129,26 +131,28 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
 
                 <div className={styles.separator}></div>
 
-                <ToolbarButton
-                    onClick={() => editor.chain().focus().setTextAlign('left').run()}
-                    isActive={editor.isActive({ textAlign: 'left' })}
-                >
-                    <AlignLeft size={18} />
-                </ToolbarButton>
+                <div className={styles.group}>
+                    <ToolbarButton
+                        onClick={() => editor.chain().focus().setTextAlign('left').run()}
+                        isActive={editor.isActive({ textAlign: 'left' })}
+                    >
+                        <AlignLeft size={18} />
+                    </ToolbarButton>
 
-                <ToolbarButton
-                    onClick={() => editor.chain().focus().setTextAlign('center').run()}
-                    isActive={editor.isActive({ textAlign: 'center' })}
-                >
-                    <AlignCenter size={18} />
-                </ToolbarButton>
+                    <ToolbarButton
+                        onClick={() => editor.chain().focus().setTextAlign('center').run()}
+                        isActive={editor.isActive({ textAlign: 'center' })}
+                    >
+                        <AlignCenter size={18} />
+                    </ToolbarButton>
 
-                <ToolbarButton
-                    onClick={() => editor.chain().focus().setTextAlign('right').run()}
-                    isActive={editor.isActive({ textAlign: 'right' })}
-                >
-                    <AlignRight size={18} />
-                </ToolbarButton>
+                    <ToolbarButton
+                        onClick={() => editor.chain().focus().setTextAlign('right').run()}
+                        isActive={editor.isActive({ textAlign: 'right' })}
+                    >
+                        <AlignRight size={18} />
+                    </ToolbarButton>
+                </div>
             </div>
 
             <EditorContent
