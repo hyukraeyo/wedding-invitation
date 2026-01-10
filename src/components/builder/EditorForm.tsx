@@ -1,139 +1,63 @@
 "use client";
 
-import React, { useState, useCallback, memo, Suspense, useEffect } from 'react';
-import dynamic from 'next/dynamic';
+import React, { useState, useCallback, memo, useEffect } from 'react';
 import { useInvitationStore } from '@/store/useInvitationStore';
+import styles from './EditorForm.module.scss';
+import { clsx } from 'clsx';
 
-// Dynamic imports for code splitting
-const ThemeSection = dynamic(() => import('./sections/ThemeSection'), {
-  loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded-lg" />
-});
+// Static imports for immediate loading (prevents icon pop-in)
+import ThemeSection from './sections/ThemeSection';
+import MainScreenSection from './sections/MainScreenSection';
+import BasicInfoSection from './sections/BasicInfoSection';
+import DateTimeSection from './sections/DateTimeSection';
+import LocationSection from './sections/LocationSection';
+import GreetingSection from './sections/GreetingSection';
+import GallerySection from './sections/GallerySection';
+import AccountsSection from './sections/AccountsSection';
+import KakaoShareSection from './sections/KakaoShareSection';
+import ClosingSection from './sections/ClosingSection';
 
-const MainScreenSection = dynamic(() => import('./sections/MainScreenSection'), {
-  loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded-lg" />
-});
-
-const BasicInfoSection = dynamic(() => import('./sections/BasicInfoSection'), {
-  loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded-lg" />
-});
-
-const DateTimeSection = dynamic(() => import('./sections/DateTimeSection'), {
-  loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded-lg" />
-});
-
-const LocationSection = dynamic(() => import('./sections/LocationSection'), {
-  loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded-lg" />
-});
-
-const GreetingSection = dynamic(() => import('./sections/GreetingSection'), {
-  loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded-lg" />
-});
-
-const GallerySection = dynamic(() => import('./sections/GallerySection'), {
-  loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded-lg" />
-});
-
-const AccountsSection = dynamic(() => import('./sections/AccountsSection'), {
-  loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded-lg" />
-});
-
-const KakaoShareSection = dynamic(() => import('./sections/KakaoShareSection'), {
-  loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded-lg" />
-});
-
-const ClosingSection = dynamic(() => import('./sections/ClosingSection'), {
-  loading: () => <div className="animate-pulse h-20 bg-gray-100 rounded-lg" />
-});
+const SECTIONS = [
+  { key: 'basic', Component: BasicInfoSection },
+  { key: 'theme', Component: ThemeSection },
+  { key: 'mainScreen', Component: MainScreenSection },
+  { key: 'message', Component: GreetingSection },
+  { key: 'date', Component: DateTimeSection },
+  { key: 'location', Component: LocationSection },
+  { key: 'gallery', Component: GallerySection },
+  { key: 'account', Component: AccountsSection },
+  { key: 'closing', Component: ClosingSection },
+  { key: 'kakao', Component: KakaoShareSection },
+] as const;
 
 const EditorForm = memo(function EditorForm() {
-  // State to track open accordion section
   const [openSection, setOpenSection] = useState<string | null>(null);
+  const [isReady, setIsReady] = useState(false);
   const setEditingSection = useInvitationStore(state => state.setEditingSection);
 
-  // Update editing section when openSection changes
   useEffect(() => {
     setEditingSection(openSection);
   }, [openSection, setEditingSection]);
+
+  // Delay rendering to ensure all icons are loaded for smooth appearance
+  useEffect(() => {
+    const timer = requestAnimationFrame(() => setIsReady(true));
+    return () => cancelAnimationFrame(timer);
+  }, []);
 
   const handleToggle = useCallback((section: string) => {
     setOpenSection(prev => prev === section ? null : section);
   }, []);
 
   return (
-    <div className="h-full">
-
-
-      <Suspense fallback={<div className="space-y-1">
-        {Array.from({ length: 9 }, (_, i) => (
-          <div key={i} className="animate-pulse h-20 bg-gray-100 rounded-lg" />
-        ))}
-      </div>}>
-        <div className="space-y-1">
-          {/* Basic Info */}
-          <BasicInfoSection
-            isOpen={openSection === 'basic'}
-            onToggle={() => handleToggle('basic')}
-          />
-
-          {/* Theme Settings */}
-          <ThemeSection
-            isOpen={openSection === 'theme'}
-            onToggle={() => handleToggle('theme')}
-          />
-
-          {/* Main Screen */}
-          <MainScreenSection
-            isOpen={openSection === 'mainScreen'}
-            onToggle={() => handleToggle('mainScreen')}
-          />
-
-
-
-          {/* Greeting */}
-          <GreetingSection
-            isOpen={openSection === 'message'}
-            onToggle={() => handleToggle('message')}
-          />
-
-
-
-          {/* Date & Time */}
-          <DateTimeSection
-            isOpen={openSection === 'date'}
-            onToggle={() => handleToggle('date')}
-          />
-
-          {/* Location */}
-          <LocationSection
-            isOpen={openSection === 'location'}
-            onToggle={() => handleToggle('location')}
-          />
-
-          {/* Gallery */}
-          <GallerySection
-            isOpen={openSection === 'gallery'}
-            onToggle={() => handleToggle('gallery')}
-          />
-
-          {/* Accounts */}
-          <AccountsSection
-            isOpen={openSection === 'account'}
-            onToggle={() => handleToggle('account')}
-          />
-
-          {/* Closing Section */}
-          <ClosingSection
-            isOpen={openSection === 'closing'}
-            onToggle={() => handleToggle('closing')}
-          />
-
-          {/* Kakao Share Thumbnail */}
-          <KakaoShareSection
-            isOpen={openSection === 'kakao'}
-            onToggle={() => handleToggle('kakao')}
-          />
-        </div>
-      </Suspense>
+    <div className={clsx(styles.container, isReady && styles.ready)}>
+      {SECTIONS.map(({ key, Component }) => (
+        <Component
+          key={key}
+          isOpen={openSection === key}
+          onToggle={() => handleToggle(key)}
+        />
+      ))}
     </div>
   );
 });

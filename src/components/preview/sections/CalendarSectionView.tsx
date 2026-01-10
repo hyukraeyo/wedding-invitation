@@ -4,6 +4,7 @@ import React, { memo, useMemo } from 'react';
 import SectionContainer from '../SectionContainer';
 import styles from './CalendarSectionView.module.scss';
 import { clsx } from 'clsx';
+import SectionHeader from '../SectionHeader';
 
 interface CalendarSectionViewProps {
     id?: string | undefined;
@@ -133,11 +134,11 @@ const CalendarSectionView = memo(({
 
     return (
         <SectionContainer id={id}>
-            <div className={styles.header}>
-                <span className={styles.subtitle} style={{ color: accentColor }}>DATE</span>
-                <h2 className={styles.title}>우리가 결혼하는 날</h2>
-                <div className={styles.decorationLine} style={{ backgroundColor: accentColor }} />
-            </div>
+            <SectionHeader
+                title="우리가 결혼하는 날"
+                subtitle="DATE"
+                accentColor={accentColor}
+            />
 
             <div className={styles.calendarContainer}>
                 <div className={styles.calendarHeader}>

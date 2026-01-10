@@ -1,106 +1,101 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useSyncExternalStore } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { X } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import styles from './LoginModal.module.scss';
-import { BuilderInput } from '../builder/BuilderInput';
-import { createPortal } from 'react-dom';
+import styles from '@/components/auth/LoginModal.module.scss';
+import { BuilderInput } from '@/components/builder/BuilderInput';
 
-interface LoginModalProps {
-    isOpen: boolean;
-    onClose: () => void;
-}
-
-const TEST_ACCOUNTS: Record<string, string> = {
-    'admin': 'admin@test.com',
-    'amin': 'admin@test.com',
-    'test_1': 'test_1@test.com',
-};
-
-// SSR-safe check for client-side mounting
-const subscribe = () => () => { };
-const getSnapshot = () => true;
-const getServerSnapshot = () => false;
-
-export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
+/**
+ * LoginPage: 직접 /login 경로로 접근 시 렌더링되는 전체 페이지 버전
+ * 모달과 동일한 UI를 사용하되, 페이지 형태로 중앙에 표시
+ */
+export default function LoginPage() {
+    const router = useRouter();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
 
-    // useSyncExternalStore for SSR-safe mounting check (no lint warnings)
-    const isMounted = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-
-    useEffect(() => {
-        document.body.style.overflow = isOpen ? 'hidden' : 'unset';
-        return () => { document.body.style.overflow = 'unset'; };
-    }, [isOpen]);
-
-    const handleOAuthLogin = useCallback(async (provider: 'kakao' | 'naver') => {
+    const handleKakaoLogin = async () => {
         setLoading(true);
         const { error } = await supabase.auth.signInWithOAuth({
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            provider: provider as any,
-            options: { redirectTo: `${window.location.origin}/builder` }
+            provider: 'kakao',
+            options: {
+                redirectTo: `${window.location.origin}/builder`
+            }
         });
         if (error) {
             alert(error.message);
             setLoading(false);
         }
-    }, []);
+    };
 
-    const handleSubmit = useCallback(async (e: React.FormEvent) => {
+    const handleNaverLogin = async () => {
+        setLoading(true);
+        const { error } = await supabase.auth.signInWithOAuth({
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            provider: 'naver' as any,
+            options: {
+                redirectTo: `${window.location.origin}/builder`,
+            }
+        });
+        if (error) {
+            alert(error.message);
+            setLoading(false);
+        }
+    };
+
+    const handleAdminLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
 
-        const loginEmail = TEST_ACCOUNTS[email] || email;
-        const isTestAccount = email in TEST_ACCOUNTS;
+        let loginEmail = email;
+        const isTestAccount = email === 'amin' || email === 'admin' || email === 'test_1';
+
+        if (email === 'amin' || email === 'admin') {
+            loginEmail = 'admin@test.com';
+        } else if (email === 'test_1') {
+            loginEmail = 'test_1@test.com';
+        }
 
         const { error } = await supabase.auth.signInWithPassword({
             email: loginEmail,
-            password
+            password: password
         });
 
         if (error) {
             if (error.status === 400 && isTestAccount) {
                 const { error: signUpError } = await supabase.auth.signUp({
                     email: loginEmail,
-                    password
+                    password: password
                 });
-                alert(signUpError?.message || '테스트 계정이 생성되었습니다. 다시 로그인해주세요.');
+                if (signUpError) alert(signUpError.message);
+                else alert('테스트 계정이 생성되었습니다. 다시 로그인해주세요.');
             } else {
                 alert('로그인 정보가 올바르지 않습니다.');
             }
         } else {
-            onClose();
+            router.push('/builder');
         }
         setLoading(false);
-    }, [email, password, onClose]);
+    };
 
-    if (!isOpen || !isMounted) return null;
-
-    return createPortal(
-        <div
-            className={styles.overlay}
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="login-title"
-            onClick={(e) => e.target === e.currentTarget && onClose()}
-        >
+    return (
+        <div className={styles.overlay}>
             <div className={styles.modal}>
-                <button onClick={onClose} className={styles.closeButton} aria-label="닫기">
-                    <X size={20} />
-                </button>
-
+                {/* Header */}
                 <div className={styles.header}>
-                    <h2 id="login-title" className={styles.title}>시작하기</h2>
+                    <h1 className={styles.title}>
+                        시작하기
+                    </h1>
                     <p className={styles.subtitle}>
                         나만의 특별한 모바일 청첩장을<br />쉽고 빠르게 만들어보세요.
                     </p>
                 </div>
 
-                <form onSubmit={handleSubmit} className={styles.form}>
+                {/* Login Form */}
+                <form onSubmit={handleAdminLogin} className={styles.form}>
                     <BuilderInput
                         type="text"
                         placeholder="아이디"
@@ -119,7 +114,11 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                         autoComplete="current-password"
                         required
                     />
-                    <button type="submit" disabled={loading} className={styles.submitButton}>
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className={styles.submitButton}
+                    >
                         {loading ? '처리 중...' : '로그인'}
                     </button>
                 </form>
@@ -131,19 +130,22 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 <div className={styles.socialButtons}>
                     <button
                         className={`${styles.socialButton} ${styles.kakao}`}
-                        onClick={() => handleOAuthLogin('kakao')}
+                        onClick={handleKakaoLogin}
                         disabled={loading}
                         type="button"
                     >
                         <svg viewBox="0 0 24 24" className={styles.icon}>
-                            <path fill="currentColor" d="M12 3C6.477 3 2 6.916 2 11.75c0 3.06 1.77 5.794 4.545 7.425-.194.72-1.246 4.384-1.277 4.55-.045.244.09.239.376.157.172-.05 3.903-2.583 4.512-3.048.601.087 1.222.132 1.844.132 5.523 0 10-3.916 10-8.75S17.523 3 12 3z" />
+                            <path
+                                fill="currentColor"
+                                d="M12 3C6.477 3 2 6.916 2 11.75c0 3.06 1.77 5.794 4.545 7.425-.194.72-1.246 4.384-1.277 4.55-.045.244.09.239.376.157.172-.05 3.903-2.583 4.512-3.048.601.087 1.222.132 1.844.132 5.523 0 10-3.916 10-8.75S17.523 3 12 3z"
+                            />
                         </svg>
                         <span>카카오로 3초 만에 시작하기</span>
                     </button>
 
                     <button
                         className={`${styles.socialButton} ${styles.naver}`}
-                        onClick={() => handleOAuthLogin('naver')}
+                        onClick={handleNaverLogin}
                         disabled={loading}
                         type="button"
                     >
@@ -154,15 +156,32 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                     </button>
                 </div>
 
+                {/* Footer */}
                 <div className={styles.footer}>
                     <p>
                         계속 진행함으로써 귀하는 당사의
-                        <Link href="/privacy" target="_blank" className={styles.link}>개인정보 처리방침</Link>
+                        <Link href="/privacy" target="_blank" className={styles.link}>
+                            개인정보 처리방침
+                        </Link>
                         및<br />이용약관에 동의하게 됩니다.
                     </p>
                 </div>
+
+                {/* Back to Home */}
+                <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+                    <Link
+                        href="/"
+                        style={{
+                            fontSize: '0.875rem',
+                            color: '#6b7280',
+                            textDecoration: 'underline',
+                            textUnderlineOffset: '2px'
+                        }}
+                    >
+                        ← 홈으로 돌아가기
+                    </Link>
+                </div>
             </div>
-        </div>,
-        document.body
+        </div>
     );
 }
