@@ -51,7 +51,6 @@ interface InvitationState {
     imageUrl: string | null;
     greetingImage: string | null;
     showNamesAtBottom: boolean;
-    sortNames: boolean;
     enableFreeformNames: boolean;
     groomNameCustom: string; // Freeform text for groom side
     brideNameCustom: string; // Freeform text for bride side
@@ -104,6 +103,11 @@ interface InvitationState {
     gallery: { id: string; url: string }[];
 
     // Account State
+    accountsTitle: string;
+    accountsDescription: string;
+    accountsGroomTitle: string;
+    accountsBrideTitle: string;
+    accountsColorMode: 'accent' | 'subtle' | 'white';
     accounts: {
         id: string;
         type: 'groom' | 'bride';
@@ -142,7 +146,6 @@ interface InvitationState {
     setGreetingTitle: (title: string) => void;
     setGreetingSubtitle: (subtitle: string) => void;
     setShowNamesAtBottom: (show: boolean) => void;
-    setSortNames: (sort: boolean) => void;
     setEnableFreeformNames: (enable: boolean) => void;
     setGroomNameCustom: (name: string) => void;
     setBrideNameCustom: (name: string) => void;
@@ -157,6 +160,11 @@ interface InvitationState {
     setGalleryPreview: (preview: boolean) => void;
     setGalleryFade: (fade: boolean) => void;
     setGalleryAutoplay: (autoplay: boolean) => void;
+    setAccountsTitle: (title: string) => void;
+    setAccountsDescription: (description: string) => void;
+    setAccountsGroomTitle: (title: string) => void;
+    setAccountsBrideTitle: (title: string) => void;
+    setAccountsColorMode: (mode: 'accent' | 'subtle' | 'white') => void;
     setAccounts: (accounts: InvitationState['accounts']) => void;
     setMainScreen: (data: Partial<InvitationState['mainScreen']>) => void;
     setShowCalendar: (show: boolean) => void;
@@ -258,7 +266,6 @@ const INITIAL_STATE = {
     greetingTitle: '',
     greetingSubtitle: '',
     showNamesAtBottom: true,
-    sortNames: true,
     enableFreeformNames: false,
     groomNameCustom: '',
     brideNameCustom: '',
@@ -307,6 +314,11 @@ const INITIAL_STATE = {
     galleryPreview: false,
     galleryFade: false,
     galleryAutoplay: true,
+    accountsTitle: '축하의 마음 전하실 곳',
+    accountsDescription: '축하의 마음을 담아 축의금을 전달하고자 하시는 분들을 위해\n계좌번호를 안내해 드립니다.',
+    accountsGroomTitle: '신랑 측 마음 전하실 곳',
+    accountsBrideTitle: '신부 측 마음 전하실 곳',
+    accountsColorMode: 'subtle' as const,
     accounts: [],
     slug: '',
     editingSection: null,
@@ -366,7 +378,6 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
     setGreetingTitle: (title) => set({ greetingTitle: title }),
     setGreetingSubtitle: (subtitle) => set({ greetingSubtitle: subtitle }),
     setShowNamesAtBottom: (show) => set({ showNamesAtBottom: show }),
-    setSortNames: (sort) => set({ sortNames: sort }),
     setEnableFreeformNames: (enable) => set({ enableFreeformNames: enable }),
     setGroomNameCustom: (name) => set({ groomNameCustom: name }),
     setBrideNameCustom: (name) => set({ brideNameCustom: name }),
@@ -381,6 +392,11 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
     setGalleryPreview: (preview) => set({ galleryPreview: preview }),
     setGalleryFade: (fade) => set({ galleryFade: fade }),
     setGalleryAutoplay: (autoplay) => set({ galleryAutoplay: autoplay }),
+    setAccountsTitle: (title) => set({ accountsTitle: title }),
+    setAccountsDescription: (description) => set({ accountsDescription: description }),
+    setAccountsGroomTitle: (title) => set({ accountsGroomTitle: title }),
+    setAccountsBrideTitle: (title) => set({ accountsBrideTitle: title }),
+    setAccountsColorMode: (mode) => set({ accountsColorMode: mode }),
     setAccounts: (accounts) => set({ accounts }),
     setMainScreen: (data) => set((state) => ({ mainScreen: { ...state.mainScreen, ...data } })),
     setShowCalendar: (show) => set({ showCalendar: show }),
@@ -417,9 +433,6 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
         // Exclude large image data from persistence to prevent QuotaExceededError (localStorage limit 5MB)
         /* eslint-disable @typescript-eslint/no-unused-vars */
         const {
-            imageUrl: _imageUrl, // Exclude heavy images
-            greetingImage: _greetingImage,
-            sketchUrl: _sketchUrl,
             gallery: _gallery, // Exclude gallery from localStorage due to size
             kakaoShare,
             closing,
@@ -429,12 +442,9 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
 
         return {
             ...rest,
-            // Only persist text metadata for shares/closing, not the image data
+            // Keep excluding gallery and large share/closing images from localStorage
             kakaoShare: { ...kakaoShare, imageUrl: null },
             closing: { ...closing, imageUrl: null },
-            imageUrl: null,
-            greetingImage: null,
-            sketchUrl: null,
             gallery: [],
         };
     }

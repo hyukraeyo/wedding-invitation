@@ -6,6 +6,7 @@ import { Map as KakaoMap, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk
 import { NavermapsProvider, Container as NaverMapDiv, NaverMap, Marker as NaverMarker } from 'react-naver-maps';
 import { Copy } from 'lucide-react';
 import SectionContainer from '../SectionContainer';
+import SectionHeader from '../SectionHeader';
 import { NaverIcon, KakaoIcon } from '../../common/MapIcons';
 import styles from './LocationView.module.scss';
 
@@ -15,13 +16,13 @@ interface LocationViewProps {
     lat: number;
     lng: number;
     address: string;
-    detailAddress?: string;
+    detailAddress?: string | null | undefined;
     accentColor: string;
     mapZoom?: number;
     showMap?: boolean;
     showNavigation?: boolean;
     showSketch?: boolean;
-    sketchUrl?: string | null;
+    sketchUrl?: string | null | undefined;
     lockMap?: boolean;
     mapType?: 'naver' | 'kakao';
 }
@@ -54,7 +55,7 @@ const KakaoMapContainer = ({ lat, lng, mapZoom, lockMap }: { lat: number; lng: n
     );
 };
 
-const NaverMapContainer = ({ lat, lng, mapZoom }: { lat: number; lng: number; mapZoom: number }) => {
+const NaverMapContainer = ({ lat, lng, mapZoom, lockMap }: { lat: number; lng: number; mapZoom: number; lockMap: boolean }) => {
     return (
         <NavermapsProvider ncpKeyId={process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID || 'dh0fr7vx5q'}>
             <NaverMapDiv style={{ width: '100%', height: '100%' }}>
@@ -63,6 +64,13 @@ const NaverMapContainer = ({ lat, lng, mapZoom }: { lat: number; lng: number; ma
                     center={{ lat, lng }}
                     defaultZoom={15}
                     zoom={mapZoom ? mapZoom - 3 : 15}
+                    draggable={!lockMap}
+                    scrollWheel={!lockMap}
+                    pinchZoom={!lockMap}
+                    keyboardShortcuts={!lockMap}
+                    disableDoubleTapZoom={lockMap}
+                    disableDoubleClickZoom={lockMap}
+                    disableTwoFingerTapZoom={lockMap}
                 >
                     <NaverMarker position={{ lat, lng }} />
                 </NaverMap>
@@ -104,11 +112,11 @@ const LocationView = memo(({
 
     return (
         <SectionContainer id={id}>
-            <div className={styles.header}>
-                <span className={styles.subtitle} style={{ color: accentColor }}>LOCATION</span>
-                <h2 className={styles.title}>오시는 길</h2>
-                <div className={styles.decorationLine} style={{ backgroundColor: accentColor }} />
-            </div>
+            <SectionHeader
+                title="오시는 길"
+                subtitle="LOCATION"
+                accentColor={accentColor}
+            />
 
             <div className={styles.locationInfo}>
                 <div className={styles.placeName}>{location}</div>
@@ -121,7 +129,7 @@ const LocationView = memo(({
             {showMap && (
                 <div className={styles.mapContainer}>
                     {mapType === 'naver' ? (
-                        <NaverMapContainer lat={lat} lng={lng} mapZoom={mapZoom} />
+                        <NaverMapContainer lat={lat} lng={lng} mapZoom={mapZoom} lockMap={lockMap} />
                     ) : (
                         <KakaoMapContainer lat={lat} lng={lng} mapZoom={mapZoom} lockMap={lockMap} />
                     )}

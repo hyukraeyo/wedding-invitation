@@ -3,55 +3,44 @@
 
 .exampleButton {
     @include flex-center;
-    gap: 0.375rem;
-    padding: 0.375rem 0.75rem;
-    background-color: #fff9eb;
-    color: #a65e1a;
-    border-radius: 9999px;
-    border: 1px solid #ffe0a3;
-    transition: $transition-fast;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    gap: 0.35rem;
+    padding: 0.45rem 0.875rem;
+    background-color: white;
+    color: #495057;
+    border-radius: 0.75rem;
+    border: 1px solid #dee2e6;
+    transition: all $transition-fast;
     cursor: pointer;
     font-size: $builder-font-sm;
-    font-weight: 700;
+    font-weight: 500;
 
     &:hover {
-        background-color: #fff2d1;
+        background-color: #fbfbfc;
+        border-color: #adb5bd;
+        color: #212529;
+    }
+
+    &:active {
+        transform: scale(0.96);
     }
 }
 
 .sparkle {
-    transition: transform 0.2s;
+    transition: transform 0.3s $transition-bounce;
+    color: #fab005;
 
     .exampleButton:hover & {
-        transform: scale(1.1);
-    }
-}
-
-.infoText {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
-    font-size: $builder-font-xs;
-    color: $builder-text-muted;
-    padding-left: 0.25rem;
-    margin-top: 0.5rem;
-
-    span:first-child {
-        margin-top: 0.125rem;
-        opacity: 0.7;
+        transform: scale(1.15) rotate(15deg);
     }
 }
 
 .modalGrid {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.75rem;
     max-height: 60vh;
     overflow-y: auto;
-    padding-inline: 0.25rem;
-    padding-right: 0.5rem;
-    padding-top: 0.5rem;
+    padding: 0.5rem 0.25rem;
     @include scrollbar-hide;
 }
 
@@ -65,19 +54,19 @@
     width: 100%;
     text-align: left;
     padding: 1.25rem;
-    border-radius: $builder-radius-xl;
+    border-radius: $builder-radius-lg;
     border: 1px solid $builder-border-light;
-    background: rgba($builder-bg-subtle, 0.5);
-    transition: $transition-fast;
+    background: white;
+    transition: all $transition-fast;
     cursor: pointer;
 
     &:hover {
-        background: white;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05);
-        border-color: #fde68a;
+        background: #fbfbfc;
+        border-color: $builder-border-dark;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 
         .sampleTitle {
-            color: #d97706;
+            color: var(--accent-color, #212529);
         }
     }
 }
@@ -85,20 +74,23 @@
 .sampleSubtitle {
     font-family: $font-pretendard;
     color: $builder-text-muted;
-    opacity: 0.6;
-    font-size: $builder-font-sm;
+    font-size: 11px;
+    font-weight: 600;
     margin-bottom: 0.25rem;
+    letter-spacing: 0.05em;
 }
 
 .sampleTitle {
-    font-weight: 700;
+    font-size: 1rem;
+    font-weight: 600;
     color: $builder-text-heading;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.625rem;
     transition: color 0.2s;
 }
 
 .sampleMessage {
-    font-size: $builder-font-sm;
-    color: $builder-text-secondary;
-    line-height: 1.8;
+    font-size: 0.875rem;
+    color: $builder-text-default;
+    line-height: 1.7;
+    white-space: pre-wrap;
 }

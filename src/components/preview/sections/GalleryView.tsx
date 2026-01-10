@@ -14,6 +14,7 @@ import 'swiper/css/free-mode';
 import 'swiper/css/thumbs';
 import type { Swiper as SwiperClass } from 'swiper';
 import SectionContainer from '../SectionContainer';
+import SectionHeader from '../SectionHeader';
 import styles from './GalleryView.module.scss';
 import { clsx } from 'clsx';
 
@@ -247,11 +248,11 @@ const GalleryView = memo(({
 
     return (
         <SectionContainer id={id} fullWidth={galleryPreview && galleryType === 'swiper'} style={{ paddingInline: (galleryPreview && galleryType === 'swiper') ? '0' : undefined }}>
-            <div className={styles.header}>
-                <span className={styles.headerSubtitle} style={{ color: accentColor }}>GALLERY</span>
-                <h2 className={styles.galleryTitle}>{galleryTitle}</h2>
-                <div className={styles.titleLine} style={{ backgroundColor: accentColor }} />
-            </div>
+            <SectionHeader
+                title={galleryTitle}
+                subtitle="GALLERY"
+                accentColor={accentColor}
+            />
 
             {renderGallery()}
 

@@ -1,7 +1,9 @@
 'use client';
 
 import React, { memo } from 'react';
+import Image from 'next/image';
 import SectionContainer from '../SectionContainer';
+import SectionHeader from '../SectionHeader';
 import styles from './GreetingView.module.scss';
 
 interface Person {
@@ -17,8 +19,12 @@ interface Person {
 interface GreetingViewProps {
     id?: string | undefined;
     greetingTitle: string;
-    greetingSubtitle?: string;
+    greetingSubtitle?: string | null | undefined;
     greetingContent: string;
+    greetingImage?: string | null | undefined;
+    showNamesAtBottom: boolean;
+    enableFreeformNames: boolean;
+    freeformNames?: string | null | undefined;
     groom: Person;
     bride: Person;
     accentColor: string;
@@ -26,13 +32,16 @@ interface GreetingViewProps {
 
 /**
  * Presentational Component for the Greeting / Invitation message.
- * Follows the Container/Presentational pattern and utilizes CSS Modules.
  */
 const GreetingView = memo(({
     id,
     greetingTitle,
     greetingSubtitle = 'GREETING',
     greetingContent,
+    greetingImage,
+    showNamesAtBottom,
+    enableFreeformNames,
+    freeformNames,
     groom,
     bride,
     accentColor
@@ -69,11 +78,11 @@ const GreetingView = memo(({
 
     return (
         <SectionContainer id={id}>
-            <div className={styles.header}>
-                <span className={styles.subtitle} style={{ color: accentColor }}>{greetingSubtitle || 'GREETING'}</span>
-                <h2 className={styles.title}>{greetingTitle}</h2>
-                <div className={styles.decorationLine} style={{ backgroundColor: accentColor }} />
-            </div>
+            <SectionHeader
+                title={greetingTitle}
+                subtitle={greetingSubtitle || 'INVITATION'}
+                accentColor={accentColor}
+            />
 
             <div className={styles.content}>
                 <div
@@ -82,10 +91,29 @@ const GreetingView = memo(({
                     dangerouslySetInnerHTML={{ __html: greetingContent }}
                 />
 
-                <div className={styles.relationArea}>
-                    {renderFamilyRelation(groom, '신랑')}
-                    {renderFamilyRelation(bride, '신부')}
-                </div>
+                {greetingImage && (
+                    <div className={styles.imageContainer}>
+                        <Image
+                            src={greetingImage}
+                            alt="인사말 이미지"
+                            width={600}
+                            height={400}
+                            className={styles.image}
+                            unoptimized
+                        />
+                    </div>
+                )}
+
+                {enableFreeformNames ? (
+                    <div className={styles.freeformArea} dangerouslySetInnerHTML={{ __html: freeformNames || '' }} />
+                ) : (
+                    showNamesAtBottom && (
+                        <div className={styles.relationArea}>
+                            {renderFamilyRelation(groom, '신랑')}
+                            {renderFamilyRelation(bride, '신부')}
+                        </div>
+                    )
+                )}
             </div>
         </SectionContainer>
     );

@@ -29,13 +29,13 @@ interface MainScreenViewProps {
         expandPhoto: boolean;
         effect: 'none' | 'mist' | 'ripple' | 'paper';
     };
-    imageUrl: string | null;
+    imageUrl: string | null | undefined;
     groom: Person;
     bride: Person;
     date?: string;
     time?: string;
     location: string;
-    detailAddress?: string;
+    detailAddress?: string | null | undefined;
     accentColor: string;
 }
 

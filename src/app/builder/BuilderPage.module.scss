@@ -31,10 +31,19 @@
 
         .scrollArea {
             flex: 1;
-            overflow-y: auto; // Enable scrolling here
-            overflow-x: hidden; // Prevent horizontal scroll
+            overflow-y: scroll;
+            overflow-x: hidden;
             padding: 2.5rem 1.5rem 1.5rem;
             background-color: rgba(249, 250, 251, 0.5);
+
+            // Hide scrollbar completely (cross-platform)
+            // Width is still usable for scrolling, just invisible
+            -ms-overflow-style: none;  // IE and Edge
+            scrollbar-width: none;  // Firefox
+
+            &::-webkit-scrollbar {
+                display: none;  // Chrome, Safari, Opera
+            }
         }
     }
 

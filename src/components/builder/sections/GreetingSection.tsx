@@ -3,7 +3,6 @@ import { MessageSquare, Sparkles, Info } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderInput } from '../BuilderInput';
-import { BuilderToggle } from '../BuilderToggle';
 import { BuilderField } from '../BuilderField';
 import { BuilderModal } from '@/components/common/BuilderModal';
 import RichTextEditor from '@/components/common/RichTextEditor';
@@ -57,7 +56,6 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
         message, setMessage,
         greetingImage, setGreetingImage,
         showNamesAtBottom, setShowNamesAtBottom,
-        sortNames, setSortNames,
         enableFreeformNames, setEnableFreeformNames,
         groomNameCustom, setGroomNameCustom
     } = useInvitationStore();
@@ -125,30 +123,54 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                 {/* Name Options */}
                 <BuilderField label="성함 표기">
                     <Stack gap="md">
-                        <Row wrap>
-                            <BuilderToggle
-                                checked={showNamesAtBottom}
-                                onChange={setShowNamesAtBottom}
-                                label="성함 표시"
-                            />
-                            <BuilderToggle
-                                checked={sortNames}
-                                onChange={setSortNames}
-                                label="항목 정렬"
-                            />
-                            <BuilderToggle
-                                checked={enableFreeformNames}
-                                onChange={setEnableFreeformNames}
-                                label="성함 자유 입력"
-                            />
-                        </Row>
+                        <Stack gap="sm">
+                            <label className={commonStyles.radioLabel}>
+                                <input
+                                    type="radio"
+                                    name="greeting-name-type"
+                                    className={commonStyles.radio}
+                                    checked={!showNamesAtBottom && !enableFreeformNames}
+                                    onChange={() => {
+                                        setShowNamesAtBottom(false);
+                                        setEnableFreeformNames(false);
+                                    }}
+                                />
+                                <span className={commonStyles.text}>표시 안 함</span>
+                            </label>
+                            <label className={commonStyles.radioLabel}>
+                                <input
+                                    type="radio"
+                                    name="greeting-name-type"
+                                    className={commonStyles.radio}
+                                    checked={showNamesAtBottom}
+                                    onChange={() => {
+                                        setShowNamesAtBottom(true);
+                                        setEnableFreeformNames(false);
+                                    }}
+                                />
+                                <span className={commonStyles.text}>인사말 하단에 신랑신부&혼주 성함 표시</span>
+                            </label>
+                            <label className={commonStyles.radioLabel}>
+                                <input
+                                    type="radio"
+                                    name="greeting-name-type"
+                                    className={commonStyles.radio}
+                                    checked={enableFreeformNames}
+                                    onChange={() => {
+                                        setShowNamesAtBottom(false);
+                                        setEnableFreeformNames(true);
+                                    }}
+                                />
+                                <span className={commonStyles.text}>성함 자유 입력</span>
+                            </label>
+                        </Stack>
 
                         {enableFreeformNames && (
                             <Stack gap="sm">
                                 <RichTextEditor
                                     content={groomNameCustom}
                                     onChange={setGroomNameCustom}
-                                    placeholder="인사말 하단 성함부분을 자유롭게 입력할 수 있습니다."
+                                    placeholder="신랑측 혼주 성함 신랑 이름&#10;신부측 혼주 성함 신부 이름"
                                 />
                                 <div className={commonStyles.notice}>
                                     <Info size={14} className={commonStyles.icon} />

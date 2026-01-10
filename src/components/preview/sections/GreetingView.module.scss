@@ -1,34 +1,5 @@
 @use "@/styles/variables" as *;
 
-.header {
-    text-align: center;
-    margin-bottom: 2.5rem;
-
-    .subtitle {
-        font-size: 0.625rem;
-        letter-spacing: 0.3em;
-        font-weight: 500;
-        opacity: 0.4;
-        text-transform: uppercase;
-    }
-
-    .title {
-        font-size: 1.25rem;
-        font-family: $font-serif;
-        color: #1f2937;
-        margin-top: 0.5rem;
-        font-weight: 500;
-    }
-
-    .decorationLine {
-        width: 1.5rem;
-        height: 1px;
-        margin-inline: auto;
-        margin-top: 1rem;
-        opacity: 0.2;
-    }
-}
-
 .content {
     @include flex-col;
     align-items: center;
@@ -37,27 +8,58 @@
     .greetingText {
         text-align: center;
         line-height: 2.2;
-        color: #4b5563;
+        color: #495057;
         width: 100%;
         word-break: keep-all;
+        margin-bottom: 2.5rem;
+        font-family: var(--font-pretendard);
+        font-weight: 400;
 
         p {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
             &:last-child {
                 margin-bottom: 0;
             }
         }
     }
+
+    .imageContainer {
+        width: 100%;
+        margin-bottom: 3rem;
+        border-radius: 1.5rem;
+        overflow: hidden;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+        background-color: #f8f9fa;
+        aspect-ratio: 16 / 11;
+        position: relative;
+        border: 1px solid #f1f3f5;
+
+        .image {
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            transition: transform 1.2s cubic-bezier(0.2, 0, 0.2, 1);
+        }
+        
+        &:hover .image {
+            transform: scale(1.05);
+        }
+    }
 }
 
 .relationArea {
-    margin-top: 3rem;
-    padding-top: 2rem;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    margin-top: 4.5rem;
+    padding-top: 3rem;
+    border-top: 1px solid #f1f3f5;
     width: 100%;
     @include flex-col;
     align-items: center;
     gap: 1.5rem;
+
+    &.sorted {
+        gap: 1rem;
+    }
 
     .familyGroup {
         display: flex;
@@ -65,43 +67,66 @@
         justify-content: center;
         gap: 0.75rem;
         width: 100%;
-
+        max-width: 420px;
+        margin-inline: auto;
+        font-family: var(--font-gowun-batang), serif;
 
         .parentsNames {
-            font-size: 1.0625rem;
-            color: #374151;
+            font-size: 1.05rem;
+            color: #343a40;
             font-weight: 500;
-            letter-spacing: -0.025em;
+            letter-spacing: -0.01em;
 
             .deceased {
-                font-size: 0.625rem;
+                font-size: 0.8rem;
                 opacity: 0.4;
                 margin-right: 0.25rem;
+                font-weight: 400;
+                vertical-align: middle;
             }
 
             .dotSeparator {
-                margin-inline: 0.375rem;
-                opacity: 0.2;
+                margin-inline: 0.5rem;
+                opacity: 0.1;
+                font-weight: 300;
             }
         }
 
         .relationSeparator {
             width: 1px;
-            height: 0.75rem;
-            background-color: #e5e7eb;
+            height: 1rem;
+            background-color: #e9ecef;
+            margin-inline: 0.25rem;
         }
 
         .relationLabel {
-            font-size: 0.875rem;
-            color: #6b7280;
+            font-size: 0.85rem;
+            color: #868e96;
             font-weight: 400;
         }
 
         .childName {
-            font-size: 1.0625rem;
-            color: #1f2937;
+            font-size: 1.1rem;
+            color: #212529;
             font-weight: 600;
-            letter-spacing: -0.025em;
+            letter-spacing: 0.01em;
         }
+    }
+}
+
+.freeformArea {
+    margin-top: 3rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid #f1f3f5;
+    width: 100%;
+    text-align: center;
+    font-size: 1.05rem;
+    line-height: 2.2;
+    color: #343a40;
+    word-break: keep-all;
+    font-family: var(--font-gowun-batang), serif;
+
+    p {
+        margin-bottom: 0.5rem;
     }
 }

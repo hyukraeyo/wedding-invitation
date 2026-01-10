@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CreditCard, Plus, Trash2 } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
+import { SubAccordion } from '../SubAccordion';
 import { BuilderInput } from '../BuilderInput';
+import RichTextEditor from '@/components/common/RichTextEditor';
 import { BuilderButtonGroup } from '../BuilderButtonGroup';
 import { BuilderButton } from '../BuilderButton';
 import { BuilderField } from '../BuilderField';
@@ -17,8 +19,15 @@ interface SectionProps {
 export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
     const {
         accounts, setAccounts,
+        accountsTitle, setAccountsTitle,
+        accountsDescription, setAccountsDescription,
+        accountsGroomTitle, setAccountsGroomTitle,
+        accountsBrideTitle, setAccountsBrideTitle,
+        accountsColorMode, setAccountsColorMode,
         groom, bride
     } = useInvitationStore();
+
+    const [isConfigOpen, setIsConfigOpen] = useState(false);
 
     const addAccount = (type: 'groom' | 'bride') => {
         const id = `${type}-${Date.now()}`;
@@ -46,6 +55,59 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
             isCompleted={accounts.length > 0 && accounts.every(a => a.bank && a.accountNumber)}
         >
             <Section>
+                <Stack gap="md">
+                    <SubAccordion
+                        label="섹션 문구 및 스타일 설정"
+                        isOpen={isConfigOpen}
+                        onClick={() => setIsConfigOpen(!isConfigOpen)}
+                    >
+                        <BuilderField label="메인 타이틀">
+                            <BuilderInput
+                                value={accountsTitle}
+                                onChange={(e) => setAccountsTitle(e.target.value)}
+                                placeholder="축하의 마음 전하실 곳"
+                            />
+                        </BuilderField>
+
+                        <BuilderField label="안내 문구">
+                            <RichTextEditor
+                                content={accountsDescription}
+                                onChange={setAccountsDescription}
+                                placeholder="축하의 마음을 담아..."
+                            />
+                        </BuilderField>
+
+                        <BuilderField label="신랑측 그룹 타이틀">
+                            <BuilderInput
+                                value={accountsGroomTitle}
+                                onChange={(e) => setAccountsGroomTitle(e.target.value)}
+                                placeholder="신랑 측 마음 전하실 곳"
+                            />
+                        </BuilderField>
+                        <BuilderField label="신부측 그룹 타이틀">
+                            <BuilderInput
+                                value={accountsBrideTitle}
+                                onChange={(e) => setAccountsBrideTitle(e.target.value)}
+                                placeholder="신부 측 마음 전하실 곳"
+                            />
+                        </BuilderField>
+
+                        <BuilderField label="계좌 아코디언 색상">
+                            <BuilderButtonGroup
+                                value={accountsColorMode}
+                                onChange={(val) => setAccountsColorMode(val as 'accent' | 'subtle' | 'white')}
+                                options={[
+                                    { label: '테마색', value: 'accent' },
+                                    { label: '연한 회색', value: 'subtle' },
+                                    { label: '흰색', value: 'white' }
+                                ]}
+                            />
+                        </BuilderField>
+                    </SubAccordion>
+                </Stack>
+
+                <Divider />
+
                 {/* Groom Side */}
                 <Stack gap="md">
                     <Row align="between">

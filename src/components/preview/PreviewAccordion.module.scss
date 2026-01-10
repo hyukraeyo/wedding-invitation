@@ -1,0 +1,85 @@
+@use "@/styles/variables" as *;
+
+.groupContainer {
+    width: 100%;
+    border-radius: 1.25rem;
+    margin-bottom: 1rem;
+    transition: all $transition-normal;
+    overflow: hidden;
+
+    &.subtle {
+        background-color: #f8f9fa;
+        border: 1px solid #f1f3f5;
+        
+        .groupTitle { 
+            color: #212529; 
+            font-weight: 600;
+        }
+        
+        .icon { 
+            color: #adb5bd; 
+        }
+
+        &:hover {
+            background-color: #f1f3f5;
+            border-color: #e9ecef;
+        }
+    }
+
+    &.accent {
+        background-color: var(--accent-bg);
+        .groupTitle { color: var(--accent-text); }
+        .icon { color: var(--accent-text); }
+    }
+
+    &.white {
+        background-color: #ffffff;
+        border: 1px solid #e9ecef;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        
+        .groupTitle { color: #212529; }
+        .icon { color: #adb5bd; }
+    }
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    .groupHeader {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.25rem 1.5rem;
+        cursor: pointer;
+        background: none;
+        border: none;
+        outline: none;
+        text-align: left;
+
+        .groupTitle {
+            font-size: 0.95rem;
+            font-family: var(--font-pretendard);
+            letter-spacing: -0.01em;
+        }
+
+        .icon {
+            transition: transform $transition-normal;
+        }
+    }
+
+    .groupContent {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+        opacity: 0;
+        
+        &.open {
+            opacity: 1;
+        }
+    }
+
+    .innerContent {
+        padding: 0 1.25rem 1.5rem 1.25rem;
+    }
+}

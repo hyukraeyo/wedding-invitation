@@ -32,8 +32,17 @@ const InvitationCanvas = memo(() => {
     address,
     detailAddress,
     greetingTitle,
+    greetingImage,
     message,
+    showNamesAtBottom,
+    enableFreeformNames,
+    groomNameCustom,
     accounts,
+    accountsTitle,
+    accountsDescription,
+    accountsGroomTitle,
+    accountsBrideTitle,
+    accountsColorMode,
     closing,
     gallery,
     galleryTitle,
@@ -139,7 +148,7 @@ const InvitationCanvas = memo(() => {
         <ScrollReveal id="section-mainScreen">
           <MainScreenView
             mainScreen={mainScreen}
-            imageUrl={imageUrl}
+            imageUrl={imageUrl || undefined}
             groom={groom}
             bride={bride}
             date={date}
@@ -156,6 +165,10 @@ const InvitationCanvas = memo(() => {
           greetingTitle={greetingTitle}
           greetingSubtitle={greetingSubtitle}
           greetingContent={message}
+          greetingImage={greetingImage || undefined}
+          showNamesAtBottom={showNamesAtBottom}
+          enableFreeformNames={enableFreeformNames}
+          freeformNames={groomNameCustom || ''}
           groom={groom}
           bride={bride}
           accentColor={theme.accentColor}
@@ -185,7 +198,7 @@ const InvitationCanvas = memo(() => {
           showMap={showMap}
           showNavigation={showNavigation}
           showSketch={showSketch}
-          sketchUrl={sketchUrl}
+          sketchUrl={sketchUrl || undefined}
           lockMap={lockMap}
           mapType={mapType}
         />
@@ -207,6 +220,11 @@ const InvitationCanvas = memo(() => {
         <AccountsView
           id="section-account"
           accounts={accounts}
+          title={accountsTitle}
+          description={accountsDescription}
+          groomTitle={accountsGroomTitle}
+          brideTitle={accountsBrideTitle}
+          colorMode={accountsColorMode as 'accent' | 'subtle' | 'white'}
           accentColor={theme.accentColor}
         />
 

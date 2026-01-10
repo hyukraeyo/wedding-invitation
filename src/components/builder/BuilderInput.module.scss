@@ -1,41 +1,6 @@
 @use "@/styles/variables" as *;
+@use "@/styles/builder" as builder;
 
 .input {
-    width: 100%;
-    padding: 0.75rem 0.875rem;
-    background-color: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 0.75rem;
-    font-size: 0.875rem; // 14px
-    color: #1f2937; // text-gray-800
-    outline: none;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    
-    // Minimal aesthetic changes
-    &::placeholder {
-        color: #9ca3af;
-        transition: color 0.2s;
-    }
-
-    &:hover:not(:disabled) {
-        border-color: #d1d5db;
-        background-color: #f9fafb;
-    }
-    
-    &:focus {
-        border-color: var(--accent-color, #111827);
-        background-color: white;
-        box-shadow: 0 0 0 1px var(--accent-color, #111827), 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        
-        &::placeholder {
-            color: #d1d5db;
-        }
-    }
-
-    &:disabled {
-        background-color: #f3f4f6;
-        color: #9ca3af;
-        border-color: #e5e7eb;
-        cursor: not-allowed;
-    }
+    @include builder.builder-input-base;
 }

@@ -13,22 +13,22 @@ $builder-gap-lg: 1rem;     // 16px
 $builder-gap-xl: 1.25rem;  // 20px
 $builder-gap-2xl: 1.5rem;  // 24px
 
-$builder-radius-sm: 0.5rem;   // 8px
-$builder-radius-md: 0.75rem;  // 12px
-$builder-radius-lg: 1rem;     // 16px
-$builder-radius-xl: 1.5rem;   // 24px
+$builder-radius-sm: 0.6rem;   // 9.6px
+$builder-radius-md: 0.875rem;  // 14px
+$builder-radius-lg: 1.125rem;  // 18px
+$builder-radius-xl: 1.5rem;    // 24px
 
-// ----- Color Variables -----
-$builder-border-light: #f3f4f6;
-$builder-border-default: #e5e7eb;
-$builder-border-dark: #d1d5db;
-$builder-bg-subtle: #f9fafb;
-$builder-bg-hover: #f3f4f6;
-$builder-text-muted: #9ca3af;
-$builder-text-secondary: #6b7280;
-$builder-text-default: #4b5563;
-$builder-text-dark: #374151;
-$builder-text-heading: #111827;
+// ----- Color Variables (Refined Modern Minimal) -----
+$builder-border-light: #f1f3f5;
+$builder-border-default: #e9ecef;
+$builder-border-dark: #dee2e6;
+$builder-bg-subtle: #f8f9fa;
+$builder-bg-hover: #f1f3f5;
+$builder-text-muted: #adb5bd;
+$builder-text-secondary: #868e96;
+$builder-text-default: #495057;
+$builder-text-dark: #343a40;
+$builder-text-heading: #212529;
 
 // ----- Typography -----
 $builder-font-xs: 11px;
@@ -43,8 +43,8 @@ $builder-font-lg: 15px;
 @mixin builder-section {
   display: flex;
   flex-direction: column;
-  gap: $builder-gap-lg;
-  padding: $builder-gap-lg;
+  gap: $builder-gap-xl;
+  padding: $builder-gap-xl;
 }
 
 // Field group - 라벨+인풋 그룹
@@ -82,6 +82,7 @@ $builder-font-lg: 15px;
   border: 1px solid $builder-border-light;
   background: white;
   padding: $builder-gap-lg;
+  transition: all $transition-fast;
 }
 
 // Subtle divider
@@ -90,8 +91,8 @@ $builder-font-lg: 15px;
   background: linear-gradient(
     90deg,
     transparent 0%,
-    $builder-border-default 20%,
-    $builder-border-default 80%,
+    $builder-border-light 20%,
+    $builder-border-light 80%,
     transparent 100%
   );
   margin-block: $builder-gap-md;
@@ -99,12 +100,13 @@ $builder-font-lg: 15px;
 
 // Label style
 @mixin builder-label {
-  font-size: $builder-font-xs;
-  font-weight: 700;
-  color: $builder-text-muted;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
+  font-size: 0.725rem;
+  font-weight: 600;
+  color: $builder-text-secondary;
   display: block;
+  margin-bottom: $builder-gap-xs;
+  padding-left: 0.125rem;
+  letter-spacing: -0.01em;
 }
 
 // Sub-label (smaller, inline)
@@ -113,59 +115,74 @@ $builder-font-lg: 15px;
   font-weight: 500;
   color: $builder-text-secondary;
   flex-shrink: 0;
-  min-width: 3rem;
+  min-width: 3.5rem;
 }
 
-// Input base style
+// Input base style (Modern Minimal)
 @mixin builder-input-base {
   width: 100%;
-  padding: 0.625rem 0.875rem;
+  padding: 0.75rem 0.875rem;
   border: 1px solid $builder-border-default;
   border-radius: $builder-radius-md;
   font-size: $builder-font-md;
   font-weight: 400;
-  color: $builder-text-dark;
-  background: white;
+  color: $builder-text-heading;
+  background: transparent;
   outline: none;
-  transition: $transition-fast;
+  transition: all $transition-fast;
 
   &::placeholder {
     color: $builder-text-muted;
     font-weight: 400;
   }
 
-  &:hover {
+  &:hover:not(:disabled) {
     border-color: $builder-border-dark;
+    background-color: #fbfbfc;
   }
 
   &:focus {
-    border-color: var(--accent-color, #6b7280);
-    box-shadow: 0 0 0 3px rgba(var(--accent-rgb, 0, 0, 0), 0.08);
+    border-color: var(--accent-color, #adb5bd);
+    background-color: white;
+    box-shadow: 0 0 0 1px var(--accent-color, #adb5bd), 0 4px 12px rgba(0, 0, 0, 0.03);
+  }
+
+  &:disabled {
+    background-color: $builder-bg-subtle;
+    color: $builder-text-muted;
+    cursor: not-allowed;
+    border-color: $builder-border-light;
   }
 }
 
 // Button base style
 @mixin builder-button-base {
   @include flex-center;
-  padding: 0.625rem 1rem;
+  padding: 0.75rem 1rem;
   border-radius: $builder-radius-md;
   font-size: $builder-font-base;
-  font-weight: 600;
-  border: 1px solid $builder-border-light;
+  font-weight: 500;
+  border: 1px solid $builder-border-default;
   background: white;
-  color: $builder-text-secondary;
+  color: $builder-text-default;
   cursor: pointer;
-  transition: $transition-fast;
+  transition: all $transition-fast;
   user-select: none;
 
-  &:hover {
-    border-color: $builder-border-default;
-    background: $builder-bg-subtle;
+  &:hover:not(:disabled) {
+    border-color: $builder-border-dark;
+    background: #fbfbfc;
     color: $builder-text-heading;
   }
 
-  &:active {
-    transform: scale(0.98);
+  &:active:not(:disabled) {
+    transform: scale(0.97);
+    background: $builder-bg-hover;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 }
 
@@ -175,4 +192,5 @@ $builder-font-lg: 15px;
   background: white;
   border-color: var(--accent-color);
   box-shadow: 0 0 0 1px var(--accent-color) inset;
+  font-weight: 600;
 }
