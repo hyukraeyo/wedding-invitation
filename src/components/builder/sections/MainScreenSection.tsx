@@ -13,7 +13,7 @@ import { BuilderToggle } from '../BuilderToggle';
 import { BuilderField } from '../BuilderField';
 import RichTextEditor from '@/components/common/RichTextEditor';
 import { ImageUploader } from '../ImageUploader';
-import { SubAccordion } from '../SubAccordion';
+import { BuilderCollapse } from '../BuilderCollapse';
 import { Stack } from '../BuilderLayout';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -240,10 +240,10 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                 {/* Custom Text (Collapsible) */}
                 <div className={styles.customTextSection}>
 
-                    <SubAccordion
+                    <BuilderCollapse
                         label="문구 커스텀"
                         isOpen={isTextSectionOpen}
-                        onClick={() => setIsTextSectionOpen(!isTextSectionOpen)}
+                        onToggle={() => setIsTextSectionOpen(!isTextSectionOpen)}
                     >
                         {/* Example Phrases Button at Top */}
                         <div className={styles.phrasesHeader}>
@@ -347,7 +347,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                             <Info size={14} className={common.icon} />
                             <span>내용을 입력하지 않으면 프리뷰에 노출되지 않습니다.</span>
                         </div>
-                    </SubAccordion>
+                    </BuilderCollapse>
 
                     {/* Example Modal */}
                     <BuilderModal

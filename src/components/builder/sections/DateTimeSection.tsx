@@ -7,10 +7,10 @@ import { AccordionItem } from '../AccordionItem';
 import { BuilderSelect } from '../BuilderSelect';
 import { BuilderToggle } from '../BuilderToggle';
 import { BuilderField } from '../BuilderField';
-import { SubAccordion } from '../SubAccordion';
+import { BuilderCollapse } from '../BuilderCollapse';
 import { BuilderCalendar } from '../BuilderCalendar';
 import { BuilderTextField } from '../BuilderTextField';
-import { Section, Stack, Row, Divider, Card } from '../BuilderLayout';
+import { Section, Stack, Row, Divider } from '../BuilderLayout';
 import commonStyles from '../Builder.module.scss';
 import sectionStyles from './DateTimeSection.module.scss';
 
@@ -109,14 +109,12 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
                     <>
                         <Divider />
                         <Stack gap="md">
-                            <SubAccordion
+                            <BuilderCollapse
                                 label="디데이 문구 커스텀"
                                 isOpen={showDdayEditor}
-                                onClick={() => setShowDdayEditor(!showDdayEditor)}
-                            />
-
-                            {showDdayEditor && (
-                                <Card className={sectionStyles.ddayEditor}>
+                                onToggle={() => setShowDdayEditor(!showDdayEditor)}
+                            >
+                                <div className={sectionStyles.ddayEditor}>
                                     {(() => {
                                         const parts = ddayMessage.split('(D-Day)');
                                         const prefix = parts[0] || '';
@@ -171,8 +169,8 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
                                             </Stack>
                                         );
                                     })()}
-                                </Card>
-                            )}
+                                </div>
+                            </BuilderCollapse>
                         </Stack>
                     </>
                 )}

@@ -32,7 +32,7 @@
 
 .accountCard {
     background: $builder-bg-subtle;
-    border-color: $builder-border-light;
+    border-color: $builder-border-default;
 }
 
 .buttonGroupWrapper {
@@ -53,4 +53,93 @@
         color: #ef4444;
         background: #fef2f2;
     }
+}
+
+.exampleButton {
+    @include flex-center;
+    gap: 0.35rem;
+    padding: 0.45rem 0.875rem;
+    background-color: white;
+    color: #495057;
+    border-radius: 0.75rem;
+    border: 1px solid $builder-border-default;
+    transition: all $transition-fast;
+    cursor: pointer;
+    font-size: $builder-font-sm;
+    font-weight: 500;
+
+    &:hover {
+        background-color: #fbfbfc;
+        border-color: #adb5bd;
+        color: #212529;
+    }
+
+    &:active {
+        transform: scale(0.96);
+    }
+}
+
+.sparkle {
+    transition: transform 0.3s $transition-bounce;
+    color: #fab005;
+
+    .exampleButton:hover & {
+        transform: scale(1.15) rotate(15deg);
+    }
+}
+
+.modalGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 0.5rem 0.25rem;
+    @include scrollbar-hide;
+}
+
+.sampleCard {
+    padding: 0;
+    border: none;
+    background: transparent;
+}
+
+.sampleButton {
+    width: 100%;
+    text-align: left;
+    padding: 1.25rem;
+    border-radius: $builder-radius-lg;
+    border: 1px solid $builder-border-default;
+    background: white;
+    transition: all $transition-fast;
+    cursor: pointer;
+
+    &:hover {
+        background: #fbfbfc;
+        border-color: $builder-border-dark;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+
+        .sampleTitle {
+            color: var(--accent-color, #212529);
+        }
+    }
+}
+
+.sampleTitle {
+    font-size: 1rem;
+    font-weight: 600;
+    color: $builder-text-heading;
+    margin-bottom: 0.625rem;
+    transition: color 0.2s;
+}
+
+.sampleMessage {
+    font-size: 0.875rem;
+    color: $builder-text-default;
+    line-height: 1.7;
+    white-space: pre-wrap;
+}
+
+.noMarginLabel {
+    margin-bottom: 0 !important;
 }

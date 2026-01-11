@@ -1,42 +1,44 @@
 import React from 'react';
 import { ChevronDown } from 'lucide-react';
-import styles from './Builder.module.scss';
+import styles from './BuilderCollapse.module.scss';
 import { clsx } from 'clsx';
 import { useInvitationStore } from '@/store/useInvitationStore';
 
-interface SubAccordionProps {
+interface BuilderCollapseProps {
     label: string;
     isOpen: boolean;
-    onClick: () => void;
+    onToggle: () => void;
     showBadge?: boolean;
     badgeText?: string;
     children?: React.ReactNode;
+    className?: string;
 }
 
-export const SubAccordion: React.FC<SubAccordionProps> = ({
+export const BuilderCollapse: React.FC<BuilderCollapseProps> = ({
     label,
     isOpen,
-    onClick,
+    onToggle,
     showBadge = false,
     badgeText = "PREMIUM",
-    children
+    children,
+    className
 }) => {
     const accentColor = useInvitationStore(state => state.theme.accentColor);
 
     return (
-        <div className={styles.subAccordionContainer}>
+        <div className={clsx(styles.container, className)}>
             <button
-                onClick={onClick}
+                onClick={onToggle}
                 type="button"
-                className={clsx(styles.subAccordion, isOpen && styles.open)}
+                className={clsx(styles.trigger, isOpen && styles.open)}
                 style={{
                     '--accent-color': accentColor
                 } as React.CSSProperties}
             >
-                <div className={styles.subHeader}>
-                    <span className={styles.subLabel}>{label}</span>
+                <div className={styles.headerContent}>
+                    <span className={styles.label}>{label}</span>
                     {showBadge && (
-                        <span className={styles.subBadge}>
+                        <span className={styles.badge}>
                             {badgeText}
                         </span>
                     )}
@@ -48,15 +50,13 @@ export const SubAccordion: React.FC<SubAccordionProps> = ({
                 />
             </button>
 
-            {children && (
-                <div className={clsx(styles.subAccordionCollapse, isOpen && styles.open)}>
-                    <div className={styles.subAccordionInner}>
-                        <div className={styles.subAccordionContent}>
-                            {children}
-                        </div>
+            <div className={clsx(styles.collapseWrapper, isOpen && styles.open)}>
+                <div className={styles.collapseInner}>
+                    <div className={styles.content}>
+                        {children}
                     </div>
                 </div>
-            )}
+            </div>
         </div>
     );
 };

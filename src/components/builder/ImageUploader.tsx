@@ -13,7 +13,7 @@ interface ImageUploaderProps {
     label?: string;
     placeholder?: string;
     className?: string;
-    aspectRatio?: '16/9' | '1/1' | '3/4' | '4/3';
+    aspectRatio?: '16/9' | '1/1' | '3/4' | '4/3' | '4/5';
     ratio?: 'fixed' | 'auto';
     onRatioChange?: (value: 'fixed' | 'auto') => void;
     uploadFolder?: string;

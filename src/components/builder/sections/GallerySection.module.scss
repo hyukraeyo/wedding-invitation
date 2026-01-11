@@ -49,7 +49,7 @@
     border-radius: builder.$builder-radius-md;
     overflow: hidden;
     background-color: builder.$builder-bg-subtle;
-    border: 1px solid builder.$builder-border-light;
+    border: 1px solid builder.$builder-border-default;
     transition: all 0.4s $transition-bounce;
     touch-action: none;
     

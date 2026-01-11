@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { CreditCard, Plus, Trash2 } from 'lucide-react';
+import { CreditCard, Plus, Trash2, Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
-import { SubAccordion } from '../SubAccordion';
+import { BuilderCollapse } from '../BuilderCollapse';
 import { BuilderInput } from '../BuilderInput';
 import RichTextEditor from '@/components/common/RichTextEditor';
 import { BuilderButtonGroup } from '../BuilderButtonGroup';
 import { BuilderButton } from '../BuilderButton';
 import { BuilderField } from '../BuilderField';
+import { BuilderLabel } from '../BuilderLabel';
+import { BuilderModal } from '@/components/common/BuilderModal';
 import { Section, Stack, Row, Divider, Grid, Card } from '../BuilderLayout';
 import styles from './AccountsSection.module.scss';
 
@@ -15,6 +17,25 @@ interface SectionProps {
     isOpen: boolean;
     onToggle: () => void;
 }
+
+const ACCOUNTS_SAMPLES = [
+    {
+        title: '정중한 마음',
+        message: '<p>참석이 어려우신 분들을 위해<br>계좌번호를 기재하였습니다.<br>너그러운 양해 부탁드립니다.</p>'
+    },
+    {
+        title: '감사의 마음',
+        message: '<p>축하의 마음을 담아 축의금을 전달하고자 하시는 분들을 위해 계좌번호를 안내해 드립니다.<br>넓은 마음으로 양해 부탁드립니다.</p>'
+    },
+    {
+        title: '따뜻한 마음',
+        message: '<p>화환은 정중히 사양합니다.<br>보내주시는 마음만 감사히 받겠습니다.<br>참석이 어려우신 분들을 위해 계좌번호를 안내해 드립니다.</p>'
+    },
+    {
+        title: '심플한 안내',
+        message: '<p>마음 전하실 곳을 안내해 드립니다.</p>'
+    }
+];
 
 export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
     const {
@@ -28,6 +49,7 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
     } = useInvitationStore();
 
     const [isConfigOpen, setIsConfigOpen] = useState(false);
+    const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
 
     const addAccount = (type: 'groom' | 'bride') => {
         const id = `${type}-${Date.now()}`;
@@ -56,10 +78,10 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
         >
             <Section>
                 <Stack gap="md">
-                    <SubAccordion
+                    <BuilderCollapse
                         label="섹션 문구 및 스타일 설정"
                         isOpen={isConfigOpen}
-                        onClick={() => setIsConfigOpen(!isConfigOpen)}
+                        onToggle={() => setIsConfigOpen(!isConfigOpen)}
                     >
                         <BuilderField label="메인 타이틀">
                             <BuilderInput
@@ -69,11 +91,28 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
                             />
                         </BuilderField>
 
-                        <BuilderField label="안내 문구">
+                        <BuilderField
+                            label={
+                                <Row align="between">
+                                    <BuilderLabel className={styles.noMarginLabel ?? ''}>안내 문구</BuilderLabel>
+                                    <button
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setIsSampleModalOpen(true);
+                                        }}
+                                        className={styles.exampleButton ?? ''}
+                                    >
+                                        <Sparkles size={14} className={styles.sparkle ?? ''} />
+                                        <span>예시 문구</span>
+                                    </button>
+                                </Row>
+                            }
+                        >
                             <RichTextEditor
                                 content={accountsDescription}
                                 onChange={setAccountsDescription}
                                 placeholder="축하의 마음을 담아..."
+                                minHeight="160px"
                             />
                         </BuilderField>
 
@@ -103,8 +142,38 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
                                 ]}
                             />
                         </BuilderField>
-                    </SubAccordion>
+                    </BuilderCollapse>
                 </Stack>
+
+                <BuilderModal
+                    isOpen={isSampleModalOpen}
+                    onClose={() => setIsSampleModalOpen(false)}
+                    title="추천 문구"
+                >
+                    <div className={styles.modalGrid ?? ''}>
+                        {ACCOUNTS_SAMPLES.map((sample, idx) => (
+                            <Card
+                                key={idx}
+                                hoverable
+                                className={styles.sampleCard ?? ''}
+                            >
+                                <button
+                                    onClick={() => {
+                                        setAccountsDescription(sample.message);
+                                        setIsSampleModalOpen(false);
+                                    }}
+                                    className={styles.sampleButton ?? ''}
+                                >
+                                    <div className={styles.sampleTitle ?? ''}>{sample.title}</div>
+                                    <div
+                                        className={styles.sampleMessage ?? ''}
+                                        dangerouslySetInnerHTML={{ __html: sample.message }}
+                                    />
+                                </button>
+                            </Card>
+                        ))}
+                    </div>
+                </BuilderModal>
 
                 <Divider />
 

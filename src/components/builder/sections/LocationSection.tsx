@@ -205,6 +205,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                             placeholder="약도 이미지 추가"
                             ratio={sketchRatio}
                             onRatioChange={(val) => setSketchRatio(val)}
+                            aspectRatio="4/3"
                         />
                     </Stack>
                 </BuilderField>
