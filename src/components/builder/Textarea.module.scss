@@ -1,9 +1,45 @@
 @use "@/styles/variables" as *;
 @use "@/styles/builder" as builder;
+@use "@/styles/tds_typography" as typography;
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+}
+
+.label {
+    @include typography.tds-t7("bold");
+    color: $tds-grey-700;
+    margin-left: 4px;
+
+    &.hasError {
+        color: $tds-red-500;
+    }
+}
 
 .textarea {
     @include builder.builder-input-base;
     min-height: 100px;
     resize: vertical;
     line-height: 1.6;
+
+    &.hasError {
+        border-color: $tds-red-500;
+        
+        &:focus {
+            box-shadow: 0 0 0 1px $tds-red-500;
+        }
+    }
+}
+
+.helpText {
+    @include typography.tds-sub-t12("regular");
+    color: $tds-grey-600;
+    margin-left: 4px;
+
+    &.error {
+        color: $tds-red-500;
+    }
 }

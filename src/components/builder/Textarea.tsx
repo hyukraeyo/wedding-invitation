@@ -1,23 +1,41 @@
+'use client';
+
 import React from 'react';
 import styles from './Textarea.module.scss';
 import { clsx } from 'clsx';
-import { useInvitationStore } from '@/store/useInvitationStore';
 
-type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
+interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
     label?: string;
-};
+    helpText?: string;
+    hasError?: boolean;
+    containerClassName?: string;
+}
 
-export const Textarea = (props: TextareaProps) => {
-    const accentColor = useInvitationStore(state => state.theme.accentColor);
+export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
+    ({ className, containerClassName, label, helpText, hasError, disabled, ...props }, ref) => {
+        return (
+            <div className={clsx(styles.container, containerClassName)}>
+                {label && (
+                    <label className={clsx(styles.label, hasError && styles.hasError)}>
+                        {label}
+                    </label>
+                )}
 
-    return (
-        <textarea
-            {...props}
-            className={clsx(styles.textarea, props.className)}
-            style={{
-                ...props.style,
-                '--focus-color': accentColor, // Assuming focus color logic similar to input
-            } as React.CSSProperties}
-        />
-    );
-};
+                <textarea
+                    ref={ref}
+                    disabled={disabled}
+                    className={clsx(styles.textarea, hasError && styles.hasError, className)}
+                    {...props}
+                />
+
+                {helpText && (
+                    <div className={clsx(styles.helpText, hasError && styles.error)}>
+                        {helpText}
+                    </div>
+                )}
+            </div>
+        );
+    }
+);
+
+Textarea.displayName = 'Textarea';

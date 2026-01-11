@@ -1,38 +1,28 @@
 'use client';
 
-import React from 'react';
+import { Switch as TDSSwitch } from '@toss/tds-mobile';
 import styles from './Switch.module.scss';
 import { clsx } from 'clsx';
 
-interface SwitchProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+interface SwitchProps {
     checked: boolean;
     onChange: (checked: boolean) => void;
     label?: string;
     className?: string; // Additional className for the container
+    disabled?: boolean;
 }
 
-export const Switch = ({ checked, onChange, label, className, disabled, ...props }: SwitchProps) => {
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (disabled) return;
-        onChange(e.target.checked);
-    };
-
+export const Switch = ({ checked, onChange, label, className, disabled }: SwitchProps) => {
     return (
         <label className={clsx(styles.switchLabel, className)}>
             <div className={styles.switchWrapper}>
-                <input
-                    type="checkbox"
-                    className={styles.input}
+                <TDSSwitch
                     checked={checked}
-                    onChange={handleChange}
+                    onChange={(_, isChecked) => onChange(isChecked)}
                     disabled={disabled}
-                    {...props}
                 />
-                <div className={styles.track}>
-                    <div className={styles.handle} />
-                </div>
             </div>
-            {label && <span style={{ marginLeft: '12px', fontSize: '15px', fontWeight: 500, color: '#333d4b' }}>{label}</span>}
+            {label && <span className={styles.labelText}>{label}</span>}
         </label>
     );
 };

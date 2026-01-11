@@ -1,9 +1,11 @@
+'use client';
+
 import React, { useCallback } from 'react';
 import styles from './Slider.module.scss';
 import { Minus, Plus } from 'lucide-react';
 import { Button } from './Button';
 
-interface BuilderSliderProps {
+interface SliderProps {
     value: number;
     onChange: (value: number) => void;
     min?: number;
@@ -11,6 +13,8 @@ interface BuilderSliderProps {
     step?: number;
     unit?: string;
     className?: string;
+    /** If true, show +/- step buttons */
+    showStepButtons?: boolean;
 }
 
 export const Slider = ({
@@ -19,11 +23,10 @@ export const Slider = ({
     min = 0,
     max = 100,
     step = 1,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    unit: _unit = '',
-    className = ''
-}: BuilderSliderProps) => {
-
+    unit = '',
+    className = '',
+    showStepButtons = true
+}: SliderProps) => {
     const handleStep = useCallback((direction: 'up' | 'down') => {
         const newValue = direction === 'up' ? value + step : value - step;
         if (newValue >= min && newValue <= max) {
@@ -45,26 +48,31 @@ export const Slider = ({
                 />
             </div>
 
-            <div className={styles.buttonGroup}>
-                <Button
-                    variant="outline"
-                    size="small"
-                    onClick={() => handleStep('down')}
-                    className={styles.iconButton}
-                    disabled={value <= min}
-                >
-                    <Minus size={14} />
-                </Button>
-                <Button
-                    variant="outline"
-                    size="small"
-                    onClick={() => handleStep('up')}
-                    className={styles.iconButton}
-                    disabled={value >= max}
-                >
-                    <Plus size={14} />
-                </Button>
-            </div>
+            {showStepButtons && (
+                <div className={styles.buttonGroup}>
+                    <Button
+                        variant="outline"
+                        size="small"
+                        onClick={() => handleStep('down')}
+                        className={styles.iconButton}
+                        disabled={value <= min}
+                    >
+                        <Minus size={14} />
+                    </Button>
+                    <span className={styles.valueDisplay}>
+                        {value}{unit}
+                    </span>
+                    <Button
+                        variant="outline"
+                        size="small"
+                        onClick={() => handleStep('up')}
+                        className={styles.iconButton}
+                        disabled={value >= max}
+                    >
+                        <Plus size={14} />
+                    </Button>
+                </div>
+            )}
         </div>
     );
 };

@@ -1,3 +1,5 @@
+'use client';
+
 import { SegmentedControl as BaseSegmentedControl, SegmentedControlItem } from '@/components/common/SegmentedControl';
 
 interface Option<T> {

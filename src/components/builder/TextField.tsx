@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import styles from './TextField.module.scss';
 import { clsx } from 'clsx';
-// import { useInvitationStore } from '@/store/useInvitationStore'; // Temporarily disabled to follow TDS blue explicitly
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string;
@@ -15,7 +14,6 @@ interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     ({ className, containerClassName, style, label, helpText, hasError, right, disabled, onFocus, onBlur, ...props }, ref) => {
-        // const accentColor = useInvitationStore(state => state.theme.accentColor);
         const [isFocused, setIsFocused] = useState(false);
 
         const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
@@ -52,11 +50,6 @@ export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
                         className={clsx(styles.input, className)}
                         onFocus={handleFocus}
                         onBlur={handleBlur}
-                        // style={{
-                        //     // Option: If we want to override TDS Blue with user theme color
-                        //     // '--focus-color': accentColor 
-                        //     ...style
-                        // } as React.CSSProperties}
                         style={style}
                         {...props}
                     />
