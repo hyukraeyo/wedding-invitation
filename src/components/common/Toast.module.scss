@@ -1,0 +1,101 @@
+@use "@/styles/variables" as *;
+
+.container {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 99999;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.75rem;
+    pointer-events: none;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1.25rem;
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 
+        0 10px 25px -5px rgba(0, 0, 0, 0.1),
+        0 8px 10px -6px rgba(0, 0, 0, 0.1),
+        0 0 0 1px rgba(0, 0, 0, 0.03);
+    pointer-events: auto;
+    cursor: pointer;
+    animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: all 0.2s ease;
+    backdrop-filter: blur(8px);
+    min-width: 200px;
+    max-width: 400px;
+
+    &:hover {
+        transform: scale(1.02);
+        box-shadow: 
+            0 20px 25px -5px rgba(0, 0, 0, 0.15),
+            0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+}
+
+.icon {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.message {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #1f2937;
+    line-height: 1.4;
+}
+
+// Type Variants
+.success {
+    .icon {
+        background-color: #dcfce7;
+        color: #16a34a;
+    }
+}
+
+.error {
+    .icon {
+        background-color: #fee2e2;
+        color: #dc2626;
+    }
+}
+
+.warning {
+    .icon {
+        background-color: #fef3c7;
+        color: #d97706;
+    }
+}
+
+.info {
+    .icon {
+        background-color: #dbeafe;
+        color: #2563eb;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(1rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

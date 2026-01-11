@@ -14,7 +14,7 @@
     scroll-margin-bottom: 2rem;
     
     &.open {
-        overflow: visible;
+        overflow: hidden;
         z-index: 10;
         box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.04);
         border-color: builder.$builder-border-dark;
@@ -154,6 +154,7 @@
     padding: 0 0.75rem 1.5rem;
     opacity: 0;
     transform: translateY(-8px);
+    overflow-x: hidden; // 수평 넘침 방지
     transition: 
         opacity 0.3s ease,
         transform 0.5s $transition-smooth;

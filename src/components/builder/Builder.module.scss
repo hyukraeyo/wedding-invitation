@@ -123,11 +123,17 @@
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+    max-width: 100%;
+    width: 100%;
 
     .groupButton {
         @include builder.builder-button-base;
-        flex: 1;
+        flex: 1 1 auto;
+        min-width: 0;
         gap: 0.35rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
 
         &.sm { padding: 0.5rem 0.75rem; font-size: 0.75rem; border-radius: builder.$builder-radius-sm; }
         &.md { padding: 0.75rem 1rem; font-size: 0.8125rem; }

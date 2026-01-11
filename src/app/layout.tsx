@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { Inter, Playfair_Display, Gowun_Batang, Gowun_Dodum, Nanum_Myeongjo, Yeon_Sung, Do_Hyeon, Song_Myung, Great_Vibes } from 'next/font/google';
+import ClientProviders from './ClientProviders';
 import "./globals.scss";
 
 // Next.js 15+ Font Optimization
@@ -164,8 +165,10 @@ export default function RootLayout({
             ])
           }}
         />
-        {children}
-        {modal}
+        <ClientProviders>
+          {children}
+          {modal}
+        </ClientProviders>
       </body>
     </html>
   );

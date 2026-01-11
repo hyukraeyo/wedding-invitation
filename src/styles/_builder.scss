@@ -193,4 +193,10 @@ $builder-font-lg: 15px;
   border-color: var(--accent-color);
   // box-shadow removed to reduce border thickness
   font-weight: 600;
+
+  &:hover:not(:disabled) {
+    background: rgba(var(--accent-rgb, 0, 0, 0), 0.04);
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+  }
 }

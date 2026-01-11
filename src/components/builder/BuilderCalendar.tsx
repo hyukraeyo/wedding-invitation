@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo, useLayoutEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import styles from './BuilderCalendar.module.scss';
 import { clsx } from 'clsx';
@@ -13,7 +14,10 @@ interface BuilderCalendarProps {
 
 export const BuilderCalendar = ({ value, onChange, className, placeholder = '날짜를 선택해주세요' }: BuilderCalendarProps) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [popupStyle, setPopupStyle] = useState<React.CSSProperties>({});
     const containerRef = useRef<HTMLDivElement>(null);
+    const triggerRef = useRef<HTMLButtonElement>(null);
+    const popupRef = useRef<HTMLDivElement>(null);
     const { theme: { accentColor } } = useInvitationStore();
 
     // Parse value or default to today
@@ -28,9 +32,27 @@ export const BuilderCalendar = ({ value, onChange, className, placeholder = '날
 
     const closeCalendar = useCallback(() => setIsOpen(false), []);
 
+    // 팝업 위치 계산
+    useLayoutEffect(() => {
+        if (isOpen && triggerRef.current) {
+            const rect = triggerRef.current.getBoundingClientRect();
+            setPopupStyle({
+                position: 'fixed',
+                top: rect.bottom + 8,
+                left: rect.left,
+                minWidth: Math.max(rect.width, 280),
+                zIndex: 9999,
+            });
+        }
+    }, [isOpen]);
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+            const target = event.target as Node;
+            const isInsideContainer = containerRef.current?.contains(target);
+            const isInsidePopup = popupRef.current?.contains(target);
+
+            if (!isInsideContainer && !isInsidePopup) {
                 closeCalendar();
             }
         };
@@ -39,12 +61,16 @@ export const BuilderCalendar = ({ value, onChange, className, placeholder = '날
             if (isOpen) closeCalendar();
         };
 
-        if (isOpen) {
-            document.addEventListener('mousedown', handleClickOutside);
+        if (!isOpen) return;
+
+        const timeoutId = setTimeout(() => {
+            document.addEventListener('click', handleClickOutside);
             window.addEventListener('scroll', handleScroll, true);
-        }
+        }, 0);
+
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            clearTimeout(timeoutId);
+            document.removeEventListener('click', handleClickOutside);
             window.removeEventListener('scroll', handleScroll, true);
         };
     }, [isOpen, closeCalendar]);
@@ -108,6 +134,11 @@ export const BuilderCalendar = ({ value, onChange, className, placeholder = '날
 
     const displayDate = value ? value.split('-').join('. ') + '.' : placeholder;
 
+    const handleTriggerClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setIsOpen(!isOpen);
+    };
+
     return (
         <div
             className={clsx(styles.calendarWrapper, className)}
@@ -115,8 +146,9 @@ export const BuilderCalendar = ({ value, onChange, className, placeholder = '날
             style={cssVars}
         >
             <button
+                ref={triggerRef}
                 type="button"
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={handleTriggerClick}
                 className={clsx(styles.trigger, isOpen && styles.open)}
                 aria-haspopup="grid"
                 aria-expanded={isOpen}
@@ -132,9 +164,11 @@ export const BuilderCalendar = ({ value, onChange, className, placeholder = '날
                 />
             </button>
 
-            {isOpen && (
+            {isOpen && createPortal(
                 <div
+                    ref={popupRef}
                     className={styles.popup}
+                    style={{ ...popupStyle, ...cssVars }}
                     role="grid"
                     aria-label={`${viewDate.getFullYear()}년 ${viewDate.getMonth() + 1}월 달력`}
                 >
@@ -179,9 +213,9 @@ export const BuilderCalendar = ({ value, onChange, className, placeholder = '날
                     <div className={styles.daysGrid}>
                         {calendarDays}
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </div>
     );
 };
-

@@ -14,6 +14,8 @@ interface CalendarSectionViewProps {
     ddayMessage?: string;
     groom?: { firstName: string };
     bride?: { firstName: string };
+    showCalendar?: boolean;
+    showDday?: boolean;
 }
 
 /**
@@ -27,9 +29,10 @@ const CalendarSectionView = memo(({
     accentColor,
     ddayMessage = '(신랑), (신부)의 결혼식이 (D-Day) 남았습니다',
     groom,
-    bride
+    bride,
+    showCalendar = true,
+    showDday = true
 }: CalendarSectionViewProps) => {
-
     const weddingDate = useMemo(() => {
         if (!date) return new Date();
         // date is YYYY-MM-DD
@@ -77,7 +80,11 @@ const CalendarSectionView = memo(({
 
         const parts = ddayMessage.split('(D-Day)');
         const prefix = parts[0] || '';
-        const suffix = parts.slice(1).join('(D-Day)') || '';
+        let suffix = parts.slice(1).join('(D-Day)') || '';
+
+        // d_day_display가 이미 "일"로 끝나므로 suffix 시작 부분의 중복 "일"을 제거
+        // "(D-Day) 일 남았습니다" → "102일 일 남았습니다" 방지
+        suffix = suffix.replace(/^[\s]*일[\s]?/, ' ');
 
         const replaceTokens = (text: string) => {
             return text
@@ -132,6 +139,11 @@ const CalendarSectionView = memo(({
     const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
     const weekDays = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
+    // 둘 다 표시 안 하면 섹션 자체를 렌더링하지 않음
+    if (!showCalendar && !showDday) {
+        return null;
+    }
+
     return (
         <SectionContainer id={id}>
             <SectionHeader
@@ -140,72 +152,78 @@ const CalendarSectionView = memo(({
                 accentColor={accentColor}
             />
 
-            <div className={styles.calendarContainer}>
-                <div className={styles.calendarHeader}>
-                    <div className={styles.monthYear}>
-                        {monthNames[weddingDate.getMonth()]} {weddingDate.getFullYear()}
+            {showCalendar && (
+                <div className={styles.calendarContainer}>
+                    <div className={styles.calendarHeader}>
+                        <div className={styles.monthYear}>
+                            {monthNames[weddingDate.getMonth()]} {weddingDate.getFullYear()}
+                        </div>
+                    </div>
+
+                    <div className={styles.calendarGrid}>
+                        {weekDays.map(wd => (
+                            <div key={wd} className={clsx(styles.weekday, wd === "SUN" && styles.sunday)}>
+                                {wd}
+                            </div>
+                        ))}
+                        {daysInMonth.map((d, i) => (
+                            <div
+                                key={i}
+                                className={clsx(
+                                    styles.day,
+                                    d.isOtherMonth && styles.otherMonth,
+                                    d.isSunday && !d.isWeddingDay && styles.sunday,
+                                    d.isWeddingDay && styles.selectedDay
+                                )}
+                            >
+                                {d.day}
+                                {d.isWeddingDay && (
+                                    <div className={styles.dayMarker} style={{ backgroundColor: accentColor }} />
+                                )}
+                            </div>
+                        ))}
                     </div>
                 </div>
-
-                <div className={styles.calendarGrid}>
-                    {weekDays.map(wd => (
-                        <div key={wd} className={clsx(styles.weekday, wd === "SUN" && styles.sunday)}>
-                            {wd}
-                        </div>
-                    ))}
-                    {daysInMonth.map((d, i) => (
-                        <div
-                            key={i}
-                            className={clsx(
-                                styles.day,
-                                d.isOtherMonth && styles.otherMonth,
-                                d.isSunday && !d.isWeddingDay && styles.sunday,
-                                d.isWeddingDay && styles.selectedDay
-                            )}
-                        >
-                            {d.day}
-                            {d.isWeddingDay && (
-                                <div className={styles.dayMarker} style={{ backgroundColor: accentColor }} />
-                            )}
-                        </div>
-                    ))}
-                </div>
-            </div>
+            )}
 
             {/* Countdown Area */}
-            <div className={styles.countdownArea}>
-                <div className={styles.timerGrid}>
-                    <div className={styles.column}>
-                        <span className={styles.label}>DAYS</span>
-                        <span className={styles.value}>{timeLeft.days}</span>
+            {showDday && (
+                <>
+                    <div className={styles.countdownArea}>
+                        <div className={styles.timerGrid}>
+                            <div className={styles.column}>
+                                <span className={styles.label}>DAYS</span>
+                                <span className={styles.value}>{timeLeft.days}</span>
+                            </div>
+                            <span className={styles.divider}>:</span>
+                            <div className={styles.column}>
+                                <span className={styles.label}>HOUR</span>
+                                <span className={styles.value}>{timeLeft.hours}</span>
+                            </div>
+                            <span className={styles.divider}>:</span>
+                            <div className={styles.column}>
+                                <span className={styles.label}>MIN</span>
+                                <span className={styles.value}>{timeLeft.minutes}</span>
+                            </div>
+                            <span className={styles.divider}>:</span>
+                            <div className={styles.column}>
+                                <span className={styles.label}>SEC</span>
+                                <span className={styles.value}>{timeLeft.seconds}</span>
+                            </div>
+                        </div>
                     </div>
-                    <span className={styles.divider}>:</span>
-                    <div className={styles.column}>
-                        <span className={styles.label}>HOUR</span>
-                        <span className={styles.value}>{timeLeft.hours}</span>
-                    </div>
-                    <span className={styles.divider}>:</span>
-                    <div className={styles.column}>
-                        <span className={styles.label}>MIN</span>
-                        <span className={styles.value}>{timeLeft.minutes}</span>
-                    </div>
-                    <span className={styles.divider}>:</span>
-                    <div className={styles.column}>
-                        <span className={styles.label}>SEC</span>
-                        <span className={styles.value}>{timeLeft.seconds}</span>
-                    </div>
-                </div>
-            </div>
 
-            <div className={styles.ddaySection}>
-                <p className={styles.sentence}>
-                    {parsedDdayMessage.prefix}
-                    <span className={styles.highlight} style={{ color: accentColor }}>
-                        {` ${d_day_display} `}
-                    </span>
-                    {parsedDdayMessage.suffix}
-                </p>
-            </div>
+                    <div className={styles.ddaySection}>
+                        <p className={styles.sentence}>
+                            {parsedDdayMessage.prefix}
+                            <span className={styles.highlight} style={{ color: accentColor }}>
+                                {` ${d_day_display} `}
+                            </span>
+                            {parsedDdayMessage.suffix}
+                        </p>
+                    </div>
+                </>
+            )}
         </SectionContainer>
     );
 });

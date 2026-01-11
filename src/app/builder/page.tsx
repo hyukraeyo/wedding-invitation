@@ -8,6 +8,7 @@ import { useInvitationStore, InvitationData } from '@/store/useInvitationStore';
 import { useAuth } from '@/hooks/useAuth';
 import { invitationService } from '@/services/invitationService';
 import Header from '@/components/common/Header';
+import { useToast } from '@/components/common/Toast';
 import styles from './BuilderPage.module.scss';
 import { clsx } from 'clsx';
 
@@ -21,6 +22,7 @@ export default function BuilderPage() {
   const [isSaving, setIsSaving] = useState(false);
   const { user } = useAuth();
   const state = useInvitationStore();
+  const toast = useToast();
 
   const handleLogin = useCallback(() => router.push('/login'), [router]);
 
@@ -43,13 +45,13 @@ export default function BuilderPage() {
       }
 
       await invitationService.saveInvitation(currentSlug, cleanData, user.id);
-      alert('저장이 완료되었습니다.');
+      toast.success('청첩장이 저장되었습니다! 🎉');
     } catch {
-      alert('저장 도중 오류가 발생했습니다.');
+      toast.error('저장 중 오류가 발생했습니다. 다시 시도해주세요.');
     } finally {
       setIsSaving(false);
     }
-  }, [user, state, handleLogin]);
+  }, [user, state, handleLogin, toast]);
 
   return (
     <main className={styles.main}>

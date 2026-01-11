@@ -14,6 +14,8 @@
 
 .uploader {
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
     position: relative;
     cursor: pointer;
     border-radius: 1rem;

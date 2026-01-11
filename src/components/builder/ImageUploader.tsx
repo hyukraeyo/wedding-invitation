@@ -6,6 +6,7 @@ import { clsx } from 'clsx';
 import { BuilderLabel } from './BuilderLabel';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { BuilderButtonGroup } from './BuilderButtonGroup';
+import { useToast } from '@/components/common/Toast';
 
 interface ImageUploaderProps {
     value: string | null;
@@ -22,6 +23,7 @@ interface ImageUploaderProps {
 export function ImageUploader({ value, onChange, label, placeholder = '사진을 업로드해주세요', className, aspectRatio = '16/9', uploadFolder = 'uploads', ...props }: ImageUploaderProps) {
     const inputRef = useRef<HTMLInputElement>(null);
     const accentColor = useInvitationStore(state => state.theme.accentColor);
+    const toast = useToast();
 
     const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
     const [isUploading, setIsUploading] = React.useState(false);
@@ -54,7 +56,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                 onChange(publicUrl);
             } catch (error) {
                 console.error('Failed to upload image:', error);
-                alert('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
+                toast.error('이미지 업로드에 실패했습니다. 다시 시도해주세요.');
                 // Revert to original value on failure
                 setPreviewUrl(value);
                 onChange(value);

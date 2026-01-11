@@ -34,6 +34,7 @@
     font-size: 0.875rem;
     color: #6b7280;
     font-weight: 500;
+    font-family: var(--font-pretendard), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
     &.hasValue {
         color: #1f2937;
@@ -50,15 +51,11 @@
 }
 
 .popup {
-    position: absolute;
-    top: calc(100% + 0.5rem);
-    left: 0;
-    right: 0;
+    // 포털로 렌더링되므로 position은 inline style로 설정됨
     background-color: white;
     border: 1px solid #f3f4f6;
     border-radius: 1rem;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    z-index: 50;
     padding: 1.25rem;
     animation: slideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     transform-origin: top center;

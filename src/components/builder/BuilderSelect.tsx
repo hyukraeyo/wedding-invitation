@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { ChevronDown } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import styles from './BuilderSelect.module.scss';
@@ -35,40 +36,64 @@ export const BuilderSelect = <T extends string | number>({
     labelClassName = ""
 }: BuilderSelectProps<T>) => {
     const [isOpen, setIsOpen] = useState(false);
+    const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
     const containerRef = useRef<HTMLDivElement>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
     const accentColor = useInvitationStore(state => state.theme.accentColor);
 
     const selectedOption = options.find(opt => opt.value === value);
 
+    // 드롭다운 위치 계산
+    useLayoutEffect(() => {
+        if (isOpen && buttonRef.current) {
+            const rect = buttonRef.current.getBoundingClientRect();
+            setDropdownStyle({
+                position: 'fixed',
+                top: rect.bottom + 8,
+                left: rect.left,
+                width: rect.width,
+                zIndex: 9999,
+            });
+        }
+    }, [isOpen]);
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+            const target = event.target as Node;
+            const isInsideContainer = containerRef.current?.contains(target);
+            const isInsideDropdown = dropdownRef.current?.contains(target);
+
+            if (!isInsideContainer && !isInsideDropdown) {
                 setIsOpen(false);
             }
         };
 
-        const handleScroll = (event: Event) => {
-            if (isOpen && containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        const handleScroll = () => {
+            if (isOpen) {
                 setIsOpen(false);
             }
         };
 
-        if (isOpen) {
-            document.addEventListener('mousedown', handleClickOutside);
+        if (!isOpen) return;
+
+        // setTimeout을 사용하여 현재 클릭 이벤트가 완료된 후 리스너 등록
+        const timeoutId = setTimeout(() => {
+            document.addEventListener('click', handleClickOutside);
             window.addEventListener('scroll', handleScroll, true);
-        }
+        }, 0);
 
         return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
+            clearTimeout(timeoutId);
+            document.removeEventListener('click', handleClickOutside);
             window.removeEventListener('scroll', handleScroll, true);
         };
     }, [isOpen]);
 
     // Active item scroll into view logic
-    const listRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
-        if (isOpen && listRef.current) {
-            const activeItem = listRef.current.querySelector('[data-active="true"]');
+        if (isOpen && dropdownRef.current) {
+            const activeItem = dropdownRef.current.querySelector('[data-active="true"]');
             if (activeItem) {
                 activeItem.scrollIntoView({ block: 'nearest', behavior: 'instant' });
             }
@@ -80,11 +105,17 @@ export const BuilderSelect = <T extends string | number>({
         '--accent-rgb': hexToRgbString(accentColor)
     } as React.CSSProperties;
 
+    const handleButtonClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setIsOpen(!isOpen);
+    };
+
     return (
         <div className={clsx(styles.container, className)} ref={containerRef} style={cssVars}>
             <button
+                ref={buttonRef}
                 type="button"
-                onClick={() => setIsOpen(!isOpen)}
+                onClick={handleButtonClick}
                 className={clsx(styles.button, isOpen && styles.open)}
             >
                 <span className={clsx(styles.label, selectedOption && styles.hasValue, labelClassName)}>
@@ -96,10 +127,11 @@ export const BuilderSelect = <T extends string | number>({
                 />
             </button>
 
-            {isOpen && (
+            {isOpen && createPortal(
                 <div
-                    ref={listRef}
+                    ref={dropdownRef}
                     className={styles.dropdown}
+                    style={{ ...dropdownStyle, ...cssVars }}
                 >
                     <div className={styles.optionsList}>
                         {options.map((option, index) => {
@@ -123,7 +155,8 @@ export const BuilderSelect = <T extends string | number>({
                             );
                         })}
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </div>
     );

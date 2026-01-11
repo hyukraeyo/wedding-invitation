@@ -63,6 +63,8 @@ const InvitationCanvas = memo(() => {
     ddayMessage,
     greetingSubtitle,
     mapType,
+    showCalendar,
+    showDday,
   } = useInvitationStore();
 
   // Scroll to editing section
@@ -188,6 +190,8 @@ const InvitationCanvas = memo(() => {
           ddayMessage={ddayMessage}
           groom={groom}
           bride={bride}
+          showCalendar={showCalendar}
+          showDday={showDday}
         />
 
         {/* 5. Location */}
