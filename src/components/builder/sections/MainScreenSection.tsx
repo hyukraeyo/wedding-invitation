@@ -202,6 +202,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                             onChange={setImageUrl}
                             placeholder="메인 사진 추가"
                             ratio={imageRatio}
+                            aspectRatio="4/5"
                             onRatioChange={(val) => setImageRatio(val)}
                         />
                     </Stack>
