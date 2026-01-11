@@ -1,3 +1,10 @@
+@use "@/styles/tds_colors" as tds;
+@use "@/styles/tds_typography" as typography;
+
+// Base Design System (TDS Mobile)
+@forward "@/styles/tds_colors";
+@forward "@/styles/tds_typography";
+
 // Basic Colors
 $background: #F9F8E6;
 $foreground: #4A5D45;
@@ -17,17 +24,21 @@ $gray-500: #868e96;
 $gray-600: #495057;
 $gray-700: #343a40;
 $gray-800: #212529;
-
-@use "@/styles/tds_colors" as tds;
-@use "@/styles/tds_typography" as typography;
-
-// Base Design System (TDS Mobile)
-@forward "@/styles/tds_colors";
-@forward "@/styles/tds_typography";
+$gray-900: #191f28;
 
 // Toss TDS Colors (Legacy mapping for compatibility)
+$toss-blue-50: tds.$tds-blue-50;
+$toss-blue-100: tds.$tds-blue-100;
+$toss-blue-200: tds.$tds-blue-200;
+$toss-blue-300: tds.$tds-blue-300;
+$toss-blue-400: tds.$tds-blue-400;
 $toss-blue-500: tds.$tds-blue-500;
 $toss-blue-600: tds.$tds-blue-600;
+$toss-blue-700: tds.$tds-blue-700;
+$toss-blue-800: tds.$tds-blue-800;
+$toss-blue-900: tds.$tds-blue-900;
+
+$toss-red-50: tds.$tds-red-50;
 $toss-red-500: tds.$tds-red-500;
 $toss-grey-50: tds.$tds-grey-50;
 $toss-grey-100: tds.$tds-grey-100;

@@ -1,8 +1,6 @@
-import React, { useMemo, useCallback, useState } from 'react';
+import React, { useMemo, useCallback, useState, useRef } from 'react';
 import Image from 'next/image';
-import { ImagePlus, Plus, Info, Trash2 } from 'lucide-react';
-import styles from './GallerySection.module.scss';
-import { clsx } from 'clsx';
+import { Image as ImageIcon, Plus, Info, X } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { Field } from '../Field';
 import { Label } from '../Label';
@@ -10,8 +8,8 @@ import { SegmentedControl } from '../SegmentedControl';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { Switch } from '../Switch';
+import { cn } from '@/lib/utils';
 
-import commonStyles from '../Builder.module.scss';
 import {
     DndContext,
     closestCenter,
@@ -25,9 +23,6 @@ import {
     defaultDropAnimationSideEffects,
 } from '@dnd-kit/core';
 import {
-    restrictToWindowEdges,
-} from '@dnd-kit/modifiers';
-import {
     arrayMove,
     SortableContext,
     sortableKeyboardCoordinates,
@@ -35,352 +30,34 @@ import {
     useSortable
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import styles from './GallerySection.module.scss';
 
 interface SectionProps {
     isOpen: boolean;
     onToggle: () => void;
 }
 
-const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen, onToggle }) {
-    const {
-        gallery,
-        setGallery,
-        galleryTitle,
-        setGalleryTitle,
-        galleryType,
-        setGalleryType,
-        galleryPopup,
-        setGalleryPopup,
-        galleryPreview,
-        setGalleryPreview,
-        galleryFade,
-        setGalleryFade,
-        galleryAutoplay,
-        setGalleryAutoplay,
-        theme
-    } = useInvitationStore();
-
-    const pointerSensor = useSensor(PointerSensor, {
-        activationConstraint: {
-            distance: 5,
-        },
-    });
-    const keyboardSensor = useSensor(KeyboardSensor, {
-        coordinateGetter: sortableKeyboardCoordinates,
-    });
-
-    const sensorsContext = useSensors(pointerSensor, keyboardSensor);
-
-    const [activeId, setActiveId] = useState<string | null>(null);
-
-    const normalizedGallery = useMemo(() => {
-        if (!gallery) return [];
-        return (gallery as (string | { id: string; url: string })[]).map((item, index) => {
-            if (typeof item === 'string') {
-                return { id: `legacy-${index}-${item.substring(0, 10)}`, url: item };
-            }
-            return item;
-        });
-    }, [gallery]);
-
-    const galleryIds = useMemo(() => normalizedGallery.map(item => item.id), [normalizedGallery]);
-
-    const handleDragStart = useCallback((event: DragStartEvent) => {
-        setActiveId(event.active.id as string);
-    }, []);
-
-    const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const files = e.target.files;
-        if (!files || files.length === 0) return;
-
-        const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-        const MAX_SIZE = 10 * 1024 * 1024; // 10MB
-        const MAX_TOTAL = 20;
-
-        const currentCount = gallery.length;
-        if (currentCount >= MAX_TOTAL) {
-            alert('이미 20장의 사진이 모두 등록되었습니다.');
-            return;
-        }
-
-        const validFiles: File[] = [];
-        const ignoredFiles: string[] = [];
-
-        Array.from(files).forEach(file => {
-            if (!ALLOWED_TYPES.includes(file.type)) {
-                ignoredFiles.push(`${file.name} (지원하지 않는 형식)`);
-                return;
-            }
-            if (file.size > MAX_SIZE) {
-                ignoredFiles.push(`${file.name} (10MB 초과)`);
-                return;
-            }
-            validFiles.push(file);
-        });
-
-        if (ignoredFiles.length > 0) {
-            alert(`일부 파일이 제외되었습니다:\n${ignoredFiles.join('\n')}`);
-        }
-
-        if (validFiles.length === 0) return;
-
-        const remainingCount = MAX_TOTAL - currentCount;
-        if (validFiles.length > remainingCount) {
-            alert(`최대 20장까지만 등록 가능합니다. 선택한 파일 중 ${remainingCount}장만 추가됩니다.`);
-        }
-
-        const filesToProcess = validFiles.slice(0, remainingCount);
-
-        // 1. Create Temporary Items (Optimistic UI)
-        const tempItems = filesToProcess.map(file => ({
-            id: `temp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-            url: URL.createObjectURL(file),
-            file // Keep file ref for uploading
-        }));
-
-        // 2. Immediately update store
-        // Need to use current state to ensure accuracy
-        const currentGallery = useInvitationStore.getState().gallery;
-        setGallery([...currentGallery, ...tempItems.map(({ id, url }) => ({ id, url }))]);
-
-        // Reset input
-        e.target.value = '';
-
-        // 3. Process Uploads in Background
-        try {
-            const { uploadImage } = await import('@/utils/upload');
-
-            // Process each file in parallel but update individually
-            tempItems.forEach(async (item) => {
-                try {
-                    const publicUrl = await uploadImage(item.file, 'images', 'gallery');
-
-                    // Update specific item with real URL
-                    // Must read fresh state because other uploads might have finished
-                    const latestGallery = useInvitationStore.getState().gallery;
-                    const newGallery = latestGallery.map(g =>
-                        g.id === item.id ? { ...g, url: publicUrl } : g
-                    );
-
-                    setGallery(newGallery);
-                    URL.revokeObjectURL(item.url); // Cleanup memory
-                } catch (error) {
-                    console.error(`Failed to upload ${item.file.name}:`, error);
-                    // Remove failed item
-                    const latestGallery = useInvitationStore.getState().gallery;
-                    setGallery(latestGallery.filter(g => g.id !== item.id));
-                    alert(`${item.file.name} 업로드에 실패했습니다.`);
-                }
-            });
-
-        } catch (err) {
-            console.error('Upload module import failed', err);
-        }
-    };
-
-    const handleDragEnd = useCallback((event: DragEndEvent) => {
-        const { active, over } = event;
-
-        if (over && active.id !== over.id) {
-            const oldIndex = normalizedGallery.findIndex(item => item.id === active.id);
-            const newIndex = normalizedGallery.findIndex(item => item.id === over.id);
-
-            if (oldIndex !== -1 && newIndex !== -1) {
-                setGallery(arrayMove(normalizedGallery, oldIndex, newIndex));
-            }
-        }
-        setActiveId(null);
-    }, [normalizedGallery, setGallery]);
-
-    const activeImageUrl = useMemo(() =>
-        activeId ? normalizedGallery.find(item => item.id === activeId)?.url : null
-        , [activeId, normalizedGallery]);
-
-    return (
-        <AccordionItem
-            title="갤러리"
-            icon={ImagePlus}
-            isOpen={isOpen}
-            onToggle={onToggle}
-            isCompleted={normalizedGallery.length > 0}
-        >
-            <div className={styles.container}>
-                {/* 제목 */}
-                <Field label="제목">
-                    <TextField
-                        type="text"
-                        value={galleryTitle}
-                        onChange={(e) => setGalleryTitle(e.target.value)}
-                        placeholder="웨딩 갤러리"
-                    />
-                </Field>
-
-                {/* 갤러리 타입 */}
-                <Field label="갤러리 타입">
-                    <SegmentedControl
-                        value={galleryType}
-                        options={[
-                            { label: '스와이퍼', value: 'swiper' },
-                            { label: '썸네일', value: 'thumbnail' },
-                            { label: '그리드', value: 'grid' },
-                        ]}
-                        onChange={(val: 'swiper' | 'thumbnail' | 'grid') => setGalleryType(val)}
-                    />
-                </Field>
-
-                {/* 팝업 뷰어 */}
-                <Field label="옵션">
-                    <div className={styles.toggleGroup}>
-                        <Switch
-                            checked={galleryPopup}
-                            onChange={setGalleryPopup}
-                            label="갤러리 팝업 뷰어 사용"
-                        />
-                    </div>
-                </Field>
-
-                {/* 스와이퍼 옵션들 (스와이퍼 타입일 때만 표시) */}
-                {galleryType === 'swiper' && (
-                    <Field label="스와이퍼 설정">
-                        <div className={styles.toggleGroup}>
-                            <Switch
-                                checked={galleryPreview}
-                                onChange={setGalleryPreview}
-                                label="미리보기"
-                            />
-                            <Switch
-                                checked={galleryFade}
-                                onChange={setGalleryFade}
-                                label="페이드 효과"
-                            />
-                            <Switch
-                                checked={galleryAutoplay}
-                                onChange={setGalleryAutoplay}
-                                label="자동 재생"
-                            />
-                        </div>
-                    </Field>
-                )}
-
-                {/* 이미지 업로드 영역 */}
-                <Field
-                    label={
-                        <div className={styles.headerRow}>
-                            <Label className="!mb-0">사진 관리</Label>
-                            <span className={styles.count}>
-                                <span style={{ color: normalizedGallery.length >= 20 ? '#EF4444' : theme.accentColor }}>{normalizedGallery.length}</span>
-                                <span className={styles.max}> / 20</span>
-                            </span>
-                        </div>
-                    }
-                >
-                    <div>
-                        <DndContext
-                            sensors={sensorsContext}
-                            collisionDetection={closestCenter}
-                            onDragStart={handleDragStart}
-                            onDragEnd={handleDragEnd}
-                            modifiers={[restrictToWindowEdges]}
-                        >
-                            <SortableContext
-                                items={galleryIds}
-                                strategy={rectSortingStrategy}
-                            >
-                                <div className={styles.grid}>
-                                    {/* 업로드된 이미지 리스트 */}
-                                    {normalizedGallery.map((img) => (
-                                        <SortableImage
-                                            key={img.id}
-                                            id={img.id}
-                                            url={img.url}
-                                            onDelete={setGallery}
-                                            gallery={normalizedGallery}
-                                        />
-                                    ))}
-
-                                    {/* 추가 버튼 (20개 미만일 때만 표시) */}
-                                    {normalizedGallery.length < 20 && (
-                                        <label className={styles.uploadButton}>
-                                            <input
-                                                type="file"
-                                                multiple
-                                                accept="image/*"
-                                                className={styles.hiddenInput}
-                                                onChange={handleUpload}
-                                            />
-                                            <Plus size={20} />
-                                        </label>
-                                    )}
-                                </div>
-                            </SortableContext>
-                            <DragOverlay dropAnimation={{
-                                sideEffects: defaultDropAnimationSideEffects({
-                                    styles: {
-                                        active: {
-                                            opacity: '0.4',
-                                        },
-                                    },
-                                }),
-                            }}>
-                                {activeId && activeImageUrl ? (
-                                    <div className={clsx(styles.sortableItem, styles.dragging)}>
-                                        <Image
-                                            src={activeImageUrl}
-                                            alt=""
-                                            fill
-                                            unoptimized
-                                        />
-                                    </div>
-                                ) : null}
-                            </DragOverlay>
-                        </DndContext>
-
-                        {/* 안내 문구 */}
-                        <div className={commonStyles.notice}>
-                            <Info size={14} className={commonStyles.icon} />
-                            <span>사진을 길게 누르거나 드래그하여 순서를 변경할 수 있습니다.</span>
-                        </div>
-                    </div>
-                </Field>
-            </div>
-        </AccordionItem>
-    );
-});
-
-// Sortable Image Component
-const SortableImage = React.memo(function SortableImage({
-    id,
-    url,
-    onDelete,
-    gallery
-}: {
+interface SortableItemProps {
     id: string;
     url: string;
-    onDelete: (images: { id: string; url: string }[]) => void;
-    gallery: { id: string; url: string }[];
-}) {
+    onRemove: (id: string) => void;
+    isDragging?: boolean;
+}
+
+const SortableItem = React.memo(function SortableItem({ id, url, onRemove, isDragging }: SortableItemProps) {
     const {
         attributes,
         listeners,
         setNodeRef,
         transform,
         transition,
-        isDragging,
     } = useSortable({ id });
 
     const style = {
         transform: CSS.Translate.toString(transform),
         transition,
-        zIndex: isDragging ? 50 : 1,
-        opacity: isDragging ? 0.4 : 1,
         touchAction: 'none',
     };
-
-    const handleDelete = useCallback((e: React.MouseEvent) => {
-        e.preventDefault();
-        e.stopPropagation();
-        onDelete(gallery.filter(item => item.id !== id));
-    }, [id, gallery, onDelete]);
 
     const isUploading = url.startsWith('blob:');
 
@@ -388,43 +65,278 @@ const SortableImage = React.memo(function SortableImage({
         <div
             ref={setNodeRef}
             style={style}
-            className={clsx(
+            className={cn(
                 styles.sortableItem,
                 isDragging && styles.dragging,
-                isUploading && styles.optimisticItem
+                isUploading && styles.uploading
             )}
         >
             <Image
                 src={url}
-                alt=""
+                alt="Gallery"
                 fill
                 unoptimized
-                className={clsx(isUploading && styles.optimisticImage)}
+                className={cn(styles.image, isUploading && styles.imageUploading)}
             />
 
             {isUploading && (
-                <div className={styles.loadingOverlay}>
+                <div className={styles.uploadingOverlay}>
                     <div className={styles.spinner} />
                 </div>
             )}
 
-            <div className={styles.overlay} />
+            <div className={styles.gradientOverlay} />
 
             <button
-                onClick={handleDelete}
-                className={styles.deleteButton}
-                title="삭제"
-                onPointerDown={(e) => e.stopPropagation()} // Prevent drag start when clicking delete
+                className={styles.deleteBtn}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    onRemove(id);
+                }}
+                onPointerDown={(e) => e.stopPropagation()}
             >
-                <Trash2 size={12} />
+                <X size={12} />
             </button>
 
             <div
                 {...attributes}
                 {...listeners}
-                className="absolute inset-0 z-0 cursor-grab active:cursor-grabbing"
+                className={styles.dragHandle}
             />
         </div>
+    );
+});
+
+const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen, onToggle }) {
+    const {
+        gallery, setGallery,
+        galleryTitle, setGalleryTitle,
+        galleryType, setGalleryType,
+        galleryPopup, setGalleryPopup,
+        galleryPreview, setGalleryPreview,
+        galleryFade, setGalleryFade,
+        galleryAutoplay, setGalleryAutoplay,
+        theme
+    } = useInvitationStore();
+
+    const fileInputRef = useRef<HTMLInputElement>(null);
+    const [activeId, setActiveId] = useState<string | null>(null);
+
+    const sensors = useSensors(
+        useSensor(PointerSensor, {
+            activationConstraint: {
+                distance: 8,
+            },
+        }),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
+
+    const handleUploadClick = () => fileInputRef.current?.click();
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const filesToUpload = Array.from(e.target.files || []);
+        if (filesToUpload.length === 0) return;
+
+        const MAX_TOTAL = 30;
+        const currentCount = gallery.length;
+
+        if (currentCount >= MAX_TOTAL) {
+            alert(`이미 ${MAX_TOTAL}장의 사진이 등록되어 있습니다.`);
+            return;
+        }
+
+        const remainingCount = MAX_TOTAL - currentCount;
+        const slicedFiles = filesToUpload.slice(0, remainingCount);
+
+        // Optimistic update with Blob URLs
+        const tempItems = slicedFiles.map(file => ({
+            id: `temp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            url: URL.createObjectURL(file),
+            file
+        }));
+
+        setGallery([...gallery, ...tempItems.map(({ id, url }) => ({ id, url }))]);
+        e.target.value = '';
+
+        // Background Upload
+        try {
+            const { uploadImage } = await import('@/utils/upload');
+
+            for (const item of tempItems) {
+                try {
+                    const publicUrl = await uploadImage(item.file, 'images', 'gallery');
+                    setGallery((prev: { id: string; url: string }[]) => prev.map(g => g.id === item.id ? { ...g, url: publicUrl } : g));
+                    URL.revokeObjectURL(item.url);
+                } catch (error) {
+                    console.error('Upload failed', error);
+                    setGallery((prev: { id: string; url: string }[]) => prev.filter(g => g.id !== item.id));
+                }
+            }
+        } catch (error) {
+            console.error('Failed to import upload module', error);
+        }
+    };
+
+    const handleRemove = useCallback((id: string) => {
+        setGallery(gallery.filter(item => item.id !== id));
+    }, [gallery, setGallery]);
+
+    const handleDragStart = useCallback((event: DragStartEvent) => {
+        setActiveId(event.active.id as string);
+    }, []);
+
+    const handleDragEnd = useCallback((event: DragEndEvent) => {
+        const { active, over } = event;
+        if (over && active.id !== over.id) {
+            const oldIndex = gallery.findIndex(item => item.id === active.id);
+            const newIndex = gallery.findIndex(item => item.id === over.id);
+            setGallery(arrayMove(gallery, oldIndex, newIndex));
+        }
+        setActiveId(null);
+    }, [gallery, setGallery]);
+
+    const activeImage = useMemo(() =>
+        gallery.find(item => item.id === activeId),
+        [gallery, activeId]
+    );
+
+    return (
+        <AccordionItem
+            title="웨딩 갤러리"
+            icon={ImageIcon}
+            isOpen={isOpen}
+            onToggle={onToggle}
+            isCompleted={gallery.length > 0}
+        >
+            <div className={styles.container}>
+                <Field label="갤러리 제목">
+                    <TextField
+                        type="text"
+                        value={galleryTitle}
+                        onChange={(e) => setGalleryTitle(e.target.value)}
+                        placeholder="예: 웨딩 갤러리"
+                    />
+                </Field>
+
+                <Field
+                    label={
+                        <div className={styles.counter}>
+                            <Label className="!mb-0">사진 관리</Label>
+                            <span className={styles.countText}>
+                                <span style={{ color: theme.accentColor }}>{gallery.length}</span>
+                                <span className={styles.countTotal}> / 30</span>
+                            </span>
+                        </div>
+                    }
+                >
+                    <div className={styles.galleryManager}>
+                        <DndContext
+                            sensors={sensors}
+                            collisionDetection={closestCenter}
+                            onDragStart={handleDragStart}
+                            onDragEnd={handleDragEnd}
+                        >
+                            <SortableContext
+                                items={gallery.map(g => g.id)}
+                                strategy={rectSortingStrategy}
+                            >
+                                <div className={styles.grid}>
+                                    {gallery.map((item) => (
+                                        <SortableItem
+                                            key={item.id}
+                                            id={item.id}
+                                            url={item.url}
+                                            onRemove={handleRemove}
+                                        />
+                                    ))}
+                                    {gallery.length < 30 && (
+                                        <div className={styles.uploadItem} onClick={handleUploadClick}>
+                                            <Plus size={24} className={styles.uploadIcon} />
+                                            <input
+                                                type="file"
+                                                ref={fileInputRef}
+                                                multiple
+                                                accept="image/*"
+                                                className={styles.hiddenInput}
+                                                onChange={handleFileChange}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                            </SortableContext>
+
+                            <DragOverlay dropAnimation={{
+                                sideEffects: defaultDropAnimationSideEffects({
+                                    styles: {
+                                        active: { opacity: '0.4' }
+                                    }
+                                })
+                            }}>
+                                {activeId && activeImage ? (
+                                    <div className={styles.overlay}>
+                                        <Image
+                                            src={activeImage.url}
+                                            alt=""
+                                            fill
+                                            unoptimized
+                                            className={styles.imageOverlay}
+                                        />
+                                    </div>
+                                ) : null}
+                            </DragOverlay>
+                        </DndContext>
+
+                        <div className={styles.infoBox}>
+                            <Info size={14} className={styles.infoIcon} />
+                            <span>사진을 드래그하여 순서를 변경할 수 있습니다. 최대 30장까지 등록 가능합니다.</span>
+                        </div>
+                    </div>
+                </Field>
+
+                <Field label="전시 형태">
+                    <SegmentedControl
+                        value={galleryType}
+                        options={[
+                            { label: '스와이퍼', value: 'swiper' },
+                            { label: '그리드', value: 'grid' },
+                            { label: '리스트', value: 'thumbnail' },
+                        ]}
+                        onChange={(val) => setGalleryType(val as 'swiper' | 'grid' | 'thumbnail')}
+                    />
+                </Field>
+
+                <Field label="기능 설정">
+                    <div className={styles.optionGroup}>
+                        <Switch
+                            checked={galleryPopup}
+                            onChange={setGalleryPopup}
+                            label="확대 보기 (팝업)"
+                        />
+                        {galleryType === 'swiper' && (
+                            <>
+                                <Switch
+                                    checked={galleryAutoplay}
+                                    onChange={setGalleryAutoplay}
+                                    label="자동 재생"
+                                />
+                                <Switch
+                                    checked={galleryFade}
+                                    onChange={setGalleryFade}
+                                    label="페이드 효과"
+                                />
+                                <Switch
+                                    checked={galleryPreview}
+                                    onChange={setGalleryPreview}
+                                    label="미리보기"
+                                />
+                            </>
+                        )}
+                    </div>
+                </Field>
+            </div>
+        </AccordionItem>
     );
 });
 

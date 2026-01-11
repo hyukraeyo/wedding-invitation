@@ -1,0 +1,29 @@
+
+> wedding-invitation@0.1.0 build
+> next build
+
+▲ Next.js 16.1.1 (Turbopack)
+- Environments: .env.local
+- Experiments (use with caution):
+  · optimizePackageImports
+  · serverActions
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 3.4s
+  Running TypeScript ...
+Failed to compile.
+
+./src/components/builder/sections/LocationSection.tsx:174:40
+Type error: Type '{ size: number; className: string | undefined; }' is not assignable to type '{ size?: number; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+
+[0m [90m 172 |[39m                                 label[33m:[39m [32m'네이버'[39m[33m,[39m
+ [90m 173 |[39m                                 value[33m:[39m [32m'naver'[39m[33m,[39m
+[31m[1m>[22m[39m[90m 174 |[39m                                 icon[33m:[39m [33m<[39m[33mNaverIcon[39m size[33m=[39m{[35m18[39m} className[33m=[39m{styles[33m.[39mmapIcon} [33m/[39m[33m>[39m
+ [90m     |[39m                                        [31m[1m^[22m[39m
+ [90m 175 |[39m                             }[33m,[39m
+ [90m 176 |[39m                             {
+ [90m 177 |[39m                                 label[33m:[39m [32m'카카오'[39m[33m,[39m[0m
+Next.js build worker exited with code: 1 and signal: null

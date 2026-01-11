@@ -1,65 +1,71 @@
-'use client';
-
-import React, { useState } from 'react';
-import styles from './TextField.module.scss';
-import { clsx } from 'clsx';
+import React from 'react';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
-    label?: string;
-    helpText?: React.ReactNode;
-    hasError?: boolean;
-    right?: React.ReactNode;
-    containerClassName?: string;
+    label?: string | undefined;
+    helpText?: React.ReactNode | undefined;
+    hasError?: boolean | undefined;
+    right?: React.ReactNode | undefined;
+    containerClassName?: string | undefined;
+    multiline?: boolean | undefined;
+    rows?: number | undefined;
 }
 
-export const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
-    ({ className, containerClassName, style, label, helpText, hasError, right, disabled, onFocus, onBlur, ...props }, ref) => {
-        const [isFocused, setIsFocused] = useState(false);
+export const TextField = React.forwardRef<HTMLInputElement | HTMLTextAreaElement, TextFieldProps>(
+    ({ className, containerClassName, style, label, helpText, hasError, right, disabled, onFocus, onBlur, multiline, rows, ...props }, ref) => {
+        const id = props.id || props.name;
 
-        const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-            setIsFocused(true);
-            onFocus?.(e);
-        };
-
-        const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-            setIsFocused(false);
-            onBlur?.(e);
+        const commonProps = {
+            disabled,
+            className: cn(
+                hasError && "border-destructive focus-visible:ring-destructive",
+                right && "pr-10",
+                className
+            ),
+            onFocus,
+            onBlur,
+            style,
+            ...props,
         };
 
         return (
-            <div className={clsx(styles.container, containerClassName)}>
+            <div className={cn("flex flex-col gap-1.5", containerClassName)}>
                 {label && (
-                    <label
-                        className={clsx(styles.label, hasError && styles.hasError)}
+                    <Label
+                        htmlFor={id}
+                        className={cn(hasError && "text-destructive")}
                     >
                         {label}
-                    </label>
+                    </Label>
                 )}
 
-                <div
-                    className={clsx(styles.inputWrapper,
-                        isFocused && styles.focused,
-                        hasError && styles.hasError,
-                        disabled && styles.disabled,
-                        props.readOnly && styles.readOnly
+                <div className="relative">
+                    {multiline ? (
+                        <Textarea
+                            ref={ref as React.ForwardedRef<HTMLTextAreaElement>}
+                            rows={rows}
+                            {...(commonProps as unknown as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
+                        />
+                    ) : (
+                        <Input
+                            ref={ref as React.ForwardedRef<HTMLInputElement>}
+                            {...(commonProps as unknown as React.InputHTMLAttributes<HTMLInputElement>)}
+                        />
                     )}
-                >
-                    <input
-                        ref={ref}
-                        disabled={disabled}
-                        className={clsx(styles.input, className)}
-                        onFocus={handleFocus}
-                        onBlur={handleBlur}
-                        style={style}
-                        {...props}
-                    />
-                    {right && <div className={styles.rightAddon}>{right}</div>}
+                    {right && !multiline && (
+                        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                            {right}
+                        </div>
+                    )}
                 </div>
 
                 {helpText && (
-                    <div className={clsx(styles.helpText, hasError && styles.error)}>
+                    <p className={cn("text-sm text-muted-foreground", hasError && "text-destructive")}>
                         {helpText}
-                    </div>
+                    </p>
                 )}
             </div>
         );

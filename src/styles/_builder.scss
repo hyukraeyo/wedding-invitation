@@ -3,7 +3,7 @@
 // 빌더 UI의 모든 레이아웃 관련 변수 및 스타일
 // ============================================
 
-@use "@/styles/variables" as *;
+@use "@/styles/variables" as v;
 
 // ----- Spacing & Sizing Variables -----
 $builder-gap-xs: 0.25rem;  // 4px
@@ -19,16 +19,16 @@ $builder-radius-lg: 1.125rem;  // 18px
 $builder-radius-xl: 1.5rem;    // 24px
 
 // ----- Color Variables (Toss TDS Inspired) -----
-$builder-border-light: $toss-grey-100;
-$builder-border-default: $toss-grey-200;
-$builder-border-dark: $toss-grey-400;
-$builder-bg-subtle: $toss-grey-50;
-$builder-bg-hover: $toss-grey-100;
-$builder-text-muted: $toss-grey-400;
-$builder-text-secondary: $toss-grey-600;
-$builder-text-default: $toss-grey-800;
-$builder-text-dark: $toss-grey-900;
-$builder-text-heading: $toss-grey-900;
+$builder-border-light: v.$toss-grey-100;
+$builder-border-default: v.$toss-grey-200;
+$builder-border-dark: v.$toss-grey-400;
+$builder-bg-subtle: v.$toss-grey-50;
+$builder-bg-hover: v.$toss-grey-100;
+$builder-text-muted: v.$toss-grey-400;
+$builder-text-secondary: v.$toss-grey-600;
+$builder-text-default: v.$toss-grey-800;
+$builder-text-dark: v.$toss-grey-900;
+$builder-text-heading: v.$toss-grey-900;
 
 // ----- Typography (Using TDS Tokens) -----
 $builder-font-xs: 11px; // sub-t13
@@ -83,7 +83,7 @@ $builder-font-xl: 17px; // t5
   border: 1px solid $builder-border-light;
   background: white;
   padding: $builder-gap-md;
-  transition: all $transition-fast;
+  transition: all v.$transition-fast;
 }
 
 // Subtle divider
@@ -101,8 +101,8 @@ $builder-font-xl: 17px; // t5
 
 // Label style
 @mixin builder-label {
-  @include tds-t7("semibold");
-  color: $toss-grey-600;
+  @include v.tds-t7("semibold");
+  color: v.$toss-grey-600;
   display: block;
   margin-bottom: 6px;
   padding-left: 2px;
@@ -111,7 +111,7 @@ $builder-font-xl: 17px; // t5
 
 // Sub-label (smaller, inline)
 @mixin builder-sub-label {
-  @include tds-sub-t12("medium");
+  @include v.tds-sub-t12("medium");
   color: $builder-text-secondary;
   flex-shrink: 0;
   min-width: 3.5rem;
@@ -121,28 +121,28 @@ $builder-font-xl: 17px; // t5
 @mixin builder-input-base {
   width: 100%;
   padding: 0.875rem 1rem; // 14px 16px
-  border: 1px solid $tds-grey-opacity-100;
+  border: 1px solid v.$tds-grey-opacity-100;
   border-radius: 14px;
-  @include tds-t5("regular"); // 17px
+  @include v.tds-t5("regular"); // 17px
   color: $builder-text-heading;
-  background-color: $tds-grey-opacity-50;
+  background-color: v.$tds-grey-opacity-50;
   outline: none;
-  transition: all $transition-fast;
+  transition: all v.$transition-fast;
   box-sizing: border-box;
 
   &::placeholder {
-    color: $toss-grey-400;
+    color: v.$toss-grey-400;
     font-weight: 400;
   }
 
   &:hover:not(:disabled) {
-    background-color: $tds-grey-opacity-100;
+    background-color: v.$tds-grey-opacity-100;
   }
 
   &:focus {
     background-color: white;
-    border-color: $tds-blue-500;
-    box-shadow: inset 0 0 0 1px $tds-blue-500;
+    border-color: v.$tds-blue-500;
+    box-shadow: inset 0 0 0 1px v.$tds-blue-500;
   }
 
   &:disabled {
@@ -156,16 +156,16 @@ $builder-font-xl: 17px; // t5
   @include flex-center;
   padding: 0.75rem 1rem;
   border-radius: 10px;
-  @include tds-t7("semibold"); // 13px
+  @include v.tds-t7("semibold"); // 13px
   border: 1px solid $builder-border-default;
   background: white;
   color: $builder-text-default;
   cursor: pointer;
-  transition: all $transition-fast;
+  transition: all v.$transition-fast;
   user-select: none;
 
   &:hover:not(:disabled) {
-    background: $toss-grey-50;
+    background: v.$toss-grey-50;
   }
 
   &:active:not(:disabled) {
@@ -180,9 +180,18 @@ $builder-font-xl: 17px; // t5
 
 // Active state for toggleable buttons (Segmented Control Item)
 @mixin builder-button-active {
-  color: $toss-blue-500;
+  color: v.$toss-blue-500;
   background: white;
   border-color: transparent;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   font-weight: 600;
+}
+
+// Helpers
+@mixin flex-center {
+  @include v.flex-center;
+}
+
+@mixin absolute-full {
+  @include v.absolute-full;
 }

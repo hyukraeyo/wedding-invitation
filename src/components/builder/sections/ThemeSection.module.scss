@@ -1,0 +1,69 @@
+@use "@/styles/variables" as v;
+@use "@/styles/builder" as b;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.optionWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.colorPicker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 0.25rem;
+}
+
+.colorItem {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &.active {
+    border-color: v.$toss-blue-500;
+    transform: scale(1.1);
+  }
+}
+
+.checkIcon {
+  color: white;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+.customColorBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px dashed v.$gray-300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: white;
+  color: v.$gray-400;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: v.$toss-blue-500;
+    color: v.$toss-blue-500;
+    background-color: v.$toss-blue-50;
+  }
+}

@@ -1,3 +1,5 @@
+@use "sass:map";
+
 // TDS (Toss Design System) Colors
 // Reference: https://tossmini-docs.toss.im/tds-mobile/foundation/colors/
 
@@ -118,43 +120,43 @@ $tds-colors: (
 );
 
 // Individual variables for convenience
-$tds-grey-50: map-get($tds-colors, "grey50");
-$tds-grey-100: map-get($tds-colors, "grey100");
-$tds-grey-200: map-get($tds-colors, "grey200");
-$tds-grey-300: map-get($tds-colors, "grey300");
-$tds-grey-400: map-get($tds-colors, "grey400");
-$tds-grey-500: map-get($tds-colors, "grey500");
-$tds-grey-600: map-get($tds-colors, "grey600");
-$tds-grey-700: map-get($tds-colors, "grey700");
-$tds-grey-800: map-get($tds-colors, "grey800");
-$tds-grey-900: map-get($tds-colors, "grey900");
+$tds-grey-50: map.get($tds-colors, "grey50");
+$tds-grey-100: map.get($tds-colors, "grey100");
+$tds-grey-200: map.get($tds-colors, "grey200");
+$tds-grey-300: map.get($tds-colors, "grey300");
+$tds-grey-400: map.get($tds-colors, "grey400");
+$tds-grey-500: map.get($tds-colors, "grey500");
+$tds-grey-600: map.get($tds-colors, "grey600");
+$tds-grey-700: map.get($tds-colors, "grey700");
+$tds-grey-800: map.get($tds-colors, "grey800");
+$tds-grey-900: map.get($tds-colors, "grey900");
 
-$tds-blue-50: map-get($tds-colors, "blue50");
-$tds-blue-100: map-get($tds-colors, "blue100");
-$tds-blue-200: map-get($tds-colors, "blue200");
-$tds-blue-300: map-get($tds-colors, "blue300");
-$tds-blue-400: map-get($tds-colors, "blue400");
-$tds-blue-500: map-get($tds-colors, "blue500");
-$tds-blue-600: map-get($tds-colors, "blue600");
-$tds-blue-700: map-get($tds-colors, "blue700");
-$tds-blue-800: map-get($tds-colors, "blue800");
-$tds-blue-900: map-get($tds-colors, "blue900");
+$tds-blue-50: map.get($tds-colors, "blue50");
+$tds-blue-100: map.get($tds-colors, "blue100");
+$tds-blue-200: map.get($tds-colors, "blue200");
+$tds-blue-300: map.get($tds-colors, "blue300");
+$tds-blue-400: map.get($tds-colors, "blue400");
+$tds-blue-500: map.get($tds-colors, "blue500");
+$tds-blue-600: map.get($tds-colors, "blue600");
+$tds-blue-700: map.get($tds-colors, "blue700");
+$tds-blue-800: map.get($tds-colors, "blue800");
+$tds-blue-900: map.get($tds-colors, "blue900");
 
-$tds-grey-opacity-50: map-get($tds-colors, "greyOpacity50");
-$tds-grey-opacity-100: map-get($tds-colors, "greyOpacity100");
-$tds-grey-opacity-200: map-get($tds-colors, "greyOpacity200");
-$tds-grey-opacity-300: map-get($tds-colors, "greyOpacity300");
-$tds-grey-opacity-400: map-get($tds-colors, "greyOpacity400");
-$tds-grey-opacity-500: map-get($tds-colors, "greyOpacity500");
-$tds-grey-opacity-600: map-get($tds-colors, "greyOpacity600");
-$tds-grey-opacity-700: map-get($tds-colors, "greyOpacity700");
-$tds-grey-opacity-800: map-get($tds-colors, "greyOpacity800");
-$tds-grey-opacity-900: map-get($tds-colors, "greyOpacity900");
+$tds-grey-opacity-50: map.get($tds-colors, "greyOpacity50");
+$tds-grey-opacity-100: map.get($tds-colors, "greyOpacity100");
+$tds-grey-opacity-200: map.get($tds-colors, "greyOpacity200");
+$tds-grey-opacity-300: map.get($tds-colors, "greyOpacity300");
+$tds-grey-opacity-400: map.get($tds-colors, "greyOpacity400");
+$tds-grey-opacity-500: map.get($tds-colors, "greyOpacity500");
+$tds-grey-opacity-600: map.get($tds-colors, "greyOpacity600");
+$tds-grey-opacity-700: map.get($tds-colors, "greyOpacity700");
+$tds-grey-opacity-800: map.get($tds-colors, "greyOpacity800");
+$tds-grey-opacity-900: map.get($tds-colors, "greyOpacity900");
 
-$tds-red-500: map-get($tds-colors, "red500");
-$tds-red-50: map-get($tds-colors, "red50");
+$tds-red-500: map.get($tds-colors, "red500");
+$tds-red-50: map.get($tds-colors, "red50");
 
-$tds-background: map-get($tds-colors, "background");
-$tds-grey-background: map-get($tds-colors, "greyBackground");
-$tds-layered-background: map-get($tds-colors, "layeredBackground");
-$tds-floated-background: map-get($tds-colors, "floatedBackground");
+$tds-background: map.get($tds-colors, "background");
+$tds-grey-background: map.get($tds-colors, "greyBackground");
+$tds-layered-background: map.get($tds-colors, "layeredBackground");
+$tds-floated-background: map.get($tds-colors, "floatedBackground");

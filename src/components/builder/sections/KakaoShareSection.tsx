@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
-import { MessageCircle } from 'lucide-react';
+import Image from 'next/image';
+import { MessageCircle, Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
-import { Label } from '../Label';
 import { TextField } from '../TextField';
-import { Button } from '../Button';
 import { SegmentedControl } from '../SegmentedControl';
-import { Switch } from '../Switch';
 import { Field } from '../Field';
-import { ImageUploader } from '../ImageUploader';
+import { Label } from '../Label';
 import { HelpText } from '../HelpText';
-import { Row, Stack } from '../Layout';
-import Image from 'next/image';
+import { ImageUploader } from '../ImageUploader';
+import styles from './KakaoShareSection.module.scss';
+import { cn } from '@/lib/utils';
 
 interface SectionProps {
     isOpen: boolean;
@@ -22,9 +21,6 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
     const { kakaoShare: kakao, setKakao } = useInvitationStore();
     const [previewOpen, setPreviewOpen] = useState(false);
 
-    if (!kakao) return null;
-
-
     return (
         <AccordionItem
             title="카카오 초대장 썸네일"
@@ -33,24 +29,23 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
             onToggle={onToggle}
             isCompleted={!!kakao.title}
         >
-            <Stack gap="lg">
+            <div className={styles.container}>
                 {/* Photo Upload with Header Preview Button */}
                 <Field
                     label={
-                        <Row justify="space-between" align="center" className="mb-2">
+                        <div className={styles.previewHeader}>
                             <Label className="!mb-0">사진</Label>
-                            <Button
-                                variant="weak"
-                                size="small"
+                            <button
                                 onClick={() => setPreviewOpen(true)}
-                                className="h-6 text-[11px] text-gray-500 border border-gray-100 bg-white"
+                                className={styles.previewBtn}
                             >
-                                미리보기
-                            </Button>
-                        </Row>
+                                <Sparkles size={12} />
+                                <span>미리보기</span>
+                            </button>
+                        </div>
                     }
                 >
-                    <div className="max-w-[160px]">
+                    <div className={styles.uploaderWrapper}>
                         <ImageUploader
                             value={kakao.imageUrl}
                             onChange={(url) => setKakao({ imageUrl: url })}
@@ -60,97 +55,106 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                     </div>
                 </Field>
 
-                {/* Title */}
-                <Field label="제목">
-                    <TextField
-                        type="text"
-                        value={kakao.title}
-                        onChange={(e) => setKakao({ title: e.target.value })}
-                        placeholder="카카오톡 제목"
-                    />
-                </Field>
-
-                {/* Description */}
-                <Field label="내용">
-                    <TextField
-                        type="text"
-                        value={kakao.description}
-                        onChange={(e) => setKakao({ description: e.target.value })}
-                        placeholder="카카오톡 내용"
-                    />
-                </Field>
-
-                {/* Image Ratio */}
                 <Field label="사진 비율">
                     <SegmentedControl
                         value={kakao.imageRatio}
                         options={[
-                            { label: '세로', value: 'portrait' },
-                            { label: '가로', value: 'landscape' },
+                            { label: '세로형', value: 'portrait' },
+                            { label: '가로형', value: 'landscape' },
                         ]}
                         onChange={(val: 'portrait' | 'landscape') => setKakao({ imageRatio: val })}
                     />
+                    <HelpText>카카오톡 공유 메시지에서 보여질 사진의 비율입니다.</HelpText>
                 </Field>
 
-                {/* Button Type */}
-                <Field label="버튼 추가">
+                <Field label="제목">
+                    <TextField
+                        type="text"
+                        placeholder="예: 우리 결혼합니다"
+                        value={kakao.title}
+                        onChange={(e) => setKakao({ title: e.target.value })}
+                        maxLength={25}
+                    />
+                </Field>
+
+                <Field label="설명">
+                    <TextField
+                        type="text"
+                        placeholder="예: 2024년 10월 12일"
+                        value={kakao.description}
+                        onChange={(e) => setKakao({ description: e.target.value })}
+                        maxLength={35}
+                    />
+                </Field>
+
+                <Field label="버튼 스타일">
                     <SegmentedControl
                         value={kakao.buttonType}
                         options={[
-                            { label: '설정안함', value: 'none' },
-                            { label: '위치보기', value: 'location' },
-                            { label: '참석의사', value: 'rsvp' },
+                            { label: '위치 안내', value: 'location' },
+                            { label: '참석 여부', value: 'rsvp' },
+                            { label: '사용 안함', value: 'none' },
                         ]}
-                        onChange={(val: 'none' | 'location' | 'rsvp') => setKakao({ buttonType: val })}
+                        onChange={(val) => setKakao({ buttonType: val as 'location' | 'rsvp' | 'none' })}
                     />
                 </Field>
 
-                {/* Share Exposure */}
-                <Field label="설정">
-                    <Switch
-                        checked={kakao.showShareButton}
-                        onChange={(checked) => setKakao({ showShareButton: checked })}
-                        label="공유 버튼 노출"
-                    />
-                </Field>
-
-                {/* Footer Note */}
-                <HelpText>
-                    미입력해도 자동 설정되며, 변경이 필요한 경우에만 입력
-                </HelpText>
-            </Stack>
-
-            {/* Simple Preview Modal (Optional, if needed for "미리보기") */}
-            {previewOpen && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 p-4" onClick={() => setPreviewOpen(false)}>
-                    <div className="bg-white rounded-xl max-w-sm w-full p-4 space-y-4" onClick={e => e.stopPropagation()}>
-                        <div className="flex justify-between items-center border-b pb-2 mb-2">
-                            <h3 className="font-bold text-gray-900">카카오톡 공유 미리보기</h3>
-                            <button onClick={() => setPreviewOpen(false)} className="text-gray-500 hover:text-gray-800">✕</button>
-                        </div>
-                        <div className="bg-[#FAE100] p-4 rounded-lg text-black">
-                            <div className="max-w-[240px] mx-auto bg-white rounded overflow-hidden shadow-sm">
-                                {kakao.imageUrl ? (
-                                    <div className={`relative w-full ${kakao.imageRatio === 'portrait' ? 'aspect-[3/4]' : 'aspect-video'}`}>
-                                        <Image src={kakao.imageUrl} alt="Kakao Preview" fill className="object-cover" />
+                {/* Simple Preview Modal */}
+                {previewOpen && (
+                    <div
+                        className={styles.modalContainer}
+                        onClick={() => setPreviewOpen(false)}
+                    >
+                        <div
+                            className={styles.modalContent}
+                            onClick={e => e.stopPropagation()}
+                        >
+                            <div className={styles.modalBody}>
+                                <div className={styles.card}>
+                                    {kakao.imageUrl ? (
+                                        <div className={cn(
+                                            styles.imageWrapper,
+                                            kakao.imageRatio === 'portrait' ? styles.portrait : styles.landscape
+                                        )}>
+                                            <Image
+                                                src={kakao.imageUrl}
+                                                alt="Kakao Preview"
+                                                fill
+                                                className={styles.cardImage}
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div className={cn(
+                                            styles.imageWrapper,
+                                            kakao.imageRatio === 'portrait' ? styles.portrait : styles.landscape
+                                        )}>
+                                            <div className={styles.placeholder}>
+                                                <MessageCircle size={32} style={{ opacity: 0.2 }} />
+                                            </div>
+                                        </div>
+                                    )}
+                                    <div className={styles.cardContent}>
+                                        <h4 className={styles.cardTitle}>
+                                            {kakao.title || '우리 결혼합니다'}
+                                        </h4>
+                                        <p className={styles.cardDescription}>
+                                            {kakao.description || '초대장을 보내드립니다.'}
+                                        </p>
                                     </div>
-                                ) : (
-                                    <div className={`w-full ${kakao.imageRatio === 'portrait' ? 'aspect-[3/4]' : 'aspect-video'} bg-gray-200 flex items-center justify-center text-gray-400 text-xs`}>
-                                        이미지 없음
+                                    <div className={styles.cardFooter}>
+                                        <span className={styles.footerText}>모바일 초대장</span>
+                                        {kakao.buttonType !== 'none' && (
+                                            <div className={styles.cardBtn}>
+                                                {kakao.buttonType === 'location' ? '위치 보기' : '참석 여부'}
+                                            </div>
+                                        )}
                                     </div>
-                                )}
-                                <div className="p-3 bg-white">
-                                    <div className="font-bold text-sm mb-1 line-clamp-2">{kakao.title || "제목을 입력해주세요"}</div>
-                                    <div className="text-xs text-gray-500 line-clamp-2">{kakao.description || "내용을 입력해주세요"}</div>
-                                </div>
-                                <div className="border-t border-gray-100 p-2 text-center text-xs text-gray-600 font-medium bg-gray-50">
-                                    {kakao.buttonType === 'location' ? '위치보기' : kakao.buttonType === 'rsvp' ? '참석의사 전달' : '자세히 보기'}
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            )}
+                )}
+            </div>
         </AccordionItem>
     );
 }

@@ -1,14 +1,6 @@
-'use client';
-
 import React from 'react';
-import styles from './HelpText.module.scss';
-import { clsx } from 'clsx';
 import { Info, AlertCircle } from 'lucide-react';
-
-/**
- * TDS-style HelpText Component
- * 도움말/힌트 문구를 일관된 스타일로 표시
- */
+import { cn } from '@/lib/utils';
 
 interface HelpTextProps {
     /** 표시할 메시지 */
@@ -33,9 +25,14 @@ export const HelpText = ({
     const Icon = variant === 'warning' ? AlertCircle : Info;
 
     return (
-        <div className={clsx(styles.container, styles[variant], className)}>
-            {showIcon && <Icon size={iconSize} className={styles.icon} />}
-            <span className={styles.text}>{children}</span>
+        <div className={cn(
+            "flex items-start gap-1.5 text-xs py-1",
+            variant === 'info' && "text-muted-foreground",
+            variant === 'warning' && "text-destructive font-medium",
+            className
+        )}>
+            {showIcon && <Icon size={iconSize} className="mt-0.5 shrink-0" />}
+            <span className="leading-normal">{children}</span>
         </div>
     );
 };

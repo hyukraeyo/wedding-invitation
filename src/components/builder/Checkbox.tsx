@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
-import styles from './Checkbox.module.scss';
-import { clsx } from 'clsx';
-import { Check } from 'lucide-react';
+import React, { useId } from 'react';
+import { Checkbox as ShadcnCheckbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
 
 /**
  * TDS Checkbox Component
@@ -14,123 +14,72 @@ import { Check } from 'lucide-react';
  * - Checkbox.Line: 체크 아이콘이 단독으로 표현
  */
 
-interface CheckboxBaseProps {
-    /** 체크박스 크기 (기본값: 24) */
-    size?: number;
+export interface CheckboxBaseProps {
     /** Controlled: 체크 상태 */
-    checked?: boolean;
+    checked?: boolean | undefined;
     /** Uncontrolled: 초기 체크 상태 */
-    defaultChecked?: boolean;
+    defaultChecked?: boolean | undefined;
     /** 체크 상태 변경 콜백 */
-    onCheckedChange?: (checked: boolean) => void;
+    onCheckedChange?: ((checked: boolean) => void) | undefined;
     /** 비활성화 */
-    disabled?: boolean;
-    /** 라디오 버튼으로 활용 */
-    inputType?: 'checkbox' | 'radio';
-    /** 라디오 버튼 value */
-    value?: string;
-    /** native onChange (for radio) */
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    disabled?: boolean | undefined;
     /** 라벨 */
-    children?: React.ReactNode;
+    children?: React.ReactNode | undefined;
     /** 추가 className */
-    className?: string;
+    className?: string | undefined;
     /** id */
-    id?: string;
-    /** name (for radio group) */
-    name?: string;
+    id?: string | undefined;
+    /** Checkbox variant (circle maps to rounded-full, line is default square) */
+    variant?: 'circle' | 'line' | undefined;
+    /** 라벨 (기존 호환성) */
+    label?: string | undefined;
+    /** native onChange (기존 호환성) */
+    onChange?: ((checked: boolean) => void) | undefined;
 }
 
-// Base Checkbox component logic
 const CheckboxBase = ({
-    variant,
-    size = 24,
-    checked: controlledChecked,
-    defaultChecked = false,
+    checked,
+    defaultChecked,
     onCheckedChange,
-    disabled = false,
-    inputType = 'checkbox',
-    value,
-    onChange,
+    disabled,
     children,
     className,
     id,
-    name,
-}: CheckboxBaseProps & { variant: 'circle' | 'line' }) => {
-    const [internalChecked, setInternalChecked] = useState(defaultChecked);
-    const [isShaking, setIsShaking] = useState(false);
-
-    const isControlled = controlledChecked !== undefined;
-    const isChecked = isControlled ? controlledChecked : internalChecked;
-
-    const handleClick = useCallback(() => {
-        if (disabled) {
-            // TDS: 비활성화된 Checkbox 클릭 시 좌우로 흔들리는 애니메이션
-            setIsShaking(true);
-            setTimeout(() => setIsShaking(false), 300);
-            return;
+    variant = "line",
+    label,
+    onChange
+}: CheckboxBaseProps) => {
+    // Handle legacy onChange that might expect event or boolean
+    const handleCheckedChange = (chk: boolean) => {
+        onCheckedChange?.(chk);
+        if (onChange) {
+            // emulate trivial event or just call with chk if legacy used boolean
+            onChange(chk);
         }
+    };
 
-        const newChecked = !isChecked;
-        if (!isControlled) {
-            setInternalChecked(newChecked);
-        }
-        onCheckedChange?.(newChecked);
-    }, [disabled, isChecked, isControlled, onCheckedChange]);
-
-    const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        if (disabled) return;
-
-        if (inputType === 'radio') {
-            onChange?.(e);
-        } else {
-            const newChecked = e.target.checked;
-            if (!isControlled) {
-                setInternalChecked(newChecked);
-            }
-            onCheckedChange?.(newChecked);
-        }
-    }, [disabled, inputType, onChange, isControlled, onCheckedChange]);
-
-    const iconSize = Math.round(size * 0.6);
+    const reactId = useId();
+    const uniqueId = id || reactId;
 
     return (
-        <label
-            className={clsx(
-                styles.container,
-                className,
-                disabled && styles.disabled
+        <div className={cn("flex items-center space-x-2", className)}>
+            <ShadcnCheckbox
+                id={uniqueId}
+                {...(checked !== undefined ? { checked } : {})}
+                {...(defaultChecked !== undefined ? { defaultChecked } : {})}
+                onCheckedChange={handleCheckedChange}
+                disabled={disabled ?? undefined}
+                className={cn(variant === 'circle' && "rounded-full")}
+            />
+            {(children || label) && (
+                <Label
+                    htmlFor={uniqueId}
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >
+                    {label || children}
+                </Label>
             )}
-        >
-            <div
-                className={clsx(
-                    styles.checkbox,
-                    styles[variant],
-                    isChecked && styles.checked,
-                    disabled && styles.disabled,
-                    isShaking && styles.shake
-                )}
-                style={{ width: size, height: size }}
-                onClick={handleClick}
-            >
-                <input
-                    type={inputType}
-                    checked={isChecked}
-                    onChange={handleChange}
-                    disabled={disabled}
-                    value={value}
-                    id={id}
-                    name={name}
-                    style={{ display: 'none' }}
-                />
-                <Check
-                    size={iconSize}
-                    className={styles.icon}
-                    strokeWidth={3}
-                />
-            </div>
-            {children && <span className={styles.label}>{children}</span>}
-        </label>
+        </div>
     );
 };
 
@@ -146,40 +95,16 @@ const CheckboxLine = (props: CheckboxBaseProps) => (
 );
 CheckboxLine.displayName = 'Checkbox.Line';
 
-// 호환성을 위한 기존 Checkbox 인터페이스
-interface LegacyCheckboxProps {
-    id?: string;
-    checked: boolean;
-    onChange: (checked: boolean) => void;
-    children?: React.ReactNode;
-    label?: string;
-    className?: string;
-    disabled?: boolean;
-}
-
 /**
  * 기본 Checkbox (기존 호환성 유지 - Circle 스타일 사용)
  * 새로운 코드에서는 Checkbox.Circle 또는 Checkbox.Line 사용 권장
  */
-const Checkbox = ({
-    checked,
-    onChange,
-    children,
-    label,
-    ...props
-}: LegacyCheckboxProps) => (
-    <CheckboxCircle
-        checked={checked}
-        onCheckedChange={onChange}
-        {...props}
-    >
-        {label || children}
-    </CheckboxCircle>
-);
+export const Checkbox = (props: CheckboxBaseProps) => {
+    return <CheckboxCircle {...props} />; // Default to Circle as per original legacy wrapper
+};
 
 // Compound Component Pattern
 Checkbox.Circle = CheckboxCircle;
 Checkbox.Line = CheckboxLine;
 
-export { Checkbox, CheckboxCircle, CheckboxLine };
-export type { CheckboxBaseProps, LegacyCheckboxProps };
+export { CheckboxCircle, CheckboxLine };

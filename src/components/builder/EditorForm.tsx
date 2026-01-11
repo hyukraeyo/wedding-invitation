@@ -2,8 +2,7 @@
 
 import React, { useState, useCallback, memo, useEffect } from 'react';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import styles from './EditorForm.module.scss';
-import { clsx } from 'clsx';
+import { cn } from '@/lib/utils';
 
 // Static imports for immediate loading (prevents icon pop-in)
 import ThemeSection from './sections/ThemeSection';
@@ -50,7 +49,10 @@ const EditorForm = memo(function EditorForm() {
   }, []);
 
   return (
-    <div className={clsx(styles.container, isReady && styles.ready)}>
+    <div className={cn(
+      "flex flex-col gap-3 pb-32 transition-opacity duration-500",
+      isReady ? "opacity-100" : "opacity-0"
+    )}>
       {SECTIONS.map(({ key, Component }) => (
         <Component
           key={key}

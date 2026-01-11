@@ -1,3 +1,5 @@
+@use "sass:map";
+
 // TDS (Toss Design System) Typography
 // Reference: https://tossmini-docs.toss.im/tds-mobile/foundation/typography/
 
@@ -12,7 +14,7 @@ $tds-font-weights: (
 @mixin tds-typography($size, $line-height, $weight: "regular") {
   font-size: $size;
   line-height: $line-height;
-  font-weight: map-get($tds-font-weights, $weight);
+  font-weight: map.get($tds-font-weights, $weight);
 }
 
 // Typography Tokens

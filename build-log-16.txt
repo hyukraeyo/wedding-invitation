@@ -1,0 +1,26 @@
+
+> wedding-invitation@0.1.0 build
+> next build
+
+▲ Next.js 16.1.1 (Turbopack)
+- Environments: .env.local
+- Experiments (use with caution):
+  · optimizePackageImports
+  · serverActions
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 3.4s
+  Running TypeScript ...
+Failed to compile.
+
+./src/components/common/Header.tsx:38:25
+Type error: Type '"secondary"' is not assignable to type '"fill" | "link" | "outline" | "ghost" | "weak"'.
+
+[0m [90m 36 |[39m                 [33m<[39m[33mnav[39m className[33m=[39m[32m"hidden md:flex items-center gap-4"[39m[33m>[39m
+ [90m 37 |[39m                     [33m<[39m[33mButton[39m
+[31m[1m>[22m[39m[90m 38 |[39m                         variant[33m=[39m[32m"secondary"[39m
+ [90m    |[39m                         [31m[1m^[22m[39m
+ [90m 39 |[39m                         size[33m=[39m[32m"sm"[39m
+ [90m 40 |[39m                         onClick[33m=[39m{() [33m=>[39m {
+ [90m 41 |[39m                             reset()[33m;[39m[0m
+Next.js build worker exited with code: 1 and signal: null

@@ -1,0 +1,50 @@
+@use "@/styles/variables" as v;
+@use "@/styles/builder" as b;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.divider {
+  height: 1px;
+  background-color: v.$gray-100;
+  width: 100%;
+}
+
+.row {
+  display: grid;
+  gap: 0.5rem;
+  align-items: center;
+  
+  &.full {
+    grid-template-columns: 50px 1fr 1fr 1fr;
+  }
+  
+  &.compact {
+    grid-template-columns: 50px 1fr auto;
+  }
+}
+
+.subLabel {
+  @include b.builder-sub-label;
+  font-size: 14px;
+}
+
+.deceasedWrapper {
+  padding-left: 0.5rem;
+  display: flex;
+  align-items: center;
+
+  label {
+    font-size: 12px !important;
+  }
+}

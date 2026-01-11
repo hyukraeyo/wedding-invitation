@@ -1,28 +1,31 @@
-'use client';
-
-import { Switch as TDSSwitch } from '@toss/tds-mobile';
-import styles from './Switch.module.scss';
-import { clsx } from 'clsx';
+import { Switch as ShadcnSwitch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
 
 interface SwitchProps {
     checked: boolean;
     onChange: (checked: boolean) => void;
-    label?: string;
-    className?: string; // Additional className for the container
-    disabled?: boolean;
+    label?: string | undefined;
+    className?: string | undefined; // Additional className for the container
+    disabled?: boolean | undefined;
 }
 
 export const Switch = ({ checked, onChange, label, className, disabled }: SwitchProps) => {
     return (
-        <label className={clsx(styles.switchLabel, className)}>
-            <div className={styles.switchWrapper}>
-                <TDSSwitch
+        <div className={cn("flex items-center justify-between py-1", className)}>
+            <div className="flex items-center space-x-2">
+                <ShadcnSwitch
+                    id={`switch-${label}`}
                     checked={checked}
-                    onChange={(_, isChecked) => onChange(isChecked)}
+                    onCheckedChange={onChange}
                     disabled={disabled}
                 />
+                {label && (
+                    <Label htmlFor={`switch-${label}`} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                        {label}
+                    </Label>
+                )}
             </div>
-            {label && <span className={styles.labelText}>{label}</span>}
-        </label>
+        </div>
     );
 };

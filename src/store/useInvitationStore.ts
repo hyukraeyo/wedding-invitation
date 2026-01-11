@@ -159,7 +159,7 @@ interface InvitationState {
     setGreetingImage: (url: string | null) => void;
     setGreetingRatio: (ratio: 'fixed' | 'auto') => void;
     setTheme: (theme: Partial<InvitationState['theme']>) => void;
-    setGallery: (images: { id: string; url: string }[]) => void;
+    setGallery: (images: { id: string; url: string }[] | ((prev: { id: string; url: string }[]) => { id: string; url: string }[])) => void;
     setGalleryTitle: (title: string) => void;
     setGalleryType: (type: 'swiper' | 'thumbnail' | 'grid') => void;
     setGalleryPopup: (use: boolean) => void;
@@ -171,7 +171,7 @@ interface InvitationState {
     setAccountsGroomTitle: (title: string) => void;
     setAccountsBrideTitle: (title: string) => void;
     setAccountsColorMode: (mode: 'accent' | 'subtle' | 'white') => void;
-    setAccounts: (accounts: InvitationState['accounts']) => void;
+    setAccounts: (accounts: InvitationState['accounts'] | ((prev: InvitationState['accounts']) => InvitationState['accounts'])) => void;
     setMainScreen: (data: Partial<InvitationState['mainScreen']>) => void;
     setShowCalendar: (show: boolean) => void;
     setShowDday: (show: boolean) => void;
@@ -397,7 +397,7 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
     setGreetingImage: (url) => set({ greetingImage: url }),
     setGreetingRatio: (greetingRatio) => set({ greetingRatio }),
     setTheme: (newTheme) => set((state) => ({ theme: { ...state.theme, ...newTheme } })),
-    setGallery: (images) => set({ gallery: images }),
+    setGallery: (images) => set((state) => ({ gallery: typeof images === 'function' ? images(state.gallery) : images })),
     setGalleryTitle: (title) => set({ galleryTitle: title }),
     setGalleryType: (type) => set({ galleryType: type }),
     setGalleryPopup: (popup) => set({ galleryPopup: popup }),
@@ -409,7 +409,7 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
     setAccountsGroomTitle: (title) => set({ accountsGroomTitle: title }),
     setAccountsBrideTitle: (title) => set({ accountsBrideTitle: title }),
     setAccountsColorMode: (mode) => set({ accountsColorMode: mode }),
-    setAccounts: (accounts) => set({ accounts }),
+    setAccounts: (accounts) => set((state) => ({ accounts: typeof accounts === 'function' ? accounts(state.accounts) : accounts })),
     setMainScreen: (data) => set((state) => ({ mainScreen: { ...state.mainScreen, ...data } })),
     setShowCalendar: (show) => set({ showCalendar: show }),
     setShowDday: (show) => set({ showDday: show }),

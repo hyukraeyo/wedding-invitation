@@ -1,331 +1,43 @@
-@use "@/styles/variables" as *;
+@use "@/styles/variables" as v;
+@use "@/styles/builder" as b;
 
 .container {
-    @include flex-col;
-    gap: 1.5rem;
-
-    &.smallGap {
-        gap: 0.5rem;
-    }
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem;
 }
 
-@keyframes shimmer {
-    0% { transform: translateX(-150%) skewX(-20deg); }
-    100% { transform: translateX(150%) skewX(-20deg); }
+.optionWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
-.swiperWrapper {
-    position: relative;
-    margin-inline: -1.25rem;
-    width: calc(100% + 2.5rem);
-
-    &::before, &::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        width: 3.5rem;
-        pointer-events: none;
-        z-index: 10;
-        transition: opacity 0.3s ease;
-        opacity: 1;
-    }
-
-    &::before {
-        left: 0;
-        background: linear-gradient(to left, transparent, rgba(255, 255, 255, 0.95) 80%);
-    }
-
-    &::after {
-        right: 0;
-        background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.95) 80%);
-    }
-
-    &.atStart::before { opacity: 0; }
-    &.atEnd::after { opacity: 0; }
+.switchGroup {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  padding: 0 0.25rem;
 }
 
-.layoutSwiper {
-    padding-bottom: 0.5rem;
-    width: 100%;
+.andTextWrapper {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 0.25rem;
 }
 
-.layoutButton {
-    flex-shrink: 0;
-    width: 5.5rem;
-    @include flex-col;
-    align-items: center;
-    gap: 0.5rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    transition: transform $transition-fast;
-
-    &:active {
-        transform: scale(0.95);
-    }
-
-    .preview {
-        width: 5.5rem;
-        height: 8.5rem;
-        border-radius: 0.75rem;
-        border: 2px solid #f3f4f6;
-        transition: $transition-smooth;
-        position: relative;
-        overflow: hidden;
-        background-color: white;
-
-        &::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                to right,
-                rgba(255, 255, 255, 0) 0%,
-                rgba(255, 255, 255, 0.4) 50%,
-                rgba(255, 255, 255, 0) 100%
-            );
-            transform: translateX(-150%) skewX(-20deg);
-            pointer-events: none;
-        }
-
-        &:hover::after {
-            animation: shimmer 1.2s infinite;
-        }
-
-        &.active {
-            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.1);
-        }
-
-        &:not(.active):hover {
-            background-color: #fcfcfd;
-            border-color: #e5e7eb;
-        }
-    }
-
-    .label {
-        font-size: 11px;
-        font-weight: 700;
-        margin-top: 0.25rem;
-        color: #9ca3af;
-        transition: color $transition-fast;
-
-        &.active {
-            color: inherit; // use inline color
-        }
-    }
+.andTextItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
 }
 
-.checkBadge {
-    position: absolute;
-    top: 0.375rem;
-    right: 0.375rem;
-    color: white;
-    border-radius: 50%;
-    padding: 0.125rem;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    z-index: 10;
-    @include flex-center;
-}
-
-.designOptions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    padding-inline: 0.25rem;
-}
-
-.customTextSection {
-    padding-top: 1rem;
-    @include flex-col;
-    gap: 1rem;
-}
-
-.phrasesHeader {
-    display: flex;
-    justify-content: flex-end;
-    padding-top: 0.25rem;
-}
-
-.exampleButton {
-    @include flex-center;
-    gap: 0.375rem;
-    padding: 0.375rem 0.75rem;
-    background-color: #fff9eb;
-    color: #a65e1a;
-    border-radius: 9999px;
-    border: 1px solid #ffe0a3;
-    transition: $transition-fast;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    cursor: pointer;
-
-    &:hover {
-        background-color: #fff2d1;
-    }
-
-
-    &:hover {
-        background-color: #fff2d1;
-    }
-
-    &:hover .sparkle {
-        transform: scale(1.1);
-    }
-
-    span {
-        font-size: 12px;
-        font-weight: 700;
-    }
-}
-
-.sparkle {
-    transition: transform 0.2s;
-}
-
-.fullWidth {
-    width: 100%;
-}
-
-.inputGrid {
-    @include flex-col;
-    gap: 0.75rem;
-}
-
-.inputRow {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-
-    .checkboxWrapper {
-        margin-top: 0.875rem;
-    }
-
-    .fieldWrapper {
-        flex: 1;
-        transition: opacity 0.3s;
-
-        &.disabled {
-            opacity: 0.6;
-        }
-    }
-}
-
-.nameInputs {
-    display: flex;
-    gap: 0.5rem;
-
-    .lastName { flex: 3; }
-    .andText { 
-        flex: 1; 
-        min-width: 60px;
-        min-width: 60px;
-        input { 
-            text-align: center; 
-            padding-inline: 0.25rem; 
-        }
-    }
-    .firstName { flex: 3; }
-}
-
-.modalGrid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    max-height: 60vh;
-    overflow-y: auto;
-    padding-right: 0.5rem;
-    padding-block: 0.25rem;
-    @include scrollbar-hide;
-}
-
-.exampleCard {
-    width: 100%;
-    padding: 1.5rem;
-    background-color: #f9fafb;
-    border: 1px solid #e5e7eb;
-    border-radius: 2rem;
-    text-align: center;
-    transition: $transition-smooth;
-    cursor: pointer;
-
-    &:hover {
-        background-color: white;
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        border-color: #fde68a;
-    }
-
-    .exampleContent {
-        @include flex-col;
-        gap: 0.75rem;
-
-        .exTitle {
-            font-size: 10px;
-            letter-spacing: 0.3em;
-            font-weight: 700;
-            color: #9ca3af; // text-gray-400
-            text-transform: uppercase;
-        }
-
-        .exNames {
-            font-size: 1.25rem; // text-xl
-            font-family: $font-serif;
-            color: #1f2937; // text-gray-800
-            transition: color 0.15s;
-
-            span {
-                opacity: 0.7;
-                margin-inline: 0.25rem;
-            }
-        }
-
-        .exSubtitle {
-            font-size: 14px;
-            font-family: $font-pretendard;
-            color: #9ca3af; // text-gray-400
-            font-style: normal;
-        }
-
-        .exDivider {
-            width: 2rem; // w-8
-            height: 1px;
-            background-color: #e5e7eb; // bg-gray-200
-            margin-inline: auto;
-        }
-
-        .exDate {
-            font-size: 0.75rem; // text-xs
-            color: #6b7280; // text-gray-500
-            white-space: pre-wrap;
-            line-height: 1.625; // leading-relaxed
-        }
-    }
-}
-
-.infoTextModal {
-    margin-top: 1.5rem;
-    font-size: 13px;
-    color: #9ca3af;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.25rem;
-    width: 100%;
-    font-weight: 500;
-}
-
-.infoArea {
-    @include flex-col;
-    gap: 0.25rem;
-    font-size: 12px;
-    color: #9ca3af;
-
-    .infoItem {
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-    }
+.andTextLabel {
+  font-size: 11.5px;
+  font-weight: bold;
+  color: v.$gray-400;
+  letter-spacing: -0.02em;
 }

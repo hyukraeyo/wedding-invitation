@@ -18,8 +18,9 @@ import {
     Type
 } from 'lucide-react';
 import { useEffect } from 'react';
-import styles from '../builder/Builder.module.scss';
-import { clsx } from 'clsx';
+import { cn } from '@/lib/utils';
+import { Toggle } from '@/components/ui/toggle';
+import { Separator } from '@/components/ui/separator';
 
 interface RichTextEditorProps {
     content: string;
@@ -29,30 +30,26 @@ interface RichTextEditorProps {
     minHeight?: string;
 }
 
-const ToolbarButton = ({
-    onClick,
-    isActive = false,
+const ToolbarToggle = ({
+    pressed,
+    onPressedChange,
     children,
-    className = "",
-    title
+    title,
 }: {
-    onClick: () => void;
-    isActive?: boolean;
+    pressed: boolean;
+    onPressedChange: () => void;
     children: React.ReactNode;
-    className?: string;
     title?: string;
 }) => (
-    <button
-        type="button"
-        onClick={(e) => {
-            e.preventDefault();
-            onClick();
-        }}
-        className={clsx(styles.toolbarButton, isActive && styles.active, className)}
+    <Toggle
+        pressed={pressed}
+        onPressedChange={onPressedChange}
+        className="data-[state=on]:bg-muted p-2 h-8 w-8"
+        aria-label={title}
         title={title}
     >
         {children}
-    </button>
+    </Toggle>
 );
 
 export default function RichTextEditor({ content, onChange, placeholder, className = "", minHeight = "min-h-[240px]" }: RichTextEditorProps) {
@@ -78,7 +75,10 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
         },
         editorProps: {
             attributes: {
-                class: `focus:outline-none`,
+                class: cn(
+                    "prose prose-sm max-w-none focus:outline-none p-4",
+                    minHeight
+                ),
                 'data-placeholder': placeholder || '',
             },
         },
@@ -94,90 +94,85 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
     if (!editor) return null;
 
     return (
-        <div className={clsx(styles.richTextEditor, className)}>
-            <div className={styles.toolbar}>
-                <div className={styles.group}>
-                    <ToolbarButton
-                        onClick={() => editor.chain().focus().toggleBold().run()}
-                        isActive={editor.isActive('bold')}
+        <div className={cn("border rounded-md bg-background overflow-hidden", className)}>
+            <div className="flex flex-wrap items-center gap-1 p-1 border-b bg-muted/20">
+                <div className="flex items-center gap-0.5">
+                    <ToolbarToggle
+                        onPressedChange={() => editor.chain().focus().toggleBold().run()}
+                        pressed={editor.isActive('bold')}
                         title="굵게"
                     >
-                        <Bold size={18} />
-                    </ToolbarButton>
+                        <Bold size={16} />
+                    </ToolbarToggle>
 
-                    <ToolbarButton
-                        onClick={() => editor.chain().focus().toggleItalic().run()}
-                        isActive={editor.isActive('italic')}
+                    <ToolbarToggle
+                        onPressedChange={() => editor.chain().focus().toggleItalic().run()}
+                        pressed={editor.isActive('italic')}
                         title="기울임"
                     >
-                        <Italic size={18} />
-                    </ToolbarButton>
+                        <Italic size={16} />
+                    </ToolbarToggle>
 
-                    <ToolbarButton
-                        onClick={() => editor.chain().focus().toggleUnderline().run()}
-                        isActive={editor.isActive('underline')}
+                    <ToolbarToggle
+                        onPressedChange={() => editor.chain().focus().toggleUnderline().run()}
+                        pressed={editor.isActive('underline')}
                         title="밑줄"
                     >
-                        <UnderlineIcon size={18} />
-                    </ToolbarButton>
+                        <UnderlineIcon size={16} />
+                    </ToolbarToggle>
                 </div>
 
-                <div className={styles.separator} aria-hidden="true" />
+                <Separator orientation="vertical" className="h-6 mx-1" />
 
-                <div className={styles.group}>
-                    <ToolbarButton
-                        onClick={() => editor.chain().focus().setColor('#8B5E3C').run()}
-                        isActive={editor.isActive('textStyle', { color: '#8B5E3C' })}
+                <div className="flex items-center gap-0.5">
+                    <ToolbarToggle
+                        onPressedChange={() => editor.chain().focus().setColor('#8B5E3C').run()}
+                        pressed={editor.isActive('textStyle', { color: '#8B5E3C' })}
                         title="갈색 상징색"
                     >
-                        <Type size={18} />
-                    </ToolbarButton>
-                    <ToolbarButton
-                        onClick={() => editor.chain().focus().toggleHighlight({ color: '#FFECD1' }).run()}
-                        isActive={editor.isActive('highlight', { color: '#FFECD1' })}
+                        <Type size={16} />
+                    </ToolbarToggle>
+                    <ToolbarToggle
+                        onPressedChange={() => editor.chain().focus().toggleHighlight({ color: '#FFECD1' }).run()}
+                        pressed={editor.isActive('highlight', { color: '#FFECD1' })}
                         title="하이라이트"
                     >
-                        <Highlighter size={18} />
-                    </ToolbarButton>
+                        <Highlighter size={16} />
+                    </ToolbarToggle>
                 </div>
 
-                <div className={styles.separator} aria-hidden="true" />
+                <Separator orientation="vertical" className="h-6 mx-1" />
 
-                <div className={styles.group}>
-                    <ToolbarButton
-                        onClick={() => editor.chain().focus().setTextAlign('left').run()}
-                        isActive={editor.isActive({ textAlign: 'left' })}
+                <div className="flex items-center gap-0.5">
+                    <ToolbarToggle
+                        onPressedChange={() => editor.chain().focus().setTextAlign('left').run()}
+                        pressed={editor.isActive({ textAlign: 'left' })}
                         title="왼쪽 정렬"
                     >
-                        <AlignLeft size={18} />
-                    </ToolbarButton>
+                        <AlignLeft size={16} />
+                    </ToolbarToggle>
 
-                    <ToolbarButton
-                        onClick={() => editor.chain().focus().setTextAlign('center').run()}
-                        isActive={editor.isActive({ textAlign: 'center' })}
+                    <ToolbarToggle
+                        onPressedChange={() => editor.chain().focus().setTextAlign('center').run()}
+                        pressed={editor.isActive({ textAlign: 'center' })}
                         title="가운데 정렬"
                     >
-                        <AlignCenter size={18} />
-                    </ToolbarButton>
+                        <AlignCenter size={16} />
+                    </ToolbarToggle>
 
-                    <ToolbarButton
-                        onClick={() => editor.chain().focus().setTextAlign('right').run()}
-                        isActive={editor.isActive({ textAlign: 'right' })}
+                    <ToolbarToggle
+                        onPressedChange={() => editor.chain().focus().setTextAlign('right').run()}
+                        pressed={editor.isActive({ textAlign: 'right' })}
                         title="오른쪽 정렬"
                     >
-                        <AlignRight size={18} />
-                    </ToolbarButton>
+                        <AlignRight size={16} />
+                    </ToolbarToggle>
                 </div>
             </div>
 
             <EditorContent
                 editor={editor}
-                className={styles.content}
-                style={{
-                    minHeight: minHeight.includes('min-h-[')
-                        ? minHeight.replace('min-h-[', '').replace(']', '')
-                        : minHeight
-                }}
+                className="w-full"
             />
         </div>
     );

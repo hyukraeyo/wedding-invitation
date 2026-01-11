@@ -1,0 +1,295 @@
+
+> wedding-invitation@0.1.0 build
+> next build
+
+▲ Next.js 16.1.1 (Turbopack)
+- Environments: .env.local
+- Experiments (use with caution):
+  · optimizePackageImports
+  · serverActions
+
+  Creating an optimized production build ...
+Turbopack build encountered 1 warnings:
+./src/components/builder/sections/BasicInfoSection.module.scss
+Issue while running loader
+SassWarning: Deprecation Warning on line 14, column 15 of file:///C:/Users/johr9/Documents/git/wedding-invitation/src/styles/_tds_typography.scss:14:15:
+Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use map.get instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+14 |   font-weight: map-get($tds-font-weights, $weight);
+
+
+src\styles\_tds_typography.scss 15:16                              tds-typography()
+src\styles\_tds_typography.scss 39:42                              tds-sub-t12()
+src\styles\_builder.scss 114:3                                     builder-sub-label()
+src\components\builder\sections\BasicInfoSection.module.scss 38:3  root stylesheet
+
+
+Import traces:
+  Client Component Browser:
+    ./src/components/builder/sections/BasicInfoSection.module.scss [Client Component Browser]
+    ./src/components/builder/sections/BasicInfoSection.tsx [Client Component Browser]
+    ./src/components/builder/EditorForm.tsx [Client Component Browser]
+    ./src/app/builder/page.tsx [Client Component Browser]
+    ./src/app/builder/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/builder/sections/BasicInfoSection.module.scss [Client Component SSR]
+    ./src/components/builder/sections/BasicInfoSection.tsx [Client Component SSR]
+    ./src/components/builder/EditorForm.tsx [Client Component SSR]
+    ./src/app/builder/page.tsx [Client Component SSR]
+    ./src/app/builder/page.tsx [Server Component]
+
+
+
+> Build error occurred
+Error: Turbopack build failed with 6 errors:
+./src/components/builder/sections/AccountsSection.module.scss
+Error evaluating Node.js code
+Error: Undefined variable.
+   ╷
+33 │     background-color: v.$toss-blue-50;
+   │                       ^^^^^^^^^^^^^^^
+   ╵
+  src\components\builder\sections\AccountsSection.module.scss 33:23  root stylesheet
+Caused by: Error: Undefined variable.
+   ╷
+33 │     background-color: v.$toss-blue-50;
+   │                       ^^^^^^^^^^^^^^^
+   ╵
+  src\components\builder\sections\AccountsSection.module.scss 33:23  root stylesheet
+    [at Object.wrapException (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:2337:47)]
+    [at C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90581:23]
+    [at _wrapJsFunctionForAsync_closure.$protected (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:5005:15)]
+    [at _wrapJsFunctionForAsync_closure.call$2 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:38505:12)]
+    [at Object._asyncStartSync (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:4969:20)]
+    [at _EvaluateVisitor2.visitVariableExpression$body$_EvaluateVisitor0 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90587:16)]
+    [at _EvaluateVisitor2.visitVariableExpression$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90561:19)]
+    [at VariableExpression0.accept$1$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:128275:22)]
+    [at VariableExpression0.accept$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:128278:19)]
+    [at C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:88642:41]
+
+Import traces:
+  Client Component Browser:
+    ./src/components/builder/sections/AccountsSection.module.scss [Client Component Browser]
+    ./src/components/builder/sections/AccountsSection.tsx [Client Component Browser]
+    ./src/components/builder/EditorForm.tsx [Client Component Browser]
+    ./src/app/builder/page.tsx [Client Component Browser]
+    ./src/app/builder/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/builder/sections/AccountsSection.module.scss [Client Component SSR]
+    ./src/components/builder/sections/AccountsSection.tsx [Client Component SSR]
+    ./src/components/builder/EditorForm.tsx [Client Component SSR]
+    ./src/app/builder/page.tsx [Client Component SSR]
+    ./src/app/builder/page.tsx [Server Component]
+
+
+./src/components/builder/sections/DateTimeSection.module.scss
+Error evaluating Node.js code
+Error: Undefined variable.
+   ╷
+31 │   border-left: 2px solid v.$toss-blue-50;
+   │                          ^^^^^^^^^^^^^^^
+   ╵
+  src\components\builder\sections\DateTimeSection.module.scss 31:26  root stylesheet
+Caused by: Error: Undefined variable.
+   ╷
+31 │   border-left: 2px solid v.$toss-blue-50;
+   │                          ^^^^^^^^^^^^^^^
+   ╵
+  src\components\builder\sections\DateTimeSection.module.scss 31:26  root stylesheet
+    [at Object.wrapException (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:2337:47)]
+    [at C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90581:23]
+    [at _wrapJsFunctionForAsync_closure.$protected (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:5005:15)]
+    [at _wrapJsFunctionForAsync_closure.call$2 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:38505:12)]
+    [at Object._asyncStartSync (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:4969:20)]
+    [at _EvaluateVisitor2.visitVariableExpression$body$_EvaluateVisitor0 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90587:16)]
+    [at _EvaluateVisitor2.visitVariableExpression$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90561:19)]
+    [at VariableExpression0.accept$1$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:128275:22)]
+    [at VariableExpression0.accept$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:128278:19)]
+    [at _EvaluateVisitor_visitListExpression_closure2.call$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:96237:25)]
+
+Import traces:
+  Client Component Browser:
+    ./src/components/builder/sections/DateTimeSection.module.scss [Client Component Browser]
+    ./src/components/builder/sections/DateTimeSection.tsx [Client Component Browser]
+    ./src/components/builder/EditorForm.tsx [Client Component Browser]
+    ./src/app/builder/page.tsx [Client Component Browser]
+    ./src/app/builder/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/builder/sections/DateTimeSection.module.scss [Client Component SSR]
+    ./src/components/builder/sections/DateTimeSection.tsx [Client Component SSR]
+    ./src/components/builder/EditorForm.tsx [Client Component SSR]
+    ./src/app/builder/page.tsx [Client Component SSR]
+    ./src/app/builder/page.tsx [Server Component]
+
+
+./src/components/builder/sections/GallerySection.module.scss
+Error evaluating Node.js code
+Error: Undefined variable.
+    ╷
+205 │   background-color: rgba(v.$toss-blue-50, 0.5);
+    │                          ^^^^^^^^^^^^^^^
+    ╵
+  src\components\builder\sections\GallerySection.module.scss 205:26  root stylesheet
+Caused by: Error: Undefined variable.
+    ╷
+205 │   background-color: rgba(v.$toss-blue-50, 0.5);
+    │                          ^^^^^^^^^^^^^^^
+    ╵
+  src\components\builder\sections\GallerySection.module.scss 205:26  root stylesheet
+    [at Object.wrapException (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:2337:47)]
+    [at C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90581:23]
+    [at _wrapJsFunctionForAsync_closure.$protected (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:5005:15)]
+    [at _wrapJsFunctionForAsync_closure.call$2 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:38505:12)]
+    [at Object._asyncStartSync (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:4969:20)]
+    [at _EvaluateVisitor2.visitVariableExpression$body$_EvaluateVisitor0 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90587:16)]
+    [at _EvaluateVisitor2.visitVariableExpression$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90561:19)]
+    [at VariableExpression0.accept$1$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:128275:22)]
+    [at VariableExpression0.accept$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:128278:19)]
+    [at C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:92301:31]
+
+Import traces:
+  Client Component Browser:
+    ./src/components/builder/sections/GallerySection.module.scss [Client Component Browser]
+    ./src/components/builder/sections/GallerySection.tsx [Client Component Browser]
+    ./src/components/builder/EditorForm.tsx [Client Component Browser]
+    ./src/app/builder/page.tsx [Client Component Browser]
+    ./src/app/builder/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/builder/sections/GallerySection.module.scss [Client Component SSR]
+    ./src/components/builder/sections/GallerySection.tsx [Client Component SSR]
+    ./src/components/builder/EditorForm.tsx [Client Component SSR]
+    ./src/app/builder/page.tsx [Client Component SSR]
+    ./src/app/builder/page.tsx [Server Component]
+
+
+./src/components/builder/sections/GreetingSection.module.scss
+Error evaluating Node.js code
+Error: Undefined variable.
+   ╷
+95 │     background-color: v.$toss-blue-50;
+   │                       ^^^^^^^^^^^^^^^
+   ╵
+  src\components\builder\sections\GreetingSection.module.scss 95:23  root stylesheet
+Caused by: Error: Undefined variable.
+   ╷
+95 │     background-color: v.$toss-blue-50;
+   │                       ^^^^^^^^^^^^^^^
+   ╵
+  src\components\builder\sections\GreetingSection.module.scss 95:23  root stylesheet
+    [at Object.wrapException (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:2337:47)]
+    [at C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90581:23]
+    [at _wrapJsFunctionForAsync_closure.$protected (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:5005:15)]
+    [at _wrapJsFunctionForAsync_closure.call$2 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:38505:12)]
+    [at Object._asyncStartSync (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:4969:20)]
+    [at _EvaluateVisitor2.visitVariableExpression$body$_EvaluateVisitor0 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90587:16)]
+    [at _EvaluateVisitor2.visitVariableExpression$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90561:19)]
+    [at VariableExpression0.accept$1$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:128275:22)]
+    [at VariableExpression0.accept$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:128278:19)]
+    [at C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:88642:41]
+
+Import traces:
+  Client Component Browser:
+    ./src/components/builder/sections/GreetingSection.module.scss [Client Component Browser]
+    ./src/components/builder/sections/GreetingSection.tsx [Client Component Browser]
+    ./src/components/builder/EditorForm.tsx [Client Component Browser]
+    ./src/app/builder/page.tsx [Client Component Browser]
+    ./src/app/builder/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/builder/sections/GreetingSection.module.scss [Client Component SSR]
+    ./src/components/builder/sections/GreetingSection.tsx [Client Component SSR]
+    ./src/components/builder/EditorForm.tsx [Client Component SSR]
+    ./src/app/builder/page.tsx [Client Component SSR]
+    ./src/app/builder/page.tsx [Server Component]
+
+
+./src/components/builder/sections/LocationSection.module.scss
+Error evaluating Node.js code
+Error: Undefined variable.
+   ╷
+46 │     color: v.$gray-900;
+   │            ^^^^^^^^^^^
+   ╵
+  src\components\builder\sections\LocationSection.module.scss 46:12  root stylesheet
+Caused by: Error: Undefined variable.
+   ╷
+46 │     color: v.$gray-900;
+   │            ^^^^^^^^^^^
+   ╵
+  src\components\builder\sections\LocationSection.module.scss 46:12  root stylesheet
+    [at Object.wrapException (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:2337:47)]
+    [at C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90581:23]
+    [at _wrapJsFunctionForAsync_closure.$protected (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:5005:15)]
+    [at _wrapJsFunctionForAsync_closure.call$2 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:38505:12)]
+    [at Object._asyncStartSync (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:4969:20)]
+    [at _EvaluateVisitor2.visitVariableExpression$body$_EvaluateVisitor0 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90587:16)]
+    [at _EvaluateVisitor2.visitVariableExpression$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90561:19)]
+    [at VariableExpression0.accept$1$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:128275:22)]
+    [at VariableExpression0.accept$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:128278:19)]
+    [at C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:88642:41]
+
+Import traces:
+  Client Component Browser:
+    ./src/components/builder/sections/LocationSection.module.scss [Client Component Browser]
+    ./src/components/builder/sections/LocationSection.tsx [Client Component Browser]
+    ./src/components/builder/EditorForm.tsx [Client Component Browser]
+    ./src/app/builder/page.tsx [Client Component Browser]
+    ./src/app/builder/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/builder/sections/LocationSection.module.scss [Client Component SSR]
+    ./src/components/builder/sections/LocationSection.tsx [Client Component SSR]
+    ./src/components/builder/EditorForm.tsx [Client Component SSR]
+    ./src/app/builder/page.tsx [Client Component SSR]
+    ./src/app/builder/page.tsx [Server Component]
+
+
+./src/components/builder/sections/ThemeSection.module.scss
+Error evaluating Node.js code
+Error: Undefined variable.
+   ╷
+67 │     background-color: v.$toss-blue-50;
+   │                       ^^^^^^^^^^^^^^^
+   ╵
+  src\components\builder\sections\ThemeSection.module.scss 67:23  root stylesheet
+Caused by: Error: Undefined variable.
+   ╷
+67 │     background-color: v.$toss-blue-50;
+   │                       ^^^^^^^^^^^^^^^
+   ╵
+  src\components\builder\sections\ThemeSection.module.scss 67:23  root stylesheet
+    [at Object.wrapException (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:2337:47)]
+    [at C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90581:23]
+    [at _wrapJsFunctionForAsync_closure.$protected (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:5005:15)]
+    [at _wrapJsFunctionForAsync_closure.call$2 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:38505:12)]
+    [at Object._asyncStartSync (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:4969:20)]
+    [at _EvaluateVisitor2.visitVariableExpression$body$_EvaluateVisitor0 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90587:16)]
+    [at _EvaluateVisitor2.visitVariableExpression$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90561:19)]
+    [at VariableExpression0.accept$1$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:128275:22)]
+    [at VariableExpression0.accept$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:128278:19)]
+    [at C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:88642:41]
+
+Import traces:
+  Client Component Browser:
+    ./src/components/builder/sections/ThemeSection.module.scss [Client Component Browser]
+    ./src/components/builder/sections/ThemeSection.tsx [Client Component Browser]
+    ./src/components/builder/EditorForm.tsx [Client Component Browser]
+    ./src/app/builder/page.tsx [Client Component Browser]
+    ./src/app/builder/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/builder/sections/ThemeSection.module.scss [Client Component SSR]
+    ./src/components/builder/sections/ThemeSection.tsx [Client Component SSR]
+    ./src/components/builder/EditorForm.tsx [Client Component SSR]
+    ./src/app/builder/page.tsx [Client Component SSR]
+    ./src/app/builder/page.tsx [Server Component]
+
+
+    at ignore-listed frames

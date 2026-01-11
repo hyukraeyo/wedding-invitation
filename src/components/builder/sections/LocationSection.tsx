@@ -1,29 +1,27 @@
-import React from 'react';
-import { MapPin, Search } from 'lucide-react';
-import DaumPostcodeEmbed from 'react-daum-postcode';
 
-import { clsx } from 'clsx';
+import React, { useState, useCallback } from 'react';
+import { MapPin, Search } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { SegmentedControl } from '../SegmentedControl';
 import { Switch } from '../Switch';
 import { Field } from '../Field';
-import { Row } from '../Layout';
 import { BuilderModal } from '@/components/common/BuilderModal';
 import { ImageUploader } from '../ImageUploader';
-import { Section, Divider, Card, Stack } from '../Layout';
+import DaumPostcodeEmbed from 'react-daum-postcode';
 import styles from './LocationSection.module.scss';
+import { cn } from '@/lib/utils';
 
 // Simple Icon Components for Map Types
-const NaverIcon = ({ size = 24, className }: { size?: number, className?: string }) => (
+const NaverIcon = ({ size = 24, className }: { size?: number, className?: string | undefined }) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
         <rect width="24" height="24" rx="4" fill="#03C75A" />
         <path d="M16.2 18V6H13.6L7.8 14.5V6H5.2V18H7.8L13.6 9.5V18H16.2Z" fill="white" />
     </svg>
 );
 
-const KakaoIcon = ({ size = 24, className, showBackground = true }: { size?: number, className?: string, showBackground?: boolean }) => (
+const KakaoIcon = ({ size = 24, className, showBackground = true }: { size?: number, className?: string | undefined, showBackground?: boolean | undefined }) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
         {showBackground && <rect width="24" height="24" rx="4" fill="#FFE812" />}
         <path d="M12 5C8.13401 5 5 7.46231 5 10.5C5 12.3023 6.13605 13.9059 7.91501 14.9077L7.30796 17.587C7.22894 17.9351 7.62594 18.1969 7.92095 17.9899L11.3739 15.5678C11.581 15.5869 11.7891 15.5969 12 15.6C15.866 15.6 19 13.1377 19 10.1C19 7.06231 15.866 5 12 5Z" fill="#3C1E1E" />
@@ -51,27 +49,34 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
         sketchRatio, setSketchRatio
     } = useInvitationStore();
 
-    const [isSearchOpen, setIsSearchOpen] = React.useState(false);
+    const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-    const handleComplete = (data: { address: string; addressType: string; bname: string; buildingName: string }) => {
+    const handleAddressSearch = useCallback(() => {
+        setIsSearchOpen(true);
+    }, []);
+
+    const handleComplete = (data: {
+        address: string;
+        addressType: 'R' | 'J';
+        bname: string;
+        buildingName: string;
+    }) => {
         let fullAddress = data.address;
         let extraAddress = '';
 
         if (data.addressType === 'R') {
-            if (data.bname !== '') extraAddress += data.bname;
-            if (data.buildingName !== '') extraAddress += (extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName);
-            fullAddress += (extraAddress !== '' ? ` (${extraAddress})` : '');
+            if (data.bname !== '') {
+                extraAddress += data.bname;
+            }
+            if (data.buildingName !== '') {
+                extraAddress += extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName;
+            }
+            fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
         }
 
         setAddress(fullAddress);
         setIsSearchOpen(false);
     };
-
-    const handleAddressSearch = () => {
-        setIsSearchOpen(true);
-    };
-
-
 
     const formatPhoneNumber = (value: string) => {
         const clean = value.replace(/[^0-9]/g, '');
@@ -106,56 +111,59 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
             icon={MapPin}
             isOpen={isOpen}
             onToggle={onToggle}
-            isCompleted={!!location && !!address}
+            isCompleted={!!address}
         >
-            <Section>
-                {/* 주소 검색 */}
+            <div className={styles.container}>
+                {/* Address Search */}
                 <Field label="주소">
                     <div
                         onClick={handleAddressSearch}
                         className={styles.addressButton}
                     >
-                        <span className={clsx(styles.addressText, !address && styles.placeholder)}>
+                        <span className={cn(
+                            styles.addressText,
+                            address ? styles.filled : styles.empty
+                        )}>
                             {address || "주소를 검색해주세요"}
                         </span>
                         <Search size={18} className={styles.searchIcon} />
                     </div>
                 </Field>
 
-                {/* 예식장명 */}
+                {/* Venue Name */}
                 <Field label="예식장명">
                     <TextField
                         type="text"
+                        placeholder="예: 더 컨벤션 신사"
                         value={location}
                         onChange={(e) => setLocation(e.target.value)}
-                        placeholder="예식장 이름 입력"
                     />
                 </Field>
 
-                {/* 층과 홀 */}
+                {/* Detailed Address */}
                 <Field label="층과 홀">
                     <TextField
                         type="text"
+                        placeholder="예: 3층 그랜드홀"
                         value={detailAddress}
                         onChange={(e) => setDetailAddress(e.target.value)}
-                        placeholder="층과 웨딩홀 이름 입력"
                     />
                 </Field>
 
-                {/* 연락처 */}
+                {/* Contact */}
                 <Field label="연락처">
                     <TextField
                         type="text"
+                        placeholder="예: 02-000-0000"
                         value={locationContact}
                         onChange={handleContactChange}
-                        placeholder="예식장 연락처, 02-000-0000"
                         maxLength={13}
                     />
                 </Field>
 
-                <Divider />
+                <div className={styles.divider} />
 
-                {/* 지도 종류 */}
+                {/* Map Type */}
                 <Field label="지도 종류">
                     <SegmentedControl
                         value={mapType}
@@ -163,28 +171,28 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                             {
                                 label: '네이버',
                                 value: 'naver',
-                                icon: <NaverIcon size={18} className="shrink-0" />
+                                icon: <NaverIcon size={18} className={styles.mapIcon} />
                             },
                             {
                                 label: '카카오',
                                 value: 'kakao',
-                                icon: <KakaoIcon size={18} showBackground={false} className="shrink-0" />
+                                icon: <KakaoIcon size={18} showBackground={false} className={styles.mapIcon} />
                             },
                         ]}
                         onChange={(val: 'naver' | 'kakao') => setMapType(val)}
                     />
                 </Field>
 
-                {/* 지도 설정 */}
+                {/* Map Settings */}
                 <Field label="지도 설정">
-                    <Row wrap>
+                    <div className={styles.mapOptions}>
                         <Switch checked={showMap} onChange={setShowMap} label="지도 표시" />
                         <Switch checked={lockMap} onChange={setLockMap} label="지도 잠금" />
                         <Switch checked={showNavigation} onChange={setShowNavigation} label="내비게이션" />
-                    </Row>
+                    </div>
                 </Field>
 
-                {/* 지도 높이 */}
+                {/* Map Height */}
                 <Field label="지도 높이">
                     <SegmentedControl
                         value={mapHeight}
@@ -196,7 +204,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                     />
                 </Field>
 
-                {/* 줌 레벨 */}
+                {/* Zoom Level */}
                 <Field label="줌 레벨">
                     <SegmentedControl
                         value={mapZoom}
@@ -211,9 +219,9 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                     />
                 </Field>
 
-                {/* 약도 이미지 */}
+                {/* Roadmap Image */}
                 <Field label="약도 이미지">
-                    <Stack gap="md">
+                    <div className={styles.sketchWrapper}>
                         <ImageUploader
                             value={sketchUrl}
                             onChange={setSketchUrl}
@@ -222,22 +230,22 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                             onRatioChange={(val) => setSketchRatio(val)}
                             aspectRatio="4/3"
                         />
-                    </Stack>
+                    </div>
                 </Field>
-            </Section>
+            </div>
 
             <BuilderModal
                 isOpen={isSearchOpen}
                 onClose={() => setIsSearchOpen(false)}
                 title="주소 검색"
             >
-                <Card className={styles.postcodeWrapper ?? ''}>
+                <div className={styles.postcodeWrapper}>
                     <DaumPostcodeEmbed
                         onComplete={handleComplete}
                         style={{ height: '100%' }}
                         autoClose={false}
                     />
-                </Card>
+                </div>
             </BuilderModal>
         </AccordionItem>
     );

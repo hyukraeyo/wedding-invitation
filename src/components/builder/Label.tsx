@@ -1,15 +1,16 @@
-import { clsx } from 'clsx';
-import commonStyles from './Builder.module.scss'; // Assuming it uses common styles or create Label.module.scss if needed. Checking file it might not have its own scss.
+import React from 'react';
+import { Label as ShadcnLabel } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
 
-interface LabelProps extends React.HTMLAttributes<HTMLLabelElement> {
-    required?: boolean;
+interface LabelProps extends React.ComponentPropsWithoutRef<typeof ShadcnLabel> {
+    required?: boolean | undefined;
 }
 
 export const Label = ({ children, className, required, ...props }: LabelProps) => {
     return (
-        <label className={clsx(commonStyles.label, className)} {...props}>
+        <ShadcnLabel className={cn(className)} {...props}>
             {children}
-            {required && <span className={commonStyles.required}>*</span>}
-        </label>
+            {required && <span className="text-destructive ml-1">*</span>}
+        </ShadcnLabel>
     );
 };

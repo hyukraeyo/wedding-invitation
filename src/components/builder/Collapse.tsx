@@ -1,7 +1,12 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React from 'react';
 import { ChevronDown } from 'lucide-react';
-import styles from './Collapse.module.scss';
-import { clsx } from 'clsx';
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+} from "@/components/ui/collapsible"
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 interface CollapseProps {
     label: string;
@@ -13,41 +18,30 @@ interface CollapseProps {
 }
 
 export const Collapse = ({ label, children, isOpen, onToggle, className, rightElement }: CollapseProps) => {
-    const contentRef = useRef<HTMLDivElement>(null);
-    const [height, setHeight] = useState<number | undefined>(isOpen ? undefined : 0);
-
-    useEffect(() => {
-        if (isOpen) {
-            const timer = setTimeout(() => {
-                setHeight(contentRef.current?.scrollHeight);
-            }, 0);
-            return () => clearTimeout(timer);
-        } else {
-            const timer = setTimeout(() => setHeight(0), 0);
-            return () => clearTimeout(timer);
-        }
-    }, [isOpen, children]);
-
     return (
-        <div className={clsx(styles.container, className, isOpen && styles.open)}>
-            <button type="button" className={styles.trigger} onClick={onToggle}>
-                <div className={styles.headerContent}>
-                    <span className={clsx(styles.label, isOpen && styles.open)}>{label}</span>
-                    {rightElement}
+        <Collapsible
+            open={isOpen}
+            onOpenChange={onToggle}
+            className={cn("w-full border rounded-lg bg-card text-card-foreground shadow-sm", className)}
+        >
+            <div className="flex items-center justify-between px-4 py-3">
+                <div className="flex items-center gap-2 flex-1">
+                    <span className="font-semibold text-sm">{label}</span>
                 </div>
-                <ChevronDown size={18} className={clsx(styles.icon, isOpen && styles.open)} />
-            </button>
-            <div
-                className={clsx(styles.collapseWrapper, isOpen && styles.open)}
-                style={{ height: isOpen ? height : 0 }}
-            >
-                <div ref={contentRef} className={styles.collapseInner}>
-                    <div className={styles.content}>
-                        {children}
-                    </div>
+                <div className="flex items-center gap-2">
+                    {rightElement}
+                    <CollapsibleTrigger asChild>
+                        <Button variant="ghost" size="sm" className="w-9 p-0">
+                            <ChevronDown className={cn("h-4 w-4 transition-transform duration-200", isOpen && "rotate-180")} />
+                            <span className="sr-only">Toggle</span>
+                        </Button>
+                    </CollapsibleTrigger>
                 </div>
             </div>
-        </div>
+            <CollapsibleContent className="px-4 pb-4">
+                {children}
+            </CollapsibleContent>
+        </Collapsible>
     );
 };
 

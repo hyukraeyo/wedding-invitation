@@ -1,9 +1,10 @@
 // Utility Functions
-import { type ClassValue, clsx } from 'clsx';
+import { type ClassValue, clsx } from "clsx"
+import { twMerge } from "tailwind-merge"
 
 // Class Name Utility
 export function cn(...inputs: ClassValue[]) {
-  return clsx(inputs);
+  return twMerge(clsx(inputs))
 }
 
 // Date Utilities

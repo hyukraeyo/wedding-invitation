@@ -1,41 +1,17 @@
 import React, { useState } from 'react';
-import { CreditCard, Plus, Trash2, Sparkles } from 'lucide-react';
+import { CreditCard, Plus, Trash2, ChevronDown } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
-import { SegmentedControl } from '../SegmentedControl';
-import { Button } from '../Button';
 import { TextField } from '../TextField';
-import { Label } from '../Label';
-import { BuilderModal } from '@/components/common/BuilderModal';
+import { SegmentedControl } from '../SegmentedControl';
 import { Field } from '../Field';
-import { Collapse } from '../Collapse';
-import RichTextEditor from '@/components/common/RichTextEditor';
-import { Section, Stack, Row, Card, Divider, Grid } from '../Layout';
 import styles from './AccountsSection.module.scss';
+import { cn } from '@/lib/utils';
 
 interface SectionProps {
     isOpen: boolean;
     onToggle: () => void;
 }
-
-const ACCOUNTS_SAMPLES = [
-    {
-        title: '정중한 마음',
-        message: '<p>참석이 어려우신 분들을 위해<br>계좌번호를 기재하였습니다.<br>너그러운 양해 부탁드립니다.</p>'
-    },
-    {
-        title: '감사의 마음',
-        message: '<p>축하의 마음을 담아 축의금을 전달하고자 하시는 분들을 위해 계좌번호를 안내해 드립니다.<br>넓은 마음으로 양해 부탁드립니다.</p>'
-    },
-    {
-        title: '따뜻한 마음',
-        message: '<p>화환은 정중히 사양합니다.<br>보내주시는 마음만 감사히 받겠습니다.<br>참석이 어려우신 분들을 위해 계좌번호를 안내해 드립니다.</p>'
-    },
-    {
-        title: '심플한 안내',
-        message: '<p>마음 전하실 곳을 안내해 드립니다.</p>'
-    }
-];
 
 export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
     const {
@@ -44,297 +20,183 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
         accountsDescription, setAccountsDescription,
         accountsGroomTitle, setAccountsGroomTitle,
         accountsBrideTitle, setAccountsBrideTitle,
-        accountsColorMode, setAccountsColorMode,
-        groom, bride
+        accountsColorMode, setAccountsColorMode
     } = useInvitationStore();
 
-    const [isConfigOpen, setIsConfigOpen] = useState(false);
-    const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
+    const [expandedId, setExpandedId] = useState<string | null>(null);
 
-    const addAccount = (type: 'groom' | 'bride') => {
-        const id = `${type}-${Date.now()}`;
-        const defaultName = type === 'groom' ? `${groom.lastName}${groom.firstName}` : `${bride.lastName}${bride.firstName}`;
-        setAccounts([...accounts, { id, type, relation: '본인', bank: '', accountNumber: '', holder: defaultName }]);
+    const handleAddAccount = () => {
+        const newAccount = {
+            id: Math.random().toString(36).substr(2, 9),
+            type: 'groom' as const,
+            relation: '본인' as const,
+            bank: '',
+            accountNumber: '',
+            holder: ''
+        };
+        setAccounts([...accounts, newAccount]);
+        setExpandedId(newAccount.id);
     };
 
-    const removeAccount = (id: string) => {
-        setAccounts(accounts.filter(a => a.id !== id));
+    const handleUpdateAccount = (id: string, data: Record<string, unknown>) => {
+        setAccounts(accounts.map(acc => acc.id === id ? { ...acc, ...data } : acc));
     };
 
-    const updateAccount = (id: string, data: Partial<Account>) => {
-        setAccounts(accounts.map(a => a.id === id ? { ...a, ...data } : a));
+    const handleRemoveAccount = (id: string) => {
+        setAccounts(accounts.filter(acc => acc.id !== id));
     };
-
-    const groomAccs = accounts.filter(a => a.type === 'groom');
-    const brideAccs = accounts.filter(a => a.type === 'bride');
 
     return (
         <AccordionItem
-            title="마음 전하실 곳"
+            title="축의금 및 계좌번호"
             icon={CreditCard}
             isOpen={isOpen}
             onToggle={onToggle}
-            isCompleted={accounts.length > 0 && accounts.every(a => a.bank && a.accountNumber)}
+            isCompleted={accounts.length > 0}
         >
-            <Section>
-                <Stack gap="md">
-                    <Collapse
-                        label="섹션 문구 및 스타일 설정"
-                        isOpen={isConfigOpen}
-                        onToggle={() => setIsConfigOpen(!isConfigOpen)}
-                    >
-                        <Field label="메인 타이틀">
-                            <TextField
-                                value={accountsTitle}
-                                onChange={(e) => setAccountsTitle(e.target.value)}
-                                placeholder="축하의 마음 전하실 곳"
-                            />
-                        </Field>
+            <div className={styles.container}>
+                {/* Titles */}
+                <Field label="페이지 문구">
+                    <div className={styles.optionWrapper}>
+                        <TextField
+                            label="메인 제목"
+                            placeholder="예: 마음 전하실 곳"
+                            value={accountsTitle}
+                            onChange={(e) => setAccountsTitle(e.target.value)}
+                        />
+                        <TextField
+                            label="대표 설명"
+                            placeholder="축하의 마음을 담아..."
+                            value={accountsDescription}
+                            onChange={(e) => setAccountsDescription(e.target.value)}
+                            multiline
+                            rows={3}
+                        />
+                    </div>
+                </Field>
 
-                        <Field
-                            label={
-                                <Row align="between">
-                                    <Label className={styles.noMarginLabel ?? ''}>안내 문구</Label>
-                                    <button
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setIsSampleModalOpen(true);
-                                        }}
-                                        className={styles.exampleButton ?? ''}
-                                    >
-                                        <Sparkles size={14} className={styles.sparkle ?? ''} />
-                                        <span>예시 문구</span>
-                                    </button>
-                                </Row>
-                            }
+                {/* Account List */}
+                <Field label="계좌 리스트">
+                    <div className={styles.accountList}>
+                        {accounts.map((acc) => (
+                            <div key={acc.id} className={styles.accountItem}>
+                                <div
+                                    className={styles.accountHeader}
+                                    onClick={() => setExpandedId(expandedId === acc.id ? null : acc.id)}
+                                >
+                                    <div className={styles.accountTitle}>
+                                        <span className={cn(styles.badge, acc.type === 'groom' ? styles.groom : styles.bride)}>
+                                            {acc.type === 'groom' ? '신랑측' : '신부측'}
+                                        </span>
+                                        <span className={styles.name}>
+                                            {acc.holder || '새 계좌'} ({acc.relation})
+                                        </span>
+                                    </div>
+                                    <ChevronDown
+                                        size={18}
+                                        className={cn(styles.chevron, expandedId === acc.id && styles.expanded)}
+                                    />
+                                </div>
+
+                                {expandedId === acc.id && (
+                                    <div className={styles.accountBody}>
+                                        <div className={styles.fieldRow}>
+                                            <div className={styles.flex2}>
+                                                <SegmentedControl
+                                                    value={acc.type}
+                                                    options={[
+                                                        { label: '신랑측', value: 'groom' },
+                                                        { label: '신부측', value: 'bride' },
+                                                    ]}
+                                                    onChange={(val) => handleUpdateAccount(acc.id, { type: val as 'groom' | 'bride' })}
+                                                />
+                                            </div>
+                                            <div className={styles.flex3}>
+                                                <TextField
+                                                    placeholder="관계 (예: 본인, 아버지)"
+                                                    value={acc.relation}
+                                                    onChange={(e) => handleUpdateAccount(acc.id, { relation: e.target.value })}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className={styles.fieldRow}>
+                                            <div className={styles.flex1}>
+                                                <TextField
+                                                    label="은행"
+                                                    placeholder="예: 신한"
+                                                    value={acc.bank}
+                                                    onChange={(e) => handleUpdateAccount(acc.id, { bank: e.target.value })}
+                                                />
+                                            </div>
+                                            <div className={styles.flex1}>
+                                                <TextField
+                                                    label="예금주"
+                                                    placeholder="성함"
+                                                    value={acc.holder}
+                                                    onChange={(e) => handleUpdateAccount(acc.id, { holder: e.target.value })}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <TextField
+                                            label="계좌번호"
+                                            placeholder="숫자만 입력"
+                                            value={acc.accountNumber}
+                                            onChange={(e) => handleUpdateAccount(acc.id, { accountNumber: e.target.value.replace(/[^0-9]/g, '') })}
+                                        />
+
+                                        <button
+                                            className={styles.removeBtn}
+                                            onClick={() => handleRemoveAccount(acc.id)}
+                                        >
+                                            <Trash2 size={14} />
+                                            <span>계좌 삭제</span>
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+
+                        <button
+                            className={styles.addBtn}
+                            onClick={handleAddAccount}
                         >
-                            <RichTextEditor
-                                content={accountsDescription}
-                                onChange={setAccountsDescription}
-                                placeholder="축하의 마음을 담아..."
-                                minHeight="160px"
-                            />
-                        </Field>
+                            <Plus size={18} />
+                            <span>계좌 추가하기</span>
+                        </button>
+                    </div>
+                </Field>
 
-                        <Field label="신랑측 그룹 타이틀">
-                            <TextField
-                                value={accountsGroomTitle}
-                                onChange={(e) => setAccountsGroomTitle(e.target.value)}
-                                placeholder="신랑 측 마음 전하실 곳"
-                            />
-                        </Field>
-                        <Field label="신부측 그룹 타이틀">
-                            <TextField
-                                value={accountsBrideTitle}
-                                onChange={(e) => setAccountsBrideTitle(e.target.value)}
-                                placeholder="신부 측 마음 전하실 곳"
-                            />
-                        </Field>
-
-                        <Field label="계좌 아코디언 색상">
+                {/* Appearance Settings */}
+                <Field label="표시 설정">
+                    <div className={styles.optionWrapper}>
+                        <TextField
+                            label="신랑측 그룹 제목"
+                            placeholder="신랑 측 마음 전하실 곳"
+                            value={accountsGroomTitle}
+                            onChange={(e) => setAccountsGroomTitle(e.target.value)}
+                        />
+                        <TextField
+                            label="신부측 그룹 제목"
+                            placeholder="신부 측 마음 전하실 곳"
+                            value={accountsBrideTitle}
+                            onChange={(e) => setAccountsBrideTitle(e.target.value)}
+                        />
+                        <Field label="색상 모드" className="mt-2">
                             <SegmentedControl
                                 value={accountsColorMode}
-                                onChange={(val) => setAccountsColorMode(val as 'accent' | 'subtle' | 'white')}
                                 options={[
-                                    { label: '테마색', value: 'accent' },
-                                    { label: '연한 회색', value: 'subtle' },
-                                    { label: '흰색', value: 'white' }
+                                    { label: '강조', value: 'accent' },
+                                    { label: '은은하게', value: 'subtle' },
+                                    { label: '화이트', value: 'white' },
                                 ]}
+                                onChange={(val) => setAccountsColorMode(val as 'accent' | 'subtle' | 'white')}
                             />
                         </Field>
-                    </Collapse>
-                </Stack>
-
-                <BuilderModal
-                    isOpen={isSampleModalOpen}
-                    onClose={() => setIsSampleModalOpen(false)}
-                    title="추천 문구"
-                >
-                    <div className={styles.modalGrid ?? ''}>
-                        {ACCOUNTS_SAMPLES.map((sample, idx) => (
-                            <Card
-                                key={idx}
-                                hoverable
-                                className={styles.sampleCard ?? ''}
-                            >
-                                <button
-                                    onClick={() => {
-                                        setAccountsDescription(sample.message);
-                                        setIsSampleModalOpen(false);
-                                    }}
-                                    className={styles.sampleButton ?? ''}
-                                >
-                                    <div className={styles.sampleTitle ?? ''}>{sample.title}</div>
-                                    <div
-                                        className={styles.sampleMessage ?? ''}
-                                        dangerouslySetInnerHTML={{ __html: sample.message }}
-                                    />
-                                </button>
-                            </Card>
-                        ))}
                     </div>
-                </BuilderModal>
-
-                <Divider />
-
-                {/* Groom Side */}
-                <Stack gap="md">
-                    <Row align="between">
-                        <Row gap="sm">
-                            <span className={styles.indicatorGroom ?? ''} />
-                            <span className={styles.sideLabel ?? ''}>신랑측 계좌</span>
-                        </Row>
-                        <Button
-                            variant="weak"
-                            size="small"
-                            color="dark"
-                            onClick={() => addAccount('groom')}
-                            className={styles.addButton ?? ''}
-                        >
-                            <Plus size={12} /> 추가
-                        </Button>
-                    </Row>
-                    <Stack gap="md">
-                        {groomAccs.map((acc) => (
-                            <AccountEntry
-                                key={acc.id}
-                                acc={acc}
-                                groom={groom}
-                                bride={bride}
-                                onUpdate={(data) => updateAccount(acc.id, data)}
-                                onRemove={() => removeAccount(acc.id)}
-                            />
-                        ))}
-                    </Stack>
-                </Stack>
-
-                <Divider />
-
-                {/* Bride Side */}
-                <Stack gap="md">
-                    <Row align="between">
-                        <Row gap="sm">
-                            <span className={styles.indicatorBride ?? ''} />
-                            <span className={styles.sideLabel ?? ''}>신부측 계좌</span>
-                        </Row>
-                        <Button
-                            variant="weak"
-                            size="small"
-                            color="dark"
-                            onClick={() => addAccount('bride')}
-                            className={styles.addButton ?? ''}
-                        >
-                            <Plus size={12} /> 추가
-                        </Button>
-                    </Row>
-                    <Stack gap="md">
-                        {brideAccs.map((acc) => (
-                            <AccountEntry
-                                key={acc.id}
-                                acc={acc}
-                                groom={groom}
-                                bride={bride}
-                                onUpdate={(data) => updateAccount(acc.id, data)}
-                                onRemove={() => removeAccount(acc.id)}
-                            />
-                        ))}
-                    </Stack>
-                </Stack>
-            </Section>
-        </AccordionItem>
-    );
-}
-
-interface Account {
-    id: string;
-    type: 'groom' | 'bride';
-    relation: '본인' | '아버지' | '어머니';
-    bank: string;
-    accountNumber: string;
-    holder: string;
-}
-
-interface Person {
-    firstName: string;
-    lastName: string;
-    parents: {
-        father: { name: string };
-        mother: { name: string };
-    };
-}
-
-function AccountEntry({
-    acc, groom, bride, onUpdate, onRemove
-}: {
-    acc: Account;
-    groom: Person;
-    bride: Person;
-    onUpdate: (data: Partial<Account>) => void;
-    onRemove: () => void
-}) {
-    const getName = (rel: '본인' | '아버지' | '어머니') => {
-        if (acc.type === 'groom') {
-            if (rel === '본인') return `${groom.lastName}${groom.firstName}`;
-            if (rel === '아버지') return groom.parents.father.name;
-            if (rel === '어머니') return groom.parents.mother.name;
-        } else {
-            if (rel === '본인') return `${bride.lastName}${bride.firstName}`;
-            if (rel === '아버지') return bride.parents.father.name;
-            if (rel === '어머니') return bride.parents.mother.name;
-        }
-        return '';
-    };
-
-    return (
-        <Card className={styles.accountCard ?? ''}>
-            <Stack gap="md">
-                <Row align="between">
-                    <div className={styles.buttonGroupWrapper ?? ''}>
-                        <SegmentedControl
-                            size="sm"
-                            value={acc.relation}
-                            options={(['본인', '아버지', '어머니'] as const).map((rel) => ({
-                                label: rel === '본인' ? (acc.type === 'groom' ? '신랑' : '신부') : rel,
-                                value: rel
-                            }))}
-                            onChange={(val) => {
-                                const rel = val as '본인' | '아버지' | '어머니';
-                                onUpdate({ relation: rel, holder: getName(rel) || acc.holder });
-                            }}
-                        />
-                    </div>
-                    <button
-                        onClick={onRemove}
-                        className={styles.removeButton ?? ''}
-                        title="삭제"
-                    >
-                        <Trash2 size={16} />
-                    </button>
-                </Row>
-                <Grid cols={2}>
-                    <Field label="은행명">
-                        <TextField
-                            placeholder="은행 입력"
-                            value={acc.bank}
-                            onChange={(e) => onUpdate({ bank: e.target.value })}
-                        />
-                    </Field>
-                    <Field label="예금주">
-                        <TextField
-                            placeholder="이름 입력"
-                            value={acc.holder}
-                            onChange={(e) => onUpdate({ holder: e.target.value })}
-                        />
-                    </Field>
-                </Grid>
-                <Field label="계좌번호">
-                    <TextField
-                        placeholder="하이픈(-) 포함하여 입력"
-                        value={acc.accountNumber}
-                        onChange={(e) => onUpdate({ accountNumber: e.target.value })}
-                    />
                 </Field>
-            </Stack>
-        </Card>
+            </div>
+        </AccordionItem>
     );
 }

@@ -1,176 +1,231 @@
-@use "@/styles/variables" as *;
-@use "@/styles/builder" as builder;
+@use "@/styles/variables" as v;
+@use "@/styles/builder" as b;
 
 .container {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem;
 }
 
 .grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.625rem;
-    margin-bottom: 0.75rem;
-    width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.625rem;
+  margin-bottom: 0.75rem;
+  width: 100%;
 }
 
-.hiddenInput {
-    display: none !important;
+.uploadItem {
+  aspect-ratio: 1 / 1;
+  border: 1px dashed v.$gray-200;
+  background-color: rgba(v.$gray-100, 0.3);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: rgba(v.$gray-400, 0.5);
+
+  &:hover {
+    border-color: rgba(v.$toss-blue-500, 0.5);
+    background-color: rgba(v.$gray-100, 0.5);
+    color: v.$toss-blue-500;
+    
+    .uploadIcon {
+      transform: scale(1.1);
+    }
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
 }
 
-.uploadButton {
-    aspect-ratio: 1 / 1;
-    border: 1px dashed builder.$builder-border-default;
-    background-color: builder.$builder-bg-subtle;
-    border-radius: builder.$builder-radius-md;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all $transition-bounce;
-    color: builder.$builder-text-muted;
-    position: relative;
+.uploadIcon {
+  transition: transform 0.2s ease;
+}
 
-    &:hover {
-        border-color: var(--accent-color, #adb5bd);
-        background-color: builder.$builder-bg-hover;
-        color: var(--accent-color, #adb5bd);
-    }
+.counter {
+  display: flex;
+  justify-content: space-between;
+  items-align: flex-end;
+  width: 100%;
+  margin-bottom: 0.25rem;
+}
 
-    &:active {
-        transform: scale(0.95);
-    }
+.countText {
+  font-size: 11.5px;
+  font-weight: bold;
+  letter-spacing: -0.02em;
+}
+
+.countTotal {
+  color: rgba(v.$gray-400, 0.6);
 }
 
 .sortableItem {
-    position: relative;
-    aspect-ratio: 1 / 1;
-    border-radius: builder.$builder-radius-md;
-    overflow: hidden;
-    background-color: builder.$builder-bg-subtle;
-    border: 1px solid builder.$builder-border-default;
-    transition: all 0.4s $transition-bounce;
-    touch-action: none;
-    
-    &:hover {
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
-        border-color: builder.$builder-border-default;
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: v.$gray-100;
+  cursor: grab;
+  
+  &.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+  }
+}
 
-        .deleteButton {
-            opacity: 1;
-            transform: scale(1);
-        }
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-        .overlay {
-            opacity: 1;
-        }
-    }
+.deleteBtn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 10;
 
-    &.dragging {
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
-        z-index: 50;
-        transform: scale(1.08);
-        border-color: var(--accent-color, #adb5bd);
-        opacity: 0.6;
-    }
+  .sortableItem:hover & {
+    opacity: 1;
+  }
 
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        pointer-events: none;
-    }
-
-    &:hover img {
-        transform: scale(1.08);
-    }
+  &:hover {
+    background-color: v.$toss-red-500;
+  }
 }
 
 .overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.05), transparent);
-    opacity: 0;
-    transition: opacity 0.3s;
-    pointer-events: none;
+  width: 100px;
+  height: 100px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  z-index: 1000;
 }
 
-.deleteButton {
-    position: absolute;
-    top: 0.375rem;
-    right: 0.375rem;
-    width: 1.625rem;
-    height: 1.625rem;
-    background-color: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    border-radius: 0.5rem;
-    color: builder.$builder-text-dark;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    opacity: 0;
-    transform: scale(0.8);
-    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-    z-index: 10;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-
-    &:hover {
-        background-color: white;
-        color: #ef4444;
-        transform: scale(1.1) !important;
-    }
+.optionGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.625rem;
+  padding: 0 0.25rem;
 }
 
-.toggleGroup {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.625rem;
+.uploading {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-.headerRow {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    width: 100%;
-    margin-bottom: 0.25rem;
-    
-    .count {
-        font-size: 0.725rem;
-        font-weight: 500;
-        letter-spacing: -0.0125rem;
-        
-    .max {
-            color: builder.$builder-text-muted;
-        }
-    }
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .5; }
 }
 
-.loadingOverlay {
-    position: absolute;
-    inset: 0;
-    z-index: 5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: rgba(255, 255, 255, 0.4);
-    backdrop-filter: blur(2px);
+.imageUploading {
+  filter: blur(2px);
+  opacity: 0.6;
+}
+
+.uploadingOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(1px);
 }
 
 .spinner {
-    width: 1.25rem;
-    height: 1.25rem;
-    border: 2px solid rgba(0, 0, 0, 0.1);
-    border-top-color: builder.$builder-text-dark;
-    border-radius: 50%;
-    animation: spin 0.8s cubic-bezier(0.55, 0.055, 0.675, 0.19) infinite;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid rgba(v.$toss-blue-500, 0.2);
+  border-top-color: v.$toss-blue-500;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
+  to { transform: rotate(360deg); }
+}
+
+.gradientOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, transparent 40%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+
+  .sortableItem:hover & {
+    opacity: 1;
+  }
+}
+
+.dragHandle {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  cursor: grab;
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.infoBox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  padding: 0.875rem;
+  background-color: rgba(v.$toss-blue-50, 0.5);
+  border: 1px solid v.$toss-blue-100;
+  border-radius: 12px;
+  color: #1b64da;
+  font-size: 12.5px;
+  line-height: 1.6;
+  
+  .infoIcon {
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+    color: v.$toss-blue-500;
+  }
+}
+
+.galleryManager {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.imageOverlay {
+  object-fit: cover;
 }

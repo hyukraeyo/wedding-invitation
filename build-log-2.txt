@@ -1,0 +1,56 @@
+
+> wedding-invitation@0.1.0 build
+> next build
+
+▲ Next.js 16.1.1 (Turbopack)
+- Environments: .env.local
+- Experiments (use with caution):
+  · optimizePackageImports
+  · serverActions
+
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 1 errors:
+./src/components/builder/sections/GallerySection.module.scss
+Error evaluating Node.js code
+Error: Undefined variable.
+    ╷
+206 │   border: 1px solid v.$toss-blue-100;
+    │                     ^^^^^^^^^^^^^^^^
+    ╵
+  src\components\builder\sections\GallerySection.module.scss 206:21  root stylesheet
+Caused by: Error: Undefined variable.
+    ╷
+206 │   border: 1px solid v.$toss-blue-100;
+    │                     ^^^^^^^^^^^^^^^^
+    ╵
+  src\components\builder\sections\GallerySection.module.scss 206:21  root stylesheet
+    [at Object.wrapException (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:2337:47)]
+    [at C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90581:23]
+    [at _wrapJsFunctionForAsync_closure.$protected (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:5005:15)]
+    [at _wrapJsFunctionForAsync_closure.call$2 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:38505:12)]
+    [at Object._asyncStartSync (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:4969:20)]
+    [at _EvaluateVisitor2.visitVariableExpression$body$_EvaluateVisitor0 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90587:16)]
+    [at _EvaluateVisitor2.visitVariableExpression$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90561:19)]
+    [at VariableExpression0.accept$1$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:128275:22)]
+    [at VariableExpression0.accept$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:128278:19)]
+    [at _EvaluateVisitor_visitListExpression_closure2.call$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:96237:25)]
+
+Import traces:
+  Client Component Browser:
+    ./src/components/builder/sections/GallerySection.module.scss [Client Component Browser]
+    ./src/components/builder/sections/GallerySection.tsx [Client Component Browser]
+    ./src/components/builder/EditorForm.tsx [Client Component Browser]
+    ./src/app/builder/page.tsx [Client Component Browser]
+    ./src/app/builder/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/builder/sections/GallerySection.module.scss [Client Component SSR]
+    ./src/components/builder/sections/GallerySection.tsx [Client Component SSR]
+    ./src/components/builder/EditorForm.tsx [Client Component SSR]
+    ./src/app/builder/page.tsx [Client Component SSR]
+    ./src/app/builder/page.tsx [Server Component]
+
+
+    at ignore-listed frames

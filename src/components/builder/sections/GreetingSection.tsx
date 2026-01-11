@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { MessageSquare, Sparkles, Info } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
@@ -9,8 +8,6 @@ import { Checkbox } from '../Checkbox';
 import { BuilderModal } from '@/components/common/BuilderModal';
 import RichTextEditor from '@/components/common/RichTextEditor';
 import { ImageUploader } from '../ImageUploader';
-import { Section, Stack, Row, Card } from '../Layout';
-import commonStyles from '../Builder.module.scss';
 import styles from './GreetingSection.module.scss';
 
 interface SectionProps {
@@ -18,17 +15,7 @@ interface SectionProps {
     onToggle: () => void;
 }
 
-const GREETING_SAMPLES = [
-    {
-        subtitle: 'INVITATION',
-        title: '소중한 분들을 초대합니다',
-        message: '<p>저희 두 사람의 작은 만남이<br>사랑의 결실을 이루어<br>소중한 결혼식을 올리게 되었습니다.</p><p>평생 서로 귀하게 여기며<br>첫 마음 그대로 존중하고 배려하며 살겠습니다.</p><p>오로지 믿음과 사랑을 약속하는 날<br>오셔서 축복해 주시면 더 없는 기쁨으로<br>간직하겠습니다.</p>'
-    },
-    {
-        subtitle: 'Our Wedding',
-        title: '함께 걸어가는 길',
-        message: '<p>서로의 빛이 되어<br>평생을 함께 걸어가겠습니다.</p><p>저희 두 사람의 시작을<br>축복해 주시면 감사하겠습니다.</p><p>바쁘시더라도 부디 오셔서<br>저희의 앞날을 지켜봐 주시면<br>더할 나위 없는 영광이겠습니다.</p>'
-    },
+const SAMPLE_PHRASES = [
     {
         subtitle: 'Hello & Welcome',
         title: '초대합니다',
@@ -36,34 +23,37 @@ const GREETING_SAMPLES = [
     },
     {
         subtitle: 'The Marriage',
-        title: '저희의 시작을 함께해주세요',
-        message: '<p>오랜 시간 서로를 지켜온<br>두 사람이 이제 부부의 연을 맺습니다.</p><p>언제나 지금 이 마음 잊지 않고<br>서로를 아끼고 보듬으며 예쁘게 살겠습니다.</p><p>저희의 행복한 시작을 축복해 주시면<br>더 없는 기쁨으로 간직하겠습니다.</p>'
+        title: '소중한 분들을 초대합니다',
+        message: '<p>함께 있으면 기분이 좋아지는 사람을 만났습니다.<br>이제 그 사람과 함께 인생의 먼 길을 떠나려 합니다.</p><p>저희의 앞날을 축복해 주시는 소중한 마음 잊지 않고<br>예쁘게 잘 살겠습니다.</p>'
     },
     {
-        subtitle: 'Love Story',
-        title: '두 사람이 하나가 됩니다',
-        message: '<p>각자 다른 공간에서 지내온 저희 두 사람이<br>이제는 한 곳을 바라보며 나아가려 합니다.</p><p>서로를 깊이 신뢰하고 사랑하는 마음으로<br>이 자리에 섰습니다.</p><p>저희의 복된 앞날을 함께 지켜봐 주시고<br>따뜻한 격려 부탁드립니다.</p>'
-    },
-    {
-        subtitle: 'Save the Date',
-        title: '약속합니다',
-        message: '<p>기쁠 때나 슬플 때나 언제나 함께하며<br>서로의 버팀목이 되겠습니다.</p><p>서로가 서로에게 선물이 되는<br>그런 인연으로 살아가겠습니다.</p><p>귀한 걸음 하시어 저희의 앞날을<br>축복해 주시면 감사하겠습니다.</p>'
+        subtitle: 'Our Wedding Day',
+        title: '저희 결혼합니다',
+        message: '<p>서로가 마주 보며 다져온 사랑을<br>이제 함께 한 곳을 바라보며 걸어가려 합니다.</p><p>새로운 인생의 출발점에 선 저희 두 사람,<br>격려와 축복으로 함께해 주시면 큰 기쁨이겠습니다.</p>'
     }
 ];
 
 export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
     const {
+        message, setMessage,
         greetingTitle, setGreetingTitle,
         greetingSubtitle, setGreetingSubtitle,
-        message, setMessage,
         greetingImage, setGreetingImage,
         greetingRatio, setGreetingRatio,
         showNamesAtBottom, setShowNamesAtBottom,
         enableFreeformNames, setEnableFreeformNames,
-        groomNameCustom, setGroomNameCustom
+        groomNameCustom, setGroomNameCustom,
+        brideNameCustom, setBrideNameCustom
     } = useInvitationStore();
 
     const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
+
+    const handleSelectSample = (sample: typeof SAMPLE_PHRASES[0]) => {
+        setGreetingSubtitle(sample.subtitle);
+        setGreetingTitle(sample.title);
+        setMessage(sample.message);
+        setIsSampleModalOpen(false);
+    };
 
     return (
         <AccordionItem
@@ -73,17 +63,17 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
             onToggle={onToggle}
             isCompleted={message.length > 0}
         >
-            <Section>
+            <div className={styles.container}>
                 {/* Header: Sample Phrases Button */}
-                <Row align="end">
+                <div className={styles.sampleBtnWrapper}>
                     <button
                         onClick={() => setIsSampleModalOpen(true)}
-                        className={styles.exampleButton ?? ''}
+                        className={styles.sampleBtn}
                     >
-                        <Sparkles size={14} className={styles.sparkle ?? ''} />
+                        <Sparkles size={14} className={styles.sparkleIcon} />
                         <span>예시 문구</span>
                     </button>
-                </Row>
+                </div>
 
                 {/* Subtitle */}
                 <Field label="상단 소제목">
@@ -116,7 +106,7 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Photo Upload */}
                 <Field label="사진">
-                    <Stack gap="md">
+                    <div className={styles.optionWrapper}>
                         <ImageUploader
                             value={greetingImage}
                             onChange={setGreetingImage}
@@ -124,98 +114,96 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                             ratio={greetingRatio}
                             onRatioChange={(val) => setGreetingRatio(val)}
                         />
-                    </Stack>
+                    </div>
                 </Field>
 
                 {/* Name Options */}
                 <Field label="성함 표기">
-                    <Stack gap="md">
-                        <Stack gap="sm">
-                            <Checkbox.Circle
-                                inputType="radio"
-                                name="greeting-name-type"
+                    <div className={styles.optionWrapper}>
+                        <div className={styles.checkboxGroup}>
+                            <Checkbox
+                                id="show-names-bottom"
+                                checked={showNamesAtBottom}
+                                onChange={(checked) => {
+                                    setShowNamesAtBottom(checked);
+                                    if (checked) setEnableFreeformNames(false);
+                                }}
+                            >
+                                인사말 하단에 성함 노출
+                            </Checkbox>
+                            <Checkbox
+                                id="enable-freeform-names"
+                                checked={enableFreeformNames}
+                                onChange={(checked) => {
+                                    setEnableFreeformNames(checked);
+                                    if (checked) setShowNamesAtBottom(false);
+                                }}
+                            >
+                                직접 입력 사용
+                            </Checkbox>
+                            <Checkbox
+                                id="hide-names"
                                 checked={!showNamesAtBottom && !enableFreeformNames}
-                                onCheckedChange={() => {
-                                    setShowNamesAtBottom(false);
-                                    setEnableFreeformNames(false);
+                                onChange={(checked) => {
+                                    if (checked) {
+                                        setShowNamesAtBottom(false);
+                                        setEnableFreeformNames(false);
+                                    }
                                 }}
                             >
                                 표시 안 함
-                            </Checkbox.Circle>
-                            <Checkbox.Circle
-                                inputType="radio"
-                                name="greeting-name-type"
-                                checked={showNamesAtBottom}
-                                onCheckedChange={() => {
-                                    setShowNamesAtBottom(true);
-                                    setEnableFreeformNames(false);
-                                }}
-                            >
-                                인사말 하단에 신랑신부&혼주 성함 표시
-                            </Checkbox.Circle>
-                            <Checkbox.Circle
-                                inputType="radio"
-                                name="greeting-name-type"
-                                checked={enableFreeformNames}
-                                onCheckedChange={() => {
-                                    setShowNamesAtBottom(false);
-                                    setEnableFreeformNames(true);
-                                }}
-                            >
-                                성함 자유 입력
-                            </Checkbox.Circle>
-                        </Stack>
+                            </Checkbox>
+                        </div>
 
                         {enableFreeformNames && (
-                            <Stack gap="sm">
-                                <RichTextEditor
-                                    content={groomNameCustom}
-                                    onChange={setGroomNameCustom}
-                                    placeholder="신랑측 혼주 성함 신랑 이름&#10;신부측 혼주 성함 신부 이름"
+                            <div className={styles.optionWrapper}>
+                                <TextField
+                                    label="신랑 측 표기"
+                                    value={groomNameCustom}
+                                    onChange={(e) => setGroomNameCustom(e.target.value)}
+                                    placeholder="예: 아버지 홍길동 · 어머니 김철수 의 장남 길동"
                                 />
-                                <div className={commonStyles.notice}>
-                                    <Info size={14} className={commonStyles.icon} />
-                                    <span>인사말 하단 성함부분을 자유롭게 입력할 수 있습니다.</span>
+                                <TextField
+                                    label="신부 측 표기"
+                                    value={brideNameCustom}
+                                    onChange={(e) => setBrideNameCustom(e.target.value)}
+                                    placeholder="예: 아버지 임걱정 · 어머니 박순이 의 장녀 순희"
+                                />
+                                <div className={styles.freeformInfo}>
+                                    <Info size={14} className={styles.infoIcon} />
+                                    <span>기본 성함 표기 대신 사용자가 직접 작성한 문구로 성함을 표시합니다.</span>
                                 </div>
-                            </Stack>
+                            </div>
                         )}
-                    </Stack>
-                </Field>
-
-                {/* Sample Phrases Modal */}
-                <BuilderModal
-                    isOpen={isSampleModalOpen}
-                    onClose={() => setIsSampleModalOpen(false)}
-                    title="샘플 문구"
-                >
-                    <div className={styles.modalGrid ?? ''}>
-                        {GREETING_SAMPLES.map((sample, idx) => (
-                            <Card
-                                key={idx}
-                                hoverable
-                                className={styles.sampleCard ?? ''}
-                            >
-                                <button
-                                    onClick={() => {
-                                        setGreetingSubtitle(sample.subtitle);
-                                        setGreetingTitle(sample.title);
-                                        setMessage(sample.message);
-                                        setIsSampleModalOpen(false);
-                                    }}
-                                    className={styles.sampleButton ?? ''}
-                                >
-                                    <div className={styles.sampleSubtitle ?? ''}>{sample.subtitle}</div>
-                                    <div className={styles.sampleTitle ?? ''}>{sample.title}</div>
-                                    <div
-                                        className={styles.sampleMessage ?? ''}
-                                        dangerouslySetInnerHTML={{ __html: sample.message }}
-                                    />
-                                </button>
-                            </Card>
-                        ))}
                     </div>
-                </BuilderModal>
-            </Section>
+                </Field>
+            </div>
+
+            {/* Sample Phrases Modal */}
+            <BuilderModal
+                isOpen={isSampleModalOpen}
+                onClose={() => setIsSampleModalOpen(false)}
+                title="인사말 예시 문구"
+            >
+                <div className={styles.sampleList}>
+                    {SAMPLE_PHRASES.map((sample, idx) => (
+                        <button
+                            key={idx}
+                            className={styles.sampleCard}
+                            onClick={() => handleSelectSample(sample)}
+                        >
+                            <div className={styles.sampleHeader}>
+                                <span className={styles.sampleBadge}>예시 {idx + 1}</span>
+                                <span className={styles.sampleTitle}>{sample.title}</span>
+                            </div>
+                            <div
+                                className={styles.sampleContent}
+                                dangerouslySetInnerHTML={{ __html: sample.message }}
+                            />
+                        </button>
+                    ))}
+                </div>
+            </BuilderModal>
         </AccordionItem>
     );
 }

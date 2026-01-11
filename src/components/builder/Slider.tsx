@@ -1,20 +1,19 @@
-'use client';
-
 import React, { useCallback } from 'react';
-import styles from './Slider.module.scss';
+import { Slider as ShadcnSlider } from '@/components/ui/slider';
+import { Button } from '@/components/ui/button';
 import { Minus, Plus } from 'lucide-react';
-import { Button } from './Button';
+import { cn } from '@/lib/utils';
 
 interface SliderProps {
     value: number;
     onChange: (value: number) => void;
-    min?: number;
-    max?: number;
-    step?: number;
-    unit?: string;
-    className?: string;
+    min?: number | undefined;
+    max?: number | undefined;
+    step?: number | undefined;
+    unit?: string | undefined;
+    className?: string | undefined;
     /** If true, show +/- step buttons */
-    showStepButtons?: boolean;
+    showStepButtons?: boolean | undefined;
 }
 
 export const Slider = ({
@@ -35,39 +34,41 @@ export const Slider = ({
     }, [value, onChange, min, max, step]);
 
     return (
-        <div className={`${styles.container} ${className}`}>
-            <div className={styles.sliderWrapper}>
-                <input
-                    type="range"
+        <div className={cn("flex flex-col gap-4", className)}>
+            <div className="flex items-center gap-4 w-full">
+                <ShadcnSlider
+                    value={[value]}
                     min={min}
                     max={max}
                     step={step}
-                    value={value}
-                    onChange={(e) => onChange(Number(e.target.value))}
-                    className={styles.slider}
+                    onValueChange={(vals) => {
+                        const val = vals[0];
+                        if (val !== undefined) onChange(val);
+                    }}
+                    className="flex-1"
                 />
             </div>
 
             {showStepButtons && (
-                <div className={styles.buttonGroup}>
+                <div className="flex items-center justify-between border rounded-md p-1 bg-muted/20">
                     <Button
-                        variant="outline"
-                        size="small"
+                        variant="ghost"
+                        size="icon"
                         onClick={() => handleStep('down')}
-                        className={styles.iconButton}
                         disabled={value <= min}
+                        className="h-8 w-8"
                     >
                         <Minus size={14} />
                     </Button>
-                    <span className={styles.valueDisplay}>
+                    <span className="text-sm font-medium">
                         {value}{unit}
                     </span>
                     <Button
-                        variant="outline"
-                        size="small"
+                        variant="ghost"
+                        size="icon"
                         onClick={() => handleStep('up')}
-                        className={styles.iconButton}
                         disabled={value >= max}
+                        className="h-8 w-8"
                     >
                         <Plus size={14} />
                     </Button>

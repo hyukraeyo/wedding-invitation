@@ -1,6 +1,10 @@
+
 @use "@/styles/variables" as *;
 @use "@/styles/animations" as *;
-@import "@toss/tds-colors/colors.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @font-face {
   font-family: 'GmarketSansMedium';
@@ -22,47 +26,6 @@
   /* We only define fallbacks or fonts not in next/font here */
   --font-pretendard: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
   --font-gmarket-sans: "GmarketSansMedium", sans-serif;
-
-  /* Manual mappings for adaptive tokens required by TDS Mobile components */
-  /* TDS Colors provides --blue500 etc, but TDS Mobile components use --adaptiveXXX */
-  
-  /* Grey Scale */
-  --adaptiveGrey50: var(--grey50);
-  --adaptiveGrey100: var(--grey100);
-  --adaptiveGrey200: var(--grey200);
-  --adaptiveGrey300: var(--grey300);
-  --adaptiveGrey400: var(--grey400);
-  --adaptiveGrey500: var(--grey500);
-  --adaptiveGrey600: var(--grey600);
-  --adaptiveGrey700: var(--grey700);
-  --adaptiveGrey800: var(--grey800);
-  --adaptiveGrey900: var(--grey900);
-  
-  /* Blue Scale */
-  --adaptiveBlue50: var(--blue50);
-  --adaptiveBlue100: var(--blue100);
-  --adaptiveBlue200: var(--blue200);
-  --adaptiveBlue300: var(--blue300);
-  --adaptiveBlue400: var(--blue400);
-  --adaptiveBlue500: var(--blue500);
-  --adaptiveBlue600: var(--blue600);
-  --adaptiveBlue700: var(--blue700);
-  
-  /* Red Scale */
-  --adaptiveRed50: var(--red50);
-  --adaptiveRed100: var(--red100);
-  --adaptiveRed200: var(--red200);
-  --adaptiveRed500: var(--red500);
-  
-  /* Backgrounds */
-  --adaptiveBackground: var(--background, #FFFFFF);
-  --adaptiveGreyBackground: var(--greyBackground, #f2f4f6);
-  --adaptiveLayeredBackground: var(--layeredBackground, #FFFFFF);
-  --adaptiveFloatedBackground: var(--floatedBackground, #FFFFFF);
-  
-  /* White (for dark mode compatibility, currently static) */
-  --adaptiveWhite: #FFFFFF;
-  --adaptiveBlack: #000000;
 }
 
 

@@ -4,15 +4,13 @@ import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
-import styles from './Header.module.scss';
+import { Button } from '@/components/builder/Button';
 
 interface HeaderProps {
     onSave?: () => void;
     onLogin?: () => void;
     isLoading?: boolean;
 }
-
-import { Button } from '@/components/builder/Button';
 
 export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
     const router = useRouter();
@@ -25,41 +23,40 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
     };
 
     return (
-        <header className={styles.header}>
+        <header className="flex h-14 items-center justify-between border-b bg-background px-4 md:px-6 sticky top-0 z-50">
             {/* Logo */}
-            <div className={styles.logo}>
-                <Link href="/" className={styles.link}>
+            <div className="flex items-center gap-2 font-serif font-bold text-xl tracking-tight">
+                <Link href="/" className="hover:opacity-80 transition-opacity">
                     WEDDING
                 </Link>
             </div>
 
             {/* Actions */}
-            <div className={styles.actions}>
-                <nav className={styles.nav}>
+            <div className="flex items-center gap-4">
+                <nav className="hidden md:flex items-center gap-4">
                     <Button
                         variant="weak"
-                        size="small"
+                        size="sm"
                         onClick={() => {
                             reset();
                             router.push('/builder');
                         }}
                     >
-                        <Plus size={14} />
+                        <Plus size={14} className="mr-1" />
                         <span>새 청첩장 만들기</span>
                     </Button>
 
                     {user ? (
                         <Link href="/mypage">
-                            <Button variant="weak" color="dark" size="small">
+                            <Button variant="ghost" size="sm">
                                 마이페이지
                             </Button>
                         </Link>
                     ) : (
                         onLogin && (
                             <Button
-                                variant="weak"
-                                color="dark"
-                                size="small"
+                                variant="ghost"
+                                size="sm"
                                 onClick={onLogin}
                             >
                                 로그인
@@ -68,23 +65,35 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
                     )}
                 </nav>
 
-                <div className={styles.userActions}>
+                <div className="flex items-center gap-2">
                     {user && (
                         <Button
-                            variant="weak"
-                            color="dark"
-                            size="small"
+                            variant="ghost"
+                            size="sm"
+                            className="md:hidden"
                             onClick={handleLogout}
                         >
                             로그아웃
                         </Button>
                     )}
+                    {user && (
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="hidden md:inline-flex"
+                            onClick={handleLogout}
+                        >
+                            로그아웃
+                        </Button>
+                    )}
+
                     {onSave && (
                         <Button
-                            color="primary"
-                            size="small"
+                            variant="default" // primary
+                            size="sm"
                             onClick={onSave}
-                            loading={!!isLoading}
+                            // loading prop handled in Button wrapper
+                            loading={isLoading}
                         >
                             저장하기
                         </Button>

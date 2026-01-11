@@ -1,130 +1,92 @@
-'use client';
-
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import styles from './SegmentedControl.module.scss';
-import { clsx } from 'clsx';
+import React from 'react';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { cn } from '@/lib/utils';
 
 interface SegmentedControlProps<T> {
-    value?: T;
-    defaultValue?: T;
-    onChange?: (value: T) => void;
-    size?: 'small' | 'large';
-    alignment?: 'fixed' | 'fluid';
+    value?: T | undefined;
+    defaultValue?: T | undefined;
+    onChange?: ((value: T) => void) | undefined;
+    size?: 'small' | 'large' | undefined;
+    alignment?: 'fixed' | 'fluid' | undefined;
     children: React.ReactNode;
-    className?: string;
+    className?: string | undefined;
 }
 
 interface SegmentedControlItemProps<T> {
     value: T;
     children: React.ReactNode;
-    className?: string;
-    onClick?: () => void;
+    className?: string | undefined;
+    // content ref for tabs? Usually TabsTrigger just wraps text/icon
 }
 
 export const SegmentedControlItem = <T extends string | number>({
-    value,
     children,
-    className,
-    onClick,
-    ...props
 }: SegmentedControlItemProps<T>) => {
-    return (
-        <div
-            className={clsx(styles.item, className)}
-            data-value={value}
-            onClick={onClick}
-            {...props}
-        >
-            {children}
-        </div>
-    );
+    return <>{children}</>;
 };
 
-// Add displayName for proper type checking
 SegmentedControlItem.displayName = 'SegmentedControlItem';
 
 export const SegmentedControl = <T extends string | number>({
-    value: controlledValue,
+    value,
     defaultValue,
     onChange,
     size = 'large',
-    alignment = 'fixed',
     children,
     className
 }: SegmentedControlProps<T>) => {
-    const [internalValue, setInternalValue] = useState<T | undefined>(defaultValue);
-    const isControlled = controlledValue !== undefined;
-    const activeValue = isControlled ? controlledValue : internalValue;
+    const activeValue = value !== undefined ? value : defaultValue;
+    const handleValueChange = (val: string) => {
+        // Try to convert back to number if T is number? 
+        // Or just pass the value if logic allows. 
+        // Since we don't know T at runtime easily, we assume the items provided the value type.
+        // We find the original value from props?
 
-    const containerRef = useRef<HTMLDivElement>(null);
-    const [thumbStyle, setThumbStyle] = useState<React.CSSProperties>({ opacity: 0 });
+        // A simpler way: Find the child with this string value and use its original value prop.
+        let originalValue: T | undefined;
+        React.Children.forEach(children, (child) => {
+            if (React.isValidElement(child) && (child.props as SegmentedControlItemProps<T>).value.toString() === val) {
+                originalValue = (child.props as SegmentedControlItemProps<T>).value;
+            }
+        });
 
-    const handleSelect = (value: T) => {
-        if (!isControlled) {
-            setInternalValue(value);
+        if (onChange && originalValue !== undefined) {
+            onChange(originalValue);
         }
-        onChange?.(value);
     };
 
-    const updateThumb = useCallback(() => {
-        if (containerRef.current && activeValue !== undefined) {
-            const activeElement = containerRef.current.querySelector(`[data-value="${activeValue}"]`) as HTMLElement;
-            if (activeElement) {
-                setThumbStyle({
-                    width: `${activeElement.offsetWidth}px`,
-                    transform: `translateX(${activeElement.offsetLeft}px)`,
-                    opacity: 1
-                });
-            }
-        }
-    }, [activeValue]);
-
-    useEffect(() => {
-        updateThumb();
-        // ResizeObserver to handle window resizing or dynamic content changes
-        if (!containerRef.current) return;
-
-        const observer = new ResizeObserver(updateThumb);
-        observer.observe(containerRef.current);
-        return () => observer.disconnect();
-    }, [updateThumb, children]);
-
     return (
-        <div
-            ref={containerRef}
-            className={clsx(
-                styles.container,
-                styles[size],
-                styles[alignment],
-                className
-            )}
-            role="tablist"
+        <Tabs
+            {...(activeValue !== undefined ? { value: activeValue.toString() } : {})}
+            onValueChange={handleValueChange}
+            className={cn("w-full", className)}
         >
-            <div className={styles.thumb} style={thumbStyle} aria-hidden="true" />
-            {React.Children.map(children, (child) => {
-                if (React.isValidElement(child)) {
-                    // Check displayName safely
-                    const type = child.type as React.FunctionComponent | React.ComponentClass;
-                    if (type.displayName === 'SegmentedControlItem' || type === SegmentedControlItem) {
+            <TabsList className={cn(
+                "w-full h-auto p-1",
+                size === 'large' ? "h-10" : "h-8",
+                "grid",
+                // alignment 'fixed' means equal width cols? 'fluid' means auto?
+                // TabsList usually flex. 'grid' works for fixed equal width.
+                // We need to count children to set col span or just use flex-1?
+                "grid-flow-col auto-cols-fr"
+            )}>
+                {React.Children.map(children, (child) => {
+                    if (React.isValidElement(child)) {
                         const props = child.props as SegmentedControlItemProps<T>;
-                        const itemValue = props.value;
-                        const isActive = activeValue === itemValue;
-
-                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                        return React.cloneElement(child as React.ReactElement<any>, {
-                            onClick: () => handleSelect(itemValue),
-                            className: clsx(props.className, isActive && styles.active),
-                            'aria-selected': isActive,
-                            role: 'tab'
-                        });
+                        return (
+                            <TabsTrigger
+                                value={props.value.toString()}
+                                className={cn(props.className)}
+                            >
+                                {props.children}
+                            </TabsTrigger>
+                        );
                     }
-                }
-                return child;
-            })}
-        </div>
+                    return null;
+                })}
+            </TabsList>
+        </Tabs>
     );
 };
 
-// Assign sub-component
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-(SegmentedControl as any).Item = SegmentedControlItem;
+SegmentedControl.Item = SegmentedControlItem;

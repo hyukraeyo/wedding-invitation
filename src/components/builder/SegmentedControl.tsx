@@ -12,8 +12,8 @@ interface SegmentedControlProps<T> {
     value: T;
     options: Option<T>[];
     onChange: (value: T) => void;
-    className?: string;
-    size?: 'sm' | 'md';
+    className?: string | undefined;
+    size?: 'sm' | 'md' | undefined;
 }
 
 export const SegmentedControl = <T extends string | number>({
