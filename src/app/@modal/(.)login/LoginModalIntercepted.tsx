@@ -1,7 +1,9 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import LoginModal from '@/components/auth/LoginModal';
+import { useAuth } from '@/hooks/useAuth';
 
 /**
  * Intercepted Modal Component
@@ -10,10 +12,19 @@ import LoginModal from '@/components/auth/LoginModal';
  */
 export default function LoginModalIntercepted() {
     const router = useRouter();
+    const { user, loading: authLoading } = useAuth();
+
+    useEffect(() => {
+        if (!authLoading && user) {
+            router.replace('/builder');
+        }
+    }, [user, authLoading, router]);
 
     const handleClose = () => {
         router.back();
     };
+
+    if (authLoading || user) return null;
 
     return <LoginModal isOpen={true} onClose={handleClose} />;
 }

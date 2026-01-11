@@ -1,12 +1,26 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
+import { Inter, Playfair_Display, Gowun_Batang, Gowun_Dodum, Nanum_Myeongjo, Yeon_Sung, Do_Hyeon, Song_Myung, Great_Vibes } from 'next/font/google';
 import "./globals.scss";
+
+// Next.js 15+ Font Optimization
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
+const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-serif', display: 'swap' });
+const gowunBatang = Gowun_Batang({ weight: ['400', '700'], variable: '--font-gowun-batang', display: 'swap' });
+const gowunDodum = Gowun_Dodum({ weight: '400', variable: '--font-gowun-dodum', display: 'swap' });
+const nanumMyeongjo = Nanum_Myeongjo({ weight: ['400', '700', '800'], variable: '--font-nanum-myeongjo', display: 'swap' });
+const yeonSung = Yeon_Sung({ weight: '400', variable: '--font-yeon-sung', display: 'swap' });
+const doHyeon = Do_Hyeon({ weight: '400', variable: '--font-do-hyeon', display: 'swap' });
+const songMyung = Song_Myung({ weight: '400', variable: '--font-song-myung', display: 'swap' });
+const greatVibes = Great_Vibes({ weight: '400', variable: '--font-script', display: 'swap' });
+
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  maximumScale: 5, // Accessibility: allow zooming
+  userScalable: true,
+  themeColor: "#F9F8E6",
 };
 
 export const metadata: Metadata = {
@@ -14,7 +28,7 @@ export const metadata: Metadata = {
     default: "심플하고 아름다운 모바일 청첩장 | Wedding Invitation Studio",
     template: "%s | Wedding Invitation Studio"
   },
-  description: "소중한 날, 특별한 순간에 여러분을 초대합니다. Next.js 16으로 제작된 고품격 모바일 청첩장으로 특별한 순간을 더욱 빛나게 만들어보세요.",
+  description: "소중한 날, 특별한 순간에 여러분을 초대합니다. 최첨단 기술로 제작된 고품격 모바일 청첩장으로 특별한 순간을 더욱 빛나게 만들어보세요.",
   keywords: [
     "모바일 청첩장", "결혼식 초대장", "셀프 모바일 청첩장", "무료 청첩장",
     "심플한 청첩장", "웨딩 초대장", "카카오톡 청첩장", "디지털 청첩장",
@@ -34,7 +48,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "심플하고 아름다운 모바일 청첩장",
-    description: "Next.js 16으로 제작된 고품격 모바일 청첩장으로 특별한 순간을 더욱 빛나게 만들어보세요.",
+    description: "최첨단 기술로 제작된 고품격 모바일 청첩장으로 특별한 순간을 더욱 빛나게 만들어보세요.",
     url: "https://wedding-invitation-zeta-one.vercel.app",
     siteName: "Wedding Invitation Studio",
     type: "website",
@@ -51,7 +65,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "심플하고 아름다운 모바일 청첩장",
-    description: "Next.js 16으로 제작된 고품격 모바일 청첩장 플랫폼",
+    description: "최첨단 기술로 제작된 고품격 모바일 청첩장 플랫폼",
     images: ["/og-image.jpg"],
     creator: "@hyukraeyo",
   },
@@ -84,20 +98,23 @@ export default function RootLayout({
   modal: React.ReactNode;
 }>) {
   return (
-    <html lang="ko">
+    <html lang="ko" suppressHydrationWarning className={`
+      ${inter.variable} 
+      ${playfair.variable} 
+      ${gowunBatang.variable} 
+      ${gowunDodum.variable} 
+      ${nanumMyeongjo.variable} 
+      ${yeonSung.variable} 
+      ${doHyeon.variable} 
+      ${songMyung.variable} 
+      ${greatVibes.variable}
+    `}>
+
       <head>
-        {/* Pretendard CDN */}
+        {/* Pretendard CDN - Special case for Korean font that is not on Google Fonts */}
         <link rel="stylesheet" as="style" crossOrigin="anonymous" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-        {/* Google Fonts - Offline 빌드 대응을 위해 CDN 사용 */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
-        <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
-        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@400..900&family=Gowun+Batang:wght@400;700&family=Gowun+Dodum:wght@400&family=Nanum+Myeongjo:wght@400;700;800&family=Yeon+Sung:wght@400&family=Do+Hyeon:wght@400&family=Song+Myung:wght@400&display=swap" rel="stylesheet" />
       </head>
       <body className="antialiased">
-
         <Script
           id="json-ld"
           type="application/ld+json"
@@ -110,7 +127,7 @@ export default function RootLayout({
                 "name": "Wedding Invitation Studio",
                 "alternateName": "심플 모바일 청첩장",
                 "url": "https://wedding-invitation-zeta-one.vercel.app",
-                "description": "Next.js 16으로 제작된 고품격 모바일 청첩장 제작 플랫폼",
+                "description": "Next.js 기반 고품격 모바일 청첩장 제작 플랫폼",
                 "inLanguage": "ko-KR",
                 "publisher": {
                   "@type": "Person",
@@ -153,3 +170,4 @@ export default function RootLayout({
     </html>
   );
 }
+

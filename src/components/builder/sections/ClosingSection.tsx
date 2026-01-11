@@ -3,10 +3,9 @@ import Image from 'next/image';
 import { Image as ImageIcon, Camera, X } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
-import { BuilderLabel } from '../BuilderLabel';
-import { BuilderTextarea } from '../BuilderTextarea';
 import { BuilderButtonGroup } from '../BuilderButtonGroup';
 import { BuilderField } from '../BuilderField';
+import RichTextEditor from '@/components/common/RichTextEditor';
 import { Section, Stack, Row } from '../BuilderLayout';
 import styles from './ClosingSection.module.scss';
 
@@ -15,10 +14,7 @@ interface SectionProps {
     onToggle: () => void;
 }
 
-const RECOMMENDED_TEXT = `장담하건대, 세상이 다 겨울이어도
-우리 사랑은 늘 봄처럼 따뜻하고
-간혹, 여름처럼 뜨거울 겁니다.
-이수동, 사랑가`;
+const RECOMMENDED_TEXT = `<p>장담하건대, 세상이 다 겨울이어도<br>우리 사랑은 늘 봄처럼 따뜻하고<br>간혹, 여름처럼 뜨거울 겁니다.</p><p>이수동, 사랑가</p>`;
 
 export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
     const { closing, setClosing } = useInvitationStore();
@@ -110,7 +106,7 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
                 <BuilderField
                     label={
                         <Row align="between" className={styles.contentHeader ?? ''}>
-                            <BuilderLabel className="!mb-0">문구 내용</BuilderLabel>
+                            <span className={styles.contentLabel}>문구 내용</span>
                             <button
                                 onClick={() => setClosing({ content: RECOMMENDED_TEXT })}
                                 className={styles.recommendButton ?? ''}
@@ -120,10 +116,9 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
                         </Row>
                     }
                 >
-                    <BuilderTextarea
-                        value={closing.content}
-                        onChange={(e) => setClosing({ content: e.target.value })}
-                        className={styles.textarea ?? ''}
+                    <RichTextEditor
+                        content={closing.content}
+                        onChange={(content) => setClosing({ content })}
                         placeholder="마무리 문구를 입력하세요..."
                     />
                 </BuilderField>

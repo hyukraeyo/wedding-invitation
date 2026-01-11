@@ -12,7 +12,7 @@ import { BuilderToggle } from '../BuilderToggle';
 import { BuilderField } from '../BuilderField';
 import { BuilderModal } from '../../common/BuilderModal';
 import { ImageUploader } from '../ImageUploader';
-import { Section, Row, Divider, Card } from '../BuilderLayout';
+import { Section, Row, Divider, Card, Stack } from '../BuilderLayout';
 import styles from './LocationSection.module.scss';
 
 interface SectionProps {
@@ -33,7 +33,8 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
         mapZoom, setMapZoom,
         mapType, setMapType,
         showSketch, setShowSketch,
-        sketchUrl, setSketchUrl
+        sketchUrl, setSketchUrl,
+        sketchRatio, setSketchRatio
     } = useInvitationStore();
 
     const [isSearchOpen, setIsSearchOpen] = React.useState(false);
@@ -200,11 +201,23 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                 {/* 약도 이미지 */}
                 {showSketch && (
                     <BuilderField label="약도 이미지">
-                        <ImageUploader
-                            value={sketchUrl}
-                            onChange={setSketchUrl}
-                            placeholder="약도 이미지 추가"
-                        />
+                        <Stack gap="md">
+                            <ImageUploader
+                                value={sketchUrl}
+                                onChange={setSketchUrl}
+                                placeholder="약도 이미지 추가"
+                            />
+                            {sketchUrl && (
+                                <BuilderButtonGroup
+                                    value={sketchRatio}
+                                    options={[
+                                        { label: '고정 (기본)', value: 'fixed' },
+                                        { label: '자동 (원본 비율)', value: 'auto' },
+                                    ]}
+                                    onChange={(val: 'fixed' | 'auto') => setSketchRatio(val)}
+                                />
+                            )}
+                        </Stack>
                     </BuilderField>
                 )}
             </Section>

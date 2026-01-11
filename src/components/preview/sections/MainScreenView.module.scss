@@ -134,9 +134,17 @@
 
     &.imageStandard {
         max-width: $canvas-max-width;
-        aspect-ratio: 4 / 5;
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
         margin-inline: auto;
+
+        &.fixed {
+            aspect-ratio: 4 / 5;
+        }
+
+        &.auto {
+            height: auto;
+            aspect-ratio: auto;
+        }
     }
 
     &.imageFill {
@@ -147,7 +155,6 @@
     }
 
     .mainImage {
-        object-fit: cover;
         transition: transform 0.7s ease-in-out;
     }
 

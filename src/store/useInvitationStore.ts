@@ -43,13 +43,16 @@ interface InvitationState {
     mapZoom: number;
     showSketch: boolean;
     sketchUrl: string | null;
+    sketchRatio: 'fixed' | 'auto';
 
     coordinates: { lat: number; lng: number } | null; // For Map
     message: string;
     greetingTitle: string;
     greetingSubtitle: string;
     imageUrl: string | null;
+    imageRatio: 'fixed' | 'auto';
     greetingImage: string | null;
+    greetingRatio: 'fixed' | 'auto';
     showNamesAtBottom: boolean;
     enableFreeformNames: boolean;
     groomNameCustom: string; // Freeform text for groom side
@@ -141,6 +144,7 @@ interface InvitationState {
     setMapType: (type: 'kakao' | 'naver') => void;
     setShowSketch: (show: boolean) => void;
     setSketchUrl: (url: string | null) => void;
+    setSketchRatio: (ratio: 'fixed' | 'auto') => void;
 
     setMessage: (message: string) => void;
     setGreetingTitle: (title: string) => void;
@@ -151,7 +155,9 @@ interface InvitationState {
     setBrideNameCustom: (name: string) => void;
 
     setImageUrl: (url: string | null) => void;
+    setImageRatio: (ratio: 'fixed' | 'auto') => void;
     setGreetingImage: (url: string | null) => void;
+    setGreetingRatio: (ratio: 'fixed' | 'auto') => void;
     setTheme: (theme: Partial<InvitationState['theme']>) => void;
     setGallery: (images: { id: string; url: string }[]) => void;
     setGalleryTitle: (title: string) => void;
@@ -260,6 +266,7 @@ const INITIAL_STATE = {
     mapZoom: 17, // Zoom Level (higher is closer)
     showSketch: false,
     sketchUrl: null,
+    sketchRatio: 'fixed' as const,
 
     coordinates: { lat: 37.5665, lng: 126.9780 }, // Default: Seoul City Hall
     message: '',
@@ -271,7 +278,9 @@ const INITIAL_STATE = {
     brideNameCustom: '',
 
     imageUrl: null,
+    imageRatio: 'fixed' as const,
     greetingImage: null,
+    greetingRatio: 'fixed' as const,
 
     mainScreen: {
         layout: 'basic' as const,
@@ -372,6 +381,7 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
     setMapType: (type) => set({ mapType: type }),
     setShowSketch: (show) => set({ showSketch: show }),
     setSketchUrl: (url) => set({ sketchUrl: url }),
+    setSketchRatio: (sketchRatio) => set({ sketchRatio }),
 
     setCoordinates: (lat, lng) => set({ coordinates: { lat, lng } }),
     setMessage: (message) => set({ message }),
@@ -383,7 +393,9 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
     setBrideNameCustom: (name) => set({ brideNameCustom: name }),
 
     setImageUrl: (url) => set({ imageUrl: url }),
+    setImageRatio: (imageRatio) => set({ imageRatio }),
     setGreetingImage: (url) => set({ greetingImage: url }),
+    setGreetingRatio: (greetingRatio) => set({ greetingRatio }),
     setTheme: (newTheme) => set((state) => ({ theme: { ...state.theme, ...newTheme } })),
     setGallery: (images) => set({ gallery: images }),
     setGalleryTitle: (title) => set({ galleryTitle: title }),

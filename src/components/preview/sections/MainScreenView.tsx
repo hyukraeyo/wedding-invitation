@@ -30,6 +30,7 @@ interface MainScreenViewProps {
         effect: 'none' | 'mist' | 'ripple' | 'paper';
     };
     imageUrl: string | null | undefined;
+    imageRatio?: 'fixed' | 'auto';
     groom: Person;
     bride: Person;
     date?: string;
@@ -46,6 +47,7 @@ interface MainScreenViewProps {
 const MainScreenView = memo(({
     mainScreen,
     imageUrl,
+    imageRatio = 'fixed',
     groom,
     bride,
     date,
@@ -114,7 +116,8 @@ const MainScreenView = memo(({
                 <div className={clsx(
                     styles.imageFrame,
                     isFillLayout ? styles.imageFill : styles.imageStandard,
-                    (!isFillLayout && mainScreen.layout !== 'arch' && mainScreen.layout !== 'oval') && styles.bgGray
+                    (!isFillLayout && mainScreen.layout !== 'arch' && mainScreen.layout !== 'oval') && styles.bgGray,
+                    !isFillLayout && styles[imageRatio]
                 )}
                     style={{
                         borderColor: mainScreen.showBorder ? accentColor : 'transparent',
@@ -129,17 +132,36 @@ const MainScreenView = memo(({
                     }}
                 >
                     {imageUrl ? (
-                        <Image
-                            src={imageUrl}
-                            alt={`${groom.firstName}와 ${bride.firstName}의 결혼식 메인 사진`}
-                            fill
-                            className={styles.mainImage}
-                            style={{
-                                transform: (mainScreen.expandPhoto && !isFillLayout) ? 'scale(1.1)' : 'scale(1)',
-                                transformOrigin: 'center center'
-                            }}
-                            priority
-                        />
+                        imageRatio === 'fixed' || isFillLayout ? (
+                            <Image
+                                src={imageUrl}
+                                alt={`${groom.firstName}와 ${bride.firstName}의 결혼식 메인 사진`}
+                                fill
+                                className={styles.mainImage}
+                                style={{
+                                    transform: (mainScreen.expandPhoto && !isFillLayout) ? 'scale(1.1)' : 'scale(1)',
+                                    transformOrigin: 'center center',
+                                    objectFit: 'cover',
+                                }}
+                                priority
+                            />
+                        ) : (
+                            <Image
+                                src={imageUrl}
+                                alt={`${groom.firstName}와 ${bride.firstName}의 결혼식 메인 사진`}
+                                width={800}
+                                height={600}
+                                className={styles.mainImage}
+                                style={{
+                                    transform: (mainScreen.expandPhoto && !isFillLayout) ? 'scale(1.1)' : 'scale(1)',
+                                    transformOrigin: 'center center',
+                                    width: '100%',
+                                    height: 'auto',
+                                    objectFit: 'contain',
+                                }}
+                                priority
+                            />
+                        )
                     ) : (
                         <div className={styles.emptyPlaceholder}>
                             <Heart size={48} strokeWidth={1} />

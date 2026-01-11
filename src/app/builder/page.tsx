@@ -43,14 +43,13 @@ export default function BuilderPage() {
       }
 
       await invitationService.saveInvitation(currentSlug, cleanData, user.id);
-      alert('저장이 완료되었습니다! 마이페이지로 이동합니다.');
-      router.push('/mypage');
+      alert('저장이 완료되었습니다.');
     } catch {
       alert('저장 도중 오류가 발생했습니다.');
     } finally {
       setIsSaving(false);
     }
-  }, [user, state, router, handleLogin]);
+  }, [user, state, handleLogin]);
 
   return (
     <main className={styles.main}>

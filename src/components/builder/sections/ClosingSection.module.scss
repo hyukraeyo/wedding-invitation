@@ -137,6 +137,8 @@
     }
 }
 
-.textarea {
-    min-height: 10rem;
+.contentLabel {
+    font-size: $builder-font-sm;
+    font-weight: 600;
+    color: $builder-text-heading;
 }

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import styles from './BuilderCalendar.module.scss';
 import { clsx } from 'clsx';
@@ -26,45 +26,45 @@ export const BuilderCalendar = ({ value, onChange, className, placeholder = '날
         }
     }, [value]);
 
+    const closeCalendar = useCallback(() => setIsOpen(false), []);
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-                setIsOpen(false);
+                closeCalendar();
             }
         };
 
         const handleScroll = () => {
-            if (isOpen) setIsOpen(false);
+            if (isOpen) closeCalendar();
         };
 
         if (isOpen) {
             document.addEventListener('mousedown', handleClickOutside);
-            // Capture scroll events from any container to close the popup
             window.addEventListener('scroll', handleScroll, true);
         }
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
             window.removeEventListener('scroll', handleScroll, true);
         };
-    }, [isOpen]);
+    }, [isOpen, closeCalendar]);
 
-    const changeMonth = (offset: number) => {
-        setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + offset, 1));
-    };
+    const changeMonth = useCallback((offset: number) => {
+        setViewDate(prev => new Date(prev.getFullYear(), prev.getMonth() + offset, 1));
+    }, []);
 
-    const handleDateClick = (day: number) => {
+    const handleDateClick = useCallback((day: number) => {
         const year = viewDate.getFullYear();
         const month = viewDate.getMonth();
-        // Format as YYYY-MM-DD (local time)
         const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         onChange(dateStr);
-        setIsOpen(false);
-    };
+        closeCalendar();
+    }, [viewDate, onChange, closeCalendar]);
 
     const daysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
     const startDayOfMonth = (year: number, month: number) => new Date(year, month, 1).getDay();
 
-    const renderCalendarDays = () => {
+    const calendarDays = useMemo(() => {
         const year = viewDate.getFullYear();
         const month = viewDate.getMonth();
         const totalDays = daysInMonth(year, month);
@@ -73,7 +73,7 @@ export const BuilderCalendar = ({ value, onChange, className, placeholder = '날
 
         // Empty slots
         for (let i = 0; i < startDay; i++) {
-            days.push(<div key={`empty-${i}`} />);
+            days.push(<div key={`empty-${i}`} aria-hidden="true" />);
         }
 
         // Days
@@ -92,17 +92,19 @@ export const BuilderCalendar = ({ value, onChange, className, placeholder = '날
                         isToday && styles.today
                     )}
                     type="button"
+                    aria-label={`${year}년 ${month + 1}월 ${day}일`}
+                    aria-current={isSelected ? 'date' : undefined}
                 >
                     {day}
                 </button>
             );
         }
         return days;
-    };
+    }, [viewDate, value, handleDateClick]);
 
-    const cssVars = {
+    const cssVars = useMemo(() => ({
         '--accent-color': accentColor,
-    } as React.CSSProperties;
+    } as React.CSSProperties), [accentColor]);
 
     const displayDate = value ? value.split('-').join('. ') + '.' : placeholder;
 
@@ -116,6 +118,9 @@ export const BuilderCalendar = ({ value, onChange, className, placeholder = '날
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
                 className={clsx(styles.trigger, isOpen && styles.open)}
+                aria-haspopup="grid"
+                aria-expanded={isOpen}
+                aria-label={value ? `선택된 날짜: ${displayDate}` : placeholder}
             >
                 <span className={clsx(styles.triggerText, value && styles.hasValue)}>
                     {displayDate}
@@ -123,39 +128,60 @@ export const BuilderCalendar = ({ value, onChange, className, placeholder = '날
                 <CalendarIcon
                     size={18}
                     className={clsx(styles.triggerIcon, isOpen && styles.active)}
+                    aria-hidden="true"
                 />
             </button>
 
             {isOpen && (
-                <div className={styles.popup}>
+                <div
+                    className={styles.popup}
+                    role="grid"
+                    aria-label={`${viewDate.getFullYear()}년 ${viewDate.getMonth() + 1}월 달력`}
+                >
                     <div className={styles.header}>
                         <div className={styles.monthTitle}>
                             <span className={styles.year}>{viewDate.getFullYear()}년</span>
                             <span className={styles.monthHighlight}>{viewDate.getMonth() + 1}월</span>
                         </div>
                         <div className={styles.navGroup}>
-                            <button onClick={() => changeMonth(-1)} className={styles.navButton} type="button">
+                            <button
+                                onClick={() => changeMonth(-1)}
+                                className={styles.navButton}
+                                type="button"
+                                aria-label="이전 달"
+                            >
                                 <ChevronLeft size={14} />
                             </button>
-                            <button onClick={() => changeMonth(1)} className={styles.navButton} type="button">
+                            <button
+                                onClick={() => changeMonth(1)}
+                                className={styles.navButton}
+                                type="button"
+                                aria-label="다음 달"
+                            >
                                 <ChevronRight size={14} />
                             </button>
                         </div>
                     </div>
 
-                    <div className={styles.weekdays}>
+                    <div className={styles.weekdays} role="row">
                         {['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map((d, i) => (
-                            <div key={d} className={clsx(styles.weekday, i === 0 && styles.sunday)}>
+                            <div
+                                key={d}
+                                className={clsx(styles.weekday, i === 0 && styles.sunday)}
+                                role="columnheader"
+                                aria-label={d === 'SUN' ? '일요일' : d === 'MON' ? '월요일' : d === 'TUE' ? '화요일' : d === 'WED' ? '수요일' : d === 'THU' ? '목요일' : d === 'FRI' ? '금요일' : '토요일'}
+                            >
                                 {d}
                             </div>
                         ))}
                     </div>
 
                     <div className={styles.daysGrid}>
-                        {renderCalendarDays()}
+                        {calendarDays}
                     </div>
                 </div>
             )}
         </div>
     );
 };
+

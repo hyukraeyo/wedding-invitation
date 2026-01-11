@@ -5,14 +5,70 @@
     align-items: center;
     text-align: center;
     width: 100%;
-    padding-top: 2rem;
+    padding-top: 0;
     padding-bottom: 5rem;
 
-    .decorationLine {
-        width: 1px;
-        height: 40px;
-        background-color: var(--accent-light, #e5e7eb);
-        margin-bottom: 2rem;
+
+    .imageSection {
+        width: 100%;
+        margin-bottom: 3rem;
+
+        &.fixed {
+            .imageContainer {
+                aspect-ratio: 4 / 5;
+            }
+        }
+
+        &.auto {
+            .imageContainer {
+                height: auto;
+                aspect-ratio: auto;
+            }
+        }
+
+        .imageContainer {
+            width: 100%;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            background-color: #f8f9fa;
+            position: relative;
+
+            .endingImage {
+                width: 100%;
+                height: 100%;
+                display: block;
+            }
+
+            .effectLayer {
+                position: absolute;
+                inset: 0;
+                z-index: 10;
+                pointer-events: none;
+        
+                &.mist {
+                    background-color: rgba(255, 255, 255, 0.2);
+                    backdrop-filter: blur(2px);
+                    animation: pulse-slow 4s infinite;
+                }
+        
+                &.ripple {
+                    opacity: 0.3;
+                    background-image: url('https://www.transparenttextures.com/water.png');
+                    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+                }
+        
+                &.paper {
+                    opacity: 0.4;
+                    background-image: url('https://www.transparenttextures.com/paper.png');
+                    mix-blend-mode: multiply;
+                }
+            }
+        }
+    }
+
+    @keyframes pulse-slow {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.8; }
     }
 
     .message {
@@ -22,6 +78,17 @@
         font-family: $font-gowun-batang;
         margin-bottom: 3rem;
         word-break: keep-all;
+
+        p {
+            margin: 0;
+            &:not(:last-child) {
+                margin-bottom: 0.75rem;
+            }
+        }
+
+        &.noImage {
+            margin-top: 1rem;
+        }
     }
 
     .shareContainer {

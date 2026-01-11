@@ -4,6 +4,7 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderInput } from '../BuilderInput';
 import { BuilderField } from '../BuilderField';
+import { BuilderButtonGroup } from '../BuilderButtonGroup';
 import { BuilderModal } from '@/components/common/BuilderModal';
 import RichTextEditor from '@/components/common/RichTextEditor';
 import { ImageUploader } from '../ImageUploader';
@@ -55,6 +56,7 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
         greetingSubtitle, setGreetingSubtitle,
         message, setMessage,
         greetingImage, setGreetingImage,
+        greetingRatio, setGreetingRatio,
         showNamesAtBottom, setShowNamesAtBottom,
         enableFreeformNames, setEnableFreeformNames,
         groomNameCustom, setGroomNameCustom
@@ -113,11 +115,23 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Photo Upload */}
                 <BuilderField label="사진">
-                    <ImageUploader
-                        value={greetingImage}
-                        onChange={setGreetingImage}
-                        placeholder="인사말 사진 추가"
-                    />
+                    <Stack gap="md">
+                        <ImageUploader
+                            value={greetingImage}
+                            onChange={setGreetingImage}
+                            placeholder="인사말 사진 추가"
+                        />
+                        {greetingImage && (
+                            <BuilderButtonGroup
+                                value={greetingRatio}
+                                options={[
+                                    { label: '고정 (기본)', value: 'fixed' },
+                                    { label: '자동 (원본 비율)', value: 'auto' },
+                                ]}
+                                onChange={(val: 'fixed' | 'auto') => setGreetingRatio(val)}
+                            />
+                        )}
+                    </Stack>
                 </BuilderField>
 
                 {/* Name Options */}

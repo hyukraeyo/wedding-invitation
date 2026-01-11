@@ -23,6 +23,7 @@ const InvitationCanvas = memo(() => {
     editingSection,
     mainScreen,
     imageUrl,
+    imageRatio,
     groom,
     bride,
     date,
@@ -34,6 +35,7 @@ const InvitationCanvas = memo(() => {
     locationContact,
     greetingTitle,
     greetingImage,
+    greetingRatio,
     message,
     showNamesAtBottom,
     enableFreeformNames,
@@ -57,6 +59,7 @@ const InvitationCanvas = memo(() => {
     showNavigation,
     showSketch,
     sketchUrl,
+    sketchRatio,
     lockMap,
     ddayMessage,
     greetingSubtitle,
@@ -150,6 +153,7 @@ const InvitationCanvas = memo(() => {
           <MainScreenView
             mainScreen={mainScreen}
             imageUrl={imageUrl || undefined}
+            imageRatio={imageRatio}
             groom={groom}
             bride={bride}
             date={date}
@@ -167,6 +171,7 @@ const InvitationCanvas = memo(() => {
           greetingSubtitle={greetingSubtitle}
           greetingContent={message}
           greetingImage={greetingImage || undefined}
+          greetingRatio={greetingRatio}
           showNamesAtBottom={showNamesAtBottom}
           enableFreeformNames={enableFreeformNames}
           freeformNames={groomNameCustom || ''}
@@ -200,6 +205,7 @@ const InvitationCanvas = memo(() => {
           showNavigation={showNavigation}
           showSketch={showSketch}
           sketchUrl={sketchUrl || undefined}
+          sketchRatio={sketchRatio}
           lockMap={lockMap}
           mapType={mapType}
           locationContact={locationContact}
@@ -234,6 +240,9 @@ const InvitationCanvas = memo(() => {
         <ClosingView
           id="section-closing"
           closingMessage={closing.content}
+          imageUrl={closing.imageUrl}
+          ratio={closing.ratio}
+          effect={closing.effect}
           accentColor={theme.accentColor}
         />
 

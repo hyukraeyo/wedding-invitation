@@ -1,0 +1,26 @@
+
+> wedding-invitation@0.1.0 build
+> next build
+
+▲ Next.js 16.1.1 (Turbopack)
+- Environments: .env.local
+- Experiments (use with caution):
+  · optimizePackageImports
+  · serverActions
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 3.0s
+  Running TypeScript ...
+Failed to compile.
+
+./src/components/common/RichTextEditor.tsx:89:49
+Type error: Type 'false' has no properties in common with type 'SetContentOptions'.
+
+[0m [90m 87 |[39m     useEffect(() [33m=>[39m {
+ [90m 88 |[39m         [36mif[39m (editor [33m&&[39m content [33m!==[39m editor[33m.[39mgetHTML()) {
+[31m[1m>[22m[39m[90m 89 |[39m             editor[33m.[39mcommands[33m.[39msetContent(content[33m,[39m [36mfalse[39m)[33m;[39m [90m// false to avoid triggering update[39m
+ [90m    |[39m                                                 [31m[1m^[22m[39m
+ [90m 90 |[39m         }
+ [90m 91 |[39m     }[33m,[39m [content[33m,[39m editor])[33m;[39m
+ [90m 92 |[39m[0m
+Next.js build worker exited with code: 1 and signal: null

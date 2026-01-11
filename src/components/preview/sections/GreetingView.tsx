@@ -4,6 +4,7 @@ import React, { memo } from 'react';
 import Image from 'next/image';
 import SectionContainer from '../SectionContainer';
 import SectionHeader from '../SectionHeader';
+import { clsx } from 'clsx';
 import styles from './GreetingView.module.scss';
 
 interface Person {
@@ -22,6 +23,7 @@ interface GreetingViewProps {
     greetingSubtitle?: string | null | undefined;
     greetingContent: string;
     greetingImage?: string | null | undefined;
+    greetingRatio?: 'fixed' | 'auto';
     showNamesAtBottom: boolean;
     enableFreeformNames: boolean;
     freeformNames?: string | null | undefined;
@@ -39,6 +41,7 @@ const GreetingView = memo(({
     greetingSubtitle = 'GREETING',
     greetingContent,
     greetingImage,
+    greetingRatio = 'fixed',
     showNamesAtBottom,
     enableFreeformNames,
     freeformNames,
@@ -92,13 +95,18 @@ const GreetingView = memo(({
                 />
 
                 {greetingImage && (
-                    <div className={styles.imageContainer}>
+                    <div className={clsx(styles.imageContainer, styles[greetingRatio])}>
                         <Image
                             src={greetingImage}
                             alt="인사말 이미지"
-                            width={600}
-                            height={400}
+                            width={800}
+                            height={550}
                             className={styles.image}
+                            style={{
+                                width: '100%',
+                                height: greetingRatio === 'fixed' ? '100%' : 'auto',
+                                objectFit: greetingRatio === 'fixed' ? 'cover' : 'contain'
+                            }}
                             unoptimized
                         />
                     </div>

@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import styles from '@/components/auth/LoginModal.module.scss';
 import { BuilderInput } from '@/components/builder/BuilderInput';
+import { useAuth } from '@/hooks/useAuth';
 
 /**
  * LoginPage: 직접 /login 경로로 접근 시 렌더링되는 전체 페이지 버전
@@ -13,9 +14,18 @@ import { BuilderInput } from '@/components/builder/BuilderInput';
  */
 export default function LoginPage() {
     const router = useRouter();
+    const { user, loading: authLoading } = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (!authLoading && user) {
+            router.replace('/builder');
+        }
+    }, [user, authLoading, router]);
+
+    if (authLoading || user) return null;
 
     const handleKakaoLogin = async () => {
         setLoading(true);

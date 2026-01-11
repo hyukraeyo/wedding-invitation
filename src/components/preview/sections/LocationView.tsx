@@ -8,6 +8,7 @@ import { Copy, Phone } from 'lucide-react';
 import SectionContainer from '../SectionContainer';
 import SectionHeader from '../SectionHeader';
 import { NaverIcon, KakaoIcon } from '../../common/MapIcons';
+import { clsx } from 'clsx';
 import styles from './LocationView.module.scss';
 
 interface LocationViewProps {
@@ -23,6 +24,7 @@ interface LocationViewProps {
     showNavigation?: boolean;
     showSketch?: boolean;
     sketchUrl?: string | null | undefined;
+    sketchRatio?: 'fixed' | 'auto';
     lockMap?: boolean;
     mapType?: 'naver' | 'kakao';
     locationContact?: string;
@@ -93,6 +95,7 @@ const LocationView = memo(({
     showNavigation = true,
     showSketch = false,
     sketchUrl = null,
+    sketchRatio = 'fixed',
     lockMap = true,
     mapType = 'naver',
     locationContact
@@ -168,13 +171,18 @@ const LocationView = memo(({
             )}
 
             {showSketch && sketchUrl && (
-                <div className={styles.sketchContainer}>
+                <div className={clsx(styles.sketchContainer, styles[sketchRatio])}>
                     <Image
                         src={sketchUrl}
                         alt="약도"
                         width={800}
                         height={600}
                         className={styles.sketchImage}
+                        style={{
+                            width: '100%',
+                            height: sketchRatio === 'fixed' ? '100%' : 'auto',
+                            objectFit: sketchRatio === 'fixed' ? 'cover' : 'contain'
+                        }}
                     />
                 </div>
             )}

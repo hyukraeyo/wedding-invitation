@@ -1,0 +1,26 @@
+
+> wedding-invitation@0.1.0 build
+> next build
+
+▲ Next.js 16.1.1 (Turbopack)
+- Environments: .env.local
+- Experiments (use with caution):
+  · optimizePackageImports
+  · serverActions
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 3.1s
+  Running TypeScript ...
+Failed to compile.
+
+./src/app/layout.tsx:14:47
+Type error: Object literal may only specify known properties, and 'subsets' does not exist in type '{ weight: "400" | "400"[]; style?: "normal" | "normal"[]; display?: Display; variable?: "--font-song-myung"; fallback?: string[]; adjustFontFallback?: boolean; }'.
+
+[0m [90m 12 |[39m [36mconst[39m yeonSung [33m=[39m [33mYeon_Sung[39m({ weight[33m:[39m [32m'400'[39m[33m,[39m subsets[33m:[39m [[32m'latin'[39m][33m,[39m variable[33m:[39m [32m'--font-yeon-sung'[39m[33m,[39m display[33m:[39m [32m'swap'[39m })[33m;[39m
+ [90m 13 |[39m [36mconst[39m doHyeon [33m=[39m [33mDo_Hyeon[39m({ weight[33m:[39m [32m'400'[39m[33m,[39m subsets[33m:[39m [[32m'latin'[39m][33m,[39m variable[33m:[39m [32m'--font-do-hyeon'[39m[33m,[39m display[33m:[39m [32m'swap'[39m })[33m;[39m
+[31m[1m>[22m[39m[90m 14 |[39m [36mconst[39m songMyung [33m=[39m [33mSong_Myung[39m({ weight[33m:[39m [32m'400'[39m[33m,[39m subsets[33m:[39m [[32m'latin'[39m][33m,[39m variable[33m:[39m [32m'--font-song-myung'[39m[33m,[39m display[33m:[39m [32m'swap'[39m })[33m;[39m
+ [90m    |[39m                                               [31m[1m^[22m[39m
+ [90m 15 |[39m [36mconst[39m greatVibes [33m=[39m [33mGreat_Vibes[39m({ weight[33m:[39m [32m'400'[39m[33m,[39m subsets[33m:[39m [[32m'latin'[39m][33m,[39m variable[33m:[39m [32m'--font-script'[39m[33m,[39m display[33m:[39m [32m'swap'[39m })[33m;[39m
+ [90m 16 |[39m
+ [90m 17 |[39m [36mexport[39m [36mconst[39m viewport[33m:[39m [33mViewport[39m [33m=[39m {[0m
+Next.js build worker exited with code: 1 and signal: null

@@ -14,6 +14,7 @@ import { BuilderField } from '../BuilderField';
 import RichTextEditor from '@/components/common/RichTextEditor';
 import { ImageUploader } from '../ImageUploader';
 import { SubAccordion } from '../SubAccordion';
+import { Stack } from '../BuilderLayout';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -61,6 +62,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
     const {
         mainScreen, setMainScreen,
         imageUrl, setImageUrl,
+        imageRatio, setImageRatio,
         groom, bride, setGroom, setBride,
         theme: { accentColor }
     } = useInvitationStore();
@@ -194,11 +196,23 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Photo Upload */}
                 <BuilderField label="사진">
-                    <ImageUploader
-                        value={imageUrl}
-                        onChange={setImageUrl}
-                        placeholder="메인 사진 추가"
-                    />
+                    <Stack gap="md">
+                        <ImageUploader
+                            value={imageUrl}
+                            onChange={setImageUrl}
+                            placeholder="메인 사진 추가"
+                        />
+                        {imageUrl && (
+                            <BuilderButtonGroup
+                                value={imageRatio}
+                                options={[
+                                    { label: '고정 (기본)', value: 'fixed' },
+                                    { label: '자동 (원본 비율)', value: 'auto' },
+                                ]}
+                                onChange={(val: 'fixed' | 'auto') => setImageRatio(val)}
+                            />
+                        )}
+                    </Stack>
                 </BuilderField>
 
                 {/* Design Options */}

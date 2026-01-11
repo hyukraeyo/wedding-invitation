@@ -1,4 +1,4 @@
-import React, { useEffect, useSyncExternalStore } from 'react';
+import React, { useEffect, useSyncExternalStore, useId } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import styles from './BuilderModal.module.scss';
@@ -18,11 +18,23 @@ const getServerSnapshot = () => false;
 
 export const BuilderModal = ({ isOpen, onClose, title, children, className = "" }: BuilderModalProps) => {
     const isMounted = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+    const titleId = useId();
 
     useEffect(() => {
-        document.body.style.overflow = isOpen ? 'hidden' : 'unset';
-        return () => { document.body.style.overflow = 'unset'; };
-    }, [isOpen]);
+        if (!isOpen) return;
+
+        document.body.style.overflow = 'hidden';
+        const handleEsc = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') onClose();
+        };
+        window.addEventListener('keydown', handleEsc);
+
+        return () => {
+            document.body.style.overflow = 'unset';
+            window.removeEventListener('keydown', handleEsc);
+        };
+    }, [isOpen, onClose]);
+
 
     if (!isOpen || !isMounted) return null;
 
@@ -32,11 +44,21 @@ export const BuilderModal = ({ isOpen, onClose, title, children, className = "" 
         <div
             className={styles.backdrop}
             onClick={(e) => e.target === e.currentTarget && onClose()}
+            role="presentation"
         >
-            <div className={clsx(styles.modal, className)}>
+            <div
+                className={clsx(styles.modal, className)}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby={titleId}
+            >
                 <div className={styles.header}>
-                    <h3>{title}</h3>
-                    <button onClick={onClose} className={styles.closeButton}>
+                    <h3 id={titleId}>{title}</h3>
+                    <button
+                        onClick={onClose}
+                        className={styles.closeButton}
+                        aria-label="닫기"
+                    >
                         <X size={20} />
                     </button>
                 </div>
@@ -48,3 +70,4 @@ export const BuilderModal = ({ isOpen, onClose, title, children, className = "" 
         portalRoot
     );
 };
+

@@ -17,19 +17,12 @@
   --muted-sand: #E2E2C7;
   --coral-pink: #FF8A8A;
 
-  /* Font Families */
-  --font-serif: "Playfair Display", serif;
-  --font-sans: "Inter", sans-serif;
-  --font-gowun-batang: "Gowun Batang", serif;
-  --font-gowun-dodum: "Gowun Dodum", sans-serif;
-  --font-nanum-myeongjo: "Nanum Myeongjo", serif;
-  --font-yeon-sung: "Yeon Sung", cursive;
-  --font-do-hyeon: "Do Hyeon", sans-serif;
-  --font-song-myung: "Song Myung", serif;
+  /* Font Families are now provided by next/font in layout.tsx */
+  /* We only define fallbacks or fonts not in next/font here */
   --font-pretendard: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
   --font-gmarket-sans: "GmarketSansMedium", sans-serif;
-  --font-script: "Great Vibes", cursive;
 }
+
 
 * {
   box-sizing: border-box;
