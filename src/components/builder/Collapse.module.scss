@@ -1,0 +1,85 @@
+@use "@/styles/variables" as *;
+
+.container {
+    width: 100%;
+    border: 1px solid $toss-grey-100;
+    border-radius: 12px;
+    background-color: white;
+    overflow: hidden;
+    transition: all 0.3s ease;
+
+    &.open {
+        background-color: $toss-grey-50;
+        border-color: $toss-grey-200;
+    }
+}
+
+.trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    transition: background-color 0.2s ease;
+    user-select: none;
+
+    &:active {
+        background-color: $toss-grey-100;
+    }
+}
+
+.headerContent {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.label {
+    font-size: 14px;
+    font-weight: 600;
+    color: $toss-grey-700;
+    letter-spacing: -0.01em;
+
+    &.open {
+        color: $toss-grey-900;
+    }
+}
+
+.badge {
+    padding: 2px 6px;
+    background-color: white;
+    border: 1px solid $toss-grey-200;
+    border-radius: 4px;
+    font-size: 10px;
+    color: $toss-grey-500;
+    font-weight: 700;
+}
+
+.icon {
+    color: $toss-grey-400;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+    &.open {
+        transform: rotate(180deg);
+        color: $toss-grey-900;
+    }
+}
+
+.collapseWrapper {
+    overflow: hidden;
+    transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.collapseInner {
+    min-height: 0;
+}
+
+.content {
+    padding: 8px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}

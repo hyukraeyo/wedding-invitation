@@ -4,13 +4,13 @@ import React, { useState } from 'react';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
-import { BuilderSelect } from '../BuilderSelect';
-import { BuilderToggle } from '../BuilderToggle';
-import { BuilderField } from '../BuilderField';
-import { BuilderCollapse } from '../BuilderCollapse';
-import { BuilderCalendar } from '../BuilderCalendar';
-import { BuilderTextField } from '../BuilderTextField';
-import { Section, Stack, Row, Divider } from '../BuilderLayout';
+import { Select } from '../Select';
+import { Switch } from '../Switch';
+import { Field } from '../Field';
+import { Collapse } from '../Collapse';
+import { Calendar } from '../Calendar';
+import { TextField } from '../TextField';
+import { Section, Stack, Row, Divider } from '../Layout';
 import commonStyles from '../Builder.module.scss';
 import sectionStyles from './DateTimeSection.module.scss';
 
@@ -64,52 +64,52 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
         >
             <Section>
                 {/* 예식일 */}
-                <BuilderField label="예식일">
-                    <BuilderCalendar
+                <Field label="예식일">
+                    <Calendar
                         value={date}
                         onChange={setDate}
                         placeholder="날짜 선택"
                     />
-                </BuilderField>
+                </Field>
 
                 {/* 예식시간 */}
-                <BuilderField label="예식시간">
+                <Field label="예식시간">
                     <Row gap="md">
-                        <BuilderSelect
+                        <Select
                             value={currentHour}
                             options={hourOptions}
                             onChange={(val) => handleTimeChange('hour', val)}
                         />
-                        <BuilderSelect
+                        <Select
                             value={currentMinute}
                             options={minuteOptions}
                             onChange={(val) => handleTimeChange('minute', val)}
                         />
                     </Row>
-                </BuilderField>
+                </Field>
 
                 {/* 표시 설정 */}
-                <BuilderField label="표시 설정">
+                <Field label="표시 설정">
                     <Row wrap>
-                        <BuilderToggle
+                        <Switch
                             checked={showCalendar}
                             onChange={setShowCalendar}
                             label="캘린더 표시"
                         />
-                        <BuilderToggle
+                        <Switch
                             checked={showDday}
                             onChange={setShowDday}
                             label="디데이 & 카운트다운"
                         />
                     </Row>
-                </BuilderField>
+                </Field>
 
                 {/* D-Day Message Editor */}
                 {showDday && (
                     <>
                         <Divider />
                         <Stack gap="md">
-                            <BuilderCollapse
+                            <Collapse
                                 label="디데이 문구 커스텀"
                                 isOpen={showDdayEditor}
                                 onToggle={() => setShowDdayEditor(!showDdayEditor)}
@@ -145,7 +145,7 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
 
                                         return (
                                             <Stack gap="lg">
-                                                <BuilderTextField
+                                                <TextField
                                                     label="시작 문구"
                                                     value={displayPrefix}
                                                     onChange={(e) => handleInputChange(e.target.value, true)}
@@ -159,7 +159,7 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
                                                     </div>
                                                 </Row>
 
-                                                <BuilderTextField
+                                                <TextField
                                                     label="종료 문구"
                                                     value={displaySuffix}
                                                     onChange={(e) => handleInputChange(e.target.value, false)}
@@ -170,7 +170,7 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
                                         );
                                     })()}
                                 </div>
-                            </BuilderCollapse>
+                            </Collapse>
                         </Stack>
                     </>
                 )}

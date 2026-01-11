@@ -1,0 +1,131 @@
+@use "@/styles/variables" as *;
+
+.base {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.2s, color 0.2s, transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    
+    &:active:not(:disabled) {
+        transform: scale(0.96);
+        opacity: 0.9;
+    }
+    
+    &:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+    }
+}
+
+/* Sizes */
+.size-small {
+    height: 32px;
+    padding: 0 12px;
+    font-size: 13px;
+    border-radius: 8px;
+}
+
+.size-medium {
+    height: 40px; // TDS Standard Button Height
+    padding: 0 18px;
+    font-size: 15px;
+    border-radius: 12px; // Slightly more rounded
+}
+
+.size-large {
+    height: 48px;
+    padding: 0 22px;
+    font-size: 17px;
+    border-radius: 16px; // TDS Radius Logic (Large)
+}
+
+.size-xlarge {
+    height: 56px;
+    padding: 0 24px;
+    font-size: 19px;
+    border-radius: 18px;
+}
+
+/* Variants & Colors */
+
+// Fill Primary
+.variant-fill.color-primary {
+    background-color: $toss-blue-500;
+    color: white;
+}
+
+// Fill Dark
+.variant-fill.color-dark {
+    background-color: $toss-grey-700;
+    color: white;
+}
+
+// Fill Danger
+.variant-fill.color-danger {
+    background-color: $toss-red-500;
+    color: white;
+}
+
+// Weak Primary
+.variant-weak.color-primary {
+    background-color: $toss-weak-blue;
+    color: $toss-blue-600;
+}
+
+// Weak Dark
+.variant-weak.color-dark {
+    background-color: $toss-weak-grey;
+    color: $toss-grey-700;
+}
+
+// Weak Danger
+.variant-weak.color-danger {
+    background-color: $toss-weak-red;
+    color: $toss-red-500;
+}
+
+// Outline (Not strictly in TDS mobile spec table but common)
+.variant-outline {
+    background-color: white;
+    border: 1px solid $toss-grey-200;
+    color: $toss-grey-700;
+}
+
+/* Display */
+.block {
+    display: flex;
+    width: 100%;
+}
+
+.loadingDots {
+    display: flex;
+    gap: 2px;
+    
+    span {
+        animation: loadingDots 1.4s infinite ease-in-out both;
+        
+        &:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        &:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+    }
+}
+
+@keyframes loadingDots {
+    0%, 80%, 100% { 
+        opacity: 0;
+    }
+    40% { 
+        opacity: 1;
+    }
+}

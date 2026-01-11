@@ -18,6 +18,37 @@ $gray-600: #495057;
 $gray-700: #343a40;
 $gray-800: #212529;
 
+@use "@/styles/tds_colors" as tds;
+@use "@/styles/tds_typography" as typography;
+
+// Base Design System (TDS Mobile)
+@forward "@/styles/tds_colors";
+@forward "@/styles/tds_typography";
+
+// Toss TDS Colors (Legacy mapping for compatibility)
+$toss-blue-500: tds.$tds-blue-500;
+$toss-blue-600: tds.$tds-blue-600;
+$toss-red-500: tds.$tds-red-500;
+$toss-grey-50: tds.$tds-grey-50;
+$toss-grey-100: tds.$tds-grey-100;
+$toss-grey-200: tds.$tds-grey-200;
+$toss-grey-300: tds.$tds-grey-300;
+$toss-grey-400: tds.$tds-grey-400;
+$toss-grey-500: tds.$tds-grey-500;
+$toss-grey-600: tds.$tds-grey-600;
+$toss-grey-700: tds.$tds-grey-700;
+$toss-grey-800: tds.$tds-grey-800;
+$toss-grey-900: tds.$tds-grey-900;
+
+$toss-weak-blue: rgba(tds.$tds-blue-500, 0.1);
+$toss-weak-red: rgba(tds.$tds-red-500, 0.1);
+$toss-weak-grey: tds.$tds-grey-opacity-100; // Map to opacity token
+$toss-weak-black: rgba(0, 0, 0, 0.05);
+
+// Backgrounds
+$tds-bg-base: tds.$tds-background;
+$tds-bg-grey: tds.$tds-grey-background;
+
 // Font Families
 $font-pretendard: var(--font-pretendard);
 $font-gmarket: var(--font-gmarket-sans);

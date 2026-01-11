@@ -1,0 +1,48 @@
+@use '@/styles/variables' as *;
+
+// TDS-style HelpText Component Styles
+
+.container {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 12px;
+    border-radius: 8px;
+    background-color: $tds-grey-50;
+}
+
+.icon {
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.text {
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+// Info variant (기본 - 회색)
+.info {
+    background-color: $tds-grey-50;
+
+    .icon {
+        color: $tds-grey-500;
+    }
+
+    .text {
+        color: $tds-grey-600;
+    }
+}
+
+// Warning variant (주의 - 노란색/주황색)
+.warning {
+    background-color: #fff8e6;
+
+    .icon {
+        color: #f59e0b;
+    }
+
+    .text {
+        color: #92400e;
+    }
+}

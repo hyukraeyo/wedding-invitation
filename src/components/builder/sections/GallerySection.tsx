@@ -4,12 +4,13 @@ import { ImagePlus, Plus, Info, Trash2 } from 'lucide-react';
 import styles from './GallerySection.module.scss';
 import { clsx } from 'clsx';
 import { useInvitationStore } from '@/store/useInvitationStore';
+import { Field } from '../Field';
+import { Label } from '../Label';
+import { SegmentedControl } from '../SegmentedControl';
 import { AccordionItem } from '../AccordionItem';
-import { BuilderLabel } from '../BuilderLabel';
-import { BuilderToggle } from '../BuilderToggle';
-import { BuilderInput } from '../BuilderInput';
-import { BuilderButtonGroup } from '../BuilderButtonGroup';
-import { BuilderField } from '../BuilderField';
+import { TextField } from '../TextField';
+import { Switch } from '../Switch';
+
 import commonStyles from '../Builder.module.scss';
 import {
     DndContext,
@@ -205,18 +206,18 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
         >
             <div className={styles.container}>
                 {/* 제목 */}
-                <BuilderField label="제목">
-                    <BuilderInput
+                <Field label="제목">
+                    <TextField
                         type="text"
                         value={galleryTitle}
                         onChange={(e) => setGalleryTitle(e.target.value)}
                         placeholder="웨딩 갤러리"
                     />
-                </BuilderField>
+                </Field>
 
                 {/* 갤러리 타입 */}
-                <BuilderField label="갤러리 타입">
-                    <BuilderButtonGroup
+                <Field label="갤러리 타입">
+                    <SegmentedControl
                         value={galleryType}
                         options={[
                             { label: '스와이퍼', value: 'swiper' },
@@ -225,47 +226,47 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
                         ]}
                         onChange={(val: 'swiper' | 'thumbnail' | 'grid') => setGalleryType(val)}
                     />
-                </BuilderField>
+                </Field>
 
                 {/* 팝업 뷰어 */}
-                <BuilderField label="옵션">
+                <Field label="옵션">
                     <div className={styles.toggleGroup}>
-                        <BuilderToggle
+                        <Switch
                             checked={galleryPopup}
                             onChange={setGalleryPopup}
                             label="갤러리 팝업 뷰어 사용"
                         />
                     </div>
-                </BuilderField>
+                </Field>
 
                 {/* 스와이퍼 옵션들 (스와이퍼 타입일 때만 표시) */}
                 {galleryType === 'swiper' && (
-                    <BuilderField label="스와이퍼 설정">
+                    <Field label="스와이퍼 설정">
                         <div className={styles.toggleGroup}>
-                            <BuilderToggle
+                            <Switch
                                 checked={galleryPreview}
                                 onChange={setGalleryPreview}
                                 label="미리보기"
                             />
-                            <BuilderToggle
+                            <Switch
                                 checked={galleryFade}
                                 onChange={setGalleryFade}
                                 label="페이드 효과"
                             />
-                            <BuilderToggle
+                            <Switch
                                 checked={galleryAutoplay}
                                 onChange={setGalleryAutoplay}
                                 label="자동 재생"
                             />
                         </div>
-                    </BuilderField>
+                    </Field>
                 )}
 
                 {/* 이미지 업로드 영역 */}
-                <BuilderField
+                <Field
                     label={
                         <div className={styles.headerRow}>
-                            <BuilderLabel className="!mb-0">사진 관리</BuilderLabel>
+                            <Label className="!mb-0">사진 관리</Label>
                             <span className={styles.count}>
                                 <span style={{ color: normalizedGallery.length >= 20 ? '#EF4444' : theme.accentColor }}>{normalizedGallery.length}</span>
                                 <span className={styles.max}> / 20</span>
@@ -340,7 +341,7 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
                             <span>사진을 길게 누르거나 드래그하여 순서를 변경할 수 있습니다.</span>
                         </div>
                     </div>
-                </BuilderField>
+                </Field>
             </div>
         </AccordionItem>
     );

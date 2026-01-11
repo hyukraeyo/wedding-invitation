@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import styles from './BuilderColorPicker.module.scss';
+import styles from './ColorPicker.module.scss';
 import { clsx } from 'clsx';
 
-interface BuilderColorPickerProps {
+interface ColorPickerProps {
     value: string;
     colors: string[];
     onChange: (color: string) => void;
@@ -19,7 +19,7 @@ const getLuma = (hex: string): number => {
     return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 };
 
-export const BuilderColorPicker = ({ value, colors, onChange, className }: BuilderColorPickerProps) => {
+export const ColorPicker = ({ value, colors, onChange, className }: ColorPickerProps) => {
     const colorData = useMemo(() =>
         colors.map(color => ({
             color,

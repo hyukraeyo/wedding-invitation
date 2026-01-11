@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { ChevronDown } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import styles from './BuilderSelect.module.scss';
+import styles from './Select.module.scss';
 import { clsx } from 'clsx';
 
 interface Option<T> {
@@ -10,7 +10,7 @@ interface Option<T> {
     value: T;
 }
 
-interface BuilderSelectProps<T> {
+interface SelectProps<T> {
     value: T;
     options: readonly Option<T>[];
     onChange: (value: T) => void;
@@ -27,14 +27,14 @@ const hexToRgbString = (hex: string) => {
     return `${r}, ${g}, ${b}`;
 };
 
-export const BuilderSelect = <T extends string | number>({
+export const Select = <T extends string | number>({
     value,
     options,
     onChange,
     placeholder,
     className = "",
     labelClassName = ""
-}: BuilderSelectProps<T>) => {
+}: SelectProps<T>) => {
     const [isOpen, setIsOpen] = useState(false);
     const [dropdownStyle, setDropdownStyle] = useState<React.CSSProperties>({});
     const containerRef = useRef<HTMLDivElement>(null);

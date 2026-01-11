@@ -1,18 +1,18 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo, useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
-import styles from './BuilderCalendar.module.scss';
+import styles from './Calendar.module.scss';
 import { clsx } from 'clsx';
 import { useInvitationStore } from '@/store/useInvitationStore';
 
-interface BuilderCalendarProps {
+interface CalendarProps {
     value: string | null;
     onChange: (date: string) => void;
     className?: string;
     placeholder?: string;
 }
 
-export const BuilderCalendar = ({ value, onChange, className, placeholder = '날짜를 선택해주세요' }: BuilderCalendarProps) => {
+export const Calendar = ({ value, onChange, className, placeholder = '날짜를 선택해주세요' }: CalendarProps) => {
     const [isOpen, setIsOpen] = useState(false);
     const [popupStyle, setPopupStyle] = useState<React.CSSProperties>({});
     const containerRef = useRef<HTMLDivElement>(null);

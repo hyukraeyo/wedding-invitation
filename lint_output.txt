@@ -3,22 +3,13 @@
 > eslint
 
 
-C:\Users\johr9\Documents\git\wedding-invitation\src\components\builder\sections\ClosingSection.tsx
-   1:17  warning  'ChangeEvent' is defined but never used  @typescript-eslint/no-unused-vars
-   2:8   warning  'Image' is defined but never used        @typescript-eslint/no-unused-vars
-   3:19  warning  'ImageIcon' is defined but never used    @typescript-eslint/no-unused-vars
-   3:38  warning  'X' is defined but never used            @typescript-eslint/no-unused-vars
-  10:19  warning  'Stack' is defined but never used        @typescript-eslint/no-unused-vars
+C:\Users\johr9\Documents\git\wedding-invitation\src\components\builder\Collapse.tsx
+  14:35  warning  '_label' is defined but never used            @typescript-eslint/no-unused-vars
+  14:96  warning  '_rightElement' is defined but never used     @typescript-eslint/no-unused-vars
+  16:12  warning  '_height' is assigned a value but never used  @typescript-eslint/no-unused-vars
 
-C:\Users\johr9\Documents\git\wedding-invitation\src\components\builder\sections\GreetingSection.tsx
-  7:10  warning  'BuilderButtonGroup' is defined but never used  @typescript-eslint/no-unused-vars
+C:\Users\johr9\Documents\git\wedding-invitation\src\components\builder\Slider.tsx
+  22:5  warning  '_unit' is assigned a value but never used  @typescript-eslint/no-unused-vars
 
-C:\Users\johr9\Documents\git\wedding-invitation\src\components\builder\sections\LocationSection.tsx
-  35:9   warning  'showSketch' is assigned a value but never used     @typescript-eslint/no-unused-vars
-  35:21  warning  'setShowSketch' is assigned a value but never used  @typescript-eslint/no-unused-vars
-
-C:\Users\johr9\Documents\git\wedding-invitation\src\components\preview\sections\LocationView.tsx
-  95:5  warning  'showSketch' is assigned a value but never used  @typescript-eslint/no-unused-vars
-
-✖ 9 problems (0 errors, 9 warnings)
+✖ 4 problems (0 errors, 4 warnings)
 

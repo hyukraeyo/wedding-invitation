@@ -1,6 +1,5 @@
 import styles from './Builder.module.scss';
 import { clsx } from 'clsx';
-import { useInvitationStore } from '@/store/useInvitationStore';
 
 interface BuilderToggleProps {
     checked: boolean;
@@ -9,31 +8,22 @@ interface BuilderToggleProps {
     className?: string;
 }
 
-const hexToRgbValues = (hex: string) => {
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
-    return `${r}, ${g}, ${b}`;
-};
-
 export const BuilderToggle = ({
     checked,
     onChange,
     label,
     className = ""
 }: BuilderToggleProps) => {
-    const accentColor = useInvitationStore(state => state.theme.accentColor);
-
     return (
         <button
             type="button"
             onClick={() => onChange(!checked)}
-            className={clsx(styles.buttonToggle, checked && styles.checked, className)}
-            style={{
-                '--accent-rgb': hexToRgbValues(accentColor)
-            } as React.CSSProperties}
+            className={clsx(styles.toggle, checked && styles.checked, className)}
         >
-            {label}
+            <div className={styles.toggleTrack}>
+                <div className={styles.toggleThumb} />
+            </div>
+            {label && <span className={styles.toggleLabel}>{label}</span>}
         </button>
     );
 };

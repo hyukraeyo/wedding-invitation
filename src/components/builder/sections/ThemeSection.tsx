@@ -1,13 +1,13 @@
 import { Palette } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
-import { BuilderButtonGroup } from '../BuilderButtonGroup';
-import { BuilderSelect } from '../BuilderSelect';
-import { BuilderToggle } from '../BuilderToggle';
-import { BuilderField } from '../BuilderField';
-import { BuilderSlider } from '../BuilderSlider';
-import { BuilderColorPicker } from '../BuilderColorPicker';
-import { Section, Stack, Row } from '../BuilderLayout';
+import { SegmentedControl } from '../SegmentedControl';
+import { Select } from '../Select';
+import { Switch } from '../Switch';
+import { Field } from '../Field';
+import { ColorPicker } from '../ColorPicker';
+import { Slider } from '../Slider';
+import { Section, Stack, Row } from '../Layout';
 
 interface SectionProps {
     isOpen: boolean;
@@ -40,46 +40,46 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
         >
             <Section>
                 {/* Font */}
-                <BuilderField label="글꼴">
-                    <BuilderSelect
+                <Field label="글꼴">
+                    <Select
                         value={theme.font}
                         options={fontOptions}
                         onChange={(val: 'pretendard' | 'gmarket' | 'gowun-batang' | 'gowun-dodum' | 'nanum-myeongjo' | 'yeon-sung' | 'do-hyeon' | 'song-myung' | 'serif' | 'sans') => setTheme({ font: val })}
                     />
-                </BuilderField>
+                </Field>
 
                 {/* Font Scale */}
-                <BuilderField label={`폰트 크기 (${theme.fontScale.toFixed(1)}x)`}>
-                    <BuilderSlider
+                <Field label={`폰트 크기 (${theme.fontScale.toFixed(1)}x)`}>
+                    <Slider
                         min={1}
                         max={1.5}
                         step={0.1}
                         value={theme.fontScale}
                         onChange={(val) => setTheme({ fontScale: val })}
                     />
-                </BuilderField>
+                </Field>
 
                 {/* Background Color */}
-                <BuilderField label="배경 색상">
-                    <BuilderColorPicker
+                <Field label="배경 색상">
+                    <ColorPicker
                         value={theme.backgroundColor}
                         colors={['#FFFFFF', '#F9F8E6', '#FFEFF4', '#F4F1EA', '#EDF2F7']}
                         onChange={(color) => setTheme({ backgroundColor: color })}
                     />
-                </BuilderField>
+                </Field>
 
                 {/* Accent Color */}
-                <BuilderField label="강조 색상">
-                    <BuilderColorPicker
+                <Field label="강조 색상">
+                    <ColorPicker
                         value={theme.accentColor}
                         colors={['#D4AF37', '#9A8C98', '#2C3E50', '#C0392B']}
                         onChange={(color) => setTheme({ accentColor: color })}
                     />
-                </BuilderField>
+                </Field>
 
                 {/* Pattern */}
-                <BuilderField label="배경 패턴">
-                    <BuilderButtonGroup
+                <Field label="배경 패턴">
+                    <SegmentedControl
                         value={theme.pattern}
                         options={[
                             { label: '없음', value: 'none' },
@@ -88,12 +88,12 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                         ]}
                         onChange={(val: 'none' | 'flower-sm' | 'flower-lg') => setTheme({ pattern: val })}
                     />
-                </BuilderField>
+                </Field>
 
                 {/* Effect */}
-                <BuilderField label="배경 이펙트">
+                <Field label="배경 이펙트">
                     <Stack gap="md">
-                        <BuilderButtonGroup
+                        <SegmentedControl
                             value={theme.effect}
                             options={[
                                 { label: '없음', value: 'none' },
@@ -104,25 +104,25 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
                         />
 
                         {theme.effect !== 'none' && (
-                            <BuilderToggle
+                            <Switch
                                 checked={theme.effectOnlyOnMain}
                                 onChange={(checked) => setTheme({ effectOnlyOnMain: checked })}
                                 label="메인 화면에만 이펙트 노출"
                             />
                         )}
                     </Stack>
-                </BuilderField>
+                </Field>
 
                 {/* Additional Options */}
-                <BuilderField label="추가 설정">
+                <Field label="추가 설정">
                     <Row wrap>
-                        <BuilderToggle
+                        <Switch
                             checked={theme.animateEntrance}
                             onChange={(checked) => setTheme({ animateEntrance: checked })}
                             label="스크롤 등장 효과"
                         />
                     </Row>
-                </BuilderField>
+                </Field>
             </Section>
         </AccordionItem>
     );

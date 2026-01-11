@@ -1,0 +1,40 @@
+// TDS (Toss Design System) Typography
+// Reference: https://tossmini-docs.toss.im/tds-mobile/foundation/typography/
+
+$tds-font-weights: (
+  "light": 300,
+  "regular": 400,
+  "medium": 500,
+  "semibold": 600,
+  "bold": 700
+);
+
+@mixin tds-typography($size, $line-height, $weight: "regular") {
+  font-size: $size;
+  line-height: $line-height;
+  font-weight: map-get($tds-font-weights, $weight);
+}
+
+// Typography Tokens
+@mixin tds-t1($weight: "semibold") { @include tds-typography(30px, 40px, $weight); }
+@mixin tds-t2($weight: "semibold") { @include tds-typography(26px, 35px, $weight); }
+@mixin tds-t3($weight: "semibold") { @include tds-typography(22px, 31px, $weight); }
+@mixin tds-t4($weight: "semibold") { @include tds-typography(20px, 29px, $weight); }
+@mixin tds-t5($weight: "semibold") { @include tds-typography(17px, 25.5px, $weight); }
+@mixin tds-t6($weight: "semibold") { @include tds-typography(15px, 22.5px, $weight); }
+@mixin tds-t7($weight: "semibold") { @include tds-typography(13px, 19.5px, $weight); }
+
+// Sub Typography Tokens
+@mixin tds-sub-t1($weight: "regular") { @include tds-typography(29px, 38px, $weight); }
+@mixin tds-sub-t2($weight: "regular") { @include tds-typography(28px, 37px, $weight); }
+@mixin tds-sub-t3($weight: "regular") { @include tds-typography(27px, 36px, $weight); }
+@mixin tds-sub-t4($weight: "regular") { @include tds-typography(25px, 34px, $weight); }
+@mixin tds-sub-t5($weight: "regular") { @include tds-typography(24px, 33px, $weight); }
+@mixin tds-sub-t6($weight: "regular") { @include tds-typography(23px, 32px, $weight); }
+@mixin tds-sub-t7($weight: "regular") { @include tds-typography(21px, 30px, $weight); }
+@mixin tds-sub-t8($weight: "regular") { @include tds-typography(19px, 28px, $weight); }
+@mixin tds-sub-t9($weight: "regular") { @include tds-typography(18px, 27px, $weight); }
+@mixin tds-sub-t10($weight: "regular") { @include tds-typography(16px, 24px, $weight); }
+@mixin tds-sub-t11($weight: "regular") { @include tds-typography(14px, 21px, $weight); }
+@mixin tds-sub-t12($weight: "regular") { @include tds-typography(12px, 18px, $weight); }
+@mixin tds-sub-t13($weight: "regular") { @include tds-typography(11px, 16.5px, $weight); }

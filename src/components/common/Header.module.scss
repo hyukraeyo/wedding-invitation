@@ -38,101 +38,10 @@
     display: flex;
     align-items: center;
     gap: 1.5rem;
-
-    .createButton {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 0.5rem 1rem;
-        background-color: black;
-        color: white;
-        border-radius: 9999px;
-        font-weight: 700;
-        font-size: 0.875rem;
-        transition: $transition-fast;
-        border: none;
-        cursor: pointer;
-
-        &:hover {
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        }
-
-        &:active {
-            transform: scale(0.95);
-        }
-    }
-
-    .linkButton {
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: #6b7280;
-        transition: color 0.2s;
-        background: none;
-        border: none;
-        cursor: pointer;
-        text-decoration: none;
-
-        &:hover {
-            color: black;
-        }
-    }
 }
 
 .userActions {
     display: flex;
     align-items: center;
     gap: 1rem;
-
-    .logoutButton {
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: #9ca3af;
-        transition: color 0.2s;
-        background: none;
-        border: none;
-        cursor: pointer;
-
-        &:hover {
-            color: #ef4444; // red-500
-        }
-    }
-
-    .saveButton {
-        padding: 0.5rem 1.5rem;
-        border-radius: 9999px;
-        border: 1px solid black;
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: black;
-        background: none;
-        cursor: pointer;
-        transition: $transition-fast;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-
-        &:hover:not(:disabled) {
-            background-color: black;
-            color: white;
-        }
-
-        &:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .spinner {
-            width: 0.75rem;
-            height: 0.75rem;
-            border: 2px solid rgba(0, 0, 0, 0.2);
-            border-top-color: black;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        &:hover:not(:disabled) .spinner {
-            border-color: rgba(255, 255, 255, 0.2);
-            border-top-color: white;
-        }
-    }
 }

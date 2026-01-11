@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import styles from '@/components/auth/LoginModal.module.scss';
-import { BuilderInput } from '@/components/builder/BuilderInput';
+import { TextField } from '@/components/builder/TextField';
 import { useAuth } from '@/hooks/useAuth';
 
 /**
@@ -106,7 +106,7 @@ export default function LoginPage() {
 
                 {/* Login Form */}
                 <form onSubmit={handleAdminLogin} className={styles.form}>
-                    <BuilderInput
+                    <TextField
                         type="text"
                         placeholder="아이디"
                         value={email}
@@ -115,7 +115,7 @@ export default function LoginPage() {
                         autoComplete="username"
                         required
                     />
-                    <BuilderInput
+                    <TextField
                         type="password"
                         placeholder="비밀번호"
                         value={password}

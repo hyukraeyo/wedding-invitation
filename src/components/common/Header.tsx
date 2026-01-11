@@ -12,6 +12,8 @@ interface HeaderProps {
     isLoading?: boolean;
 }
 
+import { Button } from '@/components/builder/Button';
+
 export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
     const router = useRouter();
     const { user } = useAuth();
@@ -34,52 +36,58 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
             {/* Actions */}
             <div className={styles.actions}>
                 <nav className={styles.nav}>
-                    <button
+                    <Button
+                        variant="weak"
+                        size="small"
                         onClick={() => {
                             reset();
                             router.push('/builder');
                         }}
-                        className={styles.createButton}
                     >
-                        <Plus size={16} />
+                        <Plus size={14} />
                         <span>새 청첩장 만들기</span>
-                    </button>
+                    </Button>
+
                     {user ? (
-                        <Link href="/mypage" className={styles.linkButton}>
-                            마이페이지
+                        <Link href="/mypage">
+                            <Button variant="weak" color="dark" size="small">
+                                마이페이지
+                            </Button>
                         </Link>
                     ) : (
                         onLogin && (
-                            <button
+                            <Button
+                                variant="weak"
+                                color="dark"
+                                size="small"
                                 onClick={onLogin}
-                                className={styles.linkButton}
                             >
                                 로그인
-                            </button>
+                            </Button>
                         )
                     )}
                 </nav>
 
                 <div className={styles.userActions}>
                     {user && (
-                        <button
+                        <Button
+                            variant="weak"
+                            color="dark"
+                            size="small"
                             onClick={handleLogout}
-                            className={styles.logoutButton}
                         >
                             로그아웃
-                        </button>
+                        </Button>
                     )}
                     {onSave && (
-                        <button
+                        <Button
+                            color="primary"
+                            size="small"
                             onClick={onSave}
-                            disabled={isLoading}
-                            className={styles.saveButton}
+                            loading={!!isLoading}
                         >
-                            {isLoading && (
-                                <div className={styles.spinner} />
-                            )}
                             저장하기
-                        </button>
+                        </Button>
                     )}
                 </div>
             </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useCallback, ReactNode, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Check, X, AlertCircle, Info } from 'lucide-react';
 import styles from './Toast.module.scss';
@@ -38,12 +38,19 @@ interface ToastProviderProps {
 
 export const ToastProvider = ({ children }: ToastProviderProps) => {
     const [toasts, setToasts] = useState<Toast[]>([]);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => setMounted(true), 0);
+        return () => clearTimeout(timer);
+    }, []);
 
     const showToast = useCallback((message: string, type: ToastType = 'success') => {
         const id = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+        // Toss standard duration for simple toast is 3000ms
         setToasts(prev => [...prev, { id, message, type }]);
 
-        // Auto dismiss after 3 seconds
         setTimeout(() => {
             setToasts(prev => prev.filter(t => t.id !== id));
         }, 3000);
@@ -61,28 +68,33 @@ export const ToastProvider = ({ children }: ToastProviderProps) => {
     const getIcon = (type: ToastType) => {
         switch (type) {
             case 'success':
-                return <Check size={18} />;
+                // Using lucide icons, but with strokeWidth and size matching TDS feel
+                return <Check size={20} strokeWidth={3} />;
             case 'error':
-                return <X size={18} />;
+                return <X size={20} strokeWidth={3} />;
             case 'warning':
-                return <AlertCircle size={18} />;
+                return <AlertCircle size={20} />;
             case 'info':
-                return <Info size={18} />;
+                return <Info size={20} />;
         }
     };
 
     return (
         <ToastContext.Provider value={{ showToast, success, error, warning, info }}>
             {children}
-            {typeof window !== 'undefined' && createPortal(
-                <div className={styles.container}>
+            {mounted && createPortal(
+                <div
+                    className={styles.container}
+                    role="alert"
+                    aria-live="polite"
+                >
                     {toasts.map(toast => (
                         <div
                             key={toast.id}
-                            className={clsx(styles.toast, styles[toast.type])}
+                            className={styles.toast}
                             onClick={() => removeToast(toast.id)}
                         >
-                            <div className={styles.icon}>
+                            <div className={clsx(styles.icon, styles[toast.type])}>
                                 {getIcon(toast.type)}
                             </div>
                             <span className={styles.message}>{toast.message}</span>

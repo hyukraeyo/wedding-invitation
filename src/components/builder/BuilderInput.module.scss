@@ -1,6 +1,0 @@
-@use "@/styles/variables" as *;
-@use "@/styles/builder" as builder;
-
-.input {
-    @include builder.builder-input-base;
-}

@@ -5,16 +5,16 @@ import Image from 'next/image';
 import { LayoutTemplate, Check, Info, Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
-import { BuilderInput } from '../BuilderInput';
-import { BuilderModal } from '@/components/common/BuilderModal';
-
-import { BuilderButtonGroup } from '../BuilderButtonGroup';
-import { BuilderToggle } from '../BuilderToggle';
-import { BuilderField } from '../BuilderField';
+import { TextField } from '../TextField';
+import { SegmentedControl } from '../SegmentedControl';
+import { Switch } from '../Switch';
 import RichTextEditor from '@/components/common/RichTextEditor';
 import { ImageUploader } from '../ImageUploader';
-import { BuilderCollapse } from '../BuilderCollapse';
-import { Stack } from '../BuilderLayout';
+import { Field } from '../Field';
+import { Collapse } from '../Collapse';
+import { HelpText } from '../HelpText';
+import { BuilderModal } from '@/components/common/BuilderModal';
+import { Stack } from '../Layout';
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
@@ -82,7 +82,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
         >
             <div className={styles.container}>
                 {/* Layout Templates */}
-                <BuilderField label="레이아웃">
+                <Field label="레이아웃">
                     <div className={clsx(styles.swiperWrapper, isAtStart && styles.atStart, isAtEnd && styles.atEnd)}>
                         <Swiper
                             slidesPerView="auto"
@@ -192,10 +192,10 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                             ))}
                         </Swiper>
                     </div>
-                </BuilderField>
+                </Field>
 
                 {/* Photo Upload */}
-                <BuilderField label="사진">
+                <Field label="사진">
                     <Stack gap="md">
                         <ImageUploader
                             value={imageUrl}
@@ -206,27 +206,27 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                             onRatioChange={(val) => setImageRatio(val)}
                         />
                     </Stack>
-                </BuilderField>
+                </Field>
 
                 {/* Design Options */}
-                <BuilderField label="디자인 변형">
+                <Field label="디자인 변형">
                     <div className={styles.designOptions}>
-                        <BuilderToggle
+                        <Switch
                             checked={mainScreen.showBorder}
                             onChange={(checked) => setMainScreen({ showBorder: checked })}
                             label="테두리 선"
                         />
-                        <BuilderToggle
+                        <Switch
                             checked={mainScreen.expandPhoto}
                             onChange={(checked) => setMainScreen({ expandPhoto: checked })}
                             label="사진 확장"
                         />
                     </div>
-                </BuilderField>
+                </Field>
 
                 {/* Effects */}
-                <BuilderField label="이펙트">
-                    <BuilderButtonGroup
+                <Field label="이펙트">
+                    <SegmentedControl
                         value={mainScreen.effect}
                         options={[
                             { label: '없음', value: 'none' },
@@ -236,12 +236,12 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                         ]}
                         onChange={(val: 'none' | 'mist' | 'ripple' | 'paper') => setMainScreen({ effect: val })}
                     />
-                </BuilderField>
+                </Field>
 
                 {/* Custom Text (Collapsible) */}
                 <div className={styles.customTextSection}>
 
-                    <BuilderCollapse
+                    <Collapse
                         label="문구 커스텀"
                         isOpen={isTextSectionOpen}
                         onToggle={() => setIsTextSectionOpen(!isTextSectionOpen)}
@@ -259,21 +259,21 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
 
                         <div className={styles.inputGrid}>
                             {/* Title */}
-                            <BuilderField label="메인 제목">
-                                <BuilderInput
+                            <Field label="메인 제목">
+                                <TextField
                                     type="text"
                                     value={mainScreen.title}
                                     onChange={(e) => setMainScreen({ title: e.target.value })}
                                     placeholder="THE MARRIAGE"
                                 />
-                            </BuilderField>
+                            </Field>
 
                             {/* Groom & Bride Name */}
-                            <BuilderField label="신랑 · 신부 성함">
+                            <Field label="신랑 · 신부 성함">
                                 <div className={clsx(styles.container, styles.smallGap)}>
                                     <div className={styles.nameInputs}>
                                         <div className={styles.lastName}>
-                                            <BuilderInput
+                                            <TextField
                                                 type="text"
                                                 value={`${groom.lastName || ''}${groom.firstName || ''}`}
                                                 onChange={(e) => {
@@ -288,7 +288,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                             />
                                         </div>
                                         <div className={styles.andText}>
-                                            <BuilderInput
+                                            <TextField
                                                 type="text"
                                                 value={mainScreen.andText || ''}
                                                 onChange={(e) => setMainScreen({ andText: e.target.value })}
@@ -296,7 +296,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                             />
                                         </div>
                                         <div className={styles.firstName}>
-                                            <BuilderInput
+                                            <TextField
                                                 type="text"
                                                 value={`${bride.lastName || ''}${bride.firstName || ''}`}
                                                 onChange={(e) => {
@@ -312,7 +312,7 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                         </div>
                                     </div>
                                     <div className={styles.fullWidth}>
-                                        <BuilderInput
+                                        <TextField
                                             type="text"
                                             value={mainScreen.suffixText || ''}
                                             onChange={(e) => setMainScreen({ suffixText: e.target.value })}
@@ -320,35 +320,34 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                                         />
                                     </div>
                                 </div>
-                            </BuilderField>
+                            </Field>
 
                             {/* Subtitle */}
-                            <BuilderField label="서브 제목">
-                                <BuilderInput
+                            <Field label="서브 제목">
+                                <TextField
                                     type="text"
                                     value={mainScreen.subtitle}
                                     onChange={(e) => setMainScreen({ subtitle: e.target.value })}
                                     placeholder="We are getting married"
                                 />
-                            </BuilderField>
+                            </Field>
 
                             {/* Custom Date & Place */}
-                            <BuilderField label="날짜 및 장소">
+                            <Field label="날짜 및 장소">
                                 <RichTextEditor
                                     content={mainScreen.customDatePlace}
                                     onChange={(val) => setMainScreen({ customDatePlace: val })}
                                     placeholder="0000.00.00 ..."
                                     minHeight="min-h-[140px]"
                                 />
-                            </BuilderField>
+                            </Field>
                         </div>
 
                         {/* Info Text */}
-                        <div className={common.notice}>
-                            <Info size={14} className={common.icon} />
-                            <span>내용을 입력하지 않으면 프리뷰에 노출되지 않습니다.</span>
-                        </div>
-                    </BuilderCollapse>
+                        <HelpText>
+                            내용을 입력하지 않으면 프리뷰에 노출되지 않습니다.
+                        </HelpText>
+                    </Collapse>
 
                     {/* Example Modal */}
                     <BuilderModal

@@ -18,24 +18,25 @@ $builder-radius-md: 0.875rem;  // 14px
 $builder-radius-lg: 1.125rem;  // 18px
 $builder-radius-xl: 1.5rem;    // 24px
 
-// ----- Color Variables (Refined Modern Minimal) -----
-$builder-border-light: #e9ecef;
-$builder-border-default: #dee2e6;
-$builder-border-dark: #adb5bd;
-$builder-bg-subtle: #f8f9fa;
-$builder-bg-hover: #f1f3f5;
-$builder-text-muted: #adb5bd;
-$builder-text-secondary: #868e96;
-$builder-text-default: #495057;
-$builder-text-dark: #343a40;
-$builder-text-heading: #212529;
+// ----- Color Variables (Toss TDS Inspired) -----
+$builder-border-light: $toss-grey-100;
+$builder-border-default: $toss-grey-200;
+$builder-border-dark: $toss-grey-400;
+$builder-bg-subtle: $toss-grey-50;
+$builder-bg-hover: $toss-grey-100;
+$builder-text-muted: $toss-grey-400;
+$builder-text-secondary: $toss-grey-600;
+$builder-text-default: $toss-grey-800;
+$builder-text-dark: $toss-grey-900;
+$builder-text-heading: $toss-grey-900;
 
-// ----- Typography -----
-$builder-font-xs: 11px;
-$builder-font-sm: 12px;
-$builder-font-base: 13px;
-$builder-font-md: 14px;
-$builder-font-lg: 15px;
+// ----- Typography (Using TDS Tokens) -----
+$builder-font-xs: 11px; // sub-t13
+$builder-font-sm: 12px; // sub-t12
+$builder-font-base: 13px; // t7
+$builder-font-md: 14px; // sub-t11
+$builder-font-lg: 15px; // t6
+$builder-font-xl: 17px; // t5
 
 // ----- Layout Mixins -----
 
@@ -100,84 +101,48 @@ $builder-font-lg: 15px;
 
 // Label style
 @mixin builder-label {
-  font-size: 0.725rem;
-  font-weight: 600;
-  color: $builder-text-secondary;
+  @include tds-t7("semibold");
+  color: $toss-grey-600;
   display: block;
-  margin-bottom: $builder-gap-xs;
-  padding-left: 0.125rem;
+  margin-bottom: 6px;
+  padding-left: 2px;
   letter-spacing: -0.01em;
 }
 
 // Sub-label (smaller, inline)
 @mixin builder-sub-label {
-  font-size: $builder-font-sm;
-  font-weight: 500;
+  @include tds-sub-t12("medium");
   color: $builder-text-secondary;
   flex-shrink: 0;
   min-width: 3.5rem;
 }
 
-// Input base style (Modern Minimal)
+// Input base style (Toss TDS Inspired)
 @mixin builder-input-base {
   width: 100%;
-  padding: 0.75rem 0.875rem;
-  border: 1px solid $builder-border-default;
-  border-radius: $builder-radius-md;
-  font-size: $builder-font-md;
-  font-weight: 400;
+  padding: 0.875rem 1rem; // 14px 16px
+  border: 1px solid $tds-grey-opacity-100;
+  border-radius: 14px;
+  @include tds-t5("regular"); // 17px
   color: $builder-text-heading;
-  background: transparent;
+  background-color: $tds-grey-opacity-50;
   outline: none;
   transition: all $transition-fast;
+  box-sizing: border-box;
 
   &::placeholder {
-    color: $builder-text-muted;
+    color: $toss-grey-400;
     font-weight: 400;
   }
 
   &:hover:not(:disabled) {
-    border-color: $builder-border-dark;
-    background-color: #fbfbfc;
+    background-color: $tds-grey-opacity-100;
   }
 
   &:focus {
-    border-color: var(--accent-color, #adb5bd);
     background-color: white;
-    box-shadow: 0 0 0 1px var(--accent-color, #adb5bd), 0 4px 12px rgba(0, 0, 0, 0.03);
-  }
-
-  &:disabled {
-    background-color: $builder-bg-subtle;
-    color: $builder-text-muted;
-    cursor: not-allowed;
-    border-color: $builder-border-light;
-  }
-}
-
-// Button base style
-@mixin builder-button-base {
-  @include flex-center;
-  padding: 0.75rem 1rem;
-  border-radius: $builder-radius-md;
-  font-size: $builder-font-base;
-  font-weight: 500;
-  border: 1px solid $builder-border-default;
-  background: white;
-  color: $builder-text-default;
-  cursor: pointer;
-  transition: all $transition-fast;
-  user-select: none;
-
-  &:hover:not(:disabled) {
-    border-color: $builder-border-dark;
-    background: #fbfbfc;
-    color: $builder-text-heading;
-  }
-
-  &:active:not(:disabled) {
-    transform: scale(0.97);
-    background: $builder-bg-hover;
+    border-color: $tds-blue-500;
+    box-shadow: inset 0 0 0 1px $tds-blue-500;
   }
 
   &:disabled {
@@ -186,17 +151,38 @@ $builder-font-lg: 15px;
   }
 }
 
-// Active state for toggleable buttons
-@mixin builder-button-active {
-  color: var(--accent-color);
+// Button base style
+@mixin builder-button-base {
+  @include flex-center;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  @include tds-t7("semibold"); // 13px
+  border: 1px solid $builder-border-default;
   background: white;
-  border-color: var(--accent-color);
-  // box-shadow removed to reduce border thickness
-  font-weight: 600;
+  color: $builder-text-default;
+  cursor: pointer;
+  transition: all $transition-fast;
+  user-select: none;
 
   &:hover:not(:disabled) {
-    background: rgba(var(--accent-rgb, 0, 0, 0), 0.04);
-    border-color: var(--accent-color);
-    color: var(--accent-color);
+    background: $toss-grey-50;
   }
+
+  &:active:not(:disabled) {
+    opacity: 0.6;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+}
+
+// Active state for toggleable buttons (Segmented Control Item)
+@mixin builder-button-active {
+  color: $toss-blue-500;
+  background: white;
+  border-color: transparent;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  font-weight: 600;
 }

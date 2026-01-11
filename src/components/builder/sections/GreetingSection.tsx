@@ -1,13 +1,15 @@
+
 import React, { useState } from 'react';
 import { MessageSquare, Sparkles, Info } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
-import { BuilderInput } from '../BuilderInput';
-import { BuilderField } from '../BuilderField';
+import { TextField } from '../TextField';
+import { Field } from '../Field';
+import { Checkbox } from '../Checkbox';
 import { BuilderModal } from '@/components/common/BuilderModal';
 import RichTextEditor from '@/components/common/RichTextEditor';
 import { ImageUploader } from '../ImageUploader';
-import { Section, Stack, Row, Card } from '../BuilderLayout';
+import { Section, Stack, Row, Card } from '../Layout';
 import commonStyles from '../Builder.module.scss';
 import styles from './GreetingSection.module.scss';
 
@@ -84,36 +86,36 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                 </Row>
 
                 {/* Subtitle */}
-                <BuilderField label="상단 소제목">
-                    <BuilderInput
+                <Field label="상단 소제목">
+                    <TextField
                         type="text"
                         value={greetingSubtitle}
                         onChange={(e) => setGreetingSubtitle(e.target.value)}
                         placeholder="예: INVITATION"
                     />
-                </BuilderField>
+                </Field>
 
                 {/* Title */}
-                <BuilderField label="제목">
-                    <BuilderInput
+                <Field label="제목">
+                    <TextField
                         type="text"
                         value={greetingTitle}
                         onChange={(e) => setGreetingTitle(e.target.value)}
                         placeholder="예: 소중한 분들을 초대합니다"
                     />
-                </BuilderField>
+                </Field>
 
                 {/* Content */}
-                <BuilderField label="내용">
+                <Field label="내용">
                     <RichTextEditor
                         content={message}
                         onChange={setMessage}
                         placeholder="축하해주시는 분들께 전할 소중한 메시지를 입력하세요."
                     />
-                </BuilderField>
+                </Field>
 
                 {/* Photo Upload */}
-                <BuilderField label="사진">
+                <Field label="사진">
                     <Stack gap="md">
                         <ImageUploader
                             value={greetingImage}
@@ -123,51 +125,45 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                             onRatioChange={(val) => setGreetingRatio(val)}
                         />
                     </Stack>
-                </BuilderField>
+                </Field>
 
                 {/* Name Options */}
-                <BuilderField label="성함 표기">
+                <Field label="성함 표기">
                     <Stack gap="md">
                         <Stack gap="sm">
-                            <label className={commonStyles.radioLabel}>
-                                <input
-                                    type="radio"
-                                    name="greeting-name-type"
-                                    className={commonStyles.radio}
-                                    checked={!showNamesAtBottom && !enableFreeformNames}
-                                    onChange={() => {
-                                        setShowNamesAtBottom(false);
-                                        setEnableFreeformNames(false);
-                                    }}
-                                />
-                                <span className={commonStyles.text}>표시 안 함</span>
-                            </label>
-                            <label className={commonStyles.radioLabel}>
-                                <input
-                                    type="radio"
-                                    name="greeting-name-type"
-                                    className={commonStyles.radio}
-                                    checked={showNamesAtBottom}
-                                    onChange={() => {
-                                        setShowNamesAtBottom(true);
-                                        setEnableFreeformNames(false);
-                                    }}
-                                />
-                                <span className={commonStyles.text}>인사말 하단에 신랑신부&혼주 성함 표시</span>
-                            </label>
-                            <label className={commonStyles.radioLabel}>
-                                <input
-                                    type="radio"
-                                    name="greeting-name-type"
-                                    className={commonStyles.radio}
-                                    checked={enableFreeformNames}
-                                    onChange={() => {
-                                        setShowNamesAtBottom(false);
-                                        setEnableFreeformNames(true);
-                                    }}
-                                />
-                                <span className={commonStyles.text}>성함 자유 입력</span>
-                            </label>
+                            <Checkbox.Circle
+                                inputType="radio"
+                                name="greeting-name-type"
+                                checked={!showNamesAtBottom && !enableFreeformNames}
+                                onCheckedChange={() => {
+                                    setShowNamesAtBottom(false);
+                                    setEnableFreeformNames(false);
+                                }}
+                            >
+                                표시 안 함
+                            </Checkbox.Circle>
+                            <Checkbox.Circle
+                                inputType="radio"
+                                name="greeting-name-type"
+                                checked={showNamesAtBottom}
+                                onCheckedChange={() => {
+                                    setShowNamesAtBottom(true);
+                                    setEnableFreeformNames(false);
+                                }}
+                            >
+                                인사말 하단에 신랑신부&혼주 성함 표시
+                            </Checkbox.Circle>
+                            <Checkbox.Circle
+                                inputType="radio"
+                                name="greeting-name-type"
+                                checked={enableFreeformNames}
+                                onCheckedChange={() => {
+                                    setShowNamesAtBottom(false);
+                                    setEnableFreeformNames(true);
+                                }}
+                            >
+                                성함 자유 입력
+                            </Checkbox.Circle>
                         </Stack>
 
                         {enableFreeformNames && (
@@ -184,7 +180,7 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                             </Stack>
                         )}
                     </Stack>
-                </BuilderField>
+                </Field>
 
                 {/* Sample Phrases Modal */}
                 <BuilderModal

@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Camera, Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
-import { BuilderButtonGroup } from '../BuilderButtonGroup';
-import { BuilderField } from '../BuilderField';
+import { Field } from '../Field';
 import { ImageUploader } from '../ImageUploader';
+import { SegmentedControl } from '../SegmentedControl';
 import { BuilderModal } from '@/components/common/BuilderModal';
 import RichTextEditor from '@/components/common/RichTextEditor';
-import { Section, Row, Card } from '../BuilderLayout';
+import { Section, Row, Card } from '../Layout';
 import styles from './ClosingSection.module.scss';
 
 interface SectionProps {
@@ -53,7 +53,7 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
         >
             <Section>
                 {/* Photo Upload */}
-                <BuilderField label="사진">
+                <Field label="사진">
                     <ImageUploader
                         value={closing.imageUrl}
                         onChange={(url) => setClosing({ imageUrl: url })}
@@ -62,11 +62,11 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
                         onRatioChange={(val) => setClosing({ ratio: val })}
                         aspectRatio="4/5"
                     />
-                </BuilderField>
+                </Field>
 
                 {/* Effect Selection */}
-                <BuilderField label="이펙트">
-                    <BuilderButtonGroup
+                <Field label="이펙트">
+                    <SegmentedControl
                         value={closing.effect}
                         options={[
                             { label: '없음', value: 'none' },
@@ -76,10 +76,10 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
                         ]}
                         onChange={(val: 'none' | 'mist' | 'ripple' | 'paper') => setClosing({ effect: val })}
                     />
-                </BuilderField>
+                </Field>
 
                 {/* Content Editor */}
-                <BuilderField
+                <Field
                     label={
                         <Row align="between" className={styles.contentHeader ?? ''}>
                             <span className={styles.contentLabel}>문구 내용</span>
@@ -98,7 +98,7 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
                         onChange={(content) => setClosing({ content })}
                         placeholder="마무리 문구를 입력하세요..."
                     />
-                </BuilderField>
+                </Field>
 
                 {/* Sample Phrases Modal */}
                 <BuilderModal

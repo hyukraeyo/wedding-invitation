@@ -3,9 +3,9 @@ import Image from 'next/image';
 import { Trash2, UploadCloud } from 'lucide-react';
 import styles from './ImageUploader.module.scss';
 import { clsx } from 'clsx';
-import { BuilderLabel } from './BuilderLabel';
+import { Label } from './Label';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { BuilderButtonGroup } from './BuilderButtonGroup';
+import { SegmentedControl } from './SegmentedControl';
 import { useToast } from '@/components/common/Toast';
 
 interface ImageUploaderProps {
@@ -93,7 +93,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
     return (
         <div className={styles.wrapper}>
             <div className={clsx(styles.container, className)} style={cssVars}>
-                {label && <BuilderLabel>{label}</BuilderLabel>}
+                {label && <Label>{label}</Label>}
 
                 <div
                     className={clsx(styles.uploader, displayUrl && styles.hasImage)}
@@ -166,7 +166,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
 
             {value && props.ratio && props.onRatioChange && (
                 <div className={styles.ratioControl}>
-                    <BuilderButtonGroup
+                    <SegmentedControl
                         value={props.ratio}
                         options={[
                             { label: '고정 (기본)', value: 'fixed' },

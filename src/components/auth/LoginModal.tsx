@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { X } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import styles from './LoginModal.module.scss';
-import { BuilderInput } from '../builder/BuilderInput';
+import { TextField } from '../builder/TextField';
 import { createPortal } from 'react-dom';
 
 interface LoginModalProps {
@@ -101,7 +101,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 </div>
 
                 <form onSubmit={handleSubmit} className={styles.form}>
-                    <BuilderInput
+                    <TextField
                         type="text"
                         placeholder="아이디"
                         value={email}
@@ -110,7 +110,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                         autoComplete="username"
                         required
                     />
-                    <BuilderInput
+                    <TextField
                         type="password"
                         placeholder="비밀번호"
                         value={password}

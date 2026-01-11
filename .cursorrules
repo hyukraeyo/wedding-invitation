@@ -1,6 +1,32 @@
 # Cursor Rules for Wedding Invitation Project
 # Next.js 16+ 공식 권장사항을 최우선으로 따르는 프로젝트 규칙
 
+## 🎨 디자인 시스템: TDS Mobile 커스텀 베이스 (최우선 준수)
+
+### 참조 디자인 시스템
+- **기반**: [TDS Mobile (Toss Design System)](https://tossmini-docs.toss.im/tds-mobile/)
+- **설명**: TDS는 토스 제품을 만들 때 공통적으로 사용하는 디자인 시스템으로, 수백 개의 컴포넌트와 템플릿으로 구성되어 있습니다.
+
+### 디자인 원칙 (TDS 지향점 기반)
+1. **제품의 최소 품질 보장**: 일관된 UI로 사용자 경험 일관성 유지
+2. **생산성 향상**: 재사용 가능한 아름다운 디자인 시스템으로 UI 개발 효율화
+3. **업계 최고 수준의 완성도**: 일관성 있는 인터랙션, 애니메이션, 디자인 템플릿 활용
+
+### 커스터마이징 가이드
+- **Colors**: TDS 컬러 팔레트를 기반으로 웨딩 테마에 맞게 커스터마이징 (`_tds_colors.scss`)
+- **Typography**: TDS 타이포그래피 시스템 참조 (`_tds_typography.scss`)
+- **Components**: TDS 컴포넌트 스타일을 참조하여 프로젝트에 맞게 구현
+  - 버튼, 입력 폼, 토스트, 모달 등 공통 컴포넌트는 TDS 스타일 가이드 준수
+  - 커스텀 시 TDS의 간격, 라운딩, 그림자 시스템 참조
+
+### 참조 문서
+- [TDS 소개](https://tossmini-docs.toss.im/tds-mobile/)
+- [TDS 시작하기](https://tossmini-docs.toss.im/tds-mobile/start/)
+- [TDS Colors](https://tossmini-docs.toss.im/tds-mobile/foundation/colors/)
+- [TDS Typography](https://tossmini-docs.toss.im/tds-mobile/foundation/typography/)
+
+---
+
 ## 🚀 Next.js 16+ 공식 권장사항 (최우선 준수)
 
 ### 1. App Router 패턴 (필수)

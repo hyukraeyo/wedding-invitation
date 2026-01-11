@@ -2,14 +2,15 @@ import React, { useState } from 'react';
 import { MessageCircle } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
-import { BuilderLabel } from '../BuilderLabel';
-import { BuilderInput } from '../BuilderInput';
-import { BuilderButton } from '../BuilderButton';
-import { BuilderButtonGroup } from '../BuilderButtonGroup';
-import { BuilderToggle } from '../BuilderToggle';
-import { BuilderField } from '../BuilderField';
+import { Label } from '../Label';
+import { TextField } from '../TextField';
+import { Button } from '../Button';
+import { SegmentedControl } from '../SegmentedControl';
+import { Switch } from '../Switch';
+import { Field } from '../Field';
 import { ImageUploader } from '../ImageUploader';
-import { Row, Stack } from '../BuilderLayout';
+import { HelpText } from '../HelpText';
+import { Row, Stack } from '../Layout';
 import Image from 'next/image';
 
 interface SectionProps {
@@ -34,18 +35,18 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
         >
             <Stack gap="lg">
                 {/* Photo Upload with Header Preview Button */}
-                <BuilderField
+                <Field
                     label={
                         <Row justify="space-between" align="center" className="mb-2">
-                            <BuilderLabel className="!mb-0">사진</BuilderLabel>
-                            <BuilderButton
-                                variant="ghost"
-                                size="sm"
+                            <Label className="!mb-0">사진</Label>
+                            <Button
+                                variant="weak"
+                                size="small"
                                 onClick={() => setPreviewOpen(true)}
                                 className="h-6 text-[11px] text-gray-500 border border-gray-100 bg-white"
                             >
                                 미리보기
-                            </BuilderButton>
+                            </Button>
                         </Row>
                     }
                 >
@@ -57,31 +58,31 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                             placeholder="썸네일 추가"
                         />
                     </div>
-                </BuilderField>
+                </Field>
 
                 {/* Title */}
-                <BuilderField label="제목">
-                    <BuilderInput
+                <Field label="제목">
+                    <TextField
                         type="text"
                         value={kakao.title}
                         onChange={(e) => setKakao({ title: e.target.value })}
                         placeholder="카카오톡 제목"
                     />
-                </BuilderField>
+                </Field>
 
                 {/* Description */}
-                <BuilderField label="내용">
-                    <BuilderInput
+                <Field label="내용">
+                    <TextField
                         type="text"
                         value={kakao.description}
                         onChange={(e) => setKakao({ description: e.target.value })}
                         placeholder="카카오톡 내용"
                     />
-                </BuilderField>
+                </Field>
 
                 {/* Image Ratio */}
-                <BuilderField label="사진 비율">
-                    <BuilderButtonGroup
+                <Field label="사진 비율">
+                    <SegmentedControl
                         value={kakao.imageRatio}
                         options={[
                             { label: '세로', value: 'portrait' },
@@ -89,11 +90,11 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                         ]}
                         onChange={(val: 'portrait' | 'landscape') => setKakao({ imageRatio: val })}
                     />
-                </BuilderField>
+                </Field>
 
                 {/* Button Type */}
-                <BuilderField label="버튼 추가">
-                    <BuilderButtonGroup
+                <Field label="버튼 추가">
+                    <SegmentedControl
                         value={kakao.buttonType}
                         options={[
                             { label: '설정안함', value: 'none' },
@@ -102,26 +103,21 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                         ]}
                         onChange={(val: 'none' | 'location' | 'rsvp') => setKakao({ buttonType: val })}
                     />
-                </BuilderField>
+                </Field>
 
                 {/* Share Exposure */}
-                <BuilderField label="설정">
-                    <BuilderToggle
+                <Field label="설정">
+                    <Switch
                         checked={kakao.showShareButton}
                         onChange={(checked) => setKakao({ showShareButton: checked })}
                         label="공유 버튼 노출"
                     />
-                </BuilderField>
+                </Field>
 
                 {/* Footer Note */}
-                <div className="flex items-start gap-1.5 pt-4 border-t border-gray-100">
-                    <div className="w-3.5 h-3.5 rounded-full border border-gray-400 flex items-center justify-center shrink-0 mt-0.5">
-                        <span className="text-[9px] text-gray-500 font-serif italic">!</span>
-                    </div>
-                    <p className="text-xs text-gray-400 leading-relaxed">
-                        미입력해도 자동 설정되며, 변경이 필요한 경우에만 입력
-                    </p>
-                </div>
+                <HelpText>
+                    미입력해도 자동 설정되며, 변경이 필요한 경우에만 입력
+                </HelpText>
             </Stack>
 
             {/* Simple Preview Modal (Optional, if needed for "미리보기") */}

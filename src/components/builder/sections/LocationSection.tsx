@@ -5,15 +5,30 @@ import DaumPostcodeEmbed from 'react-daum-postcode';
 import { clsx } from 'clsx';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
-import { BuilderInput } from '../BuilderInput';
-import { NaverIcon, KakaoIcon } from '../../common/MapIcons';
-import { BuilderButtonGroup } from '../BuilderButtonGroup';
-import { BuilderToggle } from '../BuilderToggle';
-import { BuilderField } from '../BuilderField';
-import { BuilderModal } from '../../common/BuilderModal';
+import { TextField } from '../TextField';
+import { SegmentedControl } from '../SegmentedControl';
+import { Switch } from '../Switch';
+import { Field } from '../Field';
+import { Row } from '../Layout';
+import { BuilderModal } from '@/components/common/BuilderModal';
 import { ImageUploader } from '../ImageUploader';
-import { Section, Row, Divider, Card, Stack } from '../BuilderLayout';
+import { Section, Divider, Card, Stack } from '../Layout';
 import styles from './LocationSection.module.scss';
+
+// Simple Icon Components for Map Types
+const NaverIcon = ({ size = 24, className }: { size?: number, className?: string }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+        <rect width="24" height="24" rx="4" fill="#03C75A" />
+        <path d="M16.2 18V6H13.6L7.8 14.5V6H5.2V18H7.8L13.6 9.5V18H16.2Z" fill="white" />
+    </svg>
+);
+
+const KakaoIcon = ({ size = 24, className, showBackground = true }: { size?: number, className?: string, showBackground?: boolean }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+        {showBackground && <rect width="24" height="24" rx="4" fill="#FFE812" />}
+        <path d="M12 5C8.13401 5 5 7.46231 5 10.5C5 12.3023 6.13605 13.9059 7.91501 14.9077L7.30796 17.587C7.22894 17.9351 7.62594 18.1969 7.92095 17.9899L11.3739 15.5678C11.581 15.5869 11.7891 15.5969 12 15.6C15.866 15.6 19 13.1377 19 10.1C19 7.06231 15.866 5 12 5Z" fill="#3C1E1E" />
+    </svg>
+);
 
 interface SectionProps {
     isOpen: boolean;
@@ -95,7 +110,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
         >
             <Section>
                 {/* 주소 검색 */}
-                <BuilderField label="주소">
+                <Field label="주소">
                     <div
                         onClick={handleAddressSearch}
                         className={styles.addressButton}
@@ -105,44 +120,44 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                         </span>
                         <Search size={18} className={styles.searchIcon} />
                     </div>
-                </BuilderField>
+                </Field>
 
                 {/* 예식장명 */}
-                <BuilderField label="예식장명">
-                    <BuilderInput
+                <Field label="예식장명">
+                    <TextField
                         type="text"
                         value={location}
                         onChange={(e) => setLocation(e.target.value)}
                         placeholder="예식장 이름 입력"
                     />
-                </BuilderField>
+                </Field>
 
                 {/* 층과 홀 */}
-                <BuilderField label="층과 홀">
-                    <BuilderInput
+                <Field label="층과 홀">
+                    <TextField
                         type="text"
                         value={detailAddress}
                         onChange={(e) => setDetailAddress(e.target.value)}
                         placeholder="층과 웨딩홀 이름 입력"
                     />
-                </BuilderField>
+                </Field>
 
                 {/* 연락처 */}
-                <BuilderField label="연락처">
-                    <BuilderInput
+                <Field label="연락처">
+                    <TextField
                         type="text"
                         value={locationContact}
                         onChange={handleContactChange}
                         placeholder="예식장 연락처, 02-000-0000"
                         maxLength={13}
                     />
-                </BuilderField>
+                </Field>
 
                 <Divider />
 
                 {/* 지도 종류 */}
-                <BuilderField label="지도 종류">
-                    <BuilderButtonGroup
+                <Field label="지도 종류">
+                    <SegmentedControl
                         value={mapType}
                         options={[
                             {
@@ -158,20 +173,20 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                         ]}
                         onChange={(val: 'naver' | 'kakao') => setMapType(val)}
                     />
-                </BuilderField>
+                </Field>
 
                 {/* 지도 설정 */}
-                <BuilderField label="지도 설정">
+                <Field label="지도 설정">
                     <Row wrap>
-                        <BuilderToggle checked={showMap} onChange={setShowMap} label="지도 표시" />
-                        <BuilderToggle checked={lockMap} onChange={setLockMap} label="지도 잠금" />
-                        <BuilderToggle checked={showNavigation} onChange={setShowNavigation} label="내비게이션" />
+                        <Switch checked={showMap} onChange={setShowMap} label="지도 표시" />
+                        <Switch checked={lockMap} onChange={setLockMap} label="지도 잠금" />
+                        <Switch checked={showNavigation} onChange={setShowNavigation} label="내비게이션" />
                     </Row>
-                </BuilderField>
+                </Field>
 
                 {/* 지도 높이 */}
-                <BuilderField label="지도 높이">
-                    <BuilderButtonGroup
+                <Field label="지도 높이">
+                    <SegmentedControl
                         value={mapHeight}
                         options={[
                             { label: '기본', value: 'default' },
@@ -179,11 +194,11 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                         ]}
                         onChange={(val: 'default' | 'small') => setMapHeight(val)}
                     />
-                </BuilderField>
+                </Field>
 
                 {/* 줌 레벨 */}
-                <BuilderField label="줌 레벨">
-                    <BuilderButtonGroup
+                <Field label="줌 레벨">
+                    <SegmentedControl
                         value={mapZoom}
                         options={[
                             { label: '15', value: 15 },
@@ -194,10 +209,10 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                         ]}
                         onChange={(val: number) => setMapZoom(val)}
                     />
-                </BuilderField>
+                </Field>
 
                 {/* 약도 이미지 */}
-                <BuilderField label="약도 이미지">
+                <Field label="약도 이미지">
                     <Stack gap="md">
                         <ImageUploader
                             value={sketchUrl}
@@ -208,7 +223,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                             aspectRatio="4/3"
                         />
                     </Stack>
-                </BuilderField>
+                </Field>
             </Section>
 
             <BuilderModal

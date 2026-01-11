@@ -1,0 +1,53 @@
+@use "@/styles/variables" as *;
+
+.switchLabel {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.input {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    margin: 0;
+}
+
+.track {
+    position: relative;
+    width: 51px;
+    height: 31px;
+    background-color: $tds-grey-300; // Default off color
+    border-radius: 31px; // Pill shape (height / 2)
+    transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.handle {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 27px;
+    height: 27px;
+    background-color: white;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); // TDS shadow style
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// Checked State
+.input:checked + .track {
+    background-color: $tds-blue-500;
+
+    .handle {
+        transform: translateX(20px); // 51 - 27 - 2 - 2 = 20px
+    }
+}
+
+// Disabled State
+.input:disabled + .track {
+    opacity: 0.4;
+    cursor: not-allowed;
+}

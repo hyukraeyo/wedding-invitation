@@ -1,0 +1,115 @@
+@use '@/styles/variables' as *;
+
+// TDS Checkbox Styles
+// Reference: https://tossmini-docs.toss.im/tds-mobile/components/checkbox/
+
+.container {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    user-select: none;
+    
+    &.disabled {
+        cursor: not-allowed;
+        opacity: 0.4;
+    }
+}
+
+.checkbox {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease-out;
+    flex-shrink: 0;
+    
+    input {
+        position: absolute;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        cursor: inherit;
+    }
+}
+
+// Circle Variant (원형 체크박스)
+.circle {
+    border-radius: 50%;
+    background-color: $tds-grey-200;
+    
+    .icon {
+        color: white;
+        opacity: 0;
+        transform: scale(0.5);
+        transition: all 0.15s ease-out;
+    }
+    
+    &.checked {
+        background-color: $tds-blue-500;
+        
+        .icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    
+    &.disabled {
+        background-color: $tds-grey-200;
+        
+        &.checked {
+            background-color: $tds-grey-300;
+        }
+    }
+}
+
+// Line Variant (라인 체크박스)
+.line {
+    background-color: transparent;
+    
+    .icon {
+        color: $tds-grey-400;
+        opacity: 0;
+        transform: scale(0.5);
+        transition: all 0.15s ease-out;
+    }
+    
+    &.checked {
+        .icon {
+            color: $tds-blue-500;
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+    
+    &.disabled {
+        .icon {
+            color: $tds-grey-300;
+        }
+    }
+}
+
+// Shake animation for disabled state click
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-2px); }
+    40% { transform: translateX(2px); }
+    60% { transform: translateX(-2px); }
+    80% { transform: translateX(2px); }
+}
+
+.shake {
+    animation: shake 0.3s ease-in-out;
+}
+
+// Label styling
+.label {
+    font-size: 15px;
+    line-height: 1.4;
+    color: $tds-grey-900;
+    
+    .disabled & {
+        color: $tds-grey-400;
+    }
+}
