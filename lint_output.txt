@@ -3,38 +3,22 @@
 > eslint
 
 
-C:\Users\johr9\Documents\git\wedding-invitation\src\components\builder\BuilderCalendar.tsx
-   1:46  warning  'forwardRef' is defined but never used                                                                           @typescript-eslint/no-unused-vars
-  32:8   warning  React Hook useEffect has a missing dependency: 'selectedDate'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+C:\Users\johr9\Documents\git\wedding-invitation\src\components\builder\sections\ClosingSection.tsx
+   1:17  warning  'ChangeEvent' is defined but never used  @typescript-eslint/no-unused-vars
+   2:8   warning  'Image' is defined but never used        @typescript-eslint/no-unused-vars
+   3:19  warning  'ImageIcon' is defined but never used    @typescript-eslint/no-unused-vars
+   3:38  warning  'X' is defined but never used            @typescript-eslint/no-unused-vars
+  10:19  warning  'Stack' is defined but never used        @typescript-eslint/no-unused-vars
 
-C:\Users\johr9\Documents\git\wedding-invitation\src\components\builder\BuilderColorPicker.tsx
-  17:11  warning  'accentColor' is assigned a value but never used  @typescript-eslint/no-unused-vars
-
-C:\Users\johr9\Documents\git\wedding-invitation\src\components\builder\sections\KakaoShareSection.tsx
-  1:17  warning  'ChangeEvent' is defined but never used  @typescript-eslint/no-unused-vars
+C:\Users\johr9\Documents\git\wedding-invitation\src\components\builder\sections\GreetingSection.tsx
+  7:10  warning  'BuilderButtonGroup' is defined but never used  @typescript-eslint/no-unused-vars
 
 C:\Users\johr9\Documents\git\wedding-invitation\src\components\builder\sections\LocationSection.tsx
-   2:18  warning  'ImagePlus' is defined but never used                    @typescript-eslint/no-unused-vars
-   2:29  warning  'Trash2' is defined but never used                       @typescript-eslint/no-unused-vars
-   4:8   warning  'Image' is defined but never used                        @typescript-eslint/no-unused-vars
-  15:19  warning  'Stack' is defined but never used                        @typescript-eslint/no-unused-vars
-  59:11  warning  'handleSketchUpload' is assigned a value but never used  @typescript-eslint/no-unused-vars
-
-C:\Users\johr9\Documents\git\wedding-invitation\src\components\builder\sections\MainScreenSection.tsx
-  19:8  warning  'commonStyles' is defined but never used             @typescript-eslint/no-unused-vars
-  53:7  warning  'hexToRgbValues' is assigned a value but never used  @typescript-eslint/no-unused-vars
-
-C:\Users\johr9\Documents\git\wedding-invitation\src\components\common\Header.tsx
-  8:10  warning  'clsx' is defined but never used  @typescript-eslint/no-unused-vars
-
-C:\Users\johr9\Documents\git\wedding-invitation\src\components\common\RichTextEditor.tsx
-  55:61  warning  'placeholder' is defined but never used  @typescript-eslint/no-unused-vars
-
-C:\Users\johr9\Documents\git\wedding-invitation\src\components\preview\InvitationCanvas.tsx
-  16:8  warning  'common' is defined but never used  @typescript-eslint/no-unused-vars
+  35:9   warning  'showSketch' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  35:21  warning  'setShowSketch' is assigned a value but never used  @typescript-eslint/no-unused-vars
 
 C:\Users\johr9\Documents\git\wedding-invitation\src\components\preview\sections\LocationView.tsx
-  40:5  warning  'mapType' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  95:5  warning  'showSketch' is assigned a value but never used  @typescript-eslint/no-unused-vars
 
-✖ 15 problems (0 errors, 15 warnings)
+✖ 9 problems (0 errors, 9 warnings)
 

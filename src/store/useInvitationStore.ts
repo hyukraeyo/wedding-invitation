@@ -436,28 +436,20 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
     reset: () => set(INITIAL_STATE),
 }), {
     name: 'wedding-invitation-storage',
-    storage: createJSONStorage(() => (typeof window !== 'undefined' ? localStorage : {
-        getItem: () => null,
-        setItem: () => { },
-        removeItem: () => { },
+    storage: createJSONStorage(() => ({
+        getItem: async (name: string): Promise<string | null> => {
+            const { get } = await import('idb-keyval');
+            return (await get(name)) || null;
+        },
+        setItem: async (name: string, value: string): Promise<void> => {
+            const { set } = await import('idb-keyval');
+            await set(name, value);
+        },
+        removeItem: async (name: string): Promise<void> => {
+            const { del } = await import('idb-keyval');
+            await del(name);
+        },
     })),
-    partialize: (state) => {
-        // Exclude large image data from persistence to prevent QuotaExceededError (localStorage limit 5MB)
-        /* eslint-disable @typescript-eslint/no-unused-vars */
-        const {
-            gallery: _gallery, // Exclude gallery from localStorage due to size
-            kakaoShare,
-            closing,
-            ...rest
-        } = state;
-        /* eslint-enable @typescript-eslint/no-unused-vars */
-
-        return {
-            ...rest,
-            // Keep excluding gallery and large share/closing images from localStorage
-            kakaoShare: { ...kakaoShare, imageUrl: null },
-            closing: { ...closing, imageUrl: null },
-            gallery: [],
-        };
-    }
+    // Removed partialize to allow gallery and images to be saved in IndexedDB
+    // IndexedDB has much higher limits than localStorage
 }));

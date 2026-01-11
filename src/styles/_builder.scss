@@ -191,6 +191,6 @@ $builder-font-lg: 15px;
   color: var(--accent-color);
   background: white;
   border-color: var(--accent-color);
-  box-shadow: 0 0 0 1px var(--accent-color) inset;
+  // box-shadow removed to reduce border thickness
   font-weight: 600;
 }

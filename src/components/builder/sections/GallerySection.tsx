@@ -88,7 +88,7 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
         setActiveId(event.active.id as string);
     }, []);
 
-    const handleUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const files = e.target.files;
         if (!files || files.length === 0) return;
 
@@ -130,22 +130,51 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
 
         const filesToProcess = validFiles.slice(0, remainingCount);
 
-        const readFileAsBase64 = (file: File): Promise<string> => {
-            return new Promise((resolve) => {
-                const reader = new FileReader();
-                reader.onloadend = () => resolve(reader.result as string);
-                reader.readAsDataURL(file);
-            });
-        };
+        // 1. Create Temporary Items (Optimistic UI)
+        const tempItems = filesToProcess.map(file => ({
+            id: `temp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            url: URL.createObjectURL(file),
+            file // Keep file ref for uploading
+        }));
 
-        Promise.all(filesToProcess.map(readFileAsBase64)).then(newImageUrls => {
-            const newEntries = newImageUrls.map(url => ({
-                id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-                url
-            }));
-            setGallery([...gallery, ...newEntries]);
-            e.target.value = '';
-        });
+        // 2. Immediately update store
+        // Need to use current state to ensure accuracy
+        const currentGallery = useInvitationStore.getState().gallery;
+        setGallery([...currentGallery, ...tempItems.map(({ id, url }) => ({ id, url }))]);
+
+        // Reset input
+        e.target.value = '';
+
+        // 3. Process Uploads in Background
+        try {
+            const { uploadImage } = await import('@/utils/upload');
+
+            // Process each file in parallel but update individually
+            tempItems.forEach(async (item) => {
+                try {
+                    const publicUrl = await uploadImage(item.file, 'images', 'gallery');
+
+                    // Update specific item with real URL
+                    // Must read fresh state because other uploads might have finished
+                    const latestGallery = useInvitationStore.getState().gallery;
+                    const newGallery = latestGallery.map(g =>
+                        g.id === item.id ? { ...g, url: publicUrl } : g
+                    );
+
+                    setGallery(newGallery);
+                    URL.revokeObjectURL(item.url); // Cleanup memory
+                } catch (error) {
+                    console.error(`Failed to upload ${item.file.name}:`, error);
+                    // Remove failed item
+                    const latestGallery = useInvitationStore.getState().gallery;
+                    setGallery(latestGallery.filter(g => g.id !== item.id));
+                    alert(`${item.file.name} 업로드에 실패했습니다.`);
+                }
+            });
+
+        } catch (err) {
+            console.error('Upload module import failed', err);
+        }
     };
 
     const handleDragEnd = useCallback((event: DragEndEvent) => {
@@ -352,18 +381,31 @@ const SortableImage = React.memo(function SortableImage({
         onDelete(gallery.filter(item => item.id !== id));
     }, [id, gallery, onDelete]);
 
+    const isUploading = url.startsWith('blob:');
+
     return (
         <div
             ref={setNodeRef}
             style={style}
-            className={clsx(styles.sortableItem, isDragging && styles.dragging)}
+            className={clsx(
+                styles.sortableItem,
+                isDragging && styles.dragging,
+                isUploading && styles.optimisticItem
+            )}
         >
             <Image
                 src={url}
                 alt=""
                 fill
                 unoptimized
+                className={clsx(isUploading && styles.optimisticImage)}
             />
+
+            {isUploading && (
+                <div className={styles.loadingOverlay}>
+                    <div className={styles.spinner} />
+                </div>
+            )}
 
             <div className={styles.overlay} />
 

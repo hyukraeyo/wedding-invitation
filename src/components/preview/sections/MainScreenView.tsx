@@ -144,6 +144,7 @@ const MainScreenView = memo(({
                                     objectFit: 'cover',
                                 }}
                                 priority
+                                unoptimized={imageUrl?.startsWith('blob:')}
                             />
                         ) : (
                             <Image
@@ -160,6 +161,7 @@ const MainScreenView = memo(({
                                     objectFit: 'contain',
                                 }}
                                 priority
+                                unoptimized={imageUrl?.startsWith('blob:')}
                             />
                         )
                     ) : (

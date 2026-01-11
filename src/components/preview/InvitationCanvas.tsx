@@ -57,7 +57,6 @@ const InvitationCanvas = memo(() => {
     mapZoom,
     showMap,
     showNavigation,
-    showSketch,
     sketchUrl,
     sketchRatio,
     lockMap,
@@ -203,7 +202,6 @@ const InvitationCanvas = memo(() => {
           mapZoom={mapZoom}
           showMap={showMap}
           showNavigation={showNavigation}
-          showSketch={showSketch}
           sketchUrl={sketchUrl || undefined}
           sketchRatio={sketchRatio}
           lockMap={lockMap}

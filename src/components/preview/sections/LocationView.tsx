@@ -22,7 +22,6 @@ interface LocationViewProps {
     mapZoom?: number;
     showMap?: boolean;
     showNavigation?: boolean;
-    showSketch?: boolean;
     sketchUrl?: string | null | undefined;
     sketchRatio?: 'fixed' | 'auto';
     lockMap?: boolean;
@@ -65,8 +64,7 @@ const NaverMapContainer = ({ lat, lng, mapZoom, lockMap }: { lat: number; lng: n
                 <NaverMap
                     defaultCenter={{ lat, lng }}
                     center={{ lat, lng }}
-                    defaultZoom={15}
-                    zoom={mapZoom ? mapZoom - 3 : 15}
+                    zoom={mapZoom}
                     draggable={!lockMap}
                     scrollWheel={!lockMap}
                     pinchZoom={!lockMap}
@@ -93,7 +91,6 @@ const LocationView = memo(({
     mapZoom = 17,
     showMap = true,
     showNavigation = true,
-    showSketch = false,
     sketchUrl = null,
     sketchRatio = 'fixed',
     lockMap = true,
@@ -170,7 +167,7 @@ const LocationView = memo(({
                 </div>
             )}
 
-            {showSketch && sketchUrl && (
+            {sketchUrl && (
                 <div className={clsx(styles.sketchContainer, styles[sketchRatio])}>
                     <Image
                         src={sketchUrl}
@@ -183,6 +180,7 @@ const LocationView = memo(({
                             height: sketchRatio === 'fixed' ? '100%' : 'auto',
                             objectFit: sketchRatio === 'fixed' ? 'cover' : 'contain'
                         }}
+                        unoptimized={sketchUrl?.startsWith('blob:')}
                     />
                 </div>
             )}

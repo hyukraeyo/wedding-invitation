@@ -201,17 +201,9 @@ export default function MainScreenSection({ isOpen, onToggle }: SectionProps) {
                             value={imageUrl}
                             onChange={setImageUrl}
                             placeholder="메인 사진 추가"
+                            ratio={imageRatio}
+                            onRatioChange={(val) => setImageRatio(val)}
                         />
-                        {imageUrl && (
-                            <BuilderButtonGroup
-                                value={imageRatio}
-                                options={[
-                                    { label: '고정 (기본)', value: 'fixed' },
-                                    { label: '자동 (원본 비율)', value: 'auto' },
-                                ]}
-                                onChange={(val: 'fixed' | 'auto') => setImageRatio(val)}
-                            />
-                        )}
                     </Stack>
                 </BuilderField>
 

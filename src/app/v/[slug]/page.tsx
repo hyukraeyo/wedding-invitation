@@ -36,8 +36,39 @@ export default async function InvitationViewPage({ params }: Props) {
         notFound();
     }
 
+    const { invitation_data: data } = invitation;
+
+    // JSON-LD for Event (SEO Rule Compliance)
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Event",
+        "name": `${data.groom.firstName} & ${data.bride.firstName}의 결혼식`,
+        "startDate": `${data.date.replaceAll('.', '-')}T${data.time}`,
+        "eventStatus": "https://schema.org/EventScheduled",
+        "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+        "location": {
+            "@type": "Place",
+            "name": data.location,
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": `${data.address} ${data.detailAddress}`,
+                "addressCountry": "KR"
+            }
+        },
+        "image": data.imageUrl ? [data.imageUrl] : undefined,
+        "description": data.greetingTitle || '결혼식에 초대합니다.',
+        "performer": [
+            { "@type": "Person", "name": `${data.groom.lastName}${data.groom.firstName}`, "honorificSuffix": "신랑" },
+            { "@type": "Person", "name": `${data.bride.lastName}${data.bride.firstName}`, "honorificSuffix": "신부" }
+        ]
+    };
+
     return (
         <div className="w-full min-h-screen bg-white">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             <StoreHydrator data={invitation.invitation_data} />
             <InvitationCanvas />
         </div>

@@ -32,7 +32,6 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
         mapHeight, setMapHeight,
         mapZoom, setMapZoom,
         mapType, setMapType,
-        showSketch, setShowSketch,
         sketchUrl, setSketchUrl,
         sketchRatio, setSketchRatio
     } = useInvitationStore();
@@ -167,7 +166,6 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                         <BuilderToggle checked={showMap} onChange={setShowMap} label="지도 표시" />
                         <BuilderToggle checked={lockMap} onChange={setLockMap} label="지도 잠금" />
                         <BuilderToggle checked={showNavigation} onChange={setShowNavigation} label="내비게이션" />
-                        <BuilderToggle checked={showSketch} onChange={setShowSketch} label="약도 사진" />
                     </Row>
                 </BuilderField>
 
@@ -199,27 +197,17 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                 </BuilderField>
 
                 {/* 약도 이미지 */}
-                {showSketch && (
-                    <BuilderField label="약도 이미지">
-                        <Stack gap="md">
-                            <ImageUploader
-                                value={sketchUrl}
-                                onChange={setSketchUrl}
-                                placeholder="약도 이미지 추가"
-                            />
-                            {sketchUrl && (
-                                <BuilderButtonGroup
-                                    value={sketchRatio}
-                                    options={[
-                                        { label: '고정 (기본)', value: 'fixed' },
-                                        { label: '자동 (원본 비율)', value: 'auto' },
-                                    ]}
-                                    onChange={(val: 'fixed' | 'auto') => setSketchRatio(val)}
-                                />
-                            )}
-                        </Stack>
-                    </BuilderField>
-                )}
+                <BuilderField label="약도 이미지">
+                    <Stack gap="md">
+                        <ImageUploader
+                            value={sketchUrl}
+                            onChange={setSketchUrl}
+                            placeholder="약도 이미지 추가"
+                            ratio={sketchRatio}
+                            onRatioChange={(val) => setSketchRatio(val)}
+                        />
+                    </Stack>
+                </BuilderField>
             </Section>
 
             <BuilderModal

@@ -51,6 +51,7 @@ const ClosingView = memo(({
                                     height: ratio === 'fixed' ? '100%' : 'auto',
                                     objectFit: ratio === 'fixed' ? 'cover' : 'contain'
                                 }}
+                                unoptimized={imageUrl?.startsWith('blob:')}
                             />
 
                             {/* Effects Overlay */}

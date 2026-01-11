@@ -1,12 +1,12 @@
-import React, { ChangeEvent } from 'react';
-import Image from 'next/image';
-import { Image as ImageIcon, Camera, X } from 'lucide-react';
+import React from 'react';
+import { Camera } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { BuilderButtonGroup } from '../BuilderButtonGroup';
 import { BuilderField } from '../BuilderField';
+import { ImageUploader } from '../ImageUploader';
 import RichTextEditor from '@/components/common/RichTextEditor';
-import { Section, Stack, Row } from '../BuilderLayout';
+import { Section, Row } from '../BuilderLayout';
 import styles from './ClosingSection.module.scss';
 
 interface SectionProps {
@@ -19,16 +19,7 @@ const RECOMMENDED_TEXT = `<p>장담하건대, 세상이 다 겨울이어도<br>�
 export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
     const { closing, setClosing } = useInvitationStore();
 
-    const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setClosing({ imageUrl: reader.result as string });
-            };
-            reader.readAsDataURL(file);
-        }
-    };
+
 
     return (
         <AccordionItem
@@ -42,38 +33,13 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
             <Section>
                 {/* Photo Upload */}
                 <BuilderField label="사진">
-                    <div className={styles.uploadArea ?? ''}>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageUpload}
-                            className={styles.hiddenInput ?? ''}
-                        />
-
-                        {closing.imageUrl ? (
-                            <div className={styles.previewContainer ?? ''}>
-                                <div className={styles.imageWrapper ?? ''}>
-                                    <Image src={closing.imageUrl} alt="Closing" fill className={styles.image ?? ''} />
-                                </div>
-                                <button
-                                    onClick={(e) => { e.preventDefault(); setClosing({ imageUrl: null }); }}
-                                    className={styles.removeButton ?? ''}
-                                >
-                                    <X size={20} />
-                                </button>
-                            </div>
-                        ) : (
-                            <Stack gap="sm" className={styles.placeholder ?? ''}>
-                                <div className={styles.iconWrapper ?? ''}>
-                                    <ImageIcon size={24} />
-                                </div>
-                                <div className={styles.textWrapper ?? ''}>
-                                    <p className={styles.title ?? ''}>사진 업로드</p>
-                                    <p className={styles.subtitle ?? ''}>클릭하여 이미지를 선택하세요</p>
-                                </div>
-                            </Stack>
-                        )}
-                    </div>
+                    <ImageUploader
+                        value={closing.imageUrl}
+                        onChange={(url) => setClosing({ imageUrl: url })}
+                        placeholder="마무리 사진 추가"
+                        ratio={closing.ratio}
+                        onRatioChange={(val) => setClosing({ ratio: val })}
+                    />
                 </BuilderField>
 
                 {/* Effect Selection */}
@@ -90,17 +56,7 @@ export default function ClosingSection({ isOpen, onToggle }: SectionProps) {
                     />
                 </BuilderField>
 
-                {/* Ratio Selection */}
-                <BuilderField label="사진 비율">
-                    <BuilderButtonGroup
-                        value={closing.ratio}
-                        options={[
-                            { label: '고정 (기본)', value: 'fixed' },
-                            { label: '자동 (원본 비율)', value: 'auto' },
-                        ]}
-                        onChange={(val: 'fixed' | 'auto') => setClosing({ ratio: val })}
-                    />
-                </BuilderField>
+
 
                 {/* Content Editor */}
                 <BuilderField

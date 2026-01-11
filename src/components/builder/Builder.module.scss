@@ -112,11 +112,10 @@
     @include builder.builder-button-base;
     font-size: 13px;
     padding: 0.625rem 1.125rem;
-    border-color: builder.$builder-border-light;
 
     &.checked {
         @include builder.builder-button-active;
-        background-color: rgba(var(--accent-rgb, 0, 0, 0), 0.03);
+        background-color: white;
     }
 }
 
