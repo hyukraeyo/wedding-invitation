@@ -73,7 +73,7 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
         editorProps: {
             attributes: {
                 class: cn(
-                    "prose prose-sm max-w-none focus:outline-none p-4 rich-text-content center-aligned",
+                    "prose prose-sm max-w-none focus:outline-none p-4 rich-text-content",
                     minHeight
                 ),
                 style: `font-size: var(--builder-font-size); font-family: var(--builder-font-family); line-height: var(--builder-line-height);`,
