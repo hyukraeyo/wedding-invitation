@@ -10,7 +10,6 @@ import { SegmentedControl } from '../SegmentedControl';
 import { SwitchField } from '../SwitchField';
 import { Field } from '../Field';
 import { Modal } from '@/components/common/Modal';
-import { ImageUploader } from '../ImageUploader';
 import DaumPostcodeEmbed from 'react-daum-postcode';
 import styles from './LocationSection.module.scss';
 import { cn } from '@/lib/utils';
@@ -37,8 +36,6 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ valu
         mapHeight, setMapHeight,
         mapZoom, setMapZoom,
         mapType, setMapType,
-        sketchUrl, setSketchUrl,
-        sketchRatio, setSketchRatio,
         coordinates, setCoordinates
     } = useInvitationStore();
 

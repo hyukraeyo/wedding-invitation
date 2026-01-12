@@ -69,7 +69,7 @@ export const SegmentedControl = <T extends string | number>({
                     className={cn(
                         "absolute top-1 bottom-1 left-1",
                         "bg-white rounded-[6px] shadow-[0_1px_3px_rgba(0,0,0,0.1)] ring-1 ring-black/[0.04]",
-                        "transition-transform duration-300 ease-[cubic-bezier(0.2,1,0.3,1)]", // Toss-like smooth springy ease
+                        "transition-transform duration-300 ease-ios", // Toss-like smooth springy ease
                         "pointer-events-none -z-10" // Behind the text
                     )}
                     style={{

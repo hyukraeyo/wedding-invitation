@@ -5,7 +5,6 @@ import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { Field } from '../Field';
 import { SegmentedControl } from '../SegmentedControl';
-import { Modal } from '@/components/common/Modal';
 import { ExampleSelectorModal } from '@/components/common/ExampleSelectorModal';
 import RichTextEditor from '@/components/common/RichTextEditor';
 import { ImageUploader } from '../ImageUploader';

@@ -5,7 +5,6 @@ import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { Field } from '../Field';
 import { ImageUploader } from '../ImageUploader';
-import { Modal } from '@/components/common/Modal';
 import { ExampleSelectorModal } from '@/components/common/ExampleSelectorModal';
 import styles from './ClosingSection.module.scss';
 

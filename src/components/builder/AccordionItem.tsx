@@ -45,7 +45,7 @@ export const AccordionItem = ({
             if (scrollParent) {
                 // Calculate target position: element's offset relative to scroll parent
                 // We add a small offset/padding (e.g. 20px) for visual breathing room
-                smoothScrollTo(scrollParent, element.offsetTop - 20, 600); // 600ms duration for premium feel
+                smoothScrollTo(scrollParent, element.offsetTop - 24, 600); // 600ms duration for premium feel
             }
         }, 250);
 
