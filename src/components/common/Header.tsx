@@ -7,7 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/builder/Button';
+import { Button } from '@/components/ui/button';
 import {
     Dialog,
     DialogContent,
@@ -71,7 +71,7 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
             <div className="flex items-center gap-4">
                 <nav className="hidden md:flex items-center gap-4">
                     <Button
-                        variant="weak"
+                        variant="secondary"
                         size="sm"
                         onClick={handleCreateNew}
                     >
@@ -122,7 +122,7 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
                     <Button
                         className="md:hidden"
                         size="sm"
-                        variant="weak"
+                        variant="secondary"
                         onClick={handleCreateNew}
                     >
                         <Plus size={14} />

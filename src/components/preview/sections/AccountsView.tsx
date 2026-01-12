@@ -45,8 +45,8 @@ const AccountsView = memo(({
 }: AccountsViewProps) => {
     const { toast } = useToast();
 
-    const groomAccounts = accounts.filter(a => a.type === 'groom');
-    const brideAccounts = accounts.filter(a => a.type === 'bride');
+    const groomAccounts = (accounts || []).filter(a => a.type === 'groom');
+    const brideAccounts = (accounts || []).filter(a => a.type === 'bride');
 
     const handleCopy = (text: string) => {
         const onlyNumbers = text.replace(/[^0-9]/g, '');

@@ -47,11 +47,11 @@ interface MainScreenViewProps {
  * Optimized for performance with React.memo and formatted with CSS Modules.
  */
 const MainScreenView = memo(({
-    mainScreen,
+    mainScreen: rawMainScreen,
     imageUrl,
     imageRatio = 'fixed',
-    groom,
-    bride,
+    groom: rawGroom,
+    bride: rawBride,
 
     date,
     time,
@@ -59,6 +59,26 @@ const MainScreenView = memo(({
     detailAddress,
     accentColor
 }: MainScreenViewProps) => {
+    const mainScreen = rawMainScreen || {
+        layout: 'classic',
+        showTitle: true,
+        title: 'THE MARRIAGE',
+        showGroomBride: true,
+        andText: '그리고',
+        suffixText: '결혼합니다.',
+        showSubtitle: true,
+        subtitle: '소중한 날에 초대합니다',
+        showDatePlace: true,
+        customDatePlace: '',
+        showBorder: false,
+        expandPhoto: false,
+        effect: 'none',
+        groomName: '',
+        brideName: ''
+    };
+    const groom = rawGroom || { firstName: '', lastName: '', relation: '', parents: { father: { name: '', isDeceased: false }, mother: { name: '', isDeceased: false } } };
+    const bride = rawBride || { firstName: '', lastName: '', relation: '', parents: { father: { name: '', isDeceased: false }, mother: { name: '', isDeceased: false } } };
+
     const isFillLayout = mainScreen.layout === 'fill' || mainScreen.layout === 'heart';
     const isBasicLayout = mainScreen.layout === 'classic' || mainScreen.layout === 'minimal' || mainScreen.layout === 'english' || mainScreen.layout === 'korean' || mainScreen.layout === 'basic';
 

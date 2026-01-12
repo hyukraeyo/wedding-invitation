@@ -69,6 +69,7 @@ export default function MainScreenSection({ isOpen, onToggle, value }: SectionPr
         imageUrl, setImageUrl,
         imageRatio, setImageRatio,
         groom, bride,
+        theme, setTheme,
     } = useInvitationStore();
 
     const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
@@ -229,6 +230,19 @@ export default function MainScreenSection({ isOpen, onToggle, value }: SectionPr
                             </SwiperSlide>
                         ))}
                     </Swiper>
+                </Field>
+
+                {/* Falling Effects */}
+                <Field label="흩날림 효과">
+                    <SegmentedControl
+                        value={theme.effect}
+                        onChange={(val) => setTheme({ effect: val as 'none' | 'cherry-blossom' | 'snow' })}
+                        options={[
+                            { label: '없음', value: 'none' },
+                            { label: '벚꽃', value: 'cherry-blossom' },
+                            { label: '눈내림', value: 'snow' },
+                        ]}
+                    />
                 </Field>
 
                 {/* Photo Effects */}

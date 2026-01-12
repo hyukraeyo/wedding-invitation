@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { CreditCard, Plus, Trash2, ChevronDown } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
@@ -56,13 +56,32 @@ export default function AccountsSection({ value, isOpen, onToggle }: SectionProp
         setAccounts(accounts.filter(acc => acc.id !== id));
     };
 
-    const getHolderName = (rel: string, type: 'groom' | 'bride') => {
+    const getHolderName = useCallback((rel: string, type: 'groom' | 'bride') => {
         const person = type === 'groom' ? groom : bride;
         if (rel === '본인') return `${person.lastName}${person.firstName}`;
         if (rel === '아버지') return person.parents.father.name;
         if (rel === '어머니') return person.parents.mother.name;
         return '';
-    };
+    }, [groom, bride]);
+
+    // 기본 정보 변경 시 예금주 자동 동기화
+    useEffect(() => {
+        let hasChanges = false;
+        const updatedAccounts = accounts.map((acc) => {
+            if (['본인', '아버지', '어머니'].includes(acc.relation)) {
+                const newHolder = getHolderName(acc.relation, acc.type);
+                if (newHolder && acc.holder !== newHolder) {
+                    hasChanges = true;
+                    return { ...acc, holder: newHolder };
+                }
+            }
+            return acc;
+        });
+
+        if (hasChanges) {
+            setAccounts(updatedAccounts);
+        }
+    }, [accounts, setAccounts, getHolderName]);
 
     const handleRelationChange = (id: string, rel: string, type: 'groom' | 'bride') => {
         const newHolder = getHolderName(rel, type);
@@ -130,7 +149,7 @@ export default function AccountsSection({ value, isOpen, onToggle }: SectionProp
                                 {expandedId === acc.id && (
                                     <div className={styles.accountBody}>
                                         <div className={styles.fieldRow}>
-                                            <div className={styles.flex2}>
+                                            <div className={styles.flex3}>
                                                 <SegmentedControl
                                                     value={acc.type}
                                                     options={[
@@ -148,7 +167,7 @@ export default function AccountsSection({ value, isOpen, onToggle }: SectionProp
                                                     }}
                                                 />
                                             </div>
-                                            <div className={styles.flex3}>
+                                            <div className={styles.flex2}>
                                                 <Select
                                                     value={['본인', '아버지', '어머니'].includes(acc.relation) ? acc.relation : 'custom'}
                                                     onValueChange={(val) => {

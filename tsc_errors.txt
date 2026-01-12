@@ -1,1 +1,0 @@
-src/components/builder/sections/MainScreenSection.tsx(455,30): error TS2304: Cannot find name 'Info'.

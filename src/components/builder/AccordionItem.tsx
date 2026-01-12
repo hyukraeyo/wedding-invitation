@@ -47,8 +47,8 @@ export const AccordionItem = ({
             value={value}
             ref={containerRef}
             className={cn(
-                "border rounded-xl bg-card transition-all duration-300 shadow-sm border-b-0", // Remove default border-b from shadcn
-                isOpen && "ring-2 ring-primary ring-offset-2"
+                "border border-border/60 rounded-xl bg-card transition-all duration-300 hover:border-border/80",
+                isOpen && "border-primary/40 shadow-sm"
             )}
         >
             <AccordionTrigger className={cn(

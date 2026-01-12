@@ -54,6 +54,7 @@ const GreetingView = memo(({
 }: GreetingViewProps) => {
 
     const renderFamilyRelation = (person: Person, role: '신랑' | '신부') => {
+        if (!person || !person.parents) return null;
         const { parents } = person;
 
         const fatherName = parents.father.name || '아버지';

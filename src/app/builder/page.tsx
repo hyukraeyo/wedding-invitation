@@ -8,11 +8,11 @@ import { useInvitationStore, InvitationData } from '@/store/useInvitationStore';
 import { useAuth } from '@/hooks/useAuth';
 import { invitationService } from '@/services/invitationService';
 import Header from '@/components/common/Header';
-import { useToast } from '@/components/common/Toast';
+import { toast } from 'sonner';
 import SavingOverlay from '@/components/common/SavingOverlay';
 import styles from './BuilderPage.module.scss';
 import { clsx } from 'clsx';
-import { Smartphone } from 'lucide-react';
+import { Smartphone, X } from 'lucide-react';
 import { Sheet, SheetContent, SheetTitle, SheetHeader, SheetDescription } from '@/components/ui/sheet';
 
 const generateSlug = (name: string): string => {
@@ -26,7 +26,7 @@ export default function BuilderPage() {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const { user } = useAuth();
   const state = useInvitationStore();
-  const toast = useToast();
+
 
   const handleLogin = useCallback(() => router.push('/login'), [router]);
 
@@ -132,6 +132,15 @@ export default function BuilderPage() {
             <SheetTitle>Mobile Preview</SheetTitle>
             <SheetDescription>Preview of your wedding invitation</SheetDescription>
           </SheetHeader>
+
+          <button
+            className={styles.mobilePreviewClose}
+            onClick={() => setIsPreviewOpen(false)}
+            aria-label="Close Preview"
+          >
+            <X size={20} />
+          </button>
+
           <div className={styles.mobilePreview}>
             <InvitationCanvas />
           </div>
