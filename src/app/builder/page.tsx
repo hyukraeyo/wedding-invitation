@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import InvitationCanvas from '@/components/preview/InvitationCanvas';
 import EditorForm from '@/components/builder/EditorForm';
@@ -27,6 +27,25 @@ export default function BuilderPage() {
   const { user } = useAuth();
   const state = useInvitationStore();
   const editingSection = useInvitationStore(state => state.editingSection);
+  const [windowWidth, setWindowWidth] = useState(0);
+
+  useEffect(() => {
+    setWindowWidth(window.innerWidth);
+
+    let timeoutId: NodeJS.Timeout;
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        setWindowWidth(window.innerWidth);
+      }, 150);
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      clearTimeout(timeoutId);
+    };
+  }, []);
 
 
   const handleLogin = useCallback(() => router.push('/login'), [router]);
@@ -71,49 +90,53 @@ export default function BuilderPage() {
         </section>
 
         <section className={styles.previewArea}>
-          <div className={styles.backgroundPattern} />
-          <div className={styles.previewContent}>
-            <div className={styles.iphoneFrame}>
-              <div className={clsx(styles.button, styles.action)} />
-              <div className={clsx(styles.button, styles.volUp)} />
-              <div className={clsx(styles.button, styles.volDown)} />
-              <div className={clsx(styles.button, styles.power)} />
+          {windowWidth >= 1024 && (
+            <>
+              <div className={styles.backgroundPattern} />
+              <div className={styles.previewContent}>
+                <div className={styles.iphoneFrame}>
+                  <div className={clsx(styles.button, styles.action)} />
+                  <div className={clsx(styles.button, styles.volUp)} />
+                  <div className={clsx(styles.button, styles.volDown)} />
+                  <div className={clsx(styles.button, styles.power)} />
 
-              <div className={styles.chassis}>
-                <div className={styles.bezel}>
-                  <div className={styles.dynamicIsland}>
-                    <div className={styles.island}>
-                      <div className={styles.camera} />
+                  <div className={styles.chassis}>
+                    <div className={styles.bezel}>
+                      <div className={styles.dynamicIsland}>
+                        <div className={styles.island}>
+                          <div className={styles.camera} />
+                        </div>
+                      </div>
+
+                      <div className={styles.statusBar}>
+                        <div className={styles.time}>9:41</div>
+                        <div className={styles.icons}>
+                          <div className={styles.signal}>
+                            <div style={{ height: '4px' }} />
+                            <div style={{ height: '6px' }} />
+                            <div style={{ height: '9px' }} />
+                            <div style={{ height: '12px', opacity: 0.3 }} />
+                          </div>
+                          <div className={styles.battery}>
+                            <div className={styles.level} />
+                            <div className={styles.tip} />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className={styles.screen}>
+                        <InvitationCanvas key="desktop-preview" editingSection={editingSection} />
+                      </div>
+
+                      <div className={styles.homeIndicator} />
                     </div>
                   </div>
-
-                  <div className={styles.statusBar}>
-                    <div className={styles.time}>9:41</div>
-                    <div className={styles.icons}>
-                      <div className={styles.signal}>
-                        <div style={{ height: '4px' }} />
-                        <div style={{ height: '6px' }} />
-                        <div style={{ height: '9px' }} />
-                        <div style={{ height: '12px', opacity: 0.3 }} />
-                      </div>
-                      <div className={styles.battery}>
-                        <div className={styles.level} />
-                        <div className={styles.tip} />
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className={styles.screen}>
-                    <InvitationCanvas key="desktop-preview" editingSection={editingSection} />
-                  </div>
-
-                  <div className={styles.homeIndicator} />
                 </div>
-              </div>
-            </div>
 
-            <p className={styles.label}>MOBILE PREVIEW</p>
-          </div>
+                <p className={styles.label}>MOBILE PREVIEW</p>
+              </div>
+            </>
+          )}
         </section>
       </div>
 
