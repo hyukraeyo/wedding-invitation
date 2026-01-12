@@ -75,103 +75,71 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
             </div>
 
             {/* Actions */}
-            <div className="flex items-center gap-4">
-                <nav className="hidden md:flex items-center gap-4">
-                    <Button
-                        variant="secondary"
-                        size="sm"
-                        onClick={handleCreateNew}
-                    >
-                        <Plus size={14} className="mr-1" />
-                        <span>새 청첩장 만들기</span>
-                    </Button>
+            {/* Actions */}
+            <div className="flex items-center gap-1 md:gap-2">
+                <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={handleCreateNew}
+                    className="mr-1 md:mr-2"
+                >
+                    <Plus size={16} className="hidden md:inline mr-1" />
+                    <span className="hidden md:inline">새 청첩장 만들기</span>
+                    <Plus size={20} className="md:hidden" />
+                </Button>
 
-                    {user ? (
+                {user ? (
+                    <>
                         <Link href="/mypage">
-                            <Button variant="ghost" size="sm">
-                                마이페이지
-                            </Button>
-                        </Link>
-                    ) : (
-                        onLogin && (
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={onLogin}
-                            >
-                                로그인
-                            </Button>
-                        )
-                    )}
-                </nav>
-
-                <div className="flex items-center gap-2">
-                    {user && (
-                        <Link href="/mypage" className="md:hidden">
                             <Button variant="ghost" size="sm" className="px-2">
-                                <User size={20} />
+                                <span className="hidden md:inline">마이페이지</span>
+                                <User size={20} className="md:hidden" />
                             </Button>
                         </Link>
-                    )}
-                    {user && (
                         <Button
                             variant="ghost"
                             size="sm"
-                            className="md:hidden px-2"
+                            className="px-2"
                             onClick={handleLogout}
                             aria-label="로그아웃"
                         >
-                            <LogOut size={20} />
+                            <span className="hidden md:inline">로그아웃</span>
+                            <LogOut size={20} className="md:hidden" />
                         </Button>
-                    )}
-                    {!user && onLogin && (
+                    </>
+                ) : (
+                    onLogin && (
                         <Button
                             variant="ghost"
                             size="sm"
-                            className="md:hidden px-2"
+                            className="px-2"
                             onClick={onLogin}
                             aria-label="로그인"
                         >
-                            <LogIn size={20} />
+                            <span className="hidden md:inline">로그인</span>
+                            <LogIn size={20} className="md:hidden" />
                         </Button>
-                    )}
-                    {user && (
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            className="hidden md:inline-flex"
-                            onClick={handleLogout}
-                        >
-                            로그아웃
-                        </Button>
-                    )}
+                    )
+                )}
+
+                {onSave && user && (
                     <Button
-                        className="md:hidden"
+                        onClick={onSave}
                         size="sm"
-                        variant="secondary"
-                        onClick={handleCreateNew}
+                        className="font-bold min-w-[32px] md:min-w-[60px] px-2 md:px-4 ml-1 md:ml-2"
+                        disabled={isLoading}
+                        aria-label="저장"
                     >
-                        <Plus size={14} />
+                        {isLoading ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                            <>
+                                <Save size={20} className="md:hidden" />
+                                <span className="hidden md:inline">저장</span>
+                            </>
+                        )}
                     </Button>
-                    {onSave && (
-                        <Button
-                            onClick={onSave}
-                            size="sm"
-                            className="font-bold md:min-w-[60px] px-2 md:px-4"
-                            disabled={isLoading}
-                            aria-label="저장"
-                        >
-                            {isLoading ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : (
-                                <>
-                                    <Save size={20} className="md:hidden" />
-                                    <span className="hidden md:inline">저장</span>
-                                </>
-                            )}
-                        </Button>
-                    )}
-                </div>
+                )}
             </div>
 
             <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>

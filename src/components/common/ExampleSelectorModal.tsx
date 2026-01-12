@@ -1,14 +1,16 @@
-import React from 'react';
-import { Modal } from '@/components/common/Modal';
+"use client";
+
+import React, { useEffect, useSyncExternalStore } from 'react';
+import { createPortal } from 'react-dom';
+import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
+import styles from './ExampleSelectorModal.module.scss';
 
 export interface ExampleItem {
     id?: string | number;
     title: string;
     content: string; // HTML content or plain text
     badge?: string;
-    // Additional generic fields can be passed through but we'll focus on display
     subtitle?: string; // Some might have subtitle
     [key: string]: unknown;
 }
@@ -22,6 +24,11 @@ interface ExampleSelectorModalProps<T extends ExampleItem> {
     className?: string;
 }
 
+// SSR-safe check for client-side mounting
+const subscribe = () => () => { };
+const getSnapshot = () => true;
+const getServerSnapshot = () => false;
+
 export const ExampleSelectorModal = <T extends ExampleItem>({
     isOpen,
     onClose,
@@ -30,41 +37,74 @@ export const ExampleSelectorModal = <T extends ExampleItem>({
     onSelect,
     className
 }: ExampleSelectorModalProps<T>) => {
-    return (
-        <Modal
-            isOpen={isOpen}
-            onClose={onClose}
-            title={title}
-            className={cn("sm:max-w-md", className)}
-        >
-            <div className="flex flex-col gap-3 py-2 max-h-[60vh] overflow-y-auto px-1">
-                {items.map((item, idx) => (
-                    <button
-                        key={item.id || idx}
-                        className={cn(
-                            "flex flex-col gap-3 p-4 rounded-xl text-left transition-all duration-200",
-                            "bg-white border text-card-foreground shadow-sm",
-                            "hover:border-primary hover:shadow-md hover:scale-[1.01]",
-                            "focus:outline-none focus:ring-2 focus:ring-primary/20"
-                        )}
-                        onClick={() => onSelect(item)}
-                    >
-                        <div className="flex items-center justify-between w-full">
-                            <span className="inline-flex items-center px-2 py-1 rounded-md bg-blue-50 text-blue-600 text-xs font-bold ring-1 ring-inset ring-blue-700/10">
-                                {item.badge || `예시 ${idx + 1}`}
-                            </span>
-                            <span className="text-sm font-semibold text-gray-900 ml-auto">
-                                {item.title}
-                            </span>
-                        </div>
+    // useSyncExternalStore for SSR-safe mounting check (no lint warnings)
+    const isMounted = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
-                        <div
-                            className="text-sm text-gray-600 leading-relaxed whitespace-pre-line break-keep"
-                            dangerouslySetInnerHTML={{ __html: item.content }}
-                        />
-                    </button>
-                ))}
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isOpen]);
+
+    if (!isMounted || !isOpen) return null;
+
+    return createPortal(
+        <div
+            className={styles.overlay}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="example-modal-title"
+            onClick={(e) => e.target === e.currentTarget && onClose()}
+        >
+            <div className={cn(styles.modal, className)}>
+                <button
+                    onClick={onClose}
+                    className={styles.closeButton}
+                    aria-label="닫기"
+                >
+                    <X size={20} />
+                </button>
+
+                <div className={styles.header}>
+                    <h2 id="example-modal-title" className={styles.title}>
+                        {title}
+                    </h2>
+                    <p className={styles.subtitle}>
+                        마음에 드는 문구를 선택하시면<br />
+                        자동으로 입력됩니다.
+                    </p>
+                </div>
+
+                <div className={styles.listContainer}>
+                    {items.map((item, idx) => (
+                        <button
+                            key={item.id || idx}
+                            className={styles.itemButton}
+                            onClick={() => onSelect(item)}
+                        >
+                            <div className={styles.itemHeader}>
+                                <span className={styles.badge}>
+                                    {item.badge || `예시 ${idx + 1}`}
+                                </span>
+                                <span className={styles.itemTitle}>
+                                    {item.title}
+                                </span>
+                            </div>
+
+                            <div
+                                className={styles.itemContent}
+                                dangerouslySetInnerHTML={{ __html: item.content }}
+                            />
+                        </button>
+                    ))}
+                </div>
             </div>
-        </Modal>
+        </div>,
+        document.body
     );
 };

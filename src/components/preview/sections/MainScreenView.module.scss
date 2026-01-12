@@ -24,7 +24,7 @@
     transition: $transition-smooth;
 
     &.pt10 {
-        padding-top: 3.5rem;
+        padding-top: var(--section-padding-y, 3rem);
     }
 
     &.centerFill {

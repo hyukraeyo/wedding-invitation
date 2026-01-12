@@ -79,8 +79,8 @@ const InvitationCanvas = memo(({ isPreviewMode = false, editingSection }: Invita
   // Scroll to editing section (only in desktop mode)
   useEffect(() => {
     if (editingSection) {
-      const targetId = editingSection;
-      if (targetId === 'basic') return; // 기본 정보 클릭 시 프리뷰는 가만히 둠
+      let targetId = editingSection;
+      if (targetId === 'basic') targetId = 'mainScreen';
 
       try {
         const element = document.getElementById(`section-${targetId}`);

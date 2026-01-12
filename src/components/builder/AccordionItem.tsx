@@ -75,7 +75,7 @@ export const AccordionItem = ({
                         </div>
                     )}
                     <div className="flex items-center gap-2">
-                        <span className={cn("font-semibold text-base", isOpen ? "text-foreground" : "text-muted-foreground")}>
+                        <span className={cn("font-medium text-base", isOpen ? "text-foreground" : "text-muted-foreground")}>
                             {title}
                         </span>
                         {badge && (
