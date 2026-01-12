@@ -3,16 +3,19 @@ import { Calendar, Info } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
-import { Switch } from '../Switch';
+import { SwitchField } from '../SwitchField';
 import { Field } from '../Field';
+import { TimePicker } from '../TimePicker';
+import { DatePicker } from '../DatePicker';
 import styles from './DateTimeSection.module.scss';
 
 interface SectionProps {
+    value: string;
     isOpen: boolean;
     onToggle: () => void;
 }
 
-export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
+export default function DateTimeSection({ isOpen, onToggle, value }: SectionProps) {
     const {
         date, setDate,
         time, setTime,
@@ -23,6 +26,7 @@ export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
 
     return (
         <AccordionItem
+            value={value}
             title="예식 일시"
             icon={Calendar}
             isOpen={isOpen}
@@ -31,54 +35,49 @@ export default function DateTimeSection({ isOpen, onToggle }: SectionProps) {
         >
             <div className={styles.container}>
                 {/* Date & Time Picking */}
-                <div className={styles.row}>
-                    <Field label="예식일" className={styles.fieldItem}>
-                        <TextField
-                            type="date"
-                            value={date}
-                            onChange={(e) => setDate(e.target.value)}
-                        />
-                    </Field>
-                    <Field label="예식 시간" className={styles.fieldItem}>
-                        <TextField
-                            type="time"
-                            value={time}
-                            onChange={(e) => setTime(e.target.value)}
-                        />
-                    </Field>
-                </div>
+                {/* Date & Time Picking */}
+                <Field label="예식일">
+                    <DatePicker
+                        value={date}
+                        onChange={(value) => setDate(value)}
+                    />
+                </Field>
+                <Field label="예식 시간">
+                    <TimePicker
+                        value={time}
+                        onChange={(value) => setTime(value)}
+                    />
+                </Field>
 
                 {/* Additional Options */}
-                <Field label="추가 옵션">
-                    <div className={styles.optionWrapper}>
-                        <Switch
-                            checked={showCalendar}
-                            onChange={setShowCalendar}
-                            label="달력 노출"
-                        />
-                        <div className="flex flex-col gap-3">
-                            <Switch
-                                checked={showDday}
-                                onChange={setShowDday}
-                                label="D-Day 노출"
+
+
+                <SwitchField
+                    checked={showCalendar}
+                    onChange={setShowCalendar}
+                    label="달력 노출"
+                />
+
+                <div className="flex flex-col gap-3">
+                    <SwitchField
+                        checked={showDday}
+                        onChange={setShowDday}
+                        label="D-Day 노출"
+                    />
+                    {showDday && (
+                        <div className={styles.ddayInputWrapper}>
+                            <TextField
+                                placeholder="예: (신랑), (신부)의 결혼식이 (D-Day) 남았습니다"
+                                value={ddayMessage}
+                                onChange={(e) => setDdayMessage(e.target.value)}
                             />
-                            {showDday && (
-                                <div className={styles.ddayInputWrapper}>
-                                    <TextField
-                                        label="D-Day 문구"
-                                        placeholder="예: (신랑), (신부)의 결혼식이 (D-Day) 남았습니다"
-                                        value={ddayMessage}
-                                        onChange={(e) => setDdayMessage(e.target.value)}
-                                    />
-                                    <div className={styles.infoBox}>
-                                        <Info size={14} className={styles.infoIcon} />
-                                        <span>(신랑), (신부), (D-Day)는 실제 이름과 날짜로 자동 치환됩니다.</span>
-                                    </div>
-                                </div>
-                            )}
+                            <div className={styles.infoBox}>
+                                <Info size={14} className={styles.infoIcon} />
+                                <span>(신랑), (신부), (D-Day)는 실제 이름과 날짜로 자동 치환됩니다.</span>
+                            </div>
                         </div>
-                    </div>
-                </Field>
+                    )}
+                </div>
             </div>
         </AccordionItem>
     );

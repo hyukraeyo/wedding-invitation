@@ -32,8 +32,10 @@ export const SegmentedControl = <T extends string | number>({
         >
             {options.map((option) => (
                 <SegmentedControlItem key={String(option.value)} value={option.value}>
-                    {option.icon}
-                    {option.label}
+                    <span className="flex items-center justify-center gap-1.5">
+                        {option.icon}
+                        <span>{option.label}</span>
+                    </span>
                 </SegmentedControlItem>
             ))}
         </BaseSegmentedControl>

@@ -5,14 +5,18 @@ import Image from 'next/image';
 import { Map as KakaoMap, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk';
 import { NavermapsProvider, Container as NaverMapDiv, NaverMap, Marker as NaverMarker } from 'react-naver-maps';
 import { Copy, Phone } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import SectionContainer from '../SectionContainer';
 import SectionHeader from '../SectionHeader';
 import { NaverIcon, KakaoIcon } from '../../common/MapIcons';
 import { clsx } from 'clsx';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 import styles from './LocationView.module.scss';
 
 interface LocationViewProps {
     id?: string | undefined;
+    title: string;
+    subtitle: string;
     location: string;
     lat: number;
     lng: number;
@@ -82,6 +86,8 @@ const NaverMapContainer = ({ lat, lng, mapZoom, lockMap }: { lat: number; lng: n
 
 const LocationView = memo(({
     id,
+    title,
+    subtitle,
     location,
     lat,
     lng,
@@ -97,6 +103,7 @@ const LocationView = memo(({
     mapType = 'naver',
     locationContact
 }: LocationViewProps) => {
+    const { toast } = useToast();
 
     const handleNavClick = (type: 'kakao' | 'naver') => {
         const query = encodeURIComponent(address);
@@ -108,15 +115,17 @@ const LocationView = memo(({
 
     const handleCopyAddress = () => {
         navigator.clipboard.writeText(address).then(() => {
-            alert('주소가 복사되었습니다.');
+            toast({
+                description: '주소가 복사되었습니다.',
+            });
         });
     };
 
     return (
         <SectionContainer id={id}>
             <SectionHeader
-                title="오시는 길"
-                subtitle="LOCATION"
+                title={title}
+                subtitle={subtitle}
                 accentColor={accentColor}
             />
 
@@ -136,11 +145,13 @@ const LocationView = memo(({
 
             {showMap && (
                 <div className={styles.mapContainer}>
-                    {mapType === 'naver' ? (
-                        <NaverMapContainer lat={lat} lng={lng} mapZoom={mapZoom} lockMap={lockMap} />
-                    ) : (
-                        <KakaoMapContainer lat={lat} lng={lng} mapZoom={mapZoom} lockMap={lockMap} />
-                    )}
+                    <AspectRatio ratio={16 / 10}>
+                        {mapType === 'naver' ? (
+                            <NaverMapContainer lat={lat} lng={lng} mapZoom={mapZoom} lockMap={lockMap} />
+                        ) : (
+                            <KakaoMapContainer lat={lat} lng={lng} mapZoom={mapZoom} lockMap={lockMap} />
+                        )}
+                    </AspectRatio>
                 </div>
             )}
 
@@ -169,19 +180,34 @@ const LocationView = memo(({
 
             {sketchUrl && (
                 <div className={clsx(styles.sketchContainer, styles[sketchRatio])}>
-                    <Image
-                        src={sketchUrl}
-                        alt="약도"
-                        width={800}
-                        height={600}
-                        className={styles.sketchImage}
-                        style={{
-                            width: '100%',
-                            height: sketchRatio === 'fixed' ? '100%' : 'auto',
-                            objectFit: sketchRatio === 'fixed' ? 'cover' : 'contain'
-                        }}
-                        unoptimized={sketchUrl?.startsWith('blob:')}
-                    />
+                    {sketchRatio === 'fixed' ? (
+                        <AspectRatio ratio={4 / 3}>
+                            <Image
+                                src={sketchUrl}
+                                alt="약도"
+                                fill
+                                className={styles.sketchImage}
+                                style={{
+                                    objectFit: 'cover'
+                                }}
+                                unoptimized={sketchUrl?.startsWith('blob:')}
+                            />
+                        </AspectRatio>
+                    ) : (
+                        <Image
+                            src={sketchUrl}
+                            alt="약도"
+                            width={800}
+                            height={600}
+                            className={styles.sketchImage}
+                            style={{
+                                width: '100%',
+                                height: 'auto',
+                                objectFit: 'contain'
+                            }}
+                            unoptimized={sketchUrl?.startsWith('blob:')}
+                        />
+                    )}
                 </div>
             )}
         </SectionContainer>

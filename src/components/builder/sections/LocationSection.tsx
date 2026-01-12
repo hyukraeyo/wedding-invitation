@@ -1,3 +1,4 @@
+"use client";
 
 import React, { useState, useCallback } from 'react';
 import { MapPin, Search } from 'lucide-react';
@@ -5,37 +6,27 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { SegmentedControl } from '../SegmentedControl';
-import { Switch } from '../Switch';
+import { SwitchField } from '../SwitchField';
 import { Field } from '../Field';
-import { BuilderModal } from '@/components/common/BuilderModal';
+import { Modal } from '@/components/common/Modal';
 import { ImageUploader } from '../ImageUploader';
 import DaumPostcodeEmbed from 'react-daum-postcode';
 import styles from './LocationSection.module.scss';
 import { cn } from '@/lib/utils';
 
-// Simple Icon Components for Map Types
-const NaverIcon = ({ size = 24, className }: { size?: number, className?: string | undefined }) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-        <rect width="24" height="24" rx="4" fill="#03C75A" />
-        <path d="M16.2 18V6H13.6L7.8 14.5V6H5.2V18H7.8L13.6 9.5V18H16.2Z" fill="white" />
-    </svg>
-);
-
-const KakaoIcon = ({ size = 24, className, showBackground = true }: { size?: number, className?: string | undefined, showBackground?: boolean | undefined }) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-        {showBackground && <rect width="24" height="24" rx="4" fill="#FFE812" />}
-        <path d="M12 5C8.13401 5 5 7.46231 5 10.5C5 12.3023 6.13605 13.9059 7.91501 14.9077L7.30796 17.587C7.22894 17.9351 7.62594 18.1969 7.92095 17.9899L11.3739 15.5678C11.581 15.5869 11.7891 15.5969 12 15.6C15.866 15.6 19 13.1377 19 10.1C19 7.06231 15.866 5 12 5Z" fill="#3C1E1E" />
-    </svg>
-);
+import { NaverIcon, KakaoIcon } from '@/components/common/MapIcons';
 
 interface SectionProps {
+    value: string;
     isOpen: boolean;
     onToggle: () => void;
 }
 
-const LocationSection = React.memo<SectionProps>(function LocationSection({ isOpen, onToggle }) {
+const LocationSection = React.memo<SectionProps>(function LocationSection({ value, isOpen, onToggle }) {
     const {
         location, setLocation,
+        locationTitle, setLocationTitle,
+        locationSubtitle, setLocationSubtitle,
         address, setAddress,
         detailAddress, setDetailAddress,
         locationContact, setLocationContact,
@@ -107,6 +98,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
 
     return (
         <AccordionItem
+            value={value}
             title="예식 장소"
             icon={MapPin}
             isOpen={isOpen}
@@ -114,15 +106,32 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
             isCompleted={!!address}
         >
             <div className={styles.container}>
-                {/* Address Search */}
+                <TextField
+                    label="소제목"
+                    placeholder="예: LOCATION"
+                    value={locationSubtitle}
+                    onChange={(e) => setLocationSubtitle(e.target.value)}
+                    containerClassName="mb-4"
+                />
+                <TextField
+                    label="제목"
+                    placeholder="예: 오시는 길"
+                    value={locationTitle}
+                    onChange={(e) => setLocationTitle(e.target.value)}
+                    containerClassName="mb-4"
+                />
+
                 <Field label="주소">
                     <div
                         onClick={handleAddressSearch}
-                        className={styles.addressButton}
+                        className={cn(
+                            "builder-input-unified justify-between cursor-pointer hover:border-gray-400",
+                            !address && "text-muted-foreground"
+                        )}
                     >
                         <span className={cn(
-                            styles.addressText,
-                            address ? styles.filled : styles.empty
+                            "truncate",
+                            address ? "text-foreground font-medium" : "text-muted-foreground"
                         )}>
                             {address || "주소를 검색해주세요"}
                         </span>
@@ -130,40 +139,31 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                     </div>
                 </Field>
 
-                {/* Venue Name */}
-                <Field label="예식장명">
-                    <TextField
-                        type="text"
-                        placeholder="예: 더 컨벤션 신사"
-                        value={location}
-                        onChange={(e) => setLocation(e.target.value)}
-                    />
-                </Field>
+                <TextField
+                    label="예식장명"
+                    type="text"
+                    placeholder="예: 더 컨벤션 신사"
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                />
 
-                {/* Detailed Address */}
-                <Field label="층과 홀">
-                    <TextField
-                        type="text"
-                        placeholder="예: 3층 그랜드홀"
-                        value={detailAddress}
-                        onChange={(e) => setDetailAddress(e.target.value)}
-                    />
-                </Field>
+                <TextField
+                    label="층과 홀"
+                    type="text"
+                    placeholder="예: 3층 그랜드홀"
+                    value={detailAddress}
+                    onChange={(e) => setDetailAddress(e.target.value)}
+                />
 
-                {/* Contact */}
-                <Field label="연락처">
-                    <TextField
-                        type="text"
-                        placeholder="예: 02-000-0000"
-                        value={locationContact}
-                        onChange={handleContactChange}
-                        maxLength={13}
-                    />
-                </Field>
+                <TextField
+                    label="연락처"
+                    type="text"
+                    placeholder="예: 02-000-0000"
+                    value={locationContact}
+                    onChange={handleContactChange}
+                    maxLength={13}
+                />
 
-                <div className={styles.divider} />
-
-                {/* Map Type */}
                 <Field label="지도 종류">
                     <SegmentedControl
                         value={mapType}
@@ -171,28 +171,26 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                             {
                                 label: '네이버',
                                 value: 'naver',
-                                icon: <NaverIcon size={18} className={styles.mapIcon} />
+                                icon: <NaverIcon size={18} className={styles.mapIcon || ''} />
                             },
                             {
                                 label: '카카오',
                                 value: 'kakao',
-                                icon: <KakaoIcon size={18} showBackground={false} className={styles.mapIcon} />
+                                icon: <KakaoIcon size={18} className={styles.mapIcon || ''} />
                             },
                         ]}
                         onChange={(val: 'naver' | 'kakao') => setMapType(val)}
                     />
                 </Field>
 
-                {/* Map Settings */}
                 <Field label="지도 설정">
                     <div className={styles.mapOptions}>
-                        <Switch checked={showMap} onChange={setShowMap} label="지도 표시" />
-                        <Switch checked={lockMap} onChange={setLockMap} label="지도 잠금" />
-                        <Switch checked={showNavigation} onChange={setShowNavigation} label="내비게이션" />
+                        <SwitchField checked={showMap} onChange={setShowMap} label="지도 표시" />
+                        <SwitchField checked={lockMap} onChange={setLockMap} label="지도 잠금" />
+                        <SwitchField checked={showNavigation} onChange={setShowNavigation} label="내비게이션" />
                     </div>
                 </Field>
 
-                {/* Map Height */}
                 <Field label="지도 높이">
                     <SegmentedControl
                         value={mapHeight}
@@ -204,7 +202,6 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                     />
                 </Field>
 
-                {/* Zoom Level */}
                 <Field label="줌 레벨">
                     <SegmentedControl
                         value={mapZoom}
@@ -219,7 +216,6 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                     />
                 </Field>
 
-                {/* Roadmap Image */}
                 <Field label="약도 이미지">
                     <div className={styles.sketchWrapper}>
                         <ImageUploader
@@ -234,7 +230,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                 </Field>
             </div>
 
-            <BuilderModal
+            <Modal
                 isOpen={isSearchOpen}
                 onClose={() => setIsSearchOpen(false)}
                 title="주소 검색"
@@ -246,7 +242,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ isOp
                         autoClose={false}
                     />
                 </div>
-            </BuilderModal>
+            </Modal>
         </AccordionItem>
     );
 });

@@ -6,6 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { invitationService } from '@/services/invitationService';
 import { useInvitationStore, InvitationData } from '@/store/useInvitationStore';
 import Header from '@/components/common/Header';
+import { useToast } from '@/hooks/use-toast';
 import { Calendar, MapPin, ExternalLink, Edit2, Trash2, Loader2, FileText } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import styles from './MyPage.module.scss';
@@ -26,6 +27,7 @@ export default function MyPage() {
     const [loading, setLoading] = useState(true);
     const [actionLoading, setActionLoading] = useState<string | null>(null);
     const reset = useInvitationStore(state => state.reset);
+    const { toast } = useToast();
 
     const fetchInvitations = useCallback(async () => {
         if (!user) return;
@@ -58,11 +60,14 @@ export default function MyPage() {
             await invitationService.deleteInvitation(id);
             await fetchInvitations();
         } catch {
-            alert('삭제 중 오류가 발생했습니다.');
+            toast({
+                variant: 'destructive',
+                description: '삭제 중 오류가 발생했습니다.',
+            });
         } finally {
             setActionLoading(null);
         }
-    }, [fetchInvitations]);
+    }, [fetchInvitations, toast]);
 
     const handleCreateNew = useCallback(() => {
         reset();

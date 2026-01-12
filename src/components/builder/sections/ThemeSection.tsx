@@ -3,11 +3,13 @@ import { Palette, Check, Plus } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { SegmentedControl } from '../SegmentedControl';
+import { Select } from '../Select';
 import { Field } from '../Field';
 import styles from './ThemeSection.module.scss';
 import { cn } from '@/lib/utils';
 
 interface SectionProps {
+    value: string;
     isOpen: boolean;
     onToggle: () => void;
 }
@@ -23,13 +25,14 @@ const PRESET_COLORS = [
     '#BEAD9E', // Beige
 ];
 
-export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
+export default function ThemeSection({ isOpen, onToggle, value }: SectionProps) {
     const {
         theme, setTheme
     } = useInvitationStore();
 
     return (
         <AccordionItem
+            value={value}
             title="테마 및 색상"
             icon={Palette}
             isOpen={isOpen}
@@ -65,14 +68,21 @@ export default function ThemeSection({ isOpen, onToggle }: SectionProps) {
 
                 {/* Font Style */}
                 <Field label="글꼴">
-                    <SegmentedControl
+                    <Select
                         value={theme.font}
                         options={[
-                            { label: '고딕', value: 'sans' },
-                            { label: '명조', value: 'serif' },
-                            { label: 'Pretendard', value: 'pretendard' },
+                            { label: 'Pretendard (기본)', value: 'pretendard' },
+                            { label: '나눔명조', value: 'nanum-myeongjo' },
+                            { label: '고운바탕', value: 'gowun-batang' },
+                            { label: '고운돋움', value: 'gowun-dodum' },
+                            { label: '송명체', value: 'song-myung' },
+                            { label: '연성체', value: 'yeon-sung' },
+                            { label: '도현체', value: 'do-hyeon' },
+                            { label: 'G마켓 산스', value: 'gmarket' },
+                            { label: '기본 명조', value: 'serif' },
+                            { label: '기본 고딕', value: 'sans' },
                         ]}
-                        onChange={(val) => setTheme({ font: val as 'sans' | 'serif' | 'pretendard' })}
+                        onChange={(val) => setTheme({ font: val as 'pretendard' | 'nanum-myeongjo' | 'gowun-batang' | 'gowun-dodum' | 'song-myung' | 'yeon-sung' | 'do-hyeon' | 'gmarket' | 'serif' | 'sans' })}
                     />
                 </Field>
 

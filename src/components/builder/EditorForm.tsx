@@ -3,6 +3,7 @@
 import React, { useState, useCallback, memo, useEffect } from 'react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { cn } from '@/lib/utils';
+import { Accordion } from '@/components/ui/accordion';
 
 // Static imports for immediate loading (prevents icon pop-in)
 import ThemeSection from './sections/ThemeSection';
@@ -21,9 +22,9 @@ const SECTIONS = [
   { key: 'theme', Component: ThemeSection },
   { key: 'mainScreen', Component: MainScreenSection },
   { key: 'message', Component: GreetingSection },
+  { key: 'gallery', Component: GallerySection },
   { key: 'date', Component: DateTimeSection },
   { key: 'location', Component: LocationSection },
-  { key: 'gallery', Component: GallerySection },
   { key: 'account', Component: AccountsSection },
   { key: 'closing', Component: ClosingSection },
   { key: 'kakao', Component: KakaoShareSection },
@@ -53,13 +54,22 @@ const EditorForm = memo(function EditorForm() {
       "flex flex-col gap-3 pb-32 transition-opacity duration-500",
       isReady ? "opacity-100" : "opacity-0"
     )}>
-      {SECTIONS.map(({ key, Component }) => (
-        <Component
-          key={key}
-          isOpen={openSection === key}
-          onToggle={() => handleToggle(key)}
-        />
-      ))}
+      <Accordion
+        type="single"
+        collapsible
+        value={openSection || ""}
+        onValueChange={(val) => setOpenSection(val || null)}
+        className="flex flex-col gap-3"
+      >
+        {SECTIONS.map(({ key, Component }) => (
+          <Component
+            key={key}
+            value={key}
+            isOpen={openSection === key}
+            onToggle={() => handleToggle(key)}
+          />
+        ))}
+      </Accordion>
     </div>
   );
 });

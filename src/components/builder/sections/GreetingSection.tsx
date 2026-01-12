@@ -4,13 +4,14 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { Field } from '../Field';
-import { Checkbox } from '../Checkbox';
-import { BuilderModal } from '@/components/common/BuilderModal';
+import { SegmentedControl } from '../SegmentedControl';
+import { Modal } from '@/components/common/Modal';
 import RichTextEditor from '@/components/common/RichTextEditor';
 import { ImageUploader } from '../ImageUploader';
 import styles from './GreetingSection.module.scss';
 
 interface SectionProps {
+    value: string;
     isOpen: boolean;
     onToggle: () => void;
 }
@@ -33,7 +34,7 @@ const SAMPLE_PHRASES = [
     }
 ];
 
-export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
+export default function GreetingSection({ isOpen, onToggle, value }: SectionProps) {
     const {
         message, setMessage,
         greetingTitle, setGreetingTitle,
@@ -55,8 +56,24 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
         setIsSampleModalOpen(false);
     };
 
+    const nameOptionValue = enableFreeformNames ? 'custom' : (showNamesAtBottom ? 'bottom' : 'none');
+
+    const handleNameOptionChange = (val: string) => {
+        if (val === 'custom') {
+            setEnableFreeformNames(true);
+            setShowNamesAtBottom(false);
+        } else if (val === 'bottom') {
+            setEnableFreeformNames(false);
+            setShowNamesAtBottom(true);
+        } else {
+            setEnableFreeformNames(false);
+            setShowNamesAtBottom(false);
+        }
+    };
+
     return (
         <AccordionItem
+            value={value}
             title="인사말"
             icon={MessageSquare}
             isOpen={isOpen}
@@ -76,24 +93,22 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                 </div>
 
                 {/* Subtitle */}
-                <Field label="상단 소제목">
-                    <TextField
-                        type="text"
-                        value={greetingSubtitle}
-                        onChange={(e) => setGreetingSubtitle(e.target.value)}
-                        placeholder="예: INVITATION"
-                    />
-                </Field>
+                <TextField
+                    label="소제목"
+                    type="text"
+                    value={greetingSubtitle}
+                    onChange={(e) => setGreetingSubtitle(e.target.value)}
+                    placeholder="예: INVITATION"
+                />
 
                 {/* Title */}
-                <Field label="제목">
-                    <TextField
-                        type="text"
-                        value={greetingTitle}
-                        onChange={(e) => setGreetingTitle(e.target.value)}
-                        placeholder="예: 소중한 분들을 초대합니다"
-                    />
-                </Field>
+                <TextField
+                    label="제목"
+                    type="text"
+                    value={greetingTitle}
+                    onChange={(e) => setGreetingTitle(e.target.value)}
+                    placeholder="예: 소중한 분들을 초대합니다"
+                />
 
                 {/* Content */}
                 <Field label="내용">
@@ -120,40 +135,15 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                 {/* Name Options */}
                 <Field label="성함 표기">
                     <div className={styles.optionWrapper}>
-                        <div className={styles.checkboxGroup}>
-                            <Checkbox
-                                id="show-names-bottom"
-                                checked={showNamesAtBottom}
-                                onChange={(checked) => {
-                                    setShowNamesAtBottom(checked);
-                                    if (checked) setEnableFreeformNames(false);
-                                }}
-                            >
-                                인사말 하단에 성함 노출
-                            </Checkbox>
-                            <Checkbox
-                                id="enable-freeform-names"
-                                checked={enableFreeformNames}
-                                onChange={(checked) => {
-                                    setEnableFreeformNames(checked);
-                                    if (checked) setShowNamesAtBottom(false);
-                                }}
-                            >
-                                직접 입력 사용
-                            </Checkbox>
-                            <Checkbox
-                                id="hide-names"
-                                checked={!showNamesAtBottom && !enableFreeformNames}
-                                onChange={(checked) => {
-                                    if (checked) {
-                                        setShowNamesAtBottom(false);
-                                        setEnableFreeformNames(false);
-                                    }
-                                }}
-                            >
-                                표시 안 함
-                            </Checkbox>
-                        </div>
+                        <SegmentedControl
+                            value={nameOptionValue}
+                            onChange={handleNameOptionChange}
+                            options={[
+                                { label: '하단 표기', value: 'bottom' },
+                                { label: '직접 입력', value: 'custom' },
+                                { label: '표시 안 함', value: 'none' },
+                            ]}
+                        />
 
                         {enableFreeformNames && (
                             <div className={styles.optionWrapper}>
@@ -180,7 +170,7 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
             </div>
 
             {/* Sample Phrases Modal */}
-            <BuilderModal
+            <Modal
                 isOpen={isSampleModalOpen}
                 onClose={() => setIsSampleModalOpen(false)}
                 title="인사말 예시 문구"
@@ -203,7 +193,7 @@ export default function GreetingSection({ isOpen, onToggle }: SectionProps) {
                         </button>
                     ))}
                 </div>
-            </BuilderModal>
+            </Modal>
         </AccordionItem>
     );
 }

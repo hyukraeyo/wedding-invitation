@@ -10,7 +10,7 @@ interface SwitchProps {
     disabled?: boolean | undefined;
 }
 
-export const Switch = ({ checked, onChange, label, className, disabled }: SwitchProps) => {
+export const SwitchField = ({ checked, onChange, label, className, disabled }: SwitchProps) => {
     return (
         <div className={cn("flex items-center justify-between py-1", className)}>
             <div className="flex items-center space-x-2">

@@ -6,7 +6,7 @@ import { Heart } from 'lucide-react';
 import { AmpersandSVG, HeartSVG, RingIcon } from '../../common/BrandIcons';
 import styles from './MainScreenView.module.scss';
 import { clsx } from 'clsx';
-import { formatShortDate } from '@/lib/utils/format';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 interface Person {
     lastName: string;
@@ -15,7 +15,7 @@ interface Person {
 
 interface MainScreenViewProps {
     mainScreen: {
-        layout: 'fill' | 'basic' | 'arch' | 'oval' | 'frame';
+        layout: 'classic' | 'minimal' | 'english' | 'heart' | 'korean' | 'arch' | 'oval' | 'frame' | 'fill' | 'basic';
         showTitle: boolean;
         title: string;
         showGroomBride: boolean;
@@ -28,6 +28,8 @@ interface MainScreenViewProps {
         showBorder: boolean;
         expandPhoto: boolean;
         effect: 'none' | 'mist' | 'ripple' | 'paper';
+        groomName?: string;
+        brideName?: string;
     };
     imageUrl: string | null | undefined;
     imageRatio?: 'fixed' | 'auto';
@@ -50,48 +52,114 @@ const MainScreenView = memo(({
     imageRatio = 'fixed',
     groom,
     bride,
+
     date,
+    time,
+    location,
+    detailAddress,
     accentColor
 }: MainScreenViewProps) => {
-    const isFillLayout = mainScreen.layout === 'fill';
-    const isBasicLayout = mainScreen.layout === 'basic';
+    const isFillLayout = mainScreen.layout === 'fill' || mainScreen.layout === 'heart';
+    const isBasicLayout = mainScreen.layout === 'classic' || mainScreen.layout === 'minimal' || mainScreen.layout === 'english' || mainScreen.layout === 'korean' || mainScreen.layout === 'basic';
 
     return (
         <div className={clsx(styles.wrapper, isFillLayout ? styles.fill : styles.standard)}>
             <div className={clsx(styles.content, isFillLayout ? styles.centerFill : styles.pt10)}>
 
-                {/* 1. Header Area (Basic Layout) */}
+                {/* 1. Header Area - Conditional based on textStyle */}
                 <div className={clsx(styles.headerArea, isBasicLayout ? styles.headerVisible : styles.headerHidden)}>
-                    {mainScreen.title && (
-                        <div
-                            className={styles.mainTitle}
-                            style={{ fontSize: 'calc(11px * var(--font-scale))', color: accentColor }}
-                        >
-                            {mainScreen.title}
-                        </div>
+                    {/* Classic Style */}
+                    {mainScreen.layout === 'classic' && (
+                        <>
+                            <div
+                                className={styles.mainTitle}
+                                style={{ fontSize: 'calc(10px * var(--font-scale))', color: accentColor }}
+                            >
+                                {mainScreen.title || 'THE MARRIAGE'}
+                            </div>
+                        </>
                     )}
-                    <div
-                        className={styles.dateText}
-                        style={{ fontSize: 'calc(48px * var(--font-scale))' }}
-                    >
-                        {formatShortDate(date)}
-                    </div>
-                    {(groom.firstName || bride.firstName) && (
+
+                    {/* Minimal Style */}
+                    {mainScreen.layout === 'minimal' && (
+                        <>
+                            <div className={styles.minimalDateRow} style={{ fontSize: 'calc(28px * var(--font-scale))' }}>
+                                {(() => {
+                                    if (!date) return null;
+                                    const d = new Date(date);
+                                    return (
+                                        <>
+                                            <span className={styles.minimalDateBox}>{d.getFullYear()}</span>
+                                            <span className={styles.minimalDateBox}>{String(d.getMonth() + 1).padStart(2, '0')}</span>
+                                            <span className={styles.minimalDateBox}>{String(d.getDate()).padStart(2, '0')}</span>
+                                        </>
+                                    );
+                                })()}
+                            </div>
+                            <div className={styles.weekdayText} style={{ fontSize: 'calc(14px * var(--font-scale))' }}>
+                                {date && ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'][new Date(date).getDay()]}
+                            </div>
+                        </>
+                    )}
+
+                    {/* English Style */}
+                    {mainScreen.layout === 'english' && (
+                        <>
+                            {mainScreen.title && (
+                                <div
+                                    className={styles.mainTitle}
+                                    style={{ fontSize: 'calc(12px * var(--font-scale))', color: accentColor, letterSpacing: '0.15em' }}
+                                >
+                                    {mainScreen.title}
+                                </div>
+                            )}
+                        </>
+                    )}
+
+                    {/* Heart Style - No header, just names below */}
+                    {mainScreen.layout === 'heart' && null}
+
+                    {/* Korean Style */}
+                    {mainScreen.layout === 'korean' && (
+                        <>
+                            {mainScreen.title && (
+                                <div
+                                    className={styles.koreanTitle}
+                                    style={{ fontSize: 'calc(18px * var(--font-scale))' }}
+                                >
+                                    {mainScreen.title}
+                                </div>
+                            )}
+                            {mainScreen.subtitle && (
+                                <div
+                                    className={styles.koreanSubtitle}
+                                    style={{ fontSize: 'calc(24px * var(--font-scale))' }}
+                                >
+                                    {mainScreen.subtitle}
+                                </div>
+                            )}
+                        </>
+                    )}
+
+                    {/* Names Row - For styles that show names in header */}
+                    {(mainScreen.layout === 'classic' || mainScreen.layout === 'minimal' || mainScreen.layout === 'english' || mainScreen.layout === 'korean') && (
                         <div
                             className={clsx(
                                 styles.namesWrapper,
-                                mainScreen.andText === '·' ? styles.gapSmall : (mainScreen.andText || '').length <= 2 ? styles.gapMedium : styles.gapLarge
+                                (mainScreen.andText || '그리고') === '·' ? styles.gapSmall : (mainScreen.andText || '그리고').length <= 2 ? styles.gapMedium : styles.gapLarge
                             )}
                             style={{ fontSize: 'calc(17px * var(--font-scale))' }}
                         >
-                            <span className={styles.nameText}>{groom.lastName}{groom.firstName}</span>
+                            <span className={styles.nameText}>
+                                {mainScreen.groomName || (groom.lastName || groom.firstName ? `${groom.lastName}${groom.firstName}` : '신랑')}
+                            </span>
                             <span
                                 className={styles.connector}
                                 style={{
-                                    fontSize: (mainScreen.andText || '').length === 1 ? 'calc(20px * var(--font-scale))' : 'calc(15px * var(--font-scale))',
+                                    fontSize: (mainScreen.andText || '그리고').length === 1 ? 'calc(20px * var(--font-scale))' : 'calc(15px * var(--font-scale))',
                                     color: accentColor,
-                                    transform: mainScreen.andText === '·' ? 'translateY(-15%)' : 'none',
-                                    paddingInline: (mainScreen.andText || '').length > 1 ? '0.2rem' : '0'
+                                    transform: (mainScreen.andText || '그리고') === '·' ? 'translateY(-15%)' : 'none',
+                                    paddingInline: (mainScreen.andText || '그리고').length > 1 ? '0.2rem' : '0'
                                 }}
                             >
                                 {mainScreen.andText === '&' ? (
@@ -99,15 +167,43 @@ const MainScreenView = memo(({
                                 ) : mainScreen.andText === 'ring' ? (
                                     <RingIcon className={clsx(styles.ringIcon)} />
                                 ) : (
-                                    mainScreen.andText || 'and'
+                                    mainScreen.andText || '그리고'
                                 )}
                             </span>
-                            <span className={styles.nameText}>{bride.lastName}{bride.firstName}</span>
-                            {mainScreen.suffixText && (
-                                <span className={clsx(styles.suffix, mainScreen.andText === '·' ? styles.marginLeftSmall : styles.marginLeftStandard)} style={{ fontSize: 'calc(17px * var(--font-scale))' }}>
-                                    {mainScreen.suffixText}
-                                </span>
-                            )}
+                            <span className={styles.nameText}>
+                                {mainScreen.brideName || (bride.lastName || bride.firstName ? `${bride.lastName}${bride.firstName}` : '신부')}
+                            </span>
+                            <span
+                                className={clsx(styles.suffix)}
+                                style={{
+                                    fontSize: mainScreen.layout === 'classic' ? 'calc(17px * var(--font-scale))' : 'calc(16px * var(--font-scale))',
+                                    marginLeft: '0.3rem'
+                                }}
+                            >
+                                {mainScreen.suffixText || (mainScreen.layout === 'classic' ? '결혼합니다.' : '')}
+                            </span>
+                        </div>
+                    )}
+
+                    {/* Heart Style - Special names display */}
+                    {mainScreen.layout === 'heart' && (
+                        <div
+                            className={styles.heartNamesRow}
+                            style={{ fontSize: 'calc(22px * var(--font-scale))' }}
+                        >
+                            <span>{mainScreen.groomName || (groom.lastName || groom.firstName ? `${groom.lastName}${groom.firstName}` : '신랑')}</span>
+                            <span className={styles.heartIcon} style={{ color: '#e74c3c' }}>♥</span>
+                            <span>{mainScreen.brideName || (bride.lastName || bride.firstName ? `${bride.lastName}${bride.firstName}` : '신부')}</span>
+                        </div>
+                    )}
+
+                    {/* English Style - Subtitle after names */}
+                    {mainScreen.layout === 'english' && mainScreen.subtitle && (
+                        <div
+                            className={styles.englishSubtitle}
+                            style={{ fontSize: 'calc(13px * var(--font-scale))', marginTop: '0.5rem' }}
+                        >
+                            {mainScreen.subtitle}
                         </div>
                     )}
                 </div>
@@ -132,14 +228,30 @@ const MainScreenView = memo(({
                     }}
                 >
                     {imageUrl ? (
-                        imageRatio === 'fixed' || isFillLayout ? (
+                        imageRatio === 'fixed' && !isFillLayout ? (
+                            <AspectRatio ratio={4 / 5} className="w-full h-full">
+                                <Image
+                                    src={imageUrl}
+                                    alt={`${groom.firstName}와 ${bride.firstName}의 결혼식 메인 사진`}
+                                    fill
+                                    className={styles.mainImage}
+                                    style={{
+                                        transform: mainScreen.expandPhoto ? 'scale(1.1)' : 'scale(1)',
+                                        transformOrigin: 'center center',
+                                        objectFit: 'cover',
+                                    }}
+                                    priority
+                                    unoptimized={imageUrl?.startsWith('blob:')}
+                                />
+                            </AspectRatio>
+                        ) : isFillLayout ? (
                             <Image
                                 src={imageUrl}
                                 alt={`${groom.firstName}와 ${bride.firstName}의 결혼식 메인 사진`}
                                 fill
                                 className={styles.mainImage}
                                 style={{
-                                    transform: (mainScreen.expandPhoto && !isFillLayout) ? 'scale(1.1)' : 'scale(1)',
+                                    transform: mainScreen.expandPhoto ? 'scale(1.1)' : 'scale(1)',
                                     transformOrigin: 'center center',
                                     objectFit: 'cover',
                                 }}
@@ -223,21 +335,61 @@ const MainScreenView = memo(({
                         </svg>
                     </div>
 
-                    {mainScreen.subtitle && (
-                        <div className={clsx(styles.subtitle, isFillLayout ? styles.textWhite : styles.textGray)} style={{ fontSize: 'calc(24px * var(--font-scale))' }}>
-                            {mainScreen.subtitle}
-                        </div>
-                    )}
+                    {(() => {
+                        const displaySubtitle = mainScreen.subtitle || '소중한 날에 초대합니다';
 
-                    {(mainScreen.customDatePlace && mainScreen.customDatePlace.replace(/<[^>]*>/g, '').trim().length > 0) && (
-                        <div
-                            className={clsx(styles.datePlace, isFillLayout ? styles.textWhite : styles.textGray)}
-                            style={{ fontSize: 'calc(14px * var(--font-scale))' }}
-                            dangerouslySetInnerHTML={{
-                                __html: mainScreen.customDatePlace
-                            }}
-                        />
-                    )}
+                        if (!displaySubtitle) return null;
+
+                        return (
+                            <div className={clsx(styles.subtitle, isFillLayout ? styles.textWhite : styles.textGray)} style={{ fontSize: 'calc(24px * var(--font-scale))' }}>
+                                {displaySubtitle}
+                            </div>
+                        );
+                    })()}
+
+                    {(() => {
+                        const hasCustomText = mainScreen.customDatePlace && mainScreen.customDatePlace.replace(/<[^>]*>/g, '').trim().length > 0;
+
+                        let displayText = '';
+
+                        if (hasCustomText) {
+                            displayText = mainScreen.customDatePlace;
+                        } else if (date && time) {
+                            // Automatic formatting
+                            const dateValue = date as string;
+                            const timeValue = time as string;
+                            const d = new Date(dateValue);
+                            const year = d.getFullYear();
+                            const month = d.getMonth() + 1;
+                            const day = d.getDate();
+                            const week = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'][d.getDay()];
+
+                            const [h = '12', m = '00'] = timeValue.split(':');
+                            const hour = parseInt(h, 10);
+                            const ampm = hour < 12 ? '오전' : '오후';
+                            const displayHour = hour > 12 ? hour - 12 : (hour === 0 ? 12 : hour);
+
+                            const dateStr = `${year}년 ${month}월 ${day}일 ${week}`;
+                            const timeStr = `${ampm} ${displayHour}시 ${m === '00' ? '' : `${m}분`}`; // Clean time format
+
+                            const fullLocation = [location, detailAddress].filter(Boolean).join(' ');
+                            displayText = `${dateStr} ${timeStr}${fullLocation ? `<br/>${fullLocation}` : ''}`;
+                        } else if (location || detailAddress) {
+                            displayText = [location, detailAddress].filter(Boolean).join(' ');
+                        }
+
+                        if (!displayText) return null;
+
+                        return (
+                            <div
+                                className={clsx(styles.datePlace, "rich-text-content", isFillLayout ? styles.textWhite : styles.textGray)}
+                                style={{ fontSize: 'calc(14px * var(--font-scale))' }}
+                                dangerouslySetInnerHTML={{
+                                    __html: displayText
+                                }}
+                            />
+                        );
+                    })()}
                 </div>
             </div>
         </div>

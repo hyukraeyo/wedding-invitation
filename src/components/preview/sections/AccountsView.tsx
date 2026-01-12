@@ -1,6 +1,7 @@
 'use client';
 
 import React, { memo } from 'react';
+import { useToast } from '@/hooks/use-toast';
 import SectionContainer from '../SectionContainer';
 import SectionHeader from '../SectionHeader';
 import PreviewAccordion from '../PreviewAccordion';
@@ -19,6 +20,7 @@ interface AccountsViewProps {
     id?: string | undefined;
     accounts: Account[];
     title: string;
+    subtitle: string;
     description: string;
     groomTitle: string;
     brideTitle: string;
@@ -34,19 +36,24 @@ const AccountsView = memo(({
     id,
     accounts,
     title,
+    subtitle,
     description,
     groomTitle,
     brideTitle,
     colorMode,
     accentColor
 }: AccountsViewProps) => {
+    const { toast } = useToast();
 
     const groomAccounts = accounts.filter(a => a.type === 'groom');
     const brideAccounts = accounts.filter(a => a.type === 'bride');
 
     const handleCopy = (text: string) => {
-        navigator.clipboard.writeText(text);
-        alert('계좌번호가 복사되었습니다.');
+        const onlyNumbers = text.replace(/[^0-9]/g, '');
+        navigator.clipboard.writeText(onlyNumbers);
+        toast({
+            description: '계좌번호가 복사되었습니다.',
+        });
     };
 
     const renderAccountList = (list: Account[]) => (
@@ -72,17 +79,21 @@ const AccountsView = memo(({
 
     return (
         <SectionContainer id={id}>
-            <SectionHeader
-                title={title || "축하의 마음 전하실 곳"}
-                subtitle="GIFT"
-                accentColor={accentColor}
-            />
+            {(title || description) && (
+                <>
+                    <SectionHeader
+                        title={title}
+                        subtitle={subtitle}
+                        accentColor={accentColor}
+                    />
 
-            {description && (
-                <div
-                    className={styles.description}
-                    dangerouslySetInnerHTML={{ __html: description }}
-                />
+                    {description && (
+                        <div
+                            className={styles.description}
+                            dangerouslySetInnerHTML={{ __html: description }}
+                        />
+                    )}
+                </>
             )}
 
             {groomAccounts.length > 0 && (

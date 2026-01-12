@@ -17,6 +17,7 @@ import SectionContainer from '../SectionContainer';
 import SectionHeader from '../SectionHeader';
 import styles from './GalleryView.module.scss';
 import { clsx } from 'clsx';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 interface GalleryItem {
     id: string;
@@ -27,6 +28,7 @@ interface GalleryViewProps {
     id?: string | undefined;
     gallery: (GalleryItem | string)[];
     galleryTitle: string;
+    gallerySubtitle: string;
     galleryType: 'swiper' | 'thumbnail' | 'grid';
     galleryPreview: boolean;
     galleryFade: boolean;
@@ -44,6 +46,7 @@ const GalleryView = memo(({
     id,
     gallery: rawGallery,
     galleryTitle,
+    gallerySubtitle,
     galleryType,
     galleryPreview,
     galleryFade,
@@ -238,7 +241,9 @@ const GalleryView = memo(({
                                 )}
                                 onClick={() => handleImageClick(i)}
                             >
-                                <Image src={img.url} alt="" fill unoptimized />
+                                <AspectRatio ratio={1 / 1}>
+                                    <Image src={img.url} alt="" fill unoptimized className="object-cover" />
+                                </AspectRatio>
                             </div>
                         ))}
                     </div>
@@ -250,7 +255,7 @@ const GalleryView = memo(({
         <SectionContainer id={id} fullWidth={galleryPreview && galleryType === 'swiper'} style={{ paddingInline: (galleryPreview && galleryType === 'swiper') ? '0' : undefined }}>
             <SectionHeader
                 title={galleryTitle}
-                subtitle="GALLERY"
+                subtitle={gallerySubtitle}
                 accentColor={accentColor}
             />
 

@@ -4,12 +4,14 @@ import { clsx } from 'clsx';
 
 interface SectionHeaderProps {
     title: string;
-    subtitle?: string;
-    accentColor?: string;
+    subtitle?: string | undefined;
+    accentColor?: string | undefined;
     className?: string;
 }
 
 export default function SectionHeader({ title, subtitle, accentColor, className }: SectionHeaderProps) {
+    if (!title) return null;
+
     return (
         <div className={clsx(styles.header, className)}>
             {subtitle && (

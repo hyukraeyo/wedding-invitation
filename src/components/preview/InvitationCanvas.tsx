@@ -40,8 +40,10 @@ const InvitationCanvas = memo(() => {
     showNamesAtBottom,
     enableFreeformNames,
     groomNameCustom,
+    brideNameCustom,
     accounts,
     accountsTitle,
+    accountsSubtitle,
     accountsDescription,
     accountsGroomTitle,
     accountsBrideTitle,
@@ -49,12 +51,15 @@ const InvitationCanvas = memo(() => {
     closing,
     gallery,
     galleryTitle,
+    gallerySubtitle,
     galleryType,
     galleryPreview,
     galleryFade,
     galleryAutoplay,
     galleryPopup,
     mapZoom,
+    locationTitle,
+    locationSubtitle,
     showMap,
     showNavigation,
     sketchUrl,
@@ -175,9 +180,24 @@ const InvitationCanvas = memo(() => {
           greetingRatio={greetingRatio}
           showNamesAtBottom={showNamesAtBottom}
           enableFreeformNames={enableFreeformNames}
-          freeformNames={groomNameCustom || ''}
+          groomNameCustom={groomNameCustom}
+          brideNameCustom={brideNameCustom}
           groom={groom}
           bride={bride}
+          accentColor={theme.accentColor}
+        />
+
+        {/* 3. Gallery (Moved) */}
+        <GalleryView
+          id="section-gallery"
+          gallery={gallery}
+          galleryTitle={galleryTitle}
+          gallerySubtitle={gallerySubtitle}
+          galleryType={galleryType}
+          galleryPreview={galleryPreview}
+          galleryFade={galleryFade}
+          galleryAutoplay={galleryAutoplay}
+          galleryPopup={galleryPopup}
           accentColor={theme.accentColor}
         />
 
@@ -197,6 +217,8 @@ const InvitationCanvas = memo(() => {
         {/* 5. Location */}
         <LocationView
           id="section-location"
+          title={locationTitle}
+          subtitle={locationSubtitle}
           location={location}
           lat={coordinates?.lat || 37.5665}
           lng={coordinates?.lng || 126.9780}
@@ -213,24 +235,12 @@ const InvitationCanvas = memo(() => {
           locationContact={locationContact}
         />
 
-        {/* 6. Gallery */}
-        <GalleryView
-          id="section-gallery"
-          gallery={gallery}
-          galleryTitle={galleryTitle}
-          galleryType={galleryType}
-          galleryPreview={galleryPreview}
-          galleryFade={galleryFade}
-          galleryAutoplay={galleryAutoplay}
-          galleryPopup={galleryPopup}
-          accentColor={theme.accentColor}
-        />
-
         {/* 7. Accounts */}
         <AccountsView
           id="section-account"
           accounts={accounts}
           title={accountsTitle}
+          subtitle={accountsSubtitle}
           description={accountsDescription}
           groomTitle={accountsGroomTitle}
           brideTitle={accountsBrideTitle}
@@ -241,6 +251,8 @@ const InvitationCanvas = memo(() => {
         {/* 8. Closing / Ending */}
         <ClosingView
           id="section-closing"
+          title={closing.title}
+          subtitle={closing.subtitle}
           closingMessage={closing.content}
           imageUrl={closing.imageUrl}
           ratio={closing.ratio}

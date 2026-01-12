@@ -15,11 +15,10 @@
     overflow: hidden;
 
     .sidebar {
-        width: 400px;
+        width: 100%;
         height: 100%;
-        border-right: 1px solid #e5e7eb;
+        border-right: none;
         background-color: white;
-        box-shadow: 20px 0 25px -5px rgba(0, 0, 0, 0.1), 10px 0 10px -5px rgba(0, 0, 0, 0.04);
         z-index: 20;
         display: flex;
         flex-direction: column;
@@ -27,6 +26,8 @@
 
         @media (min-width: 1024px) {
             width: 480px;
+            border-right: 1px solid #e5e7eb;
+            box-shadow: 20px 0 25px -5px rgba(0, 0, 0, 0.1), 10px 0 10px -5px rgba(0, 0, 0, 0.04);
         }
 
         .scrollArea {
@@ -38,24 +39,28 @@
 
             // Hide scrollbar completely (cross-platform)
             // Width is still usable for scrolling, just invisible
-            -ms-overflow-style: none;  // IE and Edge
-            scrollbar-width: none;  // Firefox
+            -ms-overflow-style: none; // IE and Edge
+            scrollbar-width: none; // Firefox
 
             &::-webkit-scrollbar {
-                display: none;  // Chrome, Safari, Opera
+                display: none; // Chrome, Safari, Opera
             }
         }
     }
 
     .previewArea {
+        display: none;
         flex: 1;
         height: 100%;
         background-color: #e5e7eb;
-        display: flex;
         align-items: center;
         justify-content: center;
         padding: 2rem;
         position: relative;
+
+        @media (min-width: 1024px) {
+            display: flex;
+        }
 
         .backgroundPattern {
             position: absolute;
@@ -101,10 +106,41 @@
         border-radius: 4px;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 
-        &.action { top: 110px; left: -2px; width: 3px; height: 32px; border-top-right-radius: 0; border-bottom-right-radius: 0; }
-        &.volUp { top: 160px; left: -2px; width: 3px; height: 60px; border-top-right-radius: 0; border-bottom-right-radius: 0; }
-        &.volDown { top: 230px; left: -2px; width: 3px; height: 60px; border-top-right-radius: 0; border-bottom-right-radius: 0; }
-        &.power { top: 190px; right: -2px; width: 3px; height: 90px; border-top-left-radius: 0; border-bottom-left-radius: 0; }
+        &.action {
+            top: 110px;
+            left: -2px;
+            width: 3px;
+            height: 32px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        &.volUp {
+            top: 160px;
+            left: -2px;
+            width: 3px;
+            height: 60px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        &.volDown {
+            top: 230px;
+            left: -2px;
+            width: 3px;
+            height: 60px;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+        &.power {
+            top: 190px;
+            right: -2px;
+            width: 3px;
+            height: 90px;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
     }
 
     .chassis {
@@ -113,11 +149,11 @@
         width: 393px;
         background-color: black;
         border-radius: 55px;
-        box-shadow: 
+        box-shadow:
             0 0 2px 2px rgba(255, 255, 255, 0.1),
             inset 0 0 0 2px #525252,
             inset 0 0 0 6px #000000;
-        
+
         // Ring using box-shadow or border? Tailwind ring is box-shadow
         // ring-1 ring-black/40
         // merging with existing shadow
@@ -196,8 +232,12 @@
                 align-items: flex-end;
                 gap: 2px;
                 height: 12px;
-                
-                div { background-color: white; border-radius: 1px; width: 3px; }
+
+                div {
+                    background-color: white;
+                    border-radius: 1px;
+                    width: 3px;
+                }
             }
 
             .battery {
@@ -211,8 +251,22 @@
                 align-items: center;
                 padding: 1px;
 
-                .level { height: 100%; width: 60%; background-color: white; border-radius: 1px; }
-                .tip { position: absolute; right: -3px; top: 3px; height: 3px; width: 1.5px; background-color: rgba(255, 255, 255, 0.4); border-radius: 0 1px 1px 0; }
+                .level {
+                    height: 100%;
+                    width: 60%;
+                    background-color: white;
+                    border-radius: 1px;
+                }
+
+                .tip {
+                    position: absolute;
+                    right: -3px;
+                    top: 3px;
+                    height: 3px;
+                    width: 1.5px;
+                    background-color: rgba(255, 255, 255, 0.4);
+                    border-radius: 0 1px 1px 0;
+                }
             }
         }
     }
@@ -236,5 +290,67 @@
         z-index: 50;
         pointer-events: none;
         mix-blend-mode: difference;
+    }
+}
+
+.floatingButton {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    width: 56px;
+    height: 56px;
+    border-radius: 28px;
+    background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06),
+        0 10px 15px -3px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    z-index: 40;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-tap-highlight-color: transparent;
+
+    &:hover {
+        transform: translateY(-2px) scale(1.05);
+        box-shadow:
+            0 20px 25px -5px rgba(0, 0, 0, 0.2),
+            0 10px 10px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    &:active {
+        transform: scale(0.95);
+    }
+
+    @media (min-width: 1024px) {
+        display: none;
+    }
+
+    svg {
+        width: 24px;
+        height: 24px;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
+}
+
+.mobilePreview {
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    background-color: white;
+    position: relative;
+}
+
+.sheetContent {
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+
+    @media (min-width: 640px) {
+        max-width: 450px !important;
     }
 }

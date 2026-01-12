@@ -15,7 +15,7 @@
 
         &.fixed {
             .imageContainer {
-                aspect-ratio: 4 / 5;
+                aspect-ratio: 16 / 9;
             }
         }
 
@@ -44,19 +44,19 @@
                 inset: 0;
                 z-index: 10;
                 pointer-events: none;
-        
+
                 &.mist {
                     background-color: rgba(255, 255, 255, 0.2);
                     backdrop-filter: blur(2px);
                     animation: pulse-slow 4s infinite;
                 }
-        
+
                 &.ripple {
                     opacity: 0.3;
                     background-image: url('https://www.transparenttextures.com/water.png');
                     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
                 }
-        
+
                 &.paper {
                     opacity: 0.4;
                     background-image: url('https://www.transparenttextures.com/paper.png');
@@ -67,8 +67,15 @@
     }
 
     @keyframes pulse-slow {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.8; }
+
+        0%,
+        100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.8;
+        }
     }
 
     .message {
@@ -81,6 +88,7 @@
 
         p {
             margin: 0;
+
             &:not(:last-child) {
                 margin-bottom: 0.75rem;
             }

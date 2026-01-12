@@ -2,12 +2,13 @@ import React, { useMemo, useCallback, useState, useRef } from 'react';
 import Image from 'next/image';
 import { Image as ImageIcon, Plus, Info, X } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
+import { useToast } from '@/hooks/use-toast';
 import { Field } from '../Field';
 import { Label } from '../Label';
 import { SegmentedControl } from '../SegmentedControl';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
-import { Switch } from '../Switch';
+import { SwitchField } from '../SwitchField';
 import { cn } from '@/lib/utils';
 
 import {
@@ -33,6 +34,7 @@ import { CSS } from '@dnd-kit/utilities';
 import styles from './GallerySection.module.scss';
 
 interface SectionProps {
+    value: string;
     isOpen: boolean;
     onToggle: () => void;
 }
@@ -107,10 +109,11 @@ const SortableItem = React.memo(function SortableItem({ id, url, onRemove, isDra
     );
 });
 
-const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen, onToggle }) {
+const GallerySection = React.memo<SectionProps>(function GallerySection({ value, isOpen, onToggle }) {
     const {
         gallery, setGallery,
         galleryTitle, setGalleryTitle,
+        gallerySubtitle, setGallerySubtitle,
         galleryType, setGalleryType,
         galleryPopup, setGalleryPopup,
         galleryPreview, setGalleryPreview,
@@ -118,6 +121,7 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
         galleryAutoplay, setGalleryAutoplay,
         theme
     } = useInvitationStore();
+    const { toast } = useToast();
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [activeId, setActiveId] = useState<string | null>(null);
@@ -143,14 +147,16 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
         const currentCount = gallery.length;
 
         if (currentCount >= MAX_TOTAL) {
-            alert(`이미 ${MAX_TOTAL}장의 사진이 등록되어 있습니다.`);
+            toast({
+                variant: 'destructive',
+                description: `이미 ${MAX_TOTAL}장의 사진이 등록되어 있습니다.`,
+            });
             return;
         }
 
         const remainingCount = MAX_TOTAL - currentCount;
         const slicedFiles = filesToUpload.slice(0, remainingCount);
 
-        // Optimistic update with Blob URLs
         const tempItems = slicedFiles.map(file => ({
             id: `temp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
             url: URL.createObjectURL(file),
@@ -160,7 +166,6 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
         setGallery([...gallery, ...tempItems.map(({ id, url }) => ({ id, url }))]);
         e.target.value = '';
 
-        // Background Upload
         try {
             const { uploadImage } = await import('@/utils/upload');
 
@@ -204,6 +209,7 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
 
     return (
         <AccordionItem
+            value={value}
             title="웨딩 갤러리"
             icon={ImageIcon}
             isOpen={isOpen}
@@ -211,14 +217,20 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
             isCompleted={gallery.length > 0}
         >
             <div className={styles.container}>
-                <Field label="갤러리 제목">
-                    <TextField
-                        type="text"
-                        value={galleryTitle}
-                        onChange={(e) => setGalleryTitle(e.target.value)}
-                        placeholder="예: 웨딩 갤러리"
-                    />
-                </Field>
+                <TextField
+                    label="소제목"
+                    type="text"
+                    value={gallerySubtitle}
+                    onChange={(e) => setGallerySubtitle(e.target.value)}
+                    placeholder="예: GALLERY"
+                />
+                <TextField
+                    label="제목"
+                    type="text"
+                    value={galleryTitle}
+                    onChange={(e) => setGalleryTitle(e.target.value)}
+                    placeholder="예: 웨딩 갤러리"
+                />
 
                 <Field
                     label={
@@ -309,24 +321,24 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ isOpen
 
                 <Field label="기능 설정">
                     <div className={styles.optionGroup}>
-                        <Switch
+                        <SwitchField
                             checked={galleryPopup}
                             onChange={setGalleryPopup}
                             label="확대 보기 (팝업)"
                         />
                         {galleryType === 'swiper' && (
                             <>
-                                <Switch
+                                <SwitchField
                                     checked={galleryAutoplay}
                                     onChange={setGalleryAutoplay}
                                     label="자동 재생"
                                 />
-                                <Switch
+                                <SwitchField
                                     checked={galleryFade}
                                     onChange={setGalleryFade}
                                     label="페이드 효과"
                                 />
-                                <Switch
+                                <SwitchField
                                     checked={galleryPreview}
                                     onChange={setGalleryPreview}
                                     label="미리보기"

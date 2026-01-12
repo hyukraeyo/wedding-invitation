@@ -7,22 +7,31 @@ interface FieldProps {
     className?: string | undefined;
     required?: boolean | undefined;
     description?: string | undefined;
+    error?: React.ReactNode;
+    id?: string;
 }
 
-export const Field = ({ label, children, className, required, description }: FieldProps) => {
+export const Field = ({ label, children, className, required, description, error, id }: FieldProps) => {
     return (
         <div className={cn("space-y-2", className)}>
             <div className="flex flex-col gap-1.5">
-                <Label required={!!required}>
-                    {label}
-                </Label>
+                {label && (
+                    <Label htmlFor={id} required={!!required}>
+                        {label}
+                    </Label>
+                )}
+                {children}
                 {description && (
-                    <p className="text-[0.8rem] text-muted-foreground">
+                    <p className={cn("text-[0.8rem] text-muted-foreground", error && "text-destructive")}>
                         {description}
                     </p>
                 )}
+                {error && (
+                    <p className="text-[0.8rem] font-medium text-destructive">
+                        {error}
+                    </p>
+                )}
             </div>
-            {children}
         </div>
     );
 };

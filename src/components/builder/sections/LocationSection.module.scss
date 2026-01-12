@@ -8,45 +8,8 @@
   padding: 1rem;
 }
 
-.addressButton {
-  width: 100%;
-  background-color: white;
-  border: 1px solid v.$gray-200;
-  border-radius: 12px;
-  padding: 0.75rem 1rem;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-
-  &:hover {
-    border-color: v.$gray-300;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-    
-    .searchIcon {
-      color: v.$gray-600;
-    }
-  }
-}
-
-.addressText {
-  flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  
-  &.empty {
-    color: v.$gray-400;
-  }
-  
-  &.filled {
-    color: v.$gray-900;
-    font-weight: 500;
-  }
-}
+// .addressButton styles removed in favor of global .builder-input-unified
+// .addressText styles removed
 
 .searchIcon {
   color: v.$gray-400;

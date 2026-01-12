@@ -9,8 +9,11 @@ import { useAuth } from '@/hooks/useAuth';
 import { invitationService } from '@/services/invitationService';
 import Header from '@/components/common/Header';
 import { useToast } from '@/components/common/Toast';
+import SavingOverlay from '@/components/common/SavingOverlay';
 import styles from './BuilderPage.module.scss';
 import { clsx } from 'clsx';
+import { Smartphone } from 'lucide-react';
+import { Sheet, SheetContent, SheetTitle, SheetHeader, SheetDescription } from '@/components/ui/sheet';
 
 const generateSlug = (name: string): string => {
   const randomStr = Math.random().toString(36).substring(2, 8);
@@ -20,6 +23,7 @@ const generateSlug = (name: string): string => {
 export default function BuilderPage() {
   const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const { user } = useAuth();
   const state = useInvitationStore();
   const toast = useToast();
@@ -56,6 +60,7 @@ export default function BuilderPage() {
   return (
     <main className={styles.main}>
       <Header onSave={handleSave} onLogin={handleLogin} isLoading={isSaving} />
+      <SavingOverlay isVisible={isSaving} />
 
       <div className={styles.workspace}>
         <section className={styles.sidebar} id="sidebar-portal-root">
@@ -110,6 +115,28 @@ export default function BuilderPage() {
           </div>
         </section>
       </div>
+
+      {/* Mobile Preview FAB */}
+      <button
+        className={styles.floatingButton}
+        onClick={() => setIsPreviewOpen(true)}
+        aria-label="Open Preview"
+      >
+        <Smartphone />
+      </button>
+
+      {/* Mobile Preview Drawer */}
+      <Sheet open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
+        <SheetContent side="right" className={styles.sheetContent}>
+          <SheetHeader className="sr-only">
+            <SheetTitle>Mobile Preview</SheetTitle>
+            <SheetDescription>Preview of your wedding invitation</SheetDescription>
+          </SheetHeader>
+          <div className={styles.mobilePreview}>
+            <InvitationCanvas />
+          </div>
+        </SheetContent>
+      </Sheet>
     </main>
   );
 }

@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { useInvitationStore } from '@/store/useInvitationStore';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    variant?: 'fill' | 'weak' | 'outline' | 'ghost' | 'link' | 'default' | undefined; // Extended types
+    variant?: 'fill' | 'weak' | 'outline' | 'ghost' | 'link' | 'default' | 'destructive' | undefined; // Extended types
     color?: 'primary' | 'dark' | 'danger' | 'accent' | undefined;
     size?: 'small' | 'medium' | 'large' | 'xlarge' | 'default' | 'sm' | 'lg' | 'icon' | undefined; // Extended types
     block?: boolean | undefined;
@@ -28,7 +28,8 @@ export const Button = ({
     // Map legacy props to shadcn props
     let shadcnVariant: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link" = "default";
 
-    if (variant === 'weak') shadcnVariant = "secondary";
+    if (variant === 'destructive') shadcnVariant = "destructive";
+    else if (variant === 'weak') shadcnVariant = "secondary";
     else if (variant === 'outline') shadcnVariant = "outline";
     else if (variant === 'ghost') shadcnVariant = "ghost";
     else if (variant === 'link') shadcnVariant = "link";

@@ -1,10 +1,21 @@
+"use client";
+
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { Plus } from 'lucide-react';
+import { Plus, Loader2 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { supabase } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/builder/Button';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
 
 interface HeaderProps {
     onSave?: () => void;
@@ -16,10 +27,35 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
     const router = useRouter();
     const { user } = useAuth();
     const reset = useInvitationStore(state => state.reset);
+    const [showResetDialog, setShowResetDialog] = useState(false);
 
     const handleLogout = async () => {
         await supabase.auth.signOut();
         router.push('/');
+    };
+
+    const handleCreateNew = () => {
+        const state = useInvitationStore.getState();
+        const hasContent =
+            state.groom.firstName !== '' ||
+            state.bride.firstName !== '' ||
+            state.location !== '' ||
+            state.message !== '' ||
+            state.imageUrl !== null ||
+            state.gallery.length > 0;
+
+        if (hasContent) {
+            setShowResetDialog(true);
+        } else {
+            reset();
+            router.push('/builder');
+        }
+    };
+
+    const confirmReset = () => {
+        reset();
+        router.push('/builder');
+        setShowResetDialog(false);
     };
 
     return (
@@ -37,10 +73,7 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
                     <Button
                         variant="weak"
                         size="sm"
-                        onClick={() => {
-                            reset();
-                            router.push('/builder');
-                        }}
+                        onClick={handleCreateNew}
                     >
                         <Plus size={14} className="mr-1" />
                         <span>새 청첩장 만들기</span>
@@ -86,20 +119,51 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
                             로그아웃
                         </Button>
                     )}
-
+                    <Button
+                        className="md:hidden"
+                        size="sm"
+                        variant="weak"
+                        onClick={handleCreateNew}
+                    >
+                        <Plus size={14} />
+                    </Button>
                     {onSave && (
                         <Button
-                            variant="default" // primary
-                            size="sm"
                             onClick={onSave}
-                            // loading prop handled in Button wrapper
-                            loading={isLoading}
+                            size="sm"
+                            className="font-bold min-w-[60px]"
+                            disabled={isLoading}
                         >
-                            저장하기
+                            {isLoading ? (
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                                '저장'
+                            )}
                         </Button>
                     )}
                 </div>
             </div>
+
+            <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>새 청첩장 만들기</DialogTitle>
+                        <DialogDescription>
+                            작성 중인 내용이 있습니다. 정말 새 청첩장을 만드시겠습니까?
+                            <br />
+                            (작성된 내용은 초기화됩니다.)
+                        </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                        <Button variant="ghost" onClick={() => setShowResetDialog(false)}>
+                            취소
+                        </Button>
+                        <Button variant="destructive" onClick={confirmReset}>
+                            초기화 및 만들기
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </header>
     );
 }

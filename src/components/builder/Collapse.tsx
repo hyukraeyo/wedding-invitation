@@ -31,7 +31,7 @@ export const Collapse = ({ label, children, isOpen, onToggle, className, rightEl
                 <div className="flex items-center gap-2">
                     {rightElement}
                     <CollapsibleTrigger asChild>
-                        <Button variant="ghost" size="sm" className="w-9 p-0">
+                        <Button variant="toss-text" size="icon-sm">
                             <ChevronDown className={cn("h-4 w-4 transition-transform duration-200", isOpen && "rotate-180")} />
                             <span className="sr-only">Toggle</span>
                         </Button>

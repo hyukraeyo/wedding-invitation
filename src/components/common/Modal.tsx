@@ -9,7 +9,7 @@ import {
 import { cn } from '@/lib/utils';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'; // Ensure accessibility for Description if missing
 
-interface BuilderModalProps {
+interface ModalProps {
     isOpen: boolean;
     onClose: () => void;
     title: string;
@@ -17,7 +17,7 @@ interface BuilderModalProps {
     className?: string;
 }
 
-export const BuilderModal = ({ isOpen, onClose, title, children, className = "" }: BuilderModalProps) => {
+export const Modal = ({ isOpen, onClose, title, children, className = "" }: ModalProps) => {
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
             <DialogContent className={cn("sm:max-w-[425px]", className)}>

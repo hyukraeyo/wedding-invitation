@@ -41,6 +41,7 @@ interface InvitationState {
     showNavigation: boolean;
     mapHeight: 'default' | 'small';
     mapZoom: number;
+    locationSubtitle: string;
     showSketch: boolean;
     sketchUrl: string | null;
     sketchRatio: 'fixed' | 'auto';
@@ -60,13 +61,15 @@ interface InvitationState {
 
     // Main Screen State
     mainScreen: {
-        layout: 'basic' | 'fill' | 'arch' | 'oval' | 'frame';
+        layout: 'classic' | 'minimal' | 'english' | 'heart' | 'korean' | 'arch' | 'oval' | 'frame' | 'fill' | 'basic';
         showBorder: boolean;
         expandPhoto: boolean;
         effect: 'none' | 'mist' | 'ripple' | 'paper';
         title: string;
         subtitle: string;
         customDatePlace: string;
+        groomName: string;
+        brideName: string;
         andText: string;
         suffixText: string;
         // Visibility Flags
@@ -98,6 +101,7 @@ interface InvitationState {
 
     // Gallery State
     galleryTitle: string;
+    gallerySubtitle: string;
     galleryType: 'swiper' | 'thumbnail' | 'grid';
     galleryPopup: boolean;
     galleryPreview: boolean; // 다음 슬라이드 미리보기
@@ -107,6 +111,7 @@ interface InvitationState {
 
     // Account State
     accountsTitle: string;
+    accountsSubtitle: string;
     accountsDescription: string;
     accountsGroomTitle: string;
     accountsBrideTitle: string;
@@ -135,6 +140,7 @@ interface InvitationState {
 
     // New Location Setters
     setLocationTitle: (title: string) => void;
+    setLocationSubtitle: (subtitle: string) => void;
     setLocationContact: (contact: string) => void;
     setShowMap: (show: boolean) => void;
     setLockMap: (lock: boolean) => void;
@@ -161,12 +167,14 @@ interface InvitationState {
     setTheme: (theme: Partial<InvitationState['theme']>) => void;
     setGallery: (images: { id: string; url: string }[] | ((prev: { id: string; url: string }[]) => { id: string; url: string }[])) => void;
     setGalleryTitle: (title: string) => void;
+    setGallerySubtitle: (subtitle: string) => void;
     setGalleryType: (type: 'swiper' | 'thumbnail' | 'grid') => void;
     setGalleryPopup: (use: boolean) => void;
     setGalleryPreview: (preview: boolean) => void;
     setGalleryFade: (fade: boolean) => void;
     setGalleryAutoplay: (autoplay: boolean) => void;
     setAccountsTitle: (title: string) => void;
+    setAccountsSubtitle: (subtitle: string) => void;
     setAccountsDescription: (description: string) => void;
     setAccountsGroomTitle: (title: string) => void;
     setAccountsBrideTitle: (title: string) => void;
@@ -195,6 +203,7 @@ interface InvitationState {
     // Closing Section State (New)
     closing: {
         title: string;
+        subtitle: string;
         imageUrl: string | null;
         effect: 'none' | 'mist' | 'ripple' | 'paper';
         ratio: 'fixed' | 'auto';
@@ -220,7 +229,7 @@ const getDefaultDate = () => {
     return d.toISOString().split('T')[0] || '';
 };
 
-const INITIAL_STATE = {
+export const INITIAL_STATE = {
     kakaoShare: {
         title: '',
         description: '',
@@ -258,6 +267,7 @@ const INITIAL_STATE = {
     mapType: 'naver' as const,
 
     locationTitle: '오시는 길',
+    locationSubtitle: 'LOCATION',
     locationContact: '',
     showMap: true,
     lockMap: true,
@@ -269,9 +279,9 @@ const INITIAL_STATE = {
     sketchRatio: 'fixed' as const,
 
     coordinates: { lat: 37.5665, lng: 126.9780 }, // Default: Seoul City Hall
-    message: '',
-    greetingTitle: '',
-    greetingSubtitle: '',
+    greetingTitle: '저희 두 사람 결혼합니다',
+    greetingSubtitle: 'INVITATION',
+    message: '<p style="text-align: center">서로가 마주보며 다져온 사랑을<br>이제 함께 한 곳을 바라보며 걸어가려 합니다.<br>저희의 새 출발을 축복해 주세요.</p>',
     showNamesAtBottom: true,
     enableFreeformNames: false,
     groomNameCustom: '',
@@ -283,15 +293,17 @@ const INITIAL_STATE = {
     greetingRatio: 'fixed' as const,
 
     mainScreen: {
-        layout: 'basic' as const,
+        layout: 'classic' as const,
         showBorder: false,
         expandPhoto: false,
         effect: 'none' as const,
         title: 'THE MARRIAGE',
-        subtitle: '',
+        subtitle: '소중한 날에 초대합니다',
         customDatePlace: '',
-        andText: '·',
-        suffixText: '',
+        groomName: '',
+        brideName: '',
+        andText: '그리고',
+        suffixText: '결혼합니다.',
         showTitle: true,
         showGroomBride: true,
         showSubtitle: true,
@@ -318,12 +330,14 @@ const INITIAL_STATE = {
 
     gallery: [],
     galleryTitle: '웨딩 갤러리',
+    gallerySubtitle: 'GALLERY',
     galleryType: 'swiper' as const,
     galleryPopup: true,
     galleryPreview: false,
     galleryFade: false,
     galleryAutoplay: true,
     accountsTitle: '축하의 마음 전하실 곳',
+    accountsSubtitle: 'GIFT',
     accountsDescription: '축하의 마음을 담아 축의금을 전달하고자 하시는 분들을 위해\n계좌번호를 안내해 드립니다.',
     accountsGroomTitle: '신랑 측 마음 전하실 곳',
     accountsBrideTitle: '신부 측 마음 전하실 곳',
@@ -333,6 +347,7 @@ const INITIAL_STATE = {
     editingSection: null,
     closing: {
         title: '엔딩 사진, 문구',
+        subtitle: 'CLOSING',
         imageUrl: null,
         effect: 'none' as const,
         ratio: 'auto' as const,
@@ -372,6 +387,7 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
     setDetailAddress: (detailAddress) => set({ detailAddress }),
 
     setLocationTitle: (title) => set({ locationTitle: title }),
+    setLocationSubtitle: (subtitle) => set({ locationSubtitle: subtitle }),
     setLocationContact: (contact) => set({ locationContact: contact }),
     setShowMap: (show) => set({ showMap: show }),
     setLockMap: (lock) => set({ lockMap: lock }),
@@ -399,12 +415,14 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
     setTheme: (newTheme) => set((state) => ({ theme: { ...state.theme, ...newTheme } })),
     setGallery: (images) => set((state) => ({ gallery: typeof images === 'function' ? images(state.gallery) : images })),
     setGalleryTitle: (title) => set({ galleryTitle: title }),
+    setGallerySubtitle: (subtitle) => set({ gallerySubtitle: subtitle }),
     setGalleryType: (type) => set({ galleryType: type }),
     setGalleryPopup: (popup) => set({ galleryPopup: popup }),
     setGalleryPreview: (preview) => set({ galleryPreview: preview }),
     setGalleryFade: (fade) => set({ galleryFade: fade }),
     setGalleryAutoplay: (autoplay) => set({ galleryAutoplay: autoplay }),
     setAccountsTitle: (title) => set({ accountsTitle: title }),
+    setAccountsSubtitle: (subtitle) => set({ accountsSubtitle: subtitle }),
     setAccountsDescription: (description) => set({ accountsDescription: description }),
     setAccountsGroomTitle: (title) => set({ accountsGroomTitle: title }),
     setAccountsBrideTitle: (title) => set({ accountsBrideTitle: title }),
@@ -450,6 +468,47 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
             await del(name);
         },
     })),
+    // Merge function to handle new fields added to the store
+    merge: (persistedState, currentState) => {
+        const persisted = persistedState as Partial<InvitationState>;
+        return {
+            ...currentState,
+            ...persisted,
+            // Deep merge nested objects
+            mainScreen: {
+                ...currentState.mainScreen,
+                ...(persisted.mainScreen || {}),
+            },
+            theme: {
+                ...currentState.theme,
+                ...(persisted.theme || {}),
+            },
+            closing: {
+                ...currentState.closing,
+                ...(persisted.closing || {}),
+            },
+            kakaoShare: {
+                ...currentState.kakaoShare,
+                ...(persisted.kakaoShare || {}),
+            },
+            groom: {
+                ...currentState.groom,
+                ...(persisted.groom || {}),
+                parents: {
+                    ...currentState.groom.parents,
+                    ...(persisted.groom?.parents || {}),
+                },
+            },
+            bride: {
+                ...currentState.bride,
+                ...(persisted.bride || {}),
+                parents: {
+                    ...currentState.bride.parents,
+                    ...(persisted.bride?.parents || {}),
+                },
+            },
+        };
+    },
     // Removed partialize to allow gallery and images to be saved in IndexedDB
     // IndexedDB has much higher limits than localStorage
 }));

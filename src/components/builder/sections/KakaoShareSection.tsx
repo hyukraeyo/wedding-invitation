@@ -13,16 +13,18 @@ import styles from './KakaoShareSection.module.scss';
 import { cn } from '@/lib/utils';
 
 interface SectionProps {
+    value: string;
     isOpen: boolean;
     onToggle: () => void;
 }
 
-export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
+export default function KakaoShareSection({ isOpen, onToggle, value }: SectionProps) {
     const { kakaoShare: kakao, setKakao } = useInvitationStore();
     const [previewOpen, setPreviewOpen] = useState(false);
 
     return (
         <AccordionItem
+            value={value}
             title="카카오 초대장 썸네일"
             icon={MessageCircle}
             isOpen={isOpen}
@@ -67,25 +69,23 @@ export default function KakaoShareSection({ isOpen, onToggle }: SectionProps) {
                     <HelpText>카카오톡 공유 메시지에서 보여질 사진의 비율입니다.</HelpText>
                 </Field>
 
-                <Field label="제목">
-                    <TextField
-                        type="text"
-                        placeholder="예: 우리 결혼합니다"
-                        value={kakao.title}
-                        onChange={(e) => setKakao({ title: e.target.value })}
-                        maxLength={25}
-                    />
-                </Field>
+                <TextField
+                    label="제목"
+                    type="text"
+                    placeholder="예: 우리 결혼합니다"
+                    value={kakao.title}
+                    onChange={(e) => setKakao({ title: e.target.value })}
+                    maxLength={25}
+                />
 
-                <Field label="설명">
-                    <TextField
-                        type="text"
-                        placeholder="예: 2024년 10월 12일"
-                        value={kakao.description}
-                        onChange={(e) => setKakao({ description: e.target.value })}
-                        maxLength={35}
-                    />
-                </Field>
+                <TextField
+                    label="설명"
+                    type="text"
+                    placeholder="예: 2024년 10월 12일"
+                    value={kakao.description}
+                    onChange={(e) => setKakao({ description: e.target.value })}
+                    maxLength={35}
+                />
 
                 <Field label="버튼 스타일">
                     <SegmentedControl

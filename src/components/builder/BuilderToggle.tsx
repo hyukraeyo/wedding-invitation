@@ -1,4 +1,4 @@
-import { Switch } from './Switch';
+import { SwitchField } from './SwitchField';
 
 interface BuilderToggleProps {
     checked: boolean;
@@ -14,7 +14,7 @@ export const BuilderToggle = ({
     className
 }: BuilderToggleProps) => {
     return (
-        <Switch
+        <SwitchField
             checked={checked}
             onChange={onChange}
             label={label}

@@ -5,22 +5,32 @@ import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { SegmentedControl } from '../SegmentedControl';
 import { Field } from '../Field';
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import styles from './AccountsSection.module.scss';
 import { cn } from '@/lib/utils';
 
 interface SectionProps {
+    value: string;
     isOpen: boolean;
     onToggle: () => void;
 }
 
-export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
+export default function AccountsSection({ value, isOpen, onToggle }: SectionProps) {
     const {
         accounts, setAccounts,
         accountsTitle, setAccountsTitle,
+        accountsSubtitle, setAccountsSubtitle,
         accountsDescription, setAccountsDescription,
         accountsGroomTitle, setAccountsGroomTitle,
         accountsBrideTitle, setAccountsBrideTitle,
-        accountsColorMode, setAccountsColorMode
+        accountsColorMode, setAccountsColorMode,
+        groom, bride
     } = useInvitationStore();
 
     const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -46,8 +56,26 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
         setAccounts(accounts.filter(acc => acc.id !== id));
     };
 
+    const getHolderName = (rel: string, type: 'groom' | 'bride') => {
+        const person = type === 'groom' ? groom : bride;
+        if (rel === '본인') return `${person.lastName}${person.firstName}`;
+        if (rel === '아버지') return person.parents.father.name;
+        if (rel === '어머니') return person.parents.mother.name;
+        return '';
+    };
+
+    const handleRelationChange = (id: string, rel: string, type: 'groom' | 'bride') => {
+        const newHolder = getHolderName(rel, type);
+        const updates: Record<string, string> = { relation: rel };
+        if (newHolder) {
+            updates.holder = newHolder;
+        }
+        handleUpdateAccount(id, updates);
+    };
+
     return (
         <AccordionItem
+            value={value}
             title="축의금 및 계좌번호"
             icon={CreditCard}
             isOpen={isOpen}
@@ -55,25 +83,26 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
             isCompleted={accounts.length > 0}
         >
             <div className={styles.container}>
-                {/* Titles */}
-                <Field label="페이지 문구">
-                    <div className={styles.optionWrapper}>
-                        <TextField
-                            label="메인 제목"
-                            placeholder="예: 마음 전하실 곳"
-                            value={accountsTitle}
-                            onChange={(e) => setAccountsTitle(e.target.value)}
-                        />
-                        <TextField
-                            label="대표 설명"
-                            placeholder="축하의 마음을 담아..."
-                            value={accountsDescription}
-                            onChange={(e) => setAccountsDescription(e.target.value)}
-                            multiline
-                            rows={3}
-                        />
-                    </div>
-                </Field>
+                <TextField
+                    label="소제목"
+                    placeholder="예: GIFT"
+                    value={accountsSubtitle}
+                    onChange={(e) => setAccountsSubtitle(e.target.value)}
+                />
+                <TextField
+                    label="제목"
+                    placeholder="예: 마음 전하실 곳"
+                    value={accountsTitle}
+                    onChange={(e) => setAccountsTitle(e.target.value)}
+                />
+                <TextField
+                    label="대표 설명"
+                    placeholder="축하의 마음을 담아..."
+                    value={accountsDescription}
+                    onChange={(e) => setAccountsDescription(e.target.value)}
+                    multiline
+                    rows={3}
+                />
 
                 {/* Account List */}
                 <Field label="계좌 리스트">
@@ -108,17 +137,48 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
                                                         { label: '신랑측', value: 'groom' },
                                                         { label: '신부측', value: 'bride' },
                                                     ]}
-                                                    onChange={(val) => handleUpdateAccount(acc.id, { type: val as 'groom' | 'bride' })}
+                                                    onChange={(val) => {
+                                                        const newType = val as 'groom' | 'bride';
+                                                        const newHolder = getHolderName(acc.relation, newType);
+                                                        const updates: Record<string, string> = { type: newType };
+                                                        if (newHolder) {
+                                                            updates.holder = newHolder;
+                                                        }
+                                                        handleUpdateAccount(acc.id, updates);
+                                                    }}
                                                 />
                                             </div>
                                             <div className={styles.flex3}>
-                                                <TextField
-                                                    placeholder="관계 (예: 본인, 아버지)"
-                                                    value={acc.relation}
-                                                    onChange={(e) => handleUpdateAccount(acc.id, { relation: e.target.value })}
-                                                />
+                                                <Select
+                                                    value={['본인', '아버지', '어머니'].includes(acc.relation) ? acc.relation : 'custom'}
+                                                    onValueChange={(val) => {
+                                                        if (val === 'custom') {
+                                                            handleUpdateAccount(acc.id, { relation: '' });
+                                                        } else {
+                                                            handleRelationChange(acc.id, val, acc.type);
+                                                        }
+                                                    }}
+                                                >
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="관계 선택" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="본인">본인</SelectItem>
+                                                        <SelectItem value="아버지">아버지</SelectItem>
+                                                        <SelectItem value="어머니">어머니</SelectItem>
+                                                        <SelectItem value="custom">직접 입력</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
                                             </div>
                                         </div>
+
+                                        {!['본인', '아버지', '어머니'].includes(acc.relation) && (
+                                            <TextField
+                                                placeholder="관계를 직접 입력하세요 (예: 본인, 아버지)"
+                                                value={acc.relation}
+                                                onChange={(e) => handleUpdateAccount(acc.id, { relation: e.target.value })}
+                                            />
+                                        )}
 
                                         <div className={styles.fieldRow}>
                                             <div className={styles.flex1}>
@@ -141,9 +201,9 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
 
                                         <TextField
                                             label="계좌번호"
-                                            placeholder="숫자만 입력"
+                                            placeholder="계좌번호를 입력하세요"
                                             value={acc.accountNumber}
-                                            onChange={(e) => handleUpdateAccount(acc.id, { accountNumber: e.target.value.replace(/[^0-9]/g, '') })}
+                                            onChange={(e) => handleUpdateAccount(acc.id, { accountNumber: e.target.value })}
                                         />
 
                                         <button
@@ -169,32 +229,28 @@ export default function AccountsSection({ isOpen, onToggle }: SectionProps) {
                 </Field>
 
                 {/* Appearance Settings */}
-                <Field label="표시 설정">
-                    <div className={styles.optionWrapper}>
-                        <TextField
-                            label="신랑측 그룹 제목"
-                            placeholder="신랑 측 마음 전하실 곳"
-                            value={accountsGroomTitle}
-                            onChange={(e) => setAccountsGroomTitle(e.target.value)}
-                        />
-                        <TextField
-                            label="신부측 그룹 제목"
-                            placeholder="신부 측 마음 전하실 곳"
-                            value={accountsBrideTitle}
-                            onChange={(e) => setAccountsBrideTitle(e.target.value)}
-                        />
-                        <Field label="색상 모드" className="mt-2">
-                            <SegmentedControl
-                                value={accountsColorMode}
-                                options={[
-                                    { label: '강조', value: 'accent' },
-                                    { label: '은은하게', value: 'subtle' },
-                                    { label: '화이트', value: 'white' },
-                                ]}
-                                onChange={(val) => setAccountsColorMode(val as 'accent' | 'subtle' | 'white')}
-                            />
-                        </Field>
-                    </div>
+                <TextField
+                    label="신랑측 그룹 제목"
+                    placeholder="신랑 측 마음 전하실 곳"
+                    value={accountsGroomTitle}
+                    onChange={(e) => setAccountsGroomTitle(e.target.value)}
+                />
+                <TextField
+                    label="신부측 그룹 제목"
+                    placeholder="신부 측 마음 전하실 곳"
+                    value={accountsBrideTitle}
+                    onChange={(e) => setAccountsBrideTitle(e.target.value)}
+                />
+                <Field label="색상 모드" className="mt-2">
+                    <SegmentedControl
+                        value={accountsColorMode}
+                        options={[
+                            { label: '강조', value: 'accent' },
+                            { label: '은은하게', value: 'subtle' },
+                            { label: '화이트', value: 'white' },
+                        ]}
+                        onChange={(val) => setAccountsColorMode(val as 'accent' | 'subtle' | 'white')}
+                    />
                 </Field>
             </div>
         </AccordionItem>

@@ -32,7 +32,7 @@
     border-color: rgba(v.$toss-blue-500, 0.5);
     background-color: rgba(v.$gray-100, 0.5);
     color: v.$toss-blue-500;
-    
+
     .uploadIcon {
       transform: scale(1.1);
     }
@@ -50,7 +50,7 @@
 .counter {
   display: flex;
   justify-content: space-between;
-  items-align: flex-end;
+  align-items: flex-end;
   width: 100%;
   margin-bottom: 0.25rem;
 }
@@ -72,7 +72,7 @@
   overflow: hidden;
   background-color: v.$gray-100;
   cursor: grab;
-  
+
   &.dragging {
     opacity: 0.5;
     cursor: grabbing;
@@ -124,8 +124,8 @@
 
 .optionGroup {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.625rem;
+  flex-direction: column;
+  gap: 1rem;
   padding: 0 0.25rem;
 }
 
@@ -134,8 +134,15 @@
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: .5; }
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: .5;
+  }
 }
 
 .imageUploading {
@@ -164,13 +171,15 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .gradientOverlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, transparent 40%);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, transparent 40%);
   opacity: 0;
   transition: opacity 0.2s ease;
   pointer-events: none;
@@ -208,7 +217,7 @@
   color: #1b64da;
   font-size: 12.5px;
   line-height: 1.6;
-  
+
   .infoIcon {
     flex-shrink: 0;
     margin-top: 0.125rem;

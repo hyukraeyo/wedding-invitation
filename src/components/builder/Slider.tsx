@@ -52,11 +52,10 @@ export const Slider = ({
             {showStepButtons && (
                 <div className="flex items-center justify-between border rounded-md p-1 bg-muted/20">
                     <Button
-                        variant="ghost"
-                        size="icon"
+                        variant="toss-text"
+                        size="icon-sm"
                         onClick={() => handleStep('down')}
                         disabled={value <= min}
-                        className="h-8 w-8"
                     >
                         <Minus size={14} />
                     </Button>
@@ -64,11 +63,10 @@ export const Slider = ({
                         {value}{unit}
                     </span>
                     <Button
-                        variant="ghost"
-                        size="icon"
+                        variant="toss-text"
+                        size="icon-sm"
                         onClick={() => handleStep('up')}
                         disabled={value >= max}
-                        className="h-8 w-8"
                     >
                         <Plus size={14} />
                     </Button>

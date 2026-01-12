@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabase';
 import styles from '@/components/auth/LoginModal.module.scss';
 import { TextField } from '@/components/builder/TextField';
 import { useAuth } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/use-toast';
 
 /**
  * LoginPage: 직접 /login 경로로 접근 시 렌더링되는 전체 페이지 버전
@@ -15,6 +16,7 @@ import { useAuth } from '@/hooks/useAuth';
 export default function LoginPage() {
     const router = useRouter();
     const { user, loading: authLoading } = useAuth();
+    const { toast } = useToast();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -36,7 +38,7 @@ export default function LoginPage() {
             }
         });
         if (error) {
-            alert(error.message);
+            toast({ variant: 'destructive', description: error.message });
             setLoading(false);
         }
     };
@@ -51,7 +53,7 @@ export default function LoginPage() {
             }
         });
         if (error) {
-            alert(error.message);
+            toast({ variant: 'destructive', description: error.message });
             setLoading(false);
         }
     };
@@ -80,10 +82,10 @@ export default function LoginPage() {
                     email: loginEmail,
                     password: password
                 });
-                if (signUpError) alert(signUpError.message);
-                else alert('테스트 계정이 생성되었습니다. 다시 로그인해주세요.');
+                if (signUpError) toast({ variant: 'destructive', description: signUpError.message });
+                else toast({ description: '테스트 계정이 생성되었습니다. 다시 로그인해주세요.' });
             } else {
-                alert('로그인 정보가 올바르지 않습니다.');
+                toast({ variant: 'destructive', description: '로그인 정보가 올바르지 않습니다.' });
             }
         } else {
             router.push('/builder');

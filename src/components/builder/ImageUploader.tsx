@@ -7,6 +7,7 @@ import { SegmentedControl } from './SegmentedControl';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 interface ImageUploaderProps {
     value: string | null;
@@ -116,19 +117,34 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                 >
                     {displayUrl ? (
                         <div className={cn("relative w-full h-full", isAutoRatio ? "min-h-[200px]" : "absolute inset-0")}>
-                            <Image
-                                src={displayUrl}
-                                alt="Uploaded"
-                                {...(isAutoRatio ? { width: 800, height: 600 } : { fill: true })}
-                                className={cn(
-                                    "object-cover transition-opacity duration-300",
-                                    isAutoRatio && "w-full h-auto",
-                                    isUploading && "opacity-50"
-                                )}
-                                unoptimized={displayUrl.startsWith('blob:')}
-                            />
+                            {!isAutoRatio ? (
+                                <AspectRatio ratio={aspectRatio.split('/').map(Number).reduce((a, b) => a / b)}>
+                                    <Image
+                                        src={displayUrl}
+                                        alt="Uploaded"
+                                        fill
+                                        className={cn(
+                                            "object-cover transition-opacity duration-300",
+                                            isUploading && "opacity-50"
+                                        )}
+                                        unoptimized={displayUrl.startsWith('blob:')}
+                                    />
+                                </AspectRatio>
+                            ) : (
+                                <Image
+                                    src={displayUrl}
+                                    alt="Uploaded"
+                                    width={800}
+                                    height={600}
+                                    className={cn(
+                                        "object-cover transition-opacity duration-300 w-full h-auto",
+                                        isUploading && "opacity-50"
+                                    )}
+                                    unoptimized={displayUrl.startsWith('blob:')}
+                                />
+                            )}
                             {isUploading && (
-                                <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                                <div className="absolute inset-0 flex items-center justify-center bg-black/20 z-10">
                                     <Loader2 className="h-8 w-8 animate-spin text-white" />
                                 </div>
                             )}
@@ -136,8 +152,8 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                                 type="button"
                                 onClick={handleRemove}
                                 variant="destructive"
-                                size="icon"
-                                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8"
+                                size="icon-sm"
+                                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-20"
                                 disabled={isUploading}
                             >
                                 <Trash2 size={16} />
@@ -172,7 +188,6 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                             { label: '자동 (원본 비율)', value: 'auto' },
                         ]}
                         onChange={props.onRatioChange}
-                        size="sm"
                         className="w-full"
                     />
                 </div>

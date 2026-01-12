@@ -10,11 +10,12 @@ import styles from './BasicInfoSection.module.scss';
 import { cn } from '@/lib/utils';
 
 interface SectionProps {
+    value: string;
     isOpen: boolean;
     onToggle: () => void;
 }
 
-const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ isOpen, onToggle }) {
+const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ isOpen, onToggle, value }) {
     const {
         groom, setGroom,
         bride, setBride,
@@ -24,6 +25,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
 
     return (
         <AccordionItem
+            value={value}
             title="기본 정보"
             icon={User2}
             isOpen={isOpen}

@@ -1,71 +1,40 @@
 'use client';
 
 import React from 'react';
-import { useToast as useShadcnToast } from '@/hooks/use-toast';
-import { Check, X, AlertCircle, Info } from 'lucide-react';
+import { toast } from 'sonner';
 
 // Compatibility wrapper for components using the old Toast interface
 export const useToast = () => {
-    const { toast } = useShadcnToast();
-
     return {
         showToast: (message: string, type: 'success' | 'error' | 'warning' | 'info' = 'success') => {
-            const variant = type === 'error' ? 'destructive' : 'default';
-            // You can customize title/description mapping here
-            // For simple message toast, we use description
-            toast({
-                description: (
-                    <div className="flex items-center gap-2">
-                        {type === 'success' && <Check size={16} className="text-green-500" />}
-                        {type === 'error' && <X size={16} />}
-                        {type === 'warning' && <AlertCircle size={16} className="text-yellow-500" />}
-                        {type === 'info' && <Info size={16} className="text-blue-500" />}
-                        <span>{message}</span>
-                    </div>
-                ),
-                variant: variant
-            });
+            switch (type) {
+                case 'success':
+                    toast.success(message);
+                    break;
+                case 'error':
+                    toast.error(message);
+                    break;
+                case 'warning':
+                    toast.warning(message);
+                    break;
+                case 'info':
+                    toast.info(message);
+                    break;
+                default:
+                    toast(message);
+            }
         },
         success: (message: string) => {
-            toast({
-                description: (
-                    <div className="flex items-center gap-2">
-                        <Check size={16} className="text-green-500" />
-                        <span>{message}</span>
-                    </div>
-                ),
-            });
+            toast.success(message);
         },
         error: (message: string) => {
-            toast({
-                variant: "destructive",
-                description: (
-                    <div className="flex items-center gap-2">
-                        <X size={16} />
-                        <span>{message}</span>
-                    </div>
-                ),
-            });
+            toast.error(message);
         },
         warning: (message: string) => {
-            toast({
-                description: (
-                    <div className="flex items-center gap-2">
-                        <AlertCircle size={16} className="text-yellow-500" />
-                        <span>{message}</span>
-                    </div>
-                ),
-            });
+            toast.warning(message);
         },
         info: (message: string) => {
-            toast({
-                description: (
-                    <div className="flex items-center gap-2">
-                        <Info size={16} className="text-blue-500" />
-                        <span>{message}</span>
-                    </div>
-                ),
-            });
+            toast.info(message);
         }
     };
 };

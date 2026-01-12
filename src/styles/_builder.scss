@@ -6,17 +6,19 @@
 @use "@/styles/variables" as v;
 
 // ----- Spacing & Sizing Variables -----
-$builder-gap-xs: 0.25rem;  // 4px
-$builder-gap-sm: 0.5rem;   // 8px
-$builder-gap-md: 0.75rem;  // 12px
-$builder-gap-lg: 1rem;     // 16px
-$builder-gap-xl: 1.25rem;  // 20px
-$builder-gap-2xl: 1.5rem;  // 24px
+$builder-gap-xs: 0.25rem; // 4px
+$builder-gap-sm: 0.5rem; // 8px
+$builder-gap-md: 0.75rem; // 12px
+$builder-gap-lg: 1rem; // 16px
+$builder-gap-xl: 1.25rem; // 20px
+$builder-gap-2xl: 1.5rem; // 24px
 
-$builder-radius-sm: 0.6rem;   // 9.6px
-$builder-radius-md: 0.875rem;  // 14px
-$builder-radius-lg: 1.125rem;  // 18px
-$builder-radius-xl: 1.5rem;    // 24px
+$builder-input-height: 48px; // Unified height for search boxes, inputs, buttons, etc.
+
+$builder-radius-sm: 0.6rem; // 9.6px
+$builder-radius-md: 0.875rem; // 14px
+$builder-radius-lg: 1.125rem; // 18px
+$builder-radius-xl: 1.5rem; // 24px
 
 // ----- Color Variables (Toss TDS Inspired) -----
 $builder-border-light: v.$toss-grey-100;
@@ -89,13 +91,11 @@ $builder-font-xl: 17px; // t5
 // Subtle divider
 @mixin builder-divider {
   height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    $builder-border-light 20%,
-    $builder-border-light 80%,
-    transparent 100%
-  );
+  background: linear-gradient(90deg,
+      transparent 0%,
+      $builder-border-light 20%,
+      $builder-border-light 80%,
+      transparent 100%);
   margin-block: $builder-gap-md;
 }
 
@@ -120,7 +120,8 @@ $builder-font-xl: 17px; // t5
 // Input base style (Toss TDS Inspired)
 @mixin builder-input-base {
   width: 100%;
-  padding: 0.875rem 1rem; // 14px 16px
+  height: $builder-input-height;
+  padding: 0 1rem;
   border: 1px solid v.$tds-grey-opacity-100;
   border-radius: 14px;
   @include v.tds-t5("regular"); // 17px
@@ -154,8 +155,9 @@ $builder-font-xl: 17px; // t5
 // Button base style
 @mixin builder-button-base {
   @include flex-center;
-  padding: 0.75rem 1rem;
-  border-radius: 10px;
+  height: $builder-input-height;
+  padding: 0 1rem;
+  border-radius: 12px;
   @include v.tds-t7("semibold"); // 13px
   border: 1px solid $builder-border-default;
   background: white;

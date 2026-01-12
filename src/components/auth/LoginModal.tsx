@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabase';
 import styles from './LoginModal.module.scss';
 import { TextField } from '../builder/TextField';
 import { createPortal } from 'react-dom';
+import { useToast } from '@/hooks/use-toast';
 
 interface LoginModalProps {
     isOpen: boolean;
@@ -28,6 +29,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const { toast } = useToast();
 
     // useSyncExternalStore for SSR-safe mounting check (no lint warnings)
     const isMounted = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
@@ -45,10 +47,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             options: { redirectTo: `${window.location.origin}/builder` }
         });
         if (error) {
-            alert(error.message);
+            toast({ variant: 'destructive', description: error.message });
             setLoading(false);
         }
-    }, []);
+    }, [toast]);
 
     const handleSubmit = useCallback(async (e: React.FormEvent) => {
         e.preventDefault();
@@ -68,15 +70,19 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                     email: loginEmail,
                     password
                 });
-                alert(signUpError?.message || '테스트 계정이 생성되었습니다. 다시 로그인해주세요.');
+                if (signUpError) {
+                    toast({ variant: 'destructive', description: signUpError.message });
+                } else {
+                    toast({ description: '테스트 계정이 생성되었습니다. 다시 로그인해주세요.' });
+                }
             } else {
-                alert('로그인 정보가 올바르지 않습니다.');
+                toast({ variant: 'destructive', description: '로그인 정보가 올바르지 않습니다.' });
             }
         } else {
             onClose();
         }
         setLoading(false);
-    }, [email, password, onClose]);
+    }, [email, password, onClose, toast]);
 
     if (!isOpen || !isMounted) return null;
 

@@ -1,4 +1,3 @@
-
 @use "@/styles/variables" as *;
 @use "@/styles/animations" as *;
 
@@ -14,18 +13,58 @@
 }
 
 :root {
-  --background: #F9F8E6;
+  --background: #FFFFFF;
   --foreground: #4A5D45;
-  --accent: #E2E2C7;
+  --accent: #f4f4f5;
   --ivory: #F9F8E6;
   --forest-green: #4A5D45;
   --muted-sand: #E2E2C7;
   --coral-pink: #FF8A8A;
 
-  /* Font Families are now provided by next/font in layout.tsx */
-  /* We only define fallbacks or fonts not in next/font here */
+  /* Shadcn UI Variables */
+  --card: #FFFFFF;
+  --card-foreground: #4A5D45;
+  --popover: #FFFFFF;
+  --popover-foreground: #4A5D45;
+  --primary: #4A5D45;
+  --primary-foreground: #FFFFFF;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #18181b;
+  --muted: #F4F1EA;
+  --muted-foreground: #787878;
+  --accent-foreground: #4A5D45;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --border: #E5E7EB;
+  --input: #E5E7EB;
+  --ring: #4A5D45;
+  --radius: 0.5rem;
+
+  /* Font Families */
   --font-pretendard: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
   --font-gmarket-sans: "GmarketSansMedium", sans-serif;
+
+  /* Builder Typography */
+  --builder-font-size: 15px;
+  --builder-font-family: var(--font-pretendard);
+  --builder-line-height: normal;
+  /* Adjusted for centered text */
+}
+
+@layer components {
+  .builder-input-unified {
+    @apply flex h-12 w-full items-center rounded-md border border-input bg-transparent px-3 transition-colors;
+    @apply placeholder:text-muted-foreground;
+    @apply focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring;
+    @apply disabled:cursor-not-allowed disabled:opacity-50;
+
+    font-size: var(--builder-font-size, 15px);
+    font-family: var(--builder-font-family);
+
+    &:hover:not(:disabled) {
+      @apply border-gray-400;
+    }
+  }
 }
 
 
@@ -43,26 +82,74 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.font-pretendard { font-family: var(--font-pretendard); }
-.font-gmarket { font-family: var(--font-gmarket-sans); }
-.font-gowun-batang { font-family: var(--font-gowun-batang); }
-.font-gowun-dodum { font-family: var(--font-gowun-dodum); }
-.font-nanum-myeongjo { font-family: var(--font-nanum-myeongjo); }
-.font-yeon-sung { font-family: var(--font-yeon-sung); }
-.font-do-hyeon { font-family: var(--font-do-hyeon); }
-.font-song-myung { font-family: var(--font-song-myung); }
-.font-script { font-family: var(--font-script); }
-
-.serif { font-family: var(--font-serif); }
-.sans { font-family: var(--font-sans); }
-
-/* Rich Text Content */
-.rich-text-content p {
-  margin-bottom: 0.5em;
+.font-pretendard {
+  font-family: var(--font-pretendard);
 }
 
-.rich-text-content p:last-child {
-  margin-bottom: 0;
+.font-gmarket {
+  font-family: var(--font-gmarket-sans);
+}
+
+.font-gowun-batang {
+  font-family: var(--font-gowun-batang);
+}
+
+.font-gowun-dodum {
+  font-family: var(--font-gowun-dodum);
+}
+
+.font-nanum-myeongjo {
+  font-family: var(--font-nanum-myeongjo);
+}
+
+.font-yeon-sung {
+  font-family: var(--font-yeon-sung);
+}
+
+.font-do-hyeon {
+  font-family: var(--font-do-hyeon);
+}
+
+.font-song-myung {
+  font-family: var(--font-song-myung);
+}
+
+.font-script {
+  font-family: var(--font-script);
+}
+
+.serif {
+  font-family: var(--font-serif);
+}
+
+.sans {
+  font-family: var(--font-sans);
+}
+
+/* Rich Text Content */
+.rich-text-content {
+  line-height: var(--builder-line-height, 1.6);
+
+  &.center-aligned {
+    text-align: center;
+  }
+
+  p {
+    margin-bottom: 0.5em;
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Placeholder Style */
+  .is-editor-empty:first-child::before {
+    content: attr(data-placeholder);
+    float: left;
+    color: #adb5bd;
+    pointer-events: none;
+    height: 0;
+  }
 }
 
 /* Scrollbar Hide Utility */
@@ -71,12 +158,29 @@ body {
 }
 
 /* Global Animation Classes (Compatible with existing code) */
-.animate-fall { animation: fall linear infinite; }
-.animate-fall-diagonal { animation: fall-diagonal linear infinite; }
-.animate-fall-sway { animation: fall-sway linear infinite; }
-.animate-fall-tumbling { animation: fall-rotate linear infinite; }
-.animate-float-slow { animation: float-mist ease-in-out infinite; }
-.animate-pulse-subtle { animation: pulse-subtle 3s ease-in-out infinite; }
+.animate-fall {
+  animation: fall linear infinite;
+}
+
+.animate-fall-diagonal {
+  animation: fall-diagonal linear infinite;
+}
+
+.animate-fall-sway {
+  animation: fall-sway linear infinite;
+}
+
+.animate-fall-tumbling {
+  animation: fall-rotate linear infinite;
+}
+
+.animate-float-slow {
+  animation: float-mist ease-in-out infinite;
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 3s ease-in-out infinite;
+}
 
 /* Background Patterns */
 .pattern-flower-sm {

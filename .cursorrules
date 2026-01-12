@@ -1,6 +1,13 @@
 # Cursor Rules for Wedding Invitation Project
 # Next.js 16+ 공식 권장사항을 최우선으로 따르는 프로젝트 규칙
 
+
+## 📱 모바일 최적화 (최상위 우선순위)
+- **모바일 퍼스트**: 모든 기능과 UI는 모바일 환경에서의 경험을 최우선으로 설계하고 구현해야 합니다.
+- **최상급 UI/UX**: 모바일에서의 사용자 경험(UX)과 인터페이스(UI)는 타협 없이 최고 수준이어야 합니다.
+- **반응형 필수**: 다양한 모바일 기기 해상도에서 완벽하게 동작해야 합니다.
+- **성능 최적화**: 모바일 네트워크 환경을 고려하여 로딩 속도와 렌더링 성능을 최적화해야 합니다.
+
 ## 🎨 디자인 시스템: TDS Mobile 커스텀 베이스 (최우선 준수)
 
 ### 참조 디자인 시스템
@@ -24,6 +31,11 @@
 - [TDS 시작하기](https://tossmini-docs.toss.im/tds-mobile/start/)
 - [TDS Colors](https://tossmini-docs.toss.im/tds-mobile/foundation/colors/)
 - [TDS Typography](https://tossmini-docs.toss.im/tds-mobile/foundation/typography/)
+
+### shadcn/ui Best Practices (필수 준수)
+- **최신 문서 참조**: https://ui.shadcn.com/docs/components를 항상 참조하여 최신 구현 방식을 따릅니다.
+- **성능 최적화**: 컴포넌트 구현 시 불필요한 리렌더링을 방지하고, 최적화된 패턴을 사용합니다.
+- **접근성 준수**: shadcn/ui의 기본 접근성 기능을 유지하며, ARIA 속성을 올바르게 활용합니다.
 
 ---
 

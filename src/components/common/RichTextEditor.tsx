@@ -4,20 +4,17 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { Color } from '@tiptap/extension-color';
 import { TextStyle } from '@tiptap/extension-text-style';
-import TextAlign from '@tiptap/extension-text-align';
 import Highlight from '@tiptap/extension-highlight';
 import Underline from '@tiptap/extension-underline';
+import Placeholder from '@tiptap/extension-placeholder';
 import {
     Bold,
     Italic,
     Underline as UnderlineIcon,
-    AlignLeft,
-    AlignCenter,
-    AlignRight,
     Highlighter,
     Type
 } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { Toggle } from '@/components/ui/toggle';
 import { Separator } from '@/components/ui/separator';
@@ -52,22 +49,22 @@ const ToolbarToggle = ({
     </Toggle>
 );
 
-export default function RichTextEditor({ content, onChange, placeholder, className = "", minHeight = "min-h-[240px]" }: RichTextEditorProps) {
+export default function RichTextEditor({ content, onChange, placeholder, className = "", minHeight = "min-h-[120px]" }: RichTextEditorProps) {
+    const extensions = useMemo(() => [
+        StarterKit.configure({
+            heading: false,
+        }),
+        TextStyle,
+        Color,
+        Underline,
+        Highlight.configure({ multicolor: true }),
+        Placeholder.configure({
+            placeholder: placeholder || '내용을 입력하세요...',
+        }),
+    ], [placeholder]);
+
     const editor = useEditor({
-        extensions: [
-            StarterKit.configure({
-                heading: {
-                    levels: [1, 2, 3],
-                },
-            }),
-            TextStyle,
-            Color,
-            Underline,
-            Highlight.configure({ multicolor: true }),
-            TextAlign.configure({
-                types: ['heading', 'paragraph'],
-            }),
-        ],
+        extensions,
         content: content,
         immediatelyRender: false,
         onUpdate: ({ editor }) => {
@@ -76,10 +73,10 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
         editorProps: {
             attributes: {
                 class: cn(
-                    "prose prose-sm max-w-none focus:outline-none p-4",
+                    "prose prose-sm max-w-none focus:outline-none p-4 rich-text-content center-aligned",
                     minHeight
                 ),
-                'data-placeholder': placeholder || '',
+                style: `font-size: var(--builder-font-size); font-family: var(--builder-font-family); line-height: var(--builder-line-height);`,
             },
         },
     });
@@ -96,6 +93,7 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
     return (
         <div className={cn("border rounded-md bg-background overflow-hidden", className)}>
             <div className="flex flex-wrap items-center gap-1 p-1 border-b bg-muted/20">
+                {/* 기본 스타일 그룹 */}
                 <div className="flex items-center gap-0.5">
                     <ToolbarToggle
                         onPressedChange={() => editor.chain().focus().toggleBold().run()}
@@ -124,6 +122,7 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
 
                 <Separator orientation="vertical" className="h-6 mx-1" />
 
+                {/* 색상 및 강조 그룹 */}
                 <div className="flex items-center gap-0.5">
                     <ToolbarToggle
                         onPressedChange={() => editor.chain().focus().setColor('#8B5E3C').run()}
@@ -140,34 +139,6 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
                         <Highlighter size={16} />
                     </ToolbarToggle>
                 </div>
-
-                <Separator orientation="vertical" className="h-6 mx-1" />
-
-                <div className="flex items-center gap-0.5">
-                    <ToolbarToggle
-                        onPressedChange={() => editor.chain().focus().setTextAlign('left').run()}
-                        pressed={editor.isActive({ textAlign: 'left' })}
-                        title="왼쪽 정렬"
-                    >
-                        <AlignLeft size={16} />
-                    </ToolbarToggle>
-
-                    <ToolbarToggle
-                        onPressedChange={() => editor.chain().focus().setTextAlign('center').run()}
-                        pressed={editor.isActive({ textAlign: 'center' })}
-                        title="가운데 정렬"
-                    >
-                        <AlignCenter size={16} />
-                    </ToolbarToggle>
-
-                    <ToolbarToggle
-                        onPressedChange={() => editor.chain().focus().setTextAlign('right').run()}
-                        pressed={editor.isActive({ textAlign: 'right' })}
-                        title="오른쪽 정렬"
-                    >
-                        <AlignRight size={16} />
-                    </ToolbarToggle>
-                </div>
             </div>
 
             <EditorContent
@@ -177,4 +148,3 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
         </div>
     );
 }
-
