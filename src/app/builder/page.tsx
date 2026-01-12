@@ -144,7 +144,7 @@ export default function BuilderPage() {
 
           {isPreviewOpen && (
             <div className={styles.mobilePreview}>
-              <InvitationCanvas key={`mobile-preview-${Date.now()}`} isPreviewMode editingSection={null} />
+              <InvitationCanvas key="mobile-preview" isPreviewMode editingSection={null} />
             </div>
           )}
         </SheetContent>
