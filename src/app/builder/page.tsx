@@ -26,6 +26,7 @@ export default function BuilderPage() {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const { user } = useAuth();
   const state = useInvitationStore();
+  const editingSection = useInvitationStore(state => state.editingSection);
 
 
   const handleLogin = useCallback(() => router.push('/login'), [router]);
@@ -103,7 +104,7 @@ export default function BuilderPage() {
                   </div>
 
                   <div className={styles.screen}>
-                    <InvitationCanvas />
+                    <InvitationCanvas key="desktop-preview" editingSection={editingSection} />
                   </div>
 
                   <div className={styles.homeIndicator} />
@@ -141,9 +142,11 @@ export default function BuilderPage() {
             <X size={20} />
           </button>
 
-          <div className={styles.mobilePreview}>
-            <InvitationCanvas />
-          </div>
+          {isPreviewOpen && (
+            <div className={styles.mobilePreview}>
+              <InvitationCanvas key={`mobile-preview-${Date.now()}`} isPreviewMode editingSection={null} />
+            </div>
+          )}
         </SheetContent>
       </Sheet>
     </main>

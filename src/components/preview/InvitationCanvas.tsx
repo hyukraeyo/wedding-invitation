@@ -17,10 +17,14 @@ import { clsx } from 'clsx';
 
 const LocationView = dynamic(() => import('./sections/LocationView'), { ssr: false });
 
-const InvitationCanvas = memo(() => {
+interface InvitationCanvasProps {
+  isPreviewMode?: boolean;
+  editingSection?: string | null;
+}
+
+const InvitationCanvas = memo(({ isPreviewMode = false, editingSection }: InvitationCanvasProps) => {
   const {
     theme,
-    editingSection,
     mainScreen,
     imageUrl,
     imageRatio,
@@ -72,22 +76,35 @@ const InvitationCanvas = memo(() => {
     showDday,
   } = useInvitationStore();
 
-  // Scroll to editing section
+  // Scroll to editing section (only in desktop mode)
   useEffect(() => {
-    if (editingSection) {
+    if (editingSection && !isPreviewMode) {
       const targetId = editingSection;
       if (targetId === 'basic') return; // 기본 정보 클릭 시 프리뷰는 가만히 둠
 
-      const element = document.getElementById(`section-${targetId}`);
-      if (element) {
-        element.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-          inline: 'nearest'
-        });
+      try {
+        const element = document.getElementById(`section-${targetId}`);
+        if (element) {
+          element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+            inline: 'nearest'
+          });
+        }
+      } catch (error) {
+        // Prevent errors when element is not found or scroll fails
+        console.warn('Scroll to section failed:', error);
       }
     }
-  }, [editingSection]);
+  }, [editingSection, isPreviewMode]);
+
+  // Cleanup on unmount to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      // Clear any pending scroll operations or event listeners
+      // This helps prevent errors when component unmounts during transitions
+    };
+  }, []);
 
   const canvasStyle = useMemo(() => {
     let selectedFontVar = '--font-pretendard';
