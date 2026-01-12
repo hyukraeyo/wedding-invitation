@@ -94,26 +94,6 @@ body {
   }
 }
 
-/* Shimmer Animation for Skeletons */
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
-}
-
-.animate-shimmer {
-  background: linear-gradient(
-    90deg,
-    hsl(var(--muted)) 25%,
-    hsl(var(--muted) / 0.7) 50%,
-    hsl(var(--muted)) 75%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 2s infinite linear;
-}
 
 /* Premium Transitions */
 .transition-subtle {
@@ -127,6 +107,15 @@ body {
   }
   &:active {
     transform: translateY(0);
+  }
+}
+
+/* Click/Touch Feedback */
+.click-effect {
+  transition: transform 0.1s ease-in-out;
+  
+  &:active {
+    transform: scale(0.95);
   }
 }
 

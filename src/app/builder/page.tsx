@@ -76,7 +76,7 @@ export default function BuilderPage() {
 
       <div className={styles.workspace}>
         <section className={styles.sidebar} id="sidebar-portal-root">
-          <div className={styles.scrollArea}>
+          <div className={styles.scrollArea} id="builder-sidebar-scroll">
             <EditorForm />
           </div>
         </section>
@@ -159,7 +159,7 @@ export default function BuilderPage() {
 
           {isPreviewOpen && (
             <div className={styles.mobilePreview}>
-              <InvitationCanvas key="mobile-preview" isPreviewMode editingSection={null} />
+              <InvitationCanvas key="mobile-preview" isPreviewMode editingSection={editingSection} />
             </div>
           )}
         </SheetContent>

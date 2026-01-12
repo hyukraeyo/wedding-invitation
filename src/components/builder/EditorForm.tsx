@@ -32,13 +32,19 @@ const SECTIONS = [
 ] as const;
 
 const EditorForm = memo(function EditorForm() {
-  const [openSection, setOpenSection] = useState<string | null>(null);
+  const [openSections, setOpenSections] = useState<string[]>([]);
   const [isReady, setIsReady] = useState(false);
   const setEditingSection = useInvitationStore(state => state.setEditingSection);
 
-  useEffect(() => {
-    setEditingSection(openSection);
-  }, [openSection, setEditingSection]);
+  // When sections change, identify if a new section was opened to update the preview
+  const handleValueChange = useCallback((value: string[]) => {
+    // Find if a new section was added
+    const added = value.find(v => !openSections.includes(v));
+    if (added) {
+      setEditingSection(added);
+    }
+    setOpenSections(value);
+  }, [openSections, setEditingSection]);
 
   // Delay rendering to ensure all icons are loaded for smooth appearance
   useEffect(() => {
@@ -47,7 +53,11 @@ const EditorForm = memo(function EditorForm() {
   }, []);
 
   const handleToggle = useCallback((section: string) => {
-    setOpenSection(prev => prev === section ? null : section);
+    setOpenSections(prev =>
+      prev.includes(section)
+        ? prev.filter(s => s !== section)
+        : [...prev, section]
+    );
   }, []);
 
   if (!isReady) {
@@ -72,17 +82,16 @@ const EditorForm = memo(function EditorForm() {
   return (
     <div className="flex flex-col gap-3 pb-32 sm-animate-fadeIn">
       <Accordion
-        type="single"
-        collapsible
-        value={openSection || ""}
-        onValueChange={(val) => setOpenSection(val || null)}
+        type="multiple"
+        value={openSections}
+        onValueChange={handleValueChange}
         className="flex flex-col gap-3"
       >
         {SECTIONS.map(({ key, Component }) => (
           <Component
             key={key}
             value={key}
-            isOpen={openSection === key}
+            isOpen={openSections.includes(key)}
             onToggle={() => handleToggle(key)}
           />
         ))}

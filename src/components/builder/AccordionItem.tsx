@@ -62,7 +62,7 @@ export const AccordionItem = ({
             )}
         >
             <AccordionTrigger className={cn(
-                "flex items-center justify-between p-4 cursor-pointer w-full text-left select-none rounded-xl transition-all hover:no-underline [&>svg]:hidden",
+                "flex items-center justify-between px-3 py-3 md:p-4 cursor-pointer w-full text-left select-none rounded-xl transition-all hover:no-underline [&>svg]:hidden",
                 isOpen && "rounded-b-none"
             )}>
                 <div className="flex items-center gap-3">
@@ -99,7 +99,7 @@ export const AccordionItem = ({
             </AccordionTrigger>
 
             <AccordionContent>
-                <div className="p-4 pt-0">
+                <div className="pb-4 pt-0 px-2 md:px-4">
                     <div className="h-px w-full bg-border mb-4" />
                     {children}
                 </div>

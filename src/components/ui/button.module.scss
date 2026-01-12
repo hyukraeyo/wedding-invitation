@@ -1,0 +1,171 @@
+@use "@/styles/variables" as *;
+
+.base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem; /* gap-2 */
+  white-space: nowrap;
+  border-radius: var(--radius);
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 500; /* font-medium */
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms; /* transition-colors */
+
+  &:active {
+    transform: scale(0.96);
+  }
+
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 1px var(--ring);
+  }
+
+  & :global(svg) {
+    pointer-events: none;
+    width: 1rem; /* size-4 */
+    height: 1rem;
+    flex-shrink: 0;
+  }
+}
+
+/* Variants */
+.variantDefault {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  
+  &:hover {
+    background-color: color-mix(in srgb, var(--primary), white 10%); /* opacity 0.9 approximation */
+  }
+}
+
+.variantDestructive {
+  background-color: var(--destructive);
+  color: var(--destructive-foreground);
+  
+  &:hover {
+    background-color: color-mix(in srgb, var(--destructive), white 10%);
+  }
+}
+
+.variantOutline {
+  border: 1px solid var(--input);
+  background-color: var(--background);
+  
+  &:hover {
+    background-color: var(--accent);
+    color: var(--accent-foreground);
+  }
+}
+
+.variantSecondary {
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+  
+  &:hover {
+    background-color: color-mix(in srgb, var(--secondary), black 20%); /* opacity 0.8 */
+  }
+}
+
+.variantGhost {
+  background-color: transparent;
+  
+  &:hover {
+    background-color: var(--accent);
+    color: var(--accent-foreground);
+  }
+}
+
+.variantLink {
+  color: var(--primary);
+  text-underline-offset: 4px;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+/* Toss Inspired Variants - Preserving existing styles */
+.variantTossText {
+  background-color: transparent;
+  color: var(--foreground);
+  
+  &:hover {
+    background-color: transparent;
+  }
+  
+  &:active {
+    background-color: rgba(var(--accent), 0.5); /* simplified */
+  }
+}
+
+.variantTossSolid {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  transition: opacity 0.2s;
+  
+  &:hover {
+    background-color: var(--primary);
+  }
+  
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+.variantTossLine {
+  border: 1px solid var(--input);
+  background-color: var(--background);
+  color: var(--foreground);
+  
+  &:hover {
+    background-color: var(--background);
+  }
+  
+  &:active {
+    background-color: var(--accent);
+  }
+}
+
+/* Sizes */
+.sizeDefault {
+  height: 3rem; /* h-12 to match existing mobile-friendly styles */
+  padding: 0.5rem 1rem;
+}
+
+.sizeSm {
+  height: 2rem; /* h-8 */
+  border-radius: var(--radius);
+  padding: 0 0.75rem;
+  font-size: 0.75rem; /* text-xs */
+}
+
+.sizeLg {
+  height: 3.5rem; /* h-14 */
+  border-radius: var(--radius);
+  padding: 0 2.5rem;
+}
+
+.sizeIcon {
+  height: 3rem; /* h-12 */
+  width: 3rem;
+  padding: 0;
+}
+
+.sizeIconSm {
+  height: 2rem; /* h-8 */
+  width: 2rem;
+  padding: 0;
+}
+
+.sizeIconLg {
+  height: 3.5rem; /* h-14 */
+  width: 3.5rem;
+  padding: 0;
+}

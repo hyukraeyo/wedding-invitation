@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Plus, Loader2 } from 'lucide-react';
+import { Plus, Loader2, User, LogIn, LogOut, Save } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { supabase } from '@/lib/supabase';
@@ -23,11 +23,15 @@ interface HeaderProps {
     isLoading?: boolean;
 }
 
+import { cn } from '@/lib/utils';
+import { useHeaderVisible } from '@/hooks/useHeaderVisible';
+
 export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
     const router = useRouter();
     const { user } = useAuth();
     const reset = useInvitationStore(state => state.reset);
     const [showResetDialog, setShowResetDialog] = useState(false);
+    const isVisible = useHeaderVisible(10, 'builder-sidebar-scroll');
 
     const handleLogout = async () => {
         await supabase.auth.signOut();
@@ -59,7 +63,10 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
     };
 
     return (
-        <header className="flex h-14 items-center justify-between border-b bg-background px-4 md:px-6 sticky top-0 z-50">
+        <header className={cn(
+            "fixed md:sticky top-0 left-0 right-0 flex h-14 items-center justify-between border-b bg-background px-4 md:px-6 z-50 transition-transform duration-300",
+            !isVisible && "-translate-y-full md:translate-y-0"
+        )}>
             {/* Logo */}
             <div className="flex items-center gap-2 font-serif font-bold text-xl tracking-tight">
                 <Link href="/" className="hover:opacity-80 transition-opacity">
@@ -100,13 +107,32 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
 
                 <div className="flex items-center gap-2">
                     {user && (
+                        <Link href="/mypage" className="md:hidden">
+                            <Button variant="ghost" size="sm" className="px-2">
+                                <User size={20} />
+                            </Button>
+                        </Link>
+                    )}
+                    {user && (
                         <Button
                             variant="ghost"
                             size="sm"
-                            className="md:hidden"
+                            className="md:hidden px-2"
                             onClick={handleLogout}
+                            aria-label="로그아웃"
                         >
-                            로그아웃
+                            <LogOut size={20} />
+                        </Button>
+                    )}
+                    {!user && onLogin && (
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="md:hidden px-2"
+                            onClick={onLogin}
+                            aria-label="로그인"
+                        >
+                            <LogIn size={20} />
                         </Button>
                     )}
                     {user && (
@@ -131,13 +157,17 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
                         <Button
                             onClick={onSave}
                             size="sm"
-                            className="font-bold min-w-[60px]"
+                            className="font-bold md:min-w-[60px] px-2 md:px-4"
                             disabled={isLoading}
+                            aria-label="저장"
                         >
                             {isLoading ? (
                                 <Loader2 className="h-4 w-4 animate-spin" />
                             ) : (
-                                '저장'
+                                <>
+                                    <Save size={20} className="md:hidden" />
+                                    <span className="hidden md:inline">저장</span>
+                                </>
                             )}
                         </Button>
                     )}

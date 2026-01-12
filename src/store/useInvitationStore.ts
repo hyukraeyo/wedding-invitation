@@ -281,7 +281,7 @@ export const INITIAL_STATE = {
     coordinates: { lat: 37.5665, lng: 126.9780 }, // Default: Seoul City Hall
     greetingTitle: '저희 두 사람 결혼합니다',
     greetingSubtitle: 'INVITATION',
-    message: '<p style="text-align: center">서로가 마주보며 다져온 사랑을<br>이제 함께 한 곳을 바라보며 걸어가려 합니다.<br>저희의 새 출발을 축복해 주세요.</p>',
+    message: '<p style="text-align: center">곁에 있을 때 가장 나다운 모습이 되게 하는 사람<br>꿈을 꾸게 하고 그 꿈을 함께 나누는 사람<br>그런 사람을 만나 이제 하나가 되려 합니다.<br><br>저희의 뜻깊은 시작을 함께 나누어 주시고<br>따뜻한 마음으로 축복해 주시면 감사하겠습니다.</p>',
     showNamesAtBottom: true,
     enableFreeformNames: false,
     groomNameCustom: '',
@@ -346,12 +346,12 @@ export const INITIAL_STATE = {
     slug: '',
     editingSection: null,
     closing: {
-        title: '엔딩 사진, 문구',
+        title: '감사의 마음을 전합니다',
         subtitle: 'CLOSING',
         imageUrl: null,
         effect: 'none' as const,
         ratio: 'auto' as const,
-        content: '',
+        content: '저희의 새로운 시작을 함께 축복해 주셔서 진심으로 감사합니다. 보내주신 소중한 마음 평생 잊지 않고 예쁘게 잘 살겠습니다.',
     },
 };
 

@@ -6,6 +6,7 @@ import { TextField } from '../TextField';
 import { Field } from '../Field';
 import { SegmentedControl } from '../SegmentedControl';
 import { Modal } from '@/components/common/Modal';
+import { ExampleSelectorModal } from '@/components/common/ExampleSelectorModal';
 import RichTextEditor from '@/components/common/RichTextEditor';
 import { ImageUploader } from '../ImageUploader';
 import styles from './GreetingSection.module.scss';
@@ -170,30 +171,16 @@ export default function GreetingSection({ isOpen, onToggle, value }: SectionProp
             </div>
 
             {/* Sample Phrases Modal */}
-            <Modal
+            <ExampleSelectorModal
                 isOpen={isSampleModalOpen}
                 onClose={() => setIsSampleModalOpen(false)}
                 title="인사말 예시 문구"
-            >
-                <div className={styles.sampleList}>
-                    {SAMPLE_PHRASES.map((sample, idx) => (
-                        <button
-                            key={idx}
-                            className={styles.sampleCard}
-                            onClick={() => handleSelectSample(sample)}
-                        >
-                            <div className={styles.sampleHeader}>
-                                <span className={styles.sampleBadge}>예시 {idx + 1}</span>
-                                <span className={styles.sampleTitle}>{sample.title}</span>
-                            </div>
-                            <div
-                                className={styles.sampleContent}
-                                dangerouslySetInnerHTML={{ __html: sample.message }}
-                            />
-                        </button>
-                    ))}
-                </div>
-            </Modal>
+                items={SAMPLE_PHRASES.map(s => ({
+                    ...s,
+                    content: s.message // Map message to content for the generic component
+                }))}
+                onSelect={(item) => handleSelectSample(item)}
+            />
         </AccordionItem>
     );
 }

@@ -6,6 +6,7 @@ import { TextField } from '../TextField';
 import { Field } from '../Field';
 import { ImageUploader } from '../ImageUploader';
 import { Modal } from '@/components/common/Modal';
+import { ExampleSelectorModal } from '@/components/common/ExampleSelectorModal';
 import styles from './ClosingSection.module.scss';
 
 interface SectionProps {
@@ -107,29 +108,13 @@ export default function ClosingSection({ isOpen, onToggle, value }: SectionProps
             </div>
 
             {/* Sample Phrases Modal */}
-            <Modal
+            <ExampleSelectorModal
                 isOpen={isSampleModalOpen}
                 onClose={() => setIsSampleModalOpen(false)}
                 title="엔딩 예시 문구"
-            >
-                <div className={styles.sampleList}>
-                    {SAMPLE_PHRASES.map((sample, idx) => (
-                        <button
-                            key={idx}
-                            className={styles.sampleCard}
-                            onClick={() => handleSelectSample(sample)}
-                        >
-                            <div className={styles.sampleHeader}>
-                                <span className={styles.sampleBadge}>예시 {idx + 1}</span>
-                                <span className={styles.sampleTitle}>{sample.title}</span>
-                            </div>
-                            <div className={styles.sampleContent}>
-                                {sample.content}
-                            </div>
-                        </button>
-                    ))}
-                </div>
-            </Modal>
+                items={SAMPLE_PHRASES}
+                onSelect={(item) => handleSelectSample(item)}
+            />
         </AccordionItem>
     );
 }

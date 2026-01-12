@@ -1,0 +1,25 @@
+@use "@/styles/variables" as *;
+
+.skeleton {
+  border-radius: var(--radius);
+  background-color: var(--muted);
+  
+  // Shimmer effect
+  background: linear-gradient(
+    90deg,
+    var(--muted) 25%,
+    var(--ivory) 50%, /* Using ivory or a lighter color for the shine */
+    var(--muted) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite linear;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}

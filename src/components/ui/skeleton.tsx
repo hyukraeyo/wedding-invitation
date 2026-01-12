@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils"
+import styles from "./skeleton.module.scss"
 
 function Skeleton({
     className,
@@ -6,7 +7,7 @@ function Skeleton({
 }: React.HTMLAttributes<HTMLDivElement>) {
     return (
         <div
-            className={cn("animate-shimmer rounded-md bg-muted", className)}
+            className={cn(styles.skeleton, className)}
             {...props}
         />
     )
