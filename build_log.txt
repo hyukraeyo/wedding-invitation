@@ -1,0 +1,27 @@
+
+> wedding-invitation@0.1.0 build
+> next build
+
+▲ Next.js 16.1.1 (Turbopack)
+- Environments: .env.local
+- Experiments (use with caution):
+  · optimizePackageImports
+  · serverActions
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 4.3s
+  Running TypeScript ...
+Failed to compile.
+
+./src/components/preview/sections/LocationView.tsx:78:13
+Type error: Type '{ children: Element; ncpKeyId: string; error: Element; }' is not assignable to type 'IntrinsicAttributes & Props'.
+  Property 'error' does not exist on type 'IntrinsicAttributes & Props'.
+
+[0m [90m 76 |[39m         [33m<[39m[33mNavermapsProvider[39m
+ [90m 77 |[39m             ncpKeyId[33m=[39m{process[33m.[39menv[33m.[39m[33mNEXT_PUBLIC_NAVER_MAP_CLIENT_ID[39m [33m||[39m [32m'dh0fr7vx5q'[39m}
+[31m[1m>[22m[39m[90m 78 |[39m             error[33m=[39m{[33m<[39m[33mdiv[39m className[33m=[39m[32m"relative w-full h-full bg-muted/5 flex flex-col items-center justify-center text-sm text-muted-foreground p-4 text-center"[39m[33m>[39m
+ [90m    |[39m             [31m[1m^[22m[39m
+ [90m 79 |[39m                 네이버 지도를 불러올 수 없습니다[33m.[39m[33m<[39m[33mbr[39m [33m/[39m[33m>[39m
+ [90m 80 |[39m                 [33m<[39m[33mspan[39m className[33m=[39m[32m"text-xs mt-2 opacity-70"[39m[33m>[39m([33mClient[39m [33mID[39m 또는 서비스 [33mURL[39m 등록 확인 필요)[33m<[39m[33m/[39m[33mspan[39m[33m>[39m
+ [90m 81 |[39m             [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m}[0m
+Next.js build worker exited with code: 1 and signal: null

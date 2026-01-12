@@ -1,9 +1,18 @@
 "use client";
 
 import React, { useState, useCallback, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
-import InvitationCanvas from '@/components/preview/InvitationCanvas';
-import EditorForm from '@/components/builder/EditorForm';
+
+// Heavy components dynamic import
+const InvitationCanvas = dynamic(() => import('@/components/preview/InvitationCanvas'), {
+  ssr: false,
+  loading: () => <div className="w-full h-full flex items-center justify-center bg-muted/20 animate-pulse" />
+});
+const EditorForm = dynamic(() => import('@/components/builder/EditorForm'), {
+  ssr: false
+});
+
 import { useInvitationStore, InvitationData } from '@/store/useInvitationStore';
 import { useAuth } from '@/hooks/useAuth';
 import { invitationService } from '@/services/invitationService';
@@ -14,6 +23,7 @@ import styles from './BuilderPage.module.scss';
 import { clsx } from 'clsx';
 import { Smartphone, X } from 'lucide-react';
 import { Sheet, SheetContent, SheetTitle, SheetHeader, SheetDescription } from '@/components/ui/sheet';
+import { useWindowSize } from '@/hooks/useWindowSize';
 
 const generateSlug = (name: string): string => {
   const randomStr = Math.random().toString(36).substring(2, 8);
@@ -27,25 +37,7 @@ export default function BuilderPage() {
   const { user } = useAuth();
   const state = useInvitationStore();
   const editingSection = useInvitationStore(state => state.editingSection);
-  const [windowWidth, setWindowWidth] = useState(0);
-
-  useEffect(() => {
-    setWindowWidth(window.innerWidth);
-
-    let timeoutId: NodeJS.Timeout;
-    const handleResize = () => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        setWindowWidth(window.innerWidth);
-      }, 150);
-    };
-
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-      clearTimeout(timeoutId);
-    };
-  }, []);
+  const windowWidth = useWindowSize(); // Optimized hook usage
 
 
   const handleLogin = useCallback(() => router.push('/login'), [router]);
@@ -75,7 +67,7 @@ export default function BuilderPage() {
     } finally {
       setIsSaving(false);
     }
-  }, [user, state, handleLogin, toast]);
+  }, [user, state, handleLogin]);
 
   return (
     <main className={styles.main}>

@@ -6,6 +6,7 @@ import {
     AccordionTrigger,
     AccordionContent,
 } from "@/components/ui/accordion";
+import { getScrollParent, smoothScrollTo } from '@/utils/smoothScroll';
 
 interface AccordionItemProps {
     value: string; // Required for Radix Accordion
@@ -29,15 +30,24 @@ export const AccordionItem = ({
 }: AccordionItemProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
 
-    // Auto-scroll logic kept from original
+    // Auto-scroll logic: App-like smooth scrolling
     useEffect(() => {
         if (!isOpen || !containerRef.current) return;
 
+        // Wait almost full duration (300ms) of accordion animation 
+        // to calculate correct final position, then scroll smoothly.
+        // 250ms feels slightly snappier as it catches the end of the animation.
         const timer = setTimeout(() => {
-            const rect = containerRef.current?.getBoundingClientRect();
-            if (rect && rect.top < 100 && rect.top > 0) return;
-            containerRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 150);
+            const element = containerRef.current;
+            if (!element) return;
+
+            const scrollParent = getScrollParent(element);
+            if (scrollParent) {
+                // Calculate target position: element's offset relative to scroll parent
+                // We add a small offset/padding (e.g. 20px) for visual breathing room
+                smoothScrollTo(scrollParent, element.offsetTop - 20, 600); // 600ms duration for premium feel
+            }
+        }, 250);
 
         return () => clearTimeout(timer);
     }, [isOpen]);

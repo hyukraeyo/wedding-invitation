@@ -11,6 +11,7 @@ import SectionHeader from '../SectionHeader';
 import { NaverIcon, KakaoIcon } from '../../common/MapIcons';
 import { clsx } from 'clsx';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Skeleton } from '@/components/ui/skeleton';
 import styles from './LocationView.module.scss';
 
 interface LocationViewProps {
@@ -45,8 +46,17 @@ const KakaoMapContainer = ({ lat, lng, mapZoom, lockMap }: { lat: number; lng: n
 
     const kakaoMapLevel = Math.max(1, Math.min(14, 20 - mapZoom));
 
-    if (loading) return <div className={styles.mapPlaceholder}>지도를 불러오고 있습니다...</div>;
-    if (error) return <div className={styles.mapPlaceholder}>지도를 불러올 수 없습니다.</div>;
+    if (loading) return (
+        <div className="relative w-full h-full">
+            <Skeleton className="absolute inset-0 z-10" />
+            <div className={styles.mapPlaceholder}>지도를 불러오고 있습니다...</div>
+        </div>
+    );
+    if (error) return (
+        <div className="relative w-full h-full bg-muted/5 flex items-center justify-center text-sm text-muted-foreground">
+            카카오 지도를 불러올 수 없습니다. (인증 오류)
+        </div>
+    );
 
     return (
         <KakaoMap
@@ -63,10 +73,11 @@ const KakaoMapContainer = ({ lat, lng, mapZoom, lockMap }: { lat: number; lng: n
 
 const NaverMapContainer = ({ lat, lng, mapZoom, lockMap }: { lat: number; lng: number; mapZoom: number; lockMap: boolean }) => {
     return (
-        <NavermapsProvider ncpKeyId={process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID || 'dh0fr7vx5q'}>
+        <NavermapsProvider
+            ncpKeyId={process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID || 'dh0fr7vx5q'}
+        >
             <NaverMapDiv style={{ width: '100%', height: '100%' }}>
                 <NaverMap
-                    defaultCenter={{ lat, lng }}
                     center={{ lat, lng }}
                     zoom={mapZoom}
                     draggable={!lockMap}
@@ -147,9 +158,21 @@ const LocationView = memo(({
                 <div className={styles.mapContainer}>
                     <AspectRatio ratio={16 / 10}>
                         {mapType === 'naver' ? (
-                            <NaverMapContainer lat={lat} lng={lng} mapZoom={mapZoom} lockMap={lockMap} />
+                            <NaverMapContainer
+                                key={`naver-${lat}-${lng}`}
+                                lat={lat}
+                                lng={lng}
+                                mapZoom={mapZoom}
+                                lockMap={lockMap}
+                            />
                         ) : (
-                            <KakaoMapContainer lat={lat} lng={lng} mapZoom={mapZoom} lockMap={lockMap} />
+                            <KakaoMapContainer
+                                key={`kakao-${lat}-${lng}`}
+                                lat={lat}
+                                lng={lng}
+                                mapZoom={mapZoom}
+                                lockMap={lockMap}
+                            />
                         )}
                     </AspectRatio>
                 </div>

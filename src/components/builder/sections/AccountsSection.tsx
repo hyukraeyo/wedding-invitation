@@ -260,7 +260,7 @@ export default function AccountsSection({ value, isOpen, onToggle }: SectionProp
                     value={accountsBrideTitle}
                     onChange={(e) => setAccountsBrideTitle(e.target.value)}
                 />
-                <Field label="색상 모드" className="mt-2">
+                <Field label="색상 모드">
                     <SegmentedControl
                         value={accountsColorMode}
                         options={[

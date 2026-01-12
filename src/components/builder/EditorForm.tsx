@@ -4,6 +4,7 @@ import React, { useState, useCallback, memo, useEffect } from 'react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { cn } from '@/lib/utils';
 import { Accordion } from '@/components/ui/accordion';
+import { Skeleton } from '@/components/ui/skeleton';
 
 // Static imports for immediate loading (prevents icon pop-in)
 import ThemeSection from './sections/ThemeSection';
@@ -49,11 +50,27 @@ const EditorForm = memo(function EditorForm() {
     setOpenSection(prev => prev === section ? null : section);
   }, []);
 
+  if (!isReady) {
+    return (
+      <div className="flex flex-col gap-3 pb-32">
+        {Array.from({ length: 10 }).map((_, i) => (
+          <div key={i} className="bg-white border border-builder-border rounded-[20px] p-5 h-[64px] flex items-center justify-between shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
+            <div className="flex items-center gap-3">
+              <Skeleton className="w-10 h-10 rounded-xl" />
+              <div className="flex flex-col gap-1.5">
+                <Skeleton className="w-24 h-4 rounded-full" />
+                <Skeleton className="w-16 h-3 rounded-full opacity-60" />
+              </div>
+            </div>
+            <Skeleton className="w-4 h-4 rounded-full opacity-30" />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
-    <div className={cn(
-      "flex flex-col gap-3 pb-32 transition-opacity duration-500",
-      isReady ? "opacity-100" : "opacity-0"
-    )}>
+    <div className="flex flex-col gap-3 pb-32 sm-animate-fadeIn">
       <Accordion
         type="single"
         collapsible

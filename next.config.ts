@@ -54,10 +54,27 @@ const nextConfig: NextConfig = {
 
   // 보안 및 성능 헤더
   async headers() {
+    const cspHeader = `
+      default-src 'self';
+      script-src 'self' 'unsafe-eval' 'unsafe-inline' https: http:;
+      style-src 'self' 'unsafe-inline' https: http:;
+      img-src 'self' blob: data: https: http:;
+      font-src 'self' data: https: http:;
+      connect-src 'self' https: http: wss:;
+      worker-src 'self' blob:;
+      child-src 'self' blob: https: http:;
+      frame-src 'self' https: http:;
+      object-src 'none';
+      base-uri 'self';
+      form-action 'self';
+      frame-ancestors 'none';
+    `.replace(/\s{2,}/g, ' ').trim();
+
     return [
       {
         source: '/(.*)',
         headers: [
+          { key: 'Content-Security-Policy', value: cspHeader },
           { key: 'X-Frame-Options', value: 'DENY' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },

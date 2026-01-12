@@ -3,6 +3,7 @@
 import React, { useState, useCallback } from 'react';
 import { MapPin, Search } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
+import { useKakaoLoader } from 'react-kakao-maps-sdk';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { SegmentedControl } from '../SegmentedControl';
@@ -37,10 +38,35 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ valu
         mapZoom, setMapZoom,
         mapType, setMapType,
         sketchUrl, setSketchUrl,
-        sketchRatio, setSketchRatio
+        sketchRatio, setSketchRatio,
+        coordinates, setCoordinates
     } = useInvitationStore();
 
+    // Load Kakao Maps SDK for Geocoding services
+    useKakaoLoader({
+        appkey: process.env.NEXT_PUBLIC_KAKAO_APP_KEY || '',
+        libraries: ['services'],
+    });
+
     const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+    // Geocoding Fallback: If address exists but coordinates are default or missing, try to geocode
+    React.useEffect(() => {
+        if (address && typeof window !== 'undefined' && window.kakao?.maps?.services) {
+            const geocoder = new window.kakao.maps.services.Geocoder();
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            geocoder.addressSearch(address, (result: any[], status: any) => {
+                if (status === window.kakao.maps.services.Status.OK && result.length > 0) {
+                    const lat = parseFloat(result[0].y);
+                    const lng = parseFloat(result[0].x);
+                    // Only update if different to avoid infinite loop
+                    if (Math.abs((coordinates?.lat || 0) - lat) > 0.0001 || Math.abs((coordinates?.lng || 0) - lng) > 0.0001) {
+                        setCoordinates(lat, lng);
+                    }
+                }
+            });
+        }
+    }, [address, setCoordinates, coordinates]);
 
     const handleAddressSearch = useCallback(() => {
         setIsSearchOpen(true);
@@ -111,14 +137,12 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ valu
                     placeholder="예: LOCATION"
                     value={locationSubtitle}
                     onChange={(e) => setLocationSubtitle(e.target.value)}
-                    containerClassName="mb-4"
                 />
                 <TextField
                     label="제목"
                     placeholder="예: 오시는 길"
                     value={locationTitle}
                     onChange={(e) => setLocationTitle(e.target.value)}
-                    containerClassName="mb-4"
                 />
 
                 <Field label="주소">
