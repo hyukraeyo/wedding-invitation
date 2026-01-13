@@ -37,7 +37,7 @@ const ClosingView = memo(({
     accentColor,
 }: ClosingViewProps) => {
     const { toast } = useToast();
-    const { kakaoShare, groom, bride, imageUrl: mainImageUrl, greetingTitle, date, time } = useInvitationStore();
+    const { kakaoShare, groom, bride, imageUrl: mainImageUrl, date, time } = useInvitationStore();
 
     const handleLinkShare = () => {
         const url = window.location.href;
@@ -53,8 +53,9 @@ const ClosingView = memo(({
             return;
         }
 
-        if (!window.Kakao.isInitialized()) {
-            window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_APP_KEY);
+        const kakaoAppKey = process.env.NEXT_PUBLIC_KAKAO_APP_KEY;
+        if (!window.Kakao.isInitialized() && kakaoAppKey) {
+            window.Kakao.init(kakaoAppKey);
         }
 
         const baseUrl = window.location.origin;
@@ -70,6 +71,10 @@ const ClosingView = memo(({
         }
 
         try {
+            if (!window.Kakao.Share?.sendDefault) {
+                toast({ description: '카카오 공유 기능을 사용할 수 없습니다.', variant: 'destructive' });
+                return;
+            }
             window.Kakao.Share.sendDefault({
                 objectType: 'feed',
                 content: {

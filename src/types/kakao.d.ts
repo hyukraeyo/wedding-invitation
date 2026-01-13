@@ -267,7 +267,37 @@ declare global {
 
     interface Window {
         kakao: typeof kakao;
-        Kakao: any; // Using any for the SDK to avoid massive type definitions for now
+        // Kakao SDK types - using unknown for the SDK to satisfy strict type checking
+        Kakao: {
+            init: (key: string) => void;
+            isInitialized: () => boolean;
+            Share?: {
+                sendDefault: (options: KakaoShareOptions) => void;
+            };
+            Link?: {
+                sendDefault: (options: KakaoShareOptions) => void;
+            };
+        };
+    }
+
+    interface KakaoShareOptions {
+        objectType: 'feed' | 'list' | 'location' | 'commerce' | 'text';
+        content: {
+            title: string;
+            description?: string;
+            imageUrl?: string;
+            link: {
+                mobileWebUrl?: string;
+                webUrl?: string;
+            };
+        };
+        buttons?: Array<{
+            title: string;
+            link: {
+                mobileWebUrl?: string;
+                webUrl?: string;
+            };
+        }>;
     }
 }
 

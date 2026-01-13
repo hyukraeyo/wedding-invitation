@@ -318,8 +318,8 @@ export const INITIAL_STATE = {
 
     theme: {
         font: 'pretendard' as const,
-        backgroundColor: '#FFFFFF', // White
-        accentColor: '#D4AF37', // Warm Gold
+        backgroundColor: '#FFFDE7', // Banana Ivory
+        accentColor: '#FBC02D', // Banana Yellow (Logo Color)
         fontScale: 1,
         pattern: 'none' as const,
         effect: 'none' as const,

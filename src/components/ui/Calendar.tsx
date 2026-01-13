@@ -104,7 +104,7 @@ function Calendar({
         range_middle: cn("rounded-none bg-slate-100", defaultClassNames.range_middle),
         range_end: cn("bg-slate-900 rounded-r-lg", defaultClassNames.range_end),
         today: cn(
-          "text-slate-900 font-semibold",
+          "text-primary font-bold",
           defaultClassNames.today
         ),
         outside: cn(
@@ -204,13 +204,13 @@ function CalendarDayButton({
         isSunday && !modifiers.outside && "text-rose-500",
         isSaturday && !modifiers.outside && "text-blue-500",
         // 오늘 날짜 스타일 (선택되지 않았을 때)
-        isToday && !isSelected && "bg-slate-100 font-semibold",
+        isToday && !isSelected && "bg-primary/10 text-primary font-bold",
         // 선택된 날짜 스타일
-        isSelected && "bg-slate-900 text-white font-semibold hover:bg-slate-800",
+        isSelected && "bg-primary text-white font-bold hover:bg-primary/90 shadow-sm",
         // 범위 선택 스타일
-        modifiers.range_start && "bg-slate-900 text-white rounded-lg",
-        modifiers.range_end && "bg-slate-900 text-white rounded-lg",
-        modifiers.range_middle && "bg-slate-100 text-slate-900 rounded-none",
+        modifiers.range_start && "bg-primary text-white rounded-lg",
+        modifiers.range_end && "bg-primary text-white rounded-lg",
+        modifiers.range_middle && "bg-primary/10 text-primary rounded-none",
         // 외부 날짜 (이전/다음 달)
         modifiers.outside && "text-slate-300",
         // 비활성화된 날짜

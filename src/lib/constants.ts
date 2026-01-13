@@ -75,9 +75,9 @@ export const THEME_CONSTANTS = {
     sans: 'font-sans',
   },
   colors: {
-    primary: '#4A5D45',
-    secondary: '#F9F8E6',
-    accent: '#8B7355',
+    primary: '#FBC02D',
+    secondary: '#FFFDE7',
+    accent: '#1565C0',
   },
 } as const;
 

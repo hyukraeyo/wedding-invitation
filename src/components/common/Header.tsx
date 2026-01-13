@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Plus, Loader2, User, LogIn, LogOut, Save } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
@@ -82,7 +83,7 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
             {/* Logo */}
             <div className="flex items-center">
                 <Link href="/" className="hover:opacity-80 transition-opacity flex items-center">
-                    <img src="/logo.png" alt="Logo" className="w-11 h-11 object-contain" />
+                    <Image src="/logo.png" alt="Logo" width={44} height={44} className="object-contain" priority />
                 </Link>
             </div>
 

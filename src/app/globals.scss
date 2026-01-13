@@ -14,31 +14,33 @@
 
 :root {
   --background: #FFFFFF;
-  --foreground: #4A5D45;
+  --foreground: #212121;
   --accent: #f4f4f5;
-  --ivory: #F9F8E6;
-  --forest-green: #4A5D45;
-  --muted-sand: #E2E2C7;
+  --ivory: #FFFDE7;
+  --banana-yellow: #FBC02D;
+  --banana-light: #FFEE58;
+  --wedding-blue: #1565C0;
+  --muted-sand: #F5F5DC;
   --coral-pink: #FF8A8A;
 
   /* Shadcn UI Variables */
   --card: #FFFFFF;
-  --card-foreground: #4A5D45;
+  --card-foreground: #212121;
   --popover: #FFFFFF;
-  --popover-foreground: #4A5D45;
-  --primary: #4A5D45;
+  --popover-foreground: #212121;
+  --primary: #FBC02D;
   --primary-foreground: #FFFFFF;
-  --secondary: #f4f4f5;
-  --secondary-foreground: #18181b;
-  --muted: #F4F1EA;
+  --secondary: #FFFDE7;
+  --secondary-foreground: #212121;
+  --muted: #FAFAFA;
   --muted-foreground: #787878;
-  --accent-foreground: #4A5D45;
+  --accent-foreground: #FBC02D;
   --destructive: #EF4444;
   --destructive-foreground: #FFFFFF;
-  --border: #E5E7EB;
-  --input: #E5E7EB;
-  --ring: #4A5D45;
-  --radius: 0.5rem;
+  --border: #EEEEEE;
+  --input: #EEEEEE;
+  --ring: #FBC02D;
+  --radius: 0.75rem;
 
   /* Font Families */
   --font-pretendard: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
@@ -112,6 +114,24 @@ button {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* App-like Motion Overrides */
+[data-state="open"] {
+  &.animate-in {
+    animation-timing-function: var(--ease-ios) !important;
+  }
+}
+
+[data-state="closed"] {
+  &.animate-out {
+    animation-timing-function: var(--ease-ios) !important;
+  }
+}
+
+/* Sheet Snappy Slide */
+.fixed.inset-x-0.bottom-0 {
+  transition-timing-function: var(--ease-ios);
 }
 
 

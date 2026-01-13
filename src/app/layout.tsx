@@ -128,7 +128,7 @@ export default function RootLayout({
       <body className="antialiased">
         <Script
           src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.0/kakao.min.js"
-          integrity="sha384-l686tX0v9C7X0Yh1I8J5VPT5S8dG7uXn9U6vE6K5A9r5rLhVwN5Lp+P5l5p5L5p5"
+          integrity="sha384-l+xbElFSnPZ2r0aPrU//2FF5B4LB8FiX5q4fXYTIfcG4PGpMkE1vcL7kNXl6Cci0"
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />

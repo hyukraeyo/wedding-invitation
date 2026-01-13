@@ -1,13 +1,7 @@
 'use client';
 
 import React from 'react';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/Select';
+import { Select } from './Select';
 import { cn } from '@/lib/utils';
 
 interface TimePickerProps {
@@ -74,49 +68,40 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
         <div className={cn("flex w-full items-center gap-2", className)}>
             {/* AM/PM Select */}
             <div className="flex-1">
-                <Select value={period} onValueChange={handlePeriodChange}>
-                    <SelectTrigger className="w-full">
-                        <SelectValue placeholder="오전/오후" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="AM">오전</SelectItem>
-                        <SelectItem value="PM">오후</SelectItem>
-                    </SelectContent>
-                </Select>
+                <Select
+                    value={period}
+                    onChange={handlePeriodChange}
+                    options={[
+                        { label: '오전', value: 'AM' },
+                        { label: '오후', value: 'PM' },
+                    ]}
+                    placeholder="오전/오후"
+                    modalTitle="오전/오후를 선택하세요"
+                />
             </div>
 
             {/* Hour Select */}
             <div className="flex-1">
-                <Select value={displayHour} onValueChange={handleHourChange}>
-                    <SelectTrigger className="w-full">
-                        <SelectValue placeholder="시" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {hours.map((h) => (
-                            <SelectItem key={h} value={h}>
-                                {h}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
+                <Select
+                    value={displayHour}
+                    onChange={handleHourChange}
+                    options={hours.map(h => ({ label: h, value: h }))}
+                    placeholder="시"
+                    modalTitle="시간을 선택하세요"
+                />
             </div>
 
             <span className="text-sm font-medium pt-1">:</span>
 
             {/* Minute Select */}
             <div className="flex-1">
-                <Select value={m} onValueChange={handleMinuteChange}>
-                    <SelectTrigger className="w-full">
-                        <SelectValue placeholder="분" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {minutes.map((min) => (
-                            <SelectItem key={min} value={min}>
-                                {min}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
+                <Select
+                    value={m}
+                    onChange={handleMinuteChange}
+                    options={minutes.map(min => ({ label: min, value: min }))}
+                    placeholder="분"
+                    modalTitle="분을 선택하세요"
+                />
             </div>
         </div>
     );

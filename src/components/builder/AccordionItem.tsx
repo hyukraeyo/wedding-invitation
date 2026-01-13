@@ -44,7 +44,7 @@ export const AccordionItem = ({
             if (scrollParent) {
                 // Calculate target position: element's offset relative to scroll parent
                 // We add a small offset/padding (e.g. 20px) for visual breathing room
-                smoothScrollTo(scrollParent, element.offsetTop - 24, 600); // 600ms duration for premium feel
+                smoothScrollTo(scrollParent, element.offsetTop - 24, 400); // 400ms for snappier premium feel
             }
         }, 250);
 
@@ -74,7 +74,7 @@ export const AccordionItem = ({
                         </div>
                     )}
                     <div className="flex items-center gap-2">
-                        <span className={cn("font-medium text-base", isOpen ? "text-foreground" : "text-muted-foreground")}>
+                        <span className="font-medium text-base text-foreground">
                             {title}
                         </span>
                         {badge && (
@@ -87,8 +87,8 @@ export const AccordionItem = ({
 
                 <div className="flex items-center gap-2">
                     {isCompleted && (
-                        <div className="flex items-center justify-center w-5 h-5 rounded-full bg-blue-500 text-white shadow-sm">
-                            <Check size={10} strokeWidth={4} />
+                        <div className="flex items-center justify-center text-primary animate-in fade-in zoom-in duration-300">
+                            <Check size={18} strokeWidth={3} />
                         </div>
                     )}
                     <div className={cn("transition-transform duration-300", isOpen && "rotate-180")}>
