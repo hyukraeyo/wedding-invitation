@@ -12,10 +12,9 @@ import styles from './DateTimeSection.module.scss';
 interface SectionProps {
     value: string;
     isOpen: boolean;
-    onToggle: () => void;
 }
 
-const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOpen, onToggle, value }) {
+const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOpen, value }) {
     const date = useInvitationStore(state => state.date);
     const setDate = useInvitationStore(state => state.setDate);
     const time = useInvitationStore(state => state.time);
@@ -33,7 +32,6 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
             title="예식 일시"
             icon={Calendar}
             isOpen={isOpen}
-            onToggle={onToggle}
             isCompleted={!!date && !!time}
         >
             <div className={styles.container}>

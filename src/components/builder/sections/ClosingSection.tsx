@@ -11,7 +11,6 @@ import styles from './ClosingSection.module.scss';
 interface SectionProps {
     value: string;
     isOpen: boolean;
-    onToggle: () => void;
 }
 
 const SAMPLE_PHRASES = [
@@ -32,7 +31,7 @@ const SAMPLE_PHRASES = [
     }
 ];
 
-export default function ClosingSection({ isOpen, onToggle, value }: SectionProps) {
+export default function ClosingSection({ isOpen, value }: SectionProps) {
     const closing = useInvitationStore(state => state.closing);
     const setClosing = useInvitationStore(state => state.setClosing);
 
@@ -55,7 +54,6 @@ export default function ClosingSection({ isOpen, onToggle, value }: SectionProps
             title="마무리"
             icon={Heart}
             isOpen={isOpen}
-            onToggle={onToggle}
             isCompleted={!!closing.title}
         >
             <div className={styles.container}>

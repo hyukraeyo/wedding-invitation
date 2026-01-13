@@ -21,10 +21,9 @@ import { NaverIcon, KakaoIcon } from '@/components/common/Icons';
 interface SectionProps {
     value: string;
     isOpen: boolean;
-    onToggle: () => void;
 }
 
-const LocationSection = React.memo<SectionProps>(function LocationSection({ value, isOpen, onToggle }) {
+const LocationSection = React.memo<SectionProps>(function LocationSection({ value, isOpen }) {
     const location = useInvitationStore(state => state.location);
     const setLocation = useInvitationStore(state => state.setLocation);
     const locationTitle = useInvitationStore(state => state.locationTitle);
@@ -140,7 +139,6 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ valu
             title="예식 장소"
             icon={MapPin}
             isOpen={isOpen}
-            onToggle={onToggle}
             isCompleted={!!address}
         >
             <div className={styles.container}>

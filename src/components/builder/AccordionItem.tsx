@@ -13,7 +13,6 @@ interface AccordionItemProps {
     title: string;
     icon?: React.ElementType | undefined;
     isOpen: boolean;
-    onToggle?: () => void; // Optional now as Accordion root can handle it
     children: React.ReactNode;
     isCompleted?: boolean | undefined;
     badge?: string | undefined;

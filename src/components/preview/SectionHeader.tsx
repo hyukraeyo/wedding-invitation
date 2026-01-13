@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styles from './SectionHeader.module.scss';
 import { clsx } from 'clsx';
 
@@ -9,7 +9,7 @@ interface SectionHeaderProps {
     className?: string;
 }
 
-export default function SectionHeader({ title, subtitle, accentColor, className }: SectionHeaderProps) {
+const SectionHeader = memo(function SectionHeader({ title, subtitle, accentColor, className }: SectionHeaderProps) {
     if (!title) return null;
 
     return (
@@ -23,4 +23,8 @@ export default function SectionHeader({ title, subtitle, accentColor, className 
             <div className={styles.decorationLine} style={{ backgroundColor: accentColor }} />
         </div>
     );
-}
+});
+
+SectionHeader.displayName = 'SectionHeader';
+
+export default SectionHeader;

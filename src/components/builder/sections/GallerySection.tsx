@@ -36,7 +36,6 @@ import styles from './GallerySection.module.scss';
 interface SectionProps {
     value: string;
     isOpen: boolean;
-    onToggle: () => void;
 }
 
 interface SortableItemProps {
@@ -109,7 +108,7 @@ const SortableItem = React.memo(function SortableItem({ id, url, onRemove, isDra
     );
 });
 
-const GallerySection = React.memo<SectionProps>(function GallerySection({ value, isOpen, onToggle }) {
+const GallerySection = React.memo<SectionProps>(function GallerySection({ value, isOpen }) {
     const gallery = useInvitationStore(state => state.gallery);
     const setGallery = useInvitationStore(state => state.setGallery);
     const galleryTitle = useInvitationStore(state => state.galleryTitle);
@@ -219,7 +218,6 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ value,
             title="웨딩 갤러리"
             icon={ImageIcon}
             isOpen={isOpen}
-            onToggle={onToggle}
             isCompleted={gallery.length > 0}
         >
             <div className={styles.container}>

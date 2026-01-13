@@ -18,10 +18,9 @@ import { cn } from '@/lib/utils';
 interface SectionProps {
     value: string;
     isOpen: boolean;
-    onToggle: () => void;
 }
 
-export default function AccountsSection({ value, isOpen, onToggle }: SectionProps) {
+export default function AccountsSection({ value, isOpen }: SectionProps) {
     const accounts = useInvitationStore(state => state.accounts);
     const setAccounts = useInvitationStore(state => state.setAccounts);
     const accountsTitle = useInvitationStore(state => state.accountsTitle);
@@ -104,7 +103,6 @@ export default function AccountsSection({ value, isOpen, onToggle }: SectionProp
             title="축의금 및 계좌번호"
             icon={CreditCard}
             isOpen={isOpen}
-            onToggle={onToggle}
             isCompleted={accounts.length > 0}
         >
             <div className={styles.container}>

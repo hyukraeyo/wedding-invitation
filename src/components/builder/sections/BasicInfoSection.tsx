@@ -12,10 +12,9 @@ import { cn } from '@/lib/utils';
 interface SectionProps {
     value: string;
     isOpen: boolean;
-    onToggle: () => void;
 }
 
-const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ isOpen, onToggle, value }) {
+const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ isOpen, value }) {
     const groom = useInvitationStore(state => state.groom);
     const setGroom = useInvitationStore(state => state.setGroom);
     const bride = useInvitationStore(state => state.bride);
@@ -29,7 +28,6 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
             title="기본 정보"
             icon={User2}
             isOpen={isOpen}
-            onToggle={onToggle}
             isCompleted={!!groom.firstName && !!bride.firstName}
         >
             <div className={styles.container}>

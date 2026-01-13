@@ -12,7 +12,6 @@ import type { ThemeFont } from '@/lib/utils/font';
 interface SectionProps {
     value: string;
     isOpen: boolean;
-    onToggle: () => void;
 }
 
 const PRESET_COLORS = [
@@ -26,7 +25,7 @@ const PRESET_COLORS = [
     '#BEAD9E', // Beige
 ];
 
-const ThemeSection = React.memo<SectionProps>(function ThemeSection({ isOpen, onToggle, value }) {
+const ThemeSection = React.memo<SectionProps>(function ThemeSection({ isOpen, value }) {
     const theme = useInvitationStore(state => state.theme);
     const setTheme = useInvitationStore(state => state.setTheme);
 
@@ -36,7 +35,6 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection({ isOpen, on
             title="테마 및 색상"
             icon={Palette}
             isOpen={isOpen}
-            onToggle={onToggle}
             isCompleted={true}
         >
             <div className={styles.container}>

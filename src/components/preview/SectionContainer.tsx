@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { memo } from 'react';
 import ScrollReveal from './ScrollReveal';
 import styles from './SectionContainer.module.scss';
 import { clsx } from 'clsx';
@@ -17,7 +17,7 @@ interface SectionContainerProps {
  * Common wrapper for preview sections to provide consistent padding and layout.
  * Optimized with CSS Modules and flexible properties.
  */
-export default function SectionContainer({
+const SectionContainer = memo(function SectionContainer({
     children,
     className = "",
     id,
@@ -40,4 +40,8 @@ export default function SectionContainer({
             </section>
         </ScrollReveal>
     );
-}
+});
+
+SectionContainer.displayName = 'SectionContainer';
+
+export default SectionContainer;

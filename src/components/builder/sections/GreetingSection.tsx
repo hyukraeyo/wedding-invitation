@@ -15,7 +15,6 @@ const RichTextEditor = dynamic(() => import('@/components/common/RichTextEditor'
 interface SectionProps {
     value: string;
     isOpen: boolean;
-    onToggle: () => void;
 }
 
 const SAMPLE_PHRASES = [
@@ -36,7 +35,7 @@ const SAMPLE_PHRASES = [
     }
 ];
 
-export default function GreetingSection({ isOpen, onToggle, value }: SectionProps) {
+export default function GreetingSection({ isOpen, value }: SectionProps) {
     const message = useInvitationStore(state => state.message);
     const setMessage = useInvitationStore(state => state.setMessage);
     const greetingTitle = useInvitationStore(state => state.greetingTitle);
@@ -86,7 +85,6 @@ export default function GreetingSection({ isOpen, onToggle, value }: SectionProp
             title="인사말"
             icon={MessageSquare}
             isOpen={isOpen}
-            onToggle={onToggle}
             isCompleted={message.length > 0}
         >
             <div className={styles.container}>

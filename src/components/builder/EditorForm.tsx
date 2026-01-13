@@ -51,16 +51,6 @@ const EditorForm = memo(function EditorForm() {
     return () => cancelAnimationFrame(timer);
   }, []);
 
-  const handleToggle = useCallback((section: string) => {
-    setOpenSections(prev => {
-      const isOpen = prev.includes(section);
-      if (isOpen) {
-        return prev.filter(s => s !== section);
-      }
-      return [...prev, section];
-    });
-  }, []);
-
   if (!isReady) {
     return (
       <div className="flex flex-col gap-3 pb-32">
@@ -93,7 +83,6 @@ const EditorForm = memo(function EditorForm() {
             key={key}
             value={key}
             isOpen={openSections.includes(key)}
-            onToggle={() => handleToggle(key)}
           />
         ))}
       </Accordion>

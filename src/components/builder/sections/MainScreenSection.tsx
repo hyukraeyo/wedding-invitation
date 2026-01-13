@@ -62,10 +62,9 @@ const STYLE_PRESETS: StylePreset[] = [
 interface SectionProps {
     value: string;
     isOpen: boolean;
-    onToggle: () => void;
 }
 
-export default function MainScreenSection({ isOpen, onToggle, value }: SectionProps) {
+export default function MainScreenSection({ isOpen, value }: SectionProps) {
     const mainScreen = useInvitationStore(state => state.mainScreen);
     const setMainScreen = useInvitationStore(state => state.setMainScreen);
     const imageUrl = useInvitationStore(state => state.imageUrl);
@@ -132,7 +131,6 @@ export default function MainScreenSection({ isOpen, onToggle, value }: SectionPr
             title="메인 화면"
             icon={Home}
             isOpen={isOpen}
-            onToggle={onToggle}
             isCompleted={!!imageUrl}
         >
             <div className={styles.container}>

@@ -13,10 +13,9 @@ import { cn } from '@/lib/utils';
 interface SectionProps {
     value: string;
     isOpen: boolean;
-    onToggle: () => void;
 }
 
-export default function KakaoShareSection({ isOpen, onToggle, value }: SectionProps) {
+export default function KakaoShareSection({ isOpen, value }: SectionProps) {
     const kakao = useInvitationStore(state => state.kakaoShare);
     const setKakao = useInvitationStore(state => state.setKakao);
     const [previewOpen, setPreviewOpen] = useState(false);
@@ -27,7 +26,6 @@ export default function KakaoShareSection({ isOpen, onToggle, value }: SectionPr
             title="카카오 초대장 썸네일"
             icon={MessageCircle}
             isOpen={isOpen}
-            onToggle={onToggle}
             isCompleted={!!kakao.title}
         >
             <div className={styles.container}>
