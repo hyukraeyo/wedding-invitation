@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useMemo, memo } from 'react';
+import React, { useState, useRef, useEffect, useMemo, memo, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { X } from 'lucide-react';
@@ -75,6 +75,12 @@ const GalleryView = memo(({
         });
     }, [rawGallery]);
 
+    const handleImageClick = useCallback((index: number) => {
+        if (galleryPopup) {
+            setPopupIndex(index);
+        }
+    }, [galleryPopup]);
+
     useEffect(() => {
         const timer = setTimeout(() => {
             setIsMounted(true);
@@ -139,12 +145,6 @@ const GalleryView = memo(({
     if (!gallery || gallery.length === 0) return <div id={id} />;
     if (!isMounted) return null;
 
-    const handleImageClick = (index: number) => {
-        if (galleryPopup) {
-            setPopupIndex(index);
-        }
-    };
-
     const renderGallery = () => {
         switch (galleryType) {
             case 'swiper':
@@ -171,7 +171,7 @@ const GalleryView = memo(({
                                             className={clsx(styles.imageSlide, galleryPopup && styles.cursorPointer)}
                                             onClick={() => handleImageClick(index)}
                                         >
-                                            <Image src={img.url} alt="" fill unoptimized />
+                                            <Image src={img.url} alt="" fill sizes="(max-width: 768px) 100vw, 50vw" />
                                         </div>
                                     </SwiperSlide>
                                 ))}
@@ -198,7 +198,7 @@ const GalleryView = memo(({
                             {gallery.map((img, index) => (
                                 <SwiperSlide key={img.id} onClick={() => handleImageClick(index)}>
                                     <div className={clsx(styles.imageSlide, galleryPopup && styles.cursorPointer)}>
-                                        <Image src={img.url} alt="" fill unoptimized />
+                                        <Image src={img.url} alt="" fill sizes="(max-width: 768px) 100vw, 50vw" />
                                     </div>
                                 </SwiperSlide>
                             ))}
@@ -221,7 +221,7 @@ const GalleryView = memo(({
                                         )}
                                         style={index === currentIndex ? { '--tw-ring-color': accentColor } as React.CSSProperties : {}}
                                     >
-                                        <Image src={img.url} alt="" fill unoptimized />
+                                        <Image src={img.url} alt="" fill sizes="100px" />
                                     </div>
                                 </SwiperSlide>
                             ))}
@@ -242,7 +242,7 @@ const GalleryView = memo(({
                                 onClick={() => handleImageClick(i)}
                             >
                                 <AspectRatio ratio={1 / 1}>
-                                    <Image src={img.url} alt="" fill unoptimized className="object-cover" />
+                                    <Image src={img.url} alt="" fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
                                 </AspectRatio>
                             </div>
                         ))}
@@ -311,8 +311,8 @@ const GalleryView = memo(({
                                             src={img.url}
                                             alt=""
                                             fill
-                                            unoptimized
-                                            priority
+                                            sizes="100vw"
+                                            priority={img.id === gallery[popupIndex ?? 0]?.id}
                                         />
                                     </div>
                                 </SwiperSlide>

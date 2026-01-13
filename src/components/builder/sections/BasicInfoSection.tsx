@@ -4,7 +4,7 @@ import { User2 } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
-import { Checkbox } from '../Checkbox';
+import { Toggle } from '../Toggle';
 import { Field } from '../Field';
 import styles from './BasicInfoSection.module.scss';
 import { cn } from '@/lib/utils';
@@ -68,13 +68,12 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 onChange={(e) => setGroomParents('father', { name: e.target.value })}
                             />
                             <div className={styles.deceasedWrapper}>
-                                <Checkbox
-                                    id="groom-father-deceased"
-                                    checked={groom.parents.father.isDeceased}
-                                    onChange={(checked) => setGroomParents('father', { isDeceased: checked })}
+                                <Toggle
+                                    pressed={groom.parents.father.isDeceased}
+                                    onPressedChange={(pressed) => setGroomParents('father', { isDeceased: pressed })}
                                 >
                                     故
-                                </Checkbox>
+                                </Toggle>
                             </div>
                         </div>
                         <div className={cn(styles.row, styles.compact)}>
@@ -86,13 +85,12 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 onChange={(e) => setGroomParents('mother', { name: e.target.value })}
                             />
                             <div className={styles.deceasedWrapper}>
-                                <Checkbox
-                                    id="groom-mother-deceased"
-                                    checked={groom.parents.mother.isDeceased}
-                                    onChange={(checked) => setGroomParents('mother', { isDeceased: checked })}
+                                <Toggle
+                                    pressed={groom.parents.mother.isDeceased}
+                                    onPressedChange={(pressed) => setGroomParents('mother', { isDeceased: pressed })}
                                 >
                                     故
-                                </Checkbox>
+                                </Toggle>
                             </div>
                         </div>
                     </div>
@@ -135,13 +133,12 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 onChange={(e) => setBrideParents('father', { name: e.target.value })}
                             />
                             <div className={styles.deceasedWrapper}>
-                                <Checkbox
-                                    id="bride-father-deceased"
-                                    checked={bride.parents.father.isDeceased}
-                                    onChange={(checked) => setBrideParents('father', { isDeceased: checked })}
+                                <Toggle
+                                    pressed={bride.parents.father.isDeceased}
+                                    onPressedChange={(pressed) => setBrideParents('father', { isDeceased: pressed })}
                                 >
                                     故
-                                </Checkbox>
+                                </Toggle>
                             </div>
                         </div>
                         <div className={cn(styles.row, styles.compact)}>
@@ -153,13 +150,12 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 onChange={(e) => setBrideParents('mother', { name: e.target.value })}
                             />
                             <div className={styles.deceasedWrapper}>
-                                <Checkbox
-                                    id="bride-mother-deceased"
-                                    checked={bride.parents.mother.isDeceased}
-                                    onChange={(checked) => setBrideParents('mother', { isDeceased: checked })}
+                                <Toggle
+                                    pressed={bride.parents.mother.isDeceased}
+                                    onPressedChange={(pressed) => setBrideParents('mother', { isDeceased: pressed })}
                                 >
                                     故
-                                </Checkbox>
+                                </Toggle>
                             </div>
                         </div>
                     </div>

@@ -7,6 +7,7 @@ import { Select } from '../Select';
 import { Field } from '../Field';
 import styles from './ThemeSection.module.scss';
 import { cn } from '@/lib/utils';
+import type { ThemeFont } from '@/lib/utils/font';
 
 interface SectionProps {
     value: string;
@@ -25,7 +26,7 @@ const PRESET_COLORS = [
     '#BEAD9E', // Beige
 ];
 
-export default function ThemeSection({ isOpen, onToggle, value }: SectionProps) {
+const ThemeSection = React.memo<SectionProps>(function ThemeSection({ isOpen, onToggle, value }) {
     const {
         theme, setTheme
     } = useInvitationStore();
@@ -71,18 +72,18 @@ export default function ThemeSection({ isOpen, onToggle, value }: SectionProps) 
                     <Select
                         value={theme.font}
                         options={[
-                            { label: 'Pretendard (기본)', value: 'pretendard' },
-                            { label: '나눔명조', value: 'nanum-myeongjo' },
-                            { label: '고운바탕', value: 'gowun-batang' },
-                            { label: '고운돋움', value: 'gowun-dodum' },
-                            { label: '송명체', value: 'song-myung' },
-                            { label: '연성체', value: 'yeon-sung' },
-                            { label: '도현체', value: 'do-hyeon' },
-                            { label: 'G마켓 산스', value: 'gmarket' },
-                            { label: '기본 명조', value: 'serif' },
-                            { label: '기본 고딕', value: 'sans' },
+                            { label: 'Pretendard (기본)', value: 'pretendard' as ThemeFont },
+                            { label: '나눔명조', value: 'nanum-myeongjo' as ThemeFont },
+                            { label: '고운바탕', value: 'gowun-batang' as ThemeFont },
+                            { label: '고운돋움', value: 'gowun-dodum' as ThemeFont },
+                            { label: '송명체', value: 'song-myung' as ThemeFont },
+                            { label: '연성체', value: 'yeon-sung' as ThemeFont },
+                            { label: '도현체', value: 'do-hyeon' as ThemeFont },
+                            { label: 'G마켓 산스', value: 'gmarket' as ThemeFont },
+                            { label: '기본 명조', value: 'serif' as ThemeFont },
+                            { label: '기본 고딕', value: 'sans' as ThemeFont },
                         ]}
-                        onChange={(val) => setTheme({ font: val as 'pretendard' | 'nanum-myeongjo' | 'gowun-batang' | 'gowun-dodum' | 'song-myung' | 'yeon-sung' | 'do-hyeon' | 'gmarket' | 'serif' | 'sans' })}
+                        onChange={(val) => setTheme({ font: val as ThemeFont })}
                     />
                 </Field>
 
@@ -124,4 +125,6 @@ export default function ThemeSection({ isOpen, onToggle, value }: SectionProps) 
             </div>
         </AccordionItem>
     );
-}
+});
+
+export default ThemeSection;

@@ -5,7 +5,6 @@ import dynamic from 'next/dynamic';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import MainScreenView from './sections/MainScreenView';
 import CalendarSectionView from './sections/CalendarSectionView';
-// import NamesView from './sections/NamesView';
 import GreetingView from './sections/GreetingView';
 import GalleryView from './sections/GalleryView';
 import AccountsView from './sections/AccountsView';
@@ -14,6 +13,7 @@ import EffectsOverlay from './sections/EffectsOverlay';
 import ScrollReveal from './ScrollReveal';
 import styles from './InvitationCanvas.module.scss';
 import { clsx } from 'clsx';
+import { getFontStyle } from '@/lib/utils/font';
 
 const LocationView = dynamic(() => import('./sections/LocationView'), { ssr: false });
 
@@ -106,53 +106,10 @@ const InvitationCanvas = memo(({ isPreviewMode = false, editingSection }: Invita
     };
   }, []);
 
-  const canvasStyle = useMemo(() => {
-    let selectedFontVar = '--font-pretendard';
-    switch (theme.font) {
-      case 'pretendard': selectedFontVar = '--font-pretendard'; break;
-      case 'gmarket': selectedFontVar = '--font-gmarket-sans'; break;
-      case 'gowun-batang': selectedFontVar = '--font-gowun-batang'; break;
-      case 'gowun-dodum': selectedFontVar = '--font-gowun-dodum'; break;
-      case 'nanum-myeongjo': selectedFontVar = '--font-nanum-myeongjo'; break;
-      case 'yeon-sung': selectedFontVar = '--font-yeon-sung'; break;
-      case 'do-hyeon': selectedFontVar = '--font-do-hyeon'; break;
-      case 'song-myung': selectedFontVar = '--font-song-myung'; break;
-      case 'serif': selectedFontVar = '--font-serif'; break;
-      case 'sans': selectedFontVar = '--font-sans'; break;
-    }
-
-    const selectedFontValue = `var(${selectedFontVar})`;
-
-    const fontVars = [
-      '--font-serif',
-      '--font-sans',
-      '--font-gowun-batang',
-      '--font-gowun-dodum',
-      '--font-nanum-myeongjo',
-      '--font-yeon-sung',
-      '--font-do-hyeon',
-      '--font-song-myung',
-      '--font-pretendard',
-      '--font-gmarket-sans',
-      '--font-script',
-    ];
-
-    const styleOverrides: Record<string, string | number> = {
-      backgroundColor: theme.backgroundColor,
-      '--font-scale': theme.fontScale,
-      fontFamily: selectedFontValue,
-      transform: 'translate3d(0, 0, 0)',
-    };
-
-    // 현재 선택된 폰트 변수를 제외한 모든 폰트 변수를 선택된 폰트로 오버라이드
-    fontVars.forEach(v => {
-      if (v !== selectedFontVar) {
-        styleOverrides[v] = selectedFontValue;
-      }
-    });
-
-    return styleOverrides;
-  }, [theme.backgroundColor, theme.fontScale, theme.font]);
+  const canvasStyle = useMemo(
+    () => getFontStyle(theme.font, theme.fontScale, theme.backgroundColor),
+    [theme.font, theme.fontScale, theme.backgroundColor]
+  );
 
   return (
     <div

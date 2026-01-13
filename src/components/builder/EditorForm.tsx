@@ -52,11 +52,13 @@ const EditorForm = memo(function EditorForm() {
   }, []);
 
   const handleToggle = useCallback((section: string) => {
-    setOpenSections(prev =>
-      prev.includes(section)
-        ? prev.filter(s => s !== section)
-        : [...prev, section]
-    );
+    setOpenSections(prev => {
+      const isOpen = prev.includes(section);
+      if (isOpen) {
+        return prev.filter(s => s !== section);
+      }
+      return [...prev, section];
+    });
   }, []);
 
   if (!isReady) {

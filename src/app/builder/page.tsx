@@ -2,7 +2,6 @@
 
 import React, { useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
-import { useRouter } from 'next/navigation';
 
 // Dynamic import for InvitationCanvas (conditionally rendered based on screen size)
 const InvitationCanvas = dynamic(
@@ -27,6 +26,8 @@ import { clsx } from 'clsx';
 import { Smartphone, X } from 'lucide-react';
 import { Sheet, SheetContent, SheetTitle, SheetHeader, SheetDescription } from '@/components/ui/sheet';
 import { useWindowSize } from '@/hooks/useWindowSize';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 const generateSlug = (name: string): string => {
   const randomStr = Math.random().toString(36).substring(2, 8);
@@ -34,16 +35,21 @@ const generateSlug = (name: string): string => {
 };
 
 export default function BuilderPage() {
-  const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const { user } = useAuth();
-  const state = useInvitationStore();
   const editingSection = useInvitationStore(state => state.editingSection);
   const windowWidth = useWindowSize(); // Optimized hook usage
+  const router = useRouter();
 
+  // Prefetch login route for instant modal transition
+  useEffect(() => {
+    router.prefetch('/login');
+  }, [router]);
 
-  const handleLogin = useCallback(() => router.push('/login'), [router]);
+  const handleLogin = useCallback(() => {
+    router.push('/login');
+  }, [router]);
 
   const handleSave = useCallback(async () => {
     if (!user) {
@@ -53,14 +59,15 @@ export default function BuilderPage() {
 
     setIsSaving(true);
     try {
+      const currentStoreState = useInvitationStore.getState();
       const cleanData = Object.fromEntries(
-        Object.entries(state).filter(([, v]) => typeof v !== 'function')
+        Object.entries(currentStoreState).filter(([, v]) => typeof v !== 'function')
       ) as unknown as InvitationData;
 
-      let currentSlug = state.slug;
+      let currentSlug = currentStoreState.slug;
       if (!currentSlug) {
-        currentSlug = generateSlug(state.groom.firstName);
-        state.setSlug(currentSlug);
+        currentSlug = generateSlug(currentStoreState.groom.firstName);
+        currentStoreState.setSlug(currentSlug);
       }
 
       await invitationService.saveInvitation(currentSlug, cleanData, user.id);
@@ -70,7 +77,7 @@ export default function BuilderPage() {
     } finally {
       setIsSaving(false);
     }
-  }, [user, state, handleLogin]);
+  }, [user, handleLogin]);
 
   return (
     <main className={styles.main}>

@@ -223,6 +223,8 @@ export type InvitationData = {
     [K in keyof InvitationState as InvitationState[K] extends (...args: unknown[]) => unknown ? never : K]: InvitationState[K];
 };
 
+export type InvitationStateType = InvitationState;
+
 const getDefaultDate = () => {
     const d = new Date();
     d.setDate(d.getDate() + 100);

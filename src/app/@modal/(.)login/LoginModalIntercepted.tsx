@@ -24,7 +24,7 @@ export default function LoginModalIntercepted() {
         router.back();
     };
 
-    if (authLoading || user) return null;
+    if (user) return null;
 
     return <LoginModal isOpen={true} onClose={handleClose} />;
 }

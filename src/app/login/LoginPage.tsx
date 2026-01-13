@@ -27,7 +27,7 @@ export default function LoginPage() {
         }
     }, [user, authLoading, router]);
 
-    if (authLoading || user) return null;
+    if (user) return null;
 
     const handleKakaoLogin = async () => {
         setLoading(true);

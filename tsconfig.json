@@ -84,11 +84,7 @@
     ".next",
     "out",
     "build",
-    "dist",
-    "**/*.spec.ts",
-    "**/*.spec.tsx",
-    "**/*.test.ts",
-    "**/*.test.tsx"
+    "dist"
   ],
   "ts-node": {
     "esm": true

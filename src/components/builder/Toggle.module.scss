@@ -1,0 +1,53 @@
+@use "@/styles/variables" as v;
+@use "@/styles/builder" as b;
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px; // Make it more square-ish for single char
+  height: 48px; // Match global h-12 (48px)
+  border-radius: 8px; // Match var(--radius) / rounded-md
+  padding: 0 12px;
+  font-size: 16px; // Match --builder-font-size
+  font-weight: 500;
+  transition: all 0.2s var(--ease-ios);
+  background-color: transparent; // Match input bg
+  color: #495057; // v.$gray-600 area
+  border: 1px solid var(--input); // Match input border
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  box-sizing: border-box;
+
+  &:hover:not(:disabled) {
+    background-color: var(--accent);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.94); // Match btn-base scale
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  // Active state
+  &[data-state="on"] {
+    background-color: var(--primary); // Match btn-default/solid bg
+    color: var(--primary-foreground);
+    border-color: var(--primary);
+    font-weight: 600;
+
+    &:hover:not(:disabled) {
+      background-color: color-mix(in srgb, var(--primary), white 10%);
+    }
+  }
+
+  // Focus state for accessibility
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 1px var(--ring);
+  }
+}
