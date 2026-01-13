@@ -16,12 +16,12 @@ interface SectionProps {
 }
 
 const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ isOpen, onToggle, value }) {
-    const {
-        groom, setGroom,
-        bride, setBride,
-        setGroomParents,
-        setBrideParents
-    } = useInvitationStore();
+    const groom = useInvitationStore(state => state.groom);
+    const setGroom = useInvitationStore(state => state.setGroom);
+    const bride = useInvitationStore(state => state.bride);
+    const setBride = useInvitationStore(state => state.setBride);
+    const setGroomParents = useInvitationStore(state => state.setGroomParents);
+    const setBrideParents = useInvitationStore(state => state.setBrideParents);
 
     return (
         <AccordionItem
