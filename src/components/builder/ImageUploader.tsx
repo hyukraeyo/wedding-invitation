@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useRef } from 'react';
 import Image from 'next/image';
 import { Trash2, UploadCloud, Loader2 } from 'lucide-react';
-import { Label } from './Label';
+import { Label } from './FormPrimitives';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { SegmentedControl } from './SegmentedControl';
 import { useToast } from '@/hooks/use-toast';
