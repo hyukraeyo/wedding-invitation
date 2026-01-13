@@ -99,10 +99,10 @@ export default function LoginPage() {
                 {/* Header */}
                 <div className={styles.header}>
                     <h1 className={styles.title}>
-                        시작하기
+                        바나나웨딩 시작하기 🍌
                     </h1>
                     <p className={styles.subtitle}>
-                        나만의 특별한 모바일 청첩장을<br />쉽고 빠르게 만들어보세요.
+                        유통기한 없는 우리만의 특별한 시작,<br />바나나웨딩과 함께 쉽고 빠르게 만들어보세요.
                     </p>
                 </div>
 

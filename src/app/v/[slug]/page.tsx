@@ -17,14 +17,36 @@ export async function generateMetadata({ params }: Props) {
     const groomName = `${data.groom.lastName}${data.groom.firstName}`;
     const brideName = `${data.bride.lastName}${data.bride.firstName}`;
 
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://wedding-invitation-zeta-one.vercel.app';
     const ogTitle = data.kakaoShare?.title || `${groomName} ♥ ${brideName} 결혼식에 초대합니다`;
     const ogDescription = data.kakaoShare?.description || data.greetingTitle || '소중한 분들을 초대합니다.';
-    const ogImage = data.kakaoShare?.imageUrl || data.imageUrl || '/logo.png';
+    let ogImage = data.kakaoShare?.imageUrl || data.imageUrl || '/logo.png';
+
+    if (ogImage.startsWith('/')) {
+        ogImage = `${baseUrl}${ogImage}`;
+    }
 
     return {
         title: `${groomName} ♥ ${brideName} 결혼식에 초대합니다`,
         description: data.greetingTitle || '소중한 분들을 초대합니다.',
         openGraph: {
+            title: ogTitle,
+            description: ogDescription,
+            url: `${baseUrl}/v/${slug}`,
+            siteName: 'Wedding Invitation Studio',
+            images: [
+                {
+                    url: ogImage,
+                    width: 800,
+                    height: 800,
+                    alt: 'Wedding Invitation Thumbnail',
+                },
+            ],
+            locale: 'ko_KR',
+            type: 'website',
+        },
+        twitter: {
+            card: 'summary_large_image',
             title: ogTitle,
             description: ogDescription,
             images: [ogImage],

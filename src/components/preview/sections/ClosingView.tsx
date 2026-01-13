@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { clsx } from 'clsx';
 import { MessageCircle, Share2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useInvitationStore } from '@/store/useInvitationStore';
 import SectionContainer from '../SectionContainer';
 import { AspectRatio } from '@/components/ui/AspectRatio';
 import SectionHeader from '../SectionHeader';
@@ -36,6 +37,7 @@ const ClosingView = memo(({
     accentColor,
 }: ClosingViewProps) => {
     const { toast } = useToast();
+    const { kakaoShare, groom, bride, imageUrl: mainImageUrl, greetingTitle, date, time } = useInvitationStore();
 
     const handleLinkShare = () => {
         const url = window.location.href;
@@ -43,6 +45,56 @@ const ClosingView = memo(({
         toast({
             description: '청첩장 주소가 복사되었습니다.',
         });
+    };
+
+    const handleKakaoShare = () => {
+        if (!window.Kakao) {
+            toast({ description: '카카오 SDK 로딩 중입니다. 잠시 후 다시 시도해 주세요.', variant: 'destructive' });
+            return;
+        }
+
+        if (!window.Kakao.isInitialized()) {
+            window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_APP_KEY);
+        }
+
+        const baseUrl = window.location.origin;
+        const groomName = `${groom.lastName}${groom.firstName}`;
+        const brideName = `${bride.lastName}${bride.firstName}`;
+
+        const shareTitle = kakaoShare.title || `${groomName} ♥ ${brideName} 결혼식에 초대합니다`;
+        const shareDesc = kakaoShare.description || `${date} ${time}`;
+        let shareImageUrl = kakaoShare.imageUrl || mainImageUrl || `${baseUrl}/logo.png`;
+
+        if (shareImageUrl.startsWith('/')) {
+            shareImageUrl = `${baseUrl}${shareImageUrl}`;
+        }
+
+        try {
+            window.Kakao.Share.sendDefault({
+                objectType: 'feed',
+                content: {
+                    title: shareTitle,
+                    description: shareDesc,
+                    imageUrl: shareImageUrl,
+                    link: {
+                        mobileWebUrl: window.location.href,
+                        webUrl: window.location.href,
+                    },
+                },
+                buttons: kakaoShare.buttonType !== 'none' ? [
+                    {
+                        title: kakaoShare.buttonType === 'location' ? '위치 보기' : '참석 여부',
+                        link: {
+                            mobileWebUrl: window.location.href,
+                            webUrl: window.location.href,
+                        },
+                    },
+                ] : [],
+            });
+        } catch (error) {
+            console.error('Kakao Share Error:', error);
+            toast({ description: '공유 중 오류가 발생했습니다.', variant: 'destructive' });
+        }
     };
 
     return (
@@ -109,7 +161,7 @@ const ClosingView = memo(({
                 <div className={styles.shareContainer}>
                     <button
                         className={clsx(styles.shareButton, styles.kakaoShare)}
-                        onClick={() => toast({ description: '카카오톡 공유 기능은 현재 준비 중입니다.' })}
+                        onClick={handleKakaoShare}
                     >
                         <MessageCircle size={18} fill="currentColor" />
                         카카오톡 공유하기

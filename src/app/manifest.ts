@@ -2,9 +2,9 @@ import { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
     return {
-        name: 'Wedding Invitation Studio',
-        short_name: 'Wedding Studio',
-        description: '심플하고 아름다운 모바일 청첩장 제작 플랫폼',
+        name: '바나나웨딩 (Banana Wedding)',
+        short_name: '바나나웨딩',
+        description: '유통기한 없는 달콤한 시작, 바나나웨딩',
         start_url: '/',
         display: 'standalone',
         background_color: '#F9F8E6',

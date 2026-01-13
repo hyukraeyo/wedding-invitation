@@ -27,10 +27,10 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: {
-    default: "심플하고 아름다운 모바일 청첩장 | Wedding Invitation Studio",
-    template: "%s | Wedding Invitation Studio"
+    default: "달콤하고 특별한 모바일 청첩장 | 바나나웨딩",
+    template: "%s | 바나나웨딩"
   },
-  description: "소중한 날, 특별한 순간에 여러분을 초대합니다. 최첨단 기술로 제작된 고품격 모바일 청첩장으로 특별한 순간을 더욱 빛나게 만들어보세요.",
+  description: "유통기한 없는 달콤한 시작, 바나나웨딩에서 여러분만의 특별한 모바일 청첩장을 만들어보세요.",
   keywords: [
     "모바일 청첩장", "결혼식 초대장", "셀프 모바일 청첩장", "무료 청첩장",
     "심플한 청첩장", "웨딩 초대장", "카카오톡 청첩장", "디지털 청첩장",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Hyuk Rae Yoon" }],
   creator: "Hyuk Rae Yoon",
-  publisher: "Wedding Invitation Studio",
+  publisher: "바나나웨딩 (Banana Wedding)",
   formatDetection: {
     email: false,
     address: false,
@@ -49,18 +49,18 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "심플하고 아름다운 모바일 청첩장",
-    description: "최첨단 기술로 제작된 고품격 모바일 청첩장으로 특별한 순간을 더욱 빛나게 만들어보세요.",
+    title: "바나나웨딩 - 달콤하고 특별한 모바일 청첩장",
+    description: "유통기한 없는 우리만의 특별한 시작, 바나나웨딩과 함께하세요.",
     url: "https://wedding-invitation-zeta-one.vercel.app",
-    siteName: "Wedding Invitation Studio",
+    siteName: "바나나웨딩 (Banana Wedding)",
     type: "website",
     locale: "ko_KR",
     images: [
       {
-        url: "/logo.png",
+        url: "/assets/icons/logo-banana-heart.png",
         width: 800,
         height: 800,
-        alt: "Wedding Invitation Studio - 모바일 청첩장 제작 플랫폼",
+        alt: "바나나웨딩 - 모바일 청첩장 제작 플랫폼",
       },
     ],
   },
@@ -89,6 +89,13 @@ export const metadata: Metadata = {
     other: {
       "naver-site-verification": "your-naver-site-verification-code",
     },
+  },
+  icons: {
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/icon.png', type: 'image/png' },
+    ],
+    apple: '/apple-icon.png',
   },
 };
 
@@ -120,6 +127,19 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <Script
+          src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.0/kakao.min.js"
+          integrity="sha384-l686tX0v9C7X0Yh1I8J5VPT5S8dG7uXn9U6vE6K5A9r5rLhVwN5Lp+P5l5p5L5p5"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+        <Script id="kakao-init" strategy="afterInteractive">
+          {`
+            if (typeof window !== 'undefined' && window.Kakao && !window.Kakao.isInitialized()) {
+              window.Kakao.init('${process.env.NEXT_PUBLIC_KAKAO_APP_KEY}');
+            }
+          `}
+        </Script>
+        <Script
           id="json-ld"
           type="application/ld+json"
           strategy="afterInteractive"
@@ -128,10 +148,10 @@ export default function RootLayout({
               {
                 "@context": "https://schema.org",
                 "@type": "WebSite",
-                "name": "Wedding Invitation Studio",
-                "alternateName": "심플 모바일 청첩장",
+                "name": "바나나웨딩",
+                "alternateName": "Banana Wedding",
                 "url": "https://wedding-invitation-zeta-one.vercel.app",
-                "description": "Next.js 기반 고품격 모바일 청첩장 제작 플랫폼",
+                "description": "달콤한 시작을 알리는 고품격 모바일 청첩장 플랫폼",
                 "inLanguage": "ko-KR",
                 "publisher": {
                   "@type": "Person",

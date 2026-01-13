@@ -10,14 +10,14 @@ export default function Home() {
         {/* Typographic Hero */}
         <div className={styles.hero}>
           <p className={styles.subtitle}>
-            Digital Wedding Invitation
+            Banana Wedding
           </p>
           <h1 className={styles.title}>
-            미니멀<br />모바일 청첩장
+            달콤한 시작,<br />바나나웨딩
           </h1>
           <p className={styles.description}>
-            복잡한 절차 없이, 감각적인 디자인으로<br />
-            소중한 분들에게 마음을 전하세요.
+            유통기한 없는 우리만의 달콤한 이야기,<br />
+            바나나웨딩에서 특별하게 전하세요.
           </p>
         </div>
 
@@ -37,7 +37,7 @@ export default function Home() {
       {/* Footer / Copyright */}
       <footer className={styles.footer}>
         <p>
-          © 2026 nano banana
+          © 2026 banana wedding
         </p>
       </footer>
     </div>

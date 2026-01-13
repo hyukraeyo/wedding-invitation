@@ -267,6 +267,7 @@ declare global {
 
     interface Window {
         kakao: typeof kakao;
+        Kakao: any; // Using any for the SDK to avoid massive type definitions for now
     }
 }
 

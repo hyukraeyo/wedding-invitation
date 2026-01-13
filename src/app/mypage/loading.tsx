@@ -15,7 +15,7 @@ export default function Loading() {
                 </h2>
                 <div className="h-[1px] w-12 bg-primary/30" />
                 <p className="text-xs text-muted-foreground/60 font-light">
-                    Wedding Invitation Studio
+                    바나나웨딩 (Banana Wedding)
                 </p>
             </div>
 

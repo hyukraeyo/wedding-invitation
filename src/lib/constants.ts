@@ -2,9 +2,9 @@
 
 // App Configuration
 export const APP_CONFIG = {
-  name: 'Wedding Invitation Studio',
+  name: '바나나웨딩 (Banana Wedding)',
   version: '1.0.0',
-  description: '현대적이고 아름다운 모바일 청첩장 제작 플랫폼',
+  description: '유통기한 없는 달콤한 시작, 바나나웨딩',
   url: 'https://wedding-invitation-zeta-one.vercel.app',
 } as const;
 

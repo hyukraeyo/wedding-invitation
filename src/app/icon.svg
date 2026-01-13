@@ -1,0 +1,36 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 노랑에서 파랑으로 이어지는 매끄러운 입체 그라데이션 -->
+    <linearGradient id="mainGradient" x1="5" y1="5" x2="27" y2="27" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFEE58"/>
+      <stop offset="45%" stop-color="#FBC02D"/>
+      <stop offset="55%" stop-color="#42A5F5"/>
+      <stop offset="100%" stop-color="#1565C0"/>
+    </linearGradient>
+    
+    <!-- 꼬인 부분의 입체감을 위한 그림자 에지 -->
+    <linearGradient id="edgeGradient" x1="27" y1="5" x2="5" y2="27" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#64B5F6" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#FFD54F" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#FBC02D" stop-opacity="0.5"/>
+    </linearGradient>
+
+    <!-- 상단 광택 (Glossy) 효과 -->
+    <radialGradient id="highlight" cx="12" cy="10" r="8" fx="12" fy="10" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="white" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="white" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  
+  <!-- 전체 하트 실루엣 -->
+  <path d="M16 28C16 28 4 20 4 11.5C4 7 7.5 4.5 11.5 4.5C14.5 4.5 16 6.5 16 6.5C16 6.5 17.5 4.5 20.5 4.5C24.5 4.5 28 7 28 11.5C28 20 16 28 16 28Z" 
+        fill="url(#mainGradient)" />
+        
+  <!-- 입체감을 주는 꼬임 오버레이 -->
+  <path d="M16 6.5C16 6.5 17.5 4.5 20.5 4.5C24.5 4.5 28 7 28 11.5C28 17 22 22 16 26" 
+        fill="url(#edgeGradient)" />
+        
+  <!-- 하이라이트 광택 -->
+  <path d="M11.5 5.5C8.5 5.5 6 7.5 6 10.5C6 11.5 6.5 13 7 14" 
+        stroke="url(#highlight)" stroke-width="2" stroke-linecap="round" />
+</svg>

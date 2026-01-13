@@ -1,11 +1,11 @@
-# 💒 Wedding Invitation Studio
+# 🍌 바나나웨딩 (Banana Wedding) 💍
 
 ![Next.js](https://img.shields.io/badge/Next.js-16.1.1-black?style=flat-square&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue?style=flat-square&logo=typescript)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0+-38B2AC?style=flat-square&logo=tailwind-css)
 ![Vercel](https://img.shields.io/badge/Vercel-Deployed-black?style=flat-square&logo=vercel)
 
-현대적이고 감각적인 모바일 청첩장 제작 플랫폼입니다. Next.js 16의 최신 기능을 활용하여 최고의 성능과 사용자 경험을 제공합니다.
+유통기한 없는 달콤한 시작, 바나나웨딩입니다. Next.js 16의 최신 기능을 활용하여 최고의 성능과 감각적인 사용자 경험을 제공하는 모바일 청첩장 제작 플랫폼입니다.
 
 ## ✨ 주요 특징
 
@@ -351,6 +351,6 @@ chore: 빌드/도구 설정 변경
 ---
 
 <div align="center">
-  <p>💕 행복한 결혼을 축하합니다 💕</p>
+  <p>🍌 바나나웨딩과 함께 행복한 시작을 �</p>
   <p>Made with ❤️ using Next.js 16</p>
 </div>

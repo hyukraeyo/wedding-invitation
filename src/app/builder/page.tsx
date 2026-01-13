@@ -31,7 +31,7 @@ import { useEffect } from 'react';
 
 const generateSlug = (name: string): string => {
   const randomStr = Math.random().toString(36).substring(2, 8);
-  return `${name || 'wedding'}-${randomStr}`;
+  return `${name || 'banana'}-${randomStr}`;
 };
 
 export default function BuilderPage() {
@@ -156,7 +156,7 @@ export default function BuilderPage() {
         <SheetContent side="right" className={styles.sheetContent}>
           <SheetHeader className="sr-only">
             <SheetTitle>Mobile Preview</SheetTitle>
-            <SheetDescription>Preview of your wedding invitation</SheetDescription>
+            <SheetDescription>나만의 달콤한 바나나웨딩 청첩장 미리보기</SheetDescription>
           </SheetHeader>
 
           <button
