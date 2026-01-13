@@ -33,17 +33,26 @@ const SECTIONS = [
 const EditorForm = memo(function EditorForm() {
   const [openSections, setOpenSections] = useState<string[]>([]);
   const [isReady, setIsReady] = useState(false);
+  const editingSection = useInvitationStore(state => state.editingSection);
   const setEditingSection = useInvitationStore(state => state.setEditingSection);
 
   // When sections change, identify if a new section was opened to update the preview
   const handleValueChange = useCallback((value: string[]) => {
     // Find if a new section was added
     const added = value.find(v => !openSections.includes(v));
+
     if (added) {
       setEditingSection(added);
+    } else if (value.length === 0) {
+      // If all sections are closed, clear the editing section
+      setEditingSection(null);
+    } else if (editingSection && !value.includes(editingSection)) {
+      // If the current editing section was closed, set it to the last remaining open one or null
+      setEditingSection(value[value.length - 1] ?? null);
     }
+
     setOpenSections(value);
-  }, [openSections, setEditingSection]);
+  }, [openSections, editingSection, setEditingSection]);
 
   // Delay rendering to ensure all icons are loaded for smooth appearance
   useEffect(() => {

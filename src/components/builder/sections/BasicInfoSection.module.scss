@@ -26,11 +26,11 @@
   align-items: center;
   
   &.full {
-    grid-template-columns: 50px 1fr 1fr 1fr;
+    grid-template-columns: 3.5rem 1fr 1fr 1fr;
   }
   
   &.compact {
-    grid-template-columns: 50px 1fr auto;
+    grid-template-columns: 3.5rem 1fr 48px;
   }
 }
 
@@ -39,8 +39,4 @@
   font-size: 14px;
 }
 
-.deceasedWrapper {
-  padding-left: 0.5rem;
-  display: flex;
-  align-items: center;
-}
+// deceasedWrapper and subLabel padding removed to maintain strict grid gap consistency

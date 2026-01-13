@@ -76,25 +76,28 @@ const InvitationCanvas = memo(({ isPreviewMode = false, editingSection }: Invita
     showDday,
   } = useInvitationStore();
 
-  // Scroll to editing section (only in desktop mode)
+  // Scroll to editing section
   useEffect(() => {
-    if (editingSection) {
-      let targetId = editingSection;
-      if (targetId === 'basic') targetId = 'mainScreen';
+    // If editingSection is null, or it's a section that doesn't exist in preview (theme, kakao),
+    // scroll to top (mainScreen)
+    let targetId = editingSection;
+    if (!targetId || targetId === 'theme' || targetId === 'kakao') {
+      targetId = 'mainScreen';
+    } else if (targetId === 'basic') {
+      targetId = 'mainScreen';
+    }
 
-      try {
-        const element = document.getElementById(`section-${targetId}`);
-        if (element) {
-          element.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-            inline: 'nearest'
-          });
-        }
-      } catch (error) {
-        // Prevent errors when element is not found or scroll fails
-        console.warn('Scroll to section failed:', error);
+    try {
+      const element = document.getElementById(`section-${targetId}`);
+      if (element) {
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+          inline: 'nearest'
+        });
       }
+    } catch (error) {
+      console.warn('Scroll to section failed:', error);
     }
   }, [editingSection, isPreviewMode]);
 

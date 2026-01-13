@@ -65,14 +65,12 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 value={groom.parents.father.name}
                                 onChange={(e) => setGroomParents('father', { name: e.target.value })}
                             />
-                            <div className={styles.deceasedWrapper}>
-                                <Toggle
-                                    pressed={groom.parents.father.isDeceased}
-                                    onPressedChange={(pressed) => setGroomParents('father', { isDeceased: pressed })}
-                                >
-                                    故
-                                </Toggle>
-                            </div>
+                            <Toggle
+                                pressed={groom.parents.father.isDeceased}
+                                onPressedChange={(pressed) => setGroomParents('father', { isDeceased: pressed })}
+                            >
+                                故
+                            </Toggle>
                         </div>
                         <div className={cn(styles.row, styles.compact)}>
                             <span className={styles.subLabel}>어머니</span>
@@ -82,14 +80,12 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 value={groom.parents.mother.name}
                                 onChange={(e) => setGroomParents('mother', { name: e.target.value })}
                             />
-                            <div className={styles.deceasedWrapper}>
-                                <Toggle
-                                    pressed={groom.parents.mother.isDeceased}
-                                    onPressedChange={(pressed) => setGroomParents('mother', { isDeceased: pressed })}
-                                >
-                                    故
-                                </Toggle>
-                            </div>
+                            <Toggle
+                                pressed={groom.parents.mother.isDeceased}
+                                onPressedChange={(pressed) => setGroomParents('mother', { isDeceased: pressed })}
+                            >
+                                故
+                            </Toggle>
                         </div>
                     </div>
                 </Field>
@@ -130,14 +126,12 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 value={bride.parents.father.name}
                                 onChange={(e) => setBrideParents('father', { name: e.target.value })}
                             />
-                            <div className={styles.deceasedWrapper}>
-                                <Toggle
-                                    pressed={bride.parents.father.isDeceased}
-                                    onPressedChange={(pressed) => setBrideParents('father', { isDeceased: pressed })}
-                                >
-                                    故
-                                </Toggle>
-                            </div>
+                            <Toggle
+                                pressed={bride.parents.father.isDeceased}
+                                onPressedChange={(pressed) => setBrideParents('father', { isDeceased: pressed })}
+                            >
+                                故
+                            </Toggle>
                         </div>
                         <div className={cn(styles.row, styles.compact)}>
                             <span className={styles.subLabel}>어머니</span>
@@ -147,14 +141,12 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 value={bride.parents.mother.name}
                                 onChange={(e) => setBrideParents('mother', { name: e.target.value })}
                             />
-                            <div className={styles.deceasedWrapper}>
-                                <Toggle
-                                    pressed={bride.parents.mother.isDeceased}
-                                    onPressedChange={(pressed) => setBrideParents('mother', { isDeceased: pressed })}
-                                >
-                                    故
-                                </Toggle>
-                            </div>
+                            <Toggle
+                                pressed={bride.parents.mother.isDeceased}
+                                onPressedChange={(pressed) => setBrideParents('mother', { isDeceased: pressed })}
+                            >
+                                故
+                            </Toggle>
                         </div>
                     </div>
                 </Field>

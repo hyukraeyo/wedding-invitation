@@ -8,13 +8,13 @@ import "../styles/_accessibility.scss";
 // Next.js 15+ Font Optimization
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-serif', display: 'swap' });
-const gowunBatang = Gowun_Batang({ weight: ['400', '700'], variable: '--font-gowun-batang', display: 'swap' });
-const gowunDodum = Gowun_Dodum({ weight: '400', variable: '--font-gowun-dodum', display: 'swap' });
-const nanumMyeongjo = Nanum_Myeongjo({ weight: ['400', '700', '800'], variable: '--font-nanum-myeongjo', display: 'swap' });
-const yeonSung = Yeon_Sung({ weight: '400', variable: '--font-yeon-sung', display: 'swap' });
-const doHyeon = Do_Hyeon({ weight: '400', variable: '--font-do-hyeon', display: 'swap' });
-const songMyung = Song_Myung({ weight: '400', variable: '--font-song-myung', display: 'swap' });
-const greatVibes = Great_Vibes({ weight: '400', variable: '--font-script', display: 'swap' });
+const gowunBatang = Gowun_Batang({ weight: ['400', '700'], variable: '--font-gowun-batang', display: 'optional' });
+const gowunDodum = Gowun_Dodum({ weight: '400', variable: '--font-gowun-dodum', display: 'optional' });
+const nanumMyeongjo = Nanum_Myeongjo({ weight: ['400', '700', '800'], variable: '--font-nanum-myeongjo', display: 'optional' });
+const yeonSung = Yeon_Sung({ weight: '400', variable: '--font-yeon-sung', display: 'optional' });
+const doHyeon = Do_Hyeon({ weight: '400', variable: '--font-do-hyeon', display: 'optional' });
+const songMyung = Song_Myung({ weight: '400', variable: '--font-song-myung', display: 'optional' });
+const greatVibes = Great_Vibes({ weight: '400', variable: '--font-script', display: 'optional' });
 
 
 export const viewport: Viewport = {
@@ -114,7 +114,9 @@ export default function RootLayout({
 
       <head>
         {/* Pretendard CDN - Special case for Korean font that is not on Google Fonts */}
-        <link rel="stylesheet" as="style" crossOrigin="anonymous" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
+        <link rel="preload" as="style" crossOrigin="anonymous" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+        <link rel="stylesheet" crossOrigin="anonymous" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
       </head>
       <body className="antialiased">
         <Script

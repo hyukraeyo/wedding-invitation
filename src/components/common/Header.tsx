@@ -38,8 +38,16 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
     }, [router]);
 
     const handleLogout = async () => {
-        await supabase.auth.signOut();
-        router.push('/');
+        try {
+            // Use 'local' scope to prevent rare 403 Forbidden errors on global logout
+            // and ensure the user's local session is cleared regardless of server response.
+            await supabase.auth.signOut({ scope: 'local' });
+        } catch (error) {
+            console.error('Logout error:', error);
+        } finally {
+            router.push('/');
+            router.refresh(); // Ensure UI updates to reflect logged out state
+        }
     };
 
     const handleCreateNew = () => {
