@@ -13,12 +13,12 @@ interface ScrollRevealProps {
 }
 
 export default function ScrollReveal({ children, className = "", id }: ScrollRevealProps) {
-    const { theme } = useInvitationStore();
-    const [isVisible, setIsVisible] = useState(!theme.animateEntrance);
+    const animateEntrance = useInvitationStore(state => state.theme.animateEntrance);
+    const [isVisible, setIsVisible] = useState(!animateEntrance);
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (!theme.animateEntrance) {
+        if (!animateEntrance) {
             return;
         }
 
@@ -40,10 +40,10 @@ export default function ScrollReveal({ children, className = "", id }: ScrollRev
         }
 
         return () => observer.disconnect();
-    }, [theme.animateEntrance]);
+    }, [animateEntrance]);
 
     // If animation is disabled
-    if (!theme.animateEntrance) {
+    if (!animateEntrance) {
         return <div id={id} className={className}>{children}</div>;
     }
 

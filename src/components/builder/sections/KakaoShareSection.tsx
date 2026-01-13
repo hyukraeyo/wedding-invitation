@@ -19,7 +19,8 @@ interface SectionProps {
 }
 
 export default function KakaoShareSection({ isOpen, onToggle, value }: SectionProps) {
-    const { kakaoShare: kakao, setKakao } = useInvitationStore();
+    const kakao = useInvitationStore(state => state.kakaoShare);
+    const setKakao = useInvitationStore(state => state.setKakao);
     const [previewOpen, setPreviewOpen] = useState(false);
 
     return (

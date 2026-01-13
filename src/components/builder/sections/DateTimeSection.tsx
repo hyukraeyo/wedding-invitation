@@ -16,13 +16,16 @@ interface SectionProps {
 }
 
 const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOpen, onToggle, value }) {
-    const {
-        date, setDate,
-        time, setTime,
-        showCalendar, setShowCalendar,
-        showDday, setShowDday,
-        ddayMessage, setDdayMessage
-    } = useInvitationStore();
+    const date = useInvitationStore(state => state.date);
+    const setDate = useInvitationStore(state => state.setDate);
+    const time = useInvitationStore(state => state.time);
+    const setTime = useInvitationStore(state => state.setTime);
+    const showCalendar = useInvitationStore(state => state.showCalendar);
+    const setShowCalendar = useInvitationStore(state => state.setShowCalendar);
+    const showDday = useInvitationStore(state => state.showDday);
+    const setShowDday = useInvitationStore(state => state.setShowDday);
+    const ddayMessage = useInvitationStore(state => state.ddayMessage);
+    const setDdayMessage = useInvitationStore(state => state.setDdayMessage);
 
     return (
         <AccordionItem

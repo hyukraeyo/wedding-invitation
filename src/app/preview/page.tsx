@@ -1,6 +1,3 @@
-"use client";
-
-import React from 'react';
 import InvitationCanvas from '@/components/preview/InvitationCanvas';
 
 export default function PreviewPage() {

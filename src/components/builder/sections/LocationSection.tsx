@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useCallback } from 'react';
+import dynamic from 'next/dynamic';
 import { MapPin, Search } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useKakaoLoader } from 'react-kakao-maps-sdk';
@@ -10,8 +11,9 @@ import { SegmentedControl } from '../SegmentedControl';
 import { SwitchField } from '../SwitchField';
 import { Field } from '../Field';
 import { Modal } from '@/components/common/Modal';
-import DaumPostcodeEmbed from 'react-daum-postcode';
 import styles from './LocationSection.module.scss';
+
+const DaumPostcodeEmbed = dynamic(() => import('react-daum-postcode'), { ssr: false });
 import { cn } from '@/lib/utils';
 
 import { NaverIcon, KakaoIcon } from '@/components/common/MapIcons';
@@ -23,21 +25,32 @@ interface SectionProps {
 }
 
 const LocationSection = React.memo<SectionProps>(function LocationSection({ value, isOpen, onToggle }) {
-    const {
-        location, setLocation,
-        locationTitle, setLocationTitle,
-        locationSubtitle, setLocationSubtitle,
-        address, setAddress,
-        detailAddress, setDetailAddress,
-        locationContact, setLocationContact,
-        showMap, setShowMap,
-        lockMap, setLockMap,
-        showNavigation, setShowNavigation,
-        mapHeight, setMapHeight,
-        mapZoom, setMapZoom,
-        mapType, setMapType,
-        coordinates, setCoordinates
-    } = useInvitationStore();
+    const location = useInvitationStore(state => state.location);
+    const setLocation = useInvitationStore(state => state.setLocation);
+    const locationTitle = useInvitationStore(state => state.locationTitle);
+    const setLocationTitle = useInvitationStore(state => state.setLocationTitle);
+    const locationSubtitle = useInvitationStore(state => state.locationSubtitle);
+    const setLocationSubtitle = useInvitationStore(state => state.setLocationSubtitle);
+    const address = useInvitationStore(state => state.address);
+    const setAddress = useInvitationStore(state => state.setAddress);
+    const detailAddress = useInvitationStore(state => state.detailAddress);
+    const setDetailAddress = useInvitationStore(state => state.setDetailAddress);
+    const locationContact = useInvitationStore(state => state.locationContact);
+    const setLocationContact = useInvitationStore(state => state.setLocationContact);
+    const showMap = useInvitationStore(state => state.showMap);
+    const setShowMap = useInvitationStore(state => state.setShowMap);
+    const lockMap = useInvitationStore(state => state.lockMap);
+    const setLockMap = useInvitationStore(state => state.setLockMap);
+    const showNavigation = useInvitationStore(state => state.showNavigation);
+    const setShowNavigation = useInvitationStore(state => state.setShowNavigation);
+    const mapHeight = useInvitationStore(state => state.mapHeight);
+    const setMapHeight = useInvitationStore(state => state.setMapHeight);
+    const mapZoom = useInvitationStore(state => state.mapZoom);
+    const setMapZoom = useInvitationStore(state => state.setMapZoom);
+    const mapType = useInvitationStore(state => state.mapType);
+    const setMapType = useInvitationStore(state => state.setMapType);
+    const coordinates = useInvitationStore(state => state.coordinates);
+    const setCoordinates = useInvitationStore(state => state.setCoordinates);
 
     // Load Kakao Maps SDK for Geocoding services
     useKakaoLoader({
@@ -248,11 +261,13 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ valu
                 title="주소 검색"
             >
                 <div className={styles.postcodeWrapper}>
-                    <DaumPostcodeEmbed
-                        onComplete={handleComplete}
-                        style={{ height: '100%' }}
-                        autoClose={false}
-                    />
+                    {isSearchOpen && (
+                        <DaumPostcodeEmbed
+                            onComplete={handleComplete}
+                            style={{ height: '100%' }}
+                            autoClose={false}
+                        />
+                    )}
                 </div>
             </Modal>
         </AccordionItem>

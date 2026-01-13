@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import dynamic from 'next/dynamic';
 import { Home, Sparkles } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode } from 'swiper/modules';
@@ -12,7 +13,6 @@ import { SwitchField } from '../SwitchField';
 import { SegmentedControl } from '../SegmentedControl';
 import { Field } from '../Field';
 import { ImageUploader } from '../ImageUploader';
-import RichTextEditor from '@/components/common/RichTextEditor';
 import { Button } from '@/components/ui/button';
 import {
     Dialog,
@@ -21,6 +21,8 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import styles from './MainScreenSection.module.scss';
+
+const RichTextEditor = dynamic(() => import('@/components/common/RichTextEditor'), { ssr: false });
 
 interface StylePreset {
     id: string;
@@ -64,13 +66,16 @@ interface SectionProps {
 }
 
 export default function MainScreenSection({ isOpen, onToggle, value }: SectionProps) {
-    const {
-        mainScreen, setMainScreen,
-        imageUrl, setImageUrl,
-        imageRatio, setImageRatio,
-        groom, bride,
-        theme, setTheme,
-    } = useInvitationStore();
+    const mainScreen = useInvitationStore(state => state.mainScreen);
+    const setMainScreen = useInvitationStore(state => state.setMainScreen);
+    const imageUrl = useInvitationStore(state => state.imageUrl);
+    const setImageUrl = useInvitationStore(state => state.setImageUrl);
+    const imageRatio = useInvitationStore(state => state.imageRatio);
+    const setImageRatio = useInvitationStore(state => state.setImageRatio);
+    const groom = useInvitationStore(state => state.groom);
+    const bride = useInvitationStore(state => state.bride);
+    const theme = useInvitationStore(state => state.theme);
+    const setTheme = useInvitationStore(state => state.setTheme);
 
     const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
     const swiperRef = useRef<SwiperType | null>(null);
@@ -400,11 +405,13 @@ export default function MainScreenSection({ isOpen, onToggle, value }: SectionPr
                 )}
 
                 {/* Date & Place Info - Common for all styles */}
-                <RichTextEditor
-                    content={mainScreen.customDatePlace}
-                    onChange={(val) => updateMain({ customDatePlace: val })}
-                    placeholder="미입력 시 예식일시 및 장소가 자동 노출됩니다"
-                />
+                {isOpen && (
+                    <RichTextEditor
+                        content={mainScreen.customDatePlace}
+                        onChange={(val: string) => updateMain({ customDatePlace: val })}
+                        placeholder="미입력 시 예식일시 및 장소가 자동 노출됩니다"
+                    />
+                )}
 
                 {/* Visibility Toggles */}
                 <div className={styles.switchGroup}>

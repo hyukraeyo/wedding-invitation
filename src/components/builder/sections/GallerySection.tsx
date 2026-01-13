@@ -110,17 +110,23 @@ const SortableItem = React.memo(function SortableItem({ id, url, onRemove, isDra
 });
 
 const GallerySection = React.memo<SectionProps>(function GallerySection({ value, isOpen, onToggle }) {
-    const {
-        gallery, setGallery,
-        galleryTitle, setGalleryTitle,
-        gallerySubtitle, setGallerySubtitle,
-        galleryType, setGalleryType,
-        galleryPopup, setGalleryPopup,
-        galleryPreview, setGalleryPreview,
-        galleryFade, setGalleryFade,
-        galleryAutoplay, setGalleryAutoplay,
-        theme
-    } = useInvitationStore();
+    const gallery = useInvitationStore(state => state.gallery);
+    const setGallery = useInvitationStore(state => state.setGallery);
+    const galleryTitle = useInvitationStore(state => state.galleryTitle);
+    const setGalleryTitle = useInvitationStore(state => state.setGalleryTitle);
+    const gallerySubtitle = useInvitationStore(state => state.gallerySubtitle);
+    const setGallerySubtitle = useInvitationStore(state => state.setGallerySubtitle);
+    const galleryType = useInvitationStore(state => state.galleryType);
+    const setGalleryType = useInvitationStore(state => state.setGalleryType);
+    const galleryPopup = useInvitationStore(state => state.galleryPopup);
+    const setGalleryPopup = useInvitationStore(state => state.setGalleryPopup);
+    const galleryPreview = useInvitationStore(state => state.galleryPreview);
+    const setGalleryPreview = useInvitationStore(state => state.setGalleryPreview);
+    const galleryFade = useInvitationStore(state => state.galleryFade);
+    const setGalleryFade = useInvitationStore(state => state.setGalleryFade);
+    const galleryAutoplay = useInvitationStore(state => state.galleryAutoplay);
+    const setGalleryAutoplay = useInvitationStore(state => state.setGalleryAutoplay);
+    const accentColor = useInvitationStore(state => state.theme.accentColor);
     const { toast } = useToast();
 
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -237,7 +243,7 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ value,
                         <div className={styles.counter}>
                             <Label className="!mb-0">사진 관리</Label>
                             <span className={styles.countText}>
-                                <span style={{ color: theme.accentColor }}>{gallery.length}</span>
+                                <span style={{ color: accentColor }}>{gallery.length}</span>
                                 <span className={styles.countTotal}> / 30</span>
                             </span>
                         </div>

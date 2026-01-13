@@ -33,9 +33,8 @@ const SAMPLE_PHRASES = [
 ];
 
 export default function ClosingSection({ isOpen, onToggle, value }: SectionProps) {
-    const {
-        closing, setClosing
-    } = useInvitationStore();
+    const closing = useInvitationStore(state => state.closing);
+    const setClosing = useInvitationStore(state => state.setClosing);
 
     const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
 
@@ -107,13 +106,18 @@ export default function ClosingSection({ isOpen, onToggle, value }: SectionProps
             </div>
 
             {/* Sample Phrases Modal */}
-            <ExampleSelectorModal
-                isOpen={isSampleModalOpen}
-                onClose={() => setIsSampleModalOpen(false)}
-                title="엔딩 예시 문구"
-                items={SAMPLE_PHRASES}
-                onSelect={(item) => handleSelectSample(item)}
-            />
+            {isSampleModalOpen && (
+                <ExampleSelectorModal
+                    isOpen={isSampleModalOpen}
+                    onClose={() => setIsSampleModalOpen(false)}
+                    title="마무리 문구 예시"
+                    items={SAMPLE_PHRASES.map(s => ({
+                        ...s,
+                        content: s.content
+                    }))}
+                    onSelect={(item) => handleSelectSample(item)}
+                />
+            )}
         </AccordionItem>
     );
 }

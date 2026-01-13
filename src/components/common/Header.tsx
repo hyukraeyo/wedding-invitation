@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Plus, Loader2, User, LogIn, LogOut, Save } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
@@ -32,6 +32,10 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
     const reset = useInvitationStore(state => state.reset);
     const [showResetDialog, setShowResetDialog] = useState(false);
     const isVisible = useHeaderVisible(10, 'builder-sidebar-scroll');
+
+    useEffect(() => {
+        router.prefetch('/login');
+    }, [router]);
 
     const handleLogout = async () => {
         await supabase.auth.signOut();

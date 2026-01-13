@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { MessageSquare, Sparkles, Info } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
@@ -6,9 +7,10 @@ import { TextField } from '../TextField';
 import { Field } from '../Field';
 import { SegmentedControl } from '../SegmentedControl';
 import { ExampleSelectorModal } from '@/components/common/ExampleSelectorModal';
-import RichTextEditor from '@/components/common/RichTextEditor';
 import { ImageUploader } from '../ImageUploader';
 import styles from './GreetingSection.module.scss';
+
+const RichTextEditor = dynamic(() => import('@/components/common/RichTextEditor'), { ssr: false });
 
 interface SectionProps {
     value: string;
@@ -35,17 +37,24 @@ const SAMPLE_PHRASES = [
 ];
 
 export default function GreetingSection({ isOpen, onToggle, value }: SectionProps) {
-    const {
-        message, setMessage,
-        greetingTitle, setGreetingTitle,
-        greetingSubtitle, setGreetingSubtitle,
-        greetingImage, setGreetingImage,
-        greetingRatio, setGreetingRatio,
-        showNamesAtBottom, setShowNamesAtBottom,
-        enableFreeformNames, setEnableFreeformNames,
-        groomNameCustom, setGroomNameCustom,
-        brideNameCustom, setBrideNameCustom
-    } = useInvitationStore();
+    const message = useInvitationStore(state => state.message);
+    const setMessage = useInvitationStore(state => state.setMessage);
+    const greetingTitle = useInvitationStore(state => state.greetingTitle);
+    const setGreetingTitle = useInvitationStore(state => state.setGreetingTitle);
+    const greetingSubtitle = useInvitationStore(state => state.greetingSubtitle);
+    const setGreetingSubtitle = useInvitationStore(state => state.setGreetingSubtitle);
+    const greetingImage = useInvitationStore(state => state.greetingImage);
+    const setGreetingImage = useInvitationStore(state => state.setGreetingImage);
+    const greetingRatio = useInvitationStore(state => state.greetingRatio);
+    const setGreetingRatio = useInvitationStore(state => state.setGreetingRatio);
+    const showNamesAtBottom = useInvitationStore(state => state.showNamesAtBottom);
+    const setShowNamesAtBottom = useInvitationStore(state => state.setShowNamesAtBottom);
+    const enableFreeformNames = useInvitationStore(state => state.enableFreeformNames);
+    const setEnableFreeformNames = useInvitationStore(state => state.setEnableFreeformNames);
+    const groomNameCustom = useInvitationStore(state => state.groomNameCustom);
+    const setGroomNameCustom = useInvitationStore(state => state.setGroomNameCustom);
+    const brideNameCustom = useInvitationStore(state => state.brideNameCustom);
+    const setBrideNameCustom = useInvitationStore(state => state.setBrideNameCustom);
 
     const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
 
@@ -112,11 +121,13 @@ export default function GreetingSection({ isOpen, onToggle, value }: SectionProp
 
                 {/* Content */}
                 <Field label="내용">
-                    <RichTextEditor
-                        content={message}
-                        onChange={setMessage}
-                        placeholder="축하해주시는 분들께 전할 소중한 메시지를 입력하세요."
-                    />
+                    {isOpen && (
+                        <RichTextEditor
+                            content={message}
+                            onChange={setMessage}
+                            placeholder="축하해주시는 분들께 전할 소중한 메시지를 입력하세요."
+                        />
+                    )}
                 </Field>
 
                 {/* Photo Upload */}
@@ -170,16 +181,18 @@ export default function GreetingSection({ isOpen, onToggle, value }: SectionProp
             </div>
 
             {/* Sample Phrases Modal */}
-            <ExampleSelectorModal
-                isOpen={isSampleModalOpen}
-                onClose={() => setIsSampleModalOpen(false)}
-                title="인사말 예시 문구"
-                items={SAMPLE_PHRASES.map(s => ({
-                    ...s,
-                    content: s.message // Map message to content for the generic component
-                }))}
-                onSelect={(item) => handleSelectSample(item)}
-            />
+            {isSampleModalOpen && (
+                <ExampleSelectorModal
+                    isOpen={isSampleModalOpen}
+                    onClose={() => setIsSampleModalOpen(false)}
+                    title="인사말 예시 문구"
+                    items={SAMPLE_PHRASES.map(s => ({
+                        ...s,
+                        content: s.message // Map message to content for the generic component
+                    }))}
+                    onSelect={(item) => handleSelectSample(item)}
+                />
+            )}
         </AccordionItem>
     );
 }

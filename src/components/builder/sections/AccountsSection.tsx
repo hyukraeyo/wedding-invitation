@@ -22,16 +22,22 @@ interface SectionProps {
 }
 
 export default function AccountsSection({ value, isOpen, onToggle }: SectionProps) {
-    const {
-        accounts, setAccounts,
-        accountsTitle, setAccountsTitle,
-        accountsSubtitle, setAccountsSubtitle,
-        accountsDescription, setAccountsDescription,
-        accountsGroomTitle, setAccountsGroomTitle,
-        accountsBrideTitle, setAccountsBrideTitle,
-        accountsColorMode, setAccountsColorMode,
-        groom, bride
-    } = useInvitationStore();
+    const accounts = useInvitationStore(state => state.accounts);
+    const setAccounts = useInvitationStore(state => state.setAccounts);
+    const accountsTitle = useInvitationStore(state => state.accountsTitle);
+    const setAccountsTitle = useInvitationStore(state => state.setAccountsTitle);
+    const accountsSubtitle = useInvitationStore(state => state.accountsSubtitle);
+    const setAccountsSubtitle = useInvitationStore(state => state.setAccountsSubtitle);
+    const accountsDescription = useInvitationStore(state => state.accountsDescription);
+    const setAccountsDescription = useInvitationStore(state => state.setAccountsDescription);
+    const accountsGroomTitle = useInvitationStore(state => state.accountsGroomTitle);
+    const setAccountsGroomTitle = useInvitationStore(state => state.setAccountsGroomTitle);
+    const accountsBrideTitle = useInvitationStore(state => state.accountsBrideTitle);
+    const setAccountsBrideTitle = useInvitationStore(state => state.setAccountsBrideTitle);
+    const accountsColorMode = useInvitationStore(state => state.accountsColorMode);
+    const setAccountsColorMode = useInvitationStore(state => state.setAccountsColorMode);
+    const groom = useInvitationStore(state => state.groom);
+    const bride = useInvitationStore(state => state.bride);
 
     const [expandedId, setExpandedId] = useState<string | null>(null);
 

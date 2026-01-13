@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
-interface InvitationState {
+export interface InvitationState {
     // Basic Info
     groom: {
         firstName: string;

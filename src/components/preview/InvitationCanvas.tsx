@@ -98,13 +98,6 @@ const InvitationCanvas = memo(({ isPreviewMode = false, editingSection }: Invita
     }
   }, [editingSection, isPreviewMode]);
 
-  // Cleanup on unmount to prevent memory leaks
-  useEffect(() => {
-    return () => {
-      // Clear any pending scroll operations or event listeners
-      // This helps prevent errors when component unmounts during transitions
-    };
-  }, []);
 
   const canvasStyle = useMemo(
     () => getFontStyle(theme.font, theme.fontScale, theme.backgroundColor),

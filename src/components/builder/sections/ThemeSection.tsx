@@ -27,9 +27,8 @@ const PRESET_COLORS = [
 ];
 
 const ThemeSection = React.memo<SectionProps>(function ThemeSection({ isOpen, onToggle, value }) {
-    const {
-        theme, setTheme
-    } = useInvitationStore();
+    const theme = useInvitationStore(state => state.theme);
+    const setTheme = useInvitationStore(state => state.setTheme);
 
     return (
         <AccordionItem
