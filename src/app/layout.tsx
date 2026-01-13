@@ -90,15 +90,6 @@ export const metadata: Metadata = {
       "naver-site-verification": "your-naver-site-verification-code",
     },
   },
-  icons: {
-    icon: '/icon.png',
-    shortcut: '/icon.png',
-    apple: '/icon.png',
-    other: {
-      rel: 'apple-touch-icon-precomposed',
-      url: '/icon.png',
-    },
-  },
 };
 
 export default function RootLayout({
