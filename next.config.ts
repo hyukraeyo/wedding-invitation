@@ -1,4 +1,8 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs";
+
+const withPWAInit = require('next-pwa');
 
 const nextConfig: NextConfig = {
   // React 19 Strict Mode 활성화
@@ -12,7 +16,6 @@ const nextConfig: NextConfig = {
   // Turbopack 설정 (Next.js 16 대응)
   turbopack: {},
 
-  // 이미지 최적화 설정 고도화
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'source.unsplash.com' },
@@ -23,6 +26,8 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: '*.supabase.co' },
     ],
     formats: ['image/webp', 'image/avif'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 60,
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
@@ -60,7 +65,7 @@ const nextConfig: NextConfig = {
       style-src 'self' 'unsafe-inline' https: http:;
       img-src 'self' blob: data: https: http:;
       font-src 'self' data: https: http:;
-      connect-src 'self' https: http: wss:;
+      connect-src 'self' https: http: wss: sentry.io;
       worker-src 'self' blob:;
       child-src 'self' blob: https: http:;
       frame-src 'self' https: http:;
@@ -94,7 +99,6 @@ const nextConfig: NextConfig = {
     });
 
     if (!isServer && process.env.ANALYZE === 'true') {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
       config.plugins.push(
         new BundleAnalyzerPlugin({
@@ -108,5 +112,22 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+const config = withSentryConfig(
+  withPWAInit({
+    dest: 'public',
+    register: true,
+    skipWaiting: true,
+    disable: process.env.NODE_ENV === 'development',
+    buildExcludes: [/middleware-manifest\.json$/],
+  })(nextConfig),
+  {
+    silent: true,
+    ...(process.env.SENTRY_ORG && process.env.SENTRY_PROJECT ? {
+      org: process.env.SENTRY_ORG,
+      project: process.env.SENTRY_PROJECT,
+    } : {}),
+  }
+);
+
+export default config;
 

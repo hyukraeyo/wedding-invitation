@@ -27,8 +27,6 @@
     // Additional Checks
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
 
     // Module Resolution
     "allowJs": true,

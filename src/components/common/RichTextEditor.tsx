@@ -14,7 +14,7 @@ import {
     Highlighter,
     Type
 } from 'lucide-react';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useId } from 'react';
 import { cn } from '@/lib/utils';
 import { Toggle } from '@/components/ui/toggle';
 import { Separator } from '@/components/ui/separator';
@@ -50,18 +50,21 @@ const ToolbarToggle = ({
 );
 
 export default function RichTextEditor({ content, onChange, placeholder, className = "", minHeight = "min-h-[120px]" }: RichTextEditorProps) {
+    const editorId = useId();
+
     const extensions = useMemo(() => [
         StarterKit.configure({
             heading: false,
         }),
-        TextStyle,
-        Color,
-        Underline,
+        TextStyle.configure({}),
+        Color.configure({}),
+        // 각 에디터 인스턴스에 고유한 이름을 부여하여 중복 경고 방지
+        Underline.extend({ name: `underline-${editorId}` }),
         Highlight.configure({ multicolor: true }),
         Placeholder.configure({
             placeholder: placeholder || '내용을 입력하세요...',
         }),
-    ], [placeholder]);
+    ], [placeholder, editorId]);
 
     const editor = useEditor({
         extensions,

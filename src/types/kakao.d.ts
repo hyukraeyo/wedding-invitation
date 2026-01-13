@@ -60,8 +60,8 @@ declare global {
             }
 
             // Controls
-            class MapTypeControl {}
-            class ZoomControl {}
+            class MapTypeControl { }
+            class ZoomControl { }
 
             // Enums and Constants
             enum MapTypeId {
@@ -142,6 +142,11 @@ declare global {
             class services {
                 static Geocoder: typeof Geocoder;
                 static Places: typeof Places;
+                static Status: {
+                    OK: GeocoderStatus.OK;
+                    ZERO_RESULT: GeocoderStatus.ZERO_RESULT;
+                    ERROR: GeocoderStatus.ERROR;
+                };
             }
 
             class Geocoder {
@@ -265,4 +270,4 @@ declare global {
     }
 }
 
-export {};
+export { };

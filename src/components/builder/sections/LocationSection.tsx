@@ -42,7 +42,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ valu
     // Load Kakao Maps SDK for Geocoding services
     useKakaoLoader({
         appkey: process.env.NEXT_PUBLIC_KAKAO_APP_KEY || '',
-        libraries: ['services'],
+        libraries: ['services', 'clusterer'],
     });
 
     const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -51,11 +51,13 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ valu
     React.useEffect(() => {
         if (address && typeof window !== 'undefined' && window.kakao?.maps?.services) {
             const geocoder = new window.kakao.maps.services.Geocoder();
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            geocoder.addressSearch(address, (result: any[], status: any) => {
+            geocoder.addressSearch(address, (result, status) => {
                 if (status === window.kakao.maps.services.Status.OK && result.length > 0) {
-                    const lat = parseFloat(result[0].y);
-                    const lng = parseFloat(result[0].x);
+                    const firstResult = result[0];
+                    if (!firstResult) return;
+
+                    const lat = parseFloat(firstResult.y);
+                    const lng = parseFloat(firstResult.x);
                     // Only update if different to avoid infinite loop
                     if (Math.abs((coordinates?.lat || 0) - lat) > 0.0001 || Math.abs((coordinates?.lng || 0) - lng) > 0.0001) {
                         setCoordinates(lat, lng);

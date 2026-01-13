@@ -3,6 +3,7 @@ import Script from "next/script";
 import { Inter, Playfair_Display, Gowun_Batang, Gowun_Dodum, Nanum_Myeongjo, Yeon_Sung, Do_Hyeon, Song_Myung, Great_Vibes } from 'next/font/google';
 import ClientProviders from './ClientProviders';
 import "./globals.scss";
+import "../styles/_accessibility.scss";
 
 // Next.js 15+ Font Optimization
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
@@ -99,7 +100,7 @@ export default function RootLayout({
   modal: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" suppressHydrationWarning className={`
+    <html lang="ko" suppressHydrationWarning data-scroll-behavior="smooth" className={`
       ${inter.variable} 
       ${playfair.variable} 
       ${gowunBatang.variable} 

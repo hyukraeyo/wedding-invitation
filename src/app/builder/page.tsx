@@ -4,14 +4,17 @@ import React, { useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 
-// Heavy components dynamic import
-const InvitationCanvas = dynamic(() => import('@/components/preview/InvitationCanvas'), {
-  ssr: false,
-  loading: () => <div className="w-full h-full flex items-center justify-center bg-muted/20 animate-pulse" />
-});
-const EditorForm = dynamic(() => import('@/components/builder/EditorForm'), {
-  ssr: false
-});
+// Dynamic import for InvitationCanvas (conditionally rendered based on screen size)
+const InvitationCanvas = dynamic(
+  () => import('@/components/preview/InvitationCanvas'),
+  {
+    ssr: false,
+    loading: () => <div className="w-full h-full flex items-center justify-center bg-muted/20 animate-pulse" />
+  }
+);
+
+// Static import for EditorForm to prevent CSS chunk splitting that causes preload warnings
+import EditorForm from '@/components/builder/EditorForm';
 
 import { useInvitationStore, InvitationData } from '@/store/useInvitationStore';
 import { useAuth } from '@/hooks/useAuth';

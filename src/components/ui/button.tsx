@@ -4,31 +4,30 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 
-import styles from "./button.module.scss"
-
+// Use global class names instead of CSS module to prevent chunk splitting
 const buttonVariants = cva(
-  styles.base,
+  "btn-base",
   {
     variants: {
       variant: {
-        default: styles.variantDefault,
-        destructive: styles.variantDestructive,
-        outline: styles.variantOutline,
-        secondary: styles.variantSecondary,
-        ghost: styles.variantGhost,
-        link: styles.variantLink,
+        default: "btn-default",
+        destructive: "btn-destructive",
+        outline: "btn-outline",
+        secondary: "btn-secondary",
+        ghost: "btn-ghost",
+        link: "btn-link",
         // Toss Design System Inspired Variants
-        "toss-text": styles.variantTossText,
-        "toss-solid": styles.variantTossSolid,
-        "toss-line": styles.variantTossLine,
+        "toss-text": "btn-toss-text",
+        "toss-solid": "btn-toss-solid",
+        "toss-line": "btn-toss-line",
       },
       size: {
-        default: styles.sizeDefault,
-        sm: styles.sizeSm,
-        lg: styles.sizeLg,
-        icon: styles.sizeIcon,
-        "icon-sm": styles.sizeIconSm,
-        "icon-lg": styles.sizeIconLg,
+        default: "btn-size-default",
+        sm: "btn-size-sm",
+        lg: "btn-size-lg",
+        icon: "btn-size-icon",
+        "icon-sm": "btn-size-icon-sm",
+        "icon-lg": "btn-size-icon-lg",
       },
     },
     defaultVariants: {

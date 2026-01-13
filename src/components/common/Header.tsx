@@ -75,7 +75,6 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
             </div>
 
             {/* Actions */}
-            {/* Actions */}
             <div className="flex items-center gap-1 md:gap-2">
                 <Button
                     size="sm"
