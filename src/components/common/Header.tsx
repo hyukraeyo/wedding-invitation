@@ -80,9 +80,9 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
             !isVisible && "-translate-y-full md:translate-y-0"
         )}>
             {/* Logo */}
-            <div className="flex items-center gap-2 font-serif font-bold text-xl tracking-tight">
-                <Link href="/" className="hover:opacity-80 transition-opacity">
-                    WEDDING
+            <div className="flex items-center">
+                <Link href="/" className="hover:opacity-80 transition-opacity flex items-center">
+                    <img src="/logo.png" alt="Logo" className="w-11 h-11 object-contain" />
                 </Link>
             </div>
 

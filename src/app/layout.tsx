@@ -57,9 +57,9 @@ export const metadata: Metadata = {
     locale: "ko_KR",
     images: [
       {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
+        url: "/logo.png",
+        width: 800,
+        height: 800,
         alt: "Wedding Invitation Studio - 모바일 청첩장 제작 플랫폼",
       },
     ],
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "심플하고 아름다운 모바일 청첩장",
     description: "최첨단 기술로 제작된 고품격 모바일 청첩장 플랫폼",
-    images: ["/og-image.jpg"],
+    images: ["/logo.png"],
     creator: "@hyukraeyo",
   },
   robots: {
@@ -88,6 +88,15 @@ export const metadata: Metadata = {
     google: "your-google-site-verification-code",
     other: {
       "naver-site-verification": "your-naver-site-verification-code",
+    },
+  },
+  icons: {
+    icon: '/icon.png',
+    shortcut: '/icon.png',
+    apple: '/icon.png',
+    other: {
+      rel: 'apple-touch-icon-precomposed',
+      url: '/icon.png',
     },
   },
 };

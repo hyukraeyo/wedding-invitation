@@ -17,13 +17,17 @@ export async function generateMetadata({ params }: Props) {
     const groomName = `${data.groom.lastName}${data.groom.firstName}`;
     const brideName = `${data.bride.lastName}${data.bride.firstName}`;
 
+    const ogTitle = data.kakaoShare?.title || `${groomName} ♥ ${brideName} 결혼식에 초대합니다`;
+    const ogDescription = data.kakaoShare?.description || data.greetingTitle || '소중한 분들을 초대합니다.';
+    const ogImage = data.kakaoShare?.imageUrl || data.imageUrl || '/logo.png';
+
     return {
         title: `${groomName} ♥ ${brideName} 결혼식에 초대합니다`,
         description: data.greetingTitle || '소중한 분들을 초대합니다.',
         openGraph: {
-            title: `${groomName} ♥ ${brideName} 모바일 청첩장`,
-            description: data.greetingTitle,
-            images: [data.imageUrl || '/next.svg'],
+            title: ogTitle,
+            description: ogDescription,
+            images: [ogImage],
         },
     };
 }
