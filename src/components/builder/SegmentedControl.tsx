@@ -1,6 +1,6 @@
 'use client';
 
-import { SegmentedControl as BaseSegmentedControl, SegmentedControlItem } from '@/components/common/SegmentedControl';
+import { SegmentedControl as BaseSegmentedControl, SegmentedControlItem } from '@/components/ui/SegmentedControl';
 
 interface Option<T> {
     label: string;

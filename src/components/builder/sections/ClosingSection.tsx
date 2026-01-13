@@ -3,9 +3,9 @@ import { Heart, Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
-import { Field } from '../Field';
+import { Field } from '../FormPrimitives';
 import { ImageUploader } from '../ImageUploader';
-import { ExampleSelectorModal } from '@/components/common/ExampleSelectorModal';
+import { ExampleSelectorModal } from '@/components/builder/ExampleSelectorModal';
 import styles from './ClosingSection.module.scss';
 
 interface SectionProps {

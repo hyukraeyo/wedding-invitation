@@ -2,8 +2,8 @@
 
 import React, { useState, useCallback, memo, useEffect } from 'react';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { Accordion } from '@/components/ui/accordion';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Accordion } from '@/components/ui/Accordion';
+import { Skeleton } from '@/components/ui/Skeleton';
 
 // Static imports for immediate loading (prevents icon pop-in)
 import ThemeSection from './sections/ThemeSection';

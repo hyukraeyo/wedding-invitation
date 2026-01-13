@@ -4,7 +4,7 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { SegmentedControl } from '../SegmentedControl';
 import { Select } from '../Select';
-import { Field } from '../Field';
+import { Field } from '../FormPrimitives';
 import styles from './ThemeSection.module.scss';
 import { cn } from '@/lib/utils';
 import type { ThemeFont } from '@/lib/utils/font';

@@ -9,14 +9,14 @@ import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { SegmentedControl } from '../SegmentedControl';
 import { SwitchField } from '../SwitchField';
-import { Field } from '../Field';
-import { Modal } from '@/components/common/Modal';
+import { Field } from '../FormPrimitives';
+import { Modal } from '@/components/ui/Modal';
 import styles from './LocationSection.module.scss';
 
 const DaumPostcodeEmbed = dynamic(() => import('react-daum-postcode'), { ssr: false });
 import { cn } from '@/lib/utils';
 
-import { NaverIcon, KakaoIcon } from '@/components/common/MapIcons';
+import { NaverIcon, KakaoIcon } from '@/components/common/Icons';
 
 interface SectionProps {
     value: string;

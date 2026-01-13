@@ -11,15 +11,15 @@ import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { SwitchField } from '../SwitchField';
 import { SegmentedControl } from '../SegmentedControl';
-import { Field } from '../Field';
+import { Field } from '../FormPrimitives';
 import { ImageUploader } from '../ImageUploader';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button';
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
-} from '@/components/ui/dialog';
+} from '@/components/ui/Dialog';
 import styles from './MainScreenSection.module.scss';
 
 const RichTextEditor = dynamic(() => import('@/components/common/RichTextEditor'), { ssr: false });

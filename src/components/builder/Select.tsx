@@ -5,8 +5,8 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select"
-import { Label } from '@/components/ui/label';
+} from "@/components/ui/Select"
+import { Label } from '@/components/ui/Label';
 import { cn } from '@/lib/utils';
 
 interface Option<T> {

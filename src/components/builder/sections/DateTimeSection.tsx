@@ -4,7 +4,7 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { SwitchField } from '../SwitchField';
-import { Field } from '../Field';
+import { Field } from '../FormPrimitives';
 import { TimePicker } from '../TimePicker';
 import { DatePicker } from '../DatePicker';
 import styles from './DateTimeSection.module.scss';

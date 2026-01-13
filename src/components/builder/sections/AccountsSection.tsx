@@ -4,14 +4,14 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { SegmentedControl } from '../SegmentedControl';
-import { Field } from '../Field';
+import { Field } from '../FormPrimitives';
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select";
+} from "@/components/ui/Select";
 import styles from './AccountsSection.module.scss';
 import { cn } from '@/lib/utils';
 

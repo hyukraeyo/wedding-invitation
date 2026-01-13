@@ -6,8 +6,8 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { SegmentedControl } from './SegmentedControl';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Button } from '@/components/ui/Button';
+import { AspectRatio } from '@/components/ui/AspectRatio';
 
 interface ImageUploaderProps {
     value: string | null;

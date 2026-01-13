@@ -17,7 +17,7 @@ import SectionContainer from '../SectionContainer';
 import SectionHeader from '../SectionHeader';
 import styles from './GalleryView.module.scss';
 import { clsx } from 'clsx';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { AspectRatio } from '@/components/ui/AspectRatio';
 
 interface GalleryItem {
     id: string;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { cn } from '@/lib/utils';
 
 interface SegmentedControlProps<T> {
@@ -7,7 +7,6 @@ interface SegmentedControlProps<T> {
     defaultValue?: T | undefined;
     onChange?: ((value: T) => void) | undefined;
     size?: 'small' | 'large' | undefined;
-    alignment?: 'fixed' | 'fluid' | undefined;
     children: React.ReactNode;
     className?: string | undefined;
 }
@@ -16,7 +15,6 @@ interface SegmentedControlItemProps<T> {
     value: T;
     children: React.ReactNode;
     className?: string | undefined;
-    // content ref for tabs? Usually TabsTrigger just wraps text/icon
 }
 
 export const SegmentedControlItem = <T extends string | number>({
@@ -37,7 +35,6 @@ export const SegmentedControl = <T extends string | number>({
 }: SegmentedControlProps<T>) => {
     const activeValue = value !== undefined ? value : defaultValue;
 
-    // Extract items to find the selected index and count
     const items = React.Children.toArray(children).filter(
         (child): child is React.ReactElement<SegmentedControlItemProps<T>> => React.isValidElement(child)
     );
@@ -62,15 +59,14 @@ export const SegmentedControl = <T extends string | number>({
             <TabsList className={cn(
                 "relative w-full bg-[#f2f4f6] rounded-lg p-1",
                 size === 'large' ? "h-12" : "h-10",
-                "grid grid-flow-col auto-cols-fr isolate" // 'isolate' to create stacking context
+                "grid grid-flow-col auto-cols-fr isolate"
             )}>
-                {/* Sliding Active Indicator */}
                 <span
                     className={cn(
                         "absolute top-1 bottom-1 left-1",
                         "bg-white rounded-[6px] shadow-[0_1px_3px_rgba(0,0,0,0.1)] ring-1 ring-black/[0.04]",
-                        "transition-transform duration-300 ease-ios", // Toss-like smooth springy ease
-                        "pointer-events-none -z-10" // Behind the text
+                        "transition-transform duration-300 ease-ios",
+                        "pointer-events-none -z-10"
                     )}
                     style={{
                         width: `calc((100% - 8px) / ${itemCount})`,
@@ -85,9 +81,9 @@ export const SegmentedControl = <T extends string | number>({
                             key={props.value.toString()}
                             value={props.value.toString()}
                             className={cn(
-                                "z-10 bg-transparent shadow-none data-[state=active]:bg-transparent data-[state=active]:shadow-none", // Remove default shadcn active styles
+                                "z-10 bg-transparent shadow-none data-[state=active]:bg-transparent data-[state=active]:shadow-none",
                                 "rounded-md font-medium transition-colors duration-200",
-                                "text-[#8b95a1] data-[state=active]:text-[#191f28]", // Toss Grey Colors (Active much darker)
+                                "text-[#8b95a1] data-[state=active]:text-[#191f28]",
                                 size === 'large' ? "text-[15px]" : "text-[13px]",
                                 props.className
                             )}

@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useId } from 'react';
-import { Checkbox as ShadcnCheckbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
+import { Checkbox as ShadcnCheckbox } from '@/components/ui/Checkbox';
+import { Label } from '@/components/ui/Label';
 import { cn } from '@/lib/utils';
 
 /**

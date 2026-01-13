@@ -8,10 +8,10 @@ import { Copy, Phone } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import SectionContainer from '../SectionContainer';
 import SectionHeader from '../SectionHeader';
-import { NaverIcon, KakaoIcon } from '../../common/MapIcons';
+import { NaverIcon, KakaoIcon } from '../../common/Icons';
 import { clsx } from 'clsx';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { Skeleton } from '@/components/ui/skeleton';
+import { AspectRatio } from '@/components/ui/AspectRatio';
+import { Skeleton } from '@/components/ui/Skeleton';
 import styles from './LocationView.module.scss';
 
 interface LocationViewProps {
