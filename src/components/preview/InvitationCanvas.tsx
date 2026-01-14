@@ -2,7 +2,7 @@
 
 import React, { memo, useMemo, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { useInvitationStore } from '@/store/useInvitationStore';
+import { useInvitationStore, InvitationData } from '@/store/useInvitationStore';
 import MainScreenView from './sections/MainScreenView';
 import CalendarSectionView from './sections/CalendarSectionView';
 import GreetingView from './sections/GreetingView';
@@ -20,11 +20,20 @@ const LocationView = dynamic(() => import('./sections/LocationView'), { ssr: fal
 interface InvitationCanvasProps {
   isPreviewMode?: boolean;
   editingSection?: string | null;
+  hideWatermark?: boolean;
+  data?: InvitationData; // Allow passing raw data to bypass global store
 }
 
-const InvitationCanvas = memo(({ isPreviewMode = false, editingSection }: InvitationCanvasProps) => {
+const InvitationCanvas = memo(({ isPreviewMode = false, editingSection, hideWatermark = false, data }: InvitationCanvasProps) => {
   const [isReady, setIsReady] = React.useState(!isPreviewMode);
   const initialScrollDone = React.useRef(false);
+  const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+
+  const storeData = useInvitationStore();
+
+  // Use provided data if available, otherwise fallback to store
+  const currentData = data || storeData;
+
   const {
     theme,
     mainScreen,
@@ -35,26 +44,16 @@ const InvitationCanvas = memo(({ isPreviewMode = false, editingSection }: Invita
     date,
     time,
     location,
-    coordinates,
-    address,
     detailAddress,
-    locationContact,
     greetingTitle,
+    greetingSubtitle,
+    message,
     greetingImage,
     greetingRatio,
-    message,
     showNamesAtBottom,
     enableFreeformNames,
     groomNameCustom,
     brideNameCustom,
-    accounts,
-    accountsTitle,
-    accountsSubtitle,
-    accountsDescription,
-    accountsGroomTitle,
-    accountsBrideTitle,
-    accountsColorMode,
-    closing,
     gallery,
     galleryTitle,
     gallerySubtitle,
@@ -63,21 +62,31 @@ const InvitationCanvas = memo(({ isPreviewMode = false, editingSection }: Invita
     galleryFade,
     galleryAutoplay,
     galleryPopup,
-    mapZoom,
+    ddayMessage,
+    showCalendar,
+    showDday,
     locationTitle,
     locationSubtitle,
+    coordinates,
+    address,
+    mapZoom,
     showMap,
     showNavigation,
     sketchUrl,
     sketchRatio,
     lockMap,
-    ddayMessage,
-    greetingSubtitle,
     mapType,
-    showCalendar,
-    showDday,
+    locationContact,
+    accounts,
+    accountsTitle,
+    accountsSubtitle,
+    accountsDescription,
+    accountsGroomTitle,
+    accountsBrideTitle,
+    accountsColorMode,
+    closing,
     isApproved,
-  } = useInvitationStore();
+  } = currentData;
 
   // Scroll to editing section
   useEffect(() => {
@@ -89,6 +98,14 @@ const InvitationCanvas = memo(({ isPreviewMode = false, editingSection }: Invita
 
     const performScroll = (behavior: ScrollBehavior) => {
       try {
+        if (targetId === 'mainScreen' && scrollContainerRef.current) {
+          scrollContainerRef.current.scrollTo({
+            top: 0,
+            behavior,
+          });
+          return true;
+        }
+
         const element = document.getElementById(`section-${targetId}`);
         if (element) {
           element.scrollIntoView({
@@ -142,6 +159,7 @@ const InvitationCanvas = memo(({ isPreviewMode = false, editingSection }: Invita
       style={canvasStyle as React.CSSProperties}
     >
       <div
+        ref={scrollContainerRef}
         className={clsx(
           styles.scrollArea,
           !isReady && styles.hidden,
@@ -268,7 +286,7 @@ const InvitationCanvas = memo(({ isPreviewMode = false, editingSection }: Invita
       </div>
 
       {/* Watermark for unapproved live pages */}
-      {!isApproved && !isPreviewMode && (
+      {!isApproved && !isPreviewMode && !hideWatermark && (
         <div className={styles.watermark}>
           <span>BANANA WEDDING PREVIEW</span>
         </div>

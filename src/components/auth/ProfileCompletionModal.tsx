@@ -3,11 +3,12 @@
 import React, { useState, useCallback } from 'react';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 import { TextField } from '../builder/TextField';
+import { PhoneField } from '../builder/PhoneField';
 import { Button } from '../ui/Button';
 import { useToast } from '@/hooks/use-toast';
 import { profileService } from '@/services/profileService';
 import { Loader2, User, Phone } from 'lucide-react';
-import { isValidPhone, formatPhoneNumber } from '@/lib/utils';
+import { isValidPhone } from '@/lib/utils';
 import styles from './ProfileCompletionModal.module.scss';
 
 interface ProfileCompletionModalProps {
@@ -28,12 +29,6 @@ export default function ProfileCompletionModal({
     const [loading, setLoading] = useState(false);
     const { toast } = useToast();
 
-
-
-    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const formatted = formatPhoneNumber(e.target.value);
-        setPhone(formatted);
-    };
 
     const handleSubmit = useCallback(async () => {
         if (!name.trim()) {
@@ -90,11 +85,10 @@ export default function ProfileCompletionModal({
                         <div className={styles.iconWrapper}>
                             <Phone size={18} />
                         </div>
-                        <TextField
+                        <PhoneField
                             placeholder="전화번호 (예: 010-1234-5678)"
                             value={phone}
-                            onChange={handlePhoneChange}
-                            maxLength={13}
+                            onChange={(e) => setPhone(e.target.value)}
                             className={styles.input}
                         />
                     </div>

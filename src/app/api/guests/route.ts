@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { z } from 'zod';
+
 
 const guestSchema = z.object({
   invitationId: z.string().uuid(),
@@ -15,6 +16,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const validatedData = guestSchema.parse(body);
+    const supabase = await createSupabaseServerClient();
 
     // Check if guest already exists
     const { data: existingGuest } = await supabase
@@ -86,6 +88,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const invitationId = searchParams.get('invitationId');
+    const supabase = await createSupabaseServerClient();
 
     if (!invitationId) {
       return NextResponse.json(

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { z } from 'zod';
+
 
 const invitationSchema = z.object({
   groom: z.object({
@@ -22,6 +23,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const validatedData = invitationSchema.parse(body);
+    const supabase = await createSupabaseServerClient();
 
     // Check if slug already exists
     const { data: existingSlug } = await supabase
@@ -77,6 +79,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const slug = searchParams.get('slug');
+    const supabase = await createSupabaseServerClient();
 
     if (!slug) {
       return NextResponse.json(

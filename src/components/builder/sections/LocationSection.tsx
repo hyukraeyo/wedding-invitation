@@ -9,12 +9,13 @@ import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { SegmentedControl } from '../SegmentedControl';
 import { SwitchField } from '../SwitchField';
+import { PhoneField } from '../PhoneField';
 import { Field } from '../FormPrimitives';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 import styles from './LocationSection.module.scss';
 
 const DaumPostcodeEmbed = dynamic(() => import('react-daum-postcode'), { ssr: false });
-import { cn, formatPhoneNumber } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 
 import { NaverIcon, KakaoIcon } from '@/components/common/Icons';
 
@@ -108,10 +109,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ valu
 
 
 
-    const handleContactChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const formatted = formatPhoneNumber(e.target.value);
-        setLocationContact(formatted);
-    };
+
 
     return (
         <AccordionItem
@@ -169,13 +167,11 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ valu
                     onChange={(e) => setDetailAddress(e.target.value)}
                 />
 
-                <TextField
+                <PhoneField
                     label="연락처"
-                    type="text"
                     placeholder="예: 02-000-0000"
                     value={locationContact}
-                    onChange={handleContactChange}
-                    maxLength={13}
+                    onChange={(e) => setLocationContact(e.target.value)}
                 />
 
                 <Field label="지도 종류">

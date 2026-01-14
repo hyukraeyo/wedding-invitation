@@ -3,8 +3,8 @@ interface ApprovalRequestPayload {
   invitationSlug: string;
   requesterName: string;
   requesterPhone: string;
-  userId: string;
 }
+
 
 export interface ApprovalRequestRecord {
   id: string;
@@ -30,6 +30,19 @@ export const approvalRequestService = {
 
     const result = await response.json();
     return result.data as ApprovalRequestRecord;
+  },
+
+
+  async cancelRequest(invitationId: string) {
+    const response = await fetch(`/api/approval-requests?invitationId=${invitationId}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to cancel request');
+    }
+
+    return true;
   },
 
   async getAllRequests() {

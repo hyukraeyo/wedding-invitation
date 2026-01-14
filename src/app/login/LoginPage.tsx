@@ -6,9 +6,10 @@ import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import styles from '@/components/auth/LoginModal.module.scss';
 import { TextField } from '@/components/builder/TextField';
+import { PhoneField } from '@/components/builder/PhoneField';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import { formatPhoneNumber, isValidPhone } from '@/lib/utils';
+import { isValidPhone } from '@/lib/utils';
 import { Loader2, Phone, User as UserIcon } from 'lucide-react';
 import { profileService } from '@/services/profileService';
 import { Button } from '@/components/ui/Button';
@@ -44,6 +45,7 @@ export default function LoginPage() {
 
     if (!authLoading && user && isProfileComplete) return null;
 
+    /* 
     const handleKakaoLogin = async () => {
         setLoading(true);
         const { error } = await supabase.auth.signInWithOAuth({
@@ -57,6 +59,7 @@ export default function LoginPage() {
             setLoading(false);
         }
     };
+    */
 
     const handleNaverLogin = () => {
         setLoading(true);
@@ -99,9 +102,7 @@ export default function LoginPage() {
         setLoading(false);
     };
 
-    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setPhone(formatPhoneNumber(e.target.value));
-    };
+
 
     const handleProfileComplete = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -165,14 +166,13 @@ export default function LoginPage() {
                                 />
                             </div>
                             <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                                <div style={{ position: 'absolute', left: '1rem', color: '#6b7280' }}>
+                                <div style={{ position: 'absolute', left: '1rem', color: '#6b7280', zIndex: 1 }}>
                                     <Phone size={18} />
                                 </div>
-                                <TextField
+                                <PhoneField
                                     placeholder="전화번호 (예: 010-1234-5678)"
                                     value={phone}
-                                    onChange={handlePhoneChange}
-                                    maxLength={13}
+                                    onChange={(e) => setPhone(e.target.value)}
                                     style={{ paddingLeft: '2.75rem' }}
                                     required
                                 />

@@ -16,6 +16,7 @@ import { ExampleSelectorModal } from '../ExampleSelectorModal';
 import { Field } from '../FormPrimitives';
 import { ImageUploader } from '../ImageUploader';
 import styles from './MainScreenSection.module.scss';
+import { cn } from '@/lib/utils';
 
 const RichTextEditor = dynamic(() => import('@/components/common/RichTextEditor'), { ssr: false });
 
@@ -70,6 +71,31 @@ export default function MainScreenSection({ isOpen, value }: SectionProps) {
     const bride = useInvitationStore(state => state.bride);
     const theme = useInvitationStore(state => state.theme);
     const setTheme = useInvitationStore(state => state.setTheme);
+
+    const date = useInvitationStore(state => state.date);
+    const time = useInvitationStore(state => state.time);
+    const location = useInvitationStore(state => state.location);
+    const detailAddress = useInvitationStore(state => state.detailAddress);
+
+    const getFormattedAutoText = () => {
+        if (!date || !time) return '';
+        try {
+            const d = new Date(date);
+            const week = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'][d.getDay()];
+            const [h = '12', m = '00'] = time.split(':');
+            const hour = parseInt(h, 10);
+            const ampm = hour < 12 ? '오전' : '오후';
+            const displayHour = hour > 12 ? hour - 12 : (hour === 0 ? 12 : hour);
+
+            const dateStr = `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일 ${week}`;
+            const timeStr = `${ampm} ${displayHour}시 ${m === '00' ? '' : `${m}분`}`.trim();
+            const locStr = [location, detailAddress].filter(Boolean).join(' ');
+
+            return `${dateStr} ${timeStr}${locStr ? `<br/>${locStr}` : ''}`;
+        } catch {
+            return '';
+        }
+    };
 
     const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
     const swiperRef = useRef<SwiperType | null>(null);
@@ -392,14 +418,29 @@ export default function MainScreenSection({ isOpen, value }: SectionProps) {
                             </div>
                         </>
                     )}
-
                     {/* Date & Place Info - Common for all styles */}
                     {isOpen && (
-                        <RichTextEditor
-                            content={mainScreen.customDatePlace}
-                            onChange={(val: string) => updateMain({ customDatePlace: val })}
-                            placeholder="미입력 시 예식일시 및 장소가 자동 노출됩니다"
-                        />
+                        <>
+                            {!mainScreen.customDatePlace && (
+                                <div className={cn(styles.helpText, "flex items-center justify-between gap-2")} style={{ marginBottom: '8px' }}>
+                                    <p>
+                                        <span style={{ fontWeight: 600 }}>자동 노출 중:</span> {getFormattedAutoText().replace(/<br\/>/g, ' ')}
+                                    </p>
+                                    <button
+                                        type="button"
+                                        onClick={() => updateMain({ customDatePlace: `<p style="text-align: center">${getFormattedAutoText()}</p>` })}
+                                        className="text-[11px] font-semibold text-banana hover:text-banana/80 underline shrink-0"
+                                    >
+                                        문구 적용
+                                    </button>
+                                </div>
+                            )}
+                            <RichTextEditor
+                                content={mainScreen.customDatePlace}
+                                onChange={(val: string) => updateMain({ customDatePlace: val })}
+                                placeholder="직접 입력 시 자동 노출 문구 대신 표시됩니다"
+                            />
+                        </>
                     )}
 
                     {/* Visibility Toggles */}

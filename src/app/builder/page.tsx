@@ -38,7 +38,7 @@ const generateSlug = (name: string): string => {
 export default function BuilderPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  const { user, profile, isProfileComplete, profileLoading, refreshProfile } = useAuth();
+  const { user, isProfileComplete, profileLoading } = useAuth();
   const editingSection = useInvitationStore(state => state.editingSection);
   const windowWidth = useWindowSize(); // Optimized hook usage
   const router = useRouter();
@@ -139,7 +139,7 @@ export default function BuilderPage() {
                       </div>
 
                       <div className={styles.screen}>
-                        <InvitationCanvas key="desktop-preview" editingSection={editingSection} />
+                        <InvitationCanvas key="desktop-preview" editingSection={editingSection} hideWatermark />
                       </div>
 
                       <div className={styles.homeIndicator} />
@@ -181,7 +181,7 @@ export default function BuilderPage() {
 
           {isPreviewOpen && (
             <div className={styles.mobilePreview}>
-              <InvitationCanvas key="mobile-preview" isPreviewMode editingSection={editingSection} />
+              <InvitationCanvas key="mobile-preview" isPreviewMode editingSection={editingSection} hideWatermark />
             </div>
           )}
         </SheetContent>

@@ -14,6 +14,9 @@ import {
 } from "@/components/ui/Select";
 import styles from './AccountsSection.module.scss';
 import { cn } from '@/lib/utils';
+import dynamic from 'next/dynamic';
+
+const RichTextEditor = dynamic(() => import('@/components/common/RichTextEditor'), { ssr: false });
 
 interface SectionProps {
     value: string;
@@ -118,14 +121,16 @@ export default function AccountsSection({ value, isOpen }: SectionProps) {
                     value={accountsTitle}
                     onChange={(e) => setAccountsTitle(e.target.value)}
                 />
-                <TextField
-                    label="대표 설명"
-                    placeholder="축하의 마음을 담아..."
-                    value={accountsDescription}
-                    onChange={(e) => setAccountsDescription(e.target.value)}
-                    multiline
-                    rows={3}
-                />
+
+                {isOpen && (
+                    <Field label="내용">
+                        <RichTextEditor
+                            content={accountsDescription}
+                            onChange={(val) => setAccountsDescription(val)}
+                            placeholder="축하의 마음을 담아..."
+                        />
+                    </Field>
+                )}
 
                 {/* Account List */}
                 <Field label="계좌 리스트">

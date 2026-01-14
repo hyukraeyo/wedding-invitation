@@ -1,6 +1,6 @@
 import { invitationService } from '@/services/invitationService';
 import InvitationCanvas from '@/components/preview/InvitationCanvas';
-import StoreHydrator from '@/components/preview/StoreHydrator';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { notFound } from 'next/navigation';
 
 interface Props {
@@ -9,7 +9,8 @@ interface Props {
 
 export async function generateMetadata({ params }: Props) {
     const { slug } = await params;
-    const invitation = await invitationService.getInvitation(slug);
+    const supabase = await createSupabaseServerClient();
+    const invitation = await invitationService.getInvitation(slug, supabase);
 
     if (!invitation) return { title: 'Invitation Not Found' };
 
@@ -56,7 +57,8 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function InvitationViewPage({ params }: Props) {
     const { slug } = await params;
-    const invitation = await invitationService.getInvitation(slug);
+    const supabase = await createSupabaseServerClient();
+    const invitation = await invitationService.getInvitation(slug, supabase);
 
     if (!invitation) {
         notFound();
@@ -95,8 +97,7 @@ export default async function InvitationViewPage({ params }: Props) {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
-            <StoreHydrator data={invitation.invitation_data} />
-            <InvitationCanvas />
+            <InvitationCanvas data={invitation.invitation_data} />
         </div>
     );
 }

@@ -1,0 +1,12 @@
+
+C:\Users\johr9\Documents\git\wedding-invitation\src\app\api\admin\invitations\route.ts
+  5:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\johr9\Documents\git\wedding-invitation\src\app\api\approval-requests\route.ts
+  171:35  warning  'fetchError' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\johr9\Documents\git\wedding-invitation\src\app\api\auth\naver\callback\route.ts
+  124:27  warning  'sessionData' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+✖ 3 problems (0 errors, 3 warnings)
+

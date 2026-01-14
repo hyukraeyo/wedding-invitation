@@ -69,10 +69,10 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection({ isOpen, va
                     <Select
                         value={theme.font}
                         options={[
-                            { label: 'Pretendard (기본)', value: 'pretendard' as ThemeFont },
+                            { label: '고운돋움 (기본)', value: 'gowun-dodum' as ThemeFont },
+                            { label: 'Pretendard', value: 'pretendard' as ThemeFont },
                             { label: '나눔명조', value: 'nanum-myeongjo' as ThemeFont },
                             { label: '고운바탕', value: 'gowun-batang' as ThemeFont },
-                            { label: '고운돋움', value: 'gowun-dodum' as ThemeFont },
                             { label: '송명체', value: 'song-myung' as ThemeFont },
                             { label: '연성체', value: 'yeon-sung' as ThemeFont },
                             { label: '도현체', value: 'do-hyeon' as ThemeFont },

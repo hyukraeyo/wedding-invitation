@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
-import { supabase } from '@/lib/supabase';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { z } from 'zod';
 
 const requestSchema = z.object({
@@ -8,15 +8,24 @@ const requestSchema = z.object({
   invitationSlug: z.string().min(1),
   requesterName: z.string().min(1),
   requesterPhone: z.string().min(1),
-  userId: z.string().uuid(),
 });
+
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const validatedData = requestSchema.parse(body);
 
-    // 서버사이드에서는 supabaseAdmin 사용 (있으면), 없으면 일반 클라이언트 사용
+    const supabase = await createSupabaseServerClient();
+    const { data: authData, error: authError } = await supabase.auth.getUser();
+
+    if (authError || !authData.user) {
+      return NextResponse.json(
+        { error: '로그인이 필요합니다.' },
+        { status: 401 }
+      );
+    }
+
     const db = supabaseAdmin || supabase;
 
     const { data, error } = await db
@@ -26,7 +35,7 @@ export async function POST(request: NextRequest) {
         invitation_slug: validatedData.invitationSlug,
         requester_name: validatedData.requesterName,
         requester_phone: validatedData.requesterPhone,
-        user_id: validatedData.userId,
+        user_id: authData.user.id,
         status: 'pending',
         created_at: new Date().toISOString(),
       })
@@ -60,7 +69,33 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    // 서버사이드에서는 supabaseAdmin 사용 (있으면)
+    const supabase = await createSupabaseServerClient();
+    const { data: authData, error: authError } = await supabase.auth.getUser();
+
+    if (authError || !authData.user) {
+      return NextResponse.json(
+        { error: '로그인이 필요합니다.' },
+        { status: 401 }
+      );
+    }
+
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('is_admin')
+      .eq('id', authData.user.id)
+      .single();
+
+    // Strict admin check
+    const isEmailAdmin = authData.user.email === 'admin@test.com';
+    const isAdmin = profile?.is_admin || isEmailAdmin || false;
+
+    if (!isAdmin) {
+      return NextResponse.json(
+        { error: '접근 권한이 없습니다.' },
+        { status: 403 }
+      );
+    }
+
     const db = supabaseAdmin || supabase;
 
     const { data, error } = await db
@@ -86,3 +121,73 @@ export async function GET() {
   }
 }
 
+export async function DELETE(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const invitationId = searchParams.get('invitationId');
+
+    if (!invitationId) {
+      return NextResponse.json(
+        { error: 'Invitation ID is required' },
+        { status: 400 }
+      );
+    }
+
+    const supabase = await createSupabaseServerClient();
+    const { data: authData, error: authError } = await supabase.auth.getUser();
+
+    if (authError || !authData.user) {
+      return NextResponse.json(
+        { error: '로그인이 필요합니다.' },
+        { status: 401 }
+      );
+    }
+
+    const db = supabaseAdmin || supabase;
+
+    // 1. Delete request
+    const { error: deleteError } = await db
+      .from('approval_requests')
+      .delete()
+      .eq('invitation_id', invitationId)
+      .eq('user_id', authData.user.id); // Ensure user owns the request
+
+    if (deleteError) {
+      console.error('Error deleting approval request:', deleteError);
+      return NextResponse.json(
+        { error: '신청 취소에 실패했습니다.' },
+        { status: 500 }
+      );
+    }
+
+    // 2. Update invitation status
+    // We need to fetch the current invitation first to get the JSON data, modify it, and save it back?
+    // Or just update the JSONB column partially? modifying JSONB is hard directly.
+    // But wait, invitation_data is just a JSONB column. We probably want to fetch -> update -> update.
+    // However, simpler way is: Update invitations set invitation_data = jsonb_set(invitation_data, '{isRequestingApproval}', 'false')
+
+    // Using supabase rpc or just fetch-update pattern. 
+    // Fetch first.
+    const { data: invData } = await db
+      .from('invitations')
+      .select('*')
+      .eq('id', invitationId)
+      .single();
+
+    if (invData) {
+      const newData = { ...invData.invitation_data, isRequestingApproval: false };
+      await db.from('invitations')
+        .update({ invitation_data: newData })
+        .eq('id', invitationId);
+    }
+
+    return NextResponse.json({ success: true });
+
+  } catch (error) {
+    console.error('Unexpected error in DELETE /api/approval-requests:', error);
+    return NextResponse.json(
+      { error: '서버 오류가 발생했습니다.' },
+      { status: 500 }
+    );
+  }
+}

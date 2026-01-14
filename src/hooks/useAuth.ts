@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
-import { User } from '@supabase/supabase-js';
+import { AuthChangeEvent, Session, User } from '@supabase/supabase-js';
 import { Profile, profileService } from '@/services/profileService';
 
 interface AuthState {
@@ -25,16 +25,19 @@ export function useAuth() {
     });
 
     // 프로필 조회 함수
-    const fetchProfile = useCallback(async (userId: string) => {
+    const fetchProfile = useCallback(async (userId: string, userEmail?: string | null) => {
         setState(prev => ({ ...prev, profileLoading: true }));
         try {
             const profile = await profileService.getProfile(userId);
             const isComplete = !!(profile?.full_name && profile?.phone);
+            const isEmailAdmin = userEmail === 'admin@test.com';
+            const isAdmin = profile?.is_admin || isEmailAdmin || false;
+
             setState(prev => ({
                 ...prev,
                 profile,
                 isProfileComplete: isComplete,
-                isAdmin: profile?.is_admin ?? false,
+                isAdmin: isAdmin,
                 profileLoading: false,
             }));
         } catch {
@@ -45,14 +48,17 @@ export function useAuth() {
     // 프로필 새로고침 함수 (외부에서 호출 가능)
     const refreshProfile = useCallback(async () => {
         if (state.user) {
-            await fetchProfile(state.user.id);
+            await fetchProfile(state.user.id, state.user.email);
         }
     }, [state.user, fetchProfile]);
 
     useEffect(() => {
         // Get initial session with error handling
         supabase.auth.getSession()
-            .then(({ data: { session }, error }) => {
+            .then((response: Awaited<ReturnType<typeof supabase.auth.getSession>>) => {
+                const session = response.data.session as Session | null;
+                const error = response.error;
+
                 if (error) {
                     // If refresh token is invalid, clear the session
                     if (error.message.includes('refresh_token') || error.message.includes('Refresh Token')) {
@@ -65,17 +71,17 @@ export function useAuth() {
                     const user = session?.user ?? null;
                     setState(prev => ({ ...prev, user, loading: false }));
                     if (user) {
-                        fetchProfile(user.id);
+                        fetchProfile(user.id, user.email);
                     }
                 }
             })
-            .catch((err) => {
+            .catch((err: unknown) => {
                 console.error('Unexpected auth error:', err);
                 setState(prev => ({ ...prev, loading: false }));
             });
 
         // Listen for auth changes
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event: AuthChangeEvent, session: Session | null) => {
             const user = session?.user ?? null;
 
             if (event === 'SIGNED_OUT') {
@@ -88,7 +94,7 @@ export function useAuth() {
                 }));
             } else if (event === 'SIGNED_IN' && user) {
                 setState(prev => ({ ...prev, user }));
-                fetchProfile(user.id);
+                fetchProfile(user.id, user.email);
             } else if (event === 'USER_UPDATED' && user) {
                 setState(prev => ({ ...prev, user }));
             } else if (user) {

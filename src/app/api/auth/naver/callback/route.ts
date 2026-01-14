@@ -121,7 +121,7 @@ export async function GET(request: Request) {
             userId = existingUser.id;
 
             // 매직링크 없이 세션 생성 (Admin API 사용)
-            const { data: sessionData, error: sessionError } = await supabaseAdmin.auth.admin.generateLink({
+            const { error: sessionError } = await supabaseAdmin.auth.admin.generateLink({
                 type: 'magiclink',
                 email: userEmail,
                 options: {

@@ -33,7 +33,7 @@ export const SwitchField = ({ checked, onChange, label, className, disabled }: S
                 )}
                 <ShadcnSwitch
                     checked={checked}
-                    onCheckedChange={(val) => {
+                    onCheckedChange={() => {
                         // This might be redundant if the parent handles it, 
                         // but good for accessibility if they use keyboard.
                     }}

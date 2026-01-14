@@ -1,8 +1,9 @@
 "use client";
 
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 import LoginModal from '@/components/auth/LoginModal';
+import ProfileCompletionModal from '@/components/auth/ProfileCompletionModal';
 import { useAuth } from '@/hooks/useAuth';
 
 /**
@@ -12,19 +13,42 @@ import { useAuth } from '@/hooks/useAuth';
  */
 export default function LoginModalIntercepted() {
     const router = useRouter();
-    const { user, loading: authLoading } = useAuth();
+    const pathname = usePathname();
+    const { user, isProfileComplete, loading: authLoading, refreshProfile } = useAuth();
 
     useEffect(() => {
-        if (!authLoading && user) {
+        // Only redirect if we are actually ON the /login route (not just showing modally on another page)
+        // This prevents MyPage from snapping to builder when something triggers a re-render
+        if (!authLoading && user && isProfileComplete && pathname === '/login') {
             router.replace('/builder');
         }
-    }, [user, authLoading, router]);
+    }, [user, authLoading, isProfileComplete, router, pathname]);
 
     const handleClose = () => {
         router.back();
     };
 
-    if (user) return null;
+    const handleProfileComplete = async () => {
+        await refreshProfile();
+        // The useEffect above will handle redirection to /builder
+    };
 
-    return <LoginModal isOpen={true} onClose={handleClose} />;
+    if (authLoading) return null;
+
+    if (!user) {
+        return <LoginModal isOpen={true} onClose={handleClose} />;
+    }
+
+    if (!isProfileComplete) {
+        return (
+            <ProfileCompletionModal
+                isOpen={true}
+                userId={user.id}
+                defaultName={user.user_metadata?.full_name || ''}
+                onComplete={handleProfileComplete}
+            />
+        );
+    }
+
+    return null;
 }

@@ -1,25 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
-import { supabase } from '@/lib/supabase';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { z } from 'zod';
 
 const updateSchema = z.object({
-    userId: z.string().uuid(),
     full_name: z.string().min(1).optional(),
     phone: z.string().min(1).optional(),
     avatar_url: z.string().url().optional().nullable(),
 });
 
-// GET /api/profiles?userId=xxx
-export async function GET(request: NextRequest) {
+// GET /api/profiles
+export async function GET() {
     try {
-        const { searchParams } = new URL(request.url);
-        const userId = searchParams.get('userId');
+        const supabase = await createSupabaseServerClient();
+        const { data: authData, error: authError } = await supabase.auth.getUser();
 
-        if (!userId) {
+        if (authError || !authData.user) {
             return NextResponse.json(
-                { error: 'userId가 필요합니다.' },
-                { status: 400 }
+                { error: '로그인이 필요합니다.' },
+                { status: 401 }
             );
         }
 
@@ -28,7 +27,7 @@ export async function GET(request: NextRequest) {
         const { data, error } = await db
             .from('profiles')
             .select('*')
-            .eq('id', userId)
+            .eq('id', authData.user.id)
             .single();
 
         if (error) {
@@ -57,9 +56,17 @@ export async function GET(request: NextRequest) {
 export async function PATCH(request: NextRequest) {
     try {
         const body = await request.json();
-        const validatedData = updateSchema.parse(body);
+        const updates = updateSchema.parse(body);
 
-        const { userId, ...updates } = validatedData;
+        const supabase = await createSupabaseServerClient();
+        const { data: authData, error: authError } = await supabase.auth.getUser();
+
+        if (authError || !authData.user) {
+            return NextResponse.json(
+                { error: '로그인이 필요합니다.' },
+                { status: 401 }
+            );
+        }
 
         // is_profile_complete 자동 계산
         const isComplete = !!(updates.full_name && updates.phone);
@@ -73,7 +80,7 @@ export async function PATCH(request: NextRequest) {
                 is_profile_complete: isComplete,
                 updated_at: new Date().toISOString(),
             })
-            .eq('id', userId)
+            .eq('id', authData.user.id)
             .select()
             .single();
 
@@ -101,3 +108,4 @@ export async function PATCH(request: NextRequest) {
         );
     }
 }
+

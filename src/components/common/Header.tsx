@@ -17,7 +17,7 @@ interface HeaderProps {
 }
 
 import { cn } from '@/lib/utils';
-import { useHeaderVisible } from '@/hooks/useHeaderVisible';
+
 
 export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
     const router = useRouter();

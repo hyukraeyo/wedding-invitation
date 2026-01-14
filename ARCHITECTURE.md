@@ -3,7 +3,38 @@
 
 이 섹션은 프로젝트의 일관된 코드 품질과 유지보수성을 위해 모든 개발자(Active Agent 포함)가 따라야 할 핵심 아키텍처와 UI 패턴을 정의합니다.
 
-### 1. 반응형 모달 시스템 (`ResponsiveModal`)
+### 1. Data Fetching & Mutation (Strict Rule)
+
+Next.js App Router의 성능 이점을 극대화하기 위해 다음 패턴을 강제합니다.
+
+#### **Read: Server Components w/ Direct DB Access**
+- **❌ DO NOT**: 클라이언트 컴포넌트에서 `useEffect`로 데이터를 가져오거나, 서버 컴포넌트에서 `fetch('/api/...')`로 내부 API를 호출하는 행위.
+- **✅ DO**: 서버 컴포넌트(`async` function)에서 Service 계층이나 DB Client를 직접 호출하여 데이터를 확보.
+  ```tsx
+  // app/example/page.tsx
+  import { db } from '@/lib/db';
+
+  export default async function Page() {
+    // API 호출 없이 직접 DB 쿼리
+    const data = await db.query('SELECT * ...'); 
+    return <ClientView initialData={data} />;
+  }
+  ```
+
+#### **Write: Server Actions**
+- **❌ DO NOT**: Form submit을 위해 별도의 API Route(`route.ts`)를 만들고 `fetch`로 요청하는 행위.
+- **✅ DO**: **Server Actions**(`'use server'`)를 정의하여 클라이언트에서 함수처럼 직접 호출.
+  ```tsx
+  // actions/updateUser.ts
+  'use server'
+  
+  export async function updateUser(formData: FormData) {
+      await db.update(...);
+      revalidatePath('/profile');
+  }
+  ```
+
+### 2. 반응형 모달 시스템 (`ResponsiveModal`)
 
 모든 "모달" 형태의 UI는 모바일 퍼스트 UX를 위해 기기 해상도에 따라 자동으로 형태가 변환되어야 합니다.
 
@@ -27,7 +58,7 @@ import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 ```
 *주의: 모바일에서 강제로 Dialog를 써야 하는 특수한 경우가 아니라면, 항상 이 컴포넌트를 사용하여 일관된 UX를 제공해야 합니다.*
 
-### 2. 아코디언 시스템 (`AccordionItem`)
+### 3. 아코디언 시스템 (`AccordionItem`)
 
 빌더(Builder)의 각 섹션은 `AccordionItem`을 사용하여 구성합니다.
 
@@ -47,19 +78,19 @@ import { ResponsiveModal } from '@/components/common/ResponsiveModal';
     }}
     ```
 
-### 3. 아이콘 및 에셋 관리
+### 4. 아이콘 및 에셋 관리
 
 - **라이브러리**: `lucide-react`를 기본으로 사용합니다.
 - **커스텀 아이콘**: `public/assets/icons` 경로에 SVG/PNG로 관리하며, `Image` 컴포넌트로 로드합니다.
 - **로고**: 벡터 그래픽(`public/assets/icons/logo_vector.svg`) 사용을 권장합니다.
 
-### 4. 스타일링 원칙 (Tailwind + SCSS)
+### 5. 스타일링 원칙 (Tailwind + SCSS)
 
 - **색상**: `primary`는 바나나 옐로우(`#FBC02D`)를 사용합니다.
 - **애니메이션**: 'iOS' 느낌의 부드러운 감속(`cubic-bezier(0.16, 1, 0.3, 1)`)을 전역적으로 사용합니다.
 - **반응형 패딩**: 모바일에서의 작업 영역 확보를 위해, 빌더 사이드바의 `padding-x`는 모바일에서 `1rem`, 데스크탑에서 `1.5rem`을 유지합니다.
 
-### 5. 데이터 흐름 (Zustand)
+### 6. 데이터 흐름 (Zustand)
 
 - **단일 스토어 원칙**: `useInvitationStore`를 통해 청첩장의 모든 데이터(신랑/신부 정보, 사진, 위치 등)를 관리합니다.
 - **셀렉터 사용**: 성능 최적화를 위해 필요한 상태만 선택하여 구독합니다.
