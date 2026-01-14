@@ -136,9 +136,12 @@ $builder-font-xl: 17px; // t5
     font-weight: 400;
   }
 
-  &:hover:not(:disabled) {
-    background-color: v.$tds-grey-opacity-100;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not(:disabled) {
+      background-color: v.$tds-grey-opacity-100;
+    }
   }
+
 
   &:focus {
     background-color: white;
@@ -166,9 +169,12 @@ $builder-font-xl: 17px; // t5
   transition: all v.$transition-fast;
   user-select: none;
 
-  &:hover:not(:disabled) {
-    background: v.$toss-grey-50;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not(:disabled) {
+      background: v.$toss-grey-50;
+    }
   }
+
 
   &:active:not(:disabled) {
     opacity: 0.6;

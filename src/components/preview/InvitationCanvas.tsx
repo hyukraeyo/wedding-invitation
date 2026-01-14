@@ -23,6 +23,8 @@ interface InvitationCanvasProps {
 }
 
 const InvitationCanvas = memo(({ isPreviewMode = false, editingSection }: InvitationCanvasProps) => {
+  const [isReady, setIsReady] = React.useState(!isPreviewMode);
+  const initialScrollDone = React.useRef(false);
   const {
     theme,
     mainScreen,
@@ -74,30 +76,57 @@ const InvitationCanvas = memo(({ isPreviewMode = false, editingSection }: Invita
     mapType,
     showCalendar,
     showDday,
+    isApproved,
   } = useInvitationStore();
 
   // Scroll to editing section
   useEffect(() => {
-    // If editingSection is null, or it's a section that doesn't exist in preview (theme, kakao),
-    // scroll to top (mainScreen)
+    let timer: NodeJS.Timeout;
     let targetId = editingSection;
-    if (!targetId || targetId === 'theme' || targetId === 'kakao') {
-      targetId = 'mainScreen';
-    } else if (targetId === 'basic') {
+    if (!targetId || targetId === 'theme' || targetId === 'kakao' || targetId === 'basic') {
       targetId = 'mainScreen';
     }
 
-    try {
-      const element = document.getElementById(`section-${targetId}`);
-      if (element) {
-        element.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-          inline: 'nearest'
-        });
+    const performScroll = (behavior: ScrollBehavior) => {
+      try {
+        const element = document.getElementById(`section-${targetId}`);
+        if (element) {
+          element.scrollIntoView({
+            behavior,
+            block: 'start',
+            inline: 'nearest'
+          });
+          return true;
+        }
+      } catch (error) {
+        console.warn('Scroll to section failed:', error);
       }
-    } catch (error) {
-      console.warn('Scroll to section failed:', error);
+      return false;
+    };
+
+    if (isPreviewMode && !initialScrollDone.current) {
+      // For mobile preview entrance: be more aggressive to hide the top flash
+      let attempts = 0;
+      const tryInitialScroll = () => {
+        if (performScroll('auto')) {
+          initialScrollDone.current = true;
+          // Small extra delay before showing to ensure rendering has settled
+          // 80ms feels like the sweet spot for Radix Sheet animations
+          setTimeout(() => setIsReady(true), 80);
+        } else if (attempts < 15) {
+          attempts++;
+          requestAnimationFrame(tryInitialScroll);
+        }
+      };
+
+      timer = setTimeout(tryInitialScroll, 50); // Minimal delay for Sheet mount
+      return () => {
+        if (timer) clearTimeout(timer);
+      };
+    } else {
+      // Normal behavior for desktop edits or subsequent mobile updates
+      performScroll('smooth');
+      return undefined; // Explicitly return undefined
     }
   }, [editingSection, isPreviewMode]);
 
@@ -115,6 +144,7 @@ const InvitationCanvas = memo(({ isPreviewMode = false, editingSection }: Invita
       <div
         className={clsx(
           styles.scrollArea,
+          !isReady && styles.hidden,
           theme.pattern === 'flower-sm' ? 'pattern-flower-sm' :
             theme.pattern === 'flower-lg' ? 'pattern-flower-lg' : ''
         )}
@@ -236,6 +266,13 @@ const InvitationCanvas = memo(({ isPreviewMode = false, editingSection }: Invita
           <div>ALL RIGHTS RESERVED</div>
         </div>
       </div>
+
+      {/* Watermark for unapproved live pages */}
+      {!isApproved && !isPreviewMode && (
+        <div className={styles.watermark}>
+          <span>BANANA WEDDING PREVIEW</span>
+        </div>
+      )}
 
       {/* Portal Root for Modals (to keep them inside the mockup) */}
       <div id="invitation-modal-root" className={styles.modalRoot} />

@@ -76,9 +76,12 @@
     font-size: var(--builder-font-size, 15px);
     font-family: var(--builder-font-family);
 
-    &:hover:not(:disabled) {
-      @apply border-gray-400;
+    @media (hover: hover) and (pointer: fine) {
+      &:hover:not(:disabled) {
+        @apply border-gray-400;
+      }
     }
+
   }
 }
 

@@ -20,9 +20,12 @@
   outline: none;
   box-sizing: border-box;
 
-  &:hover:not(:disabled) {
-    background-color: var(--accent);
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not(:disabled) {
+      background-color: var(--accent);
+    }
   }
+
 
   &:active:not(:disabled) {
     transform: scale(0.94); // Match btn-base scale
@@ -40,9 +43,12 @@
     border-color: var(--primary);
     font-weight: 600;
 
-    &:hover:not(:disabled) {
-      background-color: color-mix(in srgb, var(--primary), white 10%);
+    @media (hover: hover) and (pointer: fine) {
+      &:hover:not(:disabled) {
+        background-color: color-mix(in srgb, var(--primary), white 10%);
+      }
     }
+
   }
 
   // Focus state for accessibility

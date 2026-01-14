@@ -215,6 +215,10 @@ export interface InvitationState {
     slug: string;
     setSlug: (slug: string) => void;
 
+    // License Approval State
+    isApproved: boolean;
+    setIsApproved: (approved: boolean) => void;
+
     // Actions
     reset: () => void;
 }
@@ -355,6 +359,7 @@ export const INITIAL_STATE = {
         ratio: 'auto' as const,
         content: '저희의 새로운 시작을 함께 축복해 주셔서 진심으로 감사합니다. 보내주신 소중한 마음 평생 잊지 않고 예쁘게 잘 살겠습니다.',
     },
+    isApproved: false,
 };
 
 export const useInvitationStore = create<InvitationState>()(persist((set) => ({
@@ -453,6 +458,7 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
 
     setClosing: (data) => set((state) => ({ closing: { ...state.closing, ...data } })),
     setSlug: (slug) => set({ slug }),
+    setIsApproved: (approved) => set({ isApproved: approved }),
     reset: () => set(INITIAL_STATE),
 }), {
     name: 'wedding-invitation-storage',
