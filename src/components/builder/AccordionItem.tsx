@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { Check, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import {
     AccordionItem as AccordionItemRoot,
     AccordionTrigger,
@@ -16,6 +16,7 @@ interface AccordionItemProps {
     children: React.ReactNode;
     isCompleted?: boolean | undefined;
     badge?: string | undefined;
+    action?: React.ReactNode;
 }
 
 export const AccordionItem = ({
@@ -25,7 +26,8 @@ export const AccordionItem = ({
     isOpen,
     children,
     isCompleted = false,
-    badge
+    badge,
+    action
 }: AccordionItemProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -66,12 +68,13 @@ export const AccordionItem = ({
             )}>
                 <div className="flex items-center gap-3">
                     {Icon && (
-                        <div className={cn(
-                            "flex items-center justify-center w-8 h-8 rounded-full bg-secondary/50 text-muted-foreground transition-colors",
-                            isOpen && "bg-primary text-primary-foreground"
-                        )}>
-                            <Icon size={18} />
-                        </div>
+                        <Icon
+                            size={18}
+                            className={cn(
+                                "text-muted-foreground transition-colors duration-300",
+                                (isOpen || isCompleted) && "text-primary"
+                            )}
+                        />
                     )}
                     <div className="flex items-center gap-2">
                         <span className="font-medium text-base text-foreground">
@@ -86,9 +89,13 @@ export const AccordionItem = ({
                 </div>
 
                 <div className="flex items-center gap-2">
-                    {isCompleted && (
-                        <div className="flex items-center justify-center text-primary animate-in fade-in zoom-in duration-300">
-                            <Check size={18} strokeWidth={3} />
+                    {action && (
+                        <div
+                            onClick={(e) => e.stopPropagation()}
+                            onPointerDown={(e) => e.stopPropagation()}
+                            className="mr-2 relative z-10"
+                        >
+                            {action}
                         </div>
                     )}
                     <div className={cn("transition-transform duration-300", isOpen && "rotate-180")}>

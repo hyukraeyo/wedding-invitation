@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
+
+const RichTextEditor = dynamic(() => import('@/components/common/RichTextEditor'), { ssr: false });
 import { Heart, Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
@@ -6,6 +9,7 @@ import { TextField } from '../TextField';
 import { Field } from '../FormPrimitives';
 import { ImageUploader } from '../ImageUploader';
 import { ExampleSelectorModal } from '@/components/builder/ExampleSelectorModal';
+import { HeaderAction } from '../HeaderAction';
 import styles from './ClosingSection.module.scss';
 
 interface SectionProps {
@@ -49,73 +53,70 @@ export default function ClosingSection({ isOpen, value }: SectionProps) {
     };
 
     return (
-        <AccordionItem
-            value={value}
-            title="마무리"
-            icon={Heart}
-            isOpen={isOpen}
-            isCompleted={!!closing.title}
-        >
-            <div className={styles.container}>
-                {/* Header: Sample Phrases Button */}
-                <div className={styles.sampleBtnWrapper}>
-                    <button
+        <>
+            <AccordionItem
+                value={value}
+                title="마무리"
+                icon={Heart}
+                isOpen={isOpen}
+                isCompleted={!!closing.title}
+                action={
+                    <HeaderAction
+                        icon={Sparkles}
+                        label="추천 문구"
                         onClick={() => setIsSampleModalOpen(true)}
-                        className={styles.sampleBtn}
-                    >
-                        <Sparkles size={14} className={styles.sparkleIcon} />
-                        <span>예시 문구</span>
-                    </button>
+                    />
+                }
+            >
+                <div className={styles.container}>
+                    <TextField
+                        label="소제목"
+                        placeholder="예: CLOSING"
+                        value={closing.subtitle}
+                        onChange={(e) => updateClosing({ subtitle: e.target.value })}
+                    />
+                    <TextField
+                        label="제목"
+                        placeholder="예: 저희의 시작을 함께해주셔서 감사합니다"
+                        value={closing.title}
+                        onChange={(e) => updateClosing({ title: e.target.value })}
+                    />
+
+                    <Field label="내용">
+                        <RichTextEditor
+                            content={closing.content}
+                            onChange={(val: string) => updateClosing({ content: val })}
+                            placeholder="감사의 마음을 담은 짧은 인사말"
+                        />
+                    </Field>
+
+                    {/* Photo Upload */}
+                    <Field label="사진">
+                        <div className={styles.optionWrapper}>
+                            <ImageUploader
+                                value={closing.imageUrl}
+                                onChange={(url) => updateClosing({ imageUrl: url })}
+                                placeholder="마무리 사진 추가"
+                                ratio={closing.ratio}
+                                onRatioChange={(val) => updateClosing({ ratio: val })}
+                            />
+                        </div>
+                    </Field>
                 </div>
 
-                <TextField
-                    label="소제목"
-                    placeholder="예: CLOSING"
-                    value={closing.subtitle}
-                    onChange={(e) => updateClosing({ subtitle: e.target.value })}
-                />
-                <TextField
-                    label="제목"
-                    placeholder="예: 저희의 시작을 함께해주셔서 감사합니다"
-                    value={closing.title}
-                    onChange={(e) => updateClosing({ title: e.target.value })}
-                />
-                <TextField
-                    label="내용"
-                    placeholder="감사의 마음을 담은 짧은 인사말"
-                    value={closing.content}
-                    onChange={(e) => updateClosing({ content: e.target.value })}
-                    multiline
-                    rows={3}
-                />
-
-                {/* Photo Upload */}
-                <Field label="사진">
-                    <div className={styles.optionWrapper}>
-                        <ImageUploader
-                            value={closing.imageUrl}
-                            onChange={(url) => updateClosing({ imageUrl: url })}
-                            placeholder="마무리 사진 추가"
-                            ratio={closing.ratio}
-                            onRatioChange={(val) => updateClosing({ ratio: val })}
-                        />
-                    </div>
-                </Field>
-            </div>
+            </AccordionItem>
 
             {/* Sample Phrases Modal */}
-            {isSampleModalOpen && (
-                <ExampleSelectorModal
-                    isOpen={isSampleModalOpen}
-                    onClose={() => setIsSampleModalOpen(false)}
-                    title="마무리 문구 예시"
-                    items={SAMPLE_PHRASES.map(s => ({
-                        ...s,
-                        content: s.content
-                    }))}
-                    onSelect={(item) => handleSelectSample(item)}
-                />
-            )}
-        </AccordionItem>
+            <ExampleSelectorModal
+                isOpen={isSampleModalOpen}
+                onClose={() => setIsSampleModalOpen(false)}
+                title="마무리 추천 문구"
+                items={SAMPLE_PHRASES.map(s => ({
+                    ...s,
+                    content: s.content
+                }))}
+                onSelect={(item) => handleSelectSample(item)}
+            />
+        </>
     );
 }

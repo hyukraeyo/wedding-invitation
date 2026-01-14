@@ -38,7 +38,8 @@
             overflow-x: hidden;
             
             // Mobile: 3.5rem (header) + 1.5rem (spacing) = 5rem top padding
-            padding: 5rem 1.5rem 1.5rem; 
+            // Reduced horizontal padding to 1rem for maximize space
+            padding: 5rem 1rem 1.5rem; 
             
             @media (min-width: 768px) {
                 // Desktop: Sticky header doesn't cover content, restore original padding

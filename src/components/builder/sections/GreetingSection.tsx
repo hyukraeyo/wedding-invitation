@@ -7,6 +7,7 @@ import { TextField } from '../TextField';
 import { Field } from '../FormPrimitives';
 import { SegmentedControl } from '../SegmentedControl';
 import { ExampleSelectorModal } from '@/components/builder/ExampleSelectorModal';
+import { HeaderAction } from '../HeaderAction';
 import { ImageUploader } from '../ImageUploader';
 import styles from './GreetingSection.module.scss';
 
@@ -80,117 +81,114 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
     };
 
     return (
-        <AccordionItem
-            value={value}
-            title="인사말"
-            icon={MessageSquare}
-            isOpen={isOpen}
-            isCompleted={message.length > 0}
-        >
-            <div className={styles.container}>
-                {/* Header: Sample Phrases Button */}
-                <div className={styles.sampleBtnWrapper}>
-                    <button
+        <>
+            <AccordionItem
+                value={value}
+                title="인사말"
+                icon={MessageSquare}
+                isOpen={isOpen}
+                isCompleted={message.length > 0}
+                action={
+                    <HeaderAction
+                        icon={Sparkles}
+                        label="추천 문구"
                         onClick={() => setIsSampleModalOpen(true)}
-                        className={styles.sampleBtn}
-                    >
-                        <Sparkles size={14} className={styles.sparkleIcon} />
-                        <span>예시 문구</span>
-                    </button>
+                    />
+                }
+            >
+                <div className={styles.container}>
+                    {/* Subtitle */}
+                    <TextField
+                        label="소제목"
+                        type="text"
+                        value={greetingSubtitle}
+                        onChange={(e) => setGreetingSubtitle(e.target.value)}
+                        placeholder="예: INVITATION"
+                    />
+
+                    {/* Title */}
+                    <TextField
+                        label="제목"
+                        type="text"
+                        value={greetingTitle}
+                        onChange={(e) => setGreetingTitle(e.target.value)}
+                        placeholder="예: 소중한 분들을 초대합니다"
+                    />
+
+                    {/* Content */}
+                    <Field label="내용">
+                        {isOpen && (
+                            <RichTextEditor
+                                content={message}
+                                onChange={setMessage}
+                                placeholder="축하해주시는 분들께 전할 소중한 메시지를 입력하세요."
+                            />
+                        )}
+                    </Field>
+
+                    {/* Photo Upload */}
+                    <Field label="사진">
+                        <div className={styles.optionWrapper}>
+                            <ImageUploader
+                                value={greetingImage}
+                                onChange={setGreetingImage}
+                                placeholder="인사말 사진 추가"
+                                ratio={greetingRatio}
+                                onRatioChange={(val) => setGreetingRatio(val)}
+                            />
+                        </div>
+                    </Field>
+
+                    {/* Name Options */}
+                    <Field label="성함 표기">
+                        <div className={styles.optionWrapper}>
+                            <SegmentedControl
+                                value={nameOptionValue}
+                                onChange={handleNameOptionChange}
+                                options={[
+                                    { label: '하단 표기', value: 'bottom' },
+                                    { label: '직접 입력', value: 'custom' },
+                                    { label: '표시 안 함', value: 'none' },
+                                ]}
+                            />
+
+                            {enableFreeformNames && (
+                                <div className={styles.optionWrapper}>
+                                    <TextField
+                                        label="신랑 측 표기"
+                                        value={groomNameCustom}
+                                        onChange={(e) => setGroomNameCustom(e.target.value)}
+                                        placeholder="예: 아버지 홍길동 · 어머니 김철수 의 장남 길동"
+                                    />
+                                    <TextField
+                                        label="신부 측 표기"
+                                        value={brideNameCustom}
+                                        onChange={(e) => setBrideNameCustom(e.target.value)}
+                                        placeholder="예: 아버지 임걱정 · 어머니 박순이 의 장녀 순희"
+                                    />
+                                    <div className={styles.freeformInfo}>
+                                        <Info size={14} className={styles.infoIcon} />
+                                        <span>기본 성함 표기 대신 사용자가 직접 작성한 문구로 성함을 표시합니다.</span>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    </Field>
                 </div>
 
-                {/* Subtitle */}
-                <TextField
-                    label="소제목"
-                    type="text"
-                    value={greetingSubtitle}
-                    onChange={(e) => setGreetingSubtitle(e.target.value)}
-                    placeholder="예: INVITATION"
-                />
-
-                {/* Title */}
-                <TextField
-                    label="제목"
-                    type="text"
-                    value={greetingTitle}
-                    onChange={(e) => setGreetingTitle(e.target.value)}
-                    placeholder="예: 소중한 분들을 초대합니다"
-                />
-
-                {/* Content */}
-                <Field label="내용">
-                    {isOpen && (
-                        <RichTextEditor
-                            content={message}
-                            onChange={setMessage}
-                            placeholder="축하해주시는 분들께 전할 소중한 메시지를 입력하세요."
-                        />
-                    )}
-                </Field>
-
-                {/* Photo Upload */}
-                <Field label="사진">
-                    <div className={styles.optionWrapper}>
-                        <ImageUploader
-                            value={greetingImage}
-                            onChange={setGreetingImage}
-                            placeholder="인사말 사진 추가"
-                            ratio={greetingRatio}
-                            onRatioChange={(val) => setGreetingRatio(val)}
-                        />
-                    </div>
-                </Field>
-
-                {/* Name Options */}
-                <Field label="성함 표기">
-                    <div className={styles.optionWrapper}>
-                        <SegmentedControl
-                            value={nameOptionValue}
-                            onChange={handleNameOptionChange}
-                            options={[
-                                { label: '하단 표기', value: 'bottom' },
-                                { label: '직접 입력', value: 'custom' },
-                                { label: '표시 안 함', value: 'none' },
-                            ]}
-                        />
-
-                        {enableFreeformNames && (
-                            <div className={styles.optionWrapper}>
-                                <TextField
-                                    label="신랑 측 표기"
-                                    value={groomNameCustom}
-                                    onChange={(e) => setGroomNameCustom(e.target.value)}
-                                    placeholder="예: 아버지 홍길동 · 어머니 김철수 의 장남 길동"
-                                />
-                                <TextField
-                                    label="신부 측 표기"
-                                    value={brideNameCustom}
-                                    onChange={(e) => setBrideNameCustom(e.target.value)}
-                                    placeholder="예: 아버지 임걱정 · 어머니 박순이 의 장녀 순희"
-                                />
-                                <div className={styles.freeformInfo}>
-                                    <Info size={14} className={styles.infoIcon} />
-                                    <span>기본 성함 표기 대신 사용자가 직접 작성한 문구로 성함을 표시합니다.</span>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </Field>
-            </div>
+            </AccordionItem>
 
             {/* Sample Phrases Modal */}
-            {isSampleModalOpen && (
-                <ExampleSelectorModal
-                    isOpen={isSampleModalOpen}
-                    onClose={() => setIsSampleModalOpen(false)}
-                    title="인사말 예시 문구"
-                    items={SAMPLE_PHRASES.map(s => ({
-                        ...s,
-                        content: s.message // Map message to content for the generic component
-                    }))}
-                    onSelect={(item) => handleSelectSample(item)}
-                />
-            )}
-        </AccordionItem>
+            <ExampleSelectorModal
+                isOpen={isSampleModalOpen}
+                onClose={() => setIsSampleModalOpen(false)}
+                title="인사말 추천 문구"
+                items={SAMPLE_PHRASES.map(s => ({
+                    ...s,
+                    content: s.message // Map message to content for the generic component
+                }))}
+                onSelect={(item) => handleSelectSample(item)}
+            />
+        </>
     );
 }

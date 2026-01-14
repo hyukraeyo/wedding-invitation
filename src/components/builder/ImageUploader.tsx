@@ -153,7 +153,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                                 onClick={handleRemove}
                                 variant="destructive"
                                 size="icon-sm"
-                                className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-20"
+                                className="absolute top-2 right-2 transition-opacity z-20"
                                 disabled={isUploading}
                             >
                                 <Trash2 size={16} />

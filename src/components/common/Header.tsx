@@ -77,7 +77,7 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
 
     return (
         <header className={cn(
-            "fixed md:sticky top-0 left-0 right-0 flex h-14 items-center justify-between border-b bg-background px-4 md:px-6 z-50 transition-transform duration-300",
+            "fixed md:sticky top-0 left-0 right-0 flex h-14 items-center justify-between border-b bg-background px-4 md:px-6 z-50 transition-transform duration-400 ease-ios",
             !isVisible && "-translate-y-full md:translate-y-0"
         )}>
             {/* Logo */}
@@ -89,16 +89,18 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
 
             {/* Actions */}
             <div className="flex items-center gap-1 md:gap-2">
-                <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={handleCreateNew}
-                    className="mr-1 md:mr-2"
-                >
-                    <Plus size={16} className="hidden md:inline mr-1" />
-                    <span className="hidden md:inline">새 청첩장 만들기</span>
-                    <Plus size={20} className="md:hidden" />
-                </Button>
+                {user && (
+                    <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={handleCreateNew}
+                        className="mr-1 md:mr-2"
+                    >
+                        <Plus size={16} className="hidden md:inline mr-1" />
+                        <span className="hidden md:inline">새 청첩장 만들기</span>
+                        <Plus size={20} className="md:hidden" />
+                    </Button>
+                )}
 
                 {user ? (
                     <>

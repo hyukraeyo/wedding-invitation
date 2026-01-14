@@ -60,16 +60,20 @@ interface FieldProps {
     description?: string | undefined;
     error?: React.ReactNode;
     id?: string;
+    action?: React.ReactNode;
 }
 
-export const Field = ({ label, children, className, required, description, error, id }: FieldProps) => {
+export const Field = ({ label, children, className, required, description, error, id, action }: FieldProps) => {
     return (
         <div className={cn("space-y-2", className)}>
             <div className="flex flex-col gap-1.5">
                 {label && (
-                    <Label htmlFor={id} required={!!required}>
-                        {label}
-                    </Label>
+                    <div className="flex items-center justify-between">
+                        <Label htmlFor={id} required={!!required}>
+                            {label}
+                        </Label>
+                        {action}
+                    </div>
                 )}
                 {children}
                 {description && (

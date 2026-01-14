@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback, useState, useRef } from 'react';
 import Image from 'next/image';
-import { Image as ImageIcon, Plus, Info, X } from 'lucide-react';
+import { Image as ImageIcon, Plus, Info, Trash2 } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useToast } from '@/hooks/use-toast';
 import { Field } from '../FormPrimitives';
@@ -96,7 +96,7 @@ const SortableItem = React.memo(function SortableItem({ id, url, onRemove, isDra
                 }}
                 onPointerDown={(e) => e.stopPropagation()}
             >
-                <X size={12} />
+                <Trash2 size={12} />
             </button>
 
             <div
