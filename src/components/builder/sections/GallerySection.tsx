@@ -1,6 +1,7 @@
 import React, { useMemo, useCallback, useState, useRef } from 'react';
 import Image from 'next/image';
-import { Image as ImageIcon, Plus, Info, Trash2 } from 'lucide-react';
+import { Image as ImageIcon, Plus, Trash2 } from 'lucide-react';
+import { InfoMessage } from '@/components/builder/InfoMessage';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useToast } from '@/hooks/use-toast';
 import { Field } from '../FormPrimitives';
@@ -239,7 +240,7 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ value,
                 <Field
                     label={
                         <div className={styles.counter}>
-                            <Label className="!mb-0">사진 관리</Label>
+                            <span className="text-sm font-medium leading-none">사진 관리</span>
                             <span className={styles.countText}>
                                 <span style={{ color: accentColor }}>{gallery.length}</span>
                                 <span className={styles.countTotal}> / 30</span>
@@ -304,10 +305,9 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ value,
                             </DragOverlay>
                         </DndContext>
 
-                        <div className={styles.infoBox}>
-                            <Info size={14} className={styles.infoIcon} />
-                            <span>사진을 드래그하여 순서를 변경할 수 있습니다. 최대 30장까지 등록 가능합니다.</span>
-                        </div>
+                        <InfoMessage>
+                            사진을 드래그하여 순서를 변경할 수 있습니다. 최대 30장까지 등록 가능합니다.
+                        </InfoMessage>
                     </div>
                 </Field>
 

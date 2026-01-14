@@ -1,5 +1,6 @@
 import React from 'react';
-import { Calendar, Info } from 'lucide-react';
+import { Calendar } from 'lucide-react';
+import { InfoMessage } from '@/components/builder/InfoMessage';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
@@ -72,10 +73,9 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
                                 value={ddayMessage}
                                 onChange={(e) => setDdayMessage(e.target.value)}
                             />
-                            <div className={styles.infoBox}>
-                                <Info size={14} className={styles.infoIcon} />
-                                <span>(신랑), (신부), (D-Day)는 실제 이름과 날짜로 자동 치환됩니다.</span>
-                            </div>
+                            <InfoMessage>
+                                (신랑), (신부), (D-Day)는 실제 이름과 날짜로 자동 치환됩니다.
+                            </InfoMessage>
                         </div>
                     )}
                 </div>

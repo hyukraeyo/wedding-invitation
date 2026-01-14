@@ -88,11 +88,16 @@ const EditorForm = memo(function EditorForm() {
         className="flex flex-col gap-3"
       >
         {SECTIONS.map(({ key, Component }) => (
-          <Component
+          <div
             key={key}
-            value={key}
-            isOpen={openSections.includes(key)}
-          />
+            onFocusCapture={() => setEditingSection(key)}
+            onClickCapture={() => setEditingSection(key)}
+          >
+            <Component
+              value={key}
+              isOpen={openSections.includes(key)}
+            />
+          </div>
         ))}
       </Accordion>
     </div>

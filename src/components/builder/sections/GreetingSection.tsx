@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
-import { MessageSquare, Sparkles, Info } from 'lucide-react';
+import { MessageSquare, Sparkles } from 'lucide-react';
+import { InfoMessage } from '@/components/builder/InfoMessage';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
@@ -9,7 +10,7 @@ import { SegmentedControl } from '../SegmentedControl';
 import { ExampleSelectorModal } from '@/components/builder/ExampleSelectorModal';
 import { HeaderAction } from '../HeaderAction';
 import { ImageUploader } from '../ImageUploader';
-import styles from './GreetingSection.module.scss';
+import styles from './GreetingSection.module.scss'; // eslint-disable-line
 
 const RichTextEditor = dynamic(() => import('@/components/common/RichTextEditor'), { ssr: false });
 
@@ -166,10 +167,9 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
                                         onChange={(e) => setBrideNameCustom(e.target.value)}
                                         placeholder="예: 아버지 임걱정 · 어머니 박순이 의 장녀 순희"
                                     />
-                                    <div className={styles.freeformInfo}>
-                                        <Info size={14} className={styles.infoIcon} />
-                                        <span>기본 성함 표기 대신 사용자가 직접 작성한 문구로 성함을 표시합니다.</span>
-                                    </div>
+                                    <InfoMessage>
+                                        기본 성함 표기 대신 사용자가 직접 작성한 문구로 성함을 표시합니다.
+                                    </InfoMessage>
                                 </div>
                             )}
                         </div>

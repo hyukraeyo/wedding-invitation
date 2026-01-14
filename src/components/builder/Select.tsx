@@ -52,12 +52,28 @@ export const Select = <T extends string | number>({
     const selectedItemRef = React.useRef<HTMLButtonElement>(null);
 
     const stringValue = String(value);
-    const selectedOption = options.find(o => String(o.value) === stringValue);
+    // Optimistic UI state
+    const [optimisticValue, setOptimisticValue] = React.useState(stringValue);
+
+    React.useEffect(() => {
+        setOptimisticValue(stringValue);
+    }, [stringValue]);
+
+    const selectedOption = options.find(o => String(o.value) === optimisticValue);
 
     const handleValueChange = (val: string) => {
         const opt = options.find(o => String(o.value) === val);
         if (opt) {
+            // Update UI immediately (Optimistic update)
+            setOptimisticValue(String(opt.value));
+
+            // Trigger actual change
             onChange(opt.value);
+
+            // Close drawer with a slight delay to allow visual feedback, 
+            // or close immediately depending on desired UX. 
+            // Currently keeping immediate close but the state update above ensures
+            // the button text updates before the drawer fully closes visually.
             setIsOpen(false);
         }
     };

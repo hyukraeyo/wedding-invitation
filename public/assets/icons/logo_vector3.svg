@@ -1,0 +1,30 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="flatHeartGrad" x1="20%" y1="80%" x2="80%" y2="20%">
+      <stop offset="0%" style="stop-color:#FFD954;stop-opacity:1" /> <stop offset="50%" style="stop-color:#FFCBA4;stop-opacity:1" /> <stop offset="100%" style="stop-color:#6495ED;stop-opacity:1" /> </linearGradient>
+
+    <filter id="outerGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <path d="M256,440 C160,440 40,300 40,180 
+           C40,90 110,40 180,40 
+           C220,40 256,70 256,70 
+           C256,70 292,40 332,40 
+           C402,40 472,90 472,180 
+           C472,300 352,440 256,440 Z 
+           
+           M256,370 C320,370 400,260 400,180 
+           C400,120 360,100 332,100 
+           C300,100 276,130 256,160 
+           C236,130 212,100 180,100 
+           C152,100 112,120 112,180 
+           C112,260 192,370 256,370 Z" 
+        fill="url(#flatHeartGrad)" 
+        filter="url(#outerGlow)" />
+</svg>
