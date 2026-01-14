@@ -28,10 +28,13 @@
   overflow: hidden;
   transition: all 0.2s ease;
 
-  &:hover {
-    border-color: v.$toss-blue-500;
-    background-color: v.$toss-blue-50;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      border-color: v.$toss-blue-500;
+      background-color: v.$toss-blue-50;
+    }
   }
+
 }
 
 .accountHeader {
@@ -42,9 +45,12 @@
   border-bottom: 1px solid v.$gray-100;
   cursor: pointer;
 
-  .accountItem:hover & {
-    border-bottom-color: rgba(v.$toss-blue-500, 0.2);
+  @media (hover: hover) and (pointer: fine) {
+    .accountItem:hover & {
+      border-bottom-color: rgba(v.$toss-blue-500, 0.2);
+    }
   }
+
 }
 
 .accountTitle {
@@ -111,10 +117,13 @@
   cursor: pointer;
   transition: all 0.2s ease;
 
-  &:hover {
-    background-color: v.$toss-red-50;
-    color: v.$toss-red-500;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: v.$toss-red-50;
+      color: v.$toss-red-500;
+    }
   }
+
 }
 
 .addBtn {
@@ -133,11 +142,14 @@
   cursor: pointer;
   transition: all 0.2s ease;
 
-  &:hover {
-    background-color: v.$toss-blue-50;
-    border-style: solid;
-    transform: translateY(-2px);
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: v.$toss-blue-50;
+      border-style: solid;
+      transform: translateY(-2px);
+    }
   }
+
 
   &:active {
     transform: translateY(0);

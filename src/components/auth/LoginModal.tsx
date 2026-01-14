@@ -13,7 +13,6 @@ import { useFocusTrap } from '@/hooks/useAccessibility';
 import { clsx } from 'clsx';
 import { MOTION_CLASSES } from '@/constants/motion';
 
-
 interface LoginModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -43,12 +42,18 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
     useScrollLock(isOpen);
 
-
     const handleOAuthLogin = useCallback(async (provider: 'kakao' | 'naver') => {
         setLoading(true);
+
+        if (provider === 'naver') {
+            // 네이버: 커스텀 OAuth API 사용 (Supabase 미지원)
+            window.location.href = '/api/auth/naver';
+            return;
+        }
+
+        // 카카오: Supabase 내장 OAuth 사용
         const { error } = await supabase.auth.signInWithOAuth({
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            provider: provider as any,
+            provider: 'kakao',
             options: { redirectTo: `${window.location.origin}/builder` }
         });
         if (error) {
@@ -94,14 +99,12 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     return createPortal(
         <div
             className={clsx(styles.overlay, MOTION_CLASSES.overlay)}
-
             role="dialog"
             aria-modal="true"
             aria-labelledby="login-title"
             onClick={(e) => e.target === e.currentTarget && onClose()}
         >
             <div className={clsx(styles.modal, MOTION_CLASSES.dialog)} ref={focusTrapRef}>
-
                 <button onClick={onClose} className={styles.closeButton} aria-label="닫기">
                     <X size={20} />
                 </button>
@@ -142,6 +145,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 </div>
 
                 <div className={styles.socialButtons}>
+                    {/* 카카오 로그인 잠시 숨김
                     <button
                         className={`${styles.socialButton} ${styles.kakao}`}
                         onClick={() => handleOAuthLogin('kakao')}
@@ -153,6 +157,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                         </svg>
                         <span>카카오로 3초 만에 시작하기</span>
                     </button>
+                    */}
 
                     <button
                         className={`${styles.socialButton} ${styles.naver}`}

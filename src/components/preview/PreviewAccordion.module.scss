@@ -20,10 +20,13 @@
             color: #adb5bd; 
         }
 
-        &:hover {
-            background-color: #f1f3f5;
-            border-color: #e9ecef;
+        @media (hover: hover) and (pointer: fine) {
+            &:hover {
+                background-color: #f1f3f5;
+                border-color: #e9ecef;
+            }
         }
+
     }
 
     &.accent {

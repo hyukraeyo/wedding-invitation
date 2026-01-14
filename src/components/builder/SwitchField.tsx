@@ -12,19 +12,34 @@ interface SwitchProps {
 
 export const SwitchField = ({ checked, onChange, label, className, disabled }: SwitchProps) => {
     return (
-        <div className={cn("flex items-center justify-between py-1", className)}>
-            <div className="flex items-center space-x-2">
-                <ShadcnSwitch
-                    id={`switch-${label}`}
-                    checked={checked}
-                    onCheckedChange={onChange}
-                    disabled={disabled}
-                />
+        <div
+            className={cn(
+                "flex items-center justify-between py-2.5 px-1 rounded-lg transition-colors cursor-pointer active:bg-accent/50 group select-none",
+                disabled && "cursor-not-allowed opacity-50",
+                className
+            )}
+            onClick={() => !disabled && onChange(!checked)}
+        >
+            <div className="flex items-center justify-between w-full">
                 {label && (
-                    <Label htmlFor={`switch-${label}`} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                    <Label
+                        className="text-[15px] font-medium leading-none cursor-pointer group-hover:text-primary transition-colors"
+                        onClick={(e) => {
+                            e.preventDefault(); // Prevent double trigger since parent has onClick
+                        }}
+                    >
                         {label}
                     </Label>
                 )}
+                <ShadcnSwitch
+                    checked={checked}
+                    onCheckedChange={(val) => {
+                        // This might be redundant if the parent handles it, 
+                        // but good for accessibility if they use keyboard.
+                    }}
+                    disabled={disabled}
+                    className="pointer-events-none" // Parent handles click
+                />
             </div>
         </div>
     );

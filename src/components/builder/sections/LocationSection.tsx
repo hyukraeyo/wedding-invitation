@@ -10,11 +10,11 @@ import { TextField } from '../TextField';
 import { SegmentedControl } from '../SegmentedControl';
 import { SwitchField } from '../SwitchField';
 import { Field } from '../FormPrimitives';
-import { Modal } from '@/components/ui/Modal';
+import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 import styles from './LocationSection.module.scss';
 
 const DaumPostcodeEmbed = dynamic(() => import('react-daum-postcode'), { ssr: false });
-import { cn } from '@/lib/utils';
+import { cn, formatPhoneNumber } from '@/lib/utils';
 
 import { NaverIcon, KakaoIcon } from '@/components/common/Icons';
 
@@ -106,27 +106,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ valu
         setIsSearchOpen(false);
     };
 
-    const formatPhoneNumber = (value: string) => {
-        const clean = value.replace(/[^0-9]/g, '');
-        if (!clean) return '';
 
-        if (clean.startsWith('02')) {
-            if (clean.length <= 2) return clean;
-            if (clean.length <= 5) return clean.replace(/(\d{2})(\d+)/, '$1-$2');
-            if (clean.length <= 9) return clean.replace(/(\d{2})(\d{3})(\d+)/, '$1-$2-$3');
-            return clean.replace(/(\d{2})(\d{4})(\d+)/, '$1-$2-$3').substring(0, 12);
-        }
-
-        if (clean.startsWith('1')) {
-            if (clean.length <= 4) return clean;
-            return clean.replace(/(\d{4})(\d+)/, '$1-$2').substring(0, 9);
-        }
-
-        if (clean.length <= 3) return clean;
-        if (clean.length <= 6) return clean.replace(/(\d{3})(\d+)/, '$1-$2');
-        if (clean.length <= 10) return clean.replace(/(\d{3})(\d{3})(\d+)/, '$1-$2-$3');
-        return clean.replace(/(\d{3})(\d{4})(\d+)/, '$1-$2-$3').substring(0, 13);
-    };
 
     const handleContactChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const formatted = formatPhoneNumber(e.target.value);
@@ -253,12 +233,13 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ valu
 
             </div>
 
-            <Modal
-                isOpen={isSearchOpen}
-                onClose={() => setIsSearchOpen(false)}
+            <ResponsiveModal
+                open={isSearchOpen}
+                onOpenChange={setIsSearchOpen}
                 title="주소 검색"
+                description="도로명 주소 또는 지번 주소를 입력해주세요."
             >
-                <div className={styles.postcodeWrapper}>
+                <div className="h-[400px] w-full">
                     {isSearchOpen && (
                         <DaumPostcodeEmbed
                             onComplete={handleComplete}
@@ -267,7 +248,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ valu
                         />
                     )}
                 </div>
-            </Modal>
+            </ResponsiveModal>
         </AccordionItem>
     );
 });

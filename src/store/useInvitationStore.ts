@@ -218,6 +218,8 @@ export interface InvitationState {
     // License Approval State
     isApproved: boolean;
     setIsApproved: (approved: boolean) => void;
+    isRequestingApproval: boolean;
+    setIsRequestingApproval: (requesting: boolean) => void;
 
     // Actions
     reset: () => void;
@@ -321,9 +323,9 @@ export const INITIAL_STATE = {
     ddayMessage: '(신랑), (신부)의 결혼식이 (D-Day) 남았습니다',
 
     theme: {
-        font: 'pretendard' as const,
-        backgroundColor: '#FFFDE7', // Banana Ivory
-        accentColor: '#FBC02D', // Banana Yellow (Logo Color)
+        font: 'gowun-dodum' as const,
+        backgroundColor: '#FFFFFF', // White
+        accentColor: '#3182F6', // Toss Blue
         fontScale: 1,
         pattern: 'none' as const,
         effect: 'none' as const,
@@ -360,6 +362,7 @@ export const INITIAL_STATE = {
         content: '저희의 새로운 시작을 함께 축복해 주셔서 진심으로 감사합니다. 보내주신 소중한 마음 평생 잊지 않고 예쁘게 잘 살겠습니다.',
     },
     isApproved: false,
+    isRequestingApproval: false,
 };
 
 export const useInvitationStore = create<InvitationState>()(persist((set) => ({
@@ -459,6 +462,7 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
     setClosing: (data) => set((state) => ({ closing: { ...state.closing, ...data } })),
     setSlug: (slug) => set({ slug }),
     setIsApproved: (approved) => set({ isApproved: approved }),
+    setIsRequestingApproval: (requesting) => set({ isRequestingApproval: requesting }),
     reset: () => set(INITIAL_STATE),
 }), {
     name: 'wedding-invitation-storage',

@@ -86,10 +86,13 @@
         text-decoration: none;
         cursor: pointer;
 
-        &:hover {
-            border-color: #e9ecef;
-            background-color: #fbfcfd;
+        @media (hover: hover) and (pointer: fine) {
+            &:hover {
+                border-color: #e9ecef;
+                background-color: #fbfcfd;
+            }
         }
+
 
         &:active {
             background-color: #f1f3f5;

@@ -83,9 +83,12 @@
   cursor: pointer;
   transition: all 0.2s ease;
 
-  &:hover .presetThumbnail {
-    border-color: v.$gray-300;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover .presetThumbnail {
+      border-color: v.$gray-300;
+    }
   }
+
 
   &.selected .presetThumbnail {
     border-color: var(--accent-color, #D4AF37);

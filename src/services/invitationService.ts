@@ -17,6 +17,16 @@ export const invitationService = {
         return result;
     },
 
+    async getAllInvitations() {
+        const { data, error } = await supabase
+            .from('invitations')
+            .select('*')
+            .order('updated_at', { ascending: false });
+
+        if (error) throw error;
+        return data;
+    },
+
     async getUserInvitations(userId: string) {
         const { data, error } = await supabase
             .from('invitations')

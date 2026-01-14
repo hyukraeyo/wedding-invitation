@@ -3,19 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Plus, Loader2, User, LogIn, Save } from 'lucide-react';
+import { Plus, Loader2, User, LogIn, Save, LogOut } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from '@/components/ui/Dialog';
+import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 
 interface HeaderProps {
     onSave?: () => void;
@@ -30,10 +23,10 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
     const router = useRouter();
     const pathname = usePathname();
     const isMyPage = pathname?.startsWith('/mypage');
-    const { user } = useAuth();
+    const { user, signOut } = useAuth();
     const reset = useInvitationStore(state => state.reset);
     const [showResetDialog, setShowResetDialog] = useState(false);
-    const isVisible = useHeaderVisible(10, 'builder-sidebar-scroll');
+    const isVisible = true; // Always visible as per user request
 
     useEffect(() => {
         router.prefetch('/login');
@@ -42,15 +35,22 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
 
     const handleCreateNew = () => {
         const state = useInvitationStore.getState();
-        const hasContent =
+
+        // 마이페이지에서는 바로 초기화하고 빌더로 이동
+        if (isMyPage) {
+            reset();
+            router.push('/builder');
+            return;
+        }
+
+        const hasActualContent =
             state.groom.firstName !== '' ||
             state.bride.firstName !== '' ||
             state.location !== '' ||
-            state.message !== '' ||
             state.imageUrl !== null ||
             state.gallery.length > 0;
 
-        if (hasContent) {
+        if (hasActualContent) {
             setShowResetDialog(true);
         } else {
             reset();
@@ -66,13 +66,21 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
 
     return (
         <header className={cn(
-            "fixed md:sticky top-0 left-0 right-0 flex h-14 items-center justify-between border-b bg-background px-4 md:px-6 z-50 transition-transform duration-400 ease-ios",
-            !isVisible && "-translate-y-full md:translate-y-0"
+            "sticky top-0 left-0 right-0 flex h-14 items-center justify-between border-b bg-background px-4 md:px-6 z-50 transition-transform duration-400 ease-ios",
+            !isVisible && "-translate-y-full"
         )}>
             {/* Logo */}
-            <div className="flex items-center">
+            <div className="flex items-center shrink-0">
                 <Link href="/" className="hover:opacity-80 transition-opacity flex items-center">
-                    <Image src="/logo.png" alt="Logo" width={44} height={44} className="object-contain" priority />
+                    <Image
+                        src="/logo.png"
+                        alt="Logo"
+                        width={44}
+                        height={44}
+                        className="h-9 w-9 md:h-11 md:w-11 object-contain shrink-0 aspect-square"
+                        quality={100}
+                        priority
+                    />
                 </Link>
             </div>
 
@@ -101,6 +109,19 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
                                 </Button>
                             </Link>
                         )}
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="px-2"
+                            onClick={async () => {
+                                await signOut();
+                                router.push('/');
+                            }}
+                            aria-label="로그아웃"
+                        >
+                            <span className="hidden md:inline">로그아웃</span>
+                            <LogOut size={20} className="md:hidden" />
+                        </Button>
                     </>
                 ) : (
                     onLogin && (
@@ -137,26 +158,35 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
                 )}
             </div>
 
-            <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>새 청첩장 만들기</DialogTitle>
-                        <DialogDescription>
-                            작성 중인 내용이 있습니다. 정말 새 청첩장을 만드시겠습니까?
-                            <br />
-                            (작성된 내용은 초기화됩니다.)
-                        </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter>
-                        <Button variant="ghost" onClick={() => setShowResetDialog(false)}>
-                            취소
-                        </Button>
-                        <Button variant="destructive" onClick={confirmReset}>
-                            초기화 및 만들기
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
+            <ResponsiveModal
+                open={showResetDialog}
+                onOpenChange={setShowResetDialog}
+                title="새 청첩장 만들기"
+                description={
+                    <>
+                        작성 중인 내용이 있습니다. 정말 새 청첩장을 만드시겠습니까?
+                        <br />
+                        (작성된 내용은 초기화됩니다.)
+                    </>
+                }
+            >
+                <div className="flex flex-col gap-3 py-4">
+                    <Button
+                        variant="destructive"
+                        className="w-full py-6 text-lg font-bold"
+                        onClick={confirmReset}
+                    >
+                        초기화 및 만들기
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        className="w-full py-6 text-base"
+                        onClick={() => setShowResetDialog(false)}
+                    >
+                        취소
+                    </Button>
+                </div>
+            </ResponsiveModal>
         </header>
     );
 }

@@ -30,9 +30,12 @@
   cursor: pointer;
   transition: all 0.2s ease;
 
-  &:hover {
-    background-color: v.$toss-grey-200;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: v.$toss-grey-200;
+    }
   }
+
 
   &:active {
     scale: 0.95;

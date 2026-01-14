@@ -1,12 +1,53 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { User } from '@supabase/supabase-js';
+import { Profile, profileService } from '@/services/profileService';
+
+interface AuthState {
+    user: User | null;
+    profile: Profile | null;
+    loading: boolean;
+    profileLoading: boolean;
+    isProfileComplete: boolean;
+    isAdmin: boolean;
+}
 
 export function useAuth() {
-    const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [state, setState] = useState<AuthState>({
+        user: null,
+        profile: null,
+        loading: true,
+        profileLoading: false,
+        isProfileComplete: false,
+        isAdmin: false,
+    });
+
+    // 프로필 조회 함수
+    const fetchProfile = useCallback(async (userId: string) => {
+        setState(prev => ({ ...prev, profileLoading: true }));
+        try {
+            const profile = await profileService.getProfile(userId);
+            const isComplete = !!(profile?.full_name && profile?.phone);
+            setState(prev => ({
+                ...prev,
+                profile,
+                isProfileComplete: isComplete,
+                isAdmin: profile?.is_admin ?? false,
+                profileLoading: false,
+            }));
+        } catch {
+            setState(prev => ({ ...prev, profileLoading: false }));
+        }
+    }, []);
+
+    // 프로필 새로고침 함수 (외부에서 호출 가능)
+    const refreshProfile = useCallback(async () => {
+        if (state.user) {
+            await fetchProfile(state.user.id);
+        }
+    }, [state.user, fetchProfile]);
 
     useEffect(() => {
         // Get initial session with error handling
@@ -16,33 +57,60 @@ export function useAuth() {
                     // If refresh token is invalid, clear the session
                     if (error.message.includes('refresh_token') || error.message.includes('Refresh Token')) {
                         supabase.auth.signOut({ scope: 'local' }).catch(() => { });
-                        setUser(null);
+                        setState(prev => ({ ...prev, user: null, profile: null, loading: false }));
                     }
                     console.warn('Supabase auth session error:', error.message);
+                    setState(prev => ({ ...prev, loading: false }));
                 } else {
-                    setUser(session?.user ?? null);
+                    const user = session?.user ?? null;
+                    setState(prev => ({ ...prev, user, loading: false }));
+                    if (user) {
+                        fetchProfile(user.id);
+                    }
                 }
             })
             .catch((err) => {
                 console.error('Unexpected auth error:', err);
-            })
-            .finally(() => {
-                setLoading(false);
+                setState(prev => ({ ...prev, loading: false }));
             });
 
         // Listen for auth changes
         const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-            if (event === 'SIGNED_OUT' || event === 'USER_UPDATED') {
-                setUser(session?.user ?? null);
-            } else if (session) {
-                setUser(session.user);
-            } else {
-                setUser(null);
+            const user = session?.user ?? null;
+
+            if (event === 'SIGNED_OUT') {
+                setState(prev => ({
+                    ...prev,
+                    user: null,
+                    profile: null,
+                    isProfileComplete: false,
+                    isAdmin: false,
+                }));
+            } else if (event === 'SIGNED_IN' && user) {
+                setState(prev => ({ ...prev, user }));
+                fetchProfile(user.id);
+            } else if (event === 'USER_UPDATED' && user) {
+                setState(prev => ({ ...prev, user }));
+            } else if (user) {
+                setState(prev => ({ ...prev, user }));
             }
         });
 
         return () => subscription.unsubscribe();
-    }, []);
+    }, [fetchProfile]);
 
-    return { user, loading };
+    const signOut = async () => {
+        await supabase.auth.signOut();
+    };
+
+    return {
+        user: state.user,
+        profile: state.profile,
+        loading: state.loading,
+        profileLoading: state.profileLoading,
+        isProfileComplete: state.isProfileComplete,
+        isAdmin: state.isAdmin,
+        signOut,
+        refreshProfile,
+    };
 }

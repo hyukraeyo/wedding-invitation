@@ -96,6 +96,8 @@
 html {
   -webkit-tap-highlight-color: transparent;
   scroll-behavior: smooth;
+  /* 1. html, body 높이 보장 */
+  height: 100%;
 }
 
 body {
@@ -104,9 +106,24 @@ body {
   font-family: var(--font-pretendard);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  animation: fadeIn 0.4s ease-out;
+  /* 2. CRITICAL: body에 transform/animation 제거!! (fixed 포지셔닝 파괴 주범) */
   touch-action: manipulation;
   overflow-x: hidden;
+  min-height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 3. 애니메이션은 body가 아닌 내부 컨테이너에 적용 */
+#__next, 
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  animation: fadeIn 0.4s var(--ease-ios) both;
+  position: relative;
 }
 
 /* Improve button feel globally */
@@ -114,16 +131,12 @@ button {
   touch-action: manipulation;
   user-select: none;
 }
-
-
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(4px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
@@ -213,14 +226,18 @@ button {
 }
 
 .hover-lift {
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
   }
+
   &:active {
     transform: translateY(0);
   }
 }
+
 
 /* Click/Touch Feedback */
 .click-effect {
@@ -400,64 +417,84 @@ button {
   background-color: var(--primary);
   color: var(--primary-foreground);
   
-  &:hover {
-    background-color: color-mix(in srgb, var(--primary), white 10%);
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: color-mix(in srgb, var(--primary), white 10%);
+    }
   }
 }
+
 
 .btn-destructive {
   background-color: var(--destructive);
   color: var(--destructive-foreground);
   
-  &:hover {
-    background-color: color-mix(in srgb, var(--destructive), white 10%);
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: color-mix(in srgb, var(--destructive), white 10%);
+    }
   }
 }
+
 
 .btn-outline {
   border: 1px solid var(--input);
   background-color: var(--background);
   
-  &:hover {
-    background-color: var(--accent);
-    color: var(--accent-foreground);
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: var(--accent);
+      color: var(--accent-foreground);
+    }
   }
 }
+
 
 .btn-secondary {
   background-color: var(--secondary);
   color: var(--secondary-foreground);
   
-  &:hover {
-    background-color: color-mix(in srgb, var(--secondary), black 20%);
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: color-mix(in srgb, var(--secondary), black 20%);
+    }
   }
 }
+
 
 .btn-ghost {
   background-color: transparent;
   
-  &:hover {
-    background-color: var(--accent);
-    color: var(--accent-foreground);
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: var(--accent);
+      color: var(--accent-foreground);
+    }
   }
 }
+
 
 .btn-link {
   color: var(--primary);
   text-underline-offset: 4px;
   
-  &:hover {
-    text-decoration: underline;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
+
 
 /* Toss Inspired Variants */
 .btn-toss-text {
   background-color: transparent;
   color: var(--foreground);
   
-  &:hover {
-    background-color: transparent;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: transparent;
+    }
   }
   
   &:active {
@@ -465,13 +502,16 @@ button {
   }
 }
 
+
 .btn-toss-solid {
   background-color: var(--primary);
   color: var(--primary-foreground);
   transition: opacity 0.2s;
   
-  &:hover {
-    background-color: var(--primary);
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: var(--primary);
+    }
   }
   
   &:active {
@@ -479,19 +519,23 @@ button {
   }
 }
 
+
 .btn-toss-line {
   border: 1px solid var(--input);
   background-color: var(--background);
   color: var(--foreground);
   
-  &:hover {
-    background-color: var(--background);
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: var(--background);
+    }
   }
   
   &:active {
     background-color: var(--accent);
   }
 }
+
 
 /* Button Sizes */
 .btn-size-default {

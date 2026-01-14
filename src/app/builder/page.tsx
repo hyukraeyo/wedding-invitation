@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 
 // Dynamic import for InvitationCanvas (conditionally rendered based on screen size)
@@ -11,6 +11,8 @@ const InvitationCanvas = dynamic(
     loading: () => <div className="w-full h-full flex items-center justify-center bg-muted/20 animate-pulse" />
   }
 );
+
+
 
 // Static import for EditorForm to prevent CSS chunk splitting that causes preload warnings
 import EditorForm from '@/components/builder/EditorForm';
@@ -27,7 +29,6 @@ import { Smartphone, X } from 'lucide-react';
 import { Sheet, SheetContent, SheetTitle, SheetHeader, SheetDescription } from '@/components/ui/Sheet';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 
 const generateSlug = (name: string): string => {
   const randomStr = Math.random().toString(36).substring(2, 8);
@@ -37,10 +38,18 @@ const generateSlug = (name: string): string => {
 export default function BuilderPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
-  const { user } = useAuth();
+  const { user, profile, isProfileComplete, profileLoading, refreshProfile } = useAuth();
   const editingSection = useInvitationStore(state => state.editingSection);
   const windowWidth = useWindowSize(); // Optimized hook usage
   const router = useRouter();
+  const profileLockRef = useRef(false); // 모달이 닫힌 후 다시 열리는 것 방지
+
+  // 프로필 미완성시 로그인 페이지로 리다이렉트 (로그인 가드)
+  useEffect(() => {
+    if (user && !profileLoading && !isProfileComplete && !profileLockRef.current) {
+      router.replace('/login');
+    }
+  }, [user, profileLoading, isProfileComplete, router]);
 
   // Prefetch login route for instant modal transition
   useEffect(() => {
@@ -79,10 +88,13 @@ export default function BuilderPage() {
     }
   }, [user, handleLogin]);
 
+
+
   return (
     <main className={styles.main}>
       <Header onSave={handleSave} onLogin={handleLogin} isLoading={isSaving} />
       <SavingOverlay isVisible={isSaving} />
+
 
       <div className={styles.workspace}>
         <section className={styles.sidebar} id="sidebar-portal-root">

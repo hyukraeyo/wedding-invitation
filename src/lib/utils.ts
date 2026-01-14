@@ -62,6 +62,29 @@ export function isValidPhone(phone: string): boolean {
   return phoneRegex.test(phone);
 }
 
+// Phone Number Formatting Utility (Korean styles)
+export function formatPhoneNumber(value: string): string {
+  const clean = value.replace(/[^0-9]/g, '');
+  if (!clean) return '';
+
+  if (clean.startsWith('02')) {
+    if (clean.length <= 2) return clean;
+    if (clean.length <= 5) return clean.replace(/(\d{2})(\d+)/, '$1-$2');
+    if (clean.length <= 9) return clean.replace(/(\d{2})(\d{3})(\d+)/, '$1-$2-$3');
+    return clean.replace(/(\d{2})(\d{4})(\d+)/, '$1-$2-$3').substring(0, 12);
+  }
+
+  if (clean.startsWith('1')) {
+    if (clean.length <= 4) return clean;
+    return clean.replace(/(\d{4})(\d+)/, '$1-$2').substring(0, 9);
+  }
+
+  if (clean.length <= 3) return clean;
+  if (clean.length <= 6) return clean.replace(/(\d{3})(\d+)/, '$1-$2');
+  if (clean.length <= 10) return clean.replace(/(\d{3})(\d{3})(\d+)/, '$1-$2-$3');
+  return clean.replace(/(\d{3})(\d{4})(\d+)/, '$1-$2-$3').substring(0, 13);
+}
+
 export function isValidUrl(url: string): boolean {
   try {
     new URL(url);

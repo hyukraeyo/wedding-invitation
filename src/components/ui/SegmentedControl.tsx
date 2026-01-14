@@ -82,8 +82,8 @@ export const SegmentedControl = <T extends string | number>({
                             value={props.value.toString()}
                             className={cn(
                                 "z-10 bg-transparent shadow-none data-[state=active]:bg-transparent data-[state=active]:shadow-none",
-                                "rounded-md font-medium transition-colors duration-200",
-                                "text-[#8b95a1] data-[state=active]:text-[#191f28]",
+                                "rounded-md font-semibold transition-colors duration-200",
+                                "text-[#8b95a1] data-[state=active]:text-primary",
                                 size === 'large' ? "text-[15px]" : "text-[13px]",
                                 props.className
                             )}

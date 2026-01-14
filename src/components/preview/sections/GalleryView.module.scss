@@ -142,9 +142,12 @@
         border: none;
         cursor: pointer;
         
-        &:hover {
-            color: white;
+        @media (hover: hover) and (pointer: fine) {
+            &:hover {
+                color: white;
+            }
         }
+
     }
 }
 
