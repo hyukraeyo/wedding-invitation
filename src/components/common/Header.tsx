@@ -3,10 +3,9 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Plus, Loader2, User, LogIn, LogOut, Save } from 'lucide-react';
+import { Plus, Loader2, User, LogIn, Save } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { supabase } from '@/lib/supabase';
 import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import {
@@ -40,16 +39,6 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
         router.prefetch('/login');
     }, [router]);
 
-    const handleLogout = async () => {
-        try {
-            await supabase.auth.signOut({ scope: 'local' });
-        } catch (error) {
-            console.error('Logout error:', error);
-        } finally {
-            router.push('/');
-            router.refresh();
-        }
-    };
 
     const handleCreateNew = () => {
         const state = useInvitationStore.getState();

@@ -7,7 +7,7 @@ import { invitationService } from '@/services/invitationService';
 import { useInvitationStore, InvitationData } from '@/store/useInvitationStore';
 import Header from '@/components/common/Header';
 import { useToast } from '@/hooks/use-toast';
-import { Calendar, MapPin, ExternalLink, Edit2, Trash2, Loader2, FileText, MoreHorizontal, CheckCircle2 } from 'lucide-react';
+import { Calendar, MapPin, ExternalLink, Edit2, Trash2, Loader2, FileText, MoreHorizontal, CheckCircle2, Send } from 'lucide-react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -230,7 +230,8 @@ export default function MyPage() {
                                         {actionLoading === inv.id ? (
                                             <Loader2 size={16} className="animate-spin" />
                                         ) : (
-                                            <CheckCircle2 size={16} />
+                                            inv.invitation_data?.isApproved ? <CheckCircle2 size={16} /> :
+                                                isAdmin ? <CheckCircle2 size={16} /> : <Send size={16} />
                                         )}
                                         {inv.invitation_data?.isApproved
                                             ? '승인완료'

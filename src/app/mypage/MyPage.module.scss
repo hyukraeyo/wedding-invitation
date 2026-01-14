@@ -1,4 +1,6 @@
 @use "@/styles/variables" as *;
+@use "sass:color";
+
 
 .container {
     min-height: 100vh;
@@ -161,7 +163,8 @@
         width: 1rem;
         height: 1rem;
         flex-shrink: 0;
-        color: darken($banana-yellow, 5%); // Branded icon color
+        color: color.adjust($banana-yellow, $lightness: -5%); // Branded icon color
+
     }
 
     span {
@@ -206,7 +209,8 @@
     &.primary {
         flex: 1;
         background-color: #FDFCEF; // Very light yellow
-        color: darken($banana-yellow, 25%);
+        color: color.adjust($banana-yellow, $lightness: -25%);
+
         border-color: rgba($banana-yellow, 0.2);
 
         &:hover {

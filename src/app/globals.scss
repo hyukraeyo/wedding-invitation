@@ -51,7 +51,8 @@
   --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1); /* Subtle bounce */
   --motion-duration-fast: 160ms;
   --motion-duration-base: 260ms;
-  --motion-duration-slow: 420ms;
+  --motion-duration-slow: 480ms; // Slightly slower for more "weighted" feel
+  --ease-sheet: cubic-bezier(0.32, 0.72, 0, 1); // Native-like spring curve
   --motion-distance: 24px;
   --motion-scale: 0.98;
   --motion-overlay-blur: 16px;
@@ -150,18 +151,18 @@ button {
 
 .motion-sheet {
   will-change: transform, opacity;
-  animation: motion-sheet-in-bottom var(--motion-duration-slow) var(--ease-ios) both;
+  animation: motion-sheet-in-bottom var(--motion-duration-slow) var(--ease-sheet) both;
 
   &[data-state="closed"] {
-    animation: motion-sheet-out-bottom var(--motion-duration-fast) var(--ease-ios) both;
+    animation: motion-sheet-out-bottom var(--motion-duration-base) var(--ease-sheet) both;
   }
 
   &[data-side="right"] {
-    animation: motion-sheet-in-right var(--motion-duration-slow) var(--ease-ios) both;
+    animation: motion-sheet-in-right var(--motion-duration-slow) var(--ease-sheet) both;
   }
 
   &[data-side="right"][data-state="closed"] {
-    animation: motion-sheet-out-right var(--motion-duration-fast) var(--ease-ios) both;
+    animation: motion-sheet-out-right var(--motion-duration-slow) var(--ease-sheet) both;
   }
 
   &[data-side="left"] {
@@ -169,7 +170,7 @@ button {
   }
 
   &[data-side="left"][data-state="closed"] {
-    animation: motion-sheet-out-left var(--motion-duration-fast) var(--ease-ios) both;
+    animation: motion-sheet-out-left var(--motion-duration-slow) var(--ease-ios) both;
   }
 
   &[data-side="top"] {
