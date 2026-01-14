@@ -18,7 +18,9 @@ import {
     DrawerDescription,
     DrawerTrigger,
     DrawerScrollArea,
+    DrawerHandle,
 } from "@/components/ui/Drawer"
+
 import { cn } from '@/lib/utils';
 
 interface ResponsiveModalProps {
@@ -63,6 +65,7 @@ export const ResponsiveModal = ({
         <Drawer open={open as boolean} onOpenChange={onOpenChange as (open: boolean) => void}>
             {trigger && <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
             <DrawerContent>
+                <DrawerHandle />
                 {(title || description) && (
                     <DrawerHeader className="text-left">
                         {title && <DrawerTitle>{title}</DrawerTitle>}
@@ -74,5 +77,6 @@ export const ResponsiveModal = ({
                 </DrawerScrollArea>
             </DrawerContent>
         </Drawer>
+
     );
 };

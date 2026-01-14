@@ -1,0 +1,85 @@
+@use "@/styles/variables" as *;
+
+.container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--ivory);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeContainer 0.5s ease-out 3s forwards;
+  pointer-events: none;
+}
+
+.wrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+
+  @media (min-width: 768px) {
+    width: 160px;
+    height: 160px;
+  }
+}
+
+.svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: scale(1.1); // Slightly larger to create "outline" effect
+}
+
+.path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: draw 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.logoImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  animation: fadeInLogo 1s ease-out 1.2s forwards; // Start fading in while drawing is finishing
+
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes fadeInLogo {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeContainer {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}

@@ -47,12 +47,10 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
         onChange(`${formattedHour}:${newMinuteStr}`);
     };
 
-    const handlePeriodChange = (val: string) => {
-        updateTime(val as Period, displayHour, m);
-    };
-
-    const handleHourChange = (val: string) => {
-        updateTime(period, val, m);
+    const handlePeriodHourChange = (val: string) => {
+        const [nextPeriod, nextHour] = val.split(':') as [Period, string];
+        if (!nextPeriod || !nextHour) return;
+        updateTime(nextPeriod, nextHour, m);
     };
 
     const handleMinuteChange = (val: string) => {
@@ -61,32 +59,21 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
 
     // Arrays for dropdown options
     const hours = Array.from({ length: 12 }, (_, i) => String(i + 1)); // "1" to "12"
-    // 10-minute intervals: "00", "10", "20", "30", "40", "50"
+    const periodHourOptions = [
+        ...hours.map((hour) => ({ label: `오전 ${hour}시`, value: `AM:${hour}` })),
+        ...hours.map((hour) => ({ label: `오후 ${hour}시`, value: `PM:${hour}` })),
+    ];
     const minutes = Array.from({ length: 6 }, (_, i) => String(i * 10).padStart(2, '0'));
 
     return (
         <div className={cn("flex w-full items-center gap-2", className)}>
-            {/* AM/PM Select */}
-            <div className="flex-1">
+            {/* Period + Hour Select */}
+            <div className="flex-[2]">
                 <Select
-                    value={period}
-                    onChange={handlePeriodChange}
-                    options={[
-                        { label: '오전', value: 'AM' },
-                        { label: '오후', value: 'PM' },
-                    ]}
-                    placeholder="오전/오후"
-                    modalTitle="오전/오후를 선택하세요"
-                />
-            </div>
-
-            {/* Hour Select */}
-            <div className="flex-1">
-                <Select
-                    value={displayHour}
-                    onChange={handleHourChange}
-                    options={hours.map(h => ({ label: h, value: h }))}
-                    placeholder="시"
+                    value={`${period}:${displayHour}`}
+                    onChange={handlePeriodHourChange}
+                    options={periodHourOptions}
+                    placeholder="오전/오후 시간"
                     modalTitle="시간을 선택하세요"
                 />
             </div>

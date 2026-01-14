@@ -58,15 +58,32 @@ interface SheetContentProps
 const SheetContent = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Content>,
   SheetContentProps
->(({ side = "right", className, children, ...props }, ref) => (
-  <SheetPortal>
-    <SheetOverlay />
-    <SheetPrimitive.Content
-      ref={ref}
-      data-side={side}
-      className={cn(sheetVariants({ side }), MOTION_CLASSES.sheet, className)}
-      {...props}
-    >
+>(({ side = "right", className, children, onOpenAutoFocus, ...props }, ref) => {
+  const contentRef = React.useRef<React.ElementRef<typeof SheetPrimitive.Content>>(null)
+
+  React.useImperativeHandle(ref, () => contentRef.current as React.ElementRef<typeof SheetPrimitive.Content>)
+
+  const handleOpenAutoFocus: React.ComponentPropsWithoutRef<
+    typeof SheetPrimitive.Content
+  >["onOpenAutoFocus"] = (event) => {
+    onOpenAutoFocus?.(event)
+    if (event.defaultPrevented) return
+    event.preventDefault()
+    contentRef.current?.focus()
+  }
+
+  return (
+    <SheetPortal>
+      <SheetOverlay />
+      <SheetPrimitive.Content
+        ref={contentRef}
+        tabIndex={-1}
+        onOpenAutoFocus={handleOpenAutoFocus}
+        data-side={side}
+        className={cn(sheetVariants({ side }), MOTION_CLASSES.sheet, className)}
+        {...props}
+      >
+
 
       <SheetPrimitive.Close className="absolute right-4 top-4 rounded-full p-1 opacity-70 ring-offset-background transition-all hover:opacity-100 focus:outline-none disabled:pointer-events-none data-[state=open]:bg-secondary bg-muted/50">
         <X className="h-4 w-4" />
@@ -75,7 +92,9 @@ const SheetContent = React.forwardRef<
       {children}
     </SheetPrimitive.Content>
   </SheetPortal>
-))
+  )
+})
+
 SheetContent.displayName = SheetPrimitive.Content.displayName
 
 const SheetHeader = ({

@@ -7,7 +7,7 @@ import { Plus, Loader2, User, LogIn, LogOut, Save } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { supabase } from '@/lib/supabase';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import {
     Dialog,
@@ -29,6 +29,8 @@ import { useHeaderVisible } from '@/hooks/useHeaderVisible';
 
 export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
     const router = useRouter();
+    const pathname = usePathname();
+    const isMyPage = pathname?.startsWith('/mypage');
     const { user } = useAuth();
     const reset = useInvitationStore(state => state.reset);
     const [showResetDialog, setShowResetDialog] = useState(false);
@@ -40,14 +42,12 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
 
     const handleLogout = async () => {
         try {
-            // Use 'local' scope to prevent rare 403 Forbidden errors on global logout
-            // and ensure the user's local session is cleared regardless of server response.
             await supabase.auth.signOut({ scope: 'local' });
         } catch (error) {
             console.error('Logout error:', error);
         } finally {
             router.push('/');
-            router.refresh(); // Ensure UI updates to reflect logged out state
+            router.refresh();
         }
     };
 
@@ -89,37 +89,29 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
 
             {/* Actions */}
             <div className="flex items-center gap-1 md:gap-2">
-                {user && (
-                    <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={handleCreateNew}
-                        className="mr-1 md:mr-2"
-                    >
-                        <Plus size={16} className="hidden md:inline mr-1" />
-                        <span className="hidden md:inline">새 청첩장 만들기</span>
-                        <Plus size={20} className="md:hidden" />
-                    </Button>
-                )}
-
                 {user ? (
                     <>
-                        <Link href="/mypage">
-                            <Button variant="ghost" size="sm" className="px-2">
-                                <span className="hidden md:inline">마이페이지</span>
-                                <User size={20} className="md:hidden" />
-                            </Button>
-                        </Link>
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            className="px-2"
-                            onClick={handleLogout}
-                            aria-label="로그아웃"
-                        >
-                            <span className="hidden md:inline">로그아웃</span>
-                            <LogOut size={20} className="md:hidden" />
-                        </Button>
+                        {isMyPage ? (
+                            <>
+                                <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={handleCreateNew}
+                                    className="mr-1 md:mr-2"
+                                >
+                                    <Plus size={16} className="hidden md:inline mr-1" />
+                                    <span className="hidden md:inline">새 청첩장 만들기</span>
+                                    <Plus size={20} className="md:hidden" />
+                                </Button>
+                            </>
+                        ) : (
+                            <Link href="/mypage">
+                                <Button variant="ghost" size="sm" className="px-2">
+                                    <span className="hidden md:inline">마이페이지</span>
+                                    <User size={20} className="md:hidden" />
+                                </Button>
+                            </Link>
+                        )}
                     </>
                 ) : (
                     onLogin && (

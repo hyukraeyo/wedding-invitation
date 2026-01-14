@@ -62,7 +62,7 @@ const EditorForm = memo(function EditorForm() {
 
   if (!isReady) {
     return (
-      <div className="flex flex-col gap-3 pb-32">
+      <div className="flex flex-col gap-3">
         {Array.from({ length: 10 }).map((_, i) => (
           <div key={i} className="bg-white border border-builder-border rounded-[20px] p-5 h-[64px] flex items-center justify-between shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
             <div className="flex items-center gap-3">
@@ -80,7 +80,7 @@ const EditorForm = memo(function EditorForm() {
   }
 
   return (
-    <div className="flex flex-col gap-3 pb-32 sm-animate-fadeIn">
+    <div className="flex flex-col gap-3 sm-animate-fadeIn">
       <Accordion
         type="multiple"
         value={openSections}

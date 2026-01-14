@@ -16,6 +16,7 @@ import {
     DrawerTitle,
     DrawerScrollArea,
     DrawerTrigger,
+    DrawerHandle,
 } from '@/components/ui/Drawer';
 import { ChevronDown, Check } from 'lucide-react';
 
@@ -148,6 +149,7 @@ export const Select = <T extends string | number>({
                     </button>
                 </DrawerTrigger>
                 <DrawerContent className="max-h-[50vh]">
+                    <DrawerHandle />
                     <DrawerHeader className="px-6 pb-2 border-b">
                         <DrawerTitle className="text-left text-base font-bold text-foreground/90">
                             {modalTitle || label || placeholder || "항목 선택"}

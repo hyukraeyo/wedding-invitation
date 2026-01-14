@@ -16,6 +16,7 @@ import {
     DrawerTitle,
     DrawerScrollArea,
     DrawerTrigger,
+    DrawerHandle,
 } from '@/components/ui/Drawer';
 
 interface DatePickerProps {
@@ -81,6 +82,7 @@ export function DatePicker({ value, onChange, className, placeholder = "날짜 �
                     {TriggerButtonContent}
                 </DrawerTrigger>
                 <DrawerContent>
+                    <DrawerHandle />
                     <DrawerHeader className="w-full px-6 pb-2 border-b">
                         <DrawerTitle className="text-left text-base font-bold text-foreground/90">
                             날짜를 선택하세요

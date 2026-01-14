@@ -12,7 +12,7 @@ export default function Home() {
         <div className={styles.hero}>
           <div className={styles.logo}>
             <Image
-              src="/assets/icons/logo-banana-heart.png"
+              src="/logo.png"
               alt="Banana Wedding"
               width={80}
               height={80}

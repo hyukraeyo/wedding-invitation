@@ -40,28 +40,45 @@ DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName
 const DrawerContent = React.forwardRef<
     React.ElementRef<typeof DrawerPrimitive.Content>,
     React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
->(({ className, children, ...props }, ref) => (
-    <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerPrimitive.Content
-            ref={ref}
-            data-side="bottom"
-            className={cn(
-                `fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto max-h-[85vh] flex-col rounded-t-[32px] border bg-background ${MOTION_CLASSES.sheet}`,
-                className
-            )}
-            {...props}
-        >
+>(({ className, children, onOpenAutoFocus, ...props }, ref) => {
+    const contentRef = React.useRef<React.ElementRef<typeof DrawerPrimitive.Content>>(null)
 
-            <div className="mx-auto mt-4 h-1.5 w-[50px] rounded-full bg-gray-300" />
-            {/* Hidden Description for Accessibility */}
-            <DrawerPrimitive.Description className="sr-only">
-                Drawer content
-            </DrawerPrimitive.Description>
-            {children}
-        </DrawerPrimitive.Content>
-    </DrawerPortal>
-))
+    React.useImperativeHandle(ref, () => contentRef.current as React.ElementRef<typeof DrawerPrimitive.Content>)
+
+    const handleOpenAutoFocus: React.ComponentPropsWithoutRef<
+        typeof DrawerPrimitive.Content
+    >["onOpenAutoFocus"] = (event) => {
+        onOpenAutoFocus?.(event)
+        if (event.defaultPrevented) return
+        event.preventDefault()
+        contentRef.current?.focus()
+    }
+
+    return (
+        <DrawerPortal>
+            <DrawerOverlay />
+            <DrawerPrimitive.Content
+                ref={contentRef}
+                tabIndex={-1}
+                onOpenAutoFocus={handleOpenAutoFocus}
+                data-side="bottom"
+                className={cn(
+                    `fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto max-h-[85vh] flex-col rounded-t-[32px] border bg-background ${MOTION_CLASSES.sheet}`,
+                    className
+                )}
+                {...props}
+            >
+                {/* Hidden Description for Accessibility */}
+                <DrawerPrimitive.Description className="sr-only">
+                    Drawer content
+                </DrawerPrimitive.Description>
+                {children}
+            </DrawerPrimitive.Content>
+        </DrawerPortal>
+    )
+})
+
+
 DrawerContent.displayName = "DrawerContent"
 
 const DrawerHeader = ({
@@ -131,6 +148,14 @@ const DrawerScrollArea = React.forwardRef<
 ))
 DrawerScrollArea.displayName = "DrawerScrollArea"
 
+const DrawerHandle = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+    <div
+        className={cn("mx-auto mt-4 h-1.5 w-12 shrink-0 rounded-full bg-zinc-300", className)}
+        {...props}
+    />
+)
+DrawerHandle.displayName = "DrawerHandle"
+
 export {
     Drawer,
     DrawerPortal,
@@ -143,4 +168,6 @@ export {
     DrawerTitle,
     DrawerDescription,
     DrawerScrollArea,
+    DrawerHandle,
 }
+
