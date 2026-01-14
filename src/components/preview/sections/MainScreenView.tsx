@@ -7,6 +7,8 @@ import { AmpersandSVG, HeartSVG, RingIcon } from '../../common/Icons';
 import styles from './MainScreenView.module.scss';
 import { clsx } from 'clsx';
 import { AspectRatio } from '@/components/ui/AspectRatio';
+import { IMAGE_SIZES } from '@/constants/image';
+import { isBlobUrl } from '@/lib/image';
 
 interface Person {
     lastName: string;
@@ -254,6 +256,7 @@ const MainScreenView = memo(({
                                     src={imageUrl}
                                     alt={`${groom.firstName}와 ${bride.firstName}의 결혼식 메인 사진`}
                                     fill
+                                    sizes={IMAGE_SIZES.section}
                                     className={styles.mainImage}
                                     style={{
                                         transform: mainScreen.expandPhoto ? 'scale(1.1)' : 'scale(1)',
@@ -261,7 +264,7 @@ const MainScreenView = memo(({
                                         objectFit: 'cover',
                                     }}
                                     priority
-                                    unoptimized={imageUrl?.startsWith('blob:')}
+                                    unoptimized={isBlobUrl(imageUrl)}
                                 />
                             </AspectRatio>
                         ) : isFillLayout ? (
@@ -269,6 +272,7 @@ const MainScreenView = memo(({
                                 src={imageUrl}
                                 alt={`${groom.firstName}와 ${bride.firstName}의 결혼식 메인 사진`}
                                 fill
+                                sizes={IMAGE_SIZES.full}
                                 className={styles.mainImage}
                                 style={{
                                     transform: mainScreen.expandPhoto ? 'scale(1.1)' : 'scale(1)',
@@ -276,7 +280,7 @@ const MainScreenView = memo(({
                                     objectFit: 'cover',
                                 }}
                                 priority
-                                unoptimized={imageUrl?.startsWith('blob:')}
+                                unoptimized={isBlobUrl(imageUrl)}
                             />
                         ) : (
                             <Image
@@ -284,6 +288,7 @@ const MainScreenView = memo(({
                                 alt={`${groom.firstName}와 ${bride.firstName}의 결혼식 메인 사진`}
                                 width={800}
                                 height={600}
+                                sizes={IMAGE_SIZES.section}
                                 className={styles.mainImage}
                                 style={{
                                     transform: (mainScreen.expandPhoto && !isFillLayout) ? 'scale(1.1)' : 'scale(1)',
@@ -293,7 +298,7 @@ const MainScreenView = memo(({
                                     objectFit: 'contain',
                                 }}
                                 priority
-                                unoptimized={imageUrl?.startsWith('blob:')}
+                                unoptimized={isBlobUrl(imageUrl)}
                             />
                         )
                     ) : (

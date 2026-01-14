@@ -4,6 +4,8 @@ import * as React from "react"
 import { Drawer as DrawerPrimitive } from "vaul"
 
 import { cn } from "@/lib/utils"
+import { MOTION_CLASSES } from "@/constants/motion"
+
 
 const Drawer = ({
     shouldScaleBackground = true,
@@ -28,7 +30,8 @@ const DrawerOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <DrawerPrimitive.Overlay
         ref={ref}
-        className={cn("fixed inset-0 z-50 bg-black/80", className)}
+        className={cn(`fixed inset-0 z-50 bg-black/80 ${MOTION_CLASSES.overlay}`, className)}
+
         {...props}
     />
 ))
@@ -42,12 +45,14 @@ const DrawerContent = React.forwardRef<
         <DrawerOverlay />
         <DrawerPrimitive.Content
             ref={ref}
+            data-side="bottom"
             className={cn(
-                "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto max-h-[85vh] flex-col rounded-t-[32px] border bg-background",
+                `fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto max-h-[85vh] flex-col rounded-t-[32px] border bg-background ${MOTION_CLASSES.sheet}`,
                 className
             )}
             {...props}
         >
+
             <div className="mx-auto mt-4 h-1.5 w-[50px] rounded-full bg-gray-300" />
             {/* Hidden Description for Accessibility */}
             <DrawerPrimitive.Description className="sr-only">

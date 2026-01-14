@@ -18,6 +18,10 @@ import SectionHeader from '../SectionHeader';
 import styles from './GalleryView.module.scss';
 import { clsx } from 'clsx';
 import { AspectRatio } from '@/components/ui/AspectRatio';
+import { useScrollLock } from '@/hooks/use-scroll-lock';
+import { useFocusTrap } from '@/hooks/useAccessibility';
+import { MOTION_CLASSES } from '@/constants/motion';
+import { IMAGE_SIZES } from '@/constants/image';
 
 interface GalleryItem {
     id: string;
@@ -63,6 +67,12 @@ const GalleryView = memo(({
     const [portalElement, setPortalElement] = useState<HTMLElement | null>(null);
 
     const closeBtnRef = useRef<HTMLButtonElement>(null);
+    const focusTrapRef = useFocusTrap<HTMLDivElement>(popupIndex !== null);
+
+    useScrollLock(popupIndex !== null, {
+        containerSelector: '#invitation-modal-root',
+        usePreviousSibling: true,
+    });
 
     // Normalize gallery data (handling potential legacy string arrays)
     const gallery = useMemo(() => {
@@ -90,48 +100,19 @@ const GalleryView = memo(({
         return () => clearTimeout(timer);
     }, []);
 
-    // Scroll Lock & Autoplay Control
+    // Autoplay Control
     useEffect(() => {
         if (popupIndex !== null) {
             if (mainSwiper && !mainSwiper.destroyed) {
                 mainSwiper.autoplay?.stop();
             }
 
-            const scrollY = window.scrollY;
-            document.body.setAttribute('data-scroll-y', scrollY.toString());
-            document.body.style.cssText = `
-                position: fixed; 
-                top: -${scrollY}px;
-                left: 0;
-                width: 100%;
-                overflow: hidden;
-            `;
-            document.documentElement.style.overflow = 'hidden';
-
-            const mockupContainer = document.getElementById('invitation-modal-root')?.previousElementSibling as HTMLElement;
-            if (mockupContainer) {
-                mockupContainer.style.overflowY = 'hidden';
-            }
-
             setTimeout(() => closeBtnRef.current?.focus(), 100);
-        } else {
-            if (mainSwiper && !mainSwiper.destroyed && galleryAutoplay) {
-                mainSwiper.autoplay?.start();
-            }
+            return;
+        }
 
-            const scrollY = document.body.getAttribute('data-scroll-y');
-            document.body.style.cssText = '';
-            document.documentElement.style.overflow = '';
-            document.body.removeAttribute('data-scroll-y');
-
-            if (scrollY) {
-                window.scrollTo(0, parseInt(scrollY || '0'));
-            }
-
-            const mockupContainer = document.getElementById('invitation-modal-root')?.previousElementSibling as HTMLElement;
-            if (mockupContainer) {
-                mockupContainer.style.overflowY = 'auto';
-            }
+        if (mainSwiper && !mainSwiper.destroyed && galleryAutoplay) {
+            mainSwiper.autoplay?.start();
         }
     }, [popupIndex, mainSwiper, galleryAutoplay]);
 
@@ -171,7 +152,7 @@ const GalleryView = memo(({
                                             className={clsx(styles.imageSlide, galleryPopup && styles.cursorPointer)}
                                             onClick={() => handleImageClick(index)}
                                         >
-                                            <Image src={img.url} alt="" fill sizes="(max-width: 768px) 100vw, 50vw" />
+                                            <Image src={img.url} alt="" fill sizes={IMAGE_SIZES.gallery} />
                                         </div>
                                     </SwiperSlide>
                                 ))}
@@ -198,7 +179,7 @@ const GalleryView = memo(({
                             {gallery.map((img, index) => (
                                 <SwiperSlide key={img.id} onClick={() => handleImageClick(index)}>
                                     <div className={clsx(styles.imageSlide, galleryPopup && styles.cursorPointer)}>
-                                        <Image src={img.url} alt="" fill sizes="(max-width: 768px) 100vw, 50vw" />
+                                        <Image src={img.url} alt="" fill sizes={IMAGE_SIZES.gallery} />
                                     </div>
                                 </SwiperSlide>
                             ))}
@@ -221,7 +202,7 @@ const GalleryView = memo(({
                                         )}
                                         style={index === currentIndex ? { '--tw-ring-color': accentColor } as React.CSSProperties : {}}
                                     >
-                                        <Image src={img.url} alt="" fill sizes="100px" />
+                                        <Image src={img.url} alt="" fill sizes={IMAGE_SIZES.galleryThumb} />
                                     </div>
                                 </SwiperSlide>
                             ))}
@@ -242,7 +223,7 @@ const GalleryView = memo(({
                                 onClick={() => handleImageClick(i)}
                             >
                                 <AspectRatio ratio={1 / 1}>
-                                    <Image src={img.url} alt="" fill sizes="(max-width: 640px) 50vw, 25vw" className="object-cover" />
+                                    <Image src={img.url} alt="" fill sizes={IMAGE_SIZES.galleryGrid} className="object-cover" />
                                 </AspectRatio>
                             </div>
                         ))}
@@ -264,7 +245,8 @@ const GalleryView = memo(({
             {/* Lightbox Modal */}
             {popupIndex !== null && portalElement && createPortal(
                 <div
-                    className={clsx(styles.modalBackdrop)}
+                    className={clsx(styles.modalBackdrop, MOTION_CLASSES.overlay)}
+                    ref={focusTrapRef}
                     onClick={(e) => {
                         if (e.target === e.currentTarget) setPopupIndex(null);
                     }}
@@ -285,7 +267,7 @@ const GalleryView = memo(({
                         </button>
                     </div>
 
-                    <div className={styles.modalSwiperContainer}>
+                    <div className={clsx(styles.modalSwiperContainer, MOTION_CLASSES.dialog)}>
                         <Swiper
                             initialSlide={popupIndex}
                             modules={[EffectFade]}
@@ -311,7 +293,7 @@ const GalleryView = memo(({
                                             src={img.url}
                                             alt=""
                                             fill
-                                            sizes="100vw"
+                                            sizes={IMAGE_SIZES.full}
                                             priority={img.id === gallery[popupIndex ?? 0]?.id}
                                         />
                                     </div>

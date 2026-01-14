@@ -2,9 +2,11 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { useInvitationStore } from '@/store/useInvitationStore';
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 import styles from './ScrollReveal.module.scss';
 import { clsx } from 'clsx';
+
 
 interface ScrollRevealProps {
     children: React.ReactNode;
@@ -14,11 +16,13 @@ interface ScrollRevealProps {
 
 export default function ScrollReveal({ children, className = "", id }: ScrollRevealProps) {
     const animateEntrance = useInvitationStore(state => state.theme.animateEntrance);
-    const [isVisible, setIsVisible] = useState(!animateEntrance);
+    const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
+    const shouldAnimate = animateEntrance && !prefersReducedMotion;
+    const [isVisible, setIsVisible] = useState(!shouldAnimate);
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (!animateEntrance) {
+        if (!shouldAnimate) {
             return;
         }
 
@@ -40,12 +44,13 @@ export default function ScrollReveal({ children, className = "", id }: ScrollRev
         }
 
         return () => observer.disconnect();
-    }, [animateEntrance]);
+    }, [shouldAnimate]);
 
     // If animation is disabled
-    if (!animateEntrance) {
+    if (!shouldAnimate) {
         return <div id={id} className={className}>{children}</div>;
     }
+
 
     return (
         <div

@@ -49,6 +49,13 @@
   /* Custom Transitions (App-like feel) */
   --ease-ios: cubic-bezier(0.16, 1, 0.3, 1);     /* Smooth deceleration */
   --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1); /* Subtle bounce */
+  --motion-duration-fast: 160ms;
+  --motion-duration-base: 260ms;
+  --motion-duration-slow: 420ms;
+  --motion-distance: 24px;
+  --motion-scale: 0.98;
+  --motion-overlay-blur: 16px;
+
 
   /* Builder Typography */
   --builder-font-size: 16px;
@@ -129,10 +136,71 @@ button {
   }
 }
 
+.motion-overlay {
+  backdrop-filter: blur(var(--motion-overlay-blur));
+  animation: motion-overlay-in var(--motion-duration-base) var(--ease-ios) both;
+
+  &[data-state="closed"] {
+    animation: motion-overlay-out var(--motion-duration-fast) var(--ease-ios) both;
+  }
+}
+
+.motion-sheet {
+  will-change: transform, opacity;
+  animation: motion-sheet-in-bottom var(--motion-duration-slow) var(--ease-ios) both;
+
+  &[data-state="closed"] {
+    animation: motion-sheet-out-bottom var(--motion-duration-fast) var(--ease-ios) both;
+  }
+
+  &[data-side="right"] {
+    animation: motion-sheet-in-right var(--motion-duration-slow) var(--ease-ios) both;
+  }
+
+  &[data-side="right"][data-state="closed"] {
+    animation: motion-sheet-out-right var(--motion-duration-fast) var(--ease-ios) both;
+  }
+
+  &[data-side="left"] {
+    animation: motion-sheet-in-left var(--motion-duration-slow) var(--ease-ios) both;
+  }
+
+  &[data-side="left"][data-state="closed"] {
+    animation: motion-sheet-out-left var(--motion-duration-fast) var(--ease-ios) both;
+  }
+
+  &[data-side="top"] {
+    animation: motion-sheet-in-top var(--motion-duration-slow) var(--ease-ios) both;
+  }
+
+  &[data-side="top"][data-state="closed"] {
+    animation: motion-sheet-out-top var(--motion-duration-fast) var(--ease-ios) both;
+  }
+}
+
+.motion-dialog {
+  will-change: transform, opacity;
+  animation: motion-dialog-in var(--motion-duration-base) var(--ease-ios) both;
+
+  &[data-state="closed"] {
+    animation: motion-dialog-out var(--motion-duration-fast) var(--ease-ios) both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-overlay,
+  .motion-sheet,
+  .motion-dialog {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
 /* Sheet Snappy Slide */
 .fixed.inset-x-0.bottom-0 {
   transition-timing-function: var(--ease-ios);
 }
+
 
 
 /* Premium Transitions */

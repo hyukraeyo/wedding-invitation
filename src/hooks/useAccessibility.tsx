@@ -18,8 +18,8 @@ export function SkipLink({ href, children }: SkipLinkProps) {
   );
 }
 
-export function useFocusTrap(isActive: boolean) {
-  const containerRef = useRef<HTMLElement>(null);
+export function useFocusTrap<T extends HTMLElement>(isActive: boolean) {
+  const containerRef = useRef<T>(null);
 
   useEffect(() => {
     if (!isActive || !containerRef.current) {

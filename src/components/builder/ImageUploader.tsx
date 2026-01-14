@@ -8,6 +8,8 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/Button';
 import { AspectRatio } from '@/components/ui/AspectRatio';
+import { isBlobUrl } from '@/lib/image';
+import { IMAGE_SIZES } from '@/constants/image';
 
 interface ImageUploaderProps {
     value: string | null;
@@ -93,6 +95,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
 
     // Use previewUrl for display if available (covers both existing value and optimistic update)
     const displayUrl = previewUrl || value;
+    const shouldUnoptimize = isBlobUrl(displayUrl);
     const isAutoRatio = props.ratio === 'auto';
 
     // Calculate aspect ratio class or style
@@ -127,7 +130,8 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                                             "object-cover transition-opacity duration-300",
                                             isUploading && "opacity-50"
                                         )}
-                                        unoptimized={displayUrl.startsWith('blob:')}
+                                        sizes={IMAGE_SIZES.builder}
+                                        unoptimized={shouldUnoptimize}
                                     />
                                 </AspectRatio>
                             ) : (
@@ -140,7 +144,8 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                                         "object-cover transition-opacity duration-300 w-full h-auto",
                                         isUploading && "opacity-50"
                                     )}
-                                    unoptimized={displayUrl.startsWith('blob:')}
+                                    sizes={IMAGE_SIZES.builder}
+                                    unoptimized={shouldUnoptimize}
                                 />
                             )}
                             {isUploading && (

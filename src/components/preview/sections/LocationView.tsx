@@ -13,6 +13,8 @@ import { clsx } from 'clsx';
 import { AspectRatio } from '@/components/ui/AspectRatio';
 import { Skeleton } from '@/components/ui/Skeleton';
 import styles from './LocationView.module.scss';
+import { IMAGE_SIZES } from '@/constants/image';
+import { isBlobUrl } from '@/lib/image';
 
 interface LocationViewProps {
     id?: string | undefined;
@@ -209,11 +211,12 @@ const LocationView = memo(({
                                 src={sketchUrl}
                                 alt="약도"
                                 fill
+                                sizes={IMAGE_SIZES.section}
                                 className={styles.sketchImage}
                                 style={{
                                     objectFit: 'cover'
                                 }}
-                                unoptimized={sketchUrl?.startsWith('blob:')}
+                                unoptimized={isBlobUrl(sketchUrl)}
                             />
                         </AspectRatio>
                     ) : (
@@ -222,13 +225,14 @@ const LocationView = memo(({
                             alt="약도"
                             width={800}
                             height={600}
+                            sizes={IMAGE_SIZES.section}
                             className={styles.sketchImage}
                             style={{
                                 width: '100%',
                                 height: 'auto',
                                 objectFit: 'contain'
                             }}
-                            unoptimized={sketchUrl?.startsWith('blob:')}
+                            unoptimized={isBlobUrl(sketchUrl)}
                         />
                     )}
                 </div>

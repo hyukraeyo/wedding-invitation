@@ -7,6 +7,8 @@ import SectionHeader from '../SectionHeader';
 import { clsx } from 'clsx';
 import styles from './GreetingView.module.scss';
 import { AspectRatio } from '@/components/ui/AspectRatio';
+import { IMAGE_SIZES } from '@/constants/image';
+import { isBlobUrl } from '@/lib/image';
 
 interface Person {
     lastName: string;
@@ -104,11 +106,12 @@ const GreetingView = memo(({
                                     src={greetingImage}
                                     alt="인사말 이미지"
                                     fill
+                                    sizes={IMAGE_SIZES.section}
                                     className={styles.image}
                                     style={{
                                         objectFit: 'cover'
                                     }}
-                                    unoptimized
+                                    unoptimized={isBlobUrl(greetingImage)}
                                 />
                             </AspectRatio>
                         ) : (
@@ -117,13 +120,14 @@ const GreetingView = memo(({
                                 alt="인사말 이미지"
                                 width={800}
                                 height={550}
+                                sizes={IMAGE_SIZES.section}
                                 className={styles.image}
                                 style={{
                                     width: '100%',
                                     height: 'auto',
                                     objectFit: 'contain'
                                 }}
-                                unoptimized
+                                unoptimized={isBlobUrl(greetingImage)}
                             />
                         )}
                     </div>

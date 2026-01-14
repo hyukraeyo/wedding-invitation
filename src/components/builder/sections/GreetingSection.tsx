@@ -10,7 +10,7 @@ import { SegmentedControl } from '../SegmentedControl';
 import { ExampleSelectorModal } from '@/components/builder/ExampleSelectorModal';
 import { HeaderAction } from '../HeaderAction';
 import { ImageUploader } from '../ImageUploader';
-import styles from './GreetingSection.module.scss'; // eslint-disable-line
+import styles from './GreetingSection.module.scss';
 
 const RichTextEditor = dynamic(() => import('@/components/common/RichTextEditor'), { ssr: false });
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useSyncExternalStore } from 'react';
+import React, { useState, useCallback, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { X } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
@@ -8,6 +8,11 @@ import styles from './LoginModal.module.scss';
 import { TextField } from '../builder/TextField';
 import { createPortal } from 'react-dom';
 import { useToast } from '@/hooks/use-toast';
+import { useScrollLock } from '@/hooks/use-scroll-lock';
+import { useFocusTrap } from '@/hooks/useAccessibility';
+import { clsx } from 'clsx';
+import { MOTION_CLASSES } from '@/constants/motion';
+
 
 interface LoginModalProps {
     isOpen: boolean;
@@ -34,10 +39,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
     // useSyncExternalStore for SSR-safe mounting check (no lint warnings)
     const isMounted = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
-    useEffect(() => {
-        document.body.style.overflow = isOpen ? 'hidden' : 'unset';
-        return () => { document.body.style.overflow = 'unset'; };
-    }, [isOpen]);
+    const focusTrapRef = useFocusTrap<HTMLDivElement>(isOpen);
+
+    useScrollLock(isOpen);
+
 
     const handleOAuthLogin = useCallback(async (provider: 'kakao' | 'naver') => {
         setLoading(true);
@@ -88,13 +93,15 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
     return createPortal(
         <div
-            className={styles.overlay}
+            className={clsx(styles.overlay, MOTION_CLASSES.overlay)}
+
             role="dialog"
             aria-modal="true"
             aria-labelledby="login-title"
             onClick={(e) => e.target === e.currentTarget && onClose()}
         >
-            <div className={styles.modal}>
+            <div className={clsx(styles.modal, MOTION_CLASSES.dialog)} ref={focusTrapRef}>
+
                 <button onClick={onClose} className={styles.closeButton} aria-label="닫기">
                     <X size={20} />
                 </button>

@@ -64,3 +64,65 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+/* Motion Tokens */
+@keyframes motion-overlay-in {
+  from { opacity: 0; backdrop-filter: blur(0px); }
+  to { opacity: 1; backdrop-filter: blur(var(--motion-overlay-blur)); }
+}
+
+@keyframes motion-overlay-out {
+  from { opacity: 1; backdrop-filter: blur(var(--motion-overlay-blur)); }
+  to { opacity: 0; backdrop-filter: blur(0px); }
+}
+
+@keyframes motion-sheet-in-bottom {
+  from { opacity: 0; transform: translate3d(0, var(--motion-distance), 0) scale(var(--motion-scale)); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes motion-sheet-out-bottom {
+  from { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+  to { opacity: 0; transform: translate3d(0, var(--motion-distance), 0) scale(var(--motion-scale)); }
+}
+
+@keyframes motion-sheet-in-right {
+  from { opacity: 0; transform: translate3d(var(--motion-distance), 0, 0) scale(var(--motion-scale)); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes motion-sheet-out-right {
+  from { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+  to { opacity: 0; transform: translate3d(var(--motion-distance), 0, 0) scale(var(--motion-scale)); }
+}
+
+@keyframes motion-sheet-in-left {
+  from { opacity: 0; transform: translate3d(calc(-1 * var(--motion-distance)), 0, 0) scale(var(--motion-scale)); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes motion-sheet-out-left {
+  from { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+  to { opacity: 0; transform: translate3d(calc(-1 * var(--motion-distance)), 0, 0) scale(var(--motion-scale)); }
+}
+
+@keyframes motion-sheet-in-top {
+  from { opacity: 0; transform: translate3d(0, calc(-1 * var(--motion-distance)), 0) scale(var(--motion-scale)); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes motion-sheet-out-top {
+  from { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+  to { opacity: 0; transform: translate3d(0, calc(-1 * var(--motion-distance)), 0) scale(var(--motion-scale)); }
+}
+
+@keyframes motion-dialog-in {
+  from { opacity: 0; transform: translate3d(0, var(--motion-distance), 0) scale(var(--motion-scale)); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes motion-dialog-out {
+  from { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+  to { opacity: 0; transform: translate3d(0, var(--motion-distance), 0) scale(var(--motion-scale)); }
+}
+

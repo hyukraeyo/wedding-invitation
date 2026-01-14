@@ -10,6 +10,8 @@ import SectionContainer from '../SectionContainer';
 import { AspectRatio } from '@/components/ui/AspectRatio';
 import SectionHeader from '../SectionHeader';
 import styles from './ClosingView.module.scss';
+import { IMAGE_SIZES } from '@/constants/image';
+import { isBlobUrl } from '@/lib/image';
 
 interface ClosingViewProps {
     id?: string | undefined;
@@ -120,11 +122,12 @@ const ClosingView = memo(({
                                         src={imageUrl}
                                         alt="Ending Illustration"
                                         fill
+                                        sizes={IMAGE_SIZES.section}
                                         className={styles.endingImage}
                                         style={{
                                             objectFit: 'cover'
                                         }}
-                                        unoptimized={imageUrl?.startsWith('blob:')}
+                                        unoptimized={isBlobUrl(imageUrl)}
                                     />
                                     {/* Effects Overlay */}
                                     {effect === 'mist' && <div className={clsx(styles.effectLayer, styles.mist)}></div>}
@@ -138,13 +141,14 @@ const ClosingView = memo(({
                                         alt="Ending Illustration"
                                         width={800}
                                         height={600}
+                                        sizes={IMAGE_SIZES.section}
                                         className={styles.endingImage}
                                         style={{
                                             width: '100%',
                                             height: 'auto',
                                             objectFit: 'contain'
                                         }}
-                                        unoptimized={imageUrl?.startsWith('blob:')}
+                                        unoptimized={isBlobUrl(imageUrl)}
                                     />
                                     {/* Effects Overlay */}
                                     {effect === 'mist' && <div className={clsx(styles.effectLayer, styles.mist)}></div>}

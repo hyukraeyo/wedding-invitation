@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import styles from "./Home.module.scss";
 
@@ -9,9 +10,15 @@ export default function Home() {
 
         {/* Typographic Hero */}
         <div className={styles.hero}>
-          <p className={styles.subtitle}>
-            Banana Wedding
-          </p>
+          <div className={styles.logo}>
+            <Image
+              src="/assets/icons/logo-banana-heart.png"
+              alt="Banana Wedding"
+              width={80}
+              height={80}
+              priority
+            />
+          </div>
           <h1 className={styles.title}>
             달콤한 시작,<br />바나나웨딩
           </h1>

@@ -5,12 +5,12 @@ import { InfoMessage } from '@/components/builder/InfoMessage';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useToast } from '@/hooks/use-toast';
 import { Field } from '../FormPrimitives';
-import { Label } from '../FormPrimitives';
 import { SegmentedControl } from '../SegmentedControl';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { SwitchField } from '../SwitchField';
 import { cn } from '@/lib/utils';
+import { isBlobUrl } from '@/lib/image';
 
 import {
     DndContext,
@@ -61,7 +61,7 @@ const SortableItem = React.memo(function SortableItem({ id, url, onRemove, isDra
         touchAction: 'none',
     };
 
-    const isUploading = url.startsWith('blob:');
+    const isUploading = isBlobUrl(url);
 
     return (
         <div
