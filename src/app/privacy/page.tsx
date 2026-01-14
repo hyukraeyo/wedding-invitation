@@ -19,7 +19,7 @@ export default function PrivacyPage() {
             <p>서비스는 원활한 서비스 제공을 위해 아래와 같은 개인정보를 수집하고 있습니다.</p>
             <div className="bg-gray-50 p-4 rounded-lg my-4 border border-gray-200 text-gray-900">
                 <ul className="list-disc pl-5 space-y-2">
-                    <li><strong>필수 수집 항목:</strong> 소셜 계정 고유 식별값(네이버/카카오 ID), 이름, 휴대폰 번호</li>
+                    <li><strong>필수 수집 항목:</strong> 소셜 계정 고유 식별값(네이버/카카오 ID), 이름, 이메일, 별명(닉네임), 프로필 사진, 성별, 생일, 출생연도, 휴대전화 번호</li>
                     <li><strong>수집 방법:</strong> 소셜 로그인 연동 및 회원 가입 시 이용자의 직접 입력</li>
                 </ul>
             </div>
