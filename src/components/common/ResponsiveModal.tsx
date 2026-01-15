@@ -43,6 +43,7 @@ export interface ResponsiveModalProps {
     confirmVariant?: 'default' | 'destructive' | undefined;
     confirmDisabled?: boolean | undefined;
     confirmLoading?: boolean | undefined;
+    dismissible?: boolean;
 }
 
 export const ResponsiveModal = ({
@@ -62,16 +63,19 @@ export const ResponsiveModal = ({
     confirmVariant = 'default',
     confirmDisabled = false,
     confirmLoading = false,
+    dismissible = true,
 }: ResponsiveModalProps) => {
     const isDesktop = useMediaQuery("(min-width: 768px)");
     const hasActions = onConfirm || footer;
 
     const internalOnOpenChange = (newOpen: boolean) => {
+        if (!dismissible && !newOpen) return;
         onOpenChange?.(newOpen);
     };
 
     const handleCancel = () => {
         onCancel?.();
+        // Force close even if not dismissible when clicking cancel explicitly
         onOpenChange?.(false);
     };
 
@@ -106,7 +110,11 @@ export const ResponsiveModal = ({
         return (
             <Dialog open={open} onOpenChange={internalOnOpenChange}>
                 {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
-                <DialogContent className={cn("max-w-md max-h-[85vh] flex flex-col p-0 overflow-hidden", className)}>
+                <DialogContent
+                    className={cn("max-w-md max-h-[85vh] flex flex-col p-0 overflow-hidden", className)}
+                    onInteractOutside={(e) => !dismissible && e.preventDefault()}
+                    onEscapeKeyDown={(e) => !dismissible && e.preventDefault()}
+                >
                     <div className="p-6 pb-0">
                         <DialogHeader>
                             <DialogTitle>{title || "알림"}</DialogTitle>
@@ -129,7 +137,11 @@ export const ResponsiveModal = ({
     }
 
     return (
-        <Drawer open={open} onOpenChange={internalOnOpenChange}>
+        <Drawer
+            open={open}
+            onOpenChange={internalOnOpenChange}
+            dismissible={dismissible}
+        >
             {trigger && <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
             <DrawerContent>
                 <div className="mx-auto w-full max-w-sm flex flex-col max-h-[90vh]">

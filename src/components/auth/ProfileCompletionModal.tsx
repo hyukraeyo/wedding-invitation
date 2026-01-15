@@ -89,6 +89,7 @@ export default function ProfileCompletionModal({
         <ResponsiveModal
             open={isOpen}
             onOpenChange={() => { }} // 필수 입력이므로 닫기 비활성화
+            dismissible={false}
             title="프로필 완성"
             description="청첩장 서비스 이용을 위해 이름과 연락처를 입력해주세요."
             footer={modalFooter}

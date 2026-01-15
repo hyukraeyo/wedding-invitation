@@ -73,7 +73,6 @@ export const authConfig = {
                     name: profileData.nickname ?? null,
                     email: account.email ?? null,
                     image: profileData.profile_image_url ?? null,
-                    phone: null, // Explicitly null to prevent overwrite issues, handled in signIn callback
                 };
             },
         }),
