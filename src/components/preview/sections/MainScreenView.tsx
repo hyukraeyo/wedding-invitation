@@ -6,7 +6,7 @@ import { Heart } from 'lucide-react';
 import { AmpersandSVG, HeartSVG, RingIcon } from '../../common/Icons';
 import styles from './MainScreenView.module.scss';
 import { clsx } from 'clsx';
-import { AspectRatio } from '@/components/ui/AspectRatio';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { IMAGE_SIZES } from '@/constants/image';
 import { isBlobUrl } from '@/lib/image';
 

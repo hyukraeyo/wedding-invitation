@@ -1,6 +1,6 @@
 import React from 'react';
 import { Info, AlertCircle } from 'lucide-react';
-import { Label as ShadcnLabel } from '@/components/ui/Label';
+import { Label as ShadcnLabel } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
 // --- Label ---

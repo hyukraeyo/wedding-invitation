@@ -3,6 +3,8 @@
 import React, { useState, useCallback, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import { X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { IconButton } from '@/components/ui/icon-button';
 import { supabase } from '@/lib/supabase';
 import styles from './LoginModal.module.scss';
 import { TextField } from '../builder/TextField';
@@ -105,9 +107,14 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
             onClick={(e) => e.target === e.currentTarget && onClose()}
         >
             <div className={clsx(styles.modal, MOTION_CLASSES.dialog)} ref={focusTrapRef}>
-                <button onClick={onClose} className={styles.closeButton} aria-label="닫기">
-                    <X size={20} />
-                </button>
+                <IconButton
+                    onClick={onClose}
+                    className={styles.closeButton}
+                    aria-label="닫기"
+                    icon={X}
+                    variant="ghost"
+                    size="md"
+                />
 
                 <div className={styles.header}>
                     <h2 id="login-title" className={styles.title}>시작하기</h2>
@@ -135,9 +142,13 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                         autoComplete="current-password"
                         required
                     />
-                    <button type="submit" disabled={loading} className={styles.submitButton}>
-                        {loading ? '처리 중...' : '로그인'}
-                    </button>
+                    <Button
+                        type="submit"
+                        loading={loading}
+                        className="w-full h-12 text-lg font-bold"
+                    >
+                        로그인
+                    </Button>
                 </form>
 
                 <div className={styles.divider}>
@@ -159,17 +170,17 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                     </button>
                     */}
 
-                    <button
+                    <Button
                         className={`${styles.socialButton} ${styles.naver}`}
                         onClick={() => handleOAuthLogin('naver')}
-                        disabled={loading}
+                        loading={loading}
                         type="button"
                     >
                         <svg viewBox="0 0 24 24" className={styles.icon} fill="currentColor">
                             <path d="M16.273 12.845L7.376 0H0v24h7.726V11.156L16.624 24H24V0h-7.727v12.845z" />
                         </svg>
                         <span>네이버로 시작하기</span>
-                    </button>
+                    </Button>
                 </div>
 
                 <div className={styles.footer}>

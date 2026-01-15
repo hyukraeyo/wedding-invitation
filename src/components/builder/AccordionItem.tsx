@@ -5,7 +5,7 @@ import {
     AccordionItem as AccordionItemRoot,
     AccordionTrigger,
     AccordionContent,
-} from "@/components/ui/Accordion";
+} from "@/components/ui/accordion";
 import { getScrollParent, smoothScrollTo } from '@/utils/smoothScroll';
 
 interface AccordionItemProps {

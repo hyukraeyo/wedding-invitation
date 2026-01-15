@@ -7,7 +7,7 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { useKakaoLoader } from 'react-kakao-maps-sdk';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
-import { SegmentedControl } from '../SegmentedControl';
+import { SegmentedControl } from '../segmented-control';
 import { SwitchField } from '../SwitchField';
 import { PhoneField } from '../PhoneField';
 import { Field } from '../FormPrimitives';

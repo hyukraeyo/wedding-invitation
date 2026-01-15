@@ -4,7 +4,7 @@ import { MessageCircle, Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
-import { SegmentedControl } from '../SegmentedControl';
+import { SegmentedControl } from '../segmented-control';
 import { Field, HelpText } from '../FormPrimitives';
 import { ImageUploader } from '../ImageUploader';
 import { HeaderAction } from '../HeaderAction';

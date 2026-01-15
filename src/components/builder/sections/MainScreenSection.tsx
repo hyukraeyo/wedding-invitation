@@ -10,7 +10,7 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { SwitchField } from '../SwitchField';
-import { SegmentedControl } from '../SegmentedControl';
+import { SegmentedControl } from '../segmented-control';
 import { HeaderAction } from '../HeaderAction';
 import { ExampleSelectorModal } from '../ExampleSelectorModal';
 import { Field } from '../FormPrimitives';

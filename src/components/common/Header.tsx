@@ -7,8 +7,8 @@ import { Plus, Loader2, User, LogIn, Save, LogOut } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useRouter, usePathname } from 'next/navigation';
-import { Button } from '@/components/ui/Button';
-import { IconButton } from '@/components/ui/IconButton';
+import { Button } from '@/components/ui/button';
+import { IconButton } from '@/components/ui/icon-button';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 
 interface HeaderProps {
@@ -133,14 +133,13 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
 
                 {onSave && user && (
                     <IconButton
-                        icon={isLoading ? Loader2 : Save}
+                        icon={Save}
                         onClick={onSave}
-                        disabled={isLoading}
+                        loading={isLoading}
                         size="md"
-                        variant="default" // Keep Save button distinct? Or ghost? User said "same icon button". But Save usually has emphasis. I'll keep default/primary style for Save if distinct, or ghost if strictly uniform. Save was 'default' style on mobile before. I will keep it 'default' (solid color) or 'ghost' for clean look? 
-                        // Previous desktop Save was "Button" (solid/default likely). Mobile Save was "IconButton" variant="default".
-                        // So I will keep variant="default" for Save to highlight it.
-                        className={isLoading ? "animate-spin" : "ml-1"}
+                        variant="default"
+                        className="ml-1"
+                        aria-label="저장하기"
                     />
                 )}
             </div>

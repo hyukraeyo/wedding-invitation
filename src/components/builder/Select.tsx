@@ -5,8 +5,8 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/Select"
-import { Label } from '@/components/ui/Label';
+} from "@/components/ui/select"
+import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import {
@@ -16,7 +16,7 @@ import {
     DrawerTitle,
     DrawerScrollArea,
     DrawerTrigger,
-} from '@/components/ui/Drawer';
+} from '@/components/ui/drawer';
 import { ChevronDown, Check } from 'lucide-react';
 
 interface Option<T> {

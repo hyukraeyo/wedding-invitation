@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { CreditCard, Plus, Trash2, ChevronDown } from 'lucide-react';
-import { IconButton } from '@/components/ui/IconButton';
+import { IconButton } from '@/components/ui/icon-button';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
-import { SegmentedControl } from '../SegmentedControl';
+import { SegmentedControl } from '../segmented-control';
 import { Field } from '../FormPrimitives';
 import {
     Select,
@@ -12,7 +12,7 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/Select";
+} from "@/components/ui/select";
 import styles from './AccountsSection.module.scss';
 import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';

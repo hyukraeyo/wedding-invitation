@@ -3,11 +3,11 @@ import Image from 'next/image';
 import { Trash2, UploadCloud, Loader2 } from 'lucide-react';
 import { Label } from './FormPrimitives';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { SegmentedControl } from './SegmentedControl';
+import { SegmentedControl } from './segmented-control';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import { IconButton } from '@/components/ui/IconButton';
-import { AspectRatio } from '@/components/ui/AspectRatio';
+import { IconButton } from '@/components/ui/icon-button';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { isBlobUrl } from '@/lib/image';
 import { IMAGE_SIZES } from '@/constants/image';
 

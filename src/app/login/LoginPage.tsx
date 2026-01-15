@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
 import { supabase } from '@/lib/supabase';
 import styles from '@/components/auth/LoginModal.module.scss';
 import { TextField } from '@/components/builder/TextField';
@@ -141,13 +142,13 @@ export default function LoginPage() {
                         autoComplete="current-password"
                         required
                     />
-                    <button
+                    <Button
                         type="submit"
-                        disabled={loading}
-                        className={styles.submitButton}
+                        loading={loading}
+                        className="w-full h-12 text-lg font-bold"
                     >
-                        {loading ? '처리 중...' : '로그인'}
-                    </button>
+                        로그인
+                    </Button>
                 </form>
 
                 <div className={styles.divider}>
@@ -172,17 +173,17 @@ export default function LoginPage() {
                     </button>
                     */}
 
-                    <button
+                    <Button
                         className={`${styles.socialButton} ${styles.naver}`}
                         onClick={handleNaverLogin}
-                        disabled={loading}
+                        loading={loading}
                         type="button"
                     >
                         <svg viewBox="0 0 24 24" className={styles.icon} fill="currentColor">
                             <path d="M16.273 12.845L7.376 0H0v24h7.726V11.156L16.624 24H24V0h-7.727v12.845z" />
                         </svg>
                         <span>네이버로 시작하기</span>
-                    </button>
+                    </Button>
                 </div>
 
                 {/* Footer */}

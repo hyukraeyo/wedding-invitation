@@ -5,7 +5,7 @@ import { InfoMessage } from '@/components/builder/InfoMessage';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useToast } from '@/hooks/use-toast';
 import { Field } from '../FormPrimitives';
-import { SegmentedControl } from '../SegmentedControl';
+import { SegmentedControl } from '../segmented-control';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { SwitchField } from '../SwitchField';
@@ -31,7 +31,7 @@ import {
     rectSortingStrategy,
     useSortable
 } from '@dnd-kit/sortable';
-import { IconButton } from '@/components/ui/IconButton';
+import { IconButton } from '@/components/ui/icon-button';
 import { CSS } from '@dnd-kit/utilities';
 import styles from './GallerySection.module.scss';
 

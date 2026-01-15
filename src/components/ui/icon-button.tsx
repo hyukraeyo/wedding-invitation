@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Button, ButtonProps } from "@/components/ui/Button"
+import { Button, ButtonProps } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { LucideIcon } from "lucide-react"
 
@@ -42,6 +42,8 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
             xl: "h-8 w-8",
         }
 
+        const { loading, ...rest } = props;
+
         return (
             <Button
                 variant={variant}
@@ -51,9 +53,10 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
                     className
                 )}
                 ref={ref}
-                {...props}
+                loading={loading}
+                {...rest}
             >
-                {Icon && <Icon className={cn(iconSizeMap[size as keyof typeof iconSizeMap])} />}
+                {!loading && Icon && <Icon className={cn(iconSizeMap[size as keyof typeof iconSizeMap])} />}
                 {children}
             </Button>
         )

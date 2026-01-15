@@ -17,7 +17,7 @@ import SectionContainer from '../SectionContainer';
 import SectionHeader from '../SectionHeader';
 import styles from './GalleryView.module.scss';
 import { clsx } from 'clsx';
-import { AspectRatio } from '@/components/ui/AspectRatio';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { useScrollLock } from '@/hooks/use-scroll-lock';
 import { useFocusTrap } from '@/hooks/useAccessibility';
 import { MOTION_CLASSES } from '@/constants/motion';

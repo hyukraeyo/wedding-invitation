@@ -10,7 +10,7 @@ import {
     DialogDescription,
     DialogTrigger,
     DialogFooter,
-} from "@/components/ui/Dialog"
+} from "@/components/ui/dialog"
 import {
     Drawer,
     DrawerContent,
@@ -20,8 +20,8 @@ import {
     DrawerTrigger,
     DrawerScrollArea,
     DrawerFooter,
-} from "@/components/ui/Drawer"
-import { Button } from "@/components/ui/Button";
+} from "@/components/ui/drawer"
+import { Button } from "@/components/ui/button";
 import { cn } from '@/lib/utils';
 
 export interface ResponsiveModalProps {

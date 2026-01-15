@@ -8,20 +8,20 @@ import { approvalRequestService, ApprovalRequestRecord } from '@/services/approv
 import { Profile } from '@/services/profileService';
 import { useInvitationStore, InvitationData } from '@/store/useInvitationStore';
 import Header from '@/components/common/Header';
-import { IconButton } from '@/components/ui/IconButton';
+import { IconButton } from '@/components/ui/icon-button';
 import { useToast } from '@/hooks/use-toast';
 import { Calendar, MapPin, ExternalLink, Edit2, Trash2, Loader2, FileText, MoreHorizontal, CheckCircle2, Send, PhoneCall, User, XCircle } from 'lucide-react';
 import Image from 'next/image';
-import { AspectRatio } from '@/components/ui/AspectRatio';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from '@/components/ui/DropdownMenu';
+} from '@/components/ui/dropdown-menu';
 import ProfileCompletionModal from '@/components/auth/ProfileCompletionModal';
-import { Button } from '@/components/ui/Button';
+import { Button } from '@/components/ui/button';
 import styles from './MyPage.module.scss';
 import { clsx } from 'clsx';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
@@ -132,10 +132,10 @@ export default function MyPageClient({
         }
     }, [fetchInvitations, isAdmin, toast]);
 
-    const executeCancelRequest = useCallback(async (inv: InvitationRecord) => {
-        setActionLoading(inv.id);
+    const executeCancelRequest = useCallback(async (invitationId: string) => {
+        setActionLoading(invitationId);
         try {
-            await approvalRequestService.cancelRequest(inv.id);
+            await approvalRequestService.cancelRequest(invitationId);
             await fetchInvitations();
             await fetchApprovalRequests();
             toast({ description: '신청이 취소되었습니다.' });
@@ -199,7 +199,6 @@ export default function MyPageClient({
             title: '승인 신청 취소',
             description: '승인 신청을 취소하시겠습니까?',
             targetId: inv.id,
-            targetRecord: inv,
         });
     }, []);
 
@@ -292,8 +291,8 @@ export default function MyPageClient({
 
         if (type === 'DELETE' && targetId) {
             executeDelete(targetId);
-        } else if (type === 'CANCEL_REQUEST' && targetRecord) {
-            executeCancelRequest(targetRecord);
+        } else if (type === 'CANCEL_REQUEST' && targetId) {
+            executeCancelRequest(targetId);
         } else if (type === 'APPROVE' && targetRecord) {
             executeApprove(targetRecord);
         } else if (type === 'REQUEST_APPROVAL' && targetRecord) {
@@ -336,9 +335,6 @@ export default function MyPageClient({
             <main className={styles.main}>
                 <div className={styles.header}>
                     <h1 className={styles.title}>나의 청첩장</h1>
-                    <p className={styles.subtitle}>
-                        {isAdmin ? '관리자 모드: 모든 청첩장을 관리합니다.' : '지금까지 제작한 소중한 청첩장 목록입니다.'}
-                    </p>
                 </div>
 
                 {/* 1. Admin Approval Queue - Top Section */}
@@ -393,8 +389,9 @@ export default function MyPageClient({
                                                         className="gap-1.5 h-9 text-sm font-bold bg-banana-yellow text-amber-900 border-banana-yellow hover:bg-yellow-400"
                                                         onClick={() => handleApproveClick(targetInv)}
                                                         disabled={actionLoading === targetInv.id}
+                                                        loading={actionLoading === targetInv.id}
                                                     >
-                                                        {actionLoading === targetInv.id ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle2 size={14} />}
+                                                        <CheckCircle2 size={14} />
                                                         즉시 승인
                                                     </Button>
                                                 ) : (
@@ -522,26 +519,29 @@ export default function MyPageClient({
                                         </div>
                                     </div>
                                     <div className={styles.cardActions}>
-                                        <Link
-                                            href={`/v/${inv.slug}`}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className={clsx(styles.actionButton, styles.primary)}
+                                        <Button
+                                            variant="line"
+                                            asChild
+                                            className="flex-1"
                                         >
-                                            <ExternalLink size={16} />
-                                            청첩장 확인
-                                        </Link>
-                                        <button
-                                            type="button"
+                                            <Link
+                                                href={`/v/${inv.slug}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                <ExternalLink size={16} />
+                                                청첩장 확인
+                                            </Link>
+                                        </Button>
+                                        <Button
+                                            variant={inv.invitation_data?.isApproved ? "solid" : "outline"}
                                             className={clsx(
-                                                styles.actionButton,
-                                                styles.approval,
-                                                inv.invitation_data?.isApproved && styles.approved,
-                                                !inv.invitation_data?.isApproved && inv.invitation_data?.isRequestingApproval && !isAdmin && "bg-orange-50 text-orange-600 hover:bg-orange-100 border-orange-200"
+                                                "flex-1 gap-2 h-12",
+                                                inv.invitation_data?.isApproved && "bg-green-50 text-green-600 border-green-200 hover:bg-green-50 animate-none",
+                                                !inv.invitation_data?.isApproved && inv.invitation_data?.isRequestingApproval && !isAdmin && "bg-orange-50 text-orange-600 border-orange-200 hover:bg-orange-50"
                                             )}
                                             onClick={() => {
                                                 if (inv.invitation_data?.isApproved) return;
-
                                                 if (isAdmin) {
                                                     handleApproveClick(inv);
                                                 } else {
@@ -552,21 +552,18 @@ export default function MyPageClient({
                                                     }
                                                 }
                                             }}
-                                            disabled={inv.invitation_data?.isApproved || actionLoading === inv.id}
+                                            loading={actionLoading === inv.id}
+                                            disabled={inv.invitation_data?.isApproved && !isAdmin}
                                         >
-                                            {actionLoading === inv.id ? (
-                                                <Loader2 size={16} className="animate-spin" />
-                                            ) : (
-                                                inv.invitation_data?.isApproved ? <CheckCircle2 size={16} /> :
-                                                    isAdmin ? <CheckCircle2 size={16} /> :
-                                                        inv.invitation_data?.isRequestingApproval ? <XCircle size={16} /> : <Send size={16} />
-                                            )}
+                                            {inv.invitation_data?.isApproved ? <CheckCircle2 size={16} /> :
+                                                isAdmin ? <CheckCircle2 size={16} /> :
+                                                    inv.invitation_data?.isRequestingApproval ? <XCircle size={16} /> : <Send size={16} />}
                                             {inv.invitation_data?.isApproved
                                                 ? '승인완료'
                                                 : isAdmin
                                                     ? (inv.invitation_data?.isRequestingApproval ? '승인신청옴' : '사용승인')
                                                     : (inv.invitation_data?.isRequestingApproval ? '신청취소' : '사용신청')}
-                                        </button>
+                                        </Button>
                                     </div>
                                 </div>
                             ))}

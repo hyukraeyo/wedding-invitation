@@ -16,8 +16,8 @@ import {
 } from 'lucide-react';
 import { useEffect, useMemo, useId } from 'react';
 import { cn } from '@/lib/utils';
-import { Toggle } from '@/components/ui/Toggle';
-import { Separator } from '@/components/ui/Separator';
+import { Toggle } from '@/components/ui/toggle';
+import { Separator } from '@/components/ui/separator';
 
 interface RichTextEditorProps {
     content: string;

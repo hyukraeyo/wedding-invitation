@@ -1,5 +1,5 @@
-import { Switch as ShadcnSwitch } from '@/components/ui/Switch';
-import { Label } from '@/components/ui/Label';
+import { Switch as ShadcnSwitch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 
 interface SwitchProps {

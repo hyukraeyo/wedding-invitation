@@ -26,7 +26,7 @@ import SavingOverlay from '@/components/builder/SavingOverlay';
 import styles from './BuilderPage.module.scss';
 import { clsx } from 'clsx';
 import { Smartphone, X } from 'lucide-react';
-import { Sheet, SheetContent, SheetTitle, SheetHeader, SheetDescription } from '@/components/ui/Sheet';
+import { Sheet, SheetContent, SheetTitle, SheetHeader, SheetDescription } from '@/components/ui/sheet';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { useRouter, useSearchParams } from 'next/navigation';
 

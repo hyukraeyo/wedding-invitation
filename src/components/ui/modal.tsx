@@ -5,7 +5,7 @@ import {
     DialogDescription,
     DialogHeader,
     DialogTitle,
-} from "@/components/ui/Dialog"
+} from "@/components/ui/dialog"
 import { cn } from '@/lib/utils';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'; // Ensure accessibility for Description if missing
 

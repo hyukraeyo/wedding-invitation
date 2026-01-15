@@ -4,7 +4,7 @@ import { User2 } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
-import { Toggle } from '../Toggle';
+import { Toggle } from '../toggle';
 import { Field } from '../FormPrimitives';
 import styles from './BasicInfoSection.module.scss';
 import { cn } from '@/lib/utils';
