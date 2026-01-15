@@ -16,6 +16,7 @@ interface ProfileCompletionModalProps {
     userId: string;
     defaultName?: string;
     onComplete: () => void;
+    onLogout?: () => void; // 로그아웃 콜백 (선택)
 }
 
 export default function ProfileCompletionModal({
@@ -23,6 +24,7 @@ export default function ProfileCompletionModal({
     userId,
     defaultName = '',
     onComplete,
+    onLogout,
 }: ProfileCompletionModalProps) {
     const [name, setName] = useState(defaultName);
     const [phone, setPhone] = useState('');
@@ -114,7 +116,18 @@ export default function ProfileCompletionModal({
                         '시작하기'
                     )}
                 </Button>
+
+                {onLogout && (
+                    <button
+                        type="button"
+                        onClick={onLogout}
+                        className={styles.logoutLink}
+                    >
+                        로그아웃
+                    </button>
+                )}
             </div>
         </ResponsiveModal>
     );
 }
+
