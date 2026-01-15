@@ -137,6 +137,7 @@ const DrawerScrollArea = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
     <div
         ref={ref}
+        data-vaul-no-drag
         className={cn(
             "flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide py-2",
             className
