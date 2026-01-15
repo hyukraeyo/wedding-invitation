@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/supabase';
+import { getBrowserSupabaseClient } from '@/lib/supabase';
 
 export interface Profile {
     id: string;
@@ -25,6 +25,7 @@ export const profileService = {
      */
     async getProfile(userId: string): Promise<Profile | null> {
         try {
+            const supabase = await getBrowserSupabaseClient();
             const { data, error } = await supabase
                 .from('profiles')
                 .select('*')
@@ -59,6 +60,7 @@ export const profileService = {
         const phone = updates.phone ?? currentProfile?.phone ?? null;
         const isComplete = !!(fullName && phone);
 
+        const supabase = await getBrowserSupabaseClient();
         // upsert 사용: 프로필이 없으면 생성, 있으면 업데이트
         const { data, error } = await supabase
             .from('profiles')

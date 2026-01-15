@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { auth } from '@/auth';
 import { z } from 'zod';
 
 const requestSchema = z.object({
@@ -16,16 +17,16 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const validatedData = requestSchema.parse(body);
 
-    const supabase = await createSupabaseServerClient();
-    const { data: authData, error: authError } = await supabase.auth.getUser();
-
-    if (authError || !authData.user) {
+    const session = await auth();
+    const userId = session?.user?.id;
+    if (!userId) {
       return NextResponse.json(
         { error: '로그인이 필요합니다.' },
         { status: 401 }
       );
     }
 
+    const supabase = await createSupabaseServerClient();
     const db = supabaseAdmin || supabase;
 
     const { data, error } = await db
@@ -35,7 +36,7 @@ export async function POST(request: NextRequest) {
         invitation_slug: validatedData.invitationSlug,
         requester_name: validatedData.requesterName,
         requester_phone: validatedData.requesterPhone,
-        user_id: authData.user.id,
+        user_id: userId,
         status: 'pending',
         created_at: new Date().toISOString(),
       })
@@ -69,24 +70,24 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    const supabase = await createSupabaseServerClient();
-    const { data: authData, error: authError } = await supabase.auth.getUser();
-
-    if (authError || !authData.user) {
+    const session = await auth();
+    const user = session?.user ?? null;
+    if (!user) {
       return NextResponse.json(
         { error: '로그인이 필요합니다.' },
         { status: 401 }
       );
     }
 
+    const supabase = await createSupabaseServerClient();
     const { data: profile } = await supabase
       .from('profiles')
       .select('is_admin')
-      .eq('id', authData.user.id)
+      .eq('id', user.id)
       .single();
 
     // Strict admin check
-    const isEmailAdmin = authData.user.email === 'admin@test.com';
+    const isEmailAdmin = user.email === 'admin@test.com';
     const isAdmin = profile?.is_admin || isEmailAdmin || false;
 
     if (!isAdmin) {
@@ -133,16 +134,16 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    const supabase = await createSupabaseServerClient();
-    const { data: authData, error: authError } = await supabase.auth.getUser();
-
-    if (authError || !authData.user) {
+    const session = await auth();
+    const userId = session?.user?.id;
+    if (!userId) {
       return NextResponse.json(
         { error: '로그인이 필요합니다.' },
         { status: 401 }
       );
     }
 
+    const supabase = await createSupabaseServerClient();
     const db = supabaseAdmin || supabase;
 
     // 1. Delete request
@@ -150,7 +151,7 @@ export async function DELETE(request: NextRequest) {
       .from('approval_requests')
       .delete()
       .eq('invitation_id', invitationId)
-      .eq('user_id', authData.user.id); // Ensure user owns the request
+      .eq('user_id', userId); // Ensure user owns the request
 
     if (deleteError) {
       console.error('Error deleting approval request:', deleteError);

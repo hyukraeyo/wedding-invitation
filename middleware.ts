@@ -1,39 +1,21 @@
-import { createServerClient } from '@supabase/ssr';
-import type { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
-import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
+import { auth } from '@/auth-edge';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+export default auth((request) => {
+  const isLoggedIn = !!request.auth;
+  const { pathname } = request.nextUrl;
 
-type CookieOptions = Omit<ResponseCookie, 'name' | 'value'>;
+  if (!isLoggedIn && pathname.startsWith('/builder')) {
+    return NextResponse.redirect(new URL('/login', request.nextUrl));
+  }
 
-export async function middleware(request: NextRequest) {
-  const response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
-  });
+  if (isLoggedIn && pathname === '/login') {
+    return NextResponse.redirect(new URL('/builder', request.nextUrl));
+  }
 
-  const supabase = createServerClient(supabaseUrl, supabaseAnonKey, {
-    cookies: {
-      get(name: string) {
-        return request.cookies.get(name)?.value;
-      },
-      set(name: string, value: string, options?: CookieOptions) {
-        response.cookies.set({ name, value, ...options });
-      },
-      remove(name: string, options?: CookieOptions) {
-        response.cookies.set({ name, value: '', ...options });
-      },
-    },
-  });
-
-  await supabase.auth.getUser();
-
-  return response;
-}
+  return NextResponse.next();
+});
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|sw.js).*)'],
+  matcher: ['/builder/:path*', '/login'],
 };

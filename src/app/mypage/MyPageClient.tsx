@@ -333,9 +333,7 @@ export default function MyPageClient({
         <div className={styles.container}>
             <Header />
             <main className={styles.main}>
-                <div className={styles.header}>
-                    <h1 className={styles.title}>나의 청첩장</h1>
-                </div>
+                <h1 className="sr-only">마이페이지</h1>
 
                 {/* 1. Admin Approval Queue - Top Section */}
                 {isAdmin && (

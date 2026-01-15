@@ -1,26 +1,17 @@
-import { createServerClient } from '@supabase/ssr';
-import type { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
-import { cookies } from 'next/headers';
+import { createClient } from '@supabase/supabase-js';
+import { auth } from '@/auth';
+import { createSupabaseJwt } from '@/lib/supabase/jwt';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
-type CookieOptions = Omit<ResponseCookie, 'name' | 'value'>;
-
 export async function createSupabaseServerClient() {
-  const cookieStore = await cookies();
+  const session = await auth();
+  const userId = session?.user?.id;
+  const token = userId ? await createSupabaseJwt(userId) : null;
 
-  return createServerClient(supabaseUrl, supabaseAnonKey, {
-    cookies: {
-      get(name: string) {
-        return cookieStore.get(name)?.value;
-      },
-      set(name: string, value: string, options?: CookieOptions) {
-        cookieStore.set({ name, value, ...options });
-      },
-      remove(name: string, options?: CookieOptions) {
-        cookieStore.set({ name, value: '', ...options });
-      },
-    },
+  return createClient(supabaseUrl, supabaseAnonKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+    global: token ? { headers: { Authorization: `Bearer ${token}` } } : {},
   });
 }

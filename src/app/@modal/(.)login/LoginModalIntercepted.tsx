@@ -14,7 +14,7 @@ import { useAuth } from '@/hooks/useAuth';
 export default function LoginModalIntercepted() {
     const router = useRouter();
     const pathname = usePathname();
-    const { user, isProfileComplete, loading: authLoading, refreshProfile } = useAuth();
+    const { user, profile, isProfileComplete, loading: authLoading, refreshProfile } = useAuth();
 
     useEffect(() => {
         // Only redirect if we are actually ON the /login route (not just showing modally on another page)
@@ -35,7 +35,7 @@ export default function LoginModalIntercepted() {
 
     if (authLoading) return null;
 
-    if (!user) {
+    if (!user?.id) {
         return <LoginModal isOpen={true} onClose={handleClose} />;
     }
 
@@ -44,7 +44,7 @@ export default function LoginModalIntercepted() {
             <ProfileCompletionModal
                 isOpen={true}
                 userId={user.id}
-                defaultName={user.user_metadata?.full_name || ''}
+                defaultName={profile?.full_name ?? user.name ?? ''}
                 onComplete={handleProfileComplete}
             />
         );

@@ -1,69 +1,73 @@
 import React from 'react';
-import { render, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { renderWithProviders, waitFor } from '@/test-utils';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { useAuth } from '@/hooks/useAuth';
 
-const authMocks = vi.hoisted(() => ({
-  setSession: vi.fn(),
-  getSession: vi.fn(),
-  onAuthStateChange: vi.fn(),
+const sessionMocks = vi.hoisted(() => ({
+  useSession: vi.fn(),
   signOut: vi.fn(),
 }));
 
-vi.mock('@/lib/supabase', () => ({
-  supabase: {
-    auth: authMocks,
+const profileMocks = vi.hoisted(() => ({
+  getProfile: vi.fn(),
+}));
+
+vi.mock('next-auth/react', () => ({
+  useSession: sessionMocks.useSession,
+  signOut: sessionMocks.signOut,
+}));
+
+vi.mock('@/services/profileService', () => ({
+  profileService: {
+    getProfile: profileMocks.getProfile,
   },
 }));
 
 function TestComponent() {
-  useAuth();
-  return null;
+  const { user, isProfileComplete, loading } = useAuth();
+  return (
+    <div
+      data-testid="auth-state"
+      data-user={user?.id ?? ''}
+      data-complete={isProfileComplete ? 'yes' : 'no'}
+      data-loading={loading ? 'yes' : 'no'}
+    />
+  );
 }
 
-describe('useAuth hash session hydration', () => {
+describe('useAuth', () => {
   beforeEach(() => {
-    authMocks.setSession.mockResolvedValue({ error: null });
-    authMocks.getSession.mockResolvedValue({ data: { session: null }, error: null });
-    authMocks.onAuthStateChange.mockReturnValue({
-      data: {
-        subscription: { unsubscribe: vi.fn() },
-      },
+    vi.clearAllMocks();
+  });
+
+  it('exposes loading state while session is loading', () => {
+    sessionMocks.useSession.mockReturnValue({ data: null, status: 'loading' });
+    const { getByTestId } = renderWithProviders(<TestComponent />);
+    const node = getByTestId('auth-state');
+    expect(node.getAttribute('data-loading')).toBe('yes');
+  });
+
+  it('loads profile when session is ready', async () => {
+    sessionMocks.useSession.mockReturnValue({
+      data: { user: { id: 'user-1', email: 'user@test.com' } },
+      status: 'authenticated',
     });
-    window.history.pushState({}, '', '/login#access_token=token&refresh_token=refresh');
-  });
+    profileMocks.getProfile.mockResolvedValue({
+      id: 'user-1',
+      full_name: '홍길동',
+      phone: '01012341234',
+      avatar_url: null,
+      is_admin: false,
+      is_profile_complete: true,
+      created_at: 'now',
+      updated_at: 'now',
+    });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
-    authMocks.setSession.mockReset();
-    authMocks.getSession.mockReset();
-    authMocks.onAuthStateChange.mockReset();
-    authMocks.signOut.mockReset();
-  });
-
-  it('sets session and clears hash', async () => {
-    const replaceStateSpy = vi.spyOn(window.history, 'replaceState');
-    render(<TestComponent />);
-
+    const { getByTestId } = renderWithProviders(<TestComponent />);
     await waitFor(() => {
-      expect(authMocks.setSession).toHaveBeenCalledWith({
-        access_token: 'token',
-        refresh_token: 'refresh',
-      });
+      const node = getByTestId('auth-state');
+      expect(node.getAttribute('data-user')).toBe('user-1');
+      expect(node.getAttribute('data-complete')).toBe('yes');
     });
-
-    expect(replaceStateSpy).toHaveBeenCalledWith({}, '', '/login');
-  });
-
-  it('clears hash even when setSession fails', async () => {
-    authMocks.setSession.mockResolvedValue({ error: { message: 'fail' } });
-    const replaceStateSpy = vi.spyOn(window.history, 'replaceState');
-    render(<TestComponent />);
-
-    await waitFor(() => {
-      expect(authMocks.setSession).toHaveBeenCalled();
-    });
-
-    expect(replaceStateSpy).toHaveBeenCalledWith({}, '', '/login');
   });
 });

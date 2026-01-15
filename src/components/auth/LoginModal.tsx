@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { IconButton } from '@/components/ui/icon-button';
-import { supabase } from '@/lib/supabase';
+import { signIn } from 'next-auth/react';
 import styles from './LoginModal.module.scss';
 import { TextField } from '../builder/TextField';
 import { createPortal } from 'react-dom';
@@ -44,25 +44,23 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
 
     useScrollLock(isOpen);
 
-    const handleOAuthLogin = useCallback(async (provider: 'kakao' | 'naver') => {
+    const handleOAuthLogin = useCallback(async (e: React.MouseEvent<HTMLButtonElement>, provider: 'kakao' | 'naver') => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (loading) return; // Prevent double click
         setLoading(true);
 
-        if (provider === 'naver') {
-            // 네이버: 커스텀 OAuth API 사용 (Supabase 미지원)
-            window.location.href = '/api/auth/naver';
+        const result = await signIn(provider, { callbackUrl: "/builder", redirect: false });
+        if (result?.error) {
+            toast({ variant: 'destructive', description: result.error });
+            setLoading(false);
             return;
         }
-
-        // 카카오: Supabase 내장 OAuth 사용
-        const { error } = await supabase.auth.signInWithOAuth({
-            provider: 'kakao',
-            options: { redirectTo: `${window.location.origin}/builder` }
-        });
-        if (error) {
-            toast({ variant: 'destructive', description: error.message });
-            setLoading(false);
+        if (result?.url) {
+            window.location.href = result.url;
         }
-    }, [toast]);
+    }, [loading, toast]);
 
     const handleSubmit = useCallback(async (e: React.FormEvent) => {
         e.preventDefault();
@@ -71,22 +69,16 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
         const loginEmail = TEST_ACCOUNTS[email] || email;
         const isTestAccount = email in TEST_ACCOUNTS;
 
-        const { error } = await supabase.auth.signInWithPassword({
+        const result = await signIn("credentials", {
             email: loginEmail,
-            password
+            password,
+            redirect: false,
+            callbackUrl: "/builder",
         });
 
-        if (error) {
-            if (error.status === 400 && isTestAccount) {
-                const { error: signUpError } = await supabase.auth.signUp({
-                    email: loginEmail,
-                    password
-                });
-                if (signUpError) {
-                    toast({ variant: 'destructive', description: signUpError.message });
-                } else {
-                    toast({ description: '테스트 계정이 생성되었습니다. 다시 로그인해주세요.' });
-                }
+        if (result?.error) {
+            if (isTestAccount) {
+                toast({ variant: 'destructive', description: '관리자 계정 인증에 실패했습니다.' });
             } else {
                 toast({ variant: 'destructive', description: '로그인 정보가 올바르지 않습니다.' });
             }
@@ -156,10 +148,9 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 </div>
 
                 <div className={styles.socialButtons}>
-                    {/* 카카오 로그인 잠시 숨김
                     <button
                         className={`${styles.socialButton} ${styles.kakao}`}
-                        onClick={() => handleOAuthLogin('kakao')}
+                        onClick={(e) => handleOAuthLogin(e, 'kakao')}
                         disabled={loading}
                         type="button"
                     >
@@ -168,11 +159,10 @@ export default function LoginModal({ isOpen, onClose }: LoginModalProps) {
                         </svg>
                         <span>카카오로 3초 만에 시작하기</span>
                     </button>
-                    */}
 
                     <Button
                         className={`${styles.socialButton} ${styles.naver}`}
-                        onClick={() => handleOAuthLogin('naver')}
+                        onClick={(e) => handleOAuthLogin(e, 'naver')}
                         loading={loading}
                         type="button"
                     >

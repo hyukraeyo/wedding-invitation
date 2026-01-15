@@ -1,5 +1,5 @@
 
-import { supabase } from '@/lib/supabase';
+import { getBrowserSupabaseClient } from '@/lib/supabase';
 
 /**
  * Uploads a file to Supabase Storage and returns the public URL.
@@ -13,6 +13,7 @@ export async function uploadImage(
     folder: string = 'uploads'
 ): Promise<string> {
     try {
+        const supabase = await getBrowserSupabaseClient();
         const fileExt = file.name.split('.').pop();
         const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 11)}.${fileExt}`;
         const filePath = `${folder}/${fileName}`;

@@ -9,9 +9,9 @@ const dbMocks = vi.hoisted(() => ({
 }));
 
 vi.mock('@/lib/supabase', () => ({
-  supabase: {
+  getBrowserSupabaseClient: vi.fn(async () => ({
     from: dbMocks.from,
-  },
+  })),
 }));
 
 describe('profileService.updateProfile', () => {

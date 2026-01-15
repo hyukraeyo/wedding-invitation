@@ -1,14 +1,26 @@
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { auth } from '@/auth';
 import { ApprovalRequestRecord } from '@/services/approvalRequestService';
 import { Profile } from '@/services/profileService';
 import MyPageClient from './MyPageClient';
 import type { InvitationRecord } from './MyPageClient';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: '마이페이지 | 바나나웨딩',
+    description: '나만의 모바일 청첩장을 관리하고 승인 상태를 확인하세요. 바나나웨딩에서 제작한 소중한 청첩장 목록입니다.',
+    robots: {
+        index: false,
+        follow: false,
+    },
+};
+
 export default async function MyPage() {
+    const session = await auth();
+    const user = session?.user ?? null;
     const supabase = await createSupabaseServerClient();
-    const { data: authData } = await supabase.auth.getUser();
-    const user = authData.user;
 
     let profile: Profile | null = null;
     let isAdmin = false;

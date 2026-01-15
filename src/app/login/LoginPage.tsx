@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { supabase } from '@/lib/supabase';
+import { signIn } from 'next-auth/react';
 import styles from '@/components/auth/LoginModal.module.scss';
 import { TextField } from '@/components/builder/TextField';
 import { useAuth } from '@/hooks/useAuth';
@@ -17,7 +17,7 @@ import ProfileCompletionModal from '@/components/auth/ProfileCompletionModal';
  */
 export default function LoginPage() {
     const router = useRouter();
-    const { user, profile, isProfileComplete, loading: authLoading, refreshProfile, signOut } = useAuth();
+    const { user, profile, isProfileComplete, loading: authLoading, profileLoading, refreshProfile, signOut } = useAuth();
     const { toast } = useToast();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -29,28 +29,38 @@ export default function LoginPage() {
         }
     }, [user, authLoading, isProfileComplete, router]);
 
-    if (!authLoading && user && isProfileComplete) return null;
+    // 로딩 중일 때는 빈 화면 대신 로딩 표시
+    if (authLoading) {
+        return <div className="flex items-center justify-center min-h-screen"><div className="w-8 h-8 border-4 border-yellow-400 rounded-full animate-spin border-t-transparent"></div></div>;
+    }
 
-    /* 
+    // 이미 로그인하고 프로필도 완성했다면 리디렉션되므로 렌더링 안 함
+    if (user && isProfileComplete) return null;
+
     const handleKakaoLogin = async () => {
         setLoading(true);
-        const { error } = await supabase.auth.signInWithOAuth({
-            provider: 'kakao',
-            options: {
-                redirectTo: `${window.location.origin}/builder`
-            }
-        });
-        if (error) {
-            toast({ variant: 'destructive', description: error.message });
+        const result = await signIn("kakao", { callbackUrl: "/builder", redirect: false });
+        if (result?.error) {
+            toast({ variant: 'destructive', description: result.error });
             setLoading(false);
+            return;
+        }
+        if (result?.url) {
+            window.location.href = result.url;
         }
     };
-    */
 
-    const handleNaverLogin = () => {
+    const handleNaverLogin = async () => {
         setLoading(true);
-        // 네이버: 커스텀 OAuth API 사용 (Supabase 미지원)
-        window.location.href = '/api/auth/naver';
+        const result = await signIn("naver", { callbackUrl: "/builder", redirect: false });
+        if (result?.error) {
+            toast({ variant: 'destructive', description: result.error });
+            setLoading(false);
+            return;
+        }
+        if (result?.url) {
+            window.location.href = result.url;
+        }
     };
 
     const handleAdminLogin = async (e: React.FormEvent) => {
@@ -66,19 +76,16 @@ export default function LoginPage() {
             loginEmail = 'test_1@test.com';
         }
 
-        const { error } = await supabase.auth.signInWithPassword({
+        const result = await signIn("credentials", {
             email: loginEmail,
-            password: password
+            password,
+            redirect: false,
+            callbackUrl: "/builder",
         });
 
-        if (error) {
-            if (error.status === 400 && isTestAccount) {
-                const { error: signUpError } = await supabase.auth.signUp({
-                    email: loginEmail,
-                    password: password
-                });
-                if (signUpError) toast({ variant: 'destructive', description: signUpError.message });
-                else toast({ description: '테스트 계정이 생성되었습니다. 다시 로그인해주세요.' });
+        if (result?.error) {
+            if (isTestAccount) {
+                toast({ variant: 'destructive', description: '관리자 계정 인증에 실패했습니다.' });
             } else {
                 toast({ variant: 'destructive', description: '로그인 정보가 올바르지 않습니다.' });
             }
@@ -89,13 +96,14 @@ export default function LoginPage() {
     };
 
     // 로그인 상태이지만 프로필이 미완성인 경우 프로필 완성 모달 표시
-    if (user && !isProfileComplete) {
+    // profileLoading이 아닐 때만 표시 (로딩 중일 때는 깜빡임 방지)
+    if (user?.id && !isProfileComplete && !profileLoading) {
         return (
             <div className={styles.overlay} style={{ alignItems: 'center', paddingTop: 0 }}>
                 <ProfileCompletionModal
                     isOpen={true}
                     userId={user.id}
-                    defaultName={profile?.full_name || ''}
+                    defaultName={profile?.full_name ?? user.name ?? ''}
                     onComplete={async () => {
                         await refreshProfile();
                         router.replace('/builder');
@@ -156,7 +164,6 @@ export default function LoginPage() {
                 </div>
 
                 <div className={styles.socialButtons}>
-                    {/* 카카오 로그인 잠시 숨김
                     <button
                         className={`${styles.socialButton} ${styles.kakao}`}
                         onClick={handleKakaoLogin}
@@ -171,7 +178,6 @@ export default function LoginPage() {
                         </svg>
                         <span>카카오로 3초 만에 시작하기</span>
                     </button>
-                    */}
 
                     <Button
                         className={`${styles.socialButton} ${styles.naver}`}

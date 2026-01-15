@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { auth } from '@/auth';
 import { z } from 'zod';
 
 const updateSchema = z.object({
@@ -12,22 +13,22 @@ const updateSchema = z.object({
 // GET /api/profiles
 export async function GET() {
     try {
-        const supabase = await createSupabaseServerClient();
-        const { data: authData, error: authError } = await supabase.auth.getUser();
-
-        if (authError || !authData.user) {
+        const session = await auth();
+        const userId = session?.user?.id;
+        if (!userId) {
             return NextResponse.json(
                 { error: '로그인이 필요합니다.' },
                 { status: 401 }
             );
         }
 
+        const supabase = await createSupabaseServerClient();
         const db = supabaseAdmin || supabase;
 
         const { data, error } = await db
             .from('profiles')
             .select('*')
-            .eq('id', authData.user.id)
+            .eq('id', userId)
             .single();
 
         if (error) {
@@ -58,10 +59,9 @@ export async function PATCH(request: NextRequest) {
         const body = await request.json();
         const updates = updateSchema.parse(body);
 
-        const supabase = await createSupabaseServerClient();
-        const { data: authData, error: authError } = await supabase.auth.getUser();
-
-        if (authError || !authData.user) {
+        const session = await auth();
+        const userId = session?.user?.id;
+        if (!userId) {
             return NextResponse.json(
                 { error: '로그인이 필요합니다.' },
                 { status: 401 }
@@ -71,6 +71,7 @@ export async function PATCH(request: NextRequest) {
         // is_profile_complete 자동 계산
         const isComplete = !!(updates.full_name && updates.phone);
 
+        const supabase = await createSupabaseServerClient();
         const db = supabaseAdmin || supabase;
 
         const { data, error } = await db
@@ -80,7 +81,7 @@ export async function PATCH(request: NextRequest) {
                 is_profile_complete: isComplete,
                 updated_at: new Date().toISOString(),
             })
-            .eq('id', authData.user.id)
+            .eq('id', userId)
             .select()
             .single();
 
@@ -108,4 +109,3 @@ export async function PATCH(request: NextRequest) {
         );
     }
 }
-

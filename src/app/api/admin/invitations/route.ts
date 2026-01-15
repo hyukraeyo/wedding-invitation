@@ -1,15 +1,17 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { auth } from '@/auth';
 
 export async function GET() {
     try {
-        const supabase = await createSupabaseServerClient();
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
-
-        if (authError || !user) {
+        const session = await auth();
+        const user = session?.user ?? null;
+        if (!user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
+
+        const supabase = await createSupabaseServerClient();
 
         const { data: profile } = await supabase.from('profiles').select('is_admin').eq('id', user.id).single();
         // Strict admin check

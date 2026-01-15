@@ -1,12 +1,13 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { supabase } from '@/lib/supabase';
+import { getBrowserSupabaseClient } from '@/lib/supabase';
 import { InvitationData } from '@/store/useInvitationStore';
 
-const defaultClient = supabase as SupabaseClient;
+const getDefaultClient = async () => getBrowserSupabaseClient() as Promise<SupabaseClient>;
 
 export const invitationService = {
-    async saveInvitation(slug: string, data: InvitationData, userId?: string, client: SupabaseClient = defaultClient) {
-        const { data: result, error } = await client
+    async saveInvitation(slug: string, data: InvitationData, userId?: string, client?: SupabaseClient) {
+        const supabaseClient = client ?? await getDefaultClient();
+        const { data: result, error } = await supabaseClient
             .from('invitations')
             .upsert({
                 slug,
@@ -20,8 +21,9 @@ export const invitationService = {
         return result;
     },
 
-    async getAllInvitations(client: SupabaseClient = defaultClient) {
-        const { data, error } = await client
+    async getAllInvitations(client?: SupabaseClient) {
+        const supabaseClient = client ?? await getDefaultClient();
+        const { data, error } = await supabaseClient
             .from('invitations')
             .select('*')
             .order('updated_at', { ascending: false });
@@ -39,8 +41,9 @@ export const invitationService = {
         return result.data;
     },
 
-    async getUserInvitations(userId: string, client: SupabaseClient = defaultClient) {
-        const { data, error } = await client
+    async getUserInvitations(userId: string, client?: SupabaseClient) {
+        const supabaseClient = client ?? await getDefaultClient();
+        const { data, error } = await supabaseClient
             .from('invitations')
             .select('*')
             .eq('user_id', userId)
@@ -50,8 +53,9 @@ export const invitationService = {
         return data;
     },
 
-    async getInvitation(slug: string, client: SupabaseClient = defaultClient) {
-        const { data, error } = await client
+    async getInvitation(slug: string, client?: SupabaseClient) {
+        const supabaseClient = client ?? await getDefaultClient();
+        const { data, error } = await supabaseClient
             .from('invitations')
             .select('*')
             .eq('slug', slug)
@@ -61,8 +65,9 @@ export const invitationService = {
         return data;
     },
 
-    async deleteInvitation(id: string, client: SupabaseClient = defaultClient) {
-        const { error } = await client
+    async deleteInvitation(id: string, client?: SupabaseClient) {
+        const supabaseClient = client ?? await getDefaultClient();
+        const { error } = await supabaseClient
             .from('invitations')
             .delete()
             .eq('id', id);
