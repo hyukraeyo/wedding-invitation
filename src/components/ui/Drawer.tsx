@@ -4,8 +4,6 @@ import * as React from "react"
 import { Drawer as DrawerPrimitive } from "vaul"
 
 import { cn } from "@/lib/utils"
-import { MOTION_CLASSES } from "@/constants/motion"
-
 
 const Drawer = ({
     shouldScaleBackground = true,
@@ -30,8 +28,7 @@ const DrawerOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <DrawerPrimitive.Overlay
         ref={ref}
-        className={cn(`fixed inset-0 z-50 bg-black/80 ${MOTION_CLASSES.overlay}`, className)}
-
+        className={cn("fixed inset-0 z-50 bg-black/80", className)}
         {...props}
     />
 ))
@@ -40,45 +37,22 @@ DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName
 const DrawerContent = React.forwardRef<
     React.ElementRef<typeof DrawerPrimitive.Content>,
     React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
->(({ className, children, onOpenAutoFocus, ...props }, ref) => {
-    const contentRef = React.useRef<React.ElementRef<typeof DrawerPrimitive.Content>>(null)
-
-    React.useImperativeHandle(ref, () => contentRef.current as React.ElementRef<typeof DrawerPrimitive.Content>)
-
-    const handleOpenAutoFocus: React.ComponentPropsWithoutRef<
-        typeof DrawerPrimitive.Content
-    >["onOpenAutoFocus"] = (event) => {
-        onOpenAutoFocus?.(event)
-        if (event.defaultPrevented) return
-        event.preventDefault()
-        contentRef.current?.focus()
-    }
-
-    return (
-        <DrawerPortal>
-            <DrawerOverlay />
-            <DrawerPrimitive.Content
-                ref={contentRef}
-                tabIndex={-1}
-                onOpenAutoFocus={handleOpenAutoFocus}
-                data-side="bottom"
-                className={cn(
-                    `fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto max-h-[85vh] flex-col rounded-t-[32px] border bg-background ${MOTION_CLASSES.sheet}`,
-                    className
-                )}
-                {...props}
-            >
-                {/* Hidden Description for Accessibility */}
-                <DrawerPrimitive.Description className="sr-only">
-                    Drawer content
-                </DrawerPrimitive.Description>
-                {children}
-            </DrawerPrimitive.Content>
-        </DrawerPortal>
-    )
-})
-
-
+>(({ className, children, ...props }, ref) => (
+    <DrawerPortal>
+        <DrawerOverlay />
+        <DrawerPrimitive.Content
+            ref={ref}
+            className={cn(
+                "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto max-h-[85vh] flex-col rounded-t-[32px] border bg-background",
+                className
+            )}
+            {...props}
+        >
+            <div className="mx-auto mt-4 h-1.5 w-12 shrink-0 rounded-full bg-zinc-300" />
+            {children}
+        </DrawerPrimitive.Content>
+    </DrawerPortal>
+))
 DrawerContent.displayName = "DrawerContent"
 
 const DrawerHeader = ({
@@ -130,36 +104,19 @@ const DrawerDescription = React.forwardRef<
 ))
 DrawerDescription.displayName = DrawerPrimitive.Description.displayName
 
-// Custom helper for scrollable content area
 const DrawerScrollArea = React.forwardRef<
     HTMLDivElement,
     React.HTMLAttributes<HTMLDivElement>
 >(({ className, children, ...props }, ref) => (
     <div
         ref={ref}
-        data-vaul-no-drag
-        className={cn(
-            "flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide py-2",
-            className
-        )}
+        className={cn("flex-1 overflow-y-auto px-4 pb-8", className)}
         {...props}
     >
         {children}
     </div>
 ))
 DrawerScrollArea.displayName = "DrawerScrollArea"
-
-const DrawerHandle = React.forwardRef<
-    React.ElementRef<typeof DrawerPrimitive.Handle>,
-    React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Handle>
->(({ className, ...props }, ref) => (
-    <DrawerPrimitive.Handle
-        ref={ref}
-        className={cn("mx-auto mt-4 mb-2 h-1.5 w-12 shrink-0 rounded-full bg-zinc-300", className)}
-        {...props}
-    />
-))
-DrawerHandle.displayName = "DrawerHandle"
 
 export {
     Drawer,
@@ -173,6 +130,4 @@ export {
     DrawerTitle,
     DrawerDescription,
     DrawerScrollArea,
-    DrawerHandle,
 }
-
