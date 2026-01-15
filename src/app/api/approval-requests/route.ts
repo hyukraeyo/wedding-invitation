@@ -14,10 +14,10 @@ const requestSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const bodyPromise = request.json();
+    const sessionPromise = auth();
+    const [body, session] = await Promise.all([bodyPromise, sessionPromise]);
     const validatedData = requestSchema.parse(body);
-
-    const session = await auth();
     const userId = session?.user?.id;
     if (!userId) {
       return NextResponse.json(
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const supabase = await createSupabaseServerClient();
+    const supabase = await createSupabaseServerClient(session);
     const db = supabaseAdmin || supabase;
 
     const { data, error } = await db
@@ -79,16 +79,18 @@ export async function GET() {
       );
     }
 
-    const supabase = await createSupabaseServerClient();
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('is_admin')
-      .eq('id', user.id)
-      .single();
-
-    // Strict admin check
     const isEmailAdmin = user.email === 'admin@test.com';
-    const isAdmin = profile?.is_admin || isEmailAdmin || false;
+    const supabase = await createSupabaseServerClient(session);
+    let isAdmin = isEmailAdmin;
+
+    if (!isAdmin) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('is_admin')
+        .eq('id', user.id)
+        .single();
+      isAdmin = profile?.is_admin || false;
+    }
 
     if (!isAdmin) {
       return NextResponse.json(
@@ -98,7 +100,6 @@ export async function GET() {
     }
 
     const db = supabaseAdmin || supabase;
-
     const { data, error } = await db
       .from('approval_requests')
       .select('*')
@@ -143,41 +144,35 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    const supabase = await createSupabaseServerClient();
+    const supabase = await createSupabaseServerClient(session);
     const db = supabaseAdmin || supabase;
 
-    // 1. Delete request
-    const { error: deleteError } = await db
-      .from('approval_requests')
-      .delete()
-      .eq('invitation_id', invitationId)
-      .eq('user_id', userId); // Ensure user owns the request
+    const [deleteResult, invitationResult] = await Promise.all([
+      db
+        .from('approval_requests')
+        .delete()
+        .eq('invitation_id', invitationId)
+        .eq('user_id', userId),
+      db
+        .from('invitations')
+        .select('*')
+        .eq('id', invitationId)
+        .single(),
+    ]);
 
-    if (deleteError) {
-      console.error('Error deleting approval request:', deleteError);
+    if (deleteResult.error) {
+      console.error('Error deleting approval request:', deleteResult.error);
       return NextResponse.json(
         { error: '신청 취소에 실패했습니다.' },
         { status: 500 }
       );
     }
 
-    // 2. Update invitation status
-    // We need to fetch the current invitation first to get the JSON data, modify it, and save it back?
-    // Or just update the JSONB column partially? modifying JSONB is hard directly.
-    // But wait, invitation_data is just a JSONB column. We probably want to fetch -> update -> update.
-    // However, simpler way is: Update invitations set invitation_data = jsonb_set(invitation_data, '{isRequestingApproval}', 'false')
-
-    // Using supabase rpc or just fetch-update pattern. 
-    // Fetch first.
-    const { data: invData } = await db
-      .from('invitations')
-      .select('*')
-      .eq('id', invitationId)
-      .single();
-
+    const invData = invitationResult.data;
     if (invData) {
       const newData = { ...invData.invitation_data, isRequestingApproval: false };
-      await db.from('invitations')
+      await db
+        .from('invitations')
         .update({ invitation_data: newData })
         .eq('id', invitationId);
     }

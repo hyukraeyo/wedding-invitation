@@ -136,8 +136,7 @@ export default function MyPageClient({
         setActionLoading(invitationId);
         try {
             await approvalRequestService.cancelRequest(invitationId);
-            await fetchInvitations();
-            await fetchApprovalRequests();
+            await Promise.all([fetchInvitations(), fetchApprovalRequests()]);
             toast({ description: '신청이 취소되었습니다.' });
         } catch {
             toast({ variant: 'destructive', description: '취소 처리에 실패했습니다.' });
@@ -157,8 +156,7 @@ export default function MyPageClient({
             };
             await invitationService.saveInvitation(inv.slug, updatedData, inv.user_id);
             toast({ description: '사용 승인이 완료되었습니다.' });
-            await fetchInvitations();
-            await fetchApprovalRequests();
+            await Promise.all([fetchInvitations(), fetchApprovalRequests()]);
         } catch {
             toast({ variant: 'destructive', description: '승인 처리 중 오류가 발생했습니다.', });
         } finally {

@@ -2,15 +2,20 @@ import { invitationService } from '@/services/invitationService';
 import InvitationCanvas from '@/components/preview/InvitationCanvas';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { notFound } from 'next/navigation';
+import { cache } from 'react';
 
 interface Props {
     params: Promise<{ slug: string }>;
 }
 
+const getInvitation = cache(async (slug: string) => {
+    const supabase = await createSupabaseServerClient(null);
+    return invitationService.getInvitation(slug, supabase);
+});
+
 export async function generateMetadata({ params }: Props) {
     const { slug } = await params;
-    const supabase = await createSupabaseServerClient();
-    const invitation = await invitationService.getInvitation(slug, supabase);
+    const invitation = await getInvitation(slug);
 
     if (!invitation) return { title: 'Invitation Not Found' };
 
@@ -57,8 +62,7 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function InvitationViewPage({ params }: Props) {
     const { slug } = await params;
-    const supabase = await createSupabaseServerClient();
-    const invitation = await invitationService.getInvitation(slug, supabase);
+    const invitation = await getInvitation(slug);
 
     if (!invitation) {
         notFound();

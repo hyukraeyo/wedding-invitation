@@ -14,9 +14,10 @@ const guestSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const bodyPromise = request.json();
+    const supabasePromise = createSupabaseServerClient(null);
+    const [body, supabase] = await Promise.all([bodyPromise, supabasePromise]);
     const validatedData = guestSchema.parse(body);
-    const supabase = await createSupabaseServerClient();
 
     // Check if guest already exists
     const { data: existingGuest } = await supabase
@@ -88,7 +89,6 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const invitationId = searchParams.get('invitationId');
-    const supabase = await createSupabaseServerClient();
 
     if (!invitationId) {
       return NextResponse.json(
@@ -97,6 +97,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    const supabase = await createSupabaseServerClient(null);
     const { data: guests, error } = await supabase
       .from('guests')
       .select('*')

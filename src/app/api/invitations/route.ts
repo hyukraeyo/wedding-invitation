@@ -21,9 +21,10 @@ const invitationSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const bodyPromise = request.json();
+    const supabasePromise = createSupabaseServerClient(null);
+    const [body, supabase] = await Promise.all([bodyPromise, supabasePromise]);
     const validatedData = invitationSchema.parse(body);
-    const supabase = await createSupabaseServerClient();
 
     // Check if slug already exists
     const { data: existingSlug } = await supabase
@@ -79,7 +80,6 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const slug = searchParams.get('slug');
-    const supabase = await createSupabaseServerClient();
 
     if (!slug) {
       return NextResponse.json(
@@ -88,6 +88,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    const supabase = await createSupabaseServerClient(null);
     const { data: invitation, error } = await supabase
       .from('invitations')
       .select('*')

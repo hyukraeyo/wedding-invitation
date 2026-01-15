@@ -22,7 +22,7 @@ export async function GET() {
             );
         }
 
-        const supabase = await createSupabaseServerClient();
+        const supabase = await createSupabaseServerClient(session);
         const db = supabaseAdmin || supabase;
 
         const { data, error } = await db
@@ -56,10 +56,10 @@ export async function GET() {
 // PATCH /api/profiles
 export async function PATCH(request: NextRequest) {
     try {
-        const body = await request.json();
+        const bodyPromise = request.json();
+        const sessionPromise = auth();
+        const [body, session] = await Promise.all([bodyPromise, sessionPromise]);
         const updates = updateSchema.parse(body);
-
-        const session = await auth();
         const userId = session?.user?.id;
         if (!userId) {
             return NextResponse.json(
@@ -68,15 +68,20 @@ export async function PATCH(request: NextRequest) {
             );
         }
 
-        const supabase = await createSupabaseServerClient();
+        const supabase = await createSupabaseServerClient(session);
         const db = supabaseAdmin || supabase;
 
-        // Fetch current profile to merge data and determine completion status
-        const { data: currentProfile } = await db
-            .from('profiles')
-            .select('*')
-            .eq('id', userId)
-            .single();
+        const shouldLoadProfile = !(updates.full_name && updates.phone);
+        let currentProfile: { full_name?: string | null; phone?: string | null } | null = null;
+
+        if (shouldLoadProfile) {
+            const { data } = await db
+                .from('profiles')
+                .select('full_name, phone')
+                .eq('id', userId)
+                .single();
+            currentProfile = data ?? null;
+        }
 
         const fullName = updates.full_name ?? currentProfile?.full_name ?? null;
         const phone = updates.phone ?? currentProfile?.phone ?? null;

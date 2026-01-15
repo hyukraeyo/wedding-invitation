@@ -10,13 +10,18 @@ export async function GET() {
         if (!user) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
-
-        const supabase = await createSupabaseServerClient();
-
-        const { data: profile } = await supabase.from('profiles').select('is_admin').eq('id', user.id).single();
-        // Strict admin check
         const isEmailAdmin = user.email === 'admin@test.com';
-        const isAdmin = profile?.is_admin || isEmailAdmin || false;
+        let isAdmin = isEmailAdmin;
+
+        if (!isAdmin) {
+            const supabase = await createSupabaseServerClient(session);
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('is_admin')
+                .eq('id', user.id)
+                .single();
+            isAdmin = profile?.is_admin || false;
+        }
 
         if (!isAdmin) {
             return NextResponse.json({ error: 'Forbidden' }, { status: 403 });

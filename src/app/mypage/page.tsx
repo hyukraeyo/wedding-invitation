@@ -20,10 +20,12 @@ export const metadata: Metadata = {
 export default async function MyPage() {
     const session = await auth();
     const user = session?.user ?? null;
-    const supabase = await createSupabaseServerClient();
+    const supabase = await createSupabaseServerClient(session);
 
     let profile: Profile | null = null;
     let isAdmin = false;
+    let invitations: InvitationRecord[] = [];
+    let approvalRequests: ApprovalRequestRecord[] = [];
 
     if (user) {
         const { data: profileData } = await supabase
@@ -35,19 +37,21 @@ export default async function MyPage() {
         profile = profileData ?? null;
         const isEmailAdmin = user.email?.includes('admin') || user.email?.startsWith('admin');
         isAdmin = profile?.is_admin || isEmailAdmin || false;
-    }
 
-    let invitations: InvitationRecord[] = [];
-    let approvalRequests: ApprovalRequestRecord[] = [];
+        if (isAdmin) {
+            const db = supabaseAdmin || supabase;
+            const [invitationsResult, approvalRequestsResult] = await Promise.all([
+                db.from('invitations')
+                    .select('*')
+                    .contains('invitation_data', { isRequestingApproval: true })
+                    .order('updated_at', { ascending: false }),
+                db.from('approval_requests')
+                    .select('*')
+                    .order('created_at', { ascending: false }),
+            ]);
 
-    if (user) {
-        if (isAdmin && supabaseAdmin) {
-            const { data } = await supabaseAdmin
-                .from('invitations')
-                .select('*')
-                .contains('invitation_data', { isRequestingApproval: true })
-                .order('updated_at', { ascending: false });
-            invitations = (data ?? []) as InvitationRecord[];
+            invitations = (invitationsResult.data ?? []) as InvitationRecord[];
+            approvalRequests = (approvalRequestsResult.data ?? []) as ApprovalRequestRecord[];
         } else {
             const { data } = await supabase
                 .from('invitations')
@@ -56,15 +60,6 @@ export default async function MyPage() {
                 .order('updated_at', { ascending: false });
             invitations = (data ?? []) as InvitationRecord[];
         }
-    }
-
-    if (user && isAdmin) {
-        const db = supabaseAdmin || supabase;
-        const { data } = await db
-            .from('approval_requests')
-            .select('*')
-            .order('created_at', { ascending: false });
-        approvalRequests = (data ?? []) as ApprovalRequestRecord[];
     }
 
     return (
