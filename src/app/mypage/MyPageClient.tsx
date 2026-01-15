@@ -379,41 +379,36 @@ export default function MyPageClient({
                                                         {request.requester_phone}
                                                     </a>
                                                 </div>
+                                                <div className={styles.adminMeta}>
+                                                    <Link
+                                                        href={`/v/${request.invitation_slug}`}
+                                                        target="_blank"
+                                                        className="flex items-center gap-1 text-blue-500 hover:underline"
+                                                    >
+                                                        <ExternalLink size={12} />
+                                                        청첩장 보기
+                                                    </Link>
+                                                    <span className="text-gray-300">•</span>
+                                                    <span>
+                                                        {new Date(request.created_at).toLocaleDateString('ko-KR')} {new Date(request.created_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false })}
+                                                    </span>
+                                                </div>
                                             </div>
 
-                                            <div className={styles.adminRight}>
-                                                <div className={styles.adminMeta}>
-                                                    <div className="flex items-center gap-2 mb-2 justify-end">
-                                                        <Link
-                                                            href={`/v/${request.invitation_slug}`}
-                                                            target="_blank"
-                                                            className="flex items-center gap-1 text-xs text-blue-500 hover:underline"
-                                                        >
-                                                            <ExternalLink size={12} />
-                                                            청첩장 보기
-                                                        </Link>
-                                                        <span className="text-gray-300">|</span>
-                                                        <span className="text-xs">
-                                                            {new Date(request.created_at).toLocaleDateString('ko-KR')} {new Date(request.created_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false })}
-                                                        </span>
-                                                    </div>
-                                                </div>
-
-                                                <div className={styles.adminActions}>
-                                                    {targetInv ? (
-                                                        <Button
-                                                            size="sm"
-                                                            className="gap-1 h-8 text-[11px] font-bold bg-banana-yellow text-amber-900 border-banana-yellow hover:bg-yellow-400"
-                                                            onClick={() => handleApproveClick(targetInv)}
-                                                            disabled={actionLoading === targetInv.id}
-                                                        >
-                                                            {actionLoading === targetInv.id ? <Loader2 size={12} className="animate-spin" /> : <CheckCircle2 size={12} />}
-                                                            즉시 승인
-                                                        </Button>
-                                                    ) : (
-                                                        <span className="text-[10px] text-red-500">원본 청첩장 없음</span>
-                                                    )}
-                                                </div>
+                                            <div className={styles.adminActions}>
+                                                {targetInv ? (
+                                                    <Button
+                                                        size="sm"
+                                                        className="gap-1.5 h-9 text-sm font-bold bg-banana-yellow text-amber-900 border-banana-yellow hover:bg-yellow-400"
+                                                        onClick={() => handleApproveClick(targetInv)}
+                                                        disabled={actionLoading === targetInv.id}
+                                                    >
+                                                        {actionLoading === targetInv.id ? <Loader2 size={14} className="animate-spin" /> : <CheckCircle2 size={14} />}
+                                                        즉시 승인
+                                                    </Button>
+                                                ) : (
+                                                    <span className="text-xs text-red-500 py-2">원본 청첩장 없음</span>
+                                                )}
                                             </div>
                                         </div>
                                     );
