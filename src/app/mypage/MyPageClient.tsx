@@ -24,16 +24,7 @@ import ProfileCompletionModal from '@/components/auth/ProfileCompletionModal';
 import { Button } from '@/components/ui/Button';
 import styles from './MyPage.module.scss';
 import { clsx } from 'clsx';
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from "@/components/ui/AlertDialog";
+import { ResponsiveAlertDialog } from '@/components/common/ResponsiveAlertDialog';
 
 export interface InvitationRecord {
     id: string;
@@ -578,31 +569,20 @@ export default function MyPageClient({
                     />
                 )}
 
-                <AlertDialog open={confirmConfig.isOpen} onOpenChange={(open) => setConfirmConfig(prev => ({ ...prev, isOpen: open }))}>
-                    <AlertDialogContent>
-                        <AlertDialogHeader>
-                            <AlertDialogTitle>{confirmConfig.title}</AlertDialogTitle>
-                            <AlertDialogDescription>
-                                {confirmConfig.description}
-                            </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                            {confirmConfig.type !== 'INFO_ONLY' && (
-                                <AlertDialogCancel>취소</AlertDialogCancel>
-                            )}
-                            <AlertDialogAction onClick={(e) => {
-                                if (confirmConfig.type !== 'INFO_ONLY') {
-                                    e.preventDefault();
-                                    handleConfirmAction();
-                                } else {
-                                    setConfirmConfig(prev => ({ ...prev, isOpen: false }));
-                                }
-                            }}>
-                                확인
-                            </AlertDialogAction>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialog>
+                <ResponsiveAlertDialog
+                    open={confirmConfig.isOpen}
+                    onOpenChange={(open) => setConfirmConfig(prev => ({ ...prev, isOpen: open }))}
+                    title={confirmConfig.title}
+                    description={confirmConfig.description}
+                    showCancel={confirmConfig.type !== 'INFO_ONLY'}
+                    onConfirm={() => {
+                        if (confirmConfig.type !== 'INFO_ONLY') {
+                            handleConfirmAction();
+                        } else {
+                            setConfirmConfig(prev => ({ ...prev, isOpen: false }));
+                        }
+                    }}
+                />
             </main>
         </div>
     );
