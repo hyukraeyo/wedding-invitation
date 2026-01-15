@@ -24,7 +24,7 @@ import ProfileCompletionModal from '@/components/auth/ProfileCompletionModal';
 import { Button } from '@/components/ui/Button';
 import styles from './MyPage.module.scss';
 import { clsx } from 'clsx';
-import { ResponsiveAlertDialog } from '@/components/common/ResponsiveAlertDialog';
+import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 
 export interface InvitationRecord {
     id: string;
@@ -471,8 +471,23 @@ export default function MyPageClient({
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end" className="w-32">
                                                     <DropdownMenuItem
-                                                        onClick={() => handleEdit(inv)}
-                                                        className="gap-2 cursor-pointer py-2.5"
+                                                        onClick={() => {
+                                                            if (!isAdmin && inv.invitation_data?.isRequestingApproval) {
+                                                                setConfirmConfig({
+                                                                    isOpen: true,
+                                                                    type: 'INFO_ONLY',
+                                                                    title: '수정할 수 없습니다',
+                                                                    description: <>승인 신청 중인 청첩장은 수정할 수 없습니다.<br />먼저 [신청취소]를 진행해 주세요.</>,
+                                                                    targetId: null,
+                                                                });
+                                                                return;
+                                                            }
+                                                            handleEdit(inv);
+                                                        }}
+                                                        className={clsx(
+                                                            "gap-2 cursor-pointer py-2.5",
+                                                            !isAdmin && inv.invitation_data?.isRequestingApproval && "opacity-50 cursor-not-allowed"
+                                                        )}
                                                     >
                                                         <Edit2 size={16} className="text-gray-500" />
                                                         <span className="font-medium">수정</span>
@@ -569,7 +584,7 @@ export default function MyPageClient({
                     />
                 )}
 
-                <ResponsiveAlertDialog
+                <ResponsiveModal
                     open={confirmConfig.isOpen}
                     onOpenChange={(open) => setConfirmConfig(prev => ({ ...prev, isOpen: open }))}
                     title={confirmConfig.title}

@@ -9,6 +9,7 @@ import {
     DialogTitle,
     DialogDescription,
     DialogTrigger,
+    DialogFooter,
 } from "@/components/ui/Dialog"
 import {
     Drawer,
@@ -18,65 +19,152 @@ import {
     DrawerDescription,
     DrawerTrigger,
     DrawerScrollArea,
+    DrawerFooter,
     DrawerHandle,
 } from "@/components/ui/Drawer"
-
+import { Button } from "@/components/ui/Button";
 import { cn } from '@/lib/utils';
 
-interface ResponsiveModalProps {
+export interface ResponsiveModalProps {
     open?: boolean | undefined;
     onOpenChange?: ((open: boolean) => void) | undefined;
     trigger?: React.ReactNode | undefined;
     title?: React.ReactNode | undefined;
     description?: React.ReactNode | undefined;
-    children: React.ReactNode;
-    className?: string | undefined; // Content class name
+    children?: React.ReactNode | undefined;
+    className?: string | undefined;
+
+    // Alert/Confirm 모드 (children 없이 버튼만 표시)
+    confirmText?: string | undefined;
+    cancelText?: string | undefined;
+    onConfirm?: (() => void) | undefined;
+    onCancel?: (() => void) | undefined;
+    showCancel?: boolean | undefined;
+    confirmVariant?: 'default' | 'destructive' | undefined;
 }
 
 export const ResponsiveModal = ({
-    open,
+    open = false,
     onOpenChange,
     trigger,
     title,
     description,
     children,
-    className
+    className,
+    // Alert 모드 props
+    confirmText = '확인',
+    cancelText = '취소',
+    onConfirm,
+    onCancel,
+    showCancel = true,
+    confirmVariant = 'default',
 }: ResponsiveModalProps) => {
     const isDesktop = useMediaQuery("(min-width: 768px)");
 
+    // Alert 모드: children이 없고 onConfirm이 있으면 버튼만 표시
+    const isAlertMode = !children && onConfirm;
+
+    const handleOpenChange = (newOpen: boolean) => {
+        onOpenChange?.(newOpen);
+    };
+
+    const handleCancel = () => {
+        onCancel?.();
+        onOpenChange?.(false);
+    };
+
+    const handleConfirm = () => {
+        onConfirm?.();
+    };
+
+    // Footer 버튼 렌더링 (Alert 모드일 때만)
+    const renderFooter = () => {
+        if (!isAlertMode) return null;
+
+        if (isDesktop) {
+            return (
+                <DialogFooter className="gap-2 sm:gap-0">
+                    {showCancel && (
+                        <Button variant="outline" onClick={handleCancel}>
+                            {cancelText}
+                        </Button>
+                    )}
+                    <Button
+                        variant={confirmVariant}
+                        onClick={handleConfirm}
+                    >
+                        {confirmText}
+                    </Button>
+                </DialogFooter>
+            );
+        }
+
+        return (
+            <DrawerFooter className="flex-col gap-3 pt-2 pb-8">
+                <Button
+                    onClick={handleConfirm}
+                    variant={confirmVariant}
+                    className="w-full h-12"
+                >
+                    {confirmText}
+                </Button>
+                {showCancel && (
+                    <Button
+                        variant="outline"
+                        onClick={handleCancel}
+                        className="w-full h-12"
+                    >
+                        {cancelText}
+                    </Button>
+                )}
+            </DrawerFooter>
+        );
+    };
+
     if (isDesktop) {
         return (
-            <Dialog open={open as boolean} onOpenChange={onOpenChange as (open: boolean) => void}>
+            <Dialog open={open} onOpenChange={handleOpenChange}>
                 {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
                 <DialogContent className={cn("max-w-md max-h-[85vh] overflow-y-auto", className)}>
                     {(title || description) && (
                         <DialogHeader>
                             {title && <DialogTitle>{title}</DialogTitle>}
-                            {description && <DialogDescription>{description}</DialogDescription>}
+                            {description && (
+                                <DialogDescription asChild>
+                                    <div>{description}</div>
+                                </DialogDescription>
+                            )}
                         </DialogHeader>
                     )}
                     {children}
+                    {renderFooter()}
                 </DialogContent>
             </Dialog>
         );
     }
 
     return (
-        <Drawer open={open as boolean} onOpenChange={onOpenChange as (open: boolean) => void}>
+        <Drawer open={open} onOpenChange={handleOpenChange}>
             {trigger && <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
             <DrawerContent>
                 <DrawerHandle />
                 {(title || description) && (
                     <DrawerHeader className="text-left">
                         {title && <DrawerTitle>{title}</DrawerTitle>}
-                        {description && <DrawerDescription>{description}</DrawerDescription>}
+                        {description && (
+                            <DrawerDescription asChild>
+                                <div>{description}</div>
+                            </DrawerDescription>
+                        )}
                     </DrawerHeader>
                 )}
-                <DrawerScrollArea className={cn("px-4 pb-8", className)}>
-                    {children}
-                </DrawerScrollArea>
+                {children && (
+                    <DrawerScrollArea className={cn("px-4 pb-8", className)}>
+                        {children}
+                    </DrawerScrollArea>
+                )}
+                {renderFooter()}
             </DrawerContent>
         </Drawer>
-
     );
 };
