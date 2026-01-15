@@ -9,7 +9,6 @@ import {
     DialogTitle,
     DialogDescription,
     DialogTrigger,
-    DialogFooter,
 } from "@/components/ui/Dialog"
 import {
     Drawer,
@@ -19,7 +18,6 @@ import {
     DrawerDescription,
     DrawerTrigger,
     DrawerScrollArea,
-    DrawerFooter,
 } from "@/components/ui/Drawer"
 import { Button } from "@/components/ui/Button";
 import { cn } from '@/lib/utils';
@@ -79,7 +77,7 @@ export const ResponsiveModal = ({
         onConfirm?.();
     };
 
-    const FooterButtons = ({ type }: { type: 'dialog' | 'drawer' }) => {
+    const renderFooterButtons = (type: 'dialog' | 'drawer') => {
         if (!isAlertMode) return null;
 
         return (
@@ -118,7 +116,7 @@ export const ResponsiveModal = ({
                         {description && <DialogDescription>{description}</DialogDescription>}
                     </DialogHeader>
                     {children && <div className="py-2">{children}</div>}
-                    <FooterButtons type="dialog" />
+                    {renderFooterButtons('dialog')}
                 </DialogContent>
             </Dialog>
         );
@@ -138,10 +136,10 @@ export const ResponsiveModal = ({
                     </DrawerScrollArea>
                 ) : (
                     <div className="px-4">
-                        <FooterButtons type="drawer" />
+                        {renderFooterButtons('drawer')}
                     </div>
                 )}
-                {children && <div className="px-4"><FooterButtons type="drawer" /></div>}
+                {children && <div className="px-4">{renderFooterButtons('drawer')}</div>}
             </DrawerContent>
         </Drawer>
     );
