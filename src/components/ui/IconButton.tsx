@@ -5,7 +5,7 @@ import { LucideIcon } from "lucide-react"
 
 export interface IconButtonProps extends Omit<ButtonProps, "size" | "variant"> {
     /**
-     * The icon to display. structure: from lucide-react
+     * The icon to display from lucide-react
      */
     icon?: LucideIcon
     /**
@@ -15,22 +15,26 @@ export interface IconButtonProps extends Omit<ButtonProps, "size" | "variant"> {
     size?: "sm" | "md" | "lg" | "xl"
     /**
      * Color variant of the button.
-     * @default "toss-text"
+     * @default "ghost"
      */
-    variant?: "toss-text" | "toss-solid" | "toss-line" | "ghost" | "secondary" | "outline" | "destructive" | "default"
+    variant?: "solid" | "line" | "ghost" | "secondary" | "outline" | "destructive" | "default"
 }
 
+/**
+ * 아이콘 전용 버튼 컴포넌트.
+ * 바나나웨딩 디자인 시스템의 터치 영역(48px)과 인터랙션 가이드를 준수합니다.
+ */
 const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
-    ({ className, icon: Icon, size = "md", variant = "toss-text", children, ...props }, ref) => {
+    ({ className, icon: Icon, size = "md", variant = "ghost", children, ...props }, ref) => {
         // Map custom size props to Button's size variants
         const sizeMap: Record<NonNullable<IconButtonProps["size"]>, NonNullable<ButtonProps["size"]>> = {
             sm: "icon-sm", // 32px
-            md: "icon",    // 48px
+            md: "icon",    // 48px (Standard Touch Area)
             lg: "icon-lg", // 56px
-            xl: "icon-lg", // Fallback or larger if defined, sticking to lg for now
+            xl: "icon-lg",
         }
 
-        // Map size to icon size classes
+        // Map size to icon size
         const iconSizeMap = {
             sm: "h-4 w-4",
             md: "h-6 w-6",
@@ -43,7 +47,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
                 variant={variant}
                 size={sizeMap[size]}
                 className={cn(
-                    "rounded-full transition-transform active:scale-95", // TDS-like extensive rounding and press effect
+                    "rounded-full transition-all active:scale-90", // iOS 스타일 감속 인터랙션
                     className
                 )}
                 ref={ref}

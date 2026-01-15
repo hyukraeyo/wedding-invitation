@@ -1,66 +1,55 @@
 @use "@/styles/tds_colors" as tds;
 @use "@/styles/tds_typography" as typography;
 
-// Base Design System (TDS Mobile)
+// Base Design System (Banana Wedding)
+// 프로젝트의 전반적인 색상과 타이포그래피 토큰을 정의합니다.
 @forward "@/styles/tds_colors";
 @forward "@/styles/tds_typography";
 
-// Basic Colors
-$background: #F9F8E6;
-$foreground: #4A5D45;
-$accent: #E2E2C7;
-$ivory: #F9F8E6;
-$forest-green: #4A5D45;
-$muted-sand: #E2E2C7;
-$coral-pink: #FF8A8A;
+// Brand Colors
+$primary: #FBC02D; // Banana Yellow
+$primary-light: #FFEE58;
+$primary-dark: #F9A825;
+$background: #FFFFFF;
+$ivory: #FFFDE7;
 $banana-yellow: #FBC02D;
 
+// Custom Tone Colors (Wedding theme)
+$wedding-blue: #1565C0;
+$muted-sand: #F5F5DC;
+$coral-pink: #FF8A8A;
 
-// Neutral Grays (Modern Minimal)
-$gray-50: #fbfbfc;
-$gray-100: #f1f3f5;
-$gray-200: #e9ecef;
-$gray-300: #dee2e6;
-$gray-400: #adb5bd;
-$gray-500: #868e96;
-$gray-600: #495057;
-$gray-700: #343a40;
-$gray-800: #212529;
-$gray-900: #191f28;
+// Semantic Grays (Standard Zinc based for compatibility with shadcn)
+$zinc-50: #fafafa;
+$zinc-100: #f4f4f5;
+$zinc-200: #e4e4e7;
+$zinc-300: #d4d4d8;
+$zinc-400: #a1a1aa;
+$zinc-500: #71717a;
+$zinc-600: #52525b;
+$zinc-700: #3f3f46;
+$zinc-800: #27272a;
+$zinc-900: #18181b;
 
-// Toss TDS Colors (Legacy mapping for compatibility)
-$toss-blue-50: tds.$tds-blue-50;
-$toss-blue-100: tds.$tds-blue-100;
-$toss-blue-200: tds.$tds-blue-200;
-$toss-blue-300: tds.$tds-blue-300;
-$toss-blue-400: tds.$tds-blue-400;
-$toss-blue-500: tds.$tds-blue-500;
-$toss-blue-600: tds.$tds-blue-600;
-$toss-blue-700: tds.$tds-blue-700;
-$toss-blue-800: tds.$tds-blue-800;
-$toss-blue-900: tds.$tds-blue-900;
+// Legacy mapping for compatibility (Keep internal usages redirected to Zinc)
+$toss-grey-50: $zinc-50;
+$toss-grey-100: $zinc-100;
+$toss-grey-200: $zinc-200;
+$toss-grey-300: $zinc-300;
+$toss-grey-400: $zinc-400;
+$toss-grey-500: $zinc-500;
+$toss-grey-600: $zinc-600;
+$toss-grey-700: $zinc-700;
+$toss-grey-800: $zinc-800;
+$toss-grey-900: $zinc-900;
 
-$toss-red-50: tds.$tds-red-50;
-$toss-red-500: tds.$tds-red-500;
-$toss-grey-50: tds.$tds-grey-50;
-$toss-grey-100: tds.$tds-grey-100;
-$toss-grey-200: tds.$tds-grey-200;
-$toss-grey-300: tds.$tds-grey-300;
-$toss-grey-400: tds.$tds-grey-400;
-$toss-grey-500: tds.$tds-grey-500;
-$toss-grey-600: tds.$tds-grey-600;
-$toss-grey-700: tds.$tds-grey-700;
-$toss-grey-800: tds.$tds-grey-800;
-$toss-grey-900: tds.$tds-grey-900;
-
-$toss-weak-blue: rgba(tds.$tds-blue-500, 0.1);
-$toss-weak-red: rgba(tds.$tds-red-500, 0.1);
-$toss-weak-grey: tds.$tds-grey-opacity-100; // Map to opacity token
-$toss-weak-black: rgba(0, 0, 0, 0.05);
+// Blue elements (Redirect to Primary or Wedding Blue)
+$toss-blue-500: $primary;
+$toss-blue-600: $primary-dark;
 
 // Backgrounds
-$tds-bg-base: tds.$tds-background;
-$tds-bg-grey: tds.$tds-grey-background;
+$bg-base: $background;
+$bg-grey: $zinc-50;
 
 // Font Families
 $font-pretendard: var(--font-pretendard);
@@ -102,13 +91,14 @@ $canvas-max-width: 340px;
 @mixin scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
+
     &::-webkit-scrollbar {
         display: none;
     }
 }
 
 // Transitions
-$transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+$transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); // iOS Deceleration
 $transition-normal: all 0.4s ease;
 $transition-fast: all 0.2s ease;
 $transition-bounce: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);

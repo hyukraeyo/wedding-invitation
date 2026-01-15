@@ -13,36 +13,35 @@ $builder-gap-lg: 1rem; // 16px
 $builder-gap-xl: 1.25rem; // 20px
 $builder-gap-2xl: 1.5rem; // 24px
 
-$builder-input-height: 48px; // Unified height for search boxes, inputs, buttons, etc.
+$builder-input-height: 48px; // Unified height for mobile touch (48px)
 
-$builder-radius-sm: 0.6rem; // 9.6px
-$builder-radius-md: 0.875rem; // 14px
-$builder-radius-lg: 1.125rem; // 18px
-$builder-radius-xl: 1.5rem; // 24px
+$builder-radius-sm: 0.6rem;
+$builder-radius-md: 0.875rem;
+$builder-radius-lg: 1.125rem;
+$builder-radius-xl: 1.5rem;
 
-// ----- Color Variables (Toss TDS Inspired) -----
-$builder-border-light: v.$toss-grey-100;
-$builder-border-default: v.$toss-grey-200;
-$builder-border-dark: v.$toss-grey-400;
-$builder-bg-subtle: v.$toss-grey-50;
-$builder-bg-hover: v.$toss-grey-100;
-$builder-text-muted: v.$toss-grey-400;
-$builder-text-secondary: v.$toss-grey-600;
-$builder-text-default: v.$toss-grey-800;
-$builder-text-dark: v.$toss-grey-900;
-$builder-text-heading: v.$toss-grey-900;
+// ----- Color Variables (Standardized for Banana Wedding) -----
+$builder-border-light: v.$zinc-100;
+$builder-border-default: v.$zinc-200;
+$builder-border-dark: v.$zinc-300; // 가이드에 따른 가독성 있는 테두리
+$builder-bg-subtle: v.$zinc-50;
+$builder-bg-hover: v.$zinc-100;
+$builder-text-muted: v.$zinc-400;
+$builder-text-secondary: v.$zinc-500;
+$builder-text-default: v.$zinc-700;
+$builder-text-heading: v.$zinc-900;
 
-// ----- Typography (Using TDS Tokens) -----
-$builder-font-xs: 11px; // sub-t13
-$builder-font-sm: 12px; // sub-t12
-$builder-font-base: 13px; // t7
-$builder-font-md: 14px; // sub-t11
-$builder-font-lg: 15px; // t6
-$builder-font-xl: 17px; // t5
+// ----- Typography Tokens -----
+$builder-font-xs: 11px;
+$builder-font-sm: 12px;
+$builder-font-base: 13px;
+$builder-font-md: 14px;
+$builder-font-lg: 15px;
+$builder-font-xl: 17px;
 
 // ----- Layout Mixins -----
 
-// Section container - 아코디언 내부 섹션용
+// Section container
 @mixin builder-section {
   display: flex;
   flex-direction: column;
@@ -50,33 +49,12 @@ $builder-font-xl: 17px; // t5
   padding: $builder-gap-xl $builder-gap-sm;
 }
 
-// Field group - 라벨+인풋 그룹
+// Field group
 @mixin builder-field-group {
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: $builder-gap-sm;
-}
-
-// Row layout - 수평 나열
-@mixin builder-row($gap: $builder-gap-md) {
-  display: flex;
-  align-items: center;
-  gap: $gap;
-}
-
-// Grid layout - 그리드 기반
-@mixin builder-grid($cols: 2, $gap: $builder-gap-md) {
-  display: grid;
-  grid-template-columns: repeat($cols, 1fr);
-  gap: $gap;
-}
-
-// Stack layout - 수직 나열
-@mixin builder-stack($gap: $builder-gap-md) {
-  display: flex;
-  flex-direction: column;
-  gap: $gap;
 }
 
 // Card style
@@ -88,70 +66,42 @@ $builder-font-xl: 17px; // t5
   transition: all v.$transition-fast;
 }
 
-// Subtle divider
-@mixin builder-divider {
-  height: 1px;
-  background: linear-gradient(90deg,
-      transparent 0%,
-      $builder-border-light 20%,
-      $builder-border-light 80%,
-      transparent 100%);
-  margin-block: $builder-gap-md;
-}
-
-// Label style
-@mixin builder-label {
-  @include v.tds-t7("semibold");
-  color: v.$toss-grey-600;
-  display: block;
-  margin-bottom: 6px;
-  padding-left: 2px;
-  letter-spacing: -0.01em;
-}
-
-// Sub-label (smaller, inline)
-@mixin builder-sub-label {
-  @include v.tds-sub-t12("medium");
-  color: $builder-text-secondary;
-  flex-shrink: 0;
-  min-width: 3.5rem;
-}
-
-// Input base style (Toss TDS Inspired)
+// Input base style (Banana Wedding Design)
 @mixin builder-input-base {
   width: 100%;
   height: $builder-input-height;
   padding: 0 1rem;
-  border: 1px solid v.$tds-grey-opacity-100;
-  border-radius: 14px;
-  @include v.tds-t5("regular"); // 17px
+  border: 1px solid v.$zinc-300; // 가이드 준수 (zinc-300)
+  border-radius: 12px;
+  @include v.tds-t5("regular");
   color: $builder-text-heading;
-  background-color: v.$tds-grey-opacity-50;
+  background-color: white;
   outline: none;
   transition: all v.$transition-fast;
   box-sizing: border-box;
 
   &::placeholder {
-    color: v.$toss-grey-400;
+    color: v.$zinc-400;
     font-weight: 400;
   }
 
   @media (hover: hover) and (pointer: fine) {
     &:hover:not(:disabled) {
-      background-color: v.$tds-grey-opacity-100;
+      border-color: v.$zinc-400;
+      background-color: v.$zinc-50;
     }
   }
 
-
   &:focus {
     background-color: white;
-    border-color: v.$tds-blue-500;
-    box-shadow: inset 0 0 0 1px v.$tds-blue-500;
+    border-color: v.$primary; // 브랜드 컬러(노란색) 적용
+    box-shadow: 0 0 0 1px v.$primary;
   }
 
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    background-color: v.$zinc-50;
   }
 }
 
@@ -159,40 +109,40 @@ $builder-font-xl: 17px; // t5
 @mixin builder-button-base {
   @include flex-center;
   height: $builder-input-height;
-  padding: 0 1rem;
+  padding: 0 1.25rem;
   border-radius: 12px;
-  @include v.tds-t7("semibold"); // 13px
-  border: 1px solid $builder-border-default;
+  @include v.tds-t6("semibold");
+  border: 1px solid v.$zinc-300;
   background: white;
-  color: $builder-text-default;
+  color: $builder-text-heading;
   cursor: pointer;
   transition: all v.$transition-fast;
   user-select: none;
 
   @media (hover: hover) and (pointer: fine) {
     &:hover:not(:disabled) {
-      background: v.$toss-grey-50;
+      background: v.$zinc-50;
+      border-color: v.$zinc-400;
     }
   }
 
-
   &:active:not(:disabled) {
-    opacity: 0.6;
+    transform: scale(0.96);
+    background-color: v.$zinc-100;
   }
 
   &:disabled {
-    opacity: 0.3;
-    cursor: default;
+    opacity: 0.4;
+    cursor: not-allowed;
   }
 }
 
-// Active state for toggleable buttons (Segmented Control Item)
+// Active state for toggleable buttons
 @mixin builder-button-active {
-  color: v.$toss-blue-500;
-  background: white;
-  border-color: transparent;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  font-weight: 600;
+  color: v.$primary-dark;
+  background: v.$ivory;
+  border-color: v.$primary;
+  font-weight: 700;
 }
 
 // Helpers

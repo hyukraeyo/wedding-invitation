@@ -47,8 +47,10 @@
   --font-gmarket-sans: "GmarketSansMedium", sans-serif;
 
   /* Custom Transitions (App-like feel) */
-  --ease-ios: cubic-bezier(0.16, 1, 0.3, 1);     /* Smooth deceleration */
-  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1); /* Subtle bounce */
+  --ease-ios: cubic-bezier(0.16, 1, 0.3, 1);
+  /* Smooth deceleration */
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  /* Subtle bounce */
   --motion-duration-fast: 160ms;
   --motion-duration-base: 260ms;
   --motion-duration-slow: 480ms; // Slightly slower for more "weighted" feel
@@ -67,11 +69,11 @@
 
 @layer components {
   .builder-input-unified {
-    @apply flex h-12 w-full items-center rounded-md border border-input bg-transparent px-3 transition-all duration-200;
+    @apply flex h-12 w-full items-center rounded-md border border-zinc-300 bg-transparent px-3 transition-all duration-200;
     @apply placeholder:text-muted-foreground;
     @apply focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring;
     @apply disabled:cursor-not-allowed disabled:opacity-50;
-    
+
     transition-timing-function: var(--ease-ios);
 
     font-size: var(--builder-font-size, 15px);
@@ -79,10 +81,9 @@
 
     @media (hover: hover) and (pointer: fine) {
       &:hover:not(:disabled) {
-        @apply border-gray-400;
+        @apply border-zinc-400;
       }
     }
-
   }
 }
 
@@ -116,7 +117,7 @@ body {
 }
 
 /* 3. 애니메이션은 body가 아닌 내부 컨테이너에 적용 */
-#__next, 
+#__next,
 main {
   flex: 1;
   display: flex;
@@ -131,10 +132,12 @@ button {
   touch-action: manipulation;
   user-select: none;
 }
+
 @keyframes fadeIn {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -205,6 +208,7 @@ button {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .motion-overlay,
   .motion-sheet,
   .motion-dialog {
@@ -242,7 +246,7 @@ button {
 /* Click/Touch Feedback */
 .click-effect {
   transition: transform 0.1s ease-in-out;
-  
+
   &:active {
     transform: scale(0.95);
   }
@@ -260,6 +264,7 @@ button {
   background: rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
+
 .font-pretendard {
   font-family: var(--font-pretendard);
 }
@@ -416,7 +421,7 @@ button {
 .btn-default {
   background-color: var(--primary);
   color: var(--primary-foreground);
-  
+
   @media (hover: hover) and (pointer: fine) {
     &:hover {
       background-color: color-mix(in srgb, var(--primary), white 10%);
@@ -428,7 +433,7 @@ button {
 .btn-destructive {
   background-color: var(--destructive);
   color: var(--destructive-foreground);
-  
+
   @media (hover: hover) and (pointer: fine) {
     &:hover {
       background-color: color-mix(in srgb, var(--destructive), white 10%);
@@ -440,7 +445,7 @@ button {
 .btn-outline {
   border: 1px solid var(--input);
   background-color: var(--background);
-  
+
   @media (hover: hover) and (pointer: fine) {
     &:hover {
       background-color: var(--accent);
@@ -453,7 +458,7 @@ button {
 .btn-secondary {
   background-color: var(--secondary);
   color: var(--secondary-foreground);
-  
+
   @media (hover: hover) and (pointer: fine) {
     &:hover {
       background-color: color-mix(in srgb, var(--secondary), black 20%);
@@ -462,14 +467,56 @@ button {
 }
 
 
+/* Banana Wedding Specific Variants */
 .btn-ghost {
   background-color: transparent;
-  
+  color: var(--foreground);
+
   @media (hover: hover) and (pointer: fine) {
     &:hover {
       background-color: var(--accent);
       color: var(--accent-foreground);
     }
+  }
+
+  &:active {
+    background-color: var(--accent);
+  }
+}
+
+
+.btn-solid {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  transition: opacity 0.2s;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: var(--primary);
+      filter: brightness(1.05);
+    }
+  }
+
+  &:active {
+    opacity: 0.8;
+  }
+}
+
+
+.btn-line {
+  border: 1px solid theme('colors.zinc.300');
+  background-color: var(--background);
+  color: var(--foreground);
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      border-color: theme('colors.zinc.400');
+      background-color: theme('colors.zinc.50');
+    }
+  }
+
+  &:active {
+    background-color: theme('colors.zinc.100');
   }
 }
 
@@ -477,62 +524,13 @@ button {
 .btn-link {
   color: var(--primary);
   text-underline-offset: 4px;
-  
+  font-weight: 600;
+
   @media (hover: hover) and (pointer: fine) {
     &:hover {
       text-decoration: underline;
+      color: var(--primary-dark);
     }
-  }
-}
-
-
-/* Toss Inspired Variants */
-.btn-toss-text {
-  background-color: transparent;
-  color: var(--foreground);
-  
-  @media (hover: hover) and (pointer: fine) {
-    &:hover {
-      background-color: transparent;
-    }
-  }
-  
-  &:active {
-    background-color: rgba(var(--accent), 0.5);
-  }
-}
-
-
-.btn-toss-solid {
-  background-color: var(--primary);
-  color: var(--primary-foreground);
-  transition: opacity 0.2s;
-  
-  @media (hover: hover) and (pointer: fine) {
-    &:hover {
-      background-color: var(--primary);
-    }
-  }
-  
-  &:active {
-    opacity: 0.8;
-  }
-}
-
-
-.btn-toss-line {
-  border: 1px solid var(--input);
-  background-color: var(--background);
-  color: var(--foreground);
-  
-  @media (hover: hover) and (pointer: fine) {
-    &:hover {
-      background-color: var(--background);
-    }
-  }
-  
-  &:active {
-    background-color: var(--accent);
   }
 }
 

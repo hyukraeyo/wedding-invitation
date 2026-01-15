@@ -4,7 +4,6 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 
-// Use global class names instead of CSS module to prevent chunk splitting
 const buttonVariants = cva(
   "btn-base",
   {
@@ -16,16 +15,15 @@ const buttonVariants = cva(
         secondary: "btn-secondary",
         ghost: "btn-ghost",
         link: "btn-link",
-        // Toss Design System Inspired Variants
-        "toss-text": "btn-toss-text",
-        "toss-solid": "btn-toss-solid",
-        "toss-line": "btn-toss-line",
+        // 디자인 시스템 가이드에 맞춘 바나나웨딩 전용 스타일
+        solid: "btn-solid",
+        line: "btn-line",
       },
       size: {
-        default: "btn-size-default",
-        sm: "btn-size-sm",
-        lg: "btn-size-lg",
-        icon: "btn-size-icon",
+        default: "btn-size-default", // 48px (Touch Friendly)
+        sm: "btn-size-sm",          // 32px
+        lg: "btn-size-lg",          // 56px
+        icon: "btn-size-icon",      // 48px
         "icon-sm": "btn-size-icon-sm",
         "icon-lg": "btn-size-icon-lg",
       },

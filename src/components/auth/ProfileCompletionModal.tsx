@@ -16,7 +16,7 @@ interface ProfileCompletionModalProps {
     userId: string;
     defaultName?: string;
     onComplete: () => void;
-    onLogout?: () => void; // 로그아웃 콜백 (선택)
+    onLogout?: () => void;
 }
 
 export default function ProfileCompletionModal({
@@ -30,7 +30,6 @@ export default function ProfileCompletionModal({
     const [phone, setPhone] = useState('');
     const [loading, setLoading] = useState(false);
     const { toast } = useToast();
-
 
     const handleSubmit = useCallback(async () => {
         if (!name.trim()) {
@@ -63,71 +62,73 @@ export default function ProfileCompletionModal({
         }
     }, [name, phone, userId, toast, onComplete]);
 
+    // 디자인 시스템 준수를 위한 커스텀 푸터
+    const modalFooter = (
+        <div className="w-full flex flex-col gap-4">
+            <Button
+                onClick={handleSubmit}
+                disabled={loading || !name.trim() || !phone.trim()}
+                className="w-full h-12 text-base font-bold"
+            >
+                {loading ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : null}
+                {loading ? '저장 중...' : '시작하기'}
+            </Button>
+
+            {onLogout && (
+                <button
+                    type="button"
+                    onClick={onLogout}
+                    className="text-sm text-muted-foreground hover:text-foreground transition-colors self-center py-2 underline underline-offset-4"
+                >
+                    로그아웃
+                </button>
+            )}
+        </div>
+    );
+
     return (
         <ResponsiveModal
             open={isOpen}
-            onOpenChange={() => { }} // 닫기 비활성화 - 필수 입력
+            onOpenChange={() => { }} // 필수 입력이므로 닫기 비활성화
             title="프로필 완성"
             description="청첩장 서비스 이용을 위해 이름과 연락처를 입력해주세요."
+            footer={modalFooter}
         >
-            <div className={styles.container}>
-                <div className={styles.form}>
-                    <div className={styles.inputGroup}>
-                        <div className={styles.iconWrapper}>
+            <div className="flex flex-col gap-6 py-4">
+                <div className="space-y-4">
+                    <div className="relative group">
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors">
                             <User size={18} />
                         </div>
                         <TextField
-                            placeholder="이름"
+                            placeholder="성함 (실명)"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className={styles.input}
+                            className="pl-10 h-12 bg-zinc-50/50 border-zinc-200 focus:bg-white transition-all shadow-sm"
                         />
                     </div>
-                    <div className={styles.inputGroup}>
-                        <div className={styles.iconWrapper}>
+
+                    <div className="relative group">
+                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors">
                             <Phone size={18} />
                         </div>
                         <PhoneField
-                            placeholder="전화번호"
+                            placeholder="연락처 (- 없이 입력)"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
-                            className={styles.input}
+                            className="pl-10 h-12 bg-zinc-50/50 border-zinc-200 focus:bg-white transition-all shadow-sm"
                         />
                     </div>
                 </div>
 
-                <p className={styles.notice}>
-                    입력하신 정보는 청첩장 승인 신청 시 사용되며,
-                    <br />
-                    광고성 목적으로 사용되지 않습니다.
-                </p>
-
-                <Button
-                    onClick={handleSubmit}
-                    disabled={loading || !name.trim() || !phone.trim()}
-                    className={styles.submitButton}
-                >
-                    {loading ? (
-                        <>
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                            저장 중...
-                        </>
-                    ) : (
-                        '시작하기'
-                    )}
-                </Button>
-
-                {onLogout && (
-                    <button
-                        type="button"
-                        onClick={onLogout}
-                        className={styles.logoutLink}
-                    >
-                        로그아웃
-                    </button>
-                )}
+                <div className="bg-zinc-50 p-4 rounded-xl border border-zinc-100 italic">
+                    <p className="text-xs text-muted-foreground leading-relaxed text-center">
+                        입력하신 정보는 청첩장 승인 신청 시 본인 확인용으로만 사용되며,
+                        <br />
+                        타인에게 공개되거나 광고 목적으로 사용되지 않습니다.
+                    </p>
+                </div>
             </div>
         </ResponsiveModal>
     );
 }
-
