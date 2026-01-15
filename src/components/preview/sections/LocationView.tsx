@@ -4,7 +4,7 @@ import React, { memo } from 'react';
 import Image from 'next/image';
 import { Map as KakaoMap, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk';
 import { NavermapsProvider, Container as NaverMapDiv, NaverMap, Marker as NaverMarker } from 'react-naver-maps';
-import { Copy, Phone } from 'lucide-react';
+import { Copy, Phone, Banana } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import SectionContainer from '../SectionContainer';
 import SectionHeader from '../SectionHeader';
@@ -51,7 +51,9 @@ const KakaoMapContainer = ({ lat, lng, mapZoom, lockMap }: { lat: number; lng: n
     if (loading) return (
         <div className="relative w-full h-full">
             <Skeleton className="absolute inset-0 z-10" />
-            <div className={styles.mapPlaceholder}>지도를 불러오고 있습니다...</div>
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-center">
+                <Banana className="h-10 w-10 animate-spin text-primary" />
+            </div>
         </div>
     );
     if (error) return (

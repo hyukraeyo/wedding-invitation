@@ -101,10 +101,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  modal,
 }: Readonly<{
   children: React.ReactNode;
-  modal: React.ReactNode;
 }>) {
   return (
     <html lang="ko" suppressHydrationWarning data-scroll-behavior="smooth" className={`
@@ -190,7 +188,6 @@ export default function RootLayout({
         />
         <ClientProviders>
           {children}
-          {modal}
         </ClientProviders>
       </body>
     </html>

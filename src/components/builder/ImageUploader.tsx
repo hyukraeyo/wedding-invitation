@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useRef } from 'react';
 import Image from 'next/image';
-import { Trash2, UploadCloud, Loader2 } from 'lucide-react';
+import { Trash2, UploadCloud, Banana } from 'lucide-react';
 import { Label } from './FormPrimitives';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { SegmentedControl } from './SegmentedControl';
@@ -150,7 +150,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                             )}
                             {isUploading && (
                                 <div className="absolute inset-0 flex items-center justify-center bg-black/20 z-10">
-                                    <Loader2 className="h-8 w-8 animate-spin text-white" />
+                                    <Banana className="h-8 w-8 animate-spin text-primary" />
                                 </div>
                             )}
                             <IconButton

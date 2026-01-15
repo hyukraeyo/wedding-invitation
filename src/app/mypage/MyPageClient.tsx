@@ -10,7 +10,7 @@ import { useInvitationStore, InvitationData } from '@/store/useInvitationStore';
 import Header from '@/components/common/Header';
 import { IconButton } from '@/components/ui/icon-button';
 import { useToast } from '@/hooks/use-toast';
-import { Calendar, MapPin, ExternalLink, Edit2, Trash2, Loader2, FileText, MoreHorizontal, CheckCircle2, Send, PhoneCall, User, XCircle } from 'lucide-react';
+import { Calendar, MapPin, ExternalLink, Edit2, Trash2, Banana, FileText, MoreHorizontal, CheckCircle2, Send, PhoneCall, User, XCircle } from 'lucide-react';
 import Image from 'next/image';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 
@@ -496,7 +496,7 @@ export default function MyPageClient({
                                                         className="gap-2 cursor-pointer py-2.5 text-red-600 focus:text-red-600 focus:bg-red-50"
                                                     >
                                                         {actionLoading === inv.id ? (
-                                                            <Loader2 size={16} className="animate-spin" />
+                                                            <Banana size={16} className="animate-spin text-primary" />
                                                         ) : (
                                                             <Trash2 size={16} />
                                                         )}

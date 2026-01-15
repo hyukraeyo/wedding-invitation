@@ -134,8 +134,22 @@ export const authConfig = {
             // Admin Credentials Check
             if (provider === 'credentials') {
                 if (!user.email || !adminEmails.length) return false;
-                return adminEmails.includes(user.email.toLowerCase());
+                const isAdmin = adminEmails.includes(user.email.toLowerCase());
+                if (!isAdmin) return false;
+
+                try {
+                    await publicClient.from('profiles').upsert({
+                        id: user.id,
+                        full_name: user.name ?? 'Admin',
+                        is_admin: true,
+                    });
+                } catch (error) {
+                    console.error('Error saving admin profile during sign in:', error);
+                }
+
+                return true;
             }
+
 
             // Social Login: Upsert Profile
             try {

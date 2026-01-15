@@ -37,8 +37,8 @@ export function useAuth() {
     };
 
     const profile = sessionUser ? profileData ?? null : null;
-    const isEmailAdmin = sessionUser?.email === 'admin@test.com';
-    const isAdmin = !!sessionUser && (!!profile?.is_admin || isEmailAdmin);
+    const isAdmin = !!sessionUser && !!profile?.is_admin;
+
     const isProfileComplete = !!(profile?.full_name && profile?.phone);
 
     return {

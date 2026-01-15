@@ -3,7 +3,7 @@
 Guidance for agentic coding agents working in `wedding-invitation`.
 This file consolidates repo conventions plus Cursor rules from `.cursorrules`.
 
-## Build/Lint/Test Commands
+## Build / Lint / Test Commands
 
 ```bash
 # Development
@@ -35,27 +35,6 @@ npm run test -- --reporter=verbose src/components/common/__tests__
 npm run test -- -t "renders main heading"
 ```
 
-## Supabase Remote CLI (No Docker)
-
-- 로컬 Docker를 사용하지 않습니다. 원격 Supabase에 직접 연결합니다.
-- 비-인터랙티브 환경에서는 `npx supabase login`이 실패하므로 토큰을 사용하세요.
-
-```bash
-export SUPABASE_ACCESS_TOKEN=...
-export SUPABASE_DB_PASSWORD=...
-
-npx supabase link --project-ref <project-ref>
-npx supabase db push
-```
-
-## Project Overview
-
-- **Framework**: Next.js 16.1.1 (App Router)
-- **Language**: TypeScript 5 (strict mode)
-- **Styling**: Tailwind CSS + TDS Mobile design system base
-- **State**: Zustand (client), TanStack Query (server)
-- **Testing**: Vitest + React Testing Library
-
 ## Cursor Rules (from `.cursorrules`)
 
 ### Mobile-First UX (Top Priority)
@@ -73,16 +52,36 @@ npx supabase db push
 - Maintain accessibility defaults and add ARIA when needed.
 - Avoid unnecessary re-renders in component usage.
 
-### Next.js 16+ Official Patterns (STRICT)
-- **Server Components Only for Data**: ALWAYS fetch data in Server Components directly from the DB.
-- **No Client Fetching**: Do NOT use `useEffect` or client-side generic fetch for initial data.
-- **Server Actions for Mutations**: Use Server Actions (`'use server'`) for form submissions and data updates. Do NOT create API routes for these.
-- **Direct DB Access**: In Server Components, call the DB/Service layer directly. Do NOT `fetch` your own API routes.
+### Next.js 16+ Official Patterns (Strict)
+- Server components are default; only use client components for interactivity.
+- Fetch initial data in server components; no client-side `useEffect` fetches.
+- Use Server Actions (`'use server'`) for mutations; avoid extra API routes.
+- Direct DB/service layer access from server components; no `fetch('/api')`.
+- Use `Suspense` and `loading.tsx` for streaming.
 
 ### Reuse First (Critical)
 - Search for existing components before creating new ones.
-- If patterns repeat, refactor into shared components.
-- DRY is mandatory; do not duplicate UI patterns.
+- Refactor repeated patterns into shared components.
+- DRY is mandatory; avoid duplicating UI patterns.
+
+## Project Overview
+- Framework: Next.js 16.1.1 (App Router)
+- Language: TypeScript 5 (strict mode)
+- Styling: Tailwind CSS + TDS Mobile design system base
+- State: Zustand (client), TanStack Query (server)
+- Testing: Vitest + React Testing Library
+
+## Supabase Remote CLI (No Docker)
+- Local Docker is not used; connect directly to remote Supabase.
+- In non-interactive environments, `npx supabase login` fails, use tokens.
+
+```bash
+export SUPABASE_ACCESS_TOKEN=...
+export SUPABASE_DB_PASSWORD=...
+
+npx supabase link --project-ref <project-ref>
+npx supabase db push
+```
 
 ## Code Style Guidelines
 
@@ -103,101 +102,46 @@ import { CONSTANT } from '@/constants';
 - Avoid adding inline comments unless explicitly requested.
 
 ### Naming Conventions
-- **Components**: PascalCase (`UserProfile.tsx`)
-- **Files/Folders**: kebab-case (`user-profile.tsx`)
-- **Functions/Variables**: camelCase (`getUserData`)
-- **Types/Interfaces**: PascalCase (`ApiResponse`)
-- **Constants**: UPPER_SNAKE_CASE (`MAX_RETRY_COUNT`)
+- Components: PascalCase (`UserProfile.tsx`)
+- Files/Folders: kebab-case (`user-profile.tsx`)
+- Functions/Variables: camelCase (`getUserData`)
+- Types/Interfaces: PascalCase (`ApiResponse`)
+- Constants: UPPER_SNAKE_CASE (`MAX_RETRY_COUNT`)
 
 ### TypeScript Usage
 - Strict mode is enforced; avoid `any`.
 - Use `interface` for object shapes and component props.
 - Use `type` for unions, intersections, and mapped types.
 - Define props explicitly and avoid `React.FC`.
-
-```ts
-interface ButtonProps {
-  onClick: () => void;
-  disabled?: boolean;
-}
-
-export function Button({ onClick, disabled = false }: ButtonProps) {
-  return <button onClick={onClick} disabled={disabled} />;
-}
-```
+- Prefer explicit return types for exported helpers.
 
 ### React + Next.js Patterns
 - Server components by default.
 - `'use client'` only for hooks, browser APIs, or interactivity.
-- Use `ErrorBoundary` for client-side error recovery.
-- Use Next.js `<Image>` for image optimization.
-- Use memoization (`React.memo`, `useMemo`, `useCallback`) to reduce re-renders.
+- Data fetching stays in server components; no client-side fetch on initial render.
+- Use Server Actions for mutations.
+- Use `<Image>` for images and memoize expensive components.
+- Wrap risky UI with `ErrorBoundary`.
 
 ## Error Handling
-
-### API Routes
-Use structured error responses with status codes:
+- Prefer structured errors with status codes in API handlers.
+- Handle Zod validation errors explicitly.
+- Log unexpected errors server-side with context.
 
 ```ts
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
-    const validated = schema.parse(body);
-    return NextResponse.json({ success: true, data: result });
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: 'Validation failed', details: error.issues },
-        { status: 400 }
-      );
-    }
-    console.error('API error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
-  }
-}
-```
-
-### Client Components
-Wrap risky UI with `ErrorBoundary`:
-
-```tsx
-<ErrorBoundary fallback={<ErrorFallback />}>
-  <ComponentThatMightError />
-</ErrorBoundary>
+return NextResponse.json({ error: 'Validation failed' }, { status: 400 });
 ```
 
 ## Testing Guidelines
-
 - Place tests in `__tests__` folders or `*.test.tsx` files.
 - Use `@/test-utils` for configured providers.
 - Test behavior, not implementation details.
 - Prefer `getByRole`/`getByText` over selectors.
 - Mock external APIs and browser APIs when needed.
 
-```ts
-import { render, screen } from '@/test-utils';
-import { describe, it, expect } from 'vitest';
-
-describe('MyComponent', () => {
-  it('renders correctly', () => {
-    render(<MyComponent />);
-    expect(screen.getByText('Hello')).toBeInTheDocument();
-  });
-});
-```
-
-## Commit Message Format
-
-```
-type(scope): description
-
-feat(auth): add login modal
-fix(api): handle validation errors
-refactor(state): extract hook
-```
-
-- Always include a type prefix.
-- Use lowercase and keep subject <= 50 chars.
+## Performance & Accessibility
+- Minimize client components to reduce hydration cost.
+- Use memoization to reduce unnecessary re-renders.
+- Ensure keyboard navigation and meaningful ARIA labels.
+- Prefer `loading.tsx` + `Suspense` for perceived performance.
+- Keep bundle size in check with `npm run analyze`.

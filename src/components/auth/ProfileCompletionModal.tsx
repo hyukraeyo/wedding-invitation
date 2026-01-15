@@ -7,7 +7,7 @@ import { PhoneField } from '../builder/PhoneField';
 import { Button } from '../ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { profileService } from '@/services/profileService';
-import { Loader2, User, Phone } from 'lucide-react';
+import { User, Phone } from 'lucide-react';
 import { isValidPhone } from '@/lib/utils';
 
 interface ProfileCompletionModalProps {
@@ -69,8 +69,7 @@ export default function ProfileCompletionModal({
                 disabled={loading || !name.trim() || !phone.trim()}
                 className="w-full h-12 text-base font-bold"
             >
-                {loading ? <Loader2 className="h-5 w-5 animate-spin mr-2" /> : null}
-                {loading ? '저장 중...' : '시작하기'}
+                시작하기
             </Button>
 
             {onLogout && (

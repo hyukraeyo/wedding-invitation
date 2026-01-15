@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { signIn } from 'next-auth/react';
-import styles from '@/components/auth/LoginModal.module.scss';
+import styles from './login.module.scss';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import ProfileCompletionModal from '@/components/auth/ProfileCompletionModal';
@@ -26,6 +27,19 @@ export default function LoginPage() {
         }
     }, [user, authLoading, isProfileComplete, router]);
 
+    const handleOAuthLogin = useCallback(async (provider: 'kakao' | 'naver') => {
+        setLoadingProvider(provider);
+        const result = await signIn(provider, { callbackUrl: "/builder", redirect: false });
+        if (result?.error) {
+            toast({ variant: 'destructive', description: result.error });
+            setLoadingProvider(null);
+            return;
+        }
+        if (result?.url) {
+            window.location.href = result.url;
+        }
+    }, [toast]);
+
     // 로딩 중일 때는 빈 화면 대신 로딩 표시
     if (authLoading) {
         return <LoadingSpinner />;
@@ -34,31 +48,7 @@ export default function LoginPage() {
     // 이미 로그인하고 프로필도 완성했다면 리디렉션되므로 렌더링 안 함
     if (user && isProfileComplete) return null;
 
-    const handleKakaoLogin = async () => {
-        setLoadingProvider('kakao');
-        const result = await signIn("kakao", { callbackUrl: "/builder", redirect: false });
-        if (result?.error) {
-            toast({ variant: 'destructive', description: result.error });
-            setLoadingProvider(null);
-            return;
-        }
-        if (result?.url) {
-            window.location.href = result.url;
-        }
-    };
 
-    const handleNaverLogin = async () => {
-        setLoadingProvider('naver');
-        const result = await signIn("naver", { callbackUrl: "/builder", redirect: false });
-        if (result?.error) {
-            toast({ variant: 'destructive', description: result.error });
-            setLoadingProvider(null);
-            return;
-        }
-        if (result?.url) {
-            window.location.href = result.url;
-        }
-    };
 
     // 로그인 상태이지만 프로필이 미완성인 경우 프로필 완성 모달 표시
     // profileLoading이 아닐 때만 표시 (로딩 중일 때는 깜빡임 방지)
@@ -102,7 +92,8 @@ export default function LoginPage() {
                     <div className={styles.socialButtons}>
                         <button
                             className={`${styles.socialButton} ${styles.kakao}`}
-                            onClick={handleKakaoLogin}
+                            onClick={() => handleOAuthLogin('kakao')}
+
                             disabled={!!loadingProvider}
                             type="button"
                         >
@@ -117,7 +108,8 @@ export default function LoginPage() {
 
                         <Button
                             className={`${styles.socialButton} ${styles.naver}`}
-                            onClick={handleNaverLogin}
+                            onClick={() => handleOAuthLogin('naver')}
+
                             disabled={!!loadingProvider}
                             type="button"
                         >
