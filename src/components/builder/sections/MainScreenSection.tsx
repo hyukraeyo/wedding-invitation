@@ -204,8 +204,8 @@ export default function MainScreenSection({ isOpen, value }: SectionProps) {
                                         className={`${styles.stylePresetCard} ${mainScreen.layout === preset.layout ? styles.selected : ''}`}
                                         onClick={() => handleSelectPreset(preset, index)}
                                     >
-                                        <div className={styles.presetThumbnail}>
-                                            <div className={styles.thumbnailImage} />
+                                        <div className={cn(styles.presetThumbnail, preset.layout === 'classic' && styles.classicLayout)}>
+                                            {preset.layout !== 'classic' && <div className={styles.thumbnailImage} />}
                                             <div className={styles.thumbnailContent}>
                                                 {preset.layout === 'classic' && (
                                                     <>
@@ -240,7 +240,9 @@ export default function MainScreenSection({ isOpen, value }: SectionProps) {
                                                     </>
                                                 )}
                                             </div>
+                                            {preset.layout === 'classic' && <div className={styles.thumbnailImage} />}
                                             <div className={styles.thumbnailFooter}>
+                                                {preset.layout === 'classic' && <span>초대합니다</span>}
                                                 <span>2024. 05. 25</span>
                                                 <span>예식장</span>
                                             </div>

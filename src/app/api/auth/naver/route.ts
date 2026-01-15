@@ -1,15 +1,23 @@
+import { randomUUID } from 'crypto';
 import { NextResponse } from 'next/server';
 
+export const runtime = 'nodejs';
+
 // 네이버 OAuth 설정
-const NAVER_CLIENT_ID = process.env.NAVER_CLIENT_ID!;
+const NAVER_CLIENT_ID = process.env.NAVER_CLIENT_ID;
 const NAVER_AUTH_URL = 'https://nid.naver.com/oauth2.0/authorize';
 
 export async function GET(request: Request) {
-    const { searchParams } = new URL(request.url);
-    const redirectUri = searchParams.get('redirect_uri') || `${process.env.NEXT_PUBLIC_APP_URL}/api/auth/naver/callback`;
+    if (!NAVER_CLIENT_ID) {
+        const fallbackUrl = new URL('/login?error=server_misconfig', request.url);
+        return NextResponse.redirect(fallbackUrl);
+    }
+
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || new URL(request.url).origin;
+    const redirectUri = `${baseUrl}/api/auth/naver/callback`;
 
     // CSRF 방지를 위한 state 생성
-    const state = Math.random().toString(36).substring(2, 15);
+    const state = randomUUID();
 
     // 네이버 인증 URL 생성
     const authUrl = new URL(NAVER_AUTH_URL);

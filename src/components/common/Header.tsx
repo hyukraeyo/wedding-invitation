@@ -8,6 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
+import { IconButton } from '@/components/ui/IconButton';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 
 interface HeaderProps {
@@ -103,58 +104,84 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
                             </>
                         ) : (
                             <Link href="/mypage">
-                                <Button variant="ghost" size="sm" className="px-2">
-                                    <span className="hidden md:inline">마이페이지</span>
-                                    <User size={20} className="md:hidden" />
+                                <Button variant="ghost" size="sm" className="px-2 hidden md:inline-flex">
+                                    <span>마이페이지</span>
                                 </Button>
+                                <div className="md:hidden">
+                                    <IconButton icon={User} size="md" variant="ghost" />
+                                </div>
                             </Link>
                         )}
                         <Button
                             variant="ghost"
                             size="sm"
-                            className="px-2"
+                            className="px-2 hidden md:inline-flex"
                             onClick={async () => {
                                 await signOut();
                                 router.push('/');
                             }}
                             aria-label="로그아웃"
                         >
-                            <span className="hidden md:inline">로그아웃</span>
-                            <LogOut size={20} className="md:hidden" />
+                            <span>로그아웃</span>
                         </Button>
+                        <div className="md:hidden">
+                            <IconButton
+                                icon={LogOut}
+                                size="md"
+                                variant="ghost"
+                                onClick={async () => {
+                                    await signOut();
+                                    router.push('/');
+                                }}
+                                aria-label="로그아웃"
+                            />
+                        </div>
                     </>
                 ) : (
                     onLogin && (
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            className="px-2"
-                            onClick={onLogin}
-                            aria-label="로그인"
-                        >
-                            <span className="hidden md:inline">로그인</span>
-                            <LogIn size={20} className="md:hidden" />
-                        </Button>
+                        <>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="px-2 hidden md:inline-flex"
+                                onClick={onLogin}
+                                aria-label="로그인"
+                            >
+                                <span>로그인</span>
+                            </Button>
+                            <div className="md:hidden">
+                                <IconButton icon={LogIn} size="md" variant="ghost" onClick={onLogin} aria-label="로그인" />
+                            </div>
+                        </>
                     )
                 )}
 
                 {onSave && user && (
-                    <Button
-                        onClick={onSave}
-                        size="sm"
-                        className="font-bold min-w-[32px] md:min-w-[60px] px-2 md:px-4 ml-1 md:ml-2"
-                        disabled={isLoading}
-                        aria-label="저장"
-                    >
-                        {isLoading ? (
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                            <>
-                                <Save size={20} className="md:hidden" />
-                                <span className="hidden md:inline">저장</span>
-                            </>
-                        )}
-                    </Button>
+                    <>
+                        <Button
+                            onClick={onSave}
+                            size="sm"
+                            className="font-bold min-w-[60px] px-4 ml-2 hidden md:inline-flex"
+                            disabled={isLoading}
+                            aria-label="저장"
+                        >
+                            {isLoading ? (
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                                <span>저장</span>
+                            )}
+                        </Button>
+                        <div className="md:hidden ml-1">
+                            <IconButton
+                                icon={isLoading ? Loader2 : Save}
+                                onClick={onSave}
+                                disabled={isLoading}
+                                size="md"
+                                variant="default"
+                                className={isLoading ? "animate-spin" : ""}
+                            />
+                        </div>
+                    </>
                 )}
             </div>
 

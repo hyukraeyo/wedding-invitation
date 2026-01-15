@@ -31,6 +31,7 @@ import {
     rectSortingStrategy,
     useSortable
 } from '@dnd-kit/sortable';
+import { IconButton } from '@/components/ui/IconButton';
 import { CSS } from '@dnd-kit/utilities';
 import styles from './GallerySection.module.scss';
 
@@ -89,16 +90,19 @@ const SortableItem = React.memo(function SortableItem({ id, url, onRemove, isDra
 
             <div className={styles.gradientOverlay} />
 
-            <button
-                className={styles.deleteBtn}
-                onClick={(e) => {
-                    e.stopPropagation();
-                    onRemove(id);
-                }}
-                onPointerDown={(e) => e.stopPropagation()}
-            >
-                <Trash2 size={12} />
-            </button>
+            <div className="absolute top-1 right-1 z-10">
+                <IconButton
+                    icon={Trash2}
+                    size="sm"
+                    className="w-6 h-6 bg-black/50 hover:bg-black/70 text-white rounded-full border-none p-0"
+                    variant="ghost"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onRemove(id);
+                    }}
+                    onPointerDown={(e) => e.stopPropagation()}
+                />
+            </div>
 
             <div
                 {...attributes}

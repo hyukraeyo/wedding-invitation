@@ -5,6 +5,7 @@ export interface Profile {
     full_name: string | null;
     phone: string | null;
     avatar_url: string | null;
+    naver_id?: string | null;
     is_admin: boolean;
     is_profile_complete: boolean;
     created_at: string;
@@ -53,8 +54,10 @@ export const profileService = {
      * 프로필 업데이트 (없으면 생성)
      */
     async updateProfile(userId: string, updates: ProfileUpdatePayload): Promise<Profile> {
-        // 이름과 전화번호가 모두 있으면 프로필 완성으로 표시
-        const isComplete = !!(updates.full_name && updates.phone);
+        const currentProfile = await this.getProfile(userId);
+        const fullName = updates.full_name ?? currentProfile?.full_name ?? null;
+        const phone = updates.phone ?? currentProfile?.phone ?? null;
+        const isComplete = !!(fullName && phone);
 
         // upsert 사용: 프로필이 없으면 생성, 있으면 업데이트
         const { data, error } = await supabase

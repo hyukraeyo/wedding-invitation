@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { CreditCard, Plus, Trash2, ChevronDown } from 'lucide-react';
+import { IconButton } from '@/components/ui/IconButton';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
@@ -234,13 +235,15 @@ export default function AccountsSection({ value, isOpen }: SectionProps) {
                                             onChange={(e) => handleUpdateAccount(acc.id, { accountNumber: e.target.value })}
                                         />
 
-                                        <button
-                                            className={styles.removeBtn}
-                                            onClick={() => handleRemoveAccount(acc.id)}
-                                        >
-                                            <Trash2 size={14} />
-                                            <span>계좌 삭제</span>
-                                        </button>
+                                        <div className="flex justify-end mt-2">
+                                            <IconButton
+                                                icon={Trash2}
+                                                size="sm" // Small icon button
+                                                variant="destructive"
+                                                onClick={() => handleRemoveAccount(acc.id)}
+                                                className="rounded-lg w-8 h-8"
+                                            />
+                                        </div>
                                     </div>
                                 )}
                             </div>

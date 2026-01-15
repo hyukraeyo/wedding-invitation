@@ -35,6 +35,19 @@ npm run test -- --reporter=verbose src/components/common/__tests__
 npm run test -- -t "renders main heading"
 ```
 
+## Supabase Remote CLI (No Docker)
+
+- 로컬 Docker를 사용하지 않습니다. 원격 Supabase에 직접 연결합니다.
+- 비-인터랙티브 환경에서는 `npx supabase login`이 실패하므로 토큰을 사용하세요.
+
+```bash
+export SUPABASE_ACCESS_TOKEN=...
+export SUPABASE_DB_PASSWORD=...
+
+npx supabase link --project-ref <project-ref>
+npx supabase db push
+```
+
 ## Project Overview
 
 - **Framework**: Next.js 16.1.1 (App Router)

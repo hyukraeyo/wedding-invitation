@@ -287,9 +287,7 @@ const InvitationCanvas = memo(({ isPreviewMode = false, editingSection, hideWate
 
       {/* Watermark for unapproved live pages */}
       {!isApproved && !isPreviewMode && !hideWatermark && (
-        <div className={styles.watermark}>
-          <span>BANANA WEDDING PREVIEW</span>
-        </div>
+        <div className={styles.watermark} />
       )}
 
       {/* Portal Root for Modals (to keep them inside the mockup) */}

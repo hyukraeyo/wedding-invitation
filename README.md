@@ -186,6 +186,32 @@ npm run build
 npm run analyze
 ```
 
+### 🗄️ Supabase 원격 마이그레이션
+
+로컬 Docker 없이 **원격 Supabase 프로젝트에 직접** 마이그레이션을 적용합니다.
+
+#### 1) 인증 토큰 준비
+
+- Supabase Access Token을 발급한 뒤 환경 변수로 설정합니다.
+- 비-인터랙티브 환경에서는 `npx supabase login` 대신 토큰을 사용하세요.
+
+```bash
+export SUPABASE_ACCESS_TOKEN=...
+export SUPABASE_DB_PASSWORD=...
+```
+
+#### 2) 프로젝트 연결 및 마이그레이션 적용
+
+```bash
+npx supabase link --project-ref <project-ref>
+npx supabase db push
+```
+
+#### 참고
+
+- `supabase/migrations`의 SQL이 원격 DB에 적용됩니다.
+- 프로젝트 ref는 Supabase 대시보드 또는 `supabase/.temp/project-ref`에서 확인합니다.
+
 ## 📁 프로젝트 구조
 
 ```

@@ -6,7 +6,7 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { SegmentedControl } from './SegmentedControl';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/Button';
+import { IconButton } from '@/components/ui/IconButton';
 import { AspectRatio } from '@/components/ui/AspectRatio';
 import { isBlobUrl } from '@/lib/image';
 import { IMAGE_SIZES } from '@/constants/image';
@@ -153,16 +153,15 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                                     <Loader2 className="h-8 w-8 animate-spin text-white" />
                                 </div>
                             )}
-                            <Button
+                            <IconButton
                                 type="button"
                                 onClick={handleRemove}
                                 variant="destructive"
-                                size="icon-sm"
-                                className="absolute top-2 right-2 transition-opacity z-20"
+                                size="sm"
+                                icon={Trash2}
+                                className="absolute top-2 right-2 transition-opacity z-20 w-8 h-8 rounded-full shadow-sm"
                                 disabled={isUploading}
-                            >
-                                <Trash2 size={16} />
-                            </Button>
+                            />
                         </div>
                     ) : (
                         <div className="flex flex-col items-center justify-center p-6 text-center text-muted-foreground">

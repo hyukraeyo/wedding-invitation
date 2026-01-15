@@ -10,6 +10,8 @@ import { useInvitationStore, InvitationData } from '@/store/useInvitationStore';
 import Header from '@/components/common/Header';
 import { useToast } from '@/hooks/use-toast';
 import { Calendar, MapPin, ExternalLink, Edit2, Trash2, Loader2, FileText, MoreHorizontal, CheckCircle2, Send, PhoneCall, User, XCircle } from 'lucide-react';
+import Image from 'next/image';
+import { AspectRatio } from '@/components/ui/AspectRatio';
 
 
 import {
@@ -340,11 +342,7 @@ export default function MyPageClient({
                     </section>
                 )}
 
-                {/* 2. My Invitations Section */}
-                <div className="mt-8 mb-6">
-                    <h2 className="text-xl font-bold text-gray-900">나의 청첩장</h2>
-                    <p className="text-sm text-gray-500 mt-1">내가 직접 제작하고 편집 중인 청첩장입니다.</p>
-                </div>
+
 
                 {(() => {
                     const myInvitations = isAdmin
@@ -365,6 +363,25 @@ export default function MyPageClient({
                         <div className={styles.grid}>
                             {myInvitations.map((inv) => (
                                 <div key={inv.id} className={styles.card}>
+                                    {/* Card Image */}
+                                    <div className="w-full bg-gray-50 border-b border-gray-100">
+                                        <AspectRatio ratio={4 / 3}>
+                                            {inv.invitation_data?.imageUrl ? (
+                                                <Image
+                                                    src={inv.invitation_data.imageUrl}
+                                                    alt="Main Screen"
+                                                    fill
+                                                    className="object-cover"
+                                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                />
+                                            ) : (
+                                                <div className="flex items-center justify-center w-full h-full text-gray-300 bg-gray-50">
+                                                    <FileText size={48} strokeWidth={1} />
+                                                </div>
+                                            )}
+                                        </AspectRatio>
+                                    </div>
+
                                     <div className={styles.cardBody}>
                                         <div className={styles.cardHeader}>
                                             <div>
@@ -424,15 +441,15 @@ export default function MyPageClient({
                                         </div>
                                     </div>
                                     <div className={styles.cardActions}>
-                                        <a
-                                            href={`/v/${encodeURIComponent(inv.slug)}`}
+                                        <Link
+                                            href={`/v/${inv.slug}`}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className={clsx(styles.actionButton, styles.primary)}
                                         >
                                             <ExternalLink size={16} />
                                             청첩장 확인
-                                        </a>
+                                        </Link>
                                         <button
                                             type="button"
                                             className={clsx(

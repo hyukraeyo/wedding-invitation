@@ -89,31 +89,7 @@
   object-fit: cover;
 }
 
-.deleteBtn {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.5);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: none;
-  cursor: pointer;
-  opacity: 1;
-  transition: opacity 0.2s ease;
-  z-index: 10;
 
-  @media (hover: hover) and (pointer: fine) {
-    &:hover {
-      background-color: v.$toss-red-500;
-    }
-  }
-
-}
 
 .overlay {
   width: 100px;
