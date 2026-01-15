@@ -8,11 +8,11 @@ import { approvalRequestService, ApprovalRequestRecord } from '@/services/approv
 import { Profile } from '@/services/profileService';
 import { useInvitationStore, InvitationData } from '@/store/useInvitationStore';
 import Header from '@/components/common/Header';
+import { IconButton } from '@/components/ui/IconButton';
 import { useToast } from '@/hooks/use-toast';
 import { Calendar, MapPin, ExternalLink, Edit2, Trash2, Loader2, FileText, MoreHorizontal, CheckCircle2, Send, PhoneCall, User, XCircle } from 'lucide-react';
 import Image from 'next/image';
 import { AspectRatio } from '@/components/ui/AspectRatio';
-
 
 import {
     DropdownMenu,
@@ -20,16 +20,14 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/DropdownMenu';
-import { ResponsiveModal } from '@/components/common/ResponsiveModal';
-import { TextField } from '@/components/builder/TextField';
-import { PhoneField } from '@/components/builder/PhoneField';
+import ProfileCompletionModal from '@/components/auth/ProfileCompletionModal';
 import { Button } from '@/components/ui/Button';
-import { isValidPhone } from '@/lib/utils';
 import styles from './MyPage.module.scss';
 import { clsx } from 'clsx';
 import {
     AlertDialog,
     AlertDialogAction,
+    AlertDialogCancel,
     AlertDialogContent,
     AlertDialogDescription,
     AlertDialogFooter,
@@ -53,6 +51,17 @@ export interface MyPageClientProps {
     initialApprovalRequests: ApprovalRequestRecord[];
 }
 
+type ConfirmActionType = 'DELETE' | 'CANCEL_REQUEST' | 'APPROVE' | 'REQUEST_APPROVAL' | 'INFO_ONLY';
+
+interface ConfirmConfig {
+    isOpen: boolean;
+    type: ConfirmActionType;
+    title: string;
+    description: React.ReactNode;
+    targetId: string | null;
+    targetRecord?: InvitationRecord | null;
+}
+
 export default function MyPageClient({
     userId,
     isAdmin,
@@ -64,11 +73,20 @@ export default function MyPageClient({
     const [invitations, setInvitations] = useState<InvitationRecord[]>(initialInvitations);
     const [approvalRequests, setApprovalRequests] = useState<ApprovalRequestRecord[]>(initialApprovalRequests);
     const [actionLoading, setActionLoading] = useState<string | null>(null);
-    const [requestDialogOpen, setRequestDialogOpen] = useState(false);
-    const [requestName, setRequestName] = useState('');
-    const [requestPhone, setRequestPhone] = useState('');
-    const [requestTarget, setRequestTarget] = useState<InvitationRecord | null>(null);
-    const [alertDialogOpen, setAlertDialogOpen] = useState(false);
+
+    // Profile Completion Modal State
+    const [profileModalOpen, setProfileModalOpen] = useState(false);
+
+    // Confirmation Dialog State
+    const [confirmConfig, setConfirmConfig] = useState<ConfirmConfig>({
+        isOpen: false,
+        type: 'INFO_ONLY',
+        title: '',
+        description: '',
+        targetId: null,
+        targetRecord: null,
+    });
+
     const reset = useInvitationStore(state => state.reset);
     const { toast } = useToast();
 
@@ -97,16 +115,15 @@ export default function MyPageClient({
     const handleEdit = useCallback((inv: { invitation_data: InvitationData; slug: string }) => {
         useInvitationStore.setState(inv.invitation_data);
         useInvitationStore.getState().setSlug(inv.slug);
-        router.push('/builder');
+        router.push('/builder?mode=edit');
     }, [router]);
 
-    const handleDelete = useCallback(async (id: string) => {
-        if (!confirm('정말로 이 청첩장을 삭제하시겠습니까?')) return;
+    // --- Action Executors (Actual API Calls) ---
 
+    const executeDelete = useCallback(async (id: string) => {
         setActionLoading(id);
         try {
             if (isAdmin) {
-                // 관리자는 전용 API 사용 (RLS 우회)
                 const res = await fetch(`/api/admin/invitations/${id}`, { method: 'DELETE' });
                 if (!res.ok) throw new Error('Delete failed');
             } else {
@@ -120,51 +137,149 @@ export default function MyPageClient({
             });
         } finally {
             setActionLoading(null);
+            setConfirmConfig(prev => ({ ...prev, isOpen: false }));
         }
     }, [fetchInvitations, isAdmin, toast]);
 
-    const openRequestDialog = useCallback((inv: InvitationRecord) => {
-        setRequestTarget(inv);
-        // 프로필에서 이름과 전화번호 자동 채우기
-        setRequestName(profile?.full_name || '');
-        setRequestPhone(profile?.phone || '');
-        setRequestDialogOpen(true);
-    }, [profile]);
+    const executeCancelRequest = useCallback(async (inv: InvitationRecord) => {
+        setActionLoading(inv.id);
+        try {
+            await approvalRequestService.cancelRequest(inv.id);
+            await fetchInvitations();
+            await fetchApprovalRequests();
+            toast({ description: '신청이 취소되었습니다.' });
+        } catch {
+            toast({ variant: 'destructive', description: '취소 처리에 실패했습니다.' });
+        } finally {
+            setActionLoading(null);
+            setConfirmConfig(prev => ({ ...prev, isOpen: false }));
+        }
+    }, [fetchInvitations, fetchApprovalRequests, toast]);
 
-    const handleRequestSubmit = useCallback(async () => {
-        if (!requestTarget || !userId) return;
+    const executeApprove = useCallback(async (inv: InvitationRecord) => {
+        setActionLoading(inv.id);
+        try {
+            const updatedData = {
+                ...inv.invitation_data,
+                isApproved: true,
+                isRequestingApproval: false
+            };
+            await invitationService.saveInvitation(inv.slug, updatedData, inv.user_id);
+            toast({ description: '사용 승인이 완료되었습니다.' });
+            await fetchInvitations();
+            await fetchApprovalRequests();
+        } catch {
+            toast({ variant: 'destructive', description: '승인 처리 중 오류가 발생했습니다.', });
+        } finally {
+            setActionLoading(null);
+            setConfirmConfig(prev => ({ ...prev, isOpen: false }));
+        }
+    }, [fetchApprovalRequests, fetchInvitations, toast]);
 
-        if (!requestName.trim()) {
-            toast({ variant: 'destructive', description: '신청자 이름을 입력해주세요.' });
+
+    // --- Action Initiators (Open Dialog) ---
+
+    const handleDeleteClick = useCallback((inv: InvitationRecord) => {
+        // Validation for user logic
+        if (!isAdmin && inv.invitation_data?.isRequestingApproval) {
+            setConfirmConfig({
+                isOpen: true,
+                type: 'INFO_ONLY', // Can't proceed
+                title: '삭제할 수 없습니다',
+                description: <>승인 신청 중인 청첩장은 삭제할 수 없습니다.<br />먼저 [신청취소]를 진행해 주세요.</>,
+                targetId: null,
+            });
             return;
         }
 
-        const sanitizedPhone = requestPhone.replace(/[^0-9+]/g, '');
-        if (!isValidPhone(sanitizedPhone)) {
-            toast({ variant: 'destructive', description: '전화번호 형식이 올바르지 않습니다.' });
+        setConfirmConfig({
+            isOpen: true,
+            type: 'DELETE',
+            title: '청첩장 삭제',
+            description: '정말로 이 청첩장을 삭제하시겠습니까? 삭제된 데이터는 복구할 수 없습니다.',
+            targetId: inv.id,
+        });
+    }, [isAdmin]);
+
+    const handleCancelRequestClick = useCallback((inv: InvitationRecord) => {
+        setConfirmConfig({
+            isOpen: true,
+            type: 'CANCEL_REQUEST',
+            title: '승인 신청 취소',
+            description: '승인 신청을 취소하시겠습니까?',
+            targetId: inv.id,
+            targetRecord: inv,
+        });
+    }, []);
+
+    // Helper to check if profile is complete
+    const isProfileComplete = profile?.full_name && profile?.phone;
+
+    const handleApproveClick = useCallback((inv: InvitationRecord) => {
+        if (!isAdmin) {
+            // User Logic
+            if (inv.invitation_data.isRequestingApproval) {
+                toast({ description: '이미 승인 신청된 청첩장입니다.' });
+                return;
+            }
+
+            // Check if profile is complete
+            if (isProfileComplete) {
+                // Profile is complete - show confirmation dialog
+                setConfirmConfig({
+                    isOpen: true,
+                    type: 'REQUEST_APPROVAL',
+                    title: '사용 승인 신청',
+                    description: (
+                        <>
+                            <strong>{profile?.full_name}</strong>({profile?.phone}) 님으로 신청합니다.<br />
+                            신청 후 관리자 확인 절차가 진행됩니다.
+                        </>
+                    ),
+                    targetId: inv.id,
+                    targetRecord: inv,
+                });
+            } else {
+                // Profile is incomplete - show ProfileCompletionModal
+                setProfileModalOpen(true);
+            }
             return;
         }
 
-        setActionLoading(requestTarget.id);
+        // Admin Logic
+        setConfirmConfig({
+            isOpen: true,
+            type: 'APPROVE',
+            title: '청첩장 승인',
+            description: <>해당 청첩장의 사용을 승인하시겠습니까?<br />승인 후에는 워터마크가 제거됩니다.</>,
+            targetId: inv.id,
+            targetRecord: inv,
+        });
+    }, [isAdmin, toast, isProfileComplete, profile]);
+
+
+    // Execute approval request using profile data
+    const executeRequestApproval = useCallback(async (inv: InvitationRecord) => {
+        if (!userId || !profile?.full_name || !profile?.phone) return;
+
+        setActionLoading(inv.id);
         try {
             await approvalRequestService.createRequest({
-                invitationId: requestTarget.id,
-                invitationSlug: requestTarget.slug,
-                requesterName: requestName.trim(),
-                requesterPhone: sanitizedPhone,
+                invitationId: inv.id,
+                invitationSlug: inv.slug,
+                requesterName: profile.full_name,
+                requesterPhone: profile.phone,
             });
 
             const updatedData = {
-                ...requestTarget.invitation_data,
+                ...inv.invitation_data,
                 isRequestingApproval: true,
             };
-            await invitationService.saveInvitation(requestTarget.slug, updatedData, userId);
+            await invitationService.saveInvitation(inv.slug, updatedData, userId);
 
             toast({
                 description: '사용 신청이 완료되었습니다. 관리자 확인 후 처리됩니다.',
             });
-            setRequestDialogOpen(false);
-            setRequestTarget(null);
             await fetchInvitations();
         } catch {
             toast({
@@ -173,70 +288,36 @@ export default function MyPageClient({
             });
         } finally {
             setActionLoading(null);
+            setConfirmConfig(prev => ({ ...prev, isOpen: false }));
         }
-    }, [fetchInvitations, requestName, requestPhone, requestTarget, toast, userId]);
+    }, [fetchInvitations, profile, toast, userId]);
 
-    const handleCancelRequest = useCallback(async (inv: InvitationRecord) => {
-        if (!confirm('승인 신청을 취소하시겠습니까?')) return;
-
-        setActionLoading(inv.id);
-        try {
-            await approvalRequestService.cancelRequest(inv.id);
-
-            // Refetch to reflect status change
-            // The API updates the invitation status, so fetching invitations again will show the updated state.
-            await fetchInvitations();
-            await fetchApprovalRequests();
-
-            toast({ description: '신청이 취소되었습니다.' });
-        } catch {
-            toast({ variant: 'destructive', description: '취소 처리에 실패했습니다.' });
-        } finally {
-            setActionLoading(null);
-        }
-    }, [fetchInvitations, fetchApprovalRequests, toast]);
-
-    const handleApprove = useCallback(async (inv: InvitationRecord) => {
-        if (!isAdmin) {
-            // User Logic: Request Approval
-            if (inv.invitation_data.isRequestingApproval) {
-                toast({ description: '이미 승인 신청된 청첩장입니다.' });
-                return;
-            }
-
-            openRequestDialog(inv);
+    const handleConfirmAction = useCallback(() => {
+        const { type, targetId, targetRecord } = confirmConfig;
+        if (!type || type === 'INFO_ONLY') {
+            setConfirmConfig(prev => ({ ...prev, isOpen: false }));
             return;
         }
 
-        // Admin Logic: Approve
-        if (!confirm('해당 청첩장의 사용을 승인하시겠습니까?\n승인 후에는 워터마크가 제거됩니다.')) return;
-
-        setActionLoading(inv.id);
-        try {
-            // Update data with approved status and clear request flag
-            const updatedData = {
-                ...inv.invitation_data,
-                isApproved: true,
-                isRequestingApproval: false
-            };
-
-            // Admin saves to the user's invitation (userId should be preserved from the record)
-            await invitationService.saveInvitation(inv.slug, updatedData, inv.user_id);
-            toast({
-                description: '사용 승인이 완료되었습니다.',
-            });
-            await fetchInvitations();
-            await fetchApprovalRequests();
-
-        } catch {
-            toast({
-                variant: 'destructive',
-                description: '승인 처리 중 오류가 발생했습니다.',
-            });
-        } finally {
-            setActionLoading(null);
+        if (type === 'DELETE' && targetId) {
+            executeDelete(targetId);
+        } else if (type === 'CANCEL_REQUEST' && targetRecord) {
+            executeCancelRequest(targetRecord);
+        } else if (type === 'APPROVE' && targetRecord) {
+            executeApprove(targetRecord);
+        } else if (type === 'REQUEST_APPROVAL' && targetRecord) {
+            executeRequestApproval(targetRecord);
         }
-    }, [fetchApprovalRequests, fetchInvitations, isAdmin, openRequestDialog, toast]);
+    }, [confirmConfig, executeDelete, executeCancelRequest, executeApprove, executeRequestApproval]);
+
+    // Handle profile completion - auto submit approval after profile is saved
+    const handleProfileComplete = useCallback(async () => {
+        setProfileModalOpen(false);
+
+        // Refresh page to get updated profile, then user can try again
+        router.refresh();
+        toast({ description: '프로필이 저장되었습니다. 다시 사용 신청을 진행해주세요.' });
+    }, [router, toast]);
 
     const handleCreateNew = useCallback(() => {
         reset();
@@ -323,7 +404,7 @@ export default function MyPageClient({
                                                         <Button
                                                             size="sm"
                                                             className="gap-1 h-8 text-[11px] font-bold bg-banana-yellow text-amber-900 border-banana-yellow hover:bg-yellow-400"
-                                                            onClick={() => handleApprove(targetInv)}
+                                                            onClick={() => handleApproveClick(targetInv)}
                                                             disabled={actionLoading === targetInv.id}
                                                         >
                                                             {actionLoading === targetInv.id ? <Loader2 size={12} className="animate-spin" /> : <CheckCircle2 size={12} />}
@@ -395,9 +476,12 @@ export default function MyPageClient({
                                             </div>
                                             <DropdownMenu>
                                                 <DropdownMenuTrigger asChild>
-                                                    <button className="text-gray-400 hover:text-gray-600 p-1.5 rounded-full hover:bg-gray-100 transition-colors outline-none active:scale-95">
-                                                        <MoreHorizontal size={20} />
-                                                    </button>
+                                                    <IconButton
+                                                        icon={MoreHorizontal}
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="text-gray-400 hover:text-gray-600"
+                                                    />
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end" className="w-32">
                                                     <DropdownMenuItem
@@ -409,12 +493,8 @@ export default function MyPageClient({
                                                     </DropdownMenuItem>
                                                     <DropdownMenuItem
                                                         onClick={(e) => {
-                                                            if (!isAdmin && inv.invitation_data?.isRequestingApproval) {
-                                                                e.preventDefault();
-                                                                setAlertDialogOpen(true);
-                                                                return;
-                                                            }
-                                                            handleDelete(inv.id);
+                                                            e.preventDefault();
+                                                            handleDeleteClick(inv);
                                                         }}
                                                         disabled={actionLoading === inv.id}
                                                         className="gap-2 cursor-pointer py-2.5 text-red-600 focus:text-red-600 focus:bg-red-50"
@@ -462,12 +542,12 @@ export default function MyPageClient({
                                                 if (inv.invitation_data?.isApproved) return;
 
                                                 if (isAdmin) {
-                                                    handleApprove(inv);
+                                                    handleApproveClick(inv);
                                                 } else {
                                                     if (inv.invitation_data?.isRequestingApproval) {
-                                                        handleCancelRequest(inv);
+                                                        handleCancelRequestClick(inv);
                                                     } else {
-                                                        handleApprove(inv);
+                                                        handleApproveClick(inv);
                                                     }
                                                 }
                                             }}
@@ -493,58 +573,38 @@ export default function MyPageClient({
                     );
                 })()}
 
-                <ResponsiveModal
-                    open={requestDialogOpen}
-                    onOpenChange={(open) => {
-                        setRequestDialogOpen(open);
-                        if (!open) {
-                            setRequestTarget(null);
-                        }
-                    }}
-                    title="사용 승인 신청"
-                    description="신청자 이름과 연락처를 입력해주세요."
-                    className={styles.requestModalContent}
-                >
-                    <div className={styles.requestForm}>
-                        <TextField
-                            placeholder="이름"
-                            value={requestName}
-                            onChange={(e) => setRequestName(e.target.value)}
-                        />
-                        <PhoneField
-                            placeholder="전화번호 (예: 010-1234-5678)"
-                            value={requestPhone}
-                            onChange={(e) => setRequestPhone(e.target.value)}
-                        />
-                    </div>
-                    <div className={styles.requestActions}>
-                        <Button variant="ghost" onClick={() => setRequestDialogOpen(false)}>
-                            취소
-                        </Button>
-                        <Button
-                            onClick={handleRequestSubmit}
-                            disabled={actionLoading === requestTarget?.id}
-                        >
-                            {actionLoading === requestTarget?.id ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : (
-                                '신청하기'
-                            )}
-                        </Button>
-                    </div>
-                </ResponsiveModal>
+                {/* Profile Completion Modal - for users with incomplete profile */}
+                {userId && (
+                    <ProfileCompletionModal
+                        isOpen={profileModalOpen}
+                        userId={userId}
+                        defaultName={profile?.full_name || ''}
+                        onComplete={handleProfileComplete}
+                    />
+                )}
 
-                <AlertDialog open={alertDialogOpen} onOpenChange={setAlertDialogOpen}>
+                <AlertDialog open={confirmConfig.isOpen} onOpenChange={(open) => setConfirmConfig(prev => ({ ...prev, isOpen: open }))}>
                     <AlertDialogContent>
                         <AlertDialogHeader>
-                            <AlertDialogTitle>삭제할 수 없습니다</AlertDialogTitle>
+                            <AlertDialogTitle>{confirmConfig.title}</AlertDialogTitle>
                             <AlertDialogDescription>
-                                승인 신청 중인 청첩장은 삭제할 수 없습니다.<br />
-                                먼저 [신청취소]를 진행해 주세요.
+                                {confirmConfig.description}
                             </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
-                            <AlertDialogAction onClick={() => setAlertDialogOpen(false)}>확인</AlertDialogAction>
+                            {confirmConfig.type !== 'INFO_ONLY' && (
+                                <AlertDialogCancel>취소</AlertDialogCancel>
+                            )}
+                            <AlertDialogAction onClick={(e) => {
+                                if (confirmConfig.type !== 'INFO_ONLY') {
+                                    e.preventDefault();
+                                    handleConfirmAction();
+                                } else {
+                                    setConfirmConfig(prev => ({ ...prev, isOpen: false }));
+                                }
+                            }}>
+                                확인
+                            </AlertDialogAction>
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>

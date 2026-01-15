@@ -98,4 +98,95 @@ import { ResponsiveModal } from '@/components/common/ResponsiveModal';
   const groomName = useInvitationStore(state => state.groom.firstName);
   ```
 
+### 7. Zustand Persist 미들웨어 및 페이지 간 상태 관리 (Strict Rule)
+
+`useInvitationStore`는 `persist` 미들웨어를 사용하여 IndexedDB에 상태를 저장합니다. 이로 인해 페이지 간 이동 시에도 상태가 유지되므로, **페이지 진입 시 모드에 따른 상태 초기화**가 필수입니다.
+
+#### **핵심 원칙: URL 기반 모드 구분**
+
+| URL | 모드 | 동작 |
+|-----|------|------|
+| `/builder?mode=edit` | 수정 모드 | 스토어 상태 유지 (기존 데이터로 수정) |
+| `/builder` | 생성 모드 | 스토어 초기화 (`reset()`) 후 새 청첩장 생성 |
+
+#### **필수 구현 패턴**
+
+```tsx
+// app/builder/page.tsx
+function BuilderPageContent() {
+  const searchParams = useSearchParams();
+  const isEditMode = searchParams.get('mode') === 'edit';
+  const reset = useInvitationStore(state => state.reset);
+  const initRef = useRef(false);
+  const [isReady, setIsReady] = useState(false);
+
+  // 🔑 페이지 진입 시 모드 확인 후 스토어 초기화
+  useEffect(() => {
+    if (initRef.current) return;
+    initRef.current = true;
+    
+    if (!isEditMode) {
+      // 새 청첩장 모드: 스토어를 초기 상태로 리셋
+      reset();
+    }
+    setIsReady(true);
+  }, [isEditMode, reset]);
+
+  // 초기화 완료 전 저장 방지
+  const handleSave = useCallback(async () => {
+    if (!isReady) {
+      toast.error('잠시 후 다시 시도해주세요.');
+      return;
+    }
+    // ... 저장 로직
+  }, [isReady]);
+}
+```
+
+#### **마이페이지에서 수정 버튼 클릭 시**
+
+```tsx
+// app/mypage/MyPageClient.tsx
+const handleEdit = useCallback((inv: InvitationRecord) => {
+  // 1. 스토어에 기존 데이터 로드
+  useInvitationStore.setState(inv.invitation_data);
+  useInvitationStore.getState().setSlug(inv.slug);
+  
+  // 2. mode=edit 쿼리 파라미터와 함께 빌더로 이동
+  router.push('/builder?mode=edit');
+}, [router]);
+```
+
+#### **⚠️ 주의사항**
+
+- **❌ DO NOT**: `/builder` URL로 직접 접속 시 이전 데이터로 저장되도록 방치
+- **❌ DO NOT**: `sessionStorage`나 `localStorage`에 의존하는 복잡한 slug 관리 로직 사용
+- **✅ DO**: URL 쿼리 파라미터(`mode=edit`)로 명시적인 모드 구분
+- **✅ DO**: `initRef`로 React StrictMode의 이중 실행 방지
+- **✅ DO**: `isReady` 상태로 초기화 완료 전 사용자 액션 차단
+
+#### **Next.js + Zustand Persist Hydration 처리**
+
+```tsx
+// persist 미들웨어 옵션 (useInvitationStore.ts)
+persist((set) => ({...}), {
+  name: 'wedding-invitation-storage',
+  storage: createJSONStorage(() => ({
+    getItem: async (name) => { /* idb-keyval */ },
+    setItem: async (name, value) => { /* idb-keyval */ },
+    removeItem: async (name) => { /* idb-keyval */ },
+  })),
+  // 중첩 객체 deep merge 처리
+  merge: (persistedState, currentState) => ({
+    ...currentState,
+    ...persistedState,
+    mainScreen: {
+      ...currentState.mainScreen,
+      ...(persistedState.mainScreen || {}),
+    },
+    // ... 기타 중첩 객체
+  }),
+});
+```
+
 ---

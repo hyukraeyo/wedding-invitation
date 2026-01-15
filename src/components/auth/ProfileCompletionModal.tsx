@@ -86,7 +86,7 @@ export default function ProfileCompletionModal({
                             <Phone size={18} />
                         </div>
                         <PhoneField
-                            placeholder="전화번호 (예: 010-1234-5678)"
+                            placeholder="전화번호"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                             className={styles.input}

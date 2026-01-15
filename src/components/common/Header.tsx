@@ -86,102 +86,62 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
             </div>
 
             {/* Actions */}
-            <div className="flex items-center gap-1 md:gap-2">
+            {/* Actions */}
+            <div className="flex items-center gap-1">
                 {user ? (
                     <>
                         {isMyPage ? (
-                            <>
-                                <Button
-                                    size="sm"
-                                    variant="ghost"
-                                    onClick={handleCreateNew}
-                                    className="mr-1 md:mr-2"
-                                >
-                                    <Plus size={16} className="hidden md:inline mr-1" />
-                                    <span className="hidden md:inline">새 청첩장 만들기</span>
-                                    <Plus size={20} className="md:hidden" />
-                                </Button>
-                            </>
+                            <IconButton
+                                icon={Plus}
+                                size="md"
+                                variant="ghost"
+                                onClick={handleCreateNew}
+                                aria-label="새 청첩장 만들기"
+                            />
                         ) : (
                             <Link href="/mypage">
-                                <Button variant="ghost" size="sm" className="px-2 hidden md:inline-flex">
-                                    <span>마이페이지</span>
-                                </Button>
-                                <div className="md:hidden">
-                                    <IconButton icon={User} size="md" variant="ghost" />
-                                </div>
+                                <IconButton
+                                    icon={User}
+                                    size="md"
+                                    variant="ghost"
+                                    aria-label="마이페이지"
+                                />
                             </Link>
                         )}
-                        <Button
+                        <IconButton
+                            icon={LogOut}
+                            size="md"
                             variant="ghost"
-                            size="sm"
-                            className="px-2 hidden md:inline-flex"
                             onClick={async () => {
                                 await signOut();
                                 router.push('/');
                             }}
                             aria-label="로그아웃"
-                        >
-                            <span>로그아웃</span>
-                        </Button>
-                        <div className="md:hidden">
-                            <IconButton
-                                icon={LogOut}
-                                size="md"
-                                variant="ghost"
-                                onClick={async () => {
-                                    await signOut();
-                                    router.push('/');
-                                }}
-                                aria-label="로그아웃"
-                            />
-                        </div>
+                        />
                     </>
                 ) : (
                     onLogin && (
-                        <>
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                className="px-2 hidden md:inline-flex"
-                                onClick={onLogin}
-                                aria-label="로그인"
-                            >
-                                <span>로그인</span>
-                            </Button>
-                            <div className="md:hidden">
-                                <IconButton icon={LogIn} size="md" variant="ghost" onClick={onLogin} aria-label="로그인" />
-                            </div>
-                        </>
+                        <IconButton
+                            icon={LogIn}
+                            size="md"
+                            variant="ghost"
+                            onClick={onLogin}
+                            aria-label="로그인"
+                        />
                     )
                 )}
 
                 {onSave && user && (
-                    <>
-                        <Button
-                            onClick={onSave}
-                            size="sm"
-                            className="font-bold min-w-[60px] px-4 ml-2 hidden md:inline-flex"
-                            disabled={isLoading}
-                            aria-label="저장"
-                        >
-                            {isLoading ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                            ) : (
-                                <span>저장</span>
-                            )}
-                        </Button>
-                        <div className="md:hidden ml-1">
-                            <IconButton
-                                icon={isLoading ? Loader2 : Save}
-                                onClick={onSave}
-                                disabled={isLoading}
-                                size="md"
-                                variant="default"
-                                className={isLoading ? "animate-spin" : ""}
-                            />
-                        </div>
-                    </>
+                    <IconButton
+                        icon={isLoading ? Loader2 : Save}
+                        onClick={onSave}
+                        disabled={isLoading}
+                        size="md"
+                        variant="default" // Keep Save button distinct? Or ghost? User said "same icon button". But Save usually has emphasis. I'll keep default/primary style for Save if distinct, or ghost if strictly uniform. Save was 'default' style on mobile before. I will keep it 'default' (solid color) or 'ghost' for clean look? 
+                        // Previous desktop Save was "Button" (solid/default likely). Mobile Save was "IconButton" variant="default".
+                        // So I will keep variant="default" for Save to highlight it.
+                        className={isLoading ? "animate-spin" : "ml-1"}
+                    />
                 )}
             </div>
 

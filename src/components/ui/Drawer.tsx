@@ -148,12 +148,16 @@ const DrawerScrollArea = React.forwardRef<
 ))
 DrawerScrollArea.displayName = "DrawerScrollArea"
 
-const DrawerHandle = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-    <div
-        className={cn("mx-auto mt-4 h-1.5 w-12 shrink-0 rounded-full bg-zinc-300", className)}
+const DrawerHandle = React.forwardRef<
+    React.ElementRef<typeof DrawerPrimitive.Handle>,
+    React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Handle>
+>(({ className, ...props }, ref) => (
+    <DrawerPrimitive.Handle
+        ref={ref}
+        className={cn("mx-auto mt-4 mb-2 h-1.5 w-12 shrink-0 rounded-full bg-zinc-300", className)}
         {...props}
     />
-)
+))
 DrawerHandle.displayName = "DrawerHandle"
 
 export {
