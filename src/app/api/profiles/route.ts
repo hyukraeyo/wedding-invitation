@@ -68,20 +68,28 @@ export async function PATCH(request: NextRequest) {
             );
         }
 
-        // is_profile_complete 자동 계산
-        const isComplete = !!(updates.full_name && updates.phone);
-
         const supabase = await createSupabaseServerClient();
         const db = supabaseAdmin || supabase;
 
+        // Fetch current profile to merge data and determine completion status
+        const { data: currentProfile } = await db
+            .from('profiles')
+            .select('*')
+            .eq('id', userId)
+            .single();
+
+        const fullName = updates.full_name ?? currentProfile?.full_name ?? null;
+        const phone = updates.phone ?? currentProfile?.phone ?? null;
+        const isComplete = !!(fullName && phone);
+
         const { data, error } = await db
             .from('profiles')
-            .update({
+            .upsert({
+                id: userId,
                 ...updates,
                 is_profile_complete: isComplete,
                 updated_at: new Date().toISOString(),
             })
-            .eq('id', userId)
             .select()
             .single();
 

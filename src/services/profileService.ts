@@ -54,32 +54,30 @@ export const profileService = {
     /**
      * 프로필 업데이트 (없으면 생성)
      */
+    /**
+     * 프로필 업데이트 (API Route 사용)
+     */
     async updateProfile(userId: string, updates: ProfileUpdatePayload): Promise<Profile> {
-        const currentProfile = await this.getProfile(userId);
-        const fullName = updates.full_name ?? currentProfile?.full_name ?? null;
-        const phone = updates.phone ?? currentProfile?.phone ?? null;
-        const isComplete = !!(fullName && phone);
+        try {
+            const response = await fetch('/api/profiles', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updates),
+            });
 
-        const supabase = await getBrowserSupabaseClient();
-        // upsert 사용: 프로필이 없으면 생성, 있으면 업데이트
-        const { data, error } = await supabase
-            .from('profiles')
-            .upsert({
-                id: userId,
-                ...updates,
-                is_profile_complete: isComplete,
-            }, {
-                onConflict: 'id',
-            })
-            .select()
-            .single();
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || '프로필 업데이트 실패');
+            }
 
-        if (error) {
-            console.error('Error updating profile:', error);
+            const { data } = await response.json();
+            return data as Profile;
+        } catch (error) {
+            console.error('Error updating profile via API:', error);
             throw error;
         }
-
-        return data as Profile;
     },
 
     /**

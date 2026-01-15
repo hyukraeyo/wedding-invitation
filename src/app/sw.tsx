@@ -10,7 +10,7 @@ export default function ServiceWorkerRegistration() {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').then(
           (registration) => {
-            console.log('SW registered: ', registration);
+
 
             registration.addEventListener('updatefound', () => {
               const newWorker = registration.installing;
@@ -23,8 +23,8 @@ export default function ServiceWorkerRegistration() {
               }
             });
           },
-          (error) => {
-            console.log('SW registration failed: ', error);
+          () => {
+            // Registration failed
           }
         );
       });

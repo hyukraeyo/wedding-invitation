@@ -27,8 +27,9 @@ const adminEmails = (process.env.ADMIN_EMAILS ?? '')
     .map((email) => email.trim().toLowerCase())
     .filter(Boolean);
 
+
 export const authConfig = {
-    debug: true,
+
     adapter: SupabaseAdapter({
         url: supabaseUrl,
         secret: supabaseServiceRoleKey,
@@ -39,6 +40,7 @@ export const authConfig = {
         Naver({
             clientId: process.env.NAVER_CLIENT_ID!,
             clientSecret: process.env.NAVER_CLIENT_SECRET!,
+            allowDangerousEmailAccountLinking: true,
             authorization: {
                 url: 'https://nid.naver.com/oauth2.0/authorize',
                 params: { scope: 'name email mobile' },
@@ -50,13 +52,13 @@ export const authConfig = {
                     name: data.name ?? data.nickname ?? null,
                     email: data.email ?? null,
                     image: data.profile_image ?? null,
-                    phone: data.mobile ? data.mobile.replace(/-/g, '') : null,
                 };
             },
         }),
         Kakao({
             clientId: process.env.KAKAO_CLIENT_ID!,
             clientSecret: process.env.KAKAO_CLIENT_SECRET!,
+            allowDangerousEmailAccountLinking: true,
             authorization: {
                 url: 'https://kauth.kakao.com/oauth/authorize',
                 params: {
@@ -71,7 +73,7 @@ export const authConfig = {
                     name: profileData.nickname ?? null,
                     email: account.email ?? null,
                     image: profileData.profile_image_url ?? null,
-                    phone: account.phone_number ? account.phone_number.replace(/\D/g, '') : null,
+                    phone: null, // Explicitly null to prevent overwrite issues, handled in signIn callback
                 };
             },
         }),
@@ -127,12 +129,78 @@ export const authConfig = {
         }),
     ],
     callbacks: {
-        async signIn({ user, account }) {
+        async signIn({ user, account, profile }) {
             const provider = account?.provider;
+
+            // Admin Credentials Check
             if (provider === 'credentials') {
                 if (!user.email || !adminEmails.length) return false;
                 return adminEmails.includes(user.email.toLowerCase());
             }
+
+            // Social Login: Upsert Profile
+            try {
+                const isAdmin = !!(user.email && adminEmails.includes(user.email.toLowerCase()));
+                let phone: string | null = null;
+                const fullName = user.name ?? null;
+                const avatarUrl = user.image ?? null;
+
+                if (provider === 'naver') {
+                    const p = profile as {
+                        response?: { mobile?: string; name?: string; profile_image?: string };
+                        mobile?: string;
+                    };
+                    const data = p.response || p;
+                    if (data.mobile) phone = data.mobile.replace(/-/g, '');
+                } else if (provider === 'kakao') {
+                    // Kakao profile structure handling
+                    const p = profile as {
+                        kakao_account?: {
+                            phone_number?: string;
+                            profile?: { nickname?: string; profile_image_url?: string }
+                        };
+                        phone_number?: string;
+                        mobile?: string;
+                    };
+                    const kakaoAccount = p.kakao_account || {};
+
+                    // Try extraction from multiple possible paths
+                    phone = (
+                        kakaoAccount.phone_number ||
+                        p.phone_number ||
+                        p.mobile ||
+                        null
+                    );
+
+                    if (phone) {
+                        phone = phone.startsWith('+82 ') ? '0' + phone.slice(4).replace(/-/g, '') : phone.replace(/\D/g, '');
+                        if (phone.startsWith('82')) phone = '0' + phone.slice(2);
+                    }
+                }
+
+                const providerAccountId = account?.providerAccountId ?? null;
+
+                const profilePayload: Record<string, string | boolean | null | undefined> = {
+                    id: user.id,
+                    full_name: fullName,
+                    avatar_url: avatarUrl,
+                    is_admin: isAdmin,
+                    ...(provider === 'naver' && providerAccountId ? { naver_id: providerAccountId } : {}),
+                };
+
+                // Only update phone and completion status if a new phone number is actually provided by the social login.
+                // This prevents overwriting an existing, manually entered phone number with null.
+                if (phone) {
+                    profilePayload.phone = phone;
+                    profilePayload.is_profile_complete = !!(fullName && phone);
+                }
+
+                await publicClient.from('profiles').upsert(profilePayload);
+            } catch (error) {
+                console.error('Error saving profile during sign in:', error);
+                // Don't block sign in even if profile save fails, let the client handle missing profile
+            }
+
             return true;
         },
         async session({ session, user }) {
@@ -140,29 +208,6 @@ export const authConfig = {
                 session.user.id = user.id;
             }
             return session;
-        },
-    },
-    events: {
-        async signIn({ user, account, profile }) {
-            const isAdmin = !!(user.email && adminEmails.includes(user.email.toLowerCase()));
-            const provider = account?.provider;
-            const providerProfile = profile as { name?: string; image?: string; phone?: string } | undefined;
-            const fullName = providerProfile?.name ?? user.name ?? null;
-            const phone = providerProfile?.phone ?? null;
-            const avatarUrl = providerProfile?.image ?? user.image ?? null;
-            const providerAccountId = account?.providerAccountId ?? null;
-
-            const profilePayload = {
-                id: user.id,
-                full_name: fullName,
-                phone,
-                avatar_url: avatarUrl,
-                is_admin: isAdmin,
-                is_profile_complete: !!(fullName && phone),
-                ...(provider === 'naver' && providerAccountId ? { naver_id: providerAccountId } : {}),
-            };
-
-            await publicClient.from('profiles').upsert(profilePayload);
         },
     },
 } satisfies NextAuthConfig;
