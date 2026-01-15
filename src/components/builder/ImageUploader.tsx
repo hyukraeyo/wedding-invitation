@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { Trash2, UploadCloud, Loader2 } from 'lucide-react';
 import { Label } from './FormPrimitives';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { SegmentedControl } from './segmented-control';
+import { SegmentedControl } from './SegmentedControl';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { IconButton } from '@/components/ui/icon-button';

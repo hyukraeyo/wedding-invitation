@@ -6,7 +6,7 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { Field } from '../FormPrimitives';
-import { SegmentedControl } from '../segmented-control';
+import { SegmentedControl } from '../SegmentedControl';
 import { ExampleSelectorModal } from '@/components/builder/ExampleSelectorModal';
 import { HeaderAction } from '../HeaderAction';
 import { ImageUploader } from '../ImageUploader';

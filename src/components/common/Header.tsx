@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Plus, Loader2, User, LogIn, Save, LogOut } from 'lucide-react';
+import { Plus, User, LogIn, Save, LogOut } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useRouter, usePathname } from 'next/navigation';

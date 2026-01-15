@@ -5,7 +5,7 @@ import { InfoMessage } from '@/components/builder/InfoMessage';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useToast } from '@/hooks/use-toast';
 import { Field } from '../FormPrimitives';
-import { SegmentedControl } from '../segmented-control';
+import { SegmentedControl } from '../SegmentedControl';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { SwitchField } from '../SwitchField';

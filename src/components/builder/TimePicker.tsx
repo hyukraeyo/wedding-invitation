@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Select } from './select';
+import { Select } from './Select';
 import { cn } from '@/lib/utils';
 
 interface TimePickerProps {
