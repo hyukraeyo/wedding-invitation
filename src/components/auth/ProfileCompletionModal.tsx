@@ -9,7 +9,6 @@ import { useToast } from '@/hooks/use-toast';
 import { profileService } from '@/services/profileService';
 import { Loader2, User, Phone } from 'lucide-react';
 import { isValidPhone } from '@/lib/utils';
-import styles from './ProfileCompletionModal.module.scss';
 
 interface ProfileCompletionModalProps {
     isOpen: boolean;

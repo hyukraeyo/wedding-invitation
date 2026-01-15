@@ -31,6 +31,18 @@ $zinc-700: #3f3f46;
 $zinc-800: #27272a;
 $zinc-900: #18181b;
 
+// Legacy gray scales (Generic mapping)
+$gray-50: $zinc-50;
+$gray-100: $zinc-100;
+$gray-200: $zinc-200;
+$gray-300: $zinc-300;
+$gray-400: $zinc-400;
+$gray-500: $zinc-500;
+$gray-600: $zinc-600;
+$gray-700: $zinc-700;
+$gray-800: $zinc-800;
+$gray-900: $zinc-900;
+
 // Legacy mapping for compatibility (Keep internal usages redirected to Zinc)
 $toss-grey-50: $zinc-50;
 $toss-grey-100: $zinc-100;
@@ -42,10 +54,20 @@ $toss-grey-600: $zinc-600;
 $toss-grey-700: $zinc-700;
 $toss-grey-800: $zinc-800;
 $toss-grey-900: $zinc-900;
+$toss-weak-grey: rgba($zinc-900, 0.05);
 
 // Blue elements (Redirect to Primary or Wedding Blue)
+$toss-blue-50: #e8f3ff;
+$toss-blue-100: #c9e2ff;
+$toss-blue-200: #90c2ff;
 $toss-blue-500: $primary;
 $toss-blue-600: $primary-dark;
+
+// Red elements
+$toss-red-50: #ffeeee;
+$toss-red-500: #f04452;
+$toss-weak-red: rgba(#f04452, 0.1);
+$toss-weak-blue: rgba($primary, 0.1);
 
 // Backgrounds
 $bg-base: $background;

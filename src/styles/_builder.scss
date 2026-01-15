@@ -57,6 +57,27 @@ $builder-font-xl: 17px;
   gap: $builder-gap-sm;
 }
 
+// Row layout
+@mixin builder-row($gap: $builder-gap-md) {
+  display: flex;
+  align-items: center;
+  gap: $gap;
+}
+
+// Grid layout
+@mixin builder-grid($cols: 2, $gap: $builder-gap-md) {
+  display: grid;
+  grid-template-columns: repeat($cols, 1fr);
+  gap: $gap;
+}
+
+// Stack layout
+@mixin builder-stack($gap: $builder-gap-md) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
 // Card style
 @mixin builder-card {
   border-radius: $builder-radius-md;
@@ -66,12 +87,41 @@ $builder-font-xl: 17px;
   transition: all v.$transition-fast;
 }
 
+// Subtle divider
+@mixin builder-divider {
+  height: 1px;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      $builder-border-light 20%,
+      $builder-border-light 80%,
+      transparent 100%);
+  margin-block: $builder-gap-md;
+}
+
+// Label style
+@mixin builder-label {
+  @include v.tds-t7("semibold");
+  color: v.$zinc-600;
+  display: block;
+  margin-bottom: 6px;
+  padding-left: 2px;
+  letter-spacing: -0.01em;
+}
+
+// Sub-label (smaller, inline)
+@mixin builder-sub-label {
+  @include v.tds-sub-t12("medium");
+  color: $builder-text-secondary;
+  flex-shrink: 0;
+  min-width: 3.5rem;
+}
+
 // Input base style (Banana Wedding Design)
 @mixin builder-input-base {
   width: 100%;
   height: $builder-input-height;
   padding: 0 1rem;
-  border: 1px solid v.$zinc-300; // 가이드 준수 (zinc-300)
+  border: 1px solid v.$zinc-300;
   border-radius: 12px;
   @include v.tds-t5("regular");
   color: $builder-text-heading;
@@ -94,7 +144,7 @@ $builder-font-xl: 17px;
 
   &:focus {
     background-color: white;
-    border-color: v.$primary; // 브랜드 컬러(노란색) 적용
+    border-color: v.$primary;
     box-shadow: 0 0 0 1px v.$primary;
   }
 
