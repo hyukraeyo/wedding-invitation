@@ -41,20 +41,36 @@ description: TDS Mobile 디자인 시스템 참조 및 커스터마이징 가이
 - `Stepper` - 스테퍼
 - `NumericSpinner` - 숫자 스피너
 
-### UI 컴포넌트
+### UI 컴포넌트 (TDS & shadcn/ui)
 - `Badge` - 배지
-- `BottomSheet` - 바텀시트
+- `BottomSheet` - 바터시트 (TDS)
 - `AlertDialog` - 얼럿 다이얼로그
 - `Tooltip` - 툴팁
 - `Rating` - 별점
 - `Skeleton` - 스켈레톤 로딩
+- **`ResponsiveModal` (표준)** - `shadcn/ui` 기반의 반응형 모달 (Dialog ↔ Drawer). 모든 모달 UI의 최우선 순위.
 
-### 레이아웃 컴포넌트
-- `Spacing` - 간격
-- `ListRow` - 리스트 행
-- `ListHeader` - 리스트 헤더
+## 4. shadcn/ui 활용 및 시맨틱 마크업
 
-## 4. 스타일 시스템
+TDS와 함께 `shadcn/ui`를 사용하여 표준 접근성과 고급 기능을 구현합니다. 특히 모달/바텀시트 구현 시 다음의 시맨틱 요소를 정확히 사용해야 합니다.
+
+### 반응형 모달(`ResponsiveModal`)의 DOM 구조
+```tsx
+<DrawerContent>
+  <div className="mx-auto w-full max-w-sm"> {/* 1. 표준 컨테이너 */}
+    <DrawerHeader> {/* 2. 시맨틱 헤더 */}
+      <DrawerTitle>...</DrawerTitle>
+      <DrawerDescription>...</DrawerDescription>
+    </DrawerHeader>
+    <DrawerScrollArea>...</DrawerScrollArea> {/* 3. 스크롤 영역 */}
+    <DrawerFooter>...</DrawerFooter> {/* 4. 시맨틱 푸터 */}
+  </div>
+</DrawerContent>
+```
+- **SEO/A11y**: 기계적 크롤링 및 보조 기술이 제목과 내용을 정확하게 파악할 수 있도록 위 구조를 강제합니다.
+- **핸들 스타일**: `bg-zinc-300` 색상과 `h-1.5 w-12` 규격을 사용하여 충분한 가시성과 조작감을 제공합니다.
+
+## 5. 스타일 시스템
 
 ### 컬러 사용
 ```scss

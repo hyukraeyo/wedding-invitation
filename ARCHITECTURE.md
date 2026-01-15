@@ -36,27 +36,31 @@ Next.js App Router의 성능 이점을 극대화하기 위해 다음 패턴을 �
 
 ### 2. 반응형 모달 시스템 (`ResponsiveModal`)
 
-모든 "모달" 형태의 UI는 모바일 퍼스트 UX를 위해 기기 해상도에 따라 자동으로 형태가 변환되어야 합니다.
+모든 "모달" 형태의 UI는 모바일 퍼스트 UX와 접근성(A11y)을 위해 기기 해상도에 따라 자동으로 형태가 변환되어야 하며, `shadcn/ui`의 표준 시맨틱 구조를 따라야 합니다.
 
-- **Desktop (>= 768px)**: 중앙 `Dialog` (팝업)
-- **Mobile (< 768px)**: 하단 `Drawer` (바텀 시트)
+- **Desktop (>= 768px)**: 중앙 `Dialog` (Radix UI)
+- **Mobile (< 768px)**: 하단 `Drawer` (Vaul)
+
+**핵심 마크업 원칙 (A11y & SEO):**
+- **시맨틱 태그 사용**: `DrawerHeader`, `DrawerFooter`, `DrawerTitle`, `DrawerDescription` 등 전용 컴포넌트를 반드시 사용하여 DOM 구조를 표준화합니다.
+- **제목(Title) 필수**: 접근성을 위해 제목이 없는 경우에도 보이지 않는 텍스트(`VisuallyHidden` 등)나 기본 제목("알림" 등)을 제공하여 스크린 리더가 인지할 수 있게 합니다.
+- **표준 레이아웃**: `DrawerContent` 내부에는 `mx-auto w-full max-w-sm` 컨테이너를 배치하여 다양한 모바일 가로폭에서 일관된 레이아웃을 유지합니다.
 
 **사용법:**
 ```tsx
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 
-// ...
 <ResponsiveModal
     open={isOpen}
     onOpenChange={setIsOpen}
     title="모달 제목"
-    // 필요한 경우 trigger 사용 (버튼 등)
+    description="보조 설명 (SEO/접근성 향상)"
     trigger={<Button>열기</Button>} 
 >
-    <div>모달 내용</div>
+    <div>모달 내용 (DrawerScrollArea 내부 렌더링)</div>
 </ResponsiveModal>
 ```
-*주의: 모바일에서 강제로 Dialog를 써야 하는 특수한 경우가 아니라면, 항상 이 컴포넌트를 사용하여 일관된 UX를 제공해야 합니다.*
+*주의: 마우스 드래그 및 터치 스와이프 닫기 기능을 보존하기 위해, 내부에서 이벤트를 임의로 차단하지 않아야 합니다.*
 
 ### 3. 아코디언 시스템 (`AccordionItem`)
 

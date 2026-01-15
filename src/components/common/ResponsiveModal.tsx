@@ -9,6 +9,7 @@ import {
     DialogTitle,
     DialogDescription,
     DialogTrigger,
+    DialogFooter,
 } from "@/components/ui/Dialog"
 import {
     Drawer,
@@ -18,6 +19,8 @@ import {
     DrawerDescription,
     DrawerTrigger,
     DrawerScrollArea,
+    DrawerFooter,
+    DrawerClose,
 } from "@/components/ui/Drawer"
 import { Button } from "@/components/ui/Button";
 import { cn } from '@/lib/utils';
@@ -40,11 +43,6 @@ export interface ResponsiveModalProps {
     confirmVariant?: 'default' | 'destructive' | undefined;
 }
 
-/**
- * shadcn/ui 기반의 반응형 모달 컴포넌트.
- * 데스크톱에서는 Dialog(Radix UI), 모바일에서는 Drawer(Vaul)를 사용합니다.
- * 접근성(A11y) 가이드에 따라 Title과 Description을 관리합니다.
- */
 export const ResponsiveModal = ({
     open = false,
     onOpenChange,
@@ -63,7 +61,6 @@ export const ResponsiveModal = ({
     const isDesktop = useMediaQuery("(min-width: 768px)");
     const isAlertMode = !children && onConfirm;
 
-    // Radix UI와 Vaul의 strict한 타입 처리를 위한 핸들러
     const internalOnOpenChange = (newOpen: boolean) => {
         onOpenChange?.(newOpen);
     };
@@ -77,31 +74,29 @@ export const ResponsiveModal = ({
         onConfirm?.();
     };
 
-    const renderFooterButtons = (type: 'dialog' | 'drawer') => {
+    // 공통 버튼 렌더러
+    const renderButtons = (mode: 'dialog' | 'drawer') => {
         if (!isAlertMode) return null;
 
         return (
-            <div className={cn(
-                "flex gap-3 mt-4",
-                type === 'dialog' ? "justify-end sm:gap-2" : "flex-col pb-8"
-            )}>
+            <>
+                <Button
+                    variant={confirmVariant}
+                    onClick={handleConfirm}
+                    className={cn(mode === 'drawer' && "w-full h-12")}
+                >
+                    {confirmText}
+                </Button>
                 {showCancel && (
                     <Button
                         variant="outline"
                         onClick={handleCancel}
-                        className={cn(type === 'drawer' && "w-full h-12")}
+                        className={cn(mode === 'drawer' && "w-full h-12")}
                     >
                         {cancelText}
                     </Button>
                 )}
-                <Button
-                    variant={confirmVariant}
-                    onClick={handleConfirm}
-                    className={cn(type === 'drawer' && "w-full h-12")}
-                >
-                    {confirmText}
-                </Button>
-            </div>
+            </>
         );
     };
 
@@ -111,12 +106,15 @@ export const ResponsiveModal = ({
                 {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
                 <DialogContent className={cn("max-w-md max-h-[85vh] overflow-y-auto", className)}>
                     <DialogHeader>
-                        {/* 접근성: 제목이 누락된 경우를 대비해 스크린 리더용 제목 처리 고려 */}
                         <DialogTitle>{title || "알림"}</DialogTitle>
                         {description && <DialogDescription>{description}</DialogDescription>}
                     </DialogHeader>
                     {children && <div className="py-2">{children}</div>}
-                    {renderFooterButtons('dialog')}
+                    {isAlertMode && (
+                        <DialogFooter className="gap-2">
+                            {renderButtons('dialog')}
+                        </DialogFooter>
+                    )}
                 </DialogContent>
             </Dialog>
         );
@@ -126,20 +124,32 @@ export const ResponsiveModal = ({
         <Drawer open={open} onOpenChange={internalOnOpenChange}>
             {trigger && <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
             <DrawerContent>
-                <DrawerHeader className="text-left">
-                    <DrawerTitle>{title || "알림"}</DrawerTitle>
-                    {description && <DrawerDescription>{description}</DrawerDescription>}
-                </DrawerHeader>
-                {children ? (
-                    <DrawerScrollArea className={className}>
-                        {children}
-                    </DrawerScrollArea>
-                ) : (
-                    <div className="px-4">
-                        {renderFooterButtons('drawer')}
-                    </div>
-                )}
-                {children && <div className="px-4">{renderFooterButtons('drawer')}</div>}
+                {/* shadcn 공식 예제 구조: 중앙 정렬 컨테이너 */}
+                <div className="mx-auto w-full max-w-sm">
+                    <DrawerHeader className="text-left">
+                        <DrawerTitle>{title || "알림"}</DrawerTitle>
+                        {description && <DrawerDescription>{description}</DrawerDescription>}
+                    </DrawerHeader>
+
+                    {children ? (
+                        <>
+                            <DrawerScrollArea className={className}>
+                                {children}
+                            </DrawerScrollArea>
+                            {/* children이 있을 때 footer는 선택적일 수 있지만, AlertMode가 아닐 때도 있을 수 있음 */}
+                        </>
+                    ) : (
+                        <div className="p-4">
+                            {/* AlertMode일 때만 버튼 표시 */}
+                        </div>
+                    )}
+
+                    {isAlertMode && (
+                        <DrawerFooter className="flex-col gap-3 pt-2 pb-8">
+                            {renderButtons('drawer')}
+                        </DrawerFooter>
+                    )}
+                </div>
             </DrawerContent>
         </Drawer>
     );
