@@ -5,7 +5,7 @@
 .container {
     min-height: 100vh;
     min-height: 100dvh;
-    background-color: #fafafa;
+    background-color: #F9F9FB; // Minimal warm gray background
     display: flex;
     flex-direction: column;
 }
@@ -18,7 +18,7 @@
     padding: 3rem 1.5rem;
 
     @media (max-width: 768px) {
-        padding: 2rem 1rem 2rem;
+        padding: 1.5rem 1rem 2rem; // Reduced top padding for mobile
     }
 }
 
@@ -26,31 +26,32 @@
     margin-bottom: 2.5rem;
 
     .title {
-        font-size: 1.875rem;
+        font-size: 1.75rem; // Slightly smaller, tighter
         font-weight: 700;
-        color: #111827;
-        letter-spacing: -0.025em;
+        color: #191f28; // Toss Black
+        letter-spacing: -0.02em;
         margin-bottom: 0.5rem;
     }
 
     .subtitle {
-        font-size: 0.9375rem;
-        color: #6b7280;
+        font-size: 1rem;
+        color: #8b95a1; // Toss Gray
+        letter-spacing: -0.01em;
     }
 }
 
 // Empty State
 .emptyState {
-    padding: 5rem 2rem;
+    padding: 6rem 2rem;
     text-align: center;
     background-color: white;
-    border: 2px dashed #e5e7eb;
+    border: 1px dashed #e5e8eb;
     border-radius: 1.5rem;
 
     .iconWrapper {
-        width: 4rem;
-        height: 4rem;
-        background-color: #f3f4f6;
+        width: 4.5rem;
+        height: 4.5rem;
+        background-color: #f2f4f6;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -59,22 +60,22 @@
         margin-bottom: 1.5rem;
 
         svg {
-            width: 2rem;
-            height: 2rem;
-            color: #9ca3af;
+            width: 2.25rem;
+            height: 2.25rem;
+            color: #b0b8c1;
         }
     }
 
     .emptyTitle {
-        font-size: 1.125rem;
-        font-weight: 600;
-        color: #111827;
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #333d4b;
         margin-bottom: 0.5rem;
     }
 
     .emptyDescription {
-        font-size: 0.875rem;
-        color: #6b7280;
+        font-size: 0.95rem;
+        color: #8b95a1;
     }
 }
 
@@ -82,17 +83,17 @@
 .grid {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
-    gap: 1rem;
+    gap: 1.25rem; // Increased gap
     width: 100%;
 
     @media (min-width: 768px) {
         grid-template-columns: repeat(2, 1fr);
-        gap: 1.25rem;
+        gap: 1.5rem;
     }
 
     @media (min-width: 1024px) {
         grid-template-columns: repeat(3, 1fr);
-        gap: 1.5rem;
+        gap: 2rem;
     }
 }
 
@@ -102,10 +103,10 @@
     gap: 1rem;
     margin-bottom: 2rem;
     padding: 1.5rem;
-    border-radius: 1.25rem;
-    border: 1px solid #f1f3f5;
-    background-color: #fffdf7;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+    border-radius: 1.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.03);
+    background-color: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
 }
 
 .adminSectionHeader {
@@ -116,40 +117,49 @@
 }
 
 .adminTitle {
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     font-weight: 700;
-    color: #111827;
+    color: #191f28;
 }
 
 .adminSubtitle {
-    font-size: 0.875rem;
-    color: #6b7280;
+    font-size: 0.9rem;
+    color: #8b95a1;
 }
 
 .adminCount {
-    min-width: 40px;
-    padding: 0.4rem 0.75rem;
-    border-radius: 999px;
-    background-color: #fef3c7;
+    min-width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.75rem;
+    border-radius: 99px;
+    background-color: #fff8e1; // Light yellow
     color: #b45309;
     font-weight: 700;
-    text-align: center;
+    font-size: 0.875rem;
 }
 
 .adminList {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 1rem;
 }
 
 .adminItem {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
-    padding: 1rem;
-    border-radius: 0.875rem;
-    background-color: #ffffff;
-    border: 1px solid #f3f4f6;
+    gap: 1rem;
+    padding: 1.25rem;
+    border-radius: 1.25rem;
+    background-color: white;
+    border: 1px solid #f2f4f6;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: #f9fafb;
+    }
 
     @media (min-width: 640px) {
         flex-direction: row;
@@ -162,7 +172,7 @@
 .adminPrimary {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: 0.5rem;
     flex: 1;
 }
 
@@ -170,13 +180,16 @@
 .adminPhone {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.95rem;
-    color: #111827;
+    gap: 0.6rem;
+    font-size: 1rem;
+    color: #333d4b;
+    font-weight: 500;
 
     svg {
         flex-shrink: 0;
-        color: #6b7280;
+        color: #b0b8c1;
+        width: 1.125rem;
+        height: 1.125rem;
     }
 }
 
@@ -184,11 +197,11 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.75rem;
-    color: #9ca3af;
-    padding-top: 0.5rem;
-    border-top: 1px solid #f3f4f6;
+    gap: 0.75rem;
+    font-size: 0.8125rem;
+    color: #8b95a1;
+    padding-top: 0.75rem;
+    border-top: 1px solid #f2f4f6;
     margin-top: 0.25rem;
 
     @media (min-width: 640px) {
@@ -202,7 +215,7 @@
 .adminRight {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.75rem;
     width: 100%;
 
     @media (min-width: 640px) {
@@ -215,41 +228,42 @@
 .adminActions {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.625rem;
     width: 100%;
 
     @media (min-width: 640px) {
         width: auto;
     }
 
-    // 버튼이 모바일에서 전체 너비
     button {
         @media (max-width: 639px) {
             flex: 1;
             justify-content: center;
+            height: 3rem; // Larger touch target
         }
     }
 }
 
 .adminEmpty {
-    padding: 1rem;
-    border-radius: 0.875rem;
-    background-color: #fff7ed;
-    color: #92400e;
-    font-size: 0.875rem;
+    padding: 1.5rem;
+    border-radius: 1rem;
+    background-color: #f9fafb;
+    color: #8b95a1;
+    font-size: 0.95rem;
+    text-align: center;
 }
 
 .requestForm {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 1rem;
 }
 
 .requestActions {
     display: flex;
     justify-content: flex-end;
     gap: 0.75rem;
-    margin-top: 1.25rem;
+    margin-top: 2rem;
 }
 
 .requestModalContent {
@@ -258,84 +272,84 @@
 
 
 // Card
-
-// Card
 .card {
     background-color: white;
-    border-radius: 1.5rem;
+    border-radius: 1.75rem; // Rounded 28px
+    // Very subtle border and shadow
     border: 1px solid rgba(0, 0, 0, 0.04);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.02);
     overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s, border-color 0.2s;
     position: relative;
+    will-change: transform;
 
     @media (hover: hover) and (pointer: fine) {
         &:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
-            border-color: rgba($banana-yellow, 0.3);
+            transform: translateY(-4px) scale(1.005);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+            border-color: rgba($banana-yellow, 0.15);
         }
     }
-
 }
 
 .cardBody {
-    padding: 1.5rem;
+    padding: 1.75rem;
 }
 
 .cardHeader {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 0.75rem;
-    margin-bottom: 1.25rem;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
 }
 
 .cardTitle {
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     font-weight: 700;
-    color: #1a1a1a;
-    line-height: 1.3;
-    letter-spacing: -0.01em;
+    color: #191f28;
+    line-height: 1.4;
+    letter-spacing: -0.015em;
     display: -webkit-box;
     -webkit-line-clamp: 1;
+    line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
     margin-bottom: 0.25rem;
 }
 
 .cardDate {
-    font-size: 0.8125rem;
-    color: #888;
-    font-weight: 400;
+    font-size: 0.875rem;
+    color: #8b95a1;
+    font-weight: 500;
 }
 
 
 .cardMeta {
     display: flex;
     flex-direction: column;
-    gap: 0.625rem;
+    gap: 0.75rem;
     padding-top: 0.25rem;
 }
 
 .metaItem {
     display: flex;
     align-items: center;
-    gap: 0.625rem;
-    font-size: 0.9375rem;
-    color: #4b5563;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+    color: #4e5968; // Darker gray for readability
 
     svg {
-        width: 1rem;
-        height: 1rem;
+        width: 1.125rem;
+        height: 1.125rem;
         flex-shrink: 0;
-        color: color.adjust($banana-yellow, $lightness: -5%); // Branded icon color
-
+        color: #b0b8c1; // Muted icon color
     }
 
     span {
         display: -webkit-box;
         -webkit-line-clamp: 1;
+        line-clamp: 1;
         -webkit-box-orient: vertical;
         overflow: hidden;
         font-weight: 500;
@@ -345,10 +359,10 @@
 .cardActions {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 1rem 1.5rem;
+    gap: 0.75rem; // Gap between buttons
+    padding: 1.25rem 1.75rem; // Larger padding
     background-color: #fcfcfc;
-    border-top: 1px solid #f3f3f3;
+    border-top: 1px solid #f2f4f6;
 }
 
 .actionButton {
@@ -356,112 +370,133 @@
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: 0.625rem 0.75rem;
-    font-size: 0.875rem;
+    padding: 0.85rem 1rem; // Taller buttons (approx 52px-56px height)
+    font-size: 0.95rem;
     font-weight: 600;
-    border-radius: 0.875rem;
-    border: 1px solid transparent;
-    background-color: #fff;
-    color: #4b5563;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 1rem; // Rounded 16px
+    border: 1px solid #e5e8eb;
+    background-color: white;
+    color: #4e5968;
+    transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
     cursor: pointer;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    // Minimal shadow for white buttons
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
     white-space: nowrap;
+    letter-spacing: -0.01em;
 
     @media (hover: hover) and (pointer: fine) {
         &:hover {
+            background-color: #f9fafb;
+            border-color: #d1d5db;
             transform: translateY(-1px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
     }
 
+    &:active {
+        transform: scale(0.96);
+        background-color: #f2f4f6;
+    }
 
     &.primary {
         flex: 1;
-        background-color: #FDFCEF; // Very light yellow
-        color: color.adjust($banana-yellow, $lightness: -25%);
+        background-color: white; // Keep white background but styled differently or use brand color if requested. 
+        // User requested Apple/Toss style which often uses white buttons with clean borders for secondary actions.
+        // Assuming 'primary' here means "Send Request" or similar.
+        // Let's make it clean white with border for consistency, or brand color?
+        // Let's stick to the sophisticated white look from the screenshot example mostly.
 
-        border-color: rgba($banana-yellow, 0.2);
+        // Actually, the screenshot showed white buttons.
+        // But if it's a primary CTA, maybe subtle brand tint?
 
-        @media (hover: hover) and (pointer: fine) {
-            &:hover {
-                background-color: $banana-yellow;
-                color: white;
-                border-color: $banana-yellow;
-            }
+        // Let's go with the new style:
+        border: 1px solid transparent; // Reset border
+        background-color: white;
+        color: #191f28;
+        border: 1px solid #e5e8eb;
+
+        // If we want it to stand out slightly:
+        &:hover {
+            background-color: #f9fafb;
         }
-
     }
 
     &.approval {
         flex: 1;
         background-color: white;
-        color: #1a1a1a;
-        border: 1px solid #e5e7eb;
+        color: #191f28;
+        border: 1px solid #e5e8eb;
 
         svg {
             color: #10b981; // Success green icon
         }
 
-        @media (hover: hover) and (pointer: fine) {
-            &:hover {
-                background-color: #f9fafb;
-                border-color: #d1d5db;
-            }
-        }
-
-
         &.approved {
             background-color: #f0fdf4;
-            color: #059669;
-            border-color: #bbf7d0;
-            opacity: 1 !important;
+            color: #166534;
+            border-color: transparent;
+            box-shadow: none;
             cursor: default;
 
-            @media (hover: hover) and (pointer: fine) {
-                &:hover {
-                    transform: none;
-                    box-shadow: none;
-                }
+            &:active {
+                transform: none;
             }
-
         }
     }
 
     &.icon {
-        padding: 0.625rem;
-        color: #9ca3af;
+        // Square-ish icon button
+        padding: 0;
+        width: 3.25rem;
+        height: 3.25rem;
+        border-radius: 50%; // Circular
+        border: 1px solid transparent; // No border usually
         background-color: transparent;
         box-shadow: none;
-        border: 1px solid transparent;
+        color: #8b95a1;
 
         svg {
-            width: 1.125rem;
-            height: 1.125rem;
+            width: 1.5rem;
+            height: 1.5rem;
         }
 
         @media (hover: hover) and (pointer: fine) {
             &:hover {
-                background-color: #f3f4f6;
-                color: #111827;
+                background-color: rgba(0, 0, 0, 0.04);
+                color: #333d4b;
+                transform: none;
             }
         }
 
+        &:active {
+            background-color: rgba(0, 0, 0, 0.08);
+            transform: scale(0.92);
+        }
     }
 
     &.danger {
+        // Red icon button
+        color: #ef4444;
+        background-color: #fef2f2;
+        border: 1px solid transparent;
+
         @media (hover: hover) and (pointer: fine) {
             &:hover {
                 background-color: #fee2e2;
-                color: #ef4444;
+                border-color: #fecaca;
             }
         }
 
+        &:active {
+            background-color: #fca5a5;
+            color: white;
+        }
     }
 
     &:disabled {
         opacity: 0.5;
         cursor: not-allowed;
+        box-shadow: none;
+        transform: none !important;
     }
 }
 

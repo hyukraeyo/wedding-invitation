@@ -47,13 +47,21 @@ export const invitationService = {
         const supabaseClient = client ?? await getDefaultClient();
         const { data, error } = await supabaseClient
             .from('invitations')
-            .select(INVITATION_SUMMARY_SELECT)
+            .select('*')
             .eq('user_id', userId)
             .order('updated_at', { ascending: false });
 
         if (error) throw error;
-        const rows = (data ?? []) as unknown as InvitationSummaryRow[];
-        return rows.map(toInvitationSummary);
+
+        // Return data directly mapping to InvitationSummaryRecord structure
+        // Since we fetch '*', invitation_data is already a JSON object
+        return (data ?? []).map((row: any) => ({
+            id: row.id,
+            slug: row.slug,
+            updated_at: row.updated_at,
+            user_id: row.user_id,
+            invitation_data: row.invitation_data
+        })) as InvitationSummaryRecord[];
     },
 
     async getInvitation(slug: string, client?: SupabaseClient) {

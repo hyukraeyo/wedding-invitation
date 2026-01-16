@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { invitationService } from '@/services/invitationService';
@@ -62,6 +62,17 @@ export default function MyPageClient({
     const router = useRouter();
     const [invitations, setInvitations] = useState<InvitationSummaryRecord[]>(initialInvitations);
     const [approvalRequests, setApprovalRequests] = useState<ApprovalRequestSummary[]>(initialApprovalRequests);
+
+    // Debugging: Log invitations to check data structure
+    useEffect(() => {
+        console.log('⚡️ MyPage Invitations:', invitations);
+        invitations.forEach((inv, i) => {
+            console.log(`[${i}] Title:`, inv.invitation_data?.mainScreen?.title);
+            console.log(`[${i}] Image URL:`, inv.invitation_data?.imageUrl);
+            console.log(`[${i}] Main Screen Image:`, inv.invitation_data?.mainScreen?.image);
+            console.log(`[${i}] Gallery[0]:`, inv.invitation_data?.gallery?.[0]);
+        });
+    }, [invitations]);
     const [actionLoading, setActionLoading] = useState<string | null>(null);
 
     // Profile Completion Modal State
@@ -443,19 +454,26 @@ export default function MyPageClient({
                                     {/* Card Image */}
                                     <div className="w-full bg-gray-50 border-b border-gray-100">
                                         <AspectRatio ratio={4 / 3}>
-                                            {inv.invitation_data?.imageUrl ? (
-                                                <Image
-                                                    src={inv.invitation_data.imageUrl}
-                                                    alt="Main Screen"
-                                                    fill
-                                                    className="object-cover"
-                                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                                />
-                                            ) : (
-                                                <div className="flex items-center justify-center w-full h-full text-gray-300 bg-gray-50">
-                                                    <FileText size={48} strokeWidth={1} />
-                                                </div>
-                                            )}
+                                            {(() => {
+                                                const imageSrc = inv.invitation_data?.mainScreen?.image || inv.invitation_data?.imageUrl || inv.invitation_data?.gallery?.[0];
+
+                                                if (imageSrc) {
+                                                    return (
+                                                        <Image
+                                                            src={imageSrc}
+                                                            alt="Main Screen"
+                                                            fill
+                                                            className="object-cover"
+                                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                        />
+                                                    );
+                                                }
+                                                return (
+                                                    <div className="flex items-center justify-center w-full h-full text-gray-300 bg-gray-50">
+                                                        <FileText size={48} strokeWidth={1} />
+                                                    </div>
+                                                );
+                                            })()}
                                         </AspectRatio>
                                     </div>
 

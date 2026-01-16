@@ -103,8 +103,9 @@ const nextConfig: NextConfig = {
       const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
       config.plugins.push(
         new BundleAnalyzerPlugin({
-          analyzerMode: 'server',
-          openAnalyzer: true,
+          analyzerMode: process.env.ANALYZE_MODE ?? 'static',
+          openAnalyzer: process.env.ANALYZE_OPEN === 'true',
+          reportFilename: 'analyze/client.html',
         })
       );
     }
@@ -131,4 +132,3 @@ const config = withSentryConfig(
 );
 
 export default config;
-

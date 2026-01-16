@@ -5,6 +5,8 @@ export const INVITATION_SUMMARY_SELECT = [
   'user_id',
   'invitation_data->>imageUrl as image_url',
   'invitation_data->mainScreen->>title as main_title',
+  'invitation_data->mainScreen->>image as main_image',
+  'invitation_data->gallery as gallery',
   'invitation_data->>date as date',
   'invitation_data->>location as location',
   'invitation_data->>isApproved as is_approved',
@@ -15,7 +17,9 @@ export interface InvitationSummaryData {
   imageUrl: string | null;
   mainScreen: {
     title: string;
+    image?: string | null;
   };
+  gallery?: string[];
   date: string;
   location: string;
   isApproved: boolean;
@@ -37,6 +41,8 @@ export interface InvitationSummaryRow {
   user_id: string;
   image_url: string | null;
   main_title: string | null;
+  main_image: string | null;
+  gallery: string[] | null; // JSONB array
   date: string | null;
   location: string | null;
   is_approved: boolean | string | null;
@@ -55,7 +61,9 @@ export const toInvitationSummary = (row: InvitationSummaryRow): InvitationSummar
     imageUrl: row.image_url ?? null,
     mainScreen: {
       title: row.main_title ?? '',
+      image: row.main_image ?? null,
     },
+    gallery: row.gallery ?? [],
     date: row.date ?? '',
     location: row.location ?? '',
     isApproved: toBoolean(row.is_approved),

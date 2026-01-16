@@ -44,7 +44,7 @@ export default async function MyPage() {
             const db = supabaseAdmin || supabase;
             const [invitationsResult, approvalRequestsResult] = await Promise.all([
                 db.from('invitations')
-                    .select(INVITATION_SUMMARY_SELECT)
+                    .select('*')
                     .contains('invitation_data', { isRequestingApproval: true })
                     .order('updated_at', { ascending: false }),
                 db.from('approval_requests')
@@ -52,17 +52,28 @@ export default async function MyPage() {
                     .order('created_at', { ascending: false }),
             ]);
 
-            const invitationRows = (invitationsResult.data ?? []) as unknown as InvitationSummaryRow[];
-            invitations = invitationRows.map(toInvitationSummary);
+            invitations = (invitationsResult.data ?? []).map((row: any) => ({
+                id: row.id,
+                slug: row.slug,
+                updated_at: row.updated_at,
+                user_id: row.user_id,
+                invitation_data: row.invitation_data
+            })) as InvitationSummaryRecord[];
             approvalRequests = (approvalRequestsResult.data ?? []) as unknown as ApprovalRequestSummary[];
         } else {
             const { data } = await supabase
                 .from('invitations')
-                .select(INVITATION_SUMMARY_SELECT)
+                .select('*')
                 .eq('user_id', user.id)
                 .order('updated_at', { ascending: false });
-            const invitationRows = (data ?? []) as unknown as InvitationSummaryRow[];
-            invitations = invitationRows.map(toInvitationSummary);
+
+            invitations = (data ?? []).map((row: any) => ({
+                id: row.id,
+                slug: row.slug,
+                updated_at: row.updated_at,
+                user_id: row.user_id,
+                invitation_data: row.invitation_data
+            })) as InvitationSummaryRecord[];
         }
     }
 

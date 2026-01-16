@@ -1,4 +1,4 @@
-import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -8,6 +8,7 @@ let cachedToken: string | null = null;
 let clientToken: string | null = null;
 let tokenExpiresAt = 0;
 let tokenRequest: Promise<string> | null = null;
+let supabaseModulePromise: Promise<typeof import('@supabase/supabase-js')> | null = null;
 
 const decodeExpiry = (token: string) => {
     try {
@@ -45,6 +46,10 @@ export async function getBrowserSupabaseClient() {
     }
 
     if (!cachedClient || !cachedToken || clientToken !== cachedToken) {
+        if (!supabaseModulePromise) {
+            supabaseModulePromise = import('@supabase/supabase-js');
+        }
+        const { createClient } = await supabaseModulePromise;
         cachedClient = createClient(supabaseUrl, supabaseAnonKey, {
             auth: { persistSession: false, autoRefreshToken: false },
             global: { headers: { Authorization: `Bearer ${cachedToken}` } },

@@ -8,13 +8,13 @@ import "../styles/_accessibility.scss";
 // Next.js 15+ Font Optimization
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-serif', display: 'swap' });
-const gowunBatang = Gowun_Batang({ weight: ['400', '700'], variable: '--font-gowun-batang', display: 'optional' });
-const gowunDodum = Gowun_Dodum({ weight: '400', variable: '--font-gowun-dodum', display: 'optional' });
-const nanumMyeongjo = Nanum_Myeongjo({ weight: ['400', '700', '800'], variable: '--font-nanum-myeongjo', display: 'optional' });
-const yeonSung = Yeon_Sung({ weight: '400', variable: '--font-yeon-sung', display: 'optional' });
-const doHyeon = Do_Hyeon({ weight: '400', variable: '--font-do-hyeon', display: 'optional' });
+const gowunBatang = Gowun_Batang({ subsets: ['latin'], weight: ['400', '700'], variable: '--font-gowun-batang', display: 'optional' });
+const gowunDodum = Gowun_Dodum({ subsets: ['latin'], weight: '400', variable: '--font-gowun-dodum', display: 'optional' });
+const nanumMyeongjo = Nanum_Myeongjo({ subsets: ['latin'], weight: ['400', '700', '800'], variable: '--font-nanum-myeongjo', display: 'optional' });
+const yeonSung = Yeon_Sung({ subsets: ['latin'], weight: '400', variable: '--font-yeon-sung', display: 'optional' });
+const doHyeon = Do_Hyeon({ subsets: ['latin'], weight: '400', variable: '--font-do-hyeon', display: 'optional' });
 const songMyung = Song_Myung({ weight: '400', variable: '--font-song-myung', display: 'optional' });
-const greatVibes = Great_Vibes({ weight: '400', variable: '--font-script', display: 'optional' });
+const greatVibes = Great_Vibes({ subsets: ['latin'], weight: '400', variable: '--font-script', display: 'optional' });
 
 
 export const viewport: Viewport = {
@@ -193,4 +193,3 @@ export default function RootLayout({
     </html>
   );
 }
-

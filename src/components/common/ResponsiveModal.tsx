@@ -89,7 +89,9 @@ export const ResponsiveModal = ({
                     <Button
                         variant="outline"
                         onClick={handleCancel}
-                        className={cn(mode === 'drawer' && "flex-1 h-12")}
+                        className={cn(
+                            mode === 'drawer' && "flex-1 h-14 rounded-2xl border-gray-200 bg-white text-gray-700 text-[17px] font-medium shadow-sm hover:bg-gray-50 active:scale-[0.96] transition-all"
+                        )}
                     >
                         {cancelText}
                     </Button>
@@ -98,7 +100,9 @@ export const ResponsiveModal = ({
                     variant={confirmVariant}
                     onClick={onConfirm}
                     disabled={confirmDisabled || confirmLoading}
-                    className={cn(mode === 'drawer' && "flex-1 h-12")}
+                    className={cn(
+                        mode === 'drawer' && "flex-1 h-14 rounded-2xl text-[17px] font-semibold shadow-sm active:scale-[0.96] transition-all"
+                    )}
                     autoFocus
                 >
                     {confirmLoading ? "처리 중..." : confirmText}
