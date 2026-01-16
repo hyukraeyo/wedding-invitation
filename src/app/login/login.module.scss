@@ -1,16 +1,12 @@
 @use "@/styles/variables" as *;
 
 .overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 100;
+    min-height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 1rem;
-    background-color: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(8px);
-
+    background-color: #f9fafb;
 }
 
 .modal {
@@ -19,7 +15,7 @@
     max-width: 400px;
     border-radius: 1.5rem;
     padding: 2.5rem;
-    box-shadow: 
+    box-shadow:
         0 20px 25px -5px rgba(0, 0, 0, 0.1),
         0 8px 10px -6px rgba(0, 0, 0, 0.1);
     position: relative;
@@ -87,7 +83,7 @@
     font-size: 0.9375rem;
     border: 1px solid #e5e7eb;
     background-color: #ffffff;
-    
+
     &:focus {
         border-color: #111827;
     }
@@ -220,5 +216,3 @@
 
     }
 }
-
-

@@ -10,18 +10,18 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 hover:shadow-md",
+          "bg-primary text-primary-foreground hover:bg-primary/90",
         destructive:
-          "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
-          "border border-gray-200 bg-white shadow-sm hover:bg-gray-50 hover:text-gray-900 text-gray-700",
+          "border border-gray-200 bg-white hover:bg-gray-50 hover:text-gray-900 text-gray-700",
         secondary:
-          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-gray-100 hover:text-gray-900 active:bg-gray-200 active:text-gray-900 text-gray-600",
         link: "text-primary underline-offset-4 hover:underline",
         // 바나나웨딩 전용
-        solid: "bg-banana-yellow text-white shadow-sm hover:bg-[#FDD835] border border-transparent",
-        line: "border border-gray-200 bg-white text-gray-700 shadow-sm hover:bg-gray-50",
+        solid: "bg-banana-yellow text-white hover:bg-[#FDD835] border border-transparent",
+        line: "border border-gray-200 bg-white text-gray-700 hover:bg-gray-50",
       },
       size: {
         default: "h-12 px-5 py-3 text-[15px]", // 48px -> 12 * 4

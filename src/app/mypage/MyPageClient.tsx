@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { invitationService } from '@/services/invitationService';
@@ -63,16 +63,6 @@ export default function MyPageClient({
     const [invitations, setInvitations] = useState<InvitationSummaryRecord[]>(initialInvitations);
     const [approvalRequests, setApprovalRequests] = useState<ApprovalRequestSummary[]>(initialApprovalRequests);
 
-    // Debugging: Log invitations to check data structure
-    useEffect(() => {
-        console.log('⚡️ MyPage Invitations:', invitations);
-        invitations.forEach((inv, i) => {
-            console.log(`[${i}] Title:`, inv.invitation_data?.mainScreen?.title);
-            console.log(`[${i}] Image URL:`, inv.invitation_data?.imageUrl);
-            console.log(`[${i}] Main Screen Image:`, inv.invitation_data?.mainScreen?.image);
-            console.log(`[${i}] Gallery[0]:`, inv.invitation_data?.gallery?.[0]);
-        });
-    }, [invitations]);
     const [actionLoading, setActionLoading] = useState<string | null>(null);
 
     // Profile Completion Modal State
@@ -576,7 +566,6 @@ export default function MyPageClient({
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                             >
-                                                <ExternalLink size={16} />
                                                 청첩장 확인
                                             </Link>
                                         </Button>
@@ -609,18 +598,7 @@ export default function MyPageClient({
                                             loading={actionLoading === inv.id}
                                             disabled={inv.invitation_data?.isApproved && (!isAdmin || inv.user_id === userId)}
                                         >
-                                            {(() => {
-                                                if (inv.invitation_data?.isApproved) return <CheckCircle2 size={16} />;
 
-                                                const isMine = inv.user_id === userId;
-                                                const showAdminActions = isAdmin && !isMine;
-
-                                                if (showAdminActions) {
-                                                    return <CheckCircle2 size={16} />; // 관리자 승인 아이콘
-                                                } else {
-                                                    return inv.invitation_data?.isRequestingApproval ? <XCircle size={16} /> : <Send size={16} />;
-                                                }
-                                            })()}
 
                                             {(() => {
                                                 if (inv.invitation_data?.isApproved) return '승인완료';
