@@ -72,7 +72,7 @@ export default function ProfileCompletionModal({
                 시작하기
             </Button>
 
-            {onLogout && (
+            {onLogout ? (
                 <button
                     type="button"
                     onClick={onLogout}
@@ -80,7 +80,7 @@ export default function ProfileCompletionModal({
                 >
                     로그아웃
                 </button>
-            )}
+            ) : null}
         </div>
     );
 

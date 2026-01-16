@@ -152,7 +152,7 @@ const CalendarSectionView = memo(({
                 accentColor={accentColor}
             />
 
-            {showCalendar && (
+            {showCalendar ? (
                 <div className={styles.calendarContainer}>
                     <div className={styles.calendarHeader}>
                         <div className={styles.monthYear}>
@@ -177,17 +177,17 @@ const CalendarSectionView = memo(({
                                 )}
                             >
                                 {d.day}
-                                {d.isWeddingDay && (
+                                {d.isWeddingDay ? (
                                     <div className={styles.dayMarker} style={{ backgroundColor: accentColor }} />
-                                )}
+                                ) : null}
                             </div>
                         ))}
                     </div>
                 </div>
-            )}
+            ) : null}
 
             {/* Countdown Area */}
-            {showDday && (
+            {showDday ? (
                 <>
                     <div className={styles.countdownArea}>
                         <div className={styles.timerGrid}>
@@ -223,7 +223,7 @@ const CalendarSectionView = memo(({
                         </p>
                     </div>
                 </>
-            )}
+            ) : null}
         </SectionContainer>
     );
 });

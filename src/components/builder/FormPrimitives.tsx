@@ -13,7 +13,7 @@ export const Label = ({ children, className, required, ...props }: LabelProps) =
     return (
         <ShadcnLabel className={cn(className)} {...props}>
             {children}
-            {required && <span className="text-destructive ml-1">*</span>}
+            {required ? <span className="text-destructive ml-1">*</span> : null}
         </ShadcnLabel>
     );
 };
@@ -44,7 +44,7 @@ export const HelpText = ({
             variant === 'warning' && "text-destructive font-medium",
             className
         )}>
-            {showIcon && <Icon size={iconSize} className="mt-0.5 shrink-0" />}
+            {showIcon ? <Icon size={iconSize} className="mt-0.5 shrink-0" /> : null}
             <span className="leading-normal">{children}</span>
         </div>
     );
@@ -67,25 +67,25 @@ export const Field = ({ label, children, className, required, description, error
     return (
         <div className={cn("space-y-2", className)}>
             <div className="flex flex-col gap-1.5">
-                {label && (
+                {label ? (
                     <div className="flex items-center justify-between">
                         <Label htmlFor={id} required={!!required}>
                             {label}
                         </Label>
                         {action}
                     </div>
-                )}
+                ) : null}
                 {children}
-                {description && (
+                {description ? (
                     <p className={cn("text-[0.8rem] text-muted-foreground", error && "text-destructive")}>
                         {description}
                     </p>
-                )}
-                {error && (
+                ) : null}
+                {error ? (
                     <p className="text-[0.8rem] font-medium text-destructive">
                         {error}
                     </p>
-                )}
+                ) : null}
             </div>
         </div>
     );

@@ -71,14 +71,14 @@ const CheckboxBase = ({
                 disabled={disabled ?? undefined}
                 className={cn(variant === 'circle' && "rounded-full")}
             />
-            {(children || label) && (
+            {children || label ? (
                 <Label
                     htmlFor={uniqueId}
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
                     {label || children}
                 </Label>
-            )}
+            ) : null}
         </div>
     );
 };

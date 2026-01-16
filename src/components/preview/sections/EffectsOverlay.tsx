@@ -139,20 +139,24 @@ const EffectsOverlay = memo(({
     return (
         <div className={effectOnlyOnMain ? styles.overlayMain : styles.overlayGlobal}>
             <div className={clsx(styles.inner, effectOnlyOnMain ? styles.hFull : styles.hScreen)}>
-                {effect === 'cherry-blossom' && <CherryBlossomDefs />}
+                {effect === 'cherry-blossom' ? <CherryBlossomDefs /> : null}
 
-                {effect === 'snow' && particles.map(p => (
-                    <div key={p.id} className={clsx(styles.snowParticle, styles.animateFall)} style={p.style} />
-                ))}
+                {effect === 'snow' ? (
+                    particles.map(p => (
+                        <div key={p.id} className={clsx(styles.snowParticle, styles.animateFall)} style={p.style} />
+                    ))
+                ) : null}
 
-                {effect === 'cherry-blossom' && particles.map(p => (
-                    <div key={p.id} className={clsx(styles.cherryParticle, p.animationClass || styles.animateFallSway)} style={p.style}>
-                        {p.pathIndex === 0 && <Variant1 />}
-                        {p.pathIndex === 1 && <Variant2 />}
-                        {p.pathIndex === 2 && <Variant3 />}
-                        {p.pathIndex === 3 && <Variant4 />}
-                    </div>
-                ))}
+                {effect === 'cherry-blossom' ? (
+                    particles.map(p => (
+                        <div key={p.id} className={clsx(styles.cherryParticle, p.animationClass || styles.animateFallSway)} style={p.style}>
+                            {p.pathIndex === 0 ? <Variant1 /> : null}
+                            {p.pathIndex === 1 ? <Variant2 /> : null}
+                            {p.pathIndex === 2 ? <Variant3 /> : null}
+                            {p.pathIndex === 3 ? <Variant4 /> : null}
+                        </div>
+                    ))
+                ) : null}
             </div>
         </div>
     );

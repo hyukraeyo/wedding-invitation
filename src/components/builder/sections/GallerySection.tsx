@@ -82,11 +82,11 @@ const SortableItem = React.memo(function SortableItem({ id, url, onRemove, isDra
                 className={cn(styles.image, isUploading && styles.imageUploading)}
             />
 
-            {isUploading && (
+            {isUploading ? (
                 <div className={styles.uploadingOverlay}>
                     <div className={styles.spinner} />
                 </div>
-            )}
+            ) : null}
 
             <div className={styles.gradientOverlay} />
 
@@ -272,7 +272,7 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ value,
                                             onRemove={handleRemove}
                                         />
                                     ))}
-                                    {gallery.length < 30 && (
+                                    {gallery.length < 30 ? (
                                         <div className={styles.uploadItem} onClick={handleUploadClick}>
                                             <Plus size={24} className={styles.uploadIcon} />
                                             <input
@@ -284,7 +284,7 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ value,
                                                 onChange={handleFileChange}
                                             />
                                         </div>
-                                    )}
+                                    ) : null}
                                 </div>
                             </SortableContext>
 
@@ -334,7 +334,7 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ value,
                             onChange={setGalleryPopup}
                             label="확대 보기 (팝업)"
                         />
-                        {galleryType === 'swiper' && (
+                        {galleryType === 'swiper' ? (
                             <>
                                 <SwitchField
                                     checked={galleryAutoplay}
@@ -352,7 +352,7 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ value,
                                     label="미리보기"
                                 />
                             </>
-                        )}
+                        ) : null}
                     </div>
                 </Field>
             </div>

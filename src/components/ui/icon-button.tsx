@@ -49,14 +49,14 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
                 variant={variant}
                 size={sizeMap[size]}
                 className={cn(
-                    "rounded-full transition-all active:scale-90", // iOS 스타일 감속 인터랙션
+                    "rounded-full transition-transform duration-100 ease-in-out active:scale-[0.92]", // iOS/Toss Interaction
                     className
                 )}
                 ref={ref}
                 loading={loading}
                 {...rest}
             >
-                {!loading && Icon && <Icon className={cn(iconSizeMap[size as keyof typeof iconSizeMap])} />}
+                {!loading && Icon ? <Icon className={cn(iconSizeMap[size as keyof typeof iconSizeMap])} /> : null}
                 {children}
             </Button>
         )

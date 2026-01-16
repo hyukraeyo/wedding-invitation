@@ -47,14 +47,15 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection({ isOpen, va
                                     key={color}
                                     className={cn(
                                         styles.colorItem,
+                                        "transition-transform duration-200 active:scale-90",
                                         theme.accentColor === color && styles.active
                                     )}
                                     style={{ backgroundColor: color }}
                                     onClick={() => setTheme({ accentColor: color })}
                                 >
-                                    {theme.accentColor === color && (
+                                    {theme.accentColor === color ? (
                                         <Check size={16} className={styles.checkIcon} />
-                                    )}
+                                    ) : null}
                                 </button>
                             ))}
                             <button className={styles.customColorBtn}>
@@ -106,14 +107,15 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection({ isOpen, va
                                     key={color}
                                     className={cn(
                                         styles.colorItem,
+                                        "transition-transform duration-200 active:scale-90",
                                         theme.backgroundColor === color && styles.active
                                     )}
                                     style={{ backgroundColor: color }}
                                     onClick={() => setTheme({ backgroundColor: color })}
                                 >
-                                    {theme.backgroundColor === color && (
+                                    {theme.backgroundColor === color ? (
                                         <Check size={16} className={styles.checkIcon} />
-                                    )}
+                                    ) : null}
                                 </button>
                             ))}
                         </div>

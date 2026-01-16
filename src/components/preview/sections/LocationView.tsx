@@ -148,17 +148,17 @@ const LocationView = memo(({
                 <div className={styles.placeName}>{location}</div>
                 <div className={styles.address}>
                     {address}
-                    {detailAddress && <div className={styles.detailAddress}>{detailAddress}</div>}
+                    {detailAddress ? <div className={styles.detailAddress}>{detailAddress}</div> : null}
                 </div>
-                {locationContact && (
+                {locationContact ? (
                     <a href={`tel:${locationContact.replace(/[^0-9]/g, '')}`} className={styles.contact}>
                         <Phone size={14} />
                         {locationContact}
                     </a>
-                )}
+                ) : null}
             </div>
 
-            {showMap && (
+            {showMap ? (
                 <div className={styles.mapContainer}>
                     <AspectRatio ratio={16 / 10}>
                         {mapType === 'naver' ? (
@@ -180,9 +180,9 @@ const LocationView = memo(({
                         )}
                     </AspectRatio>
                 </div>
-            )}
+            ) : null}
 
-            {showNavigation && (
+            {showNavigation ? (
                 <div className={styles.navLinks}>
                     <button onClick={() => handleNavClick('kakao')} className={styles.navButton}>
                         <div className={styles.navIconWrapper}>
@@ -203,9 +203,9 @@ const LocationView = memo(({
                         <span className={styles.navLabel}>주소 복사</span>
                     </button>
                 </div>
-            )}
+            ) : null}
 
-            {sketchUrl && (
+            {sketchUrl ? (
                 <div className={clsx(styles.sketchContainer, styles[sketchRatio])}>
                     {sketchRatio === 'fixed' ? (
                         <AspectRatio ratio={4 / 3}>
@@ -238,7 +238,7 @@ const LocationView = memo(({
                         />
                     )}
                 </div>
-            )}
+            ) : null}
         </SectionContainer>
     );
 });

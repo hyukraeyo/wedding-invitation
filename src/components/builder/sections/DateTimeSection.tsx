@@ -66,7 +66,7 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
                         onChange={setShowDday}
                         label="D-Day 노출"
                     />
-                    {showDday && (
+                    {showDday ? (
                         <div className={styles.ddayInputWrapper}>
                             <TextField
                                 placeholder="예: (신랑), (신부)의 결혼식이 (D-Day) 남았습니다"
@@ -77,7 +77,7 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
                                 (신랑), (신부), (D-Day)는 실제 이름과 날짜로 자동 치환됩니다.
                             </InfoMessage>
                         </div>
-                    )}
+                    ) : null}
                 </div>
             </div>
         </AccordionItem>

@@ -75,7 +75,7 @@ export default function LoginPage() {
     return (
         <>
             {/* Full Screen Loading Animation */}
-            {loadingProvider && <LoadingSpinner />}
+            {loadingProvider ? <LoadingSpinner /> : null}
 
             <div className={styles.overlay} style={{ alignItems: 'center', paddingTop: 0 }}>
                 <div className={styles.modal}>

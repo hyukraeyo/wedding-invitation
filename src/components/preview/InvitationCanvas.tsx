@@ -286,9 +286,9 @@ const InvitationCanvas = memo(({ isPreviewMode = false, editingSection, hideWate
       </div>
 
       {/* Watermark for unapproved live pages */}
-      {!isApproved && !isPreviewMode && !hideWatermark && (
+      {!isApproved && !isPreviewMode && !hideWatermark ? (
         <div className={styles.watermark} />
-      )}
+      ) : null}
 
       {/* Portal Root for Modals (to keep them inside the mockup) */}
       <div id="invitation-modal-root" className={styles.modalRoot} />

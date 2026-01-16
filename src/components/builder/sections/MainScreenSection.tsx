@@ -201,48 +201,52 @@ export default function MainScreenSection({ isOpen, value }: SectionProps) {
                                 <SwiperSlide key={preset.id} className={styles.stylePresetSlide}>
                                     <button
                                         type="button"
-                                        className={`${styles.stylePresetCard} ${mainScreen.layout === preset.layout ? styles.selected : ''}`}
+                                        className={cn(
+                                            styles.stylePresetCard,
+                                            mainScreen.layout === preset.layout ? styles.selected : '',
+                                            "transition-transform duration-200 active:scale-[0.98]"
+                                        )}
                                         onClick={() => handleSelectPreset(preset, index)}
                                     >
                                         <div className={cn(styles.presetThumbnail, preset.layout === 'classic' && styles.classicLayout)}>
-                                            {preset.layout !== 'classic' && <div className={styles.thumbnailImage} />}
+                                            {preset.layout !== 'classic' ? <div className={styles.thumbnailImage} /> : null}
                                             <div className={styles.thumbnailContent}>
-                                                {preset.layout === 'classic' && (
+                                                {preset.layout === 'classic' ? (
                                                     <>
                                                         <span className={styles.thumbTitle}>THE MARRIAGE</span>
                                                         <span className={styles.thumbMarriage}>신랑, 신부 결혼합니다.</span>
                                                     </>
-                                                )}
-                                                {preset.layout === 'minimal' && (
+                                                ) : null}
+                                                {preset.layout === 'minimal' ? (
                                                     <>
                                                         <span className={styles.thumbDateMinimal}>2024 / 05 / 25</span>
                                                         <span className={styles.thumbWeekday}>SATURDAY</span>
                                                         <span className={styles.thumbNames}>신랑 · 신부</span>
                                                     </>
-                                                )}
-                                                {preset.layout === 'english' && (
+                                                ) : null}
+                                                {preset.layout === 'english' ? (
                                                     <>
                                                         <span className={styles.thumbTitle}>THE NEW BEGINNING</span>
                                                         <span className={styles.thumbNames}>신랑 그리고 신부</span>
                                                         <span className={styles.thumbSubtext}>We are getting married</span>
                                                     </>
-                                                )}
-                                                {preset.layout === 'heart' && (
+                                                ) : null}
+                                                {preset.layout === 'heart' ? (
                                                     <>
                                                         <span className={styles.thumbHeart}>신랑 ♥ 신부</span>
                                                     </>
-                                                )}
-                                                {preset.layout === 'korean' && (
+                                                ) : null}
+                                                {preset.layout === 'korean' ? (
                                                     <>
                                                         <span className={styles.thumbKoreanTop}>저희 둘,</span>
                                                         <span className={styles.thumbKoreanBottom}>결혼합니다.</span>
                                                         <span className={styles.thumbNames}>신랑 · 신부</span>
                                                     </>
-                                                )}
+                                                ) : null}
                                             </div>
-                                            {preset.layout === 'classic' && <div className={styles.thumbnailImage} />}
+                                            {preset.layout === 'classic' ? <div className={styles.thumbnailImage} /> : null}
                                             <div className={styles.thumbnailFooter}>
-                                                {preset.layout === 'classic' && <span>초대합니다</span>}
+                                                {preset.layout === 'classic' ? <span>초대합니다</span> : null}
                                                 <span>2024. 05. 25</span>
                                                 <span>예식장</span>
                                             </div>
@@ -281,7 +285,7 @@ export default function MainScreenSection({ isOpen, value }: SectionProps) {
                         />
                     </Field>
 
-                    {mainScreen.layout === 'classic' && (
+                    {mainScreen.layout === 'classic' ? (
                         <>
                             <div className={styles.optionWrapper}>
                                 <TextField
@@ -343,9 +347,9 @@ export default function MainScreenSection({ isOpen, value }: SectionProps) {
                                 </div>
                             </div>
                         </>
-                    )}
+                    ) : null}
 
-                    {mainScreen.layout === 'minimal' && (
+                    {mainScreen.layout === 'minimal' ? (
                         <>
                             <p className={styles.helpText}>예식일시에서 자동으로 표시됩니다</p>
                             <div className={styles.andTextWrapper}>
@@ -360,9 +364,9 @@ export default function MainScreenSection({ isOpen, value }: SectionProps) {
                                 </div>
                             </div>
                         </>
-                    )}
+                    ) : null}
 
-                    {mainScreen.layout === 'english' && (
+                    {mainScreen.layout === 'english' ? (
                         <>
                             <div className={styles.optionWrapper}>
                                 <TextField
@@ -392,15 +396,15 @@ export default function MainScreenSection({ isOpen, value }: SectionProps) {
                                 </div>
                             </div>
                         </>
-                    )}
+                    ) : null}
 
-                    {mainScreen.layout === 'heart' && (
+                    {mainScreen.layout === 'heart' ? (
                         <>
                             <p className={styles.helpText}>♥ 아이콘이 자동으로 표시됩니다</p>
                         </>
-                    )}
+                    ) : null}
 
-                    {mainScreen.layout === 'korean' && (
+                    {mainScreen.layout === 'korean' ? (
                         <>
                             <div className={styles.optionWrapper}>
                                 <TextField
@@ -419,11 +423,11 @@ export default function MainScreenSection({ isOpen, value }: SectionProps) {
                                 />
                             </div>
                         </>
-                    )}
+                    ) : null}
                     {/* Date & Place Info - Common for all styles */}
-                    {isOpen && (
+                    {isOpen ? (
                         <>
-                            {!mainScreen.customDatePlace && (
+                            {!mainScreen.customDatePlace ? (
                                 <div className={cn(styles.helpText, "flex items-center justify-between gap-2")} style={{ marginBottom: '8px' }}>
                                     <p>
                                         <span style={{ fontWeight: 600 }}>자동 노출 중:</span> {getFormattedAutoText().replace(/<br\/>/g, ' ')}
@@ -436,14 +440,14 @@ export default function MainScreenSection({ isOpen, value }: SectionProps) {
                                         문구 적용
                                     </button>
                                 </div>
-                            )}
+                            ) : null}
                             <RichTextEditor
                                 content={mainScreen.customDatePlace}
                                 onChange={(val: string) => updateMain({ customDatePlace: val })}
                                 placeholder="직접 입력 시 자동 노출 문구 대신 표시됩니다"
                             />
                         </>
-                    )}
+                    ) : null}
 
                     {/* Visibility Toggles */}
                     <div className={styles.switchGroup}>

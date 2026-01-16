@@ -157,11 +157,11 @@ const GalleryView = memo(({
                                     </SwiperSlide>
                                 ))}
                             </Swiper>
-                            {gallery.length > 1 && (
+                            {gallery.length > 1 ? (
                                 <div className={styles.counter}>
                                     {currentIndex + 1} / {gallery.length}
                                 </div>
-                            )}
+                            ) : null}
                         </div>
                     </div>
                 );

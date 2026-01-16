@@ -236,13 +236,13 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ valu
                 description="도로명 주소 또는 지번 주소를 입력해주세요."
             >
                 <div className="h-[400px] w-full">
-                    {isSearchOpen && (
+                    {isSearchOpen ? (
                         <DaumPostcodeEmbed
                             onComplete={handleComplete}
                             style={{ height: '100%' }}
                             autoClose={false}
                         />
-                    )}
+                    ) : null}
                 </div>
             </ResponsiveModal>
         </AccordionItem>

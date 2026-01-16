@@ -351,7 +351,7 @@ export default function MyPageClient({
                 <h1 className="sr-only">마이페이지</h1>
 
                 {/* 1. Admin Approval Queue - Top Section */}
-                {isAdmin && (
+                {isAdmin ? (
                     <section className={styles.adminSection}>
                         <div className={styles.adminSectionHeader}>
                             <div>
@@ -417,7 +417,7 @@ export default function MyPageClient({
                             </div>
                         )}
                     </section>
-                )}
+                ) : null}
 
 
 
@@ -466,7 +466,11 @@ export default function MyPageClient({
                                                     {inv.invitation_data?.mainScreen?.title || '제목 없는 청첩장'}
                                                 </h3>
                                                 <p className={styles.cardDate}>
-                                                    {isAdmin && <span className="block text-xs text-blue-600 mb-1 font-mono">My ID: {userId?.slice(0, 8)}</span>}
+                                                    {isAdmin ? (
+                                                        <span className="block text-xs text-blue-600 mb-1 font-mono">
+                                                            My ID: {userId?.slice(0, 8)}
+                                                        </span>
+                                                    ) : null}
                                                     수정: {new Date(inv.updated_at).toLocaleDateString('ko-KR')} {new Date(inv.updated_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false })}
                                                 </p>
                                             </div>
@@ -585,14 +589,14 @@ export default function MyPageClient({
                 })()}
 
                 {/* Profile Completion Modal - for users with incomplete profile */}
-                {userId && (
+                {userId ? (
                     <ProfileCompletionModal
                         isOpen={profileModalOpen}
                         userId={userId}
                         defaultName={profile?.full_name || ''}
                         onComplete={handleProfileComplete}
                     />
-                )}
+                ) : null}
 
                 <ResponsiveModal
                     open={confirmConfig.isOpen}

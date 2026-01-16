@@ -113,7 +113,7 @@ const ClosingView = memo(({
                     accentColor={accentColor}
                 />
 
-                {imageUrl && (
+                {imageUrl ? (
                     <div className={clsx(styles.imageSection, styles[ratio])}>
                         <div className={styles.imageContainer}>
                             {ratio === 'fixed' ? (
@@ -130,9 +130,15 @@ const ClosingView = memo(({
                                         unoptimized={isBlobUrl(imageUrl)}
                                     />
                                     {/* Effects Overlay */}
-                                    {effect === 'mist' && <div className={clsx(styles.effectLayer, styles.mist)}></div>}
-                                    {effect === 'ripple' && <div className={clsx(styles.effectLayer, styles.ripple)}></div>}
-                                    {effect === 'paper' && <div className={clsx(styles.effectLayer, styles.paper)}></div>}
+                                    {effect === 'mist' ? (
+                                        <div className={clsx(styles.effectLayer, styles.mist)}></div>
+                                    ) : null}
+                                    {effect === 'ripple' ? (
+                                        <div className={clsx(styles.effectLayer, styles.ripple)}></div>
+                                    ) : null}
+                                    {effect === 'paper' ? (
+                                        <div className={clsx(styles.effectLayer, styles.paper)}></div>
+                                    ) : null}
                                 </AspectRatio>
                             ) : (
                                 <>
@@ -151,14 +157,20 @@ const ClosingView = memo(({
                                         unoptimized={isBlobUrl(imageUrl)}
                                     />
                                     {/* Effects Overlay */}
-                                    {effect === 'mist' && <div className={clsx(styles.effectLayer, styles.mist)}></div>}
-                                    {effect === 'ripple' && <div className={clsx(styles.effectLayer, styles.ripple)}></div>}
-                                    {effect === 'paper' && <div className={clsx(styles.effectLayer, styles.paper)}></div>}
+                                    {effect === 'mist' ? (
+                                        <div className={clsx(styles.effectLayer, styles.mist)}></div>
+                                    ) : null}
+                                    {effect === 'ripple' ? (
+                                        <div className={clsx(styles.effectLayer, styles.ripple)}></div>
+                                    ) : null}
+                                    {effect === 'paper' ? (
+                                        <div className={clsx(styles.effectLayer, styles.paper)}></div>
+                                    ) : null}
                                 </>
                             )}
                         </div>
                     </div>
-                )}
+                ) : null}
 
                 <div
                     className={clsx(styles.message, "rich-text-content", !imageUrl && styles.noImage)}

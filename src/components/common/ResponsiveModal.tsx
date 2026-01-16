@@ -85,7 +85,7 @@ export const ResponsiveModal = ({
 
         return (
             <>
-                {showCancel && (
+                {showCancel ? (
                     <Button
                         variant="outline"
                         onClick={handleCancel}
@@ -93,7 +93,7 @@ export const ResponsiveModal = ({
                     >
                         {cancelText}
                     </Button>
-                )}
+                ) : null}
                 <Button
                     variant={confirmVariant}
                     onClick={onConfirm}
@@ -109,7 +109,7 @@ export const ResponsiveModal = ({
     if (isDesktop) {
         return (
             <Dialog open={open} onOpenChange={internalOnOpenChange}>
-                {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
+                {trigger ? <DialogTrigger asChild>{trigger}</DialogTrigger> : null}
                 <DialogContent
                     className={cn("max-w-md max-h-[85vh] flex flex-col p-0 overflow-hidden", className)}
                     onInteractOutside={(e) => !dismissible && e.preventDefault()}
@@ -118,7 +118,7 @@ export const ResponsiveModal = ({
                     <div className="p-6 pb-0">
                         <DialogHeader>
                             <DialogTitle>{title || "알림"}</DialogTitle>
-                            {description && <DialogDescription>{description}</DialogDescription>}
+                            {description ? <DialogDescription>{description}</DialogDescription> : null}
                         </DialogHeader>
                     </div>
 
@@ -126,11 +126,11 @@ export const ResponsiveModal = ({
                         {children}
                     </div>
 
-                    {hasActions && (
+                    {hasActions ? (
                         <DialogFooter className="p-6 pt-2 gap-2 flex-row justify-end">
                             {renderButtons('dialog')}
                         </DialogFooter>
-                    )}
+                    ) : null}
                 </DialogContent>
             </Dialog>
         );
@@ -142,27 +142,27 @@ export const ResponsiveModal = ({
             onOpenChange={internalOnOpenChange}
             dismissible={dismissible}
         >
-            {trigger && <DrawerTrigger asChild>{trigger}</DrawerTrigger>}
+            {trigger ? <DrawerTrigger asChild>{trigger}</DrawerTrigger> : null}
             <DrawerContent>
                 <div className="mx-auto w-full max-w-sm flex flex-col max-h-[90vh]">
                     <DrawerHeader className="text-left shrink-0">
                         <DrawerTitle>{title || "알림"}</DrawerTitle>
-                        {description && <DrawerDescription>{description}</DrawerDescription>}
+                        {description ? <DrawerDescription>{description}</DrawerDescription> : null}
                     </DrawerHeader>
 
                     <div className="flex-1 overflow-hidden min-h-0">
-                        {children && (
+                        {children ? (
                             <DrawerScrollArea className={className}>
                                 {children}
                             </DrawerScrollArea>
-                        )}
+                        ) : null}
                     </div>
 
-                    {hasActions && (
+                    {hasActions ? (
                         <DrawerFooter className="flex-col gap-3 pt-2 pb-8 shrink-0">
                             {renderButtons('drawer')}
                         </DrawerFooter>
-                    )}
+                    ) : null}
                 </div>
             </DrawerContent>
         </Drawer>

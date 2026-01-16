@@ -110,7 +110,7 @@ export const Select = <T extends string | number>({
     if (!isMobile) {
         return (
             <div className={cn("flex flex-col gap-1.5", className)}>
-                {label && <Label className={labelClassName}>{label}</Label>}
+                {label ? <Label className={labelClassName}>{label}</Label> : null}
                 <ShadcnSelect value={stringValue} onValueChange={handleValueChange}>
                     <SelectTrigger className="w-full">
                         <SelectValue placeholder={placeholder} />
@@ -129,12 +129,12 @@ export const Select = <T extends string | number>({
 
     return (
         <div className={cn("flex flex-col gap-1.5", className)}>
-            {label && <Label className={labelClassName}>{label}</Label>}
+            {label ? <Label className={labelClassName}>{label}</Label> : null}
             <Drawer open={isOpen} onOpenChange={setIsOpen}>
                 <DrawerTrigger asChild>
                     <button
                         type="button"
-                        className="flex h-12 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 hover:bg-accent hover:text-accent-foreground transition-all active:scale-[0.98]"
+                        className="flex h-12 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 hover:bg-accent hover:text-accent-foreground transition-transform active:scale-[0.96] active:bg-gray-200"
                         style={{
                             fontSize: 'var(--builder-font-size)',
                             fontFamily: 'var(--builder-font-family)',
@@ -154,7 +154,7 @@ export const Select = <T extends string | number>({
                             {modalTitle || label || placeholder || "항목 선택"}
                         </DrawerTitle>
                     </DrawerHeader>
-                    <DrawerScrollArea ref={scrollAreaRef}>
+                    <DrawerScrollArea ref={scrollAreaRef} className="px-0">
                         {options.map((option, idx) => {
                             const isSelected = stringValue === String(option.value);
                             return (
@@ -174,9 +174,9 @@ export const Select = <T extends string | number>({
                                     )}>
                                         {option.label}
                                     </span>
-                                    {isSelected && (
+                                    {isSelected ? (
                                         <Check className="h-5 w-5 text-primary" strokeWidth={3} />
-                                    )}
+                                    ) : null}
                                 </button>
                             );
                         })}

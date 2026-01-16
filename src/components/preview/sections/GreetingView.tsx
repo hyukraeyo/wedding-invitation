@@ -67,12 +67,12 @@ const GreetingView = memo(({
             <div className={styles.familyGroup}>
                 <div className={styles.parentsNames}>
                     <span>
-                        {parents.father.isDeceased && <span className={styles.deceased}>故</span>}
+                        {parents.father.isDeceased ? <span className={styles.deceased}>故</span> : null}
                         {fatherName}
                     </span>
                     <span className={styles.dotSeparator}>·</span>
                     <span>
-                        {parents.mother.isDeceased && <span className={styles.deceased}>故</span>}
+                        {parents.mother.isDeceased ? <span className={styles.deceased}>故</span> : null}
                         {motherName}
                     </span>
                 </div>
@@ -98,7 +98,7 @@ const GreetingView = memo(({
                     dangerouslySetInnerHTML={{ __html: greetingContent }}
                 />
 
-                {greetingImage && (
+                {greetingImage ? (
                     <div className={clsx(styles.imageContainer, styles[greetingRatio])}>
                         {greetingRatio === 'fixed' ? (
                             <AspectRatio ratio={800 / 550}>
@@ -131,20 +131,20 @@ const GreetingView = memo(({
                             />
                         )}
                     </div>
-                )}
+                ) : null}
 
                 {enableFreeformNames ? (
                     <div className={styles.freeformArea}>
-                        {groomNameCustom && <p>{groomNameCustom}</p>}
-                        {brideNameCustom && <p>{brideNameCustom}</p>}
+                        {groomNameCustom ? <p>{groomNameCustom}</p> : null}
+                        {brideNameCustom ? <p>{brideNameCustom}</p> : null}
                     </div>
                 ) : (
-                    showNamesAtBottom && (
+                    showNamesAtBottom ? (
                         <div className={styles.relationArea}>
                             {renderFamilyRelation(groom, '신랑')}
                             {renderFamilyRelation(bride, '신부')}
                         </div>
-                    )
+                    ) : null
                 )}
             </div>
         </SectionContainer>

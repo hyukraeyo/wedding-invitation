@@ -33,14 +33,14 @@ export const TextField = React.forwardRef<HTMLInputElement | HTMLTextAreaElement
 
         return (
             <div className={cn("flex flex-col gap-1.5", containerClassName)}>
-                {label && (
+                {label ? (
                     <Label
                         htmlFor={id}
                         className={cn(hasError && "text-destructive")}
                     >
                         {label}
                     </Label>
-                )}
+                ) : null}
 
                 <div className="relative">
                     {multiline ? (
@@ -55,18 +55,18 @@ export const TextField = React.forwardRef<HTMLInputElement | HTMLTextAreaElement
                             {...(commonProps as unknown as React.InputHTMLAttributes<HTMLInputElement>)}
                         />
                     )}
-                    {right && !multiline && (
+                    {right && !multiline ? (
                         <div className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                             {right}
                         </div>
-                    )}
+                    ) : null}
                 </div>
 
-                {helpText && (
+                {helpText ? (
                     <p className={cn("text-sm text-muted-foreground", hasError && "text-destructive")}>
                         {helpText}
                     </p>
-                )}
+                ) : null}
             </div>
         );
     }

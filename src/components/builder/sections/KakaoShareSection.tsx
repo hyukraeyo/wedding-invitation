@@ -136,11 +136,11 @@ export default function KakaoShareSection({ isOpen, value }: SectionProps) {
                         </div>
                         <div className={styles.cardFooter}>
                             <span className={styles.footerText}>모바일 초대장</span>
-                            {kakao.buttonType !== 'none' && (
+                            {kakao.buttonType !== 'none' ? (
                                 <div className={styles.cardBtn}>
                                     {kakao.buttonType === 'location' ? '위치 보기' : '참석 여부'}
                                 </div>
-                            )}
+                            ) : null}
                         </div>
                     </div>
                 </div>

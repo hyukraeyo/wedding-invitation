@@ -77,7 +77,7 @@ export function ResponsiveSelect({
                 type="button"
                 onClick={() => setIsOpen(true)}
                 className={cn(
-                    "flex h-12 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 hover:bg-accent hover:text-accent-foreground transition-colors",
+                    "flex h-12 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 hover:bg-accent hover:text-accent-foreground transition-transform active:scale-[0.96] active:bg-gray-200",
                     triggerClassName
                 )}
                 style={{
@@ -98,11 +98,11 @@ export function ResponsiveSelect({
                         <SheetTitle className="text-left text-base font-semibold">
                             {title || placeholder || "항목 선택"}
                         </SheetTitle>
-                        {description && (
+                        {description ? (
                             <SheetDescription className="text-left text-xs">
                                 {description}
                             </SheetDescription>
-                        )}
+                        ) : null}
                     </SheetHeader>
                     <div className="flex flex-col py-2">
                         {options.map((option) => (
@@ -119,9 +119,9 @@ export function ResponsiveSelect({
                                 )}
                             >
                                 <span style={{ fontSize: '16px' }}>{option.label}</span>
-                                {value === option.value && (
+                                {value === option.value ? (
                                     <Check className="h-5 w-5 text-primary" strokeWidth={3} />
-                                )}
+                                ) : null}
                             </button>
                         ))}
                     </div>

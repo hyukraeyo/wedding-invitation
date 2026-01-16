@@ -79,7 +79,7 @@ const AccountsView = memo(({
 
     return (
         <SectionContainer id={id}>
-            {(title || description) && (
+            {title || description ? (
                 <>
                     <SectionHeader
                         title={title}
@@ -87,16 +87,16 @@ const AccountsView = memo(({
                         accentColor={accentColor}
                     />
 
-                    {description && (
+                    {description ? (
                         <div
                             className={styles.description}
                             dangerouslySetInnerHTML={{ __html: description }}
                         />
-                    )}
+                    ) : null}
                 </>
-            )}
+            ) : null}
 
-            {groomAccounts.length > 0 && (
+            {groomAccounts.length > 0 ? (
                 <PreviewAccordion
                     title={groomTitle || "신랑 측 마음 전하실 곳"}
                     mode={colorMode}
@@ -104,9 +104,9 @@ const AccountsView = memo(({
                 >
                     {renderAccountList(groomAccounts)}
                 </PreviewAccordion>
-            )}
+            ) : null}
 
-            {brideAccounts.length > 0 && (
+            {brideAccounts.length > 0 ? (
                 <PreviewAccordion
                     title={brideTitle || "신부 측 마음 전하실 곳"}
                     mode={colorMode}
@@ -114,7 +114,7 @@ const AccountsView = memo(({
                 >
                     {renderAccountList(brideAccounts)}
                 </PreviewAccordion>
-            )}
+            ) : null}
         </SectionContainer>
     );
 });

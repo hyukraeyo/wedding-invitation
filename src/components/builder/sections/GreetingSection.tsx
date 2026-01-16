@@ -118,13 +118,13 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
 
                     {/* Content */}
                     <Field label="내용">
-                        {isOpen && (
+                        {isOpen ? (
                             <RichTextEditor
                                 content={message}
                                 onChange={setMessage}
                                 placeholder="축하해주시는 분들께 전할 소중한 메시지를 입력하세요."
                             />
-                        )}
+                        ) : null}
                     </Field>
 
                     {/* Photo Upload */}
@@ -153,7 +153,7 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
                                 ]}
                             />
 
-                            {enableFreeformNames && (
+                            {enableFreeformNames ? (
                                 <div className={styles.optionWrapper}>
                                     <TextField
                                         label="신랑 측 표기"
@@ -171,7 +171,7 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
                                         기본 성함 표기 대신 사용자가 직접 작성한 문구로 성함을 표시합니다.
                                     </InfoMessage>
                                 </div>
-                            )}
+                            ) : null}
                         </div>
                     </Field>
                 </div>

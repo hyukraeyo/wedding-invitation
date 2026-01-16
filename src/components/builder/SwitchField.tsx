@@ -21,7 +21,7 @@ export const SwitchField = ({ checked, onChange, label, className, disabled }: S
             onClick={() => !disabled && onChange(!checked)}
         >
             <div className="flex items-center justify-between w-full">
-                {label && (
+                {label ? (
                     <Label
                         className="text-[15px] font-medium leading-none cursor-pointer group-hover:text-primary transition-colors"
                         onClick={(e) => {
@@ -30,7 +30,7 @@ export const SwitchField = ({ checked, onChange, label, className, disabled }: S
                     >
                         {label}
                     </Label>
-                )}
+                ) : null}
                 <ShadcnSwitch
                     checked={checked}
                     onCheckedChange={() => {

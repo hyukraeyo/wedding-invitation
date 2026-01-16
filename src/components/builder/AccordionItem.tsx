@@ -67,7 +67,7 @@ export const AccordionItem = ({
                 isOpen && "rounded-b-none"
             )}>
                 <div className="flex items-center gap-3">
-                    {Icon && (
+                    {Icon ? (
                         <Icon
                             size={18}
                             className={cn(
@@ -75,21 +75,21 @@ export const AccordionItem = ({
                                 (isOpen || isCompleted) && "text-primary"
                             )}
                         />
-                    )}
+                    ) : null}
                     <div className="flex items-center gap-2">
                         <span className="font-medium text-base text-foreground">
                             {title}
                         </span>
-                        {badge && (
+                        {badge ? (
                             <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-destructive text-destructive-foreground">
                                 {badge}
                             </span>
-                        )}
+                        ) : null}
                     </div>
                 </div>
 
                 <div className="flex items-center gap-2">
-                    {action && (
+                    {action ? (
                         <div
                             onClick={(e) => e.stopPropagation()}
                             onPointerDown={(e) => e.stopPropagation()}
@@ -97,7 +97,7 @@ export const AccordionItem = ({
                         >
                             {action}
                         </div>
-                    )}
+                    ) : null}
                     <div className={cn("transition-transform duration-300", isOpen && "rotate-180")}>
                         <ChevronDown size={18} className="text-muted-foreground" />
                     </div>

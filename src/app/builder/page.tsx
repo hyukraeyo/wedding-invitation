@@ -120,7 +120,7 @@ function BuilderPageContent() {
   return (
     <main className={styles.main}>
       <Header onSave={handleSave} onLogin={handleLogin} isLoading={isSaving} />
-      {isSaving && <LoadingSpinner />}
+      {isSaving ? <LoadingSpinner /> : null}
 
 
       <div className={styles.workspace}>
@@ -131,7 +131,7 @@ function BuilderPageContent() {
         </section>
 
         <section className={styles.previewArea}>
-          {windowWidth >= 1024 && (
+          {windowWidth >= 1024 ? (
             <>
               <div className={styles.backgroundPattern} />
               <div className={styles.previewContent}>
@@ -177,7 +177,7 @@ function BuilderPageContent() {
                 <p className={styles.label}>MOBILE PREVIEW</p>
               </div>
             </>
-          )}
+          ) : null}
         </section>
       </div>
 
@@ -206,11 +206,11 @@ function BuilderPageContent() {
             <X size={20} />
           </button>
 
-          {isPreviewOpen && (
+          {isPreviewOpen ? (
             <div className={styles.mobilePreview}>
               <InvitationCanvas key="mobile-preview" isPreviewMode editingSection={editingSection} hideWatermark />
             </div>
-          )}
+          ) : null}
         </SheetContent>
       </Sheet>
     </main>

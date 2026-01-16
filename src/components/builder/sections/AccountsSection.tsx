@@ -124,7 +124,7 @@ export default function AccountsSection({ value, isOpen }: SectionProps) {
                     onChange={(e) => setAccountsTitle(e.target.value)}
                 />
 
-                {isOpen && (
+                {isOpen ? (
                     <Field label="내용">
                         <RichTextEditor
                             content={accountsDescription}
@@ -132,7 +132,7 @@ export default function AccountsSection({ value, isOpen }: SectionProps) {
                             placeholder="축하의 마음을 담아..."
                         />
                     </Field>
-                )}
+                ) : null}
 
                 {/* Account List */}
                 <Field label="계좌 리스트">
@@ -157,7 +157,7 @@ export default function AccountsSection({ value, isOpen }: SectionProps) {
                                     />
                                 </div>
 
-                                {expandedId === acc.id && (
+                                {expandedId === acc.id ? (
                                     <div className={styles.accountBody}>
                                         <div className={styles.fieldRow}>
                                             <div className={styles.flex3}>
@@ -202,13 +202,13 @@ export default function AccountsSection({ value, isOpen }: SectionProps) {
                                             </div>
                                         </div>
 
-                                        {!['본인', '아버지', '어머니'].includes(acc.relation) && (
+                                        {!['본인', '아버지', '어머니'].includes(acc.relation) ? (
                                             <TextField
                                                 placeholder="관계를 직접 입력하세요 (예: 본인, 아버지)"
                                                 value={acc.relation}
                                                 onChange={(e) => handleUpdateAccount(acc.id, { relation: e.target.value })}
                                             />
-                                        )}
+                                        ) : null}
 
                                         <div className={styles.fieldRow}>
                                             <div className={styles.flex1}>
@@ -246,7 +246,7 @@ export default function AccountsSection({ value, isOpen }: SectionProps) {
                                             />
                                         </div>
                                     </div>
-                                )}
+                                ) : null}
                             </div>
                         ))}
 

@@ -120,7 +120,7 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
                         />
                     </>
                 ) : (
-                    onLogin && (
+                    onLogin ? (
                         <IconButton
                             icon={LogIn}
                             size="md"
@@ -128,20 +128,20 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
                             onClick={onLogin}
                             aria-label="로그인"
                         />
-                    )
+                    ) : null
                 )}
 
-                {onSave && user && (
+                {onSave && user ? (
                     <IconButton
                         icon={Save}
                         onClick={onSave}
                         loading={isLoading}
                         size="md"
-                        variant="default"
-                        className="ml-1"
+                        variant="ghost"
+                        className="ml-1 transition-transform active:scale-[0.92]"
                         aria-label="저장하기"
                     />
-                )}
+                ) : null}
             </div>
 
             <ResponsiveModal

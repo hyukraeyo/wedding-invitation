@@ -34,11 +34,11 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
             <p className="font-mono text-xs text-muted-foreground">
               {error.message}
             </p>
-            {error.digest && (
+            {error.digest ? (
               <p className="font-mono text-xs text-muted-foreground mt-2">
                 Error ID: {error.digest}
               </p>
-            )}
+            ) : null}
           </div>
 
           <div className="flex gap-3 justify-center">

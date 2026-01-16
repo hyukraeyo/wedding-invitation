@@ -74,7 +74,7 @@ export const NaverIcon = ({ size = 24, className }: IconProps) => (
 
 export const KakaoIcon = ({ size = 24, showBackground = true, className }: KakaoIconProps) => (
     <svg width={size} height={size} viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-        {showBackground && <rect width="1024" height="1024" rx="160" fill="#FAE100" />}
+        {showBackground ? <rect width="1024" height="1024" rx="160" fill="#FAE100" /> : null}
         <path
             d="M512 880c0 0-300-300-300-470a300 300 0 1 1 600 0c0 170-300 470-300 470z M512 310a100 100 0 1 0 0 200 100 100 0 1 0 0 -200z"
             fill="#1585F6"

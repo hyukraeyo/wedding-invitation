@@ -106,7 +106,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
     return (
         <div className="flex flex-col gap-2">
             <div className={cn("w-full", className)} style={cssVars}>
-                {label && <Label className="mb-2 block">{label}</Label>}
+                {label ? <Label className="mb-2 block">{label}</Label> : null}
 
                 <div
                     className={cn(
@@ -148,11 +148,11 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                                     unoptimized={shouldUnoptimize}
                                 />
                             )}
-                            {isUploading && (
+                            {isUploading ? (
                                 <div className="absolute inset-0 flex items-center justify-center bg-black/20 z-10">
                                     <Banana className="h-8 w-8 animate-spin text-primary" />
                                 </div>
-                            )}
+                            ) : null}
                             <IconButton
                                 type="button"
                                 onClick={handleRemove}
@@ -183,7 +183,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                 </div>
             </div>
 
-            {value && props.ratio && props.onRatioChange && (
+            {value && props.ratio && props.onRatioChange ? (
                 <div className="mt-2">
                     <SegmentedControl
                         value={props.ratio}
@@ -195,7 +195,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                         className="w-full"
                     />
                 </div>
-            )}
+            ) : null}
         </div>
     );
 }

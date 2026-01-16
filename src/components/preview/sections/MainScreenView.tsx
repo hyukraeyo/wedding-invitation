@@ -91,7 +91,7 @@ const MainScreenView = memo(({
                 {/* 1. Header Area - Conditional based on textStyle */}
                 <div className={clsx(styles.headerArea, isBasicLayout ? styles.headerVisible : styles.headerHidden)}>
                     {/* Classic Style */}
-                    {mainScreen.layout === 'classic' && (
+                    {mainScreen.layout === 'classic' ? (
                         <>
                             <div
                                 className={styles.mainTitle}
@@ -100,10 +100,10 @@ const MainScreenView = memo(({
                                 {mainScreen.title || 'THE MARRIAGE'}
                             </div>
                         </>
-                    )}
+                    ) : null}
 
                     {/* Minimal Style */}
-                    {mainScreen.layout === 'minimal' && (
+                    {mainScreen.layout === 'minimal' ? (
                         <>
                             <div className={styles.minimalDateRow} style={{ fontSize: 'calc(28px * var(--font-scale))' }}>
                                 {(() => {
@@ -119,52 +119,50 @@ const MainScreenView = memo(({
                                 })()}
                             </div>
                             <div className={styles.weekdayText} style={{ fontSize: 'calc(14px * var(--font-scale))' }}>
-                                {date && ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'][new Date(date).getDay()]}
+                                {date ? ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'][new Date(date).getDay()] : null}
                             </div>
                         </>
-                    )}
+                    ) : null}
 
                     {/* English Style */}
-                    {mainScreen.layout === 'english' && (
+                    {mainScreen.layout === 'english' ? (
                         <>
-                            {mainScreen.title && (
+                            {mainScreen.title ? (
                                 <div
                                     className={styles.mainTitle}
                                     style={{ fontSize: 'calc(12px * var(--font-scale))', color: accentColor, letterSpacing: '0.15em' }}
                                 >
                                     {mainScreen.title}
                                 </div>
-                            )}
+                            ) : null}
                         </>
-                    )}
+                    ) : null}
 
                     {/* Heart Style - No header, just names below */}
-                    {mainScreen.layout === 'heart' && null}
-
                     {/* Korean Style */}
-                    {mainScreen.layout === 'korean' && (
+                    {mainScreen.layout === 'korean' ? (
                         <>
-                            {mainScreen.title && (
+                            {mainScreen.title ? (
                                 <div
                                     className={styles.koreanTitle}
                                     style={{ fontSize: 'calc(18px * var(--font-scale))' }}
                                 >
                                     {mainScreen.title}
                                 </div>
-                            )}
-                            {mainScreen.subtitle && (
+                            ) : null}
+                            {mainScreen.subtitle ? (
                                 <div
                                     className={styles.koreanSubtitle}
                                     style={{ fontSize: 'calc(24px * var(--font-scale))' }}
                                 >
                                     {mainScreen.subtitle}
                                 </div>
-                            )}
+                            ) : null}
                         </>
-                    )}
+                    ) : null}
 
                     {/* Names Row - For styles that show names in header */}
-                    {(mainScreen.layout === 'classic' || mainScreen.layout === 'minimal' || mainScreen.layout === 'english' || mainScreen.layout === 'korean') && (
+                    {mainScreen.layout === 'classic' || mainScreen.layout === 'minimal' || mainScreen.layout === 'english' || mainScreen.layout === 'korean' ? (
                         <div
                             className={clsx(
                                 styles.namesWrapper,
@@ -205,10 +203,10 @@ const MainScreenView = memo(({
                                 {mainScreen.suffixText || (mainScreen.layout === 'classic' ? '결혼합니다.' : '')}
                             </span>
                         </div>
-                    )}
+                    ) : null}
 
                     {/* Heart Style - Special names display */}
-                    {mainScreen.layout === 'heart' && (
+                    {mainScreen.layout === 'heart' ? (
                         <div
                             className={styles.heartNamesRow}
                             style={{ fontSize: 'calc(22px * var(--font-scale))' }}
@@ -217,17 +215,17 @@ const MainScreenView = memo(({
                             <span className={styles.heartIcon} style={{ color: '#e74c3c' }}>♥</span>
                             <span>{mainScreen.brideName || (bride.lastName || bride.firstName ? `${bride.lastName}${bride.firstName}` : '신부')}</span>
                         </div>
-                    )}
+                    ) : null}
 
                     {/* English Style - Subtitle after names */}
-                    {mainScreen.layout === 'english' && mainScreen.subtitle && (
+                    {mainScreen.layout === 'english' && mainScreen.subtitle ? (
                         <div
                             className={styles.englishSubtitle}
                             style={{ fontSize: 'calc(13px * var(--font-scale))', marginTop: '0.5rem' }}
                         >
                             {mainScreen.subtitle}
                         </div>
-                    )}
+                    ) : null}
                 </div>
 
                 {/* 2. Photo Area */}
@@ -308,27 +306,29 @@ const MainScreenView = memo(({
                         </div>
                     )}
 
-                    {mainScreen.layout === 'frame' && <div className={styles.frameBorder}></div>}
-                    {isFillLayout && <div className={styles.gradientOverlay} />}
+                    {mainScreen.layout === 'frame' ? <div className={styles.frameBorder}></div> : null}
+                    {isFillLayout ? <div className={styles.gradientOverlay} /> : null}
 
-                    {mainScreen.effect === 'mist' && <div className={clsx(styles.effectLayer, styles.mist)}></div>}
-                    {mainScreen.effect === 'ripple' && <div className={clsx(styles.effectLayer, styles.ripple)}></div>}
-                    {mainScreen.effect === 'paper' && mainScreen.layout !== 'oval' && <div className={clsx(styles.effectLayer, styles.paper)}></div>}
+                    {mainScreen.effect === 'mist' ? <div className={clsx(styles.effectLayer, styles.mist)}></div> : null}
+                    {mainScreen.effect === 'ripple' ? <div className={clsx(styles.effectLayer, styles.ripple)}></div> : null}
+                    {mainScreen.effect === 'paper' && mainScreen.layout !== 'oval' ? (
+                        <div className={clsx(styles.effectLayer, styles.paper)}></div>
+                    ) : null}
                 </div>
 
                 {/* 3. Bottom Area */}
                 <div className={clsx(styles.bottomArea, isFillLayout ? styles.bottomFill : styles.bottomStandard)}>
-                    {!isBasicLayout && (
+                    {!isBasicLayout ? (
                         <>
-                            {mainScreen.title && (
+                            {mainScreen.title ? (
                                 <div
                                     className={styles.bottomTitle}
                                     style={{ fontSize: 'calc(10px * var(--font-scale))', color: isFillLayout ? 'inherit' : accentColor }}
                                 >
                                     {mainScreen.title}
                                 </div>
-                            )}
-                            {(groom.firstName || bride.firstName) && (
+                            ) : null}
+                            {groom.firstName || bride.firstName ? (
                                 <div
                                     className={clsx(styles.bottomNames, mainScreen.andText === '·' ? styles.gapSmall : styles.gapLarge, isFillLayout ? styles.light : styles.normal)}
                                     style={{ fontSize: 'calc(24px * var(--font-scale))' }}
@@ -344,15 +344,15 @@ const MainScreenView = memo(({
                                                     <span>{mainScreen.andText || 'and'}</span>}
                                     </span>
                                     <span>{bride.lastName}{bride.firstName}</span>
-                                    {mainScreen.suffixText && (
+                                    {mainScreen.suffixText ? (
                                         <span className={clsx(styles.suffix, mainScreen.andText === '·' ? styles.marginLeftSmall : styles.marginLeftStandard, isFillLayout ? styles.textWhite : styles.textGray)} style={{ fontSize: 'calc(17px * var(--font-scale))' }}>
                                             {mainScreen.suffixText}
                                         </span>
-                                    )}
+                                    ) : null}
                                 </div>
-                            )}
+                            ) : null}
                         </>
-                    )}
+                    ) : null}
 
                     <div className={styles.separator}>
                         <svg width="60" height="20" viewBox="0 0 100 20" fill="none" stroke="currentColor">

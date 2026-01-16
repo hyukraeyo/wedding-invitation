@@ -14,11 +14,11 @@ const SectionHeader = memo(function SectionHeader({ title, subtitle, accentColor
 
     return (
         <div className={clsx(styles.header, className)}>
-            {subtitle && (
+            {subtitle ? (
                 <span className={styles.subtitle} style={{ color: accentColor }}>
                     {subtitle}
                 </span>
-            )}
+            ) : null}
             <h2 className={styles.title}>{title}</h2>
             <div className={styles.decorationLine} style={{ backgroundColor: accentColor }} />
         </div>
