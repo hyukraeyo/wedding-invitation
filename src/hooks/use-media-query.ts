@@ -1,24 +1,15 @@
 import { useSyncExternalStore } from "react"
+import { getMediaQuerySnapshot, subscribeMediaQuery } from "@/lib/client-subscriptions"
 
 export function useMediaQuery(query: string) {
-    const subscribe = (callback: () => void) => {
-        const matchMedia = window.matchMedia(query)
-        matchMedia.addEventListener("change", callback)
-        return () => matchMedia.removeEventListener("change", callback)
-    }
-
-    const getSnapshot = () => {
-        return window.matchMedia(query).matches
-    }
-
     const getServerSnapshot = () => {
         return false
     }
 
     // SSR safe implementation
     return useSyncExternalStore(
-        subscribe,
-        getSnapshot,
+        (callback) => subscribeMediaQuery(query, callback),
+        () => getMediaQuerySnapshot(query),
         getServerSnapshot
     )
 }

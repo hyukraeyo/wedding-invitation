@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from 'react';
+import { getWindowWidthSnapshot, subscribeWindowWidth } from '@/lib/client-subscriptions';
 
 /**
  * Optimized hook to get the window width.
@@ -6,12 +7,8 @@ import { useSyncExternalStore } from 'react';
  */
 export function useWindowSize() {
     return useSyncExternalStore(
-        (callback) => {
-            if (typeof window === 'undefined') return () => { };
-            window.addEventListener('resize', callback);
-            return () => window.removeEventListener('resize', callback);
-        },
-        () => window.innerWidth,
+        subscribeWindowWidth,
+        getWindowWidthSnapshot,
         () => 0 // Fallback for SSR
     );
 }

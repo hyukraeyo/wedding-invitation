@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { CreditCard, Plus, Trash2, ChevronDown } from 'lucide-react';
-import { IconButton } from '@/components/ui/icon-button';
 import { useInvitationStore } from '@/store/useInvitationStore';
+import { IconButton } from '@/components/ui/icon-button';
+import { Button as UIButton } from '@/components/ui/button';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { SegmentedControl } from '../SegmentedControl';
@@ -249,13 +250,14 @@ export default function AccountsSection({ value, isOpen }: SectionProps) {
                             </div>
                         ))}
 
-                        <button
-                            className={styles.addBtn}
+                        <UIButton
+                            variant="outline"
+                            className="w-full h-12 gap-2 text-base font-medium rounded-xl border-dashed border-2 hover:border-solid hover:bg-zinc-50 hover:text-primary transition-all active:scale-[0.98]"
                             onClick={handleAddAccount}
                         >
                             <Plus size={18} />
                             <span>계좌 추가하기</span>
-                        </button>
+                        </UIButton>
                     </div>
                 </Field>
 
