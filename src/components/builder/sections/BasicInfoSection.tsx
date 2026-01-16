@@ -35,33 +35,19 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                 <Field label="🤵 신랑">
                     <div className={styles.formGroup}>
                         <div className={cn(styles.row, styles.full)}>
-                            <span className={styles.subLabel}>신랑</span>
                             <TextField
                                 type="text"
-                                placeholder="성"
-                                value={groom.lastName}
-                                onChange={(e) => setGroom({ lastName: e.target.value })}
-                            />
-                            <TextField
-                                type="text"
-                                placeholder="이름"
-                                value={groom.firstName}
-                                onChange={(e) => setGroom({ firstName: e.target.value })}
-                            />
-                            <TextField
-                                type="text"
-                                placeholder="관계"
-                                value={groom.relation}
-                                onChange={(e) => setGroom({ relation: e.target.value })}
+                                placeholder="신랑 이름"
+                                value={groom.lastName + groom.firstName}
+                                onChange={(e) => setGroom({ firstName: e.target.value, lastName: '' })}
                             />
                         </div>
 
                         {/* Groom Parents */}
                         <div className={cn(styles.row, styles.compact)}>
-                            <span className={styles.subLabel}>아버지</span>
                             <TextField
                                 type="text"
-                                placeholder="성함"
+                                placeholder="아버지 성함"
                                 value={groom.parents.father.name}
                                 onChange={(e) => setGroomParents('father', { name: e.target.value })}
                             />
@@ -73,10 +59,9 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                             </Toggle>
                         </div>
                         <div className={cn(styles.row, styles.compact)}>
-                            <span className={styles.subLabel}>어머니</span>
                             <TextField
                                 type="text"
-                                placeholder="성함"
+                                placeholder="어머니 성함"
                                 value={groom.parents.mother.name}
                                 onChange={(e) => setGroomParents('mother', { name: e.target.value })}
                             />
@@ -92,37 +77,22 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
 
                 <div className={styles.divider} />
 
-                {/* Bride Section */}
                 <Field label="👰‍♀️ 신부">
                     <div className={styles.formGroup}>
                         <div className={cn(styles.row, styles.full)}>
-                            <span className={styles.subLabel}>신부</span>
                             <TextField
                                 type="text"
-                                placeholder="성"
-                                value={bride.lastName}
-                                onChange={(e) => setBride({ lastName: e.target.value })}
-                            />
-                            <TextField
-                                type="text"
-                                placeholder="이름"
-                                value={bride.firstName}
-                                onChange={(e) => setBride({ firstName: e.target.value })}
-                            />
-                            <TextField
-                                type="text"
-                                placeholder="관계"
-                                value={bride.relation}
-                                onChange={(e) => setBride({ relation: e.target.value })}
+                                placeholder="신부 이름"
+                                value={bride.lastName + bride.firstName}
+                                onChange={(e) => setBride({ firstName: e.target.value, lastName: '' })}
                             />
                         </div>
 
                         {/* Bride Parents */}
                         <div className={cn(styles.row, styles.compact)}>
-                            <span className={styles.subLabel}>아버지</span>
                             <TextField
                                 type="text"
-                                placeholder="성함"
+                                placeholder="아버지 성함"
                                 value={bride.parents.father.name}
                                 onChange={(e) => setBrideParents('father', { name: e.target.value })}
                             />
@@ -134,10 +104,9 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                             </Toggle>
                         </div>
                         <div className={cn(styles.row, styles.compact)}>
-                            <span className={styles.subLabel}>어머니</span>
                             <TextField
                                 type="text"
-                                placeholder="성함"
+                                placeholder="어머니 성함"
                                 value={bride.parents.mother.name}
                                 onChange={(e) => setBrideParents('mother', { name: e.target.value })}
                             />

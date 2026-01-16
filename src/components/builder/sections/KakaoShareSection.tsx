@@ -5,7 +5,8 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { SegmentedControl } from '../SegmentedControl';
-import { Field, HelpText } from '../FormPrimitives';
+import { InfoMessage } from '@/components/builder/InfoMessage';
+import { Field } from '../FormPrimitives';
 import { ImageUploader } from '../ImageUploader';
 import { HeaderAction } from '../HeaderAction';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
@@ -60,7 +61,7 @@ export default function KakaoShareSection({ isOpen, value }: SectionProps) {
                             ]}
                             onChange={(val: 'portrait' | 'landscape') => setKakao({ imageRatio: val })}
                         />
-                        <HelpText>카카오톡 공유 메시지에서 보여질 사진의 비율입니다.</HelpText>
+                        <InfoMessage>카카오톡 공유 메시지에서 보여질 사진의 비율입니다.</InfoMessage>
                     </Field>
 
                     <TextField

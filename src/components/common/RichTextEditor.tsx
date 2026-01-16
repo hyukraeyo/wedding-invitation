@@ -17,7 +17,7 @@ import {
 import { useEffect, useMemo, useId } from 'react';
 import { cn } from '@/lib/utils';
 import { Toggle } from '@/components/ui/toggle';
-import { Separator } from '@/components/ui/separator';
+import styles from './RichTextEditor.module.scss';
 
 interface RichTextEditorProps {
     content: string;
@@ -58,7 +58,6 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
         }),
         TextStyle.configure({}),
         Color.configure({}),
-        // 각 에디터 인스턴스에 고유한 이름을 부여하여 중복 경고 방지
         Underline.extend({ name: `underline-${editorId}` }),
         Highlight.configure({ multicolor: true }),
         Placeholder.configure({
@@ -76,16 +75,15 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
         editorProps: {
             attributes: {
                 class: cn(
-                    "prose prose-sm max-w-none focus:outline-none p-4 rich-text-content",
+                    "rich-text-content",
                     minHeight
                 ),
-                style: `font-size: var(--builder-font-size); font-family: var(--builder-font-family); line-height: var(--builder-line-height);`,
             },
         },
     });
 
     useEffect(() => {
-        if (editor && content !== editor.getHTML()) {
+        if (editor && !editor.isFocused && content !== editor.getHTML()) {
             editor.commands.setContent(content, { emitUpdate: false });
         }
     }, [content, editor]);
@@ -94,10 +92,9 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
     if (!editor) return null;
 
     return (
-        <div className={cn("border rounded-md bg-background overflow-hidden", className)}>
-            <div className="flex flex-wrap items-center gap-1 p-1 border-b bg-muted/20">
-                {/* 기본 스타일 그룹 */}
-                <div className="flex items-center gap-0.5">
+        <div className={cn(styles.editorContainer, className)}>
+            <div className={styles.toolbar}>
+                <div className={styles.toolbarGroup}>
                     <ToolbarToggle
                         onPressedChange={() => editor.chain().focus().toggleBold().run()}
                         pressed={editor.isActive('bold')}
@@ -123,10 +120,9 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
                     </ToolbarToggle>
                 </div>
 
-                <Separator orientation="vertical" className="h-6 mx-1" />
+                <div className={styles.separator} />
 
-                {/* 색상 및 강조 그룹 */}
-                <div className="flex items-center gap-0.5">
+                <div className={styles.toolbarGroup}>
                     <ToolbarToggle
                         onPressedChange={() => editor.chain().focus().setColor('#8B5E3C').run()}
                         pressed={editor.isActive('textStyle', { color: '#8B5E3C' })}
@@ -146,7 +142,7 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
 
             <EditorContent
                 editor={editor}
-                className="w-full"
+                className={styles.editorContent}
             />
         </div>
     );

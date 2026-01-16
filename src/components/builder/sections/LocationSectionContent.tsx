@@ -114,10 +114,7 @@ export default function LocationSectionContent() {
                 <Field label="주소">
                     <div
                         onClick={handleAddressSearch}
-                        className={cn(
-                            "builder-input-unified justify-between cursor-pointer hover:border-gray-400",
-                            !address && "text-muted-foreground"
-                        )}
+                        className={styles.addressButton}
                     >
                         <span className={cn(
                             "truncate",

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { cn } from '@/lib/utils';
+import styles from './SegmentedControl.module.scss';
 
 interface SegmentedControlProps<T> {
     value?: T | undefined;
@@ -54,20 +55,14 @@ export const SegmentedControl = <T extends string | number>({
         <Tabs
             {...(activeValue !== undefined ? { value: activeValue.toString() } : {})}
             onValueChange={handleValueChange}
-            className={cn("w-full", className)}
+            className={cn(styles.tabs, className)}
         >
             <TabsList className={cn(
-                "relative w-full bg-[#f2f4f6] rounded-lg p-1",
-                size === 'large' ? "h-12" : "h-10",
-                "grid grid-flow-col auto-cols-fr isolate"
+                styles.tabsList,
+                size === 'large' ? styles.large : styles.small
             )}>
                 <span
-                    className={cn(
-                        "absolute top-1 bottom-1 left-1",
-                        "bg-white rounded-[6px] shadow-[0_1px_3px_rgba(0,0,0,0.1)] ring-1 ring-black/[0.04]",
-                        "transition-transform duration-300 ease-ios",
-                        "pointer-events-none -z-10"
-                    )}
+                    className={styles.indicator}
                     style={{
                         width: `calc((100% - 8px) / ${itemCount})`,
                         transform: `translateX(calc(100% * ${validIndex}))`
@@ -81,10 +76,8 @@ export const SegmentedControl = <T extends string | number>({
                             key={props.value.toString()}
                             value={props.value.toString()}
                             className={cn(
-                                "z-10 bg-transparent shadow-none data-[state=active]:bg-transparent data-[state=active]:shadow-none",
-                                "rounded-md font-semibold transition-colors duration-200",
-                                "text-[#8b95a1] data-[state=active]:text-primary",
-                                size === 'large' ? "text-[15px]" : "text-[13px]",
+                                styles.trigger,
+                                size === 'large' ? styles.large : styles.small,
                                 props.className
                             )}
                         >

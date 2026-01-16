@@ -19,6 +19,7 @@ import {
     DrawerTrigger,
 } from '@/components/ui/drawer';
 import { ChevronDown, Check } from 'lucide-react';
+import styles from './Select.module.scss';
 
 interface Option<T> {
     label: string;
@@ -136,17 +137,12 @@ export const Select = <T extends string | number>({
                 <DrawerTrigger asChild>
                     <button
                         type="button"
-                        className="flex h-12 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 hover:bg-accent hover:text-accent-foreground transition-transform active:scale-[0.96] active:bg-gray-200"
-                        style={{
-                            fontSize: 'var(--builder-font-size)',
-                            fontFamily: 'var(--builder-font-family)',
-                            lineHeight: 'var(--builder-line-height)',
-                        }}
+                        className={styles.triggerButton}
                     >
-                        <span className={cn(!selectedOption && "text-muted-foreground")}>
+                        <span className={cn(!selectedOption && styles.placeholder)}>
                             {selectedOption ? selectedOption.label : placeholder}
                         </span>
-                        <ChevronDown className="h-4 w-4 opacity-50 transition-transform duration-200" />
+                        <ChevronDown />
                     </button>
                 </DrawerTrigger>
                 <DrawerContent
@@ -193,6 +189,6 @@ export const Select = <T extends string | number>({
                     </DrawerScrollArea>
                 </DrawerContent>
             </Drawer>
-        </div>
+        </div >
     );
 };

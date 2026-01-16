@@ -1,0 +1,69 @@
+@use "@/styles/variables" as v;
+
+.tabs {
+    width: 100%;
+}
+
+.tabsList {
+    position: relative;
+    width: 100%;
+    background-color: v.$zinc-100;
+    border-radius: 12px; // Match standard builder-radius-md (0.875rem is approx 14px, but 12px is cleaner)
+    padding: 0.25rem; // p-1
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+    isolation: isolate;
+
+    &.large {
+        height: 48px; // Unified with button/input height
+    }
+
+    &.small {
+        height: 2.5rem; // h-10
+    }
+}
+
+.indicator {
+    position: absolute;
+    top: 0.25rem; // top-1
+    bottom: 0.25rem; // bottom-1
+    left: 0.25rem; // left-1
+    background-color: white;
+    border-radius: 9px; // Inner radius for 12px outer
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.02);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); // ease-ios
+    pointer-events: none;
+    z-index: -10;
+}
+
+.trigger {
+    @include v.button-base; // Inherit standard button interactions & typography
+
+    // Override base button styles for Segmented Control context
+    width: 100%;
+    height: 100%; // Fill the grid cell
+    padding: 0; // Center content
+    border: none;
+    background: transparent;
+    border-radius: calc(var(--radius) - 2px); // rounded-md
+    color: v.$zinc-500; // Inactive state color
+
+    // Active State
+    &[data-state=active] {
+        background-color: transparent; // Indicator handles the background
+        box-shadow: none;
+        color: v.$primary-dark;
+        font-weight: 700;
+        border: none;
+    }
+
+    // Size variants overrides (if base font needs adjustment)
+    &.large {
+        font-size: 15px; // v.button-base default
+    }
+
+    &.small {
+        font-size: 13px;
+    }
+}

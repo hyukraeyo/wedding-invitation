@@ -181,23 +181,9 @@
   }
 }
 
-.infoBox {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.625rem;
-  padding: 0.875rem;
-  background-color: rgba(v.$toss-blue-50, 0.5);
-  border: 1px solid v.$toss-blue-100;
-  border-radius: 12px;
-  color: #1b64da;
-  font-size: 12.5px;
-  line-height: 1.6;
 
-  .infoIcon {
-    flex-shrink: 0;
-    margin-top: 0.125rem;
-    color: v.$toss-blue-500;
-  }
+.infoBox {
+  @include v.info-box;
 }
 
 .galleryManager {

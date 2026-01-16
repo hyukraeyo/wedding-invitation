@@ -1,0 +1,35 @@
+@use "@/styles/variables" as v;
+@use "@/styles/builder" as b;
+
+.triggerButton {
+    @include b.builder-input-base;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-align: left;
+    cursor: pointer;
+
+    // Icon styling for both DatePicker and Select chevrons/icons
+    :global(svg) {
+        width: 1rem;
+        height: 1rem;
+        opacity: 0.5;
+        transition: transform 0.2s ease;
+    }
+}
+
+.placeholder {
+    color: v.$zinc-400;
+}
+
+.value {
+    color: v.$zinc-900;
+}
+
+// Drawer Content Styling (Optional if you want to scope it)
+.drawerTitle {
+    text-align: left;
+    font-size: 1rem;
+    font-weight: 700;
+    color: v.$zinc-900;
+}

@@ -79,8 +79,8 @@ module.exports = {
 				}
 			},
 			animation: {
-				'accordion-down': 'accordion-down 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-				'accordion-up': 'accordion-up 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+				'accordion-down': 'accordion-down 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+				'accordion-up': 'accordion-up 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
 				'fade-in': 'fade-in 0.2s ease-out',
 				'scale-in': 'scale-in 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
 			}

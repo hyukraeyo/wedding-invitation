@@ -7,13 +7,7 @@ import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { SegmentedControl } from '../SegmentedControl';
 import { Field } from '../FormPrimitives';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
+import { Select } from "@/components/builder/Select";
 import styles from './AccountsSection.module.scss';
 import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
@@ -181,24 +175,23 @@ export default function AccountsSection({ value, isOpen }: SectionProps) {
                                             <div className={styles.flex2}>
                                                 <Select
                                                     value={['본인', '아버지', '어머니'].includes(acc.relation) ? acc.relation : 'custom'}
-                                                    onValueChange={(val) => {
-                                                        if (val === 'custom') {
+                                                    options={[
+                                                        { label: '본인', value: '본인' },
+                                                        { label: '아버지', value: '아버지' },
+                                                        { label: '어머니', value: '어머니' },
+                                                        { label: '직접 입력', value: 'custom' },
+                                                    ]}
+                                                    onChange={(val) => {
+                                                        const newVal = String(val);
+                                                        if (newVal === 'custom') {
                                                             handleUpdateAccount(acc.id, { relation: '' });
                                                         } else {
-                                                            handleRelationChange(acc.id, val, acc.type);
+                                                            handleRelationChange(acc.id, newVal, acc.type);
                                                         }
                                                     }}
-                                                >
-                                                    <SelectTrigger>
-                                                        <SelectValue placeholder="관계 선택" />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        <SelectItem value="본인">본인</SelectItem>
-                                                        <SelectItem value="아버지">아버지</SelectItem>
-                                                        <SelectItem value="어머니">어머니</SelectItem>
-                                                        <SelectItem value="custom">직접 입력</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
+                                                    placeholder="관계 선택"
+                                                    modalTitle="관계 선택"
+                                                />
                                             </div>
                                         </div>
 
@@ -236,13 +229,12 @@ export default function AccountsSection({ value, isOpen }: SectionProps) {
                                             onChange={(e) => handleUpdateAccount(acc.id, { accountNumber: e.target.value })}
                                         />
 
-                                        <div className="flex justify-end mt-2">
+                                        <div className={styles.deleteWrapper}>
                                             <IconButton
                                                 icon={Trash2}
-                                                size="sm" // Small icon button
+                                                size="sm"
                                                 variant="destructive"
                                                 onClick={() => handleRemoveAccount(acc.id)}
-                                                className="rounded-lg w-8 h-8"
                                             />
                                         </div>
                                     </div>

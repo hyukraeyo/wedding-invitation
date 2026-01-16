@@ -13,17 +13,17 @@ $builder-gap-lg: 1rem; // 16px
 $builder-gap-xl: 1.25rem; // 20px
 $builder-gap-2xl: 1.5rem; // 24px
 
-$builder-input-height: 48px; // Unified height for mobile touch (48px)
+$builder-input-height: var(--builder-height);
 
 $builder-radius-sm: 0.6rem;
-$builder-radius-md: 0.875rem;
+$builder-radius-md: var(--builder-radius);
 $builder-radius-lg: 1.125rem;
 $builder-radius-xl: 1.5rem;
 
 // ----- Color Variables (Standardized for Banana Wedding) -----
 $builder-border-light: v.$zinc-100;
 $builder-border-default: v.$zinc-200;
-$builder-border-dark: v.$zinc-300; // 가이드에 따른 가독성 있는 테두리
+$builder-border-dark: var(--builder-border-color, v.$zinc-300);
 $builder-bg-subtle: v.$zinc-50;
 $builder-bg-hover: v.$zinc-100;
 $builder-text-muted: v.$zinc-400;
@@ -34,7 +34,7 @@ $builder-text-heading: v.$zinc-900;
 // ----- Typography Tokens -----
 $builder-font-xs: 11px;
 $builder-font-sm: 12px;
-$builder-font-base: 13px;
+$builder-font-base: var(--builder-font-size);
 $builder-font-md: 14px;
 $builder-font-lg: 15px;
 $builder-font-xl: 17px;
@@ -100,7 +100,9 @@ $builder-font-xl: 17px;
 
 // Label style
 @mixin builder-label {
-  @include v.tds-t7("semibold");
+  font-size: 13px;
+  line-height: 1.5; // 19.5px
+  font-weight: 600; // semibold
   color: v.$zinc-600;
   display: block;
   margin-bottom: 6px;
@@ -110,81 +112,31 @@ $builder-font-xl: 17px;
 
 // Sub-label (smaller, inline)
 @mixin builder-sub-label {
-  @include v.tds-sub-t12("medium");
+  font-size: 12px;
+  line-height: 1.5; // 18px
+  font-weight: 500; // medium
   color: $builder-text-secondary;
   flex-shrink: 0;
   min-width: 3.5rem;
+  // align-self: center; // optional
 }
 
-// Input base style (Banana Wedding Design)
 @mixin builder-input-base {
-  width: 100%;
-  height: $builder-input-height;
-  padding: 0 1rem;
-  border: 1px solid v.$zinc-300;
-  border-radius: 12px;
-  @include v.tds-t5("regular");
-  color: $builder-text-heading;
-  background-color: white;
-  outline: none;
-  transition: all v.$transition-fast;
-  box-sizing: border-box;
+  @include v.input-base;
 
   &::placeholder {
-    color: v.$zinc-400;
-    font-weight: 400;
+    @include v.input-placeholder;
   }
 
-  @media (hover: hover) and (pointer: fine) {
-    &:hover:not(:disabled) {
-      border-color: v.$zinc-400;
-      background-color: v.$zinc-50;
-    }
-  }
-
-  &:focus {
-    background-color: white;
-    border-color: v.$primary;
-    box-shadow: 0 0 0 1px v.$primary;
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    background-color: v.$zinc-50;
-  }
+  @include v.input-hover;
+  @include v.input-disabled;
 }
 
-// Button base style
 @mixin builder-button-base {
-  @include flex-center;
-  height: $builder-input-height;
-  padding: 0 1.25rem;
-  border-radius: 12px;
-  @include v.tds-t6("semibold");
-  border: 1px solid v.$zinc-300;
-  background: white;
-  color: $builder-text-heading;
-  cursor: pointer;
-  transition: all v.$transition-fast;
-  user-select: none;
-
-  @media (hover: hover) and (pointer: fine) {
-    &:hover:not(:disabled) {
-      background: v.$zinc-50;
-      border-color: v.$zinc-400;
-    }
-  }
-
-  &:active:not(:disabled) {
-    transform: scale(0.96);
-    background-color: v.$zinc-100;
-  }
-
-  &:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
+  @include v.button-base;
+  @include v.button-hover;
+  @include v.button-active;
+  @include v.button-disabled;
 }
 
 // Active state for toggleable buttons
@@ -194,6 +146,8 @@ $builder-font-xl: 17px;
   border-color: v.$primary;
   font-weight: 700;
 }
+
+
 
 // Helpers
 @mixin flex-center {

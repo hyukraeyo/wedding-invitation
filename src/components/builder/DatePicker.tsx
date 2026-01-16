@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
 import { format, parse } from 'date-fns';
@@ -18,6 +17,7 @@ import {
     DrawerScrollArea,
     DrawerTrigger,
 } from '@/components/ui/drawer';
+import styles from './Select.module.scss';
 
 interface DatePickerProps {
     value: string;
@@ -43,18 +43,15 @@ export function DatePicker({ value, onChange, className, placeholder = "날짜 �
     };
 
     const TriggerButtonContent = (
-        <Button
-            variant="outline"
+        <button
             type="button"
-            className={cn(
-                "w-full justify-between text-left font-normal h-12 px-3 py-2",
-                !value && "text-muted-foreground",
-                className
-            )}
+            className={cn(styles.triggerButton, className)}
         >
-            {dateValue ? format(dateValue, 'PPP', { locale: ko }) : placeholder}
-            <CalendarIcon className="ml-2 h-4 w-4 opacity-50" />
-        </Button>
+            <span className={cn(!value && styles.placeholder, value && styles.value)}>
+                {dateValue ? format(dateValue, 'PPP', { locale: ko }) : placeholder}
+            </span>
+            <CalendarIcon />
+        </button>
     );
 
     if (!isMobile) {

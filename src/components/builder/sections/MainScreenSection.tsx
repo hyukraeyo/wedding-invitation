@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import dynamic from 'next/dynamic';
+
 import { Home, Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
@@ -11,12 +11,7 @@ interface SectionProps {
     isOpen: boolean;
 }
 
-const MainScreenSectionContent = dynamic(() => import('./MainScreenSectionContent'), {
-    ssr: false,
-    loading: () => (
-        <div className="h-40 w-full rounded-xl bg-muted/20 animate-pulse" />
-    ),
-});
+import MainScreenSectionContent from './MainScreenSectionContent';
 
 export default function MainScreenSection({ isOpen, value }: SectionProps) {
     const imageUrl = useInvitationStore(state => state.imageUrl);

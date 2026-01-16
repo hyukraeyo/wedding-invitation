@@ -24,19 +24,15 @@
   display: grid;
   gap: 0.5rem;
   align-items: center;
-  
+  width: 100%;
+
+  // 신랑/신부 이름 (1컬럼)
   &.full {
-    grid-template-columns: 3.5rem 1fr 1fr 1fr;
+    grid-template-columns: 1fr;
   }
-  
+
+  // 혼주 성함 + 故 토글 (2컬럼)
   &.compact {
-    grid-template-columns: 3.5rem 1fr 48px;
+    grid-template-columns: 1fr auto;
   }
 }
-
-.subLabel {
-  @include b.builder-sub-label;
-  font-size: 14px;
-}
-
-// deceasedWrapper and subLabel padding removed to maintain strict grid gap consistency

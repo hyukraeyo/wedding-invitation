@@ -1,0 +1,6 @@
+@use "@/styles/variables" as v;
+// @use "@/styles/builder" as b; // removed as unused
+
+.container {
+    @include v.info-box;
+}
