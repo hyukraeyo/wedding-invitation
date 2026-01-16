@@ -6,7 +6,6 @@ import { useInvitationStore, InvitationData } from '@/store/useInvitationStore';
 import MainScreenView from './sections/MainScreenView';
 import CalendarSectionView from './sections/CalendarSectionView';
 import GreetingView from './sections/GreetingView';
-import GalleryView from './sections/GalleryView';
 import AccountsView from './sections/AccountsView';
 import ClosingView from './sections/ClosingView';
 import EffectsOverlay from './sections/EffectsOverlay';
@@ -14,8 +13,13 @@ import ScrollReveal from './ScrollReveal';
 import styles from './InvitationCanvas.module.scss';
 import { clsx } from 'clsx';
 import { getFontStyle } from '@/lib/utils/font';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const LocationView = dynamic(() => import('./sections/LocationView'), { ssr: false });
+const GalleryView = dynamic(() => import('./sections/GalleryView'), {
+  ssr: false,
+  loading: () => <Skeleton className="h-40 w-full" />,
+});
 
 interface InvitationCanvasProps {
   isPreviewMode?: boolean;
