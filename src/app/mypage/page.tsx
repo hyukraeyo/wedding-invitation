@@ -42,18 +42,35 @@ export default async function MyPage() {
 
         if (isAdmin) {
             const db = supabaseAdmin || supabase;
-            const [invitationsResult, approvalRequestsResult] = await Promise.all([
+            const [adminQueueResult, myInvitationsResult, approvalRequestsResult] = await Promise.all([
+                // 1. Admin Queue (Requests)
                 db.from('invitations')
                     .select(INVITATION_SUMMARY_SELECT)
                     .contains('invitation_data', { isRequestingApproval: true })
                     .order('updated_at', { ascending: false }),
+                // 2. Personal Invitations (Drafts included)
+                db.from('invitations')
+                    .select(INVITATION_SUMMARY_SELECT)
+                    .eq('user_id', user.id)
+                    .order('updated_at', { ascending: false }),
+                // 3. Approval Requests List
                 db.from('approval_requests')
                     .select(APPROVAL_REQUEST_SUMMARY_SELECT)
                     .order('created_at', { ascending: false }),
             ]);
 
-            const rows = (invitationsResult.data ?? []) as unknown as InvitationSummaryRow[];
-            invitations = rows.map(toInvitationSummary);
+            const adminRows = (adminQueueResult.data ?? []) as unknown as InvitationSummaryRow[];
+            const myRows = (myInvitationsResult.data ?? []) as unknown as InvitationSummaryRow[];
+
+            // Deduplicate
+            const paramMap = new Map();
+            adminRows.forEach(row => paramMap.set(row.id, row));
+            myRows.forEach(row => paramMap.set(row.id, row));
+
+            const mergedRows = Array.from(paramMap.values())
+                .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
+
+            invitations = mergedRows.map(toInvitationSummary);
             approvalRequests = (approvalRequestsResult.data ?? []) as unknown as ApprovalRequestSummary[];
         } else {
             const { data } = await supabase

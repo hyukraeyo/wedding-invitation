@@ -94,10 +94,25 @@ export default function MyPageClient({
     const fetchInvitations = useCallback(async () => {
         if (!userId) return;
         try {
-            const data = isAdmin
-                ? await invitationService.getAdminInvitations()
-                : await invitationService.getUserInvitations(userId);
-            setInvitations(data);
+            if (isAdmin) {
+                const [adminQueue, myInvitations] = await Promise.all([
+                    invitationService.getAdminInvitations(),
+                    invitationService.getUserInvitations(userId)
+                ]);
+
+                // Merge and deduplicate by ID
+                const paramMap = new Map();
+                adminQueue.forEach(inv => paramMap.set(inv.id, inv));
+                myInvitations.forEach(inv => paramMap.set(inv.id, inv));
+
+                const merged = Array.from(paramMap.values())
+                    .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
+
+                setInvitations(merged);
+            } else {
+                const data = await invitationService.getUserInvitations(userId);
+                setInvitations(data);
+            }
         } catch {
             // Silent fail - user can refresh
         }
@@ -230,38 +245,35 @@ export default function MyPageClient({
     // Helper to check if profile is complete
     const isProfileComplete = profile?.full_name && profile?.phone;
 
-    const handleApproveClick = useCallback((inv: InvitationSummaryRecord) => {
-        if (!isAdmin) {
-            // User Logic
-            if (inv.invitation_data.isRequestingApproval) {
-                toast({ description: '이미 승인 신청된 청첩장입니다.' });
-                return;
-            }
-
-            // Check if profile is complete
-            if (isProfileComplete) {
-                // Profile is complete - show confirmation dialog
-                setConfirmConfig({
-                    isOpen: true,
-                    type: 'REQUEST_APPROVAL',
-                    title: '사용 승인 신청',
-                    description: (
-                        <>
-                            <strong>{profile?.full_name}</strong>({profile?.phone}) 님으로 신청합니다.<br />
-                            신청 후 관리자 확인 절차가 진행됩니다.
-                        </>
-                    ),
-                    targetId: inv.id,
-                    targetRecord: inv,
-                });
-            } else {
-                // Profile is incomplete - show ProfileCompletionModal
-                setProfileModalOpen(true);
-            }
+    const handleRequestApprovalClick = useCallback((inv: InvitationSummaryRecord) => {
+        if (inv.invitation_data.isRequestingApproval) {
+            toast({ description: '이미 승인 신청된 청첩장입니다.' });
             return;
         }
 
-        // Admin Logic
+        // Check if profile is complete
+        if (isProfileComplete) {
+            // Profile is complete - show confirmation dialog
+            setConfirmConfig({
+                isOpen: true,
+                type: 'REQUEST_APPROVAL',
+                title: '사용 승인 신청',
+                description: (
+                    <>
+                        <strong>{profile?.full_name}</strong>({profile?.phone}) 님으로 신청합니다.<br />
+                        신청 후 관리자 확인 절차가 진행됩니다.
+                    </>
+                ),
+                targetId: inv.id,
+                targetRecord: inv,
+            });
+        } else {
+            // Profile is incomplete - show ProfileCompletionModal
+            setProfileModalOpen(true);
+        }
+    }, [isProfileComplete, profile, toast]);
+
+    const handleAdminApproveClick = useCallback((inv: InvitationSummaryRecord) => {
         setConfirmConfig({
             isOpen: true,
             type: 'APPROVE',
@@ -270,7 +282,7 @@ export default function MyPageClient({
             targetId: inv.id,
             targetRecord: inv,
         });
-    }, [isAdmin, toast, isProfileComplete, profile]);
+    }, []);
 
 
     // Execute approval request using profile data
@@ -296,7 +308,7 @@ export default function MyPageClient({
             toast({
                 description: '사용 신청이 완료되었습니다. 관리자 확인 후 처리됩니다.',
             });
-            await fetchInvitations();
+            await Promise.all([fetchInvitations(), fetchApprovalRequests()]);
         } catch {
             toast({
                 variant: 'destructive',
@@ -306,7 +318,7 @@ export default function MyPageClient({
             setActionLoading(null);
             setConfirmConfig(prev => ({ ...prev, isOpen: false }));
         }
-    }, [fetchFullInvitationData, fetchInvitations, profile, toast, userId]);
+    }, [fetchFullInvitationData, fetchInvitations, fetchApprovalRequests, profile, toast, userId]);
 
     const handleConfirmAction = useCallback(() => {
         const { type, targetId, targetRecord } = confirmConfig;
@@ -411,7 +423,7 @@ export default function MyPageClient({
                                                     <Button
                                                         size="sm"
                                                         className="gap-1.5 h-9 text-sm font-bold bg-banana-yellow text-amber-900 border-banana-yellow hover:bg-yellow-400"
-                                                        onClick={() => handleApproveClick(targetInv)}
+                                                        onClick={() => handleAdminApproveClick(targetInv)}
                                                         disabled={actionLoading === targetInv.id}
                                                         loading={actionLoading === targetInv.id}
                                                     >
@@ -526,9 +538,8 @@ export default function MyPageClient({
                                                         <span className="font-medium text-base text-gray-700">수정</span>
                                                     </DropdownMenuItem>
                                                     <DropdownMenuItem
-                                                        onClick={(e) => {
-                                                            e.preventDefault();
-                                                            handleDeleteClick(inv);
+                                                        onClick={() => {
+                                                            setTimeout(() => handleDeleteClick(inv), 0);
                                                         }}
                                                         disabled={actionLoading === inv.id}
                                                         className="flex w-full items-center gap-2 cursor-pointer px-3 py-3 rounded-md text-red-600 hover:bg-red-50 focus:bg-red-50 focus:text-red-700 transition-colors"
@@ -574,31 +585,55 @@ export default function MyPageClient({
                                             className={clsx(
                                                 "flex-1 gap-2 h-12",
                                                 inv.invitation_data?.isApproved && "bg-green-50 text-green-600 border-green-200 hover:bg-green-50 animate-none",
-                                                !inv.invitation_data?.isApproved && inv.invitation_data?.isRequestingApproval && !isAdmin && "bg-orange-50 text-orange-600 border-orange-200 hover:bg-orange-50"
+                                                // 내 청첩장(또는 일반유저)이면서 신청중일 때 -> 주황색 대기 상태
+                                                !inv.invitation_data?.isApproved && inv.invitation_data?.isRequestingApproval && (inv.user_id === userId || !isAdmin) && "bg-orange-50 text-orange-600 border-orange-200 hover:bg-orange-50"
                                             )}
                                             onClick={() => {
                                                 if (inv.invitation_data?.isApproved) return;
-                                                if (isAdmin) {
-                                                    handleApproveClick(inv);
+
+                                                const isMine = inv.user_id === userId;
+                                                const showAdminActions = isAdmin && !isMine;
+
+                                                if (showAdminActions) {
+                                                    // 관리자가 남의 청첩장 볼 때 -> 승인 처리
+                                                    handleAdminApproveClick(inv);
                                                 } else {
+                                                    // 내 청첩장이거나 일반 유저일 때 -> 신청/취소
                                                     if (inv.invitation_data?.isRequestingApproval) {
                                                         handleCancelRequestClick(inv);
                                                     } else {
-                                                        handleApproveClick(inv);
+                                                        handleRequestApprovalClick(inv); // 사용자 승인 신청 로직 탐
                                                     }
                                                 }
                                             }}
                                             loading={actionLoading === inv.id}
-                                            disabled={inv.invitation_data?.isApproved && !isAdmin}
+                                            disabled={inv.invitation_data?.isApproved && (!isAdmin || inv.user_id === userId)}
                                         >
-                                            {inv.invitation_data?.isApproved ? <CheckCircle2 size={16} /> :
-                                                isAdmin ? <CheckCircle2 size={16} /> :
-                                                    inv.invitation_data?.isRequestingApproval ? <XCircle size={16} /> : <Send size={16} />}
-                                            {inv.invitation_data?.isApproved
-                                                ? '승인완료'
-                                                : isAdmin
-                                                    ? (inv.invitation_data?.isRequestingApproval ? '승인신청옴' : '사용승인')
-                                                    : (inv.invitation_data?.isRequestingApproval ? '신청취소' : '사용신청')}
+                                            {(() => {
+                                                if (inv.invitation_data?.isApproved) return <CheckCircle2 size={16} />;
+
+                                                const isMine = inv.user_id === userId;
+                                                const showAdminActions = isAdmin && !isMine;
+
+                                                if (showAdminActions) {
+                                                    return <CheckCircle2 size={16} />; // 관리자 승인 아이콘
+                                                } else {
+                                                    return inv.invitation_data?.isRequestingApproval ? <XCircle size={16} /> : <Send size={16} />;
+                                                }
+                                            })()}
+
+                                            {(() => {
+                                                if (inv.invitation_data?.isApproved) return '승인완료';
+
+                                                const isMine = inv.user_id === userId;
+                                                const showAdminActions = isAdmin && !isMine;
+
+                                                if (showAdminActions) {
+                                                    return inv.invitation_data?.isRequestingApproval ? '승인신청옴' : '사용승인';
+                                                } else {
+                                                    return inv.invitation_data?.isRequestingApproval ? '신청취소' : '사용신청';
+                                                }
+                                            })()}
                                         </Button>
                                     </div>
                                 </div>
