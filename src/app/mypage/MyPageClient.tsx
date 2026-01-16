@@ -12,7 +12,7 @@ import type { InvitationData } from '@/store/useInvitationStore';
 import Header from '@/components/common/Header';
 
 import { useToast } from '@/hooks/use-toast';
-import { ExternalLink, Edit2, Trash2, FileText, MoreHorizontal, CheckCircle2, PhoneCall, User, BarChart2, Share, Eye, Pencil } from 'lucide-react';
+import { ExternalLink, Edit2, Trash2, FileText, MoreHorizontal, CheckCircle2, PhoneCall, User, BarChart2, Share, Eye, Pencil, XCircle } from 'lucide-react';
 import Image from 'next/image';
 
 
@@ -41,7 +41,7 @@ export interface MyPageClientProps {
     initialApprovalRequests: ApprovalRequestSummary[];
 }
 
-type ConfirmActionType = 'DELETE' | 'CANCEL_REQUEST' | 'APPROVE' | 'REQUEST_APPROVAL' | 'INFO_ONLY';
+type ConfirmActionType = 'DELETE' | 'CANCEL_REQUEST' | 'APPROVE' | 'REVOKE_APPROVAL' | 'REQUEST_APPROVAL' | 'INFO_ONLY';
 
 interface ConfirmConfig {
     isOpen: boolean;
@@ -197,6 +197,25 @@ export default function MyPageClient({
         }
     }, [fetchApprovalRequests, fetchFullInvitationData, fetchInvitations, toast]);
 
+    const executeRevokeApproval = useCallback(async (inv: InvitationSummaryRecord) => {
+        setActionLoading(inv.id);
+        try {
+            const fullData = await fetchFullInvitationData(inv.slug);
+            const updatedData = {
+                ...fullData,
+                isApproved: false,
+                isRequestingApproval: false,
+            };
+            await invitationService.saveInvitation(inv.slug, updatedData, inv.user_id);
+            toast({ description: '승인이 취소되었습니다.' });
+            await Promise.all([fetchInvitations(), fetchApprovalRequests()]);
+        } catch {
+            toast({ variant: 'destructive', description: '승인 취소 중 오류가 발생했습니다.' });
+        } finally {
+            setActionLoading(null);
+            setConfirmConfig(prev => ({ ...prev, isOpen: false }));
+        }
+    }, [fetchApprovalRequests, fetchFullInvitationData, fetchInvitations, toast]);
 
     // --- Action Initiators (Open Dialog) ---
 
@@ -274,6 +293,17 @@ export default function MyPageClient({
         });
     }, []);
 
+    const handleAdminRevokeClick = useCallback((inv: InvitationSummaryRecord) => {
+        setConfirmConfig({
+            isOpen: true,
+            type: 'REVOKE_APPROVAL',
+            title: '승인 취소',
+            description: '승인 상태를 취소하시겠습니까?',
+            targetId: inv.id,
+            targetRecord: inv,
+        });
+    }, []);
+
 
     // Execute approval request using profile data
     const executeRequestApproval = useCallback(async (inv: InvitationSummaryRecord) => {
@@ -323,10 +353,12 @@ export default function MyPageClient({
             executeCancelRequest(targetId);
         } else if (type === 'APPROVE' && targetRecord) {
             executeApprove(targetRecord);
+        } else if (type === 'REVOKE_APPROVAL' && targetRecord) {
+            executeRevokeApproval(targetRecord);
         } else if (type === 'REQUEST_APPROVAL' && targetRecord) {
             executeRequestApproval(targetRecord);
         }
-    }, [confirmConfig, executeDelete, executeCancelRequest, executeApprove, executeRequestApproval]);
+    }, [confirmConfig, executeDelete, executeCancelRequest, executeApprove, executeRevokeApproval, executeRequestApproval]);
 
     // Handle profile completion - auto submit approval after profile is saved
     const handleProfileComplete = useCallback(async () => {
@@ -412,13 +444,24 @@ export default function MyPageClient({
                                                 {targetInv ? (
                                                     <Button
                                                         size="sm"
-                                                        className="gap-1.5 h-9 text-sm font-bold bg-banana-yellow text-amber-900 border-banana-yellow hover:bg-yellow-400"
-                                                        onClick={() => handleAdminApproveClick(targetInv)}
+                                                        className={clsx(
+                                                            "gap-1.5 h-9 text-sm font-bold border-banana-yellow",
+                                                            targetInv.invitation_data?.isApproved
+                                                                ? "bg-red-500 text-white hover:bg-red-600"
+                                                                : "bg-banana-yellow text-amber-900 hover:bg-yellow-400"
+                                                        )}
+                                                        onClick={() => {
+                                                            if (targetInv.invitation_data?.isApproved) {
+                                                                handleAdminRevokeClick(targetInv);
+                                                            } else {
+                                                                handleAdminApproveClick(targetInv);
+                                                            }
+                                                        }}
                                                         disabled={actionLoading === targetInv.id}
                                                         loading={actionLoading === targetInv.id}
                                                     >
-                                                        <CheckCircle2 size={14} />
-                                                        즉시 승인
+                                                        {targetInv.invitation_data?.isApproved ? <XCircle size={14} /> : <CheckCircle2 size={14} />}
+                                                        {targetInv.invitation_data?.isApproved ? '승인 취소' : '즉시 승인'}
                                                     </Button>
                                                 ) : (
                                                     <span className="text-xs text-red-500 py-2">원본 청첩장 없음</span>
@@ -630,7 +673,12 @@ export default function MyPageClient({
                                         <Button
                                             onClick={(e) => {
                                                 e.preventDefault();
-                                                if (inv.invitation_data?.isApproved) return;
+                                                if (inv.invitation_data?.isApproved) {
+                                                    if (isAdmin) {
+                                                        handleAdminRevokeClick(inv);
+                                                    }
+                                                    return;
+                                                }
                                                 const isMine = inv.user_id === userId;
                                                 const showAdminActions = isAdmin && !isMine;
 
@@ -648,12 +696,14 @@ export default function MyPageClient({
                                             className={clsx(
                                                 "flex h-11 flex-1 items-center justify-center rounded-full text-sm font-bold shadow-lg transition-transform active:scale-95 border-0",
                                                 inv.invitation_data?.isApproved
-                                                    ? "bg-green-500 hover:bg-green-600 text-white cursor-default"
+                                                    ? isAdmin
+                                                        ? "bg-red-500 hover:bg-red-600 text-white"
+                                                        : "bg-green-500 hover:bg-green-600 text-white cursor-default"
                                                     : "bg-[#FBC02D] hover:bg-[#F9A825] text-gray-900" // Banana Yellow
                                             )}
                                         >
                                             {(() => {
-                                                if (inv.invitation_data?.isApproved) return '승인완료';
+                                                if (inv.invitation_data?.isApproved) return isAdmin ? '승인취소' : '승인완료';
                                                 const isMine = inv.user_id === userId;
                                                 const showAdminActions = isAdmin && !isMine;
                                                 if (showAdminActions) return inv.invitation_data?.isRequestingApproval ? '승인하기' : '사용승인';

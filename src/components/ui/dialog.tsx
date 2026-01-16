@@ -5,6 +5,7 @@ import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { focusFirstFocusable } from "@/lib/a11y"
 import { Button } from "@/components/ui/button"
 import { MOTION_CLASSES } from "@/constants/motion"
 
@@ -34,31 +35,44 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
-  <DialogPortal>
-    <DialogOverlay />
-    <DialogPrimitive.Content
-      ref={ref}
-      className={cn(
-        `fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg ${MOTION_CLASSES.dialogFixed}`,
-        className
-      )}
-      {...props}
-    >
-      {children}
-      <DialogPrimitive.Close asChild>
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          className="absolute right-4 top-4 opacity-70 transition-opacity hover:opacity-100 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
-        >
-          <X className="h-4 w-4" />
-          <span className="sr-only">Close</span>
-        </Button>
-      </DialogPrimitive.Close>
-    </DialogPrimitive.Content>
-  </DialogPortal>
-))
+>(({ className, children, onOpenAutoFocus, ...props }, ref) => {
+  const handleOpenAutoFocus: React.ComponentPropsWithoutRef<
+    typeof DialogPrimitive.Content
+  >["onOpenAutoFocus"] = (event) => {
+    onOpenAutoFocus?.(event)
+    if (event.defaultPrevented) return
+    event.preventDefault()
+    focusFirstFocusable(event.currentTarget as HTMLElement)
+  }
+
+  return (
+    <DialogPortal>
+      <DialogOverlay />
+      <DialogPrimitive.Content
+        ref={ref}
+        tabIndex={-1}
+        className={cn(
+          `fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg sm:rounded-lg ${MOTION_CLASSES.dialogFixed}`,
+          className
+        )}
+        onOpenAutoFocus={handleOpenAutoFocus}
+        {...props}
+      >
+        {children}
+        <DialogPrimitive.Close asChild>
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="absolute right-4 top-4 opacity-70 transition-opacity hover:opacity-100 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+          >
+            <X className="h-4 w-4" />
+            <span className="sr-only">Close</span>
+          </Button>
+        </DialogPrimitive.Close>
+      </DialogPrimitive.Content>
+    </DialogPortal>
+  )
+})
 DialogContent.displayName = DialogPrimitive.Content.displayName
 
 const DialogHeader = ({

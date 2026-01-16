@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { FOCUSABLE_SELECTOR } from '@/lib/a11y';
 
 interface SkipLinkProps {
   href: string;
@@ -27,9 +28,7 @@ export function useFocusTrap<T extends HTMLElement>(isActive: boolean) {
     }
 
     const container = containerRef.current;
-    const focusableElements = container.querySelectorAll<HTMLElement>(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
+    const focusableElements = container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
     const firstElement = focusableElements[0];
     const lastElement = focusableElements[focusableElements.length - 1];
 

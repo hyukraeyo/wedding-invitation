@@ -6,6 +6,9 @@ description: 바나나웨딩 디자인 시스템 (shadcn/ui + Tailwind) 가이�
 
 모든 UI 컴포넌트는 **shadcn/ui**를 기반으로 하며, **모바일 퍼스트**와 **접근성(A11y)** 준수를 최우선으로 합니다.
 
+## 공통 전제
+- React/Next.js 관련 변경은 `.codex/skills/vercel-react-best-practices/SKILL.md`를 최우선으로 준수합니다.
+
 ## 📱 디자인 원칙
 - **모바일 퍼스트**: 모든 화면은 모바일 해상도를 기준으로 먼저 설계하고, 이후 데스크톱 대응을 고려합니다.
 - **반응형 컴포넌트**: 기기 해상도에 따라 형태가 변하는 `ResponsiveModal` 시스템을 적극 활용합니다.

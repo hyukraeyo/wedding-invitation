@@ -4,6 +4,7 @@ import * as React from "react"
 import { Drawer as DrawerPrimitive } from "vaul"
 
 import { cn } from "@/lib/utils"
+import { focusFirstFocusable } from "@/lib/a11y"
 
 const Drawer = ({
     shouldScaleBackground = true,
@@ -37,22 +38,35 @@ DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName
 const DrawerContent = React.forwardRef<
     React.ElementRef<typeof DrawerPrimitive.Content>,
     React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
->(({ className, children, ...props }, ref) => (
-    <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerPrimitive.Content
-            ref={ref}
-            className={cn(
-                "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[20px] border bg-background",
-                className
-            )}
-            {...props}
-        >
-            <div className="mx-auto mt-4 h-1.5 w-12 shrink-0 rounded-full bg-zinc-300" />
-            {children}
-        </DrawerPrimitive.Content>
-    </DrawerPortal>
-))
+>(({ className, children, onOpenAutoFocus, ...props }, ref) => {
+    const handleOpenAutoFocus: React.ComponentPropsWithoutRef<
+        typeof DrawerPrimitive.Content
+    >["onOpenAutoFocus"] = (event) => {
+        onOpenAutoFocus?.(event)
+        if (event.defaultPrevented) return
+        event.preventDefault()
+        focusFirstFocusable(event.currentTarget as HTMLElement)
+    }
+
+    return (
+        <DrawerPortal>
+            <DrawerOverlay />
+            <DrawerPrimitive.Content
+                ref={ref}
+                tabIndex={-1}
+                className={cn(
+                    "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[20px] border bg-background",
+                    className
+                )}
+                onOpenAutoFocus={handleOpenAutoFocus}
+                {...props}
+            >
+                <div className="mx-auto mt-4 h-1.5 w-12 shrink-0 rounded-full bg-zinc-300" />
+                {children}
+            </DrawerPrimitive.Content>
+        </DrawerPortal>
+    )
+})
 DrawerContent.displayName = "DrawerContent"
 
 const DrawerHeader = ({

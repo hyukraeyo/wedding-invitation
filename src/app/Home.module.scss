@@ -3,140 +3,153 @@
 .container {
     min-height: 100vh;
     min-height: 100dvh;
-    background-color: var(--ivory);
+    background: radial-gradient(circle at 50% 30%, #FFFDE7 0%, #FFF9C4 100%); // Subtle banana gradient
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1.5rem;
-    overflow: hidden; // Prevent scroll during animation
+    padding: 1rem; // Reduced padding
+    overflow: hidden;
     position: relative;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FBC02D' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        opacity: 0.5;
+        pointer-events: none;
+    }
 }
 
 .main {
     flex: 1;
-    max-width: 28rem;
+    min-height: auto; // Override global min-height: 100dvh
+    max-width: 32rem;
     width: 100%;
     text-align: center;
     display: flex;
     flex-direction: column;
-    justify-content: center; // Center content vertically
-    gap: 3.5rem;
+    justify-content: center;
+    gap: min(8vh, 3.5rem); // Responsive gap to prevent overflow
     z-index: 1;
-    padding-bottom: 4rem; // Offset for absolute footer
+    padding-bottom: 3rem; // Keep space for footer
 }
 
 .hero {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.25rem; // Reduced gap
     align-items: center;
 
     .logo {
-        width: 4rem; // 64px
+        width: 140px;
         height: auto;
-        display: block;
-        margin-bottom: 0.5rem;
+        display: flex; // Use flex to center the image inside
+        justify-content: center;
+        margin-inline: auto; // Center the wrapper itself
+        margin-bottom: 0.25rem;
         opacity: 0;
         animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        filter: drop-shadow(0 10px 15px rgba(251, 192, 45, 0.2));
     }
 
     .title {
-        color: var(--forest-green);
-        font-family: var(--font-serif);
-        font-size: 3rem;
-        line-height: 1.15;
-        font-weight: 400; // More minimal, less bold
-        letter-spacing: -0.02em;
+        color: var(--foreground);
+        font-family: var(--font-pretendard); // Clean modern sans
+        font-size: 2.25rem;
+        line-height: 1.3;
+        font-weight: 700;
+        letter-spacing: -0.03em;
         opacity: 0;
-        animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+        animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+        text-shadow: 0 0 1px rgba(0, 0, 0, 0.05);
 
         @media (min-width: 768px) {
-            font-size: 4rem;
+            font-size: 3rem;
         }
 
-        br {
-            display: inline; 
+        span {
+            color: var(--primary); // Highlight 'Banana Wedding'
+            display: inline-block;
         }
     }
 
     .description {
-        color: rgba(74, 93, 69, 0.7); // forest-green with opacity
-        font-family: var(--font-sans);
-        font-size: 1rem;
-        line-height: 1.7;
+        color: var(--muted-foreground);
+        font-family: var(--font-pretendard);
+        font-size: 1.05rem;
+        line-height: 1.6;
         word-break: keep-all;
         opacity: 0;
-        animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+        animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+        max-width: 280px; // Limit width for better mobile readability
+        margin: 0 auto;
     }
 }
 
 .action {
     opacity: 0;
-    animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
+    animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
     display: flex;
     justify-content: center;
 
     .link {
         display: inline-flex;
         align-items: center;
-        gap: 0.75rem;
-        padding: 1rem 2rem;
+        gap: 0.5rem;
+        padding: 1.125rem 2.5rem;
         border-radius: 9999px;
-        background-color: transparent;
-        color: var(--forest-green);
-        border: 1px solid rgba(74, 93, 69, 0.2);
-        transition: transform 0.1s ease-in-out, background-color 0.1s, border-color 0.1s, box-shadow 0.1s;
+        background-color: #FFF; // Clean white background
+        color: #212121;
+        border: 1px solid var(--border);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); // Soft shadow
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         position: relative;
         overflow: hidden;
         cursor: pointer;
         user-select: none;
-        -webkit-tap-highlight-color: transparent; // Remove mobile tap blue box
+        -webkit-tap-highlight-color: transparent;
 
         .text {
-            font-size: 1.0625rem;
+            font-size: 1.1rem;
             font-weight: 600;
+            letter-spacing: -0.01em;
             z-index: 1;
         }
 
         .icon {
             width: 1.25rem;
             height: 1.25rem;
-            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            color: var(--primary); // Arrow in brand color
             z-index: 1;
-        }
-
-        &:active {
-            transform: scale(0.96) !important; // Override hover transform
-            background-color: rgba(74, 93, 69, 0.1); // Forest green light fill
         }
 
         @media (hover: hover) and (pointer: fine) {
             &:hover {
-                border-color: $banana-yellow;
-                background-color: $banana-yellow;
-                transform: translateY(-2px);
-                box-shadow: 0 10px 20px -5px rgba(251, 192, 45, 0.3);
+                transform: translateY(-3px);
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+                border-color: var(--primary);
 
                 .icon {
-                    transform: translateX(0.25rem);
+                    transform: translateX(4px);
                 }
-            }
-            
-            // Define active state within media query to handle precedence if needed, 
-            // but global :active above usually works. 
-            // However, specificity of hover might override active if they coincide.
-            &:active {
-                transform: scale(0.96) translateY(0); // Reset translateY
-                box-shadow: none;
             }
         }
 
+        &:active {
+            transform: scale(0.97) translateY(0);
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.05);
+        }
     }
 }
 
 .footer {
     position: absolute;
-    bottom: 2rem;
+    bottom: 1.5rem;
     text-align: center;
     width: 100%;
     opacity: 0;
@@ -144,21 +157,25 @@
 
     p {
         font-size: 0.75rem;
-        color: rgba(74, 93, 69, 0.3);
+        color: var(--muted-foreground);
+        opacity: 0.6;
         text-transform: uppercase;
-        letter-spacing: 0.1em;
-        font-family: var(--font-sans);
+        letter-spacing: 0.05em;
+        font-family: var(--font-pretendard);
     }
 }
 
 @keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(20px);
+        filter: blur(4px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
+        filter: blur(0);
     }
 }
 
@@ -166,6 +183,7 @@
     from {
         opacity: 0;
     }
+
     to {
         opacity: 1;
     }

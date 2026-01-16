@@ -13,6 +13,10 @@ trigger: always_on
 
 ## 핵심 개발 규칙
 
+### 0. Vercel React Best Practices (최우선)
+- React/Next.js 관련 작업은 항상 Vercel Best Practices를 최우선으로 준수합니다.
+- 참조: `.codex/skills/vercel-react-best-practices/SKILL.md` 및 `rules/*`
+
 ### 1. Data Fetching (Strict)
 - ❌ 클라이언트에서 `useEffect` + `fetch` 금지
 - ❌ 서버 컴포넌트에서 내부 API Route 호출 금지

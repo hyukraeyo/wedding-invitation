@@ -20,7 +20,7 @@ export default function Home() {
             />
           </div>
           <h1 className={styles.title}>
-            달콤한 시작,<br />바나나웨딩
+            달콤한 시작,<br /><span>바나나웨딩</span>
           </h1>
           <p className={styles.description}>
             유통기한 없는 우리만의 달콤한 이야기,<br />

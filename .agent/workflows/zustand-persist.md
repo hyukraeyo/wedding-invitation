@@ -8,6 +8,9 @@ description: Zustand persist 미들웨어와 Next.js 페이지 간 상태 관리
 
 이 프로젝트는 `useInvitationStore`에서 Zustand `persist` 미들웨어를 사용하여 IndexedDB에 상태를 영속화합니다. 이로 인해 페이지 간 이동 시에도 상태가 유지되므로, 특정 페이지 진입 시 모드에 따른 상태 초기화가 필수입니다.
 
+## 공통 전제
+- React/Next.js 관련 변경은 `.codex/skills/vercel-react-best-practices/SKILL.md`를 최우선으로 준수합니다.
+
 ## 핵심 패턴: URL 기반 모드 구분
 
 ### 빌더 페이지 (`/builder`)
