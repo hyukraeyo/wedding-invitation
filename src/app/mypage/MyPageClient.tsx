@@ -4,9 +4,11 @@ import React, { useState, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { invitationService } from '@/services/invitationService';
-import { approvalRequestService, ApprovalRequestRecord } from '@/services/approvalRequestService';
-import { Profile } from '@/services/profileService';
-import { useInvitationStore, InvitationData } from '@/store/useInvitationStore';
+import { approvalRequestService } from '@/services/approvalRequestService';
+import type { ApprovalRequestSummary } from '@/services/approvalRequestService';
+import type { InvitationSummaryRecord } from '@/lib/invitation-summary';
+import { useInvitationStore } from '@/store/useInvitationStore';
+import type { InvitationData } from '@/store/useInvitationStore';
 import Header from '@/components/common/Header';
 import { IconButton } from '@/components/ui/icon-button';
 import { useToast } from '@/hooks/use-toast';
@@ -26,20 +28,17 @@ import styles from './MyPage.module.scss';
 import { clsx } from 'clsx';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 
-export interface InvitationRecord {
-    id: string;
-    slug: string;
-    invitation_data: InvitationData;
-    updated_at: string;
-    user_id: string;
+interface ProfileSummary {
+    full_name: string | null;
+    phone: string | null;
 }
 
 export interface MyPageClientProps {
     userId: string | null;
     isAdmin: boolean;
-    profile: Profile | null;
-    initialInvitations: InvitationRecord[];
-    initialApprovalRequests: ApprovalRequestRecord[];
+    profile: ProfileSummary | null;
+    initialInvitations: InvitationSummaryRecord[];
+    initialApprovalRequests: ApprovalRequestSummary[];
 }
 
 type ConfirmActionType = 'DELETE' | 'CANCEL_REQUEST' | 'APPROVE' | 'REQUEST_APPROVAL' | 'INFO_ONLY';
@@ -50,7 +49,7 @@ interface ConfirmConfig {
     title: string;
     description: React.ReactNode;
     targetId: string | null;
-    targetRecord?: InvitationRecord | null;
+    targetRecord?: InvitationSummaryRecord | null;
 }
 
 export default function MyPageClient({
@@ -61,8 +60,8 @@ export default function MyPageClient({
     initialApprovalRequests,
 }: MyPageClientProps) {
     const router = useRouter();
-    const [invitations, setInvitations] = useState<InvitationRecord[]>(initialInvitations);
-    const [approvalRequests, setApprovalRequests] = useState<ApprovalRequestRecord[]>(initialApprovalRequests);
+    const [invitations, setInvitations] = useState<InvitationSummaryRecord[]>(initialInvitations);
+    const [approvalRequests, setApprovalRequests] = useState<ApprovalRequestSummary[]>(initialApprovalRequests);
     const [actionLoading, setActionLoading] = useState<string | null>(null);
 
     // Profile Completion Modal State
@@ -87,7 +86,7 @@ export default function MyPageClient({
             const data = isAdmin
                 ? await invitationService.getAdminInvitations()
                 : await invitationService.getUserInvitations(userId);
-            setInvitations(data as InvitationRecord[]);
+            setInvitations(data);
         } catch {
             // Silent fail - user can refresh
         }
@@ -103,11 +102,27 @@ export default function MyPageClient({
         }
     }, [userId, isAdmin]);
 
-    const handleEdit = useCallback((inv: { invitation_data: InvitationData; slug: string }) => {
-        useInvitationStore.setState(inv.invitation_data);
-        useInvitationStore.getState().setSlug(inv.slug);
-        router.push('/builder?mode=edit');
-    }, [router]);
+    const fetchFullInvitationData = useCallback(async (slug: string) => {
+        const fullInvitation = await invitationService.getInvitation(slug);
+        if (!fullInvitation?.invitation_data) {
+            throw new Error('Invitation data missing');
+        }
+        return fullInvitation.invitation_data as InvitationData;
+    }, []);
+
+    const handleEdit = useCallback(async (inv: InvitationSummaryRecord) => {
+        try {
+            const fullData = await fetchFullInvitationData(inv.slug);
+            useInvitationStore.setState(fullData);
+            useInvitationStore.getState().setSlug(inv.slug);
+            router.push('/builder?mode=edit');
+        } catch {
+            toast({
+                variant: 'destructive',
+                description: '청첩장 데이터를 불러오지 못했습니다.',
+            });
+        }
+    }, [fetchFullInvitationData, router, toast]);
 
     // --- Action Executors (Actual API Calls) ---
 
@@ -146,11 +161,12 @@ export default function MyPageClient({
         }
     }, [fetchInvitations, fetchApprovalRequests, toast]);
 
-    const executeApprove = useCallback(async (inv: InvitationRecord) => {
+    const executeApprove = useCallback(async (inv: InvitationSummaryRecord) => {
         setActionLoading(inv.id);
         try {
+            const fullData = await fetchFullInvitationData(inv.slug);
             const updatedData = {
-                ...inv.invitation_data,
+                ...fullData,
                 isApproved: true,
                 isRequestingApproval: false
             };
@@ -163,12 +179,12 @@ export default function MyPageClient({
             setActionLoading(null);
             setConfirmConfig(prev => ({ ...prev, isOpen: false }));
         }
-    }, [fetchApprovalRequests, fetchInvitations, toast]);
+    }, [fetchApprovalRequests, fetchFullInvitationData, fetchInvitations, toast]);
 
 
     // --- Action Initiators (Open Dialog) ---
 
-    const handleDeleteClick = useCallback((inv: InvitationRecord) => {
+    const handleDeleteClick = useCallback((inv: InvitationSummaryRecord) => {
         // Validation for user logic
         if (!isAdmin && inv.invitation_data?.isRequestingApproval) {
             setConfirmConfig({
@@ -190,7 +206,7 @@ export default function MyPageClient({
         });
     }, [isAdmin]);
 
-    const handleCancelRequestClick = useCallback((inv: InvitationRecord) => {
+    const handleCancelRequestClick = useCallback((inv: InvitationSummaryRecord) => {
         setConfirmConfig({
             isOpen: true,
             type: 'CANCEL_REQUEST',
@@ -203,7 +219,7 @@ export default function MyPageClient({
     // Helper to check if profile is complete
     const isProfileComplete = profile?.full_name && profile?.phone;
 
-    const handleApproveClick = useCallback((inv: InvitationRecord) => {
+    const handleApproveClick = useCallback((inv: InvitationSummaryRecord) => {
         if (!isAdmin) {
             // User Logic
             if (inv.invitation_data.isRequestingApproval) {
@@ -247,7 +263,7 @@ export default function MyPageClient({
 
 
     // Execute approval request using profile data
-    const executeRequestApproval = useCallback(async (inv: InvitationRecord) => {
+    const executeRequestApproval = useCallback(async (inv: InvitationSummaryRecord) => {
         if (!userId || !profile?.full_name || !profile?.phone) return;
 
         setActionLoading(inv.id);
@@ -259,8 +275,9 @@ export default function MyPageClient({
                 requesterPhone: profile.phone,
             });
 
+            const fullData = await fetchFullInvitationData(inv.slug);
             const updatedData = {
-                ...inv.invitation_data,
+                ...fullData,
                 isRequestingApproval: true,
             };
             await invitationService.saveInvitation(inv.slug, updatedData, userId);
@@ -278,7 +295,7 @@ export default function MyPageClient({
             setActionLoading(null);
             setConfirmConfig(prev => ({ ...prev, isOpen: false }));
         }
-    }, [fetchInvitations, profile, toast, userId]);
+    }, [fetchFullInvitationData, fetchInvitations, profile, toast, userId]);
 
     const handleConfirmAction = useCallback(() => {
         const { type, targetId, targetRecord } = confirmConfig;
@@ -475,7 +492,7 @@ export default function MyPageClient({
                                                                 });
                                                                 return;
                                                             }
-                                                            handleEdit(inv);
+                                                            void handleEdit(inv);
                                                         }}
                                                         className={clsx(
                                                             "gap-2 cursor-pointer py-2.5",

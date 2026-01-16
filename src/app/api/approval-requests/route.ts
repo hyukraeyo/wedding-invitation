@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { APPROVAL_REQUEST_SUMMARY_SELECT } from '@/lib/approval-request-summary';
+import type { ApprovalRequestSummary } from '@/lib/approval-request-summary';
 import { auth } from '@/auth';
 import { z } from 'zod';
 
@@ -40,7 +42,7 @@ export async function POST(request: NextRequest) {
         status: 'pending',
         created_at: new Date().toISOString(),
       })
-      .select()
+      .select(APPROVAL_REQUEST_SUMMARY_SELECT)
       .single();
 
     if (error) {
@@ -51,7 +53,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    return NextResponse.json({ success: true, data }, { status: 201 });
+    return NextResponse.json(
+      { success: true, data: data as unknown as ApprovalRequestSummary },
+      { status: 201 }
+    );
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -102,7 +107,7 @@ export async function GET() {
     const db = supabaseAdmin || supabase;
     const { data, error } = await db
       .from('approval_requests')
-      .select('*')
+      .select(APPROVAL_REQUEST_SUMMARY_SELECT)
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -113,7 +118,10 @@ export async function GET() {
       );
     }
 
-    return NextResponse.json({ success: true, data });
+    return NextResponse.json({
+      success: true,
+      data: (data ?? []) as unknown as ApprovalRequestSummary[],
+    });
   } catch (error) {
     console.error('Unexpected error in GET /api/approval-requests:', error);
     return NextResponse.json(

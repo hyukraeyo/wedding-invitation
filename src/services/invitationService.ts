@@ -1,4 +1,6 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
+import { INVITATION_SUMMARY_SELECT, toInvitationSummary } from '@/lib/invitation-summary';
+import type { InvitationSummaryRecord, InvitationSummaryRow } from '@/lib/invitation-summary';
 import { getBrowserSupabaseClient } from '@/lib/supabase';
 import { InvitationData } from '@/store/useInvitationStore';
 
@@ -38,19 +40,20 @@ export const invitationService = {
             throw new Error('Failed to fetch admin invitations');
         }
         const result = await response.json();
-        return result.data;
+        return result.data as InvitationSummaryRecord[];
     },
 
     async getUserInvitations(userId: string, client?: SupabaseClient) {
         const supabaseClient = client ?? await getDefaultClient();
         const { data, error } = await supabaseClient
             .from('invitations')
-            .select('*')
+            .select(INVITATION_SUMMARY_SELECT)
             .eq('user_id', userId)
             .order('updated_at', { ascending: false });
 
         if (error) throw error;
-        return data;
+        const rows = (data ?? []) as unknown as InvitationSummaryRow[];
+        return rows.map(toInvitationSummary);
     },
 
     async getInvitation(slug: string, client?: SupabaseClient) {

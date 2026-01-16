@@ -1,3 +1,7 @@
+import type { ApprovalRequestSummary } from '@/lib/approval-request-summary';
+
+export type { ApprovalRequestSummary };
+
 interface ApprovalRequestPayload {
   invitationId: string;
   invitationSlug: string;
@@ -5,16 +9,6 @@ interface ApprovalRequestPayload {
   requesterPhone: string;
 }
 
-
-export interface ApprovalRequestRecord {
-  id: string;
-  invitation_id: string;
-  invitation_slug: string;
-  requester_name: string;
-  requester_phone: string;
-  user_id: string;
-  created_at: string;
-}
 
 export const approvalRequestService = {
   async createRequest(payload: ApprovalRequestPayload) {
@@ -29,7 +23,7 @@ export const approvalRequestService = {
     }
 
     const result = await response.json();
-    return result.data as ApprovalRequestRecord;
+    return result.data as ApprovalRequestSummary;
   },
 
 
@@ -53,6 +47,6 @@ export const approvalRequestService = {
     }
 
     const result = await response.json();
-    return result.data as ApprovalRequestRecord[];
+    return result.data as ApprovalRequestSummary[];
   },
 };

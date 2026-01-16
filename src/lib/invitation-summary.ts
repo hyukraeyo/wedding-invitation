@@ -1,0 +1,64 @@
+export const INVITATION_SUMMARY_SELECT = [
+  'id',
+  'slug',
+  'updated_at',
+  'user_id',
+  'invitation_data->>imageUrl as image_url',
+  'invitation_data->mainScreen->>title as main_title',
+  'invitation_data->>date as date',
+  'invitation_data->>location as location',
+  'invitation_data->>isApproved as is_approved',
+  'invitation_data->>isRequestingApproval as is_requesting_approval',
+].join(', ');
+
+export interface InvitationSummaryData {
+  imageUrl: string | null;
+  mainScreen: {
+    title: string;
+  };
+  date: string;
+  location: string;
+  isApproved: boolean;
+  isRequestingApproval: boolean;
+}
+
+export interface InvitationSummaryRecord {
+  id: string;
+  slug: string;
+  invitation_data: InvitationSummaryData;
+  updated_at: string;
+  user_id: string;
+}
+
+export interface InvitationSummaryRow {
+  id: string;
+  slug: string;
+  updated_at: string;
+  user_id: string;
+  image_url: string | null;
+  main_title: string | null;
+  date: string | null;
+  location: string | null;
+  is_approved: boolean | string | null;
+  is_requesting_approval: boolean | string | null;
+}
+
+const toBoolean = (value: boolean | string | null | undefined) =>
+  value === true || value === 'true';
+
+export const toInvitationSummary = (row: InvitationSummaryRow): InvitationSummaryRecord => ({
+  id: row.id,
+  slug: row.slug,
+  updated_at: row.updated_at,
+  user_id: row.user_id,
+  invitation_data: {
+    imageUrl: row.image_url ?? null,
+    mainScreen: {
+      title: row.main_title ?? '',
+    },
+    date: row.date ?? '',
+    location: row.location ?? '',
+    isApproved: toBoolean(row.is_approved),
+    isRequestingApproval: toBoolean(row.is_requesting_approval),
+  },
+});

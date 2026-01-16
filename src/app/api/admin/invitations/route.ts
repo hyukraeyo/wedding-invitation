@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { INVITATION_SUMMARY_SELECT, toInvitationSummary } from '@/lib/invitation-summary';
+import type { InvitationSummaryRow } from '@/lib/invitation-summary';
 import { auth } from '@/auth';
 
 export async function GET() {
@@ -37,7 +39,7 @@ export async function GET() {
 
         const { data, error } = await supabaseAdmin
             .from('invitations')
-            .select('*')
+            .select(INVITATION_SUMMARY_SELECT)
             .contains('invitation_data', { isRequestingApproval: true })
             .order('updated_at', { ascending: false });
 
@@ -49,7 +51,8 @@ export async function GET() {
             );
         }
 
-        return NextResponse.json({ success: true, data: data ?? [] });
+        const invitations = ((data ?? []) as unknown as InvitationSummaryRow[]).map(toInvitationSummary);
+        return NextResponse.json({ success: true, data: invitations });
     } catch (error) {
         console.error('Unexpected error in GET /api/admin/invitations:', error);
         return NextResponse.json(
