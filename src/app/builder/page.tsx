@@ -22,7 +22,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { invitationService } from '@/services/invitationService';
 import Header from '@/components/common/Header';
 import { toast } from 'sonner';
-import SavingOverlay from '@/components/builder/SavingOverlay';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import styles from './BuilderPage.module.scss';
 import { clsx } from 'clsx';
 import { Smartphone, X } from 'lucide-react';
@@ -120,7 +120,7 @@ function BuilderPageContent() {
   return (
     <main className={styles.main}>
       <Header onSave={handleSave} onLogin={handleLogin} isLoading={isSaving} />
-      <SavingOverlay isVisible={isSaving} />
+      {isSaving && <LoadingSpinner />}
 
 
       <div className={styles.workspace}>
