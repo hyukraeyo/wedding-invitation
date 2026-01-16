@@ -89,7 +89,7 @@ export const ResponsiveModal = ({
                     <Button
                         variant="outline"
                         onClick={handleCancel}
-                        className={cn(mode === 'drawer' && "w-full h-12")}
+                        className={cn(mode === 'drawer' && "flex-1 h-12")}
                     >
                         {cancelText}
                     </Button>
@@ -98,7 +98,7 @@ export const ResponsiveModal = ({
                     variant={confirmVariant}
                     onClick={onConfirm}
                     disabled={confirmDisabled || confirmLoading}
-                    className={cn(mode === 'drawer' && "w-full h-12")}
+                    className={cn(mode === 'drawer' && "flex-1 h-12")}
                     autoFocus
                 >
                     {confirmLoading ? "처리 중..." : confirmText}
@@ -115,11 +115,12 @@ export const ResponsiveModal = ({
                     className={cn("max-w-md max-h-[85vh] flex flex-col p-0 overflow-hidden", className)}
                     onInteractOutside={(e) => !dismissible && e.preventDefault()}
                     onEscapeKeyDown={(e) => !dismissible && e.preventDefault()}
+                    aria-describedby={description ? undefined : undefined} // Radix handles linking if Description exists, but if not, we must clear it to avoid warning. Actually passing undefined might not be enough if it defaults. Let's try passing undefined effectively. Wait, the warning says "Missing Description or aria-describedby={undefined}". So passing undefined is correct.
                 >
                     <div className="p-6 pb-0">
                         <DialogHeader>
                             <DialogTitle>{title || "알림"}</DialogTitle>
-                            {description ? <DialogDescription>{description}</DialogDescription> : null}
+                            {description ? <DialogDescription>{description}</DialogDescription> : <DialogDescription className="sr-only" />}
                         </DialogHeader>
                     </div>
 
@@ -148,7 +149,7 @@ export const ResponsiveModal = ({
                 <div className="mx-auto w-full max-w-sm flex flex-col max-h-[90vh]">
                     <DrawerHeader className="text-left shrink-0">
                         <DrawerTitle>{title || "알림"}</DrawerTitle>
-                        {description ? <DrawerDescription>{description}</DrawerDescription> : null}
+                        {description ? <DrawerDescription>{description}</DrawerDescription> : <DrawerDescription className="sr-only" />}
                     </DrawerHeader>
 
                     <div className="flex-1 overflow-hidden min-h-0">
@@ -160,7 +161,7 @@ export const ResponsiveModal = ({
                     </div>
 
                     {hasActions ? (
-                        <DrawerFooter className="flex-col gap-3 pt-2 pb-8 shrink-0">
+                        <DrawerFooter className="flex-row gap-3 pt-2 pb-8 shrink-0">
                             {renderButtons('drawer')}
                         </DrawerFooter>
                     ) : null}

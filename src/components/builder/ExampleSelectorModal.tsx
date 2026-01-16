@@ -42,6 +42,7 @@ export const ExampleSelectorModal = <T extends ExampleItem>({
                         key={item.id || idx}
                         className={cn(styles.itemButton, "transition-transform duration-200 active:scale-[0.98]")}
                         onClick={() => onSelect(item)}
+                        autoFocus={idx === 0}
                     >
                         <div className={styles.itemHeader}>
                             <span className={styles.badge}>
