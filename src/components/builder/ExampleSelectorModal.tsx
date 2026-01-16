@@ -40,7 +40,7 @@ export const ExampleSelectorModal = <T extends ExampleItem>({
                 {items.map((item, idx) => (
                     <button
                         key={item.id || idx}
-                        className={styles.itemButton}
+                        className={cn(styles.itemButton, "transition-transform duration-200 active:scale-[0.98]")}
                         onClick={() => onSelect(item)}
                     >
                         <div className={styles.itemHeader}>

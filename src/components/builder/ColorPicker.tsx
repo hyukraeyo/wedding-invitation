@@ -33,7 +33,7 @@ export const ColorPicker = ({ value, colors, onChange, className }: ColorPickerP
                     key={color}
                     onClick={() => onChange(color)}
                     className={cn(
-                        "w-8 h-8 rounded-full border border-black/10 transition-all",
+                        "w-8 h-8 rounded-full border border-black/10 transition-transform active:scale-90",
                         "hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2",
                         value === color && "ring-2 ring-offset-2 scale-110"
                     )}

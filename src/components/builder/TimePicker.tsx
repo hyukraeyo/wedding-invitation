@@ -74,7 +74,7 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
                     onChange={handlePeriodHourChange}
                     options={periodHourOptions}
                     placeholder="오전/오후 시간"
-                    modalTitle="시간을 선택하세요"
+                    modalTitle="시간"
                 />
             </div>
 
@@ -87,7 +87,7 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
                     onChange={handleMinuteChange}
                     options={minutes.map(min => ({ label: min, value: min }))}
                     placeholder="분"
-                    modalTitle="분을 선택하세요"
+                    modalTitle="분"
                 />
             </div>
         </div>

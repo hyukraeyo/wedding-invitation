@@ -1,5 +1,6 @@
 import React from 'react';
 import { LucideIcon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 interface HeaderActionProps {
@@ -11,26 +12,30 @@ interface HeaderActionProps {
 
 export const HeaderAction = ({ icon: Icon, label, onClick, className }: HeaderActionProps) => {
     return (
-        <div
-            role="button"
-            onClick={(e) => {
+        <Button
+            asChild
+            variant="ghost"
+            size="sm"
+            onClick={(e: React.MouseEvent) => {
                 e.preventDefault();
                 e.stopPropagation();
                 onClick();
             }}
-            onMouseDown={(e) => {
+            onMouseDown={(e: React.MouseEvent) => {
                 // Prevent parent focus
                 e.preventDefault();
                 e.stopPropagation();
             }}
-            onPointerDown={(e) => e.stopPropagation()}
+            onPointerDown={(e: React.PointerEvent) => e.stopPropagation()}
             className={cn(
-                "flex items-center gap-1 px-2.5 py-1 ml-2 text-[11px] font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-md transition-colors cursor-pointer select-none",
+                "h-7 px-2.5 ml-2 gap-1 text-[11px] [&_svg]:size-[11px] font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 hover:text-slate-700 active:bg-slate-300 rounded-md",
                 className
             )}
         >
-            <Icon size={11} />
-            <span>{label}</span>
-        </div>
+            <span role="button" tabIndex={0}>
+                <Icon size={11} />
+                <span>{label}</span>
+            </span>
+        </Button>
     );
 };

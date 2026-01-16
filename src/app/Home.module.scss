@@ -85,9 +85,12 @@
         background-color: transparent;
         color: var(--forest-green);
         border: 1px solid rgba(74, 93, 69, 0.2);
-        transition: $transition-smooth;
+        transition: transform 0.1s ease-in-out, background-color 0.1s, border-color 0.1s, box-shadow 0.1s;
         position: relative;
         overflow: hidden;
+        cursor: pointer;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent; // Remove mobile tap blue box
 
         .text {
             font-size: 1.0625rem;
@@ -102,6 +105,11 @@
             z-index: 1;
         }
 
+        &:active {
+            transform: scale(0.96) !important; // Override hover transform
+            background-color: rgba(74, 93, 69, 0.1); // Forest green light fill
+        }
+
         @media (hover: hover) and (pointer: fine) {
             &:hover {
                 border-color: $banana-yellow;
@@ -112,6 +120,14 @@
                 .icon {
                     transform: translateX(0.25rem);
                 }
+            }
+            
+            // Define active state within media query to handle precedence if needed, 
+            // but global :active above usually works. 
+            // However, specificity of hover might override active if they coincide.
+            &:active {
+                transform: scale(0.96) translateY(0); // Reset translateY
+                box-shadow: none;
             }
         }
 

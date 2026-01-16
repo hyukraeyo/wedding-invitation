@@ -99,6 +99,7 @@ export const ResponsiveModal = ({
                     onClick={onConfirm}
                     disabled={confirmDisabled || confirmLoading}
                     className={cn(mode === 'drawer' && "w-full h-12")}
+                    autoFocus
                 >
                     {confirmLoading ? "처리 중..." : confirmText}
                 </Button>
