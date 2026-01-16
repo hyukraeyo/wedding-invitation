@@ -16,6 +16,7 @@ interface CalendarSectionViewProps {
     bride?: { firstName: string };
     showCalendar?: boolean;
     showDday?: boolean;
+    animateEntrance?: boolean;
 }
 
 /**
@@ -31,7 +32,8 @@ const CalendarSectionView = memo(({
     groom,
     bride,
     showCalendar = true,
-    showDday = true
+    showDday = true,
+    animateEntrance
 }: CalendarSectionViewProps) => {
     const weddingDate = useMemo(() => {
         if (!date) return new Date();
@@ -145,7 +147,7 @@ const CalendarSectionView = memo(({
     }
 
     return (
-        <SectionContainer id={id}>
+        <SectionContainer id={id} animateEntrance={animateEntrance}>
             <SectionHeader
                 title="우리가 결혼하는 날"
                 subtitle="DATE"

@@ -2,7 +2,9 @@
 
 import React, { memo, useMemo, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { useInvitationStore, InvitationData } from '@/store/useInvitationStore';
+import { useShallow } from 'zustand/shallow';
+import { useInvitationStore } from '@/store/useInvitationStore';
+import type { InvitationData } from '@/store/useInvitationStore';
 import MainScreenView from './sections/MainScreenView';
 import CalendarSectionView from './sections/CalendarSectionView';
 import GreetingView from './sections/GreetingView';
@@ -28,15 +30,130 @@ interface InvitationCanvasProps {
   data?: InvitationData; // Allow passing raw data to bypass global store
 }
 
-const InvitationCanvas = memo(({ isPreviewMode = false, editingSection, hideWatermark = false, data }: InvitationCanvasProps) => {
+type InvitationCanvasData = Pick<
+  InvitationData,
+  | 'theme'
+  | 'mainScreen'
+  | 'imageUrl'
+  | 'imageRatio'
+  | 'groom'
+  | 'bride'
+  | 'date'
+  | 'time'
+  | 'location'
+  | 'detailAddress'
+  | 'greetingTitle'
+  | 'greetingSubtitle'
+  | 'message'
+  | 'greetingImage'
+  | 'greetingRatio'
+  | 'showNamesAtBottom'
+  | 'enableFreeformNames'
+  | 'groomNameCustom'
+  | 'brideNameCustom'
+  | 'gallery'
+  | 'galleryTitle'
+  | 'gallerySubtitle'
+  | 'galleryType'
+  | 'galleryPreview'
+  | 'galleryFade'
+  | 'galleryAutoplay'
+  | 'galleryPopup'
+  | 'ddayMessage'
+  | 'showCalendar'
+  | 'showDday'
+  | 'locationTitle'
+  | 'locationSubtitle'
+  | 'coordinates'
+  | 'address'
+  | 'mapZoom'
+  | 'showMap'
+  | 'showNavigation'
+  | 'sketchUrl'
+  | 'sketchRatio'
+  | 'lockMap'
+  | 'mapType'
+  | 'locationContact'
+  | 'accounts'
+  | 'accountsTitle'
+  | 'accountsSubtitle'
+  | 'accountsDescription'
+  | 'accountsGroomTitle'
+  | 'accountsBrideTitle'
+  | 'accountsColorMode'
+  | 'closing'
+  | 'isApproved'
+  | 'kakaoShare'
+>;
+
+const selectInvitationCanvasData = (state: InvitationData): InvitationCanvasData => ({
+  theme: state.theme,
+  mainScreen: state.mainScreen,
+  imageUrl: state.imageUrl,
+  imageRatio: state.imageRatio,
+  groom: state.groom,
+  bride: state.bride,
+  date: state.date,
+  time: state.time,
+  location: state.location,
+  detailAddress: state.detailAddress,
+  greetingTitle: state.greetingTitle,
+  greetingSubtitle: state.greetingSubtitle,
+  message: state.message,
+  greetingImage: state.greetingImage,
+  greetingRatio: state.greetingRatio,
+  showNamesAtBottom: state.showNamesAtBottom,
+  enableFreeformNames: state.enableFreeformNames,
+  groomNameCustom: state.groomNameCustom,
+  brideNameCustom: state.brideNameCustom,
+  gallery: state.gallery,
+  galleryTitle: state.galleryTitle,
+  gallerySubtitle: state.gallerySubtitle,
+  galleryType: state.galleryType,
+  galleryPreview: state.galleryPreview,
+  galleryFade: state.galleryFade,
+  galleryAutoplay: state.galleryAutoplay,
+  galleryPopup: state.galleryPopup,
+  ddayMessage: state.ddayMessage,
+  showCalendar: state.showCalendar,
+  showDday: state.showDday,
+  locationTitle: state.locationTitle,
+  locationSubtitle: state.locationSubtitle,
+  coordinates: state.coordinates,
+  address: state.address,
+  mapZoom: state.mapZoom,
+  showMap: state.showMap,
+  showNavigation: state.showNavigation,
+  sketchUrl: state.sketchUrl,
+  sketchRatio: state.sketchRatio,
+  lockMap: state.lockMap,
+  mapType: state.mapType,
+  locationContact: state.locationContact,
+  accounts: state.accounts,
+  accountsTitle: state.accountsTitle,
+  accountsSubtitle: state.accountsSubtitle,
+  accountsDescription: state.accountsDescription,
+  accountsGroomTitle: state.accountsGroomTitle,
+  accountsBrideTitle: state.accountsBrideTitle,
+  accountsColorMode: state.accountsColorMode,
+  closing: state.closing,
+  isApproved: state.isApproved,
+  kakaoShare: state.kakaoShare,
+});
+
+type InvitationCanvasContentProps = Omit<InvitationCanvasProps, 'data'> & {
+  data: InvitationCanvasData;
+};
+
+const InvitationCanvasContent = memo(({
+  isPreviewMode = false,
+  editingSection,
+  hideWatermark = false,
+  data,
+}: InvitationCanvasContentProps) => {
   const [isReady, setIsReady] = React.useState(!isPreviewMode);
   const initialScrollDone = React.useRef(false);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
-
-  const storeData = useInvitationStore();
-
-  // Use provided data if available, otherwise fallback to store
-  const currentData = data || storeData;
 
   const {
     theme,
@@ -90,7 +207,8 @@ const InvitationCanvas = memo(({ isPreviewMode = false, editingSection, hideWate
     accountsColorMode,
     closing,
     isApproved,
-  } = currentData;
+    kakaoShare,
+  } = data;
 
   // Scroll to editing section
   useEffect(() => {
@@ -177,7 +295,7 @@ const InvitationCanvas = memo(({ isPreviewMode = false, editingSection, hideWate
         />
 
         {/* 1. Main Screen */}
-        <ScrollReveal id="section-mainScreen">
+        <ScrollReveal id="section-mainScreen" animateEntrance={theme.animateEntrance}>
           <MainScreenView
             mainScreen={mainScreen}
             imageUrl={imageUrl || undefined}
@@ -207,6 +325,7 @@ const InvitationCanvas = memo(({ isPreviewMode = false, editingSection, hideWate
           groom={groom}
           bride={bride}
           accentColor={theme.accentColor}
+          animateEntrance={theme.animateEntrance}
         />
 
         {/* 3. Gallery (Moved) */}
@@ -221,6 +340,7 @@ const InvitationCanvas = memo(({ isPreviewMode = false, editingSection, hideWate
           galleryAutoplay={galleryAutoplay}
           galleryPopup={galleryPopup}
           accentColor={theme.accentColor}
+          animateEntrance={theme.animateEntrance}
         />
 
         {/* 4. Calendar & D-Day */}
@@ -234,6 +354,7 @@ const InvitationCanvas = memo(({ isPreviewMode = false, editingSection, hideWate
           bride={bride}
           showCalendar={showCalendar}
           showDday={showDday}
+          animateEntrance={theme.animateEntrance}
         />
 
         {/* 5. Location */}
@@ -255,6 +376,7 @@ const InvitationCanvas = memo(({ isPreviewMode = false, editingSection, hideWate
           lockMap={lockMap}
           mapType={mapType}
           locationContact={locationContact}
+          animateEntrance={theme.animateEntrance}
         />
 
         {/* 7. Accounts */}
@@ -268,6 +390,7 @@ const InvitationCanvas = memo(({ isPreviewMode = false, editingSection, hideWate
           brideTitle={accountsBrideTitle}
           colorMode={accountsColorMode as 'accent' | 'subtle' | 'white'}
           accentColor={theme.accentColor}
+          animateEntrance={theme.animateEntrance}
         />
 
         {/* 8. Closing / Ending */}
@@ -280,6 +403,13 @@ const InvitationCanvas = memo(({ isPreviewMode = false, editingSection, hideWate
           ratio={closing.ratio}
           effect={closing.effect}
           accentColor={theme.accentColor}
+          kakaoShare={kakaoShare}
+          groom={groom}
+          bride={bride}
+          date={date}
+          time={time}
+          mainImageUrl={imageUrl}
+          animateEntrance={theme.animateEntrance}
         />
 
         {/* Footer Padding */}
@@ -300,6 +430,19 @@ const InvitationCanvas = memo(({ isPreviewMode = false, editingSection, hideWate
   );
 });
 
-InvitationCanvas.displayName = 'InvitationCanvas';
+InvitationCanvasContent.displayName = 'InvitationCanvasContent';
 
-export default InvitationCanvas;
+const InvitationCanvasFromStore = memo((props: Omit<InvitationCanvasProps, 'data'>) => {
+  const storeData = useInvitationStore(useShallow(selectInvitationCanvasData));
+  return <InvitationCanvasContent {...props} data={storeData} />;
+});
+
+InvitationCanvasFromStore.displayName = 'InvitationCanvasFromStore';
+
+export default function InvitationCanvas(props: InvitationCanvasProps) {
+  if (props.data) {
+    return <InvitationCanvasContent {...props} data={props.data} />;
+  }
+
+  return <InvitationCanvasFromStore {...props} />;
+}

@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { useInvitationStore } from '@/store/useInvitationStore';
 import { useMediaQuery } from '@/hooks/use-media-query';
 
 import styles from './ScrollReveal.module.scss';
@@ -12,10 +11,10 @@ interface ScrollRevealProps {
     children: React.ReactNode;
     className?: string;
     id?: string | undefined;
+    animateEntrance?: boolean;
 }
 
-export default function ScrollReveal({ children, className = "", id }: ScrollRevealProps) {
-    const animateEntrance = useInvitationStore(state => state.theme.animateEntrance);
+export default function ScrollReveal({ children, className = "", id, animateEntrance = true }: ScrollRevealProps) {
     const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
     const shouldAnimate = animateEntrance && !prefersReducedMotion;
     const [isVisible, setIsVisible] = useState(!shouldAnimate);

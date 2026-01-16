@@ -33,6 +33,7 @@ interface LocationViewProps {
     lockMap?: boolean;
     mapType?: 'naver' | 'kakao';
     locationContact?: string;
+    animateEntrance?: boolean;
 }
 
 const MapLoading = () => (
@@ -71,7 +72,8 @@ const LocationView = memo(({
     sketchRatio = 'fixed',
     lockMap = true,
     mapType = 'naver',
-    locationContact
+    locationContact,
+    animateEntrance
 }: LocationViewProps) => {
     const { toast } = useToast();
 
@@ -92,7 +94,7 @@ const LocationView = memo(({
     };
 
     return (
-        <SectionContainer id={id}>
+        <SectionContainer id={id} animateEntrance={animateEntrance}>
             <SectionHeader
                 title={title}
                 subtitle={subtitle}

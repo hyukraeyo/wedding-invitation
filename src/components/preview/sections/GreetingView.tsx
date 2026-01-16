@@ -34,6 +34,7 @@ interface GreetingViewProps {
     groom: Person;
     bride: Person;
     accentColor: string;
+    animateEntrance?: boolean;
 }
 
 /**
@@ -52,7 +53,8 @@ const GreetingView = memo(({
     brideNameCustom,
     groom,
     bride,
-    accentColor
+    accentColor,
+    animateEntrance
 }: GreetingViewProps) => {
 
     const renderFamilyRelation = (person: Person, role: '신랑' | '신부') => {
@@ -84,7 +86,7 @@ const GreetingView = memo(({
     };
 
     return (
-        <SectionContainer id={id}>
+        <SectionContainer id={id} animateEntrance={animateEntrance}>
             <SectionHeader
                 title={greetingTitle}
                 subtitle={greetingSubtitle || 'INVITATION'}

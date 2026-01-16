@@ -11,6 +11,7 @@ interface SectionContainerProps {
     id?: string | undefined;
     fullWidth?: boolean;
     style?: React.CSSProperties;
+    animateEntrance?: boolean;
 }
 
 /**
@@ -22,10 +23,11 @@ const SectionContainer = memo(function SectionContainer({
     className = "",
     id,
     fullWidth = false,
-    style
+    style,
+    animateEntrance
 }: SectionContainerProps) {
     return (
-        <ScrollReveal id={id}>
+        <ScrollReveal id={id} animateEntrance={animateEntrance}>
             <section
                 className={clsx(
                     styles.container,

@@ -39,6 +39,7 @@ interface GalleryViewProps {
     galleryAutoplay: boolean;
     galleryPopup: boolean;
     accentColor: string;
+    animateEntrance?: boolean;
 }
 
 /**
@@ -56,7 +57,8 @@ const GalleryView = memo(({
     galleryFade,
     galleryAutoplay,
     galleryPopup,
-    accentColor
+    accentColor,
+    animateEntrance
 }: GalleryViewProps) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isMounted, setIsMounted] = useState(false);
@@ -233,7 +235,12 @@ const GalleryView = memo(({
     };
 
     return (
-        <SectionContainer id={id} fullWidth={galleryPreview && galleryType === 'swiper'} style={{ paddingInline: (galleryPreview && galleryType === 'swiper') ? '0' : undefined }}>
+        <SectionContainer
+            id={id}
+            fullWidth={galleryPreview && galleryType === 'swiper'}
+            style={{ paddingInline: (galleryPreview && galleryType === 'swiper') ? '0' : undefined }}
+            animateEntrance={animateEntrance}
+        >
             <SectionHeader
                 title={galleryTitle}
                 subtitle={gallerySubtitle}

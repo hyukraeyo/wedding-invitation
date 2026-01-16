@@ -26,6 +26,7 @@ interface AccountsViewProps {
     brideTitle: string;
     colorMode: 'accent' | 'subtle' | 'white';
     accentColor: string;
+    animateEntrance?: boolean;
 }
 
 /**
@@ -41,7 +42,8 @@ const AccountsView = memo(({
     groomTitle,
     brideTitle,
     colorMode,
-    accentColor
+    accentColor,
+    animateEntrance
 }: AccountsViewProps) => {
     const { toast } = useToast();
 
@@ -78,7 +80,7 @@ const AccountsView = memo(({
     );
 
     return (
-        <SectionContainer id={id}>
+        <SectionContainer id={id} animateEntrance={animateEntrance}>
             {title || description ? (
                 <>
                     <SectionHeader

@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { clsx } from 'clsx';
 import { MessageCircle, Share2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { useInvitationStore } from '@/store/useInvitationStore';
+import type { InvitationData } from '@/store/useInvitationStore';
 import SectionContainer from '../SectionContainer';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import SectionHeader from '../SectionHeader';
@@ -22,6 +22,13 @@ interface ClosingViewProps {
     ratio?: 'fixed' | 'auto';
     effect?: 'none' | 'mist' | 'ripple' | 'paper';
     accentColor: string;
+    kakaoShare?: InvitationData['kakaoShare'];
+    groom: InvitationData['groom'];
+    bride: InvitationData['bride'];
+    date: InvitationData['date'];
+    time: InvitationData['time'];
+    mainImageUrl: InvitationData['imageUrl'];
+    animateEntrance?: boolean;
 }
 
 /**
@@ -37,9 +44,15 @@ const ClosingView = memo(({
     ratio = 'fixed',
     effect = 'none',
     accentColor,
+    kakaoShare,
+    groom,
+    bride,
+    date,
+    time,
+    mainImageUrl,
+    animateEntrance,
 }: ClosingViewProps) => {
     const { toast } = useToast();
-    const { kakaoShare, groom, bride, imageUrl: mainImageUrl, date, time } = useInvitationStore();
 
     const handleLinkShare = () => {
         const url = window.location.href;
@@ -64,9 +77,9 @@ const ClosingView = memo(({
         const groomName = `${groom.lastName}${groom.firstName}`;
         const brideName = `${bride.lastName}${bride.firstName}`;
 
-        const shareTitle = kakaoShare.title || `${groomName} ♥ ${brideName} 결혼식에 초대합니다`;
-        const shareDesc = kakaoShare.description || `${date} ${time}`;
-        let shareImageUrl = kakaoShare.imageUrl || mainImageUrl || `${baseUrl}/logo.png`;
+        const shareTitle = kakaoShare?.title || `${groomName} ♥ ${brideName} 결혼식에 초대합니다`;
+        const shareDesc = kakaoShare?.description || `${date} ${time}`;
+        let shareImageUrl = kakaoShare?.imageUrl || mainImageUrl || `${baseUrl}/logo.png`;
 
         if (shareImageUrl.startsWith('/')) {
             shareImageUrl = `${baseUrl}${shareImageUrl}`;
@@ -88,9 +101,9 @@ const ClosingView = memo(({
                         webUrl: window.location.href,
                     },
                 },
-                buttons: kakaoShare.buttonType !== 'none' ? [
+                buttons: (kakaoShare?.buttonType ?? 'none') !== 'none' ? [
                     {
-                        title: kakaoShare.buttonType === 'location' ? '위치 보기' : '참석 여부',
+                        title: kakaoShare?.buttonType === 'location' ? '위치 보기' : '참석 여부',
                         link: {
                             mobileWebUrl: window.location.href,
                             webUrl: window.location.href,
@@ -105,7 +118,7 @@ const ClosingView = memo(({
     };
 
     return (
-        <SectionContainer id={id}>
+        <SectionContainer id={id} animateEntrance={animateEntrance}>
             <div className={styles.footer}>
                 <SectionHeader
                     title={title || ''}
