@@ -5,7 +5,6 @@ Sentry.init({
   tracesSampleRate: 1.0,
   replaysSessionSampleRate: 0.1,
   replaysOnErrorSampleRate: 1.0,
-
   integrations: [
     Sentry.replayIntegration({
       maskAllText: true,
@@ -16,14 +15,14 @@ Sentry.init({
       levels: ['error'],
     }),
   ],
-
   beforeSend(event) {
     if (process.env.NODE_ENV === 'development') {
       console.error('[Sentry]', event);
     }
     return event;
   },
-
   environment: process.env.NODE_ENV,
   enabled: process.env.NODE_ENV === 'production',
 });
+
+export const onRouterTransitionStart = Sentry.captureRouterTransitionStart;

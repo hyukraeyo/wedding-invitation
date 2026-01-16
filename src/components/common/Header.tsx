@@ -10,6 +10,8 @@ import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { IconButton } from '@/components/ui/icon-button';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
+import { cn } from '@/lib/utils';
+import { useToast } from '@/hooks/use-toast';
 
 interface HeaderProps {
     onSave?: () => void;
@@ -17,17 +19,16 @@ interface HeaderProps {
     isLoading?: boolean;
 }
 
-import { cn } from '@/lib/utils';
-
-
 export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
     const router = useRouter();
     const pathname = usePathname();
     const isMyPage = pathname?.startsWith('/mypage');
     const { user, signOut } = useAuth();
     const reset = useInvitationStore(state => state.reset);
+    const isUploading = useInvitationStore(state => state.isUploading); // Add Loading State
     const [showResetDialog, setShowResetDialog] = useState(false);
     const isVisible = true; // Always visible as per user request
+    const { toast } = useToast();
 
     useEffect(() => {
         router.prefetch('/login');
@@ -65,6 +66,18 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
         setShowResetDialog(false);
     };
 
+    const handleSave = () => {
+        if (isUploading) {
+            toast({
+                variant: 'destructive',
+                title: '이미지 업로드 중',
+                description: '이미지가 완전히 업로드될 때까지 잠시만 기다려주세요.'
+            });
+            return;
+        }
+        onSave?.();
+    };
+
     return (
         <header className={cn(
             "sticky top-0 left-0 right-0 flex h-14 items-center justify-between border-b bg-background px-4 md:px-6 z-50 transition-transform duration-400 ease-ios",
@@ -85,7 +98,6 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
                 </Link>
             </div>
 
-            {/* Actions */}
             {/* Actions */}
             <div className="flex items-center gap-1">
                 {user ? (
@@ -134,8 +146,8 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
                 {onSave && user ? (
                     <IconButton
                         icon={Save}
-                        onClick={onSave}
-                        loading={isLoading}
+                        onClick={handleSave}
+                        loading={isLoading || isUploading}
                         size="md"
                         variant="ghost"
                         className="ml-1 transition-transform active:scale-[0.92]"

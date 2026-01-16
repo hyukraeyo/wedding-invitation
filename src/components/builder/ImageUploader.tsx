@@ -30,6 +30,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
 
     const [previewUrl, setPreviewUrl] = React.useState<string | null>(null);
     const [isUploading, setIsUploading] = React.useState(false);
+    const setIsGlobalUploading = useInvitationStore(state => state.setIsUploading);
 
     // Sync previewUrl with value when value changes externally (and not currently uploading)
     React.useEffect(() => {
@@ -45,6 +46,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
             const objectUrl = URL.createObjectURL(file);
             setPreviewUrl(objectUrl);
             setIsUploading(true);
+            setIsGlobalUploading(true);
 
             // Immediate store update for Preview component
             onChange(objectUrl);
@@ -69,6 +71,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                 onChange(value);
             } finally {
                 setIsUploading(false);
+                setIsGlobalUploading(false);
                 // Clean up Blob URL to avoid memory leaks
                 URL.revokeObjectURL(objectUrl);
                 if (inputRef.current) {

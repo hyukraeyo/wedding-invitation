@@ -221,6 +221,10 @@ export interface InvitationState {
     isRequestingApproval: boolean;
     setIsRequestingApproval: (requesting: boolean) => void;
 
+    // Global Loading State (e.g. Image Uploading)
+    isUploading: boolean;
+    setIsUploading: (uploading: boolean) => void;
+
     // Actions
     reset: () => void;
 }
@@ -363,10 +367,13 @@ export const INITIAL_STATE = {
     },
     isApproved: false,
     isRequestingApproval: false,
+    isUploading: false,
 };
 
 export const useInvitationStore = create<InvitationState>()(persist((set) => ({
     ...INITIAL_STATE,
+
+    setIsUploading: (uploading) => set({ isUploading: uploading }),
 
     setGroom: (data) => set((state) => ({ groom: { ...state.groom, ...data } })),
     setBride: (data) => set((state) => ({ bride: { ...state.bride, ...data } })),
