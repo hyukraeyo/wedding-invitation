@@ -31,6 +31,21 @@ export async function POST(request: NextRequest) {
     const supabase = await createSupabaseServerClient(session);
     const db = supabaseAdmin || supabase;
 
+    // Check for existing pending request to prevent duplicates
+    const { data: existingRequest } = await db
+      .from('approval_requests')
+      .select(APPROVAL_REQUEST_SUMMARY_SELECT)
+      .eq('invitation_id', validatedData.invitationId)
+      .eq('status', 'pending')
+      .single();
+
+    if (existingRequest) {
+      return NextResponse.json(
+        { success: true, data: existingRequest as unknown as ApprovalRequestSummary },
+        { status: 200 }
+      );
+    }
+
     const { data, error } = await db
       .from('approval_requests')
       .insert({

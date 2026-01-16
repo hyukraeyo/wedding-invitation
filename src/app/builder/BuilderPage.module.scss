@@ -1,6 +1,6 @@
 @use "@/styles/variables" as *;
 
-.main {
+.container {
     position: fixed;
     inset: 0;
     display: flex;
@@ -39,10 +39,10 @@
             flex: 1;
             overflow-y: auto;
             overflow-x: hidden;
-            
+
             // Padding aligned with header being sticky (no longer covering content)
             padding: 1.5rem 1rem;
-            
+
             @media (min-width: 768px) {
                 padding: 1.5rem;
             }
@@ -329,17 +329,17 @@
     -webkit-tap-highlight-color: transparent;
 
     @media (hover: hover) and (pointer: fine) {
-    @media (hover: hover) and (pointer: fine) {
-    @media (hover: hover) and (pointer: fine) {
-        &:hover {
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 
-                0 20px 25px -5px rgba(0, 0, 0, 0.2),
-                0 10px 10px -5px rgba(0, 0, 0, 0.1);
-        }
-    }
+        @media (hover: hover) and (pointer: fine) {
+            @media (hover: hover) and (pointer: fine) {
+                &:hover {
+                    transform: translateY(-2px) scale(1.05);
+                    box-shadow:
+                        0 20px 25px -5px rgba(0, 0, 0, 0.2),
+                        0 10px 10px -5px rgba(0, 0, 0, 0.1);
+                }
+            }
 
-    }
+        }
 
     }
 
@@ -392,7 +392,7 @@
     justify-content: center;
     border: 1px solid rgba(255, 255, 255, 0.1);
     cursor: pointer;
-    box-shadow: 
+    box-shadow:
         0 4px 6px -1px rgba(0, 0, 0, 0.1),
         0 2px 4px -1px rgba(0, 0, 0, 0.06),
         0 10px 15px -3px rgba(0, 0, 0, 0.2);
@@ -401,7 +401,7 @@
 
     &:hover {
         transform: translateY(-2px) scale(1.05);
-        box-shadow: 
+        box-shadow:
             0 20px 25px -5px rgba(0, 0, 0, 0.2),
             0 10px 10px -5px rgba(0, 0, 0, 0.1);
     }

@@ -3,8 +3,6 @@
 
 
 .container {
-    min-height: 100vh;
-    min-height: 100dvh;
     background-color: #F9F9FB; // Minimal warm gray background
     display: flex;
     flex-direction: column;
@@ -12,13 +10,14 @@
 
 .main {
     flex: 1;
+    min-height: calc(100dvh - 3.5rem);
     max-width: 64rem;
     width: 100%;
     margin-inline: auto;
     padding: 3rem 1.5rem;
 
     @media (max-width: 768px) {
-        padding: 1.5rem 1rem 2rem; // Reduced top padding for mobile
+        padding: 1.5rem 1rem 1.5rem; // Reduced top padding for mobile
     }
 }
 
@@ -47,6 +46,10 @@
     background-color: white;
     border: 1px dashed #e5e8eb;
     border-radius: 1.5rem;
+
+    @media (max-width: 768px) {
+        padding: 3rem 1rem;
+    }
 
     .iconWrapper {
         width: 4.5rem;

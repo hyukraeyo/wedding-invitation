@@ -118,12 +118,12 @@ function BuilderPageContent() {
 
 
   return (
-    <main className={styles.main}>
+    <div className={styles.container}>
       <Header onSave={handleSave} onLogin={handleLogin} isLoading={isSaving} />
       {isSaving ? <LoadingSpinner /> : null}
 
 
-      <div className={styles.workspace}>
+      <main className={styles.workspace}>
         <section className={styles.sidebar} id="sidebar-portal-root">
           <div className={styles.scrollArea} id="builder-sidebar-scroll">
             <EditorForm />
@@ -179,7 +179,7 @@ function BuilderPageContent() {
             </>
           ) : null}
         </section>
-      </div>
+      </main>
 
       {/* Mobile Preview FAB */}
       <button
@@ -213,13 +213,13 @@ function BuilderPageContent() {
           ) : null}
         </SheetContent>
       </Sheet>
-    </main>
+    </div>
   );
 }
 
 export default function BuilderPage() {
   return (
-    <Suspense fallback={<div className={styles.main} />}>
+    <Suspense fallback={<div className={styles.container} />}>
       <BuilderPageContent />
     </Suspense>
   );

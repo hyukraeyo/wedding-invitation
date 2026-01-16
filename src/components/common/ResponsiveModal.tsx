@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import {
     Dialog,
@@ -65,8 +65,13 @@ export const ResponsiveModal = ({
     confirmLoading = false,
     dismissible = true,
 }: ResponsiveModalProps) => {
+    const [mounted, setMounted] = useState(false);
     const isDesktop = useMediaQuery("(min-width: 768px)");
     const hasActions = onConfirm || footer;
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     const internalOnOpenChange = (newOpen: boolean) => {
         if (!dismissible && !newOpen) return;
@@ -110,6 +115,10 @@ export const ResponsiveModal = ({
             </>
         );
     };
+
+    if (!mounted) {
+        return null;
+    }
 
     if (isDesktop) {
         return (

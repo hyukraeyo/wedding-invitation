@@ -630,6 +630,8 @@ export default function MyPageClient({
                             setConfirmConfig(prev => ({ ...prev, isOpen: false }));
                         }
                     }}
+                    confirmLoading={!!actionLoading}
+                    dismissible={!actionLoading}
                 />
             </main>
         </div>
