@@ -220,7 +220,9 @@ const InvitationCanvasContent = memo(({
 
     const performScroll = (behavior: ScrollBehavior) => {
       try {
-        if (targetId === 'mainScreen' && scrollContainerRef.current) {
+        if (!scrollContainerRef.current) return false;
+
+        if (targetId === 'mainScreen') {
           scrollContainerRef.current.scrollTo({
             top: 0,
             behavior,
@@ -228,12 +230,16 @@ const InvitationCanvasContent = memo(({
           return true;
         }
 
-        const element = document.getElementById(`section-${targetId}`);
-        if (element) {
-          element.scrollIntoView({
+        const element = scrollContainerRef.current.querySelector(`#section-${targetId}`);
+        if (element instanceof HTMLElement) {
+          // Using offsetTop is much more stable than getBoundingClientRect 
+          // because it's relative to the scroll container, not the viewport.
+          // This prevents jitter while the drawer is animating/moving.
+          const scrollTarget = element.offsetTop;
+
+          scrollContainerRef.current.scrollTo({
+            top: scrollTarget,
             behavior,
-            block: 'start',
-            inline: 'nearest'
           });
           return true;
         }
@@ -244,28 +250,38 @@ const InvitationCanvasContent = memo(({
     };
 
     if (isPreviewMode && !initialScrollDone.current) {
-      // For mobile preview entrance: be more aggressive to hide the top flash
       let attempts = 0;
       const tryInitialScroll = () => {
-        if (performScroll('auto')) {
+        // We need to ensure the element exists and has layout
+        const element = targetId === 'mainScreen'
+          ? scrollContainerRef.current
+          : scrollContainerRef.current?.querySelector(`#section-${targetId}`);
+
+        if (element && performScroll('auto')) {
           initialScrollDone.current = true;
-          // Small extra delay before showing to ensure rendering has settled
-          // 80ms feels like the sweet spot for Radix Sheet animations
-          setTimeout(() => setIsReady(true), 80);
-        } else if (attempts < 15) {
+          // Increased delay to ~350ms to match the Sheet animation duration.
+          // This ensures the content is revealed ONLY after the motion has stopped,
+          // eliminating the "jolt" caused by heavy layout paints during translation.
+          setTimeout(() => setIsReady(true), 350);
+        } else if (attempts < 20) {
           attempts++;
           requestAnimationFrame(tryInitialScroll);
+        } else {
+          // Fallback: just show it if we can't find the section after many tries
+          setIsReady(true);
         }
       };
 
-      timer = setTimeout(tryInitialScroll, 50); // Minimal delay for Sheet mount
+      // Initial delay to let the Sheet portal mount
+      timer = setTimeout(tryInitialScroll, 50);
       return () => {
         if (timer) clearTimeout(timer);
       };
     } else {
       // Normal behavior for desktop edits or subsequent mobile updates
-      performScroll('smooth');
-      return undefined; // Explicitly return undefined
+      // Using a small timeout to ensure DOM has updated if the component just re-rendered
+      const t = setTimeout(() => performScroll('smooth'), 50);
+      return () => clearTimeout(t);
     }
   }, [editingSection, isPreviewMode]);
 

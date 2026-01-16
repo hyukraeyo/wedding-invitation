@@ -27,7 +27,6 @@ import styles from './BuilderPage.module.scss';
 import { clsx } from 'clsx';
 import { Smartphone, X } from 'lucide-react';
 import { Sheet, SheetContent, SheetTitle, SheetHeader, SheetDescription } from '@/components/ui/sheet';
-import { useWindowSize } from '@/hooks/useWindowSize';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 const generateSlug = (name: string): string => {
@@ -42,7 +41,6 @@ function BuilderPageContent() {
   const { user, isProfileComplete, profileLoading } = useAuth();
   const editingSection = useInvitationStore(state => state.editingSection);
   const reset = useInvitationStore(state => state.reset);
-  const windowWidth = useWindowSize(); // Optimized hook usage
   const router = useRouter();
   const searchParams = useSearchParams();
   const isEditMode = searchParams.get('mode') === 'edit';

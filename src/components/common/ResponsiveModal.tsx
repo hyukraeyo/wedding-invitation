@@ -9,7 +9,6 @@ import {
     DialogTitle,
     DialogDescription,
     DialogTrigger,
-    DialogFooter,
 } from "@/components/ui/dialog"
 import {
     Drawer,
@@ -19,9 +18,7 @@ import {
     DrawerDescription,
     DrawerTrigger,
     DrawerScrollArea,
-    DrawerFooter,
 } from "@/components/ui/drawer"
-import { Button } from "@/components/ui/button";
 import { cn } from '@/lib/utils';
 
 export interface ResponsiveModalProps {
@@ -77,45 +74,6 @@ export const ResponsiveModal = ({
         onCancel?.();
         // Force close even if not dismissible when clicking cancel explicitly
         onOpenChange?.(false);
-    };
-
-    const renderButtons = (mode: 'dialog' | 'drawer') => {
-        if (footer) return footer;
-        if (!onConfirm) return null;
-
-        const baseButtonClass = "h-12 rounded-xl text-[16px] font-bold shadow-sm transition-all active:scale-[0.96]";
-        const mobileButtonClass = "h-14 rounded-2xl text-[17px]"; // Taller & more rounded on mobile
-
-        return (
-            <>
-                {showCancel ? (
-                    <Button
-                        variant="outline"
-                        onClick={handleCancel}
-                        className={cn(
-                            baseButtonClass,
-                            "border-gray-200 bg-white text-gray-700 hover:bg-gray-50",
-                            mode === 'drawer' && [mobileButtonClass, "flex-1"]
-                        )}
-                    >
-                        {cancelText}
-                    </Button>
-                ) : null}
-                <Button
-                    variant={confirmVariant === 'destructive' ? 'destructive' : 'default'}
-                    onClick={onConfirm}
-                    disabled={confirmDisabled || confirmLoading}
-                    className={cn(
-                        baseButtonClass,
-                        confirmVariant !== 'destructive' && "bg-[#FBC02D] hover:bg-[#F9A825] text-gray-900 border-0", // Banana Brand Color
-                        mode === 'drawer' && [mobileButtonClass, "flex-1"]
-                    )}
-                    autoFocus
-                >
-                    {confirmLoading ? "처리 중..." : confirmText}
-                </Button>
-            </>
-        );
     };
 
     const isMounted = useSyncExternalStore(

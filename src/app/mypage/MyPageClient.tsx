@@ -12,7 +12,7 @@ import type { InvitationData } from '@/store/useInvitationStore';
 import Header from '@/components/common/Header';
 
 import { useToast } from '@/hooks/use-toast';
-import { ExternalLink, Edit2, Trash2, Banana, FileText, MoreHorizontal, CheckCircle2, Send, PhoneCall, User, XCircle, BarChart2, Share, Eye, Pencil } from 'lucide-react';
+import { ExternalLink, Edit2, Trash2, FileText, MoreHorizontal, CheckCircle2, PhoneCall, User, BarChart2, Share, Eye, Pencil } from 'lucide-react';
 import Image from 'next/image';
 
 
