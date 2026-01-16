@@ -159,9 +159,38 @@ export const ResponsiveModal = ({
                     </div>
 
                     {hasActions ? (
-                        <DialogFooter className="p-8 pt-6 gap-3 flex-col sm:flex-row sm:justify-center">
-                            {renderButtons('dialog')}
-                        </DialogFooter>
+                        <div className="flex w-full mt-auto border-t border-gray-100">
+                            {showCancel ? (
+                                <button
+                                    onClick={handleCancel}
+                                    className="flex-1 h-14 text-[16px] font-medium text-gray-600 hover:bg-gray-50 active:bg-gray-100 transition-colors border-r border-gray-100"
+                                >
+                                    {cancelText}
+                                </button>
+                            ) : null}
+                            <button
+                                onClick={onConfirm}
+                                disabled={confirmDisabled || confirmLoading}
+                                className={cn(
+                                    "flex-1 h-14 text-[16px] font-bold transition-colors active:bg-opacity-90",
+                                    confirmVariant === 'destructive'
+                                        ? "text-red-600 hover:bg-red-50"
+                                        : "text-[#191F28] hover:bg-[#FFF9C4]", // Default Text Color
+                                    // If it's the primary confirm button, we might want a background color interaction or just text? 
+                                    // The user asked for "buttons at the bottom taking 50%". Usually this implies a split button bar style.
+                                    // Let's use the yellow brand color for the confirm side background to make it stand out?
+                                    // OR just simple split buttons like iOS alerts? 
+                                    // Looking at the screenshot provided previously (rounded modal), the buttons were floating. 
+                                    // But NOW the request refers to "attached to bottom 50% each". 
+                                    // Let's make the Confirm button have the Banana Yellow background for clear distinction if desired, 
+                                    // OR keep it white with colored text. 
+                                    // Let's try: Cancel (White/Gray) | Confirm (Yellow Background) for maximum clarity and "app-like" feel.
+                                    confirmVariant !== 'destructive' && "bg-[#FBC02D] hover:bg-[#F9A825]"
+                                )}
+                            >
+                                {confirmLoading ? "처리 중..." : confirmText}
+                            </button>
+                        </div>
                     ) : null}
                 </DialogContent>
             </Dialog>
@@ -175,8 +204,8 @@ export const ResponsiveModal = ({
             dismissible={dismissible}
         >
             {trigger ? <DrawerTrigger asChild>{trigger}</DrawerTrigger> : null}
-            <DrawerContent className="rounded-t-[2rem]"> {/* Rounded top for drawer */}
-                <div className="mx-auto w-full max-w-sm flex flex-col max-h-[90vh]">
+            <DrawerContent className="rounded-t-[2rem] p-0 border-0"> {/* Rounded top for drawer, no padding */}
+                <div className="flex flex-col max-h-[90vh] w-full">
                     <DrawerHeader className="text-center pt-8 pb-4 shrink-0">
                         <DrawerTitle className="text-2xl font-bold tracking-tight text-[#191F28] mb-3">
                             {title || "알림"}
@@ -197,9 +226,29 @@ export const ResponsiveModal = ({
                     </div>
 
                     {hasActions ? (
-                        <DrawerFooter className="flex-row gap-3 pt-2 pb-8 px-5 shrink-0">
-                            {renderButtons('drawer')}
-                        </DrawerFooter>
+                        <div className="flex w-full mt-auto border-t border-gray-100 overflow-hidden shrink-0">
+                            {showCancel ? (
+                                <button
+                                    onClick={handleCancel}
+                                    className="flex-1 h-16 text-[17px] font-medium text-gray-600 hover:bg-gray-50 active:bg-gray-100 transition-colors border-r border-gray-100"
+                                >
+                                    {cancelText}
+                                </button>
+                            ) : null}
+                            <button
+                                onClick={onConfirm}
+                                disabled={confirmDisabled || confirmLoading}
+                                className={cn(
+                                    "flex-1 h-16 text-[17px] font-bold transition-colors active:bg-opacity-90",
+                                    confirmVariant === 'destructive'
+                                        ? "text-red-600 hover:bg-red-50"
+                                        : "text-[#191F28] hover:bg-[#FFF9C4]",
+                                    confirmVariant !== 'destructive' && "bg-[#FBC02D] hover:bg-[#F9A825]"
+                                )}
+                            >
+                                {confirmLoading ? "처리 중..." : confirmText}
+                            </button>
+                        </div>
                     ) : null}
                 </div>
             </DrawerContent>

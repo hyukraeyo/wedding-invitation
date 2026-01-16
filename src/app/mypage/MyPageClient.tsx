@@ -12,7 +12,7 @@ import type { InvitationData } from '@/store/useInvitationStore';
 import Header from '@/components/common/Header';
 
 import { useToast } from '@/hooks/use-toast';
-import { ExternalLink, Edit2, Trash2, Banana, FileText, MoreHorizontal, CheckCircle2, Send, PhoneCall, User, XCircle } from 'lucide-react';
+import { ExternalLink, Edit2, Trash2, Banana, FileText, MoreHorizontal, CheckCircle2, Send, PhoneCall, User, XCircle, BarChart2, Share, Eye, Pencil } from 'lucide-react';
 import Image from 'next/image';
 
 
@@ -521,34 +521,88 @@ export default function MyPageClient({
                                                     <MoreHorizontal size={20} />
                                                 </button>
                                             </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="start" className="w-48 p-1.5 ml-2">
-                                                <DropdownMenuItem
-                                                    asChild
-                                                    className="flex w-full items-center gap-2 cursor-pointer px-3 py-2.5 rounded-md transition-colors hover:bg-gray-100"
-                                                >
-                                                    <Link
-                                                        href={`/v/${inv.slug}`}
-                                                        target="_blank"
-                                                        className="w-full h-full flex items-center gap-2"
+                                            <DropdownMenuContent side="top" align="start" className="w-[240px] p-3 rounded-[24px] border border-gray-100/50 shadow-xl bg-white/95 backdrop-blur-md mb-2">
+                                                {/* Top Grid: Stats & Share */}
+                                                <div className="grid grid-cols-2 gap-2 mb-3">
+                                                    <div
+                                                        className="flex flex-col items-center justify-center p-3 rounded-2xl bg-gray-50 hover:bg-gray-100 cursor-pointer transition-colors active:scale-95"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            toast({ description: "통계 기능은 준비 중입니다." });
+                                                        }}
                                                     >
-                                                        <ExternalLink size={16} className="text-gray-500" />
-                                                        <span className="font-medium">청첩장 확인하기</span>
-                                                    </Link>
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    onClick={() => {
-                                                        setTimeout(() => handleDeleteClick(inv), 0);
-                                                    }}
-                                                    disabled={actionLoading === inv.id}
-                                                    className="flex w-full items-center gap-2 cursor-pointer px-3 py-2.5 rounded-md text-red-600 hover:bg-red-50 focus:bg-red-50"
-                                                >
-                                                    {actionLoading === inv.id ? (
-                                                        <Banana size={16} className="animate-spin text-primary" />
-                                                    ) : (
-                                                        <Trash2 size={16} />
-                                                    )}
-                                                    <span className="font-medium">삭제하기</span>
-                                                </DropdownMenuItem>
+                                                        <BarChart2 className="w-6 h-6 mb-2 text-gray-600" strokeWidth={1.5} />
+                                                        <span className="text-[13px] text-gray-600 font-medium tracking-tight">관리·통계</span>
+                                                    </div>
+                                                    <div
+                                                        className="flex flex-col items-center justify-center p-3 rounded-2xl bg-gray-50 hover:bg-gray-100 cursor-pointer transition-colors active:scale-95"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            const url = `${window.location.origin}/v/${inv.slug}`;
+                                                            navigator.clipboard.writeText(url);
+                                                            toast({ title: "링크 복사 완료", description: "청첩장 주소가 복사되었습니다." });
+                                                        }}
+                                                    >
+                                                        <Share className="w-6 h-6 mb-2 text-gray-600" strokeWidth={1.5} />
+                                                        <span className="text-[13px] text-gray-600 font-medium tracking-tight">공유하기</span>
+                                                    </div>
+                                                </div>
+
+                                                {/* Menu Items */}
+                                                <div className="flex flex-col gap-1">
+                                                    <DropdownMenuItem
+                                                        asChild
+                                                        className="flex w-full items-center justify-between cursor-pointer px-3 py-3 rounded-xl transition-colors hover:bg-gray-50 focus:bg-gray-50 outline-none"
+                                                    >
+                                                        <Link
+                                                            href={`/v/${inv.slug}`}
+                                                            target="_blank"
+                                                            className="w-full flex items-center justify-between"
+                                                        >
+                                                            <span className="text-[15px] font-medium text-gray-700">청첩장 보기</span>
+                                                            <Eye size={18} className="text-gray-400" />
+                                                        </Link>
+                                                    </DropdownMenuItem>
+
+                                                    <DropdownMenuItem
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            if (!isAdmin && inv.invitation_data?.isRequestingApproval) {
+                                                                toast({ variant: "destructive", description: "승인 심사 중에는 수정할 수 없습니다." });
+                                                                return;
+                                                            }
+                                                            handleEdit(inv);
+                                                        }}
+                                                        className="flex w-full items-center justify-between cursor-pointer px-3 py-3 rounded-xl transition-colors hover:bg-gray-50 focus:bg-gray-50 outline-none"
+                                                    >
+                                                        <span className="text-[15px] font-medium text-gray-700">청첩장 편집하기</span>
+                                                        <Edit2 size={18} className="text-gray-400" />
+                                                    </DropdownMenuItem>
+
+                                                    <DropdownMenuItem
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            toast({ description: "제목 변경 기능은 준비 중입니다." });
+                                                        }}
+                                                        className="flex w-full items-center justify-between cursor-pointer px-3 py-3 rounded-xl transition-colors hover:bg-gray-50 focus:bg-gray-50 outline-none"
+                                                    >
+                                                        <span className="text-[15px] font-medium text-gray-700">프로젝트 제목변경</span>
+                                                        <Pencil size={18} className="text-gray-400" />
+                                                    </DropdownMenuItem>
+
+                                                    <div className="h-px bg-gray-100 my-1 mx-2" />
+
+                                                    <DropdownMenuItem
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setTimeout(() => handleDeleteClick(inv), 0);
+                                                        }}
+                                                        className="flex w-full items-center justify-between cursor-pointer px-3 py-3 rounded-xl transition-colors hover:bg-red-50 focus:bg-red-50 outline-none group/delete"
+                                                    >
+                                                        <span className="text-[15px] font-medium text-red-500 group-hover/delete:text-red-600">삭제하기</span>
+                                                        <Trash2 size={18} className="text-red-400 group-hover/delete:text-red-500" />
+                                                    </DropdownMenuItem>
+                                                </div>
                                             </DropdownMenuContent>
                                         </DropdownMenu>
 
