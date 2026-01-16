@@ -10,11 +10,11 @@ import type { InvitationSummaryRecord } from '@/lib/invitation-summary';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import type { InvitationData } from '@/store/useInvitationStore';
 import Header from '@/components/common/Header';
-import { IconButton } from '@/components/ui/icon-button';
+
 import { useToast } from '@/hooks/use-toast';
-import { Calendar, MapPin, ExternalLink, Edit2, Trash2, Banana, FileText, MoreHorizontal, CheckCircle2, Send, PhoneCall, User, XCircle } from 'lucide-react';
+import { ExternalLink, Edit2, Trash2, Banana, FileText, MoreHorizontal, CheckCircle2, Send, PhoneCall, User, XCircle } from 'lucide-react';
 import Image from 'next/image';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
+
 
 import {
     DropdownMenu,
@@ -450,167 +450,160 @@ export default function MyPageClient({
                     }
 
                     return (
-                        <div className={styles.grid}>
+                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pb-20">
                             {myInvitations.map((inv, index) => (
-                                <div key={inv.id} className={styles.card}>
-                                    {/* Card Image */}
-                                    <div className="w-full bg-gray-50 border-b border-gray-100">
-                                        <AspectRatio ratio={4 / 3}>
-                                            {(() => {
-                                                const imageSrc = inv.invitation_data?.mainScreen?.image || inv.invitation_data?.imageUrl || inv.invitation_data?.gallery?.[0];
+                                <div key={inv.id} className="group relative aspect-[9/16] w-full overflow-hidden rounded-[30px] bg-gray-100 shadow-sm transition-all hover:shadow-lg">
+                                    {/* 1. Background Image Layer */}
+                                    <div className="absolute inset-0 h-full w-full">
+                                        {(() => {
+                                            // Priority logic: first 4 images are eager loaded (LCP optimization)
+                                            const isPriority = index < 4;
+                                            const imageSrc = inv.invitation_data?.mainScreen?.image || inv.invitation_data?.imageUrl || inv.invitation_data?.gallery?.[0];
 
-                                                if (imageSrc) {
-                                                    return (
-                                                        <Image
-                                                            src={imageSrc}
-                                                            alt="Main Screen"
-                                                            fill
-                                                            className="object-cover"
-                                                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                                            priority={index < 2}
-                                                        />
-                                                    );
-                                                }
+                                            if (imageSrc) {
                                                 return (
-                                                    <div className="flex items-center justify-center w-full h-full text-gray-300 bg-gray-50">
-                                                        <FileText size={48} strokeWidth={1} />
-                                                    </div>
-                                                );
-                                            })()}
-                                        </AspectRatio>
-                                    </div>
-
-                                    <div className={styles.cardBody}>
-                                        <div className={styles.cardHeader}>
-                                            <div>
-                                                <h3 className={styles.cardTitle}>
-                                                    {inv.invitation_data?.mainScreen?.title || '제목 없는 청첩장'}
-                                                </h3>
-                                                <p className={styles.cardDate}>
-                                                    {isAdmin ? (
-                                                        <span className="block text-xs text-blue-600 mb-1 font-mono">
-                                                            My ID: {userId?.slice(0, 8)}
-                                                        </span>
-                                                    ) : null}
-                                                    수정: {new Date(inv.updated_at).toLocaleDateString('ko-KR')} {new Date(inv.updated_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false })}
-                                                </p>
-                                            </div>
-                                            <DropdownMenu>
-                                                <DropdownMenuTrigger asChild>
-                                                    <IconButton
-                                                        icon={MoreHorizontal}
-                                                        variant="ghost"
-                                                        size="md"
-                                                        className="text-gray-400 hover:text-gray-900 hover:bg-gray-100 transition-colors shrink-0"
+                                                    <Image
+                                                        src={imageSrc}
+                                                        alt="Cover"
+                                                        fill
+                                                        className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                        priority={isPriority}
+                                                        loading={isPriority ? "eager" : "lazy"}
                                                     />
-                                                </DropdownMenuTrigger>
-                                                <DropdownMenuContent align="end" className="w-40 p-1.5">
-                                                    <DropdownMenuItem
-                                                        onClick={() => {
-                                                            if (!isAdmin && inv.invitation_data?.isRequestingApproval) {
-                                                                setConfirmConfig({
-                                                                    isOpen: true,
-                                                                    type: 'INFO_ONLY',
-                                                                    title: '수정할 수 없습니다',
-                                                                    description: <>승인 신청 중인 청첩장은 수정할 수 없습니다.<br />먼저 [신청취소]를 진행해 주세요.</>,
-                                                                    targetId: null,
-                                                                });
-                                                                return;
-                                                            }
-                                                            void handleEdit(inv);
-                                                        }}
-                                                        className={clsx(
-                                                            "flex w-full items-center gap-2 cursor-pointer px-3 py-3 rounded-md transition-colors hover:bg-gray-100 focus:bg-gray-100",
-                                                            !isAdmin && inv.invitation_data?.isRequestingApproval && "opacity-50 cursor-not-allowed"
-                                                        )}
-                                                    >
-                                                        <Edit2 size={18} className="text-gray-500" />
-                                                        <span className="font-medium text-base text-gray-700">수정</span>
-                                                    </DropdownMenuItem>
-                                                    <DropdownMenuItem
-                                                        onClick={() => {
-                                                            setTimeout(() => handleDeleteClick(inv), 0);
-                                                        }}
-                                                        disabled={actionLoading === inv.id}
-                                                        className="flex w-full items-center gap-2 cursor-pointer px-3 py-3 rounded-md text-red-600 hover:bg-red-50 focus:bg-red-50 focus:text-red-700 transition-colors"
-                                                    >
-                                                        {actionLoading === inv.id ? (
-                                                            <Banana size={18} className="animate-spin text-primary" />
-                                                        ) : (
-                                                            <Trash2 size={18} />
-                                                        )}
-                                                        <span className="font-medium text-base">삭제</span>
-                                                    </DropdownMenuItem>
-                                                </DropdownMenuContent>
-                                            </DropdownMenu>
+                                                );
+                                            }
+                                            return (
+                                                <div className="flex h-full w-full flex-col items-center justify-center bg-gray-100 text-gray-300">
+                                                    <FileText size={48} strokeWidth={1} />
+                                                </div>
+                                            );
+                                        })()}
+                                        <div className="absolute inset-0 bg-black/20 transition-opacity group-hover:bg-black/30" />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/10" />
+                                    </div>
+
+                                    {/* 2. Content Layer */}
+                                    <div className="absolute inset-0 flex flex-col justify-between p-5 pointer-events-none">
+                                        {/* Header: Status Badge */}
+                                        <div className="flex justify-between items-start pointer-events-auto">
+                                            <div className="flex items-center gap-1.5 rounded-full bg-white/90 px-3 py-1.5 text-xs font-bold text-gray-800 backdrop-blur-md shadow-sm">
+                                                {inv.invitation_data?.isApproved ? (
+                                                    <>
+                                                        <div className="h-2 w-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
+                                                        <span>승인 완료</span>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <div className="h-2 w-2 rounded-full bg-yellow-400 shadow-[0_0_8px_rgba(250,204,21,0.5)]" />
+                                                        <span>샘플 이용중</span>
+                                                    </>
+                                                )}
+                                            </div>
                                         </div>
-                                        <div className={styles.cardMeta}>
-                                            <div className={styles.metaItem}>
-                                                <Calendar />
-                                                <span>{inv.invitation_data?.date || '날짜 미지정'}</span>
-                                            </div>
-                                            <div className={styles.metaItem}>
-                                                <MapPin />
-                                                <span>{inv.invitation_data?.location || '장소 미지정'}</span>
-                                            </div>
+
+                                        {/* Middle: Title */}
+                                        <div className="mb-14 px-1 pointer-events-auto">
+                                            <h3 className="break-keep text-2xl font-bold leading-tight text-white drop-shadow-md">
+                                                {inv.invitation_data?.mainScreen?.title || '제목없음'}
+                                            </h3>
+                                            <p className="mt-1 text-xs text-white/80 font-medium">
+                                                {new Date(inv.updated_at).toLocaleDateString()}
+                                            </p>
                                         </div>
                                     </div>
-                                    <div className={styles.cardActions}>
-                                        <Button
-                                            variant="line"
-                                            asChild
-                                            className="flex-1"
-                                        >
-                                            <Link
-                                                href={`/v/${inv.slug}`}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                            >
-                                                청첩장 확인
-                                            </Link>
-                                        </Button>
-                                        <Button
-                                            variant={inv.invitation_data?.isApproved ? "solid" : "outline"}
-                                            className={clsx(
-                                                "flex-1 gap-2 h-12",
-                                                inv.invitation_data?.isApproved && "bg-green-50 text-green-600 border-green-200 hover:bg-green-50 animate-none",
-                                                // 내 청첩장(또는 일반유저)이면서 신청중일 때 -> 주황색 대기 상태
-                                                !inv.invitation_data?.isApproved && inv.invitation_data?.isRequestingApproval && (inv.user_id === userId || !isAdmin) && "bg-orange-50 text-orange-600 border-orange-200 hover:bg-orange-50"
-                                            )}
-                                            onClick={() => {
-                                                if (inv.invitation_data?.isApproved) return;
 
+                                    {/* 3. Interaction Layer (Bottom Buttons) */}
+                                    <div className="absolute bottom-5 left-4 right-4 z-20 flex items-center gap-2">
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <button className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/90 backdrop-blur-sm shadow-lg transition-transform active:scale-95 hover:bg-white text-gray-700">
+                                                    <MoreHorizontal size={20} />
+                                                </button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="start" className="w-48 p-1.5 ml-2">
+                                                <DropdownMenuItem
+                                                    asChild
+                                                    className="flex w-full items-center gap-2 cursor-pointer px-3 py-2.5 rounded-md transition-colors hover:bg-gray-100"
+                                                >
+                                                    <Link
+                                                        href={`/v/${inv.slug}`}
+                                                        target="_blank"
+                                                        className="w-full h-full flex items-center gap-2"
+                                                    >
+                                                        <ExternalLink size={16} className="text-gray-500" />
+                                                        <span className="font-medium">청첩장 확인하기</span>
+                                                    </Link>
+                                                </DropdownMenuItem>
+                                                <DropdownMenuItem
+                                                    onClick={() => {
+                                                        setTimeout(() => handleDeleteClick(inv), 0);
+                                                    }}
+                                                    disabled={actionLoading === inv.id}
+                                                    className="flex w-full items-center gap-2 cursor-pointer px-3 py-2.5 rounded-md text-red-600 hover:bg-red-50 focus:bg-red-50"
+                                                >
+                                                    {actionLoading === inv.id ? (
+                                                        <Banana size={16} className="animate-spin text-primary" />
+                                                    ) : (
+                                                        <Trash2 size={16} />
+                                                    )}
+                                                    <span className="font-medium">삭제하기</span>
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+
+                                        <button
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                // Edit Logic
+                                                if (!isAdmin && inv.invitation_data?.isRequestingApproval) {
+                                                    setConfirmConfig({
+                                                        isOpen: true,
+                                                        type: 'INFO_ONLY',
+                                                        title: '수정 불가',
+                                                        description: '승인 심사 중에는 수정할 수 없습니다.',
+                                                        targetId: null
+                                                    });
+                                                    return;
+                                                }
+                                                void handleEdit(inv);
+                                            }}
+                                            className="flex h-11 flex-1 items-center justify-center rounded-full bg-white/90 backdrop-blur-sm text-sm font-bold text-gray-800 shadow-lg transition-transform active:scale-95 hover:bg-white"
+                                        >
+                                            편집하기
+                                        </button>
+
+                                        <Button
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                if (inv.invitation_data?.isApproved) return;
                                                 const isMine = inv.user_id === userId;
                                                 const showAdminActions = isAdmin && !isMine;
 
                                                 if (showAdminActions) {
-                                                    // 관리자가 남의 청첩장 볼 때 -> 승인 처리
                                                     handleAdminApproveClick(inv);
                                                 } else {
-                                                    // 내 청첩장이거나 일반 유저일 때 -> 신청/취소
                                                     if (inv.invitation_data?.isRequestingApproval) {
                                                         handleCancelRequestClick(inv);
                                                     } else {
-                                                        handleRequestApprovalClick(inv); // 사용자 승인 신청 로직 탐
+                                                        handleRequestApprovalClick(inv);
                                                     }
                                                 }
                                             }}
                                             loading={actionLoading === inv.id}
-                                            disabled={inv.invitation_data?.isApproved && (!isAdmin || inv.user_id === userId)}
+                                            className={clsx(
+                                                "flex h-11 flex-1 items-center justify-center rounded-full text-sm font-bold shadow-lg transition-transform active:scale-95 border-0",
+                                                inv.invitation_data?.isApproved
+                                                    ? "bg-green-500 hover:bg-green-600 text-white cursor-default"
+                                                    : "bg-[#FBC02D] hover:bg-[#F9A825] text-gray-900" // Banana Yellow
+                                            )}
                                         >
-
-
                                             {(() => {
                                                 if (inv.invitation_data?.isApproved) return '승인완료';
-
                                                 const isMine = inv.user_id === userId;
                                                 const showAdminActions = isAdmin && !isMine;
-
-                                                if (showAdminActions) {
-                                                    return inv.invitation_data?.isRequestingApproval ? '승인신청옴' : '사용승인';
-                                                } else {
-                                                    return inv.invitation_data?.isRequestingApproval ? '신청취소' : '사용신청';
-                                                }
+                                                if (showAdminActions) return inv.invitation_data?.isRequestingApproval ? '승인하기' : '사용승인';
+                                                return inv.invitation_data?.isRequestingApproval ? '신청취소' : '사용승인';
                                             })()}
                                         </Button>
                                     </div>

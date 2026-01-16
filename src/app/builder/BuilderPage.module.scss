@@ -14,6 +14,7 @@
 
 .workspace {
     display: flex;
+    flex-direction: row;
     flex: 1;
     height: calc(100dvh - 3.5rem); // Header height (h-14 = 3.5rem)
     overflow: hidden;
@@ -70,6 +71,7 @@
         padding: 2rem;
         position: relative;
         overflow: hidden;
+        z-index: 1;
 
         @media (min-width: 1024px) {
             display: flex;
@@ -97,6 +99,10 @@
             @media (min-width: 1024px) {
                 transform: scale(0.95);
             }
+
+            // Ensure content is above background
+            position: relative;
+            z-index: 10;
 
             .label {
                 color: #6b7280;

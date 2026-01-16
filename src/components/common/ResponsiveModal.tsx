@@ -83,6 +83,9 @@ export const ResponsiveModal = ({
         if (footer) return footer;
         if (!onConfirm) return null;
 
+        const baseButtonClass = "h-12 rounded-xl text-[16px] font-bold shadow-sm transition-all active:scale-[0.96]";
+        const mobileButtonClass = "h-14 rounded-2xl text-[17px]"; // Taller & more rounded on mobile
+
         return (
             <>
                 {showCancel ? (
@@ -90,18 +93,22 @@ export const ResponsiveModal = ({
                         variant="outline"
                         onClick={handleCancel}
                         className={cn(
-                            mode === 'drawer' && "flex-1 h-14 rounded-2xl border-gray-200 bg-white text-gray-700 text-[17px] font-medium shadow-sm hover:bg-gray-50 active:scale-[0.96] transition-all"
+                            baseButtonClass,
+                            "border-gray-200 bg-white text-gray-700 hover:bg-gray-50",
+                            mode === 'drawer' && [mobileButtonClass, "flex-1"]
                         )}
                     >
                         {cancelText}
                     </Button>
                 ) : null}
                 <Button
-                    variant={confirmVariant}
+                    variant={confirmVariant === 'destructive' ? 'destructive' : 'default'}
                     onClick={onConfirm}
                     disabled={confirmDisabled || confirmLoading}
                     className={cn(
-                        mode === 'drawer' && "flex-1 h-14 rounded-2xl text-[17px] font-semibold shadow-sm active:scale-[0.96] transition-all"
+                        baseButtonClass,
+                        confirmVariant !== 'destructive' && "bg-[#FBC02D] hover:bg-[#F9A825] text-gray-900 border-0", // Banana Brand Color
+                        mode === 'drawer' && [mobileButtonClass, "flex-1"]
                     )}
                     autoFocus
                 >
@@ -126,24 +133,33 @@ export const ResponsiveModal = ({
             <Dialog open={open} onOpenChange={internalOnOpenChange}>
                 {trigger ? <DialogTrigger asChild>{trigger}</DialogTrigger> : null}
                 <DialogContent
-                    className={cn("max-w-md max-h-[85vh] flex flex-col p-0 overflow-hidden", className)}
+                    className={cn(
+                        "max-w-[28rem] max-h-[85vh] flex flex-col p-0 overflow-hidden rounded-[2rem] border-0 shadow-2xl", // Super rounded corners
+                        className
+                    )}
                     onInteractOutside={(e) => !dismissible && e.preventDefault()}
                     onEscapeKeyDown={(e) => !dismissible && e.preventDefault()}
-                    aria-describedby={description ? undefined : undefined} // Radix handles linking if Description exists, but if not, we must clear it to avoid warning. Actually passing undefined might not be enough if it defaults. Let's try passing undefined effectively. Wait, the warning says "Missing Description or aria-describedby={undefined}". So passing undefined is correct.
+                    aria-describedby={description ? undefined : undefined}
                 >
-                    <div className="p-6 pb-0">
-                        <DialogHeader>
-                            <DialogTitle>{title || "알림"}</DialogTitle>
-                            {description ? <DialogDescription>{description}</DialogDescription> : <DialogDescription className="sr-only" />}
+                    <div className="px-8 pt-10 pb-2 text-center flex flex-col items-center">
+                        <DialogHeader className="text-center sm:text-center">
+                            <DialogTitle className="text-2xl font-bold tracking-tight text-[#191F28] mb-3">
+                                {title || "알림"}
+                            </DialogTitle>
+                            {description ? (
+                                <DialogDescription className="text-[17px] text-[#4E5968] leading-relaxed break-keep">
+                                    {description}
+                                </DialogDescription>
+                            ) : <DialogDescription className="sr-only" />}
                         </DialogHeader>
                     </div>
 
-                    <div className="flex-1 overflow-y-auto p-6 py-2">
+                    <div className="flex-1 overflow-y-auto px-8 py-2">
                         {children}
                     </div>
 
                     {hasActions ? (
-                        <DialogFooter className="p-6 pt-2 gap-2 flex-row justify-end">
+                        <DialogFooter className="p-8 pt-6 gap-3 flex-col sm:flex-row sm:justify-center">
                             {renderButtons('dialog')}
                         </DialogFooter>
                     ) : null}
@@ -159,11 +175,17 @@ export const ResponsiveModal = ({
             dismissible={dismissible}
         >
             {trigger ? <DrawerTrigger asChild>{trigger}</DrawerTrigger> : null}
-            <DrawerContent>
+            <DrawerContent className="rounded-t-[2rem]"> {/* Rounded top for drawer */}
                 <div className="mx-auto w-full max-w-sm flex flex-col max-h-[90vh]">
-                    <DrawerHeader className="text-left shrink-0">
-                        <DrawerTitle>{title || "알림"}</DrawerTitle>
-                        {description ? <DrawerDescription>{description}</DrawerDescription> : <DrawerDescription className="sr-only" />}
+                    <DrawerHeader className="text-center pt-8 pb-4 shrink-0">
+                        <DrawerTitle className="text-2xl font-bold tracking-tight text-[#191F28] mb-3">
+                            {title || "알림"}
+                        </DrawerTitle>
+                        {description ? (
+                            <DrawerDescription className="text-[17px] text-[#4E5968] leading-relaxed break-keep">
+                                {description}
+                            </DrawerDescription>
+                        ) : <DrawerDescription className="sr-only" />}
                     </DrawerHeader>
 
                     <div className="flex-1 overflow-hidden min-h-0">
@@ -175,7 +197,7 @@ export const ResponsiveModal = ({
                     </div>
 
                     {hasActions ? (
-                        <DrawerFooter className="flex-row gap-3 pt-2 pb-8 shrink-0">
+                        <DrawerFooter className="flex-row gap-3 pt-2 pb-8 px-5 shrink-0">
                             {renderButtons('drawer')}
                         </DrawerFooter>
                     ) : null}

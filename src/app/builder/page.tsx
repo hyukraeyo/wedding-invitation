@@ -131,53 +131,49 @@ function BuilderPageContent() {
         </section>
 
         <section className={styles.previewArea}>
-          {windowWidth >= 1024 ? (
-            <>
-              <div className={styles.backgroundPattern} />
-              <div className={styles.previewContent}>
-                <div className={styles.iphoneFrame}>
-                  <div className={clsx(styles.button, styles.action)} />
-                  <div className={clsx(styles.button, styles.volUp)} />
-                  <div className={clsx(styles.button, styles.volDown)} />
-                  <div className={clsx(styles.button, styles.power)} />
+          <div className={styles.backgroundPattern} />
+          <div className={styles.previewContent}>
+            <div className={styles.iphoneFrame}>
+              <div className={clsx(styles.button, styles.action)} />
+              <div className={clsx(styles.button, styles.volUp)} />
+              <div className={clsx(styles.button, styles.volDown)} />
+              <div className={clsx(styles.button, styles.power)} />
 
-                  <div className={styles.chassis}>
-                    <div className={styles.bezel}>
-                      <div className={styles.dynamicIsland}>
-                        <div className={styles.island}>
-                          <div className={styles.camera} />
-                        </div>
-                      </div>
-
-                      <div className={styles.statusBar}>
-                        <div className={styles.time}>9:41</div>
-                        <div className={styles.icons}>
-                          <div className={styles.signal}>
-                            <div style={{ height: '4px' }} />
-                            <div style={{ height: '6px' }} />
-                            <div style={{ height: '9px' }} />
-                            <div style={{ height: '12px', opacity: 0.3 }} />
-                          </div>
-                          <div className={styles.battery}>
-                            <div className={styles.level} />
-                            <div className={styles.tip} />
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className={styles.screen}>
-                        <InvitationCanvas key="desktop-preview" editingSection={editingSection} hideWatermark />
-                      </div>
-
-                      <div className={styles.homeIndicator} />
+              <div className={styles.chassis}>
+                <div className={styles.bezel}>
+                  <div className={styles.dynamicIsland}>
+                    <div className={styles.island}>
+                      <div className={styles.camera} />
                     </div>
                   </div>
-                </div>
 
-                <p className={styles.label}>MOBILE PREVIEW</p>
+                  <div className={styles.statusBar}>
+                    <div className={styles.time}>9:41</div>
+                    <div className={styles.icons}>
+                      <div className={styles.signal}>
+                        <div style={{ height: '4px' }} />
+                        <div style={{ height: '6px' }} />
+                        <div style={{ height: '9px' }} />
+                        <div style={{ height: '12px', opacity: 0.3 }} />
+                      </div>
+                      <div className={styles.battery}>
+                        <div className={styles.level} />
+                        <div className={styles.tip} />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={styles.screen}>
+                    <InvitationCanvas key="desktop-preview" editingSection={editingSection} hideWatermark />
+                  </div>
+
+                  <div className={styles.homeIndicator} />
+                </div>
               </div>
-            </>
-          ) : null}
+            </div>
+
+            <p className={styles.label}>MOBILE PREVIEW</p>
+          </div>
         </section>
       </main>
 
