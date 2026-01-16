@@ -4,7 +4,6 @@ import React, { useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { MapPin, Search } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { useKakaoLoader } from 'react-kakao-maps-sdk';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { SegmentedControl } from '../SegmentedControl';
@@ -15,6 +14,7 @@ import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 import styles from './LocationSection.module.scss';
 
 const DaumPostcodeEmbed = dynamic(() => import('react-daum-postcode'), { ssr: false });
+const KakaoSdkLoader = dynamic(() => import('./KakaoSdkLoader'), { ssr: false });
 import { cn } from '@/lib/utils';
 
 import { NaverIcon, KakaoIcon } from '@/components/common/Icons';
@@ -52,16 +52,12 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ valu
     const coordinates = useInvitationStore(state => state.coordinates);
     const setCoordinates = useInvitationStore(state => state.setCoordinates);
 
-    // Load Kakao Maps SDK for Geocoding services
-    useKakaoLoader({
-        appkey: process.env.NEXT_PUBLIC_KAKAO_APP_KEY || '',
-        libraries: ['services', 'clusterer'],
-    });
-
     const [isSearchOpen, setIsSearchOpen] = useState(false);
+    const [isKakaoReady, setIsKakaoReady] = useState(false);
 
     // Geocoding Fallback: If address exists but coordinates are default or missing, try to geocode
     React.useEffect(() => {
+        if (!isKakaoReady) return;
         if (address && typeof window !== 'undefined' && window.kakao?.maps?.services) {
             const geocoder = new window.kakao.maps.services.Geocoder();
             geocoder.addressSearch(address, (result, status) => {
@@ -78,7 +74,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ valu
                 }
             });
         }
-    }, [address, setCoordinates, coordinates]);
+    }, [address, coordinates, isKakaoReady, setCoordinates]);
 
     const handleAddressSearch = useCallback(() => {
         setIsSearchOpen(true);
@@ -119,6 +115,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ valu
             isOpen={isOpen}
             isCompleted={!!address}
         >
+            <KakaoSdkLoader onReady={() => setIsKakaoReady(true)} />
             <div className={styles.container}>
                 <TextField
                     label="소제목"
