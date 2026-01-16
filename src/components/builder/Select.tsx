@@ -14,6 +14,7 @@ import {
     DrawerContent,
     DrawerHeader,
     DrawerTitle,
+    DrawerDescription,
     DrawerScrollArea,
     DrawerTrigger,
 } from '@/components/ui/drawer';
@@ -50,6 +51,7 @@ export const Select = <T extends string | number>({
     const [isOpen, setIsOpen] = React.useState(false);
     const scrollAreaRef = React.useRef<HTMLDivElement>(null);
     const selectedItemRef = React.useRef<HTMLButtonElement>(null);
+    const firstItemRef = React.useRef<HTMLButtonElement>(null);
 
     const stringValue = String(value);
     // Optimistic UI state
@@ -147,12 +149,20 @@ export const Select = <T extends string | number>({
                         <ChevronDown className="h-4 w-4 opacity-50 transition-transform duration-200" />
                     </button>
                 </DrawerTrigger>
-                <DrawerContent className="max-h-[50vh]">
-
+                <DrawerContent
+                    className="max-h-[50vh]"
+                    onOpenAutoFocus={(event) => {
+                        event.preventDefault();
+                        (selectedItemRef.current ?? firstItemRef.current)?.focus();
+                    }}
+                >
                     <DrawerHeader className="px-6 pb-2 border-b">
                         <DrawerTitle className="text-left text-base font-bold text-foreground/90">
                             {modalTitle || label || placeholder || "항목 선택"}
                         </DrawerTitle>
+                        <DrawerDescription className="sr-only">
+                            항목 목록
+                        </DrawerDescription>
                     </DrawerHeader>
                     <DrawerScrollArea ref={scrollAreaRef} className="px-0">
                         {options.map((option, idx) => {
@@ -160,7 +170,7 @@ export const Select = <T extends string | number>({
                             return (
                                 <button
                                     key={`${String(option.value)}-${idx}`}
-                                    ref={isSelected ? selectedItemRef : null}
+                                    ref={isSelected ? selectedItemRef : idx === 0 ? firstItemRef : null}
                                     type="button"
                                     onClick={() => handleValueChange(String(option.value))}
                                     className={cn(
