@@ -1,4 +1,5 @@
 import React from 'react';
+import dynamic from 'next/dynamic';
 import { Calendar } from 'lucide-react';
 import { InfoMessage } from '@/components/builder/InfoMessage';
 import { useInvitationStore } from '@/store/useInvitationStore';
@@ -7,13 +8,19 @@ import { TextField } from '../TextField';
 import { SwitchField } from '../SwitchField';
 import { Field } from '../FormPrimitives';
 import { TimePicker } from '../TimePicker';
-import { DatePicker } from '../DatePicker';
 import styles from './DateTimeSection.module.scss';
 
 interface SectionProps {
     value: string;
     isOpen: boolean;
 }
+
+const DatePicker = dynamic(() => import('../DatePicker').then((mod) => mod.DatePicker), {
+    ssr: false,
+    loading: () => (
+        <div className="h-12 w-full rounded-md bg-muted/30 animate-pulse" />
+    ),
+});
 
 const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOpen, value }) {
     const date = useInvitationStore(state => state.date);
@@ -39,10 +46,12 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
                 {/* Date & Time Picking */}
                 {/* Date & Time Picking */}
                 <Field label="예식일">
-                    <DatePicker
-                        value={date}
-                        onChange={(value) => setDate(value)}
-                    />
+                    {isOpen ? (
+                        <DatePicker
+                            value={date}
+                            onChange={(value) => setDate(value)}
+                        />
+                    ) : null}
                 </Field>
                 <Field label="예식 시간">
                     <TimePicker
