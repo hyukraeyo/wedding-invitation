@@ -449,7 +449,7 @@ export default function MyPageClient({
 
                     return (
                         <div className={styles.grid}>
-                            {myInvitations.map((inv) => (
+                            {myInvitations.map((inv, index) => (
                                 <div key={inv.id} className={styles.card}>
                                     {/* Card Image */}
                                     <div className="w-full bg-gray-50 border-b border-gray-100">
@@ -465,6 +465,7 @@ export default function MyPageClient({
                                                             fill
                                                             className="object-cover"
                                                             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                            priority={index < 2}
                                                         />
                                                     );
                                                 }
@@ -497,11 +498,11 @@ export default function MyPageClient({
                                                     <IconButton
                                                         icon={MoreHorizontal}
                                                         variant="ghost"
-                                                        size="sm"
-                                                        className="text-gray-400 hover:text-gray-600"
+                                                        size="md"
+                                                        className="text-gray-400 hover:text-gray-900 hover:bg-gray-100 transition-colors shrink-0"
                                                     />
                                                 </DropdownMenuTrigger>
-                                                <DropdownMenuContent align="end" className="w-32">
+                                                <DropdownMenuContent align="end" className="w-40 p-1.5">
                                                     <DropdownMenuItem
                                                         onClick={() => {
                                                             if (!isAdmin && inv.invitation_data?.isRequestingApproval) {
@@ -517,12 +518,12 @@ export default function MyPageClient({
                                                             void handleEdit(inv);
                                                         }}
                                                         className={clsx(
-                                                            "gap-2 cursor-pointer py-2.5",
+                                                            "flex w-full items-center gap-2 cursor-pointer px-3 py-3 rounded-md transition-colors hover:bg-gray-100 focus:bg-gray-100",
                                                             !isAdmin && inv.invitation_data?.isRequestingApproval && "opacity-50 cursor-not-allowed"
                                                         )}
                                                     >
-                                                        <Edit2 size={16} className="text-gray-500" />
-                                                        <span className="font-medium">수정</span>
+                                                        <Edit2 size={18} className="text-gray-500" />
+                                                        <span className="font-medium text-base text-gray-700">수정</span>
                                                     </DropdownMenuItem>
                                                     <DropdownMenuItem
                                                         onClick={(e) => {
@@ -530,14 +531,14 @@ export default function MyPageClient({
                                                             handleDeleteClick(inv);
                                                         }}
                                                         disabled={actionLoading === inv.id}
-                                                        className="gap-2 cursor-pointer py-2.5 text-red-600 focus:text-red-600 focus:bg-red-50"
+                                                        className="flex w-full items-center gap-2 cursor-pointer px-3 py-3 rounded-md text-red-600 hover:bg-red-50 focus:bg-red-50 focus:text-red-700 transition-colors"
                                                     >
                                                         {actionLoading === inv.id ? (
-                                                            <Banana size={16} className="animate-spin text-primary" />
+                                                            <Banana size={18} className="animate-spin text-primary" />
                                                         ) : (
-                                                            <Trash2 size={16} />
+                                                            <Trash2 size={18} />
                                                         )}
-                                                        <span className="font-medium">삭제</span>
+                                                        <span className="font-medium text-base">삭제</span>
                                                     </DropdownMenuItem>
                                                 </DropdownMenuContent>
                                             </DropdownMenu>

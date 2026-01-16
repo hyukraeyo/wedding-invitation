@@ -17,7 +17,7 @@ const buttonVariants = cva(
           "border border-gray-200 bg-white shadow-sm hover:bg-gray-50 hover:text-gray-900 text-gray-700",
         secondary:
           "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
-        ghost: "hover:bg-gray-100 hover:text-gray-900 text-gray-600",
+        ghost: "hover:bg-gray-100 hover:text-gray-900 active:bg-gray-200 active:text-gray-900 text-gray-600",
         link: "text-primary underline-offset-4 hover:underline",
         // 바나나웨딩 전용
         solid: "bg-banana-yellow text-white shadow-sm hover:bg-[#FDD835] border border-transparent",

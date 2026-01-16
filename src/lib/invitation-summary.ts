@@ -1,16 +1,17 @@
+// PostgREST syntax for aliasing JSON fields: alias:field
 export const INVITATION_SUMMARY_SELECT = [
   'id',
   'slug',
   'updated_at',
   'user_id',
-  'invitation_data->>imageUrl as image_url',
-  'invitation_data->mainScreen->>title as main_title',
-  'invitation_data->mainScreen->>image as main_image',
-  'invitation_data->gallery as gallery',
-  'invitation_data->>date as date',
-  'invitation_data->>location as location',
-  'invitation_data->>isApproved as is_approved',
-  'invitation_data->>isRequestingApproval as is_requesting_approval',
+  'image_url:invitation_data->>imageUrl',
+  'main_title:invitation_data->mainScreen->>title',
+  'main_image:invitation_data->mainScreen->>image',
+  'gallery:invitation_data->gallery',
+  'date:invitation_data->>date',
+  'location:invitation_data->>location',
+  'is_approved:invitation_data->>isApproved',
+  'is_requesting_approval:invitation_data->>isRequestingApproval',
 ].join(', ');
 
 export interface InvitationSummaryData {
