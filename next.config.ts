@@ -1,8 +1,5 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 import type { NextConfig } from "next";
-import { withSentryConfig } from "@sentry/nextjs";
-
-const withPWAInit = require('next-pwa');
 
 const nextConfig: NextConfig = {
   // React 19 Strict Mode 활성화
@@ -12,8 +9,6 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
-
-
 
   images: {
     remotePatterns: [
@@ -33,7 +28,6 @@ const nextConfig: NextConfig = {
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 
-
   // 로깅 (Next.js 15+ 권장)
   logging: {
     fetches: {
@@ -46,15 +40,6 @@ const nextConfig: NextConfig = {
     serverActions: {
       allowedOrigins: ['localhost:3000', 'wedding-invitation-zeta-one.vercel.app'],
     },
-    /* optimizePackageImports: [
-      'lucide-react',
-      '@tiptap/react',
-      'clsx',
-      'swiper',
-      'zustand',
-      '@dnd-kit/core',
-      '@dnd-kit/sortable'
-    ], */
   },
 
   // 보안 및 성능 헤더
@@ -65,7 +50,7 @@ const nextConfig: NextConfig = {
       style-src 'self' 'unsafe-inline' https: http:;
       img-src 'self' blob: data: https: http:;
       font-src 'self' data: https: http:;
-      connect-src 'self' https: http: wss: sentry.io;
+      connect-src 'self' https: http: wss:;
       worker-src 'self' blob:;
       child-src 'self' blob: https: http:;
       frame-src 'self' https: http:;
@@ -92,42 +77,24 @@ const nextConfig: NextConfig = {
   },
 
   // 웹팩 최적화
-  webpack: (config, { isServer }) => {
+  webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/,
       use: ['@svgr/webpack'],
     });
 
-    if (!isServer && process.env.ANALYZE === 'true') {
-      const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-      config.plugins.push(
-        new BundleAnalyzerPlugin({
-          analyzerMode: process.env.ANALYZE_MODE ?? 'static',
-          openAnalyzer: process.env.ANALYZE_OPEN === 'true',
-          reportFilename: 'analyze/client.html',
-        })
-      );
-    }
-
     return config;
   },
 };
 
-const config = withSentryConfig(
-  withPWAInit({
+// 개발 환경이 아닐 때만 PWA 설정을 입힙니다.
+const config = process.env.NODE_ENV === 'production'
+  ? require('next-pwa')({
     dest: 'public',
     register: true,
     skipWaiting: true,
-    disable: process.env.NODE_ENV === 'development',
     buildExcludes: [/middleware-manifest\.json$/],
-  })(nextConfig),
-  {
-    silent: true,
-    ...(process.env.SENTRY_ORG && process.env.SENTRY_PROJECT ? {
-      org: process.env.SENTRY_ORG,
-      project: process.env.SENTRY_PROJECT,
-    } : {}),
-  }
-);
+  })(nextConfig)
+  : nextConfig;
 
 export default config;
