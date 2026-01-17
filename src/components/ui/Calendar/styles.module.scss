@@ -4,6 +4,7 @@
 .root {
   padding: 1rem;
   background-color: transparent;
+  width: min-content;
 }
 
 .months {
@@ -19,7 +20,7 @@
 .month {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 1rem;
 }
 
 .month_caption {
@@ -28,14 +29,15 @@
   align-items: center;
   justify-content: center;
   height: 2.5rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .caption_label {
-  font-size: 1rem;
-  font-weight: 700;
+  font-size: 1.125rem;
+  font-weight: 800;
   color: v.$zinc-900;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
+  font-family: v.$font-gmarket-sans;
 }
 
 .nav {
@@ -47,53 +49,68 @@
   align-items: center;
   justify-content: space-between;
   height: 2.5rem;
+  z-index: 1;
 }
 
 .button_previous, .button_next {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  border-radius: v.$radius-full;
-  color: v.$zinc-600;
-  transition: all 0.2s;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 10px;
+  color: v.$zinc-500;
+  background-color: transparent;
+  border: 1px solid v.$zinc-100;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   
   &:hover:not(:disabled) {
-    background-color: v.$zinc-100;
+    background-color: v.$zinc-50;
     color: v.$zinc-900;
+    border-color: v.$zinc-200;
   }
   
   &:disabled {
-    opacity: 0.3;
+    opacity: 0.2;
+    cursor: not-allowed;
   }
 }
 
 .table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0 4px;
 }
 
 .weekdays {
   display: flex;
+  margin-bottom: 0.5rem;
+  border-bottom: 1px solid v.$zinc-50;
+  padding-bottom: 0.5rem;
 }
 
 .weekday {
   flex: 1;
-  height: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
   color: v.$zinc-400;
-  text-transform: uppercase;
+  height: 1.5rem;
+
+  // Weekends
+  &:first-child {
+    color: #ff6b6b; // Sunday Red
+  }
+  &:last-child {
+    color: #4dabf7; // Saturday Blue
+  }
 }
 
 .week {
   display: flex;
   width: 100%;
-  margin-top: 0.25rem;
 }
 
 .day {
@@ -103,90 +120,106 @@
   align-items: center;
   justify-content: center;
   padding: 0;
-  aspect-square: 1 / 1;
+  aspect-ratio: 1 / 1;
+  min-width: 2.5rem;
 }
 
 // Day Button Styles (Custom component)
 .dayButton {
-  width: 100%;
-  height: 100%;
-  border-radius: v.$radius-full;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 0.9375rem;
-  font-weight: 500;
+  font-weight: 600;
   color: v.$zinc-700;
   background-color: transparent;
-  border: none;
+  border: 1px solid transparent;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   
   &:hover:not(:disabled) {
-    background-color: v.$primary-100;
+    background-color: v.$primary-50;
     color: v.$primary-700;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: scale(0.95);
   }
   
   &[data-selected="true"] {
     background-color: v.$color-primary !important;
-    color: white !important;
-    font-weight: 700;
-    box-shadow: 0 4px 12px rgba(v.$color-primary, 0.3);
+    border-color: v.$color-primary !important;
+    color: v.$color-primary-foreground !important;
+    font-weight: 800;
+    box-shadow: 0 4px 12px rgba(v.$color-primary, 0.35);
     transform: scale(1.05);
+  }
+
+  &.sunday {
+    color: #ff6b6b;
+  }
+
+  &.saturday {
+    color: #4dabf7;
   }
 }
 
-.today {
-  color: v.$color-primary;
-  font-weight: 700;
-  position: relative;
+.dayToday {
+  color: v.$color-primary !important;
+  font-weight: 800 !important;
+  background-color: v.$primary-50;
+  border-color: v.$primary-100;
   
   &::after {
     content: '';
     position: absolute;
-    bottom: 6px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 4px;
-    height: 4px;
-    border-radius: v.$radius-full;
+    bottom: 4px;
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
     background-color: v.$color-primary;
   }
 }
 
-.outside {
-  color: v.$zinc-300;
-  opacity: 0.5;
+.dayOutside {
+  color: v.$zinc-300 !important;
+  opacity: 0.4;
+  font-weight: 400 !important;
 }
 
 .disabled {
-  color: v.$zinc-200;
+  color: v.$zinc-100;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
 .hidden {
   visibility: hidden;
 }
 
-// Range Styles
+// Range Styles (If needed)
 .range_start {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+  & > button {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
 }
 
 .range_middle {
-  border-radius: 0;
-  background-color: v.$primary-50;
-  color: v.$primary-700;
+  & > button {
+    border-radius: 0;
+    background-color: v.$primary-50;
+    color: v.$primary-700;
+  }
 }
 
 .range_end {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-}
-
-// Customization for "날짜 선택" UI in Drawer
-.calendarContainer {
-  @include m.flex-center;
-  width: 100%;
+  & > button {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
 }

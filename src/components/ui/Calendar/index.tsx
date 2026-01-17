@@ -73,6 +73,8 @@ function CalendarDayButton({
   }, [modifiers.focused])
 
   const isSelected = !!modifiers.selected
+  const isSunday = day.date.getDay() === 0
+  const isSaturday = day.date.getDay() === 6
 
   return (
     <button
@@ -82,9 +84,10 @@ function CalendarDayButton({
       data-selected={isSelected}
       className={cn(
         styles.dayButton,
-        isSelected && styles.daySelected,
         modifiers.today && styles.dayToday,
         modifiers.outside && styles.dayOutside,
+        !isSelected && !modifiers.outside && isSunday && styles.sunday,
+        !isSelected && !modifiers.outside && isSaturday && styles.saturday,
         className
       )}
     >

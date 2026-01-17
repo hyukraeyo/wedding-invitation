@@ -44,6 +44,7 @@
   position: relative;
   z-index: v.$z-modal;
   min-width: 8rem;
+  max-height: 24rem; // max-h-96 equivalent
   overflow: hidden;
   border-radius: v.$radius-md;
   border: 1px solid v.$zinc-200;
@@ -51,6 +52,12 @@
   color: v.$zinc-900;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   
+  &--popper {
+    max-height: var(--radix-select-content-available-height);
+    &[data-side='bottom'] { transform: translateY(4px); }
+    &[data-side='top'] { transform: translateY(-4px); }
+  }
+
   // Animation (Radix attributes)
   &[data-state='open'] {
     animation: fadeIn 0.2s ease-out;
@@ -65,9 +72,8 @@
 .viewport {
   padding: 0.25rem;
 
-  // Popper modifier (moved from inline Tailwind)
+  // Popper modifier: only set width constraints, let height be determined by children or content max-height
   &--popper {
-    height: var(--radix-select-trigger-height);
     width: 100%;
     min-width: var(--radix-select-trigger-width);
   }
