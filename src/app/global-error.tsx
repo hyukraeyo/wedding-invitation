@@ -1,51 +1,98 @@
 'use client';
 
-import { Button } from '@/components/ui/Button';
-import { AlertTriangle, Home } from 'lucide-react';
+import { AlertTriangle, RefreshCw } from 'lucide-react';
 
-interface GlobalErrorProps {
+export default function GlobalError({
+  error,
+  reset,
+}: {
   error: Error & { digest?: string };
   reset: () => void;
-}
-
-export default function GlobalError({ error, reset }: GlobalErrorProps) {
+}) {
   return (
-    <html>
-      <body className="min-h-screen flex items-center justify-center bg-background">
-        <div className="max-w-md w-full p-8 text-center space-y-6">
-          <div className="flex justify-center">
-            <div className="bg-destructive/10 p-6 rounded-full">
-              <AlertTriangle className="h-16 w-16 text-destructive" />
+    <html lang="ko">
+      <body style={{ margin: 0 }}>
+        <div style={{
+          minHeight: '100dvh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#fff',
+          padding: '24px',
+          fontFamily: 'Pretendard, -apple-system, sans-serif'
+        }}>
+          <div style={{
+            maxWidth: '400px',
+            width: '100%',
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '24px'
+          }}>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <div style={{
+                backgroundColor: '#fff5f5',
+                padding: '24px',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <AlertTriangle size={48} color="#ff4d4f" />
+              </div>
             </div>
-          </div>
 
-          <div className="space-y-3">
-            <h1 className="text-3xl font-bold text-foreground">
-              치명적인 오류 발생
-            </h1>
-            <p className="text-muted-foreground">
-              애플리케이션에서 심각한 오류가 발생했습니다.
-              <br />
-              개발팀에 문제를 보고하고 있습니다.
-            </p>
-          </div>
+            <div>
+              <h1 style={{
+                fontSize: '24px',
+                fontWeight: '700',
+                color: '#1a1a1a',
+                margin: '0 0 8px 0'
+              }}>치명적인 오류 발생</h1>
+              <p style={{
+                fontSize: '15px',
+                color: '#666',
+                margin: 0,
+                lineHeight: '1.5'
+              }}>앱을 로드하는 중 심각한 문제가 발생했습니다.</p>
+            </div>
 
-          <div className="bg-muted p-4 rounded-lg text-left text-sm">
-            <p className="font-mono text-xs text-muted-foreground">
-              {error.message}
-            </p>
-            {error.digest ? (
-              <p className="font-mono text-xs text-muted-foreground mt-2">
-                Error ID: {error.digest}
-              </p>
-            ) : null}
-          </div>
+            <div style={{
+              backgroundColor: '#f8f9fa',
+              padding: '16px',
+              borderRadius: '12px',
+              textAlign: 'left',
+              fontSize: '13px'
+            }}>
+              <p style={{
+                fontFamily: 'monospace',
+                color: '#888',
+                margin: 0,
+                wordBreak: 'break-all'
+              }}>{error.message || 'Fatal Error'}</p>
+            </div>
 
-          <div className="flex gap-3 justify-center">
-            <Button onClick={reset} variant="default" size="lg">
-              <Home className="mr-2 h-5 w-5" />
-              다시 시도
-            </Button>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <button
+                onClick={() => reset()}
+                style={{
+                  backgroundColor: '#FBC02D',
+                  color: '#000',
+                  border: 'none',
+                  padding: '12px 32px',
+                  borderRadius: '12px',
+                  fontWeight: '600',
+                  fontSize: '15px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px'
+                }}
+              >
+                <RefreshCw size={18} />
+                앱 다시 시작
+              </button>
+            </div>
           </div>
         </div>
       </body>
