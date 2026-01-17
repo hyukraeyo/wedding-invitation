@@ -2,10 +2,8 @@
 
 import * as React from "react"
 import * as LabelPrimitive from "@radix-ui/react-label"
-import classNames from "classnames/bind"
+import { cn } from "@/lib/utils"
 import styles from "./styles.module.scss"
-
-const cx = classNames.bind(styles)
 
 const Label = React.forwardRef<
     React.ElementRef<typeof LabelPrimitive.Root>,
@@ -13,7 +11,7 @@ const Label = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <LabelPrimitive.Root
         ref={ref}
-        className={cx("label", className)}
+        className={cn(styles.label, className)}
         {...props}
     />
 ))

@@ -16,7 +16,7 @@
 .modal {
     background-color: white;
     width: 100%;
-    max-width: 480px; /* Slightly wider for content */
+    max-width: 480px;
     border-radius: 1.5rem;
     padding: 2.5rem;
     box-shadow: 
@@ -57,7 +57,6 @@
         }
     }
 
-
     @media (max-width: 480px) {
         right: 1rem;
         top: 1rem;
@@ -86,6 +85,7 @@
 }
 
 .listContainer {
+    margin-top: 1rem;
     overflow-y: auto;
     padding-right: 0.5rem;
     margin-right: -0.5rem;
@@ -110,37 +110,34 @@
             background-color: #d1d5db;
         }
     }
-
 }
 
 .itemButton {
-    display: flex;
-    flex-direction: column;
+    /* Override Button component defaults */
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    height: auto !important;
+    width: 100% !important;
+    padding: 1.25rem !important;
+    white-space: normal !important;
+    text-align: left !important;
+    
     gap: 0.75rem;
-    padding: 1.25rem;
     border-radius: 1rem;
-    text-align: left;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     background-color: #ffffff;
     border: 1px solid #e5e7eb;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     cursor: pointer;
     position: relative;
-    width: 100%;
 
     @media (hover: hover) and (pointer: fine) {
         &:hover {
-            border-color: #111827;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-color: #FBC02D !important; // Primary color highlight
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
             transform: translateY(-2px);
         }
-    }
-
-
-    &:focus-visible {
-        outline: none;
-        ring: 2px solid #111827;
-        ring-offset: 2px;
     }
 
     &:active {
@@ -179,6 +176,10 @@
     line-height: 1.6;
     white-space: pre-line;
     word-break: keep-all;
+
+    p {
+        margin: 0;
+    }
 }
 
 @keyframes fadeIn {

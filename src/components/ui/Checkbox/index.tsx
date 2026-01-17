@@ -3,10 +3,8 @@
 import * as React from "react"
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox"
 import { Check } from "lucide-react"
-import classNames from "classnames/bind"
+import { cn } from "@/lib/utils"
 import styles from "./styles.module.scss"
-
-const cx = classNames.bind(styles)
 
 const Checkbox = React.forwardRef<
     React.ElementRef<typeof CheckboxPrimitive.Root>,
@@ -14,13 +12,13 @@ const Checkbox = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <CheckboxPrimitive.Root
         ref={ref}
-        className={cx("checkbox", className)}
+        className={cn(styles.checkbox, className)}
         {...props}
     >
         <CheckboxPrimitive.Indicator
-            className={cx("indicator")}
+            className={styles.indicator}
         >
-            <Check />
+            <Check size={14} strokeWidth={3} />
         </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
 ))

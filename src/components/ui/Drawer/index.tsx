@@ -2,9 +2,9 @@
 
 import * as React from "react"
 import { Drawer as DrawerPrimitive } from "vaul"
-
 import { cn } from "@/lib/utils"
 import { focusFirstFocusable } from "@/lib/a11y"
+import styles from "./styles.module.scss"
 
 const Drawer = ({
     shouldScaleBackground = true,
@@ -29,7 +29,7 @@ const DrawerOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <DrawerPrimitive.Overlay
         ref={ref}
-        className={cn("fixed inset-0 z-50 bg-black/80", className)}
+        className={cn(styles.overlay, className)}
         {...props}
     />
 ))
@@ -39,29 +39,16 @@ const DrawerContent = React.forwardRef<
     React.ElementRef<typeof DrawerPrimitive.Content>,
     React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
 >(({ className, children, onOpenAutoFocus, ...props }, ref) => {
-    const handleOpenAutoFocus: React.ComponentPropsWithoutRef<
-        typeof DrawerPrimitive.Content
-    >["onOpenAutoFocus"] = (event) => {
-        onOpenAutoFocus?.(event)
-        if (event.defaultPrevented) return
-        event.preventDefault()
-        focusFirstFocusable(event.currentTarget as HTMLElement)
-    }
-
     return (
         <DrawerPortal>
             <DrawerOverlay />
             <DrawerPrimitive.Content
                 ref={ref}
                 tabIndex={-1}
-                className={cn(
-                    "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-[20px] border bg-background",
-                    className
-                )}
-                onOpenAutoFocus={handleOpenAutoFocus}
+                className={cn(styles.content, className)}
                 {...props}
             >
-                <div className="mx-auto mt-4 h-1.5 w-12 shrink-0 rounded-full bg-zinc-300" />
+                <div className={styles.handle} />
                 {children}
             </DrawerPrimitive.Content>
         </DrawerPortal>
@@ -74,7 +61,7 @@ const DrawerHeader = ({
     ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
     <div
-        className={cn("grid gap-1.5 p-4 text-center sm:text-left", className)}
+        className={cn(styles.header, className)}
         {...props}
     />
 )
@@ -85,7 +72,7 @@ const DrawerFooter = ({
     ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
     <div
-        className={cn("mt-auto flex flex-col gap-2 p-4", className)}
+        className={cn(styles.footer, className)}
         {...props}
     />
 )
@@ -97,10 +84,7 @@ const DrawerTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <DrawerPrimitive.Title
         ref={ref}
-        className={cn(
-            "text-lg font-semibold leading-none tracking-tight",
-            className
-        )}
+        className={cn(styles.title, className)}
         {...props}
     />
 ))
@@ -112,7 +96,7 @@ const DrawerDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <DrawerPrimitive.Description
         ref={ref}
-        className={cn("text-sm text-muted-foreground", className)}
+        className={cn(styles.description, className)}
         {...props}
     />
 ))
@@ -124,7 +108,7 @@ const DrawerScrollArea = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
     <div
         ref={ref}
-        className={cn("flex-1 overflow-y-auto px-4 pb-8", className)}
+        className={cn(styles.scrollArea, className)}
         {...props}
     >
         {children}

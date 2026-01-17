@@ -21,7 +21,9 @@
   text-decoration: none;
 
   @include m.focus-ring;
-  @include m.disabled;
+  &:disabled {
+    @include m.disabled;
+  }
 
   &[data-loading="true"] {
     color: transparent !important;

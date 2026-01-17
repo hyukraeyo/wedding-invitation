@@ -3,10 +3,8 @@
 import * as React from "react"
 import * as SheetPrimitive from "@radix-ui/react-dialog"
 import { X } from "lucide-react"
-import classNames from "classnames/bind"
+import { cn } from "@/lib/utils"
 import styles from "./styles.module.scss"
-
-const cx = classNames.bind(styles)
 
 const Sheet = SheetPrimitive.Root
 
@@ -21,7 +19,7 @@ const SheetOverlay = React.forwardRef<
     React.ComponentPropsWithoutRef<typeof SheetPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
     <SheetPrimitive.Overlay
-        className={cx("overlay", className)}
+        className={cn(styles.overlay, className)}
         {...props}
         ref={ref}
     />
@@ -58,17 +56,17 @@ const SheetContent = React.forwardRef<
                 tabIndex={-1}
                 onOpenAutoFocus={handleOpenAutoFocus}
                 data-side={side}
-                className={cx(
-                    "content",
-                    `content--side-${side}`,
+                className={cn(
+                    styles.content,
+                    styles[`content--side-${side}`],
                     className
                 )}
                 {...props}
             >
                 {children}
-                <SheetPrimitive.Close className={cx("close")}>
+                <SheetPrimitive.Close className={styles.close}>
                     <X size={18} />
-                    <span className={cx("srOnly")}>Close</span>
+                    <span className={styles.srOnly}>Close</span>
                 </SheetPrimitive.Close>
             </SheetPrimitive.Content>
         </SheetPortal>
@@ -81,7 +79,7 @@ const SheetHeader = ({
     ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
     <div
-        className={cx("header", className)}
+        className={cn(styles.header, className)}
         {...props}
     />
 )
@@ -92,7 +90,7 @@ const SheetFooter = ({
     ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
     <div
-        className={cx("footer", className)}
+        className={cn(styles.footer, className)}
         {...props}
     />
 )
@@ -104,7 +102,7 @@ const SheetTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <SheetPrimitive.Title
         ref={ref}
-        className={cx("title", className)}
+        className={cn(styles.title, className)}
         {...props}
     />
 ))
@@ -116,7 +114,7 @@ const SheetDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <SheetPrimitive.Description
         ref={ref}
-        className={cx("description", className)}
+        className={cn(styles.description, className)}
         {...props}
     />
 ))

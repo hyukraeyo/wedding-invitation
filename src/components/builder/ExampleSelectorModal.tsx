@@ -1,5 +1,6 @@
 import React from 'react';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
+import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 import styles from './ExampleSelectorModal.module.scss';
 
@@ -36,11 +37,12 @@ export const ExampleSelectorModal = <T extends ExampleItem>({
             title={title}
             className={className}
         >
-            <div className={cn(styles.listContainer, "mt-4")}>
+            <div className={styles.listContainer}>
                 {items.map((item, idx) => (
-                    <button
+                    <Button
                         key={item.id || idx}
-                        className={cn(styles.itemButton, "transition-transform duration-200 active:scale-[0.98]")}
+                        variant="line"
+                        className={styles.itemButton}
                         onClick={() => onSelect(item)}
                         autoFocus={idx === 0}
                     >
@@ -57,7 +59,7 @@ export const ExampleSelectorModal = <T extends ExampleItem>({
                             className={styles.itemContent}
                             dangerouslySetInnerHTML={{ __html: item.content }}
                         />
-                    </button>
+                    </Button>
                 ))}
             </div>
         </ResponsiveModal>

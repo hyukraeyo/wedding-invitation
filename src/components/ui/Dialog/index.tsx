@@ -1,10 +1,8 @@
 import * as React from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { X } from "lucide-react"
-import classNames from "classnames/bind"
+import { cn } from "@/lib/utils"
 import styles from "./styles.module.scss"
-
-const cx = classNames.bind(styles)
 
 const Dialog = DialogPrimitive.Root
 const DialogTrigger = DialogPrimitive.Trigger
@@ -17,7 +15,7 @@ const DialogOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <DialogPrimitive.Overlay
         ref={ref}
-        className={cx("overlay", className)}
+        className={cn(styles.overlay, className)}
         {...props}
     />
 ))
@@ -31,7 +29,7 @@ const DialogContent = React.forwardRef<
         <DialogOverlay />
         <DialogPrimitive.Content
             ref={ref}
-            className={cx("content", className)}
+            className={cn(styles.content, className)}
             {...props}
         >
             {children}
@@ -48,7 +46,7 @@ const DialogHeader = ({
     className,
     ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-    <div className={cx("header", className)} {...props} />
+    <div className={cn(styles.header, className)} {...props} />
 )
 DialogHeader.displayName = "DialogHeader"
 
@@ -56,7 +54,7 @@ const DialogFooter = ({
     className,
     ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-    <div className={cx("footer", className)} {...props} />
+    <div className={cn(styles.footer, className)} {...props} />
 )
 DialogFooter.displayName = "DialogFooter"
 
@@ -66,7 +64,7 @@ const DialogTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <DialogPrimitive.Title
         ref={ref}
-        className={cx("title", className)}
+        className={cn(styles.title, className)}
         {...props}
     />
 ))
@@ -78,7 +76,7 @@ const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <DialogPrimitive.Description
         ref={ref}
-        className={cx("description", className)}
+        className={cn(styles.description, className)}
         {...props}
     />
 ))

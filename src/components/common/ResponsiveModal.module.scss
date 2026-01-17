@@ -4,8 +4,6 @@
 // 하드코딩된 색상 변수화 (필요시 variables.scss에 추가 고려)
 $color-text-title: #191F28;
 $color-text-desc: #4E5968;
-$color-bg-confirm: v.$color-primary;
-$color-bg-confirm-hover: v.$color-primary-dark;
 
 .dialogContent {
   max-width: 28rem;
@@ -68,6 +66,8 @@ $color-bg-confirm-hover: v.$color-primary-dark;
 
 .content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
   padding: 0.5rem 2rem; // px-8 py-2
   
@@ -87,70 +87,35 @@ $color-bg-confirm-hover: v.$color-primary-dark;
   overflow: hidden;
 }
 
-.buttonBase {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.2s;
-  
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-}
-
+// Button overrides for ResponsiveModal layout
 .cancelButton {
-  @extend .buttonBase;
-  background-color: transparent;
-  color: v.$zinc-600; // text-gray-600
-  font-weight: 500;
-  border-right: 1px solid v.$zinc-100;
-  
+  flex: 1;
+  border-radius: 0 !important;
+  border: none !important;
+  border-right: 1px solid v.$zinc-100 !important;
+  font-weight: 500 !important;
+  color: v.$zinc-600 !important;
+
   &:hover {
-    background-color: v.$zinc-50; // hover:bg-gray-50
-  }
-  
-  &:active {
-    background-color: v.$zinc-100; // active:bg-gray-100
+    background-color: v.$zinc-50 !important;
   }
 }
 
 .confirmButton {
-  @extend .buttonBase;
-  font-weight: 700;
-  color: $color-text-title;
-  
-  &:active {
-    background-color: rgba($color-bg-confirm, 0.9);
-  }
-
-  &.primary {
-    background-color: $color-bg-confirm;
-    
-    &:hover {
-      background-color: $color-bg-confirm-hover;
-    }
-  }
-
-  &.destructive {
-    color: v.$color-danger; // text-red-600
-    background-color: transparent;
-    
-    &:hover {
-      background-color: #FEF2F2; // red-50
-    }
-  }
+  flex: 1;
+  border-radius: 0 !important;
+  border: none !important;
+  font-weight: 700 !important;
 }
 
 // Dialog Button Height
 .dialogButtonHeight {
-  height: 3.5rem; // h-14 (56px)
-  font-size: 1rem; // 16px
+  height: 3.5rem !important; // h-14 (56px)
+  font-size: 1rem !important; // 16px
 }
 
 // Drawer Button Height
 .drawerButtonHeight {
-  height: 4rem; // h-16 (64px)
-  font-size: 1.0625rem; // 17px
+  height: 4rem !important; // h-16 (64px)
+  font-size: 1.0625rem !important; // 17px
 }

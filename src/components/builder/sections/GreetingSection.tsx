@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { MessageSquare, Sparkles } from 'lucide-react';
 import RichTextEditor from '@/components/common/RichTextEditor';
-import { ExampleSelectorModal } from '@/components/builder/ExampleSelectorModal';
+import dynamic from 'next/dynamic';
+const ExampleSelectorModal = dynamic(() => import('@/components/builder/ExampleSelectorModal').then(mod => mod.ExampleSelectorModal), {
+    ssr: false
+});
 import { InfoMessage } from '@/components/builder/InfoMessage';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
@@ -113,7 +116,9 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
                     <HeaderAction
                         icon={Sparkles}
                         label="추천 문구"
-                        onClick={() => setIsSampleModalOpen(true)}
+                        onClick={() => {
+                            setIsSampleModalOpen(true);
+                        }}
                     />
                 }
             >

@@ -3,10 +3,8 @@
 import * as React from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
 import { Check, ChevronDown, ChevronUp } from "lucide-react"
-import classNames from "classnames/bind"
+import { cn } from "@/lib/utils"
 import styles from "./styles.module.scss"
-
-const cx = classNames.bind(styles)
 
 const Select = SelectPrimitive.Root
 
@@ -20,7 +18,7 @@ const SelectTrigger = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
     <SelectPrimitive.Trigger
         ref={ref}
-        className={cx("trigger", className)}
+        className={cn(styles.trigger, className)}
         {...props}
     >
         {children}
@@ -37,10 +35,10 @@ const SelectScrollUpButton = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <SelectPrimitive.ScrollUpButton
         ref={ref}
-        className={cx("scrollButton", className)}
+        className={cn(styles.scrollButton, className)}
         {...props}
     >
-        <ChevronUp />
+        <ChevronUp size={16} />
     </SelectPrimitive.ScrollUpButton>
 ))
 SelectScrollUpButton.displayName = SelectPrimitive.ScrollUpButton.displayName
@@ -51,10 +49,10 @@ const SelectScrollDownButton = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <SelectPrimitive.ScrollDownButton
         ref={ref}
-        className={cx("scrollButton", className)}
+        className={cn(styles.scrollButton, className)}
         {...props}
     >
-        <ChevronDown />
+        <ChevronDown size={16} />
     </SelectPrimitive.ScrollDownButton>
 ))
 SelectScrollDownButton.displayName =
@@ -67,9 +65,9 @@ const SelectContent = React.forwardRef<
     <SelectPrimitive.Portal>
         <SelectPrimitive.Content
             ref={ref}
-            className={cx(
-                "content",
-                position === "popper" && "popper",
+            className={cn(
+                styles.content,
+                position === "popper" && styles["content--popper"],
                 className
             )}
             position={position}
@@ -77,9 +75,9 @@ const SelectContent = React.forwardRef<
         >
             <SelectScrollUpButton />
             <SelectPrimitive.Viewport
-                className={cx(
-                    "viewport",
-                    position === "popper" && "popper"
+                className={cn(
+                    styles.viewport,
+                    position === "popper" && styles["viewport--popper"]
                 )}
             >
                 {children}
@@ -96,7 +94,7 @@ const SelectLabel = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <SelectPrimitive.Label
         ref={ref}
-        className={cx("label", className)}
+        className={cn(styles.label, className)}
         {...props}
     />
 ))
@@ -108,14 +106,15 @@ const SelectItem = React.forwardRef<
 >(({ className, children, ...props }, ref) => (
     <SelectPrimitive.Item
         ref={ref}
-        className={cx("item", className)}
+        className={cn(styles.item, className)}
         {...props}
     >
-        <span className={styles.itemIndicator}>
+        <span className={styles.itemIndicatorWrapper}>
             <SelectPrimitive.ItemIndicator>
-                <Check />
+                <Check size={16} />
             </SelectPrimitive.ItemIndicator>
         </span>
+
         <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
     </SelectPrimitive.Item>
 ))
@@ -127,7 +126,7 @@ const SelectSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <SelectPrimitive.Separator
         ref={ref}
-        className={cx("separator", className)}
+        className={cn(styles.separator, className)}
         {...props}
     />
 ))

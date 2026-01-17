@@ -1,26 +1,24 @@
 "use client"
 
 import * as React from "react"
-import * as SwitchPrimitives from "@radix-ui/react-switch"
-import classNames from "classnames/bind"
+import * as SwitchPrimitive from "@radix-ui/react-switch"
+import { cn } from "@/lib/utils"
 import styles from "./styles.module.scss"
 
-const cx = classNames.bind(styles)
-
 const Switch = React.forwardRef<
-    React.ElementRef<typeof SwitchPrimitives.Root>,
-    React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>
+    React.ElementRef<typeof SwitchPrimitive.Root>,
+    React.ComponentPropsWithoutRef<typeof SwitchPrimitive.Root>
 >(({ className, ...props }, ref) => (
-    <SwitchPrimitives.Root
-        className={cx("root", className)}
+    <SwitchPrimitive.Root
+        className={cn(styles.switch, className)}
         {...props}
         ref={ref}
     >
-        <SwitchPrimitives.Thumb
-            className={cx("thumb")}
+        <SwitchPrimitive.Thumb
+            className={styles.thumb}
         />
-    </SwitchPrimitives.Root>
+    </SwitchPrimitive.Root>
 ))
-Switch.displayName = SwitchPrimitives.Root.displayName
+Switch.displayName = SwitchPrimitive.Root.displayName
 
 export { Switch }

@@ -2,10 +2,8 @@
 
 import * as React from "react"
 import * as TabsPrimitive from "@radix-ui/react-tabs"
-import classNames from "classnames/bind"
+import { cn } from "@/lib/utils"
 import styles from "./styles.module.scss"
-
-const cx = classNames.bind(styles)
 
 const Tabs = TabsPrimitive.Root
 
@@ -15,7 +13,7 @@ const TabsList = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <TabsPrimitive.List
         ref={ref}
-        className={cx("list", className)}
+        className={cn(styles.list, className)}
         {...props}
     />
 ))
@@ -27,7 +25,7 @@ const TabsTrigger = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <TabsPrimitive.Trigger
         ref={ref}
-        className={cx("trigger", className)}
+        className={cn(styles.trigger, className)}
         {...props}
     />
 ))
@@ -39,7 +37,7 @@ const TabsContent = React.forwardRef<
 >(({ className, ...props }, ref) => (
     <TabsPrimitive.Content
         ref={ref}
-        className={cx("content", className)}
+        className={cn(styles.content, className)}
         {...props}
     />
 ))

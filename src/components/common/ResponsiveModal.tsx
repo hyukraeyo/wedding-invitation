@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useSyncExternalStore } from 'react';
+import React from 'react';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import {
     Dialog,
@@ -19,6 +19,7 @@ import {
     DrawerTrigger,
     DrawerScrollArea,
 } from "@/components/ui/Drawer"
+import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 import styles from './ResponsiveModal.module.scss';
 
@@ -38,7 +39,7 @@ export interface ResponsiveModalProps {
     onConfirm?: (() => void) | undefined;
     onCancel?: (() => void) | undefined;
     showCancel?: boolean | undefined;
-    confirmVariant?: 'default' | 'destructive' | undefined;
+    confirmVariant?: 'default' | 'destructive' | 'solid' | undefined;
     confirmDisabled?: boolean | undefined;
     confirmLoading?: boolean | undefined;
     dismissible?: boolean;
@@ -77,11 +78,11 @@ export const ResponsiveModal = ({
         onOpenChange?.(false);
     };
 
-    const isMounted = useSyncExternalStore(
-        () => () => { },
-        () => true,
-        () => false
-    );
+    const [isMounted, setIsMounted] = React.useState(false);
+
+    React.useEffect(() => {
+        setIsMounted(true);
+    }, []);
 
     if (!isMounted) {
         return null;
@@ -97,18 +98,16 @@ export const ResponsiveModal = ({
                     onEscapeKeyDown={(e) => !dismissible && e.preventDefault()}
                     aria-describedby={description ? undefined : undefined}
                 >
-                    <div className={styles.header}>
-                        <DialogHeader className="text-center sm:text-center"> {/* Shadcn Override */}
-                            <DialogTitle className={styles.title}>
-                                {title || "알림"}
-                            </DialogTitle>
-                            {description ? (
-                                <DialogDescription className={styles.description}>
-                                    {description}
-                                </DialogDescription>
-                            ) : <DialogDescription className="sr-only" />}
-                        </DialogHeader>
-                    </div>
+                    <DialogHeader className={styles.header}>
+                        <DialogTitle className={styles.title}>
+                            {title || "알림"}
+                        </DialogTitle>
+                        {description ? (
+                            <DialogDescription className={styles.description}>
+                                {description}
+                            </DialogDescription>
+                        ) : null}
+                    </DialogHeader>
 
                     <div className={styles.content}>
                         {children}
@@ -116,29 +115,35 @@ export const ResponsiveModal = ({
 
                     {hasActions ? (
                         <div className={styles.footer}>
-                            {showCancel ? (
-                                <button
-                                    onClick={handleCancel}
-                                    className={cn(styles.cancelButton, styles.dialogButtonHeight)}
-                                >
-                                    {cancelText}
-                                </button>
-                            ) : null}
-                            <button
-                                onClick={onConfirm}
-                                disabled={confirmDisabled || confirmLoading}
-                                className={cn(
-                                    styles.confirmButton,
-                                    styles.dialogButtonHeight,
-                                    confirmVariant === 'destructive' ? styles.destructive : styles.primary
-                                )}
-                            >
-                                {confirmLoading ? "처리 중..." : confirmText}
-                            </button>
+                            {footer || (
+                                <>
+                                    {showCancel ? (
+                                        <Button
+                                            variant="ghost"
+                                            onClick={handleCancel}
+                                            className={cn(styles.cancelButton, styles.dialogButtonHeight)}
+                                        >
+                                            {cancelText}
+                                        </Button>
+                                    ) : null}
+                                    <Button
+                                        onClick={onConfirm}
+                                        disabled={confirmDisabled || confirmLoading}
+                                        loading={confirmLoading}
+                                        variant={confirmVariant === 'destructive' ? 'destructive' : 'solid'}
+                                        className={cn(
+                                            styles.confirmButton,
+                                            styles.dialogButtonHeight
+                                        )}
+                                    >
+                                        {confirmText}
+                                    </Button>
+                                </>
+                            )}
                         </div>
                     ) : null}
                 </DialogContent>
-            </Dialog>
+            </Dialog >
         );
     }
 
@@ -159,7 +164,7 @@ export const ResponsiveModal = ({
                             <DrawerDescription className={styles.description}>
                                 {description}
                             </DrawerDescription>
-                        ) : <DrawerDescription className="sr-only" />}
+                        ) : null}
                     </DrawerHeader>
 
                     <div className={cn(styles.content, styles.drawerScrollArea)}>
@@ -172,25 +177,31 @@ export const ResponsiveModal = ({
 
                     {hasActions ? (
                         <div className={styles.footer}>
-                            {showCancel ? (
-                                <button
-                                    onClick={handleCancel}
-                                    className={cn(styles.cancelButton, styles.drawerButtonHeight)}
-                                >
-                                    {cancelText}
-                                </button>
-                            ) : null}
-                            <button
-                                onClick={onConfirm}
-                                disabled={confirmDisabled || confirmLoading}
-                                className={cn(
-                                    styles.confirmButton,
-                                    styles.drawerButtonHeight,
-                                    confirmVariant === 'destructive' ? styles.destructive : styles.primary
-                                )}
-                            >
-                                {confirmLoading ? "처리 중..." : confirmText}
-                            </button>
+                            {footer || (
+                                <>
+                                    {showCancel ? (
+                                        <Button
+                                            variant="ghost"
+                                            onClick={handleCancel}
+                                            className={cn(styles.cancelButton, styles.drawerButtonHeight)}
+                                        >
+                                            {cancelText}
+                                        </Button>
+                                    ) : null}
+                                    <Button
+                                        onClick={onConfirm}
+                                        disabled={confirmDisabled || confirmLoading}
+                                        loading={confirmLoading}
+                                        variant={confirmVariant === 'destructive' ? 'destructive' : 'solid'}
+                                        className={cn(
+                                            styles.confirmButton,
+                                            styles.drawerButtonHeight
+                                        )}
+                                    >
+                                        {confirmText}
+                                    </Button>
+                                </>
+                            )}
                         </div>
                     ) : null}
                 </div>

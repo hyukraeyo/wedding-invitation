@@ -2,7 +2,7 @@ import React from 'react';
 import { LucideIcon } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
-
+import styles from './HeaderAction.module.scss';
 
 interface HeaderActionProps {
     icon: LucideIcon;
@@ -17,18 +17,20 @@ export const HeaderAction = ({ icon: Icon, label, onClick, className }: HeaderAc
             type="button"
             variant="secondary"
             size="sm"
-            onClick={(e: React.MouseEvent) => {
-                e.preventDefault();
+            onPointerDown={(e: React.PointerEvent) => {
+                // Stop propagation to prevent Radix Accordion from toggling
                 e.stopPropagation();
-                onClick();
             }}
             onMouseDown={(e: React.MouseEvent) => {
-                // Prevent parent focus and accordion toggle
-                e.preventDefault();
+                // Stop propagation to prevent Radix Accordion from toggling
                 e.stopPropagation();
             }}
-            onPointerDown={(e: React.PointerEvent) => e.stopPropagation()}
-            className={cn("h-7 px-2.5 text-[11px] font-medium gap-1.5", className)}
+            onClick={(e: React.MouseEvent) => {
+                e.stopPropagation();
+                e.preventDefault();
+                onClick();
+            }}
+            className={cn(styles.headerAction, className)}
         >
             <Icon size={14} />
             <span>{label}</span>

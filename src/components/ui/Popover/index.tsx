@@ -2,10 +2,8 @@
 
 import * as React from "react"
 import * as PopoverPrimitive from "@radix-ui/react-popover"
-import classNames from "classnames/bind"
+import { cn } from "@/lib/utils"
 import styles from "./styles.module.scss"
-
-const cx = classNames.bind(styles)
 
 const Popover = PopoverPrimitive.Root
 
@@ -22,7 +20,7 @@ const PopoverContent = React.forwardRef<
             ref={ref}
             align={align}
             sideOffset={sideOffset}
-            className={cx("content", className)}
+            className={cn(styles.content, className)}
             {...props}
         />
     </PopoverPrimitive.Portal>
