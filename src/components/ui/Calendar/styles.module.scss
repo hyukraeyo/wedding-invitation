@@ -50,6 +50,7 @@
   align-items: center;
   justify-content: space-between;
   height: 2.5rem;
+  padding: 0 0.25rem; // Bring buttons in slightly
   z-index: 1;
 }
 
@@ -57,18 +58,17 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  border-radius: 10px;
-  color: v.$zinc-500;
+  width: 2rem;
+  height: 2rem;
+  border-radius: v.$radius-md;
+  color: v.$zinc-400; // Softer default color
   background-color: transparent;
-  border: 1px solid v.$zinc-100;
+  border: none; // Ghost style
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   
   &:hover:not(:disabled) {
-    background-color: v.$zinc-50;
+    background-color: v.$zinc-100;
     color: v.$zinc-900;
-    border-color: v.$zinc-200;
   }
   
   &:disabled {

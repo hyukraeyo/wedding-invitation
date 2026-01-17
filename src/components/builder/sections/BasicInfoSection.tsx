@@ -5,7 +5,8 @@ import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
-import { Toggle } from '../Toggle';
+
+import { Button } from '@/components/ui/Button';
 import { Field, SectionContainer } from '../FormPrimitives';
 import styles from './BasicInfoSection.module.scss';
 import { cn } from '@/lib/utils';
@@ -52,12 +53,14 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 value={groom.parents.father.name}
                                 onChange={(e) => setGroomParents('father', { name: e.target.value })}
                             />
-                            <Toggle
-                                pressed={groom.parents.father.isDeceased}
-                                onPressedChange={(pressed) => setGroomParents('father', { isDeceased: pressed })}
+                            <Button
+                                type="button"
+                                variant={groom.parents.father.isDeceased ? 'default' : 'outline'}
+                                onClick={() => setGroomParents('father', { isDeceased: !groom.parents.father.isDeceased })}
+                                className={cn("w-[50px] p-0", !groom.parents.father.isDeceased && "text-zinc-400")}
                             >
                                 故
-                            </Toggle>
+                            </Button>
                         </div>
                         <div className={cn(styles.row, styles.compact)}>
                             <TextField
@@ -66,12 +69,14 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 value={groom.parents.mother.name}
                                 onChange={(e) => setGroomParents('mother', { name: e.target.value })}
                             />
-                            <Toggle
-                                pressed={groom.parents.mother.isDeceased}
-                                onPressedChange={(pressed) => setGroomParents('mother', { isDeceased: pressed })}
+                            <Button
+                                type="button"
+                                variant={groom.parents.mother.isDeceased ? 'default' : 'outline'}
+                                onClick={() => setGroomParents('mother', { isDeceased: !groom.parents.mother.isDeceased })}
+                                className={cn("w-[50px] p-0", !groom.parents.mother.isDeceased && "text-zinc-400")}
                             >
                                 故
-                            </Toggle>
+                            </Button>
                         </div>
                     </div>
                 </Field>
@@ -97,12 +102,14 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 value={bride.parents.father.name}
                                 onChange={(e) => setBrideParents('father', { name: e.target.value })}
                             />
-                            <Toggle
-                                pressed={bride.parents.father.isDeceased}
-                                onPressedChange={(pressed) => setBrideParents('father', { isDeceased: pressed })}
+                            <Button
+                                type="button"
+                                variant={bride.parents.father.isDeceased ? 'default' : 'outline'}
+                                onClick={() => setBrideParents('father', { isDeceased: !bride.parents.father.isDeceased })}
+                                className={cn("w-[50px] p-0", !bride.parents.father.isDeceased && "text-zinc-400")}
                             >
                                 故
-                            </Toggle>
+                            </Button>
                         </div>
                         <div className={cn(styles.row, styles.compact)}>
                             <TextField
@@ -111,12 +118,14 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 value={bride.parents.mother.name}
                                 onChange={(e) => setBrideParents('mother', { name: e.target.value })}
                             />
-                            <Toggle
-                                pressed={bride.parents.mother.isDeceased}
-                                onPressedChange={(pressed) => setBrideParents('mother', { isDeceased: pressed })}
+                            <Button
+                                type="button"
+                                variant={bride.parents.mother.isDeceased ? 'default' : 'outline'}
+                                onClick={() => setBrideParents('mother', { isDeceased: !bride.parents.mother.isDeceased })}
+                                className={cn("w-[50px] p-0", !bride.parents.mother.isDeceased && "text-zinc-400")}
                             >
                                 故
-                            </Toggle>
+                            </Button>
                         </div>
                     </div>
                 </Field>

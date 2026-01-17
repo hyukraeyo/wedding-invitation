@@ -2,5 +2,27 @@
 @use "../../styles/mixins" as m;
 
 .container {
-    @include m.info-box;
+  display: flex;
+  align-items: flex-start; // Align to top for multiline text
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: v.$primary-50;
+  border: 1px solid v.$primary-200;
+  border-radius: v.$radius-lg;
+  color: v.$zinc-700;
+  font-size: v.$font-size-sm;
+  line-height: 1.5;
+}
+
+.icon {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: v.$zinc-700; // or primary-600 depending on preference, user screenshot shows dark gray icon
+  margin-top: 0.125rem; // Optical alignment with text
+}
+
+.content {
+  flex: 1;
+  word-break: keep-all; // Prevent awkward word breaks for Korean
 }
