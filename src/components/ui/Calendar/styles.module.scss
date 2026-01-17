@@ -1,0 +1,192 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+
+.root {
+  padding: 1rem;
+  background-color: transparent;
+}
+
+.months {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  
+  @media (min-width: v.$mobile) {
+    flex-direction: row;
+  }
+}
+
+.month {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.month_caption {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.caption_label {
+  font-size: 1rem;
+  font-weight: 700;
+  color: v.$zinc-900;
+  letter-spacing: -0.02em;
+}
+
+.nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 2.5rem;
+}
+
+.button_previous, .button_next {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: v.$radius-full;
+  color: v.$zinc-600;
+  transition: all 0.2s;
+  
+  &:hover:not(:disabled) {
+    background-color: v.$zinc-100;
+    color: v.$zinc-900;
+  }
+  
+  &:disabled {
+    opacity: 0.3;
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.weekdays {
+  display: flex;
+}
+
+.weekday {
+  flex: 1;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: v.$zinc-400;
+  text-transform: uppercase;
+}
+
+.week {
+  display: flex;
+  width: 100%;
+  margin-top: 0.25rem;
+}
+
+.day {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  aspect-square: 1 / 1;
+}
+
+// Day Button Styles (Custom component)
+.dayButton {
+  width: 100%;
+  height: 100%;
+  border-radius: v.$radius-full;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: v.$zinc-700;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  
+  &:hover:not(:disabled) {
+    background-color: v.$primary-100;
+    color: v.$primary-700;
+  }
+  
+  &[data-selected="true"] {
+    background-color: v.$color-primary !important;
+    color: white !important;
+    font-weight: 700;
+    box-shadow: 0 4px 12px rgba(v.$color-primary, 0.3);
+    transform: scale(1.05);
+  }
+}
+
+.today {
+  color: v.$color-primary;
+  font-weight: 700;
+  position: relative;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: v.$radius-full;
+    background-color: v.$color-primary;
+  }
+}
+
+.outside {
+  color: v.$zinc-300;
+  opacity: 0.5;
+}
+
+.disabled {
+  color: v.$zinc-200;
+  cursor: not-allowed;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+// Range Styles
+.range_start {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.range_middle {
+  border-radius: 0;
+  background-color: v.$primary-50;
+  color: v.$primary-700;
+}
+
+.range_end {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+// Customization for "날짜 선택" UI in Drawer
+.calendarContainer {
+  @include m.flex-center;
+  width: 100%;
+}
