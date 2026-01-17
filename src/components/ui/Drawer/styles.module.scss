@@ -11,7 +11,8 @@
 
 .content {
   position: fixed;
-  inset-x: 0;
+  left: 0;
+  right: 0;
   bottom: 0;
   z-index: v.$z-modal;
   display: flex;
@@ -23,17 +24,27 @@
   border: 1px solid v.$zinc-200;
   background-color: white;
   outline: none;
+  box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.1);
+
+  // Desktop/Tablet centering
+  @media (min-width: v.$mobile) {
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 440px;
+  }
 }
 
 .handle {
-  margin-top: 1rem;
+  margin-top: 0.75rem;
   margin-left: auto;
   margin-right: auto;
-  height: 6px;
-  width: 48px;
+  height: 5px;
+  width: 36px;
   flex-shrink: 0;
   border-radius: 9999px;
-  background-color: v.$zinc-300;
+  background-color: v.$zinc-200;
+  transition: background-color 0.2s;
 }
 
 .header {
@@ -67,7 +78,11 @@
 .scrollArea {
   flex: 1;
   overflow-y: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-bottom: 2rem;
+  // Use scroll-padding to ensure text isn't cut off when auto-scrolling
+  scroll-padding: 2rem;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: env(safe-area-inset-bottom, 2rem);
+  
+  @include m.scrollbar-hide;
 }

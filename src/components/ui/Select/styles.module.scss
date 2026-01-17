@@ -66,7 +66,7 @@
   padding: 0.25rem;
 
   // Popper modifier (moved from inline Tailwind)
-  &.popper {
+  &--popper {
     height: var(--radix-select-trigger-height);
     width: 100%;
     min-width: var(--radix-select-trigger-width);

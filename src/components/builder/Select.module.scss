@@ -42,28 +42,35 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.25rem 1.5rem; // px-6 py-5
+  padding: 1.125rem 1.5rem; // Slightly more compact but still large enough
   text-align: left;
-  transition: background-color v.$transition-fast;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid v.$zinc-50; // Subtle divider
+  transition: all v.$transition-fast;
+  cursor: pointer;
   
+  &:last-child {
+    border-bottom: none;
+  }
+
   &:active {
-    background-color: rgba(v.$zinc-100, 0.8); // active:bg-accent/80
+    background-color: v.$zinc-50;
   }
 
   &.selected {
-    background-color: rgba(v.$color-primary, 0.05); // bg-primary/5
-    color: v.$color-primary;
+    background-color: rgba(v.$color-primary, 0.08);
   }
 }
 
 .optionText {
-  font-size: 1.0625rem; // 17px
-  letter-spacing: -0.025em; // tracking-tight
-  color: rgba(v.$color-foreground, 0.8); // text-foreground/80
-  font-weight: 500;
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  color: v.$zinc-700;
+  transition: all v.$transition-fast;
   
   &.selected {
-    font-weight: 700;
+    font-weight: 600;
     color: v.$color-primary;
   }
 }
@@ -86,10 +93,9 @@
 }
 
 .drawerHeader {
-  padding-left: 1.5rem; // px-6
-  padding-right: 1.5rem;
-  padding-bottom: 0.5rem; // pb-2
-  border-bottom: 1px solid v.$color-border;
+  padding: 1.25rem 1.5rem 1rem;
+  border-bottom: 1px solid v.$zinc-100;
+  margin-bottom: 0.5rem;
 }
 
 .srOnly {

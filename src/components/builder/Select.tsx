@@ -146,7 +146,6 @@ export const Select = <T extends string | number>({
                     </button>
                 </DrawerTrigger>
                 <DrawerContent
-                    className="max-h-[50vh]"
                     onOpenAutoFocus={(event) => {
                         event.preventDefault();
                         (selectedItemRef.current ?? firstItemRef.current)?.focus();
