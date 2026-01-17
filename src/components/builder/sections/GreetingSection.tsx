@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 const ExampleSelectorModal = dynamic(() => import('@/components/builder/ExampleSelectorModal').then(mod => mod.ExampleSelectorModal), {
     ssr: false
 });
+import type { ExampleItem } from '@/components/builder/ExampleSelectorModal';
 import { InfoMessage } from '@/components/builder/InfoMessage';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
@@ -212,7 +213,7 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
                     ...s,
                     content: s.message // Map message to content for the generic component
                 }))}
-                onSelect={(item) => handleSelectSample(item)}
+                onSelect={(item: ExampleItem) => handleSelectSample(item as unknown as typeof SAMPLE_PHRASES[0])}
             />
         </>
     );

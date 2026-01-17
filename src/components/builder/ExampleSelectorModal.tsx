@@ -1,7 +1,6 @@
 import React from 'react';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 import { Button } from '@/components/ui/Button';
-import { cn } from '@/lib/utils';
 import styles from './ExampleSelectorModal.module.scss';
 
 export interface ExampleItem {

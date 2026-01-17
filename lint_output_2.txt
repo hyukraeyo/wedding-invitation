@@ -1,12 +1,13 @@
 
-C:\Users\johr9\Documents\git\wedding-invitation\src\app\api\admin\invitations\route.ts
-  5:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+> banana-wedding@0.1.0 lint
+> eslint
 
-C:\Users\johr9\Documents\git\wedding-invitation\src\app\api\approval-requests\route.ts
-  171:35  warning  'fetchError' is assigned a value but never used  @typescript-eslint/no-unused-vars
 
-C:\Users\johr9\Documents\git\wedding-invitation\src\app\api\auth\naver\callback\route.ts
-  124:27  warning  'sessionData' is assigned a value but never used  @typescript-eslint/no-unused-vars
+C:\Users\johr9\Documents\git\wedding-invitation\src\components\builder\sections\GreetingSection.tsx
+  215:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
 
-✖ 3 problems (0 errors, 3 warnings)
+C:\Users\johr9\Documents\git\wedding-invitation\src\components\ui\Drawer\index.tsx
+  40:44  warning  '_onOpenAutoFocus' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 2 problems (1 error, 1 warning)
 

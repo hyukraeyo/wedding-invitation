@@ -1,63 +1,10 @@
 
-C:\Users\johr9\Documents\git\wedding-invitation\src\app\api\admin\invitations\route.ts
-  5:27  warning  'request' is defined but never used  @typescript-eslint/no-unused-vars
+C:\Users\johr9\Documents\git\wedding-invitation\src\components\builder\ExampleSelectorModal.tsx
+  4:10  warning  'cn' is defined but never used  @typescript-eslint/no-unused-vars
 
-C:\Users\johr9\Documents\git\wedding-invitation\src\app\api\approval-requests\route.ts
-  171:35  warning  'fetchError' is assigned a value but never used  @typescript-eslint/no-unused-vars
+C:\Users\johr9\Documents\git\wedding-invitation\src\components\ui\Drawer\index.tsx
+   6:10  warning  'focusFirstFocusable' is defined but never used  @typescript-eslint/no-unused-vars
+  41:27  warning  'onOpenAutoFocus' is defined but never used      @typescript-eslint/no-unused-vars
 
-C:\Users\johr9\Documents\git\wedding-invitation\src\app\api\auth\naver\callback\route.ts
-  124:27  warning  'sessionData' is assigned a value but never used  @typescript-eslint/no-unused-vars
-
-C:\Users\johr9\Documents\git\wedding-invitation\src\app\builder\page.tsx
-  41:17  warning  'profile' is assigned a value but never used         @typescript-eslint/no-unused-vars
-  41:61  warning  'refreshProfile' is assigned a value but never used  @typescript-eslint/no-unused-vars
-
-C:\Users\johr9\Documents\git\wedding-invitation\src\app\login\LoginPage.tsx
-  12:10  warning  'formatPhoneNumber' is defined but never used          @typescript-eslint/no-unused-vars
-  48:11  warning  'handleKakaoLogin' is assigned a value but never used  @typescript-eslint/no-unused-vars
-
-C:\Users\johr9\Documents\git\wedding-invitation\src\components\auth\ProfileCompletionModal.tsx
-  11:24  warning  'formatPhoneNumber' is defined but never used  @typescript-eslint/no-unused-vars
-
-C:\Users\johr9\Documents\git\wedding-invitation\src\components\builder\SwitchField.tsx
-  36:39  warning  'val' is defined but never used  @typescript-eslint/no-unused-vars
-
-C:\Users\johr9\Documents\git\wedding-invitation\src\components\builder\sections\LocationSection.tsx
-  18:14  warning  'formatPhoneNumber' is defined but never used  @typescript-eslint/no-unused-vars
-
-C:\Users\johr9\Documents\git\wedding-invitation\src\components\builder\sections\MainScreenSection.tsx
-  95:18  warning  'e' is defined but never used  @typescript-eslint/no-unused-vars
-
-C:\Users\johr9\Documents\git\wedding-invitation\src\components\common\Header.tsx
-  20:10  warning  'useHeaderVisible' is defined but never used  @typescript-eslint/no-unused-vars
-
-C:\Users\johr9\Documents\git\wedding-invitation\src\components\ui\RadioGroup.tsx
-  5:10  warning  'Circle' is defined but never used  @typescript-eslint/no-unused-vars
-
-C:\Users\johr9\Documents\git\wedding-invitation\src\hooks\useAuth.ts
-  28:38  error    Compilation Skipped: Existing memoization could not be preserved
-
-React Compiler has skipped optimizing this component because the existing manual memoization could not be preserved. The inferred dependencies did not match the manually specified dependencies, which could cause the value to change more or less frequently than expected. The inferred dependency was `state.user`, but the source dependencies were []. Inferred dependency not present in source.
-
-C:\Users\johr9\Documents\git\wedding-invitation\src\hooks\useAuth.ts:28:38
-  26 |
-  27 |     // 프로필 조회 함수
-> 28 |     const fetchProfile = useCallback(async (userId: string, userEmail?: string | null) => {
-     |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> 29 |         setState(prev => ({ ...prev, profileLoading: true }));
-     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> 30 |         try {
-     …
-     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> 45 |         }
-     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> 46 |     }, []);
-     | ^^^^^^ Could not preserve existing manual memoization
-  47 |
-  48 |     // 프로필 새로고침 함수 (외부에서 호출 가능)
-  49 |     const refreshProfile = useCallback(async () => {  react-hooks/preserve-manual-memoization
-  28:61  warning  'userEmail' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
-  46:8   warning  React Hook useCallback has a missing dependency: 'state.user?.email'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      react-hooks/exhaustive-deps
-
-✖ 16 problems (1 error, 15 warnings)
+✖ 3 problems (0 errors, 3 warnings)
 

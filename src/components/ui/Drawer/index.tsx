@@ -3,7 +3,6 @@
 import * as React from "react"
 import { Drawer as DrawerPrimitive } from "vaul"
 import { cn } from "@/lib/utils"
-import { focusFirstFocusable } from "@/lib/a11y"
 import styles from "./styles.module.scss"
 
 const Drawer = ({
@@ -38,7 +37,7 @@ DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName
 const DrawerContent = React.forwardRef<
     React.ElementRef<typeof DrawerPrimitive.Content>,
     React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
->(({ className, children, onOpenAutoFocus, ...props }, ref) => {
+>(({ className, children, ...props }, ref) => {
     return (
         <DrawerPortal>
             <DrawerOverlay />
