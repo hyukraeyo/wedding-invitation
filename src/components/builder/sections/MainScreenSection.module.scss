@@ -1,5 +1,5 @@
-@use "@/styles/variables" as v;
-@use "@/styles/builder" as b;
+@use "../../../styles/variables" as v;
+@use "../../../styles/builder" as b;
 
 .container {
   @include b.builder-section;
@@ -32,15 +32,15 @@
 .andTextLabel {
   font-size: 11.5px;
   font-weight: bold;
-  color: v.$gray-400;
+  color: v.$zinc-400;
   letter-spacing: -0.02em;
 }
 
 .helpText {
   font-size: 13px;
-  color: v.$gray-400;
+  color: v.$zinc-400;
   padding: 0.75rem 1rem;
-  background: v.$gray-50;
+  background: v.$zinc-50;
   border-radius: 8px;
   margin: 0;
 }
@@ -79,7 +79,7 @@
 
   @media (hover: hover) and (pointer: fine) {
     &:hover .presetThumbnail {
-      border-color: v.$gray-300;
+      border-color: v.$zinc-300;
     }
   }
 
@@ -92,7 +92,7 @@
 .presetThumbnail {
   width: 100%;
   aspect-ratio: 9 / 16;
-  border: 1px solid v.$gray-200;
+  border: 1px solid v.$zinc-200;
   border-radius: 8px;
   background: #fff;
   overflow: hidden;
@@ -102,7 +102,7 @@
 
 .thumbnailImage {
   flex: 1;
-  background: linear-gradient(135deg, v.$gray-100 0%, v.$gray-50 100%);
+  background: linear-gradient(135deg, v.$zinc-100 0%, v.$zinc-50 100%);
   min-height: 50%;
 }
 
@@ -123,16 +123,16 @@
   align-items: center;
   padding: 0.25rem;
   font-size: 5px;
-  color: v.$gray-400;
+  color: v.$zinc-400;
   gap: 0.05rem;
-  border-top: 1px solid v.$gray-100;
+  border-top: 1px solid v.$zinc-100;
 }
 
 .presetLabel {
   margin-top: 0.5rem;
   font-size: 11px;
   font-weight: 500;
-  color: v.$gray-600;
+  color: v.$zinc-600;
 }
 
 // Classic Layout Adjustments
@@ -182,59 +182,59 @@
   font-size: 4px;
   font-weight: 600;
   letter-spacing: 0.1em;
-  color: v.$gray-400;
+  color: v.$zinc-400;
   margin-bottom: 0.1rem;
 }
 
 .thumbMarriage {
   font-size: 5px;
-  color: v.$gray-600;
+  color: v.$zinc-600;
 }
 
 .thumbDate {
   font-size: 12px;
   font-weight: 300;
-  color: v.$gray-700;
+  color: v.$zinc-700;
   letter-spacing: -0.02em;
 }
 
 .thumbDateMinimal {
   font-size: 6px;
   letter-spacing: 0.05em;
-  color: v.$gray-600;
+  color: v.$zinc-600;
 }
 
 .thumbWeekday {
   font-size: 5px;
   letter-spacing: 0.15em;
-  color: v.$gray-400;
+  color: v.$zinc-400;
 }
 
 .thumbNames {
   font-size: 6px;
-  color: v.$gray-600;
+  color: v.$zinc-600;
 }
 
 .thumbSubtext {
   font-size: 5px;
   font-style: italic;
-  color: v.$gray-400;
+  color: v.$zinc-400;
 }
 
 .thumbHeart {
   font-size: 8px;
-  color: v.$gray-700;
+  color: v.$zinc-700;
 }
 
 .thumbKoreanTop {
   font-size: 6px;
-  color: v.$gray-500;
+  color: v.$zinc-500;
 }
 
 .thumbKoreanBottom {
   font-size: 9px;
   font-weight: 500;
-  color: v.$gray-700;
+  color: v.$zinc-700;
 }
 
 // Sentence Combination Input

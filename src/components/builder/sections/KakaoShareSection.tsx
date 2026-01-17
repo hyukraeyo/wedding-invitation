@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { MessageCircle, Sparkles } from 'lucide-react';
+import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
@@ -9,9 +11,12 @@ import { InfoMessage } from '@/components/builder/InfoMessage';
 import { Field } from '../FormPrimitives';
 import { ImageUploader } from '../ImageUploader';
 import { HeaderAction } from '../HeaderAction';
-import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 import styles from './KakaoShareSection.module.scss';
 import { cn } from '@/lib/utils';
+
+const ResponsiveModal = dynamic(() => import('@/components/common/ResponsiveModal').then(mod => mod.ResponsiveModal), {
+    ssr: false
+});
 
 interface SectionProps {
     value: string;
@@ -19,7 +24,7 @@ interface SectionProps {
 }
 
 export default function KakaoShareSection({ isOpen, value }: SectionProps) {
-    const kakao = useInvitationStore(state => state.kakaoShare);
+    const kakao = useInvitationStore(useShallow(state => state.kakaoShare));
     const setKakao = useInvitationStore(state => state.setKakao);
     const [previewOpen, setPreviewOpen] = useState(false);
 

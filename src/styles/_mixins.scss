@@ -1,0 +1,267 @@
+@use 'variables' as *;
+
+// ============================================
+// Breakpoints
+// ============================================
+@mixin mobile {
+  @media (max-width: #{$mobile - 1px}) {
+    @content;
+  }
+}
+
+@mixin desktop {
+  @media (min-width: #{$mobile}) {
+    @content;
+  }
+}
+
+// ============================================
+// CSS Variables Export
+// ============================================
+@mixin export-css-vars {
+  @each $key, $value in (
+    'background': $color-background,
+    'foreground': $color-foreground,
+    'primary': $color-primary,
+    'primary-dark': $color-primary-dark,
+    'border': $color-border,
+    'input': $color-input,
+    'muted': $color-muted,
+    'muted-foreground': $color-muted-foreground,
+  ) {
+    --#{$key}: #{$value};
+  }
+}
+
+// ============================================
+// Flexbox Tools
+// ============================================
+@mixin flex($justify: flex-start, $align: stretch, $direction: row) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+  flex-direction: $direction;
+}
+
+@mixin flex-center {
+  @include flex(center, center);
+}
+
+@mixin flex-col {
+  @include flex(stretch, stretch, column);
+}
+
+@mixin flex-between {
+  @include flex(space-between, center);
+}
+
+// ============================================
+// Typography Utilities
+// ============================================
+@mixin text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// ============================================
+// Focus Ring (Accessibility)
+// ============================================
+@mixin focus-ring {
+  outline: none;
+  &:focus-visible {
+    box-shadow: 0 0 0 2px $color-background, 0 0 0 4px $color-primary;
+  }
+}
+
+// ============================================
+// Scrollbar Hide
+// ============================================
+@mixin scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+// ============================================
+// Absolute Full (fill parent)
+// ============================================
+@mixin absolute-full {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+// ============================================
+// Disabled State
+// ============================================
+@mixin disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+// ============================================
+// Hover Media Query (only for devices with hover capability)
+// ============================================
+@mixin hover {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      @content;
+    }
+  }
+}
+
+// ============================================
+// Input Base Styles
+// ============================================
+@mixin input-base {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: $font-size-base;
+  font-family: $font-family-base;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  background: $color-background;
+  color: $color-foreground;
+  transition: border-color $transition-fast;
+}
+
+@mixin input-placeholder {
+  color: $color-muted-foreground;
+}
+
+@mixin input-hover {
+  @include hover {
+    border-color: $zinc-300;
+  }
+}
+
+@mixin input-disabled {
+  @include disabled {
+    background: $color-muted;
+    cursor: not-allowed;
+  }
+}
+
+// ============================================
+// Button Base Styles
+// ============================================
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  font-size: $font-size-base;
+  font-weight: 500;
+  font-family: $font-family-base;
+  border: 1px solid transparent;
+  border-radius: $radius-md;
+  cursor: pointer;
+  transition: all $transition-fast;
+  text-decoration: none;
+  user-select: none;
+}
+
+@mixin button-hover {
+  @include hover {
+    opacity: 0.9;
+  }
+}
+
+@mixin button-active {
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+@mixin button-disabled {
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+// ============================================
+// Toggle Base Styles
+// ============================================
+@mixin toggle-base {
+  position: relative;
+  width: 2.5rem;
+  height: 1.25rem;
+  background: $zinc-200;
+  border-radius: $radius-full;
+  cursor: pointer;
+  transition: background $transition-fast;
+}
+
+// ============================================
+// Info Box Style
+// ============================================
+@mixin info-box {
+  padding: 0.75rem 1rem;
+  background: $color-ivory;
+  border: 1px solid $zinc-200;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  color: $zinc-700;
+  line-height: 1.5;
+}
+
+// ============================================
+// Visually Hidden (for accessibility)
+// ============================================
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+// ============================================
+// Toggle Hover State
+// ============================================
+@mixin toggle-hover {
+  @include hover {
+    background: $zinc-300;
+  }
+}
+
+// ============================================
+// Toggle Active State
+// ============================================
+@mixin toggle-active {
+  &:active {
+    background: $zinc-400;
+  }
+}
+
+// ============================================
+// Toggle State On
+// ============================================
+@mixin toggle-state-on {
+  background: $color-primary;
+  &:checked {
+    background: $color-primary;
+  }
+}
+
+// ============================================
+// Input Disabled State
+// ============================================
+@mixin input-disabled {
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}

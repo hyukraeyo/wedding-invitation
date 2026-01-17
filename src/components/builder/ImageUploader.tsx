@@ -6,10 +6,11 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { SegmentedControl } from './SegmentedControl';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import { IconButton } from '@/components/ui/icon-button';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { IconButton } from '@/components/ui/IconButton';
+import { AspectRatio } from '@/components/ui/AspectRatio';
 import { isBlobUrl } from '@/lib/image';
 import { IMAGE_SIZES } from '@/constants/image';
+import styles from './ImageUploader.module.scss';
 
 interface ImageUploaderProps {
     value: string | null;
@@ -101,28 +102,22 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
     const shouldUnoptimize = isBlobUrl(displayUrl);
     const isAutoRatio = props.ratio === 'auto';
 
-    // Calculate aspect ratio class or style
-    // Tailwind aspect-ratio plugin usually needed or arbitrary values.
-    // We can use arbitrary values like aspect-[16/9] if supported or style.
-    // For now we use style for dynamic ratio compatibility or standard classes if mapped.
-
     return (
-        <div className="flex flex-col gap-2">
+        <div className={styles.container}>
             <div className={cn("w-full", className)} style={cssVars}>
-                {label ? <Label className="mb-2 block">{label}</Label> : null}
+                {label ? <Label className={styles.label}>{label}</Label> : null}
 
                 <div
                     className={cn(
-                        "group relative w-full border-2 border-dashed rounded-lg flex items-center justify-center transition-colors overflow-hidden bg-background",
-                        !displayUrl && "hover:bg-muted/50 cursor-pointer border-muted-foreground/25",
-                        displayUrl && "border-transparent",
-                        !displayUrl && "min-h-[200px]"
+                        styles.uploadBox,
+                        !displayUrl && styles.empty,
+                        displayUrl && styles.filled
                     )}
                     onClick={() => !displayUrl && inputRef.current?.click()}
                     style={!isAutoRatio ? { aspectRatio: aspectRatio.replace('/', '/') } : {}}
                 >
                     {displayUrl ? (
-                        <div className={cn("relative w-full h-full", isAutoRatio ? "min-h-[200px]" : "absolute inset-0")}>
+                        <div className={cn(styles.previewWrapper, isAutoRatio ? styles.minHeight : styles.absoluteFull)}>
                             {!isAutoRatio ? (
                                 <AspectRatio ratio={aspectRatio.split('/').map(Number).reduce((a, b) => a / b)}>
                                     <Image
@@ -130,8 +125,8 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                                         alt="Uploaded"
                                         fill
                                         className={cn(
-                                            "object-cover transition-opacity duration-300",
-                                            isUploading && "opacity-50"
+                                            styles.image,
+                                            isUploading && styles.uploading
                                         )}
                                         sizes={IMAGE_SIZES.builder}
                                         unoptimized={shouldUnoptimize}
@@ -144,16 +139,16 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                                     width={800}
                                     height={600}
                                     className={cn(
-                                        "object-cover transition-opacity duration-300 w-full h-auto",
-                                        isUploading && "opacity-50"
+                                        styles.image,
+                                        isUploading && styles.uploading
                                     )}
                                     sizes={IMAGE_SIZES.builder}
                                     unoptimized={shouldUnoptimize}
                                 />
                             )}
                             {isUploading ? (
-                                <div className="absolute inset-0 flex items-center justify-center bg-black/20 z-10">
-                                    <Banana className="h-8 w-8 animate-spin text-primary" />
+                                <div className={styles.overlay}>
+                                    <Banana className={styles.spinner} />
                                 </div>
                             ) : null}
                             <IconButton
@@ -162,17 +157,17 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                                 variant="destructive"
                                 size="sm"
                                 icon={Trash2}
-                                className="absolute top-2 right-2 transition-opacity z-20 w-8 h-8 rounded-full shadow-sm"
+                                className={styles.removeButton}
                                 disabled={isUploading}
                             />
                         </div>
                     ) : (
-                        <div className="flex flex-col items-center justify-center p-6 text-center text-muted-foreground">
-                            <div className="mb-4 rounded-full bg-muted p-3">
-                                <UploadCloud size={24} className="text-muted-foreground" />
+                        <div className={styles.emptyState}>
+                            <div className={styles.iconCircle}>
+                                <UploadCloud size={24} className={styles.uploadIcon} />
                             </div>
-                            <p className="text-sm font-medium mb-1">{placeholder}</p>
-                            <p className="text-xs text-muted-foreground/75">클릭하여 이미지를 선택하세요</p>
+                            <p className={styles.emptyTitle}>{placeholder}</p>
+                            <p className={styles.emptyDesc}>클릭하여 이미지를 선택하세요</p>
                         </div>
                     )}
 
@@ -181,13 +176,13 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                         type="file"
                         accept="image/*"
                         onChange={handleUpload}
-                        className="hidden"
+                        className={styles.hiddenInput}
                     />
                 </div>
             </div>
 
             {value && props.ratio && props.onRatioChange ? (
-                <div className="mt-2">
+                <div className={styles.ratioControl}>
                     <SegmentedControl
                         value={props.ratio}
                         options={[

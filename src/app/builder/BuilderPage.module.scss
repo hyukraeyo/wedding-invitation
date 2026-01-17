@@ -1,4 +1,4 @@
-@use "@/styles/variables" as *;
+@use "../../styles/variables" as *;
 
 .container {
     position: fixed;
@@ -7,7 +7,7 @@
     flex-direction: column;
     height: 100dvh;
     width: 100vw;
-    background-color: #f3f4f6;
+    background-color: #eeeeee; // 요청: 뒷 배경 #eee
     overflow: hidden;
     z-index: 10;
 }
@@ -48,7 +48,7 @@
                 padding: 1.5rem;
             }
 
-            background-color: rgba(249, 250, 251, 0.5);
+            background-color: transparent; // 사이드바 배경(#eee)이 보이도록 투명 처리
 
             // Hide scrollbar completely (cross-platform)
             // Width is still usable for scrolling, just invisible

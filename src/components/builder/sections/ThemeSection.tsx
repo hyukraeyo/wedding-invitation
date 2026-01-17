@@ -1,5 +1,6 @@
 import React from 'react';
 import { Palette, Check, Plus } from 'lucide-react';
+import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { SegmentedControl } from '../SegmentedControl';
@@ -26,7 +27,7 @@ const PRESET_COLORS = [
 ];
 
 const ThemeSection = React.memo<SectionProps>(function ThemeSection({ isOpen, value }) {
-    const theme = useInvitationStore(state => state.theme);
+    const theme = useInvitationStore(useShallow(state => state.theme));
     const setTheme = useInvitationStore(state => state.setTheme);
 
     return (

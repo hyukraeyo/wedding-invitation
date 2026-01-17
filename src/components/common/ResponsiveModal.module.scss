@@ -1,0 +1,156 @@
+@use "../../styles/variables" as v;
+@use "../../styles/mixins" as m;
+
+// 하드코딩된 색상 변수화 (필요시 variables.scss에 추가 고려)
+$color-text-title: #191F28;
+$color-text-desc: #4E5968;
+$color-bg-confirm: v.$color-primary;
+$color-bg-confirm-hover: v.$color-primary-dark;
+
+.dialogContent {
+  max-width: 28rem;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  border-radius: 2rem;
+  border: none;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); // shadow-2xl
+}
+
+.drawerContent {
+  border-top-left-radius: 2rem;
+  border-top-right-radius: 2rem;
+  padding: 0;
+  border: none;
+}
+
+.drawerLayout {
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  width: 100%;
+}
+
+.header {
+  text-align: center;
+  padding-top: 2.5rem; // pt-10
+  padding-bottom: 0.5rem; // pb-2
+  padding-left: 2rem;
+  padding-right: 2rem; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0; // shrink-0
+  
+  // Drawer specific overrides
+  &.drawerHeader {
+    padding-top: 2rem; // pt-8
+    padding-bottom: 1rem; // pb-4
+  }
+}
+
+.title {
+  font-size: 1.5rem; // 2xl
+  font-weight: 700;
+  letter-spacing: -0.025em; // tracking-tight
+  color: $color-text-title;
+  margin-bottom: 0.75rem; // mb-3
+}
+
+.description {
+  font-size: 1.0625rem; // 17px
+  color: $color-text-desc;
+  line-height: 1.625; // leading-relaxed
+  word-break: keep-all; // break-keep
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem 2rem; // px-8 py-2
+  
+  // Drawer scroll area specific overrides
+  &.drawerScrollArea {
+     overflow: hidden;
+     min-height: 0;
+  }
+}
+
+.footer {
+  display: flex;
+  width: 100%;
+  margin-top: auto;
+  border-top: 1px solid v.$zinc-100; // border-gray-100
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.buttonBase {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.cancelButton {
+  @extend .buttonBase;
+  background-color: transparent;
+  color: v.$zinc-600; // text-gray-600
+  font-weight: 500;
+  border-right: 1px solid v.$zinc-100;
+  
+  &:hover {
+    background-color: v.$zinc-50; // hover:bg-gray-50
+  }
+  
+  &:active {
+    background-color: v.$zinc-100; // active:bg-gray-100
+  }
+}
+
+.confirmButton {
+  @extend .buttonBase;
+  font-weight: 700;
+  color: $color-text-title;
+  
+  &:active {
+    background-color: rgba($color-bg-confirm, 0.9);
+  }
+
+  &.primary {
+    background-color: $color-bg-confirm;
+    
+    &:hover {
+      background-color: $color-bg-confirm-hover;
+    }
+  }
+
+  &.destructive {
+    color: v.$color-danger; // text-red-600
+    background-color: transparent;
+    
+    &:hover {
+      background-color: #FEF2F2; // red-50
+    }
+  }
+}
+
+// Dialog Button Height
+.dialogButtonHeight {
+  height: 3.5rem; // h-14 (56px)
+  font-size: 1rem; // 16px
+}
+
+// Drawer Button Height
+.drawerButtonHeight {
+  height: 4rem; // h-16 (64px)
+  font-size: 1.0625rem; // 17px
+}

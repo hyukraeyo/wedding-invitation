@@ -88,11 +88,172 @@ import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 - **커스텀 아이콘**: `public/assets/icons` 경로에 SVG/PNG로 관리하며, `Image` 컴포넌트로 로드합니다.
 - **로고**: 벡터 그래픽(`public/assets/icons/logo_vector.svg`) 사용을 권장합니다.
 
-### 5. 스타일링 원칙 (Tailwind + SCSS)
+### 5. 스타일링 원칙 (SCSS Modules + Radix UI)
 
-- **색상**: `primary`는 바나나 옐로우(`#FBC02D`)를 사용합니다.
-- **애니메이션**: 'iOS' 느낌의 부드러운 감속(`cubic-bezier(0.16, 1, 0.3, 1)`)을 전역적으로 사용합니다.
-- **반응형 패딩**: 모바일에서의 작업 영역 확보를 위해, 빌더 사이드바의 `padding-x`는 모바일에서 `1rem`, 데스크탑에서 `1.5rem`을 유지합니다.
+- **Single Source of Truth**: 모든 디자인 토큰(색상, 폰트, 간격)은 `src/styles/_variables.scss`에서 관리합니다.
+- **SCSS Modules 필수**: 컴포넌트 스타일링은 반드시 `module.scss`를 사용하며, Tailwind 등 유틸리티 클래스 사용을 금지합니다.
+- **Radix UI Primitives**: 
+  - 접근성(A11y)과 키보드 네비게이션이 보장된 Radix UI Primitive를 사용합니다.
+  - 스타일은 전적으로 SCSS로 커스터마이징합니다.
+- **색상**: Primary Color는 바나나 옐로우(`#FBC02D`)를 사용합니다.
+
+### 5.1 UI 컴포넌트 생성 가이드 (Strict Rule)
+
+새로운 UI 컴포넌트를 생성할 때 반드시 다음 규칙을 따릅니다.
+
+#### **폴더 구조 (필수)**
+```
+src/components/ui/
+├── ComponentName/           # PascalCase 폴더명
+│   ├── index.tsx           # 컴포넌트 로직
+│   └── styles.module.scss  # 스타일 (선택적)
+├── Button/
+│   ├── index.tsx
+│   └── styles.module.scss
+├── Calendar/
+│   └── index.tsx           # react-day-picker 래핑
+├── Accordion/
+│   ├── index.tsx
+│   └── styles.module.scss
+└── ...
+```
+
+#### **컴포넌트 타입별 구현 패턴**
+
+**1. Radix UI 기반 컴포넌트 (권장)**
+```tsx
+// src/components/ui/Dialog/index.tsx
+"use client"
+
+import * as React from "react"
+import * as DialogPrimitive from "@radix-ui/react-dialog"
+import { cn } from "@/lib/utils"
+import styles from "./styles.module.scss"
+
+const Dialog = DialogPrimitive.Root
+const DialogTrigger = DialogPrimitive.Trigger
+
+const DialogContent = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Content>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
+>(({ className, children, ...props }, ref) => (
+  <DialogPrimitive.Portal>
+    <DialogPrimitive.Overlay className={styles.overlay} />
+    <DialogPrimitive.Content
+      ref={ref}
+      className={cn(styles.content, className)}
+      {...props}
+    >
+      {children}
+    </DialogPrimitive.Content>
+  </DialogPrimitive.Portal>
+))
+DialogContent.displayName = DialogPrimitive.Content.displayName
+
+export { Dialog, DialogTrigger, DialogContent }
+```
+
+**2. 외부 라이브러리 래핑 (Calendar 등)**
+```tsx
+// src/components/ui/Calendar/index.tsx
+"use client"
+
+import * as React from "react"
+import { DayPicker } from "react-day-picker"
+import { cn } from "@/lib/utils"
+import { Button, buttonVariants } from "@/components/ui/Button"
+
+// 타입 정의
+export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
+  buttonVariant?: React.ComponentProps<typeof Button>["variant"]
+}
+
+function Calendar({ className, classNames, ...props }: CalendarProps) {
+  return (
+    <DayPicker
+      className={cn("...", className)}
+      classNames={{...classNames}}
+      {...props}
+    />
+  )
+}
+Calendar.displayName = "Calendar"
+
+export { Calendar }
+```
+
+**3. 순수 HTML 기반 컴포넌트**
+```tsx
+// src/components/ui/Input/index.tsx
+import * as React from "react"
+import { cn } from "@/lib/utils"
+import styles from "./styles.module.scss"
+
+const Input = React.forwardRef<
+  HTMLInputElement,
+  React.InputHTMLAttributes<HTMLInputElement>
+>(({ className, type, ...props }, ref) => (
+  <input
+    type={type}
+    className={cn(styles.input, className)}
+    ref={ref}
+    {...props}
+  />
+))
+Input.displayName = "Input"
+
+export { Input }
+```
+
+#### **SCSS 스타일 작성 규칙**
+
+```scss
+// src/components/ui/Button/styles.module.scss
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+
+.button {
+  @include m.button-base;  // 공통 믹스인 사용
+  
+  // 변형(Variant)별 스타일
+  &--variant-default {
+    background-color: v.$primary;
+    color: v.$color-primary-foreground;
+  }
+  
+  &--variant-outline {
+    border: 1px solid v.$color-border;
+    background-color: transparent;
+  }
+  
+  // 크기별 스타일
+  &--size-sm { padding: 0.25rem 0.5rem; }
+  &--size-default { padding: 0.5rem 1rem; }
+  &--size-lg { padding: 0.75rem 1.5rem; }
+}
+```
+
+#### **Export 규칙**
+
+- **Named Export 사용**: `export { ComponentName }`
+- **displayName 필수**: 디버깅을 위해 항상 설정
+- **타입 Export**: 필요 시 Props 타입도 export
+
+#### **Shadcn UI CLI 사용 시**
+
+Shadcn CLI로 컴포넌트 추가 후 반드시:
+1. 생성된 `*.tsx` 파일을 `ComponentName/index.tsx` 폴더로 이동
+2. import 경로를 대문자 폴더명으로 수정
+3. 중복 생성된 파일(button.tsx 등) 삭제
+
+```bash
+# Shadcn CLI로 컴포넌트 추가
+npx shadcn@latest add calendar
+
+# 폴더 구조로 이동
+mkdir -p src/components/ui/Calendar
+mv src/components/ui/calendar.tsx src/components/ui/Calendar/index.tsx
+```
 
 ### 6. 데이터 흐름 (Zustand)
 

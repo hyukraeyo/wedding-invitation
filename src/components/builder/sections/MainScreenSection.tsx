@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 
 import { Home, Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { HeaderAction } from '../HeaderAction';
-import { ExampleSelectorModal } from '../ExampleSelectorModal';
+import type { ExampleItem } from '../ExampleSelectorModal';
+
+const ExampleSelectorModal = dynamic(() => import('../ExampleSelectorModal').then(mod => mod.ExampleSelectorModal), {
+    ssr: false
+});
 
 interface SectionProps {
     value: string;
@@ -29,7 +34,7 @@ export default function MainScreenSection({ isOpen, value }: SectionProps) {
         { title: '소중한 분들을 초대합니다', subtitle: '국문 정중' },
     ];
 
-    const handleSelectSample = (sample: typeof SAMPLE_TITLES[0]) => {
+    const handleSelectSample = (sample: ExampleItem) => {
         setMainScreen({ title: sample.title });
         setIsSampleModalOpen(false);
     };

@@ -9,14 +9,14 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from '@/components/ui/select';
+} from '@/components/ui/Select';
 import {
     Sheet,
     SheetContent,
     SheetHeader,
     SheetTitle,
     SheetDescription,
-} from '@/components/ui/sheet';
+} from '@/components/ui/Sheet';
 import { useWindowSize } from '@/hooks/useWindowSize';
 
 export interface SelectOption {

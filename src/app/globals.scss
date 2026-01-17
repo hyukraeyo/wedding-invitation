@@ -1,10 +1,8 @@
-@use "@/styles/variables" as *;
-@use "@/styles/animations" as *;
-@use "@/styles/common";
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@use "../styles/variables" as *;
+@use "../styles/mixins" as m;
+@use "../styles/reset"; // Replaces Tailwind Preflight
+@use "../styles/animations";
+@use "../styles/common";
 
 @font-face {
   font-family: 'GmarketSansMedium';
@@ -14,47 +12,20 @@
 }
 
 :root {
-  --background: #FFFFFF;
-  --foreground: #212121;
-  --accent: #f4f4f5;
-  --ivory: #FFFDE7;
-  --banana-yellow: #FBC02D;
-  --banana-light: #FFEE58;
-  --wedding-blue: #1565C0;
-  --muted-sand: #F5F5DC;
-  --coral-pink: #FF8A8A;
-
-  /* Shadcn UI Variables */
-  --card: #FFFFFF;
-  --card-foreground: #212121;
-  --popover: #FFFFFF;
-  --popover-foreground: #212121;
-  --primary: #FBC02D;
-  --primary-foreground: #FFFFFF;
-  --secondary: #FFFDE7;
-  --secondary-foreground: #212121;
-  --muted: #FAFAFA;
-  --muted-foreground: #787878;
-  --accent-foreground: #FBC02D;
-  --destructive: #EF4444;
-  --destructive-foreground: #FFFFFF;
-  --border: #EEEEEE;
-  --input: #EEEEEE;
-  --ring: #FBC02D;
-  --radius: 0.75rem;
-
-  /* Builder Design System Tokens (Global) */
-  --builder-font-size: 15px;
-  --builder-line-height: normal;
-  --builder-radius: 12px;
-  --builder-height: 48px;
-  --builder-font-family: var(--font-gmarket-sans);
-  --builder-border-color: #d4d4d8;
-  /* zinc-300 */
+  @include m.export-css-vars;
 
   /* Font Families */
   --font-pretendard: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
   --font-gmarket-sans: "GmarketSansMedium", sans-serif;
+  --font-sans: "Inter", "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  --font-serif: "Playfair Display", "Nanum Myeongjo", "Times New Roman", serif;
+  --font-gowun-batang: "Gowun Batang", "Nanum Myeongjo", serif;
+  --font-gowun-dodum: "Gowun Dodum", "Pretendard", sans-serif;
+  --font-nanum-myeongjo: "Nanum Myeongjo", "Times New Roman", serif;
+  --font-yeon-sung: "Yeon Sung", "Pretendard", cursive;
+  --font-do-hyeon: "Do Hyeon", "Pretendard", sans-serif;
+  --font-song-myung: "Song Myung", "Nanum Myeongjo", serif;
+  --font-script: "Great Vibes", "Times New Roman", cursive;
 
   /* Custom Transitions (App-like feel) */
   --ease-ios: cubic-bezier(0.16, 1, 0.3, 1);
@@ -68,9 +39,6 @@
   --motion-distance: 24px;
   --motion-scale: 0.98;
   --motion-overlay-blur: 16px;
-
-
-
 }
 
 * {
@@ -207,5 +175,3 @@ button {
 .fixed.inset-x-0.bottom-0 {
   transition-timing-function: var(--ease-ios);
 }
-
-

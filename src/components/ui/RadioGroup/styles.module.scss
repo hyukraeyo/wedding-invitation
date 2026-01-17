@@ -1,0 +1,87 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+
+.root {
+  display: grid;
+  gap: 0.5rem; // gap-2
+}
+
+.item {
+  width: 1.125rem; // 18px
+  height: 1.125rem;
+  border-radius: 9999px;
+  border: 1px solid v.$zinc-300; // border-gray-300
+  background-color: transparent;
+  cursor: pointer;
+  
+  // Layout center for indicator
+  display: grid;
+  place-items: center;
+
+  transition: all 0.2s ease;
+
+  // Mixin
+  @include m.focus-ring;
+
+  // Disabled
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  // Checked State
+  &[data-state='checked'] {
+    border-color: v.$color-primary;
+  }
+}
+
+.indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.circle {
+  width: 0.5rem; // h-2 (8px)
+  height: 0.5rem; // w-2
+  border-radius: 9999px;
+  background-color: v.$color-primary;
+}
+
+// Card Style Radio Item (Custom)
+.cardItem {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  
+  padding: 1rem; // p-4
+  border-radius: v.$radius-md; // rounded-md
+  border: 2px solid v.$zinc-100; // border-muted
+  background-color: white; // bg-popover
+  
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  font-size: 0.875rem; // text-sm
+  font-weight: 500; // font-medium
+  color: v.$zinc-500; // text-muted-foreground
+
+  @include m.focus-ring;
+  
+  // Link hover style from original
+  &:hover {
+    background-color: v.$zinc-50; // bg-accent
+    color: v.$zinc-900;
+  }
+
+  // Checked State
+  &[data-state='checked'] {
+    border-color: v.$color-primary;
+    background-color: rgba(v.$primary-100, 0.5); // bg-secondary/20 equivalent appx
+    color: v.$color-primary-dark; // text-primary
+  }
+}

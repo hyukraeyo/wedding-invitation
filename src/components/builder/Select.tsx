@@ -5,8 +5,8 @@ import {
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select"
-import { Label } from '@/components/ui/label';
+} from "@/components/ui/Select"
+import { Label } from '@/components/ui/Label';
 import { cn } from '@/lib/utils';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import {
@@ -17,7 +17,7 @@ import {
     DrawerDescription,
     DrawerScrollArea,
     DrawerTrigger,
-} from '@/components/ui/drawer';
+} from '@/components/ui/Drawer';
 import { ChevronDown, Check } from 'lucide-react';
 import styles from './Select.module.scss';
 
@@ -112,10 +112,10 @@ export const Select = <T extends string | number>({
 
     if (!isMobile) {
         return (
-            <div className={cn("flex flex-col gap-1.5", className)}>
+            <div className={cn(styles.container, className)}>
                 {label ? <Label className={labelClassName}>{label}</Label> : null}
                 <ShadcnSelect value={stringValue} onValueChange={handleValueChange}>
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className={styles.desktopTrigger}>
                         <SelectValue placeholder={placeholder} />
                     </SelectTrigger>
                     <SelectContent>
@@ -131,7 +131,7 @@ export const Select = <T extends string | number>({
     }
 
     return (
-        <div className={cn("flex flex-col gap-1.5", className)}>
+        <div className={cn(styles.container, className)}>
             {label ? <Label className={labelClassName}>{label}</Label> : null}
             <Drawer open={isOpen} onOpenChange={setIsOpen}>
                 <DrawerTrigger asChild>
@@ -152,11 +152,11 @@ export const Select = <T extends string | number>({
                         (selectedItemRef.current ?? firstItemRef.current)?.focus();
                     }}
                 >
-                    <DrawerHeader className="px-6 pb-2 border-b">
-                        <DrawerTitle className="text-left text-base font-bold text-foreground/90">
+                    <DrawerHeader className={styles.drawerHeader}>
+                        <DrawerTitle className={styles.drawerTitle}>
                             {modalTitle || label || placeholder || "항목 선택"}
                         </DrawerTitle>
-                        <DrawerDescription className="sr-only">
+                        <DrawerDescription className={styles.srOnly}>
                             항목 목록
                         </DrawerDescription>
                     </DrawerHeader>
@@ -170,18 +170,18 @@ export const Select = <T extends string | number>({
                                     type="button"
                                     onClick={() => handleValueChange(String(option.value))}
                                     className={cn(
-                                        "w-full flex items-center justify-between px-6 py-5 text-left transition-all active:bg-accent/80 touch-manipulation",
-                                        isSelected && "bg-primary/5 text-primary"
+                                        styles.optionItem,
+                                        isSelected && styles.selected
                                     )}
                                 >
                                     <span className={cn(
-                                        "text-[17px] tracking-tight",
-                                        isSelected ? "font-bold" : "font-medium text-foreground/80"
+                                        styles.optionText,
+                                        isSelected && styles.selected
                                     )}>
                                         {option.label}
                                     </span>
                                     {isSelected ? (
-                                        <Check className="h-5 w-5 text-primary" strokeWidth={3} />
+                                        <Check className={styles.checkIcon} strokeWidth={3} />
                                     ) : null}
                                 </button>
                             );

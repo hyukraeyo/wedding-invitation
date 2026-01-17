@@ -1,6 +1,7 @@
 'use client';
 
-import { SegmentedControl as BaseSegmentedControl, SegmentedControlItem } from '@/components/ui/segmented-control';
+import { SegmentedControl as BaseSegmentedControl, SegmentedControlItem } from '@/components/ui/SegmentedControl';
+import styles from './SegmentedControl.module.scss';
 
 interface Option<T> {
     label: string;
@@ -27,12 +28,12 @@ export const SegmentedControl = <T extends string | number>({
         <BaseSegmentedControl
             value={value}
             onChange={onChange}
-            className={className}
+            className={className} // Pass external className
             size={size === 'sm' ? 'small' : 'large'}
         >
             {options.map((option) => (
                 <SegmentedControlItem key={String(option.value)} value={option.value}>
-                    <span className="flex items-center justify-center gap-1.5">
+                    <span className={styles.itemContent}>
                         {option.icon}
                         <span>{option.label}</span>
                     </span>

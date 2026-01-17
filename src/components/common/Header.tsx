@@ -1,17 +1,21 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Plus, User, LogIn, Save, LogOut } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useRouter, usePathname } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { IconButton } from '@/components/ui/icon-button';
+import { IconButton } from '@/components/ui/IconButton';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
+import { useShallow } from 'zustand/shallow';
+import styles from './Header.module.scss';
+
+// Lazy load Button to avoid preload warning (Button is only used inside modal)
+const Button = lazy(() => import('@/components/ui/Button').then(mod => ({ default: mod.Button })));
 
 interface HeaderProps {
     onSave?: () => void;
@@ -24,8 +28,10 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
     const pathname = usePathname();
     const isMyPage = pathname?.startsWith('/mypage');
     const { user, signOut } = useAuth();
-    const reset = useInvitationStore(state => state.reset);
-    const isUploading = useInvitationStore(state => state.isUploading); // Add Loading State
+    const { reset, isUploading } = useInvitationStore(useShallow((state) => ({
+        reset: state.reset,
+        isUploading: state.isUploading,
+    })));
     const [showResetDialog, setShowResetDialog] = useState(false);
     const isVisible = true; // Always visible as per user request
     const { toast } = useToast();
@@ -79,19 +85,16 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
     };
 
     return (
-        <header className={cn(
-            "sticky top-0 left-0 right-0 flex h-14 items-center justify-between border-b bg-background px-4 md:px-6 z-50 transition-transform duration-400 ease-ios",
-            !isVisible && "-translate-y-full"
-        )}>
+        <header className={cn(styles.header, !isVisible && styles.hidden)}>
             {/* Logo */}
-            <div className="flex items-center shrink-0">
-                <Link href="/" className="hover:opacity-80 transition-opacity flex items-center">
+            <div className={styles.logoWrapper}>
+                <Link href="/" className={styles.logoLink}>
                     <Image
                         src="/logo.png"
                         alt="Logo"
                         width={44}
                         height={44}
-                        className="h-9 w-9 md:h-11 md:w-11 object-contain shrink-0 aspect-square"
+                        className={styles.logoImage}
                         quality={100}
                         priority
                     />
@@ -99,7 +102,7 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
             </div>
 
             {/* Actions */}
-            <div className="flex items-center gap-1">
+            <div className={styles.actions}>
                 {user ? (
                     <>
                         {isMyPage ? (
@@ -150,7 +153,7 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
                         loading={isLoading || isUploading}
                         size="md"
                         variant="ghost"
-                        className="ml-1 transition-transform active:scale-[0.92]"
+                        className={styles.saveButton}
                         aria-label="저장하기"
                     />
                 ) : null}
@@ -168,22 +171,24 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
                     </>
                 }
             >
-                <div className="flex flex-col gap-3 py-4">
-                    <Button
-                        variant="destructive"
-                        className="w-full py-6 text-lg font-bold"
-                        onClick={confirmReset}
-                    >
-                        초기화 및 만들기
-                    </Button>
-                    <Button
-                        variant="ghost"
-                        className="w-full py-6 text-base"
-                        onClick={() => setShowResetDialog(false)}
-                    >
-                        취소
-                    </Button>
-                </div>
+                <Suspense fallback={<div className="h-32" />}>
+                    <div className={styles.resetDialogContent}>
+                        <Button
+                            variant="destructive"
+                            className={styles.confirmButton}
+                            onClick={confirmReset}
+                        >
+                            초기화 및 만들기
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            className={styles.cancelButton}
+                            onClick={() => setShowResetDialog(false)}
+                        >
+                            취소
+                        </Button>
+                    </div>
+                </Suspense>
             </ResponsiveModal>
         </header>
     );

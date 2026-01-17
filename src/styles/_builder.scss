@@ -3,7 +3,8 @@
 // 빌더 UI의 모든 레이아웃 관련 변수 및 스타일
 // ============================================
 
-@use "@/styles/variables" as v;
+@use "./variables" as v;
+@use "./mixins" as m;
 
 // ----- Spacing & Sizing Variables -----
 $builder-gap-xs: 0.25rem; // 4px
@@ -122,21 +123,21 @@ $builder-font-xl: 17px;
 }
 
 @mixin builder-input-base {
-  @include v.input-base;
+  @include m.input-base;
 
   &::placeholder {
-    @include v.input-placeholder;
+    color: v.$color-muted-foreground;
   }
 
-  @include v.input-hover;
-  @include v.input-disabled;
+  @include m.input-hover;
+  @include m.input-disabled;
 }
 
 @mixin builder-button-base {
-  @include v.button-base;
-  @include v.button-hover;
-  @include v.button-active;
-  @include v.button-disabled;
+  @include m.button-base;
+  @include m.button-hover;
+  @include m.button-active;
+  @include m.button-disabled;
 }
 
 // Active state for toggleable buttons
@@ -151,9 +152,9 @@ $builder-font-xl: 17px;
 
 // Helpers
 @mixin flex-center {
-  @include v.flex-center;
+  @include m.flex-center;
 }
 
 @mixin absolute-full {
-  @include v.absolute-full;
+  @include m.absolute-full;
 }

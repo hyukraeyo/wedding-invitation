@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { CreditCard, Plus, Trash2, ChevronDown } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { IconButton } from '@/components/ui/icon-button';
-import { Button as UIButton } from '@/components/ui/button';
+import { IconButton } from '@/components/ui/IconButton';
+import { Button as UIButton } from '@/components/ui/Button';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { SegmentedControl } from '../SegmentedControl';
@@ -11,6 +11,7 @@ import { Select } from "@/components/builder/Select";
 import styles from './AccountsSection.module.scss';
 import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
+import { useShallow } from 'zustand/shallow';
 
 const RichTextEditor = dynamic(() => import('@/components/common/RichTextEditor'), { ssr: false });
 
@@ -20,22 +21,41 @@ interface SectionProps {
 }
 
 export default function AccountsSection({ value, isOpen }: SectionProps) {
-    const accounts = useInvitationStore(state => state.accounts);
-    const setAccounts = useInvitationStore(state => state.setAccounts);
-    const accountsTitle = useInvitationStore(state => state.accountsTitle);
-    const setAccountsTitle = useInvitationStore(state => state.setAccountsTitle);
-    const accountsSubtitle = useInvitationStore(state => state.accountsSubtitle);
-    const setAccountsSubtitle = useInvitationStore(state => state.setAccountsSubtitle);
-    const accountsDescription = useInvitationStore(state => state.accountsDescription);
-    const setAccountsDescription = useInvitationStore(state => state.setAccountsDescription);
-    const accountsGroomTitle = useInvitationStore(state => state.accountsGroomTitle);
-    const setAccountsGroomTitle = useInvitationStore(state => state.setAccountsGroomTitle);
-    const accountsBrideTitle = useInvitationStore(state => state.accountsBrideTitle);
-    const setAccountsBrideTitle = useInvitationStore(state => state.setAccountsBrideTitle);
-    const accountsColorMode = useInvitationStore(state => state.accountsColorMode);
-    const setAccountsColorMode = useInvitationStore(state => state.setAccountsColorMode);
-    const groom = useInvitationStore(state => state.groom);
-    const bride = useInvitationStore(state => state.bride);
+    const {
+        accounts,
+        setAccounts,
+        accountsTitle,
+        setAccountsTitle,
+        accountsSubtitle,
+        setAccountsSubtitle,
+        accountsDescription,
+        setAccountsDescription,
+        accountsGroomTitle,
+        setAccountsGroomTitle,
+        accountsBrideTitle,
+        setAccountsBrideTitle,
+        accountsColorMode,
+        setAccountsColorMode,
+        groom,
+        bride,
+    } = useInvitationStore(useShallow((state) => ({
+        accounts: state.accounts,
+        setAccounts: state.setAccounts,
+        accountsTitle: state.accountsTitle,
+        setAccountsTitle: state.setAccountsTitle,
+        accountsSubtitle: state.accountsSubtitle,
+        setAccountsSubtitle: state.setAccountsSubtitle,
+        accountsDescription: state.accountsDescription,
+        setAccountsDescription: state.setAccountsDescription,
+        accountsGroomTitle: state.accountsGroomTitle,
+        setAccountsGroomTitle: state.setAccountsGroomTitle,
+        accountsBrideTitle: state.accountsBrideTitle,
+        setAccountsBrideTitle: state.setAccountsBrideTitle,
+        accountsColorMode: state.accountsColorMode,
+        setAccountsColorMode: state.setAccountsColorMode,
+        groom: state.groom,
+        bride: state.bride,
+    })));
 
     const [expandedId, setExpandedId] = useState<string | null>(null);
 
@@ -48,16 +68,16 @@ export default function AccountsSection({ value, isOpen }: SectionProps) {
             accountNumber: '',
             holder: ''
         };
-        setAccounts([...accounts, newAccount]);
+        setAccounts((prev) => [...prev, newAccount]);
         setExpandedId(newAccount.id);
     };
 
     const handleUpdateAccount = (id: string, data: Record<string, unknown>) => {
-        setAccounts(accounts.map(acc => acc.id === id ? { ...acc, ...data } : acc));
+        setAccounts((prev) => prev.map(acc => acc.id === id ? { ...acc, ...data } : acc));
     };
 
     const handleRemoveAccount = (id: string) => {
-        setAccounts(accounts.filter(acc => acc.id !== id));
+        setAccounts((prev) => prev.filter(acc => acc.id !== id));
     };
 
     const getHolderName = useCallback((rel: string, type: 'groom' | 'bride') => {

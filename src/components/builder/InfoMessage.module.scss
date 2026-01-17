@@ -1,6 +1,6 @@
-@use "@/styles/variables" as v;
-// @use "@/styles/builder" as b; // removed as unused
+@use "../../styles/variables" as v;
+@use "../../styles/mixins" as m;
 
 .container {
-    @include v.info-box;
+    @include m.info-box;
 }

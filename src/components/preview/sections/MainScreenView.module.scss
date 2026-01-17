@@ -1,9 +1,9 @@
-@use "@/styles/variables" as *;
+@use "../../../styles/variables" as v;
 
 .wrapper {
     position: relative;
     width: 100%;
-    transition: $transition-smooth;
+    transition: v.$transition-smooth;
 
     &.fill {
         height: 650px;
@@ -21,7 +21,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    transition: $transition-smooth;
+    transition: v.$transition-smooth;
 
     &.pt10 {
         padding-top: var(--section-padding-y, 3rem);
@@ -39,7 +39,7 @@
     align-items: center;
     text-align: center;
     padding-inline: 1.5rem;
-    transition: $transition-smooth;
+    transition: v.$transition-smooth;
     width: 100%;
 
     &.headerVisible {
@@ -66,7 +66,7 @@
     }
 
     .dateText {
-        font-family: $font-serif;
+        font-family: v.$font-serif;
         font-weight: 300;
         color: #374151; // gray-700
         letter-spacing: -0.05em;
@@ -92,7 +92,7 @@
         padding: 0.5rem 0.75rem;
         background: rgba(0, 0, 0, 0.03);
         border-radius: 4px;
-        font-family: $font-serif;
+        font-family: v.$font-serif;
         font-weight: 300;
         letter-spacing: 0.05em;
     }
@@ -122,7 +122,7 @@
         display: flex;
         align-items: center;
         gap: 0.75rem;
-        font-family: $font-serif;
+        font-family: v.$font-serif;
         color: #1f2937;
         margin-bottom: 1rem;
     }
@@ -140,7 +140,7 @@
 }
 
 .namesWrapper {
-    font-family: $font-serif;
+    font-family: v.$font-serif;
     color: #1f2937; // gray-800
     font-weight: 500;
     letter-spacing: -0.025em;
@@ -168,7 +168,7 @@
     }
 
     .connector {
-        font-family: $font-serif;
+        font-family: v.$font-serif;
         text-transform: uppercase;
         flex-shrink: 0;
         display: inline-flex;
@@ -202,7 +202,7 @@
 .imageFrame {
     position: relative;
     width: 100%;
-    transition: $transition-smooth;
+    transition: v.$transition-smooth;
     overflow: hidden;
 
     &.bgGray {
@@ -210,7 +210,7 @@
     }
 
     &.imageStandard {
-        max-width: $canvas-max-width;
+        max-width: v.$canvas-max-width;
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
         margin-inline: auto;
 
@@ -302,7 +302,7 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    transition: $transition-smooth;
+    transition: v.$transition-smooth;
 
     &.bottomStandard {
         margin-top: 1.5rem;
@@ -327,7 +327,7 @@
     }
 
     .bottomNames {
-        font-family: $font-serif;
+        font-family: v.$font-serif;
         margin-bottom: 1.5rem;
         display: flex;
         align-items: center;
@@ -350,7 +350,7 @@
         }
 
         .connector {
-            font-family: $font-serif;
+            font-family: v.$font-serif;
             text-transform: uppercase;
             letter-spacing: 0.1em;
             opacity: 0.6;
@@ -399,7 +399,7 @@
 
     .subtitle {
         margin-bottom: 1.5rem;
-        font-family: $font-pretendard;
+        font-family: v.$font-pretendard;
         font-weight: 400;
 
         &.textWhite {
@@ -423,13 +423,12 @@
         &.textGray {
             color: #6b7280;
             font-weight: 500;
-            font-family: $font-serif;
+            font-family: v.$font-serif;
         }
     }
 }
 
 @keyframes pulse-slow {
-
     0%,
     100% {
         opacity: 1;
@@ -438,4 +437,9 @@
     50% {
         opacity: 0.8;
     }
+}
+
+.fullSize {
+    width: 100%;
+    height: 100%;
 }

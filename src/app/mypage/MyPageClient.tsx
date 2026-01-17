@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { invitationService } from '@/services/invitationService';
@@ -21,12 +22,19 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import ProfileCompletionModal from '@/components/auth/ProfileCompletionModal';
-import { Button } from '@/components/ui/button';
+} from '@/components/ui/DropdownMenu';
+import { Button } from '@/components/ui/Button';
 import styles from './MyPage.module.scss';
 import { clsx } from 'clsx';
-import { ResponsiveModal } from '@/components/common/ResponsiveModal';
+
+const ProfileCompletionModal = dynamic(
+    () => import('@/components/auth/ProfileCompletionModal'),
+    { ssr: false }
+);
+const ResponsiveModal = dynamic(
+    () => import('@/components/common/ResponsiveModal').then(mod => mod.ResponsiveModal),
+    { ssr: false }
+);
 
 interface ProfileSummary {
     full_name: string | null;
@@ -252,7 +260,9 @@ export default function MyPageClient({
     }, []);
 
     // Helper to check if profile is complete
-    const isProfileComplete = profile?.full_name && profile?.phone;
+    const isProfileComplete = useMemo(() => {
+        return Boolean(profile?.full_name && profile?.phone);
+    }, [profile]);
 
     const handleRequestApprovalClick = useCallback((inv: InvitationSummaryRecord) => {
         if (inv.invitation_data.isRequestingApproval) {

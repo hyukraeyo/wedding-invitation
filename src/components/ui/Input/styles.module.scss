@@ -1,0 +1,35 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+
+.input {
+    // 1. Base Input Styles (Reuse Mixin)
+    @include m.input-base; 
+
+    // 2. Additional Input Specifics
+    display: flex;
+    align-items: center;
+
+    // 3. File Input Styling
+    &[type="file"] {
+        border: 0;
+        background: transparent;
+        font-size: 0.875rem;
+        font-weight: 500;
+        padding: 0;
+        height: auto;
+        
+        &::file-selector-button {
+            border: 0;
+            background: transparent;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: v.$zinc-900;
+            margin-right: 1rem;
+            cursor: pointer;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}

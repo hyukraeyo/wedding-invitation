@@ -13,8 +13,7 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: false,
   },
 
-  // Turbopack 설정 (Next.js 16 대응)
-  turbopack: {},
+
 
   images: {
     remotePatterns: [
@@ -47,7 +46,7 @@ const nextConfig: NextConfig = {
     serverActions: {
       allowedOrigins: ['localhost:3000', 'wedding-invitation-zeta-one.vercel.app'],
     },
-    optimizePackageImports: [
+    /* optimizePackageImports: [
       'lucide-react',
       '@tiptap/react',
       'clsx',
@@ -55,7 +54,7 @@ const nextConfig: NextConfig = {
       'zustand',
       '@dnd-kit/core',
       '@dnd-kit/sortable'
-    ],
+    ], */
   },
 
   // 보안 및 성능 헤더

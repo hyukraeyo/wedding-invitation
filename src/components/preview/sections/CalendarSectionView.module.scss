@@ -1,4 +1,5 @@
-@use "@/styles/variables" as *;
+@use "../../../styles/variables" as *;
+@use "../../../styles/mixins" as m;
 
 .calendarContainer {
     width: 100%;
@@ -35,7 +36,7 @@
 
         .day {
             aspect-ratio: 1;
-            @include flex-center;
+            @include m.flex-center;
             font-size: 0.95rem;
             color: #495057;
             border-radius: 9999px;
@@ -75,7 +76,7 @@
 
 .countdownArea {
     margin-top: 3.5rem;
-    @include flex-center;
+    @include m.flex-center;
 
     .timerGrid {
         display: flex;
@@ -83,7 +84,7 @@
         gap: 0.75rem;
         
         .column {
-            @include flex-col;
+            @include m.flex-col;
             align-items: center;
             gap: 0.25rem;
             min-width: 2.2rem;

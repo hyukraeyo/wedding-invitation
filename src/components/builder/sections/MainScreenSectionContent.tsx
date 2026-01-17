@@ -5,6 +5,7 @@ import { FreeMode } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/free-mode';
+import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { TextField } from '../TextField';
 import { SwitchField } from '../SwitchField';
@@ -51,15 +52,15 @@ const STYLE_PRESETS: StylePreset[] = [
 ];
 
 export default function MainScreenSectionContent() {
-    const mainScreen = useInvitationStore(state => state.mainScreen);
+    const mainScreen = useInvitationStore(useShallow(state => state.mainScreen));
     const setMainScreen = useInvitationStore(state => state.setMainScreen);
     const imageUrl = useInvitationStore(state => state.imageUrl);
     const setImageUrl = useInvitationStore(state => state.setImageUrl);
     const imageRatio = useInvitationStore(state => state.imageRatio);
     const setImageRatio = useInvitationStore(state => state.setImageRatio);
-    const groom = useInvitationStore(state => state.groom);
-    const bride = useInvitationStore(state => state.bride);
-    const theme = useInvitationStore(state => state.theme);
+    const groom = useInvitationStore(useShallow(state => state.groom));
+    const bride = useInvitationStore(useShallow(state => state.bride));
+    const theme = useInvitationStore(useShallow(state => state.theme));
     const setTheme = useInvitationStore(state => state.setTheme);
     const date = useInvitationStore(state => state.date);
     const time = useInvitationStore(state => state.time);

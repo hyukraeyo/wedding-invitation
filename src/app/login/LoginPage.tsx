@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/Button';
 import { signIn } from 'next-auth/react';
 import styles from './login.module.scss';
 import { useAuth } from '@/hooks/useAuth';

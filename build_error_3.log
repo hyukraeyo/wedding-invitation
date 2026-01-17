@@ -1,0 +1,96 @@
+
+> banana-wedding@0.1.0 build
+> next build
+
+▲ Next.js 16.1.1 (Turbopack)
+- Environments: .env.local
+- Experiments (use with caution):
+  · clientTraceMetadata
+  · serverActions
+
+  Creating an optimized production build ...
+Turbopack build encountered 2 warnings:
+./src/components/ui/Sonner/styles.module.scss
+Issue while running loader
+SassWarning: Deprecation Warning on line 46, column 22 of file:///C:/Users/johr9/Documents/git/wedding-invitation/src/components/ui/Sonner/styles.module.scss:46:22:
+Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use color.adjust instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+46 |     background-color: darken(v.$color-muted, 5%);
+
+
+src\components\ui\Sonner\styles.module.scss 47:23  root stylesheet
+
+
+Import traces:
+  Client Component Browser:
+    ./src/components/ui/Sonner/styles.module.scss [Client Component Browser]
+    ./src/components/ui/Sonner/index.tsx [Client Component Browser]
+    ./src/app/ClientProviders.tsx [Client Component Browser]
+    ./src/app/ClientProviders.tsx [Server Component]
+    ./src/app/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/ui/Sonner/styles.module.scss [Client Component SSR]
+    ./src/components/ui/Sonner/index.tsx [Client Component SSR]
+    ./src/app/ClientProviders.tsx [Client Component SSR]
+    ./src/app/ClientProviders.tsx [Server Component]
+    ./src/app/layout.tsx [Server Component]
+
+
+./src/components/ui/Sonner/styles.module.scss
+Issue while running loader
+SassWarning: Deprecation Warning on line 46, column 22 of file:///C:/Users/johr9/Documents/git/wedding-invitation/src/components/ui/Sonner/styles.module.scss:46:22:
+darken() is deprecated. Suggestions:
+
+color.scale($color, $lightness: -5.2040816327%)
+color.adjust($color, $lightness: -5%)
+
+More info: https://sass-lang.com/d/color-functions
+
+46 |     background-color: darken(v.$color-muted, 5%);
+
+
+src\components\ui\Sonner\styles.module.scss 47:23  root stylesheet
+
+
+Import traces:
+  Client Component Browser:
+    ./src/components/ui/Sonner/styles.module.scss [Client Component Browser]
+    ./src/components/ui/Sonner/index.tsx [Client Component Browser]
+    ./src/app/ClientProviders.tsx [Client Component Browser]
+    ./src/app/ClientProviders.tsx [Server Component]
+    ./src/app/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/ui/Sonner/styles.module.scss [Client Component SSR]
+    ./src/components/ui/Sonner/index.tsx [Client Component SSR]
+    ./src/app/ClientProviders.tsx [Client Component SSR]
+    ./src/app/ClientProviders.tsx [Server Component]
+    ./src/app/layout.tsx [Server Component]
+
+
+✓ Compiled successfully in 4.7s
+  Running next.config.js provided runAfterProductionCompile ...
+✓ Completed runAfterProductionCompile in 178ms
+  Running TypeScript ...
+Failed to compile.
+
+./src/components/builder/DatePicker.tsx:98:30
+Type error: Type '{ mode: "single"; selected: Date | undefined; onSelect: (date: Date | undefined) => void; initialFocus: true; locale: Locale; className: string | undefined; }' is not assignable to type 'IntrinsicAttributes & DayPickerProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Type '{ mode: "single"; selected: Date | undefined; onSelect: (date: Date | undefined) => void; initialFocus: true; locale: Locale; className: string | undefined; }' is not assignable to type '(IntrinsicAttributes & PropsBase & PropsSingle) | (IntrinsicAttributes & PropsBase & PropsSingleRequired)' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+    Type '{ mode: "single"; selected: Date | undefined; onSelect: (date: Date | undefined) => void; initialFocus: true; locale: Locale; className: string | undefined; }' is not assignable to type 'PropsBase' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+      Types of property 'className' are incompatible.
+        Type 'string | undefined' is not assignable to type 'string'.
+          Type 'undefined' is not assignable to type 'string'.
+
+[0m [90m  96 |[39m                     [33m<[39m[33mDrawerScrollArea[39m className[33m=[39m{styles[33m.[39mcalendarWrapper}[33m>[39m
+ [90m  97 |[39m                         [33m<[39m[33mdiv[39m ref[33m=[39m{calendarWrapperRef} tabIndex[33m=[39m{[33m-[39m[35m1[39m}[33m>[39m
+[31m[1m>[22m[39m[90m  98 |[39m                             [33m<[39m[33mCalendar[39m
+ [90m     |[39m                              [31m[1m^[22m[39m
+ [90m  99 |[39m                                 mode[33m=[39m[32m"single"[39m
+ [90m 100 |[39m                                 selected[33m=[39m{dateValue}
+ [90m 101 |[39m                                 onSelect[33m=[39m{handleSelect}[0m
+Next.js build worker exited with code: 1 and signal: null

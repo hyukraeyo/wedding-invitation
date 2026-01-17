@@ -1,20 +1,50 @@
-// Base Design System (Banana Wedding)
-// 프로젝트의 전반적인 색상과 타이포그래피 토큰을 정의합니다.
+// ============================================
+// Colors (Banana Wedding Theme)
+// ============================================
+$color-primary: #FBC02D;
+$color-primary-dark: #F9A825;
+$color-primary-foreground: #FFFFFF;
+$color-primary-hover: #E6B02A;
+$color-ivory: #FFFBEA;
 
-// Brand Colors
-$primary: #FBC02D; // Banana Yellow
-$primary-light: #FFEE58;
-$primary-dark: #F9A825;
-$background: #FFFFFF;
-$ivory: #FFFDE7;
-$banana-yellow: #FBC02D;
+$color-background: #FFFFFF;
+$color-bg-base: #FFFFFF; // Alias for background
+$color-foreground: #1A1A1A;
+$color-text-primary: #1A1A1A; // Alias for foreground
 
-// Custom Tone Colors (Wedding theme)
-$wedding-blue: #1565C0;
-$muted-sand: #F5F5DC;
-$coral-pink: #FF8A8A;
+$color-muted: #F5F5F5;
+$color-muted-foreground: #737373;
 
-// Semantic Grays (Standard Zinc based for compatibility with shadcn)
+$color-border: #E5E5E5;
+$color-border-hover: #D4D4D8; // zinc-300
+$color-input: #E5E5E5;
+
+$color-danger: #EF4444;
+$color-success: #22C55E;
+
+// Red Color Scale (for danger/destructive states)
+$red-500: #EF4444;
+$red-600: #DC2626;
+
+// Overlay colors
+$color-bg-overlay: rgba(0, 0, 0, 0.5);
+
+// Primary Color Scale
+$primary: $color-primary;
+$primary-50: #FFFBEA;
+$primary-100: #FEF3C7;
+$primary-200: #FDE68A;
+$primary-300: #FCD34D;
+$primary-400: #FBBF24;
+$primary-500: $color-primary;
+$primary-600: #D97706;
+$primary-700: #B45309;
+$primary-800: #92400E;
+$primary-900: #78350F;
+$primary-dark: $color-primary-dark;
+$primary-hover: $color-primary-hover;
+
+// Zinc Color Scale
 $zinc-50: #fafafa;
 $zinc-100: #f4f4f5;
 $zinc-200: #e4e4e7;
@@ -25,257 +55,52 @@ $zinc-600: #52525b;
 $zinc-700: #3f3f46;
 $zinc-800: #27272a;
 $zinc-900: #18181b;
+$zinc-950: #09090b;
 
-// Legacy gray scales (Generic mapping)
-$gray-50: $zinc-50;
-$gray-100: $zinc-100;
-$gray-200: $zinc-200;
-$gray-300: $zinc-300;
-$gray-400: $zinc-400;
-$gray-500: $zinc-500;
-$gray-600: $zinc-600;
-$gray-700: $zinc-700;
-$gray-800: $zinc-800;
-$gray-900: $zinc-900;
+// ============================================
+// Typography
+// ============================================
+// CSS 변수는 next/font에서 자동 생성됨 (src/lib/fonts.ts 참조)
+$font-family-base: var(--font-pretendard), -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+$font-sans: var(--font-inter), var(--font-pretendard), -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+$font-serif: var(--font-playfair), var(--font-nanum-myeongjo), 'Times New Roman', serif;
+$font-gowun-batang: 'Gowun Batang', var(--font-nanum-myeongjo), serif;
+$font-gowun-dodum: 'Gowun Dodum', var(--font-pretendard), sans-serif;
+$font-nanum-myeongjo: var(--font-nanum-myeongjo), 'Times New Roman', serif;
+$font-yeon-sung: 'Yeon Sung', var(--font-pretendard), cursive;
+$font-do-hyeon: var(--font-do-hyeon), var(--font-pretendard), sans-serif;
+$font-song-myung: var(--font-song-myung), var(--font-nanum-myeongjo), serif;
+$font-script: var(--font-great-vibes), 'Times New Roman', cursive;
+$font-gmarket-sans: 'GmarketSansMedium', sans-serif;
+$font-pretendard: var(--font-pretendard), -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+$font-size-xs: 0.75rem;   // 12px
+$font-size-sm: 0.875rem;   // 14px
+$font-size-base: 1rem;     // 16px
+$font-size-lg: 1.125rem;   // 18px
+$font-size-xl: 1.25rem;    // 20px
 
-// Legacy mapping for compatibility (Keep internal usages redirected to Zinc)
-$toss-grey-50: $zinc-50;
-$toss-grey-100: $zinc-100;
-$toss-grey-200: $zinc-200;
-$toss-grey-300: $zinc-300;
-$toss-grey-400: $zinc-400;
-$toss-grey-500: $zinc-500;
-$toss-grey-600: $zinc-600;
-$toss-grey-700: $zinc-700;
-$toss-grey-800: $zinc-800;
-$toss-grey-900: $zinc-900;
-$toss-weak-grey: rgba($zinc-900, 0.05);
-
-// Blue elements (Redirect to Primary or Wedding Blue)
-$toss-blue-50: #e8f3ff;
-$toss-blue-100: #c9e2ff;
-$toss-blue-200: #90c2ff;
-$toss-blue-500: $primary;
-$toss-blue-600: $primary-dark;
-
-// Red elements
-$toss-red-50: #ffeeee;
-$toss-red-500: #f04452;
-$toss-weak-red: rgba(#f04452, 0.1);
-$toss-weak-blue: rgba($primary, 0.1);
-
-// Backgrounds
-$bg-base: $background;
-$bg-grey: $zinc-50;
-
-// Font Families
-$font-pretendard: var(--font-pretendard);
-$font-gmarket: var(--font-gmarket-sans);
-$font-gowun-batang: var(--font-gowun-batang);
-$font-gowun-dodum: var(--font-gowun-dodum);
-$font-nanum-myeongjo: var(--font-nanum-myeongjo);
-$font-yeon-sung: var(--font-yeon-sung);
-$font-do-hyeon: var(--font-do-hyeon);
-$font-song-myung: var(--font-song-myung);
-$font-serif: var(--font-serif);
-$font-sans: var(--font-sans);
-$font-script: var(--font-script);
-
+// ============================================
 // Spacing & Layout
-$max-mobile: 430px;
-$canvas-max-width: 340px;
+// ============================================
+$radius-sm: 0.375rem; // 6px
+$radius-md: 0.5rem;   // 8px
+$radius-lg: 0.75rem;  // 12px
+$radius-full: 9999px;
 
-// Mixins
-@mixin flex-center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+$mobile: 768px;
+$max-mobile: 767px;
+$canvas-max-width: 428px;
 
-@mixin flex-col {
-    display: flex;
-    flex-direction: column;
-}
+$z-index-dropdown: 1000;
+$z-index-modal: 2000;
+$z-modal: $z-index-modal; // Alias for backward compatibility
+$z-index-toast: 3000;
+$z-overlay: 4000;
 
-@mixin absolute-full {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
-@mixin scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-
-    &::-webkit-scrollbar {
-        display: none;
-    }
-}
-
+// ============================================
 // Transitions
-$transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); // iOS Deceleration
-$transition-normal: all 0.4s ease;
-$transition-fast: all 0.2s ease;
-$transition-bounce: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-
-// --- Component Design Tokens (Unified) ---
-
-@mixin focus-ring {
-    &:focus-visible {
-        outline: none;
-        border-color: var(--ring);
-        box-shadow: 0 0 0 1px var(--ring);
-    }
-}
-
-// Input Mixins
-@mixin input-base {
-    width: 100%;
-    height: var(--builder-height, 48px);
-    padding: 0 1rem;
-    border: 1px solid $zinc-300;
-    border-radius: var(--builder-radius, 12px);
-    background-color: white;
-    box-sizing: border-box;
-    transition: all 0.2s ease;
-    outline: none;
-
-    // Typography
-    font-size: var(--builder-font-size, 15px);
-    font-family: var(--builder-font-family, $font-pretendard);
-    font-weight: 400;
-    color: $zinc-900;
-    line-height: var(--builder-line-height, normal);
-
-    @include focus-ring;
-}
-
-@mixin input-placeholder {
-    color: $zinc-400;
-    font-weight: 400;
-    opacity: 1; // Ensure full visibility of color
-}
-
-@mixin input-hover {
-    @media (hover: hover) and (pointer: fine) {
-        &:hover:not(:disabled):not(:focus) {
-            border-color: $zinc-400;
-            background-color: $zinc-50;
-        }
-    }
-}
-
-@mixin input-disabled {
-    &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        background-color: $zinc-50;
-    }
-}
-
-// Button Mixins
-@mixin button-base {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: var(--builder-height, 48px);
-    padding: 0 1.25rem;
-    border-radius: var(--builder-radius, 12px);
-    background: white;
-    border: 1px solid $zinc-300;
-    color: $zinc-900;
-    cursor: pointer;
-    user-select: none;
-    transition: all 0.2s ease;
-
-    // Typography
-    font-size: var(--builder-font-size, 15px);
-    font-family: var(--builder-font-family, $font-pretendard);
-    font-weight: 600;
-
-    @include focus-ring;
-}
-
-@mixin button-hover {
-    @media (hover: hover) and (pointer: fine) {
-        &:hover:not(:disabled) {
-            background-color: $zinc-50;
-            border-color: $zinc-400;
-        }
-    }
-}
-
-@mixin button-active {
-    &:active:not(:disabled) {
-        transform: scale(0.96);
-        background-color: $zinc-100;
-    }
-}
-
-@mixin button-disabled {
-    &:disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
-    }
-}
-
-// Toggle Mixins (Inherits from Button/Input logic but specific to toggle behavior)
-@mixin toggle-base {
-    @include input-base; // Inherit base input styling (height, borders, font-size, radius)
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: auto;
-    min-width: 48px;
-    padding: 0 12px;
-    cursor: pointer;
-    user-select: none;
-    color: $zinc-500;
-}
-
-@mixin toggle-hover {
-    @media (hover: hover) and (pointer: fine) {
-        &:hover:not(:disabled):not([data-state="on"]) {
-            background-color: $zinc-50;
-            color: $zinc-900;
-        }
-    }
-}
-
-@mixin toggle-active {
-    &:active:not(:disabled) {
-        transform: scale(0.96);
-    }
-}
-
-@mixin toggle-state-on {
-    &[data-state="on"] {
-        background-color: white;
-        border-color: $primary;
-        color: $primary-dark;
-        font-weight: 600;
-    }
-}
-
-@mixin info-box {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.625rem;
-    padding: 0.875rem;
-    background-color: rgba($primary, 0.05); // Use yellow-ish background 
-    border: 1px solid rgba($primary, 0.2);
-    border-radius: 12px;
-    color: #c79200; // Text color adapted for readability on yellow bg
-    font-size: 12.5px;
-    line-height: 1.6;
-
-    // Icon styling hook
-    :global(svg) {
-        flex-shrink: 0;
-        margin-top: 0.125rem;
-        color: $primary;
-    }
-}
+// ============================================
+$transition-fast: 150ms;
+$transition-normal: 250ms;
+$transition-slow: 400ms;
+$transition-smooth: 260ms;

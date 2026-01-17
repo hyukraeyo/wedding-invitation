@@ -1,5 +1,5 @@
-@use "@/styles/variables" as v;
-@use "@/styles/builder" as b;
+@use "../../../styles/variables" as v;
+@use "../../../styles/builder" as b;
 
 .container {
   display: flex;
@@ -21,10 +21,10 @@
   align-items: center;
   gap: 0.375rem;
   padding: 0.375rem 0.625rem;
-  background-color: v.$toss-grey-100;
-  color: v.$toss-grey-800;
+  background-color: v.$zinc-100;
+  color: v.$zinc-800;
   border-radius: 8px;
-  border: 1px solid v.$toss-grey-200;
+  border: 1px solid v.$zinc-200;
   font-size: 11px;
   font-weight: bold;
   cursor: pointer;
@@ -32,7 +32,7 @@
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {
-      background-color: v.$toss-grey-200;
+      background-color: v.$zinc-200;
     }
   }
 

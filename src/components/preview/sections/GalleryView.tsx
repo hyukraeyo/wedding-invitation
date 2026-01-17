@@ -17,7 +17,7 @@ import SectionContainer from '../SectionContainer';
 import SectionHeader from '../SectionHeader';
 import styles from './GalleryView.module.scss';
 import { clsx } from 'clsx';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { AspectRatio } from '@/components/ui/AspectRatio';
 import { useScrollLock } from '@/hooks/use-scroll-lock';
 import { useFocusTrap } from '@/hooks/useAccessibility';
 import { MOTION_CLASSES } from '@/constants/motion';
@@ -202,7 +202,7 @@ const GalleryView = memo(({
                                             styles.thumbItem,
                                             index === currentIndex && styles.active
                                         )}
-                                        style={index === currentIndex ? { '--tw-ring-color': accentColor } as React.CSSProperties : {}}
+                                        style={index === currentIndex ? { '--active-ring-color': accentColor } as React.CSSProperties : {}}
                                     >
                                         <Image src={img.url} alt="" fill sizes={IMAGE_SIZES.galleryThumb} />
                                     </div>
@@ -225,7 +225,7 @@ const GalleryView = memo(({
                                 onClick={() => handleImageClick(i)}
                             >
                                 <AspectRatio ratio={1 / 1}>
-                                    <Image src={img.url} alt="" fill sizes={IMAGE_SIZES.galleryGrid} className="object-cover" />
+                                    <Image src={img.url} alt="" fill sizes={IMAGE_SIZES.galleryGrid} />
                                 </AspectRatio>
                             </div>
                         ))}

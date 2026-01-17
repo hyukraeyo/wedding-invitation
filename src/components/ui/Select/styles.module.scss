@@ -1,0 +1,142 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+
+.trigger {
+  @include m.flex-between;
+  width: 100%;
+  height: var(--builder-height, 48px);
+  padding: 0 1rem;
+  border: 1px solid v.$zinc-300;
+  border-radius: var(--builder-radius, 12px);
+  background-color: white;
+  color: v.$zinc-900;
+  font-size: var(--builder-font-size, 15px);
+  font-family: var(--builder-font-family, v.$font-pretendard);
+  line-height: var(--builder-line-height, normal);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  outline: none;
+
+  @include m.focus-ring;
+
+  &:hover:not(:disabled) {
+    background-color: v.$zinc-50;
+    border-color: v.$zinc-400;
+  }
+
+  &:disabled {
+    @include m.disabled;
+    background-color: v.$zinc-50;
+  }
+
+  &[data-placeholder] {
+    color: v.$zinc-400;
+  }
+}
+
+.icon {
+  opacity: 0.5;
+  width: 1rem;
+  height: 1rem;
+}
+
+.content {
+  position: relative;
+  z-index: v.$z-modal;
+  min-width: 8rem;
+  overflow: hidden;
+  border-radius: v.$radius-md;
+  border: 1px solid v.$zinc-200;
+  background-color: white;
+  color: v.$zinc-900;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  
+  // Animation (Radix attributes)
+  &[data-state='open'] {
+    animation: fadeIn 0.2s ease-out;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-2px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.viewport {
+  padding: 0.25rem;
+
+  // Popper modifier (moved from inline Tailwind)
+  &.popper {
+    height: var(--radix-select-trigger-height);
+    width: 100%;
+    min-width: var(--radix-select-trigger-width);
+  }
+}
+
+.item {
+  position: relative;
+  display: flex;
+  width: 100%;
+  cursor: default;
+  user-select: none;
+  align-items: center;
+  border-radius: v.$radius-sm;
+  padding: 0.5rem 2rem 0.5rem 0.5rem; // Right padding for indicator
+  outline: none;
+  font-size: 14px;
+  color: v.$zinc-900;
+  font-family: var(--builder-font-family, v.$font-pretendard);
+  
+  &[data-highlighted] {
+    background-color: v.$primary-100;
+    color: v.$primary-600;
+  }
+
+  &[data-disabled] {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+}
+
+.itemIndicator {
+  position: absolute;
+  right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+  & > svg {
+    width: 1rem;
+    height: 1rem;
+    color: v.$primary-600;
+  }
+}
+
+.label {
+  padding: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: v.$zinc-900;
+}
+
+.separator {
+  margin: 0.25rem -0.25rem;
+  height: 1px;
+  background-color: v.$zinc-100;
+}
+
+.scrollButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 25px;
+  background-color: white;
+  color: v.$zinc-500;
+  cursor: default;
+
+  & > svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}

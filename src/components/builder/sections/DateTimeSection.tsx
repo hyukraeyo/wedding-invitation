@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { Calendar } from 'lucide-react';
 import { InfoMessage } from '@/components/builder/InfoMessage';
 import { useInvitationStore } from '@/store/useInvitationStore';
+import { useShallow } from 'zustand/shallow';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { SwitchField } from '../SwitchField';
@@ -23,16 +24,29 @@ const DatePicker = dynamic(() => import('../DatePicker').then((mod) => mod.DateP
 });
 
 const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOpen, value }) {
-    const date = useInvitationStore(state => state.date);
-    const setDate = useInvitationStore(state => state.setDate);
-    const time = useInvitationStore(state => state.time);
-    const setTime = useInvitationStore(state => state.setTime);
-    const showCalendar = useInvitationStore(state => state.showCalendar);
-    const setShowCalendar = useInvitationStore(state => state.setShowCalendar);
-    const showDday = useInvitationStore(state => state.showDday);
-    const setShowDday = useInvitationStore(state => state.setShowDday);
-    const ddayMessage = useInvitationStore(state => state.ddayMessage);
-    const setDdayMessage = useInvitationStore(state => state.setDdayMessage);
+    const {
+        date,
+        setDate,
+        time,
+        setTime,
+        showCalendar,
+        setShowCalendar,
+        showDday,
+        setShowDday,
+        ddayMessage,
+        setDdayMessage
+    } = useInvitationStore(useShallow((state) => ({
+        date: state.date,
+        setDate: state.setDate,
+        time: state.time,
+        setTime: state.setTime,
+        showCalendar: state.showCalendar,
+        setShowCalendar: state.setShowCalendar,
+        showDday: state.showDday,
+        setShowDday: state.setShowDday,
+        ddayMessage: state.ddayMessage,
+        setDdayMessage: state.setDdayMessage,
+    })));
 
     return (
         <AccordionItem

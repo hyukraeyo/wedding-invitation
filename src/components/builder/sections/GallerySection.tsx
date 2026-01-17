@@ -1,5 +1,6 @@
 import React from 'react';
 import { Image as ImageIcon } from 'lucide-react';
+import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import GallerySectionContent from './GallerySectionContent';
@@ -10,7 +11,7 @@ interface SectionProps {
 }
 
 const GallerySection = React.memo<SectionProps>(function GallerySection({ value, isOpen }) {
-    const gallery = useInvitationStore(state => state.gallery);
+    const gallery = useInvitationStore(useShallow(state => state.gallery));
     return (
         <AccordionItem
             value={value}

@@ -1,20 +1,10 @@
+import React from "react";
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import { Inter, Playfair_Display, Gowun_Batang, Gowun_Dodum, Nanum_Myeongjo, Yeon_Sung, Do_Hyeon, Song_Myung, Great_Vibes } from 'next/font/google';
 import ClientProviders from './ClientProviders';
+import { fontVariables } from '@/lib/fonts';
 import "./globals.scss";
 import "../styles/_accessibility.scss";
-
-// Next.js 15+ Font Optimization
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans', display: 'swap' });
-const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-serif', display: 'swap' });
-const gowunBatang = Gowun_Batang({ subsets: ['latin'], weight: ['400', '700'], variable: '--font-gowun-batang', display: 'optional' });
-const gowunDodum = Gowun_Dodum({ subsets: ['latin'], weight: '400', variable: '--font-gowun-dodum', display: 'optional' });
-const nanumMyeongjo = Nanum_Myeongjo({ subsets: ['latin'], weight: ['400', '700', '800'], variable: '--font-nanum-myeongjo', display: 'optional' });
-const yeonSung = Yeon_Sung({ subsets: ['latin'], weight: '400', variable: '--font-yeon-sung', display: 'optional' });
-const doHyeon = Do_Hyeon({ subsets: ['latin'], weight: '400', variable: '--font-do-hyeon', display: 'optional' });
-const songMyung = Song_Myung({ weight: '400', variable: '--font-song-myung', display: 'optional' });
-const greatVibes = Great_Vibes({ subsets: ['latin'], weight: '400', variable: '--font-script', display: 'optional' });
 
 
 export const viewport: Viewport = {
@@ -84,19 +74,6 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    google: "your-google-site-verification-code",
-    other: {
-      "naver-site-verification": "your-naver-site-verification-code",
-    },
-  },
-  icons: {
-    icon: [
-      { url: '/icon.svg', type: 'image/svg+xml' },
-      { url: '/icon.png', type: 'image/png' },
-    ],
-    apple: '/apple-icon.png',
-  },
 };
 
 export default function RootLayout({
@@ -105,24 +82,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" suppressHydrationWarning data-scroll-behavior="smooth" className={`
-      ${inter.variable} 
-      ${playfair.variable} 
-      ${gowunBatang.variable} 
-      ${gowunDodum.variable} 
-      ${nanumMyeongjo.variable} 
-      ${yeonSung.variable} 
-      ${doHyeon.variable} 
-      ${songMyung.variable} 
-      ${greatVibes.variable}
-    `}>
-
-      <head>
-        {/* Pretendard CDN - Special case for Korean font that is not on Google Fonts */}
-        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
-        <link rel="preload" as="style" crossOrigin="anonymous" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-        <link rel="stylesheet" crossOrigin="anonymous" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-      </head>
+    <html lang="ko" suppressHydrationWarning data-scroll-behavior="smooth" className={fontVariables}>
       <body className="antialiased">
         <Script
           src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.0/kakao.min.js"

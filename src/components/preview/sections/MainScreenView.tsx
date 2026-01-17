@@ -6,7 +6,7 @@ import { Heart } from 'lucide-react';
 import { AmpersandSVG, HeartSVG, RingIcon } from '../../common/Icons';
 import styles from './MainScreenView.module.scss';
 import { clsx } from 'clsx';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { AspectRatio } from '@/components/ui/AspectRatio';
 import { IMAGE_SIZES } from '@/constants/image';
 import { isBlobUrl } from '@/lib/image';
 
@@ -249,7 +249,7 @@ const MainScreenView = memo(({
                 >
                     {imageUrl ? (
                         imageRatio === 'fixed' && !isFillLayout ? (
-                            <AspectRatio ratio={4 / 5} className="w-full h-full">
+                            <AspectRatio ratio={4 / 5} className={styles.fullSize}>
                                 <Image
                                     src={imageUrl}
                                     alt={`${groom.firstName}와 ${bride.firstName}의 결혼식 메인 사진`}

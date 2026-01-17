@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
-import dynamic from 'next/dynamic';
 import { MessageSquare, Sparkles } from 'lucide-react';
+import RichTextEditor from '@/components/common/RichTextEditor';
+import { ExampleSelectorModal } from '@/components/builder/ExampleSelectorModal';
 import { InfoMessage } from '@/components/builder/InfoMessage';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { Field } from '../FormPrimitives';
 import { SegmentedControl } from '../SegmentedControl';
-import { ExampleSelectorModal } from '@/components/builder/ExampleSelectorModal';
 import { HeaderAction } from '../HeaderAction';
 import { ImageUploader } from '../ImageUploader';
 import styles from './GreetingSection.module.scss';
-
-const RichTextEditor = dynamic(() => import('@/components/common/RichTextEditor'), { ssr: false });
+import { useShallow } from 'zustand/shallow';
 
 interface SectionProps {
     value: string;
@@ -38,24 +37,45 @@ const SAMPLE_PHRASES = [
 ];
 
 export default function GreetingSection({ isOpen, value }: SectionProps) {
-    const message = useInvitationStore(state => state.message);
-    const setMessage = useInvitationStore(state => state.setMessage);
-    const greetingTitle = useInvitationStore(state => state.greetingTitle);
-    const setGreetingTitle = useInvitationStore(state => state.setGreetingTitle);
-    const greetingSubtitle = useInvitationStore(state => state.greetingSubtitle);
-    const setGreetingSubtitle = useInvitationStore(state => state.setGreetingSubtitle);
-    const greetingImage = useInvitationStore(state => state.greetingImage);
-    const setGreetingImage = useInvitationStore(state => state.setGreetingImage);
-    const greetingRatio = useInvitationStore(state => state.greetingRatio);
-    const setGreetingRatio = useInvitationStore(state => state.setGreetingRatio);
-    const showNamesAtBottom = useInvitationStore(state => state.showNamesAtBottom);
-    const setShowNamesAtBottom = useInvitationStore(state => state.setShowNamesAtBottom);
-    const enableFreeformNames = useInvitationStore(state => state.enableFreeformNames);
-    const setEnableFreeformNames = useInvitationStore(state => state.setEnableFreeformNames);
-    const groomNameCustom = useInvitationStore(state => state.groomNameCustom);
-    const setGroomNameCustom = useInvitationStore(state => state.setGroomNameCustom);
-    const brideNameCustom = useInvitationStore(state => state.brideNameCustom);
-    const setBrideNameCustom = useInvitationStore(state => state.setBrideNameCustom);
+    const {
+        message,
+        setMessage,
+        greetingTitle,
+        setGreetingTitle,
+        greetingSubtitle,
+        setGreetingSubtitle,
+        greetingImage,
+        setGreetingImage,
+        greetingRatio,
+        setGreetingRatio,
+        showNamesAtBottom,
+        setShowNamesAtBottom,
+        enableFreeformNames,
+        setEnableFreeformNames,
+        groomNameCustom,
+        setGroomNameCustom,
+        brideNameCustom,
+        setBrideNameCustom,
+    } = useInvitationStore(useShallow((state) => ({
+        message: state.message,
+        setMessage: state.setMessage,
+        greetingTitle: state.greetingTitle,
+        setGreetingTitle: state.setGreetingTitle,
+        greetingSubtitle: state.greetingSubtitle,
+        setGreetingSubtitle: state.setGreetingSubtitle,
+        greetingImage: state.greetingImage,
+        setGreetingImage: state.setGreetingImage,
+        greetingRatio: state.greetingRatio,
+        setGreetingRatio: state.setGreetingRatio,
+        showNamesAtBottom: state.showNamesAtBottom,
+        setShowNamesAtBottom: state.setShowNamesAtBottom,
+        enableFreeformNames: state.enableFreeformNames,
+        setEnableFreeformNames: state.setEnableFreeformNames,
+        groomNameCustom: state.groomNameCustom,
+        setGroomNameCustom: state.setGroomNameCustom,
+        brideNameCustom: state.brideNameCustom,
+        setBrideNameCustom: state.setBrideNameCustom,
+    })));
 
     const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
 

@@ -1,4 +1,6 @@
-@use "@/styles/variables" as v;
+@use "./variables" as v;
+@use "./mixins" as m;
+
 
 /* Background Patterns */
 .pattern-flower-sm {
@@ -39,7 +41,7 @@
 }
 
 .scrollbar-hide {
-  @include v.scrollbar-hide;
+  @include m.scrollbar-hide;
 }
 
 /* Keyframe helpers */

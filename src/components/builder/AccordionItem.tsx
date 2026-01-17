@@ -5,7 +5,7 @@ import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import {
     AccordionItem as AccordionItemRoot,
     AccordionContent,
-} from "@/components/ui/accordion";
+} from "@/components/ui/Accordion";
 import { getScrollParent, smoothScrollTo } from '@/utils/smoothScroll';
 import styles from './AccordionItem.module.scss';
 
@@ -23,25 +23,24 @@ interface AccordionItemProps {
 export const AccordionItem = ({
     value,
     title,
-    icon: Icon, // Icon is not used in the new design but kept for interface compatibility
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    icon: _icon,
     isOpen,
     children,
-    isCompleted = false,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    isCompleted: _isCompleted = false,
     badge,
     action
 }: AccordionItemProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
 
-    // Auto-scroll logic: App-like smooth scrolling
+    // Auto-scroll logic
     useEffect(() => {
         if (!isOpen || !containerRef.current) return;
 
-        // Wait almost full duration (300ms) of accordion animation 
-        // to calculate correct final position, then scroll smoothly.
         const timer = setTimeout(() => {
             const element = containerRef.current;
             if (!element) return;
-
             const scrollParent = getScrollParent(element);
             if (scrollParent) {
                 smoothScrollTo(scrollParent, element.offsetTop - 24, 400);
@@ -61,12 +60,17 @@ export const AccordionItem = ({
                 <div className={cn(styles.trigger, isOpen && styles.open)}>
                     {/* 1. Full-size clickable overlay trigger (Main toggle) */}
                     <AccordionPrimitive.Trigger
-                        className="absolute inset-0 w-full h-full opacity-0 z-0 cursor-pointer"
+                        className={styles.overlayTrigger}
                         tabIndex={0}
                     />
 
-                    {/* 2. Visual Content (Pass-through pointer events) */}
-                    <div className={cn(styles.headerContent, "pointer-events-none")}>
+                    {/* 2. Visual Content (Behind Trigger or pass-through) */}
+                    {/* Since Trigger is z-index 1, this needs to be visible. 
+                        If we put it below in DOM or use z-index? 
+                        The overlay matches parent size. We can just place content naturally.
+                        Trigger is absolute and transparent. content is static. */}
+
+                    <div className={styles.headerContent}>
                         <div className={styles.titleWrapper}>
                             <span className={styles.title}>
                                 {title}
@@ -80,15 +84,17 @@ export const AccordionItem = ({
                     </div>
 
                     {/* 3. Actions (Interactive/On-top) */}
+                    {/* Must have higher z-index to be clickable over the absolute trigger */}
                     <div className={styles.rightActions}>
                         {action ? (
                             <div
-                                className={cn(styles.actionWrapper, "pointer-events-auto relative z-10")}
+                                className={cn(styles.actionWrapper)}
+                            // z-index is handled in SCSS (.actionWrapper { z-index: 10 })
                             >
                                 {action}
                             </div>
                         ) : null}
-                        <div className={cn(styles.chevron, isOpen && styles.open, "pointer-events-none")}>
+                        <div className={cn(styles.chevron, isOpen && styles.open)}>
                             <ChevronDown size={18} />
                         </div>
                     </div>

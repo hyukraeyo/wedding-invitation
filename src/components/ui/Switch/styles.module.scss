@@ -1,0 +1,53 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+
+.root {
+  display: inline-flex;
+  width: 50px;
+  height: 30px;
+  flex-shrink: 0;
+  cursor: pointer;
+  align-items: center;
+  border-radius: 9999px; // rounded-full
+  background-color: #E9E9EA; // unchecked state
+  transition: background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1); // ease-ios equivalent
+  position: relative;
+  
+  // Mixins
+  @include m.focus-ring;
+
+  // Disabled state
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.3;
+  }
+
+  // Checked state
+  &[data-state='checked'] {
+    background-color: v.$color-primary;
+  }
+}
+
+.thumb {
+  display: block;
+  width: 22px;
+  height: 22px;
+  background-color: white;
+  border-radius: 9999px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+  
+  // Positioning
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  
+  // Animation
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateX(0);
+
+  // Checked translate
+  &[data-state='checked'] {
+    transform: translateX(20px);
+  }
+}

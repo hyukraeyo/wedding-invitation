@@ -29,9 +29,10 @@ import {
     rectSortingStrategy,
     useSortable
 } from '@dnd-kit/sortable';
-import { IconButton } from '@/components/ui/icon-button';
+import { IconButton } from '@/components/ui/IconButton';
 import { CSS } from '@dnd-kit/utilities';
 import styles from './GallerySection.module.scss';
+import { useShallow } from 'zustand/shallow';
 
 interface SortableItemProps {
     id: string;
@@ -87,7 +88,7 @@ const SortableItem = React.memo(function SortableItem({ id, url, onRemove, isDra
                 <IconButton
                     icon={Trash2}
                     size="sm"
-                    className="w-6 h-6 bg-black/50 hover:bg-black/70 text-white rounded-full border-none p-0"
+                    className={styles.removeButton}
                     variant="ghost"
                     onClick={(e) => {
                         e.stopPropagation();
@@ -107,23 +108,43 @@ const SortableItem = React.memo(function SortableItem({ id, url, onRemove, isDra
 });
 
 export default function GallerySectionContent() {
-    const gallery = useInvitationStore(state => state.gallery);
-    const setGallery = useInvitationStore(state => state.setGallery);
-    const galleryTitle = useInvitationStore(state => state.galleryTitle);
-    const setGalleryTitle = useInvitationStore(state => state.setGalleryTitle);
-    const gallerySubtitle = useInvitationStore(state => state.gallerySubtitle);
-    const setGallerySubtitle = useInvitationStore(state => state.setGallerySubtitle);
-    const galleryType = useInvitationStore(state => state.galleryType);
-    const setGalleryType = useInvitationStore(state => state.setGalleryType);
-    const galleryPopup = useInvitationStore(state => state.galleryPopup);
-    const setGalleryPopup = useInvitationStore(state => state.setGalleryPopup);
-    const galleryPreview = useInvitationStore(state => state.galleryPreview);
-    const setGalleryPreview = useInvitationStore(state => state.setGalleryPreview);
-    const galleryFade = useInvitationStore(state => state.galleryFade);
-    const setGalleryFade = useInvitationStore(state => state.setGalleryFade);
-    const galleryAutoplay = useInvitationStore(state => state.galleryAutoplay);
-    const setGalleryAutoplay = useInvitationStore(state => state.setGalleryAutoplay);
-    const accentColor = useInvitationStore(state => state.theme.accentColor);
+    const {
+        gallery,
+        setGallery,
+        galleryTitle,
+        setGalleryTitle,
+        gallerySubtitle,
+        setGallerySubtitle,
+        galleryType,
+        setGalleryType,
+        galleryPopup,
+        setGalleryPopup,
+        galleryPreview,
+        setGalleryPreview,
+        galleryFade,
+        setGalleryFade,
+        galleryAutoplay,
+        setGalleryAutoplay,
+        accentColor,
+    } = useInvitationStore(useShallow((state) => ({
+        gallery: state.gallery,
+        setGallery: state.setGallery,
+        galleryTitle: state.galleryTitle,
+        setGalleryTitle: state.setGalleryTitle,
+        gallerySubtitle: state.gallerySubtitle,
+        setGallerySubtitle: state.setGallerySubtitle,
+        galleryType: state.galleryType,
+        setGalleryType: state.setGalleryType,
+        galleryPopup: state.galleryPopup,
+        setGalleryPopup: state.setGalleryPopup,
+        galleryPreview: state.galleryPreview,
+        setGalleryPreview: state.setGalleryPreview,
+        galleryFade: state.galleryFade,
+        setGalleryFade: state.setGalleryFade,
+        galleryAutoplay: state.galleryAutoplay,
+        setGalleryAutoplay: state.setGalleryAutoplay,
+        accentColor: state.theme.accentColor,
+    })));
     const { toast } = useToast();
 
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -188,8 +209,8 @@ export default function GallerySectionContent() {
     };
 
     const handleRemove = useCallback((id: string) => {
-        setGallery(gallery.filter(item => item.id !== id));
-    }, [gallery, setGallery]);
+        setGallery((prev: { id: string; url: string }[]) => prev.filter(item => item.id !== id));
+    }, [setGallery]);
 
     const handleDragStart = useCallback((event: DragStartEvent) => {
         setActiveId(event.active.id as string);
@@ -198,12 +219,15 @@ export default function GallerySectionContent() {
     const handleDragEnd = useCallback((event: DragEndEvent) => {
         const { active, over } = event;
         if (over && active.id !== over.id) {
-            const oldIndex = gallery.findIndex(item => item.id === active.id);
-            const newIndex = gallery.findIndex(item => item.id === over.id);
-            setGallery(arrayMove(gallery, oldIndex, newIndex));
+            setGallery((prev: { id: string; url: string }[]) => {
+                const oldIndex = prev.findIndex(item => item.id === active.id);
+                const newIndex = prev.findIndex(item => item.id === over.id);
+                if (oldIndex === -1 || newIndex === -1) return prev;
+                return arrayMove(prev, oldIndex, newIndex);
+            });
         }
         setActiveId(null);
-    }, [gallery, setGallery]);
+    }, [setGallery]);
 
     const activeImage = useMemo(() =>
         gallery.find(item => item.id === activeId),
@@ -230,7 +254,7 @@ export default function GallerySectionContent() {
             <Field
                 label={
                     <div className={styles.counter}>
-                        <span className="text-sm font-medium leading-none">사진 관리</span>
+                        <span className={styles.labelText}>사진 관리</span>
                         <span className={styles.countText}>
                             <span style={{ color: accentColor }}>{gallery.length}</span>
                             <span className={styles.countTotal}> / 30</span>

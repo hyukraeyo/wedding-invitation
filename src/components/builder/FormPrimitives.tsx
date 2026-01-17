@@ -1,7 +1,8 @@
 import React from 'react';
 import { Info, AlertCircle } from 'lucide-react';
-import { Label as ShadcnLabel } from '@/components/ui/label';
+import { Label as ShadcnLabel } from '@/components/ui/Label';
 import { cn } from '@/lib/utils';
+import styles from './FormPrimitives.module.scss';
 
 // --- Label ---
 
@@ -13,7 +14,7 @@ export const Label = ({ children, className, required, ...props }: LabelProps) =
     return (
         <ShadcnLabel className={cn(className)} {...props}>
             {children}
-            {required ? <span className="text-destructive ml-1">*</span> : null}
+            {required ? <span className={styles.requiredStar}>*</span> : null}
         </ShadcnLabel>
     );
 };
@@ -39,13 +40,13 @@ export const HelpText = ({
 
     return (
         <div className={cn(
-            "flex items-start gap-1.5 text-xs py-1",
-            variant === 'info' && "text-muted-foreground",
-            variant === 'warning' && "text-destructive font-medium",
+            styles.helpText,
+            variant === 'info' && styles.info,
+            variant === 'warning' && styles.warning,
             className
         )}>
-            {showIcon ? <Icon size={iconSize} className="mt-0.5 shrink-0" /> : null}
-            <span className="leading-normal">{children}</span>
+            {showIcon ? <Icon size={iconSize} className={styles.helpIcon} /> : null}
+            <span className={styles.leadingNormal}>{children}</span>
         </div>
     );
 };
@@ -65,10 +66,10 @@ interface FieldProps {
 
 export const Field = ({ label, children, className, required, description, error, id, action }: FieldProps) => {
     return (
-        <div className={cn("space-y-2", className)}>
-            <div className="flex flex-col gap-1.5">
+        <div className={cn(styles.spaceY2, className)}>
+            <div className={styles.fieldContainer}>
                 {label ? (
-                    <div className="flex items-center justify-between">
+                    <div className={styles.fieldHeader}>
                         <Label htmlFor={id} required={!!required}>
                             {label}
                         </Label>
@@ -77,12 +78,12 @@ export const Field = ({ label, children, className, required, description, error
                 ) : null}
                 {children}
                 {description ? (
-                    <p className={cn("text-[0.8rem] text-muted-foreground", error && "text-destructive")}>
+                    <p className={cn(styles.description, error && styles.error)}>
                         {description}
                     </p>
                 ) : null}
                 {error ? (
-                    <p className="text-[0.8rem] font-medium text-destructive">
+                    <p className={styles.errorMessage}>
                         {error}
                     </p>
                 ) : null}

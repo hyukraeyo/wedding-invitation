@@ -15,12 +15,13 @@ import ScrollReveal from './ScrollReveal';
 import styles from './InvitationCanvas.module.scss';
 import { clsx } from 'clsx';
 import { getFontStyle } from '@/lib/utils/font';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Skeleton } from '@/components/ui/Skeleton';
 
 const LocationView = dynamic(() => import('./sections/LocationView'), { ssr: false });
+const galleryLoading = <Skeleton className="h-40 w-full" />;
 const GalleryView = dynamic(() => import('./sections/GalleryView'), {
   ssr: false,
-  loading: () => <Skeleton className="h-40 w-full" />,
+  loading: () => galleryLoading,
 });
 
 interface InvitationCanvasProps {

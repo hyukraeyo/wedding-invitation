@@ -7,7 +7,7 @@ import { MessageCircle, Share2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import type { InvitationData } from '@/store/useInvitationStore';
 import SectionContainer from '../SectionContainer';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { AspectRatio } from '@/components/ui/AspectRatio';
 import SectionHeader from '../SectionHeader';
 import styles from './ClosingView.module.scss';
 import { IMAGE_SIZES } from '@/constants/image';

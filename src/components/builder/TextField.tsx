@@ -1,8 +1,9 @@
 import React from 'react';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/Input';
+import { Textarea } from '@/components/ui/Textarea';
+import { Label } from '@/components/ui/Label';
 import { cn } from '@/lib/utils';
+import styles from './TextField.module.scss';
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string | undefined;
@@ -21,8 +22,8 @@ export const TextField = React.forwardRef<HTMLInputElement | HTMLTextAreaElement
         const commonProps = {
             disabled,
             className: cn(
-                hasError && "border-destructive focus-visible:ring-destructive",
-                right && "pr-10",
+                hasError && styles.errorInput,
+                right && styles.paddingRight,
                 className
             ),
             onFocus,
@@ -32,17 +33,17 @@ export const TextField = React.forwardRef<HTMLInputElement | HTMLTextAreaElement
         };
 
         return (
-            <div className={cn("flex flex-col gap-1.5", containerClassName)}>
+            <div className={cn(styles.container, containerClassName)}>
                 {label ? (
                     <Label
                         htmlFor={id}
-                        className={cn(hasError && "text-destructive")}
+                        className={cn(hasError && styles.errorLabel)}
                     >
                         {label}
                     </Label>
                 ) : null}
 
-                <div className="relative">
+                <div className={styles.inputWrapper}>
                     {multiline ? (
                         <Textarea
                             ref={ref as React.ForwardedRef<HTMLTextAreaElement>}
@@ -56,14 +57,14 @@ export const TextField = React.forwardRef<HTMLInputElement | HTMLTextAreaElement
                         />
                     )}
                     {right && !multiline ? (
-                        <div className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                        <div className={styles.rightIcon}>
                             {right}
                         </div>
                     ) : null}
                 </div>
 
                 {helpText ? (
-                    <p className={cn("text-sm text-muted-foreground", hasError && "text-destructive")}>
+                    <p className={cn(styles.helpText, hasError && styles.hasError)}>
                         {helpText}
                     </p>
                 ) : null}

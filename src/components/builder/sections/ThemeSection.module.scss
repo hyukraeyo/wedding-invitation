@@ -1,5 +1,5 @@
-@use "@/styles/variables" as v;
-@use "@/styles/builder" as b;
+@use "../../../styles/variables" as v;
+@use "../../../styles/builder" as b;
 
 .container {
   display: flex;
@@ -41,7 +41,7 @@
 
 
   &.active {
-    border-color: v.$toss-blue-500;
+    border-color: v.$primary-500;
     transform: scale(1.1);
   }
 }
@@ -55,20 +55,20 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  border: 1px dashed v.$gray-300;
+  border: 1px dashed v.$zinc-300;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   background: white;
-  color: v.$gray-400;
+  color: v.$zinc-400;
   transition: all 0.2s ease;
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {
-      border-color: v.$toss-blue-500;
-      color: v.$toss-blue-500;
-      background-color: v.$toss-blue-50;
+      border-color: v.$primary-500;
+      color: v.$primary-500;
+      background-color: v.$primary-100;
     }
   }
 

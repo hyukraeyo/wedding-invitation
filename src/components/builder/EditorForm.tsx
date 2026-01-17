@@ -2,8 +2,10 @@
 
 import React, { useState, useCallback, memo, useEffect } from 'react';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { Accordion } from '@/components/ui/accordion';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Accordion } from '@/components/ui/Accordion';
+import { Skeleton } from '@/components/ui/Skeleton';
+import { useShallow } from 'zustand/shallow';
+import styles from './EditorForm.module.scss';
 
 // Static imports for immediate loading (prevents icon pop-in)
 import ThemeSection from './sections/ThemeSection';
@@ -33,8 +35,10 @@ const SECTIONS = [
 const EditorForm = memo(function EditorForm() {
   const [openSections, setOpenSections] = useState<string[]>([]);
   const [isReady, setIsReady] = useState(false);
-  const editingSection = useInvitationStore(state => state.editingSection);
-  const setEditingSection = useInvitationStore(state => state.setEditingSection);
+  const { editingSection, setEditingSection } = useInvitationStore(useShallow((state) => ({
+    editingSection: state.editingSection,
+    setEditingSection: state.setEditingSection,
+  })));
 
   // When sections change, identify if a new section was opened to update the preview
   const handleValueChange = useCallback((value: string[]) => {
@@ -62,17 +66,17 @@ const EditorForm = memo(function EditorForm() {
 
   if (!isReady) {
     return (
-      <div className="flex flex-col gap-3">
+      <div className={styles.loadingContainer}>
         {Array.from({ length: 10 }).map((_, i) => (
-          <div key={i} className="bg-white border border-builder-border rounded-[20px] p-5 h-[64px] flex items-center justify-between shadow-[0_2px_8px_rgba(0,0,0,0.02)]">
-            <div className="flex items-center gap-3">
-              <Skeleton className="w-10 h-10 rounded-xl" />
-              <div className="flex flex-col gap-1.5">
-                <Skeleton className="w-24 h-4 rounded-full" />
-                <Skeleton className="w-16 h-3 rounded-full opacity-60" />
+          <div key={i} className={styles.skeletonItem}>
+            <div className={styles.skeletonLeft}>
+              <Skeleton className={styles.skeletonIcon} />
+              <div className={styles.skeletonText}>
+                <Skeleton className={styles.skeletonTitle} />
+                <Skeleton className={styles.skeletonSubtitle} />
               </div>
             </div>
-            <Skeleton className="w-4 h-4 rounded-full opacity-30" />
+            <Skeleton className={styles.skeletonChevron} />
           </div>
         ))}
       </div>
@@ -80,24 +84,19 @@ const EditorForm = memo(function EditorForm() {
   }
 
   return (
-    <div className="flex flex-col gap-3 sm-animate-fadeIn">
+    <div className={styles.wrapper}>
       <Accordion
         type="multiple"
         value={openSections}
         onValueChange={handleValueChange}
-        className="flex flex-col gap-3"
+        className={styles.list}
       >
         {SECTIONS.map(({ key, Component }) => (
-          <div
+          <Component
             key={key}
-            onFocusCapture={() => setEditingSection(key)}
-            onClickCapture={() => setEditingSection(key)}
-          >
-            <Component
-              value={key}
-              isOpen={openSections.includes(key)}
-            />
-          </div>
+            value={key}
+            isOpen={openSections.includes(key)}
+          />
         ))}
       </Accordion>
     </div>

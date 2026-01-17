@@ -3,14 +3,20 @@ import dynamic from 'next/dynamic';
 
 const RichTextEditor = dynamic(() => import('@/components/common/RichTextEditor'), { ssr: false });
 import { Heart, Sparkles } from 'lucide-react';
+import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { Field } from '../FormPrimitives';
 import { ImageUploader } from '../ImageUploader';
-import { ExampleSelectorModal } from '@/components/builder/ExampleSelectorModal';
 import { HeaderAction } from '../HeaderAction';
 import styles from './ClosingSection.module.scss';
+
+import type { ExampleItem } from '@/components/builder/ExampleSelectorModal';
+
+const ExampleSelectorModal = dynamic(() => import('@/components/builder/ExampleSelectorModal').then(mod => mod.ExampleSelectorModal), {
+    ssr: false
+});
 
 interface SectionProps {
     value: string;
@@ -36,16 +42,16 @@ const SAMPLE_PHRASES = [
 ];
 
 export default function ClosingSection({ isOpen, value }: SectionProps) {
-    const closing = useInvitationStore(state => state.closing);
+    const closing = useInvitationStore(useShallow(state => state.closing));
     const setClosing = useInvitationStore(state => state.setClosing);
 
     const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
 
     const updateClosing = (data: Partial<typeof closing>) => setClosing(data);
 
-    const handleSelectSample = (sample: typeof SAMPLE_PHRASES[0]) => {
+    const handleSelectSample = (sample: ExampleItem) => {
         updateClosing({
-            subtitle: sample.subtitle,
+            subtitle: sample.subtitle || '',
             title: sample.title,
             content: sample.content
         });

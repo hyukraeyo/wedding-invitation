@@ -3,12 +3,16 @@
 import React, { useState, useCallback, useEffect, useRef, Suspense } from 'react';
 import dynamic from 'next/dynamic';
 
+const invitationCanvasLoading = (
+  <div className="w-full h-full flex items-center justify-center bg-muted/20 animate-pulse" />
+);
+
 // Dynamic import for InvitationCanvas (conditionally rendered based on screen size)
 const InvitationCanvas = dynamic(
   () => import('@/components/preview/InvitationCanvas'),
   {
     ssr: false,
-    loading: () => <div className="w-full h-full flex items-center justify-center bg-muted/20 animate-pulse" />
+    loading: () => invitationCanvasLoading
   }
 );
 
@@ -26,8 +30,9 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 import styles from './BuilderPage.module.scss';
 import { clsx } from 'clsx';
 import { Smartphone, X } from 'lucide-react';
-import { Sheet, SheetContent, SheetTitle, SheetHeader, SheetDescription } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTitle, SheetHeader, SheetDescription } from '@/components/ui/Sheet';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useShallow } from 'zustand/shallow';
 
 const generateSlug = (name: string): string => {
   const randomStr = Math.random().toString(36).substring(2, 8);
@@ -39,8 +44,10 @@ function BuilderPageContent() {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isReady, setIsReady] = useState(false); // 초기화 완료 여부
   const { user, isProfileComplete, profileLoading } = useAuth();
-  const editingSection = useInvitationStore(state => state.editingSection);
-  const reset = useInvitationStore(state => state.reset);
+  const { editingSection, reset } = useInvitationStore(useShallow((state) => ({
+    editingSection: state.editingSection,
+    reset: state.reset,
+  })));
   const router = useRouter();
   const searchParams = useSearchParams();
   const isEditMode = searchParams.get('mode') === 'edit';
@@ -119,7 +126,6 @@ function BuilderPageContent() {
     <div className={styles.container}>
       <Header onSave={handleSave} onLogin={handleLogin} isLoading={isSaving} />
       {isSaving ? <LoadingSpinner /> : null}
-
 
       <main className={styles.workspace}>
         <section className={styles.sidebar} id="sidebar-portal-root">
@@ -206,8 +212,8 @@ function BuilderPageContent() {
             </div>
           ) : null}
         </SheetContent>
-      </Sheet>
-    </div>
+      </Sheet >
+    </div >
   );
 }
 

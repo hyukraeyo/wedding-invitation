@@ -3,6 +3,7 @@
 import React from 'react';
 import { Select } from './Select';
 import { cn } from '@/lib/utils';
+import styles from './TimePicker.module.scss';
 
 interface TimePickerProps {
     value: string;
@@ -66,9 +67,9 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
     const minutes = Array.from({ length: 6 }, (_, i) => String(i * 10).padStart(2, '0'));
 
     return (
-        <div className={cn("flex w-full items-center gap-2", className)}>
+        <div className={cn(styles.container, className)}>
             {/* Period + Hour Select */}
-            <div className="flex-[2]">
+            <div className={styles.hourSection}>
                 <Select
                     value={`${period}:${displayHour}`}
                     onChange={handlePeriodHourChange}
@@ -78,10 +79,10 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
                 />
             </div>
 
-            <span className="text-sm font-medium pt-1">:</span>
+            <span className={styles.separator}>:</span>
 
             {/* Minute Select */}
-            <div className="flex-1">
+            <div className={styles.minuteSection}>
                 <Select
                     value={m}
                     onChange={handleMinuteChange}

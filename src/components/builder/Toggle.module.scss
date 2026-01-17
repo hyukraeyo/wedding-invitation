@@ -1,10 +1,13 @@
-@use "@/styles/variables" as v;
-@use "@/styles/builder" as b;
+@use "../../styles/variables" as v;
+@use "../../styles/mixins" as m;
 
 .toggle {
-  @include v.toggle-base;
-  @include v.toggle-hover;
-  @include v.toggle-active;
-  @include v.toggle-state-on;
-  @include v.input-disabled;
+  @include m.toggle-base;
+  @include m.toggle-hover;
+  @include m.toggle-active;
+  @include m.toggle-state-on;
+  
+  &:disabled {
+      @include m.input-disabled;
+  }
 }

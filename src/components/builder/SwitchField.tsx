@@ -1,6 +1,7 @@
-import { Switch as ShadcnSwitch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
+import { Switch as ShadcnSwitch } from '@/components/ui/Switch';
+import { Label } from '@/components/ui/Label';
 import { cn } from '@/lib/utils';
+import styles from './SwitchField.module.scss';
 
 interface SwitchProps {
     checked: boolean;
@@ -14,16 +15,16 @@ export const SwitchField = ({ checked, onChange, label, className, disabled }: S
     return (
         <div
             className={cn(
-                "flex items-center justify-between py-2.5 px-1 rounded-lg transition-colors cursor-pointer active:bg-accent/50 group select-none",
-                disabled && "cursor-not-allowed opacity-50",
+                styles.container,
+                disabled && styles.disabled,
                 className
             )}
             onClick={() => !disabled && onChange(!checked)}
         >
-            <div className="flex items-center justify-between w-full">
+            <div className={styles.content}>
                 {label ? (
                     <Label
-                        className="text-[15px] font-medium leading-none cursor-pointer group-hover:text-primary transition-colors"
+                        className={styles.label}
                         onClick={(e) => {
                             e.preventDefault(); // Prevent double trigger since parent has onClick
                         }}
@@ -38,7 +39,7 @@ export const SwitchField = ({ checked, onChange, label, className, disabled }: S
                         // but good for accessibility if they use keyboard.
                     }}
                     disabled={disabled}
-                    className="pointer-events-none" // Parent handles click
+                    className={styles.switch} // Parent handles click
                 />
             </div>
         </div>

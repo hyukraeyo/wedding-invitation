@@ -1,0 +1,22 @@
+@use "../../styles/variables" as v;
+
+.container {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.5rem; // gap-2
+}
+
+.hourSection {
+  flex: 2;
+}
+
+.separator {
+  font-size: v.$font-size-sm;
+  font-weight: 500;
+  padding-top: 0.25rem; // pt-1
+}
+
+.minuteSection {
+  flex: 1;
+}

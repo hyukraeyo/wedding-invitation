@@ -1,4 +1,5 @@
-@use "@/styles/variables" as *;
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as m;
 
 .canvasWrapper {
     width: 100%;
@@ -18,10 +19,10 @@
     width: 100%;
     height: 100%;
     position: relative;
-    @include flex-col;
+    @include m.flex-col;
     overflow-y: auto;
     overflow-x: hidden;
-    @include scrollbar-hide;
+    @include m.scrollbar-hide;
     transition: background-color 0.5s ease, opacity 0.2s ease;
 
     &.hidden {
@@ -31,8 +32,8 @@
 
 .footerPadding {
     height: 10rem;
-    @include flex-col;
-    @include flex-center;
+    @include m.flex-col;
+    @include m.flex-center;
     font-size: 10px;
     color: rgba(0, 0, 0, 0.1);
     letter-spacing: 0.2em;

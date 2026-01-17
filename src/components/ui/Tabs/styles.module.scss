@@ -1,0 +1,51 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+
+.list {
+  display: inline-flex;
+  height: 2.25rem; // h-9 (36px)
+  align-items: center;
+  justify-content: center;
+  border-radius: v.$radius-sm; // rounded-lg
+  background-color: v.$zinc-100; // bg-muted
+  padding: 0.25rem; // p-1
+  color: v.$zinc-500; // text-muted-foreground
+}
+
+.trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  
+  border-radius: calc(v.$radius-sm - 2px); // rounded-md
+  padding: 0.25rem 0.75rem; // px-3 py-1
+  
+  font-size: 0.875rem; // text-sm
+  font-weight: 500; // font-medium
+  
+  color: inherit;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  
+  transition: all 0.2s ease;
+
+  @include m.focus-ring;
+
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  &[data-state='active'] {
+    background-color: white; // bg-background
+    color: v.$zinc-900; // text-foreground
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+}
+
+.content {
+  margin-top: 0.5rem; // mt-2
+  @include m.focus-ring;
+}

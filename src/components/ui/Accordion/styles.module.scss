@@ -1,0 +1,79 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+
+.item {
+  border-bottom: 1px solid v.$zinc-200; // border-b
+}
+
+.header {
+  display: flex;
+}
+
+.trigger {
+
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1rem 0; // py-4
+  
+  font-size: 0.875rem; // text-sm
+  font-weight: 500; // font-medium
+  text-align: left;
+  
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  
+  transition: all 0.2s ease;
+
+  @include m.focus-ring;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  // Open state for Icon rotation
+  &[data-state='open'] {
+    .icon {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.icon {
+  width: 1rem; // h-4
+  height: 1rem;
+  flex-shrink: 0;
+  color: v.$zinc-500; // text-muted-foreground
+  transition: transform 0.2s ease;
+}
+
+.content {
+  overflow: hidden;
+  font-size: 0.875rem; // text-sm
+  
+  // Animation
+  &[data-state='open'] {
+    animation: accordion-down 0.2s ease-out;
+  }
+  &[data-state='closed'] {
+    animation: accordion-up 0.2s ease-out;
+  }
+}
+
+.contentInner {
+  padding-bottom: 1rem; // pb-4
+  padding-top: 0; // pt-0
+}
+
+@keyframes accordion-down {
+  from { height: 0; }
+  to { height: var(--radix-accordion-content-height); }
+}
+
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to { height: 0; }
+}

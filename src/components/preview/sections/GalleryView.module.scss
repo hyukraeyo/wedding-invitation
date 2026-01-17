@@ -1,11 +1,11 @@
-@use "@/styles/variables" as *;
+@use "../../../styles/variables" as v;
 
 /* Swiper specific */
 .swiperContainer {
     width: 100%;
 
     &.swiperContainerLimited {
-        max-width: $canvas-max-width;
+        max-width: v.$canvas-max-width;
         margin-inline: auto;
     }
 }
@@ -63,7 +63,7 @@
     
     &.active {
         opacity: 1;
-        box-shadow: 0 0 0 2px var(--tw-ring-color), 0 0 0 calc(2px + 1px) white; // ring-2 ring-offset-1 logic
+        box-shadow: 0 0 0 2px var(--active-ring-color), 0 0 0 calc(2px + 1px) white; // ring-2 ring-offset-1 logic
     }
 }
 

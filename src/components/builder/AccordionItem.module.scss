@@ -1,24 +1,39 @@
-@use "@/styles/variables" as *;
+@use "../../styles/variables" as *;
 
 .item {
-    background-color: var(--card);
-    border-radius: 0.75rem; // rounded-xl
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); // ease-ios
-    border: 1px solid transparent; // Layout shift 방지
+    background-color: #ffffff;
+    border-radius: 1rem; // 조금 더 둥글게 (16px)
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    border: none;
+    box-shadow: none; // 그림자 제거 (요청사항 1)
 
-    // 💡 핵심: 닫힌 상태에서도 은은한 그림자를 주어 입체감 부여 (첫 번째 이미지처럼)
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 3px 0 rgba(0, 0, 0, 0.04);
+    // 테두리도 없이 깔끔하게
+    // border: 1px solid v.$zinc-100; 
 
     &:hover {
-        // 호버 시 살짝 진해지는 테두리 느낌 (선택 사항)
-        // border-color: rgba(0, 0, 0, 0.05);
+        // 호버 효과 최소화
+        // background-color: v.$zinc-50;
     }
 
     &.open {
-        // 열렸을 때는 조금 더 떠오르는 느낌
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-        // border-color: rgba(251, 192, 45, 0.4); // Primary color hint (optional)
+        // 열렸을 때도 그림자 없이
+        box-shadow: none;
     }
+}
+
+.overlayTrigger {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: 1;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: transparent;
 }
 
 .trigger {
@@ -27,28 +42,24 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 1rem 1rem;
+    padding: 1.25rem 1.5rem; // 패딩 확대
     cursor: pointer;
     text-align: left;
     user-select: none;
-    border-radius: 0.75rem;
+    border-radius: 1rem;
     transition: all 0.2s;
     background-color: transparent;
     border: none;
     font-family: inherit;
 
-    // Radix Accordion Trigger 기본 아이콘 숨김
-    :global(svg) {
-        display: none;
-    }
-
     &.open {
         border-bottom-left-radius: 0;
         border-bottom-right-radius: 0;
+        padding-bottom: 1rem;
     }
 
     @media (min-width: 768px) {
-        padding: 1rem;
+        padding: 1.25rem 1.5rem;
     }
 
     // Hover effect removal as per user preference or keep subtle
@@ -71,8 +82,9 @@
 
     .title {
         font-weight: 700; // font-bold
-        font-size: 1rem; // text-base
+        font-size: 1.05rem; // text-base 조금 더 크게
         color: var(--foreground);
+        letter-spacing: -0.01em;
     }
 }
 
@@ -93,7 +105,7 @@
     .actionWrapper {
         margin-right: 0.5rem;
         position: relative;
-        z-index: 10;
+        z-index: 10; // Must be higher than .overlayTrigger (z-index: 1)
     }
 
     .chevron {
@@ -107,10 +119,10 @@
 }
 
 .contentWrapper {
-    padding: 0 0.5rem 1rem 0.5rem; // pb-4 pt-0 px-2
+    padding: 0 1.5rem 1.5rem 1.5rem; // pb-4 pt-0 px-2
 
     @media (min-width: 768px) {
-        padding: 0 1rem 1rem 1rem; // md:px-4
+        padding: 0 1.5rem 1.5rem 1.5rem; // md:px-4
     }
 }
 

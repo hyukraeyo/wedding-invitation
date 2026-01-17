@@ -1,0 +1,21 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+
+.label {
+    font-size: 0.875rem; // text-sm
+    font-weight: 500;    // font-medium
+    line-height: 1;      // leading-none
+    color: v.$zinc-900;
+    user-select: none;
+    
+    // peer-disabled:cursor-not-allowed peer-disabled:opacity-70
+    // SCSS에서는 형제 선택자나 상태를 직접 제어하기 어려울 수 있으므로,
+    // 필요 시 JS에서 상태를 받아오거나 부모 컨텍스트를 활용해야 함.
+    // 하지만 Radix Label은 보통 Input과 함께 쓰이므로 기본적인 스타일만 정의.
+    
+    &[data-disabled],
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.7;
+    }
+}

@@ -1,0 +1,46 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+
+.checkbox {
+  @include m.flex-center;
+  // grid place-content-center replacement
+  display: grid;
+  place-content: center;
+
+  width: 1rem; // h-4
+  height: 1rem; // w-4
+  flex-shrink: 0;
+  border-radius: v.$radius-sm; // rounded-sm
+  border: 1px solid v.$color-primary; // border-primary
+  background-color: transparent;
+  color: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  // focus-visible styles via mixin
+  @include m.focus-ring;
+
+  // Disabled state
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  // Checked state
+  &[data-state='checked'] {
+    background-color: v.$color-primary; // bg-primary
+    color: v.$color-primary-foreground; // text-primary-foreground
+  }
+}
+
+.indicator {
+  @include m.flex-center;
+  color: currentColor;
+  
+  // Icon size
+  :global(svg) {
+    width: 0.8rem;
+    height: 0.8rem;
+    stroke-width: 3px;
+  }
+}

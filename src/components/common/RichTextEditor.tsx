@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { useEffect, useMemo, useId } from 'react';
 import { cn } from '@/lib/utils';
-import { Toggle } from '@/components/ui/toggle';
+import { Toggle } from '@/components/ui/Toggle';
 import styles from './RichTextEditor.module.scss';
 
 interface RichTextEditorProps {
@@ -41,7 +41,7 @@ const ToolbarToggle = ({
     <Toggle
         pressed={pressed}
         onPressedChange={onPressedChange}
-        className="data-[state=on]:bg-muted p-2 h-8 w-8"
+        className={styles.toggleButton}
         aria-label={title}
         title={title}
     >

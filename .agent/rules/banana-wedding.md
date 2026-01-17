@@ -34,10 +34,40 @@ trigger: always_on
 - `/builder?mode=edit`: 기존 청첩장 수정 (상태 유지)
 - `/builder`: 새 청첩장 생성 (스토어 초기화)
 
-### 4. 스타일링
-- TDS Mobile 디자인 시스템 우선 사용
+### 4. 스타일링 및 UI 컴포넌트
 - Primary 컬러: 바나나 옐로우 `#FBC02D`
 - 애니메이션: iOS 느낌 (`cubic-bezier(0.16, 1, 0.3, 1)`)
+- SCSS Modules 필수 사용 (Tailwind 금지)
+- 디자인 토큰은 `src/styles/_variables.scss`에서 관리
+
+### 4.1 UI 컴포넌트 생성 규칙 (Strict)
+
+**폴더 구조 (필수)**
+```
+src/components/ui/ComponentName/
+├── index.tsx           # PascalCase 폴더, 컴포넌트 로직
+└── styles.module.scss  # 스타일 (선택적)
+```
+
+**구현 패턴**
+- **Radix UI 기반**: `@radix-ui/react-*` Primitives 사용 (Dialog, Popover, Dropdown 등)
+- **외부 라이브러리 래핑**: `react-day-picker` (Calendar), `vaul` (Drawer) 등
+- **순수 HTML**: Input, Textarea 등 기본 요소
+
+**필수 규칙**
+- ❌ 단일 파일(`component.tsx`) 금지 → 폴더 구조(`Component/index.tsx`) 사용
+- ✅ Named Export 사용: `export { ComponentName }`
+- ✅ displayName 필수 설정
+- ✅ SCSS 변수는 `@use "../../../styles/variables" as v;`로 import
+
+**Shadcn CLI 사용 시**
+```bash
+npx shadcn@latest add [component]
+# 이후 반드시:
+# 1. 폴더 구조로 이동 (ComponentName/index.tsx)
+# 2. import 경로 PascalCase로 수정
+# 3. 중복 파일 삭제
+```
 
 ### 5. 코드 품질
 - TypeScript strict 모드 필수

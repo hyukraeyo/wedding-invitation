@@ -9,44 +9,79 @@ import { SegmentedControl } from '../SegmentedControl';
 import { SwitchField } from '../SwitchField';
 import { PhoneField } from '../PhoneField';
 import { Field } from '../FormPrimitives';
-import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 import styles from './LocationSection.module.scss';
 import { cn } from '@/lib/utils';
 import { NaverIcon, KakaoIcon } from '@/components/common/Icons';
+import { useShallow } from 'zustand/shallow';
 
 const DaumPostcodeEmbed = dynamic(() => import('react-daum-postcode'), { ssr: false });
 const KakaoSdkLoader = dynamic(() => import('./KakaoSdkLoader'), { ssr: false });
+const ResponsiveModal = dynamic(
+    () => import('@/components/common/ResponsiveModal').then(mod => mod.ResponsiveModal),
+    { ssr: false }
+);
 
 export default function LocationSectionContent() {
-    const location = useInvitationStore(state => state.location);
-    const setLocation = useInvitationStore(state => state.setLocation);
-    const locationTitle = useInvitationStore(state => state.locationTitle);
-    const setLocationTitle = useInvitationStore(state => state.setLocationTitle);
-    const locationSubtitle = useInvitationStore(state => state.locationSubtitle);
-    const setLocationSubtitle = useInvitationStore(state => state.setLocationSubtitle);
-    const address = useInvitationStore(state => state.address);
-    const setAddress = useInvitationStore(state => state.setAddress);
-    const detailAddress = useInvitationStore(state => state.detailAddress);
-    const setDetailAddress = useInvitationStore(state => state.setDetailAddress);
-    const locationContact = useInvitationStore(state => state.locationContact);
-    const setLocationContact = useInvitationStore(state => state.setLocationContact);
-    const showMap = useInvitationStore(state => state.showMap);
-    const setShowMap = useInvitationStore(state => state.setShowMap);
-    const lockMap = useInvitationStore(state => state.lockMap);
-    const setLockMap = useInvitationStore(state => state.setLockMap);
-    const showNavigation = useInvitationStore(state => state.showNavigation);
-    const setShowNavigation = useInvitationStore(state => state.setShowNavigation);
-    const mapHeight = useInvitationStore(state => state.mapHeight);
-    const setMapHeight = useInvitationStore(state => state.setMapHeight);
-    const mapZoom = useInvitationStore(state => state.mapZoom);
-    const setMapZoom = useInvitationStore(state => state.setMapZoom);
-    const mapType = useInvitationStore(state => state.mapType);
-    const setMapType = useInvitationStore(state => state.setMapType);
-    const coordinates = useInvitationStore(state => state.coordinates);
-    const setCoordinates = useInvitationStore(state => state.setCoordinates);
+    const {
+        location,
+        setLocation,
+        locationTitle,
+        setLocationTitle,
+        locationSubtitle,
+        setLocationSubtitle,
+        address,
+        setAddress,
+        detailAddress,
+        setDetailAddress,
+        locationContact,
+        setLocationContact,
+        showMap,
+        setShowMap,
+        lockMap,
+        setLockMap,
+        showNavigation,
+        setShowNavigation,
+        mapHeight,
+        setMapHeight,
+        mapZoom,
+        setMapZoom,
+        mapType,
+        setMapType,
+        coordinates,
+        setCoordinates,
+    } = useInvitationStore(useShallow((state) => ({
+        location: state.location,
+        setLocation: state.setLocation,
+        locationTitle: state.locationTitle,
+        setLocationTitle: state.setLocationTitle,
+        locationSubtitle: state.locationSubtitle,
+        setLocationSubtitle: state.setLocationSubtitle,
+        address: state.address,
+        setAddress: state.setAddress,
+        detailAddress: state.detailAddress,
+        setDetailAddress: state.setDetailAddress,
+        locationContact: state.locationContact,
+        setLocationContact: state.setLocationContact,
+        showMap: state.showMap,
+        setShowMap: state.setShowMap,
+        lockMap: state.lockMap,
+        setLockMap: state.setLockMap,
+        showNavigation: state.showNavigation,
+        setShowNavigation: state.setShowNavigation,
+        mapHeight: state.mapHeight,
+        setMapHeight: state.setMapHeight,
+        mapZoom: state.mapZoom,
+        setMapZoom: state.setMapZoom,
+        mapType: state.mapType,
+        setMapType: state.setMapType,
+        coordinates: state.coordinates,
+        setCoordinates: state.setCoordinates,
+    })));
 
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isKakaoReady, setIsKakaoReady] = useState(false);
+    const coordinateLat = coordinates?.lat ?? 0;
+    const coordinateLng = coordinates?.lng ?? 0;
 
     React.useEffect(() => {
         if (!isKakaoReady) return;
@@ -59,13 +94,13 @@ export default function LocationSectionContent() {
 
                     const lat = parseFloat(firstResult.y);
                     const lng = parseFloat(firstResult.x);
-                    if (Math.abs((coordinates?.lat || 0) - lat) > 0.0001 || Math.abs((coordinates?.lng || 0) - lng) > 0.0001) {
+                    if (Math.abs(coordinateLat - lat) > 0.0001 || Math.abs(coordinateLng - lng) > 0.0001) {
                         setCoordinates(lat, lng);
                     }
                 }
             });
         }
-    }, [address, coordinates, isKakaoReady, setCoordinates]);
+    }, [address, coordinateLat, coordinateLng, isKakaoReady, setCoordinates]);
 
     const handleAddressSearch = useCallback(() => {
         setIsSearchOpen(true);

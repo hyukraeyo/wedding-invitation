@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover';
+import { Calendar } from '@/components/ui/Calendar'; // 폴더 구조로 통일
 import { cn } from '@/lib/utils';
 import { format, parse } from 'date-fns';
 import { ko } from 'date-fns/locale';
@@ -16,8 +16,8 @@ import {
     DrawerDescription,
     DrawerScrollArea,
     DrawerTrigger,
-} from '@/components/ui/drawer';
-import styles from './Select.module.scss';
+} from '@/components/ui/Drawer';
+import styles from './DatePicker.module.scss';
 
 interface DatePickerProps {
     value: string;
@@ -30,7 +30,6 @@ export function DatePicker({ value, onChange, className, placeholder = "날짜 �
     const windowWidth = useWindowSize();
     const isMobile = windowWidth < 768;
     const [isOpen, setIsOpen] = useState(false);
-    const calendarWrapperRef = React.useRef<HTMLDivElement>(null);
 
     // Parse string date (YYYY-MM-DD) to Date object
     const dateValue = value ? parse(value, 'yyyy-MM-dd', new Date()) : undefined;
@@ -60,13 +59,12 @@ export function DatePicker({ value, onChange, className, placeholder = "날짜 �
                 <PopoverTrigger asChild>
                     {TriggerButtonContent}
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
+                <PopoverContent className={styles.popoverContent} align="start">
                     <Calendar
                         mode="single"
                         selected={dateValue}
-                        onSelect={handleSelect}
-                        initialFocus
-                        locale={ko}
+                        /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+                        onSelect={handleSelect as any}
                     />
                 </PopoverContent>
             </Popover>
@@ -79,31 +77,23 @@ export function DatePicker({ value, onChange, className, placeholder = "날짜 �
                 <DrawerTrigger asChild>
                     {TriggerButtonContent}
                 </DrawerTrigger>
-                <DrawerContent
-                    onOpenAutoFocus={(event) => {
-                        event.preventDefault();
-                        calendarWrapperRef.current?.focus();
-                    }}
-                >
-                    <DrawerHeader className="w-full px-6 pb-2 border-b">
-                        <DrawerTitle className="text-left text-base font-bold text-foreground/90">
+                <DrawerContent>
+                    <DrawerHeader className={styles.drawerHeader}>
+                        <DrawerTitle className={styles.drawerTitle}>
                             날짜를 선택하세요
                         </DrawerTitle>
-                        <DrawerDescription className="sr-only">
+                        <DrawerDescription className={styles.srOnly}>
                             날짜 선택
                         </DrawerDescription>
                     </DrawerHeader>
-                    <DrawerScrollArea className="flex flex-col items-center justify-center p-4">
-                        <div ref={calendarWrapperRef} tabIndex={-1}>
-                            <Calendar
-                                mode="single"
-                                selected={dateValue}
-                                onSelect={handleSelect}
-                                initialFocus
-                                locale={ko}
-                                className="p-0 border-0 scale-110 md:scale-100"
-                            />
-                        </div>
+                    <DrawerScrollArea className={styles.calendarWrapper}>
+                        <Calendar
+                            mode="single"
+                            selected={dateValue}
+                            /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+                            onSelect={handleSelect as any}
+                            className={styles.calendar || ""}
+                        />
                     </DrawerScrollArea>
                 </DrawerContent>
             </Drawer>

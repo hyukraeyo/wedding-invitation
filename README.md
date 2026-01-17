@@ -2,7 +2,8 @@
 
 ![Next.js](https://img.shields.io/badge/Next.js-16.1.1-black?style=flat-square&logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue?style=flat-square&logo=typescript)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0+-38B2AC?style=flat-square&logo=tailwind-css)
+![SCSS](https://img.shields.io/badge/Sass-1.69+-CC6699?style=flat-square&logo=sass)
+![Radix UI](https://img.shields.io/badge/Radix%20UI-Primitives-black?style=flat-square&logo=radix-ui)
 ![Vercel](https://img.shields.io/badge/Vercel-Deployed-black?style=flat-square&logo=vercel)
 
 유통기한 없는 달콤한 시작, 바나나웨딩입니다. Next.js 16의 최신 기능을 활용하여 최고의 성능과 감각적인 사용자 경험을 제공하는 모바일 청첩장 제작 플랫폼입니다.
@@ -66,7 +67,7 @@
 
 - **반응형 모달 시스템**: Desktop(Dialog) ↔ Mobile(Drawer) 자동 변환
 - **아코디언 UI 패턴**: 아이콘 스타일 및 헤더 액션 구현 규칙
-- **디자인 원칙**: Tailwind + SCSS 하이브리드 사용법 및 애니메이션
+- **디자인 원칙**: Radix UI Primitives + SCSS Modules 시스템 구축
 - **데이터 관리**: Zustand 상태 관리 및 성능 최적화 전략
 - **Zustand Persist 패턴**: URL 기반 모드 구분으로 페이지 간 상태 초기화 관리
   - `/builder?mode=edit`: 기존 청첩장 수정 (상태 유지)
@@ -84,9 +85,9 @@
 
 ### UI & Styling (최신 버전)
 
-- **Tailwind CSS 4.0+** - 향상된 성능과 새로운 유틸리티
-- **Lucide React** - 일관된 아이콘 시스템 (5.0+)
-- **Next.js Font Optimization** - Inter, Playfair Display 자동 최적화
+- **SCSS Modules** - BEM 방법론을 적용한 모듈 식 스타일링
+- **Radix UI Primitives** - 웹 접근성 표준 준수 (Headless UI)
+- **CSS Variables** - 다크모드 및 테마 확장을 위한 변수 관리
 
 ### State Management & Data
 
@@ -387,7 +388,7 @@ chore: 빌드/도구 설정 변경
 
 - [Next.js](https://nextjs.org/) 팀
 - [Vercel](https://vercel.com/) 플랫폼
-- [Tailwind CSS](https://tailwindcss.com/) 팀
+- [Radix UI](https://www.radix-ui.com/) 팀
 - 모든 오픈소스 기여자들
 
 ---

@@ -9,8 +9,8 @@ import SectionContainer from '../SectionContainer';
 import SectionHeader from '../SectionHeader';
 import { NaverIcon, KakaoIcon } from '../../common/Icons';
 import { clsx } from 'clsx';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { Skeleton } from '@/components/ui/skeleton';
+import { AspectRatio } from '@/components/ui/AspectRatio';
+import { Skeleton } from '@/components/ui/Skeleton';
 import styles from './LocationView.module.scss';
 import { IMAGE_SIZES } from '@/constants/image';
 import { isBlobUrl } from '@/lib/image';
@@ -37,10 +37,10 @@ interface LocationViewProps {
 }
 
 const MapLoading = () => (
-    <div className="relative w-full h-full">
-        <Skeleton className="absolute inset-0 z-10" />
-        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center">
-            <Banana className="h-10 w-10 animate-spin text-primary" />
+    <div className={styles.mapLoading}>
+        <Skeleton className={styles.mapLoadingSkeleton} />
+        <div className={styles.loadingOverlay}>
+            <Banana className={styles.spinner} />
         </div>
     </div>
 );

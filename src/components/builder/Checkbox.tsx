@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useId } from 'react';
-import { Checkbox as ShadcnCheckbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
+import { Checkbox as ShadcnCheckbox } from '@/components/ui/Checkbox';
+import { Label } from '@/components/ui/Label';
 import { cn } from '@/lib/utils';
+import styles from './Checkbox.module.scss';
 
 /**
  * TDS Checkbox Component
@@ -62,19 +63,19 @@ const CheckboxBase = ({
     const uniqueId = id || reactId;
 
     return (
-        <div className={cn("flex items-center space-x-2", className)}>
+        <div className={cn(styles.container, className)}>
             <ShadcnCheckbox
                 id={uniqueId}
                 {...(checked !== undefined ? { checked } : {})}
                 {...(defaultChecked !== undefined ? { defaultChecked } : {})}
                 onCheckedChange={handleCheckedChange}
                 disabled={disabled ?? undefined}
-                className={cn(variant === 'circle' && "rounded-full")}
+                className={cn(variant === 'circle' && styles.circle)}
             />
             {children || label ? (
                 <Label
                     htmlFor={uniqueId}
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    className={cn(styles.label, disabled && styles.disabled)}
                 >
                     {label || children}
                 </Label>

@@ -1,38 +1,26 @@
-@use "@/styles/variables" as v;
-@use "@/styles/builder" as b;
+@use "../../../styles/variables" as v;
+@use "../../../styles/builder" as b;
+@use "../../../styles/mixins" as m;
 
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  padding: 1rem;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.625rem;
-  margin-bottom: 0.75rem;
-  width: 100%;
-}
+// ... (lines 4-18)
 
 .uploadItem {
   aspect-ratio: 1 / 1;
-  border: 1px dashed v.$gray-200;
-  background-color: rgba(v.$gray-100, 0.3);
+  border: 1px dashed v.$zinc-200;
+  background-color: rgba(v.$zinc-100, 0.3);
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  color: rgba(v.$gray-400, 0.5);
+  color: rgba(v.$zinc-400, 0.5);
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {
-      border-color: rgba(v.$toss-blue-500, 0.5);
-      background-color: rgba(v.$gray-100, 0.5);
-      color: v.$toss-blue-500;
+      border-color: rgba(v.$primary-500, 0.5);
+      background-color: rgba(v.$zinc-100, 0.5);
+      color: v.$primary-500;
 
       .uploadIcon {
         transform: scale(1.1);
@@ -40,33 +28,15 @@
     }
   }
 
-
   &:active {
     transform: scale(0.95);
   }
 }
 
-.uploadIcon {
-  transition: transform 0.2s ease;
-}
-
-.counter {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  width: 100%;
-  margin-bottom: 0.25rem;
-  gap: 0.5rem;
-}
-
-.countText {
-  font-size: 11.5px;
-  font-weight: bold;
-  letter-spacing: -0.02em;
-}
+// ...
 
 .countTotal {
-  color: rgba(v.$gray-400, 0.6);
+  color: rgba(v.$zinc-400, 0.6);
 }
 
 .sortableItem {
@@ -74,7 +44,7 @@
   aspect-ratio: 1 / 1;
   border-radius: 12px;
   overflow: hidden;
-  background-color: v.$gray-100;
+  background-color: v.$zinc-100;
   cursor: grab;
 
   &.dragging {
@@ -83,107 +53,21 @@
   }
 }
 
-.image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-
-
-.overlay {
-  width: 100px;
-  height: 100px;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  pointer-events: none;
-  z-index: 1000;
-}
-
-.optionGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  padding: 0 0.25rem;
-}
-
-.uploading {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes pulse {
-
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: .5;
-  }
-}
-
-.imageUploading {
-  filter: blur(2px);
-  opacity: 0.6;
-}
-
-.uploadingOverlay {
-  position: absolute;
-  inset: 0;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(1px);
-}
+// ...
 
 .spinner {
   width: 1.25rem;
   height: 1.25rem;
-  border: 2px solid rgba(v.$toss-blue-500, 0.2);
-  border-top-color: v.$toss-blue-500;
+  border: 2px solid rgba(v.$primary-500, 0.2);
+  border-top-color: v.$primary-500;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.gradientOverlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 0%, transparent 40%);
-  opacity: 1;
-  transition: opacity 0.2s ease;
-  pointer-events: none;
-}
-
-.dragHandle {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  cursor: grab;
-  background: none;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-
-  &:active {
-    cursor: grabbing;
-  }
-}
-
+// ...
 
 .infoBox {
-  @include v.info-box;
+  @include m.info-box;
 }
 
 .galleryManager {
@@ -197,5 +81,36 @@
 }
 
 .imageOverlay {
-  object-fit: cover;
+    object-fit: cover;
+}
+
+.removeButton {
+  width: 1.5rem; // w-6
+  height: 1.5rem; // h-6
+  background-color: rgba(0, 0, 0, 0.5); // bg-black/50
+  color: white; // text-white
+  border-radius: 9999px; // rounded-full
+  border: none;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.7); // hover:bg-black/70
+  }
+}
+
+.labelText {
+  font-size: v.$font-size-sm;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.counter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }

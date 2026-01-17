@@ -1,35 +1,97 @@
-@use "@/styles/variables" as v;
-@use "@/styles/builder" as b;
+@use "../../styles/variables" as v;
+@use "../../styles/mixins" as m;
 
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem; // gap-1.5
+}
+
+// Mobile Trigger Button
 .triggerButton {
-    @include b.builder-input-base;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    text-align: left;
-    cursor: pointer;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border: 1px solid v.$color-border;
+  border-radius: v.$radius-md;
+  background-color: v.$color-background;
+  font-size: v.$font-size-base;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color v.$transition-fast;
 
-    // Icon styling for both DatePicker and Select chevrons/icons
-    :global(svg) {
-        width: 1rem;
-        height: 1rem;
-        opacity: 0.5;
-        transition: transform 0.2s ease;
-    }
+  &:hover {
+    border-color: v.$zinc-300;
+  }
+  
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
 }
 
 .placeholder {
-    color: v.$zinc-400;
+  color: v.$color-muted-foreground;
 }
 
-.value {
-    color: v.$zinc-900;
+// Mobile Drawer Option Item
+.optionItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem; // px-6 py-5
+  text-align: left;
+  transition: background-color v.$transition-fast;
+  
+  &:active {
+    background-color: rgba(v.$zinc-100, 0.8); // active:bg-accent/80
+  }
+
+  &.selected {
+    background-color: rgba(v.$color-primary, 0.05); // bg-primary/5
+    color: v.$color-primary;
+  }
 }
 
-// Drawer Content Styling (Optional if you want to scope it)
-.drawerTitle {
-    text-align: left;
-    font-size: 1rem;
+.optionText {
+  font-size: 1.0625rem; // 17px
+  letter-spacing: -0.025em; // tracking-tight
+  color: rgba(v.$color-foreground, 0.8); // text-foreground/80
+  font-weight: 500;
+  
+  &.selected {
     font-weight: 700;
-    color: v.$zinc-900;
+    color: v.$color-primary;
+  }
+}
+
+.checkIcon {
+  width: 1.25rem; // h-5
+  height: 1.25rem; // w-5
+  color: v.$color-primary;
+}
+
+.desktopTrigger {
+  width: 100%;
+}
+
+.drawerTitle {
+  text-align: left;
+  font-size: v.$font-size-base;
+  font-weight: 700;
+  color: rgba(v.$color-foreground, 0.9);
+}
+
+.drawerHeader {
+  padding-left: 1.5rem; // px-6
+  padding-right: 1.5rem;
+  padding-bottom: 0.5rem; // pb-2
+  border-bottom: 1px solid v.$color-border;
+}
+
+.srOnly {
+  @include m.visually-hidden;
 }

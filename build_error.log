@@ -1,0 +1,234 @@
+
+> banana-wedding@0.1.0 build
+> next build
+
+▲ Next.js 16.1.1 (Turbopack)
+- Environments: .env.local
+- Experiments (use with caution):
+  · clientTraceMetadata
+  · serverActions
+
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 7 errors:
+./src/components/ui/Calendar/styles.module.scss
+Error evaluating Node.js code
+Error: Undefined variable.
+   ╷
+87 │   color: v.$muted-foreground;
+   │          ^^^^^^^^^^^^^^^^^^^
+   ╵
+  src\components\ui\Calendar\styles.module.scss 87:10  root stylesheet
+Caused by: Error: Undefined variable.
+   ╷
+87 │   color: v.$muted-foreground;
+   │          ^^^^^^^^^^^^^^^^^^^
+   ╵
+  src\components\ui\Calendar\styles.module.scss 87:10  root stylesheet
+    [at Object.wrapException (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:2337:47)]
+    [at C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90581:23]
+    [at _wrapJsFunctionForAsync_closure.$protected (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:5005:15)]
+    [at _wrapJsFunctionForAsync_closure.call$2 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:38505:12)]
+    [at Object._asyncStartSync (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:4969:20)]
+    [at _EvaluateVisitor2.visitVariableExpression$body$_EvaluateVisitor0 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90587:16)]
+    [at _EvaluateVisitor2.visitVariableExpression$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90561:19)]
+    [at VariableExpression0.accept$1$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:128275:22)]
+    [at VariableExpression0.accept$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:128278:19)]
+    [at C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:88642:41]
+
+Import trace:
+  Client Component Browser:
+    ./src/components/ui/Calendar/styles.module.scss [Client Component Browser]
+    ./src/components/ui/Calendar/index.tsx [Client Component Browser]
+    ./src/components/builder/DatePicker.tsx [Client Component Browser]
+    ./src/components/builder/sections/DateTimeSection.tsx [Client Component Browser]
+    ./src/components/builder/EditorForm.tsx [Client Component Browser]
+    ./src/app/builder/page.tsx [Client Component Browser]
+    ./src/app/builder/page.tsx [Server Component]
+
+
+./src/components/ui/Sonner/styles.module.scss
+Error evaluating Node.js code
+Error: Undefined variable.
+  ╷
+8 │   background-color: v.$background;
+  │                     ^^^^^^^^^^^^^
+  ╵
+  src\components\ui\Sonner\styles.module.scss 8:21  root stylesheet
+Caused by: Error: Undefined variable.
+  ╷
+8 │   background-color: v.$background;
+  │                     ^^^^^^^^^^^^^
+  ╵
+  src\components\ui\Sonner\styles.module.scss 8:21  root stylesheet
+    [at Object.wrapException (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:2337:47)]
+    [at C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90581:23]
+    [at _wrapJsFunctionForAsync_closure.$protected (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:5005:15)]
+    [at _wrapJsFunctionForAsync_closure.call$2 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:38505:12)]
+    [at Object._asyncStartSync (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:4969:20)]
+    [at _EvaluateVisitor2.visitVariableExpression$body$_EvaluateVisitor0 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90587:16)]
+    [at _EvaluateVisitor2.visitVariableExpression$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:90561:19)]
+    [at VariableExpression0.accept$1$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:128275:22)]
+    [at VariableExpression0.accept$1 (C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:128278:19)]
+    [at C:\Users\johr9\Documents\git\wedding-invitation\node_modules\sass\sass.dart.js:88642:41]
+
+Import traces:
+  Client Component Browser:
+    ./src/components/ui/Sonner/styles.module.scss [Client Component Browser]
+    ./src/components/ui/Sonner/index.tsx [Client Component Browser]
+    ./src/app/ClientProviders.tsx [Client Component Browser]
+    ./src/app/ClientProviders.tsx [Server Component]
+    ./src/app/layout.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/ui/Sonner/styles.module.scss [Client Component SSR]
+    ./src/components/ui/Sonner/index.tsx [Client Component SSR]
+    ./src/app/ClientProviders.tsx [Client Component SSR]
+    ./src/app/ClientProviders.tsx [Server Component]
+    ./src/app/layout.tsx [Server Component]
+
+
+./src/components/preview/sections/ClosingView.tsx:10:1
+Module not found: Can't resolve '@/components/ui/aspect-ratio'
+[0m [90m  8 |[39m [36mimport[39m type { [33mInvitationData[39m } [36mfrom[39m [32m'@/store/useInvitationStore'[39m[33m;[39m
+ [90m  9 |[39m [36mimport[39m [33mSectionContainer[39m [36mfrom[39m [32m'../SectionContainer'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 10 |[39m [36mimport[39m { [33mAspectRatio[39m } [36mfrom[39m [32m'@/components/ui/aspect-ratio'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 11 |[39m [36mimport[39m [33mSectionHeader[39m [36mfrom[39m [32m'../SectionHeader'[39m[33m;[39m
+ [90m 12 |[39m [36mimport[39m styles [36mfrom[39m [32m'./ClosingView.module.scss'[39m[33m;[39m
+ [90m 13 |[39m [36mimport[39m { [33mIMAGE_SIZES[39m } [36mfrom[39m [32m'@/constants/image'[39m[33m;[39m[0m
+
+Import map: aliased to relative './src/components/ui/aspect-ratio' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/components/preview/sections/ClosingView.tsx [Client Component Browser]
+    ./src/components/preview/InvitationCanvas.tsx [Client Component Browser]
+    ./src/components/preview/InvitationCanvas.tsx [Server Component]
+    ./src/app/preview/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/preview/sections/ClosingView.tsx [Client Component SSR]
+    ./src/components/preview/InvitationCanvas.tsx [Client Component SSR]
+    ./src/components/preview/InvitationCanvas.tsx [Server Component]
+    ./src/app/preview/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/components/preview/sections/GalleryView.tsx:20:1
+Module not found: Can't resolve '@/components/ui/aspect-ratio'
+[0m [90m 18 |[39m [36mimport[39m styles [36mfrom[39m [32m'./GalleryView.module.scss'[39m[33m;[39m
+ [90m 19 |[39m [36mimport[39m { clsx } [36mfrom[39m [32m'clsx'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 20 |[39m [36mimport[39m { [33mAspectRatio[39m } [36mfrom[39m [32m'@/components/ui/aspect-ratio'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 21 |[39m [36mimport[39m { useScrollLock } [36mfrom[39m [32m'@/hooks/use-scroll-lock'[39m[33m;[39m
+ [90m 22 |[39m [36mimport[39m { useFocusTrap } [36mfrom[39m [32m'@/hooks/useAccessibility'[39m[33m;[39m
+ [90m 23 |[39m [36mimport[39m { [33mMOTION_CLASSES[39m } [36mfrom[39m [32m'@/constants/motion'[39m[33m;[39m[0m
+
+Import map: aliased to relative './src/components/ui/aspect-ratio' inside of [project]/
+
+
+Import trace:
+  Client Component Browser:
+    ./src/components/preview/sections/GalleryView.tsx [Client Component Browser]
+    ./src/components/preview/InvitationCanvas.tsx [Client Component Browser]
+    ./src/components/preview/InvitationCanvas.tsx [Server Component]
+    ./src/app/preview/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/components/preview/sections/GreetingView.tsx:9:1
+Module not found: Can't resolve '@/components/ui/aspect-ratio'
+[0m [90m  7 |[39m [36mimport[39m { clsx } [36mfrom[39m [32m'clsx'[39m[33m;[39m
+ [90m  8 |[39m [36mimport[39m styles [36mfrom[39m [32m'./GreetingView.module.scss'[39m[33m;[39m
+[31m[1m>[22m[39m[90m  9 |[39m [36mimport[39m { [33mAspectRatio[39m } [36mfrom[39m [32m'@/components/ui/aspect-ratio'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 10 |[39m [36mimport[39m { [33mIMAGE_SIZES[39m } [36mfrom[39m [32m'@/constants/image'[39m[33m;[39m
+ [90m 11 |[39m [36mimport[39m { isBlobUrl } [36mfrom[39m [32m'@/lib/image'[39m[33m;[39m
+ [90m 12 |[39m[0m
+
+Import map: aliased to relative './src/components/ui/aspect-ratio' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/components/preview/sections/GreetingView.tsx [Client Component Browser]
+    ./src/components/preview/InvitationCanvas.tsx [Client Component Browser]
+    ./src/components/preview/InvitationCanvas.tsx [Server Component]
+    ./src/app/preview/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/preview/sections/GreetingView.tsx [Client Component SSR]
+    ./src/components/preview/InvitationCanvas.tsx [Client Component SSR]
+    ./src/components/preview/InvitationCanvas.tsx [Server Component]
+    ./src/app/preview/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/components/preview/sections/LocationView.tsx:12:1
+Module not found: Can't resolve '@/components/ui/aspect-ratio'
+[0m [90m 10 |[39m [36mimport[39m { [33mNaverIcon[39m[33m,[39m [33mKakaoIcon[39m } [36mfrom[39m [32m'../../common/Icons'[39m[33m;[39m
+ [90m 11 |[39m [36mimport[39m { clsx } [36mfrom[39m [32m'clsx'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 12 |[39m [36mimport[39m { [33mAspectRatio[39m } [36mfrom[39m [32m'@/components/ui/aspect-ratio'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 13 |[39m [36mimport[39m { [33mSkeleton[39m } [36mfrom[39m [32m'@/components/ui/Skeleton'[39m[33m;[39m
+ [90m 14 |[39m [36mimport[39m styles [36mfrom[39m [32m'./LocationView.module.scss'[39m[33m;[39m
+ [90m 15 |[39m [36mimport[39m { [33mIMAGE_SIZES[39m } [36mfrom[39m [32m'@/constants/image'[39m[33m;[39m[0m
+
+Import map: aliased to relative './src/components/ui/aspect-ratio' inside of [project]/
+
+
+Import trace:
+  Client Component Browser:
+    ./src/components/preview/sections/LocationView.tsx [Client Component Browser]
+    ./src/components/preview/InvitationCanvas.tsx [Client Component Browser]
+    ./src/components/preview/InvitationCanvas.tsx [Server Component]
+    ./src/app/preview/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+./src/components/preview/sections/MainScreenView.tsx:9:1
+Module not found: Can't resolve '@/components/ui/aspect-ratio'
+[0m [90m  7 |[39m [36mimport[39m styles [36mfrom[39m [32m'./MainScreenView.module.scss'[39m[33m;[39m
+ [90m  8 |[39m [36mimport[39m { clsx } [36mfrom[39m [32m'clsx'[39m[33m;[39m
+[31m[1m>[22m[39m[90m  9 |[39m [36mimport[39m { [33mAspectRatio[39m } [36mfrom[39m [32m'@/components/ui/aspect-ratio'[39m[33m;[39m
+ [90m    |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 10 |[39m [36mimport[39m { [33mIMAGE_SIZES[39m } [36mfrom[39m [32m'@/constants/image'[39m[33m;[39m
+ [90m 11 |[39m [36mimport[39m { isBlobUrl } [36mfrom[39m [32m'@/lib/image'[39m[33m;[39m
+ [90m 12 |[39m[0m
+
+Import map: aliased to relative './src/components/ui/aspect-ratio' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/components/preview/sections/MainScreenView.tsx [Client Component Browser]
+    ./src/components/preview/InvitationCanvas.tsx [Client Component Browser]
+    ./src/components/preview/InvitationCanvas.tsx [Server Component]
+    ./src/app/preview/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/components/preview/sections/MainScreenView.tsx [Client Component SSR]
+    ./src/components/preview/InvitationCanvas.tsx [Client Component SSR]
+    ./src/components/preview/InvitationCanvas.tsx [Server Component]
+    ./src/app/preview/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (./src/components/preview/sections/ClosingView.tsx:10:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/components/preview/sections/GalleryView.tsx:20:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/components/preview/sections/GreetingView.tsx:9:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/components/preview/sections/LocationView.tsx:12:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (./src/components/preview/sections/MainScreenView.tsx:9:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)

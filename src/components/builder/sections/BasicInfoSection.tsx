@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { User2 } from 'lucide-react';
+import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
@@ -15,9 +16,9 @@ interface SectionProps {
 }
 
 const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ isOpen, value }) {
-    const groom = useInvitationStore(state => state.groom);
+    const groom = useInvitationStore(useShallow(state => state.groom));
     const setGroom = useInvitationStore(state => state.setGroom);
-    const bride = useInvitationStore(state => state.bride);
+    const bride = useInvitationStore(useShallow(state => state.bride));
     const setBride = useInvitationStore(state => state.setBride);
     const setGroomParents = useInvitationStore(state => state.setGroomParents);
     const setBrideParents = useInvitationStore(state => state.setBrideParents);

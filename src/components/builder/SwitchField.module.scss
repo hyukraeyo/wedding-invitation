@@ -1,0 +1,44 @@
+@use "../../styles/variables" as v;
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.625rem 0.25rem; // py-2.5 px-1
+  border-radius: v.$radius-lg;
+  transition: background-color v.$transition-fast;
+  cursor: pointer;
+  user-select: none;
+  
+  &:active {
+    background-color: rgba(v.$zinc-200, 0.5); // active:bg-accent/50
+  }
+
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.label {
+  font-size: 0.9375rem; // 15px
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  transition: color v.$transition-fast;
+  
+  &:hover {
+    color: v.$color-primary;
+  }
+}
+
+.switch {
+  pointer-events: none;
+}

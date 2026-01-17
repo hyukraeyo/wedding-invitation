@@ -4,7 +4,7 @@ import React, { useState, useCallback } from 'react';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 import { TextField } from '../builder/TextField';
 import { PhoneField } from '../builder/PhoneField';
-import { Button } from '../ui/button';
+import { Button } from '../ui/Button';
 import { useToast } from '@/hooks/use-toast';
 import { profileService } from '@/services/profileService';
 import { User, Phone } from 'lucide-react';
