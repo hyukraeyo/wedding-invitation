@@ -91,3 +91,28 @@ export const Field = ({ label, children, className, required, description, error
         </div>
     );
 };
+
+// --- Section Container ---
+
+interface SectionContainerProps {
+    children: React.ReactNode;
+    className?: string;
+}
+
+export const SectionContainer = ({ children, className }: SectionContainerProps) => {
+    return (
+        <div className={cn(styles.sectionContainer, className)}>
+            {children}
+        </div>
+    );
+};
+
+// --- Option Group ---
+
+export const OptionGroup = ({ children, className }: { children: React.ReactNode, className?: string }) => {
+    return (
+        <div className={cn(styles.optionGroup, className)}>
+            {children}
+        </div>
+    );
+};

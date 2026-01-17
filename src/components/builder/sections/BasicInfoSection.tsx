@@ -6,7 +6,7 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { Toggle } from '../Toggle';
-import { Field } from '../FormPrimitives';
+import { Field, SectionContainer } from '../FormPrimitives';
 import styles from './BasicInfoSection.module.scss';
 import { cn } from '@/lib/utils';
 
@@ -31,7 +31,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
             isOpen={isOpen}
             isCompleted={!!groom.firstName && !!bride.firstName}
         >
-            <div className={styles.container}>
+            <SectionContainer>
                 {/* Groom Section */}
                 <Field label="🤵 신랑">
                     <div className={styles.formGroup}>
@@ -120,7 +120,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                         </div>
                     </div>
                 </Field>
-            </div>
+            </SectionContainer>
         </AccordionItem>
     );
 });

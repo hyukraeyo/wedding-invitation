@@ -8,7 +8,7 @@ import { TextField } from '../TextField';
 import { SegmentedControl } from '../SegmentedControl';
 import { SwitchField } from '../SwitchField';
 import { PhoneField } from '../PhoneField';
-import { Field } from '../FormPrimitives';
+import { Field, SectionContainer } from '../FormPrimitives';
 import styles from './LocationSection.module.scss';
 import { cn } from '@/lib/utils';
 import { NaverIcon, KakaoIcon } from '@/components/common/Icons';
@@ -132,7 +132,7 @@ export default function LocationSectionContent() {
     return (
         <>
             <KakaoSdkLoader onReady={() => setIsKakaoReady(true)} />
-            <div className={styles.container}>
+            <SectionContainer>
                 <TextField
                     label="소제목"
                     placeholder="예: LOCATION"
@@ -235,7 +235,7 @@ export default function LocationSectionContent() {
                         onChange={(val: number) => setMapZoom(val)}
                     />
                 </Field>
-            </div>
+            </SectionContainer>
 
             <ResponsiveModal
                 open={isSearchOpen}

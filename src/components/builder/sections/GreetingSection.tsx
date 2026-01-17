@@ -10,7 +10,7 @@ import { InfoMessage } from '@/components/builder/InfoMessage';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
-import { Field } from '../FormPrimitives';
+import { Field, SectionContainer } from '../FormPrimitives';
 import { SegmentedControl } from '../SegmentedControl';
 import { HeaderAction } from '../HeaderAction';
 import { ImageUploader } from '../ImageUploader';
@@ -123,7 +123,7 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
                     />
                 }
             >
-                <div className={styles.container}>
+                <SectionContainer>
                     {/* Subtitle */}
                     <TextField
                         label="소제목"
@@ -200,7 +200,7 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
                             ) : null}
                         </div>
                     </Field>
-                </div>
+                </SectionContainer>
 
             </AccordionItem>
 

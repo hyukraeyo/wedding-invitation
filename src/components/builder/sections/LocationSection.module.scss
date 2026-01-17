@@ -1,11 +1,6 @@
 @use "../../../styles/variables" as v;
 @use "../../../styles/builder" as b;
 
-.container {
-  @include b.builder-section;
-  padding: 1rem; // Custom overrides if needed, or stick to mixin default
-}
-
 .addressButton {
   @include b.builder-input-base;
   display: flex;

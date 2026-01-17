@@ -4,7 +4,7 @@ import { Plus, Trash2 } from 'lucide-react';
 import { InfoMessage } from '@/components/builder/InfoMessage';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useToast } from '@/hooks/use-toast';
-import { Field } from '../FormPrimitives';
+import { Field, SectionContainer } from '../FormPrimitives';
 import { SegmentedControl } from '../SegmentedControl';
 import { TextField } from '../TextField';
 import { SwitchField } from '../SwitchField';
@@ -15,8 +15,8 @@ import {
     closestCenter,
     KeyboardSensor,
     PointerSensor,
-    useSensor,
     useSensors,
+    useSensor,
     DragEndEvent,
     DragOverlay,
     DragStartEvent,
@@ -235,7 +235,7 @@ export default function GallerySectionContent() {
     );
 
     return (
-        <div className={styles.container}>
+        <SectionContainer>
             <TextField
                 label="소제목"
                 type="text"
@@ -365,6 +365,6 @@ export default function GallerySectionContent() {
                     ) : null}
                 </div>
             </Field>
-        </div>
+        </SectionContainer>
     );
 }

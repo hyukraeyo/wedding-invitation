@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Palette, Check, Plus } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
@@ -5,7 +6,7 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { SegmentedControl } from '../SegmentedControl';
 import { Select } from '../Select';
-import { Field } from '../FormPrimitives';
+import { Field, SectionContainer } from '../FormPrimitives';
 import styles from './ThemeSection.module.scss';
 import { cn } from '@/lib/utils';
 import type { ThemeFont } from '@/lib/utils/font';
@@ -38,7 +39,7 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection({ isOpen, va
             isOpen={isOpen}
             isCompleted={true}
         >
-            <div className={styles.container}>
+            <SectionContainer>
                 {/* Point Color */}
                 <Field label="포인트 색상">
                     <div className={styles.optionWrapper}>
@@ -122,7 +123,7 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection({ isOpen, va
                         </div>
                     </div>
                 </Field>
-            </div>
+            </SectionContainer>
         </AccordionItem>
     );
 });

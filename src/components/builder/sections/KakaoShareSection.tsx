@@ -8,7 +8,7 @@ import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { SegmentedControl } from '../SegmentedControl';
 import { InfoMessage } from '@/components/builder/InfoMessage';
-import { Field } from '../FormPrimitives';
+import { Field, SectionContainer } from '../FormPrimitives';
 import { ImageUploader } from '../ImageUploader';
 import { HeaderAction } from '../HeaderAction';
 import styles from './KakaoShareSection.module.scss';
@@ -44,7 +44,7 @@ export default function KakaoShareSection({ isOpen, value }: SectionProps) {
                     />
                 }
             >
-                <div className={styles.container}>
+                <SectionContainer>
                     {/* Photo Upload */}
                     <Field label="사진">
                         <div className={styles.uploaderWrapper}>
@@ -99,7 +99,7 @@ export default function KakaoShareSection({ isOpen, value }: SectionProps) {
                         />
                     </Field>
 
-                </div>
+                </SectionContainer>
             </AccordionItem>
 
             {/* Simple Preview Modal */}

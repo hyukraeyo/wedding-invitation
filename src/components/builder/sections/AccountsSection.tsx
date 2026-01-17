@@ -6,7 +6,7 @@ import { Button as UIButton } from '@/components/ui/Button';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { SegmentedControl } from '../SegmentedControl';
-import { Field } from '../FormPrimitives';
+import { Field, SectionContainer } from '../FormPrimitives';
 import { Select } from "@/components/builder/Select";
 import styles from './AccountsSection.module.scss';
 import { cn } from '@/lib/utils';
@@ -124,7 +124,7 @@ export default function AccountsSection({ value, isOpen }: SectionProps) {
             isOpen={isOpen}
             isCompleted={accounts.length > 0}
         >
-            <div className={styles.container}>
+            <SectionContainer>
                 <TextField
                     label="소제목"
                     placeholder="예: GIFT"
@@ -142,7 +142,7 @@ export default function AccountsSection({ value, isOpen }: SectionProps) {
                     <Field label="내용">
                         <RichTextEditor
                             content={accountsDescription}
-                            onChange={(val) => setAccountsDescription(val)}
+                            onChange={(val: string) => setAccountsDescription(val)}
                             placeholder="축하의 마음을 담아..."
                         />
                     </Field>
@@ -297,7 +297,7 @@ export default function AccountsSection({ value, isOpen }: SectionProps) {
                         onChange={(val) => setAccountsColorMode(val as 'accent' | 'subtle' | 'white')}
                     />
                 </Field>
-            </div>
+            </SectionContainer>
         </AccordionItem>
     );
 }

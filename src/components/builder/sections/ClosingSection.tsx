@@ -7,7 +7,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
-import { Field } from '../FormPrimitives';
+import { Field, SectionContainer } from '../FormPrimitives';
 import { ImageUploader } from '../ImageUploader';
 import { HeaderAction } from '../HeaderAction';
 import styles from './ClosingSection.module.scss';
@@ -74,7 +74,7 @@ export default function ClosingSection({ isOpen, value }: SectionProps) {
                     />
                 }
             >
-                <div className={styles.container}>
+                <SectionContainer>
                     <TextField
                         label="소제목"
                         placeholder="예: CLOSING"
@@ -108,7 +108,7 @@ export default function ClosingSection({ isOpen, value }: SectionProps) {
                             />
                         </div>
                     </Field>
-                </div>
+                </SectionContainer>
 
             </AccordionItem>
 

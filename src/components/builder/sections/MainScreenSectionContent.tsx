@@ -10,7 +10,7 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { TextField } from '../TextField';
 import { SwitchField } from '../SwitchField';
 import { SegmentedControl } from '../SegmentedControl';
-import { Field } from '../FormPrimitives';
+import { Field, SectionContainer } from '../FormPrimitives';
 import { ImageUploader } from '../ImageUploader';
 import styles from './MainScreenSection.module.scss';
 import { cn } from '@/lib/utils';
@@ -113,7 +113,7 @@ export default function MainScreenSectionContent() {
     };
 
     return (
-        <div className={styles.container}>
+        <SectionContainer>
             <Field label="메인 사진">
                 <div className={styles.optionWrapper}>
                     <ImageUploader
@@ -404,6 +404,6 @@ export default function MainScreenSectionContent() {
                     label="사진 꽉 차게"
                 />
             </div>
-        </div>
+        </SectionContainer>
     );
 }

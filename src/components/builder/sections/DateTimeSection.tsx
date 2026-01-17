@@ -7,7 +7,7 @@ import { useShallow } from 'zustand/shallow';
 import { AccordionItem } from '../AccordionItem';
 import { TextField } from '../TextField';
 import { SwitchField } from '../SwitchField';
-import { Field } from '../FormPrimitives';
+import { Field, SectionContainer } from '../FormPrimitives';
 import { TimePicker } from '../TimePicker';
 import styles from './DateTimeSection.module.scss';
 
@@ -56,8 +56,7 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
             isOpen={isOpen}
             isCompleted={!!date && !!time}
         >
-            <div className={styles.container}>
-                {/* Date & Time Picking */}
+            <SectionContainer>
                 {/* Date & Time Picking */}
                 <Field label="예식일">
                     {isOpen ? (
@@ -75,8 +74,6 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
                 </Field>
 
                 {/* Additional Options */}
-
-
                 <SwitchField
                     checked={showCalendar}
                     onChange={setShowCalendar}
@@ -102,7 +99,7 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
                         </div>
                     ) : null}
                 </div>
-            </div>
+            </SectionContainer>
         </AccordionItem>
     );
 });
