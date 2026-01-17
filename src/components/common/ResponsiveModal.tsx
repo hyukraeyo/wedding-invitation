@@ -96,7 +96,7 @@ export const ResponsiveModal = ({
                     className={cn(styles.dialogContent, className)}
                     onInteractOutside={(e) => !dismissible && e.preventDefault()}
                     onEscapeKeyDown={(e) => !dismissible && e.preventDefault()}
-                    aria-describedby={description ? undefined : undefined}
+                    aria-describedby={description ? undefined : undefined} // Keep as is if it was intended to suppress, but usually it should be conditional
                 >
                     <DialogHeader className={styles.header}>
                         <DialogTitle className={styles.title}>
@@ -154,7 +154,10 @@ export const ResponsiveModal = ({
             dismissible={dismissible}
         >
             {trigger ? <DrawerTrigger asChild>{trigger}</DrawerTrigger> : null}
-            <DrawerContent className={styles.drawerContent}>
+            <DrawerContent
+                className={styles.drawerContent}
+                aria-describedby={description ? undefined : undefined}
+            >
                 <div className={styles.drawerLayout}>
                     <DrawerHeader className={cn(styles.header, styles.drawerHeader)}>
                         <DrawerTitle className={styles.title}>

@@ -45,6 +45,7 @@ const DrawerContent = React.forwardRef<
                 ref={ref}
                 tabIndex={-1}
                 className={cn(styles.content, className)}
+                aria-describedby={undefined}
                 {...props}
             >
                 <div className={styles.handle} />

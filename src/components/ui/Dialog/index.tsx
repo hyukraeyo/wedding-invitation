@@ -30,6 +30,7 @@ const DialogContent = React.forwardRef<
         <DialogPrimitive.Content
             ref={ref}
             className={cn(styles.content, className)}
+            aria-describedby={undefined}
             {...props}
         >
             {children}
