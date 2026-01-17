@@ -54,8 +54,6 @@
   
   &--popper {
     max-height: min(300px, var(--radix-select-content-available-height));
-    &[data-side='bottom'] { transform: translateY(4px); }
-    &[data-side='top'] { transform: translateY(-4px); }
   }
 
   // Animation (Radix attributes)
