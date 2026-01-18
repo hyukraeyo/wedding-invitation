@@ -1,0 +1,103 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem; // gap-1.5
+}
+
+// Mobile Trigger Button
+.triggerButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border: 1px solid v.$color-border;
+  border-radius: v.$radius-md;
+  background-color: v.$color-background;
+  font-size: v.$font-size-base;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color v.$transition-fast;
+
+  &:hover {
+    border-color: v.$zinc-300;
+  }
+  
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.placeholder {
+  color: v.$color-muted-foreground;
+}
+
+// Mobile Drawer Option Item
+.optionItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.125rem 1.5rem; // Slightly more compact but still large enough
+  text-align: left;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid v.$zinc-50; // Subtle divider
+  transition: all v.$transition-fast;
+  cursor: pointer;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:active {
+    background-color: v.$zinc-50;
+  }
+
+  &.selected {
+    background-color: rgba(v.$color-primary, 0.08);
+  }
+}
+
+.optionText {
+  font-size: 1rem;
+  letter-spacing: -0.01em;
+  color: v.$zinc-700;
+  transition: all v.$transition-fast;
+  
+  &.selected {
+    font-weight: 600;
+    color: v.$color-primary;
+  }
+}
+
+.checkIcon {
+  width: 1.25rem; // h-5
+  height: 1.25rem; // w-5
+  color: v.$color-primary;
+}
+
+.desktopTrigger {
+  width: 100%;
+}
+
+.drawerTitle {
+  text-align: left;
+  font-size: v.$font-size-base;
+  font-weight: 700;
+  color: rgba(v.$color-foreground, 0.9);
+}
+
+.drawerHeader {
+  padding: 1.25rem 1.5rem 1rem;
+  border-bottom: 1px solid v.$zinc-100;
+  margin-bottom: 0.5rem;
+}
+
+.srOnly {
+  @include m.visually-hidden;
+}

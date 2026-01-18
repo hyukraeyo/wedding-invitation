@@ -45,7 +45,7 @@
             padding: 1.5rem 1rem 8rem 1rem; // Bottom padding enlarged for mobile FAB
 
             @media (min-width: 768px) {
-                padding: 1.5rem;
+                padding: 1.5rem 1rem 6rem 1rem; // 하단 패딩 충분히 확보
             }
 
             background-color: transparent; // 사이드바 배경(#eee)이 보이도록 투명 처리

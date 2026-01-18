@@ -1,0 +1,214 @@
+"use client";
+
+import React from 'react';
+import { useMediaQuery } from '@/hooks/use-media-query';
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+    DialogTrigger,
+} from "@/components/ui/Dialog"
+import {
+    Drawer,
+    DrawerContent,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerDescription,
+    DrawerTrigger,
+    DrawerScrollArea,
+} from "@/components/ui/Drawer"
+import { Button } from '@/components/ui/Button';
+import { cn } from '@/lib/utils';
+import styles from './styles.module.scss';
+
+export interface ResponsiveModalProps {
+    open?: boolean | undefined;
+    onOpenChange?: ((open: boolean) => void) | undefined;
+    trigger?: React.ReactNode | undefined;
+    title?: React.ReactNode | undefined;
+    description?: React.ReactNode | undefined;
+    children?: React.ReactNode | undefined;
+    footer?: React.ReactNode | undefined; // 추가: 커스텀 푸터
+    className?: string | undefined;
+
+    // Action Buttons
+    confirmText?: string | undefined;
+    cancelText?: string | undefined;
+    onConfirm?: (() => void) | undefined;
+    onCancel?: (() => void) | undefined;
+    showCancel?: boolean | undefined;
+    confirmVariant?: 'default' | 'destructive' | 'solid' | undefined;
+    confirmDisabled?: boolean | undefined;
+    confirmLoading?: boolean | undefined;
+    dismissible?: boolean;
+}
+
+export const ResponsiveModal = ({
+    open = false,
+    onOpenChange,
+    trigger,
+    title,
+    description,
+    children,
+    footer,
+    className,
+    confirmText = '확인',
+    cancelText = '취소',
+    onConfirm,
+    onCancel,
+    showCancel = true,
+    confirmVariant = 'default',
+    confirmDisabled = false,
+    confirmLoading = false,
+    dismissible = true,
+}: ResponsiveModalProps) => {
+    const isDesktop = useMediaQuery("(min-width: 768px)");
+    const hasActions = onConfirm || footer;
+
+    const internalOnOpenChange = (newOpen: boolean) => {
+        if (!dismissible && !newOpen) return;
+        onOpenChange?.(newOpen);
+    };
+
+    const handleCancel = () => {
+        onCancel?.();
+        // Force close even if not dismissible when clicking cancel explicitly
+        onOpenChange?.(false);
+    };
+
+    const [isMounted, setIsMounted] = React.useState(false);
+
+    React.useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
+    if (!isMounted) {
+        return null;
+    }
+
+    if (isDesktop) {
+        return (
+            <Dialog open={open} onOpenChange={internalOnOpenChange}>
+                {trigger ? <DialogTrigger asChild>{trigger}</DialogTrigger> : null}
+                <DialogContent
+                    className={cn(styles.dialogContent, className)}
+                    onInteractOutside={(e) => !dismissible && e.preventDefault()}
+                    onEscapeKeyDown={(e) => !dismissible && e.preventDefault()}
+                    aria-describedby={description ? undefined : undefined} // Keep as is if it was intended to suppress, but usually it should be conditional
+                >
+                    <DialogHeader className={styles.header}>
+                        <DialogTitle className={styles.title}>
+                            {title || "알림"}
+                        </DialogTitle>
+                        {description ? (
+                            <DialogDescription className={styles.description}>
+                                {description}
+                            </DialogDescription>
+                        ) : null}
+                    </DialogHeader>
+
+                    <div className={styles.content}>
+                        {children}
+                    </div>
+
+                    {hasActions ? (
+                        <div className={styles.footer}>
+                            {footer || (
+                                <>
+                                    {showCancel ? (
+                                        <Button
+                                            variant="ghost"
+                                            onClick={handleCancel}
+                                            className={cn(styles.cancelButton, styles.dialogButtonHeight)}
+                                        >
+                                            {cancelText}
+                                        </Button>
+                                    ) : null}
+                                    <Button
+                                        onClick={onConfirm}
+                                        disabled={confirmDisabled || confirmLoading}
+                                        loading={confirmLoading}
+                                        variant={confirmVariant === 'destructive' ? 'destructive' : 'solid'}
+                                        className={cn(
+                                            styles.confirmButton,
+                                            styles.dialogButtonHeight
+                                        )}
+                                    >
+                                        {confirmText}
+                                    </Button>
+                                </>
+                            )}
+                        </div>
+                    ) : null}
+                </DialogContent>
+            </Dialog >
+        );
+    }
+
+    return (
+        <Drawer
+            open={open}
+            onOpenChange={internalOnOpenChange}
+            dismissible={dismissible}
+        >
+            {trigger ? <DrawerTrigger asChild>{trigger}</DrawerTrigger> : null}
+            <DrawerContent
+                className={styles.drawerContent}
+                aria-describedby={description ? undefined : undefined}
+            >
+                <div className={styles.drawerLayout}>
+                    <DrawerHeader className={cn(styles.header, styles.drawerHeader)}>
+                        <DrawerTitle className={styles.title}>
+                            {title || "알림"}
+                        </DrawerTitle>
+                        {description ? (
+                            <DrawerDescription className={styles.description}>
+                                {description}
+                            </DrawerDescription>
+                        ) : null}
+                    </DrawerHeader>
+
+                    <div className={cn(styles.content, styles.drawerScrollArea)}>
+                        {children ? (
+                            <DrawerScrollArea className={className}>
+                                {children}
+                            </DrawerScrollArea>
+                        ) : null}
+                    </div>
+
+                    {hasActions ? (
+                        <div className={styles.footer}>
+                            {footer || (
+                                <>
+                                    {showCancel ? (
+                                        <Button
+                                            variant="ghost"
+                                            onClick={handleCancel}
+                                            className={cn(styles.cancelButton, styles.drawerButtonHeight)}
+                                        >
+                                            {cancelText}
+                                        </Button>
+                                    ) : null}
+                                    <Button
+                                        onClick={onConfirm}
+                                        disabled={confirmDisabled || confirmLoading}
+                                        loading={confirmLoading}
+                                        variant={confirmVariant === 'destructive' ? 'destructive' : 'solid'}
+                                        className={cn(
+                                            styles.confirmButton,
+                                            styles.drawerButtonHeight
+                                        )}
+                                    >
+                                        {confirmText}
+                                    </Button>
+                                </>
+                            )}
+                        </div>
+                    ) : null}
+                </div>
+            </DrawerContent>
+        </Drawer>
+    );
+};
