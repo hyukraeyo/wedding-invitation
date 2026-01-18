@@ -16,8 +16,8 @@ type Period = 'AM' | 'PM';
 
 export function TimePicker({ value, onChange, className }: TimePickerProps) {
     // 1. Parse existing value "HH:mm" -> Period, Hour, Minute
-    // Default to 12:00 PM if empty
-    const [hStr = '12', mStr = '00'] = value ? value.split(':') : [];
+    // Default to 10:00 AM if empty
+    const [hStr = '10', mStr = '00'] = value ? value.split(':') : [];
     const hInt = parseInt(hStr, 10);
     const m = mStr;
 
@@ -58,10 +58,18 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
     };
 
     // Arrays for dropdown options
-    const hours = Array.from({ length: 12 }, (_, i) => String(i + 1)); // "1" to "12"
+    // Arrays for dropdown options
+    // 오전 7시 ~ 12시 (12시는 사용자가 오전으로 인식하길 원함)
+    const amHours = ['7', '8', '9', '10', '11', '12'];
+    // 오후 1시 ~ 10시
+    const pmHours = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+
     const periodHourOptions = [
-        ...hours.map((hour) => ({ label: `오전 ${hour}시`, value: `AM:${hour}` })),
-        ...hours.map((hour) => ({ label: `오후 ${hour}시`, value: `PM:${hour}` })),
+        ...amHours.map((hour) => ({
+            label: `오전 ${hour}시`,
+            value: hour === '12' ? 'PM:12' : `AM:${hour}` // 12시는 라벨만 '오전'이고 실제 값은 12:00(PM)
+        })),
+        ...pmHours.map((hour) => ({ label: `오후 ${hour}시`, value: `PM:${hour}` })),
     ];
     const minutes = Array.from({ length: 6 }, (_, i) => String(i * 10).padStart(2, '0'));
 
@@ -85,7 +93,7 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
                 <Select
                     value={m}
                     onChange={handleMinuteChange}
-                    options={minutes.map(min => ({ label: min, value: min }))}
+                    options={minutes.map(min => ({ label: `${min}분`, value: min }))}
                     placeholder="분"
                     modalTitle="분"
                 />

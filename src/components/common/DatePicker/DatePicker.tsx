@@ -66,6 +66,7 @@ export function DatePicker({ value, onChange, className, placeholder = "날짜 �
                     <Calendar
                         mode="single"
                         selected={dateValue}
+                        defaultMonth={dateValue || new Date()} // undefined 방지
                         onSelect={handleSelect}
                     />
                 </PopoverContent>
@@ -102,6 +103,7 @@ export function DatePicker({ value, onChange, className, placeholder = "날짜 �
                         <Calendar
                             mode="single"
                             selected={dateValue}
+                            defaultMonth={dateValue || new Date()}
                             onSelect={handleSelect}
                             className={styles.calendar || ""}
                         />

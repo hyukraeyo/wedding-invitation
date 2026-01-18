@@ -3,6 +3,7 @@
 
 .triggerButton {
   @include m.input-base;
+  height: v.$input-height; // Select 등 다른 입력 폼과 높이 통일
   display: flex;
   align-items: center;
   justify-content: space-between;
