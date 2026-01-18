@@ -1,3 +1,5 @@
+@use "variables" as v;
+
 /* Animations from globals.css */
 @keyframes fall {
   0% { transform: translateY(-10px) translateX(0); opacity: 0; }
@@ -173,4 +175,40 @@
 @keyframes accordion-up {
   from { height: var(--radix-accordion-content-height); }
   to { height: 0; }
+}
+
+// ============================================
+// Popup Animations
+// ============================================
+
+@keyframes popup-in {
+  from {
+    opacity: v.$popup-opacity-start;
+    transform: scale(v.$popup-scale-start) translateY(v.$popup-translate-y);
+  }
+  to {
+    opacity: v.$popup-opacity-end;
+    transform: scale(v.$popup-scale-end) translateY(0);
+  }
+}
+
+@keyframes popup-out {
+  from {
+    opacity: v.$popup-opacity-end;
+    transform: scale(v.$popup-scale-end) translateY(0);
+  }
+  to {
+    opacity: v.$popup-opacity-start;
+    transform: scale(v.$popup-scale-start) translateY(v.$popup-translate-y);
+  }
+}
+
+// Mixin for popup animation
+@mixin popup-animation {
+  animation: popup-in v.$popup-duration v.$popup-easing both;
+  transform-origin: var(--radix-popover-content-transform-origin, center top);
+  
+  &[data-state='closed'] {
+    animation-name: popup-out;
+  }
 }

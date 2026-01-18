@@ -104,3 +104,19 @@ $transition-fast: 150ms;
 $transition-normal: 250ms;
 $transition-slow: 400ms;
 $transition-smooth: 260ms;
+
+// ============================================
+// Popup Animation Tokens
+// ============================================
+// Timing
+$popup-duration: 180ms;
+$popup-easing: cubic-bezier(0.16, 1, 0.3, 1); // iOS-style smooth easing
+
+// Transform
+$popup-scale-start: 0.95;
+$popup-scale-end: 1;
+$popup-translate-y: 4px;
+
+// Opacity
+$popup-opacity-start: 0;
+$popup-opacity-end: 1;
