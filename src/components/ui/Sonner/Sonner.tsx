@@ -1,7 +1,7 @@
 "use client"
 
 import { Toaster as Sonner } from "sonner"
-import styles from "./styles.module.scss"
+import styles from "./Sonner.module.scss"
 
 type ToasterProps = React.ComponentProps<typeof Sonner>
 

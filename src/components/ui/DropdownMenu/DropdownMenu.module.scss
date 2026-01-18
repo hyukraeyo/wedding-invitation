@@ -1,0 +1,77 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+@use "../../../styles/animations" as a;
+
+.content {
+  z-index: v.$z-modal;
+  min-width: 8rem;
+  overflow: hidden;
+  border-radius: v.$radius-md;
+  border: 1px solid v.$zinc-200;
+  background-color: white;
+  color: v.$zinc-900;
+  padding: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  
+  @include a.popup-animation;
+}
+
+.item {
+  position: relative;
+  display: flex;
+  cursor: pointer;
+  user-select: none;
+  align-items: center;
+  border-radius: v.$radius-sm;
+  padding: 0.6rem 0.75rem;
+  outline: none;
+  font-size: 0.875rem; 
+  font-weight: 500;
+  color: v.$zinc-700;
+  transition: all 0.1s ease;
+  gap: 0.5rem; // icon gap
+
+  &[data-highlighted] {
+    background-color: v.$primary-100;
+    color: v.$primary-700;
+    
+    // Icon color change on highlight
+    svg {
+        color: v.$primary-700;
+    }
+  }
+
+  &[data-disabled] {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  
+  // Danger variant (delete)
+  &[data-variant="danger"] {
+      color: v.$red-600;
+      
+      &[data-highlighted] {
+          background-color: #FEF2F2; // red-50
+          color: v.$red-600;
+      }
+  }
+}
+
+.separator {
+  margin: 4px -4px;
+  height: 1px;
+  background-color: v.$zinc-100;
+}
+
+.label {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: v.$zinc-500;
+}
+
+.shortcut {
+    margin-left: auto;
+    font-size: 0.75rem;
+    color: v.$zinc-400;
+}

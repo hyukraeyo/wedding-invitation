@@ -17,7 +17,7 @@ import {
     DrawerDescription,
     DrawerScrollArea,
 } from '@/components/ui/Drawer';
-import styles from './styles.module.scss';
+import styles from './DatePicker.module.scss';
 
 interface DatePickerProps {
     value: string;

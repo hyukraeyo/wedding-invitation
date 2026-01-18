@@ -1,7 +1,7 @@
 import React from 'react';
 import { Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import styles from './styles.module.scss';
+import styles from './InfoMessage.module.scss';
 
 interface InfoMessageProps {
     children: React.ReactNode;

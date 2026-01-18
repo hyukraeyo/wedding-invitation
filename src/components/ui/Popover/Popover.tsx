@@ -3,7 +3,7 @@
 import * as React from "react"
 import * as PopoverPrimitive from "@radix-ui/react-popover"
 import { cn } from "@/lib/utils"
-import styles from "./styles.module.scss"
+import styles from "./Popover.module.scss"
 
 const Popover = PopoverPrimitive.Root
 

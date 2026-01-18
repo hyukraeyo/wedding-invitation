@@ -1,6 +1,6 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import styles from "./styles.module.scss"
+import styles from "./Input.module.scss"
 
 const Input = React.forwardRef<
     HTMLInputElement,

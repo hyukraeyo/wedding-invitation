@@ -9,7 +9,7 @@ import { DayButton, DayPicker, useDayPicker, MonthCaptionProps, ClassNames } fro
 import { format, isValid, isSameMonth } from "date-fns"
 import { ko } from "date-fns/locale"
 import { cn } from "@/lib/utils"
-import styles from "./styles.module.scss"
+import styles from "./Calendar.module.scss"
 
 function Calendar({
   className,

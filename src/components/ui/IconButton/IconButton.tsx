@@ -1,7 +1,8 @@
 import * as React from "react"
 import { Button, ButtonProps } from "@/components/ui/Button"
 import { cn } from "@/lib/utils"
-import { LucideIcon } from "lucide-react"
+import { LucideIcon, Banana } from "lucide-react"
+import styles from "./IconButton.module.scss"
 
 export interface IconButtonProps extends Omit<ButtonProps, "size" | "variant"> {
     /**
@@ -21,10 +22,6 @@ export interface IconButtonProps extends Omit<ButtonProps, "size" | "variant"> {
     loading?: boolean | undefined;
 }
 
-/**
- * 아이콘 전용 버튼 컴포넌트.
- * 바나나웨딩 디자인 시스템의 터치 영역(48px)과 인터랙션 가이드를 준수합니다.
- */
 const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
     ({ className, icon: Icon, size = "md", variant = "ghost", children, ...props }, ref) => {
         // Map custom size props to Button's size variants
@@ -35,29 +32,37 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
             xl: "icon-lg",
         }
 
-        // Map size to icon size
-        const iconSizeMap = {
-            sm: "h-4 w-4",
-            md: "h-6 w-6",
-            lg: "h-7 w-7",
-            xl: "h-8 w-8",
-        }
-
         const { loading, ...rest } = props;
 
         return (
             <Button
                 variant={variant}
                 size={sizeMap[size]}
-                className={cn(
-                    "rounded-full transition-transform duration-100 ease-in-out active:scale-[0.92]", // iOS/Toss Interaction
-                    className
-                )}
+                className={cn(styles.iconButton, className)}
                 ref={ref}
-                loading={loading}
+                loading={false} // Prevent Button from hiding content
+                disabled={loading || rest.disabled}
                 {...rest}
             >
-                {!loading && Icon ? <Icon className={cn(iconSizeMap[size as keyof typeof iconSizeMap])} /> : null}
+                {Icon ? (
+                    <Icon
+                        className={cn(
+                            styles.icon,
+                            styles[size],
+                            loading && styles.faded
+                        )}
+                    />
+                ) : null}
+
+                {loading && (
+                    <div className={styles.spinnerOverlay}>
+                        <Banana
+                            className={styles.spinner}
+                            size={size === 'sm' ? 14 : 20}
+                        />
+                    </div>
+                )}
+
                 {children}
             </Button>
         )

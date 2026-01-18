@@ -1,27 +1,36 @@
 @use "../../../styles/variables" as v;
 @use "../../../styles/builder" as b;
+@use "../../../styles/mixins" as m;
 
 .addressButton {
   @include b.builder-input-base;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  position: relative;
   cursor: pointer;
+  padding-right: 2.5rem; // Make space for the icon
 }
 
 .searchIcon {
-  color: v.$zinc-400; // Use zinc variables directly
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: v.$color-muted-foreground;
+  pointer-events: none;
   flex-shrink: 0;
   transition: color 0.2s ease;
 }
 
 .postcodeWrapper {
-  height: 480px;
   width: 100%;
+  height: 560px;
   overflow: hidden;
-  border-radius: 12px;
-  background-color: white;
-  border: 1px solid v.$zinc-100;
+  background-color: v.$white;
+
+  @include m.mobile {
+    height: 480px;
+  }
 }
 
 .mapOptions {
@@ -33,6 +42,27 @@
   flex-shrink: 0;
 }
 
+.postcodeModalContent {
+  padding: 0 !important;
+}
+
 .sketchWrapper {
   @include b.builder-field-group;
+}
+
+.addressText {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  // Font size is inherited from parent (builder-input-base -> input-base -> 1rem)
+}
+
+.addressTextPlaceholder {
+  color: v.$color-muted-foreground;
+}
+
+.addressTextFilled {
+  color: v.$zinc-900;
+  font-weight: 500;
 }

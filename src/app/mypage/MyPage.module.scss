@@ -1,359 +1,435 @@
 @use "../../styles/variables" as *;
-@use "sass:color";
-
+@use "../../styles/mixins" as *;
 
 .container {
-    background-color: #F9F9FB; // Minimal warm gray background
-    display: flex;
-    flex-direction: column;
+    min-height: 100dvh;
+    background-color: #F2F4F6; // Toss-like warm gray
+    padding-bottom: 5rem;
 }
 
 .main {
-    flex: 1;
-    min-height: calc(100dvh - 3.5rem);
-    max-width: 64rem;
     width: 100%;
-    margin-inline: auto;
-    padding: 3rem 1.5rem;
-
-    @media (max-width: 768px) {
-        padding: 1.5rem 1rem 1.5rem; // Reduced top padding for mobile
+    margin: 0 auto;
+    padding: 0 1.25rem;
+    
+    // Mobile first: default max-width for readability on phones
+    max-width: 600px;
+    
+    // Desktop: Expand width and adjust padding
+    @include desktop {
+        max-width: 1024px;
+        padding: 3rem 0;
     }
 }
 
-.header {
-    margin-bottom: 2.5rem;
-
-    .title {
-        font-size: 1.75rem; // Slightly smaller, tighter
-        font-weight: 700;
-        color: #191f28; // Toss Black
-        letter-spacing: -0.02em;
-        margin-bottom: 0.5rem;
-    }
-
-    .subtitle {
-        font-size: 1rem;
-        color: #8b95a1; // Toss Gray
-        letter-spacing: -0.01em;
-    }
-}
-
-// Empty State
-.emptyState {
-    padding: 6rem 2rem;
-    text-align: center;
-    background-color: white;
-    border: 1px dashed #e5e8eb;
-    border-radius: 1.5rem;
-
-    @media (max-width: 768px) {
-        padding: 3rem 1rem;
-    }
-
-    .iconWrapper {
-        width: 4.5rem;
-        height: 4.5rem;
-        background-color: #f2f4f6;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-inline: auto;
-        margin-bottom: 1.5rem;
-
-        svg {
-            width: 2.25rem;
-            height: 2.25rem;
-            color: #b0b8c1;
-        }
-    }
-
-    .emptyTitle {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: #333d4b;
-        margin-bottom: 0.5rem;
-    }
-
-    .emptyDescription {
-        font-size: 0.95rem;
-        color: #8b95a1;
-    }
-}
-
-
-
-.adminSection {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    border-radius: 1.5rem;
-    border: 1px solid rgba(0, 0, 0, 0.03);
+// 상단 요약 카드 (신청한 청첩장)
+.summaryCard {
     background-color: #ffffff;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-}
-
-.adminSectionHeader {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-}
-
-.adminTitle {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: #191f28;
-}
-
-.adminSubtitle {
-    font-size: 0.9rem;
-    color: #8b95a1;
-}
-
-.adminCount {
-    min-width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 0.75rem;
-    border-radius: 99px;
-    background-color: #fff8e1; // Light yellow
-    color: #b45309;
-    font-weight: 700;
-    font-size: 0.875rem;
-}
-
-.adminList {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.adminItem {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1.25rem;
-    border-radius: 1.25rem;
-    background-color: white;
-    border: 1px solid #f2f4f6;
-    transition: background-color 0.2s;
-
-    &:hover {
-        background-color: #f9fafb;
-    }
-
-    @media (min-width: 640px) {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-    }
-}
-
-.adminPrimary {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    flex: 1;
-}
-
-.adminName,
-.adminPhone {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    font-size: 1rem;
-    color: #333d4b;
-    font-weight: 500;
-
-    svg {
-        flex-shrink: 0;
-        color: #b0b8c1;
-        width: 1.125rem;
-        height: 1.125rem;
-    }
-}
-
-.adminMeta {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 0.75rem;
-    font-size: 0.8125rem;
-    color: #8b95a1;
-    padding-top: 0.75rem;
-    border-top: 1px solid #f2f4f6;
-    margin-top: 0.25rem;
-
-    @media (min-width: 640px) {
-        padding-top: 0;
-        border-top: none;
-        margin-top: 0;
-        justify-content: flex-end;
-    }
-}
-
-.adminRight {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    width: 100%;
-
-    @media (min-width: 640px) {
-        flex-direction: column;
-        align-items: flex-end;
-        width: auto;
-    }
-}
-
-.adminActions {
-    display: flex;
-    align-items: center;
-    gap: 0.625rem;
-    width: 100%;
-
-    @media (min-width: 640px) {
-        width: auto;
-    }
-
-    button {
-        @media (max-width: 639px) {
-            flex: 1;
-            justify-content: center;
-            height: 3rem; // Larger touch target
-        }
-    }
-}
-
-.adminEmpty {
-    padding: 1.5rem;
-    border-radius: 1rem;
-    background-color: #f9fafb;
-    color: #8b95a1;
-    font-size: 0.95rem;
-    text-align: center;
-}
-
-.requestForm {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.requestActions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 0.75rem;
-    margin-top: 2rem;
-}
-
-.requestModalContent {
-    padding-bottom: 0.5rem;
-}
-
-
-
-
-// Loading & Auth States
-.loadingContainer {
-    min-height: 100vh;
-    min-height: 100dvh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #fafafa;
-}
-
-.spinner {
-    width: 2.5rem;
-    height: 2.5rem;
-    border: 3px solid rgba(0, 0, 0, 0.1);
-    border-top-color: #111827;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-.authContainer {
-    min-height: 100vh;
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 1.5rem;
-    background-color: #fafafa;
-}
-
-.authCard {
-    background-color: white;
-    padding: 2.5rem;
     border-radius: 1.5rem;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-    max-width: 22rem;
-    width: 100%;
-    text-align: center;
-
-    .authIcon {
-        width: 4rem;
-        height: 4rem;
-        background-color: #f3f4f6;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-inline: auto;
-        margin-bottom: 1.5rem;
-
-        svg {
-            width: 1.5rem;
-            height: 1.5rem;
-            color: #9ca3af;
-        }
-    }
-
-    .authTitle {
-        font-size: 1.375rem;
-        font-weight: 700;
-        color: #111827;
-        margin-bottom: 0.5rem;
-    }
-
-    .authDescription {
-        font-size: 0.875rem;
-        color: #6b7280;
-        margin-bottom: 1.5rem;
-    }
-
-    .authButton {
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.02);
+    
+    // Desktop: Keep it block flow (Top to Bottom)
+    @include desktop {
         display: block;
-        width: 100%;
-        padding: 0.875rem;
-        background-color: #111827;
-        color: white;
-        border-radius: 0.75rem;
-        font-weight: 600;
-        font-size: 0.9375rem;
-        text-align: center;
-        text-decoration: none;
-        transition: background-color 0.2s;
+        padding: 2rem;
+    }
 
-        @media (hover: hover) and (pointer: fine) {
-            &:hover {
-                background-color: #000000;
+    .summaryHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        
+        h2 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: $color-foreground;
+            margin-bottom: 0.25rem;
+            
+            @include desktop {
+                font-size: 1.25rem;
             }
         }
+        
+        p {
+            font-size: 0.875rem;
+            color: $zinc-500;
+            margin: 0;
+        }
+    }
 
+    .countBadge {
+        background-color: #FFF8E1;
+        color: #B45309;
+        font-weight: 700;
+        font-size: 0.875rem;
+        padding: 0.3rem 0.8rem;
+        border-radius: 99px;
+        transition: transform 0.2s;
+        
+        &:hover {
+            transform: scale(1.05);
+        }
+    }
+
+    .emptySummary {
+        background-color: #F9FAFB;
+        border-radius: 1rem;
+        padding: 3rem 1.5rem;
+        text-align: center;
+        
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        
+        .emptyIconWrapper {
+            color: $zinc-300;
+            margin-bottom: 0.5rem;
+        }
+
+        .emptyText {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: $zinc-600;
+        }
+        
+        .emptySubText {
+            font-size: 0.85rem;
+            color: $zinc-400;
+        }
+    }
+
+    // Request List Styling
+    .requestList {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+    }
+
+    .requestItem {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.25rem;
+        background-color: #F9FAFB;
+        border-radius: 1rem;
+        border: 1px solid transparent;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background-color: #F2F4F6;
+            border-color: rgba(0,0,0,0.05);
+        }
+
+        .requestInfo {
+            display: flex;
+            flex-direction: column;
+            gap: 0.125rem;
+
+            .requester {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                flex-wrap: wrap;
+                
+                strong {
+                    font-size: 0.9375rem;
+                    color: $color-foreground;
+                    font-weight: 600;
+                }
+                
+                .phone {
+                    font-size: 0.875rem;
+                    color: $zinc-500;
+                }
+            }
+
+            .requestTime {
+                font-size: 0.75rem;
+                color: $zinc-400;
+                display: flex;
+                align-items: center;
+                gap: 0.25rem;
+                margin-top: 0.2rem;
+            }
+        }
+        
+        .approveButton {
+            background-color: $color-primary;
+            color: #1a1a1a;
+            font-weight: 600;
+            font-size: 0.8125rem;
+            padding: 0.5rem 0.875rem;
+            border-radius: 0.75rem;
+            border: none;
+            cursor: pointer;
+            transition: filter 0.2s;
+            white-space: nowrap;
+            
+            &:hover {
+                filter: brightness(0.95);
+            }
+        }
     }
 }
+
+// 청첩장 리스트
+.invitationList {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    
+    @include desktop {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr); // 3 cards per row
+        gap: 1.5rem;
+        align-items: stretch;
+    }
+    
+    @media (min-width: 1280px) {
+         grid-template-columns: repeat(4, 1fr); // 4 cards on extra large screens
+    }
+}
+
+.invitationItem {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    
+    // Card Style (Mobile & Desktop)
+    background-color: #ffffff;
+    border-radius: 1.75rem; // Slightly more rounded
+    padding: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s, box-shadow 0.2s;
+    
+    border: 1px solid transparent; // for hover border effect
+    
+    @include hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06);
+        border-color: rgba(0,0,0,0.05);
+    }
+    
+    .itemHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        
+        .statusLabel {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: $zinc-500;
+            margin-bottom: 0.25rem;
+            background-color: $zinc-100;
+            padding: 0.25rem 0.6rem;
+            border-radius: 0.5rem;
+            display: inline-block;
+        }
+        
+        .itemTitle {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: $color-foreground;
+            line-height: 1.4;
+            margin-top: 0.5rem;
+            
+            // Text ellipsis for title
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 3.1em; // Fixed height for alignment
+        }
+        
+        .itemDate {
+            font-size: 0.8125rem;
+            color: $zinc-400;
+            margin-top: 0.25rem;
+        }
+
+        .moreButton {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            color: $zinc-400;
+            transition: background-color 0.2s;
+            margin-right: -0.5rem;
+            margin-top: -0.5rem;
+            
+            &:hover {
+                background-color: $zinc-100;
+                color: $zinc-600;
+            }
+            
+            // Hide text on button, show only icon
+            span {
+                display: none; // Hide "편집하기" text to keep it clean
+            }
+        }
+    }
+
+    .actionButton {
+        width: 100%;
+        height: 3rem;
+        border-radius: 1rem;
+        background-color: $color-primary;
+        color: #1a1a1a;
+        font-weight: 700;
+        font-size: 0.9375rem;
+        border: none;
+        cursor: pointer;
+        transition: transform 0.1s, background-color 0.2s, filter 0.2s;
+        margin-top: auto; // Push to bottom
+        
+        &:active {
+            transform: scale(0.98);
+        }
+        
+        &:hover {
+            filter: brightness(0.95);
+        }
+
+        &.approved {
+            background-color: $zinc-800;
+            color: white;
+            
+            &:hover {
+                background-color: black;
+            }
+        }
+    }
+
+    .iconWithText {
+        display: flex;
+        flex: 1; // Take available space
+        align-items: center;
+        justify-content: center;
+        padding: 1.5rem 0;
+        opacity: 0.8;
+        transition: opacity 0.2s;
+        
+        @include hover {
+            opacity: 1;
+        }
+    }
+
+    .previewImageWrapper {
+        width: 100%;
+        margin: 1rem 0;
+        border-radius: 1rem;
+        overflow: hidden;
+        background-color: $zinc-100;
+        position: relative;
+        aspect-ratio: 2 / 3; // Portrait ratio for mobile invitation
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        @include hover {
+            img {
+                transform: scale(1.05);
+            }
+        }
+    }
+}
+
+
+// Auth / Loading
+.authCard {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 2rem;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    
+    .authTitle {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    
+    .authButton {
+        display: inline-block;
+        margin-top: 1.5rem;
+        padding: 0.875rem 2rem;
+        background: $zinc-900;
+        color: white;
+        border-radius: 1rem;
+        font-weight: 600;
+    }
+}
+
+.emptyFullState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 0;
+  text-align: center;
+  
+  .emptyIcon {
+    width: 4rem;
+    height: 4rem;
+    background-color: $zinc-100;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    color: $zinc-400;
+  }
+  
+  h3 {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: $zinc-900;
+    margin-bottom: 0.5rem;
+  }
+  
+  p {
+    color: $zinc-500;
+    margin-bottom: 1.5rem;
+  }
+  
+  .createBtn {
+    padding: 0.75rem 1.5rem;
+    background-color: $zinc-900;
+    color: white;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    transition: background-color 0.2s;
+    
+    &:hover {
+      background-color: black;
+    }
+  }
+}
+
+.flexColStart {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+
+.itemHeaderRight {
+  display: flex;
+  align-items: flex-start;
+  height: 100%;
+}
+

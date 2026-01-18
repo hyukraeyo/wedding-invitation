@@ -12,7 +12,7 @@ import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { useShallow } from 'zustand/react/shallow';
-import styles from './styles.module.scss';
+import styles from './Header.module.scss';
 
 // Lazy load Button to avoid preload warning (Button is only used inside modal)
 const Button = lazy(() => import('@/components/ui/Button').then(mod => ({ default: mod.Button })));
@@ -171,7 +171,7 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
                     </>
                 }
             >
-                <Suspense fallback={<div className="h-32" />}>
+                <Suspense fallback={<div className={styles.suspenseFallback} />}>
                     <div className={styles.resetDialogContent}>
                         <Button
                             variant="destructive"

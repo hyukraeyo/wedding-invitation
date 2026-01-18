@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils"
-import styles from "./styles.module.scss"
+import styles from "./Skeleton.module.scss"
 
 function Skeleton({
     className,

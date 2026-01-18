@@ -4,7 +4,7 @@ import React, { useId } from 'react';
 import { Checkbox as ShadcnCheckbox } from '@/components/ui/Checkbox';
 import { Label } from '@/components/ui/Label';
 import { cn } from '@/lib/utils';
-import styles from './styles.module.scss';
+import styles from './Checkbox.module.scss';
 
 /**
  * TDS Checkbox Component

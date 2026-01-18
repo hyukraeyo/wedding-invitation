@@ -2,7 +2,7 @@ import React from 'react';
 import { LucideIcon } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
-import styles from './styles.module.scss';
+import styles from './HeaderAction.module.scss';
 
 interface HeaderActionProps {
     icon: LucideIcon;

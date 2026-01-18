@@ -152,8 +152,7 @@ export default function MainScreenSectionContent() {
                                 type="button"
                                 className={cn(
                                     styles.stylePresetCard,
-                                    mainScreen.layout === preset.layout ? styles.selected : '',
-                                    "transition-transform duration-200 active:scale-[0.98]"
+                                    mainScreen.layout === preset.layout ? styles.selected : ''
                                 )}
                                 onClick={() => handleSelectPreset(preset, index)}
                             >
@@ -373,14 +372,14 @@ export default function MainScreenSectionContent() {
             ) : null}
 
             {!mainScreen.customDatePlace ? (
-                <div className={cn(styles.helpText, "flex items-center justify-between gap-2")} style={{ marginBottom: '8px' }}>
-                    <p>
+                <div className={styles.autoTextContainer}>
+                    <p className={styles.helpText} style={{ flex: 1, padding: '0.5rem 0.75rem' }}>
                         <span style={{ fontWeight: 600 }}>자동 노출 중:</span> {getFormattedAutoText().replace(/<br\/>/g, ' ')}
                     </p>
                     <button
                         type="button"
                         onClick={() => updateMain({ customDatePlace: `<p style="text-align: center">${getFormattedAutoText()}</p>` })}
-                        className="text-[11px] font-semibold text-banana hover:text-banana/80 underline shrink-0"
+                        className={styles.applyTextBtn}
                     >
                         문구 적용
                     </button>

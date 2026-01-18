@@ -4,7 +4,7 @@ import * as React from "react"
 import * as SheetPrimitive from "@radix-ui/react-dialog"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
-import styles from "./styles.module.scss"
+import styles from "./Sheet.module.scss"
 
 const Sheet = SheetPrimitive.Root
 
@@ -28,13 +28,14 @@ SheetOverlay.displayName = SheetPrimitive.Overlay.displayName
 
 interface SheetContentProps
     extends React.ComponentPropsWithoutRef<typeof SheetPrimitive.Content> {
-    side?: "top" | "bottom" | "left" | "right"
+    side?: "top" | "bottom" | "left" | "right";
+    hideCloseButton?: boolean;
 }
 
 const SheetContent = React.forwardRef<
     React.ElementRef<typeof SheetPrimitive.Content>,
     SheetContentProps
->(({ side = "right", className, children, onOpenAutoFocus, ...props }, ref) => {
+>(({ side = "right", hideCloseButton = false, className, children, onOpenAutoFocus, ...props }, ref) => {
     const contentRef = React.useRef<React.ElementRef<typeof SheetPrimitive.Content>>(null)
 
     React.useImperativeHandle(ref, () => contentRef.current as React.ElementRef<typeof SheetPrimitive.Content>)
@@ -64,10 +65,12 @@ const SheetContent = React.forwardRef<
                 {...props}
             >
                 {children}
-                <SheetPrimitive.Close className={styles.close}>
-                    <X size={18} />
-                    <span className={styles.srOnly}>Close</span>
-                </SheetPrimitive.Close>
+                {!hideCloseButton && (
+                    <SheetPrimitive.Close className={styles.close}>
+                        <X size={18} />
+                        <span className={styles.srOnly}>Close</span>
+                    </SheetPrimitive.Close>
+                )}
             </SheetPrimitive.Content>
         </SheetPortal>
     )

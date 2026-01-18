@@ -260,7 +260,7 @@ export default function AccountsSection({ value, isOpen }: SectionProps) {
 
                         <UIButton
                             variant="outline"
-                            className="w-full h-12 gap-2 text-base font-medium rounded-xl border-dashed border-2 hover:border-solid hover:bg-zinc-50 hover:text-primary transition-all active:scale-[0.98]"
+                            className={styles.addAccountBtn}
                             onClick={handleAddAccount}
                         >
                             <Plus size={18} />

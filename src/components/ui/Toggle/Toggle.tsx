@@ -3,7 +3,7 @@
 import React from 'react';
 import * as TogglePrimitive from '@radix-ui/react-toggle';
 import { cn } from '@/lib/utils';
-import styles from './styles.module.scss';
+import styles from './Toggle.module.scss';
 
 interface ToggleProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   pressed: boolean;

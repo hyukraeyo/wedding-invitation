@@ -2,7 +2,7 @@ import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { Banana } from "lucide-react";
 import { clsx } from "clsx";
-import styles from "./styles.module.scss";
+import styles from "./Button.module.scss";
 
 type ButtonVariantsOptions = {
     variant?: ButtonProps["variant"];

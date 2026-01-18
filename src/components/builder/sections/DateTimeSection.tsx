@@ -67,7 +67,7 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
                     label="달력 노출"
                 />
 
-                <div className="flex flex-col gap-3">
+                <div className={styles.switchGroup}>
                     <SwitchField
                         checked={showDday}
                         onChange={setShowDday}

@@ -21,7 +21,7 @@ import {
     DrawerTrigger,
 } from '@/components/ui/Drawer';
 import { ChevronDown, Check } from 'lucide-react';
-import styles from './styles.module.scss';
+import styles from './ResponsiveSelect.module.scss';
 
 interface Option<T> {
     label: string;

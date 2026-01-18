@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { SegmentedControl as BaseSegmentedControl, SegmentedControlItem } from '@/components/ui/SegmentedControl';
-import styles from './styles.module.scss';
+import styles from './SegmentedControl.module.scss';
 
 interface Option<T> {
     label: string;

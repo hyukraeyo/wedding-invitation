@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
 import { Label } from '@/components/ui/Label';
 import { cn } from '@/lib/utils';
-import styles from './styles.module.scss';
+import styles from './TextField.module.scss';
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string | undefined;

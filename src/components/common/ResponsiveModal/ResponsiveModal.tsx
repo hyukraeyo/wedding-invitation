@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/Drawer"
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
-import styles from './styles.module.scss';
+import styles from './ResponsiveModal.module.scss';
 
 export interface ResponsiveModalProps {
     open?: boolean | undefined;
@@ -32,6 +32,7 @@ export interface ResponsiveModalProps {
     children?: React.ReactNode | undefined;
     footer?: React.ReactNode | undefined; // 추가: 커스텀 푸터
     className?: string | undefined;
+    contentClassName?: string | undefined;
 
     // Action Buttons
     confirmText?: string | undefined;
@@ -54,6 +55,7 @@ export const ResponsiveModal = ({
     children,
     footer,
     className,
+    contentClassName,
     confirmText = '확인',
     cancelText = '취소',
     onConfirm,
@@ -109,7 +111,7 @@ export const ResponsiveModal = ({
                         ) : null}
                     </DialogHeader>
 
-                    <div className={styles.content}>
+                    <div className={cn(styles.content, contentClassName)}>
                         {children}
                     </div>
 
@@ -170,7 +172,7 @@ export const ResponsiveModal = ({
                         ) : null}
                     </DrawerHeader>
 
-                    <div className={cn(styles.content, styles.drawerScrollArea)}>
+                    <div className={cn(styles.content, styles.drawerScrollArea, contentClassName)}>
                         {children ? (
                             <DrawerScrollArea className={className}>
                                 {children}

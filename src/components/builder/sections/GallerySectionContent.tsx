@@ -29,7 +29,7 @@ import {
     rectSortingStrategy,
     useSortable
 } from '@dnd-kit/sortable';
-import { IconButton } from '@/components/ui/IconButton';
+
 import { CSS } from '@dnd-kit/utilities';
 import styles from './GallerySection.module.scss';
 import { useShallow } from 'zustand/react/shallow';
@@ -37,11 +37,12 @@ import { useShallow } from 'zustand/react/shallow';
 interface SortableItemProps {
     id: string;
     url: string;
+    index: number;
     onRemove: (id: string) => void;
     isDragging?: boolean;
 }
 
-const SortableItem = React.memo(function SortableItem({ id, url, onRemove, isDragging }: SortableItemProps) {
+const SortableItem = React.memo(function SortableItem({ id, url, index, onRemove, isDragging }: SortableItemProps) {
     const {
         attributes,
         listeners,
@@ -53,7 +54,6 @@ const SortableItem = React.memo(function SortableItem({ id, url, onRemove, isDra
     const style = {
         transform: CSS.Translate.toString(transform),
         transition,
-        touchAction: 'none',
     };
 
     const isUploading = isBlobUrl(url);
@@ -64,17 +64,23 @@ const SortableItem = React.memo(function SortableItem({ id, url, onRemove, isDra
             style={style}
             className={cn(
                 styles.sortableItem,
-                isDragging && styles.dragging,
-                isUploading && styles.uploading
+                isDragging && styles.dragging
             )}
+            {...attributes}
+            {...listeners}
         >
             <Image
                 src={url}
-                alt="Gallery"
+                alt={`Gallery image ${index + 1}`}
                 fill
                 unoptimized
                 className={cn(styles.image, isUploading && styles.imageUploading)}
+                draggable={false}
             />
+
+            {index === 0 && !isUploading && (
+                <div className={styles.mainTag}>대표</div>
+            )}
 
             {isUploading ? (
                 <div className={styles.uploadingOverlay}>
@@ -82,27 +88,17 @@ const SortableItem = React.memo(function SortableItem({ id, url, onRemove, isDra
                 </div>
             ) : null}
 
-            <div className={styles.gradientOverlay} />
-
-            <div className="absolute top-1 right-1 z-10">
-                <IconButton
-                    icon={Trash2}
-                    size="sm"
-                    className={styles.removeButton}
-                    variant="ghost"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onRemove(id);
-                    }}
-                    onPointerDown={(e) => e.stopPropagation()}
-                />
-            </div>
-
-            <div
-                {...attributes}
-                {...listeners}
-                className={styles.dragHandle}
-            />
+            <button
+                type="button"
+                className={styles.removeButton}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    onRemove(id);
+                }}
+                onPointerDown={(e) => e.stopPropagation()}
+            >
+                <Trash2 />
+            </button>
         </div>
     );
 });
@@ -274,17 +270,19 @@ export default function GallerySectionContent() {
                             strategy={rectSortingStrategy}
                         >
                             <div className={styles.grid}>
-                                {gallery.map((item) => (
+                                {gallery.map((item, index) => (
                                     <SortableItem
                                         key={item.id}
                                         id={item.id}
+                                        index={index}
                                         url={item.url}
                                         onRemove={handleRemove}
                                     />
                                 ))}
                                 {gallery.length < 30 ? (
                                     <div className={styles.uploadItem} onClick={handleUploadClick}>
-                                        <Plus size={24} className={styles.uploadIcon} />
+                                        <Plus className={styles.uploadIcon} />
+                                        <span className={styles.uploadText}>추가</span>
                                         <input
                                             type="file"
                                             ref={fileInputRef}
@@ -306,13 +304,13 @@ export default function GallerySectionContent() {
                             })
                         }}>
                             {activeId && activeImage ? (
-                                <div className={styles.overlay}>
+                                <div className={styles.dragOverlayItem}>
                                     <Image
                                         src={activeImage.url}
                                         alt=""
                                         fill
                                         unoptimized
-                                        className={styles.imageOverlay}
+                                        className={styles.image}
                                     />
                                 </div>
                             ) : null}
@@ -320,7 +318,7 @@ export default function GallerySectionContent() {
                     </DndContext>
 
                     <InfoMessage>
-                        사진을 드래그하여 순서를 변경할 수 있습니다. 최대 30장까지 등록 가능합니다.
+                        사진을 길게 눌러 순서를 변경할 수 있습니다. (첫 번째 사진이 대표 사진)
                     </InfoMessage>
                 </div>
             </Field>

@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 const ExampleSelectorModal = dynamic(() => import('@/components/common/ExampleSelectorModal').then(mod => mod.ExampleSelectorModal), {
     ssr: false
 });
-import type { ExampleItem } from '@/components/common/ExampleSelectorModal';
+
 import { InfoMessage } from '@/components/ui/InfoMessage';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '@/components/common/AccordionItem';

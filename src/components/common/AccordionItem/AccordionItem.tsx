@@ -7,7 +7,7 @@ import {
     AccordionContent,
 } from "@/components/ui/Accordion";
 import { getScrollParent, smoothScrollTo } from '@/utils/smoothScroll';
-import styles from './styles.module.scss';
+import styles from './AccordionItem.module.scss';
 
 interface AccordionItemProps {
     value: string; // Required for Radix Accordion

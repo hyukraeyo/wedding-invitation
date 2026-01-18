@@ -4,7 +4,7 @@ import React, { useState, useCallback, useEffect, useRef, Suspense } from 'react
 import dynamic from 'next/dynamic';
 
 const invitationCanvasLoading = (
-  <div className="w-full h-full flex items-center justify-center bg-muted/20 animate-pulse" />
+  <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.05)' }} />
 );
 
 // Dynamic import for InvitationCanvas (conditionally rendered based on screen size)
@@ -192,28 +192,26 @@ function BuilderPageContent() {
 
       {/* Mobile Preview Drawer */}
       <Sheet open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
-        <SheetContent side="right" className={styles.sheetContent}>
-          <SheetHeader className="sr-only">
+        <SheetContent side="right" className={styles.sheetContent} hideCloseButton>
+          <SheetHeader style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>
             <SheetTitle>Mobile Preview</SheetTitle>
             <SheetDescription>나만의 달콤한 바나나웨딩 청첩장 미리보기</SheetDescription>
           </SheetHeader>
 
+          <div className={styles.mobilePreview}>
+            <InvitationCanvas key="mobile-preview" isPreviewMode editingSection={editingSection} hideWatermark />
+          </div>
+
           <button
             className={styles.mobilePreviewClose}
-            onClick={() => setIsPreviewOpen(false)}
             aria-label="Close Preview"
+            onClick={() => setIsPreviewOpen(false)}
           >
-            <X size={20} />
+            <X size={24} />
           </button>
-
-          {isPreviewOpen ? (
-            <div className={styles.mobilePreview}>
-              <InvitationCanvas key="mobile-preview" isPreviewMode editingSection={editingSection} hideWatermark />
-            </div>
-          ) : null}
         </SheetContent>
-      </Sheet >
-    </div >
+      </Sheet>
+    </div>
   );
 }
 

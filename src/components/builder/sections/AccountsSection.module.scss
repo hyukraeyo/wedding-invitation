@@ -104,3 +104,31 @@
   justify-content: flex-end;
   margin-top: 0.5rem;
 }
+
+.addAccountBtn {
+  width: 100%;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border-radius: 12px;
+  border: 2px dashed v.$color-border;
+  background-color: transparent;
+  color: v.$zinc-600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-style: solid;
+    background-color: v.$zinc-50;
+    color: v.$primary;
+    border-color: v.$primary;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}

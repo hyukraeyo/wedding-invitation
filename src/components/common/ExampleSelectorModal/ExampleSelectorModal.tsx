@@ -1,7 +1,7 @@
 import React from 'react';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 import { Button } from '@/components/ui/Button';
-import styles from './styles.module.scss';
+import styles from './ExampleSelectorModal.module.scss';
 
 export interface ExampleItem {
     id?: string | number;

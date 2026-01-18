@@ -1,4 +1,4 @@
-import type { SupabaseClient } from '@supabase/supabase-js';
+import type { SupabaseClient, SupabaseClientOptions } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -7,7 +7,7 @@ let cachedClient: SupabaseClient | null = null;
 let cachedToken: string | null = null;
 let clientToken: string | null = null;
 let tokenExpiresAt = 0;
-let tokenRequest: Promise<string> | null = null;
+let tokenRequest: Promise<string | null> | null = null;
 let supabaseModulePromise: Promise<typeof import('@supabase/supabase-js')> | null = null;
 
 const decodeExpiry = (token: string) => {
@@ -21,39 +21,62 @@ const decodeExpiry = (token: string) => {
     }
 };
 
-const fetchSupabaseToken = async () => {
-    const response = await fetch('/api/supabase/token', { method: 'GET' });
-    if (!response.ok) {
-        throw new Error('Failed to fetch Supabase token');
+const fetchSupabaseToken = async (): Promise<string | null> => {
+    try {
+        const response = await fetch('/api/supabase/token', { method: 'GET' });
+        if (response.status === 401) {
+            return null;
+        }
+        if (!response.ok) {
+            throw new Error('Failed to fetch Supabase token');
+        }
+        const data = (await response.json()) as { token: string };
+        return data.token;
+    } catch (error) {
+        console.warn('Error fetching Supabase token:', error);
+        return null;
     }
-    const data = (await response.json()) as { token: string };
-    return data.token;
 };
 
 export async function getBrowserSupabaseClient() {
     const now = Date.now();
-    const isTokenValid = cachedToken && tokenExpiresAt > now + 30_000;
+    // Valid if we have a token that isn't expired, OR if we ostensibly have no token (anon) but the check hasn't "expired" (to prevent spamming)
+    // Actually, simply checking expiresAt is enough if we set it for anon too.
+    const isTokenValid = tokenExpiresAt > now + 30_000;
 
     if (!isTokenValid) {
         if (!tokenRequest) {
-            tokenRequest = fetchSupabaseToken().finally(() => {
+            tokenRequest = fetchSupabaseToken().catch(() => null).finally(() => {
                 tokenRequest = null;
             });
         }
         const token = await tokenRequest;
         cachedToken = token;
-        tokenExpiresAt = decodeExpiry(token);
+
+        if (token) {
+            tokenExpiresAt = decodeExpiry(token);
+        } else {
+            // If no token (anon), check again in 2 minutes
+            tokenExpiresAt = Date.now() + 120_000;
+        }
     }
 
-    if (!cachedClient || !cachedToken || clientToken !== cachedToken) {
+    // Initialize or Re-initialize if token changed
+    if (!cachedClient || clientToken !== cachedToken) {
         if (!supabaseModulePromise) {
             supabaseModulePromise = import('@supabase/supabase-js');
         }
         const { createClient } = await supabaseModulePromise;
-        cachedClient = createClient(supabaseUrl, supabaseAnonKey, {
+
+        const options: SupabaseClientOptions<'public'> = {
             auth: { persistSession: false, autoRefreshToken: false },
-            global: { headers: { Authorization: `Bearer ${cachedToken}` } },
-        });
+        };
+
+        if (cachedToken) {
+            options.global = { headers: { Authorization: `Bearer ${cachedToken}` } };
+        }
+
+        cachedClient = createClient(supabaseUrl, supabaseAnonKey, options);
         clientToken = cachedToken;
     }
 

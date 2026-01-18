@@ -2,7 +2,7 @@ import React from 'react';
 import { Info, AlertCircle } from 'lucide-react';
 import { Label as ShadcnLabel } from '@/components/ui/Label';
 import { cn } from '@/lib/utils';
-import styles from './styles.module.scss';
+import styles from './FormPrimitives.module.scss';
 
 // --- Label ---
 

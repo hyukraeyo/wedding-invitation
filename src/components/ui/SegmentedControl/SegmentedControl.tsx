@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { cn } from '@/lib/utils';
-import styles from './styles.module.scss';
+import styles from './SegmentedControl.module.scss';
 
 interface SegmentedControlProps<T> {
     value?: T | undefined;

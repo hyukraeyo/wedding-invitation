@@ -1,7 +1,7 @@
 import { Switch as ShadcnSwitch } from '@/components/ui/Switch';
 import { Label } from '@/components/ui/Label';
 import { cn } from '@/lib/utils';
-import styles from './styles.module.scss';
+import styles from './SwitchField.module.scss';
 
 interface SwitchProps {
     checked: boolean;

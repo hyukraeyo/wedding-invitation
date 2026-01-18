@@ -43,3 +43,9 @@
     color: v.$zinc-400;
   }
 }
+
+.switchGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}

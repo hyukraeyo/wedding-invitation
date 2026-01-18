@@ -10,7 +10,7 @@ import { IconButton } from '@/components/ui/IconButton';
 import { AspectRatio } from '@/components/ui/AspectRatio';
 import { isBlobUrl } from '@/lib/image';
 import { IMAGE_SIZES } from '@/constants/image';
-import styles from './styles.module.scss';
+import styles from './ImageUploader.module.scss';
 
 interface ImageUploaderProps {
     value: string | null;
@@ -104,7 +104,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
 
     return (
         <div className={styles.container}>
-            <div className={cn("w-full", className)} style={cssVars}>
+            <div className={cn(styles.wrapper, className)} style={cssVars}>
                 {label ? <Label className={styles.label}>{label}</Label> : null}
 
                 <div
@@ -186,7 +186,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                     <SegmentedControl
                         value={props.ratio}
                         onChange={props.onRatioChange}
-                        className="w-full"
+                        className={styles.wrapper}
                     >
                         <SegmentedControl.Item value="fixed">고정 (기본)</SegmentedControl.Item>
                         <SegmentedControl.Item value="auto">자동 (원본 비율)</SegmentedControl.Item>

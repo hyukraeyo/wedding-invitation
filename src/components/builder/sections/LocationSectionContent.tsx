@@ -152,8 +152,8 @@ export default function LocationSectionContent() {
                         className={styles.addressButton}
                     >
                         <span className={cn(
-                            "truncate",
-                            address ? "text-foreground font-medium" : "text-muted-foreground"
+                            styles.addressText,
+                            address ? styles.addressTextFilled : styles.addressTextPlaceholder
                         )}>
                             {address || "주소를 검색해주세요"}
                         </span>
@@ -242,15 +242,16 @@ export default function LocationSectionContent() {
                 onOpenChange={setIsSearchOpen}
                 title="주소 검색"
                 description="도로명 주소 또는 지번 주소를 입력해주세요."
+                contentClassName={styles.postcodeModalContent}
             >
-                <div className="h-[400px] w-full">
-                    {isSearchOpen ? (
+                <div className={styles.postcodeWrapper}>
+                    {isSearchOpen && (
                         <DaumPostcodeEmbed
                             onComplete={handleComplete}
                             style={{ height: '100%' }}
-                            autoClose={false}
+                            autoClose={true}
                         />
-                    ) : null}
+                    )}
                 </div>
             </ResponsiveModal>
         </>

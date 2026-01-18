@@ -1,0 +1,47 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.iconButton {
+  border-radius: 9999px; // rounded-full
+  position: relative;
+  transition: transform 0.1s ease-in-out;
+  
+  &:active {
+    transform: scale(0.92);
+  }
+}
+
+.icon {
+  transition: opacity 0.2s;
+  
+  &.faded {
+    opacity: 0.2;
+  }
+
+  // Icon Sizes
+  &.sm { width: 1rem; height: 1rem; }
+  &.md { width: 1.5rem; height: 1.5rem; }
+  &.lg { width: 1.75rem; height: 1.75rem; }
+  &.xl { width: 2rem; height: 2rem; }
+}
+
+.spinnerOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  color: currentColor;
+}

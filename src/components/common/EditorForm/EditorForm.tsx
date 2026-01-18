@@ -5,7 +5,7 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { Accordion } from '@/components/ui/Accordion';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { useShallow } from 'zustand/react/shallow';
-import styles from './styles.module.scss';
+import styles from './EditorForm.module.scss';
 
 // Static imports for immediate loading (prevents icon pop-in)
 import ThemeSection from '@/components/builder/sections/ThemeSection';

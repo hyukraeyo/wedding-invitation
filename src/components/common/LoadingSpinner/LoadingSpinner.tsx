@@ -1,6 +1,6 @@
 import React from 'react';
 import { Banana } from 'lucide-react';
-import styles from './styles.module.scss';
+import styles from './LoadingSpinner.module.scss';
 
 export default function LoadingSpinner() {
     return (

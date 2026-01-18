@@ -3,7 +3,7 @@
 import React from 'react';
 import { ResponsiveSelect as Select } from '@/components/common/ResponsiveSelect';
 import { cn } from '@/lib/utils';
-import styles from './styles.module.scss';
+import styles from './TimePicker.module.scss';
 
 interface TimePickerProps {
     value: string;
