@@ -42,6 +42,15 @@ const nextConfig: NextConfig = {
     },
   },
 
+  turbopack: {
+    rules: {
+      '*.svg': {
+        loaders: ['@svgr/webpack'],
+        as: '*.js',
+      },
+    },
+  },
+
   // 보안 및 성능 헤더
   async headers() {
     const cspHeader = `
