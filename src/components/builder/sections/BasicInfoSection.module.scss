@@ -2,22 +2,15 @@
 @use "../../../styles/builder" as b;
 
 .formGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  @include b.section-form-group;
 }
 
 .divider {
-  height: 1px;
-  background-color: v.$zinc-100;
-  width: 100%;
+  @include b.section-divider;
 }
 
 .row {
-  display: grid;
-  gap: 0.5rem;
-  align-items: center;
-  width: 100%;
+  @include b.section-form-row;
 
   // 신랑/신부 이름 (1컬럼)
   &.full {

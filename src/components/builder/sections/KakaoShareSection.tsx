@@ -13,15 +13,11 @@ import { ImageUploader } from '@/components/common/ImageUploader';
 import { HeaderAction } from '@/components/common/HeaderAction';
 import styles from './KakaoShareSection.module.scss';
 import { cn } from '@/lib/utils';
+import type { SectionProps } from '@/types/builder';
 
 const ResponsiveModal = dynamic(() => import('@/components/common/ResponsiveModal').then(mod => mod.ResponsiveModal), {
     ssr: false
 });
-
-interface SectionProps {
-    value: string;
-    isOpen: boolean;
-}
 
 export default function KakaoShareSection({ isOpen, value }: SectionProps) {
     const kakao = useInvitationStore(useShallow(state => state.kakaoShare));

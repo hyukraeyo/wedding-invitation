@@ -3,11 +3,7 @@ import { MapPin } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '@/components/common/AccordionItem';
 import LocationSectionContent from './LocationSectionContent';
-
-interface SectionProps {
-    value: string;
-    isOpen: boolean;
-}
+import type { SectionProps } from '@/types/builder';
 
 const LocationSection = React.memo<SectionProps>(function LocationSection({ value, isOpen }) {
     const address = useInvitationStore(state => state.address);

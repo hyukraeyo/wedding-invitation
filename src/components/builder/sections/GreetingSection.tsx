@@ -15,30 +15,11 @@ import { SegmentedControl } from '@/components/common/SegmentedControl';
 import { HeaderAction } from '@/components/common/HeaderAction';
 import { ImageUploader } from '@/components/common/ImageUploader';
 import styles from './GreetingSection.module.scss';
-import { useShallow } from 'zustand/shallow';
+import { useShallow } from 'zustand/react/shallow';
+import type { SectionProps, SamplePhraseItem } from '@/types/builder';
+import { GREETING_SAMPLES } from '@/constants/samples';
 
-interface SectionProps {
-    value: string;
-    isOpen: boolean;
-}
 
-const SAMPLE_PHRASES = [
-    {
-        subtitle: 'Hello & Welcome',
-        title: '초대합니다',
-        message: '<p>곁에 있을 때 가장 나다운 모습이 되게 하는 사람<br>꿈을 꾸게 하고 그 꿈을 함께 나누는 사람<br>그런 사람을 만나 이제 하나가 되려 합니다.</p><p>저희의 뜻깊은 시작을 함께 나누어 주시고<br>따뜻한 마음으로 축복해 주시면 감사하겠습니다.</p>'
-    },
-    {
-        subtitle: 'The Marriage',
-        title: '소중한 분들을 초대합니다',
-        message: '<p>함께 있으면 기분이 좋아지는 사람을 만났습니다.<br>이제 그 사람과 함께 인생의 먼 길을 떠나려 합니다.</p><p>저희의 앞날을 축복해 주시는 소중한 마음 잊지 않고<br>예쁘게 잘 살겠습니다.</p>'
-    },
-    {
-        subtitle: 'Our Wedding Day',
-        title: '저희 결혼합니다',
-        message: '<p>서로가 마주 보며 다져온 사랑을<br>이제 함께 한 곳을 바라보며 걸어가려 합니다.</p><p>새로운 인생의 출발점에 선 저희 두 사람,<br>격려와 축복으로 함께해 주시면 큰 기쁨이겠습니다.</p>'
-    }
-];
 
 export default function GreetingSection({ isOpen, value }: SectionProps) {
     const {
@@ -83,10 +64,10 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
 
     const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
 
-    const handleSelectSample = (sample: typeof SAMPLE_PHRASES[0]) => {
-        setGreetingSubtitle(sample.subtitle);
+    const handleSelectSample = (sample: SamplePhraseItem) => {
+        setGreetingSubtitle(sample.subtitle || '');
         setGreetingTitle(sample.title);
-        setMessage(sample.message);
+        setMessage(sample.content);
         setIsSampleModalOpen(false);
     };
 
@@ -209,11 +190,8 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
                 isOpen={isSampleModalOpen}
                 onClose={() => setIsSampleModalOpen(false)}
                 title="인사말 추천 문구"
-                items={SAMPLE_PHRASES.map(s => ({
-                    ...s,
-                    content: s.message // Map message to content for the generic component
-                }))}
-                onSelect={(item: ExampleItem) => handleSelectSample(item as unknown as typeof SAMPLE_PHRASES[0])}
+                items={GREETING_SAMPLES}
+                onSelect={handleSelectSample}
             />
         </>
     );

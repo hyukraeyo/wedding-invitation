@@ -11,14 +11,10 @@ import { ResponsiveSelect as Select } from "@/components/common/ResponsiveSelect
 import styles from './AccountsSection.module.scss';
 import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
-import { useShallow } from 'zustand/shallow';
+import { useShallow } from 'zustand/react/shallow';
+import type { SectionProps } from '@/types/builder';
 
 const RichTextEditor = dynamic(() => import('@/components/common/RichTextEditor'), { ssr: false });
-
-interface SectionProps {
-    value: string;
-    isOpen: boolean;
-}
 
 export default function AccountsSection({ value, isOpen }: SectionProps) {
     const {

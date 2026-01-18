@@ -3,18 +3,14 @@ import dynamic from 'next/dynamic';
 import { Calendar } from 'lucide-react';
 import { InfoMessage } from '@/components/ui/InfoMessage';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { useShallow } from 'zustand/shallow';
+import { useShallow } from 'zustand/react/shallow';
 import { AccordionItem } from '@/components/common/AccordionItem';
 import { TextField } from '@/components/common/TextField';
 import { SwitchField } from '@/components/common/SwitchField';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import { TimePicker } from '@/components/common/TimePicker';
 import styles from './DateTimeSection.module.scss';
-
-interface SectionProps {
-    value: string;
-    isOpen: boolean;
-}
+import type { SectionProps } from '@/types/builder';
 
 const DatePicker = dynamic(() => import('@/components/common/DatePicker').then((mod) => mod.DatePicker), {
     ssr: false,

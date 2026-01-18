@@ -2,7 +2,7 @@
 
 import React, { memo, useMemo, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { useShallow } from 'zustand/shallow';
+import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import type { InvitationData } from '@/store/useInvitationStore';
 import MainScreenView from './sections/MainScreenView';

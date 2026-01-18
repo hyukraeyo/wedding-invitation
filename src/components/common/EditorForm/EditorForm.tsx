@@ -4,7 +4,7 @@ import React, { useState, useCallback, memo, useEffect } from 'react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { Accordion } from '@/components/ui/Accordion';
 import { Skeleton } from '@/components/ui/Skeleton';
-import { useShallow } from 'zustand/shallow';
+import { useShallow } from 'zustand/react/shallow';
 import styles from './styles.module.scss';
 
 // Static imports for immediate loading (prevents icon pop-in)

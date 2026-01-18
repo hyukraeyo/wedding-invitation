@@ -10,11 +10,7 @@ import { Button } from '@/components/ui/Button';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import styles from './BasicInfoSection.module.scss';
 import { cn } from '@/lib/utils';
-
-interface SectionProps {
-    value: string;
-    isOpen: boolean;
-}
+import type { SectionProps } from '@/types/builder';
 
 const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ isOpen, value }) {
     const groom = useInvitationStore(useShallow(state => state.groom));

@@ -10,11 +10,7 @@ import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import styles from './ThemeSection.module.scss';
 import { cn } from '@/lib/utils';
 import type { ThemeFont } from '@/lib/utils/font';
-
-interface SectionProps {
-    value: string;
-    isOpen: boolean;
-}
+import type { SectionProps } from '@/types/builder';
 
 const PRESET_COLORS = [
     '#3182F6', // Toss Blue

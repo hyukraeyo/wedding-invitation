@@ -12,7 +12,7 @@ import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import styles from './LocationSection.module.scss';
 import { cn } from '@/lib/utils';
 import { NaverIcon, KakaoIcon } from '@/components/common/Icons';
-import { useShallow } from 'zustand/shallow';
+import { useShallow } from 'zustand/react/shallow';
 
 const DaumPostcodeEmbed = dynamic(() => import('react-daum-postcode'), { ssr: false });
 const KakaoSdkLoader = dynamic(() => import('./KakaoSdkLoader'), { ssr: false });

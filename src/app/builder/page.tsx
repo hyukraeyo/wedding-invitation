@@ -32,7 +32,7 @@ import { clsx } from 'clsx';
 import { Smartphone, X } from 'lucide-react';
 import { Sheet, SheetContent, SheetTitle, SheetHeader, SheetDescription } from '@/components/ui/Sheet';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useShallow } from 'zustand/shallow';
+import { useShallow } from 'zustand/react/shallow';
 
 const generateSlug = (name: string): string => {
   const randomStr = Math.random().toString(36).substring(2, 8);

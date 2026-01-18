@@ -32,7 +32,7 @@ import {
 import { IconButton } from '@/components/ui/IconButton';
 import { CSS } from '@dnd-kit/utilities';
 import styles from './GallerySection.module.scss';
-import { useShallow } from 'zustand/shallow';
+import { useShallow } from 'zustand/react/shallow';
 
 interface SortableItemProps {
     id: string;

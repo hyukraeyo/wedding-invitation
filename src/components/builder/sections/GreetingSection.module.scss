@@ -38,9 +38,7 @@
 }
 
 .optionWrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  @include b.section-option-wrapper;
 }
 
 .checkboxGroup {

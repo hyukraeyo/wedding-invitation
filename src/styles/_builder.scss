@@ -158,3 +158,100 @@ $builder-font-xl: 17px;
 @mixin absolute-full {
   @include m.absolute-full;
 }
+
+// ============================================
+// Section Component Common Patterns
+// builder/sections에서 반복되는 공통 패턴
+// ============================================
+
+// Option wrapper - vertical stack with gap
+// 사용처: GreetingSection, ThemeSection, ClosingSection
+@mixin section-option-wrapper($gap: $builder-gap-lg) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+// Section divider - horizontal line between sections
+// 사용처: BasicInfoSection, AccountsSection
+@mixin section-divider {
+  height: 1px;
+  background-color: $builder-border-light;
+  width: 100%;
+}
+
+// Form group - vertical stack for form elements
+// 사용처: BasicInfoSection (신랑/신부 정보)
+@mixin section-form-group($gap: $builder-gap-md) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+// Form row - horizontal grid for inputs
+// 사용처: BasicInfoSection (이름 + 故 버튼)
+@mixin section-form-row {
+  display: grid;
+  gap: $builder-gap-sm;
+  align-items: center;
+  width: 100%;
+}
+
+// Color picker grid
+// 사용처: ThemeSection
+@mixin section-color-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $builder-gap-md;
+  padding: $builder-gap-xs;
+}
+
+// Color picker item
+// 사용처: ThemeSection
+@mixin section-color-item($size: 32px) {
+  position: relative;
+  width: $size;
+  height: $size;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  &.active {
+    border-color: v.$primary-500;
+    transform: scale(1.1);
+  }
+}
+
+// Custom add button (circular dashed)
+// 사용처: ThemeSection, GallerySection
+@mixin section-add-button-circle($size: 32px) {
+  width: $size;
+  height: $size;
+  border-radius: 50%;
+  border: 1px dashed $builder-border-default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: white;
+  color: $builder-text-muted;
+  transition: all 0.2s ease;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      border-color: v.$primary-500;
+      color: v.$primary-500;
+      background-color: v.$primary-100;
+    }
+  }
+}
