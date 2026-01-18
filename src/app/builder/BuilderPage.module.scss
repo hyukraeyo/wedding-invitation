@@ -371,6 +371,7 @@
     overflow-y: auto;
     background-color: white;
     position: relative;
+    z-index: 1; // 낮은 z-index로 닫기 버튼(z-index: 99999)이 위에 올라올 수 있도록
 }
 
 .sheetContent {

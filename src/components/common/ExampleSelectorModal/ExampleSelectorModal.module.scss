@@ -19,7 +19,7 @@
     max-width: 480px;
     border-radius: 1.5rem;
     padding: 2.5rem;
-    box-shadow: 
+    box-shadow:
         0 20px 25px -5px rgba(0, 0, 0, 0.1),
         0 8px 10px -6px rgba(0, 0, 0, 0.1);
     position: relative;
@@ -84,12 +84,33 @@
     }
 }
 
-.listContainer {
-    margin-top: 1rem;
-    overflow-y: auto;
-    padding-right: 0.5rem;
-    margin-right: -0.5rem;
+.scrollWrapper {
+    position: relative;
     flex: 1;
+    min-height: 0;
+}
+
+.scrollMask {
+    // ResponsiveModal의 content 영역에 적용되어 스크롤 페이드 효과 제공
+    mask-image: linear-gradient(to bottom,
+            transparent 0%,
+            black 2rem,
+            black calc(100% - 2rem),
+            transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom,
+            transparent 0%,
+            black 2rem,
+            black calc(100% - 2rem),
+            transparent 100%);
+}
+
+.listContainer {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+    // 상하 패딩을 추가하여 마스크 영역(흐린 부분)에 컨텐츠가 가려지지 않도록 함
+    // 좌우 패딩은 스크롤바와 포커스 링을 위해 유지
+    padding: 2rem 0.5rem 2rem 0.125rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -98,13 +119,16 @@
     &::-webkit-scrollbar {
         width: 6px;
     }
+
     &::-webkit-scrollbar-track {
         background: transparent;
     }
+
     &::-webkit-scrollbar-thumb {
         background-color: #e5e7eb;
         border-radius: 3px;
     }
+
     @media (hover: hover) and (pointer: fine) {
         &::-webkit-scrollbar-thumb:hover {
             background-color: #d1d5db;
@@ -123,21 +147,26 @@
     padding: 1.25rem !important;
     white-space: normal !important;
     text-align: left !important;
-    
+
     gap: 0.75rem;
     border-radius: 1rem;
     background-color: #ffffff;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    border: 2px solid transparent; // 투명 테두리로 시작
+    box-shadow: inset 0 0 0 1px #e5e7eb; // 내부 테두리 효과
     cursor: pointer;
     position: relative;
+    transition: box-shadow 0.2s ease, transform 0.15s ease;
 
     @media (hover: hover) and (pointer: fine) {
         &:hover {
-            border-color: #FBC02D !important; // Primary color highlight
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            box-shadow: inset 0 0 0 2px #FBC02D; // 노란색 내부 테두리
             transform: translateY(-2px);
         }
+    }
+
+    &:focus-visible {
+        box-shadow: inset 0 0 0 2px #FBC02D; // outline 대신 inset shadow
+        outline: none;
     }
 
     &:active {
@@ -183,11 +212,23 @@
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes scaleIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
 }

@@ -30,7 +30,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 import styles from './BuilderPage.module.scss';
 import { clsx } from 'clsx';
 import { Smartphone, X } from 'lucide-react';
-import { Sheet, SheetContent, SheetTitle, SheetHeader, SheetDescription } from '@/components/ui/Sheet';
+import { Sheet, SheetContent, SheetTitle, SheetHeader, SheetDescription, SheetClose } from '@/components/ui/Sheet';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -202,13 +202,14 @@ function BuilderPageContent() {
             <InvitationCanvas key="mobile-preview" isPreviewMode editingSection={editingSection} hideWatermark />
           </div>
 
-          <button
-            className={styles.mobilePreviewClose}
-            aria-label="Close Preview"
-            onClick={() => setIsPreviewOpen(false)}
-          >
-            <X size={24} />
-          </button>
+          <SheetClose asChild>
+            <button
+              className={styles.mobilePreviewClose}
+              aria-label="Close Preview"
+            >
+              <X size={24} />
+            </button>
+          </SheetClose>
         </SheetContent>
       </Sheet>
     </div>

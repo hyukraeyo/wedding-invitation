@@ -6,9 +6,9 @@ import styles from './ExampleSelectorModal.module.scss';
 export interface ExampleItem {
     id?: string | number;
     title: string;
-    content: string; // HTML content or plain text
+    content: string;
     badge?: string;
-    subtitle?: string; // Some might have subtitle
+    subtitle?: string;
     [key: string]: unknown;
 }
 
@@ -35,31 +35,34 @@ export const ExampleSelectorModal = <T extends ExampleItem>({
             onOpenChange={(open) => !open && onClose()}
             title={title}
             className={className}
+            contentClassName={styles.scrollMask}
         >
-            <div className={styles.listContainer}>
-                {items.map((item, idx) => (
-                    <Button
-                        key={item.id || idx}
-                        variant="line"
-                        className={styles.itemButton}
-                        onClick={() => onSelect(item)}
-                        autoFocus={idx === 0}
-                    >
-                        <div className={styles.itemHeader}>
-                            <span className={styles.badge}>
-                                {item.badge || `예시 ${idx + 1}`}
-                            </span>
-                            <span className={styles.itemTitle}>
-                                {item.title}
-                            </span>
-                        </div>
+            <div className={styles.scrollWrapper}>
+                <div className={styles.listContainer}>
+                    {items.map((item, idx) => (
+                        <Button
+                            key={item.id || idx}
+                            variant="line"
+                            className={styles.itemButton}
+                            onClick={() => onSelect(item)}
+                            autoFocus={idx === 0}
+                        >
+                            <div className={styles.itemHeader}>
+                                <span className={styles.badge}>
+                                    {item.badge || `예시 ${idx + 1}`}
+                                </span>
+                                <span className={styles.itemTitle}>
+                                    {item.title}
+                                </span>
+                            </div>
 
-                        <div
-                            className={styles.itemContent}
-                            dangerouslySetInnerHTML={{ __html: item.content }}
-                        />
-                    </Button>
-                ))}
+                            <div
+                                className={styles.itemContent}
+                                dangerouslySetInnerHTML={{ __html: item.content }}
+                            />
+                        </Button>
+                    ))}
+                </div>
             </div>
         </ResponsiveModal>
     );
