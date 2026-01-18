@@ -40,6 +40,8 @@ export function DatePicker({ value, onChange, className, placeholder = "날짜 �
         }
     };
 
+    const calendarWrapperRef = React.useRef<HTMLDivElement>(null);
+
     const TriggerButtonContent = (
         <button
             type="button"
@@ -71,7 +73,7 @@ export function DatePicker({ value, onChange, className, placeholder = "날짜 �
         );
     }
 
-    const calendarWrapperRef = React.useRef<HTMLDivElement>(null);
+
 
     return (
         <>
