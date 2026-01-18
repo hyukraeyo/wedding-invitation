@@ -2,12 +2,13 @@
 
 import React, { useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover';
-import { Calendar } from '@/components/ui/Calendar'; // 폴더 구조로 통일
+import { Calendar } from '@/components/ui/Calendar';
 import { cn } from '@/lib/utils';
 import { format, parse } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { CalendarIcon } from 'lucide-react';
-import { useWindowSize } from '@/hooks/useWindowSize';
+import { useMediaQuery } from '@/hooks/use-media-query';
+import { SelectSingleEventHandler } from 'react-day-picker';
 import {
     Drawer,
     DrawerContent,
@@ -26,14 +27,14 @@ interface DatePickerProps {
 }
 
 export function DatePicker({ value, onChange, className, placeholder = "날짜 선택" }: DatePickerProps) {
-    const windowWidth = useWindowSize();
-    const isMobile = windowWidth < 768;
+    const isDesktop = useMediaQuery("(min-width: 768px)");
+    const isMobile = !isDesktop;
     const [isOpen, setIsOpen] = useState(false);
 
     // Parse string date (YYYY-MM-DD) to Date object
     const dateValue = value ? parse(value, 'yyyy-MM-dd', new Date()) : undefined;
 
-    const handleSelect = (date: Date | undefined) => {
+    const handleSelect: SelectSingleEventHandler = (date) => {
         if (date) {
             onChange(format(date, 'yyyy-MM-dd'));
             setIsOpen(false);
@@ -65,15 +66,12 @@ export function DatePicker({ value, onChange, className, placeholder = "날짜 �
                     <Calendar
                         mode="single"
                         selected={dateValue}
-                        /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-                        onSelect={handleSelect as any}
+                        onSelect={handleSelect}
                     />
                 </PopoverContent>
             </Popover>
         );
     }
-
-
 
     return (
         <>
@@ -104,8 +102,7 @@ export function DatePicker({ value, onChange, className, placeholder = "날짜 �
                         <Calendar
                             mode="single"
                             selected={dateValue}
-                            /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-                            onSelect={handleSelect as any}
+                            onSelect={handleSelect}
                             className={styles.calendar || ""}
                         />
                     </DrawerScrollArea>

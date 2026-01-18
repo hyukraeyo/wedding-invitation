@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/Select"
 import { Label } from '@/components/ui/Label';
 import { cn } from '@/lib/utils';
-import { useWindowSize } from '@/hooks/useWindowSize';
+import { useMediaQuery } from '@/hooks/use-media-query';
 import {
     Drawer,
     DrawerContent,
@@ -49,8 +49,8 @@ export const ResponsiveSelect = <T extends string | number>({
     label,
     modalTitle
 }: ResponsiveSelectProps<T>) => {
-    const windowWidth = useWindowSize();
-    const isMobile = windowWidth < 768;
+    const isDesktop = useMediaQuery("(min-width: 768px)");
+    const isMobile = !isDesktop;
     const [isOpen, setIsOpen] = React.useState(false);
     const scrollAreaRef = React.useRef<HTMLDivElement>(null);
     const selectedItemRef = React.useRef<HTMLButtonElement>(null);
@@ -107,8 +107,8 @@ export const ResponsiveSelect = <T extends string | number>({
                         <SelectValue placeholder={placeholder} />
                     </SelectTrigger>
                     <SelectContent>
-                        {options.map((option, idx) => (
-                            <SelectItem key={`${String(option.value)}-${idx}`} value={String(option.value)}>
+                        {options.map((option) => (
+                            <SelectItem key={String(option.value)} value={String(option.value)}>
                                 {option.label}
                             </SelectItem>
                         ))}
@@ -152,7 +152,7 @@ export const ResponsiveSelect = <T extends string | number>({
                             const isSelected = stringValue === String(option.value);
                             return (
                                 <button
-                                    key={`${String(option.value)}-${idx}`}
+                                    key={String(option.value)}
                                     ref={isSelected ? selectedItemRef : idx === 0 ? firstItemRef : null}
                                     type="button"
                                     onClick={() => handleValueChange(String(option.value))}
