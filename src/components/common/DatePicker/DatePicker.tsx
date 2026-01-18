@@ -15,7 +15,6 @@ import {
     DrawerTitle,
     DrawerDescription,
     DrawerScrollArea,
-    DrawerTrigger,
 } from '@/components/ui/Drawer';
 import styles from './styles.module.scss';
 
@@ -45,6 +44,7 @@ export function DatePicker({ value, onChange, className, placeholder = "날짜 �
         <button
             type="button"
             className={cn(styles.triggerButton, className)}
+            onClick={() => setIsOpen(true)}
         >
             <span className={cn(!value && styles.placeholder, value && styles.value)}>
                 {dateValue ? format(dateValue, 'PPP', { locale: ko }) : placeholder}
@@ -71,13 +71,20 @@ export function DatePicker({ value, onChange, className, placeholder = "날짜 �
         );
     }
 
+    const calendarWrapperRef = React.useRef<HTMLDivElement>(null);
+
     return (
         <>
+            {TriggerButtonContent}
             <Drawer open={isOpen} onOpenChange={setIsOpen}>
-                <DrawerTrigger asChild>
-                    {TriggerButtonContent}
-                </DrawerTrigger>
-                <DrawerContent>
+                <DrawerContent
+                    onOpenAutoFocus={(e) => {
+                        // 모바일 Drawer가 열릴 때 포커스를 강제로 내부로 이동시켜
+                        // 백그라운드 요소(Trigger 등)가 포커스를 유지하여 발생하는 aria-hidden 경고 방지
+                        e.preventDefault();
+                        calendarWrapperRef.current?.focus();
+                    }}
+                >
                     <DrawerHeader className={styles.drawerHeader}>
                         <DrawerTitle className={styles.drawerTitle}>
                             날짜를 선택하세요
@@ -86,7 +93,12 @@ export function DatePicker({ value, onChange, className, placeholder = "날짜 �
                             날짜 선택
                         </DrawerDescription>
                     </DrawerHeader>
-                    <DrawerScrollArea className={styles.calendarWrapper}>
+                    {/* 포커스 타겟이 될 수 있도록 tabIndex 추가 */}
+                    <DrawerScrollArea
+                        ref={calendarWrapperRef}
+                        className={styles.calendarWrapper}
+                        tabIndex={-1}
+                    >
                         <Calendar
                             mode="single"
                             selected={dateValue}

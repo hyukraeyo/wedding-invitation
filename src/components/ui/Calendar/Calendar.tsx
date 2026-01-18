@@ -2,13 +2,13 @@
 
 import * as React from "react"
 import {
-  ChevronDownIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "lucide-react"
-import { DayButton, DayPicker } from "react-day-picker"
-import { cn } from "@/lib/utils"
+import { DayButton, DayPicker, useDayPicker, MonthCaptionProps, ClassNames } from "react-day-picker"
+import { format, isValid } from "date-fns"
 import { ko } from "date-fns/locale"
+import { cn } from "@/lib/utils"
 import styles from "./styles.module.scss"
 
 function Calendar({
@@ -17,48 +17,100 @@ function Calendar({
   showOutsideDays = true,
   ...props
 }: React.ComponentProps<typeof DayPicker>) {
+  const defaultClassNames: ClassNames = {
+    months: styles.months,
+    month: styles.month,
+    table: styles.table,
+    weekdays: styles.weekdays,
+    weekday: styles.weekday,
+    week: styles.week,
+    day: styles.day,
+    today: styles.today,
+    outside: styles.outside,
+    disabled: styles.disabled,
+    range_start: styles.range_start,
+    range_middle: styles.range_middle,
+    range_end: styles.range_end,
+    hidden: styles.hidden,
+    ...classNames,
+  } as ClassNames;
+
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
+      fixedWeeks
       className={cn(styles.root, className)}
       locale={ko}
-      classNames={{
-        months: styles.months || "",
-        month: styles.month || "",
-        month_caption: styles.month_caption || "",
-        caption_label: styles.caption_label || "",
-        nav: styles.nav || "",
-        button_previous: styles.button_previous || "",
-        button_next: styles.button_next || "",
-        table: styles.table || "",
-        weekdays: styles.weekdays || "",
-        weekday: styles.weekday || "",
-        week: styles.week || "",
-        day: styles.day || "",
-        today: styles.today || "",
-        outside: styles.outside || "",
-        disabled: styles.disabled || "",
-        range_start: styles.range_start || "",
-        range_middle: styles.range_middle || "",
-        range_end: styles.range_end || "",
-        hidden: styles.hidden || "",
-        ...classNames,
-      }}
+      classNames={defaultClassNames}
       components={{
-        Chevron: ({ orientation }) => {
-          if (orientation === "left") {
-            return <ChevronLeftIcon size={18} />
-          }
-          if (orientation === "right") {
-            return <ChevronRightIcon size={18} />
-          }
-          return <ChevronDownIcon size={18} />
-        },
+        MonthCaption: CustomMonthCaption,
+        Nav: () => <></>,
         DayButton: CalendarDayButton,
       }}
       {...props}
     />
   )
+}
+
+/**
+ * MonthCaption 컴포넌트를 커스텀하여 텍스트 양옆에 네비게이션 버튼을 배치합니다.
+ * react-day-picker v9에서는 MonthCaption이 헤더의 핵심 역할을 합니다.
+ */
+function CustomMonthCaption(props: MonthCaptionProps) {
+  const { calendarMonth } = props;
+  const { goToMonth, previousMonth, nextMonth } = useDayPicker();
+
+  const handlePrev = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (previousMonth) {
+      goToMonth(previousMonth);
+    }
+  };
+
+  const handleNext = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (nextMonth) {
+      goToMonth(nextMonth);
+    }
+  };
+
+  // 날짜 유효성 검사 및 포맷팅 (calendarMonth.date 사용)
+  const displayDate = calendarMonth.date;
+  const formattedDate = isValid(displayDate)
+    ? format(displayDate, "yyyy년 M월")
+    : "";
+
+  return (
+    <div className={styles.month_caption}>
+      <div className={styles.customHeader}>
+        <button
+          type="button"
+          className={styles.navButton}
+          onClick={handlePrev}
+          disabled={!previousMonth}
+          aria-label="이전 달"
+        >
+          <ChevronLeftIcon />
+        </button>
+
+        <span className={styles.caption_label}>
+          {formattedDate}
+        </span>
+
+        <button
+          type="button"
+          className={styles.navButton}
+          onClick={handleNext}
+          disabled={!nextMonth}
+          aria-label="다음 달"
+        >
+          <ChevronRightIcon />
+        </button>
+      </div>
+    </div>
+  );
 }
 
 function CalendarDayButton({
@@ -69,7 +121,9 @@ function CalendarDayButton({
 }: React.ComponentProps<typeof DayButton>) {
   const ref = React.useRef<HTMLButtonElement>(null)
   React.useEffect(() => {
-    if (modifiers.focused) ref.current?.focus()
+    if (ref.current && modifiers.focused) {
+      ref.current.focus();
+    }
   }, [modifiers.focused])
 
   const isSelected = !!modifiers.selected

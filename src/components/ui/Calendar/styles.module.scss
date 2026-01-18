@@ -22,6 +22,7 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  min-height: 295px; 
 }
 
 .month_caption {
@@ -31,39 +32,45 @@
   justify-content: center;
   height: 2.5rem;
   margin-bottom: 0.75rem;
+  width: 100%;
 }
 
-.caption_label {
-  font-size: 1.125rem;
-  font-weight: 800;
-  color: v.$zinc-900;
-  letter-spacing: -0.03em;
-  font-family: v.$font-gmarket-sans;
-}
-
-.nav {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 2.5rem;
-  padding: 0 0.25rem; // Bring buttons in slightly
-  z-index: 1;
-}
-
-.button_previous, .button_next {
+.customHeader {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2rem;
-  height: 2rem;
-  border-radius: v.$radius-md;
-  color: v.$zinc-400; // Softer default color
-  background-color: transparent;
-  border: none; // Ghost style
+  gap: 1.5rem; // 버튼과 텍스트 사이의 간격
+  width: 100%;
+}
+
+.caption_label {
+  font-size: 0.9375rem; 
+  font-weight: 700;
+  color: v.$zinc-900;
+  letter-spacing: -0.01em;
+  font-family: v.$font-pretendard;
+}
+
+// 명시적으로 nav, button_previous, button_next 클래스 추가
+.nav {
+  display: none !important;
+}
+
+.button_previous, .button_next {
+  display: none !important; // 기본 버튼 숨김
+}
+
+.navButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  color: v.$zinc-600;
+  background-color: v.$zinc-50;
+  border: none;
+  cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   
   &:hover:not(:disabled) {
@@ -71,9 +78,19 @@
     color: v.$zinc-900;
   }
   
+  &:active:not(:disabled) {
+    background-color: v.$zinc-200;
+    transform: scale(0.92);
+  }
+  
   &:disabled {
     opacity: 0.2;
     cursor: not-allowed;
+  }
+
+  & > svg {
+    width: 1.125rem;
+    height: 1.125rem;
   }
 }
 
@@ -100,12 +117,11 @@
   color: v.$zinc-400;
   height: 1.5rem;
 
-  // Weekends
   &:first-child {
-    color: #ff6b6b; // Sunday Red
+    color: #ff6b6b;
   }
   &:last-child {
-    color: #4dabf7; // Saturday Blue
+    color: #4dabf7;
   }
 }
 
@@ -125,7 +141,6 @@
   min-width: 2.5rem;
 }
 
-// Day Button Styles (Custom component)
 .dayButton {
   width: 2.25rem;
   height: 2.25rem;
@@ -202,7 +217,6 @@
   visibility: hidden;
 }
 
-// Range Styles (If needed)
 .range_start {
   & > button {
     border-top-right-radius: 0;
