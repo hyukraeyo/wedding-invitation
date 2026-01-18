@@ -133,6 +133,10 @@ $builder-font-xl: 17px;
   @include m.input-disabled;
 }
 
+@mixin builder-input-focus {
+  @include m.input-focus-style;
+}
+
 @mixin builder-button-base {
   @include m.button-base;
   @include m.button-hover;

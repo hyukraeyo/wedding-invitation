@@ -2,31 +2,16 @@
 @use "../../../styles/mixins" as m;
 
 .trigger {
+  @include m.input-base;
   @include m.flex-between;
-  width: 100%;
   height: var(--builder-height, 48px);
   padding: 0 1rem;
-  border: 1px solid v.$zinc-300;
-  border-radius: var(--builder-radius, 12px);
   background-color: white;
-  color: v.$zinc-900;
-  font-size: var(--builder-font-size, 15px);
-  font-family: var(--builder-font-family, v.$font-pretendard);
-  line-height: var(--builder-line-height, normal);
   transition: all 0.2s ease;
   cursor: pointer;
-  outline: none;
-
-  @include m.focus-ring;
 
   &:hover:not(:disabled) {
-    background-color: v.$zinc-50;
     border-color: v.$zinc-400;
-  }
-
-  &:disabled {
-    @include m.disabled;
-    background-color: v.$zinc-50;
   }
 
   &[data-placeholder] {
@@ -44,7 +29,7 @@
   position: relative;
   z-index: v.$z-modal;
   min-width: 8rem;
-  max-height: 24rem; // max-h-96 equivalent
+  max-height: 24rem;
   overflow: hidden;
   border-radius: v.$radius-md;
   border: 1px solid v.$zinc-200;
@@ -54,6 +39,40 @@
   
   &--popper {
     max-height: min(300px, var(--radix-select-content-available-height));
+  }
+
+  // Dynamic Fade effect based on scroll position
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 32px;
+    z-index: 10;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    opacity: 0; // Hidden by default
+  }
+
+  &::before {
+    top: 0;
+    background: linear-gradient(to bottom, white, rgba(255, 255, 255, 0));
+    border-radius: v.$radius-md v.$radius-md 0 0;
+  }
+
+  &::after {
+    bottom: 0;
+    background: linear-gradient(to top, white, rgba(255, 255, 255, 0));
+    border-radius: 0 0 v.$radius-md v.$radius-md;
+  }
+
+  &.showTopFade::before {
+    opacity: 1;
+  }
+
+  &.showBottomFade::after {
+    opacity: 1;
   }
 
   // Animation (Radix attributes)
@@ -68,7 +87,7 @@
 }
 
 .viewport {
-  padding: 0.25rem;
+  padding: 8px 4px; // Vertical padding for better initial view with fade
 
   // Popper modifier: only set width constraints, let height be determined by children or content max-height
   &--popper {
@@ -128,19 +147,4 @@
   margin: 0.25rem -0.25rem;
   height: 1px;
   background-color: v.$zinc-100;
-}
-
-.scrollButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 25px;
-  background-color: white;
-  color: v.$zinc-500;
-  cursor: default;
-
-  & > svg {
-    width: 1rem;
-    height: 1rem;
-  }
 }

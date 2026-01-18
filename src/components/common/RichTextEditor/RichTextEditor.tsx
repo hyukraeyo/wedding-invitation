@@ -1,22 +1,22 @@
 'use client';
 
-import { useEditor, EditorContent } from '@tiptap/react';
+import { useEditor, EditorContent, useEditorState } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { Color } from '@tiptap/extension-color';
 import { TextStyle } from '@tiptap/extension-text-style';
-import Highlight from '@tiptap/extension-highlight';
-import Underline from '@tiptap/extension-underline';
-import Placeholder from '@tiptap/extension-placeholder';
+import { Highlight } from '@tiptap/extension-highlight';
+import { Underline } from '@tiptap/extension-underline';
+import { Placeholder } from '@tiptap/extension-placeholder';
 import {
     Bold,
     Italic,
     Underline as UnderlineIcon,
     Highlighter,
-    Type
+    Type,
+    LucideIcon
 } from 'lucide-react';
-import { useEffect, useMemo, useId } from 'react';
+import { useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { Toggle } from '@/components/ui/Toggle';
 import styles from './styles.module.scss';
 
 interface RichTextEditorProps {
@@ -27,46 +27,28 @@ interface RichTextEditorProps {
     minHeight?: string;
 }
 
-const ToolbarToggle = ({
-    pressed,
-    onPressedChange,
-    children,
-    title,
-}: {
-    pressed: boolean;
-    onPressedChange: () => void;
-    children: React.ReactNode;
-    title?: string;
-}) => (
-    <Toggle
-        pressed={pressed}
-        onPressedChange={onPressedChange}
-        className={styles.toggleButton}
-        aria-label={title}
-        title={title}
-    >
-        {children}
-    </Toggle>
-);
+export default function RichTextEditor({
+    content,
+    onChange,
+    placeholder,
+    className = "",
+    minHeight = "min-h-[120px]"
+}: RichTextEditorProps) {
 
-export default function RichTextEditor({ content, onChange, placeholder, className = "", minHeight = "min-h-[120px]" }: RichTextEditorProps) {
-    const editorId = useId();
-
-    const extensions = useMemo(() => [
-        StarterKit.configure({
-            heading: false,
-        }),
-        TextStyle.configure({}),
-        Color.configure({}),
-        Underline.extend({ name: `underline-${editorId}` }),
-        Highlight.configure({ multicolor: true }),
-        Placeholder.configure({
-            placeholder: placeholder || '내용을 입력하세요...',
-        }),
-    ], [placeholder, editorId]);
+    const BRAND_COLOR = '#8B5E3C';
+    const HIGHLIGHT_COLOR = '#FFECD1';
 
     const editor = useEditor({
-        extensions,
+        extensions: [
+            StarterKit,
+            TextStyle,
+            Color,
+            Underline,
+            Highlight.configure({ multicolor: true }),
+            Placeholder.configure({
+                placeholder: placeholder || '내용을 입력하세요...',
+            }),
+        ],
         content: content,
         immediatelyRender: false,
         onUpdate: ({ editor }) => {
@@ -74,11 +56,29 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
         },
         editorProps: {
             attributes: {
-                class: cn(
-                    "rich-text-content",
-                    minHeight
-                ),
+                class: cn("rich-text-content focus:outline-none", minHeight),
             },
+        },
+    });
+
+    // ✨ 핵심: useEditorState를 사용하여 에디터 상태 변화를 리액트가 감지하게 함
+    const states = useEditorState({
+        editor,
+        selector: (ctx) => {
+            if (!ctx.editor) return {
+                bold: false,
+                italic: false,
+                underline: false,
+                brandColor: false,
+                highlight: false,
+            };
+            return {
+                bold: ctx.editor.isActive('bold'),
+                italic: ctx.editor.isActive('italic'),
+                underline: ctx.editor.isActive('underline'),
+                brandColor: ctx.editor.isActive('textStyle', { color: BRAND_COLOR }),
+                highlight: ctx.editor.isActive('highlight'),
+            };
         },
     });
 
@@ -88,55 +88,53 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
         }
     }, [content, editor]);
 
-
     if (!editor) return null;
 
     return (
         <div className={cn(styles.editorContainer, className)}>
             <div className={styles.toolbar}>
                 <div className={styles.toolbarGroup}>
-                    <ToolbarToggle
-                        onPressedChange={() => editor.chain().focus().toggleBold().run()}
-                        pressed={editor.isActive('bold')}
+                    <MenuBtn
                         title="굵게"
-                    >
-                        <Bold size={16} />
-                    </ToolbarToggle>
-
-                    <ToolbarToggle
-                        onPressedChange={() => editor.chain().focus().toggleItalic().run()}
-                        pressed={editor.isActive('italic')}
+                        icon={Bold}
+                        isActive={!!states?.bold}
+                        onClick={() => editor.chain().focus().toggleBold().run()}
+                    />
+                    <MenuBtn
                         title="기울임"
-                    >
-                        <Italic size={16} />
-                    </ToolbarToggle>
-
-                    <ToolbarToggle
-                        onPressedChange={() => editor.chain().focus().toggleUnderline().run()}
-                        pressed={editor.isActive('underline')}
+                        icon={Italic}
+                        isActive={!!states?.italic}
+                        onClick={() => editor.chain().focus().toggleItalic().run()}
+                    />
+                    <MenuBtn
                         title="밑줄"
-                    >
-                        <UnderlineIcon size={16} />
-                    </ToolbarToggle>
+                        icon={UnderlineIcon}
+                        isActive={!!states?.underline}
+                        onClick={() => editor.chain().focus().toggleUnderline().run()}
+                    />
                 </div>
 
                 <div className={styles.separator} />
 
                 <div className={styles.toolbarGroup}>
-                    <ToolbarToggle
-                        onPressedChange={() => editor.chain().focus().setColor('#8B5E3C').run()}
-                        pressed={editor.isActive('textStyle', { color: '#8B5E3C' })}
-                        title="갈색 상징색"
-                    >
-                        <Type size={16} />
-                    </ToolbarToggle>
-                    <ToolbarToggle
-                        onPressedChange={() => editor.chain().focus().toggleHighlight({ color: '#FFECD1' }).run()}
-                        pressed={editor.isActive('highlight', { color: '#FFECD1' })}
+                    <MenuBtn
+                        title="상징색"
+                        icon={Type}
+                        isActive={!!states?.brandColor}
+                        onClick={() => {
+                            if (states?.brandColor) {
+                                editor.chain().focus().unsetColor().run();
+                            } else {
+                                editor.chain().focus().setColor(BRAND_COLOR).run();
+                            }
+                        }}
+                    />
+                    <MenuBtn
                         title="하이라이트"
-                    >
-                        <Highlighter size={16} />
-                    </ToolbarToggle>
+                        icon={Highlighter}
+                        isActive={!!states?.highlight}
+                        onClick={() => editor.chain().focus().toggleHighlight({ color: HIGHLIGHT_COLOR }).run()}
+                    />
                 </div>
             </div>
 
@@ -147,3 +145,29 @@ export default function RichTextEditor({ content, onChange, placeholder, classNa
         </div>
     );
 }
+
+// 툴바 버튼용 헬퍼 컴포넌트
+const MenuBtn = ({
+    icon: Icon,
+    onClick,
+    isActive,
+    title
+}: {
+    icon: LucideIcon,
+    onClick: () => void,
+    isActive: boolean,
+    title: string
+}) => (
+    <button
+        type="button"
+        onClick={(e) => {
+            e.preventDefault();
+            onClick();
+        }}
+        className={cn(styles.toggleButton)}
+        data-state={isActive ? 'on' : 'off'}
+        title={title}
+    >
+        <Icon size={16} />
+    </button>
+);

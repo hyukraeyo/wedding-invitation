@@ -61,32 +61,66 @@ SelectScrollDownButton.displayName =
 const SelectContent = React.forwardRef<
     React.ElementRef<typeof SelectPrimitive.Content>,
     React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
->(({ className, children, position = "popper", ...props }, ref) => (
-    <SelectPrimitive.Portal>
-        <SelectPrimitive.Content
-            ref={ref}
-            className={cn(
-                styles.content,
-                position === "popper" && styles["content--popper"],
-                className
-            )}
-            position={position}
-            sideOffset={4}
-            {...props}
-        >
-            <SelectScrollUpButton />
-            <SelectPrimitive.Viewport
+>(({ className, children, position = "popper", ...props }, ref) => {
+    const [showTopFade, setShowTopFade] = React.useState(false);
+    const [showBottomFade, setShowBottomFade] = React.useState(false);
+    const viewportRef = React.useRef<HTMLDivElement>(null);
+
+    const handleScroll = React.useCallback(() => {
+        if (!viewportRef.current) return;
+        const { scrollTop, scrollHeight, clientHeight } = viewportRef.current;
+        setShowTopFade(scrollTop > 2);
+        setShowBottomFade(scrollTop + clientHeight < scrollHeight - 2);
+    }, []);
+
+    React.useEffect(() => {
+        const viewport = viewportRef.current;
+        if (!viewport) return;
+
+        // Check initial state (with a small delay to ensure rendering is complete)
+        const timer = setTimeout(handleScroll, 0);
+
+        viewport.addEventListener("scroll", handleScroll);
+
+        // ResizeObserver to handle content changes
+        const resizeObserver = new ResizeObserver(handleScroll);
+        resizeObserver.observe(viewport);
+
+        return () => {
+            clearTimeout(timer);
+            viewport.removeEventListener("scroll", handleScroll);
+            resizeObserver.disconnect();
+        };
+    }, [handleScroll]);
+
+    return (
+        <SelectPrimitive.Portal>
+            <SelectPrimitive.Content
+                ref={ref}
                 className={cn(
-                    styles.viewport,
-                    position === "popper" && styles["viewport--popper"]
+                    styles.content,
+                    showTopFade && styles.showTopFade,
+                    showBottomFade && styles.showBottomFade,
+                    position === "popper" && styles["content--popper"],
+                    className
                 )}
+                position={position}
+                sideOffset={4}
+                {...props}
             >
-                {children}
-            </SelectPrimitive.Viewport>
-            <SelectScrollDownButton />
-        </SelectPrimitive.Content>
-    </SelectPrimitive.Portal>
-))
+                <SelectPrimitive.Viewport
+                    ref={viewportRef}
+                    className={cn(
+                        styles.viewport,
+                        position === "popper" && styles["viewport--popper"]
+                    )}
+                >
+                    {children}
+                </SelectPrimitive.Viewport>
+            </SelectPrimitive.Content>
+        </SelectPrimitive.Portal>
+    );
+})
 SelectContent.displayName = SelectPrimitive.Content.displayName
 
 const SelectLabel = React.forwardRef<
@@ -110,13 +144,12 @@ const SelectItem = React.forwardRef<
         className={cn(styles.item, className)}
         {...props}
     >
-        <span className={styles.itemIndicatorWrapper}>
+        <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+        <span className={styles.itemIndicator}>
             <SelectPrimitive.ItemIndicator>
                 <Check size={16} />
             </SelectPrimitive.ItemIndicator>
         </span>
-
-        <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
     </SelectPrimitive.Item>
 ))
 SelectItem.displayName = SelectPrimitive.Item.displayName
