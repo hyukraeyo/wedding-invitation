@@ -1,5 +1,4 @@
 import React from 'react';
-import dynamic from 'next/dynamic';
 import { Calendar } from 'lucide-react';
 import { InfoMessage } from '@/components/ui/InfoMessage';
 import { useInvitationStore } from '@/store/useInvitationStore';
@@ -9,15 +8,9 @@ import { TextField } from '@/components/common/TextField';
 import { SwitchField } from '@/components/common/SwitchField';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import { TimePicker } from '@/components/common/TimePicker';
+import { DatePicker } from '@/components/common/DatePicker';
 import styles from './DateTimeSection.module.scss';
 import type { SectionProps } from '@/types/builder';
-
-const DatePicker = dynamic(() => import('@/components/common/DatePicker').then((mod) => mod.DatePicker), {
-    ssr: false,
-    loading: () => (
-        <div className="h-12 w-full rounded-md bg-muted/30 animate-pulse" />
-    ),
-});
 
 const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOpen, value }) {
     const {
@@ -55,12 +48,10 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
             <SectionContainer>
                 {/* Date & Time Picking */}
                 <Field label="예식일">
-                    {isOpen ? (
-                        <DatePicker
-                            value={date}
-                            onChange={(value) => setDate(value)}
-                        />
-                    ) : null}
+                    <DatePicker
+                        value={date}
+                        onChange={(value) => setDate(value)}
+                    />
                 </Field>
                 <Field label="예식 시간">
                     <TimePicker
