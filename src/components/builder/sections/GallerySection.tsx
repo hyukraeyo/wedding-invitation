@@ -2,7 +2,7 @@ import React from 'react';
 import { Image as ImageIcon } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { AccordionItem } from '../AccordionItem';
+import { AccordionItem } from '@/components/common/AccordionItem';
 import GallerySectionContent from './GallerySectionContent';
 
 interface SectionProps {

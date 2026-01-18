@@ -1,0 +1,138 @@
+@use "../../../styles/variables" as v;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; // gap-2
+}
+
+.label {
+  margin-bottom: 0.5rem; // mb-2
+  display: block;
+}
+
+.uploadBox {
+  position: relative;
+  width: 100%;
+  border: 2px dashed v.$zinc-300; // border-muted-foreground/25 -> 대략 zinc-300
+  border-radius: v.$radius-lg;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color v.$transition-fast;
+  overflow: hidden;
+  background-color: v.$color-background;
+  
+  &.empty {
+    min-height: 200px;
+    cursor: pointer;
+    &:hover {
+      background-color: rgba(v.$zinc-100, 0.5); // hover:bg-muted/50
+    }
+  }
+
+  &.filled {
+    border-color: transparent;
+  }
+}
+
+.previewWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  
+  &.absoluteFull {
+    position: absolute;
+    inset: 0;
+  }
+  &.minHeight {
+    min-height: 200px;
+  }
+}
+
+.image {
+  object-fit: cover;
+  transition: opacity 300ms;
+  width: 100%;
+  height: auto;
+  
+  &.uploading {
+    opacity: 0.5;
+  }
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.spinner {
+  width: 2rem;
+  height: 2rem;
+  color: v.$color-primary;
+  animation: spin 1s linear infinite;
+}
+
+.removeButton {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 20;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem; // p-6
+  text-align: center;
+  color: v.$color-muted-foreground;
+}
+
+.iconCircle {
+  margin-bottom: 1rem; // mb-4
+  border-radius: 9999px;
+  background-color: v.$zinc-100; // bg-muted
+  padding: 0.75rem; // p-3
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.uploadIcon {
+  color: v.$color-muted-foreground;
+}
+
+.emptyTitle {
+  font-size: v.$font-size-sm;
+  font-weight: 500;
+  margin-bottom: 0.25rem; // mb-1
+}
+
+.emptyDesc {
+  font-size: v.$font-size-xs;
+  color: rgba(v.$color-muted-foreground, 0.75);
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.ratioControl {
+  margin-top: 0.5rem; // mt-2
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { MapPin } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { AccordionItem } from '../AccordionItem';
+import { AccordionItem } from '@/components/common/AccordionItem';
 import LocationSectionContent from './LocationSectionContent';
 
 interface SectionProps {

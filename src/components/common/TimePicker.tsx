@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Select } from './Select';
+import { ResponsiveSelect as Select } from './ResponsiveSelect';
 import { cn } from '@/lib/utils';
 import styles from './TimePicker.module.scss';
 
@@ -31,7 +31,6 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
     } else if (hInt === 0) {
         displayHourInt = 12;
     }
-    // const displayHour = String(displayHourInt).padStart(2, '0'); // keep logic, but Select uses string values usually
     const displayHour = String(displayHourInt);
 
     // Helpers to reconstruct 24h string and call onChange

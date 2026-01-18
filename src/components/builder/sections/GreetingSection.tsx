@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 import { MessageSquare, Sparkles } from 'lucide-react';
 import RichTextEditor from '@/components/common/RichTextEditor';
 import dynamic from 'next/dynamic';
-const ExampleSelectorModal = dynamic(() => import('@/components/builder/ExampleSelectorModal').then(mod => mod.ExampleSelectorModal), {
+const ExampleSelectorModal = dynamic(() => import('@/components/common/ExampleSelectorModal').then(mod => mod.ExampleSelectorModal), {
     ssr: false
 });
-import type { ExampleItem } from '@/components/builder/ExampleSelectorModal';
-import { InfoMessage } from '@/components/builder/InfoMessage';
+import type { ExampleItem } from '@/components/common/ExampleSelectorModal';
+import { InfoMessage } from '@/components/ui/InfoMessage';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { AccordionItem } from '../AccordionItem';
-import { TextField } from '../TextField';
-import { Field, SectionContainer } from '../FormPrimitives';
-import { SegmentedControl } from '../SegmentedControl';
-import { HeaderAction } from '../HeaderAction';
-import { ImageUploader } from '../ImageUploader';
+import { AccordionItem } from '@/components/common/AccordionItem';
+import { TextField } from '@/components/common/TextField';
+import { Field, SectionContainer } from '@/components/common/FormPrimitives';
+import { SegmentedControl } from '@/components/common/SegmentedControl';
+import { HeaderAction } from '@/components/common/HeaderAction';
+import { ImageUploader } from '@/components/common/ImageUploader';
 import styles from './GreetingSection.module.scss';
 import { useShallow } from 'zustand/shallow';
 

@@ -39,9 +39,6 @@ export const ColorPicker = ({ value, colors, onChange, className }: ColorPickerP
                     )}
                     style={{
                         backgroundColor: color,
-                        // If value matches, we use ringColor for the ring (using tailwind arbitrary values would be nicer but style override is easy here)
-                        // Actually tailwind ring-color utilities work better if ringColor is standard.
-                        // Here we use box-shadow style for custom ring color to match logic
                         boxShadow: value === color ? `0 0 0 2px white, 0 0 0 4px ${ringColor}` : undefined
                     }}
                     title={color}

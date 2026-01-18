@@ -7,11 +7,11 @@ import 'swiper/css';
 import 'swiper/css/free-mode';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { TextField } from '../TextField';
-import { SwitchField } from '../SwitchField';
-import { SegmentedControl } from '../SegmentedControl';
-import { Field, SectionContainer } from '../FormPrimitives';
-import { ImageUploader } from '../ImageUploader';
+import { TextField } from '@/components/common/TextField';
+import { SwitchField } from '@/components/common/SwitchField';
+import { SegmentedControl } from '@/components/common/SegmentedControl';
+import { Field, SectionContainer } from '@/components/common/FormPrimitives';
+import { ImageUploader } from '@/components/common/ImageUploader';
 import styles from './MainScreenSection.module.scss';
 import { cn } from '@/lib/utils';
 

@@ -3,11 +3,11 @@ import dynamic from 'next/dynamic';
 
 import { Home, Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { AccordionItem } from '../AccordionItem';
-import { HeaderAction } from '../HeaderAction';
-import type { ExampleItem } from '../ExampleSelectorModal';
+import { AccordionItem } from '@/components/common/AccordionItem';
+import { HeaderAction } from '@/components/common/HeaderAction';
+import type { ExampleItem } from '@/components/common/ExampleSelectorModal';
 
-const ExampleSelectorModal = dynamic(() => import('../ExampleSelectorModal').then(mod => mod.ExampleSelectorModal), {
+const ExampleSelectorModal = dynamic(() => import('@/components/common/ExampleSelectorModal').then(mod => mod.ExampleSelectorModal), {
     ssr: false
 });
 

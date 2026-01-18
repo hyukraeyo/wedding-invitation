@@ -3,11 +3,11 @@ import React from 'react';
 import { User2 } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { AccordionItem } from '../AccordionItem';
-import { TextField } from '../TextField';
+import { AccordionItem } from '@/components/common/AccordionItem';
+import { TextField } from '@/components/common/TextField';
 
 import { Button } from '@/components/ui/Button';
-import { Field, SectionContainer } from '../FormPrimitives';
+import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import styles from './BasicInfoSection.module.scss';
 import { cn } from '@/lib/utils';
 

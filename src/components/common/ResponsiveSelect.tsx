@@ -1,3 +1,5 @@
+"use client";
+
 import React from 'react';
 import {
     Select as ShadcnSelect,
@@ -19,25 +21,25 @@ import {
     DrawerTrigger,
 } from '@/components/ui/Drawer';
 import { ChevronDown, Check } from 'lucide-react';
-import styles from './Select.module.scss';
+import styles from './ResponsiveSelect.module.scss';
 
 interface Option<T> {
     label: string;
     value: T;
 }
 
-interface SelectProps<T> {
+interface ResponsiveSelectProps<T> {
     value: T;
     options: readonly Option<T>[];
     onChange: (value: T) => void;
     placeholder?: string | undefined;
     className?: string | undefined;
     labelClassName?: string | undefined;
-    label?: string | undefined; // Add label support if needed or inferred
-    modalTitle?: string; // Title for the mobile bottom sheet
+    label?: string | undefined;
+    modalTitle?: string;
 }
 
-export const Select = <T extends string | number>({
+export const ResponsiveSelect = <T extends string | number>({
     value,
     options,
     onChange,
@@ -46,7 +48,7 @@ export const Select = <T extends string | number>({
     labelClassName = "",
     label,
     modalTitle
-}: SelectProps<T>) => {
+}: ResponsiveSelectProps<T>) => {
     const windowWidth = useWindowSize();
     const isMobile = windowWidth < 768;
     const [isOpen, setIsOpen] = React.useState(false);
@@ -55,7 +57,6 @@ export const Select = <T extends string | number>({
     const firstItemRef = React.useRef<HTMLButtonElement>(null);
 
     const stringValue = String(value);
-    // Optimistic UI state
     const [optimisticValue, setOptimisticValue] = React.useState(stringValue);
 
     React.useEffect(() => {
@@ -67,34 +68,21 @@ export const Select = <T extends string | number>({
     const handleValueChange = (val: string) => {
         const opt = options.find(o => String(o.value) === val);
         if (opt) {
-            // Update UI immediately (Optimistic update)
             setOptimisticValue(String(opt.value));
-
-            // Trigger actual change
             onChange(opt.value);
-
-            // Close drawer with a slight delay to allow visual feedback, 
-            // or close immediately depending on desired UX. 
-            // Currently keeping immediate close but the state update above ensures
-            // the button text updates before the drawer fully closes visually.
             setIsOpen(false);
         }
     };
 
-    // Auto-scroll to selected item when drawer opens
-    // Using 'instant' behavior so the item appears centered from the start
     React.useEffect(() => {
         if (!isOpen || !isMobile) {
             return;
         }
 
-        // Small timeout to ensure DOM is ready, but instant scroll for better UX
         const timer = setTimeout(() => {
             if (selectedItemRef.current && scrollAreaRef.current) {
                 const container = scrollAreaRef.current;
                 const item = selectedItemRef.current;
-
-                // Calculate scroll position to center the item
                 const containerHeight = container.clientHeight;
                 const itemOffsetTop = item.offsetTop;
                 const itemHeight = item.clientHeight;
@@ -102,10 +90,10 @@ export const Select = <T extends string | number>({
 
                 container.scrollTo({
                     top: Math.max(0, scrollPosition),
-                    behavior: 'instant' // Instant scroll - item appears centered from the start
+                    behavior: 'instant'
                 });
             }
-        }, 50); // Minimal delay - just enough for DOM to be ready
+        }, 50);
 
         return () => clearTimeout(timer);
     }, [isOpen, isMobile]);

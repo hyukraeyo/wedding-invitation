@@ -1,0 +1,193 @@
+@use "../../../styles/variables" as *;
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.modal {
+    background-color: white;
+    width: 100%;
+    max-width: 480px;
+    border-radius: 1.5rem;
+    padding: 2.5rem;
+    box-shadow: 
+        0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    transform-origin: center center;
+    animation: scaleIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+
+    @media (max-width: 480px) {
+        padding: 1.5rem;
+        border-radius: 1.25rem;
+        max-height: 90vh;
+    }
+}
+
+.closeButton {
+    position: absolute;
+    right: 1.5rem;
+    top: 1.5rem;
+    color: #9ca3af;
+    transition: color 0.2s;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    z-index: 10;
+
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            color: #1f2937;
+            background-color: #f3f4f6;
+        }
+    }
+
+    @media (max-width: 480px) {
+        right: 1rem;
+        top: 1rem;
+    }
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    flex-shrink: 0;
+
+    .title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 0.5rem;
+        letter-spacing: -0.025em;
+    }
+
+    .subtitle {
+        font-size: 0.9375rem;
+        color: #6b7280;
+        line-height: 1.5;
+        font-weight: 400;
+    }
+}
+
+.listContainer {
+    margin-top: 1rem;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+    margin-right: -0.5rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    /* Custom Scrollbar */
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: #e5e7eb;
+        border-radius: 3px;
+    }
+    @media (hover: hover) and (pointer: fine) {
+        &::-webkit-scrollbar-thumb:hover {
+            background-color: #d1d5db;
+        }
+    }
+}
+
+.itemButton {
+    /* Override Button component defaults */
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    height: auto !important;
+    width: 100% !important;
+    padding: 1.25rem !important;
+    white-space: normal !important;
+    text-align: left !important;
+    
+    gap: 0.75rem;
+    border-radius: 1rem;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    position: relative;
+
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            border-color: #FBC02D !important; // Primary color highlight
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+}
+
+.itemHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.625rem;
+    border-radius: 0.5rem;
+    background-color: #f3f4f6;
+    color: #4b5563;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.itemTitle {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.itemContent {
+    font-size: 0.875rem;
+    color: #4b5563;
+    line-height: 1.6;
+    white-space: pre-line;
+    word-break: keep-all;
+
+    p {
+        margin: 0;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}

@@ -1,13 +1,13 @@
 import React, { useMemo, useCallback, useState, useRef } from 'react';
 import Image from 'next/image';
 import { Plus, Trash2 } from 'lucide-react';
-import { InfoMessage } from '@/components/builder/InfoMessage';
+import { InfoMessage } from '@/components/ui/InfoMessage';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useToast } from '@/hooks/use-toast';
-import { Field, SectionContainer } from '../FormPrimitives';
-import { SegmentedControl } from '../SegmentedControl';
-import { TextField } from '../TextField';
-import { SwitchField } from '../SwitchField';
+import { Field, SectionContainer } from '@/components/common/FormPrimitives';
+import { SegmentedControl } from '@/components/common/SegmentedControl';
+import { TextField } from '@/components/common/TextField';
+import { SwitchField } from '@/components/common/SwitchField';
 import { cn } from '@/lib/utils';
 import { isBlobUrl } from '@/lib/image';
 import {

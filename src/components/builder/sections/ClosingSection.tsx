@@ -5,16 +5,16 @@ const RichTextEditor = dynamic(() => import('@/components/common/RichTextEditor'
 import { Heart, Sparkles } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { AccordionItem } from '../AccordionItem';
-import { TextField } from '../TextField';
-import { Field, SectionContainer } from '../FormPrimitives';
-import { ImageUploader } from '../ImageUploader';
-import { HeaderAction } from '../HeaderAction';
+import { AccordionItem } from '@/components/common/AccordionItem';
+import { TextField } from '@/components/common/TextField';
+import { Field, SectionContainer } from '@/components/common/FormPrimitives';
+import { ImageUploader } from '@/components/common/ImageUploader';
+import { HeaderAction } from '@/components/common/HeaderAction';
 import styles from './ClosingSection.module.scss';
 
-import type { ExampleItem } from '@/components/builder/ExampleSelectorModal';
+import type { ExampleItem } from '@/components/common/ExampleSelectorModal';
 
-const ExampleSelectorModal = dynamic(() => import('@/components/builder/ExampleSelectorModal').then(mod => mod.ExampleSelectorModal), {
+const ExampleSelectorModal = dynamic(() => import('@/components/common/ExampleSelectorModal').then(mod => mod.ExampleSelectorModal), {
     ssr: false
 });
 

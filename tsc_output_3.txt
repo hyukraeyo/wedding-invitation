@@ -1,1 +1,0 @@
-src/components/builder/sections/GreetingSection.tsx(215,34): error TS2304: Cannot find name 'ExampleItem'.

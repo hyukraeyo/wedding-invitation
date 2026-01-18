@@ -19,7 +19,7 @@ const InvitationCanvas = dynamic(
 
 
 // Static import for EditorForm to prevent CSS chunk splitting that causes preload warnings
-import EditorForm from '@/components/builder/EditorForm';
+import EditorForm from '@/components/common/EditorForm';
 
 import { useInvitationStore, InvitationData } from '@/store/useInvitationStore';
 import { useAuth } from '@/hooks/useAuth';

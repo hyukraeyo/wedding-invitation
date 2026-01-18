@@ -1,14 +1,14 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
 import { Calendar } from 'lucide-react';
-import { InfoMessage } from '@/components/builder/InfoMessage';
+import { InfoMessage } from '@/components/ui/InfoMessage';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useShallow } from 'zustand/shallow';
-import { AccordionItem } from '../AccordionItem';
-import { TextField } from '../TextField';
-import { SwitchField } from '../SwitchField';
-import { Field, SectionContainer } from '../FormPrimitives';
-import { TimePicker } from '../TimePicker';
+import { AccordionItem } from '@/components/common/AccordionItem';
+import { TextField } from '@/components/common/TextField';
+import { SwitchField } from '@/components/common/SwitchField';
+import { Field, SectionContainer } from '@/components/common/FormPrimitives';
+import { TimePicker } from '@/components/common/TimePicker';
 import styles from './DateTimeSection.module.scss';
 
 interface SectionProps {
@@ -16,7 +16,7 @@ interface SectionProps {
     isOpen: boolean;
 }
 
-const DatePicker = dynamic(() => import('../DatePicker').then((mod) => mod.DatePicker), {
+const DatePicker = dynamic(() => import('@/components/common/DatePicker').then((mod) => mod.DatePicker), {
     ssr: false,
     loading: () => (
         <div className="h-12 w-full rounded-md bg-muted/30 animate-pulse" />
