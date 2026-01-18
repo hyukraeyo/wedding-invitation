@@ -6,7 +6,7 @@ import {
   ChevronRightIcon,
 } from "lucide-react"
 import { DayButton, DayPicker, useDayPicker, MonthCaptionProps, ClassNames } from "react-day-picker"
-import { format, isValid } from "date-fns"
+import { format, isValid, isSameMonth } from "date-fns"
 import { ko } from "date-fns/locale"
 import { cn } from "@/lib/utils"
 import styles from "./styles.module.scss"
@@ -120,6 +120,8 @@ function CalendarDayButton({
   ...props
 }: React.ComponentProps<typeof DayButton>) {
   const ref = React.useRef<HTMLButtonElement>(null)
+  const { goToMonth, months } = useDayPicker();
+
   React.useEffect(() => {
     if (ref.current && modifiers.focused) {
       ref.current.focus();
@@ -130,11 +132,29 @@ function CalendarDayButton({
   const isSunday = day.date.getDay() === 0
   const isSaturday = day.date.getDay() === 6
 
+  // 외부 날짜(이전/다음 달) 클릭 시 선택 대신 달 이동 처리
+  const handleDayClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const currentMonth = months?.[0]?.date;
+
+    // 현재 표시된 달과 클릭된 날짜의 달이 다르면 (Outside Day)
+    // 원래의 선택 동작(props.onClick)을 막고 달만 이동시킴
+    if (currentMonth && !isSameMonth(day.date, currentMonth)) {
+      e.preventDefault();
+      e.stopPropagation(); // 상위로 이벤트 전파 방지 (DatePicker 닫힘 방지)
+      goToMonth(day.date);
+      return;
+    }
+
+    // 현재 달의 날짜면 원래 동작 수행
+    props.onClick?.(e);
+  };
+
   return (
     <button
       {...props}
       ref={ref}
       type="button"
+      onClick={handleDayClick}
       data-selected={isSelected}
       className={cn(
         styles.dayButton,

@@ -31,7 +31,8 @@
   align-items: center;
   justify-content: center;
   height: 2.5rem;
-  margin-bottom: 0.75rem;
+  margin-top: 0.5rem; // 데이트피커 헤더와의 간격 확보
+  margin-bottom: 1rem; // 날짜 그리드와의 간격 약간 증가
   width: 100%;
 }
 
