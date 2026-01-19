@@ -78,12 +78,12 @@ export const ExampleSelectorModal = <T extends ExampleItem>({
             <div className={styles.scrollWrapper}>
                 <div className={styles.listContainer}>
                     {items.map((item, idx) => (
-                        <Button
+                        <button
                             key={item.id || idx}
-                            variant="line"
                             className={styles.itemButton}
                             onClick={() => onSelect(item)}
                             autoFocus={idx === 0}
+                            type="button"
                         >
                             <div className={styles.itemHeader}>
                                 <span className={styles.badge}>
@@ -98,7 +98,7 @@ export const ExampleSelectorModal = <T extends ExampleItem>({
                                 className={styles.itemContent}
                                 dangerouslySetInnerHTML={{ __html: item.content }}
                             />
-                        </Button>
+                        </button>
                     ))}
                 </div>
             </div>

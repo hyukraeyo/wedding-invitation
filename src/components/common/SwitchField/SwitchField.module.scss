@@ -9,7 +9,7 @@
   transition: background-color v.$transition-fast;
   cursor: pointer;
   user-select: none;
-  
+
   &:active {
     background-color: rgba(v.$zinc-200, 0.5); // active:bg-accent/50
   }
@@ -33,9 +33,16 @@
   line-height: 1;
   cursor: pointer;
   transition: color v.$transition-fast;
-  
-  &:hover {
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      color: v.$color-primary;
+    }
+  }
+
+  &:active {
     color: v.$color-primary;
+    opacity: 0.8;
   }
 }
 

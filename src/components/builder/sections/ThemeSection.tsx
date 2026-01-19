@@ -13,14 +13,10 @@ import type { ThemeFont } from '@/lib/utils/font';
 import type { SectionProps } from '@/types/builder';
 
 const PRESET_COLORS = [
-    '#3182F6', // Toss Blue
-    '#F04452', // Toss Red
-    '#19C9AD', // Toss Teal
-    '#FF681B', // Toss Orange
-    '#9154F3', // Toss Purple
-    '#222222', // Deep Dark
-    '#6B7280', // Grey
-    '#BEAD9E', // Beige
+    '#545454', // Dark Gray
+    '#FFB7B2', // Soft Pink
+    '#C19A6D', // Soft Brown
+    '#D7A7BE', // Soft Mauve
 ];
 
 const ThemeSection = React.memo<SectionProps>(function ThemeSection({ isOpen, value }) {
@@ -56,9 +52,7 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection({ isOpen, va
                                     ) : null}
                                 </button>
                             ))}
-                            <button className={styles.customColorBtn}>
-                                <Plus size={16} />
-                            </button>
+
                         </div>
                     </div>
                 </Field>
@@ -83,6 +77,19 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection({ isOpen, va
                     />
                 </Field>
 
+                {/* Font Size */}
+                <Field label="글자 크기">
+                    <SegmentedControl
+                        value={theme.fontScale || 1}
+                        options={[
+                            { label: '기본', value: 1 },
+                            { label: '크게', value: 1.1 },
+                            { label: '더 크게', value: 1.2 },
+                        ]}
+                        onChange={(val) => setTheme({ fontScale: val as number })}
+                    />
+                </Field>
+
                 {/* Background Pattern */}
                 <Field label="배경 무늬">
                     <SegmentedControl
@@ -100,11 +107,12 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection({ isOpen, va
                 <Field label="배경 색상">
                     <div className={styles.optionWrapper}>
                         <div className={styles.colorPicker}>
-                            {['#FFFFFF', '#F9F8E6', '#F4F1EA'].map((color) => (
+                            {['#FFFFFF', '#FFECEF', '#F4F1EA', '#F2EBFA'].map((color) => (
                                 <button
                                     key={color}
                                     className={cn(
                                         styles.colorItem,
+                                        styles.lightColorItem,
                                         "transition-transform duration-200 active:scale-90",
                                         theme.backgroundColor === color && styles.active
                                     )}

@@ -11,6 +11,16 @@
 
 .colorItem {
   @include b.section-color-item;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
+  /* Visible border for white/light colors */
+
+  &.lightColorItem {
+    .checkIcon {
+      color: rgba(0, 0, 0, 0.4);
+      /* Dark check for light backgrounds */
+      filter: none;
+    }
+  }
 }
 
 .checkIcon {

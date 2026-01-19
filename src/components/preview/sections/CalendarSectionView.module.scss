@@ -12,7 +12,7 @@
         margin-bottom: 2.5rem;
 
         .monthYear {
-            font-size: 1.15rem;
+            font-size: calc(1.15rem * var(--font-scale));
             font-weight: 500;
             color: #212529;
             letter-spacing: 0.1em;
@@ -27,7 +27,7 @@
         text-align: center;
 
         .weekday {
-            font-size: 0.7rem;
+            font-size: calc(0.7rem * var(--font-scale));
             font-weight: 500;
             color: #adb5bd;
             padding-bottom: 1rem;
@@ -37,7 +37,7 @@
         .day {
             aspect-ratio: 1;
             @include m.flex-center;
-            font-size: 0.95rem;
+            font-size: calc(0.95rem * var(--font-scale));
             color: #495057;
             border-radius: 9999px;
             position: relative;
@@ -70,8 +70,15 @@
 }
 
 @keyframes scale-in {
-    from { transform: scale(0.5); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
+    from {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 .countdownArea {
@@ -82,7 +89,7 @@
         display: flex;
         align-items: center;
         gap: 0.75rem;
-        
+
         .column {
             @include m.flex-col;
             align-items: center;
@@ -90,14 +97,14 @@
             min-width: 2.2rem;
 
             .label {
-                font-size: 0.6rem;
+                font-size: calc(0.6rem * var(--font-scale));
                 color: #adb5bd;
                 letter-spacing: 0.05em;
                 font-weight: 500;
             }
 
             .value {
-                font-size: 1.35rem;
+                font-size: calc(1.35rem * var(--font-scale));
                 font-weight: 500;
                 color: #343a40;
                 font-family: var(--font-pretendard);
@@ -120,7 +127,7 @@
     padding-inline: 1.5rem;
 
     .sentence {
-        font-size: 0.95rem;
+        font-size: calc(0.95rem * var(--font-scale));
         line-height: 1.8;
         color: #495057;
         word-break: keep-all;

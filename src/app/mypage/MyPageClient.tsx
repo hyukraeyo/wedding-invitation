@@ -479,7 +479,11 @@ export default function MyPageClient({
                                 <div className={styles.itemHeader}>
                                     <div className={styles.flexColStart}>
                                         <span className={styles.statusLabel}>
-                                            {inv.invitation_data?.isApproved ? '승인 완료' : '샘플 이용중'}
+                                            {inv.invitation_data?.isApproved
+                                                ? '승인 완료'
+                                                : inv.invitation_data?.isRequestingApproval
+                                                    ? '승인 대기중'
+                                                    : '샘플 이용중'}
                                         </span>
                                         <h3 className={styles.itemTitle}>
                                             {inv.invitation_data?.mainScreen?.title || '제목없음'}
@@ -497,9 +501,11 @@ export default function MyPageClient({
                                                 </button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end" style={{ width: '200px', padding: '0.5rem', borderRadius: '0.75rem' }}>
-                                                <DropdownMenuItem onClick={() => handleEdit(inv)}>
-                                                    <Edit2 className="mr-2 h-4 w-4" /> 편집하기
-                                                </DropdownMenuItem>
+                                                {!inv.invitation_data?.isRequestingApproval && !inv.invitation_data?.isApproved && (
+                                                    <DropdownMenuItem onClick={() => handleEdit(inv)}>
+                                                        <Edit2 className="mr-2 h-4 w-4" /> 편집하기
+                                                    </DropdownMenuItem>
+                                                )}
                                                 <DropdownMenuItem onClick={() => window.open(`/v/${inv.slug}`, '_blank')}>
                                                     <Eye className="mr-2 h-4 w-4" /> 미리보기
                                                 </DropdownMenuItem>

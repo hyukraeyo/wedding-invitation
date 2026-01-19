@@ -36,6 +36,10 @@
     pointer-events: none;
   }
 
+  &:active {
+    transform: scale(0.97);
+  }
+
   // --- Variants ---
 
   &--variant-default,

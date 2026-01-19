@@ -1,4 +1,4 @@
-@use "../../../styles/variables" as *;
+@use "../../../styles/variables" as v;
 
 .overlay {
     position: fixed;
@@ -18,7 +18,7 @@
     width: 100%;
     max-width: 480px;
     border-radius: 1.5rem;
-    padding: 2.5rem;
+    padding: 2rem;
     box-shadow:
         0 20px 25px -5px rgba(0, 0, 0, 0.1),
         0 8px 10px -6px rgba(0, 0, 0, 0.1);
@@ -31,7 +31,7 @@
     flex-direction: column;
 
     @media (max-width: 480px) {
-        padding: 1.5rem;
+        padding: 1.25rem;
         border-radius: 1.25rem;
         max-height: 90vh;
     }
@@ -141,40 +141,36 @@
 }
 
 .itemButton {
-    /* Override Button component defaults */
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    justify-content: flex-start !important;
-    height: auto !important;
-    width: 100% !important;
-    padding: 1.25rem !important;
-    white-space: normal !important;
-    text-align: left !important;
-
-    gap: 0.75rem;
-    border-radius: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 1.25rem;
     background-color: #ffffff;
-    border: 2px solid transparent; // 투명 테두리로 시작
-    box-shadow: inset 0 0 0 1px #e5e7eb; // 내부 테두리 효과
+    border: 1px solid v.$zinc-200;
+    border-radius: 1rem;
     cursor: pointer;
-    position: relative;
-    transition: box-shadow 0.2s ease, transform 0.15s ease;
+    transition: all 0.2s v.$popup-easing;
+    text-align: left;
 
     @media (hover: hover) and (pointer: fine) {
         &:hover {
-            box-shadow: inset 0 0 0 2px #FBC02D; // 노란색 내부 테두리
-            transform: translateY(-2px);
+            background-color: v.$zinc-50;
+            border-color: v.$zinc-300;
         }
     }
 
     &:focus-visible {
-        box-shadow: inset 0 0 0 2px #FBC02D; // outline 대신 inset shadow
+        border-color: v.$color-primary;
+        box-shadow: 0 0 0 1px v.$color-primary;
         outline: none;
     }
 
     &:active {
         transform: scale(0.98);
+        background-color: v.$zinc-100;
+        border-color: v.$zinc-300;
     }
 }
 
@@ -183,16 +179,17 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    margin-bottom: 0.25rem;
 }
 
 .badge {
     display: inline-flex;
     align-items: center;
-    padding: 0.25rem 0.625rem;
+    padding: 0.2rem 0.6rem;
     border-radius: 0.5rem;
-    background-color: #f3f4f6;
-    color: #4b5563;
-    font-size: 0.75rem;
+    background-color: v.$zinc-100;
+    color: v.$zinc-600;
+    font-size: 0.7rem;
     font-weight: 600;
     line-height: 1;
 }

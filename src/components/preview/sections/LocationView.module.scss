@@ -6,7 +6,7 @@
     margin-bottom: 1.5rem;
 
     .placeName {
-        font-size: 1.15rem;
+        font-size: calc(1.15rem * var(--font-scale));
         font-weight: 600;
         color: #212529;
         margin-bottom: 0.625rem;
@@ -15,7 +15,7 @@
     }
 
     .address {
-        font-size: 0.95rem;
+        font-size: calc(0.95rem * var(--font-scale));
         color: #868e96;
         line-height: 1.7;
         font-family: var(--font-pretendard);
@@ -23,7 +23,7 @@
         .detailAddress {
             margin-top: 0.25rem;
             color: #adb5bd;
-            font-size: 0.85rem;
+            font-size: calc(0.85rem * var(--font-scale));
         }
     }
 
@@ -33,7 +33,7 @@
         align-items: center;
         justify-content: center;
         gap: 0.375rem;
-        font-size: 0.85rem;
+        font-size: calc(0.85rem * var(--font-scale));
         color: #868e96;
         font-family: var(--font-pretendard);
         text-decoration: none;
@@ -109,7 +109,7 @@
         }
 
         .navLabel {
-            font-size: 0.725rem;
+            font-size: calc(0.725rem * var(--font-scale));
             color: #495057;
             font-weight: 500;
             letter-spacing: -0.01em;
@@ -151,7 +151,7 @@
         gap: 0.625rem;
 
         .trafficType {
-            font-size: 0.75rem;
+            font-size: calc(0.75rem * var(--font-scale));
             font-weight: 600;
             color: #212529;
             display: flex;
@@ -167,7 +167,7 @@
         }
 
         .trafficContent {
-            font-size: 0.9rem;
+            font-size: calc(0.9rem * var(--font-scale));
             color: #495057;
             line-height: 1.8;
             white-space: pre-wrap;
@@ -176,6 +176,7 @@
         }
     }
 }
+
 @keyframes spin {
     from {
         transform: rotate(0deg);

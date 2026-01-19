@@ -243,11 +243,7 @@
             mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
         }
 
-        &.cleanFrame {
-            box-shadow: none !important;
-            border: none !important;
-            background-color: transparent !important;
-        }
+
     }
 
     &.imageFill {

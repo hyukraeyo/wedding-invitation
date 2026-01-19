@@ -139,6 +139,12 @@ export default function MainScreenSectionContent() {
                         setSwiperProgress(swiper.isBeginning ? 'start' : swiper.isEnd ? 'end' : 'middle');
                     }}
                     className={cn(styles.stylePresetSwiper, styles[swiperProgress])}
+                    onReachBeginning={() => setSwiperProgress('start')}
+                    onReachEnd={() => setSwiperProgress('end')}
+                    onFromEdge={() => setSwiperProgress('middle')}
+                    onTransitionEnd={(swiper) => {
+                        setSwiperProgress(swiper.isBeginning ? 'start' : swiper.isEnd ? 'end' : 'middle');
+                    }}
                 >
                     {STYLE_PRESETS.map((preset, index) => (
                         <SwiperSlide key={preset.id} className={styles.stylePresetSlide}>

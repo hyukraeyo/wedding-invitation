@@ -232,7 +232,7 @@ const MainScreenView = memo(({
                     (!isFillLayout && mainScreen.layout !== 'arch' && mainScreen.layout !== 'oval' && !(mainScreen.layout === 'classic' && (mainScreen.imageShape === 'arch' || mainScreen.imageShape === 'oval'))) && styles.bgGray,
                     !isFillLayout && styles[imageRatio],
                     mainScreen.effect === 'mist' && styles.mistEffect,
-                    mainScreen.effect === 'ripple' && styles.cleanFrame
+
                 )}
                     style={{
                         borderColor: 'transparent',
@@ -259,7 +259,7 @@ const MainScreenView = memo(({
                                     sizes={IMAGE_SIZES.section}
                                     className={styles.mainImage}
                                     style={{
-                                        transform: mainScreen.expandPhoto ? 'scale(1.1)' : 'scale(1)',
+                                        transform: 'scale(1)',
                                         transformOrigin: 'center center',
                                         objectFit: 'cover',
                                     }}
@@ -275,7 +275,7 @@ const MainScreenView = memo(({
                                 sizes={IMAGE_SIZES.full}
                                 className={styles.mainImage}
                                 style={{
-                                    transform: mainScreen.expandPhoto ? 'scale(1.1)' : 'scale(1)',
+                                    transform: 'scale(1)',
                                     transformOrigin: 'center center',
                                     objectFit: 'cover',
                                 }}
@@ -291,7 +291,7 @@ const MainScreenView = memo(({
                                 sizes={IMAGE_SIZES.section}
                                 className={styles.mainImage}
                                 style={{
-                                    transform: (mainScreen.expandPhoto && !isFillLayout) ? 'scale(1.1)' : 'scale(1)',
+                                    transform: 'scale(1)',
                                     transformOrigin: 'center center',
                                     width: '100%',
                                     height: 'auto',

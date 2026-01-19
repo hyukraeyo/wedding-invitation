@@ -3,7 +3,7 @@
 
 .description {
     text-align: center;
-    font-size: 0.85rem;
+    font-size: calc(0.85rem * var(--font-scale));
     color: #868e96;
     margin-bottom: 2.5rem;
     line-height: 1.7;
@@ -37,7 +37,7 @@
         margin-bottom: 0.5rem;
 
         .relationLabel {
-            font-size: 0.75rem;
+            font-size: calc(0.75rem * var(--font-scale));
             font-weight: 500;
             color: #868e96;
             letter-spacing: -0.01em;
@@ -46,7 +46,7 @@
         }
 
         .copyButton {
-            font-size: 0.7rem;
+            font-size: calc(0.7rem * var(--font-scale));
             font-weight: 500;
             padding: 0.25rem 0.6rem;
             border-radius: 99rem;
@@ -75,12 +75,12 @@
             display: flex;
             align-items: center;
             gap: 0.35rem;
-            font-size: 0.8rem;
+            font-size: calc(0.8rem * var(--font-scale));
             color: #868e96;
         }
 
         .accountDetails {
-            font-size: 1rem;
+            font-size: calc(1rem * var(--font-scale));
             font-weight: 500;
             color: #343a40;
             font-family: var(--font-pretendard);

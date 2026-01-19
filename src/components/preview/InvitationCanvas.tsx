@@ -16,6 +16,7 @@ import styles from './InvitationCanvas.module.scss';
 import { clsx } from 'clsx';
 import { getFontStyle } from '@/lib/utils/font';
 import { Skeleton } from '@/components/ui/Skeleton';
+import { FontSizeControl } from './elements/FontSizeControl';
 
 const LocationView = dynamic(() => import('./sections/LocationView'), { ssr: false });
 const galleryLoading = <Skeleton className="h-40 w-full" />;
@@ -443,6 +444,9 @@ const InvitationCanvasContent = memo(({
 
       {/* Portal Root for Modals (to keep them inside the mockup) */}
       <div id="invitation-modal-root" className={styles.modalRoot} />
+
+      {/* Font Size UX/UI specifically for Preview */}
+      <FontSizeControl />
     </div>
   );
 });

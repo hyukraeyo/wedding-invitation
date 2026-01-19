@@ -36,8 +36,10 @@
   align-items: center;
   transition: opacity v.$transition-normal;
 
-  &:hover {
-    opacity: 0.8;
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      opacity: 0.8;
+    }
   }
 }
 
@@ -92,4 +94,3 @@
 .suspenseFallback {
   height: 8rem; // h-32
 }
-

@@ -1,0 +1,93 @@
+@use "../../../../styles/variables" as v;
+@use "../../../../styles/mixins" as m;
+
+.container {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    z-index: 10001;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    pointer-events: auto;
+}
+
+.trigger {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 9999px;
+    background-color: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f1f3f5;
+    @include m.flex-center;
+    color: #495057;
+    transition: all v.$transition-normal;
+    cursor: pointer;
+
+    &:active {
+        transform: scale(0.95);
+        background-color: #f8f9fa;
+    }
+
+    &.active {
+        background-color: v.$color-primary;
+        color: v.$color-primary-foreground;
+        border-color: v.$color-primary;
+    }
+}
+
+.panel {
+    background-color: white;
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f1f3f5;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    animation: slide-up v.$transition-slow cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.option {
+    width: auto;
+    min-width: 3rem;
+    height: 2.5rem;
+    padding-inline: 0.75rem;
+    border-radius: 0.75rem;
+    border: none;
+    background: transparent;
+    color: #495057;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    @include m.flex-center;
+    transition: all v.$transition-fast;
+
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            background-color: #f8f9fa;
+        }
+    }
+
+    &.active {
+        background-color: #f1f3f5;
+        color: v.$color-primary;
+    }
+
+    &:active {
+        background-color: #f1f3f5;
+        transform: scale(0.95);
+    }
+}

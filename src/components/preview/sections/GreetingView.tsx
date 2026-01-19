@@ -96,7 +96,6 @@ const GreetingView = memo(({
             <div className={styles.content}>
                 <div
                     className={clsx(styles.greetingText, "rich-text-content")}
-                    style={{ fontSize: 'calc(15px * var(--font-scale))' }}
                     dangerouslySetInnerHTML={{ __html: greetingContent }}
                 />
 

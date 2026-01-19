@@ -5,8 +5,8 @@
     margin-bottom: 1.5rem; // Reduced margin as requested ("하단에 여백이 너무 큰데")
 
     .subtitle {
-        font-size: 0.75rem; // Slightly increased from 0.625rem for visibility
-        letter-spacing: 0.2em; 
+        font-size: calc(0.75rem * var(--font-scale)); // Slightly increased from 0.625rem for visibility
+        letter-spacing: 0.2em;
         font-weight: 600; // Increased weight
         opacity: 0.9; // Significantly increased from 0.4 for visibility
         text-transform: uppercase;
@@ -15,7 +15,7 @@
     }
 
     .title {
-        font-size: 1.25rem;
+        font-size: calc(1.25rem * var(--font-scale));
         font-family: $font-serif;
         color: #1f2937;
         margin-top: 0;
