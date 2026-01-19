@@ -67,7 +67,7 @@ const MainScreenView = memo(({
         title: 'THE MARRIAGE',
         showGroomBride: true,
         andText: '그리고',
-        suffixText: '결혼합니다.',
+        suffixText: '',
         showSubtitle: true,
         subtitle: '소중한 날에 초대합니다',
         showDatePlace: true,
@@ -193,15 +193,7 @@ const MainScreenView = memo(({
                             <span className={styles.nameText}>
                                 {mainScreen.brideName || (bride.lastName || bride.firstName ? `${bride.lastName}${bride.firstName}` : '신부')}
                             </span>
-                            <span
-                                className={clsx(styles.suffix)}
-                                style={{
-                                    fontSize: mainScreen.layout === 'classic' ? 'calc(17px * var(--font-scale))' : 'calc(16px * var(--font-scale))',
-                                    marginLeft: '0.3rem'
-                                }}
-                            >
-                                {mainScreen.suffixText || (mainScreen.layout === 'classic' ? '결혼합니다.' : '')}
-                            </span>
+
                         </div>
                     ) : null}
 

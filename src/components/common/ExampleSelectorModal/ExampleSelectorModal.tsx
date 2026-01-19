@@ -52,11 +52,13 @@ export const ExampleSelectorModal = <T extends ExampleItem>({
     };
 
     useEffect(() => {
-        if (isOpen) {
-            // Small timeout to ensure layout is done
-            const timer = setTimeout(checkScroll, 0);
-            return () => clearTimeout(timer);
+        if (!isOpen) {
+            return;
         }
+
+        // Small timeout to ensure layout is done
+        const timer = setTimeout(checkScroll, 0);
+        return () => clearTimeout(timer);
     }, [isOpen, items]);
 
     return (

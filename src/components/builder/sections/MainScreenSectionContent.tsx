@@ -88,6 +88,7 @@ export default function MainScreenSectionContent() {
     };
 
     const swiperRef = useRef<SwiperType | null>(null);
+    const [swiperProgress, setSwiperProgress] = React.useState<'start' | 'middle' | 'end'>('start');
     const updateMain = (data: Partial<typeof mainScreen>) => setMainScreen(data);
     const selectedPresetIndex = STYLE_PRESETS.findIndex(p => p.layout === mainScreen.layout);
 
@@ -143,8 +144,14 @@ export default function MainScreenSectionContent() {
                     grabCursor={true}
                     initialSlide={selectedPresetIndex >= 0 ? selectedPresetIndex : 0}
                     centeredSlides={false}
-                    onSwiper={(swiper) => { swiperRef.current = swiper; }}
-                    className={styles.stylePresetSwiper}
+                    onSwiper={(swiper) => {
+                        swiperRef.current = swiper;
+                        setSwiperProgress(swiper.isBeginning ? 'start' : swiper.isEnd ? 'end' : 'middle');
+                    }}
+                    onSlideChange={(swiper) => {
+                        setSwiperProgress(swiper.isBeginning ? 'start' : swiper.isEnd ? 'end' : 'middle');
+                    }}
+                    className={cn(styles.stylePresetSwiper, styles[swiperProgress])}
                 >
                     {STYLE_PRESETS.map((preset, index) => (
                         <SwiperSlide key={preset.id} className={styles.stylePresetSlide}>
@@ -281,16 +288,7 @@ export default function MainScreenSectionContent() {
                                 />
                             </div>
                         </div>
-                        <div className={styles.sentenceItem}>
-                            <div className={styles.sentenceSuffixInput}>
-                                <TextField
-                                    type="text"
-                                    placeholder="결혼합니다."
-                                    value={mainScreen.suffixText}
-                                    onChange={(e) => updateMain({ suffixText: e.target.value })}
-                                />
-                            </div>
-                        </div>
+
                     </div>
                 </>
             ) : null}
@@ -371,24 +369,11 @@ export default function MainScreenSectionContent() {
                 </>
             ) : null}
 
-            {!mainScreen.customDatePlace ? (
-                <div className={styles.autoTextContainer}>
-                    <p className={styles.helpText} style={{ flex: 1, padding: '0.5rem 0.75rem' }}>
-                        <span style={{ fontWeight: 600 }}>자동 노출 중:</span> {getFormattedAutoText().replace(/<br\/>/g, ' ')}
-                    </p>
-                    <button
-                        type="button"
-                        onClick={() => updateMain({ customDatePlace: `<p style="text-align: center">${getFormattedAutoText()}</p>` })}
-                        className={styles.applyTextBtn}
-                    >
-                        문구 적용
-                    </button>
-                </div>
-            ) : null}
+
             <RichTextEditor
                 content={mainScreen.customDatePlace}
                 onChange={(val: string) => updateMain({ customDatePlace: val })}
-                placeholder="직접 입력 시 자동 노출 문구 대신 표시됩니다"
+                placeholder={getFormattedAutoText().replace(/<br\/>/g, ' ') || "직접 입력 시 자동 노출 문구 대신 표시됩니다"}
             />
 
             <div className={styles.switchGroup}>

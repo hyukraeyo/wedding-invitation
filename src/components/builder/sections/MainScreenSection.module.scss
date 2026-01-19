@@ -52,6 +52,22 @@
   padding: 4px;
   padding-bottom: 0.5rem;
 
+  // Dynamic Masking logic
+  &.start {
+    mask-image: linear-gradient(to right, black 0%, black calc(100% - 24px), transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black 0%, black calc(100% - 24px), transparent 100%);
+  }
+
+  &.middle {
+    mask-image: linear-gradient(to right, transparent 0%, black 24px, black calc(100% - 24px), transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 24px, black calc(100% - 24px), transparent 100%);
+  }
+
+  &.end {
+    mask-image: linear-gradient(to right, transparent 0%, black 24px, black 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 24px, black 100%);
+  }
+
   :global(.swiper-wrapper) {
     align-items: stretch;
   }

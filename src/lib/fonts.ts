@@ -8,7 +8,7 @@
  * - preload 최적화
  */
 
-import { Inter, Playfair_Display, Nanum_Myeongjo, Do_Hyeon, Song_Myung, Great_Vibes } from 'next/font/google';
+import { Inter, Playfair_Display, Nanum_Myeongjo, Do_Hyeon, Song_Myung, Great_Vibes, Gowun_Dodum, Gowun_Batang, Yeon_Sung } from 'next/font/google';
 import localFont from 'next/font/local';
 
 // ============================================================================
@@ -59,6 +59,33 @@ export const inter = Inter({
 // ============================================================================
 // 청첩장 테마용 폰트
 // ============================================================================
+
+/**
+ * Gowun Dodum - 고운돋움 & Gowun Batang - 고운바탕
+ */
+export const gowunDodum = Gowun_Dodum({
+    weight: '400',
+    subsets: ['latin'],
+    variable: '--font-gowun-dodum',
+    display: 'swap',
+});
+
+export const gowunBatang = Gowun_Batang({
+    weight: ['400', '700'],
+    subsets: ['latin'],
+    variable: '--font-gowun-batang',
+    display: 'swap',
+});
+
+/**
+ * Yeon Sung - 연성체
+ */
+export const yeonSung = Yeon_Sung({
+    weight: '400',
+    subsets: ['latin'],
+    variable: '--font-yeon-sung',
+    display: 'swap',
+});
 
 /**
  * Playfair Display - 우아한 세리프 폰트 (영문)
@@ -126,6 +153,9 @@ export const fontVariables = [
     doHyeon.variable,
     songMyung.variable,
     greatVibes.variable,
+    gowunDodum.variable,
+    gowunBatang.variable,
+    yeonSung.variable,
 ].join(' ');
 
 /**
@@ -145,4 +175,7 @@ export const fontFamilyMap = {
     doHyeon: 'var(--font-do-hyeon)',
     songMyung: 'var(--font-song-myung)',
     greatVibes: 'var(--font-great-vibes)',
+    gowunDodum: 'var(--font-gowun-dodum)',
+    gowunBatang: 'var(--font-gowun-batang)',
+    yeonSung: 'var(--font-yeon-sung)',
 } as const;

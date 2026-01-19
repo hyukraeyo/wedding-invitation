@@ -59,7 +59,7 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
 
     // Arrays for dropdown options
     // Arrays for dropdown options
-    // 오전 7시 ~ 12시 (12시는 사용자가 오전으로 인식하길 원함)
+    // 오전 7시 ~ 12시
     const amHours = ['7', '8', '9', '10', '11', '12'];
     // 오후 1시 ~ 10시
     const pmHours = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
@@ -67,7 +67,7 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
     const periodHourOptions = [
         ...amHours.map((hour) => ({
             label: `오전 ${hour}시`,
-            value: hour === '12' ? 'PM:12' : `AM:${hour}` // 12시는 라벨만 '오전'이고 실제 값은 12:00(PM)
+            value: `AM:${hour}`
         })),
         ...pmHours.map((hour) => ({ label: `오후 ${hour}시`, value: `PM:${hour}` })),
     ];

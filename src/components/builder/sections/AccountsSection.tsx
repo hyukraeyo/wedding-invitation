@@ -161,10 +161,22 @@ export default function AccountsSection({ value, isOpen }: SectionProps) {
                                             {acc.holder || '새 계좌'} ({acc.relation})
                                         </span>
                                     </div>
-                                    <ChevronDown
-                                        size={18}
-                                        className={cn(styles.chevron, expandedId === acc.id && styles.expanded)}
-                                    />
+                                    <div className={styles.headerActions}>
+                                        <IconButton
+                                            icon={Trash2}
+                                            size="sm"
+                                            variant="ghost"
+                                            className="text-zinc-400 hover:text-red-600 hover:bg-red-50"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleRemoveAccount(acc.id);
+                                            }}
+                                        />
+                                        <ChevronDown
+                                            size={18}
+                                            className={cn(styles.chevron, expandedId === acc.id && styles.expanded)}
+                                        />
+                                    </div>
                                 </div>
 
                                 {expandedId === acc.id ? (
@@ -245,14 +257,7 @@ export default function AccountsSection({ value, isOpen }: SectionProps) {
                                             onChange={(e) => handleUpdateAccount(acc.id, { accountNumber: e.target.value })}
                                         />
 
-                                        <div className={styles.deleteWrapper}>
-                                            <IconButton
-                                                icon={Trash2}
-                                                size="sm"
-                                                variant="destructive"
-                                                onClick={() => handleRemoveAccount(acc.id)}
-                                            />
-                                        </div>
+
                                     </div>
                                 ) : null}
                             </div>
