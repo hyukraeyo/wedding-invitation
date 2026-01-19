@@ -54,7 +54,7 @@ export default function LoginPage() {
     // profileLoading이 아닐 때만 표시 (로딩 중일 때는 깜빡임 방지)
     if (user?.id && !isProfileComplete && !profileLoading) {
         return (
-            <div className={styles.overlay} style={{ alignItems: 'center', paddingTop: 0 }}>
+            <div className={styles.profileCompletionOverlay}>
                 <ProfileCompletionModal
                     isOpen={true}
                     userId={user.id}
@@ -134,15 +134,10 @@ export default function LoginPage() {
                     </div>
 
                     {/* Back to Home */}
-                    <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+                    <div className={styles.backToHomeWrapper}>
                         <Link
                             href="/"
-                            style={{
-                                fontSize: '0.875rem',
-                                color: '#6b7280',
-                                textDecoration: 'underline',
-                                textUnderlineOffset: '2px'
-                            }}
+                            className={styles.backToHomeLink}
                         >
                             ← 홈으로 돌아가기
                         </Link>

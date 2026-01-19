@@ -101,8 +101,9 @@
   padding: 0;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.7) !important;
-    transform: scale(1.05);
+    background-color: v.$red-500 !important;
+    transform: scale(1.1);
+    color: white !important;
   }
 
   &:active {

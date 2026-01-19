@@ -132,6 +132,11 @@ const MainScreenView = memo(({
 
     const displayText = formatDatePlaceArea(mainScreen.customDatePlace, date, time, location, detailAddress);
 
+    // SEO: Dynamic Alt Text
+    const groomName = groom.firstName ? `${groom.lastName}${groom.firstName}` : '신랑';
+    const brideName = bride.firstName ? `${bride.lastName}${bride.firstName}` : '신부';
+    const imageAlt = `${groomName} & ${brideName}의 결혼식`;
+
     return (
         <div className={clsx(styles.wrapper, isFillLayout ? styles.fill : styles.standard) || ''}>
             <div className={clsx(styles.content, isFillLayout ? styles.centerFill : styles.pt10) || ''}>
@@ -139,12 +144,12 @@ const MainScreenView = memo(({
                 {/* 1. Header Area */}
                 <div className={clsx(styles.headerArea, isBasicLayout ? styles.headerVisible : styles.headerHidden) || ''}>
                     {mainScreen.layout === 'classic' ? (
-                        <div
+                        <h1
                             className={clsx(styles.mainTitle) || ''}
                             style={{ fontSize: 'calc(10px * var(--font-scale))', color: accentColor }}
                         >
                             {mainScreen.title || 'THE MARRIAGE'}
-                        </div>
+                        </h1>
                     ) : null}
 
                     {mainScreen.layout === 'minimal' ? (
@@ -171,21 +176,21 @@ const MainScreenView = memo(({
 
                     {mainScreen.layout === 'english' ? (
                         mainScreen.title ? (
-                            <div
+                            <h1
                                 className={clsx(styles.mainTitle) || ''}
                                 style={{ fontSize: 'calc(12px * var(--font-scale))', color: accentColor, letterSpacing: '0.15em' }}
                             >
                                 {mainScreen.title}
-                            </div>
+                            </h1>
                         ) : null
                     ) : null}
 
                     {mainScreen.layout === 'korean' ? (
                         <>
                             {mainScreen.title ? (
-                                <div className={clsx(styles.koreanTitle) || ''} style={{ fontSize: 'calc(18px * var(--font-scale))' }}>
+                                <h1 className={clsx(styles.koreanTitle) || ''} style={{ fontSize: 'calc(18px * var(--font-scale))' }}>
                                     {mainScreen.title}
-                                </div>
+                                </h1>
                             ) : null}
                             {mainScreen.subtitle ? (
                                 <div className={clsx(styles.koreanSubtitle) || ''} style={{ fontSize: 'calc(24px * var(--font-scale))' }}>
@@ -230,14 +235,14 @@ const MainScreenView = memo(({
                     ) : null}
 
                     {mainScreen.layout === 'heart' ? (
-                        <div
+                        <h1
                             className={clsx(styles.heartNamesRow) || ''}
                             style={{ fontSize: 'calc(22px * var(--font-scale))' }}
                         >
                             <span>{mainScreen.groomName || (groom.lastName || groom.firstName ? `${groom.lastName}${groom.firstName}` : '신랑')}</span>
                             <span className={clsx(styles.heartIcon) || ''} style={{ color: '#e74c3c' }}>♥</span>
                             <span>{mainScreen.brideName || (bride.lastName || bride.firstName ? `${bride.lastName}${bride.firstName}` : '신부')}</span>
-                        </div>
+                        </h1>
                     ) : null}
 
                     {(mainScreen.layout === 'english' && mainScreen.subtitle) ? (
@@ -280,7 +285,7 @@ const MainScreenView = memo(({
                             <AspectRatio ratio={4 / 5} className={clsx(styles.fullSize) || ''}>
                                 <Image
                                     src={imageUrl}
-                                    alt="Wedding Main Picture"
+                                    alt={imageAlt}
                                     fill
                                     sizes={IMAGE_SIZES.section}
                                     className={clsx(styles.mainImage) || ''}
@@ -292,7 +297,7 @@ const MainScreenView = memo(({
                         ) : isFillLayout ? (
                             <Image
                                 src={imageUrl}
-                                alt="Wedding Main Picture"
+                                alt={imageAlt}
                                 fill
                                 sizes={IMAGE_SIZES.full}
                                 className={clsx(styles.mainImage) || ''}
@@ -303,7 +308,7 @@ const MainScreenView = memo(({
                         ) : (
                             <Image
                                 src={imageUrl}
-                                alt="Wedding Main Picture"
+                                alt={imageAlt}
                                 width={800}
                                 height={600}
                                 sizes={IMAGE_SIZES.section}

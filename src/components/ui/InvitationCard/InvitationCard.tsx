@@ -9,8 +9,11 @@ import {
     Bookmark,
     FileText,
     AlertCircle,
-    Banana
+    Banana,
+    Share2,
+    MessageCircle
 } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import { clsx } from 'clsx';
 import {
     DropdownMenu,
@@ -55,6 +58,65 @@ const InvitationCard = ({
     const slug = invitation.slug;
 
     const [showRejectionModal, setShowRejectionModal] = useState(false);
+    const [showShareModal, setShowShareModal] = useState(false);
+    const { toast } = useToast();
+
+    const handleLinkShare = () => {
+        const url = `${window.location.origin}/v/${slug}`;
+        navigator.clipboard.writeText(url);
+        toast({
+            description: '청첩장 주소가 복사되었습니다.',
+        });
+        setShowShareModal(false);
+    };
+
+    const handleKakaoShare = () => {
+        if (!window.Kakao) {
+            toast({ description: '카카오 SDK 로딩 중입니다. 잠시 후 다시 시도해 주세요.', variant: 'destructive' });
+            return;
+        }
+
+        const kakaoAppKey = process.env.NEXT_PUBLIC_KAKAO_APP_KEY;
+        if (!window.Kakao.isInitialized() && kakaoAppKey) {
+            window.Kakao.init(kakaoAppKey);
+        }
+
+        const shareTitle = data?.mainScreen?.title || '결혼식에 초대합니다';
+        const shareDesc = `${data?.date || ''} ${data?.location || ''}`.trim();
+        const shareImageUrl = data?.imageUrl || `${window.location.origin}/logo.png`; // Fallback image
+
+        try {
+            if (!window.Kakao.Share?.sendDefault) {
+                toast({ description: '카카오 공유 기능을 사용할 수 없습니다.', variant: 'destructive' });
+                return;
+            }
+            window.Kakao.Share.sendDefault({
+                objectType: 'feed',
+                content: {
+                    title: shareTitle,
+                    description: shareDesc,
+                    imageUrl: shareImageUrl.startsWith('/') ? `${window.location.origin}${shareImageUrl}` : shareImageUrl,
+                    link: {
+                        mobileWebUrl: `${window.location.origin}/v/${slug}`,
+                        webUrl: `${window.location.origin}/v/${slug}`,
+                    },
+                },
+                buttons: [
+                    {
+                        title: '청첩장 보기',
+                        link: {
+                            mobileWebUrl: `${window.location.origin}/v/${slug}`,
+                            webUrl: `${window.location.origin}/v/${slug}`,
+                        },
+                    },
+                ]
+            });
+            setShowShareModal(false);
+        } catch (error) {
+            console.error('Kakao Share Error:', error);
+            toast({ description: '공유 중 오류가 발생했습니다.', variant: 'destructive' });
+        }
+    };
 
     const handlePreview = () => {
         window.open(`/v/${slug}`, '_blank');
@@ -103,7 +165,6 @@ const InvitationCard = ({
                             {isRejected ? '거절됨' : isApproved ? '승인 완료' : isRequesting ? '승인 대기중' : '샘플 이용중'}
                         </span>
                         <h3 className={styles.overlayTitle}>
-                            <Bookmark size={20} fill="currentColor" />
                             {title}
                         </h3>
                     </div>
@@ -146,7 +207,7 @@ const InvitationCard = ({
                             <>
                                 <Button
                                     variant="outline"
-                                    className={styles.footerSecondaryButton}
+                                    className={clsx(styles.footerSecondaryButton, styles.blueButton)}
                                     onClick={handlePreview}
                                 >
                                     미리보기
@@ -163,7 +224,7 @@ const InvitationCard = ({
                             <>
                                 <Button
                                     variant="outline"
-                                    className={styles.footerSecondaryButton}
+                                    className={clsx(styles.footerSecondaryButton, styles.editButton)}
                                     onClick={() => onEdit(invitation)}
                                 >
                                     편집하기
@@ -180,7 +241,7 @@ const InvitationCard = ({
                             <>
                                 <Button
                                     variant="outline"
-                                    className={styles.footerSecondaryButton}
+                                    className={clsx(styles.footerSecondaryButton, styles.blueButton)}
                                     onClick={handlePreview}
                                 >
                                     미리보기
@@ -188,14 +249,12 @@ const InvitationCard = ({
                                 <Button
                                     className={clsx(
                                         styles.footerPrimaryButton,
-                                        isApproved && styles.approved,
-                                        isRequesting && styles.requesting
+                                        isApproved ? styles.shareYellowButton : styles.requesting
                                     )}
-                                    variant={isApproved ? "secondary" : "solid"}
-                                    disabled={(!isAdmin && isApproved)}
-                                    onClick={handlePrimaryAction}
+                                    variant={isApproved ? "solid" : "solid"}
+                                    onClick={isApproved ? () => setShowShareModal(true) : handlePrimaryAction}
                                 >
-                                    {isApproved ? '승인완료' : '신청취소'}
+                                    {isApproved ? '공유하기' : '신청취소'}
                                 </Button>
                             </>
                         )}
@@ -231,6 +290,32 @@ const InvitationCard = ({
                     </div>
                 </ResponsiveModal>
             )}
+
+            {/* Share Modal */}
+            <ResponsiveModal
+                open={showShareModal}
+                onOpenChange={setShowShareModal}
+                title="청첩장 공유하기"
+                description="청첩장을 공유할 방법을 선택해주세요."
+                showCancel={false}
+            >
+                <div className={styles.shareContainer}>
+                    <Button
+                        className={clsx(styles.modalShareButton, styles.kakaoShare)}
+                        onClick={handleKakaoShare}
+                    >
+                        <MessageCircle size={18} fill="currentColor" />
+                        카카오톡 공유하기
+                    </Button>
+                    <Button
+                        className={clsx(styles.modalShareButton, styles.linkShare)}
+                        onClick={handleLinkShare}
+                    >
+                        <Share2 size={18} />
+                        링크 주소 복사하기
+                    </Button>
+                </div>
+            </ResponsiveModal>
         </div>
     );
 };

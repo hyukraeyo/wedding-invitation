@@ -82,7 +82,7 @@
 }
 
 .countdownArea {
-    margin-top: 3.5rem;
+    margin-top: 1.5rem;
     @include m.flex-center;
 
     .timerGrid {
@@ -121,10 +121,10 @@
 }
 
 .ddaySection {
-    margin-top: 3rem;
+    margin-top: 1.5rem;
     text-align: center;
     width: 100%;
-    padding-inline: 1.5rem;
+    // padding-inline: 1.5rem; Removed as per user request
 
     .sentence {
         font-size: calc(0.95rem * var(--font-scale));
@@ -137,6 +137,8 @@
             font-weight: 600;
             color: var(--accent-color);
             margin: 0 0.2rem;
+            padding: 0.1em 0.3em;
+            border-radius: 4px;
         }
     }
 }

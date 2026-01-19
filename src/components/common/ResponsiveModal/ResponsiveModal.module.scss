@@ -5,16 +5,37 @@
 $color-text-title: #191F28;
 $color-text-desc: #4E5968;
 
+.dialogOverlayWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+// Dialog Content (The positioning wrapper)
 .dialogContent {
   max-width: 28rem;
   max-height: 85vh;
   display: flex;
   flex-direction: column;
+  align-items: center;
   padding: 0;
+  border: none;
+  background: transparent; // Make transparent to allow outer elements
+  box-shadow: none;
+  overflow: visible; // Allow outer footer to be seen
+}
+
+// The actual visual card (was dialogContent)
+.card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: v.$white;
   overflow: hidden;
   border-radius: 2rem;
-  border: none;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); // shadow-2xl
+  border: none;
 }
 
 .drawerContent {
@@ -36,12 +57,13 @@ $color-text-desc: #4E5968;
   padding-top: 2.5rem; // pt-10
   padding-bottom: 0.5rem; // pb-2
   padding-left: 2rem;
-  padding-right: 2rem; 
+  padding-right: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   flex-shrink: 0; // shrink-0
-  
+  background-color: v.$white; // Explicit bg
+
   // Drawer specific overrides
   &.drawerHeader {
     padding-top: 2rem; // pt-8
@@ -70,11 +92,12 @@ $color-text-desc: #4E5968;
   flex-direction: column;
   overflow-y: auto;
   padding: 0.5rem 2rem; // px-8 py-2
-  
+  background-color: v.$white; // Explicit bg
+
   // Drawer scroll area specific overrides
   &.drawerScrollArea {
-     overflow: hidden;
-     min-height: 0;
+    overflow: hidden;
+    min-height: 0;
   }
 }
 
@@ -85,6 +108,16 @@ $color-text-desc: #4E5968;
   border-top: 1px solid v.$zinc-100; // border-gray-100
   flex-shrink: 0;
   overflow: hidden;
+  background-color: v.$white; // Explicit bg
+}
+
+.outerFooter {
+  margin-top: 1rem;
+  text-align: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-out;
 }
 
 // Button overrides for ResponsiveModal layout
@@ -106,6 +139,14 @@ $color-text-desc: #4E5968;
   border-radius: 0 !important;
   border: none !important;
   font-weight: 700 !important;
+  background-color: v.$color-primary-hover !important; // Ensure it looks active/yellow
+  color: v.$white !important;
+
+  &:disabled {
+    opacity: 0.5;
+    background-color: v.$zinc-300 !important;
+    color: v.$zinc-500 !important;
+  }
 }
 
 // Dialog Button Height
@@ -118,4 +159,16 @@ $color-text-desc: #4E5968;
 .drawerButtonHeight {
   height: 4rem !important; // h-16 (64px)
   font-size: 1.0625rem !important; // 17px
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

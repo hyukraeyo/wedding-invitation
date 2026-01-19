@@ -254,7 +254,10 @@ export default function AccountsSection({ value, isOpen }: SectionProps) {
                                             label="계좌번호"
                                             placeholder="계좌번호를 입력하세요"
                                             value={acc.accountNumber}
-                                            onChange={(e) => handleUpdateAccount(acc.id, { accountNumber: e.target.value })}
+                                            onChange={(e) => {
+                                                const value = e.target.value.replace(/[^0-9-]/g, '');
+                                                handleUpdateAccount(acc.id, { accountNumber: value });
+                                            }}
                                         />
 
 

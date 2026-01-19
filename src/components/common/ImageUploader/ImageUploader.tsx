@@ -22,9 +22,10 @@ interface ImageUploaderProps {
     ratio?: 'fixed' | 'auto' | undefined;
     onRatioChange?: ((value: 'fixed' | 'auto') => void) | undefined;
     uploadFolder?: string | undefined;
+    allowDelete?: boolean;
 }
 
-export function ImageUploader({ value, onChange, label, placeholder = '사진을 업로드해주세요', className, aspectRatio = '16/9', uploadFolder = 'uploads', ...props }: ImageUploaderProps) {
+export function ImageUploader({ value, onChange, label, placeholder = '사진을 업로드해주세요', className, aspectRatio = '16/9', uploadFolder = 'uploads', allowDelete = true, ...props }: ImageUploaderProps) {
     const inputRef = useRef<HTMLInputElement>(null);
     const accentColor = useInvitationStore(state => state.theme.accentColor);
     const { toast } = useToast();
@@ -113,7 +114,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                         !displayUrl && styles.empty,
                         displayUrl && styles.filled
                     )}
-                    onClick={() => !displayUrl && inputRef.current?.click()}
+                    onClick={() => inputRef.current?.click()}
                     style={!isAutoRatio ? { aspectRatio: aspectRatio.replace('/', '/') } : {}}
                 >
                     {displayUrl ? (
@@ -151,15 +152,17 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                                     <Banana className={styles.spinner} />
                                 </div>
                             ) : null}
-                            <IconButton
-                                type="button"
-                                onClick={handleRemove}
-                                variant="ghost"
-                                size="sm"
-                                icon={Trash2}
-                                className={styles.removeButton}
-                                disabled={isUploading}
-                            />
+                            {allowDelete && (
+                                <IconButton
+                                    type="button"
+                                    onClick={handleRemove}
+                                    variant="ghost"
+                                    size="sm"
+                                    icon={Trash2}
+                                    className={styles.removeButton}
+                                    disabled={isUploading}
+                                />
+                            )}
                         </div>
                     ) : (
                         <div className={styles.emptyState}>

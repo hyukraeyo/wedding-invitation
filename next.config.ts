@@ -65,7 +65,7 @@ const nextConfig: NextConfig = {
       frame-src 'self' https: http:;
       object-src 'none';
       base-uri 'self';
-      form-action 'self';
+      form-action 'self' https://sharer.kakao.com;
       frame-ancestors 'none';
     `.replace(/\s{2,}/g, ' ').trim();
 

@@ -323,6 +323,7 @@
     align-items: center;
     justify-content: center;
     padding: 5rem 0;
+    grid-column: 1 / -1;
     text-align: center;
 
     .emptyIcon {

@@ -11,11 +11,17 @@ import { InfoMessage } from '@/components/ui/InfoMessage';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import { ImageUploader } from '@/components/common/ImageUploader';
 import { HeaderAction } from '@/components/common/HeaderAction';
-import styles from './KakaoShareSection.module.scss';
 import { cn } from '@/lib/utils';
+import styles from './KakaoShareSection.module.scss';
+import { CLOSING_SAMPLES, KAKAO_SHARE_SAMPLES } from '@/constants/samples';
+import type { ExampleItem } from '@/components/common/ExampleSelectorModal';
 import type { SectionProps } from '@/types/builder';
 
 const ResponsiveModal = dynamic(() => import('@/components/common/ResponsiveModal').then(mod => mod.ResponsiveModal), {
+    ssr: false
+});
+
+const ExampleSelectorModal = dynamic(() => import('@/components/common/ExampleSelectorModal').then(mod => mod.ExampleSelectorModal), {
     ssr: false
 });
 
@@ -23,6 +29,15 @@ export default function KakaoShareSection({ isOpen, value }: SectionProps) {
     const kakao = useInvitationStore(useShallow(state => state.kakaoShare));
     const setKakao = useInvitationStore(state => state.setKakao);
     const [previewOpen, setPreviewOpen] = useState(false);
+    const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
+
+    const handleSelectSample = (sample: ExampleItem) => {
+        setKakao({
+            title: sample.title,
+            description: sample.content // Map content to description
+        });
+        setIsSampleModalOpen(false);
+    };
 
     return (
         <>
@@ -33,24 +48,29 @@ export default function KakaoShareSection({ isOpen, value }: SectionProps) {
                 isOpen={isOpen}
                 isCompleted={!!kakao.title}
                 action={
-                    <HeaderAction
-                        icon={Sparkles}
-                        label="미리보기"
-                        onClick={() => setPreviewOpen(true)}
-                    />
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        <HeaderAction
+                            icon={Sparkles}
+                            label="추천 문구"
+                            onClick={() => setIsSampleModalOpen(true)}
+                        />
+                        <HeaderAction
+                            icon={MessageCircle}
+                            label="미리보기"
+                            onClick={() => setPreviewOpen(true)}
+                        />
+                    </div>
                 }
             >
                 <SectionContainer>
                     {/* Photo Upload */}
                     <Field label="사진">
-                        <div className={styles.uploaderWrapper}>
-                            <ImageUploader
-                                value={kakao.imageUrl}
-                                onChange={(url) => setKakao({ imageUrl: url })}
-                                aspectRatio={kakao.imageRatio === 'portrait' ? '3/4' : '16/9'}
-                                placeholder="썸네일 추가"
-                            />
-                        </div>
+                        <ImageUploader
+                            value={kakao.imageUrl}
+                            onChange={(url) => setKakao({ imageUrl: url })}
+                            aspectRatio={kakao.imageRatio === 'portrait' ? '3/4' : '16/9'}
+                            placeholder="썸네일 추가"
+                        />
                     </Field>
 
                     <Field label="사진 비율">
@@ -147,6 +167,15 @@ export default function KakaoShareSection({ isOpen, value }: SectionProps) {
                     </div>
                 </div>
             </ResponsiveModal>
+
+            {/* Sample Phrases Modal */}
+            <ExampleSelectorModal
+                isOpen={isSampleModalOpen}
+                onClose={() => setIsSampleModalOpen(false)}
+                title="카카오 공유 추천 문구"
+                items={KAKAO_SHARE_SAMPLES}
+                onSelect={handleSelectSample}
+            />
         </>
     );
 }

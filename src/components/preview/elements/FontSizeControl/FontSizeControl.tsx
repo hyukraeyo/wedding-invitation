@@ -32,6 +32,13 @@ export function FontSizeControl() {
 
     return (
         <div className={styles.container} ref={containerRef}>
+            <button
+                className={cn(styles.trigger, isOpen && styles.active)}
+                onClick={() => setIsOpen(!isOpen)}
+                aria-label="글자 크기 조절"
+            >
+                {isOpen ? <X size={20} /> : <Type size={20} />}
+            </button>
             {isOpen && (
                 <div className={styles.panel}>
                     {options.map((opt) => (
@@ -54,13 +61,6 @@ export function FontSizeControl() {
                     ))}
                 </div>
             )}
-            <button
-                className={cn(styles.trigger, isOpen && styles.active)}
-                onClick={() => setIsOpen(!isOpen)}
-                aria-label="글자 크기 조절"
-            >
-                {isOpen ? <X size={20} /> : <Type size={20} />}
-            </button>
         </div>
     );
 }

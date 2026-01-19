@@ -31,6 +31,7 @@ export interface ResponsiveModalProps {
     description?: React.ReactNode | undefined;
     children?: React.ReactNode | undefined;
     footer?: React.ReactNode | undefined; // 추가: 커스텀 푸터
+    outerFooter?: React.ReactNode | undefined; // 추가: 카드 외부 푸터 (로그아웃 버튼 등)
     className?: string | undefined;
     contentClassName?: string | undefined;
 
@@ -56,6 +57,7 @@ export const ResponsiveModal = ({
     description,
     children,
     footer,
+    outerFooter,
     className,
     contentClassName,
     confirmText = '확인',
@@ -102,54 +104,63 @@ export const ResponsiveModal = ({
                     className={cn(styles.dialogContent, className)}
                     onInteractOutside={(e) => !dismissible && e.preventDefault()}
                     onEscapeKeyDown={(e) => !dismissible && e.preventDefault()}
-                    aria-describedby={description ? undefined : undefined} // Keep as is if it was intended to suppress, but usually it should be conditional
+                    aria-describedby={description ? undefined : undefined}
                 >
-                    <DialogHeader className={styles.header}>
-                        <DialogTitle className={styles.title}>
-                            {title || "알림"}
-                        </DialogTitle>
-                        {description ? (
-                            <DialogDescription className={styles.description}>
-                                {description}
-                            </DialogDescription>
-                        ) : null}
-                    </DialogHeader>
+                    <div className={styles.card}>
+                        <DialogHeader className={styles.header}>
+                            <DialogTitle className={styles.title}>
+                                {title || "알림"}
+                            </DialogTitle>
+                            {description ? (
+                                <DialogDescription className={styles.description}>
+                                    {description}
+                                </DialogDescription>
+                            ) : null}
+                        </DialogHeader>
 
-                    <div
-                        ref={scrollRef}
-                        className={cn(styles.content, contentClassName)}
-                        onScroll={onScroll}
-                    >
-                        {children}
+                        <div
+                            ref={scrollRef}
+                            className={cn(styles.content, contentClassName)}
+                            onScroll={onScroll}
+                        >
+                            {children}
+                        </div>
+
+                        {hasActions ? (
+                            <div className={styles.footer}>
+                                {footer || (
+                                    <>
+                                        {showCancel ? (
+                                            <Button
+                                                variant="ghost"
+                                                onClick={handleCancel}
+                                                className={cn(styles.cancelButton, styles.dialogButtonHeight)}
+                                            >
+                                                {cancelText}
+                                            </Button>
+                                        ) : null}
+                                        <Button
+                                            onClick={onConfirm}
+                                            disabled={confirmDisabled || confirmLoading}
+                                            loading={confirmLoading}
+                                            variant={confirmVariant === 'destructive' ? 'destructive' : 'solid'}
+                                            className={cn(
+                                                styles.confirmButton,
+                                                styles.dialogButtonHeight
+                                            )}
+                                        >
+                                            {confirmText}
+                                        </Button>
+                                    </>
+                                )}
+                            </div>
+                        ) : null}
                     </div>
 
-                    {hasActions ? (
-                        <div className={styles.footer}>
-                            {footer || (
-                                <>
-                                    {showCancel ? (
-                                        <Button
-                                            variant="ghost"
-                                            onClick={handleCancel}
-                                            className={cn(styles.cancelButton, styles.dialogButtonHeight)}
-                                        >
-                                            {cancelText}
-                                        </Button>
-                                    ) : null}
-                                    <Button
-                                        onClick={onConfirm}
-                                        disabled={confirmDisabled || confirmLoading}
-                                        loading={confirmLoading}
-                                        variant={confirmVariant === 'destructive' ? 'destructive' : 'solid'}
-                                        className={cn(
-                                            styles.confirmButton,
-                                            styles.dialogButtonHeight
-                                        )}
-                                    >
-                                        {confirmText}
-                                    </Button>
-                                </>
-                            )}
+                    {/* Outer content below the card */}
+                    {outerFooter ? (
+                        <div className={styles.outerFooter}>
+                            {outerFooter}
                         </div>
                     ) : null}
                 </DialogContent>
@@ -219,6 +230,13 @@ export const ResponsiveModal = ({
                                     </Button>
                                 </>
                             )}
+                        </div>
+                    ) : null}
+
+                    {/* On Desktop it's outside, on Mobile (Drawer) we put it below the main footer but inside content since it's a sheet */}
+                    {outerFooter ? (
+                        <div className={cn(styles.outerFooter, 'pb-8 bg-white')}>
+                            {outerFooter}
                         </div>
                     ) : null}
                 </div>

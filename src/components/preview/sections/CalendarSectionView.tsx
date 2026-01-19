@@ -218,7 +218,7 @@ const CalendarSectionView = memo(({
                     <div className={styles.ddaySection}>
                         <p className={styles.sentence}>
                             {parsedDdayMessage.prefix}
-                            <span className={styles.highlight} style={{ color: accentColor }}>
+                            <span className={styles.highlight} style={{ color: accentColor, backgroundColor: `${accentColor}26` }}>
                                 {` ${d_day_display} `}
                             </span>
                             {parsedDdayMessage.suffix}

@@ -8,6 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import type { InvitationData } from '@/store/useInvitationStore';
 import SectionContainer from '../SectionContainer';
 import { AspectRatio } from '@/components/ui/AspectRatio';
+import { Button } from '@/components/ui/Button';
 import SectionHeader from '../SectionHeader';
 import styles from './ClosingView.module.scss';
 import { IMAGE_SIZES } from '@/constants/image';
@@ -171,20 +172,20 @@ const ClosingView = memo(({
                 />
 
                 <div className={clsx(styles.shareContainer) || ''}>
-                    <button
+                    <Button
                         className={clsx(styles.shareButton, styles.kakaoShare) || ''}
                         onClick={handleKakaoShare}
                     >
                         <MessageCircle size={18} fill="currentColor" />
                         카카오톡 공유하기
-                    </button>
-                    <button
+                    </Button>
+                    <Button
                         className={clsx(styles.shareButton, styles.linkShare) || ''}
                         onClick={handleLinkShare}
                     >
                         <Share2 size={18} />
                         링크 주소 복사하기
-                    </button>
+                    </Button>
                 </div>
             </div>
         </SectionContainer>

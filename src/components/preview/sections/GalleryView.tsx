@@ -18,6 +18,7 @@ import SectionHeader from '../SectionHeader';
 import styles from './GalleryView.module.scss';
 import { clsx } from 'clsx';
 import { AspectRatio } from '@/components/ui/AspectRatio';
+import { IconButton } from '@/components/ui/IconButton/IconButton';
 import { useScrollLock } from '@/hooks/use-scroll-lock';
 import { useFocusTrap } from '@/hooks/useAccessibility';
 import { MOTION_CLASSES } from '@/constants/motion';
@@ -67,6 +68,9 @@ const GalleryView = memo(({
     const [mainSwiper, setMainSwiper] = useState<SwiperClass | null>(null);
     const [modalSwiper, setModalSwiper] = useState<SwiperClass | null>(null);
     const [portalElement, setPortalElement] = useState<HTMLElement | null>(null);
+    const [isIntersecting, setIsIntersecting] = useState(false);
+
+    const swiperContainerRef = useRef<HTMLDivElement>(null);
 
     const closeBtnRef = useRef<HTMLButtonElement>(null);
     const focusTrapRef = useFocusTrap<HTMLDivElement>(popupIndex !== null);
@@ -98,6 +102,26 @@ const GalleryView = memo(({
         setPortalElement(document.getElementById('invitation-modal-root') || document.body);
     }, []);
 
+    // Intersection Observer for Autoplay
+    useEffect(() => {
+        if (galleryType !== 'swiper') return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                if (entries[0]) {
+                    setIsIntersecting(entries[0].isIntersecting);
+                }
+            },
+            { threshold: 0.1 }
+        );
+
+        if (swiperContainerRef.current) {
+            observer.observe(swiperContainerRef.current);
+        }
+
+        return () => observer.disconnect();
+    }, [galleryType, isMounted]); // Re-run when mounted or type changes
+
     // Autoplay Control
     useEffect(() => {
         if (!mainSwiper || mainSwiper.destroyed) return;
@@ -108,10 +132,13 @@ const GalleryView = memo(({
             return;
         }
 
-        if (galleryAutoplay) {
+        // Only autoplay if enabled AND visible
+        if (galleryAutoplay && isIntersecting) {
             mainSwiper.autoplay?.start();
+        } else {
+            mainSwiper.autoplay?.stop();
         }
-    }, [popupIndex, mainSwiper, galleryAutoplay]);
+    }, [popupIndex, mainSwiper, galleryAutoplay, isIntersecting]);
 
     // Modal Slide Sync
     useEffect(() => {
@@ -127,7 +154,7 @@ const GalleryView = memo(({
         switch (galleryType) {
             case 'swiper':
                 return (
-                    <div className={clsx(styles.swiperContainer, !galleryPreview ? styles.swiperContainerLimited : '') || ''}>
+                    <div ref={swiperContainerRef} className={clsx(styles.swiperContainer, !galleryPreview ? styles.swiperContainerLimited : '') || ''}>
                         <div className={clsx(styles.galleryWrapper) || ''}>
                             <Swiper
                                 key={`swiper-${gallery.length}-${galleryPreview}-${galleryFade}`}
@@ -149,7 +176,15 @@ const GalleryView = memo(({
                                             className={clsx(styles.imageSlide, galleryPopup ? styles.cursorPointer : '') || ''}
                                             onClick={() => handleImageClick(index)}
                                         >
-                                            <Image src={img.url} alt="" fill sizes={IMAGE_SIZES.gallery} />
+                                            <Image
+                                                src={img.url}
+                                                alt=""
+                                                fill
+                                                sizes={galleryPreview
+                                                    ? IMAGE_SIZES.gallery
+                                                    : '(max-width: 768px) calc(100vw - 64px), 50vw'
+                                                }
+                                            />
                                         </div>
                                     </SwiperSlide>
                                 ))}
@@ -176,7 +211,12 @@ const GalleryView = memo(({
                             {gallery.map((img, index) => (
                                 <SwiperSlide key={img.id} onClick={() => handleImageClick(index)}>
                                     <div className={clsx(styles.imageSlide, galleryPopup ? styles.cursorPointer : '') || ''}>
-                                        <Image src={img.url} alt="" fill sizes={IMAGE_SIZES.gallery} />
+                                        <Image
+                                            src={img.url}
+                                            alt=""
+                                            fill
+                                            sizes="(max-width: 768px) calc(100vw - 64px), 50vw"
+                                        />
                                     </div>
                                 </SwiperSlide>
                             ))}
@@ -253,14 +293,14 @@ const GalleryView = memo(({
                         <span className={clsx(styles.count) || ''}>
                             {currentIndex + 1} / {gallery.length}
                         </span>
-                        <button
+                        <IconButton
                             ref={closeBtnRef}
+                            icon={X}
+                            variant="ghost"
                             onClick={() => setPopupIndex(null)}
                             className={clsx(styles.closeBtn) || ''}
                             aria-label="창 닫기"
-                        >
-                            <X size={24} strokeWidth={1.5} />
-                        </button>
+                        />
                     </div>
 
                     <div className={clsx(styles.modalSwiperContainer, MOTION_CLASSES.dialog) || ''}>
@@ -289,7 +329,7 @@ const GalleryView = memo(({
                                             src={img.url}
                                             alt=""
                                             fill
-                                            sizes={IMAGE_SIZES.full}
+                                            sizes="calc(100vw - 32px)"
                                             priority={img.id === gallery[popupIndex ?? 0]?.id}
                                         />
                                     </div>

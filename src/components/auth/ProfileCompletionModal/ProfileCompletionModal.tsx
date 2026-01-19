@@ -4,13 +4,11 @@ import React, { useState, useCallback } from 'react';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 import { TextField } from '@/components/common/TextField';
 import { PhoneField } from '@/components/common/PhoneField';
-import { Button } from '@/components/ui/Button';
 import { useToast } from '@/hooks/use-toast';
 import { profileService } from '@/services/profileService';
 import { User, Phone } from 'lucide-react';
 import { isValidPhone } from '@/lib/utils';
 import styles from './ProfileCompletionModal.module.scss';
-import { cn } from '@/lib/utils';
 
 interface ProfileCompletionModalProps {
     isOpen: boolean;
@@ -63,28 +61,15 @@ export function ProfileCompletionModal({
         }
     }, [name, phone, userId, toast, onComplete]);
 
-    // 디자인 시스템 준수를 위한 커스텀 푸터
-    const modalFooter = (
-        <div className={styles.footer}>
-            <Button
-                onClick={handleSubmit}
-                disabled={loading || !name.trim() || !phone.trim()}
-                className={styles.submitButton}
-            >
-                시작하기
-            </Button>
-
-            {onLogout ? (
-                <button
-                    type="button"
-                    onClick={onLogout}
-                    className={styles.logoutButton}
-                >
-                    로그아웃
-                </button>
-            ) : null}
-        </div>
-    );
+    const logoutButton = onLogout ? (
+        <button
+            type="button"
+            onClick={onLogout}
+            className={styles.logoutButton}
+        >
+            로그아웃
+        </button>
+    ) : undefined;
 
     return (
         <ResponsiveModal
@@ -93,7 +78,16 @@ export function ProfileCompletionModal({
             dismissible={false}
             title="프로필 완성"
             description="청첩장 서비스 이용을 위해 이름과 연락처를 입력해주세요."
-            footer={modalFooter}
+
+            // Native Footer Props for "Sticky Bottom" style
+            onConfirm={handleSubmit}
+            confirmText="시작하기"
+            showCancel={false}
+            confirmDisabled={loading || !name.trim() || !phone.trim()}
+            confirmLoading={loading}
+
+            // Outer Footer for Logout
+            outerFooter={logoutButton}
         >
             <div className={styles.container}>
                 <div className={styles.inputList}>

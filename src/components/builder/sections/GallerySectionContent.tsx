@@ -2,8 +2,8 @@ import React, { useMemo, useCallback, useState, useRef } from 'react';
 import Image from 'next/image';
 import { Plus, Trash2 } from 'lucide-react';
 import { InfoMessage } from '@/components/ui/InfoMessage';
+import { IconButton } from '@/components/ui/IconButton/IconButton';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { useToast } from '@/hooks/use-toast';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import { SegmentedControl } from '@/components/common/SegmentedControl';
 import { TextField } from '@/components/common/TextField';
@@ -33,6 +33,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import styles from './GallerySection.module.scss';
 import { useShallow } from 'zustand/react/shallow';
+import { ResponsiveModal } from '@/components/common/ResponsiveModal/ResponsiveModal';
 
 interface SortableItemProps {
     id: string;
@@ -88,17 +89,15 @@ const SortableItem = React.memo(function SortableItem({ id, url, index, onRemove
                 </div>
             ) : null}
 
-            <button
-                type="button"
+            <IconButton
+                icon={Trash2}
                 className={styles.removeButton}
                 onClick={(e) => {
                     e.stopPropagation();
                     onRemove(id);
                 }}
                 onPointerDown={(e) => e.stopPropagation()}
-            >
-                <Trash2 />
-            </button>
+            />
         </div>
     );
 });
@@ -141,10 +140,10 @@ export default function GallerySectionContent() {
         setGalleryAutoplay: state.setGalleryAutoplay,
         accentColor: state.theme.accentColor,
     })));
-    const { toast } = useToast();
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [activeId, setActiveId] = useState<string | null>(null);
+    const [isLimitModalOpen, setIsLimitModalOpen] = useState(false);
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
@@ -157,24 +156,32 @@ export default function GallerySectionContent() {
         })
     );
 
-    const handleUploadClick = () => fileInputRef.current?.click();
+    const handleUploadClick = () => {
+        if (gallery.length >= 10) {
+            setIsLimitModalOpen(true);
+            return;
+        }
+        fileInputRef.current?.click();
+    };
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const filesToUpload = Array.from(e.target.files || []);
         if (filesToUpload.length === 0) return;
 
-        const MAX_TOTAL = 30;
+        const MAX_TOTAL = 10;
         const currentCount = gallery.length;
 
         if (currentCount >= MAX_TOTAL) {
-            toast({
-                variant: 'destructive',
-                description: `이미 ${MAX_TOTAL}장의 사진이 등록되어 있습니다.`,
-            });
+            setIsLimitModalOpen(true);
             return;
         }
 
         const remainingCount = MAX_TOTAL - currentCount;
+
+        if (filesToUpload.length > remainingCount) {
+            setIsLimitModalOpen(true);
+        }
+
         const slicedFiles = filesToUpload.slice(0, remainingCount);
 
         const tempItems = slicedFiles.map(file => ({
@@ -253,7 +260,7 @@ export default function GallerySectionContent() {
                         <span className={styles.labelText}>사진 관리</span>
                         <span className={styles.countText}>
                             <span style={{ color: accentColor }}>{gallery.length}</span>
-                            <span className={styles.countTotal}> / 30</span>
+                            <span className={styles.countTotal}> / 10</span>
                         </span>
                     </div>
                 }
@@ -279,7 +286,7 @@ export default function GallerySectionContent() {
                                         onRemove={handleRemove}
                                     />
                                 ))}
-                                {gallery.length < 30 ? (
+                                {gallery.length < 10 && (
                                     <div className={styles.uploadItem} onClick={handleUploadClick}>
                                         <Plus className={styles.uploadIcon} />
                                         <span className={styles.uploadText}>추가</span>
@@ -292,9 +299,19 @@ export default function GallerySectionContent() {
                                             onChange={handleFileChange}
                                         />
                                     </div>
-                                ) : null}
+                                )}
                             </div>
                         </SortableContext>
+
+                        <ResponsiveModal
+                            open={isLimitModalOpen}
+                            onOpenChange={setIsLimitModalOpen}
+                            title="알림"
+                            description="사진은 최대 10장까지 등록 가능합니다."
+                            onConfirm={() => setIsLimitModalOpen(false)}
+                            confirmText="확인"
+                            showCancel={false}
+                        />
 
                         <DragOverlay dropAnimation={{
                             sideEffects: defaultDropAnimationSideEffects({

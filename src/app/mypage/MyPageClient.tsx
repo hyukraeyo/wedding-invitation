@@ -13,7 +13,7 @@ import type { InvitationData } from '@/store/useInvitationStore';
 import Header from '@/components/common/Header';
 
 import { useToast } from '@/hooks/use-toast';
-import { Edit2, Trash2, FileText, MoreHorizontal, Eye, Inbox, Clock, Bookmark, AlertCircle, CheckCircle } from 'lucide-react';
+import { Edit2, Trash2, Banana, MoreHorizontal, Eye, Inbox, Clock, Bookmark, AlertCircle, CheckCircle } from 'lucide-react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -208,7 +208,7 @@ export default function MyPageClient({
         try {
             // Update approval_requests status to 'approved'
             await approvalRequestService.approveRequest(inv.id);
-            
+
             // Update invitation data
             const fullData = await fetchFullInvitationData(inv.slug);
             const updatedData = {
@@ -573,7 +573,7 @@ export default function MyPageClient({
                         {invitations.length === 0 ? (
                             <div className={styles.emptyFullState}>
                                 <div className={styles.emptyIcon}>
-                                    <FileText size={32} />
+                                    <Banana size={32} />
                                 </div>
                                 <h3>청첩장을 만들어보세요</h3>
                                 <p>나만의 특별한 모바일 청첩장을<br />쉽고 빠르게 만들 수 있습니다.</p>

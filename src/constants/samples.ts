@@ -61,3 +61,29 @@ export const MAIN_TITLE_SAMPLES: SamplePhraseItem[] = [
     { title: '우리 결혼해요', subtitle: '국문 데이트', content: '국문 데이트' },
     { title: '소중한 분들을 초대합니다', subtitle: '국문 정중', content: '국문 정중' },
 ];
+
+/**
+ * 카카오 공유 썸네일 샘플 문구
+ */
+export const KAKAO_SHARE_SAMPLES: SamplePhraseItem[] = [
+    {
+        subtitle: '심플',
+        title: '우리 결혼합니다',
+        content: '초대장을 보내드립니다.'
+    },
+    {
+        subtitle: '정중',
+        title: '소중한 분들을 초대합니다',
+        content: '귀한 걸음 하시어 축복해 주세요.'
+    },
+    {
+        subtitle: '날짜 강조',
+        title: '저희 결혼식에 초대합니다',
+        content: '2026년 4월 29일 토요일 오후 12시'
+    },
+    {
+        subtitle: '영문',
+        title: 'We Are Getting Married',
+        content: 'Please join us for our wedding celebration'
+    }
+];

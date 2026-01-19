@@ -106,6 +106,7 @@ export default function MainScreenSectionContent() {
                         ratio={imageRatio}
                         onRatioChange={setImageRatio}
                         aspectRatio="4/5"
+
                     />
                     <SwitchField
                         checked={mainScreen.expandPhoto}

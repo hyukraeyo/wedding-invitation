@@ -272,7 +272,7 @@ export const INITIAL_STATE = {
     useFlowerIcon: true,
     order: 'groom-first' as const,
     date: getDefaultDate(),
-    time: '12:00',
+    time: '13:00',
     location: '',
     address: '',
     detailAddress: '',
@@ -330,7 +330,7 @@ export const INITIAL_STATE = {
     theme: {
         font: 'gowun-dodum' as const,
         backgroundColor: '#FFFFFF', // White
-        accentColor: '#3182F6', // Toss Blue
+        accentColor: '#C19A6D', // Soft Brown
         fontScale: 1,
         pattern: 'none' as const,
         effect: 'none' as const,

@@ -13,9 +13,9 @@ import type { ThemeFont } from '@/lib/utils/font';
 import type { SectionProps } from '@/types/builder';
 
 const PRESET_COLORS = [
+    '#C19A6D', // Soft Brown
     '#545454', // Dark Gray
     '#FFB7B2', // Soft Pink
-    '#C19A6D', // Soft Brown
     '#D7A7BE', // Soft Mauve
 ];
 

@@ -59,10 +59,10 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
 
     // Arrays for dropdown options
     // Arrays for dropdown options
-    // 오전 7시 ~ 12시
-    const amHours = ['7', '8', '9', '10', '11', '12'];
-    // 오후 1시 ~ 10시
-    const pmHours = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+    // 오전 7시 ~ 11시
+    const amHours = ['7', '8', '9', '10', '11'];
+    // 오후 12시 ~ 11시
+    const pmHours = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
 
     const periodHourOptions = [
         ...amHours.map((hour) => ({
