@@ -81,35 +81,69 @@ const InvitationCard = ({
             window.Kakao.init(kakaoAppKey);
         }
 
-        const shareTitle = data?.mainScreen?.title || '결혼식에 초대합니다';
-        const shareDesc = `${data?.date || ''} ${data?.location || ''}`.trim();
-        const shareImageUrl = data?.imageUrl || `${window.location.origin}/logo.png`; // Fallback image
+        // Ensure invitationUrl is clean and matches registered domain precisely
+        const origin = window.location.origin;
+        const invitationUrl = `${origin}/v/${slug}`.trim();
+
+        // Default values for robustness
+        const kakaoShare = data?.kakaoShare || { title: '', description: '', buttonType: 'location' };
+        const shareTitle = (kakaoShare.title || data?.mainScreen?.title || '결혼식에 초대합니다').trim();
+        const shareDesc = (kakaoShare.description || `${data?.date || ''} ${data?.location || ''}`.trim() || '소중한 날에 초대합니다').trim();
+        let shareImageUrl = kakaoShare.imageUrl || data?.imageUrl || `${origin}/logo.png`;
+
+        // 카카오 서버는 blob: URL에 접근할 수 없으므로, 공개 URL만 사용
+        if (shareImageUrl.startsWith('blob:')) {
+            shareImageUrl = `${origin}/logo.png`;
+        } else if (shareImageUrl.startsWith('/')) {
+            shareImageUrl = `${origin}${shareImageUrl}`;
+        }
 
         try {
             if (!window.Kakao.Share?.sendDefault) {
                 toast({ description: '카카오 공유 기능을 사용할 수 없습니다.', variant: 'destructive' });
                 return;
             }
+
+            const buttonType = kakaoShare.buttonType ?? 'location';
+
+            // Helpful logs
+            console.log('Kakao Share Invitation URL:', invitationUrl);
+
             window.Kakao.Share.sendDefault({
                 objectType: 'feed',
                 content: {
                     title: shareTitle,
                     description: shareDesc,
-                    imageUrl: shareImageUrl.startsWith('/') ? `${window.location.origin}${shareImageUrl}` : shareImageUrl,
+                    imageUrl: shareImageUrl,
                     link: {
-                        mobileWebUrl: `${window.location.origin}/v/${slug}`,
-                        webUrl: `${window.location.origin}/v/${slug}`,
+                        mobileWebUrl: invitationUrl,
+                        webUrl: invitationUrl,
                     },
                 },
-                buttons: [
+                buttons: buttonType !== 'none' ? [
                     {
-                        title: '청첩장 보기',
+                        title: '모바일 초대장',
                         link: {
-                            mobileWebUrl: `${window.location.origin}/v/${slug}`,
-                            webUrl: `${window.location.origin}/v/${slug}`,
+                            mobileWebUrl: invitationUrl,
+                            webUrl: invitationUrl,
                         },
                     },
-                ]
+                    {
+                        title: buttonType === 'location' ? '위치 안내' : '참석 여부',
+                        link: {
+                            mobileWebUrl: `${invitationUrl}${buttonType === 'location' ? '#section-location' : '#section-account'}`,
+                            webUrl: `${invitationUrl}${buttonType === 'location' ? '#section-location' : '#section-account'}`,
+                        },
+                    },
+                ] : [
+                    {
+                        title: '모바일 초대장',
+                        link: {
+                            mobileWebUrl: invitationUrl,
+                            webUrl: invitationUrl,
+                        },
+                    },
+                ],
             });
             setShowShareModal(false);
         } catch (error) {

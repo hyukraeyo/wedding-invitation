@@ -78,9 +78,14 @@ const ClosingView = memo(({
 
         const shareTitle = kakaoShare?.title || `${groomName} ♥ ${brideName} 결혼식에 초대합니다`;
         const shareDesc = kakaoShare?.description || `${date} ${time}`;
+
+        // 카카오 서버는 blob: URL에 접근할 수 없으므로, 공개 URL만 사용
         let shareImageUrl = kakaoShare?.imageUrl || mainImageUrl || `${baseUrl}/logo.png`;
 
-        if (shareImageUrl.startsWith('/')) {
+        // blob: URL이거나 상대경로인 경우 기본 로고로 대체
+        if (shareImageUrl.startsWith('blob:')) {
+            shareImageUrl = `${baseUrl}/logo.png`;
+        } else if (shareImageUrl.startsWith('/')) {
             shareImageUrl = `${baseUrl}${shareImageUrl}`;
         }
 
@@ -102,13 +107,28 @@ const ClosingView = memo(({
                 },
                 buttons: (kakaoShare?.buttonType ?? 'none') !== 'none' ? [
                     {
-                        title: kakaoShare?.buttonType === 'location' ? '위치 보기' : '참석 여부',
+                        title: '모바일 초대장',
                         link: {
                             mobileWebUrl: window.location.href,
                             webUrl: window.location.href,
                         },
                     },
-                ] : [],
+                    {
+                        title: kakaoShare?.buttonType === 'location' ? '위치 안내' : '참석 여부',
+                        link: {
+                            mobileWebUrl: `${window.location.href}${kakaoShare?.buttonType === 'location' ? '#section-location' : '#section-account'}`,
+                            webUrl: `${window.location.href}${kakaoShare?.buttonType === 'location' ? '#section-location' : '#section-account'}`,
+                        },
+                    },
+                ] : [
+                    {
+                        title: '모바일 초대장',
+                        link: {
+                            mobileWebUrl: window.location.href,
+                            webUrl: window.location.href,
+                        },
+                    },
+                ],
             });
         } catch (error) {
             console.error('Kakao Share Error:', error);
