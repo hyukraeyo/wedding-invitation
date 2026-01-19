@@ -15,7 +15,7 @@
   background-color: transparent;
   color: transparent;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: border-color v.$transition-fast, background-color v.$transition-fast, box-shadow v.$transition-fast;
 
   // focus-visible styles via mixin
   @include m.focus-ring;

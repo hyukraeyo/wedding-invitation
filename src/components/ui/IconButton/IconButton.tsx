@@ -20,10 +20,11 @@ export interface IconButtonProps extends Omit<ButtonProps, "size" | "variant"> {
      */
     variant?: "solid" | "line" | "ghost" | "secondary" | "outline" | "destructive" | "default"
     loading?: boolean | undefined;
+    "aria-label"?: string;
 }
 
 const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
-    ({ className, icon: Icon, size = "md", variant = "ghost", children, ...props }, ref) => {
+    ({ className, icon: Icon, size = "md", variant = "ghost", children, "aria-label": ariaLabel, ...props }, ref) => {
         // Map custom size props to Button's size variants
         const sizeMap: Record<NonNullable<IconButtonProps["size"]>, NonNullable<ButtonProps["size"]>> = {
             sm: "icon-sm", // 32px
@@ -42,6 +43,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
                 ref={ref}
                 loading={false} // Prevent Button from hiding content
                 disabled={loading || rest.disabled}
+                aria-label={ariaLabel || (typeof children === 'string' ? children : undefined)}
                 {...rest}
             >
                 {Icon ? (

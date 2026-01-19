@@ -11,6 +11,7 @@ import {
     Share2,
     MessageCircle
 } from 'lucide-react';
+import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 import { clsx } from 'clsx';
 import {
@@ -124,8 +125,14 @@ const InvitationCard = ({
             <div className={styles.cardItem}>
                 {imageUrl ? (
                     <div className={styles.imageWrapper}>
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={imageUrl} alt={title} />
+                        <Image
+                            src={imageUrl}
+                            alt={title}
+                            fill
+                            sizes="(max-width: 428px) 100vw, 400px"
+                            priority={invitation.invitation_data?.isApproved}
+                            style={{ objectFit: 'cover' }}
+                        />
                     </div>
                 ) : (
                     <div className={styles.fallbackWrapper}>
@@ -158,7 +165,7 @@ const InvitationCard = ({
                                     variant="outline"
                                 />
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent side="top" align="start" style={{ width: '160px', padding: '0.4rem', borderRadius: '0.75rem' }}>
+                            <DropdownMenuContent side="top" align="start" className={styles.dropdownContent}>
                                 {!isRequesting && !isApproved && !isRejected && (
                                     <DropdownMenuItem onClick={() => onEdit(invitation)}>
                                         <Edit2 size={16} className="mr-2" /> 편집하기
@@ -256,18 +263,10 @@ const InvitationCard = ({
                     confirmText="확인"
                     onConfirm={() => setShowRejectionModal(false)}
                 >
-                    <div style={{
-                        marginTop: '1rem',
-                        padding: '1rem',
-                        backgroundColor: '#FEF2F2',
-                        borderRadius: '0.75rem',
-                        border: '1px solid #FEE2E2',
-                    }}>
-                        <div
-                            style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7 }}
-                            dangerouslySetInnerHTML={{ __html: rejectionData.rejection_reason || '거절 사유가 없습니다.' }}
-                        />
-                    </div>
+                    <div
+                        className={styles.rejectionMessage}
+                        dangerouslySetInnerHTML={{ __html: rejectionData.rejection_reason || '거절 사유가 없습니다.' }}
+                    />
                 </ResponsiveModal>
             )}
 

@@ -3,7 +3,7 @@
 .item {
     background-color: #ffffff;
     border-radius: 1rem; // 조금 더 둥글게 (16px)
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     border: none;
     box-shadow: none; // 그림자 제거 (요청사항 1)
 

@@ -133,7 +133,7 @@
   border-radius: $radius-md;
   background: $color-background;
   color: $color-foreground;
-  transition: all $transition-fast;
+  transition: border-color $transition-fast, box-shadow $transition-fast, background-color $transition-fast;
 
   &:focus {
     @include input-focus-style;
@@ -171,7 +171,7 @@
   border: 1px solid transparent;
   border-radius: $radius-md;
   cursor: pointer;
-  transition: all $transition-fast;
+  transition: background-color $transition-fast, border-color $transition-fast, box-shadow $transition-fast, transform $transition-fast;
   text-decoration: none;
   user-select: none;
 }

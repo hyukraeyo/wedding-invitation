@@ -140,6 +140,6 @@ export default function Error({ error, reset }: ErrorProps) {
           </button>
         </div>
       </div>
-    </div>
+    </div >
   );
 }

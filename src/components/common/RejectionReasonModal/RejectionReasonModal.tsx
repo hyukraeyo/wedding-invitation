@@ -68,7 +68,7 @@ export default function RejectionReasonModal({
                 <RichTextEditor
                     content={reason}
                     onChange={setReason}
-                    placeholder="거절 사유를 입력하세요..."
+                    placeholder="거절 사유를 입력하세요…"
                     minHeight="min-h-[180px]"
                 />
             </div>

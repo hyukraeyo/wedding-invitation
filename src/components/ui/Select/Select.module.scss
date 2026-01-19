@@ -8,7 +8,7 @@
   height: var(--builder-height, 48px);
   padding: 0 1rem;
   background-color: white;
-  transition: all 0.2s ease;
+  transition: background-color v.$transition-fast, color v.$transition-fast;
   cursor: pointer;
 
   &:hover:not(:disabled) {

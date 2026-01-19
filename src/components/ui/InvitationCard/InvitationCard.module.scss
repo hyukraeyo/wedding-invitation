@@ -263,7 +263,7 @@
     font-size: 0.9375rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: background-color 0.2s, transform 0.2s;
 
     &.kakaoShare {
         background-color: #FEE500;
@@ -280,8 +280,22 @@
         color: v.$zinc-700;
         border: 1px solid v.$zinc-200;
 
-        &:hover {
-            background-color: v.$zinc-50;
-        }
     }
+}
+
+.dropdownContent {
+    width: 160px;
+    padding: 0.4rem;
+    border-radius: 0.75rem;
+}
+
+.rejectionMessage {
+    font-size: 0.9375rem;
+    color: #374151;
+    line-height: 1.7;
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: #FEF2F2;
+    border-radius: 0.75rem;
+    border: 1px solid #FEE2E2;
 }

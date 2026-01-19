@@ -19,7 +19,7 @@
     border: 1px solid rgba(0, 0, 0, 0.03);
     @include m.flex-center;
     color: #555;
-    transition: all v.$transition-normal;
+    transition: background-color v.$transition-normal, transform v.$transition-normal, box-shadow v.$transition-normal, color v.$transition-normal;
     cursor: pointer;
 
     &:active {
@@ -37,7 +37,7 @@
 
 .iconWrapper {
     @include m.flex-center;
-    transition: all v.$transition-normal;
+    transition: transform v.$transition-normal, opacity v.$transition-normal, color v.$transition-normal;
     color: v.$color-primary;
 
     &.small {
