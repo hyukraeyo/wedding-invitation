@@ -235,6 +235,10 @@
             margin-inline: 0;
             border-radius: 0;
         }
+
+        &.noShadow {
+            box-shadow: none;
+        }
     }
 
     &.imageFill {
@@ -290,9 +294,11 @@
         pointer-events: none;
 
         &.mist {
-            background-color: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(2px);
-            animation: pulse-slow 4s infinite;
+            background: linear-gradient(to top,
+                    rgba(255, 255, 255, 1) 0%,
+                    rgba(255, 255, 255, 0.9) 15%,
+                    rgba(255, 255, 255, 0.6) 30%,
+                    rgba(255, 255, 255, 0) 60%);
         }
 
         &.ripple {

@@ -227,18 +227,19 @@ const MainScreenView = memo(({
                     mainScreen.layout === 'classic' && styles.classic,
                     mainScreen.expandPhoto && styles.expanded,
                     (!isFillLayout && mainScreen.layout !== 'arch' && mainScreen.layout !== 'oval') && styles.bgGray,
-                    !isFillLayout && styles[imageRatio]
+                    !isFillLayout && styles[imageRatio],
+                    mainScreen.effect === 'mist' && styles.noShadow
                 )}
                     style={{
                         borderColor: mainScreen.showBorder ? accentColor : 'transparent',
                         borderWidth: mainScreen.showBorder ? '4px' : '0px',
                         borderStyle: mainScreen.showBorder ? 'double' : 'solid',
                         borderRadius: mainScreen.expandPhoto ? '0px' :
-                            mainScreen.layout === 'arch' ? '170px 170px 20px 20px' :
-                                mainScreen.layout === 'oval' ? '170px 170px 170px 170px' :
-                                    mainScreen.layout === 'basic' ? '20px 20px 20px 20px' :
-                                        mainScreen.layout === 'frame' ? '4px 4px 4px 4px' :
-                                            mainScreen.layout === 'fill' ? '0px 0px 0px 0px' : '20px 20px 20px 20px'
+                            mainScreen.layout === 'arch' ? `170px 170px ${mainScreen.effect === 'mist' ? '0px 0px' : '20px 20px'}` :
+                                mainScreen.layout === 'oval' ? `170px 170px ${mainScreen.effect === 'mist' ? '0px 0px' : '170px 170px'}` :
+                                    mainScreen.layout === 'basic' ? `20px 20px ${mainScreen.effect === 'mist' ? '0px 0px' : '20px 20px'}` :
+                                        mainScreen.layout === 'frame' ? `4px 4px ${mainScreen.effect === 'mist' ? '0px 0px' : '4px 4px'}` :
+                                            mainScreen.layout === 'fill' ? '0px 0px 0px 0px' : `20px 20px ${mainScreen.effect === 'mist' ? '0px 0px' : '20px 20px'}`
                     }}
                 >
                     {imageUrl ? (
