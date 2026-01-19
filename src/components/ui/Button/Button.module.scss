@@ -158,3 +158,10 @@
 .spin {
   animation: spin 1s linear infinite;
 }
+
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}

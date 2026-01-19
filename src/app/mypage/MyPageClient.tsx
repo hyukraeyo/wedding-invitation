@@ -13,7 +13,7 @@ import type { InvitationData } from '@/store/useInvitationStore';
 import Header from '@/components/common/Header';
 
 import { useToast } from '@/hooks/use-toast';
-import { Edit2, Trash2, FileText, MoreHorizontal, Eye, Inbox, Clock, Bookmark, AlertCircle } from 'lucide-react';
+import { Edit2, Trash2, FileText, MoreHorizontal, Eye, Inbox, Clock, Bookmark, AlertCircle, CheckCircle } from 'lucide-react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -25,7 +25,7 @@ import { clsx } from 'clsx';
 import { InvitationCard } from '@/components/ui/InvitationCard';
 
 const ProfileCompletionModal = dynamic(
-    () => import('@/components/auth/ProfileCompletionModal'),
+    () => import('@/components/auth/ProfileCompletionModal').then(mod => mod.ProfileCompletionModal),
     { ssr: false }
 );
 const ResponsiveModal = dynamic(
@@ -86,6 +86,10 @@ export default function MyPageClient({
     // Rejection Modal State
     const [rejectionModalOpen, setRejectionModalOpen] = useState(false);
     const [rejectionTarget, setRejectionTarget] = useState<InvitationSummaryRecord | null>(null);
+
+    // View Rejection Reason Modal State
+    const [viewRejectionModalOpen, setViewRejectionModalOpen] = useState(false);
+    const [viewRejectionData, setViewRejectionData] = useState<ApprovalRequestSummary | null>(null);
 
     // Confirmation Dialog State
     const [confirmConfig, setConfirmConfig] = useState<ConfirmConfig>({
@@ -202,6 +206,10 @@ export default function MyPageClient({
     const executeApprove = useCallback(async (inv: InvitationSummaryRecord) => {
         setActionLoading(inv.id);
         try {
+            // Update approval_requests status to 'approved'
+            await approvalRequestService.approveRequest(inv.id);
+            
+            // Update invitation data
             const fullData = await fetchFullInvitationData(inv.slug);
             const updatedData = {
                 ...fullData,
@@ -462,17 +470,32 @@ export default function MyPageClient({
                                     const targetInv = adminInvitations.find(inv => inv.id === request.invitation_id);
                                     const date = new Date(request.created_at);
                                     const formattedDate = `${date.getFullYear()}. ${String(date.getMonth() + 1).padStart(2, '0')}. ${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+                                    const isRejected = request.status === 'rejected';
+                                    const isApproved = request.status === 'approved';
 
                                     return (
-                                        <div key={request.id} className={styles.requestItem}>
+                                        <div key={request.id} className={clsx(
+                                            styles.requestItem,
+                                            isRejected && styles.rejectedItem,
+                                            isApproved && styles.approvedItem
+                                        )}>
                                             <div className={styles.requestInfo}>
                                                 <div className={styles.requester}>
-                                                    <strong>{request.requester_name}</strong>
+                                                    {isRejected && <AlertCircle size={14} color="#DC2626" style={{ marginRight: '0.25rem' }} />}
+                                                    {isApproved && <CheckCircle size={14} color="#10B981" style={{ marginRight: '0.25rem' }} />}
+                                                    <strong style={
+                                                        isRejected ? { color: '#DC2626' } :
+                                                            isApproved ? { color: '#10B981' } : undefined
+                                                    }>
+                                                        {request.requester_name}
+                                                    </strong>
                                                     <span className={styles.phone}>({request.requester_phone})</span>
                                                 </div>
                                                 <div className={styles.requestTime}>
                                                     <Clock size={12} />
-                                                    <span>{formattedDate} 신청</span>
+                                                    <span>
+                                                        {formattedDate} {isRejected ? '거절' : isApproved ? '승인' : '신청'}
+                                                    </span>
                                                 </div>
                                             </div>
                                             {targetInv && (
@@ -483,18 +506,39 @@ export default function MyPageClient({
                                                     >
                                                         미리보기
                                                     </button>
-                                                    <button
-                                                        onClick={() => handleAdminRejectClick(targetInv)}
-                                                        className={styles.rejectButton}
-                                                    >
-                                                        거절하기
-                                                    </button>
-                                                    <button
-                                                        onClick={() => handleAdminApproveClick(targetInv)}
-                                                        className={styles.approveButton}
-                                                    >
-                                                        승인하기
-                                                    </button>
+                                                    {isRejected ? (
+                                                        <button
+                                                            onClick={() => {
+                                                                setViewRejectionData(request);
+                                                                setViewRejectionModalOpen(true);
+                                                            }}
+                                                            className={styles.viewReasonButton}
+                                                        >
+                                                            사유보기
+                                                        </button>
+                                                    ) : isApproved ? (
+                                                        <button
+                                                            onClick={() => handleAdminRevokeClick(targetInv)}
+                                                            className={styles.revokeButton}
+                                                        >
+                                                            승인취소
+                                                        </button>
+                                                    ) : (
+                                                        <>
+                                                            <button
+                                                                onClick={() => handleAdminRejectClick(targetInv)}
+                                                                className={styles.rejectButton}
+                                                            >
+                                                                거절하기
+                                                            </button>
+                                                            <button
+                                                                onClick={() => handleAdminApproveClick(targetInv)}
+                                                                className={styles.approveButton}
+                                                            >
+                                                                승인하기
+                                                            </button>
+                                                        </>
+                                                    )}
                                                 </div>
                                             )}
                                         </div>
@@ -510,59 +554,6 @@ export default function MyPageClient({
                                 <p className={styles.emptySubText}>모든 요청을 처리했습니다.</p>
                             </div>
                         )}
-                    </section>
-                )}
-
-                {/* Rejected Requests Section - Visible to all users (including admins) */}
-                {rejectedRequests.length > 0 && (
-                    <section className={styles.summaryCard} style={{ borderColor: '#FEE2E2' }}>
-                        <div className={styles.summaryHeader}>
-                            <div>
-                                <h2 style={{ color: '#DC2626' }}>거절된 신청</h2>
-                                <p>관리자가 거절한 사용 신청 내역입니다.</p>
-                            </div>
-                            <span className={styles.countBadge} style={{ backgroundColor: '#FEE2E2', color: '#DC2626' }}>
-                                {rejectedRequests.length}
-                            </span>
-                        </div>
-                        <div className={styles.requestList}>
-                            {rejectedRequests.map(request => {
-                                const date = new Date(request.created_at);
-                                const formattedDate = `${date.getFullYear()}. ${String(date.getMonth() + 1).padStart(2, '0')}. ${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
-
-                                return (
-                                    <div key={request.id} className={styles.requestItem} style={{ backgroundColor: '#FEF2F2' }}>
-                                        <div className={styles.requestInfo}>
-                                            <div className={styles.requester}>
-                                                <AlertCircle size={16} color="#DC2626" style={{ marginRight: '0.5rem' }} />
-                                                <strong style={{ color: '#DC2626' }}>거절됨</strong>
-                                            </div>
-                                            <div className={styles.requestTime}>
-                                                <Clock size={12} />
-                                                <span>{formattedDate}</span>
-                                            </div>
-                                        </div>
-                                        {request.rejection_reason && (
-                                            <div style={{
-                                                marginTop: '0.75rem',
-                                                padding: '0.75rem',
-                                                backgroundColor: '#FFF',
-                                                borderRadius: '0.5rem',
-                                                border: '1px solid #FEE2E2',
-                                            }}>
-                                                <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#DC2626', marginBottom: '0.5rem' }}>
-                                                    거절 사유
-                                                </div>
-                                                <div
-                                                    style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.6 }}
-                                                    dangerouslySetInnerHTML={{ __html: request.rejection_reason }}
-                                                />
-                                            </div>
-                                        )}
-                                    </div>
-                                );
-                            })}
-                        </div>
                     </section>
                 )}
 
@@ -595,18 +586,22 @@ export default function MyPageClient({
                                 </Link>
                             </div>
                         ) : (
-                            invitations.map((inv) => (
-                                <InvitationCard
-                                    key={inv.id}
-                                    invitation={inv}
-                                    isAdmin={isAdmin}
-                                    onEdit={handleEdit}
-                                    onDelete={handleDeleteClick}
-                                    onRequestApproval={handleRequestApprovalClick}
-                                    onCancelRequest={handleCancelRequestClick}
-                                    onRevokeApproval={handleAdminRevokeClick}
-                                />
-                            ))
+                            invitations.map((inv) => {
+                                const rejectionData = rejectedRequests.find(req => req.invitation_id === inv.id) || null;
+                                return (
+                                    <InvitationCard
+                                        key={inv.id}
+                                        invitation={inv}
+                                        isAdmin={isAdmin}
+                                        rejectionData={rejectionData}
+                                        onEdit={handleEdit}
+                                        onDelete={handleDeleteClick}
+                                        onRequestApproval={handleRequestApprovalClick}
+                                        onCancelRequest={handleCancelRequestClick}
+                                        onRevokeApproval={handleAdminRevokeClick}
+                                    />
+                                );
+                            })
                         )}
                     </div>
                 </section>
@@ -652,6 +647,39 @@ export default function MyPageClient({
                     loading={!!actionLoading}
                     requesterName={approvalRequests.find(req => req.invitation_id === rejectionTarget.id)?.requester_name || ''}
                 />
+            )}
+
+            {/* View Rejection Reason Modal */}
+            {viewRejectionData && (
+                <ResponsiveModal
+                    open={viewRejectionModalOpen}
+                    onOpenChange={setViewRejectionModalOpen}
+                    title="거절 사유"
+                    description={
+                        <>
+                            <strong>{viewRejectionData.requester_name}</strong>님의 신청을 거절한 사유입니다.
+                        </>
+                    }
+                    showCancel={false}
+                    confirmText="확인"
+                    onConfirm={() => {
+                        setViewRejectionModalOpen(false);
+                        setViewRejectionData(null);
+                    }}
+                >
+                    <div style={{
+                        marginTop: '1rem',
+                        padding: '1rem',
+                        backgroundColor: '#FEF2F2',
+                        borderRadius: '0.75rem',
+                        border: '1px solid #FEE2E2',
+                    }}>
+                        <div
+                            style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7 }}
+                            dangerouslySetInnerHTML={{ __html: viewRejectionData.rejection_reason || '거절 사유가 없습니다.' }}
+                        />
+                    </div>
+                </ResponsiveModal>
             )}
         </div>
     );

@@ -74,4 +74,18 @@ export const approvalRequestService = {
     const result = await response.json();
     return result.data as ApprovalRequestSummary[];
   },
+
+  async approveRequest(invitationId: string) {
+    const response = await fetch('/api/approval-requests', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ invitationId }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to approve request');
+    }
+
+    return true;
+  },
 };

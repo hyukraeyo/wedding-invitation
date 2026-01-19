@@ -208,6 +208,68 @@
             background-color: $zinc-100;
             color: $zinc-600;
         }
+
+        .viewReasonButton {
+            font-weight: 600;
+            font-size: 0.8125rem;
+            padding: 0.525rem 0.875rem;
+            border-radius: 0.75rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            background-color: #FEF2F2;
+            color: #DC2626;
+
+            &:hover {
+                background-color: #FEE2E2;
+                transform: translateY(-1px);
+            }
+
+            &:active {
+                transform: translateY(0);
+            }
+        }
+
+        .revokeButton {
+            font-weight: 600;
+            font-size: 0.8125rem;
+            padding: 0.525rem 0.875rem;
+            border-radius: 0.75rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            background-color: #FEF3C7;
+            color: #D97706;
+
+            &:hover {
+                background-color: #FDE68A;
+                transform: translateY(-1px);
+            }
+
+            &:active {
+                transform: translateY(0);
+            }
+        }
+    }
+
+    .rejectedItem {
+        background-color: #FEF2F2 !important;
+        border-color: #FEE2E2 !important;
+
+        &:hover {
+            background-color: #FEE2E2 !important;
+        }
+    }
+
+    .approvedItem {
+        background-color: #F0FDF4 !important;
+        border-color: #BBF7D0 !important;
+
+        &:hover {
+            background-color: #DCFCE7 !important;
+        }
     }
 }
 

@@ -4,7 +4,7 @@ import React, { useState, useCallback } from 'react';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 import { TextField } from '@/components/common/TextField';
 import { PhoneField } from '@/components/common/PhoneField';
-import { Button } from '../ui/Button';
+import { Button } from '@/components/ui/Button';
 import { useToast } from '@/hooks/use-toast';
 import { profileService } from '@/services/profileService';
 import { User, Phone } from 'lucide-react';
@@ -18,7 +18,7 @@ interface ProfileCompletionModalProps {
     onLogout?: () => void;
 }
 
-export default function ProfileCompletionModal({
+export function ProfileCompletionModal({
     isOpen,
     userId,
     defaultName = '',

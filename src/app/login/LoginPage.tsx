@@ -6,10 +6,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { signIn } from 'next-auth/react';
-import styles from './login.module.scss';
+import styles from './LoginPage.module.scss';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import ProfileCompletionModal from '@/components/auth/ProfileCompletionModal';
+import { ProfileCompletionModal } from '@/components/auth/ProfileCompletionModal';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 /**

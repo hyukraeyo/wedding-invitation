@@ -14,8 +14,12 @@ const requestSchema = z.object({
 });
 
 const rejectSchema = z.object({
-  invitationId: z.string().uuid(),
+ invitationId: z.string().uuid(),
   rejectionReason: z.string().min(1),
+});
+
+const approveSchema = z.object({
+  invitationId: z.string().uuid(),
 });
 
 
@@ -145,7 +149,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // Admin fetching all pending requests
+    // Admin fetching all requests (pending, rejected, and approved)
     if (!isAdmin) {
       return NextResponse.json(
         { error: '접근 권한이 없습니다.' },
@@ -156,7 +160,7 @@ export async function GET(request: NextRequest) {
     const { data, error } = await db
       .from('approval_requests')
       .select(APPROVAL_REQUEST_SUMMARY_SELECT)
-      .eq('status', 'pending')
+      .in('status', ['pending', 'rejected', 'approved'])
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -328,6 +332,81 @@ export async function DELETE(request: NextRequest) {
 
   } catch (error) {
     console.error('Unexpected error in DELETE /api/approval-requests:', error);
+    return NextResponse.json(
+      { error: '서버 오류가 발생했습니다.' },
+      { status: 500 }
+    );
+  }
+}
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const bodyPromise = request.json();
+    const sessionPromise = auth();
+    const [body, session] = await Promise.all([bodyPromise, sessionPromise]);
+    const validatedData = approveSchema.parse(body);
+    const userId = session?.user?.id;
+
+    if (!userId) {
+      return NextResponse.json(
+        { error: '로그인이 필요합니다.' },
+        { status: 401 }
+      );
+    }
+
+    // Check admin
+    const isEmailAdmin = session.user?.email === 'admin@test.com';
+    const supabase = await createSupabaseServerClient(session);
+    let isAdmin = isEmailAdmin;
+
+    if (!isAdmin) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('is_admin')
+        .eq('id', userId)
+        .single();
+      isAdmin = profile?.is_admin || false;
+    }
+
+    if (!isAdmin) {
+      return NextResponse.json(
+        { error: '관리자만 사용할 수 있습니다.' },
+        { status: 403 }
+      );
+    }
+
+    const db = supabaseAdmin || supabase;
+
+    // Update approval_requests status to approved
+    const { error: updateError } = await db
+      .from('approval_requests')
+      .update({
+        status: 'approved',
+        reviewed_by: userId,
+        reviewed_at: new Date().toISOString(),
+      })
+      .eq('invitation_id', validatedData.invitationId)
+      .eq('status', 'pending');
+
+    if (updateError) {
+      console.error('Error approving request:', updateError);
+      return NextResponse.json(
+        { error: '승인 처리에 실패했습니다.' },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ success: true });
+
+  } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: '입력 데이터가 올바르지 않습니다.', details: error.issues },
+        { status: 400 }
+      );
+    }
+
+    console.error('Unexpected error in PATCH /api/approval-requests:', error);
     return NextResponse.json(
       { error: '서버 오류가 발생했습니다.' },
       { status: 500 }

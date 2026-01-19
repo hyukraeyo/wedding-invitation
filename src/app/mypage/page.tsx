@@ -60,7 +60,7 @@ export default async function MyPage() {
                     .order('updated_at', { ascending: false }),
                 db.from('approval_requests')
                     .select(APPROVAL_REQUEST_SUMMARY_SELECT)
-                    .eq('status', 'pending')
+                    .in('status', ['pending', 'rejected', 'approved'])
                     .order('created_at', { ascending: false }),
                 db.from('approval_requests')
                     .select(APPROVAL_REQUEST_SUMMARY_SELECT)
@@ -109,7 +109,7 @@ export default async function MyPage() {
                         .order('updated_at', { ascending: false }),
                     db.from('approval_requests')
                         .select(APPROVAL_REQUEST_SUMMARY_SELECT)
-                        .eq('status', 'pending')
+                        .in('status', ['pending', 'rejected', 'approved'])
                         .order('created_at', { ascending: false }),
                 ]);
                 adminQueueResult = extraResults[0];

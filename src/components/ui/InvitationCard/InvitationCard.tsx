@@ -1,13 +1,15 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
     MoreHorizontal,
     Edit2,
     Eye,
     Trash2,
     Bookmark,
-    FileText
+    FileText,
+    AlertCircle,
+    Banana
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import {
@@ -17,11 +19,16 @@ import {
     DropdownMenuTrigger
 } from '@/components/ui/DropdownMenu';
 import type { InvitationSummaryRecord } from '@/lib/invitation-summary';
-import styles from './styles.module.scss';
+import type { ApprovalRequestSummary } from '@/services/approvalRequestService';
+import styles from './InvitationCard.module.scss';
+import { Button } from '@/components/ui/Button';
+import { IconButton } from '@/components/ui/IconButton';
+import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 
 interface InvitationCardProps {
     invitation: InvitationSummaryRecord;
     isAdmin?: boolean;
+    rejectionData?: ApprovalRequestSummary | null | undefined;
     onEdit: (inv: InvitationSummaryRecord) => void;
     onDelete: (inv: InvitationSummaryRecord) => void;
     onRequestApproval: (inv: InvitationSummaryRecord) => void;
@@ -32,6 +39,7 @@ interface InvitationCardProps {
 const InvitationCard = ({
     invitation,
     isAdmin = false,
+    rejectionData = null,
     onEdit,
     onDelete,
     onRequestApproval,
@@ -41,9 +49,12 @@ const InvitationCard = ({
     const data = invitation.invitation_data;
     const isApproved = data?.isApproved;
     const isRequesting = data?.isRequestingApproval;
+    const isRejected = !!rejectionData;
     const imageUrl = data?.imageUrl;
     const title = data?.mainScreen?.title || '제목없음';
     const slug = invitation.slug;
+
+    const [showRejectionModal, setShowRejectionModal] = useState(false);
 
     const handlePreview = () => {
         window.open(`/v/${slug}`, '_blank');
@@ -51,9 +62,10 @@ const InvitationCard = ({
 
     const handlePrimaryAction = (e: React.MouseEvent) => {
         e.preventDefault();
-        if (isApproved) {
-            if (isAdmin) onRevokeApproval(invitation);
-        } else if (isRequesting) {
+        // Prevent action if approved or rejected (treat as disabled)
+        if (isApproved || isRejected) return;
+
+        if (isRequesting) {
             onCancelRequest(invitation);
         } else {
             onRequestApproval(invitation);
@@ -75,7 +87,7 @@ const InvitationCard = ({
                     </div>
                 ) : (
                     <div className={styles.fallbackWrapper}>
-                        <FileText size={48} strokeWidth={1} className="text-gray-200" />
+                        <Banana className={styles.bananaIcon} />
                     </div>
                 )}
 
@@ -83,11 +95,12 @@ const InvitationCard = ({
                     <div className={styles.overlayTop}>
                         <span className={clsx(
                             styles.statusBadge,
-                            isApproved ? styles.approvedBadge :
-                                isRequesting ? styles.pendingBadge : styles.sampleBadge
+                            isRejected ? styles.rejectedBadge :
+                                isApproved ? styles.approvedBadge :
+                                    isRequesting ? styles.pendingBadge : styles.sampleBadge
                         )}>
                             <span className={styles.dot} />
-                            {isApproved ? '승인 완료' : isRequesting ? '승인 대기중' : '샘플 이용중'}
+                            {isRejected ? '거절됨' : isApproved ? '승인 완료' : isRequesting ? '승인 대기중' : '샘플 이용중'}
                         </span>
                         <h3 className={styles.overlayTitle}>
                             <Bookmark size={20} fill="currentColor" />
@@ -98,12 +111,14 @@ const InvitationCard = ({
                     <div className={styles.footer}>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <button className={styles.footerIconButton}>
-                                    <MoreHorizontal size={18} />
-                                </button>
+                                <IconButton
+                                    icon={MoreHorizontal}
+                                    className={styles.footerIconButton}
+                                    variant="outline"
+                                />
                             </DropdownMenuTrigger>
                             <DropdownMenuContent side="top" align="start" style={{ width: '160px', padding: '0.4rem', borderRadius: '0.75rem' }}>
-                                {!isRequesting && !isApproved && (
+                                {!isRequesting && !isApproved && !isRejected && (
                                     <DropdownMenuItem onClick={() => onEdit(invitation)}>
                                         <Edit2 size={16} className="mr-2" /> 편집하기
                                     </DropdownMenuItem>
@@ -111,7 +126,12 @@ const InvitationCard = ({
                                 <DropdownMenuItem onClick={handlePreview}>
                                     <Eye size={16} className="mr-2" /> 미리보기
                                 </DropdownMenuItem>
-                                {!isRequesting && !isApproved && (
+                                {isRejected && (
+                                    <DropdownMenuItem onClick={() => setShowRejectionModal(true)} style={{ color: '#DC2626' }}>
+                                        <AlertCircle size={16} className="mr-2" /> 거절 사유
+                                    </DropdownMenuItem>
+                                )}
+                                {!isRequesting && !isApproved && !isRejected && (
                                     <DropdownMenuItem
                                         onClick={() => setTimeout(() => onDelete(invitation), 0)}
                                         style={{ color: '#EF4444' }}
@@ -122,33 +142,77 @@ const InvitationCard = ({
                             </DropdownMenuContent>
                         </DropdownMenu>
 
-                        {!isRequesting && !isApproved ? (
-                            <button className={styles.footerSecondaryButton} onClick={() => onEdit(invitation)}>
+                        {isRejected ? (
+                            <Button
+                                variant="outline"
+                                className={styles.footerSecondaryButton}
+                                onClick={() => setShowRejectionModal(true)}
+                            >
+                                거절 사유
+                            </Button>
+                        ) : !isRequesting && !isApproved ? (
+                            <Button
+                                variant="outline"
+                                className={styles.footerSecondaryButton}
+                                onClick={() => onEdit(invitation)}
+                            >
                                 편집하기
-                            </button>
+                            </Button>
                         ) : (
-                            <button className={styles.footerSecondaryButton} onClick={handlePreview}>
+                            <Button
+                                variant="outline"
+                                className={styles.footerSecondaryButton}
+                                onClick={handlePreview}
+                            >
                                 미리보기
-                            </button>
+                            </Button>
                         )}
 
-                        <button
+                        <Button
                             className={clsx(
                                 styles.footerPrimaryButton,
                                 isApproved && styles.approved,
-                                isRequesting && styles.requesting
+                                isRequesting && styles.requesting,
+                                isRejected && styles.rejected
                             )}
-                            disabled={!isAdmin && isApproved}
+                            variant={isApproved ? "secondary" : isRejected ? "outline" : "solid"}
+                            disabled={isApproved || isRejected}
                             onClick={handlePrimaryAction}
                         >
-                            {isApproved ? "승인완료" : isRequesting ? "신청취소" : "사용신청"}
-                        </button>
+                            {isRejected ? '거절됨' : isApproved ? '승인완료' : isRequesting ? '신청취소' : '사용신청'}
+                        </Button>
                     </div>
                 </div>
             </div>
             <div className={styles.dateText}>
                 생성일 {formattedDate}
             </div>
+
+            {/* Rejection Reason Modal */}
+            {isRejected && rejectionData && (
+                <ResponsiveModal
+                    open={showRejectionModal}
+                    onOpenChange={setShowRejectionModal}
+                    title="거절 사유"
+                    description="관리자가 작성한 거절 사유입니다."
+                    showCancel={false}
+                    confirmText="확인"
+                    onConfirm={() => setShowRejectionModal(false)}
+                >
+                    <div style={{
+                        marginTop: '1rem',
+                        padding: '1rem',
+                        backgroundColor: '#FEF2F2',
+                        borderRadius: '0.75rem',
+                        border: '1px solid #FEE2E2',
+                    }}>
+                        <div
+                            style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7 }}
+                            dangerouslySetInnerHTML={{ __html: rejectionData.rejection_reason || '거절 사유가 없습니다.' }}
+                        />
+                    </div>
+                </ResponsiveModal>
+            )}
         </div>
     );
 };

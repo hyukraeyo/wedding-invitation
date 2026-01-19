@@ -64,7 +64,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                 ref={ref}
                 {...props}
             >
-                <span className={clsx(loading && styles.loadingText)}>{children}</span>
+                <span className={clsx(styles.content, loading && styles.loadingText)}>{children}</span>
                 {loading && (
                     <div className={styles.loader}>
                         <Banana className={styles.spin} size={20} />
