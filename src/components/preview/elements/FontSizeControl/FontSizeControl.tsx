@@ -1,66 +1,43 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Type, X } from 'lucide-react';
+import { CaseSensitive } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { cn } from '@/lib/utils';
 import styles from './FontSizeControl.module.scss';
 
 export function FontSizeControl() {
-    const [isOpen, setIsOpen] = useState(false);
     const fontScale = useInvitationStore(state => state.theme.fontScale || 1);
     const setTheme = useInvitationStore(state => state.setTheme);
-    const containerRef = useRef<HTMLDivElement>(null);
 
-    const options = [
-        { label: '작게', value: 1, className: styles.small },
-        { label: '중간', value: 1.1, className: styles.large },
-        { label: '크게', value: 1.2, className: styles.extraLarge },
-    ];
+    const scales = [1, 1.1, 1.2];
+    const labels = ['작게', '중간', '크게'];
 
-    useEffect(() => {
-        const handleClickOutside = (e: MouseEvent) => {
-            if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
-                setIsOpen(false);
-            }
-        };
-        if (isOpen) {
-            document.addEventListener('mousedown', handleClickOutside);
-        }
-        return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, [isOpen]);
+    const handleToggle = () => {
+        const currentIndex = scales.indexOf(fontScale);
+        const nextIndex = (currentIndex + 1) % scales.length;
+        setTheme({ fontScale: scales[nextIndex] });
+    };
+
+    const currentLabel = labels[scales.indexOf(fontScale)] || '중간';
 
     return (
-        <div className={styles.container} ref={containerRef}>
+        <div className={styles.container}>
             <button
-                className={cn(styles.trigger, isOpen && styles.active)}
-                onClick={() => setIsOpen(!isOpen)}
-                aria-label="글자 크기 조절"
+                className={styles.trigger}
+                onClick={handleToggle}
+                aria-label={`글자 크기 조절 (현재: ${currentLabel})`}
+                title={`글자 크기: ${currentLabel}`}
             >
-                {isOpen ? <X size={20} /> : <Type size={20} />}
-            </button>
-            {isOpen && (
-                <div className={styles.panel}>
-                    {options.map((opt) => (
-                        <button
-                            key={opt.value}
-                            className={cn(
-                                styles.option,
-                                opt.className,
-                                fontScale === opt.value && styles.active
-                            )}
-                            onClick={() => {
-                                setTheme({ fontScale: opt.value });
-                                // Keep open to allow rapid testing? Or close?
-                                // Let's keep it open for now.
-                            }}
-                            title={`글자 크기 ${opt.value * 100}%`}
-                        >
-                            {opt.label}
-                        </button>
-                    ))}
+                <div className={cn(
+                    styles.iconWrapper,
+                    fontScale === 1 && styles.small,
+                    fontScale === 1.1 && styles.medium,
+                    fontScale === 1.2 && styles.large
+                )}>
+                    <CaseSensitive size={20} strokeWidth={fontScale === 1 ? 1.5 : fontScale === 1.1 ? 2 : 2.5} />
                 </div>
-            )}
+            </button>
         </div>
     );
 }

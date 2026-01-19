@@ -159,6 +159,19 @@ const InvitationCanvasContent = memo(({
   const initialScrollDone = React.useRef(false);
   const scrollContainerRef = React.useRef<HTMLDivElement>(null);
 
+  // Subscribe to store's fontScale to make the UI reactive to FontSizeControl
+  const storeFontScale = useInvitationStore(state => state.theme.fontScale);
+  const setTheme = useInvitationStore(state => state.setTheme);
+
+  // Sync initial data's fontScale to store if provided (shared link view)
+  useEffect(() => {
+    if (data?.theme?.fontScale && !isPreviewMode) {
+      if (useInvitationStore.getState().theme.fontScale !== data.theme.fontScale) {
+        setTheme({ fontScale: data.theme.fontScale });
+      }
+    }
+  }, [data?.theme?.fontScale, isPreviewMode, setTheme]);
+
   const {
     theme,
     mainScreen,
@@ -292,8 +305,8 @@ const InvitationCanvasContent = memo(({
 
 
   const canvasStyle = useMemo(
-    () => getFontStyle(theme.font, theme.fontScale, theme.backgroundColor),
-    [theme.font, theme.fontScale, theme.backgroundColor]
+    () => getFontStyle(theme.font, storeFontScale || theme.fontScale, theme.backgroundColor),
+    [theme.font, theme.fontScale, storeFontScale, theme.backgroundColor]
   );
 
   return (

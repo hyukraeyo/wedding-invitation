@@ -37,6 +37,9 @@
 ## Introduction
 This document defines the development workflow, code conventions, and contribution standards for the project. It consolidates architectural principles, testing requirements, formatting rules, and review expectations to ensure consistent, maintainable, and high-quality contributions across the codebase.
 
+> **CRITICAL: SYNC MANDATE**
+> 모든 설정 및 가이드 문서(`.agent`, `.codex`, `.cursor`, `.opencode`, `.cursorrules`, `AGENTS.md`, `README.md`, `ARCHITECTURE.md`)는 항상 동일한 기준을 유지하도록 함께 업데이트되어야 합니다. 한 곳의 규칙이 변경되면 언급된 모든 파일에 해당 변경 사항을 명시하고 동기화하십시오.
+
 ## Project Structure
 The repository follows a Next.js App Router structure with clear separation of concerns:
 - src/app: App Router pages, API routes, and shared layouts
@@ -139,7 +142,7 @@ ServerAction-->>Client : "Response"
 ## Code Contribution Standards
 - Naming conventions
   - Components: PascalCase (e.g., UserProfile.tsx)
-  - Files/Folders: kebab-case (e.g., user-profile.tsx)
+  - Files/Folders: PascalCase (e.g., UserProfile/UserProfile.tsx)
   - Functions/Variables: camelCase (e.g., getUserData)
   - Types/Interfaces: PascalCase (e.g., ApiResponse)
   - Constants: UPPER_SNAKE_CASE (e.g., MAX_RETRY_COUNT)

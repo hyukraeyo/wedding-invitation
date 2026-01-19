@@ -3,6 +3,9 @@
 Guidance for agentic coding agents working in `wedding-invitation`.
 This file consolidates repo conventions plus Cursor rules from `.cursorrules`.
 
+> **CRITICAL: SYNC MANDATE**
+> 모든 설정 및 가이드 문서(`.agent`, `.codex`, `.cursor`, `.opencode`, `.cursorrules`, `AGENTS.md`, `README.md`, `ARCHITECTURE.md`)는 항상 동일한 기준을 유지하도록 함께 업데이트되어야 합니다. 한 곳의 규칙이 변경되면 언급된 모든 파일에 해당 변경 사항을 명시하고 동기화하십시오.
+
 ## Build / Lint / Test Commands
 
 ```bash
@@ -22,131 +25,48 @@ npm run test:ui            # Open Vitest UI
 npm run test:coverage      # Generate coverage report
 ```
 
-### Run a Single Test
+## Core Standards (from `.cursorrules`)
 
-```bash
-# Run a specific test file
-npm run test -- src/app/__tests__/page.test.tsx
+### Styling: Strict SCSS Modules
+- **SCSS Modules are mandatory** for all components.
+- **Tailwind CSS is prohibited** within components to maintain design consistency.
+- Use `@use "@/styles/variables" as v;` for design tokens.
 
-# Run tests matching pattern
-npm run test -- --reporter=verbose src/components/common/__tests__
-
-# Run test matching name
-npm run test -- -t "renders main heading"
-```
-
-## Cursor Rules (from `.cursorrules`)
+### Naming: PascalCase Folders & Files
+- **Component Folders/Files**: Use **PascalCase** (e.g., `src/components/ui/Button/Button.tsx`).
+- **Hybrid Pattern**: Every component folder must have a `ComponentName.tsx`, `ComponentName.module.scss`, and `index.ts`.
 
 ### Mobile-First UX (Top Priority)
-- Design for mobile first, including layout and performance.
-- Ensure responsive behavior across common devices.
-- Keep UI/UX quality high without compromise.
+- Design for mobile first (Portrait mode).
+- Premium iOS-like animations (`cubic-bezier(0.16, 1, 0.3, 1)`).
+- Use `ResponsiveModal` for dialogs.
 
-### Design System: TDS Mobile (Required)
-- Follow TDS colors and typography references.
-- Reuse TDS-style components (buttons, inputs, modals, toasts).
-- Customize only within TDS spacing/rounding/shadow constraints.
-
-### shadcn/ui Best Practices
-- Prefer `@/components/ui` components.
-- Maintain accessibility defaults and add ARIA when needed.
-- Avoid unnecessary re-renders in component usage.
-
-### Next.js 16+ Official Patterns (Strict)
-- Server components are default; only use client components for interactivity.
-- Fetch initial data in server components; no client-side `useEffect` fetches.
-- Use Server Actions (`'use server'`) for mutations; avoid extra API routes.
-- Direct DB/service layer access from server components; no `fetch('/api')`.
-- Use `Suspense` and `loading.tsx` for streaming.
+### Next.js 16+ Patterns (Strict)
+- Server components are default.
+- Fetch initial data in server components; no client-side `useEffect` fetches on page load.
+- Use Server Actions (`'use server'`) for mutations.
+- Direct DB access from server components; no internal `fetch('/api')`.
 
 ### Reuse First (Critical)
 - Search for existing components before creating new ones.
 - Refactor repeated patterns into shared components.
-- DRY is mandatory; avoid duplicating UI patterns.
+- DRY is mandatory.
 
 ## Project Overview
 - Framework: Next.js 16.1.1 (App Router)
 - Language: TypeScript 5 (strict mode)
-- Styling: Tailwind CSS + TDS Mobile design system base
+- Styling: SCSS Modules + TDS Mobile (Toss Style)
 - State: Zustand (client), TanStack Query (server)
-- Testing: Vitest + React Testing Library
+- Database: Supabase (Remote CLI)
 
-## Supabase Remote CLI (No Docker)
-- Local Docker is not used; connect directly to remote Supabase.
-- In non-interactive environments, `npx supabase login` fails, use tokens.
-
-### Database Cleanup and Initialization
-- To clean all data (users, invitations, profiles, etc.), create a migration file in `supabase/migrations/` with DELETE statements
-- Use `npx supabase db push` to apply the cleanup migration
-- All data will be permanently deleted, so use with caution
-
-```bash
-export SUPABASE_ACCESS_TOKEN=...
-export SUPABASE_DB_PASSWORD=...
-
-npx supabase link --project-ref <project-ref>
-npx supabase db push
-```
-
-## Code Style Guidelines
-
-### Imports and Path Aliases
-Use path aliases for clarity:
-
-```ts
-import { Component } from '@/components/common/Component';
-import { utility } from '@/lib/utils';
-import { CustomType } from '@/types/common';
-import { useCustomHook } from '@/hooks/useCustomHook';
-import { CONSTANT } from '@/constants';
-```
-
-### Formatting
-- Follow existing file formatting and ESLint rules.
-- Keep components under 200 lines with a single responsibility.
-- Avoid adding inline comments unless explicitly requested.
-
-### Naming Conventions
+## Naming Conventions
 - Components: PascalCase (`UserProfile.tsx`)
-- Files/Folders: kebab-case (`user-profile.tsx`)
+- Folders: PascalCase (`src/components/ui/UserProfile/`)
 - Functions/Variables: camelCase (`getUserData`)
 - Types/Interfaces: PascalCase (`ApiResponse`)
 - Constants: UPPER_SNAKE_CASE (`MAX_RETRY_COUNT`)
 
-### TypeScript Usage
+## TypeScript Usage
 - Strict mode is enforced; avoid `any`.
-- Use `interface` for object shapes and component props.
-- Use `type` for unions, intersections, and mapped types.
 - Define props explicitly and avoid `React.FC`.
 - Prefer explicit return types for exported helpers.
-
-### React + Next.js Patterns
-- Server components by default.
-- `'use client'` only for hooks, browser APIs, or interactivity.
-- Data fetching stays in server components; no client-side fetch on initial render.
-- Use Server Actions for mutations.
-- Use `<Image>` for images and memoize expensive components.
-- Wrap risky UI with `ErrorBoundary`.
-
-## Error Handling
-- Prefer structured errors with status codes in API handlers.
-- Handle Zod validation errors explicitly.
-- Log unexpected errors server-side with context.
-
-```ts
-return NextResponse.json({ error: 'Validation failed' }, { status: 400 });
-```
-
-## Testing Guidelines
-- Place tests in `__tests__` folders or `*.test.tsx` files.
-- Use `@/test-utils` for configured providers.
-- Test behavior, not implementation details.
-- Prefer `getByRole`/`getByText` over selectors.
-- Mock external APIs and browser APIs when needed.
-
-## Performance & Accessibility
-- Minimize client components to reduce hydration cost.
-- Use memoization to reduce unnecessary re-renders.
-- Ensure keyboard navigation and meaningful ARIA labels.
-- Prefer `loading.tsx` + `Suspense` for perceived performance.
-- Keep bundle size in check with `npm run analyze`.

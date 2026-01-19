@@ -1,270 +1,54 @@
 # Cursor Rules for Wedding Invitation Project
-# Next.js 16+ 공식 권장사항을 최우선으로 따르는 프로젝트 규칙
+# Next.js 16+ 및 React 19 최적화 / SCSS Modules 기반 토스 스타일 프로젝트
 
+> **CRITICAL: SYNC MANDATE**
+> 모든 설정 및 가이드 문서(`.agent`, `.codex`, `.cursor`, `.opencode`, `.cursorrules`, `AGENTS.md`, `README.md`, `ARCHITECTURE.md`)는 항상 동일한 기준을 유지하도록 함께 업데이트되어야 합니다. 한 곳의 규칙이 변경되면 언급된 모든 파일에 해당 변경 사항을 명시하고 동기화하십시오.
+
+---
 
 ## ⚡ Vercel React Best Practices (최상위 우선순위)
 - **최우선 원칙**: React/Next.js 관련 모든 작업은 Vercel Best Practices를 최우선으로 준수합니다.
 - **참조 문서**: `.codex/skills/vercel-react-best-practices/SKILL.md` 및 하위 `rules/*` 문서를 기준으로 결정합니다.
-- **충돌 처리**: 다른 규칙과 충돌 시 이 규칙을 기준으로 해결하고, 필요하면 규칙 자체를 업데이트합니다.
 
-## 📱 모바일 최적화 (최상위 우선순위)
-- **모바일 퍼스트**: 모든 기능과 UI는 모바일 환경에서의 경험을 최우선으로 설계하고 구현해야 합니다.
-- **최상급 UI/UX**: 모바일에서의 사용자 경험(UX)과 인터페이스(UI)는 타협 없이 최고 수준이어야 합니다.
-- **반응형 필수**: 다양한 모바일 기기 해상도에서 완벽하게 동작해야 합니다.
-- **성능 최적화**: 모바일 네트워크 환경을 고려하여 로딩 속도와 렌더링 성능을 최적화해야 합니다.
+## 🎨 스타일링 및 디자인 시스템 (Strict Rule)
+- **SCSS Modules 필수**: 모든 컴포넌트 스타일링은 반드시 SCSS Modules를 사용합니다.
+- **Tailwind 금지**: 컴포넌트 단위에서 Tailwind CSS 유틸리티 클래스 사용을 엄격히 금지합니다. (일관된 디자인 시스템 유지 목적)
+- **TDS Mobile 기반**: [Toss Design System Mobile](https://tossmini-docs.toss.im/tds-mobile/)의 미학을 따릅니다.
+- **디자인 토큰**: `src/styles/_variables.scss` 및 `_mixins.scss`에 정의된 토큰을 `@use`하여 사용합니다.
+- **Primary Color**: 바나나 옐로우 `#FBC02D`를 주력으로 사용합니다.
 
-## 🎨 디자인 시스템: TDS Mobile 커스텀 베이스 (최우선 준수)
+## 📱 모바일 최적화 및 UX
+- **모바일 퍼스트**: 모든 UI는 모바일 환경(포트레이트 모드)에서의 경험을 최우선으로 설계합니다.
+- **프리미엄 미학**: iOS 스타일의 부드러운 애니메이션(`cubic-bezier(0.16, 1, 0.3, 1)`)과 글래스모피즘을 적극 활용합니다.
+- **반응형 모달**: Desktop(Dialog) ↔ Mobile(Drawer) 변환 패턴(`ResponsiveModal`)을 필수 사용합니다.
 
-### 참조 디자인 시스템
-- **기반**: [TDS Mobile (Toss Design System)](https://tossmini-docs.toss.im/tds-mobile/)
-- **설명**: TDS는 토스 제품을 만들 때 공통적으로 사용하는 디자인 시스템으로, 수백 개의 컴포넌트와 템플릿으로 구성되어 있습니다.
+## 📂 폴더 구조 및 네이밍 컨벤션 (PascalCase)
+- **컴포넌트 폴더/파일명**: 반드시 **PascalCase**를 사용합니다.
+  - ✅ `src/components/ui/Button/Button.tsx`
+  - ❌ `src/components/ui/button/button.tsx`
+- **하이브리드 컴포넌트 패턴**: 명확한 파일명 식별과 깔끔한 import를 위해 다음 구조를 엄수합니다.
+  ```
+  ComponentName/
+  ├── ComponentName.tsx        # 컴포넌트 로직
+  ├── ComponentName.module.scss # 스타일
+  └── index.ts                # Re-export (export * from './ComponentName')
+  ```
+- **기타 네이밍**: 
+  - 함수/변수: `camelCase`
+  - 상수: `UPPER_SNAKE_CASE`
+  - 타입/인터페이스: `PascalCase`
 
-### 디자인 원칙 (TDS 지향점 기반)
-1. **제품의 최소 품질 보장**: 일관된 UI로 사용자 경험 일관성 유지
-2. **생산성 향상**: 재사용 가능한 아름다운 디자인 시스템으로 UI 개발 효율화
-3. **업계 최고 수준의 완성도**: 일관성 있는 인터랙션, 애니메이션, 디자인 템플릿 활용
+## 🚀 Next.js 16+ App Router 패턴
+- **서버 컴포넌트 기본**: 데이터 페칭은 서버 컴포넌트에서 직접 수행합니다.
+- **Client Fetch 금지**: 페이지 초기 진입 시 `useEffect`나 `fetch`를 통한 클라이언트 데이터 로딩을 금지합니다.
+- **서버 액션**: 모든 데이터 변경(Mutation)은 `'use server'` 액션을 통해 처리합니다.
+- **직접 DB 접근**: 서버 컴포넌트에서는 API Route를 거치지 않고 Supabase Service 계층을 직접 호출합니다.
 
-### 커스터마이징 가이드
-- **Colors**: TDS 컬러 팔레트를 기반으로 웨딩 테마에 맞게 커스터마이징 (`_tds_colors.scss`)
-- **Typography**: TDS 타이포그래피 시스템 참조 (`_tds_typography.scss`)
-- **Components**: TDS 컴포넌트 스타일을 참조하여 프로젝트에 맞게 구현
-  - 버튼, 입력 폼, 토스트, 모달 등 공통 컴포넌트는 TDS 스타일 가이드 준수
-  - 커스텀 시 TDS의 간격, 라운딩, 그림자 시스템 참조
-
-### 참조 문서
-- [TDS 소개](https://tossmini-docs.toss.im/tds-mobile/)
-- [TDS 시작하기](https://tossmini-docs.toss.im/tds-mobile/start/)
-- [TDS Colors](https://tossmini-docs.toss.im/tds-mobile/foundation/colors/)
-- [TDS Typography](https://tossmini-docs.toss.im/tds-mobile/foundation/typography/)
-
-### shadcn/ui Best Practices (필수 준수)
-- **최신 문서 참조**: https://ui.shadcn.com/docs/components를 항상 참조하여 최신 구현 방식을 따릅니다.
-- **성능 최적화**: 컴포넌트 구현 시 불필요한 리렌더링을 방지하고, 최적화된 패턴을 사용합니다.
-- **접근성 준수**: shadcn/ui의 기본 접근성 기능을 유지하며, ARIA 속성을 올바르게 활용합니다.
+## 🔧 기술 스택 및 설정
+- **Framework**: Next.js 16.1.1 (App Router)
+- **Language**: TypeScript 5 (Strict Mode 필수)
+- **State**: Zustand (`useInvitationStore` 단일 스토어 활용)
+- **Data**: Supabase (Remote CLI 사용, Local Docker 미사용)
 
 ---
-
-## 🚀 Next.js 16+ 공식 권장사항 (최우선 준수)
-
-### 1. App Router 패턴 (최우선 필수)
-- **서버 컴포넌트 필수**: 모든 페이지와 데이터 페칭 컴포넌트는 반드시 **서버 컴포넌트**로 작성해야 합니다.
-- **직접 DB 접근**: 서버 컴포넌트에서 API Route(`fetch('/api/...')`)를 호출하지 마십시오. **직접 DB(Supabase)를 호출**하거나 Service 계층을 통해 데이터를 가져와야 합니다.
-- **'use client' 제한**: 클라이언트 컴포넌트는 트리의 말단(Leaf) 노드에서 인터랙션(클릭, 입력 등)이 필요한 경우에만 최소한으로 사용합니다.
-- **데이터 흐름**: Server Component(Fetch) -> Client Component(Props) 패턴을 엄수합니다.
-
-### 2. 데이터 페칭 전략 (Strict Rule)
-- **NO Client-Side Fetching**: 페이지 진입 시 필요한 데이터를 `useEffect`나 `tanstack-query`로 클라이언트에서 가져오는 행위를 **금지**합니다. (초기 데이터는 무조건 서버에서 주입)
-- **서버 액션(Server Actions)**: 데이터 변이(Mutation)는 **Server Actions**를 통해 처리합니다. API Route 핸들러를 별도로 만들지 마십시오.
-- **캐싱 및 최적화**: `unstable_cache` 또는 Supabase의 캐싱 기능을 활용하여 DB 부하를 최소화합니다.
-- **스트리밍**: `Suspense`와 `loading.tsx`를 적극 활용하여 워터폴 현상을 방지하고 체감 성능을 높입니다.
-
-### 3. Supabase 마이그레이션 및 데이터베이스 관리
-- **원격 마이그레이션**: 로컬 Docker 없이 원격 Supabase에 직접 마이그레이션 적용 (`npx supabase db push`)
-- **데이터 초기화**: 기존 데이터를 삭제하고 싶을 때는 `supabase/migrations/`에 cleanup 마이그레이션 파일을 생성하여 실행
-- **토큰 기반 인증**: 비-인터랙티브 환경에서는 `SUPABASE_ACCESS_TOKEN` 환경 변수를 사용
-
-### 4. 렌더링 최적화 (React 19 + Next.js 16)
-- **서버 사이드 렌더링**: 동적 콘텐츠는 서버에서 렌더링하여 FCP 향상
-- **정적 생성**: 정적 콘텐츠는 빌드 시점에 생성 (`export const dynamic = 'force-static'`)
-- **하이드레이션 최적화**: 클라이언트 컴포넌트 최소화로 하이드레이션 비용 절감
-- **React 19 기능 활용**: 새로운 컴파일러와 자동 배치 처리 활용
-
-### 5. 컴포넌트 재사용 및 공통화 (Antigravity 필수 규칙)
-- **재사용 우선 원칙**: 새로운 UI나 기능을 작성하기 전에 반드시 기존 코드베이스를 검색하여 재사용 가능한 컴포넌트가 있는지 확인해야 합니다. (예: 모달, 버튼, 폼 요소 등)
-- **공통화 의무**: 비슷한 패턴이 반복되거나 중복된 코드가 발견되면, 이를 즉시 공통 컴포넌트(예: `BuilderModal`, `BuilderButton`)로 리팩토링하여 사용해야 합니다.
-- **검색 필수**: 작업 시작 전 `grep_search` 등을 통해 유사한 구현이 있는지 확인하는 것을 습관화하며, DRY(Don't Repeat Yourself) 원칙을 철저히 준수합니다.
-
-## 📁 프로젝트 구조 및 컨벤션
-
-### 폴더 구조
-```
-src/
-├── app/                    # Next.js App Router
-│   ├── (auth)/            # 라우트 그룹
-│   ├── api/               # API 라우트
-│   ├── globals.css        # 글로벌 스타일
-│   ├── layout.tsx         # 루트 레이아웃
-│   └── page.tsx           # 홈 페이지
-├── components/            # 재사용 컴포넌트
-│   ├── ui/               # 기초 UI 컴포넌트
-│   ├── forms/            # 폼 컴포넌트
-│   └── layout/           # 레이아웃 컴포넌트
-├── lib/                  # 유틸리티 함수
-├── hooks/               # 커스텀 훅
-├── types/               # TypeScript 타입 정의
-└── constants/           # 상수 정의
-```
-
-### 네이밍 컨벤션
-- **컴포넌트**: PascalCase (`Button.tsx`, `UserProfile.tsx`)
-- **파일/폴더**: kebab-case (`user-profile.tsx`, `api-routes/`)
-- **함수/변수**: camelCase (`getUserData`, `userName`)
-- **타입**: PascalCase (`User`, `ApiResponse`)
-
-## 🎯 TypeScript 엄격 모드 (Next.js 16 필수)
-
-### 설정 요구사항
-```json
-{
-  "compilerOptions": {
-    "strict": true,
-    "noImplicitAny": true,
-    "exactOptionalPropertyTypes": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": false,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "strictBindCallApply": true,
-    "strictPropertyInitialization": true,
-    "noImplicitThis": true
-  }
-}
-```
-
-### 타입 정의 규칙
-- **인터페이스 우선**: `interface`를 기본으로 사용, `type`은 유니온/매핑 타입에만 사용
-- **유니온 타입**: 가능한 모든 케이스 명시, `never`로 불가능한 케이스 처리
-- **제네릭 활용**: 재사용 가능한 타입 정의, 제약 조건 명확히 지정
-- **매핑 타입**: 객체 타입 변환에 활용, 키 프리징으로 불변성 보장
-- **브랜딩 타입**: `unique symbol`로 타입 안전성 강화
-- **템플릿 리터럴 타입**: 문자열 조합 타입에 활용
-
-## 🔧 코드 품질 및 성능 (React 19 + Next.js 16)
-
-### 컴포넌트 작성 규칙
-- **단일 책임**: 각 컴포넌트는 하나의 역할만 담당, 200줄 이내 유지
-- **Props 인터페이스**: 모든 props에 대한 타입 정의, `React.FC` 지양
-- **메모이제이션**: 불필요한 리렌더링 방지 (`React.memo`, `useMemo`, `useCallback`)
-- **서버/클라이언트 분리**: 서버 컴포넌트는 데이터 페칭, 클라이언트는 인터랙션
-- **에러 경계**: `ErrorBoundary`로 사용자 경험 향상
-- **접근성**: ARIA 속성과 키보드 네비게이션 지원
-
-### 성능 최적화 전략
-- **이미지 최적화**: Next.js `<Image>` 컴포넌트 필수 사용, WebP/AVIF 자동 변환
-- **코드 분할**: 동적 임포트와 `React.lazy()`로 번들 크기 최적화
-- **번들 분석**: Webpack Bundle Analyzer와 Next.js 분석 도구 활용
-- **캐싱 전략**: ISR, SSR, SWR 패턴에 따른 적절한 캐싱 구현
-- **컴파일러 활용**: React 19 컴파일러의 자동 최적화 활용
-
-## 🧪 테스트 전략
-
-### 단위 테스트
-- **컴포넌트**: React Testing Library 사용
-- **커스텀 훅**: `@testing-library/react-hooks`
-- **유틸리티**: Jest 단위 테스트
-
-### 통합 테스트
-- **사용자 플로우**: Playwright E2E 테스트
-- **API 통합**: MSW로 API 모킹
-
-## 🚀 배포 및 모니터링 (Next.js 16)
-
-### Vercel 최적화
-- **Edge Runtime**: API 라우트에 Edge Runtime 사용으로 전역 배포
-- **ISR/SSR**: `next.revalidate`, `export const dynamic`으로 캐싱 전략 최적화
-- **Analytics**: Vercel Analytics와 Web Vitals 통합
-- **Edge Config**: 환경별 설정 관리
-
-### 모니터링 및 품질 보증
-- **에러 추적**: Sentry 통합으로 런타임 에러 모니터링
-- **성능 모니터링**: Core Web Vitals와 사용자 경험 지표 측정
-- **A/B 테스트**: Vercel Edge Functions로 실험적 기능 테스트
-- **사용자 피드백**: 사용자 행동 분석과 피드백 수집
-
-## 📋 커밋 컨벤션
-
-### 커밋 메시지 형식
-```
-type(scope): description
-
-[optional body]
-
-[optional footer]
-```
-
-### 필수 규칙: 커밋 메시지 앞에 타입 종류 항상 붙이기
-**⚠️ 모든 커밋 메시지 앞에 아래 타입 중 하나를 반드시 붙여주세요.**
-
-### 타입 종류
-- `feat`: 새로운 기능
-- `fix`: 버그 수정
-- `docs`: 문서 변경
-- `style`: 코드 스타일 변경 (포맷팅, 세미콜론 누락 등)
-- `refactor`: 코드 리팩토링 (기능 변경 없이 코드 구조 개선)
-- `test`: 테스트 추가/수정
-- `chore`: 빌드/도구 설정 변경 (production code 변경 없음)
-
-### 커밋 메시지 예시
-```
-feat: 사용자 로그인 기능 추가
-fix: 메뉴 버튼 클릭 시 오류 수정
-docs: README.md 설치 가이드 업데이트
-style: 코드 들여쓰기 통일
-refactor: API 호출 로직 모듈화
-test: 결제 모듈 유닛 테스트 추가
-chore: ESLint 설정 업데이트
-```
-
-### 주의사항
-- 타입은 소문자로 작성
-- 콜론(:) 뒤에 공백 하나 필수
-- 첫 글자는 대문자 금지 (소문자로 시작)
-- 50자 이내로 간결하게 작성
-
-## 🔒 보안 및 개인정보 (Next.js 16)
-
-### 데이터 보호
-- **민감 정보**: 환경 변수와 Vercel Edge Config로 관리
-- **API 키**: 서버 컴포넌트/서버 액션에서만 사용
-- **CORS**: Middleware로 오리진 제한 구현
-- **인증**: NextAuth.js 또는 Clerk 활용
-- **HTTPS**: 모든 외부 리소스 HTTPS 강제
-
-### 개인정보 보호 (GDPR/KISA 준수)
-- **데이터 최소화**: 필요한 데이터만 수집 및 저장
-- **동의 기반**: 명확한 사용자 동의 획득
-- **보존 기간**: 데이터 보존 정책 명확히 정의
-- **쿠키 관리**: GDPR 준수를 위한 쿠키 배너 구현
-
-## 🏗️ 아키텍처 패턴
-
-### 서버 컴포넌트 패턴
-- **데이터 페칭**: 서버 컴포넌트에서 비동기 데이터 호출
-- **컴포넌트 합성**: 서버/클라이언트 컴포넌트 적절한 조합
-- **스트리밍**: `loading.tsx`와 함께 점진적 UI 로딩
-
-### 상태 관리 전략
-- **서버 상태**: TanStack Query/SWR로 서버 상태 관리
-- **클라이언트 상태**: Zustand로 로컬 상태 관리
-- **글로벌 상태**: Context API 최소화, Props 드릴링 방지
-
-### API 설계 원칙
-- **RESTful API**: Next.js API Routes로 구현
-- **GraphQL**: 필요시 Apollo Client 통합
-- **타입 안전성**: tRPC로 엔드투엔드 타입 안전성 보장
-
-## 📚 참고 자료 및 베스트 프랙티스
-
-### 공식 문서
-- [Next.js 16 공식 문서](https://nextjs.org/docs) - 최신 App Router 가이드
-- [React 19 공식 문서](https://react.dev) - 새로운 컴파일러와 기능
-- [TypeScript 핸드북](https://www.typescriptlang.org/docs/) - 엄격 모드 설정
-- [Vercel 배포 가이드](https://vercel.com/docs) - Edge Runtime과 ISR
-
-### 성능 및 품질
-- [Web Vitals](https://web.dev/vitals/) - 사용자 경험 지표
-- [Lighthouse](https://developers.google.com/web/tools/lighthouse) - 성능 감사
-- [Bundle Analyzer](https://github.com/vercel/next-bundle-analyzer) - 번들 크기 분석
-
-### 보안 및 접근성
-- [OWASP](https://owasp.org/) - 웹 애플리케이션 보안
-- [WCAG 2.1](https://www.w3.org/TR/WCAG21/) - 웹 접근성 가이드라인
-- [MDN 접근성](https://developer.mozilla.org/en-US/docs/Web/Accessibility) - 접근성 구현
-
-### 개발 도구
-- [ESLint](https://eslint.org/) - 코드 품질 도구
-- [Prettier](https://prettier.io/) - 코드 포맷터
-- [Husky](https://github.com/typicorn/husky) - Git 훅 자동화
+*이 문서는 프로젝트의 헌법과 같으며, 인공지능 에이전트는 모든 작업 수행 시 이 규칙을 최우선으로 준수해야 합니다.*
