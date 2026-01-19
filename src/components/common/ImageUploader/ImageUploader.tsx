@@ -154,7 +154,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                             <IconButton
                                 type="button"
                                 onClick={handleRemove}
-                                variant="destructive"
+                                variant="ghost"
                                 size="sm"
                                 icon={Trash2}
                                 className={styles.removeButton}

@@ -2,8 +2,13 @@
 @use "../../../styles/mixins" as m;
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .button {
@@ -17,10 +22,11 @@
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
   user-select: none;
-  border: 1px solid transparent; 
+  border: 1px solid transparent;
   text-decoration: none;
 
   @include m.focus-ring;
+
   &:disabled {
     @include m.disabled;
   }
@@ -35,8 +41,8 @@
   &--variant-default,
   &--variant-solid {
     background-color: v.$color-primary;
-    color: white; 
-    
+    color: v.$zinc-900;
+
     @include m.hover {
       background-color: v.$color-primary-hover;
     }
