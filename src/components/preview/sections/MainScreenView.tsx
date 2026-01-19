@@ -348,11 +348,7 @@ const MainScreenView = memo(({
                         </>
                     ) : null}
 
-                    <div className={styles.separator}>
-                        <svg width="60" height="20" viewBox="0 0 100 20" fill="none" stroke="currentColor">
-                            <path d="M0 10h40M60 10h40M45 10l5-5 5 5-5 5-5-5z" strokeWidth="0.5" />
-                        </svg>
-                    </div>
+
 
                     {(() => {
                         const displaySubtitle = mainScreen.subtitle || '소중한 날에 초대합니다';

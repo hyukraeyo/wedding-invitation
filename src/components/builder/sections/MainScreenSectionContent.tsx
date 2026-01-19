@@ -15,7 +15,7 @@ import { ImageUploader } from '@/components/common/ImageUploader';
 import styles from './MainScreenSection.module.scss';
 import { cn } from '@/lib/utils';
 
-const RichTextEditor = dynamic(() => import('@/components/common/RichTextEditor'), { ssr: false });
+
 
 interface StylePreset {
     id: string;
@@ -67,25 +67,7 @@ export default function MainScreenSectionContent() {
     const location = useInvitationStore(state => state.location);
     const detailAddress = useInvitationStore(state => state.detailAddress);
 
-    const getFormattedAutoText = () => {
-        if (!date || !time) return '';
-        try {
-            const d = new Date(date);
-            const week = ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'][d.getDay()];
-            const [h = '12', m = '00'] = time.split(':');
-            const hour = parseInt(h, 10);
-            const ampm = hour < 12 ? '오전' : '오후';
-            const displayHour = hour > 12 ? hour - 12 : (hour === 0 ? 12 : hour);
 
-            const dateStr = `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일 ${week}`;
-            const timeStr = `${ampm} ${displayHour}시 ${m === '00' ? '' : `${m}분`}`.trim();
-            const locStr = [location, detailAddress].filter(Boolean).join(' ');
-
-            return `${dateStr} ${timeStr}${locStr ? `<br/>${locStr}` : ''}`;
-        } catch {
-            return '';
-        }
-    };
 
     const swiperRef = useRef<SwiperType | null>(null);
     const [swiperProgress, setSwiperProgress] = React.useState<'start' | 'middle' | 'end'>('start');
@@ -124,6 +106,11 @@ export default function MainScreenSectionContent() {
                         ratio={imageRatio}
                         onRatioChange={setImageRatio}
                         aspectRatio="4/5"
+                    />
+                    <SwitchField
+                        checked={mainScreen.expandPhoto}
+                        onChange={(show) => updateMain({ expandPhoto: show })}
+                        label="사진 꽉 차게"
                     />
                 </div>
             </Field>
@@ -370,24 +357,9 @@ export default function MainScreenSectionContent() {
             ) : null}
 
 
-            <RichTextEditor
-                content={mainScreen.customDatePlace}
-                onChange={(val: string) => updateMain({ customDatePlace: val })}
-                placeholder={getFormattedAutoText().replace(/<br\/>/g, ' ') || "직접 입력 시 자동 노출 문구 대신 표시됩니다"}
-            />
 
-            <div className={styles.switchGroup}>
-                <SwitchField
-                    checked={mainScreen.showBorder}
-                    onChange={(show) => updateMain({ showBorder: show })}
-                    label="테두리 노출"
-                />
-                <SwitchField
-                    checked={mainScreen.expandPhoto}
-                    onChange={(show) => updateMain({ expandPhoto: show })}
-                    label="사진 꽉 차게"
-                />
-            </div>
+
+
         </SectionContainer>
     );
 }

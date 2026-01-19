@@ -181,7 +181,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                 </div>
             </div>
 
-            {value && props.ratio && props.onRatioChange ? (
+            {props.ratio && props.onRatioChange ? (
                 <div className={styles.ratioControl}>
                     <SegmentedControl
                         value={props.ratio}
