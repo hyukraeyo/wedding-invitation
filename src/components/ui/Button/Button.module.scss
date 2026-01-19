@@ -32,8 +32,11 @@
   }
 
   &[data-loading="true"] {
-    color: transparent !important;
     pointer-events: none;
+  }
+
+  .loadingText {
+    opacity: 0;
   }
 
   &:active {

@@ -39,11 +39,36 @@ export const approvalRequestService = {
     return true;
   },
 
+  async rejectRequest(invitationId: string, rejectionReason: string) {
+    const response = await fetch('/api/approval-requests', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ invitationId, rejectionReason }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to reject request');
+    }
+
+    return true;
+  },
+
   async getAllRequests() {
     const response = await fetch('/api/approval-requests');
 
     if (!response.ok) {
       throw new Error('Approval request fetch failed');
+    }
+
+    const result = await response.json();
+    return result.data as ApprovalRequestSummary[];
+  },
+
+  async getUserRejectedRequests() {
+    const response = await fetch('/api/approval-requests?userOnly=true');
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch rejected requests');
     }
 
     const result = await response.json();

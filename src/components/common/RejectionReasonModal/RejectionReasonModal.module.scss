@@ -1,0 +1,16 @@
+@use '@/styles/variables' as v;
+
+.editorWrapper {
+    margin-top: 1rem;
+    width: 100%;
+    border-radius: 0.75rem;
+    border: 1px solid v.$zinc-200;
+    background-color: v.$white;
+    overflow: hidden;
+    transition: all 0.2s ease;
+
+    &:focus-within {
+        border-color: v.$primary-400;
+        box-shadow: 0 0 0 3px rgba(v.$primary-500, 0.1);
+    }
+}

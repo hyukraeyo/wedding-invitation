@@ -5,6 +5,8 @@ export const APPROVAL_REQUEST_SUMMARY_SELECT = [
   'requester_name',
   'requester_phone',
   'created_at',
+  'status',
+  'rejection_reason',
 ].join(', ');
 
 export interface ApprovalRequestSummary {
@@ -14,4 +16,6 @@ export interface ApprovalRequestSummary {
   requester_name: string;
   requester_phone: string;
   created_at: string;
+  status?: string;
+  rejection_reason?: string;
 }

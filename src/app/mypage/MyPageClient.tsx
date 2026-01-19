@@ -13,7 +13,7 @@ import type { InvitationData } from '@/store/useInvitationStore';
 import Header from '@/components/common/Header';
 
 import { useToast } from '@/hooks/use-toast';
-import { Edit2, Trash2, FileText, MoreHorizontal, Eye, Inbox, Clock, Bookmark } from 'lucide-react';
+import { Edit2, Trash2, FileText, MoreHorizontal, Eye, Inbox, Clock, Bookmark, AlertCircle } from 'lucide-react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -32,6 +32,10 @@ const ResponsiveModal = dynamic(
     () => import('@/components/common/ResponsiveModal').then(mod => mod.ResponsiveModal),
     { ssr: false }
 );
+const RejectionReasonModal = dynamic(
+    () => import('@/components/common/RejectionReasonModal'),
+    { ssr: false }
+);
 
 interface ProfileSummary {
     full_name: string | null;
@@ -45,6 +49,7 @@ export interface MyPageClientProps {
     initialInvitations: InvitationSummaryRecord[];
     initialAdminInvitations: InvitationSummaryRecord[];
     initialApprovalRequests: ApprovalRequestSummary[];
+    initialRejectedRequests?: ApprovalRequestSummary[];
 }
 
 type ConfirmActionType = 'DELETE' | 'CANCEL_REQUEST' | 'APPROVE' | 'REVOKE_APPROVAL' | 'REQUEST_APPROVAL' | 'INFO_ONLY';
@@ -65,16 +70,22 @@ export default function MyPageClient({
     initialInvitations,
     initialAdminInvitations,
     initialApprovalRequests,
+    initialRejectedRequests = [],
 }: MyPageClientProps) {
     const router = useRouter();
     const [invitations, setInvitations] = useState<InvitationSummaryRecord[]>(initialInvitations);
     const [adminInvitations, setAdminInvitations] = useState<InvitationSummaryRecord[]>(initialAdminInvitations);
     const [approvalRequests, setApprovalRequests] = useState<ApprovalRequestSummary[]>(initialApprovalRequests);
+    const [rejectedRequests, setRejectedRequests] = useState<ApprovalRequestSummary[]>(initialRejectedRequests);
 
     const [actionLoading, setActionLoading] = useState<string | null>(null);
 
     // Profile Completion Modal State
     const [profileModalOpen, setProfileModalOpen] = useState(false);
+
+    // Rejection Modal State
+    const [rejectionModalOpen, setRejectionModalOpen] = useState(false);
+    const [rejectionTarget, setRejectionTarget] = useState<InvitationSummaryRecord | null>(null);
 
     // Confirmation Dialog State
     const [confirmConfig, setConfirmConfig] = useState<ConfirmConfig>({
@@ -118,6 +129,16 @@ export default function MyPageClient({
             // Silent fail
         }
     }, [userId, isAdmin]);
+
+    const fetchRejectedRequests = useCallback(async () => {
+        if (!userId) return;
+        try {
+            const data = await approvalRequestService.getUserRejectedRequests();
+            setRejectedRequests(data);
+        } catch {
+            // Silent fail
+        }
+    }, [userId]);
 
     const fetchFullInvitationData = useCallback(async (slug: string) => {
         const fullInvitation = await invitationService.getInvitation(slug);
@@ -218,6 +239,21 @@ export default function MyPageClient({
         }
     }, [fetchApprovalRequests, fetchFullInvitationData, fetchInvitations, toast]);
 
+    const executeReject = useCallback(async (inv: InvitationSummaryRecord, reason: string) => {
+        setActionLoading(inv.id);
+        try {
+            await approvalRequestService.rejectRequest(inv.id, reason);
+            toast({ description: '신청이 거절되었습니다. 사용자가 거절 사유를 확인할 수 있습니다.' });
+            await Promise.all([fetchInvitations(), fetchApprovalRequests(), fetchRejectedRequests()]);
+        } catch {
+            toast({ variant: 'destructive', description: '거절 처리 중 오류가 발생했습니다.' });
+        } finally {
+            setActionLoading(null);
+            setRejectionModalOpen(false);
+            setRejectionTarget(null);
+        }
+    }, [fetchApprovalRequests, fetchInvitations, fetchRejectedRequests, toast]);
+
     // --- Action Initiators (Open Dialog) ---
 
     const handleDeleteClick = useCallback((inv: InvitationSummaryRecord) => {
@@ -312,14 +348,10 @@ export default function MyPageClient({
     }, []);
 
     const handleAdminRejectClick = useCallback((inv: InvitationSummaryRecord) => {
-        setConfirmConfig({
-            isOpen: true,
-            type: 'CANCEL_REQUEST', // Reuse SAME logic as cancel request
-            title: '사용 신청 거절',
-            description: <>해당 청첩장의 사용 신청을 거절하시겠습니까?<br />거절 시 신청 내역이 삭제되며 사용자에게 [사용신청] 버튼이 다시 노출됩니다.</>,
-            targetId: inv.id,
-        });
-    }, []);
+        const request = approvalRequests.find(req => req.invitation_id === inv.id);
+        setRejectionTarget(inv);
+        setRejectionModalOpen(true);
+    }, [approvalRequests]);
 
 
     // Execute approval request using profile data
@@ -481,6 +513,59 @@ export default function MyPageClient({
                     </section>
                 )}
 
+                {/* Rejected Requests Section - Visible to all users (including admins) */}
+                {rejectedRequests.length > 0 && (
+                    <section className={styles.summaryCard} style={{ borderColor: '#FEE2E2' }}>
+                        <div className={styles.summaryHeader}>
+                            <div>
+                                <h2 style={{ color: '#DC2626' }}>거절된 신청</h2>
+                                <p>관리자가 거절한 사용 신청 내역입니다.</p>
+                            </div>
+                            <span className={styles.countBadge} style={{ backgroundColor: '#FEE2E2', color: '#DC2626' }}>
+                                {rejectedRequests.length}
+                            </span>
+                        </div>
+                        <div className={styles.requestList}>
+                            {rejectedRequests.map(request => {
+                                const date = new Date(request.created_at);
+                                const formattedDate = `${date.getFullYear()}. ${String(date.getMonth() + 1).padStart(2, '0')}. ${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+
+                                return (
+                                    <div key={request.id} className={styles.requestItem} style={{ backgroundColor: '#FEF2F2' }}>
+                                        <div className={styles.requestInfo}>
+                                            <div className={styles.requester}>
+                                                <AlertCircle size={16} color="#DC2626" style={{ marginRight: '0.5rem' }} />
+                                                <strong style={{ color: '#DC2626' }}>거절됨</strong>
+                                            </div>
+                                            <div className={styles.requestTime}>
+                                                <Clock size={12} />
+                                                <span>{formattedDate}</span>
+                                            </div>
+                                        </div>
+                                        {request.rejection_reason && (
+                                            <div style={{
+                                                marginTop: '0.75rem',
+                                                padding: '0.75rem',
+                                                backgroundColor: '#FFF',
+                                                borderRadius: '0.5rem',
+                                                border: '1px solid #FEE2E2',
+                                            }}>
+                                                <div style={{ fontSize: '0.75rem', fontWeight: 600, color: '#DC2626', marginBottom: '0.5rem' }}>
+                                                    거절 사유
+                                                </div>
+                                                <div
+                                                    style={{ fontSize: '0.875rem', color: '#4B5563', lineHeight: 1.6 }}
+                                                    dangerouslySetInnerHTML={{ __html: request.rejection_reason }}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </section>
+                )}
+
                 {/* 2. Invitation List */}
                 <section className={styles.invitationSection}>
                     <div className={styles.summaryHeader}>
@@ -555,6 +640,19 @@ export default function MyPageClient({
                 confirmLoading={!!actionLoading}
                 dismissible={!actionLoading}
             />
+
+            {rejectionTarget && (
+                <RejectionReasonModal
+                    isOpen={rejectionModalOpen}
+                    onClose={() => {
+                        setRejectionModalOpen(false);
+                        setRejectionTarget(null);
+                    }}
+                    onSubmit={(reason) => executeReject(rejectionTarget, reason)}
+                    loading={!!actionLoading}
+                    requesterName={approvalRequests.find(req => req.invitation_id === rejectionTarget.id)?.requester_name || ''}
+                />
+            )}
         </div>
     );
 }

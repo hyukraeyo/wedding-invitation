@@ -29,6 +29,7 @@ export default async function MyPage() {
     let invitations: InvitationSummaryRecord[] = [];
     let adminInvitations: InvitationSummaryRecord[] = [];
     let approvalRequests: ApprovalRequestSummary[] = [];
+    let rejectedRequests: ApprovalRequestSummary[] = [];
 
     if (user) {
         // Only use the database profile for admin status, not just email presence
@@ -42,10 +43,10 @@ export default async function MyPage() {
             .eq('id', user.id)
             .single();
 
-        let adminQueueResult, myInvitationsResult, approvalRequestsResult;
+        let adminQueueResult, myInvitationsResult, approvalRequestsResult, rejectedRequestsResult;
 
         if (isDefaultAdmin) {
-            // Case A: Definitely Admin. Parallelize all admin queries + profile.
+            // Case A: Definitely Admin. Parallelize all admin queries + profile + rejected requests.
             const db = supabaseAdmin || supabase;
             const results = await Promise.all([
                 profilePromise,
@@ -59,6 +60,12 @@ export default async function MyPage() {
                     .order('updated_at', { ascending: false }),
                 db.from('approval_requests')
                     .select(APPROVAL_REQUEST_SUMMARY_SELECT)
+                    .eq('status', 'pending')
+                    .order('created_at', { ascending: false }),
+                db.from('approval_requests')
+                    .select(APPROVAL_REQUEST_SUMMARY_SELECT)
+                    .eq('user_id', user.id)
+                    .eq('status', 'rejected')
                     .order('created_at', { ascending: false }),
             ]);
 
@@ -66,9 +73,10 @@ export default async function MyPage() {
             adminQueueResult = results[1];
             myInvitationsResult = results[2];
             approvalRequestsResult = results[3];
+            rejectedRequestsResult = results[4];
             isAdmin = true;
         } else {
-            // Case B: Probably User. Parallelize My Invitations + Profile.
+            // Case B: Probably User. Parallelize My Invitations + Profile + Rejected Requests.
             const results = await Promise.all([
                 profilePromise,
                 supabase
@@ -76,10 +84,17 @@ export default async function MyPage() {
                     .select(INVITATION_SUMMARY_SELECT)
                     .eq('user_id', user.id)
                     .order('updated_at', { ascending: false }),
+                supabase
+                    .from('approval_requests')
+                    .select(APPROVAL_REQUEST_SUMMARY_SELECT)
+                    .eq('user_id', user.id)
+                    .eq('status', 'rejected')
+                    .order('created_at', { ascending: false }),
             ]);
 
             profile = results[0].data ?? null;
             myInvitationsResult = results[1];
+            rejectedRequestsResult = results[2];
 
             // Check if actually admin via DB profile
             isAdmin = !!profile?.is_admin;
@@ -94,6 +109,7 @@ export default async function MyPage() {
                         .order('updated_at', { ascending: false }),
                     db.from('approval_requests')
                         .select(APPROVAL_REQUEST_SUMMARY_SELECT)
+                        .eq('status', 'pending')
                         .order('created_at', { ascending: false }),
                 ]);
                 adminQueueResult = extraResults[0];
@@ -108,9 +124,11 @@ export default async function MyPage() {
             invitations = myRows.map(toInvitationSummary);
             adminInvitations = adminRows.map(toInvitationSummary);
             approvalRequests = (approvalRequestsResult?.data ?? []) as unknown as ApprovalRequestSummary[];
+            rejectedRequests = (rejectedRequestsResult?.data ?? []) as unknown as ApprovalRequestSummary[];
         } else {
             const rows = (myInvitationsResult?.data ?? []) as unknown as InvitationSummaryRow[];
             invitations = rows.map(toInvitationSummary);
+            rejectedRequests = (rejectedRequestsResult?.data ?? []) as unknown as ApprovalRequestSummary[];
         }
     }
 
@@ -122,6 +140,7 @@ export default async function MyPage() {
             initialInvitations={invitations}
             initialAdminInvitations={adminInvitations}
             initialApprovalRequests={approvalRequests}
+            initialRejectedRequests={rejectedRequests}
         />
     );
 }
