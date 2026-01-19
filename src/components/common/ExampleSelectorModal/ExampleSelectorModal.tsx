@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
-import { Button } from '@/components/ui/Button';
 import styles from './ExampleSelectorModal.module.scss';
 
 export interface ExampleItem {

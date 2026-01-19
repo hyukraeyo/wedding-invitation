@@ -124,7 +124,7 @@ function BuilderPageContent() {
     } finally {
       setIsSaving(false);
     }
-  }, [user, handleLogin, isReady, router]);
+  }, [user, handleLogin, isReady, router, isAdmin]);
 
 
 

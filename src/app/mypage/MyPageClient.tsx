@@ -13,13 +13,7 @@ import type { InvitationData } from '@/store/useInvitationStore';
 import Header from '@/components/common/Header';
 
 import { useToast } from '@/hooks/use-toast';
-import { Edit2, Trash2, Banana, MoreHorizontal, Eye, Inbox, Clock, Bookmark, AlertCircle, CheckCircle } from 'lucide-react';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from '@/components/ui/DropdownMenu';
+import { Edit2, Banana, Inbox, Clock, AlertCircle, CheckCircle } from 'lucide-react';
 import styles from './MyPage.module.scss';
 import { clsx } from 'clsx';
 import { InvitationCard } from '@/components/ui/InvitationCard';
@@ -288,7 +282,7 @@ export default function MyPageClient({
             description: '정말로 이 청첩장을 삭제하시겠습니까? 삭제된 데이터는 복구할 수 없습니다.',
             targetId: inv.id,
         });
-    }, [isAdmin]);
+    }, []);
 
     const handleCancelRequestClick = useCallback((inv: InvitationSummaryRecord) => {
         setConfirmConfig({
@@ -356,10 +350,9 @@ export default function MyPageClient({
     }, []);
 
     const handleAdminRejectClick = useCallback((inv: InvitationSummaryRecord) => {
-        const request = approvalRequests.find(req => req.invitation_id === inv.id);
         setRejectionTarget(inv);
         setRejectionModalOpen(true);
-    }, [approvalRequests]);
+    }, []);
 
 
     // Execute approval request using profile data

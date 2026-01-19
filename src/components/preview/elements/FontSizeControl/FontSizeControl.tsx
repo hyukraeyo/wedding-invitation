@@ -1,43 +1,66 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { CaseSensitive } from 'lucide-react';
-import { useInvitationStore } from '@/store/useInvitationStore';
+import { ResponsiveModal } from '@/components/common/ResponsiveModal';
+import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { cn } from '@/lib/utils';
 import styles from './FontSizeControl.module.scss';
 
-export function FontSizeControl() {
-    const fontScale = useInvitationStore(state => state.theme.fontScale || 1);
-    const setTheme = useInvitationStore(state => state.setTheme);
+interface FontSizeControlProps {
+    value: number;
+    onChange: (value: number) => void;
+}
 
-    const scales = [1, 1.1, 1.2];
-    const labels = ['작게', '중간', '크게'];
+export function FontSizeControl({ value, onChange }: FontSizeControlProps) {
+    const [isOpen, setIsOpen] = useState(false);
 
-    const handleToggle = () => {
-        const currentIndex = scales.indexOf(fontScale);
-        const nextIndex = (currentIndex + 1) % scales.length;
-        setTheme({ fontScale: scales[nextIndex] });
+    const labels = {
+        1: '기본',
+        1.1: '크게',
+        1.2: '더 크게'
     };
 
-    const currentLabel = labels[scales.indexOf(fontScale)] || '중간';
+    const currentLabel = labels[value as keyof typeof labels] || '기본';
 
     return (
         <div className={styles.container}>
-            <button
-                className={styles.trigger}
-                onClick={handleToggle}
-                aria-label={`글자 크기 조절 (현재: ${currentLabel})`}
-                title={`글자 크기: ${currentLabel}`}
+            <ResponsiveModal
+                open={isOpen}
+                onOpenChange={setIsOpen}
+                title="보기 설정"
+                trigger={
+                    <button
+                        className={styles.trigger}
+                        aria-label={`글자 크기 설정 (현재: ${currentLabel})`}
+                        title="글자 크기 조절"
+                    >
+                        <div className={cn(
+                            styles.iconWrapper,
+                            value === 1 && styles.small,
+                            value === 1.1 && styles.medium,
+                            value === 1.2 && styles.large
+                        )}>
+                            <CaseSensitive size={20} strokeWidth={value === 1 ? 1.5 : value === 1.1 ? 2 : 2.5} />
+                        </div>
+                    </button>
+                }
             >
-                <div className={cn(
-                    styles.iconWrapper,
-                    fontScale === 1 && styles.small,
-                    fontScale === 1.1 && styles.medium,
-                    fontScale === 1.2 && styles.large
-                )}>
-                    <CaseSensitive size={20} strokeWidth={fontScale === 1 ? 1.5 : fontScale === 1.1 ? 2 : 2.5} />
+                <div className={styles.modalBody}>
+                    <div className={styles.section}>
+                        <h4 className={styles.sectionTitle}>글자 크기</h4>
+                        <SegmentedControl
+                            value={value}
+                            onChange={(val) => onChange(val as number)}
+                            className={styles.control}
+                        >
+                            <SegmentedControl.Item value={1}>기본</SegmentedControl.Item>
+                            <SegmentedControl.Item value={1.1}>크게</SegmentedControl.Item>
+                            <SegmentedControl.Item value={1.2}>더 크게</SegmentedControl.Item>
+                        </SegmentedControl>
+                    </div>
                 </div>
-            </button>
+            </ResponsiveModal>
         </div>
     );
 }

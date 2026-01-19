@@ -1,12 +1,13 @@
 
 import React from 'react';
-import { Palette, Check, Plus } from 'lucide-react';
+import { Palette, Check } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '@/components/common/AccordionItem';
 import { SegmentedControl } from '@/components/common/SegmentedControl';
 import { ResponsiveSelect as Select } from '@/components/common/ResponsiveSelect';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
+import { SwitchField } from '@/components/common/SwitchField';
 import styles from './ThemeSection.module.scss';
 import { cn } from '@/lib/utils';
 import type { ThemeFont } from '@/lib/utils/font';
@@ -87,6 +88,12 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection({ isOpen, va
                             { label: '더 크게', value: 1.2 },
                         ]}
                         onChange={(val) => setTheme({ fontScale: val as number })}
+                    />
+                    <SwitchField
+                        label="하객의 글자 크기 변경 허용"
+                        checked={theme.allowFontScale}
+                        onChange={(checked) => setTheme({ allowFontScale: checked })}
+                        className="mt-3"
                     />
                 </Field>
 

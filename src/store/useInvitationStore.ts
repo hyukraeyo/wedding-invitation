@@ -91,6 +91,7 @@ export interface InvitationState {
         backgroundColor: string;
         accentColor: string;
         fontScale: number;
+        allowFontScale: boolean;
         pattern: 'none' | 'flower-sm' | 'flower-lg';
         effect: 'none' | 'cherry-blossom' | 'snow';
         effectOnlyOnMain: boolean;
@@ -332,6 +333,7 @@ export const INITIAL_STATE = {
         backgroundColor: '#FFFFFF', // White
         accentColor: '#C19A6D', // Soft Brown
         fontScale: 1,
+        allowFontScale: true,
         pattern: 'none' as const,
         effect: 'none' as const,
         effectOnlyOnMain: false,
