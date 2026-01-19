@@ -40,6 +40,17 @@ const nextConfig: NextConfig = {
     serverActions: {
       allowedOrigins: ['localhost:3000', 'wedding-invitation-zeta-one.vercel.app'],
     },
+    // bundle-barrel-imports: lucide-react 등 barrel file 최적화
+    optimizePackageImports: [
+      'lucide-react',
+      '@radix-ui/react-accordion',
+      '@radix-ui/react-dialog',
+      '@radix-ui/react-dropdown-menu',
+      '@radix-ui/react-popover',
+      '@radix-ui/react-select',
+      '@radix-ui/react-tabs',
+      'date-fns',
+    ],
   },
 
   turbopack: {
