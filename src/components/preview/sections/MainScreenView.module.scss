@@ -222,6 +222,19 @@
             height: auto;
             aspect-ratio: auto;
         }
+
+        /* Classic Layout: Add horizontal margins */
+        &.classic {
+            width: calc(100% - 3rem); // 1.5rem margin on each side
+            margin-inline: auto;
+        }
+
+        /* Expanded Photo: Full width, no rounded corners */
+        &.expanded {
+            width: 100%;
+            margin-inline: 0;
+            border-radius: 0;
+        }
     }
 
     &.imageFill {
@@ -429,6 +442,7 @@
 }
 
 @keyframes pulse-slow {
+
     0%,
     100% {
         opacity: 1;

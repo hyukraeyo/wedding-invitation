@@ -232,6 +232,8 @@ const MainScreenView = memo(({
                 <div className={clsx(
                     styles.imageFrame,
                     isFillLayout ? styles.imageFill : styles.imageStandard,
+                    mainScreen.layout === 'classic' && styles.classic,
+                    mainScreen.expandPhoto && styles.expanded,
                     (!isFillLayout && mainScreen.layout !== 'arch' && mainScreen.layout !== 'oval') && styles.bgGray,
                     !isFillLayout && styles[imageRatio]
                 )}
@@ -239,7 +241,7 @@ const MainScreenView = memo(({
                         borderColor: mainScreen.showBorder ? accentColor : 'transparent',
                         borderWidth: mainScreen.showBorder ? '4px' : '0px',
                         borderStyle: mainScreen.showBorder ? 'double' : 'solid',
-                        borderRadius:
+                        borderRadius: mainScreen.expandPhoto ? '0px' :
                             mainScreen.layout === 'arch' ? '170px 170px 20px 20px' :
                                 mainScreen.layout === 'oval' ? '170px 170px 170px 170px' :
                                     mainScreen.layout === 'basic' ? '20px 20px 20px 20px' :
@@ -417,7 +419,7 @@ const MainScreenView = memo(({
                     })()}
                 </div>
             </div>
-        </div>
+        </div >
     );
 });
 

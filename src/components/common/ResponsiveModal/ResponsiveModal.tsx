@@ -44,6 +44,8 @@ export interface ResponsiveModalProps {
     confirmDisabled?: boolean | undefined;
     confirmLoading?: boolean | undefined;
     dismissible?: boolean;
+    onScroll?: (e: React.UIEvent<HTMLDivElement>) => void;
+    scrollRef?: React.Ref<HTMLDivElement>;
 }
 
 export const ResponsiveModal = ({
@@ -65,6 +67,8 @@ export const ResponsiveModal = ({
     confirmDisabled = false,
     confirmLoading = false,
     dismissible = true,
+    onScroll,
+    scrollRef,
 }: ResponsiveModalProps) => {
     const isDesktop = useMediaQuery("(min-width: 768px)");
     const hasActions = onConfirm || footer;
@@ -111,7 +115,11 @@ export const ResponsiveModal = ({
                         ) : null}
                     </DialogHeader>
 
-                    <div className={cn(styles.content, contentClassName)}>
+                    <div
+                        ref={scrollRef}
+                        className={cn(styles.content, contentClassName)}
+                        onScroll={onScroll}
+                    >
                         {children}
                     </div>
 
@@ -174,7 +182,11 @@ export const ResponsiveModal = ({
 
                     <div className={cn(styles.content, styles.drawerScrollArea, contentClassName)}>
                         {children ? (
-                            <DrawerScrollArea className={className}>
+                            <DrawerScrollArea
+                                ref={scrollRef}
+                                className={className}
+                                onScroll={onScroll}
+                            >
                                 {children}
                             </DrawerScrollArea>
                         ) : null}

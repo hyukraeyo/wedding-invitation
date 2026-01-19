@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { cn } from '@/lib/utils';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 import { Button } from '@/components/ui/Button';
 import styles from './ExampleSelectorModal.module.scss';
@@ -29,13 +30,48 @@ export const ExampleSelectorModal = <T extends ExampleItem>({
     onSelect,
     className
 }: ExampleSelectorModalProps<T>) => {
+    const listRef = useRef<HTMLDivElement>(null);
+    const [scrollState, setScrollState] = useState({
+        isTop: true,
+        isBottom: true, // Default to true to prevent initial fade flash on short content
+    });
+
+    const checkScroll = () => {
+        const el = listRef.current;
+        if (!el) return;
+
+        requestAnimationFrame(() => {
+            const { scrollTop, scrollHeight, clientHeight } = el;
+            const isScrollable = scrollHeight > clientHeight;
+
+            setScrollState({
+                isTop: scrollTop <= 0,
+                isBottom: !isScrollable || Math.ceil(scrollTop + clientHeight) >= scrollHeight
+            });
+        });
+    };
+
+    useEffect(() => {
+        if (isOpen) {
+            // Small timeout to ensure layout is done
+            const timer = setTimeout(checkScroll, 0);
+            return () => clearTimeout(timer);
+        }
+    }, [isOpen, items]);
+
     return (
         <ResponsiveModal
             open={isOpen}
             onOpenChange={(open) => !open && onClose()}
             title={title}
             className={className}
-            contentClassName={styles.scrollMask}
+            contentClassName={cn(
+                !scrollState.isTop && !scrollState.isBottom && styles.maskBoth,
+                !scrollState.isTop && scrollState.isBottom && styles.maskTop,
+                scrollState.isTop && !scrollState.isBottom && styles.maskBottom
+            )}
+            scrollRef={listRef}
+            onScroll={checkScroll}
         >
             <div className={styles.scrollWrapper}>
                 <div className={styles.listContainer}>

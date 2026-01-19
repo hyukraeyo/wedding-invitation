@@ -195,8 +195,8 @@ export default function MainScreenSectionContent() {
                                     {preset.layout === 'classic' ? <div className={styles.thumbnailImage} /> : null}
                                     <div className={styles.thumbnailFooter}>
                                         {preset.layout === 'classic' ? <span>초대합니다</span> : null}
-                                        <span>2024. 05. 25</span>
-                                        <span>예식장</span>
+                                        <span>2026년 4월 29일 수요일 오후 12시 </span>
+                                        <span>더 컨벤션 신사 3층 그랜드홀</span>
                                     </div>
                                 </div>
                                 <span className={styles.presetLabel}>{preset.label}</span>
