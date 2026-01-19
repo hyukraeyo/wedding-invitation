@@ -62,7 +62,6 @@ const GalleryView = memo(({
     animateEntrance
 }: GalleryViewProps) => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [isMounted, setIsMounted] = useState(false);
     const [popupIndex, setPopupIndex] = useState<number | null>(null);
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperClass | null>(null);
     const [mainSwiper, setMainSwiper] = useState<SwiperClass | null>(null);
@@ -98,8 +97,10 @@ const GalleryView = memo(({
     }, [galleryPopup]);
 
     useEffect(() => {
-        setIsMounted(true);
-        setPortalElement(document.getElementById('invitation-modal-root') || document.body);
+        const timer = setTimeout(() => {
+            setPortalElement(document.getElementById('invitation-modal-root') || document.body);
+        }, 0);
+        return () => clearTimeout(timer);
     }, []);
 
     // Intersection Observer for Autoplay
@@ -120,7 +121,7 @@ const GalleryView = memo(({
         }
 
         return () => observer.disconnect();
-    }, [galleryType, isMounted]); // Re-run when mounted or type changes
+    }, [galleryType]); // Re-run when type changes
 
     // Autoplay Control
     useEffect(() => {
@@ -148,7 +149,7 @@ const GalleryView = memo(({
     }, [popupIndex, modalSwiper]);
 
     if (!gallery.length) return <div id={id} />;
-    if (!isMounted) return null;
+    if (!portalElement) return null;
 
     const renderGallery = () => {
         switch (galleryType) {

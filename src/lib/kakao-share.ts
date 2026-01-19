@@ -7,11 +7,14 @@ export interface KakaoShareOptions {
     description: string;
     imageUrl: string;
     buttonType: 'none' | 'location' | 'rsvp';
+    address?: string | undefined;
+    location?: string | undefined;
 }
 
 export interface KakaoShareParams {
     invitationUrl: string;
     options: KakaoShareOptions;
+    slug?: string | undefined; // Add slug to build canonical URL
     onSuccess?: () => void;
     onError?: (error: unknown) => void;
 }
@@ -44,13 +47,19 @@ export function normalizeImageUrl(imageUrl: string | null | undefined, origin: s
  */
 export function createKakaoButtons(
     invitationUrl: string,
-    buttonType: 'none' | 'location' | 'rsvp'
+    buttonType: 'none' | 'location' | 'rsvp',
+    address?: string | null,
+    location?: string | null
 ): Array<{ title: string; link: { mobileWebUrl: string; webUrl: string } }> {
+    // 앵커 링크와 검색 링크를 구분하여 생성
+    // invitationUrl에 이미 해시가 있을 경우를 대비해 해시 제거
+    const cleanUrl = invitationUrl.split('#')[0] || '';
+
     const baseButton = {
         title: '모바일 초대장',
         link: {
-            mobileWebUrl: invitationUrl,
-            webUrl: invitationUrl,
+            mobileWebUrl: cleanUrl,
+            webUrl: cleanUrl,
         },
     };
 
@@ -59,16 +68,40 @@ export function createKakaoButtons(
     }
 
     const secondButtonTitle = buttonType === 'location' ? '위치 안내' : '참석 여부';
-    const anchor = buttonType === 'location' ? '#section-location' : '#section-account';
+
+    let secondButtonLink: { mobileWebUrl: string; webUrl: string };
+
+    if (buttonType === 'location') {
+        const searchQuery = (address || location || '').trim();
+        if (searchQuery && searchQuery !== 'undefined' && searchQuery !== 'null') {
+            // 카카오 SDK의 도메인 제한을 우회하기 위해 자사 도메인의 리다이렉트 페이지를 사용합니다.
+            const origin = new URL(cleanUrl).origin;
+            const redirectUrl = `${origin}/out/map?q=${encodeURIComponent(searchQuery)}`;
+
+            secondButtonLink = {
+                mobileWebUrl: redirectUrl,
+                webUrl: redirectUrl,
+            };
+        } else {
+            secondButtonLink = {
+                mobileWebUrl: `${cleanUrl}#section-location`,
+                webUrl: `${cleanUrl}#section-location`,
+            };
+        }
+    } else {
+        // rsvp (참석 여부) 등 다른 버튼 타입은 기존처럼 앵커 링크 사용
+        const anchor = '#section-account';
+        secondButtonLink = {
+            mobileWebUrl: `${cleanUrl}${anchor}`,
+            webUrl: `${cleanUrl}${anchor}`,
+        };
+    }
 
     return [
         baseButton,
         {
             title: secondButtonTitle,
-            link: {
-                mobileWebUrl: `${invitationUrl}${anchor}`,
-                webUrl: `${invitationUrl}${anchor}`,
-            },
+            link: secondButtonLink,
         },
     ];
 }
@@ -95,6 +128,7 @@ export function initKakaoSdk(): boolean {
 export function sendKakaoShare({
     invitationUrl,
     options,
+    slug,
     onSuccess,
     onError,
 }: KakaoShareParams): void {
@@ -108,8 +142,11 @@ export function sendKakaoShare({
         }
 
         const origin = new URL(invitationUrl).origin;
+        // 슬러그가 있으면 정규 URL(Live URL)을 우선 사용
+        const canonicalUrl = slug ? `${origin}/v/${slug}` : invitationUrl.split('#')[0] || '';
+
         const imageUrl = normalizeImageUrl(options.imageUrl, origin);
-        const buttons = createKakaoButtons(invitationUrl, options.buttonType);
+        const buttons = createKakaoButtons(canonicalUrl, options.buttonType, options.address, options.location);
 
         window.Kakao.Share.sendDefault({
             objectType: 'feed',
@@ -118,8 +155,8 @@ export function sendKakaoShare({
                 description: options.description,
                 imageUrl,
                 link: {
-                    mobileWebUrl: invitationUrl,
-                    webUrl: invitationUrl,
+                    mobileWebUrl: canonicalUrl,
+                    webUrl: canonicalUrl,
                 },
             },
             buttons,

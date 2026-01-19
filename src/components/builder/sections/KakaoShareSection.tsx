@@ -13,7 +13,7 @@ import { ImageUploader } from '@/components/common/ImageUploader';
 import { HeaderAction } from '@/components/common/HeaderAction';
 import { cn } from '@/lib/utils';
 import styles from './KakaoShareSection.module.scss';
-import { CLOSING_SAMPLES, KAKAO_SHARE_SAMPLES } from '@/constants/samples';
+import { KAKAO_SHARE_SAMPLES } from '@/constants/samples';
 import type { ExampleItem } from '@/components/common/ExampleSelectorModal';
 import type { SectionProps } from '@/types/builder';
 

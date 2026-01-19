@@ -6,8 +6,6 @@ import {
     Edit2,
     Eye,
     Trash2,
-    Bookmark,
-    FileText,
     AlertCircle,
     Banana,
     Share2,
@@ -41,13 +39,11 @@ interface InvitationCardProps {
 
 const InvitationCard = ({
     invitation,
-    isAdmin = false,
     rejectionData = null,
     onEdit,
     onDelete,
     onRequestApproval,
     onCancelRequest,
-    onRevokeApproval,
 }: InvitationCardProps) => {
     const data = invitation.invitation_data;
     const isApproved = data?.isApproved;
@@ -90,7 +86,10 @@ const InvitationCard = ({
                     description: shareDesc,
                     imageUrl: normalizeImageUrl(shareImageUrl, origin),
                     buttonType,
+                    address: data?.address,
+                    location: data?.location,
                 },
+                slug,
                 onSuccess: () => setShowShareModal(false),
                 onError: () => toast({ description: '공유 중 오류가 발생했습니다.', variant: 'destructive' }),
             });

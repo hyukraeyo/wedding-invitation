@@ -10,6 +10,7 @@ export const INVITATION_SUMMARY_SELECT = [
   'gallery:invitation_data->gallery',
   'date:invitation_data->>date',
   'location:invitation_data->>location',
+  'address:invitation_data->>address',
   'is_approved:invitation_data->>isApproved',
   'is_requesting_approval:invitation_data->>isRequestingApproval',
   'kakao_share:invitation_data->kakaoShare',
@@ -24,6 +25,7 @@ export interface InvitationSummaryData {
   gallery?: string[];
   date: string;
   location: string;
+  address?: string;
   isApproved: boolean;
   isRequestingApproval: boolean;
   kakaoShare?: {
@@ -53,6 +55,7 @@ export interface InvitationSummaryRow {
   gallery: string[] | null; // JSONB array
   date: string | null;
   location: string | null;
+  address: string | null;
   is_approved: boolean | string | null;
   is_requesting_approval: boolean | string | null;
   kakao_share: {
@@ -80,6 +83,7 @@ export const toInvitationSummary = (row: InvitationSummaryRow): InvitationSummar
     gallery: row.gallery ?? [],
     date: row.date ?? '',
     location: row.location ?? '',
+    address: row.address ?? '',
     isApproved: toBoolean(row.is_approved),
     isRequestingApproval: toBoolean(row.is_requesting_approval),
     ...(row.kakao_share ? { kakaoShare: row.kakao_share } : {}),

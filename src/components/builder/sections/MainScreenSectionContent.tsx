@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import dynamic from 'next/dynamic';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode } from 'swiper/modules';
 import type { Swiper as SwiperType } from 'swiper';
@@ -62,10 +61,6 @@ export default function MainScreenSectionContent() {
     const bride = useInvitationStore(useShallow(state => state.bride));
     const theme = useInvitationStore(useShallow(state => state.theme));
     const setTheme = useInvitationStore(state => state.setTheme);
-    const date = useInvitationStore(state => state.date);
-    const time = useInvitationStore(state => state.time);
-    const location = useInvitationStore(state => state.location);
-    const detailAddress = useInvitationStore(state => state.detailAddress);
 
 
 

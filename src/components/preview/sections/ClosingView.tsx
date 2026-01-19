@@ -29,6 +29,9 @@ interface ClosingViewProps {
     time: InvitationData['time'];
     mainImageUrl: InvitationData['imageUrl'];
     animateEntrance?: boolean;
+    address?: string;
+    location?: string;
+    slug?: string;
 }
 
 /**
@@ -50,6 +53,9 @@ const ClosingView = memo(({
     time,
     mainImageUrl,
     animateEntrance,
+    address,
+    location,
+    slug,
 }: ClosingViewProps) => {
     const { toast } = useToast();
 
@@ -80,7 +86,10 @@ const ClosingView = memo(({
                     description: shareDesc,
                     imageUrl: normalizeImageUrl(shareImageUrl, baseUrl),
                     buttonType,
+                    address,
+                    location,
                 },
+                slug,
                 onError: () => {
                     toast({ description: '공유 중 오류가 발생했습니다.', variant: 'destructive' });
                 },

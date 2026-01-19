@@ -86,6 +86,7 @@ type InvitationCanvasData = Pick<
   | 'closing'
   | 'isApproved'
   | 'kakaoShare'
+  | 'slug'
 >;
 
 const selectInvitationCanvasData = (state: InvitationData): InvitationCanvasData => ({
@@ -141,6 +142,7 @@ const selectInvitationCanvasData = (state: InvitationData): InvitationCanvasData
   closing: state.closing,
   isApproved: state.isApproved,
   kakaoShare: state.kakaoShare,
+  slug: state.slug,
 });
 
 type InvitationCanvasContentProps = Omit<InvitationCanvasProps, 'data'> & {
@@ -210,6 +212,7 @@ const InvitationCanvasContent = memo(({
     closing,
     isApproved,
     kakaoShare,
+    slug,
   } = data;
 
   // Scroll to editing section
@@ -427,6 +430,9 @@ const InvitationCanvasContent = memo(({
           time={time}
           mainImageUrl={imageUrl}
           animateEntrance={theme.animateEntrance}
+          address={address}
+          location={location}
+          slug={slug}
         />
 
         {/* Footer Padding */}
