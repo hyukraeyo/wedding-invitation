@@ -243,8 +243,8 @@ const getDefaultDate = () => {
 
 export const INITIAL_STATE = {
     kakaoShare: {
-        title: '',
-        description: '',
+        title: '소중한 분들을 초대합니다',
+        description: '귀한 걸음 하시어 축복해 주세요.',
         imageUrl: null,
         imageRatio: 'portrait' as const,
         buttonType: 'location' as const,
