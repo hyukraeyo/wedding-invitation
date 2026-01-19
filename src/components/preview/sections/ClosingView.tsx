@@ -62,78 +62,32 @@ const ClosingView = memo(({
     };
 
     const handleKakaoShare = () => {
-        if (!window.Kakao) {
-            toast({ description: '카카오 SDK 로딩 중입니다. 잠시 후 다시 시도해 주세요.', variant: 'destructive' });
-            return;
-        }
-
-        const kakaoAppKey = process.env.NEXT_PUBLIC_KAKAO_APP_KEY;
-        if (!window.Kakao.isInitialized() && kakaoAppKey) {
-            window.Kakao.init(kakaoAppKey);
-        }
-
         const baseUrl = window.location.origin;
         const groomName = `${groom.lastName}${groom.firstName}`;
         const brideName = `${bride.lastName}${bride.firstName}`;
 
         const shareTitle = kakaoShare?.title || `${groomName} ♥ ${brideName} 결혼식에 초대합니다`;
         const shareDesc = kakaoShare?.description || `${date} ${time}`;
+        const shareImageUrl = kakaoShare?.imageUrl || mainImageUrl || `${baseUrl}/logo.png`;
+        const buttonType = kakaoShare?.buttonType ?? 'location';
 
-        // 카카오 서버는 blob: URL에 접근할 수 없으므로, 공개 URL만 사용
-        let shareImageUrl = kakaoShare?.imageUrl || mainImageUrl || `${baseUrl}/logo.png`;
-
-        // blob: URL이거나 상대경로인 경우 기본 로고로 대체
-        if (shareImageUrl.startsWith('blob:')) {
-            shareImageUrl = `${baseUrl}/logo.png`;
-        } else if (shareImageUrl.startsWith('/')) {
-            shareImageUrl = `${baseUrl}${shareImageUrl}`;
-        }
-
-        try {
-            if (!window.Kakao.Share?.sendDefault) {
-                toast({ description: '카카오 공유 기능을 사용할 수 없습니다.', variant: 'destructive' });
-                return;
-            }
-            window.Kakao.Share.sendDefault({
-                objectType: 'feed',
-                content: {
+        // 카카오 공유 유틸리티 사용
+        import('@/lib/kakao-share').then(({ sendKakaoShare, normalizeImageUrl }) => {
+            sendKakaoShare({
+                invitationUrl: window.location.href,
+                options: {
                     title: shareTitle,
                     description: shareDesc,
-                    imageUrl: shareImageUrl,
-                    link: {
-                        mobileWebUrl: window.location.href,
-                        webUrl: window.location.href,
-                    },
+                    imageUrl: normalizeImageUrl(shareImageUrl, baseUrl),
+                    buttonType,
                 },
-                buttons: (kakaoShare?.buttonType ?? 'none') !== 'none' ? [
-                    {
-                        title: '모바일 초대장',
-                        link: {
-                            mobileWebUrl: window.location.href,
-                            webUrl: window.location.href,
-                        },
-                    },
-                    {
-                        title: kakaoShare?.buttonType === 'location' ? '위치 안내' : '참석 여부',
-                        link: {
-                            mobileWebUrl: `${window.location.href}${kakaoShare?.buttonType === 'location' ? '#section-location' : '#section-account'}`,
-                            webUrl: `${window.location.href}${kakaoShare?.buttonType === 'location' ? '#section-location' : '#section-account'}`,
-                        },
-                    },
-                ] : [
-                    {
-                        title: '모바일 초대장',
-                        link: {
-                            mobileWebUrl: window.location.href,
-                            webUrl: window.location.href,
-                        },
-                    },
-                ],
+                onError: () => {
+                    toast({ description: '공유 중 오류가 발생했습니다.', variant: 'destructive' });
+                },
             });
-        } catch (error) {
-            console.error('Kakao Share Error:', error);
-            toast({ description: '공유 중 오류가 발생했습니다.', variant: 'destructive' });
-        }
+        }).catch(() => {
+            toast({ description: '카카오 SDK 로딩 중입니다. 잠시 후 다시 시도해 주세요.', variant: 'destructive' });
+        });
     };
 
     return (
