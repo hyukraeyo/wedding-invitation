@@ -43,7 +43,7 @@ function BuilderPageContent() {
   const [isSaving, setIsSaving] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isReady, setIsReady] = useState(false); // 초기화 완료 여부
-  const { user, isProfileComplete, profileLoading } = useAuth();
+  const { user, isProfileComplete, profileLoading, isAdmin } = useAuth();
   const { editingSection, reset } = useInvitationStore(useShallow((state) => ({
     editingSection: state.editingSection,
     reset: state.reset,
@@ -108,6 +108,12 @@ function BuilderPageContent() {
       if (!currentSlug) {
         currentSlug = generateSlug(currentStoreState.groom.firstName);
         currentStoreState.setSlug(currentSlug);
+      }
+
+      // 🛑 신청 중이거나 승인된 청첩장은 저장(수정) 불가 (일반 사용자)
+      if (!isAdmin && (currentStoreState.isRequestingApproval || currentStoreState.isApproved)) {
+        toast.error('승인 신청 중이거나 승인된 청첩장은 수정할 수 없습니다.');
+        return;
       }
 
       await invitationService.saveInvitation(currentSlug, cleanData, user.id);

@@ -27,10 +27,13 @@ export default async function MyPage() {
     let profile: Pick<Profile, 'full_name' | 'phone' | 'is_admin'> | null = null;
     let isAdmin = false;
     let invitations: InvitationSummaryRecord[] = [];
+    let adminInvitations: InvitationSummaryRecord[] = [];
     let approvalRequests: ApprovalRequestSummary[] = [];
 
     if (user) {
-        const isEmailAdmin = user.email?.includes('admin') || user.email?.startsWith('admin');
+        // Only use the database profile for admin status, not just email presence
+        // (email check is only for the specific 'admin@test.com' if needed for initial setup)
+        const isDefaultAdmin = user.email === 'admin@test.com';
 
         // 1. Start Profile Fetch
         const profilePromise = supabase
@@ -41,7 +44,7 @@ export default async function MyPage() {
 
         let adminQueueResult, myInvitationsResult, approvalRequestsResult;
 
-        if (isEmailAdmin) {
+        if (isDefaultAdmin) {
             // Case A: Definitely Admin. Parallelize all admin queries + profile.
             const db = supabaseAdmin || supabase;
             const results = await Promise.all([
@@ -79,8 +82,9 @@ export default async function MyPage() {
             myInvitationsResult = results[1];
 
             // Check if actually admin via DB profile
-            if (profile?.is_admin) {
-                isAdmin = true;
+            isAdmin = !!profile?.is_admin;
+
+            if (isAdmin) {
                 // Fetch missing admin data
                 const db = supabaseAdmin || supabase;
                 const extraResults = await Promise.all([
@@ -94,8 +98,6 @@ export default async function MyPage() {
                 ]);
                 adminQueueResult = extraResults[0];
                 approvalRequestsResult = extraResults[1];
-            } else {
-                isAdmin = false;
             }
         }
 
@@ -103,15 +105,8 @@ export default async function MyPage() {
             const adminRows = (adminQueueResult?.data ?? []) as unknown as InvitationSummaryRow[];
             const myRows = (myInvitationsResult?.data ?? []) as unknown as InvitationSummaryRow[];
 
-            // Deduplicate
-            const paramMap = new Map();
-            adminRows.forEach(row => paramMap.set(row.id, row));
-            myRows.forEach(row => paramMap.set(row.id, row));
-
-            const mergedRows = Array.from(paramMap.values())
-                .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
-
-            invitations = mergedRows.map(toInvitationSummary);
+            invitations = myRows.map(toInvitationSummary);
+            adminInvitations = adminRows.map(toInvitationSummary);
             approvalRequests = (approvalRequestsResult?.data ?? []) as unknown as ApprovalRequestSummary[];
         } else {
             const rows = (myInvitationsResult?.data ?? []) as unknown as InvitationSummaryRow[];
@@ -125,6 +120,7 @@ export default async function MyPage() {
             isAdmin={isAdmin}
             profile={profile ? { full_name: profile.full_name, phone: profile.phone } : null}
             initialInvitations={invitations}
+            initialAdminInvitations={adminInvitations}
             initialApprovalRequests={approvalRequests}
         />
     );

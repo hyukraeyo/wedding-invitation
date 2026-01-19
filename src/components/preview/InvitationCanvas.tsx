@@ -419,7 +419,6 @@ const InvitationCanvasContent = memo(({
           closingMessage={closing.content}
           imageUrl={closing.imageUrl}
           ratio={closing.ratio}
-          effect={closing.effect}
           accentColor={theme.accentColor}
           kakaoShare={kakaoShare}
           groom={groom}

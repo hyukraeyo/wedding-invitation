@@ -235,12 +235,11 @@ export default function MainScreenSectionContent() {
             <Field label="사진 효과">
                 <SegmentedControl
                     value={mainScreen.effect}
-                    onChange={(val) => updateMain({ effect: val as 'none' | 'mist' | 'ripple' | 'paper' })}
+                    onChange={(val) => updateMain({ effect: val as 'none' | 'mist' | 'ripple' })}
                     options={[
                         { label: '없음', value: 'none' },
                         { label: '안개', value: 'mist' },
                         { label: '물결', value: 'ripple' },
-                        { label: '종이', value: 'paper' },
                     ]}
                 />
             </Field>

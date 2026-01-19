@@ -64,7 +64,7 @@ export interface InvitationState {
         layout: 'classic' | 'minimal' | 'english' | 'heart' | 'korean' | 'arch' | 'oval' | 'frame' | 'fill' | 'basic';
         showBorder: boolean;
         expandPhoto: boolean;
-        effect: 'none' | 'mist' | 'ripple' | 'paper';
+        effect: 'none' | 'mist' | 'ripple';
         imageShape: 'rect' | 'arch' | 'oval';
         title: string;
         subtitle: string;
@@ -206,7 +206,6 @@ export interface InvitationState {
         title: string;
         subtitle: string;
         imageUrl: string | null;
-        effect: 'none' | 'mist' | 'ripple' | 'paper';
         ratio: 'fixed' | 'auto';
         content: string;
     };
@@ -360,12 +359,11 @@ export const INITIAL_STATE = {
     slug: '',
     editingSection: null,
     closing: {
-        title: '감사의 마음을 전합니다',
+        title: '',
         subtitle: 'CLOSING',
         imageUrl: null,
-        effect: 'none' as const,
-        ratio: 'auto' as const,
-        content: '저희의 새로운 시작을 함께 축복해 주셔서 진심으로 감사합니다. 보내주신 소중한 마음 평생 잊지 않고 예쁘게 잘 살겠습니다.',
+        ratio: 'fixed' as const,
+        content: '<p style="text-align: center">서로가 마주보며 다져온 사랑을<br>이제 함께 한 곳을 바라보며 걸어가려 합니다.<br>저희의 새 출발을 축복해 주세요.</p>',
     },
     isApproved: false,
     isRequestingApproval: false,

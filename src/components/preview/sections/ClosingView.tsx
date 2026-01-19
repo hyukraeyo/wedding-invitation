@@ -20,7 +20,6 @@ interface ClosingViewProps {
     closingMessage?: string;
     imageUrl?: string | null;
     ratio?: 'fixed' | 'auto';
-    effect?: 'none' | 'mist' | 'ripple' | 'paper';
     accentColor: string;
     kakaoShare?: InvitationData['kakaoShare'];
     groom: InvitationData['groom'];
@@ -42,7 +41,6 @@ const ClosingView = memo(({
     closingMessage,
     imageUrl,
     ratio = 'fixed',
-    effect = 'none',
     accentColor,
     kakaoShare,
     groom,
@@ -127,31 +125,21 @@ const ClosingView = memo(({
                 />
 
                 {imageUrl ? (
-                    <div className={clsx(styles.imageSection, styles[ratio])}>
-                        <div className={styles.imageContainer}>
+                    <div className={clsx(styles.imageSection, styles[ratio]) || ''}>
+                        <div className={clsx(styles.imageContainer) || ''}>
                             {ratio === 'fixed' ? (
-                                <AspectRatio ratio={16 / 9}>
+                                <AspectRatio ratio={16 / 9} className={clsx(styles.fullSize) || ''}>
                                     <Image
                                         src={imageUrl}
                                         alt="Ending Illustration"
                                         fill
                                         sizes={IMAGE_SIZES.section}
-                                        className={styles.endingImage}
+                                        className={clsx(styles.endingImage) || ''}
                                         style={{
                                             objectFit: 'cover'
                                         }}
                                         unoptimized={isBlobUrl(imageUrl)}
                                     />
-                                    {/* Effects Overlay */}
-                                    {effect === 'mist' ? (
-                                        <div className={clsx(styles.effectLayer, styles.mist)}></div>
-                                    ) : null}
-                                    {effect === 'ripple' ? (
-                                        <div className={clsx(styles.effectLayer, styles.ripple)}></div>
-                                    ) : null}
-                                    {effect === 'paper' ? (
-                                        <div className={clsx(styles.effectLayer, styles.paper)}></div>
-                                    ) : null}
                                 </AspectRatio>
                             ) : (
                                 <>
@@ -161,7 +149,7 @@ const ClosingView = memo(({
                                         width={800}
                                         height={600}
                                         sizes={IMAGE_SIZES.section}
-                                        className={styles.endingImage}
+                                        className={clsx(styles.endingImage) || ''}
                                         style={{
                                             width: '100%',
                                             height: 'auto',
@@ -169,16 +157,6 @@ const ClosingView = memo(({
                                         }}
                                         unoptimized={isBlobUrl(imageUrl)}
                                     />
-                                    {/* Effects Overlay */}
-                                    {effect === 'mist' ? (
-                                        <div className={clsx(styles.effectLayer, styles.mist)}></div>
-                                    ) : null}
-                                    {effect === 'ripple' ? (
-                                        <div className={clsx(styles.effectLayer, styles.ripple)}></div>
-                                    ) : null}
-                                    {effect === 'paper' ? (
-                                        <div className={clsx(styles.effectLayer, styles.paper)}></div>
-                                    ) : null}
                                 </>
                             )}
                         </div>
@@ -186,22 +164,22 @@ const ClosingView = memo(({
                 ) : null}
 
                 <div
-                    className={clsx(styles.message, "rich-text-content", !imageUrl && styles.noImage)}
+                    className={clsx(styles.message, "rich-text-content", !imageUrl && styles.noImage) || ''}
                     dangerouslySetInnerHTML={{
                         __html: closingMessage || "<p>서로가 마주보며 다져온 사랑을<br>이제 함께 한 곳을 바라보며 걸어가려 합니다.<br>저희의 새 출발을 축복해 주세요.</p>"
                     }}
                 />
 
-                <div className={styles.shareContainer}>
+                <div className={clsx(styles.shareContainer) || ''}>
                     <button
-                        className={clsx(styles.shareButton, styles.kakaoShare)}
+                        className={clsx(styles.shareButton, styles.kakaoShare) || ''}
                         onClick={handleKakaoShare}
                     >
                         <MessageCircle size={18} fill="currentColor" />
                         카카오톡 공유하기
                     </button>
                     <button
-                        className={clsx(styles.shareButton, styles.linkShare)}
+                        className={clsx(styles.shareButton, styles.linkShare) || ''}
                         onClick={handleLinkShare}
                     >
                         <Share2 size={18} />

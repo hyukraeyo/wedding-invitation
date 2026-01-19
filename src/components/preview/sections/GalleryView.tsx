@@ -76,12 +76,12 @@ const GalleryView = memo(({
         usePreviousSibling: true,
     });
 
-    // Normalize gallery data (handling potential legacy string arrays)
+    // Normalize gallery data
     const gallery = useMemo(() => {
         if (!rawGallery) return [];
         return rawGallery.map((item, index) => {
             if (typeof item === 'string') {
-                return { id: `legacy-${index}-${item.substring(0, 10)}`, url: item };
+                return { id: `img-${index}-${item.substring(0, 8)}`, url: item };
             }
             return item;
         });
@@ -94,64 +94,59 @@ const GalleryView = memo(({
     }, [galleryPopup]);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsMounted(true);
-            const root = document.getElementById('invitation-modal-root');
-            setPortalElement(root || document.body);
-        }, 0);
-        return () => clearTimeout(timer);
+        setIsMounted(true);
+        setPortalElement(document.getElementById('invitation-modal-root') || document.body);
     }, []);
 
     // Autoplay Control
     useEffect(() => {
-        if (popupIndex !== null) {
-            if (mainSwiper && !mainSwiper.destroyed) {
-                mainSwiper.autoplay?.stop();
-            }
+        if (!mainSwiper || mainSwiper.destroyed) return;
 
+        if (popupIndex !== null) {
+            mainSwiper.autoplay?.stop();
             setTimeout(() => closeBtnRef.current?.focus(), 100);
             return;
         }
 
-        if (mainSwiper && !mainSwiper.destroyed && galleryAutoplay) {
+        if (galleryAutoplay) {
             mainSwiper.autoplay?.start();
         }
     }, [popupIndex, mainSwiper, galleryAutoplay]);
 
-    // Sync Logic
+    // Modal Slide Sync
     useEffect(() => {
         if (popupIndex !== null && modalSwiper && !modalSwiper.destroyed) {
             modalSwiper.slideTo(popupIndex, 0);
         }
     }, [popupIndex, modalSwiper]);
 
-    if (!gallery || gallery.length === 0) return <div id={id} />;
+    if (!gallery.length) return <div id={id} />;
     if (!isMounted) return null;
 
     const renderGallery = () => {
         switch (galleryType) {
             case 'swiper':
                 return (
-                    <div className={clsx(styles.swiperContainer, !galleryPreview && styles.swiperContainerLimited)}>
-                        <div className={styles.galleryWrapper}>
+                    <div className={clsx(styles.swiperContainer, !galleryPreview ? styles.swiperContainerLimited : '') || ''}>
+                        <div className={clsx(styles.galleryWrapper) || ''}>
                             <Swiper
-                                key={`${gallery.length}-${galleryType}-${galleryPreview}-${galleryFade}`}
+                                key={`swiper-${gallery.length}-${galleryPreview}-${galleryFade}`}
                                 modules={[Navigation, Pagination, EffectFade, Autoplay]}
                                 spaceBetween={20}
                                 slidesPerView={galleryPreview ? 1.25 : 1}
                                 centeredSlides={galleryPreview}
                                 effect={galleryFade ? "fade" : "slide"}
-                                {...(galleryFade && { fadeEffect: { crossFade: true } })}
+                                {...(galleryFade ? { fadeEffect: { crossFade: true } } : {})}
                                 autoplay={galleryAutoplay ? { delay: 3000, disableOnInteraction: false } : false}
                                 loop={gallery.length > 1}
                                 onSwiper={setMainSwiper}
                                 onSlideChange={(swiper) => setCurrentIndex(swiper.realIndex)}
-                                className={styles.swiperMain}
+                                className={clsx(styles.swiperMain) || ''}
                             >
                                 {gallery.map((img, index) => (
                                     <SwiperSlide key={img.id}>
                                         <div
-                                            className={clsx(styles.imageSlide, galleryPopup && styles.cursorPointer)}
+                                            className={clsx(styles.imageSlide, galleryPopup ? styles.cursorPointer : '') || ''}
                                             onClick={() => handleImageClick(index)}
                                         >
                                             <Image src={img.url} alt="" fill sizes={IMAGE_SIZES.gallery} />
@@ -160,7 +155,7 @@ const GalleryView = memo(({
                                 ))}
                             </Swiper>
                             {gallery.length > 1 ? (
-                                <div className={styles.counter}>
+                                <div className={clsx(styles.counter) || ''}>
                                     {currentIndex + 1} / {gallery.length}
                                 </div>
                             ) : null}
@@ -169,18 +164,18 @@ const GalleryView = memo(({
                 );
             case 'thumbnail':
                 return (
-                    <div className={styles.swiperContainerLimited}>
+                    <div className={clsx(styles.swiperContainerLimited) || ''}>
                         <Swiper
                             spaceBetween={10}
                             thumbs={{ swiper: thumbsSwiper && !thumbsSwiper.destroyed ? thumbsSwiper : null }}
                             modules={[FreeMode, Navigation, Thumbs]}
                             onSwiper={setMainSwiper}
                             onSlideChange={(swiper) => setCurrentIndex(swiper.activeIndex)}
-                            className={styles.swiperThumbMain}
+                            className={clsx(styles.swiperThumbMain) || ''}
                         >
                             {gallery.map((img, index) => (
                                 <SwiperSlide key={img.id} onClick={() => handleImageClick(index)}>
-                                    <div className={clsx(styles.imageSlide, galleryPopup && styles.cursorPointer)}>
+                                    <div className={clsx(styles.imageSlide, galleryPopup ? styles.cursorPointer : '') || ''}>
                                         <Image src={img.url} alt="" fill sizes={IMAGE_SIZES.gallery} />
                                     </div>
                                 </SwiperSlide>
@@ -193,15 +188,12 @@ const GalleryView = memo(({
                             freeMode={true}
                             watchSlidesProgress={true}
                             modules={[FreeMode, Thumbs]}
-                            className={styles.swiperThumbNav}
+                            className={clsx(styles.swiperThumbNav) || ''}
                         >
                             {gallery.map((img, index) => (
-                                <SwiperSlide key={img.id} className={styles.cursorPointer}>
+                                <SwiperSlide key={img.id} className={clsx(styles.cursorPointer) || ''}>
                                     <div
-                                        className={clsx(
-                                            styles.thumbItem,
-                                            index === currentIndex && styles.active
-                                        )}
+                                        className={clsx(styles.thumbItem, index === currentIndex ? styles.active : '') || ''}
                                         style={index === currentIndex ? { '--active-ring-color': accentColor } as React.CSSProperties : {}}
                                     >
                                         <Image src={img.url} alt="" fill sizes={IMAGE_SIZES.galleryThumb} />
@@ -214,17 +206,14 @@ const GalleryView = memo(({
             case 'grid':
             default:
                 return (
-                    <div className={styles.gridContainer}>
+                    <div className={clsx(styles.gridContainer) || ''}>
                         {gallery.map((img, i) => (
                             <div
                                 key={img.id}
-                                className={clsx(
-                                    styles.gridItem,
-                                    galleryPopup && styles.cursorPointer
-                                )}
+                                className={clsx(styles.gridItem, galleryPopup ? styles.cursorPointer : '') || ''}
                                 onClick={() => handleImageClick(i)}
                             >
-                                <AspectRatio ratio={1 / 1}>
+                                <AspectRatio ratio={1 / 1} className={clsx(styles.fullSize) || ''}>
                                     <Image src={img.url} alt="" fill sizes={IMAGE_SIZES.galleryGrid} />
                                 </AspectRatio>
                             </div>
@@ -250,9 +239,9 @@ const GalleryView = memo(({
             {renderGallery()}
 
             {/* Lightbox Modal */}
-            {popupIndex !== null && portalElement && createPortal(
+            {(popupIndex !== null && portalElement) ? createPortal(
                 <div
-                    className={clsx(styles.modalBackdrop, MOTION_CLASSES.overlay)}
+                    className={clsx(styles.modalBackdrop, MOTION_CLASSES.overlay) || ''}
                     ref={focusTrapRef}
                     onClick={(e) => {
                         if (e.target === e.currentTarget) setPopupIndex(null);
@@ -260,21 +249,21 @@ const GalleryView = memo(({
                     role="dialog"
                     aria-modal="true"
                 >
-                    <div className={styles.modalHeader}>
-                        <span className={styles.count}>
+                    <div className={clsx(styles.modalHeader) || ''}>
+                        <span className={clsx(styles.count) || ''}>
                             {currentIndex + 1} / {gallery.length}
                         </span>
                         <button
                             ref={closeBtnRef}
                             onClick={() => setPopupIndex(null)}
-                            className={styles.closeBtn}
+                            className={clsx(styles.closeBtn) || ''}
                             aria-label="창 닫기"
                         >
                             <X size={24} strokeWidth={1.5} />
                         </button>
                     </div>
 
-                    <div className={clsx(styles.modalSwiperContainer, MOTION_CLASSES.dialog)}>
+                    <div className={clsx(styles.modalSwiperContainer, MOTION_CLASSES.dialog) || ''}>
                         <Swiper
                             initialSlide={popupIndex}
                             modules={[EffectFade]}
@@ -294,8 +283,8 @@ const GalleryView = memo(({
                             }}
                         >
                             {gallery.map((img) => (
-                                <SwiperSlide key={img.id} className={styles.modalSlide}>
-                                    <div className={styles.imageWrapper}>
+                                <SwiperSlide key={img.id} className={clsx(styles.modalSlide) || ''}>
+                                    <div className={clsx(styles.imageWrapper) || ''}>
                                         <Image
                                             src={img.url}
                                             alt=""
@@ -310,7 +299,7 @@ const GalleryView = memo(({
                     </div>
                 </div>,
                 portalElement
-            )}
+            ) : null}
         </SectionContainer>
     );
 });

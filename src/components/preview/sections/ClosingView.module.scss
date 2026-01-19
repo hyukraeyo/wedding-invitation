@@ -9,7 +9,6 @@
     padding-top: 0;
     padding-bottom: 5rem;
 
-
     .imageSection {
         width: 100%;
         margin-bottom: 3rem;
@@ -39,43 +38,6 @@
                 height: 100%;
                 display: block;
             }
-
-            .effectLayer {
-                position: absolute;
-                inset: 0;
-                z-index: 10;
-                pointer-events: none;
-
-                &.mist {
-                    background-color: rgba(255, 255, 255, 0.2);
-                    backdrop-filter: blur(2px);
-                    animation: pulse-slow 4s infinite;
-                }
-
-                &.ripple {
-                    opacity: 0.3;
-                    background-image: url('https://www.transparenttextures.com/water.png');
-                    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-                }
-
-                &.paper {
-                    opacity: 0.4;
-                    background-image: url('https://www.transparenttextures.com/paper.png');
-                    mix-blend-mode: multiply;
-                }
-            }
-        }
-    }
-
-    @keyframes pulse-slow {
-
-        0%,
-        100% {
-            opacity: 1;
-        }
-
-        50% {
-            opacity: 0.8;
         }
     }
 

@@ -13,7 +13,7 @@ import type { InvitationData } from '@/store/useInvitationStore';
 import Header from '@/components/common/Header';
 
 import { useToast } from '@/hooks/use-toast';
-import { Edit2, Trash2, FileText, MoreHorizontal, Eye, Inbox, Clock } from 'lucide-react';
+import { Edit2, Trash2, FileText, MoreHorizontal, Eye, Inbox, Clock, Bookmark } from 'lucide-react';
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/DropdownMenu';
 import styles from './MyPage.module.scss';
 import { clsx } from 'clsx';
+import { InvitationCard } from '@/components/ui/InvitationCard';
 
 const ProfileCompletionModal = dynamic(
     () => import('@/components/auth/ProfileCompletionModal'),
@@ -42,6 +43,7 @@ export interface MyPageClientProps {
     isAdmin: boolean;
     profile: ProfileSummary | null;
     initialInvitations: InvitationSummaryRecord[];
+    initialAdminInvitations: InvitationSummaryRecord[];
     initialApprovalRequests: ApprovalRequestSummary[];
 }
 
@@ -61,10 +63,12 @@ export default function MyPageClient({
     isAdmin,
     profile,
     initialInvitations,
+    initialAdminInvitations,
     initialApprovalRequests,
 }: MyPageClientProps) {
     const router = useRouter();
     const [invitations, setInvitations] = useState<InvitationSummaryRecord[]>(initialInvitations);
+    const [adminInvitations, setAdminInvitations] = useState<InvitationSummaryRecord[]>(initialAdminInvitations);
     const [approvalRequests, setApprovalRequests] = useState<ApprovalRequestSummary[]>(initialApprovalRequests);
 
     const [actionLoading, setActionLoading] = useState<string | null>(null);
@@ -94,15 +98,8 @@ export default function MyPageClient({
                     invitationService.getUserInvitations(userId)
                 ]);
 
-                // Merge and deduplicate by ID
-                const paramMap = new Map();
-                adminQueue.forEach(inv => paramMap.set(inv.id, inv));
-                myInvitations.forEach(inv => paramMap.set(inv.id, inv));
-
-                const merged = Array.from(paramMap.values())
-                    .sort((a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
-
-                setInvitations(merged);
+                setAdminInvitations(adminQueue);
+                setInvitations(myInvitations);
             } else {
                 const data = await invitationService.getUserInvitations(userId);
                 setInvitations(data);
@@ -224,13 +221,17 @@ export default function MyPageClient({
     // --- Action Initiators (Open Dialog) ---
 
     const handleDeleteClick = useCallback((inv: InvitationSummaryRecord) => {
-        // Validation for user logic
-        if (!isAdmin && inv.invitation_data?.isRequestingApproval) {
+        // Validation for user logic: Block deletion if requesting or approved
+        // Admin also follows this for their own invitations
+        if (inv.invitation_data?.isRequestingApproval || inv.invitation_data?.isApproved) {
             setConfirmConfig({
                 isOpen: true,
-                type: 'INFO_ONLY', // Can't proceed
-                title: '삭제할 수 없습니다',
-                description: <>승인 신청 중인 청첩장은 삭제할 수 없습니다.<br />먼저 [신청취소]를 진행해 주세요.</>,
+                type: 'INFO_ONLY',
+                title: '수정/삭제할 수 없습니다',
+                description: <>
+                    승인 신청 중이거나 승인 완료된 청첩장은 직접 수정/삭제할 수 없습니다.<br /><br />
+                    신청 중인 경우 하단의 <strong>[신청취소]</strong> 버튼을 눌러 상태를 변경한 뒤 다시 시도해 주세요.
+                </>,
                 targetId: null,
             });
             return;
@@ -307,6 +308,16 @@ export default function MyPageClient({
             description: '승인 상태를 취소하시겠습니까?',
             targetId: inv.id,
             targetRecord: inv,
+        });
+    }, []);
+
+    const handleAdminRejectClick = useCallback((inv: InvitationSummaryRecord) => {
+        setConfirmConfig({
+            isOpen: true,
+            type: 'CANCEL_REQUEST', // Reuse SAME logic as cancel request
+            title: '사용 신청 거절',
+            description: <>해당 청첩장의 사용 신청을 거절하시겠습니까?<br />거절 시 신청 내역이 삭제되며 사용자에게 [사용신청] 버튼이 다시 노출됩니다.</>,
+            targetId: inv.id,
         });
     }, []);
 
@@ -416,7 +427,7 @@ export default function MyPageClient({
                         {approvalRequests.length > 0 ? (
                             <div className={styles.requestList}>
                                 {approvalRequests.map(request => {
-                                    const targetInv = invitations.find(inv => inv.id === request.invitation_id);
+                                    const targetInv = adminInvitations.find(inv => inv.id === request.invitation_id);
                                     const date = new Date(request.created_at);
                                     const formattedDate = `${date.getFullYear()}. ${String(date.getMonth() + 1).padStart(2, '0')}. ${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
 
@@ -433,12 +444,26 @@ export default function MyPageClient({
                                                 </div>
                                             </div>
                                             {targetInv && (
-                                                <button
-                                                    onClick={() => handleAdminApproveClick(targetInv)}
-                                                    className={styles.approveButton}
-                                                >
-                                                    승인하기
-                                                </button>
+                                                <div className={styles.adminButtonGroup}>
+                                                    <button
+                                                        onClick={() => window.open(`/v/${targetInv.slug}`, '_blank')}
+                                                        className={styles.previewButton}
+                                                    >
+                                                        미리보기
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleAdminRejectClick(targetInv)}
+                                                        className={styles.rejectButton}
+                                                    >
+                                                        거절하기
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleAdminApproveClick(targetInv)}
+                                                        className={styles.approveButton}
+                                                    >
+                                                        승인하기
+                                                    </button>
+                                                </div>
                                             )}
                                         </div>
                                     );
@@ -457,141 +482,79 @@ export default function MyPageClient({
                 )}
 
                 {/* 2. Invitation List */}
-                <section className={styles.invitationList}>
-                    {invitations.length === 0 ? (
-                        <div className={styles.emptyFullState}>
-                            <div className={styles.emptyIcon}>
-                                <FileText size={32} />
-                            </div>
-                            <h3>청첩장을 만들어보세요</h3>
-                            <p>나만의 특별한 모바일 청첩장을<br />쉽고 빠르게 만들 수 있습니다.</p>
-                            <Link
-                                href="/builder"
-                                className={styles.createBtn}
-                                onClick={handleCreateNew}
-                            >
-                                청첩장 만들기
-                            </Link>
+                <section className={styles.invitationSection}>
+                    <div className={styles.summaryHeader}>
+                        <div>
+                            <h2>저장한 청첩장</h2>
+                            <p>내가 제작 중인 청첩장 목록입니다.</p>
                         </div>
-                    ) : (
-                        invitations.map((inv) => (
-                            <div key={inv.id} className={styles.invitationItem}>
-                                <div className={styles.itemHeader}>
-                                    <div className={styles.flexColStart}>
-                                        <span className={styles.statusLabel}>
-                                            {inv.invitation_data?.isApproved
-                                                ? '승인 완료'
-                                                : inv.invitation_data?.isRequestingApproval
-                                                    ? '승인 대기중'
-                                                    : '샘플 이용중'}
-                                        </span>
-                                        <h3 className={styles.itemTitle}>
-                                            {inv.invitation_data?.mainScreen?.title || '제목없음'}
-                                        </h3>
-                                        <p className={styles.itemDate}>
-                                            {inv.invitation_data?.date || new Date(inv.updated_at).toLocaleDateString()}
-                                        </p>
-                                    </div>
-                                    <div className={styles.itemHeaderRight}>
-                                        <DropdownMenu>
-                                            <DropdownMenuTrigger asChild>
-                                                <button className={styles.moreButton}>
-                                                    <span className={styles.srOnly}>편집하기</span>
-                                                    <MoreHorizontal size={16} />
-                                                </button>
-                                            </DropdownMenuTrigger>
-                                            <DropdownMenuContent align="end" style={{ width: '200px', padding: '0.5rem', borderRadius: '0.75rem' }}>
-                                                {!inv.invitation_data?.isRequestingApproval && !inv.invitation_data?.isApproved && (
-                                                    <DropdownMenuItem onClick={() => handleEdit(inv)}>
-                                                        <Edit2 className="mr-2 h-4 w-4" /> 편집하기
-                                                    </DropdownMenuItem>
-                                                )}
-                                                <DropdownMenuItem onClick={() => window.open(`/v/${inv.slug}`, '_blank')}>
-                                                    <Eye className="mr-2 h-4 w-4" /> 미리보기
-                                                </DropdownMenuItem>
-                                                <DropdownMenuItem
-                                                    onClick={() => setTimeout(() => handleDeleteClick(inv), 0)}
-                                                    style={{ color: '#EF4444' }}
-                                                >
-                                                    <Trash2 className="mr-2 h-4 w-4" /> 삭제하기
-                                                </DropdownMenuItem>
-                                            </DropdownMenuContent>
-                                        </DropdownMenu>
-                                    </div>
+                        <span className={styles.countBadge}>
+                            {invitations.length}
+                        </span>
+                    </div>
+
+                    <div className={styles.invitationList}>
+                        {invitations.length === 0 ? (
+                            <div className={styles.emptyFullState}>
+                                <div className={styles.emptyIcon}>
+                                    <FileText size={32} />
                                 </div>
-
-                                {inv.invitation_data?.imageUrl ? (
-                                    <div className={styles.previewImageWrapper}>
-                                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                                        <img
-                                            src={inv.invitation_data.imageUrl}
-                                            alt="Main Screen"
-                                        />
-                                    </div>
-                                ) : (
-                                    <div className={styles.iconWithText}>
-                                        <FileText size={48} strokeWidth={1} className="text-gray-800" />
-                                    </div>
-                                )}
-
-                                <button
-                                    className={clsx(
-                                        styles.actionButton,
-                                        inv.invitation_data?.isApproved && styles.approved
-                                    )}
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        if (inv.invitation_data?.isApproved) {
-                                            if (isAdmin) handleAdminRevokeClick(inv);
-                                            // User: Do nothing or share
-                                        } else {
-                                            if (inv.invitation_data?.isRequestingApproval) {
-                                                handleCancelRequestClick(inv);
-                                            } else {
-                                                handleRequestApprovalClick(inv);
-                                            }
-                                        }
-                                    }}
+                                <h3>청첩장을 만들어보세요</h3>
+                                <p>나만의 특별한 모바일 청첩장을<br />쉽고 빠르게 만들 수 있습니다.</p>
+                                <Link
+                                    href="/builder"
+                                    className={styles.createBtn}
+                                    onClick={handleCreateNew}
                                 >
-                                    {inv.invitation_data?.isApproved
-                                        ? "승인 완료"
-                                        : inv.invitation_data?.isRequestingApproval
-                                            ? "신청 취소"
-                                            : "사용신청"
-                                    }
-                                </button>
+                                    청첩장 만들기
+                                </Link>
                             </div>
-                        ))
-                    )}
+                        ) : (
+                            invitations.map((inv) => (
+                                <InvitationCard
+                                    key={inv.id}
+                                    invitation={inv}
+                                    isAdmin={isAdmin}
+                                    onEdit={handleEdit}
+                                    onDelete={handleDeleteClick}
+                                    onRequestApproval={handleRequestApprovalClick}
+                                    onCancelRequest={handleCancelRequestClick}
+                                    onRevokeApproval={handleAdminRevokeClick}
+                                />
+                            ))
+                        )}
+                    </div>
                 </section>
+            </main>
 
-                {/* Modals remain same */}
-                {userId ? (
+            {/* Modals remain same */}
+            {
+                userId ? (
                     <ProfileCompletionModal
                         isOpen={profileModalOpen}
                         userId={userId}
                         defaultName={profile?.full_name || ''}
                         onComplete={handleProfileComplete}
                     />
-                ) : null}
+                ) : null
+            }
 
-                <ResponsiveModal
-                    open={confirmConfig.isOpen}
-                    onOpenChange={(open) => setConfirmConfig(prev => ({ ...prev, isOpen: open }))}
-                    title={confirmConfig.title}
-                    description={confirmConfig.description}
-                    showCancel={confirmConfig.type !== 'INFO_ONLY'}
-                    onConfirm={() => {
-                        if (confirmConfig.type !== 'INFO_ONLY') {
-                            handleConfirmAction();
-                        } else {
-                            setConfirmConfig(prev => ({ ...prev, isOpen: false }));
-                        }
-                    }}
-                    confirmLoading={!!actionLoading}
-                    dismissible={!actionLoading}
-                />
-            </main>
+            <ResponsiveModal
+                open={confirmConfig.isOpen}
+                onOpenChange={(open) => setConfirmConfig(prev => ({ ...prev, isOpen: open }))}
+                title={confirmConfig.title}
+                description={confirmConfig.description}
+                showCancel={confirmConfig.type !== 'INFO_ONLY'}
+                onConfirm={() => {
+                    if (confirmConfig.type !== 'INFO_ONLY') {
+                        handleConfirmAction();
+                    } else {
+                        setConfirmConfig(prev => ({ ...prev, isOpen: false }));
+                    }
+                }}
+                confirmLoading={!!actionLoading}
+                dismissible={!actionLoading}
+            />
         </div>
     );
 }
