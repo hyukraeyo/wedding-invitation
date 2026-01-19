@@ -12,6 +12,7 @@ export const INVITATION_SUMMARY_SELECT = [
   'location:invitation_data->>location',
   'is_approved:invitation_data->>isApproved',
   'is_requesting_approval:invitation_data->>isRequestingApproval',
+  'kakao_share:invitation_data->kakaoShare',
 ].join(', ');
 
 export interface InvitationSummaryData {
@@ -25,6 +26,12 @@ export interface InvitationSummaryData {
   location: string;
   isApproved: boolean;
   isRequestingApproval: boolean;
+  kakaoShare?: {
+    title?: string;
+    description?: string;
+    imageUrl?: string | null;
+    buttonType?: 'none' | 'location' | 'rsvp';
+  };
 }
 
 export interface InvitationSummaryRecord {
@@ -48,6 +55,12 @@ export interface InvitationSummaryRow {
   location: string | null;
   is_approved: boolean | string | null;
   is_requesting_approval: boolean | string | null;
+  kakao_share: {
+    title?: string;
+    description?: string;
+    imageUrl?: string | null;
+    buttonType?: 'none' | 'location' | 'rsvp';
+  } | null;
 }
 
 const toBoolean = (value: boolean | string | null | undefined) =>
@@ -69,5 +82,6 @@ export const toInvitationSummary = (row: InvitationSummaryRow): InvitationSummar
     location: row.location ?? '',
     isApproved: toBoolean(row.is_approved),
     isRequestingApproval: toBoolean(row.is_requesting_approval),
+    ...(row.kakao_share ? { kakaoShare: row.kakao_share } : {}),
   },
 });
