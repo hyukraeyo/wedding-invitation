@@ -211,6 +211,16 @@ npx supabase link --project-ref <project-ref>
 npx supabase db push
 ```
 
+#### 3) 데이터베이스 전체 삭제 (데이터 초기화)
+
+기존 데이터를 모두 삭제하고 싶을 때 사용합니다. 모든 사용자와 청첩장 데이터가 영구 삭제됩니다.
+
+```bash
+npx supabase db push
+```
+
+이 명령어는 `supabase/migrations/` 디렉토리의 마이그레이션 파일 중, 모든 데이터를 삭제하는 마이그레이션을 포함합니다.
+
 #### 참고
 
 - `supabase/migrations`의 SQL이 원격 DB에 적용됩니다.

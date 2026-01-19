@@ -75,6 +75,11 @@ npm run test -- -t "renders main heading"
 - Local Docker is not used; connect directly to remote Supabase.
 - In non-interactive environments, `npx supabase login` fails, use tokens.
 
+### Database Cleanup and Initialization
+- To clean all data (users, invitations, profiles, etc.), create a migration file in `supabase/migrations/` with DELETE statements
+- Use `npx supabase db push` to apply the cleanup migration
+- All data will be permanently deleted, so use with caution
+
 ```bash
 export SUPABASE_ACCESS_TOKEN=...
 export SUPABASE_DB_PASSWORD=...

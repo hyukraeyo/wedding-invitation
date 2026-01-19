@@ -9,6 +9,13 @@
     background-color: #f9fafb;
 }
 
+// Reuse overlay styles but ensure padding-top is 0
+.profileCompletionOverlay {
+    @extend .overlay;
+    align-items: center;
+    padding-top: 0;
+}
+
 .modal {
     background-color: white;
     width: 100%;
@@ -214,5 +221,21 @@
             }
         }
 
+    }
+}
+
+.backToHomeWrapper {
+    margin-top: 1.5rem;
+    text-align: center;
+}
+
+.backToHomeLink {
+    font-size: 0.875rem;
+    color: #6b7280;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+
+    &:hover {
+        color: #374151;
     }
 }

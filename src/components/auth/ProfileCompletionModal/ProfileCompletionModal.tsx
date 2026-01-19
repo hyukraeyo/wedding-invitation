@@ -9,6 +9,8 @@ import { useToast } from '@/hooks/use-toast';
 import { profileService } from '@/services/profileService';
 import { User, Phone } from 'lucide-react';
 import { isValidPhone } from '@/lib/utils';
+import styles from './ProfileCompletionModal.module.scss';
+import { cn } from '@/lib/utils';
 
 interface ProfileCompletionModalProps {
     isOpen: boolean;
@@ -63,11 +65,11 @@ export function ProfileCompletionModal({
 
     // 디자인 시스템 준수를 위한 커스텀 푸터
     const modalFooter = (
-        <div className="w-full flex flex-col gap-4">
+        <div className={styles.footer}>
             <Button
                 onClick={handleSubmit}
                 disabled={loading || !name.trim() || !phone.trim()}
-                className="w-full h-12 text-base font-bold"
+                className={styles.submitButton}
             >
                 시작하기
             </Button>
@@ -76,7 +78,7 @@ export function ProfileCompletionModal({
                 <button
                     type="button"
                     onClick={onLogout}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors self-center py-2 underline underline-offset-4"
+                    className={styles.logoutButton}
                 >
                     로그아웃
                 </button>
@@ -93,35 +95,35 @@ export function ProfileCompletionModal({
             description="청첩장 서비스 이용을 위해 이름과 연락처를 입력해주세요."
             footer={modalFooter}
         >
-            <div className="flex flex-col gap-6 py-4">
-                <div className="space-y-4">
-                    <div className="relative group">
-                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors">
+            <div className={styles.container}>
+                <div className={styles.inputList}>
+                    <div className={styles.inputGroup}>
+                        <div className={styles.inputIcon}>
                             <User size={18} />
                         </div>
                         <TextField
                             placeholder="성함 (실명)"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="pl-10 h-12 bg-zinc-50/50 border-zinc-200 focus:bg-white transition-all shadow-sm"
+                            className={styles.inputField}
                         />
                     </div>
 
-                    <div className="relative group">
-                        <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors">
+                    <div className={styles.inputGroup}>
+                        <div className={styles.inputIcon}>
                             <Phone size={18} />
                         </div>
                         <PhoneField
                             placeholder="연락처 (- 없이 입력)"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
-                            className="pl-10 h-12 bg-zinc-50/50 border-zinc-200 focus:bg-white transition-all shadow-sm"
+                            className={styles.inputField}
                         />
                     </div>
                 </div>
 
-                <div className="bg-zinc-50 p-4 rounded-xl border border-zinc-100 italic">
-                    <p className="text-xs text-muted-foreground leading-relaxed text-center">
+                <div className={styles.infoBox}>
+                    <p>
                         입력하신 정보는 청첩장 승인 신청 시 본인 확인용으로만 사용되며,
                         <br />
                         타인에게 공개되거나 광고 목적으로 사용되지 않습니다.
@@ -131,3 +133,6 @@ export function ProfileCompletionModal({
         </ResponsiveModal>
     );
 }
+
+// Ensure displayName is set if not auto-inferred (good practice)
+ProfileCompletionModal.displayName = "ProfileCompletionModal";
