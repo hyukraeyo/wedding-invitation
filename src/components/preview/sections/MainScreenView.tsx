@@ -9,6 +9,7 @@ import { clsx } from 'clsx';
 import { AspectRatio } from '@/components/ui/AspectRatio';
 import { IMAGE_SIZES } from '@/constants/image';
 import { isBlobUrl } from '@/lib/image';
+import { useInvitationStore } from '@/store/useInvitationStore';
 
 interface Person {
     lastName: string;
@@ -30,6 +31,7 @@ interface MainScreenViewProps {
         showBorder: boolean;
         expandPhoto: boolean;
         effect: 'none' | 'mist' | 'ripple' | 'paper';
+        imageShape?: 'rect' | 'arch' | 'oval';
         groomName?: string;
         brideName?: string;
     };
@@ -61,6 +63,7 @@ const MainScreenView = memo(({
     detailAddress,
     accentColor
 }: MainScreenViewProps) => {
+    const bgColor = useInvitationStore((state) => state.theme.backgroundColor);
     const mainScreen = rawMainScreen || {
         layout: 'classic',
         showTitle: true,
@@ -226,20 +229,24 @@ const MainScreenView = memo(({
                     isFillLayout ? styles.imageFill : styles.imageStandard,
                     mainScreen.layout === 'classic' && styles.classic,
                     mainScreen.expandPhoto && styles.expanded,
-                    (!isFillLayout && mainScreen.layout !== 'arch' && mainScreen.layout !== 'oval') && styles.bgGray,
+                    (!isFillLayout && mainScreen.layout !== 'arch' && mainScreen.layout !== 'oval' && !(mainScreen.layout === 'classic' && (mainScreen.imageShape === 'arch' || mainScreen.imageShape === 'oval'))) && styles.bgGray,
                     !isFillLayout && styles[imageRatio],
-                    mainScreen.effect === 'mist' && styles.noShadow
+                    mainScreen.effect === 'mist' && styles.mistEffect,
+                    mainScreen.effect === 'ripple' && styles.cleanFrame
                 )}
                     style={{
-                        borderColor: mainScreen.showBorder ? accentColor : 'transparent',
-                        borderWidth: mainScreen.showBorder ? '4px' : '0px',
-                        borderStyle: mainScreen.showBorder ? 'double' : 'solid',
-                        borderRadius: mainScreen.expandPhoto ? '0px' :
+                        borderColor: 'transparent',
+                        borderWidth: '0px',
+                        borderStyle: 'none',
+                        borderRadius:
                             mainScreen.layout === 'arch' ? `170px 170px ${mainScreen.effect === 'mist' ? '0px 0px' : '20px 20px'}` :
-                                mainScreen.layout === 'oval' ? `170px 170px ${mainScreen.effect === 'mist' ? '0px 0px' : '170px 170px'}` :
-                                    mainScreen.layout === 'basic' ? `20px 20px ${mainScreen.effect === 'mist' ? '0px 0px' : '20px 20px'}` :
-                                        mainScreen.layout === 'frame' ? `4px 4px ${mainScreen.effect === 'mist' ? '0px 0px' : '4px 4px'}` :
-                                            mainScreen.layout === 'fill' ? '0px 0px 0px 0px' : `20px 20px ${mainScreen.effect === 'mist' ? '0px 0px' : '20px 20px'}`
+                                mainScreen.layout === 'oval' ? '170px' :
+                                    (mainScreen.layout === 'classic' && mainScreen.imageShape === 'arch') ? `170px 170px ${mainScreen.effect === 'mist' ? '0px 0px' : '20px 20px'}` :
+                                        (mainScreen.layout === 'classic' && mainScreen.imageShape === 'oval') ? '170px' :
+                                            mainScreen.expandPhoto ? '0px' :
+                                                mainScreen.layout === 'basic' ? `20px 20px ${mainScreen.effect === 'mist' ? '0px 0px' : '20px 20px'}` :
+                                                    mainScreen.layout === 'frame' ? `4px 4px ${mainScreen.effect === 'mist' ? '0px 0px' : '4px 4px'}` :
+                                                        mainScreen.layout === 'fill' ? '0px 0px 0px 0px' : `20px 20px ${mainScreen.effect === 'mist' ? '0px 0px' : '20px 20px'}`
                     }}
                 >
                     {imageUrl ? (
@@ -304,11 +311,24 @@ const MainScreenView = memo(({
                     {mainScreen.layout === 'frame' ? <div className={styles.frameBorder}></div> : null}
                     {isFillLayout ? <div className={styles.gradientOverlay} /> : null}
 
-                    {mainScreen.effect === 'mist' ? <div className={clsx(styles.effectLayer, styles.mist)}></div> : null}
-                    {mainScreen.effect === 'ripple' ? <div className={clsx(styles.effectLayer, styles.ripple)}></div> : null}
+                    {mainScreen.effect === 'ripple' ? (
+                        <svg className={styles.waves} xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shapeRendering="auto">
+                            <defs>
+                                <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+                            </defs>
+                            <g className={styles.parallax}>
+                                <use href="#gentle-wave" x="48" y="0" fill={bgColor || '#ffffff'} opacity={0.7} />
+                                <use href="#gentle-wave" x="48" y="3" fill={bgColor || '#ffffff'} opacity={0.5} />
+                                <use href="#gentle-wave" x="48" y="5" fill={bgColor || '#ffffff'} opacity={0.3} />
+                                <use href="#gentle-wave" x="48" y="7" fill={bgColor || '#ffffff'} opacity={0.2} />
+                            </g>
+                        </svg>
+                    ) : null}
                     {mainScreen.effect === 'paper' && mainScreen.layout !== 'oval' ? (
                         <div className={clsx(styles.effectLayer, styles.paper)}></div>
                     ) : null}
+
+
                 </div>
 
                 {/* 3. Bottom Area */}

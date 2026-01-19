@@ -65,6 +65,7 @@ export interface InvitationState {
         showBorder: boolean;
         expandPhoto: boolean;
         effect: 'none' | 'mist' | 'ripple' | 'paper';
+        imageShape: 'rect' | 'arch' | 'oval';
         title: string;
         subtitle: string;
         customDatePlace: string;
@@ -309,6 +310,7 @@ export const INITIAL_STATE = {
         showBorder: false,
         expandPhoto: false,
         effect: 'none' as const,
+        imageShape: 'rect' as const,
         title: 'THE MARRIAGE',
         subtitle: '소중한 날에 초대합니다',
         customDatePlace: '',

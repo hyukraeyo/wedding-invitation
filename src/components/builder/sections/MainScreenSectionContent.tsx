@@ -212,6 +212,20 @@ export default function MainScreenSectionContent() {
                 />
             </Field>
 
+            {mainScreen.layout === 'classic' && (
+                <Field label="사진 형태">
+                    <SegmentedControl
+                        value={mainScreen.imageShape || 'rect'}
+                        onChange={(val) => updateMain({ imageShape: val as 'rect' | 'arch' | 'oval' })}
+                        options={[
+                            { label: '기본', value: 'rect' },
+                            { label: '아치', value: 'arch' },
+                            { label: '타원', value: 'oval' },
+                        ]}
+                    />
+                </Field>
+            )}
+
             <Field label="사진 효과">
                 <SegmentedControl
                     value={mainScreen.effect}
