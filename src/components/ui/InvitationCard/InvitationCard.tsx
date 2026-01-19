@@ -143,44 +143,62 @@ const InvitationCard = ({
                         </DropdownMenu>
 
                         {isRejected ? (
-                            <Button
-                                variant="outline"
-                                className={styles.footerSecondaryButton}
-                                onClick={() => setShowRejectionModal(true)}
-                            >
-                                거절 사유
-                            </Button>
+                            <>
+                                <Button
+                                    variant="outline"
+                                    className={styles.footerSecondaryButton}
+                                    onClick={handlePreview}
+                                >
+                                    미리보기
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    className={clsx(styles.footerPrimaryButton, styles.rejected)}
+                                    onClick={() => setShowRejectionModal(true)}
+                                >
+                                    거절 사유
+                                </Button>
+                            </>
                         ) : !isRequesting && !isApproved ? (
-                            <Button
-                                variant="outline"
-                                className={styles.footerSecondaryButton}
-                                onClick={() => onEdit(invitation)}
-                            >
-                                편집하기
-                            </Button>
+                            <>
+                                <Button
+                                    variant="outline"
+                                    className={styles.footerSecondaryButton}
+                                    onClick={() => onEdit(invitation)}
+                                >
+                                    편집하기
+                                </Button>
+                                <Button
+                                    className={styles.footerPrimaryButton}
+                                    variant="solid"
+                                    onClick={handlePrimaryAction}
+                                >
+                                    사용신청
+                                </Button>
+                            </>
                         ) : (
-                            <Button
-                                variant="outline"
-                                className={styles.footerSecondaryButton}
-                                onClick={handlePreview}
-                            >
-                                미리보기
-                            </Button>
+                            <>
+                                <Button
+                                    variant="outline"
+                                    className={styles.footerSecondaryButton}
+                                    onClick={handlePreview}
+                                >
+                                    미리보기
+                                </Button>
+                                <Button
+                                    className={clsx(
+                                        styles.footerPrimaryButton,
+                                        isApproved && styles.approved,
+                                        isRequesting && styles.requesting
+                                    )}
+                                    variant={isApproved ? "secondary" : "solid"}
+                                    disabled={(!isAdmin && isApproved)}
+                                    onClick={handlePrimaryAction}
+                                >
+                                    {isApproved ? '승인완료' : '신청취소'}
+                                </Button>
+                            </>
                         )}
-
-                        <Button
-                            className={clsx(
-                                styles.footerPrimaryButton,
-                                isApproved && styles.approved,
-                                isRequesting && styles.requesting,
-                                isRejected && styles.rejected
-                            )}
-                            variant={isApproved ? "secondary" : isRejected ? "outline" : "solid"}
-                            disabled={isApproved || isRejected}
-                            onClick={handlePrimaryAction}
-                        >
-                            {isRejected ? '거절됨' : isApproved ? '승인완료' : isRequesting ? '신청취소' : '사용신청'}
-                        </Button>
                     </div>
                 </div>
             </div>
