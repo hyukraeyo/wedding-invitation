@@ -366,7 +366,6 @@ const InvitationCanvasContent = memo(({
           galleryTitle={galleryTitle}
           gallerySubtitle={gallerySubtitle}
           galleryType={galleryType}
-          galleryPreview={galleryPreview}
           galleryFade={galleryFade}
           galleryAutoplay={galleryAutoplay}
           galleryPopup={galleryPopup}

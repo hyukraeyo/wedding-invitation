@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect, useMemo, memo, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import Image from 'next/image';
-import { X } from 'lucide-react';
+import { X, Image as ImageIcon } from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, EffectFade, Autoplay, FreeMode, Thumbs } from 'swiper/modules';
 import 'swiper/css';
@@ -35,13 +35,14 @@ interface GalleryViewProps {
     galleryTitle: string;
     gallerySubtitle: string;
     galleryType: 'swiper' | 'thumbnail' | 'grid';
-    galleryPreview: boolean;
     galleryFade: boolean;
     galleryAutoplay: boolean;
     galleryPopup: boolean;
     accentColor: string;
     animateEntrance?: boolean;
 }
+
+const SWIPER_MODULES = [Navigation, Pagination, EffectFade, Autoplay];
 
 /**
  * Presentational Component for Gallery View.
@@ -54,7 +55,6 @@ const GalleryView = memo(({
     galleryTitle,
     gallerySubtitle,
     galleryType,
-    galleryPreview,
     galleryFade,
     galleryAutoplay,
     galleryPopup,
@@ -148,25 +148,27 @@ const GalleryView = memo(({
         }
     }, [popupIndex, modalSwiper]);
 
-    if (!gallery.length) return <div id={id} />;
+    // if (!gallery.length) return <div id={id} />; // 삭제: 빈 상태라도 영역을 렌더링해야 함
     if (!portalElement) return null;
 
     const renderGallery = () => {
         switch (galleryType) {
             case 'swiper':
+                const isFade = galleryFade;
+
                 return (
-                    <div ref={swiperContainerRef} className={clsx(styles.swiperContainer, !galleryPreview ? styles.swiperContainerLimited : '') || ''}>
+                    <div ref={swiperContainerRef} className={clsx(styles.swiperContainer)}>
                         <div className={clsx(styles.galleryWrapper) || ''}>
                             <Swiper
-                                key={`${galleryType}-${gallery.length}-${galleryFade}-${galleryPreview}`}
-                                modules={[Navigation, Pagination, EffectFade, Autoplay]}
-                                spaceBetween={20}
-                                slidesPerView={galleryFade ? 1 : (galleryPreview ? 1.25 : 1)}
-                                centeredSlides={!galleryFade && galleryPreview}
+                                key={`${galleryType}-${gallery.length}-${isFade}`}
+                                modules={SWIPER_MODULES}
+                                spaceBetween={isFade ? 0 : 20}
+                                slidesPerView={isFade ? 1 : 1.18}
+                                centeredSlides={!isFade}
                                 observer={true}
                                 observeParents={true}
-                                effect={galleryFade ? "fade" : "slide"}
-                                {...(galleryFade ? { fadeEffect: { crossFade: true } } : {})}
+                                effect={isFade ? "fade" : "slide"}
+                                {...(isFade ? { fadeEffect: { crossFade: true } } : {})}
                                 autoplay={galleryAutoplay ? { delay: 3000, disableOnInteraction: false } : false}
                                 loop={false}
                                 onSwiper={setMainSwiper}
@@ -176,17 +178,19 @@ const GalleryView = memo(({
                                 {gallery.map((img, index) => (
                                     <SwiperSlide key={img.id}>
                                         <div
-                                            className={clsx(styles.imageSlide, galleryPopup ? styles.cursorPointer : '') || ''}
+                                            className={clsx(
+                                                styles.imageSlide,
+                                                galleryPopup ? styles.cursorPointer : ''
+                                            ) || ''}
+                                            style={{ borderRadius: isFade ? '0' : undefined }}
                                             onClick={() => handleImageClick(index)}
                                         >
                                             <Image
                                                 src={img.url}
                                                 alt=""
                                                 fill
-                                                sizes={galleryPreview
-                                                    ? IMAGE_SIZES.gallery
-                                                    : '(max-width: 768px) calc(100vw - 64px), 50vw'
-                                                }
+                                                priority={index === 0}
+                                                sizes={'(max-width: 768px) calc(100vw - 48px), 500px'}
                                             />
                                         </div>
                                     </SwiperSlide>
@@ -269,8 +273,6 @@ const GalleryView = memo(({
     return (
         <SectionContainer
             id={id}
-            fullWidth={galleryPreview && galleryType === 'swiper'}
-            style={{ paddingInline: (galleryPreview && galleryType === 'swiper') ? '0' : undefined }}
             animateEntrance={animateEntrance}
         >
             <SectionHeader
@@ -279,7 +281,12 @@ const GalleryView = memo(({
                 accentColor={accentColor}
             />
 
-            {renderGallery()}
+            {gallery.length > 0 ? renderGallery() : (
+                <div className={clsx(styles.emptyState) || ''}>
+                    <ImageIcon />
+                    <span>사진을 등록해주세요</span>
+                </div>
+            )}
 
             {/* Lightbox Modal */}
             {(popupIndex !== null && portalElement) ? createPortal(

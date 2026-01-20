@@ -1,19 +1,15 @@
 @use "../../../styles/variables" as v;
 
 /* Swiper specific */
+/* Swiper specific */
 .swiperContainer {
     width: 100%;
-
-    &.swiperContainerLimited {
-        max-width: v.$canvas-max-width;
-        margin-inline: auto;
-    }
+    max-width: v.$canvas-max-width;
+    margin-inline: auto;
 }
 
 .galleryWrapper {
     position: relative;
-    
-    // Equivalent to 'group' class for hover effects if needed
 }
 
 .swiperMain {
@@ -38,6 +34,10 @@
     height: 100%;
     border-radius: 1rem;
     overflow: hidden;
+
+    &.noRadius {
+        border-radius: 0 !important;
+    }
 
     &.cursorPointer {
         cursor: pointer;
@@ -181,5 +181,25 @@
         img {
             object-fit: contain;
         }
+    }
+}
+
+.emptyState {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.03);
+    border-radius: 1rem;
+    color: rgba(0, 0, 0, 0.4);
+    gap: 0.5rem;
+    font-size: 0.875rem;
+
+    svg {
+        width: 2rem;
+        height: 2rem;
+        opacity: 0.5;
     }
 }

@@ -372,11 +372,6 @@ export default function GallerySectionContent() {
                                 onChange={setGalleryFade}
                                 label="페이드 효과"
                             />
-                            <SwitchField
-                                checked={galleryPreview}
-                                onChange={setGalleryPreview}
-                                label="미리보기"
-                            />
                         </>
                     ) : null}
                 </div>
