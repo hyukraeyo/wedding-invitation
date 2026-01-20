@@ -1,0 +1,30 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+
+.sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    @include m.desktop {
+        margin-bottom: 2rem;
+    }
+}
+
+.sectionTitle {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: v.$zinc-900;
+
+    @include m.desktop {
+        font-size: 1.5rem;
+    }
+}
+
+.actions {
+    display: flex;
+    gap: 0.5rem;
+}

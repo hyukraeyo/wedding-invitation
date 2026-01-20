@@ -1,0 +1,34 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+
+// ============================================
+// Layout Container
+// ============================================
+.pageContainer {
+    min-height: 100dvh;
+    background-color: v.$color-bg-page;
+    padding-top: 3.5rem; // Header height
+}
+
+.layout {
+    display: flex;
+    min-height: calc(100dvh - 3.5rem);
+    
+    @include m.mobile {
+        flex-direction: column;
+    }
+}
+
+// ============================================
+// Main Content Area (통일된 스타일)
+// ============================================
+.mainContent {
+    flex: 1;
+    padding: 1.5rem 1.25rem 5rem;
+    max-width: 100%;
+
+    @include m.desktop {
+        padding: 2rem 3rem 3rem;
+        max-width: calc(100% - 280px);
+    }
+}

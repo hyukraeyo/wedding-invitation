@@ -1,6 +1,44 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
+// Selector helpers for optimized re-renders
+export const selectGroomInfo = (state: InvitationState) => ({
+    firstName: state.groom.firstName,
+    lastName: state.groom.lastName,
+    relation: state.groom.relation,
+});
+
+export const selectBrideInfo = (state: InvitationState) => ({
+    firstName: state.bride.firstName,
+    lastName: state.bride.lastName,
+    relation: state.bride.relation,
+});
+
+export const selectEventInfo = (state: InvitationState) => ({
+    date: state.date,
+    time: state.time,
+    location: state.location,
+    address: state.address,
+    detailAddress: state.detailAddress,
+});
+
+export const selectThemeInfo = (state: InvitationState) => ({
+    font: state.theme.font,
+    backgroundColor: state.theme.backgroundColor,
+    accentColor: state.theme.accentColor,
+    fontScale: state.theme.fontScale,
+    pattern: state.theme.pattern,
+    effect: state.theme.effect,
+});
+
+export const selectGalleryConfig = (state: InvitationState) => ({
+    galleryType: state.galleryType,
+    galleryPopup: state.galleryPopup,
+    galleryFade: state.galleryFade,
+    galleryAutoplay: state.galleryAutoplay,
+    gallery: state.gallery,
+});
+
 export interface InvitationState {
     // Basic Info
     groom: {

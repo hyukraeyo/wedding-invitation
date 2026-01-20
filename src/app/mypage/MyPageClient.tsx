@@ -10,7 +10,8 @@ import type { ApprovalRequestSummary } from '@/services/approvalRequestService';
 import type { InvitationSummaryRecord } from '@/lib/invitation-summary';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import type { InvitationData } from '@/store/useInvitationStore';
-import Header from '@/components/common/Header';
+import { MyPageLayout } from '@/components/mypage/MyPageLayout';
+import { MyPageHeader } from '@/components/mypage/MyPageHeader';
 // import { signOut } from 'next-auth/react';
 
 import { useToast } from '@/hooks/use-toast';
@@ -20,7 +21,6 @@ import {
 } from 'lucide-react';
 import styles from './MyPage.module.scss';
 import { InvitationCard } from '@/components/ui/InvitationCard';
-import { MyPageSidebar } from '@/components/mypage/MyPageSidebar';
 
 const ProfileCompletionModal = dynamic(
     () => import('@/components/auth/ProfileCompletionModal').then(mod => mod.ProfileCompletionModal),
@@ -293,8 +293,12 @@ export default function MyPageClient({
 
     if (!userId) {
         return (
-            <div className={styles.pageContainer}>
-                <Header />
+            <MyPageLayout
+                profile={profile}
+                isAdmin={isAdmin}
+                invitationCount={0}
+                requestCount={0}
+            >
                 <div className={styles.authCard}>
                     <div className={styles.authIcon}>
                         <Banana size={32} />
@@ -305,79 +309,68 @@ export default function MyPageClient({
                         로그인하기
                     </Link>
                 </div>
-            </div>
+            </MyPageLayout>
         );
     }
 
     return (
-        <div className={styles.pageContainer}>
-            <Header />
-            <div className={styles.layout}>
-                {/* Sidebar */}
-                <MyPageSidebar
-                    profile={profile}
-                    isAdmin={isAdmin}
-                    invitationCount={invitations.length}
-                    requestCount={approvalRequests.length}
-                />
+        <MyPageLayout
+            profile={profile}
+            isAdmin={isAdmin}
+            invitationCount={invitations.length}
+            requestCount={approvalRequests.length}
+        >
+            <MyPageHeader title="내 청첩장" />
 
-                {/* Main Content */}
-                <main className={styles.mainContent}>
-                    <div className={styles.sectionHeader}>
-                        <h1 className={styles.sectionTitle}>내 청첩장</h1>
-                    </div>
-
-                    <div className={styles.cardGrid}>
-                        {/* Create New Card */}
-                        <div className={styles.createCardWrapper}>
-                            <Link
-                                href="/builder"
-                                className={styles.createCard}
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    handleCreateNew();
-                                }}
-                            >
-                                <div className={styles.createIcon}>
-                                    <Plus size={28} />
-                                </div>
-                                <span className={styles.createText}>새 청첩장 만들기</span>
-                            </Link>
-                            <div className={styles.createDatePlaceholder} />
+            <div className={styles.cardGrid}>
+                {/* Create New Card */}
+                <div className={styles.createCardWrapper}>
+                    <Link
+                        href="/builder"
+                        className={styles.createCard}
+                        onClick={(e) => {
+                            e.preventDefault();
+                            handleCreateNew();
+                        }}
+                    >
+                        <div className={styles.createIcon}>
+                            <Plus size={28} />
                         </div>
+                        <span className={styles.createText}>새 청첩장 만들기</span>
+                    </Link>
+                    <div className={styles.createDatePlaceholder} />
+                </div>
 
-                        {/* Invitation Cards */}
-                        {invitations.length === 0 ? (
-                            <div className={styles.emptyState}>
-                                <div className={styles.emptyIcon}>
-                                    <Banana size={40} />
-                                </div>
-                                <h3 className={styles.emptyTitle}>아직 청첩장이 없어요</h3>
-                                <p className={styles.emptyDescription}>
-                                    나만의 특별한 모바일 청첩장을<br />
-                                    쉽고 빠르게 만들어보세요!
-                                </p>
-                            </div>
-                        ) : (
-                            invitations.map((inv) => {
-                                const rejectionData = rejectedRequests.find(req => req.invitation_id === inv.id) || null;
-                                return (
-                                    <InvitationCard
-                                        key={inv.id}
-                                        invitation={inv}
-                                        isAdmin={isAdmin}
-                                        rejectionData={rejectionData}
-                                        onEdit={handleEdit}
-                                        onDelete={handleDeleteClick}
-                                        onRequestApproval={handleRequestApprovalClick}
-                                        onCancelRequest={handleCancelRequestClick}
-                                        onRevokeApproval={handleAdminRevokeClick}
-                                    />
-                                );
-                            })
-                        )}
+                {/* Invitation Cards */}
+                {invitations.length === 0 ? (
+                    <div className={styles.emptyState}>
+                        <div className={styles.emptyIcon}>
+                            <Banana size={40} />
+                        </div>
+                        <h3 className={styles.emptyTitle}>아직 청첩장이 없어요</h3>
+                        <p className={styles.emptyDescription}>
+                            나만의 특별한 모바일 청첩장을<br />
+                            쉽고 빠르게 만들어보세요!
+                        </p>
                     </div>
-                </main>
+                ) : (
+                    invitations.map((inv) => {
+                        const rejectionData = rejectedRequests.find(req => req.invitation_id === inv.id) || null;
+                        return (
+                            <InvitationCard
+                                key={inv.id}
+                                invitation={inv}
+                                isAdmin={isAdmin}
+                                rejectionData={rejectionData}
+                                onEdit={handleEdit}
+                                onDelete={handleDeleteClick}
+                                onRequestApproval={handleRequestApprovalClick}
+                                onCancelRequest={handleCancelRequestClick}
+                                onRevokeApproval={handleAdminRevokeClick}
+                            />
+                        );
+                    })
+                )}
             </div>
 
             {/* Modals */}
@@ -424,6 +417,6 @@ export default function MyPageClient({
                     confirmText="승인 취소"
                 />
             ) : null}
-        </div>
+        </MyPageLayout>
     );
 }

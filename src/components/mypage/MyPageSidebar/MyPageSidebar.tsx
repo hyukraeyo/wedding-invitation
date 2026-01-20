@@ -39,9 +39,16 @@ export function MyPageSidebar({
 }: MyPageSidebarProps) {
     const pathname = usePathname();
     const [isEventModalOpen, setIsEventModalOpen] = React.useState(false);
+    const [isCustomerServiceModalOpen, setIsCustomerServiceModalOpen] = React.useState(false);
 
     const handleLogout = async () => {
         await signOut({ callbackUrl: '/login' });
+    };
+
+    const handleCustomerServiceConfirm = () => {
+        // 카카오톡 고객센터로 이동
+        window.open('http://pf.kakao.com/_KaiAX/chat', '_blank', 'noopener,noreferrer');
+        setIsCustomerServiceModalOpen(false);
     };
 
     return (
@@ -99,15 +106,13 @@ export function MyPageSidebar({
                         이벤트
                     </button>
 
-                    <Link
-                        href="http://pf.kakao.com/_KaiAX/chat"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    <button
                         className={styles.menuItem}
+                        onClick={() => setIsCustomerServiceModalOpen(true)}
                     >
                         <HelpCircle size={20} className={styles.menuIcon} />
                         고객센터
-                    </Link>
+                    </button>
 
                     <button className={styles.menuItem} onClick={handleLogout}>
                         <LogOut size={20} className={styles.menuIcon} />
@@ -139,6 +144,17 @@ export function MyPageSidebar({
                     </p>
                 </div>
             </ResponsiveModal>
+
+            <ResponsiveModal
+                open={isCustomerServiceModalOpen}
+                onOpenChange={setIsCustomerServiceModalOpen}
+                title="고객센터"
+                description="카카오톡 채널로 연결됩니다. 문의사항을 남겨주시면 빠르게 답변 드리겠습니다."
+                confirmText="확인"
+                cancelText="닫기"
+                showCancel={true}
+                onConfirm={handleCustomerServiceConfirm}
+            />
         </>
     );
 }

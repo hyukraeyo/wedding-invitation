@@ -11,35 +11,28 @@ interface Props {
 const getInvitation = cache(async (slug: string) => {
     const supabase = await createSupabaseServerClient(null);
 
-    // 1. Try direct match
-    let invitation = await invitationService.getInvitation(slug, supabase);
-    if (invitation) return invitation;
-
-    // 2. Robust lookup for Korean/Special characters
+    // Prepare all possible slug variations upfront
+    const possibleSlugs = new Set<string>([slug]);
+    
     try {
         const decodedSlug = decodeURIComponent(slug);
-
-        // If decoded is different, try decoded
-        if (decodedSlug !== slug) {
-            invitation = await invitationService.getInvitation(decodedSlug, supabase);
-            if (invitation) return invitation;
-        }
-
-        // 3. Try NFC normalization (Unicode Composition primarily for Korean)
+        if (decodedSlug !== slug) possibleSlugs.add(decodedSlug);
+        
         const nfcSlug = decodedSlug.normalize('NFC');
-        if (nfcSlug !== decodedSlug) {
-            invitation = await invitationService.getInvitation(nfcSlug, supabase);
-            if (invitation) return invitation;
-        }
-
-        // 4. Try NFD normalization (For records potentially created on Mac/iOS)
+        if (nfcSlug !== decodedSlug) possibleSlugs.add(nfcSlug);
+        
         const nfdSlug = decodedSlug.normalize('NFD');
         if (nfdSlug !== decodedSlug && nfdSlug !== nfcSlug) {
-            invitation = await invitationService.getInvitation(nfdSlug, supabase);
-            if (invitation) return invitation;
+            possibleSlugs.add(nfdSlug);
         }
     } catch (e) {
         console.error('Slug decoding error:', e);
+    }
+
+    // Try all variations sequentially (early return on first match)
+    for (const possibleSlug of possibleSlugs) {
+        const invitation = await invitationService.getInvitation(possibleSlug, supabase);
+        if (invitation) return invitation;
     }
 
     return null;

@@ -190,7 +190,9 @@ const GalleryView = memo(({
                                                 alt=""
                                                 fill
                                                 priority={index === 0}
+                                                loading={index === 0 ? 'eager' : 'lazy'}
                                                 sizes={'(max-width: 768px) calc(100vw - 48px), 500px'}
+                                                quality={85}
                                             />
                                         </div>
                                     </SwiperSlide>
@@ -222,7 +224,9 @@ const GalleryView = memo(({
                                             src={img.url}
                                             alt=""
                                             fill
+                                            loading={index < 3 ? 'eager' : 'lazy'}
                                             sizes="(max-width: 768px) calc(100vw - 64px), 50vw"
+                                            quality={85}
                                         />
                                     </div>
                                 </SwiperSlide>
@@ -243,7 +247,14 @@ const GalleryView = memo(({
                                         className={clsx(styles.thumbItem, index === currentIndex ? styles.active : '') || ''}
                                         style={index === currentIndex ? { '--active-ring-color': accentColor } as React.CSSProperties : {}}
                                     >
-                                        <Image src={img.url} alt="" fill sizes={IMAGE_SIZES.galleryThumb} />
+                                        <Image 
+                                            src={img.url} 
+                                            alt="" 
+                                            fill 
+                                            loading={index < 5 ? 'eager' : 'lazy'}
+                                            sizes={IMAGE_SIZES.galleryThumb} 
+                                            quality={75}
+                                        />
                                     </div>
                                 </SwiperSlide>
                             ))}
@@ -261,7 +272,14 @@ const GalleryView = memo(({
                                 onClick={() => handleImageClick(i)}
                             >
                                 <AspectRatio ratio={1 / 1} className={clsx(styles.fullSize) || ''}>
-                                    <Image src={img.url} alt="" fill sizes={IMAGE_SIZES.galleryGrid} />
+                                    <Image 
+                                        src={img.url} 
+                                        alt="" 
+                                        fill 
+                                        loading={i < 6 ? 'eager' : 'lazy'}
+                                        sizes={IMAGE_SIZES.galleryGrid} 
+                                        quality={85}
+                                    />
                                 </AspectRatio>
                             </div>
                         ))}
@@ -341,6 +359,8 @@ const GalleryView = memo(({
                                             fill
                                             sizes="calc(100vw - 32px)"
                                             priority={img.id === gallery[popupIndex ?? 0]?.id}
+                                            loading={img.id === gallery[popupIndex ?? 0]?.id ? 'eager' : 'lazy'}
+                                            quality={85}
                                         />
                                     </div>
                                 </SwiperSlide>

@@ -103,7 +103,7 @@ const SortableItem = React.memo(function SortableItem({ id, url, index, onRemove
     );
 });
 
-export default function GallerySectionContent() {
+export default React.memo(function GallerySectionContent() {
     const {
         gallery,
         setGallery,
@@ -191,18 +191,24 @@ export default function GallerySectionContent() {
         e.target.value = '';
 
         try {
+            // Dynamic import for code splitting - upload module loaded only when needed
             const { uploadImage } = await import('@/utils/upload');
 
-            for (const item of tempItems) {
+            // Upload images in parallel for better performance
+            await Promise.all(tempItems.map(async (item) => {
                 try {
                     const publicUrl = await uploadImage(item.file, 'images', 'gallery');
-                    setGallery((prev: { id: string; url: string }[]) => prev.map(g => g.id === item.id ? { ...g, url: publicUrl } : g));
+                    setGallery((prev: { id: string; url: string }[]) => 
+                        prev.map(g => g.id === item.id ? { ...g, url: publicUrl } : g)
+                    );
                     URL.revokeObjectURL(item.url);
                 } catch (error) {
                     console.error('Upload failed', error);
-                    setGallery((prev: { id: string; url: string }[]) => prev.filter(g => g.id !== item.id));
+                    setGallery((prev: { id: string; url: string }[]) => 
+                        prev.filter(g => g.id !== item.id)
+                    );
                 }
-            }
+            }));
         } catch (error) {
             console.error('Failed to import upload module', error);
         }
@@ -374,4 +380,4 @@ export default function GallerySectionContent() {
             </Field>
         </SectionContainer>
     );
-}
+});
