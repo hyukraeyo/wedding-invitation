@@ -9,7 +9,7 @@
     position: relative;
     width: 100%;
     background-color: v.$zinc-100;
-    border-radius: 12px; // Match standard builder-radius-md
+    border-radius: 1rem; // 16px
     padding: 0.25rem; // p-1
     display: grid;
     grid-auto-flow: column;
@@ -31,7 +31,7 @@
     bottom: 0.25rem; // bottom-1
     left: 0.25rem; // left-1
     background-color: white;
-    border-radius: 9px; // Inner radius for 12px outer
+    border-radius: calc(1rem - 4px); // Inner radius for 16px outer
     // box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.02);
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); // ease-ios
     pointer-events: none;

@@ -57,7 +57,7 @@
 .thumbItem {
     position: relative;
     aspect-ratio: 1 / 1;
-    border-radius: 0.5rem;
+    border-radius: 1rem; // 16px
     overflow: hidden;
     transition: all 0.2s;
     opacity: 0.4;
@@ -85,7 +85,7 @@
 .gridItem {
     position: relative;
     aspect-ratio: 1 / 1;
-    border-radius: 0.5rem;
+    border-radius: 1rem; // 16px
     overflow: hidden;
     // box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 

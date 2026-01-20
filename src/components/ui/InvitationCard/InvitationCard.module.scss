@@ -9,7 +9,7 @@
 
 .cardItem {
     position: relative;
-    border-radius: 1.75rem;
+    border-radius: 1rem; // 16px
     overflow: hidden;
     background-color: #ffffff;
     aspect-ratio: 3 / 4.4;
@@ -108,7 +108,7 @@
     gap: 0.375rem;
     background-color: #ffffff;
     padding: 0.375rem 0.75rem;
-    border-radius: 0.875rem;
+    border-radius: 1rem; // 16px
     font-size: 0.75rem;
     font-weight: 700;
     color: v.$zinc-600;
@@ -169,7 +169,7 @@
     .footerSecondaryButton,
     .footerPrimaryButton {
         height: 2.875rem !important; // Override default height for compact card
-        border-radius: 0.875rem;
+        border-radius: 1rem; // 16px
         font-weight: 700;
         display: flex;
         align-items: center;
@@ -274,7 +274,7 @@
     @include m.flex-center;
     gap: 0.75rem;
     padding: 0.875rem;
-    border-radius: 0.75rem;
+    border-radius: 1rem; // 16px
     font-size: 0.9375rem;
     font-weight: 600;
     cursor: pointer;
@@ -301,7 +301,7 @@
 .dropdownContent {
     width: 160px;
     padding: 0.4rem;
-    border-radius: 0.75rem;
+    border-radius: 1rem; // 16px
 }
 
 .rejectionMessage {
@@ -311,6 +311,6 @@
     margin-top: 1rem;
     padding: 1rem;
     background-color: #FEF2F2;
-    border-radius: 0.75rem;
+    border-radius: 1rem; // 16px
     border: 1px solid #FEE2E2;
 }
