@@ -10,7 +10,6 @@ import { approvalRequestService } from '@/services/approvalRequestService';
 import type { ApprovalRequestSummary } from '@/services/approvalRequestService';
 import type { InvitationSummaryRecord } from '@/lib/invitation-summary';
 import { invitationService } from '@/services/invitationService';
-import { MyPageLayout } from '@/components/mypage/MyPageLayout';
 import { MyPageHeader } from '@/components/mypage/MyPageHeader';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -57,11 +56,8 @@ interface ConfirmConfig {
 }
 
 export default function RequestsPageClient({
-    // userId: _userId,
     initialApprovalRequests,
     initialAdminInvitations,
-    profile,
-    invitationCount,
 }: RequestsPageClientProps) {
     const [approvalRequests, setApprovalRequests] = useState<ApprovalRequestSummary[]>(initialApprovalRequests);
     const [adminInvitations, setAdminInvitations] = useState<InvitationSummaryRecord[]>(initialAdminInvitations);
@@ -181,12 +177,7 @@ export default function RequestsPageClient({
 
 
     return (
-        <MyPageLayout
-            profile={profile}
-            isAdmin={true}
-            requestCount={approvalRequests.length}
-            invitationCount={invitationCount}
-        >
+        <>
             <MyPageHeader title="신청 관리" />
 
             {approvalRequests.length > 0 ? (
@@ -358,6 +349,6 @@ export default function RequestsPageClient({
                     </ResponsiveModal>
                 ) : null
             }
-        </MyPageLayout>
+        </>
     );
 }

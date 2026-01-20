@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from 'react';
-import { MyPageLayout } from '@/components/mypage/MyPageLayout';
 import { MyPageHeader } from '@/components/mypage/MyPageHeader';
 import { PhoneField } from '@/components/common/PhoneField';
 import { Button } from '@/components/ui/Button';
@@ -30,10 +29,7 @@ interface AccountPageClientProps {
 
 export default function AccountPageClient({
     profile,
-    isAdmin,
     userEmail,
-    invitationCount,
-    requestCount
 }: AccountPageClientProps) {
     const { toast } = useToast();
     const router = useRouter();
@@ -60,12 +56,7 @@ export default function AccountPageClient({
 
 
     return (
-        <MyPageLayout
-            profile={profile}
-            isAdmin={isAdmin}
-            invitationCount={invitationCount}
-            requestCount={requestCount}
-        >
+        <>
             <MyPageHeader title="계정 관리" />
 
             <div className={styles.contentCard}>
@@ -152,9 +143,7 @@ export default function AccountPageClient({
                         )}
                     </div>
                 </div>
-
-
             </div>
-        </MyPageLayout>
+        </>
     );
 }

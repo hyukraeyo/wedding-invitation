@@ -55,35 +55,38 @@ $color-text-desc: #4E5968;
 
 .header {
   text-align: center;
-  padding-top: 1.5rem; // 40px
-  padding-bottom: 1.5rem; // 40px
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
   padding-left: 2rem;
   padding-right: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex-shrink: 0; // shrink-0
-  background-color: v.$white; // Explicit bg
+  flex-shrink: 0;
+  background-color: v.$white;
+  border-bottom: 1px solid v.$color-border;
 
   // Drawer specific overrides
   &.drawerHeader {
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
   }
 }
 
 .title {
-  font-size: 1.25rem; // 24px -> 20px로 하향
+  font-size: 1.25rem;
   font-weight: 700;
-  letter-spacing: -0.03em; // 자간 더 타이트하게
+  letter-spacing: -0.03em;
   color: $color-text-title;
 }
 
 .description {
   font-size: 1.0625rem; // 17px
   color: $color-text-desc;
-  line-height: 1.625; // leading-relaxed
-  word-break: keep-all; // break-keep
+  line-height: 1.625;
+  word-break: keep-all;
+  text-align: center;
+  white-space: pre-wrap;
 }
 
 .content {
@@ -91,12 +94,14 @@ $color-text-desc: #4E5968;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  padding: 2rem 2rem; // Increased vertical padding
-  background-color: v.$white; // Explicit bg
+  padding: 2.5rem 2rem; // Increased vertical padding for premium feel
+  background-color: v.$white;
+  min-height: 8rem; // Ensure some space for content even if short
+  justify-content: center; // Center content vertically for better look with short text
 
   // Scrollbar hiding
-  scrollbar-width: none; // Firefox
-  -ms-overflow-style: none; // IE/Edge
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 
   &::-webkit-scrollbar {
     display: none;

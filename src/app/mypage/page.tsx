@@ -32,114 +32,64 @@ export default async function MyPage() {
     let rejectedRequests: ApprovalRequestSummary[] = [];
 
     if (user) {
-        // Only use the database profile for admin status, not just email presence
-        // (email check is only for the specific 'admin@test.com' if needed for initial setup)
-        const isDefaultAdmin = user.email === 'admin@test.com';
-
-        // 1. Start Profile Fetch
+        // Start all independent fetches in parallel
         const profilePromise = supabase
             .from('profiles')
             .select('full_name, phone, is_admin')
             .eq('id', user.id)
             .single();
 
-        let adminQueueResult, myInvitationsResult, approvalRequestsResult, rejectedRequestsResult;
+        const myInvitationsPromise = supabase
+            .from('invitations')
+            .select(INVITATION_SUMMARY_SELECT)
+            .eq('user_id', user.id)
+            .order('updated_at', { ascending: false });
 
-        if (isDefaultAdmin) {
-            // Case A: Definitely Admin.
+        const rejectedRequestsPromise = supabase
+            .from('approval_requests')
+            .select(APPROVAL_REQUEST_SUMMARY_SELECT)
+            .eq('user_id', user.id)
+            .eq('status', 'rejected')
+            .order('created_at', { ascending: false });
+
+        // Await the basic data
+        const [profileRes, myInvRes, rejReqRes] = await Promise.all([
+            profilePromise,
+            myInvitationsPromise,
+            rejectedRequestsPromise,
+        ]);
+
+        profile = profileRes.data ?? null;
+        isAdmin = !!profile?.is_admin;
+
+        // Map initial data
+        const myRows = (myInvRes.data ?? []) as unknown as InvitationSummaryRow[];
+        invitations = myRows.map(toInvitationSummary);
+        rejectedRequests = (rejReqRes.data ?? []) as unknown as ApprovalRequestSummary[];
+
+        if (isAdmin) {
+            // If admin, fetch specific admin queue data
             const db = supabaseAdmin || supabase;
-            const results = await Promise.all([
-                profilePromise,
-                db.from('invitations')
-                    .select(INVITATION_SUMMARY_SELECT)
-                    .eq('user_id', user.id)
-                    .order('updated_at', { ascending: false }),
-                db.from('approval_requests')
-                    .select(APPROVAL_REQUEST_SUMMARY_SELECT)
-                    .in('status', ['pending', 'rejected', 'approved'])
-                    .order('created_at', { ascending: false }),
-                db.from('approval_requests')
-                    .select(APPROVAL_REQUEST_SUMMARY_SELECT)
-                    .eq('user_id', user.id)
-                    .eq('status', 'rejected')
-                    .order('created_at', { ascending: false }),
-            ]);
 
-            profile = results[0].data ?? null;
-            myInvitationsResult = results[1];
-            approvalRequestsResult = results[2];
-            rejectedRequestsResult = results[3];
-            isAdmin = true;
+            // Waterfall here is unavoidable because we need IDs from approval_requests first,
+            // but we can at least make the requests fetch fast.
+            const approvalRequestsRes = await db.from('approval_requests')
+                .select(APPROVAL_REQUEST_SUMMARY_SELECT)
+                .in('status', ['pending', 'rejected', 'approved'])
+                .order('created_at', { ascending: false });
 
-            // Fetch admin invitations based on approval requests
-            const requestIds = (approvalRequestsResult.data as unknown as ApprovalRequestSummary[])?.map(r => r.invitation_id) || [];
+            approvalRequests = (approvalRequestsRes.data ?? []) as unknown as ApprovalRequestSummary[];
+            const requestIds = approvalRequests.map(r => r.invitation_id);
+
             if (requestIds.length > 0) {
-                adminQueueResult = await db.from('invitations')
+                const adminQueueRes = await db.from('invitations')
                     .select(INVITATION_SUMMARY_SELECT)
                     .in('id', requestIds)
                     .order('updated_at', { ascending: false });
-            } else {
-                adminQueueResult = { data: [] };
+
+                const adminRows = (adminQueueRes.data ?? []) as unknown as InvitationSummaryRow[];
+                adminInvitations = adminRows.map(toInvitationSummary);
             }
-
-        } else {
-            // Case B: Probably User. Parallelize My Invitations + Profile + Rejected Requests.
-            const results = await Promise.all([
-                profilePromise,
-                supabase
-                    .from('invitations')
-                    .select(INVITATION_SUMMARY_SELECT)
-                    .eq('user_id', user.id)
-                    .order('updated_at', { ascending: false }),
-                supabase
-                    .from('approval_requests')
-                    .select(APPROVAL_REQUEST_SUMMARY_SELECT)
-                    .eq('user_id', user.id)
-                    .eq('status', 'rejected')
-                    .order('created_at', { ascending: false }),
-            ]);
-
-            profile = results[0].data ?? null;
-            myInvitationsResult = results[1];
-            rejectedRequestsResult = results[2];
-
-            // Check if actually admin via DB profile
-            isAdmin = !!profile?.is_admin;
-
-            if (isAdmin) {
-                // Fetch missing admin data
-                const db = supabaseAdmin || supabase;
-                // First get requests
-                approvalRequestsResult = await db.from('approval_requests')
-                    .select(APPROVAL_REQUEST_SUMMARY_SELECT)
-                    .in('status', ['pending', 'rejected', 'approved'])
-                    .order('created_at', { ascending: false });
-
-                const requestIds = (approvalRequestsResult.data as unknown as ApprovalRequestSummary[])?.map(r => r.invitation_id) || [];
-
-                if (requestIds.length > 0) {
-                    adminQueueResult = await db.from('invitations')
-                        .select(INVITATION_SUMMARY_SELECT)
-                        .in('id', requestIds)
-                        .order('updated_at', { ascending: false });
-                } else {
-                    adminQueueResult = { data: [] };
-                }
-            }
-        }
-
-        if (isAdmin) {
-            const adminRows = (adminQueueResult?.data ?? []) as unknown as InvitationSummaryRow[];
-            const myRows = (myInvitationsResult?.data ?? []) as unknown as InvitationSummaryRow[];
-
-            invitations = myRows.map(toInvitationSummary);
-            adminInvitations = adminRows.map(toInvitationSummary);
-            approvalRequests = (approvalRequestsResult?.data ?? []) as unknown as ApprovalRequestSummary[];
-            rejectedRequests = (rejectedRequestsResult?.data ?? []) as unknown as ApprovalRequestSummary[];
-        } else {
-            const rows = (myInvitationsResult?.data ?? []) as unknown as InvitationSummaryRow[];
-            invitations = rows.map(toInvitationSummary);
-            rejectedRequests = (rejectedRequestsResult?.data ?? []) as unknown as ApprovalRequestSummary[];
         }
     }
 

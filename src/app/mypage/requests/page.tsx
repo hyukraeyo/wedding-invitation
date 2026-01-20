@@ -20,22 +20,30 @@ export default async function RequestsPage() {
 
     const supabase = await createSupabaseServerClient(session);
 
-    // Check if user is admin
-    const { data: profileData } = await supabase
+    // 1. Start basic checks in parallel
+    const profilePromise = supabase
         .from('profiles')
         .select('is_admin, full_name, phone')
         .eq('id', user.id)
         .single();
 
+    const countPromise = supabase
+        .from('invitations')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', user.id);
+
+    // 2. Await basic checks
+    const [profileRes, countRes] = await Promise.all([profilePromise, countPromise]);
+    const profileData = profileRes.data;
     const isAdmin = profileData?.is_admin || false;
+    const invitationCount = countRes.count || 0;
 
     if (!isAdmin) {
         redirect('/mypage');
     }
 
-    // Fetch data for admin
+    // 3. Fetch admin-specific data
     const db = supabaseAdmin || supabase;
-
     const approvalRequestsResult = await db.from('approval_requests')
         .select(APPROVAL_REQUEST_SUMMARY_SELECT)
         .in('status', ['pending', 'rejected', 'approved'])
@@ -54,12 +62,6 @@ export default async function RequestsPage() {
         const rows = (adminQueueResult.data ?? []) as unknown as InvitationSummaryRow[];
         adminInvitations = rows.map(toInvitationSummary);
     }
-
-    // Fetch count of admin's own invitations
-    const { count: invitationCount } = await supabase
-        .from('invitations')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', user.id);
 
     return (
         <RequestsPageClient

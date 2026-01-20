@@ -233,3 +233,25 @@
     color: v.$zinc-600;
     line-height: 1.6;
 }
+// ============================================
+// Template (Page Transitions)
+// ============================================
+.templateWrapper {
+    animation: contentIn 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    will-change: transform, opacity;
+
+    @supports (view-transition-name: none) {
+        animation: none;
+    }
+}
+
+@keyframes contentIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

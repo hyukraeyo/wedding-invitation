@@ -14,37 +14,36 @@ import { useToast } from '@/hooks/use-toast';
 import { useShallow } from 'zustand/react/shallow';
 import styles from './Header.module.scss';
 
-// Lazy load Button to avoid preload warning (Button is only used inside modal)
+import { useHeaderStore } from '@/store/useHeaderStore';
+
+// Lazy load Button to avoid preload warning
 const Button = lazy(() => import('@/components/ui/Button').then(mod => ({ default: mod.Button })));
 
-interface HeaderProps {
-    onSave?: () => void;
-    onLogin?: () => void;
-    isLoading?: boolean;
-}
-
-export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
+export default function Header() {
     const router = useRouter();
     const pathname = usePathname();
     const isMyPage = pathname?.startsWith('/mypage');
     const { user } = useAuth();
+
+    // Store states
     const { reset, isUploading } = useInvitationStore(useShallow((state) => ({
         reset: state.reset,
         isUploading: state.isUploading,
     })));
+
+    const { onSave, isLoading } = useHeaderStore();
+
     const [showResetDialog, setShowResetDialog] = useState(false);
-    const isVisible = true; // Always visible as per user request
+    const isVisible = true;
     const { toast } = useToast();
 
     useEffect(() => {
         router.prefetch('/login');
     }, [router]);
 
-
     const handleCreateNew = () => {
         const state = useInvitationStore.getState();
 
-        // 마이페이지에서는 바로 초기화하고 빌더로 이동
         if (isMyPage) {
             reset();
             router.push('/builder');
@@ -72,7 +71,7 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
         setShowResetDialog(false);
     };
 
-    const handleSave = () => {
+    const handleSaveAction = () => {
         if (isUploading) {
             toast({
                 variant: 'destructive',
@@ -106,7 +105,7 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
                 {onSave && user ? (
                     <IconButton
                         icon={Save}
-                        onClick={handleSave}
+                        onClick={handleSaveAction}
                         loading={isLoading || isUploading}
                         size="md"
                         variant="ghost"
@@ -133,15 +132,13 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
                         </Link>
                     </>
                 ) : (
-                    onLogin ? (
-                        <IconButton
-                            icon={LogIn}
-                            size="md"
-                            variant="ghost"
-                            onClick={onLogin}
-                            aria-label="로그인"
-                        />
-                    ) : null
+                    <IconButton
+                        icon={LogIn}
+                        size="md"
+                        variant="ghost"
+                        onClick={() => router.push('/login')}
+                        aria-label="로그인"
+                    />
                 )}
             </div>
 

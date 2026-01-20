@@ -51,6 +51,7 @@ const nextConfig: NextConfig = {
       '@radix-ui/react-tabs',
       'date-fns',
     ],
+    viewTransition: true,
   },
 
   turbopack: {

@@ -1,7 +1,6 @@
 "use client";
 
 import React from 'react';
-import Header from '@/components/common/Header';
 import { MyPageSidebar } from '@/components/mypage/MyPageSidebar';
 import styles from './MyPageLayout.module.scss';
 
@@ -28,7 +27,6 @@ export function MyPageLayout({
 }: MyPageLayoutProps) {
     return (
         <div className={styles.pageContainer}>
-            <Header />
             <div className={styles.layout}>
                 <MyPageSidebar
                     profile={profile}

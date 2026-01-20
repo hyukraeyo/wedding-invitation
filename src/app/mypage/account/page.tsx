@@ -17,22 +17,27 @@ export default async function AccountPage() {
 
     const supabase = await createSupabaseServerClient(session);
 
-    // Fetch profile
-    const { data: profile } = await supabase
+    // 1. Kick off essential fetches in parallel
+    const profilePromise = supabase
         .from('profiles')
         .select('*')
         .eq('id', session.user.id)
         .single();
 
-    const isAdmin = profile?.is_admin || session.user.email === 'admin@test.com';
-
-    // Fetch invitation count for the sidebar badge
-    const { count: invitationCount } = await supabase
+    const countPromise = supabase
         .from('invitations')
         .select('*', { count: 'exact', head: true })
         .eq('user_id', session.user.id);
 
-    // Fetch request count for the sidebar badge (if admin)
+    // 2. Await both basic data
+    const [profileRes, countRes] = await Promise.all([profilePromise, countPromise]);
+    const profile = profileRes.data;
+    const invitationCount = countRes.count || 0;
+
+    // Check admin status early
+    const isAdmin = profile?.is_admin || session.user.email === 'admin@test.com';
+
+    // 3. Fetch admin count if needed
     let requestCount = 0;
     if (isAdmin) {
         const { count } = await supabase

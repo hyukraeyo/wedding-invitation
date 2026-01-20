@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import ClientProviders from './ClientProviders';
 import { fontVariables } from '@/lib/fonts';
+import Header from '@/components/common/Header';
 import "./globals.scss";
 import "../styles/_accessibility.scss";
 
@@ -147,6 +148,7 @@ export default function RootLayout({
           }}
         />
         <ClientProviders>
+          <Header />
           {children}
         </ClientProviders>
       </body>

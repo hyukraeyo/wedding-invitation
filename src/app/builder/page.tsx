@@ -24,7 +24,7 @@ import EditorForm from '@/components/common/EditorForm';
 import { useInvitationStore, InvitationData } from '@/store/useInvitationStore';
 import { useAuth } from '@/hooks/useAuth';
 import { invitationService } from '@/services/invitationService';
-import Header from '@/components/common/Header';
+import { useHeaderStore } from '@/store/useHeaderStore';
 import { toast } from 'sonner';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import styles from './BuilderPage.module.scss';
@@ -141,10 +141,22 @@ function BuilderPageContent() {
 
 
 
+  const { registerSaveAction, setIsLoading } = useHeaderStore();
+
+  // Register save action to global header
+  useEffect(() => {
+    registerSaveAction(handleSave);
+    return () => registerSaveAction(null);
+  }, [handleSave, registerSaveAction]);
+
+  // Sync loading state to global header
+  useEffect(() => {
+    setIsLoading(isSaving);
+  }, [isSaving, setIsLoading]);
+
   return (
     <>
       <div className={styles.container}>
-        <Header onSave={handleSave} onLogin={handleLogin} isLoading={isSaving} />
         {isSaving ? <LoadingSpinner /> : null}
 
         <main className={styles.workspace}>

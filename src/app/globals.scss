@@ -83,6 +83,10 @@ main {
   min-height: 100dvh;
   animation: fadeIn 0.4s var(--ease-ios) both;
   position: relative;
+
+  @supports (view-transition-name: none) {
+    animation: none;
+  }
 }
 
 /* Improve button feel globally */
@@ -178,4 +182,47 @@ button {
 /* Sheet Snappy Slide */
 .fixed.inset-x-0.bottom-0 {
   transition-timing-function: var(--ease-ios);
+}
+
+/* ============================================
+   Native View Transitions API (Next.js 15/16)
+   ============================================ */
+@supports (view-transition-name: none) {
+  ::view-transition-group(page-content) {
+    animation-duration: 400ms;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  ::view-transition-old(page-content) {
+    animation: 300ms cubic-bezier(0.4, 0, 1, 1) both fade-out;
+  }
+
+  ::view-transition-new(page-content) {
+    animation: 400ms cubic-bezier(0, 0, 0.2, 1) both fade-in;
+  }
+}
+
+
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// Global utility for view transitions to ensure correct naming
+.view-transition-content {
+  view-transition-name: page-content;
 }

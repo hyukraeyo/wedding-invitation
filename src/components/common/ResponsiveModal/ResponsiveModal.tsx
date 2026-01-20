@@ -111,11 +111,6 @@ export const ResponsiveModal = ({
                             <DialogTitle className={styles.title}>
                                 {title || "알림"}
                             </DialogTitle>
-                            {description ? (
-                                <DialogDescription className={styles.description}>
-                                    {description}
-                                </DialogDescription>
-                            ) : null}
                         </DialogHeader>
 
                         <div
@@ -123,6 +118,11 @@ export const ResponsiveModal = ({
                             className={cn(styles.content, contentClassName)}
                             onScroll={onScroll}
                         >
+                            {description ? (
+                                <DialogDescription className={styles.description}>
+                                    {description}
+                                </DialogDescription>
+                            ) : null}
                             {children}
                         </div>
 
@@ -185,14 +185,14 @@ export const ResponsiveModal = ({
                         <DrawerTitle className={styles.title}>
                             {title || "알림"}
                         </DrawerTitle>
-                        {description ? (
-                            <DrawerDescription className={styles.description}>
-                                {description}
-                            </DrawerDescription>
-                        ) : null}
                     </DrawerHeader>
 
                     <div className={cn(styles.content, styles.drawerScrollArea, contentClassName)}>
+                        {description ? (
+                            <DrawerDescription className={cn(styles.description, 'mb-4')}>
+                                {description}
+                            </DrawerDescription>
+                        ) : null}
                         {children ? (
                             <DrawerScrollArea
                                 ref={scrollRef}
@@ -201,7 +201,9 @@ export const ResponsiveModal = ({
                             >
                                 {children}
                             </DrawerScrollArea>
-                        ) : null}
+                        ) : (
+                            description ? null : null // Placeholder for clarity
+                        )}
                     </div>
 
                     {hasActions ? (

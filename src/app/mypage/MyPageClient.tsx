@@ -10,8 +10,8 @@ import type { ApprovalRequestSummary } from '@/services/approvalRequestService';
 import type { InvitationSummaryRecord } from '@/lib/invitation-summary';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import type { InvitationData } from '@/store/useInvitationStore';
-import { MyPageLayout } from '@/components/mypage/MyPageLayout';
 import { MyPageHeader } from '@/components/mypage/MyPageHeader';
+import { MyPageLayout } from '@/components/mypage/MyPageLayout';
 // import { signOut } from 'next-auth/react';
 
 import { useToast } from '@/hooks/use-toast';
@@ -66,12 +66,10 @@ export default function MyPageClient({
     isAdmin,
     profile,
     initialInvitations,
-    initialApprovalRequests,
     initialRejectedRequests = [],
 }: MyPageClientProps) {
     const router = useRouter();
     const [invitations, setInvitations] = useState<InvitationSummaryRecord[]>(initialInvitations);
-    const [approvalRequests] = useState<ApprovalRequestSummary[]>(initialApprovalRequests);
     const [rejectedRequests] = useState<ApprovalRequestSummary[]>(initialRejectedRequests);
 
     const [actionLoading, setActionLoading] = useState<string | null>(null);
@@ -314,12 +312,7 @@ export default function MyPageClient({
     }
 
     return (
-        <MyPageLayout
-            profile={profile}
-            isAdmin={isAdmin}
-            invitationCount={invitations.length}
-            requestCount={approvalRequests.length}
-        >
+        <>
             <MyPageHeader title="내 청첩장" />
 
             <div className={styles.cardGrid}>
@@ -421,6 +414,6 @@ export default function MyPageClient({
                     confirmText="승인 취소"
                 />
             ) : null}
-        </MyPageLayout>
+        </>
     );
 }
