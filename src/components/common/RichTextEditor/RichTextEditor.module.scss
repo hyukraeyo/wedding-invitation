@@ -90,7 +90,7 @@
     // 포커스 상태
     &:focus-visible {
         outline: none;
-        box-shadow: 0 0 0 2px v.$primary-500;
+        // box-shadow: 0 0 0 2px v.$primary-500;
     }
 }
 

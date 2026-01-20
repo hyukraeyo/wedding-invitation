@@ -35,8 +35,9 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useShallow } from 'zustand/react/shallow';
 
 const generateSlug = (name: string): string => {
+  const cleanName = (name || 'banana').trim().normalize('NFC').replace(/\s+/g, '-');
   const randomStr = Math.random().toString(36).substring(2, 8);
-  return `${name || 'banana'}-${randomStr}`;
+  return `${cleanName}-${randomStr}`;
 };
 
 function BuilderPageContent() {

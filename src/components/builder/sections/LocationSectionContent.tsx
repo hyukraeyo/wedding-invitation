@@ -216,9 +216,9 @@ export default function LocationSectionContent() {
                         value={mapHeight}
                         options={[
                             { label: '기본', value: 'default' },
-                            { label: '축소', value: 'small' },
+                            { label: '확대', value: 'expanded' },
                         ]}
-                        onChange={(val: 'default' | 'small') => setMapHeight(val)}
+                        onChange={(val: 'default' | 'expanded') => setMapHeight(val)}
                     />
                 </Field>
 

@@ -13,6 +13,9 @@ interface RejectionReasonModalProps {
     onSubmit: (reason: string) => void;
     loading?: boolean;
     requesterName?: string;
+    title?: string;
+    description?: React.ReactNode;
+    confirmText?: string;
 }
 
 export default function RejectionReasonModal({
@@ -21,6 +24,9 @@ export default function RejectionReasonModal({
     onSubmit,
     loading = false,
     requesterName,
+    title = "승인 거절",
+    description,
+    confirmText = "승인 거절",
 }: RejectionReasonModalProps) {
     const [reason, setReason] = useState('');
 
@@ -44,18 +50,18 @@ export default function RejectionReasonModal({
             onOpenChange={(open) => {
                 if (!open) handleClose();
             }}
-            title="사용 신청 거절"
+            title={title}
             description={
-                requesterName ? (
+                description || (requesterName ? (
                     <>
                         <strong>{requesterName}</strong>님의 사용 신청을 거절합니다.<br />
-                        거절 사유를 입력해주세요. 사용자가 확인할 수 있습니다.
+                        승인 거절 사유를 입력해주세요. 사용자가 확인할 수 있습니다.
                     </>
                 ) : (
-                    '거절 사유를 입력해주세요. 사용자가 확인할 수 있습니다.'
-                )
+                    '승인 거절 사유를 입력해주세요. 사용자가 확인할 수 있습니다.'
+                ))
             }
-            confirmText="거절하기"
+            confirmText={confirmText}
             cancelText="취소"
             onConfirm={handleSubmit}
             onCancel={handleClose}
@@ -68,7 +74,7 @@ export default function RejectionReasonModal({
                 <RichTextEditor
                     content={reason}
                     onChange={setReason}
-                    placeholder="거절 사유를 입력하세요…"
+                    placeholder="내용을 입력하세요…"
                     minHeight="min-h-[180px]"
                 />
             </div>

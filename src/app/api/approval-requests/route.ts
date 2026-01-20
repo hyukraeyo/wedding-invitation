@@ -5,6 +5,7 @@ import { APPROVAL_REQUEST_SUMMARY_SELECT } from '@/lib/approval-request-summary'
 import type { ApprovalRequestSummary } from '@/lib/approval-request-summary';
 import { auth } from '@/auth';
 import { z } from 'zod';
+import { createRejectionReason } from '@/lib/rejection-helpers';
 
 const requestSchema = z.object({
   invitationId: z.string().uuid(),
@@ -14,7 +15,7 @@ const requestSchema = z.object({
 });
 
 const rejectSchema = z.object({
- invitationId: z.string().uuid(),
+  invitationId: z.string().uuid(),
   rejectionReason: z.string().min(1),
 });
 
@@ -149,7 +150,7 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // Admin fetching all requests (pending, rejected, and approved)
+    // Admin fetching all requests (pending, rejected, approved)
     if (!isAdmin) {
       return NextResponse.json(
         { error: '접근 권한이 없습니다.' },
@@ -221,17 +222,36 @@ export async function PUT(request: NextRequest) {
 
     const db = supabaseAdmin || supabase;
 
+    // Check current status to determine if it's a rejection or revocation
+    const { data: currentRequest } = await db
+      .from('approval_requests')
+      .select('id, status')
+      .eq('invitation_id', validatedData.invitationId)
+      .in('status', ['pending', 'approved'])
+      .maybeSingle();
+
+    if (!currentRequest) {
+      return NextResponse.json(
+        { error: '처리할 승인 요청 내역을 찾을 수 없습니다.' },
+        { status: 404 }
+      );
+    }
+
+    // DB가 canceled 상태를 지원하지 않는 것으로 추정되므로 status는 rejected로 통일하고
+    // 대신 rejection_reason에 마커를 추가하여 구분함 (유틸리티 사용)
+    const isRevocation = currentRequest.status === 'approved';
+    const finalReason = createRejectionReason(validatedData.rejectionReason, isRevocation);
+
     const [deleteResult, invitationResult] = await Promise.all([
       db
         .from('approval_requests')
         .update({
           status: 'rejected',
-          rejection_reason: validatedData.rejectionReason,
+          rejection_reason: finalReason,
           reviewed_by: userId,
           reviewed_at: new Date().toISOString(),
         })
-        .eq('invitation_id', validatedData.invitationId)
-        .eq('status', 'pending'),
+        .eq('id', currentRequest.id),
       db
         .from('invitations')
         .select('*')
@@ -249,7 +269,11 @@ export async function PUT(request: NextRequest) {
 
     const invData = invitationResult.data;
     if (invData) {
-      const newData = { ...invData.invitation_data, isRequestingApproval: false };
+      const newData = {
+        ...invData.invitation_data,
+        isRequestingApproval: false,
+        isApproved: false
+      };
       await db
         .from('invitations')
         .update({ invitation_data: newData })

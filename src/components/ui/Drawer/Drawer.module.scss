@@ -19,12 +19,12 @@
   height: auto;
   max-height: 90dvh;
   flex-direction: column;
-  border-top-left-radius: 24px;
-  border-top-right-radius: 24px;
+  border-top-left-radius: 1.25rem;
+  border-top-right-radius: 1.25rem;
   border: none;
   background-color: white;
   outline: none;
-  box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.08);
+  box-shadow: none !important;
   overflow: hidden;
 
   // Desktop/Tablet centering

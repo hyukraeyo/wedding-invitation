@@ -41,6 +41,6 @@
   border-color: v.$color-danger !important;
   &:focus-visible {
     // ring-destructive 대체
-    box-shadow: 0 0 0 2px v.$color-background, 0 0 0 4px v.$color-danger !important; 
+    // box-shadow: 0 0 0 2px v.$color-background, 0 0 0 4px v.$color-danger !important; 
   }
 }

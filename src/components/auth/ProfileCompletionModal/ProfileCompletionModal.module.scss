@@ -47,7 +47,7 @@
   border: 1px solid v.$zinc-200;
   border-radius: v.$radius-lg;
   transition: all v.$transition-smooth;
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  // box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   font-size: v.$font-size-base;
 
   &:hover {
@@ -58,7 +58,7 @@
   &:focus {
     background-color: v.$white;
     border-color: v.$color-primary;
-    box-shadow: 0 0 0 4px rgba(v.$color-primary, 0.1);
+    // box-shadow: 0 0 0 4px rgba(v.$color-primary, 0.1);
     outline: none;
   }
 
@@ -103,7 +103,7 @@
   &:hover:not(:disabled) {
     background-color: v.$color-primary-hover;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(v.$color-primary, 0.25);
+    // box-shadow: 0 4px 12px rgba(v.$color-primary, 0.25);
   }
 
   &:active:not(:disabled) {

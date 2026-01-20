@@ -8,14 +8,18 @@
 
 html,
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
+  // max-width: 100vw 제거 - Windows에서 스크롤바 포함 너비로 레이아웃 문제 유발
+  // overflow-x: hidden도 html에서 제거 - Radix UI 스크롤 락과 충돌
   font-family: $font-family-base;
   font-size: 16px;
   background-color: $color-background;
   color: $color-foreground;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  overflow-x: hidden; // body에만 적용 (수평 스크롤 방지)
 }
 
 a {

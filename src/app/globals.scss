@@ -52,6 +52,8 @@ html {
   scroll-behavior: smooth;
   /* 1. html, body 높이 보장 */
   height: 100%;
+  // 배경색 설정 (모달 오버레이 뒤 영역용)
+  background-color: var(--background);
 }
 
 body {
@@ -67,6 +69,9 @@ body {
   margin: 0;
   display: flex;
   flex-direction: column;
+
+  // Radix UI가 모달 오픈 시 스크롤 락을 처리함 - 기본 동작 신뢰
+  // (이전에 추가했던 !important 오버라이드 제거)
 }
 
 /* 3. 애니메이션은 body가 아닌 내부 컨테이너에 적용 */

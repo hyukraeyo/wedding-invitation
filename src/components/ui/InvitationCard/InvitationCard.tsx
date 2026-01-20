@@ -1,5 +1,6 @@
 "use client";
 
+import { parseRejection } from '@/lib/rejection-helpers';
 import React, { useState } from 'react';
 import {
     MoreHorizontal,
@@ -120,6 +121,25 @@ const InvitationCard = ({
         .replace(/\. /g, '.')
         .replace(/\.$/, '');
 
+    // 유틸리티를 사용하여 상태 분석 및 텍스트 추출
+    const {
+        displayReason,
+        label: REJECTION_LABEL,
+        badge: REJECTION_BADGE,
+        title: REJECTION_TITLE,
+        description: REJECTION_DESC
+    } = parseRejection(rejectionData);
+
+    // DropdownMenuItem 클릭 시 모달 열기
+    // setTimeout을 사용하여 드롭다운이 닫힌 후 모달이 열리도록 처리 (포커스 경고 방지)
+    const handleRejectionModalOpen = () => {
+        setTimeout(() => setShowRejectionModal(true), 0);
+    };
+
+    const handleShareModalOpen = () => {
+        setShowShareModal(true);
+    };
+
     return (
         <div className={styles.cardWrapper}>
             <div className={styles.cardItem}>
@@ -140,7 +160,7 @@ const InvitationCard = ({
                     </div>
                 )}
 
-                <div className={styles.overlay}>
+                <div className={clsx(styles.overlay, !imageUrl && styles.noImage)}>
                     <div className={styles.overlayTop}>
                         <span className={clsx(
                             styles.statusBadge,
@@ -149,7 +169,7 @@ const InvitationCard = ({
                                     isRequesting ? styles.pendingBadge : styles.sampleBadge
                         )}>
                             <span className={styles.dot} />
-                            {isRejected ? '거절됨' : isApproved ? '승인 완료' : isRequesting ? '승인 대기중' : '샘플 이용중'}
+                            {isRejected ? REJECTION_BADGE : isApproved ? '승인 완료' : isRequesting ? '승인 대기' : '샘플 이용중'}
                         </span>
                         <h3 className={styles.overlayTitle}>
                             {title}
@@ -175,8 +195,8 @@ const InvitationCard = ({
                                     <Eye size={16} className="mr-2" /> 미리보기
                                 </DropdownMenuItem>
                                 {isRejected && (
-                                    <DropdownMenuItem onClick={() => setShowRejectionModal(true)} style={{ color: '#DC2626' }}>
-                                        <AlertCircle size={16} className="mr-2" /> 거절 사유
+                                    <DropdownMenuItem onSelect={handleRejectionModalOpen}>
+                                        <AlertCircle size={16} className="mr-2" /> {REJECTION_LABEL} 확인
                                     </DropdownMenuItem>
                                 )}
                                 {!isRequesting && !isApproved && !isRejected && (
@@ -200,11 +220,11 @@ const InvitationCard = ({
                                     미리보기
                                 </Button>
                                 <Button
-                                    variant="outline"
-                                    className={clsx(styles.footerPrimaryButton, styles.rejected)}
+                                    className={styles.footerPrimaryButton}
+                                    variant="solid"
                                     onClick={() => setShowRejectionModal(true)}
                                 >
-                                    거절 사유
+                                    사용 신청
                                 </Button>
                             </>
                         ) : !isRequesting && !isApproved ? (
@@ -221,7 +241,7 @@ const InvitationCard = ({
                                     variant="solid"
                                     onClick={handlePrimaryAction}
                                 >
-                                    사용신청
+                                    사용 신청
                                 </Button>
                             </>
                         ) : (
@@ -239,9 +259,9 @@ const InvitationCard = ({
                                         isApproved ? styles.shareYellowButton : styles.requesting
                                     )}
                                     variant={isApproved ? "solid" : "solid"}
-                                    onClick={isApproved ? () => setShowShareModal(true) : handlePrimaryAction}
+                                    onClick={isApproved ? handleShareModalOpen : handlePrimaryAction}
                                 >
-                                    {isApproved ? '공유하기' : '신청취소'}
+                                    {isApproved ? '공유하기' : '신청 취소'}
                                 </Button>
                             </>
                         )}
@@ -252,20 +272,24 @@ const InvitationCard = ({
                 생성일 {formattedDate}
             </div>
 
-            {/* Rejection Reason Modal */}
+            {/* Rejection Reason Modal with Re-apply Option */}
             {isRejected && rejectionData && (
                 <ResponsiveModal
                     open={showRejectionModal}
                     onOpenChange={setShowRejectionModal}
-                    title="거절 사유"
-                    description="관리자가 작성한 거절 사유입니다."
-                    showCancel={false}
-                    confirmText="확인"
-                    onConfirm={() => setShowRejectionModal(false)}
+                    title={REJECTION_TITLE}
+                    showCancel={true}
+                    cancelText="닫기"
+                    confirmText="사용 신청"
+                    onConfirm={() => {
+                        setShowRejectionModal(false);
+                        onRequestApproval(invitation);
+                    }}
+                    onCancel={() => setShowRejectionModal(false)}
                 >
                     <div
                         className={styles.rejectionMessage}
-                        dangerouslySetInnerHTML={{ __html: rejectionData.rejection_reason || '거절 사유가 없습니다.' }}
+                        dangerouslySetInnerHTML={{ __html: displayReason || '내용이 없습니다.' }}
                     />
                 </ResponsiveModal>
             )}

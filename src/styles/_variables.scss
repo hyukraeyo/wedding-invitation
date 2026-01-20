@@ -7,8 +7,9 @@ $color-primary-foreground: #FFFFFF;
 $color-primary-hover: #E6B02A;
 $color-ivory: #FFFBEA;
 
-$color-background: #FFFFFF;
-$color-bg-base: #FFFFFF; // Alias for background
+$color-background: #FFFFFF; // 기본 컴포넌트 배경 (Header 등)
+$color-bg-base: #FFFFFF;    // Alias for background
+$color-bg-page: #F2F4F6;    // 페이지 전체 배경 (Toss-like warm gray)
 $color-foreground: #1A1A1A;
 $color-text-primary: #1A1A1A; // Alias for foreground
 

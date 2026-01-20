@@ -34,6 +34,7 @@ interface LocationViewProps {
     mapType?: 'naver' | 'kakao';
     locationContact?: string;
     animateEntrance?: boolean;
+    mapHeight?: 'default' | 'expanded';
 }
 
 const MapLoading = () => (
@@ -73,7 +74,8 @@ const LocationView = memo(({
     lockMap = true,
     mapType = 'naver',
     locationContact,
-    animateEntrance
+    animateEntrance,
+    mapHeight = 'default'
 }: LocationViewProps) => {
     const { toast } = useToast();
 
@@ -116,8 +118,8 @@ const LocationView = memo(({
             </div>
 
             {showMap ? (
-                <div className={styles.mapContainer}>
-                    <AspectRatio ratio={16 / 10}>
+                <div className={clsx(styles.mapContainer, mapHeight === 'expanded' && styles.expanded)}>
+                    <AspectRatio ratio={mapHeight === 'expanded' ? 1.25 : 16 / 10}>
                         {mapType === 'naver' ? (
                             <NaverMapContainer
                                 key={`naver-${lat}-${lng}`}

@@ -46,14 +46,10 @@ export default async function MyPage() {
         let adminQueueResult, myInvitationsResult, approvalRequestsResult, rejectedRequestsResult;
 
         if (isDefaultAdmin) {
-            // Case A: Definitely Admin. Parallelize all admin queries + profile + rejected requests.
+            // Case A: Definitely Admin.
             const db = supabaseAdmin || supabase;
             const results = await Promise.all([
                 profilePromise,
-                db.from('invitations')
-                    .select(INVITATION_SUMMARY_SELECT)
-                    .contains('invitation_data', { isRequestingApproval: true })
-                    .order('updated_at', { ascending: false }),
                 db.from('invitations')
                     .select(INVITATION_SUMMARY_SELECT)
                     .eq('user_id', user.id)
@@ -70,11 +66,22 @@ export default async function MyPage() {
             ]);
 
             profile = results[0].data ?? null;
-            adminQueueResult = results[1];
-            myInvitationsResult = results[2];
-            approvalRequestsResult = results[3];
-            rejectedRequestsResult = results[4];
+            myInvitationsResult = results[1];
+            approvalRequestsResult = results[2];
+            rejectedRequestsResult = results[3];
             isAdmin = true;
+
+            // Fetch admin invitations based on approval requests
+            const requestIds = (approvalRequestsResult.data as unknown as ApprovalRequestSummary[])?.map(r => r.invitation_id) || [];
+            if (requestIds.length > 0) {
+                adminQueueResult = await db.from('invitations')
+                    .select(INVITATION_SUMMARY_SELECT)
+                    .in('id', requestIds)
+                    .order('updated_at', { ascending: false });
+            } else {
+                adminQueueResult = { data: [] };
+            }
+
         } else {
             // Case B: Probably User. Parallelize My Invitations + Profile + Rejected Requests.
             const results = await Promise.all([
@@ -102,18 +109,22 @@ export default async function MyPage() {
             if (isAdmin) {
                 // Fetch missing admin data
                 const db = supabaseAdmin || supabase;
-                const extraResults = await Promise.all([
-                    db.from('invitations')
+                // First get requests
+                approvalRequestsResult = await db.from('approval_requests')
+                    .select(APPROVAL_REQUEST_SUMMARY_SELECT)
+                    .in('status', ['pending', 'rejected', 'approved'])
+                    .order('created_at', { ascending: false });
+
+                const requestIds = (approvalRequestsResult.data as unknown as ApprovalRequestSummary[])?.map(r => r.invitation_id) || [];
+
+                if (requestIds.length > 0) {
+                    adminQueueResult = await db.from('invitations')
                         .select(INVITATION_SUMMARY_SELECT)
-                        .contains('invitation_data', { isRequestingApproval: true })
-                        .order('updated_at', { ascending: false }),
-                    db.from('approval_requests')
-                        .select(APPROVAL_REQUEST_SUMMARY_SELECT)
-                        .in('status', ['pending', 'rejected', 'approved'])
-                        .order('created_at', { ascending: false }),
-                ]);
-                adminQueueResult = extraResults[0];
-                approvalRequestsResult = extraResults[1];
+                        .in('id', requestIds)
+                        .order('updated_at', { ascending: false });
+                } else {
+                    adminQueueResult = { data: [] };
+                }
             }
         }
 

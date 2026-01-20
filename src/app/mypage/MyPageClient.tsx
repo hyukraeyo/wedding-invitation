@@ -1,5 +1,6 @@
 "use client";
 
+import { parseRejection } from '@/lib/rejection-helpers';
 import React, { useMemo, useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -311,7 +312,7 @@ export default function MyPageClient({
             setConfirmConfig({
                 isOpen: true,
                 type: 'REQUEST_APPROVAL',
-                title: '사용 승인 신청',
+                title: '승인 신청',
                 description: (
                     <>
                         <strong>{profile?.full_name}</strong>({profile?.phone}) 님으로 신청합니다.<br />
@@ -445,7 +446,7 @@ export default function MyPageClient({
             <main className={styles.main}>
                 {/* 1. Summary Card */}
                 {/* 1. Summary Card - Only visible to Admin */}
-                {isAdmin && (
+                {isAdmin ? (
                     <section className={styles.summaryCard}>
                         <div className={styles.summaryHeader}>
                             <div>
@@ -463,7 +464,8 @@ export default function MyPageClient({
                                     const targetInv = adminInvitations.find(inv => inv.id === request.invitation_id);
                                     const date = new Date(request.created_at);
                                     const formattedDate = `${date.getFullYear()}. ${String(date.getMonth() + 1).padStart(2, '0')}. ${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
-                                    const isRejected = request.status === 'rejected';
+                                    const { isRevoked, isRejected: isPureRejected } = parseRejection(request);
+                                    const isRejected = isRevoked || isPureRejected;
                                     const isApproved = request.status === 'approved';
 
                                     return (
@@ -474,8 +476,8 @@ export default function MyPageClient({
                                         )}>
                                             <div className={styles.requestInfo}>
                                                 <div className={styles.requester}>
-                                                    {isRejected && <AlertCircle size={14} color="#DC2626" style={{ marginRight: '0.25rem' }} />}
-                                                    {isApproved && <CheckCircle size={14} color="#10B981" style={{ marginRight: '0.25rem' }} />}
+                                                    {isRejected ? <AlertCircle size={14} color="#DC2626" style={{ marginRight: '0.25rem' }} /> : null}
+                                                    {isApproved ? <CheckCircle size={14} color="#10B981" style={{ marginRight: '0.25rem' }} /> : null}
                                                     <strong style={
                                                         isRejected ? { color: '#DC2626' } :
                                                             isApproved ? { color: '#10B981' } : undefined
@@ -487,11 +489,11 @@ export default function MyPageClient({
                                                 <div className={styles.requestTime}>
                                                     <Clock size={12} />
                                                     <span>
-                                                        {formattedDate} {isRejected ? '거절' : isApproved ? '승인' : '신청'}
+                                                        {formattedDate} {isRevoked ? '승인 취소' : isPureRejected ? '승인 거절' : isApproved ? '승인 완료' : '승인 신청'}
                                                     </span>
                                                 </div>
                                             </div>
-                                            {targetInv && (
+                                            {targetInv ? (
                                                 <div className={styles.adminButtonGroup}>
                                                     <button
                                                         onClick={() => window.open(`/v/${targetInv.slug}`, '_blank')}
@@ -507,14 +509,17 @@ export default function MyPageClient({
                                                             }}
                                                             className={styles.viewReasonButton}
                                                         >
-                                                            사유보기
+                                                            {isRevoked ? '취소 사유' : '거절 사유'}
                                                         </button>
                                                     ) : isApproved ? (
                                                         <button
-                                                            onClick={() => handleAdminRevokeClick(targetInv)}
+                                                            onClick={() => {
+                                                                setRejectionTarget(targetInv);
+                                                                setRejectionModalOpen(true);
+                                                            }}
                                                             className={styles.revokeButton}
                                                         >
-                                                            승인취소
+                                                            승인 취소
                                                         </button>
                                                     ) : (
                                                         <>
@@ -522,7 +527,7 @@ export default function MyPageClient({
                                                                 onClick={() => handleAdminRejectClick(targetInv)}
                                                                 className={styles.rejectButton}
                                                             >
-                                                                거절하기
+                                                                승인 거절
                                                             </button>
                                                             <button
                                                                 onClick={() => handleAdminApproveClick(targetInv)}
@@ -533,7 +538,7 @@ export default function MyPageClient({
                                                         </>
                                                     )}
                                                 </div>
-                                            )}
+                                            ) : null}
                                         </div>
                                     );
                                 })}
@@ -548,7 +553,7 @@ export default function MyPageClient({
                             </div>
                         )}
                     </section>
-                )}
+                ) : null}
 
                 {/* 2. Invitation List */}
                 <section className={styles.invitationSection}>
@@ -629,51 +634,60 @@ export default function MyPageClient({
                 dismissible={!actionLoading}
             />
 
-            {rejectionTarget && (
-                <RejectionReasonModal
-                    isOpen={rejectionModalOpen}
-                    onClose={() => {
-                        setRejectionModalOpen(false);
-                        setRejectionTarget(null);
-                    }}
-                    onSubmit={(reason) => executeReject(rejectionTarget, reason)}
-                    loading={!!actionLoading}
-                    requesterName={approvalRequests.find(req => req.invitation_id === rejectionTarget.id)?.requester_name || ''}
-                />
-            )}
+            {
+                rejectionTarget ? (
+                    <RejectionReasonModal
+                        isOpen={rejectionModalOpen}
+                        onClose={() => {
+                            setRejectionModalOpen(false);
+                            setRejectionTarget(null);
+                        }}
+                        onSubmit={(reason) => executeReject(rejectionTarget, reason)}
+                        loading={!!actionLoading}
+                        requesterName={approvalRequests.find(req => req.invitation_id === rejectionTarget.id)?.requester_name || ''}
+                        title={rejectionTarget.invitation_data.isApproved ? "승인 취소" : "승인 거절"}
+                        description={<></>}
+                        confirmText={rejectionTarget.invitation_data.isApproved ? "승인 취소" : "승인 거절"}
+                    />
+                ) : null
+            }
 
             {/* View Rejection Reason Modal */}
-            {viewRejectionData && (
-                <ResponsiveModal
-                    open={viewRejectionModalOpen}
-                    onOpenChange={setViewRejectionModalOpen}
-                    title="거절 사유"
-                    description={
-                        <>
-                            <strong>{viewRejectionData.requester_name}</strong>님의 신청을 거절한 사유입니다.
-                        </>
-                    }
-                    showCancel={false}
-                    confirmText="확인"
-                    onConfirm={() => {
-                        setViewRejectionModalOpen(false);
-                        setViewRejectionData(null);
-                    }}
-                >
-                    <div style={{
-                        marginTop: '1rem',
-                        padding: '1rem',
-                        backgroundColor: '#FEF2F2',
-                        borderRadius: '0.75rem',
-                        border: '1px solid #FEE2E2',
-                    }}>
-                        <div
-                            style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7 }}
-                            dangerouslySetInnerHTML={{ __html: viewRejectionData.rejection_reason || '거절 사유가 없습니다.' }}
-                        />
-                    </div>
-                </ResponsiveModal>
-            )}
-        </div>
+            {
+                viewRejectionData ? (
+                    <ResponsiveModal
+                        open={viewRejectionModalOpen}
+                        onOpenChange={setViewRejectionModalOpen}
+                        title="거절/취소 사유"
+                        description={
+                            <>
+                                <strong>{viewRejectionData.requester_name}</strong>님의 신청 처리 내역입니다.
+                            </>
+                        }
+                        showCancel={false}
+                        confirmText="확인"
+                        onConfirm={() => {
+                            setViewRejectionModalOpen(false);
+                            setViewRejectionData(null);
+                        }}
+                    >
+                        <div style={{
+                            marginTop: '1rem',
+                            padding: '1rem',
+                            backgroundColor: '#FEF2F2',
+                            borderRadius: '0.75rem',
+                            border: '1px solid #FEE2E2',
+                        }}>
+                            <div
+                                style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7 }}
+                                dangerouslySetInnerHTML={{
+                                    __html: parseRejection(viewRejectionData).displayReason || '내용이 없습니다.'
+                                }}
+                            />
+                        </div>
+                    </ResponsiveModal>
+                ) : null
+            }
+        </div >
     );
 }

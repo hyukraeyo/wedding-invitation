@@ -326,7 +326,7 @@ const MainScreenView = memo(({
                     )}
 
                     {mainScreen.layout === 'frame' ? <div className={clsx(styles.frameBorder) || ''} /> : null}
-                    {isFillLayout ? <div className={clsx(styles.gradientOverlay) || ''} /> : null}
+                    {isFillLayout && imageUrl ? <div className={clsx(styles.gradientOverlay) || ''} /> : null}
 
                     {mainScreen.effect === 'ripple' ? (
                         <svg className={clsx(styles.waves) || ''} xmlns="http://www.w3.org/2000/svg" viewBox="0 24 150 28" preserveAspectRatio="none" shapeRendering="auto">

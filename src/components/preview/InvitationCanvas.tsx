@@ -57,7 +57,6 @@ type InvitationCanvasData = Pick<
   | 'galleryTitle'
   | 'gallerySubtitle'
   | 'galleryType'
-  | 'galleryPreview'
   | 'galleryFade'
   | 'galleryAutoplay'
   | 'galleryPopup'
@@ -87,6 +86,7 @@ type InvitationCanvasData = Pick<
   | 'isApproved'
   | 'kakaoShare'
   | 'slug'
+  | 'mapHeight'
 >;
 
 const selectInvitationCanvasData = (state: InvitationData): InvitationCanvasData => ({
@@ -113,7 +113,6 @@ const selectInvitationCanvasData = (state: InvitationData): InvitationCanvasData
   galleryTitle: state.galleryTitle,
   gallerySubtitle: state.gallerySubtitle,
   galleryType: state.galleryType,
-  galleryPreview: state.galleryPreview,
   galleryFade: state.galleryFade,
   galleryAutoplay: state.galleryAutoplay,
   galleryPopup: state.galleryPopup,
@@ -143,6 +142,7 @@ const selectInvitationCanvasData = (state: InvitationData): InvitationCanvasData
   isApproved: state.isApproved,
   kakaoShare: state.kakaoShare,
   slug: state.slug,
+  mapHeight: state.mapHeight,
 });
 
 type InvitationCanvasContentProps = Omit<InvitationCanvasProps, 'data'> & {
@@ -193,7 +193,6 @@ const InvitationCanvasContent = memo(({
     galleryTitle,
     gallerySubtitle,
     galleryType,
-    galleryPreview,
     galleryFade,
     galleryAutoplay,
     galleryPopup,
@@ -223,6 +222,7 @@ const InvitationCanvasContent = memo(({
     isApproved,
     kakaoShare,
     slug,
+    mapHeight,
   } = data;
 
   // Scroll to editing section
@@ -407,6 +407,7 @@ const InvitationCanvasContent = memo(({
           mapType={mapType}
           locationContact={locationContact}
           animateEntrance={theme.animateEntrance}
+          mapHeight={mapHeight}
         />
 
         {/* 7. Accounts */}

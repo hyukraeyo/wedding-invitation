@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { MessageCircle, Sparkles } from 'lucide-react';
+import { MessageCircle, Sparkles, ChevronRight } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '@/components/common/AccordionItem';
@@ -137,6 +137,7 @@ export default function KakaoShareSection({ isOpen, value }: SectionProps) {
                                                 src={kakao.imageUrl}
                                                 alt="Kakao Preview"
                                                 fill
+                                                sizes="(max-width: 768px) 100vw, 400px"
                                                 className={styles.cardImage}
                                             />
                                         </div>
@@ -158,9 +159,6 @@ export default function KakaoShareSection({ isOpen, value }: SectionProps) {
                                             {kakao.description || '초대장을 보내드립니다.'}
                                         </p>
                                     </div>
-                                    <div className={styles.cardFooter}>
-                                        <span className={styles.footerText}>모바일 초대장</span>
-                                    </div>
                                     <div className={styles.btnGroup}>
                                         <div className={styles.cardBtn}>모바일 초대장</div>
                                         {kakao.buttonType !== 'none' && (
@@ -168,6 +166,10 @@ export default function KakaoShareSection({ isOpen, value }: SectionProps) {
                                                 {kakao.buttonType === 'location' ? '위치 안내' : '참석 여부'}
                                             </div>
                                         )}
+                                    </div>
+                                    <div className={styles.cardFooter}>
+                                        <span className={styles.footerText}>바나나 웨딩</span>
+                                        <ChevronRight size={12} className={styles.footerChevron} />
                                     </div>
                                 </div>
                             </div>

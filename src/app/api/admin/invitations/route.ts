@@ -37,10 +37,30 @@ export async function GET() {
             );
         }
 
+        // 1. Get all invitation IDs from approval_requests
+        const { data: requestIds, error: requestError } = await supabaseAdmin
+            .from('approval_requests')
+            .select('invitation_id');
+
+        if (requestError) {
+            console.error('Error fetching approval request IDs:', requestError);
+            return NextResponse.json(
+                { error: '승인 요청 목록을 불러오는데 실패했습니다.' },
+                { status: 500 }
+            );
+        }
+
+        const invitationIds = requestIds?.map(req => req.invitation_id) || [];
+
+        if (invitationIds.length === 0) {
+            return NextResponse.json({ success: true, data: [] });
+        }
+
+        // 2. Fetch invitations with those IDs
         const { data, error } = await supabaseAdmin
             .from('invitations')
             .select(INVITATION_SUMMARY_SELECT)
-            .contains('invitation_data', { isRequestingApproval: true })
+            .in('id', invitationIds)
             .order('updated_at', { ascending: false });
 
         if (error) {

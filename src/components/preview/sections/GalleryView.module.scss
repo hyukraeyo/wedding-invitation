@@ -6,6 +6,12 @@
     width: 100%;
     max-width: v.$canvas-max-width;
     margin-inline: auto;
+
+    &.fullBleed {
+        margin-inline: calc(var(--section-padding-x, 2rem) * -1);
+        width: calc(100% + (var(--section-padding-x, 2rem) * 2));
+        max-width: none;
+    }
 }
 
 .galleryWrapper {
@@ -63,7 +69,7 @@
     
     &.active {
         opacity: 1;
-        box-shadow: 0 0 0 2px var(--active-ring-color), 0 0 0 calc(2px + 1px) white; // ring-2 ring-offset-1 logic
+        // box-shadow: 0 0 0 2px var(--active-ring-color), 0 0 0 calc(2px + 1px) white; // ring-2 ring-offset-1 logic
     }
 }
 
@@ -81,7 +87,7 @@
     aspect-ratio: 1 / 1;
     border-radius: 0.5rem;
     overflow: hidden;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    // box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 
     &.cursorPointer {
         cursor: pointer;

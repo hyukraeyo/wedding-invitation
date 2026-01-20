@@ -157,7 +157,7 @@ const GalleryView = memo(({
                 const isFade = galleryFade;
 
                 return (
-                    <div ref={swiperContainerRef} className={clsx(styles.swiperContainer)}>
+                    <div ref={swiperContainerRef} className={clsx(styles.swiperContainer, isFade && styles.fullBleed)}>
                         <div className={clsx(styles.galleryWrapper) || ''}>
                             <Swiper
                                 key={`${galleryType}-${gallery.length}-${isFade}`}

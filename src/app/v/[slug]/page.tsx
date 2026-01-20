@@ -10,7 +10,39 @@ interface Props {
 
 const getInvitation = cache(async (slug: string) => {
     const supabase = await createSupabaseServerClient(null);
-    return invitationService.getInvitation(slug, supabase);
+
+    // 1. Try direct match
+    let invitation = await invitationService.getInvitation(slug, supabase);
+    if (invitation) return invitation;
+
+    // 2. Robust lookup for Korean/Special characters
+    try {
+        const decodedSlug = decodeURIComponent(slug);
+
+        // If decoded is different, try decoded
+        if (decodedSlug !== slug) {
+            invitation = await invitationService.getInvitation(decodedSlug, supabase);
+            if (invitation) return invitation;
+        }
+
+        // 3. Try NFC normalization (Unicode Composition primarily for Korean)
+        const nfcSlug = decodedSlug.normalize('NFC');
+        if (nfcSlug !== decodedSlug) {
+            invitation = await invitationService.getInvitation(nfcSlug, supabase);
+            if (invitation) return invitation;
+        }
+
+        // 4. Try NFD normalization (For records potentially created on Mac/iOS)
+        const nfdSlug = decodedSlug.normalize('NFD');
+        if (nfdSlug !== decodedSlug && nfdSlug !== nfcSlug) {
+            invitation = await invitationService.getInvitation(nfdSlug, supabase);
+            if (invitation) return invitation;
+        }
+    } catch (e) {
+        console.error('Slug decoding error:', e);
+    }
+
+    return null;
 });
 
 export async function generateMetadata({ params }: Props) {

@@ -58,7 +58,14 @@
     background-color: #f8f9fa;
     border: 1px solid #f1f3f5;
     position: relative;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    // box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+
+    &.expanded {
+        width: calc(100% + var(--section-padding-x, 2rem) * 2);
+        margin-inline: calc(var(--section-padding-x, 2rem) * -1);
+        border-radius: 0;
+        border-inline: none;
+    }
 }
 
 .mapPlaceholder {

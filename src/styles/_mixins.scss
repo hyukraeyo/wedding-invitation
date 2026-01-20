@@ -20,7 +20,7 @@
 // ============================================
 @mixin export-css-vars {
   @each $key, $value in (
-    'background': $color-background,
+    'background': $color-bg-page,
     'foreground': $color-foreground,
     'primary': $color-primary,
     'primary-dark': $color-primary-dark,
@@ -70,7 +70,7 @@
 @mixin focus-ring {
   outline: none;
   &:focus-visible {
-    box-shadow: 0 0 0 2px $color-background, 0 0 0 4px $color-primary;
+    // box-shadow: 0 0 0 2px $color-background, 0 0 0 4px $color-primary;
   }
 }
 
@@ -121,7 +121,7 @@
 @mixin input-focus-style {
   outline: none;
   border-color: $color-primary;
-  box-shadow: 0 0 0 1px $color-primary;
+  // box-shadow: 0 0 0 1px $color-primary;
 }
 
 @mixin input-base {

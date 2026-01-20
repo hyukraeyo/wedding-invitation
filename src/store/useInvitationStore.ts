@@ -39,7 +39,7 @@ export interface InvitationState {
     showMap: boolean;
     lockMap: boolean;
     showNavigation: boolean;
-    mapHeight: 'default' | 'small';
+    mapHeight: 'default' | 'expanded';
     mapZoom: number;
     locationSubtitle: string;
     showSketch: boolean;
@@ -147,7 +147,7 @@ export interface InvitationState {
     setShowMap: (show: boolean) => void;
     setLockMap: (lock: boolean) => void;
     setShowNavigation: (show: boolean) => void;
-    setMapHeight: (height: 'default' | 'small') => void;
+    setMapHeight: (height: 'default' | 'expanded') => void;
     setMapZoom: (zoom: number) => void;
     setMapType: (type: 'kakao' | 'naver') => void;
     setShowSketch: (show: boolean) => void;
