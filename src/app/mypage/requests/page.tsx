@@ -55,12 +55,19 @@ export default async function RequestsPage() {
         adminInvitations = rows.map(toInvitationSummary);
     }
 
+    // Fetch count of admin's own invitations
+    const { count: invitationCount } = await supabase
+        .from('invitations')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', user.id);
+
     return (
         <RequestsPageClient
             userId={user.id}
             initialApprovalRequests={approvalRequests}
             initialAdminInvitations={adminInvitations}
             profile={profileData}
+            invitationCount={invitationCount || 0}
         />
     );
 }

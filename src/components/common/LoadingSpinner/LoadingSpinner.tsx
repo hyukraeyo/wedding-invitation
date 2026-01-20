@@ -2,9 +2,16 @@ import React from 'react';
 import { Banana } from 'lucide-react';
 import styles from './LoadingSpinner.module.scss';
 
-export default function LoadingSpinner() {
+interface LoadingSpinnerProps {
+    variant?: 'fixed' | 'full';
+    className?: string;
+}
+
+export default function LoadingSpinner({ variant = 'fixed', className }: LoadingSpinnerProps) {
+    const containerClass = variant === 'fixed' ? styles.fixed : styles.full;
+
     return (
-        <div className={styles.overlay}>
+        <div className={`${containerClass} ${className || ''}`}>
             <div className={styles.iconWrapper}>
                 {/* Rotating Banana Icon */}
                 <Banana className={styles.icon} />

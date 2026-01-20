@@ -11,7 +11,7 @@ import type { InvitationSummaryRecord } from '@/lib/invitation-summary';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import type { InvitationData } from '@/store/useInvitationStore';
 import Header from '@/components/common/Header';
-import { signOut } from 'next-auth/react';
+// import { signOut } from 'next-auth/react';
 
 import { useToast } from '@/hooks/use-toast';
 import {

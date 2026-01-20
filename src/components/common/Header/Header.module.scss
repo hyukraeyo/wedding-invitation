@@ -63,6 +63,25 @@
   gap: 0.25rem; // gap-1
 }
 
+.profileIcon {
+  width: 2.25rem; // w-9
+  height: 2.25rem;
+  border-radius: 50%;
+  background-color: v.$color-primary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  margin-left: 0.25rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(251, 192, 45, 0.25);
+  
+  &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(251, 192, 45, 0.4);
+  }
+}
+
 .saveButton {
   margin-left: 0.25rem; // ml-1
   transition: transform v.$transition-fast;

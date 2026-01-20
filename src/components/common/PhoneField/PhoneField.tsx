@@ -29,6 +29,9 @@ export const PhoneField = React.forwardRef<HTMLInputElement, PhoneFieldProps>(
                 {...props}
                 ref={ref}
                 onChange={handleChange}
+                type="tel" // Force type to tel
+                inputMode="numeric" // Force numeric keypad
+                pattern="[0-9]*" // iOS numeric keypad trigger
                 maxLength={13}
                 right={showIcon ? <Phone size={16} /> : props.right}
             />

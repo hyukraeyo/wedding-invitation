@@ -1,5 +1,6 @@
 "use client";
 
+import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -9,7 +10,7 @@ import {
     HelpCircle,
     User,
     LogOut,
-    Banana
+    Banana,
 } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 import styles from './MyPageSidebar.module.scss';
@@ -34,110 +35,110 @@ export function MyPageSidebar({
     isAdmin,
     invitationCount = 0,
     requestCount = 0,
-    userEmail,
+    // userEmail,
 }: MyPageSidebarProps) {
     const pathname = usePathname();
+    const [isEventModalOpen, setIsEventModalOpen] = React.useState(false);
 
     const handleLogout = async () => {
         await signOut({ callbackUrl: '/login' });
     };
 
     return (
-        <aside className={styles.sidebar}>
-            <div className={styles.profileSection}>
-                <div className={styles.avatar}>
-                    <Banana size={24} />
-                </div>
-                <div className={styles.userInfo}>
-                    <div className={styles.userName}>
-                        {profile?.full_name || '이름 없음'}
-                        <Link href="/mypage/account" style={{
-                            fontSize: '0.75rem',
-                            color: '#3B82F6',
-                            fontWeight: 500,
-                            marginLeft: '0.5rem',
-                            textDecoration: 'none'
-                        }}>
-                            프로필 설정
-                        </Link>
+        <>
+            <aside className={styles.sidebar}>
+                <div className={styles.profileSection}>
+                    <div className={styles.avatar}>
+                        <Banana size={24} />
                     </div>
-                    {/* <div className={styles.userEmail}>
-                        {profile?.phone || userEmail || '정보 없음'}
-                    </div> */}
-                </div>
-            </div>
-
-            <nav className={styles.menuList}>
-                <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#111', marginBottom: '0.5rem', marginLeft: '0.5rem' }}>
-                    내 보관함
+                    <div className={styles.userInfo}>
+                        <div className={styles.userName}>
+                            {profile?.full_name || '이름 없음'}
+                        </div>
+                    </div>
                 </div>
 
-                <Link
-                    href="/mypage"
-                    className={clsx(styles.menuItem, pathname === '/mypage' && styles.active)}
-                >
-                    <FileText size={20} className={styles.menuIcon} />
-                    모바일 청첩장
-                    {invitationCount > 0 && (
-                        <span className={styles.menuBadge}>{invitationCount}</span>
-                    )}
-                </Link>
-
-                {/* Coming Soon Items */}
-                <button className={styles.menuItem} style={{ cursor: 'default', opacity: 0.6 }}>
-                    <ClipboardList size={20} className={styles.menuIcon} />
-                    웨딩영상
-                </button>
-                <button className={styles.menuItem} style={{ cursor: 'default', opacity: 0.6 }}>
-                    <FileText size={20} className={styles.menuIcon} />
-                    모바일 감사장
-                </button>
-
-                <div style={{ height: '1rem' }} />
-
-                {isAdmin && (
+                <nav className={styles.menuList}>
                     <Link
-                        href="/mypage/requests"
-                        className={clsx(styles.menuItem, pathname === '/mypage/requests' && styles.active)}
+                        href="/mypage"
+                        className={clsx(styles.menuItem, pathname === '/mypage' && styles.active)}
                     >
-                        <ClipboardList size={20} className={styles.menuIcon} />
-                        신청 관리
-                        {requestCount > 0 && (
-                            <span className={styles.menuBadge}>{requestCount}</span>
+                        <FileText size={20} className={styles.menuIcon} />
+                        모바일 청첩장
+                        {invitationCount > 0 && (
+                            <span className={styles.menuBadge}>{invitationCount}</span>
                         )}
                     </Link>
-                )}
 
-                <button className={styles.menuItem} style={{ cursor: 'default' }}>
-                    <span style={{ marginRight: '0.75rem', width: '20px', display: 'inline-block' }}>🎉</span>
-                    이벤트
-                </button>
+                    {isAdmin && (
+                        <Link
+                            href="/mypage/requests"
+                            className={clsx(styles.menuItem, pathname === '/mypage/requests' && styles.active)}
+                        >
+                            <ClipboardList size={20} className={styles.menuIcon} />
+                            신청 관리
+                            {requestCount > 0 && (
+                                <span className={clsx(styles.menuBadge, styles.badgeAlert)}>{requestCount}</span>
+                            )}
+                        </Link>
+                    )}
 
-                <Link
-                    href="http://pf.kakao.com/_KaiAX/chat"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={styles.menuItem}
-                >
-                    <HelpCircle size={20} className={styles.menuIcon} />
-                    고객센터
-                </Link>
+                    <Link
+                        href="/mypage/account"
+                        className={clsx(styles.menuItem, pathname === '/mypage/account' && styles.active)}
+                    >
+                        <User size={20} className={styles.menuIcon} />
+                        내 계정관리
+                    </Link>
 
-                <Link
-                    href="/mypage/account"
-                    className={clsx(styles.menuItem, pathname === '/mypage/account' && styles.active)}
-                >
-                    <User size={20} className={styles.menuIcon} />
-                    내 계정관리
-                </Link>
-            </nav>
+                    <button
+                        className={styles.menuItem}
+                        onClick={() => setIsEventModalOpen(true)}
+                    >
+                        <span style={{ marginRight: '0.75rem', width: '20px', display: 'flex', justifyContent: 'center' }}>🎉</span>
+                        이벤트
+                    </button>
 
-            <div className={styles.logoutButtonWrapper}>
-                <button className={styles.logoutButton} onClick={handleLogout}>
-                    <LogOut size={18} />
-                    로그아웃
-                </button>
-            </div>
-        </aside>
+                    <Link
+                        href="http://pf.kakao.com/_KaiAX/chat"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={styles.menuItem}
+                    >
+                        <HelpCircle size={20} className={styles.menuIcon} />
+                        고객센터
+                    </Link>
+
+                    <button className={styles.menuItem} onClick={handleLogout}>
+                        <LogOut size={20} className={styles.menuIcon} />
+                        로그아웃
+                    </button>
+                </nav>
+            </aside>
+
+            <ResponsiveModal
+                open={isEventModalOpen}
+                onOpenChange={setIsEventModalOpen}
+                title="🎁 오픈 이벤트 준비 중!"
+                description=""
+                confirmText="확인"
+                showCancel={false}
+                onConfirm={() => setIsEventModalOpen(false)}
+            >
+                <div className={styles.eventModalContent}>
+                    <div className={styles.eventIconWrapper}>
+                        <span style={{ fontSize: '3rem' }}>🎁</span>
+                    </div>
+                    <p className={styles.eventMainText}>
+                        다양한 혜택을 담은 이벤트를<br />
+                        열심히 준비하고 있어요!
+                    </p>
+                    <p className={styles.eventSubText}>
+                        곧 찾아올 특별한 소식을 기대해주세요.<br />
+                        (커밍 쑨- ✨)
+                    </p>
+                </div>
+            </ResponsiveModal>
+        </>
     );
 }

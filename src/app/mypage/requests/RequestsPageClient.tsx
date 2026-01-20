@@ -3,9 +3,9 @@
 import { parseRejection } from '@/lib/rejection-helpers';
 import React, { useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { signOut } from 'next-auth/react';
+// import Link from 'next/link';
+// import { useRouter } from 'next/navigation';
+// import { signOut } from 'next-auth/react';
 import { approvalRequestService } from '@/services/approvalRequestService';
 import type { ApprovalRequestSummary } from '@/services/approvalRequestService';
 import type { InvitationSummaryRecord } from '@/lib/invitation-summary';
@@ -13,7 +13,7 @@ import { invitationService } from '@/services/invitationService';
 import Header from '@/components/common/Header';
 import { useToast } from '@/hooks/use-toast';
 import {
-    Banana,
+    // Banana,
     Clock,
     AlertCircle,
     CheckCircle,
@@ -42,6 +42,7 @@ interface RequestsPageClientProps {
     initialApprovalRequests: ApprovalRequestSummary[];
     initialAdminInvitations: InvitationSummaryRecord[];
     profile: ProfileSummary | null;
+    invitationCount: number;
 }
 
 type ConfirmActionType = 'APPROVE' | 'REVOKE_APPROVAL' | 'INFO_ONLY';
@@ -56,10 +57,11 @@ interface ConfirmConfig {
 }
 
 export default function RequestsPageClient({
-    userId: _userId,
+    // userId: _userId,
     initialApprovalRequests,
     initialAdminInvitations,
     profile,
+    invitationCount,
 }: RequestsPageClientProps) {
     const [approvalRequests, setApprovalRequests] = useState<ApprovalRequestSummary[]>(initialApprovalRequests);
     const [adminInvitations, setAdminInvitations] = useState<InvitationSummaryRecord[]>(initialAdminInvitations);
@@ -187,6 +189,7 @@ export default function RequestsPageClient({
                     profile={profile}
                     isAdmin={true}
                     requestCount={approvalRequests.length}
+                    invitationCount={invitationCount}
                 />
 
                 {/* Main Content */}

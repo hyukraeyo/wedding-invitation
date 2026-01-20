@@ -106,38 +106,66 @@
 }
 
 .menuBadge {
-  background-color: v.$color-danger;
-  color: white;
+  margin-left: auto;
+  background-color: #f1f3f5;
+  color: #495057;
   font-size: 0.75rem;
-  padding: 0.125rem 0.5rem;
+  padding: 0.15rem 0.6rem;
   border-radius: 999px;
   font-weight: 600;
-}
-
-.logoutButtonWrapper {
-  margin-top: auto;
-  padding-top: 1rem;
-}
-
-.logoutButton {
-  width: 100%;
+  min-width: 1.5rem;
+  text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  padding: 0.875rem;
-  border: 1px solid #ddd;
-  border-radius: 0.75rem;
-  background-color: #f8f9fa;
-  color: #666;
-  font-size: 0.95rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  line-height: 1.2;
+}
 
-  &:hover {
-    background-color: white;
-    border-color: #ccc;
-    color: #333;
+.badgeAlert {
+  background-color: #ffe3e3;
+  color: #e03131;
+}
+
+// Event Modal Styles
+.eventModalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.5rem 0;
+}
+
+.eventIconWrapper {
+    width: 80px;
+    height: 80px;
+    background-color: #FFF9C4; // Light yellow background
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
   }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.eventMainText {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+}
+
+.eventSubText {
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.5;
 }

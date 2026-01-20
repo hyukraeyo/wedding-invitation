@@ -3,7 +3,7 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Plus, LogIn, Save, LogOut } from 'lucide-react';
+import { Plus, LogIn, Save, Banana } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useRouter, usePathname } from 'next/navigation';
@@ -13,7 +13,6 @@ import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { useShallow } from 'zustand/react/shallow';
 import styles from './Header.module.scss';
-import { MyPageSmileIcon } from '@/components/common/Icons/MyPageSmileIcon';
 
 // Lazy load Button to avoid preload warning (Button is only used inside modal)
 const Button = lazy(() => import('@/components/ui/Button').then(mod => ({ default: mod.Button })));
@@ -28,7 +27,7 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
     const router = useRouter();
     const pathname = usePathname();
     const isMyPage = pathname?.startsWith('/mypage');
-    const { user, signOut } = useAuth();
+    const { user } = useAuth();
     const { reset, isUploading } = useInvitationStore(useShallow((state) => ({
         reset: state.reset,
         isUploading: state.isUploading,
@@ -104,9 +103,21 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
 
             {/* Actions */}
             <div className={styles.actions}>
+                {onSave && user ? (
+                    <IconButton
+                        icon={Save}
+                        onClick={handleSave}
+                        loading={isLoading || isUploading}
+                        size="md"
+                        variant="ghost"
+                        className={styles.saveButton}
+                        aria-label="저장하기"
+                    />
+                ) : null}
+
                 {user ? (
                     <>
-                        {isMyPage ? (
+                        {isMyPage && (
                             <IconButton
                                 icon={Plus}
                                 size="md"
@@ -114,26 +125,12 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
                                 onClick={handleCreateNew}
                                 aria-label="새 청첩장 만들기"
                             />
-                        ) : (
-                            <Link href="/mypage">
-                                <IconButton
-                                    icon={MyPageSmileIcon}
-                                    size="md"
-                                    variant="ghost"
-                                    aria-label="마이페이지"
-                                />
-                            </Link>
                         )}
-                        <IconButton
-                            icon={LogOut}
-                            size="md"
-                            variant="ghost"
-                            onClick={async () => {
-                                await signOut();
-                                router.push('/');
-                            }}
-                            aria-label="로그아웃"
-                        />
+                        <Link href="/mypage">
+                            <div className={styles.profileIcon} aria-label="마이페이지">
+                                <Banana size={20} strokeWidth={2.5} />
+                            </div>
+                        </Link>
                     </>
                 ) : (
                     onLogin ? (
@@ -146,18 +143,6 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
                         />
                     ) : null
                 )}
-
-                {onSave && user ? (
-                    <IconButton
-                        icon={Save}
-                        onClick={handleSave}
-                        loading={isLoading || isUploading}
-                        size="md"
-                        variant="ghost"
-                        className={styles.saveButton}
-                        aria-label="저장하기"
-                    />
-                ) : null}
             </div>
 
             <ResponsiveModal
