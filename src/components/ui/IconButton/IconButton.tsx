@@ -13,7 +13,7 @@ export interface IconButtonProps extends Omit<ButtonProps, "size" | "variant"> {
      * Size of the button.
      * @default "md"
      */
-    size?: "sm" | "md" | "lg" | "xl"
+    size?: "xs" | "sm" | "md" | "lg" | "xl"
     /**
      * Color variant of the button.
      * @default "ghost"
@@ -27,6 +27,7 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
     ({ className, icon: Icon, size = "md", variant = "ghost", children, "aria-label": ariaLabel, ...props }, ref) => {
         // Map custom size props to Button's size variants
         const sizeMap: Record<NonNullable<IconButtonProps["size"]>, NonNullable<ButtonProps["size"]>> = {
+            xs: "icon-xs", // 28px
             sm: "icon-sm", // 32px
             md: "icon",    // 48px (Standard Touch Area)
             lg: "icon-lg", // 56px

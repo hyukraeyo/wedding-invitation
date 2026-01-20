@@ -25,7 +25,7 @@ export interface ButtonProps
     | "link"
     | "solid"
     | "line";
-    size?: "default" | "sm" | "lg" | "icon" | "icon-sm" | "icon-lg";
+    size?: "default" | "sm" | "lg" | "icon" | "icon-xs" | "icon-sm" | "icon-lg";
     loading?: boolean | undefined;
 }
 

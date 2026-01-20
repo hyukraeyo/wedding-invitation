@@ -133,6 +133,13 @@
     padding: 0;
   }
 
+  &--size-icon-xs {
+    height: 28px;
+    width: 28px;
+    padding: 0;
+    border-radius: v.$radius-sm;
+  }
+
   &--size-icon-sm {
     height: 36px;
     width: 36px;
