@@ -158,15 +158,17 @@ const GalleryView = memo(({
                     <div ref={swiperContainerRef} className={clsx(styles.swiperContainer, !galleryPreview ? styles.swiperContainerLimited : '') || ''}>
                         <div className={clsx(styles.galleryWrapper) || ''}>
                             <Swiper
-                                key={`swiper-${gallery.length}-${galleryPreview}-${galleryFade}`}
+                                key={`${galleryType}-${gallery.length}-${galleryFade}-${galleryPreview}`}
                                 modules={[Navigation, Pagination, EffectFade, Autoplay]}
                                 spaceBetween={20}
-                                slidesPerView={galleryPreview ? 1.25 : 1}
-                                centeredSlides={galleryPreview}
+                                slidesPerView={galleryFade ? 1 : (galleryPreview ? 1.25 : 1)}
+                                centeredSlides={!galleryFade && galleryPreview}
+                                observer={true}
+                                observeParents={true}
                                 effect={galleryFade ? "fade" : "slide"}
                                 {...(galleryFade ? { fadeEffect: { crossFade: true } } : {})}
                                 autoplay={galleryAutoplay ? { delay: 3000, disableOnInteraction: false } : false}
-                                loop={gallery.length > 1}
+                                loop={false}
                                 onSwiper={setMainSwiper}
                                 onSlideChange={(swiper) => setCurrentIndex(swiper.realIndex)}
                                 className={clsx(styles.swiperMain) || ''}
