@@ -77,7 +77,7 @@ export function ProfileCompletionModal({
             onOpenChange={() => { }} // 필수 입력이므로 닫기 비활성화
             dismissible={false}
             title="프로필 완성"
-            description="청첩장 서비스 이용을 위해 이름과 연락처를 입력해주세요."
+            description={null}
 
             // Native Footer Props for "Sticky Bottom" style
             onConfirm={handleSubmit}
@@ -90,6 +90,9 @@ export function ProfileCompletionModal({
             outerFooter={logoutButton}
         >
             <div className={styles.container}>
+                <div style={{ textAlign: 'center', color: '#4E5968', marginBottom: '1.5rem', wordBreak: 'keep-all', fontSize: '1.0625rem' }}>
+                    청첩장 서비스 이용을 위해 이름과 연락처를 입력해주세요.
+                </div>
                 <div className={styles.inputList}>
                     <div className={styles.inputGroup}>
                         <div className={styles.inputIcon}>

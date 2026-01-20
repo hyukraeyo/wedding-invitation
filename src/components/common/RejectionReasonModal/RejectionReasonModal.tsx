@@ -51,16 +51,7 @@ export default function RejectionReasonModal({
                 if (!open) handleClose();
             }}
             title={title}
-            description={
-                description || (requesterName ? (
-                    <>
-                        <strong>{requesterName}</strong>님의 사용 신청을 거절합니다.<br />
-                        승인 거절 사유를 입력해주세요. 사용자가 확인할 수 있습니다.
-                    </>
-                ) : (
-                    '승인 거절 사유를 입력해주세요. 사용자가 확인할 수 있습니다.'
-                ))
-            }
+            description={null}
             confirmText={confirmText}
             cancelText="취소"
             onConfirm={handleSubmit}
@@ -70,6 +61,16 @@ export default function RejectionReasonModal({
             confirmLoading={loading}
             dismissible={!loading}
         >
+            <div style={{ textAlign: 'center', color: '#4E5968', marginBottom: '1.5rem', wordBreak: 'keep-all', lineHeight: '1.6' }}>
+                {description || (requesterName ? (
+                    <>
+                        <strong>{requesterName}</strong>님의 사용 신청을 거절합니다.<br />
+                        승인 거절 사유를 입력해주세요. 사용자가 확인할 수 있습니다.
+                    </>
+                ) : (
+                    '승인 거절 사유를 입력해주세요. 사용자가 확인할 수 있습니다.'
+                ))}
+            </div>
             <div className={styles.editorWrapper}>
                 <RichTextEditor
                     content={reason}

@@ -149,14 +149,13 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
                 open={showResetDialog}
                 onOpenChange={setShowResetDialog}
                 title="새 청첩장 만들기"
-                description={
-                    <>
-                        작성 중인 내용이 있습니다. 정말 새 청첩장을 만드시겠습니까?
-                        <br />
-                        (작성된 내용은 초기화됩니다.)
-                    </>
-                }
+                description={null}
             >
+                <div style={{ textAlign: 'center', wordBreak: 'keep-all', lineHeight: '1.6', marginBottom: '1.5rem' }}>
+                    작성 중인 내용이 있습니다. 정말 새 청첩장을 만드시겠습니까?
+                    <br />
+                    (작성된 내용은 초기화됩니다.)
+                </div>
                 <Suspense fallback={<div className={styles.suspenseFallback} />}>
                     <div className={styles.resetDialogContent}>
                         <Button

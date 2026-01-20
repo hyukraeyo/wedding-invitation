@@ -387,7 +387,7 @@ export default function MyPageClient({
                 open={confirmConfig.isOpen}
                 onOpenChange={(open) => setConfirmConfig(prev => ({ ...prev, isOpen: open }))}
                 title={confirmConfig.title}
-                description={confirmConfig.description}
+                description={null}
                 showCancel={confirmConfig.type !== 'INFO_ONLY'}
                 onConfirm={() => {
                     if (confirmConfig.type !== 'INFO_ONLY') {
@@ -398,7 +398,11 @@ export default function MyPageClient({
                 }}
                 confirmLoading={!!actionLoading}
                 dismissible={!actionLoading}
-            />
+            >
+                <div style={{ textAlign: 'center', wordBreak: 'keep-all', lineHeight: '1.6' }}>
+                    {confirmConfig.description}
+                </div>
+            </ResponsiveModal>
 
             {rejectionTarget ? (
                 <RejectionReasonModal
