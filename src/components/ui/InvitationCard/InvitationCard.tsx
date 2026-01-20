@@ -184,11 +184,9 @@ const InvitationCard = ({
                                 />
                             </DropdownMenuTrigger>
                             <DropdownMenuContent side="top" align="start" className={styles.dropdownContent}>
-                                {!isRequesting && !isApproved && !isRejected && (
-                                    <DropdownMenuItem onClick={() => onEdit(invitation)}>
-                                        <Edit2 size={16} className="mr-2" /> 편집하기
-                                    </DropdownMenuItem>
-                                )}
+                                <DropdownMenuItem onClick={() => onEdit(invitation)}>
+                                    <Edit2 size={16} className="mr-2" /> 편집하기
+                                </DropdownMenuItem>
                                 <DropdownMenuItem onClick={handlePreview}>
                                     <Eye size={16} className="mr-2" /> 미리보기
                                 </DropdownMenuItem>
@@ -197,7 +195,7 @@ const InvitationCard = ({
                                         <AlertCircle size={16} className="mr-2" /> {REJECTION_LABEL} 확인
                                     </DropdownMenuItem>
                                 )}
-                                {!isRequesting && !isApproved && !isRejected && (
+                                {!isRequesting && !isApproved && (
                                     <DropdownMenuItem
                                         onClick={() => setTimeout(() => onDelete(invitation), 0)}
                                         style={{ color: '#EF4444' }}
@@ -212,10 +210,10 @@ const InvitationCard = ({
                             <>
                                 <Button
                                     variant="outline"
-                                    className={clsx(styles.footerSecondaryButton, styles.blueButton)}
-                                    onClick={handlePreview}
+                                    className={clsx(styles.footerSecondaryButton, styles.editButton)}
+                                    onClick={() => onEdit(invitation)}
                                 >
-                                    미리보기
+                                    편집하기
                                 </Button>
                                 <Button
                                     className={styles.footerPrimaryButton}

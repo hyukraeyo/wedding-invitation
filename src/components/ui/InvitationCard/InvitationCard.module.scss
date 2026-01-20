@@ -152,13 +152,13 @@
     .footerPrimaryButton {
         height: 2.875rem !important; // Override default height for compact card
         border-radius: 1rem; // 16px
-        font-weight: 700;
+        font-weight: 600;
         display: flex;
         align-items: center;
         justify-content: center;
         white-space: nowrap;
         padding: 0 !important;
-        // box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .footerIconButton {
@@ -197,22 +197,32 @@
 }
 
 .requesting {
-    background-color: v.$color-danger !important;
-    border-color: v.$color-danger !important;
-    color: white !important;
+    background-color: #f3f4f6 !important;
+    border-color: transparent !important;
+    color: #6b7280 !important;
+    
+    &:hover {
+        background-color: #e5e7eb !important;
+    }
 }
 
 .blueButton {
     background-color: #FFFFFF !important;
-    border-color: transparent !important; // 테두리 제거
-    color: #007AFF !important;
+    border-color: transparent !important;
+    color: #6b7280 !important;
+    font-weight: 600 !important;
+    
+    &:hover {
+        background-color: #f9fafb !important;
+        color: #374151 !important;
+    }
 }
 
 .shareYellowButton {
     background-color: v.$color-primary !important;
     border-color: v.$color-primary !important;
-    color: #1a1a1a !important; // Dark text for better contrast on yellow
-    font-weight: 700;
+    color: #1a1a1a !important;
+    font-weight: 600 !important;
 
     &:hover {
         opacity: 0.9;
@@ -221,8 +231,14 @@
 
 .editButton {
     background-color: #FFFFFF !important;
-    color: #007AFF !important;
-    border-color: transparent !important; // 테두리 제거
+    color: #6b7280 !important;
+    border-color: transparent !important;
+    font-weight: 600 !important;
+    
+    &:hover {
+        background-color: #f9fafb !important;
+        color: #374151 !important;
+    }
 }
 
 .rejected {
