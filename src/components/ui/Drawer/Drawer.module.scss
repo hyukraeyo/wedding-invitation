@@ -17,7 +17,7 @@
   z-index: v.$z-modal;
   display: flex;
   height: auto;
-  max-height: 90vh;
+  max-height: 90dvh;
   flex-direction: column;
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
@@ -62,6 +62,7 @@
   flex-direction: column;
   gap: 0.5rem;
   padding: 1rem;
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom));
 }
 
 .title {

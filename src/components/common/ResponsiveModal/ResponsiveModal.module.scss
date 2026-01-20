@@ -49,7 +49,7 @@ $color-text-desc: #4E5968;
 .drawerLayout {
   display: flex;
   flex-direction: column;
-  max-height: 90vh;
+  max-height: 90dvh;
   width: 100%;
 }
 
@@ -110,6 +110,7 @@ $color-text-desc: #4E5968;
   flex-shrink: 0;
   overflow: hidden;
   background-color: v.$white; // Explicit bg
+  padding-bottom: env(safe-area-inset-bottom); // iOS Home Indicator safe area
 }
 
 .outerFooter {
