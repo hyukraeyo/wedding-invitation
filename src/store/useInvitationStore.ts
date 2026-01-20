@@ -333,7 +333,7 @@ export const INITIAL_STATE = {
         backgroundColor: '#FFFFFF', // White
         accentColor: '#C19A6D', // Soft Brown
         fontScale: 1,
-        allowFontScale: true,
+        allowFontScale: false,
         pattern: 'none' as const,
         effect: 'none' as const,
         effectOnlyOnMain: false,

@@ -107,37 +107,10 @@
 }
 
 .listContainer {
-    // overflow 제거 (상위 DrawerScrollArea에서 스크롤 처리됨)
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    padding-bottom: 2rem; // 하단 여백 추가
-
-    // Default mask (fully visible)
-    mask-image: linear-gradient(to bottom, black 100%, transparent 100%);
-    -webkit-mask-image: linear-gradient(to bottom, black 100%, transparent 100%);
-
-    // Soft transition for mask? Not easily animatable, but acceptable snap.
-
-    /* Custom Scrollbar */
-    &::-webkit-scrollbar {
-        width: 6px;
-    }
-
-    &::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background-color: #e5e7eb;
-        border-radius: 3px;
-    }
-
-    @media (hover: hover) and (pointer: fine) {
-        &::-webkit-scrollbar-thumb:hover {
-            background-color: #d1d5db;
-        }
-    }
+    gap: 0.75rem;
+    padding-bottom: 2rem;
 }
 
 .itemButton {
@@ -148,64 +121,70 @@
     width: 100%;
     padding: 1.25rem;
     background-color: #ffffff;
-    border: 1px solid v.$zinc-200;
-    border-radius: 1rem;
+    border: 1px solid v.$zinc-200; // 더 선명한 선 (기본 #f1f3f5보다 어두운 수준)
+    border-radius: 1.25rem;
     cursor: pointer;
     transition: all 0.2s v.$popup-easing;
     text-align: left;
+    box-shadow: none; // 그림자 제거
 
     @media (hover: hover) and (pointer: fine) {
         &:hover {
-            background-color: v.$zinc-50;
-            border-color: v.$zinc-300;
+            background-color: #fffdf0; 
+            border-color: v.$color-primary; // 호버 시 테두리 확실하게 강조
+            transform: translateY(-1px);
+            box-shadow: none;
         }
     }
 
     &:focus-visible {
         border-color: v.$color-primary;
-        box-shadow: 0 0 0 1px v.$color-primary;
+        box-shadow: 0 0 0 2px rgba(251, 192, 45, 0.2);
         outline: none;
     }
 
     &:active {
         transform: scale(0.98);
-        background-color: v.$zinc-100;
-        border-color: v.$zinc-300;
+        background-color: #fffcf0;
+        border-color: v.$color-primary;
     }
 }
 
 .itemHeader {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 0.625rem;
     width: 100%;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.625rem;
 }
 
 .badge {
     display: inline-flex;
     align-items: center;
-    padding: 0.2rem 0.6rem;
-    border-radius: 0.5rem;
-    background-color: v.$zinc-100;
-    color: v.$zinc-600;
-    font-size: 0.7rem;
-    font-weight: 600;
+    padding: 0.25rem 0.625rem;
+    border-radius: 9999px;
+    background-color: #f1f3f5;
+    color: v.$zinc-500;
+    font-size: 0.625rem;
+    font-weight: 700;
     line-height: 1;
+    letter-spacing: 0.02em;
 }
 
 .itemTitle {
     font-size: 0.9375rem;
-    font-weight: 600;
-    color: #111827;
+    font-weight: 700;
+    color: #1a1f27;
+    flex: 1;
 }
 
 .itemContent {
-    font-size: 0.875rem;
-    color: #4b5563;
+    font-size: 0.8125rem; // 13px로 살짝 축소하여 제목과의 계층 구조 강화
+    color: #4e5968;
     line-height: 1.6;
     white-space: pre-line;
     word-break: keep-all;
+    opacity: 0.85;
 
     p {
         margin: 0;

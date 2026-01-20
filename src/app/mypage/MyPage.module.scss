@@ -10,7 +10,7 @@
 .main {
     width: 100%;
     margin: 0 auto;
-    padding: 0 1.25rem;
+    padding: 1.5rem 1.25rem 0; // 상단 여백 추가
 
     // Mobile first: default max-width for readability on phones
     max-width: 600px;
@@ -24,15 +24,20 @@
 
 // 공통 섹션 스타일
 .sectionCard {
-    background-color: #ffffff;
-    border-radius: 1.5rem;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-    border: 1px solid rgba(0, 0, 0, 0.02);
+    background-color: transparent; // 모바일: 투명하게
+    border-radius: 0;
+    padding: 0.5rem 0; // 상하 여백만 유지
+    margin-bottom: 3rem;
+    box-shadow: none;
+    border: none;
 
     @include desktop {
+        background-color: #ffffff;
+        border-radius: 1.5rem;
         padding: 2.25rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+        border: 1px solid rgba(0, 0, 0, 0.02);
     }
 }
 
@@ -45,6 +50,13 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        padding: 0 0.25rem; // 모바일: 살짝 안으로 밀어서 정렬
+        margin-bottom: 1.25rem;
+
+        @include desktop {
+            padding: 0;
+            margin-bottom: 0; // 데스크탑 카드 내부에서는 이전 스타일 유지
+        }
 
         h2 {
             font-size: 1.125rem;
@@ -58,9 +70,13 @@
         }
 
         p {
-            font-size: 0.875rem;
+            font-size: 0.8125rem; // 모바일에서 서브텍스트 살짝 축소
             color: $zinc-500;
             margin: 0;
+
+            @include desktop {
+                font-size: 0.875rem;
+            }
         }
     }
 
@@ -115,22 +131,24 @@
         display: flex;
         flex-direction: column;
         gap: 0.75rem;
-        margin-top: 1.5rem;
+        // margin-top 제거 (Header에서 margin-bottom 처리)
     }
 
     .requestItem {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 1rem 1.25rem;
-        background-color: #F9FAFB;
-        border-radius: 1rem;
-        border: 1px solid transparent;
+        padding: 1.125rem 1.25rem;
+        background-color: #ffffff; // 배경이 회색이므로 아이템은 흰색으로
+        border-radius: 1.25rem;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
         transition: all 0.2s ease;
 
         &:hover {
-            background-color: #F2F4F6;
-            border-color: rgba(0, 0, 0, 0.05);
+            background-color: #F9FAFB;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
         }
 
         .requestInfo {
@@ -170,6 +188,9 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            flex-wrap: wrap; // 좁은 화면에서 버튼 줄바꿈 허용
+            justify-content: flex-end;
+            margin-left: 0.75rem; // 정보 영역과의 최소 간격
         }
 
         .approveButton,
@@ -277,8 +298,8 @@
 .invitationList {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    margin-top: 1.5rem; // Header와의 간격
+    gap: 1.25rem;
+    // margin-top 제거 (Header에서 margin-bottom 처리)
 
     @include desktop {
         display: grid;

@@ -30,7 +30,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
         >
             <SectionContainer>
                 {/* Groom Section */}
-                <Field label="🤵 신랑">
+                <Field label="신랑">
                     <div className={styles.formGroup}>
                         <div className={cn(styles.row, styles.full)}>
                             <TextField
@@ -79,7 +79,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
 
                 <div className={styles.divider} />
 
-                <Field label="👰‍♀️ 신부">
+                <Field label="신부">
                     <div className={styles.formGroup}>
                         <div className={cn(styles.row, styles.full)}>
                             <TextField

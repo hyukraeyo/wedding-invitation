@@ -11,6 +11,7 @@ import { InfoMessage } from '@/components/ui/InfoMessage';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import { ImageUploader } from '@/components/common/ImageUploader';
 import { HeaderAction } from '@/components/common/HeaderAction';
+import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 import styles from './KakaoShareSection.module.scss';
 import { KAKAO_SHARE_SAMPLES } from '@/constants/samples';
@@ -48,18 +49,11 @@ export default function KakaoShareSection({ isOpen, value }: SectionProps) {
                 isOpen={isOpen}
                 isCompleted={!!kakao.title}
                 action={
-                    <div style={{ display: 'flex', gap: '0.5rem' }}>
-                        <HeaderAction
-                            icon={Sparkles}
-                            label="추천 문구"
-                            onClick={() => setIsSampleModalOpen(true)}
-                        />
-                        <HeaderAction
-                            icon={MessageCircle}
-                            label="미리보기"
-                            onClick={() => setPreviewOpen(true)}
-                        />
-                    </div>
+                    <HeaderAction
+                        icon={Sparkles}
+                        label="추천 문구"
+                        onClick={() => setIsSampleModalOpen(true)}
+                    />
                 }
             >
                 <SectionContainer>
@@ -115,61 +109,72 @@ export default function KakaoShareSection({ isOpen, value }: SectionProps) {
                         />
                     </Field>
 
+
+                    <div className={styles.bottomActions}>
+                        <ResponsiveModal
+                            open={previewOpen}
+                            onOpenChange={setPreviewOpen}
+                            title="카카오톡 공유 미리보기"
+                            trigger={
+                                <Button
+                                    type="button"
+                                    variant="secondary"
+                                    className={styles.fullPreviewBtn}
+                                >
+                                    <MessageCircle size={16} />
+                                    미리보기
+                                </Button>
+                            }
+                        >
+                            <div className={styles.modalBody}>
+                                <div className={styles.card}>
+                                    {kakao.imageUrl ? (
+                                        <div className={cn(
+                                            styles.imageWrapper,
+                                            kakao.imageRatio === 'portrait' ? styles.portrait : styles.landscape
+                                        )}>
+                                            <Image
+                                                src={kakao.imageUrl}
+                                                alt="Kakao Preview"
+                                                fill
+                                                className={styles.cardImage}
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div className={cn(
+                                            styles.imageWrapper,
+                                            kakao.imageRatio === 'portrait' ? styles.portrait : styles.landscape
+                                        )}>
+                                            <div className={styles.placeholder}>
+                                                <MessageCircle size={32} style={{ opacity: 0.2 }} />
+                                            </div>
+                                        </div>
+                                    )}
+                                    <div className={styles.cardContent}>
+                                        <h4 className={styles.cardTitle}>
+                                            {kakao.title || '우리 결혼합니다'}
+                                        </h4>
+                                        <p className={styles.cardDescription}>
+                                            {kakao.description || '초대장을 보내드립니다.'}
+                                        </p>
+                                    </div>
+                                    <div className={styles.cardFooter}>
+                                        <span className={styles.footerText}>모바일 초대장</span>
+                                    </div>
+                                    <div className={styles.btnGroup}>
+                                        <div className={styles.cardBtn}>모바일 초대장</div>
+                                        {kakao.buttonType !== 'none' && (
+                                            <div className={styles.cardBtn}>
+                                                {kakao.buttonType === 'location' ? '위치 안내' : '참석 여부'}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </ResponsiveModal>
+                    </div>
                 </SectionContainer>
             </AccordionItem>
-
-            {/* Simple Preview Modal */}
-            <ResponsiveModal
-                open={previewOpen}
-                onOpenChange={setPreviewOpen}
-                title="카카오톡 공유 미리보기"
-            >
-                <div className={styles.modalBody}>
-                    <div className={styles.card}>
-                        {kakao.imageUrl ? (
-                            <div className={cn(
-                                styles.imageWrapper,
-                                kakao.imageRatio === 'portrait' ? styles.portrait : styles.landscape
-                            )}>
-                                <Image
-                                    src={kakao.imageUrl}
-                                    alt="Kakao Preview"
-                                    fill
-                                    className={styles.cardImage}
-                                />
-                            </div>
-                        ) : (
-                            <div className={cn(
-                                styles.imageWrapper,
-                                kakao.imageRatio === 'portrait' ? styles.portrait : styles.landscape
-                            )}>
-                                <div className={styles.placeholder}>
-                                    <MessageCircle size={32} style={{ opacity: 0.2 }} />
-                                </div>
-                            </div>
-                        )}
-                        <div className={styles.cardContent}>
-                            <h4 className={styles.cardTitle}>
-                                {kakao.title || '우리 결혼합니다'}
-                            </h4>
-                            <p className={styles.cardDescription}>
-                                {kakao.description || '초대장을 보내드립니다.'}
-                            </p>
-                        </div>
-                        <div className={styles.cardFooter}>
-                            <span className={styles.footerText}>모바일 초대장</span>
-                        </div>
-                        <div className={styles.btnGroup}>
-                            <div className={styles.cardBtn}>모바일 초대장</div>
-                            {kakao.buttonType !== 'none' && (
-                                <div className={styles.cardBtn}>
-                                    {kakao.buttonType === 'location' ? '위치 안내' : '참석 여부'}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </ResponsiveModal>
 
             {/* Sample Phrases Modal */}
             <ExampleSelectorModal

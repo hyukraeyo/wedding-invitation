@@ -163,3 +163,15 @@
     background-color: #f8f9fa;
   }
 }
+
+.bottomActions {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px dashed v.$zinc-200;
+}
+
+.fullPreviewBtn {
+  width: 100%;
+  gap: 0.5rem;
+  font-weight: 700;
+}

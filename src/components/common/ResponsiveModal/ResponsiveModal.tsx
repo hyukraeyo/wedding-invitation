@@ -104,6 +104,7 @@ export const ResponsiveModal = ({
                     className={cn(styles.dialogContent, className)}
                     onInteractOutside={(e) => !dismissible && e.preventDefault()}
                     onEscapeKeyDown={(e) => !dismissible && e.preventDefault()}
+                    onOpenAutoFocus={(e) => e.preventDefault()}
                     aria-describedby={description ? undefined : undefined}
                 >
                     <div className={styles.card}>
@@ -177,6 +178,7 @@ export const ResponsiveModal = ({
             {trigger ? <DrawerTrigger asChild>{trigger}</DrawerTrigger> : null}
             <DrawerContent
                 className={styles.drawerContent}
+                onOpenAutoFocus={(e) => e.preventDefault()}
                 aria-describedby={description ? undefined : undefined}
             >
                 <div className={styles.drawerLayout}>

@@ -73,11 +73,11 @@ $color-text-desc: #4E5968;
 }
 
 .title {
-  font-size: 1.5rem; // 2xl
+  font-size: 1.25rem; // 24px -> 20px로 하향
   font-weight: 700;
-  letter-spacing: -0.025em; // tracking-tight
+  letter-spacing: -0.03em; // 자간 더 타이트하게
   color: $color-text-title;
-  margin-bottom: 0.75rem; // mb-3
+  margin-bottom: 0.5rem; // 여백 살짝 축소
 }
 
 .description {
