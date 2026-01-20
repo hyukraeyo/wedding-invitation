@@ -42,7 +42,7 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 1.25rem 1.5rem; // 패딩 확대
+    padding: 1.25rem 1rem;
     cursor: pointer;
     text-align: left;
     user-select: none;
@@ -119,10 +119,10 @@
 }
 
 .contentWrapper {
-    padding: 0 1.5rem 1.5rem 1.5rem; // pb-4 pt-0 px-2
+    padding: 0 0.75rem 1.5rem 0.75rem;
 
     @media (min-width: 768px) {
-        padding: 0 1.5rem 1.5rem 1.5rem; // md:px-4
+        padding: 0 1.5rem 1.5rem 1.5rem;
     }
 }
 

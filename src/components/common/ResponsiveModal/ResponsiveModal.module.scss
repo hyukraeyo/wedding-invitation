@@ -39,10 +39,11 @@ $color-text-desc: #4E5968;
 }
 
 .drawerContent {
-  border-top-left-radius: 2rem;
-  border-top-right-radius: 2rem;
+  border-top-left-radius: 1.5rem; // 24px
+  border-top-right-radius: 1.5rem;
   padding: 0;
   border: none;
+  overflow: hidden;
 }
 
 .drawerLayout {
@@ -66,8 +67,8 @@ $color-text-desc: #4E5968;
 
   // Drawer specific overrides
   &.drawerHeader {
-    padding-top: 2rem; // pt-8
-    padding-bottom: 1rem; // pb-4
+    padding-top: 1.5rem; // Reduced from 2rem
+    padding-bottom: 1rem;
   }
 }
 

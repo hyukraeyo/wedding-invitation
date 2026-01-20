@@ -330,28 +330,29 @@
         0 10px 15px -3px rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.1);
     cursor: pointer;
-    z-index: 40;
+    z-index: 99999; // Ensure it stays on top of Sheet (z-index 50)
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     -webkit-tap-highlight-color: transparent;
 
     @media (hover: hover) and (pointer: fine) {
-        @media (hover: hover) and (pointer: fine) {
-            @media (hover: hover) and (pointer: fine) {
-                &:hover {
-                    transform: translateY(-2px) scale(1.05);
-                    box-shadow:
-                        0 20px 25px -5px rgba(0, 0, 0, 0.2),
-                        0 10px 10px -5px rgba(0, 0, 0, 0.1);
-                }
-            }
-
+        &:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow:
+                0 20px 25px -5px rgba(0, 0, 0, 0.2),
+                0 10px 10px -5px rgba(0, 0, 0, 0.1);
         }
-
     }
-
 
     &:active {
         transform: scale(0.95);
+    }
+
+    &.previewOpen {
+        background: linear-gradient(135deg, #333 0%, #1a1a1a 100%);
+        
+        svg {
+            transform: rotate(90deg);
+        }
     }
 
     @media (min-width: 1024px) {
@@ -362,6 +363,7 @@
         width: 24px;
         height: 24px;
         filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 }
 
@@ -378,48 +380,14 @@
     padding: 0 !important;
     width: 100% !important;
     max-width: 100% !important;
+    position: relative; // Ensure absolute children are positioned correctly
 
     @media (min-width: 640px) {
         max-width: 450px !important;
     }
-}
 
-.mobilePreviewClose {
-    position: absolute;
-    bottom: 1.5rem;
-    right: 1.5rem;
-    z-index: 99999;
-    width: 56px;
-    height: 56px;
-    border-radius: 28px;
-    background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    cursor: pointer;
-    box-shadow:
-        0 4px 6px -1px rgba(0, 0, 0, 0.1),
-        0 2px 4px -1px rgba(0, 0, 0, 0.06),
-        0 10px 15px -3px rgba(0, 0, 0, 0.2);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    -webkit-tap-highlight-color: transparent;
-
-    &:hover {
-        transform: translateY(-2px) scale(1.05);
-        box-shadow:
-            0 20px 25px -5px rgba(0, 0, 0, 0.2),
-            0 10px 10px -5px rgba(0, 0, 0, 0.1);
-    }
-
-    &:active {
-        transform: scale(0.95);
-    }
-
-    svg {
-        width: 24px;
-        height: 24px;
-        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    // Inside sheet, the button should be absolute to stay within the drawer's context
+    .floatingButton {
+        position: absolute;
     }
 }

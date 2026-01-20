@@ -460,8 +460,8 @@ const InvitationCanvasContent = memo(({
       {/* Portal Root for Modals (to keep them inside the mockup) */}
       <div id="invitation-modal-root" className={styles.modalRoot} />
 
-      {/* Font Size UX/UI specifically for Preview */}
-      {(theme.allowFontScale || isPreviewMode) && (
+      {/* Font Size UX/UI */}
+      {theme.allowFontScale && (
         <FontSizeControl
           value={localFontScale}
           onChange={setLocalFontScale}

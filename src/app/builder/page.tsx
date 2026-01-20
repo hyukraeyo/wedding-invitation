@@ -30,7 +30,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 import styles from './BuilderPage.module.scss';
 import { clsx } from 'clsx';
 import { Smartphone, X } from 'lucide-react';
-import { Sheet, SheetContent, SheetTitle, SheetHeader, SheetDescription, SheetClose } from '@/components/ui/Sheet';
+import { Sheet, SheetContent, SheetTitle, SheetHeader, SheetDescription } from '@/components/ui/Sheet';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useShallow } from 'zustand/react/shallow';
 
@@ -67,6 +67,18 @@ function BuilderPageContent() {
     }
     setIsReady(true);
   }, [isEditMode, reset]);
+
+  // 🖱️ 프리뷰 오픈 시 바디 스크롤 방지 (modal={false} 사용 시 필수)
+  useEffect(() => {
+    if (isPreviewOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isPreviewOpen]);
 
   // 프로필 미완성시 로그인 페이지로 리다이렉트 (로그인 가드)
   useEffect(() => {
@@ -129,75 +141,77 @@ function BuilderPageContent() {
 
 
   return (
-    <div className={styles.container}>
-      <Header onSave={handleSave} onLogin={handleLogin} isLoading={isSaving} />
-      {isSaving ? <LoadingSpinner /> : null}
+    <>
+      <div className={styles.container}>
+        <Header onSave={handleSave} onLogin={handleLogin} isLoading={isSaving} />
+        {isSaving ? <LoadingSpinner /> : null}
 
-      <main className={styles.workspace}>
-        <section className={styles.sidebar} id="sidebar-portal-root">
-          <div className={styles.scrollArea} id="builder-sidebar-scroll">
-            <EditorForm />
-          </div>
-        </section>
+        <main className={styles.workspace}>
+          <section className={styles.sidebar} id="sidebar-portal-root">
+            <div className={styles.scrollArea} id="builder-sidebar-scroll">
+              <EditorForm />
+            </div>
+          </section>
 
-        <section className={styles.previewArea}>
-          <div className={styles.backgroundPattern} />
-          <div className={styles.previewContent}>
-            <div className={styles.iphoneFrame}>
-              <div className={clsx(styles.button, styles.action)} />
-              <div className={clsx(styles.button, styles.volUp)} />
-              <div className={clsx(styles.button, styles.volDown)} />
-              <div className={clsx(styles.button, styles.power)} />
+          <section className={styles.previewArea}>
+            <div className={styles.backgroundPattern} />
+            <div className={styles.previewContent}>
+              <div className={styles.iphoneFrame}>
+                <div className={clsx(styles.button, styles.action)} />
+                <div className={clsx(styles.button, styles.volUp)} />
+                <div className={clsx(styles.button, styles.volDown)} />
+                <div className={clsx(styles.button, styles.power)} />
 
-              <div className={styles.chassis}>
-                <div className={styles.bezel}>
-                  <div className={styles.dynamicIsland}>
-                    <div className={styles.island}>
-                      <div className={styles.camera} />
-                    </div>
-                  </div>
-
-                  <div className={styles.statusBar}>
-                    <div className={styles.time}>9:41</div>
-                    <div className={styles.icons}>
-                      <div className={styles.signal}>
-                        <div style={{ height: '4px' }} />
-                        <div style={{ height: '6px' }} />
-                        <div style={{ height: '9px' }} />
-                        <div style={{ height: '12px', opacity: 0.3 }} />
-                      </div>
-                      <div className={styles.battery}>
-                        <div className={styles.level} />
-                        <div className={styles.tip} />
+                <div className={styles.chassis}>
+                  <div className={styles.bezel}>
+                    <div className={styles.dynamicIsland}>
+                      <div className={styles.island}>
+                        <div className={styles.camera} />
                       </div>
                     </div>
-                  </div>
 
-                  <div className={styles.screen}>
-                    <InvitationCanvas key="desktop-preview" editingSection={editingSection} hideWatermark />
-                  </div>
+                    <div className={styles.statusBar}>
+                      <div className={styles.time}>9:41</div>
+                      <div className={styles.icons}>
+                        <div className={styles.signal}>
+                          <div style={{ height: '4px' }} />
+                          <div style={{ height: '6px' }} />
+                          <div style={{ height: '9px' }} />
+                          <div style={{ height: '12px', opacity: 0.3 }} />
+                        </div>
+                        <div className={styles.battery}>
+                          <div className={styles.level} />
+                          <div className={styles.tip} />
+                        </div>
+                      </div>
+                    </div>
 
-                  <div className={styles.homeIndicator} />
+                    <div className={styles.screen}>
+                      <InvitationCanvas key="desktop-preview" editingSection={editingSection} hideWatermark />
+                    </div>
+
+                    <div className={styles.homeIndicator} />
+                  </div>
                 </div>
               </div>
+
+              <p className={styles.label}>MOBILE PREVIEW</p>
             </div>
+          </section>
+        </main>
+      </div>
 
-            <p className={styles.label}>MOBILE PREVIEW</p>
-          </div>
-        </section>
-      </main>
-
-      {/* Mobile Preview FAB */}
+      {/* Mobile Preview FAB - Truly One Button */}
       <button
-        className={styles.floatingButton}
-        onClick={() => setIsPreviewOpen(true)}
-        aria-label="Open Preview"
+        className={clsx(styles.floatingButton, isPreviewOpen && styles.previewOpen)}
+        onClick={() => setIsPreviewOpen(!isPreviewOpen)}
+        aria-label={isPreviewOpen ? "Close Preview" : "Open Preview"}
       >
-        <Smartphone />
+        {isPreviewOpen ? <X size={24} /> : <Smartphone size={24} />}
       </button>
 
-      {/* Mobile Preview Drawer */}
-      <Sheet open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
+      {/* Mobile Preview Drawer - Using modal={false} to keep the FAB interactive */}
+      <Sheet open={isPreviewOpen} onOpenChange={setIsPreviewOpen} modal={false}>
         <SheetContent side="right" className={styles.sheetContent} hideCloseButton>
           <SheetHeader style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>
             <SheetTitle>Mobile Preview</SheetTitle>
@@ -207,18 +221,9 @@ function BuilderPageContent() {
           <div className={styles.mobilePreview}>
             <InvitationCanvas key="mobile-preview" isPreviewMode editingSection={editingSection} hideWatermark />
           </div>
-
-          <SheetClose asChild>
-            <button
-              className={styles.mobilePreviewClose}
-              aria-label="Close Preview"
-            >
-              <X size={24} />
-            </button>
-          </SheetClose>
         </SheetContent>
       </Sheet>
-    </div>
+    </>
   );
 }
 
