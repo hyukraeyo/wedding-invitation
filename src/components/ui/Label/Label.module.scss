@@ -2,7 +2,7 @@
 @use "../../../styles/mixins" as m;
 
 .label {
-    font-size: 0.875rem; // text-sm
+    font-size: 0.8rem;   // 더욱 축소 (12.8px)
     font-weight: 500;    // font-medium
     line-height: 1;      // leading-none
     color: v.$zinc-900;

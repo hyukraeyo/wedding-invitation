@@ -1,4 +1,6 @@
-import React, { useRef, useEffect } from 'react';
+"use client";
+
+import React, { useRef, useEffect, memo } from 'react';
 import { cn } from '@/lib/utils';
 import { ChevronDown } from 'lucide-react';
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
@@ -20,7 +22,7 @@ interface AccordionItemProps {
     action?: React.ReactNode;
 }
 
-export const AccordionItem = ({
+export const AccordionItem = memo(({
     value,
     title,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -54,14 +56,15 @@ export const AccordionItem = ({
         <AccordionItemRoot
             value={value}
             ref={containerRef}
-            className={cn(styles.item, isOpen && styles.open)}
+            className={cn(styles.item, isOpen ? styles.open : null)}
         >
             <AccordionPrimitive.Header className="flex">
-                <div className={cn(styles.trigger, isOpen && styles.open)}>
+                <div className={cn(styles.trigger, isOpen ? styles.open : null)}>
                     {/* 1. Full-size clickable overlay trigger (Main toggle) */}
                     <AccordionPrimitive.Trigger
                         className={styles.overlayTrigger}
                         tabIndex={0}
+                        aria-label={`${title} 섹션 열기`}
                     />
 
                     {/* 2. Visual Content (Behind Trigger or pass-through) */}
@@ -88,7 +91,7 @@ export const AccordionItem = ({
                                 {action}
                             </div>
                         ) : null}
-                        <div className={cn(styles.chevron, isOpen && styles.open)}>
+                        <div className={cn(styles.chevron, isOpen ? styles.open : null)}>
                             <ChevronDown size={18} />
                         </div>
                     </div>
@@ -103,4 +106,6 @@ export const AccordionItem = ({
             </AccordionContent>
         </AccordionItemRoot>
     );
-};
+});
+
+AccordionItem.displayName = "AccordionItem";

@@ -22,7 +22,10 @@ export function FontSizeControl({ value, onChange }: FontSizeControlProps) {
     const handleClick = () => {
         const currentIndex = SCALES.indexOf(value);
         const nextIndex = (currentIndex + 1) % SCALES.length;
-        onChange(SCALES[nextIndex]);
+        const nextValue = SCALES[nextIndex];
+        if (nextValue !== undefined) {
+            onChange(nextValue);
+        }
     };
 
     const currentLabel = labels[value] || '기본';
