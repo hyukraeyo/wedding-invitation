@@ -1,6 +1,6 @@
 "use client";
 
-import { parseRejection } from '@/lib/rejection-helpers';
+
 import React, { useMemo, useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -14,9 +14,8 @@ import type { InvitationData } from '@/store/useInvitationStore';
 import Header from '@/components/common/Header';
 
 import { useToast } from '@/hooks/use-toast';
-import { Edit2, Banana, Inbox, Clock, AlertCircle, CheckCircle } from 'lucide-react';
+import { Edit2, Banana } from 'lucide-react';
 import styles from './MyPage.module.scss';
-import { clsx } from 'clsx';
 import { InvitationCard } from '@/components/ui/InvitationCard';
 
 const ProfileCompletionModal = dynamic(
@@ -69,7 +68,7 @@ export default function MyPageClient({
 }: MyPageClientProps) {
     const router = useRouter();
     const [invitations, setInvitations] = useState<InvitationSummaryRecord[]>(initialInvitations);
-    const [adminInvitations, setAdminInvitations] = useState<InvitationSummaryRecord[]>(initialAdminInvitations);
+
     const [approvalRequests, setApprovalRequests] = useState<ApprovalRequestSummary[]>(initialApprovalRequests);
     const [rejectedRequests, setRejectedRequests] = useState<ApprovalRequestSummary[]>(initialRejectedRequests);
 
@@ -444,114 +443,20 @@ export default function MyPageClient({
         <div className={styles.container}>
             <Header />
             <main className={styles.main}>
-                {/* 1. Summary Card */}
-                {/* 1. Summary Card - Only visible to Admin */}
+                {/* 1. Admin Link to Requests Page */}
                 {isAdmin ? (
                     <section className={styles.summaryCard}>
-                        <div className={styles.summaryHeader}>
-                            <div>
-                                <h2>신청한 청첩장</h2>
-                                <p>사용 승인 신청 목록입니다.</p>
-                            </div>
-                            <span className={styles.countBadge}>
-                                {approvalRequests.length}
-                            </span>
-                        </div>
-                        {/* Admin sees request list */}
-                        {approvalRequests.length > 0 ? (
-                            <div className={styles.requestList}>
-                                {approvalRequests.map(request => {
-                                    const targetInv = adminInvitations.find(inv => inv.id === request.invitation_id);
-                                    const date = new Date(request.created_at);
-                                    const formattedDate = `${date.getFullYear()}. ${String(date.getMonth() + 1).padStart(2, '0')}. ${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
-                                    const { isRevoked, isRejected: isPureRejected } = parseRejection(request);
-                                    const isRejected = isRevoked || isPureRejected;
-                                    const isApproved = request.status === 'approved';
-
-                                    return (
-                                        <div key={request.id} className={clsx(
-                                            styles.requestItem,
-                                            isRejected && styles.rejectedItem,
-                                            isApproved && styles.approvedItem
-                                        )}>
-                                            <div className={styles.requestInfo}>
-                                                <div className={styles.requester}>
-                                                    {isRejected ? <AlertCircle size={14} color="#DC2626" style={{ marginRight: '0.25rem' }} /> : null}
-                                                    {isApproved ? <CheckCircle size={14} color="#10B981" style={{ marginRight: '0.25rem' }} /> : null}
-                                                    <strong style={
-                                                        isRejected ? { color: '#DC2626' } :
-                                                            isApproved ? { color: '#10B981' } : undefined
-                                                    }>
-                                                        {request.requester_name}
-                                                    </strong>
-                                                    <span className={styles.phone}>({request.requester_phone})</span>
-                                                </div>
-                                                <div className={styles.requestTime}>
-                                                    <Clock size={12} />
-                                                    <span>
-                                                        {formattedDate} {isRevoked ? '승인 취소' : isPureRejected ? '승인 거절' : isApproved ? '승인 완료' : '승인 신청'}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            {targetInv ? (
-                                                <div className={styles.adminButtonGroup}>
-                                                    <button
-                                                        onClick={() => window.open(`/v/${targetInv.slug}`, '_blank')}
-                                                        className={styles.previewButton}
-                                                    >
-                                                        미리보기
-                                                    </button>
-                                                    {isRejected ? (
-                                                        <button
-                                                            onClick={() => {
-                                                                setViewRejectionData(request);
-                                                                setViewRejectionModalOpen(true);
-                                                            }}
-                                                            className={styles.viewReasonButton}
-                                                        >
-                                                            {isRevoked ? '취소 사유' : '거절 사유'}
-                                                        </button>
-                                                    ) : isApproved ? (
-                                                        <button
-                                                            onClick={() => {
-                                                                setRejectionTarget(targetInv);
-                                                                setRejectionModalOpen(true);
-                                                            }}
-                                                            className={styles.revokeButton}
-                                                        >
-                                                            승인 취소
-                                                        </button>
-                                                    ) : (
-                                                        <>
-                                                            <button
-                                                                onClick={() => handleAdminRejectClick(targetInv)}
-                                                                className={styles.rejectButton}
-                                                            >
-                                                                승인 거절
-                                                            </button>
-                                                            <button
-                                                                onClick={() => handleAdminApproveClick(targetInv)}
-                                                                className={styles.approveButton}
-                                                            >
-                                                                승인하기
-                                                            </button>
-                                                        </>
-                                                    )}
-                                                </div>
-                                            ) : null}
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        ) : (
-                            <div className={styles.emptySummary}>
-                                <div className={styles.emptyIconWrapper}>
-                                    <Inbox size={48} strokeWidth={1} />
+                        <Link href="/mypage/requests">
+                            <div className={styles.summaryHeader} style={{ cursor: 'pointer' }}>
+                                <div>
+                                    <h2>신청한 청첩장</h2>
+                                    <p>사용 승인 신청 목록을 확인합니다.</p>
                                 </div>
-                                <p className={styles.emptyText}>현재 대기 중인 승인 신청이 없습니다.</p>
-                                <p className={styles.emptySubText}>모든 요청을 처리했습니다.</p>
+                                <span className={styles.countBadge}>
+                                    {approvalRequests.length}
+                                </span>
                             </div>
-                        )}
+                        </Link>
                     </section>
                 ) : null}
 

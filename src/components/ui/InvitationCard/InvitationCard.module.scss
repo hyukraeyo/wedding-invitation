@@ -218,9 +218,9 @@
 }
 
 .blueButton {
-    background-color: #007AFF !important;
-    border-color: #007AFF !important;
-    color: white !important;
+    background-color: #FFFFFF !important;
+    border-color: transparent !important; // 테두리 제거
+    color: #007AFF !important;
 }
 
 .shareYellowButton {
@@ -235,10 +235,9 @@
 }
 
 .editButton {
-
     background-color: #FFFFFF !important;
     color: #007AFF !important;
-    border-color: #FFFFFF !important;
+    border-color: transparent !important; // 테두리 제거
 }
 
 .rejected {
