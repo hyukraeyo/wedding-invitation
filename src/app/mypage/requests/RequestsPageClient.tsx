@@ -13,19 +13,15 @@ import { invitationService } from '@/services/invitationService';
 import Header from '@/components/common/Header';
 import { useToast } from '@/hooks/use-toast';
 import {
+    Banana,
     Clock,
     AlertCircle,
     CheckCircle,
-    Inbox,
-    Banana,
-    FileText,
-    ClipboardList,
-    HelpCircle,
-    User,
-    LogOut
+    Inbox
 } from 'lucide-react';
 import styles from './RequestsPage.module.scss';
 import { clsx } from 'clsx';
+import { MyPageSidebar } from '@/components/mypage/MyPageSidebar';
 
 const ResponsiveModal = dynamic(
     () => import('@/components/common/ResponsiveModal').then(mod => mod.ResponsiveModal),
@@ -180,71 +176,18 @@ export default function RequestsPageClient({
         }
     }, [confirmConfig, executeApprove]);
 
-    const handleLogout = useCallback(async () => {
-        await signOut({ callbackUrl: '/login' });
-    }, []);
 
-    // Coming Soon Handler (Placeholder)
-    const handleComingSoon = (title: string) => {
-        toast({ description: `${title} 기능은 준비 중입니다.` });
-    };
 
     return (
         <div className={styles.pageContainer}>
             <Header />
             <div className={styles.layout}>
                 {/* Desktop Sidebar */}
-                <aside className={styles.sidebar}>
-                    <div className={styles.profileSection}>
-                        <div className={styles.avatar}>
-                            <Banana size={24} />
-                        </div>
-                        <div className={styles.userInfo}>
-                            <div className={styles.userName}>
-                                {profile?.full_name || '관리자'}
-                            </div>
-                            <div className={styles.userEmail}>
-                                {profile?.phone || '전화번호 없음'}
-                            </div>
-                        </div>
-                    </div>
-
-                    <nav className={styles.menuList}>
-                        <Link href="/mypage" className={styles.menuItem}>
-                            <FileText className={styles.menuIcon} />
-                            내 청첩장
-                        </Link>
-
-                        <Link href="/mypage/requests" className={`${styles.menuItem} ${styles.active}`}>
-                            <ClipboardList className={styles.menuIcon} />
-                            신청 관리
-                            {approvalRequests.length > 0 && (
-                                <span className={styles.menuBadge}>{approvalRequests.length}</span>
-                            )}
-                        </Link>
-
-                        <button
-                            className={styles.menuItem}
-                            onClick={() => handleComingSoon('고객센터')}
-                        >
-                            <HelpCircle className={styles.menuIcon} />
-                            고객센터
-                        </button>
-
-                        <button
-                            className={styles.menuItem}
-                            onClick={() => handleComingSoon('내 계정')}
-                        >
-                            <User className={styles.menuIcon} />
-                            내 계정
-                        </button>
-                    </nav>
-
-                    <button className={styles.logoutButton} onClick={handleLogout}>
-                        <LogOut size={20} />
-                        로그아웃
-                    </button>
-                </aside>
+                <MyPageSidebar
+                    profile={profile}
+                    isAdmin={true}
+                    requestCount={approvalRequests.length}
+                />
 
                 {/* Main Content */}
                 <main className={styles.mainContent}>

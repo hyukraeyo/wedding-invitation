@@ -16,16 +16,11 @@ import { signOut } from 'next-auth/react';
 import { useToast } from '@/hooks/use-toast';
 import {
     Banana,
-    FileText,
-    ClipboardList,
-    HelpCircle,
-    User,
-    LogOut,
     Plus,
-    Clock
 } from 'lucide-react';
 import styles from './MyPage.module.scss';
 import { InvitationCard } from '@/components/ui/InvitationCard';
+import { MyPageSidebar } from '@/components/mypage/MyPageSidebar';
 
 const ProfileCompletionModal = dynamic(
     () => import('@/components/auth/ProfileCompletionModal').then(mod => mod.ProfileCompletionModal),
@@ -87,10 +82,6 @@ export default function MyPageClient({
     // Rejection Modal State
     const [rejectionModalOpen, setRejectionModalOpen] = useState(false);
     const [rejectionTarget, setRejectionTarget] = useState<InvitationSummaryRecord | null>(null);
-
-    // Coming Soon Modal State
-    const [comingSoonModalOpen, setComingSoonModalOpen] = useState(false);
-    const [comingSoonTitle, setComingSoonTitle] = useState('');
 
     // Confirmation Dialog State
     const [confirmConfig, setConfirmConfig] = useState<ConfirmConfig>({
@@ -300,15 +291,6 @@ export default function MyPageClient({
         router.push('/builder');
     }, [reset, router]);
 
-    const handleComingSoon = useCallback((title: string) => {
-        setComingSoonTitle(title);
-        setComingSoonModalOpen(true);
-    }, []);
-
-    const handleLogout = useCallback(async () => {
-        await signOut({ callbackUrl: '/login' });
-    }, []);
-
     if (!userId) {
         return (
             <div className={styles.pageContainer}>
@@ -331,64 +313,13 @@ export default function MyPageClient({
         <div className={styles.pageContainer}>
             <Header />
             <div className={styles.layout}>
-                {/* Desktop Sidebar */}
-                <aside className={styles.sidebar}>
-                    <div className={styles.profileSection}>
-                        <div className={styles.avatar}>
-                            <Banana size={24} />
-                        </div>
-                        <div className={styles.userInfo}>
-                            <div className={styles.userName}>
-                                {profile?.full_name || '이름 없음'}
-                            </div>
-                            <div className={styles.userEmail}>
-                                {profile?.phone || '전화번호 없음'}
-                            </div>
-                        </div>
-                    </div>
-
-                    <nav className={styles.menuList}>
-                        <Link href="/mypage" className={`${styles.menuItem} ${styles.active}`}>
-                            <FileText className={styles.menuIcon} />
-                            내 청첩장
-                            <span className={styles.menuBadge}>{invitations.length}</span>
-                        </Link>
-
-                        {isAdmin && (
-                            <Link href="/mypage/requests" className={styles.menuItem}>
-                                <ClipboardList className={styles.menuIcon} />
-                                신청 관리
-                                {approvalRequests.length > 0 && (
-                                    <span className={styles.menuBadge}>{approvalRequests.length}</span>
-                                )}
-                            </Link>
-                        )}
-
-                        <Link
-                            href="http://pf.kakao.com/_KaiAX/chat"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={styles.menuItem}
-                            title="고객센터 상담하기" // Force Refresh
-                        >
-                            <HelpCircle className={styles.menuIcon} />
-                            고객센터
-                        </Link>
-
-                        <button
-                            className={styles.menuItem}
-                            onClick={() => handleComingSoon('내 계정')}
-                        >
-                            <User className={styles.menuIcon} />
-                            내 계정
-                        </button>
-                    </nav>
-
-                    <button className={styles.logoutButton} onClick={handleLogout}>
-                        <LogOut size={20} />
-                        로그아웃
-                    </button>
-                </aside>
+                {/* Sidebar */}
+                <MyPageSidebar
+                    profile={profile}
+                    isAdmin={isAdmin}
+                    invitationCount={invitations.length}
+                    requestCount={approvalRequests.length}
+                />
 
                 {/* Main Content */}
                 <main className={styles.mainContent}>
@@ -493,26 +424,6 @@ export default function MyPageClient({
                     confirmText="승인 취소"
                 />
             ) : null}
-
-            {/* Coming Soon Modal */}
-            <ResponsiveModal
-                open={comingSoonModalOpen}
-                onOpenChange={setComingSoonModalOpen}
-                title={comingSoonTitle}
-                showCancel={false}
-                confirmText="확인"
-                onConfirm={() => setComingSoonModalOpen(false)}
-            >
-                <div className={styles.comingSoonContent}>
-                    <div className={styles.comingSoonIcon}>
-                        <Clock size={32} />
-                    </div>
-                    <p className={styles.comingSoonText}>
-                        해당 기능은 현재 준비 중입니다.<br />
-                        빠른 시일 내에 만나보실 수 있어요!
-                    </p>
-                </div>
-            </ResponsiveModal>
         </div>
     );
 }

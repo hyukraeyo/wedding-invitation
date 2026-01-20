@@ -3,7 +3,7 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Plus, User, LogIn, Save, LogOut } from 'lucide-react';
+import { Plus, LogIn, Save, LogOut } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useRouter, usePathname } from 'next/navigation';
@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { useShallow } from 'zustand/react/shallow';
 import styles from './Header.module.scss';
+import { MyPageSmileIcon } from '@/components/common/Icons/MyPageSmileIcon';
 
 // Lazy load Button to avoid preload warning (Button is only used inside modal)
 const Button = lazy(() => import('@/components/ui/Button').then(mod => ({ default: mod.Button })));
@@ -116,7 +117,7 @@ export default function Header({ onSave, onLogin, isLoading }: HeaderProps) {
                         ) : (
                             <Link href="/mypage">
                                 <IconButton
-                                    icon={User}
+                                    icon={MyPageSmileIcon}
                                     size="md"
                                     variant="ghost"
                                     aria-label="마이페이지"

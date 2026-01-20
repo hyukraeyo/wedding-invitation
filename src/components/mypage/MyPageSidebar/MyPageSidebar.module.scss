@@ -1,0 +1,143 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+
+.sidebar {
+  width: 280px;
+  background-color: #f8f9fa;
+  border-right: 1px solid #eee;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 60px); // Header height excluded
+  position: sticky;
+  top: 60px;
+
+  @include m.mobile {
+    display: none;
+  }
+}
+
+.profileSection {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #eee;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: v.$color-primary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.userInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.userName {
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #111;
+  margin-bottom: 0.25rem;
+}
+
+.userEmail {
+  font-size: 0.875rem;
+  color: #888;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.menuList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  padding: 0.875rem 1rem;
+  border-radius: 0.75rem;
+  color: #666;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: white;
+    color: #333;
+    transform: translateX(4px);
+  }
+
+  &.active {
+    background-color: white;
+    color: v.$color-primary;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    .menuIcon {
+      color: v.$color-primary;
+    }
+  }
+}
+
+.menuIcon {
+  margin-right: 0.75rem;
+  color: #999;
+  transition: color 0.2s ease;
+}
+
+.menuBadge {
+  background-color: v.$color-danger;
+  color: white;
+  font-size: 0.75rem;
+  padding: 0.125rem 0.5rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.logoutButtonWrapper {
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+.logoutButton {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem;
+  border: 1px solid #ddd;
+  border-radius: 0.75rem;
+  background-color: #f8f9fa;
+  color: #666;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: white;
+    border-color: #ccc;
+    color: #333;
+  }
+}
