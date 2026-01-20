@@ -1,6 +1,5 @@
 "use client";
 
-
 import React, { useMemo, useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
@@ -12,9 +11,19 @@ import type { InvitationSummaryRecord } from '@/lib/invitation-summary';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import type { InvitationData } from '@/store/useInvitationStore';
 import Header from '@/components/common/Header';
+import { signOut } from 'next-auth/react';
 
 import { useToast } from '@/hooks/use-toast';
-import { Edit2, Banana } from 'lucide-react';
+import {
+    Banana,
+    FileText,
+    ClipboardList,
+    HelpCircle,
+    User,
+    LogOut,
+    Plus,
+    Clock
+} from 'lucide-react';
 import styles from './MyPage.module.scss';
 import { InvitationCard } from '@/components/ui/InvitationCard';
 
@@ -62,15 +71,13 @@ export default function MyPageClient({
     isAdmin,
     profile,
     initialInvitations,
-    initialAdminInvitations,
     initialApprovalRequests,
     initialRejectedRequests = [],
 }: MyPageClientProps) {
     const router = useRouter();
     const [invitations, setInvitations] = useState<InvitationSummaryRecord[]>(initialInvitations);
-
-    const [approvalRequests, setApprovalRequests] = useState<ApprovalRequestSummary[]>(initialApprovalRequests);
-    const [rejectedRequests, setRejectedRequests] = useState<ApprovalRequestSummary[]>(initialRejectedRequests);
+    const [approvalRequests] = useState<ApprovalRequestSummary[]>(initialApprovalRequests);
+    const [rejectedRequests] = useState<ApprovalRequestSummary[]>(initialRejectedRequests);
 
     const [actionLoading, setActionLoading] = useState<string | null>(null);
 
@@ -81,9 +88,9 @@ export default function MyPageClient({
     const [rejectionModalOpen, setRejectionModalOpen] = useState(false);
     const [rejectionTarget, setRejectionTarget] = useState<InvitationSummaryRecord | null>(null);
 
-    // View Rejection Reason Modal State
-    const [viewRejectionModalOpen, setViewRejectionModalOpen] = useState(false);
-    const [viewRejectionData, setViewRejectionData] = useState<ApprovalRequestSummary | null>(null);
+    // Coming Soon Modal State
+    const [comingSoonModalOpen, setComingSoonModalOpen] = useState(false);
+    const [comingSoonTitle, setComingSoonTitle] = useState('');
 
     // Confirmation Dialog State
     const [confirmConfig, setConfirmConfig] = useState<ConfirmConfig>({
@@ -101,40 +108,10 @@ export default function MyPageClient({
     const fetchInvitations = useCallback(async () => {
         if (!userId) return;
         try {
-            if (isAdmin) {
-                const [adminQueue, myInvitations] = await Promise.all([
-                    invitationService.getAdminInvitations(),
-                    invitationService.getUserInvitations(userId)
-                ]);
-
-                setAdminInvitations(adminQueue);
-                setInvitations(myInvitations);
-            } else {
-                const data = await invitationService.getUserInvitations(userId);
-                setInvitations(data);
-            }
+            const data = await invitationService.getUserInvitations(userId);
+            setInvitations(data);
         } catch {
             // Silent fail - user can refresh
-        }
-    }, [userId, isAdmin]);
-
-    const fetchApprovalRequests = useCallback(async () => {
-        if (!userId || !isAdmin) return;
-        try {
-            const data = await approvalRequestService.getAllRequests();
-            setApprovalRequests(data);
-        } catch {
-            // Silent fail
-        }
-    }, [userId, isAdmin]);
-
-    const fetchRejectedRequests = useCallback(async () => {
-        if (!userId) return;
-        try {
-            const data = await approvalRequestService.getUserRejectedRequests();
-            setRejectedRequests(data);
-        } catch {
-            // Silent fail
         }
     }, [userId]);
 
@@ -160,17 +137,12 @@ export default function MyPageClient({
         }
     }, [fetchFullInvitationData, router, toast]);
 
-    // --- Action Executors (Actual API Calls) ---
+    // --- Action Executors ---
 
     const executeDelete = useCallback(async (id: string) => {
         setActionLoading(id);
         try {
-            if (isAdmin) {
-                const res = await fetch(`/api/admin/invitations/${id}`, { method: 'DELETE' });
-                if (!res.ok) throw new Error('Delete failed');
-            } else {
-                await invitationService.deleteInvitation(id);
-            }
+            await invitationService.deleteInvitation(id);
             await fetchInvitations();
         } catch {
             toast({
@@ -181,13 +153,13 @@ export default function MyPageClient({
             setActionLoading(null);
             setConfirmConfig(prev => ({ ...prev, isOpen: false }));
         }
-    }, [fetchInvitations, isAdmin, toast]);
+    }, [fetchInvitations, toast]);
 
     const executeCancelRequest = useCallback(async (invitationId: string) => {
         setActionLoading(invitationId);
         try {
             await approvalRequestService.cancelRequest(invitationId);
-            await Promise.all([fetchInvitations(), fetchApprovalRequests()]);
+            await fetchInvitations();
             toast({ description: '신청이 취소되었습니다.' });
         } catch {
             toast({ variant: 'destructive', description: '취소 처리에 실패했습니다.' });
@@ -195,72 +167,11 @@ export default function MyPageClient({
             setActionLoading(null);
             setConfirmConfig(prev => ({ ...prev, isOpen: false }));
         }
-    }, [fetchInvitations, fetchApprovalRequests, toast]);
+    }, [fetchInvitations, toast]);
 
-    const executeApprove = useCallback(async (inv: InvitationSummaryRecord) => {
-        setActionLoading(inv.id);
-        try {
-            // Update approval_requests status to 'approved'
-            await approvalRequestService.approveRequest(inv.id);
-
-            // Update invitation data
-            const fullData = await fetchFullInvitationData(inv.slug);
-            const updatedData = {
-                ...fullData,
-                isApproved: true,
-                isRequestingApproval: false
-            };
-            await invitationService.saveInvitation(inv.slug, updatedData, inv.user_id);
-            toast({ description: '사용 승인이 완료되었습니다.' });
-            await Promise.all([fetchInvitations(), fetchApprovalRequests()]);
-        } catch {
-            toast({ variant: 'destructive', description: '승인 처리 중 오류가 발생했습니다.', });
-        } finally {
-            setActionLoading(null);
-            setConfirmConfig(prev => ({ ...prev, isOpen: false }));
-        }
-    }, [fetchApprovalRequests, fetchFullInvitationData, fetchInvitations, toast]);
-
-    const executeRevokeApproval = useCallback(async (inv: InvitationSummaryRecord) => {
-        setActionLoading(inv.id);
-        try {
-            const fullData = await fetchFullInvitationData(inv.slug);
-            const updatedData = {
-                ...fullData,
-                isApproved: false,
-                isRequestingApproval: false,
-            };
-            await invitationService.saveInvitation(inv.slug, updatedData, inv.user_id);
-            toast({ description: '승인이 취소되었습니다.' });
-            await Promise.all([fetchInvitations(), fetchApprovalRequests()]);
-        } catch {
-            toast({ variant: 'destructive', description: '승인 취소 중 오류가 발생했습니다.' });
-        } finally {
-            setActionLoading(null);
-            setConfirmConfig(prev => ({ ...prev, isOpen: false }));
-        }
-    }, [fetchApprovalRequests, fetchFullInvitationData, fetchInvitations, toast]);
-
-    const executeReject = useCallback(async (inv: InvitationSummaryRecord, reason: string) => {
-        setActionLoading(inv.id);
-        try {
-            await approvalRequestService.rejectRequest(inv.id, reason);
-            toast({ description: '신청이 거절되었습니다. 사용자가 거절 사유를 확인할 수 있습니다.' });
-            await Promise.all([fetchInvitations(), fetchApprovalRequests(), fetchRejectedRequests()]);
-        } catch {
-            toast({ variant: 'destructive', description: '거절 처리 중 오류가 발생했습니다.' });
-        } finally {
-            setActionLoading(null);
-            setRejectionModalOpen(false);
-            setRejectionTarget(null);
-        }
-    }, [fetchApprovalRequests, fetchInvitations, fetchRejectedRequests, toast]);
-
-    // --- Action Initiators (Open Dialog) ---
+    // --- Action Initiators ---
 
     const handleDeleteClick = useCallback((inv: InvitationSummaryRecord) => {
-        // Validation for user logic: Block deletion if requesting or approved
-        // Admin also follows this for their own invitations
         if (inv.invitation_data?.isRequestingApproval || inv.invitation_data?.isApproved) {
             setConfirmConfig({
                 isOpen: true,
@@ -294,7 +205,6 @@ export default function MyPageClient({
         });
     }, []);
 
-    // Helper to check if profile is complete
     const isProfileComplete = useMemo(() => {
         return Boolean(profile?.full_name && profile?.phone);
     }, [profile]);
@@ -305,9 +215,7 @@ export default function MyPageClient({
             return;
         }
 
-        // Check if profile is complete
         if (isProfileComplete) {
-            // Profile is complete - show confirmation dialog
             setConfirmConfig({
                 isOpen: true,
                 type: 'REQUEST_APPROVAL',
@@ -322,40 +230,15 @@ export default function MyPageClient({
                 targetRecord: inv,
             });
         } else {
-            // Profile is incomplete - show ProfileCompletionModal
             setProfileModalOpen(true);
         }
     }, [isProfileComplete, profile, toast]);
 
-    const handleAdminApproveClick = useCallback((inv: InvitationSummaryRecord) => {
-        setConfirmConfig({
-            isOpen: true,
-            type: 'APPROVE',
-            title: '청첩장 승인',
-            description: <>해당 청첩장의 사용을 승인하시겠습니까?<br />승인 후에는 워터마크가 제거됩니다.</>,
-            targetId: inv.id,
-            targetRecord: inv,
-        });
-    }, []);
-
     const handleAdminRevokeClick = useCallback((inv: InvitationSummaryRecord) => {
-        setConfirmConfig({
-            isOpen: true,
-            type: 'REVOKE_APPROVAL',
-            title: '승인 취소',
-            description: '승인 상태를 취소하시겠습니까?',
-            targetId: inv.id,
-            targetRecord: inv,
-        });
-    }, []);
-
-    const handleAdminRejectClick = useCallback((inv: InvitationSummaryRecord) => {
         setRejectionTarget(inv);
         setRejectionModalOpen(true);
     }, []);
 
-
-    // Execute approval request using profile data
     const executeRequestApproval = useCallback(async (inv: InvitationSummaryRecord) => {
         if (!userId || !profile?.full_name || !profile?.phone) return;
 
@@ -378,7 +261,7 @@ export default function MyPageClient({
             toast({
                 description: '사용 신청이 완료되었습니다. 관리자 확인 후 처리됩니다.',
             });
-            await Promise.all([fetchInvitations(), fetchApprovalRequests()]);
+            await fetchInvitations();
         } catch {
             toast({
                 variant: 'destructive',
@@ -388,7 +271,7 @@ export default function MyPageClient({
             setActionLoading(null);
             setConfirmConfig(prev => ({ ...prev, isOpen: false }));
         }
-    }, [fetchFullInvitationData, fetchInvitations, fetchApprovalRequests, profile, toast, userId]);
+    }, [fetchFullInvitationData, fetchInvitations, profile, toast, userId]);
 
     const handleConfirmAction = useCallback(() => {
         const { type, targetId, targetRecord } = confirmConfig;
@@ -401,20 +284,13 @@ export default function MyPageClient({
             executeDelete(targetId);
         } else if (type === 'CANCEL_REQUEST' && targetId) {
             executeCancelRequest(targetId);
-        } else if (type === 'APPROVE' && targetRecord) {
-            executeApprove(targetRecord);
-        } else if (type === 'REVOKE_APPROVAL' && targetRecord) {
-            executeRevokeApproval(targetRecord);
         } else if (type === 'REQUEST_APPROVAL' && targetRecord) {
             executeRequestApproval(targetRecord);
         }
-    }, [confirmConfig, executeDelete, executeCancelRequest, executeApprove, executeRevokeApproval, executeRequestApproval]);
+    }, [confirmConfig, executeDelete, executeCancelRequest, executeRequestApproval]);
 
-    // Handle profile completion - auto submit approval after profile is saved
     const handleProfileComplete = useCallback(async () => {
         setProfileModalOpen(false);
-
-        // Refresh page to get updated profile, then user can try again
         router.refresh();
         toast({ description: '프로필이 저장되었습니다. 다시 사용 신청을 진행해주세요.' });
     }, [router, toast]);
@@ -424,15 +300,27 @@ export default function MyPageClient({
         router.push('/builder');
     }, [reset, router]);
 
+    const handleComingSoon = useCallback((title: string) => {
+        setComingSoonTitle(title);
+        setComingSoonModalOpen(true);
+    }, []);
+
+    const handleLogout = useCallback(async () => {
+        await signOut({ callbackUrl: '/login' });
+    }, []);
+
     if (!userId) {
         return (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', padding: '1.5rem', backgroundColor: '#F2F4F6' }}>
+            <div className={styles.pageContainer}>
+                <Header />
                 <div className={styles.authCard}>
-                    <div className={styles.authIcon}><Edit2 /></div>
+                    <div className={styles.authIcon}>
+                        <Banana size={32} />
+                    </div>
                     <h2 className={styles.authTitle}>로그인이 필요합니다</h2>
                     <p className={styles.authDescription}>저장된 청첩장을 보려면 먼저 로그인을 해주세요.</p>
-                    <Link href="/builder" onClick={handleCreateNew} className={styles.authButton}>
-                        메인으로 돌아가기
+                    <Link href="/login" className={styles.authButton}>
+                        로그인하기
                     </Link>
                 </div>
             </div>
@@ -440,53 +328,104 @@ export default function MyPageClient({
     }
 
     return (
-        <div className={styles.container}>
+        <div className={styles.pageContainer}>
             <Header />
-            <main className={styles.main}>
-                {/* 1. Admin Link to Requests Page */}
-                {isAdmin ? (
-                    <section className={styles.summaryCard}>
-                        <Link href="/mypage/requests">
-                            <div className={styles.summaryHeader} style={{ cursor: 'pointer' }}>
-                                <div>
-                                    <h2>신청한 청첩장</h2>
-                                    <p>사용 승인 신청 목록을 확인합니다.</p>
-                                </div>
-                                <span className={styles.countBadge}>
-                                    {approvalRequests.length}
-                                </span>
-                            </div>
-                        </Link>
-                    </section>
-                ) : null}
-
-                {/* 2. Invitation List */}
-                <section className={styles.invitationSection}>
-                    <div className={styles.summaryHeader}>
-                        <div>
-                            <h2>저장한 청첩장</h2>
-                            <p>내가 제작 중인 청첩장 목록입니다.</p>
+            <div className={styles.layout}>
+                {/* Desktop Sidebar */}
+                <aside className={styles.sidebar}>
+                    <div className={styles.profileSection}>
+                        <div className={styles.avatar}>
+                            <Banana size={24} />
                         </div>
-                        <span className={styles.countBadge}>
-                            {invitations.length}
-                        </span>
+                        <div className={styles.userInfo}>
+                            <div className={styles.userName}>
+                                {profile?.full_name || '이름 없음'}
+                            </div>
+                            <div className={styles.userEmail}>
+                                {profile?.phone || '전화번호 없음'}
+                            </div>
+                        </div>
                     </div>
 
-                    <div className={styles.invitationList}>
-                        {invitations.length === 0 ? (
-                            <div className={styles.emptyFullState}>
-                                <div className={styles.emptyIcon}>
-                                    <Banana size={32} />
+                    <nav className={styles.menuList}>
+                        <Link href="/mypage" className={`${styles.menuItem} ${styles.active}`}>
+                            <FileText className={styles.menuIcon} />
+                            내 청첩장
+                            <span className={styles.menuBadge}>{invitations.length}</span>
+                        </Link>
+
+                        {isAdmin && (
+                            <Link href="/mypage/requests" className={styles.menuItem}>
+                                <ClipboardList className={styles.menuIcon} />
+                                신청 관리
+                                {approvalRequests.length > 0 && (
+                                    <span className={styles.menuBadge}>{approvalRequests.length}</span>
+                                )}
+                            </Link>
+                        )}
+
+                        <Link
+                            href="http://pf.kakao.com/_KaiAX/chat"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles.menuItem}
+                            title="고객센터 상담하기" // Force Refresh
+                        >
+                            <HelpCircle className={styles.menuIcon} />
+                            고객센터
+                        </Link>
+
+                        <button
+                            className={styles.menuItem}
+                            onClick={() => handleComingSoon('내 계정')}
+                        >
+                            <User className={styles.menuIcon} />
+                            내 계정
+                        </button>
+                    </nav>
+
+                    <button className={styles.logoutButton} onClick={handleLogout}>
+                        <LogOut size={20} />
+                        로그아웃
+                    </button>
+                </aside>
+
+                {/* Main Content */}
+                <main className={styles.mainContent}>
+                    <div className={styles.sectionHeader}>
+                        <h1 className={styles.sectionTitle}>내 청첩장</h1>
+                    </div>
+
+                    <div className={styles.cardGrid}>
+                        {/* Create New Card */}
+                        <div className={styles.createCardWrapper}>
+                            <Link
+                                href="/builder"
+                                className={styles.createCard}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    handleCreateNew();
+                                }}
+                            >
+                                <div className={styles.createIcon}>
+                                    <Plus size={28} />
                                 </div>
-                                <h3>청첩장을 만들어보세요</h3>
-                                <p>나만의 특별한 모바일 청첩장을<br />쉽고 빠르게 만들 수 있습니다.</p>
-                                <Link
-                                    href="/builder"
-                                    className={styles.createBtn}
-                                    onClick={handleCreateNew}
-                                >
-                                    청첩장 만들기
-                                </Link>
+                                <span className={styles.createText}>새 청첩장 만들기</span>
+                            </Link>
+                            <div className={styles.createDatePlaceholder} />
+                        </div>
+
+                        {/* Invitation Cards */}
+                        {invitations.length === 0 ? (
+                            <div className={styles.emptyState}>
+                                <div className={styles.emptyIcon}>
+                                    <Banana size={40} />
+                                </div>
+                                <h3 className={styles.emptyTitle}>아직 청첩장이 없어요</h3>
+                                <p className={styles.emptyDescription}>
+                                    나만의 특별한 모바일 청첩장을<br />
+                                    쉽고 빠르게 만들어보세요!
+                                </p>
                             </div>
                         ) : (
                             invitations.map((inv) => {
@@ -507,20 +446,18 @@ export default function MyPageClient({
                             })
                         )}
                     </div>
-                </section>
-            </main>
+                </main>
+            </div>
 
-            {/* Modals remain same */}
-            {
-                userId ? (
-                    <ProfileCompletionModal
-                        isOpen={profileModalOpen}
-                        userId={userId}
-                        defaultName={profile?.full_name || ''}
-                        onComplete={handleProfileComplete}
-                    />
-                ) : null
-            }
+            {/* Modals */}
+            {userId ? (
+                <ProfileCompletionModal
+                    isOpen={profileModalOpen}
+                    userId={userId}
+                    defaultName={profile?.full_name || ''}
+                    onComplete={handleProfileComplete}
+                />
+            ) : null}
 
             <ResponsiveModal
                 open={confirmConfig.isOpen}
@@ -539,60 +476,43 @@ export default function MyPageClient({
                 dismissible={!actionLoading}
             />
 
-            {
-                rejectionTarget ? (
-                    <RejectionReasonModal
-                        isOpen={rejectionModalOpen}
-                        onClose={() => {
-                            setRejectionModalOpen(false);
-                            setRejectionTarget(null);
-                        }}
-                        onSubmit={(reason) => executeReject(rejectionTarget, reason)}
-                        loading={!!actionLoading}
-                        requesterName={approvalRequests.find(req => req.invitation_id === rejectionTarget.id)?.requester_name || ''}
-                        title={rejectionTarget.invitation_data.isApproved ? "승인 취소" : "승인 거절"}
-                        description={<></>}
-                        confirmText={rejectionTarget.invitation_data.isApproved ? "승인 취소" : "승인 거절"}
-                    />
-                ) : null
-            }
+            {rejectionTarget ? (
+                <RejectionReasonModal
+                    isOpen={rejectionModalOpen}
+                    onClose={() => {
+                        setRejectionModalOpen(false);
+                        setRejectionTarget(null);
+                    }}
+                    onSubmit={async () => {
+                        // Not used in user view
+                    }}
+                    loading={!!actionLoading}
+                    requesterName=""
+                    title="승인 취소"
+                    description={<></>}
+                    confirmText="승인 취소"
+                />
+            ) : null}
 
-            {/* View Rejection Reason Modal */}
-            {
-                viewRejectionData ? (
-                    <ResponsiveModal
-                        open={viewRejectionModalOpen}
-                        onOpenChange={setViewRejectionModalOpen}
-                        title="거절/취소 사유"
-                        description={
-                            <>
-                                <strong>{viewRejectionData.requester_name}</strong>님의 신청 처리 내역입니다.
-                            </>
-                        }
-                        showCancel={false}
-                        confirmText="확인"
-                        onConfirm={() => {
-                            setViewRejectionModalOpen(false);
-                            setViewRejectionData(null);
-                        }}
-                    >
-                        <div style={{
-                            marginTop: '1rem',
-                            padding: '1rem',
-                            backgroundColor: '#FEF2F2',
-                            borderRadius: '0.75rem',
-                            border: '1px solid #FEE2E2',
-                        }}>
-                            <div
-                                style={{ fontSize: '0.9375rem', color: '#374151', lineHeight: 1.7 }}
-                                dangerouslySetInnerHTML={{
-                                    __html: parseRejection(viewRejectionData).displayReason || '내용이 없습니다.'
-                                }}
-                            />
-                        </div>
-                    </ResponsiveModal>
-                ) : null
-            }
-        </div >
+            {/* Coming Soon Modal */}
+            <ResponsiveModal
+                open={comingSoonModalOpen}
+                onOpenChange={setComingSoonModalOpen}
+                title={comingSoonTitle}
+                showCancel={false}
+                confirmText="확인"
+                onConfirm={() => setComingSoonModalOpen(false)}
+            >
+                <div className={styles.comingSoonContent}>
+                    <div className={styles.comingSoonIcon}>
+                        <Clock size={32} />
+                    </div>
+                    <p className={styles.comingSoonText}>
+                        해당 기능은 현재 준비 중입니다.<br />
+                        빠른 시일 내에 만나보실 수 있어요!
+                    </p>
+                </div>
+            </ResponsiveModal>
+        </div>
     );
 }

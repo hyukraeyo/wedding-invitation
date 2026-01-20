@@ -126,8 +126,7 @@ const InvitationCard = ({
         displayReason,
         label: REJECTION_LABEL,
         badge: REJECTION_BADGE,
-        title: REJECTION_TITLE,
-        description: REJECTION_DESC
+        title: REJECTION_TITLE
     } = parseRejection(rejectionData);
 
     // DropdownMenuItem 클릭 시 모달 열기
@@ -168,7 +167,6 @@ const InvitationCard = ({
                                 isApproved ? styles.approvedBadge :
                                     isRequesting ? styles.pendingBadge : styles.sampleBadge
                         )}>
-                            <span className={styles.dot} />
                             {isRejected ? REJECTION_BADGE : isApproved ? '승인 완료' : isRequesting ? '승인 대기' : '샘플 이용중'}
                         </span>
                         <h3 className={styles.overlayTitle}>

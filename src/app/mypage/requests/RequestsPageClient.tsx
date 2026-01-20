@@ -3,15 +3,28 @@
 import { parseRejection } from '@/lib/rejection-helpers';
 import React, { useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 import { approvalRequestService } from '@/services/approvalRequestService';
 import type { ApprovalRequestSummary } from '@/services/approvalRequestService';
 import type { InvitationSummaryRecord } from '@/lib/invitation-summary';
 import { invitationService } from '@/services/invitationService';
 import Header from '@/components/common/Header';
 import { useToast } from '@/hooks/use-toast';
-import { Clock, AlertCircle, CheckCircle, Inbox } from 'lucide-react';
-import styles from '../MyPage.module.scss';
+import {
+    Clock,
+    AlertCircle,
+    CheckCircle,
+    Inbox,
+    Banana,
+    FileText,
+    ClipboardList,
+    HelpCircle,
+    User,
+    LogOut
+} from 'lucide-react';
+import styles from './RequestsPage.module.scss';
 import { clsx } from 'clsx';
 
 const ResponsiveModal = dynamic(
@@ -23,10 +36,16 @@ const RejectionReasonModal = dynamic(
     { ssr: false }
 );
 
+interface ProfileSummary {
+    full_name: string | null;
+    phone: string | null;
+}
+
 interface RequestsPageClientProps {
     userId: string;
     initialApprovalRequests: ApprovalRequestSummary[];
     initialAdminInvitations: InvitationSummaryRecord[];
+    profile: ProfileSummary | null;
 }
 
 type ConfirmActionType = 'APPROVE' | 'REVOKE_APPROVAL' | 'INFO_ONLY';
@@ -41,11 +60,11 @@ interface ConfirmConfig {
 }
 
 export default function RequestsPageClient({
-    userId,
+    userId: _userId,
     initialApprovalRequests,
     initialAdminInvitations,
+    profile,
 }: RequestsPageClientProps) {
-    const router = useRouter();
     const [approvalRequests, setApprovalRequests] = useState<ApprovalRequestSummary[]>(initialApprovalRequests);
     const [adminInvitations, setAdminInvitations] = useState<InvitationSummaryRecord[]>(initialAdminInvitations);
     const [actionLoading, setActionLoading] = useState<string | null>(null);
@@ -161,20 +180,78 @@ export default function RequestsPageClient({
         }
     }, [confirmConfig, executeApprove]);
 
+    const handleLogout = useCallback(async () => {
+        await signOut({ callbackUrl: '/login' });
+    }, []);
+
+    // Coming Soon Handler (Placeholder)
+    const handleComingSoon = (title: string) => {
+        toast({ description: `${title} 기능은 준비 중입니다.` });
+    };
+
     return (
-        <div className={styles.container}>
+        <div className={styles.pageContainer}>
             <Header />
-            <main className={styles.main}>
-                <section className={styles.summaryCard}>
-                    <div className={styles.summaryHeader}>
-                        <div>
-                            <h2>신청한 청첩장</h2>
-                            <p>사용 승인 신청 목록입니다.</p>
+            <div className={styles.layout}>
+                {/* Desktop Sidebar */}
+                <aside className={styles.sidebar}>
+                    <div className={styles.profileSection}>
+                        <div className={styles.avatar}>
+                            <Banana size={24} />
                         </div>
-                        <span className={styles.countBadge}>
-                            {approvalRequests.length}
-                        </span>
+                        <div className={styles.userInfo}>
+                            <div className={styles.userName}>
+                                {profile?.full_name || '관리자'}
+                            </div>
+                            <div className={styles.userEmail}>
+                                {profile?.phone || '전화번호 없음'}
+                            </div>
+                        </div>
                     </div>
+
+                    <nav className={styles.menuList}>
+                        <Link href="/mypage" className={styles.menuItem}>
+                            <FileText className={styles.menuIcon} />
+                            내 청첩장
+                        </Link>
+
+                        <Link href="/mypage/requests" className={`${styles.menuItem} ${styles.active}`}>
+                            <ClipboardList className={styles.menuIcon} />
+                            신청 관리
+                            {approvalRequests.length > 0 && (
+                                <span className={styles.menuBadge}>{approvalRequests.length}</span>
+                            )}
+                        </Link>
+
+                        <button
+                            className={styles.menuItem}
+                            onClick={() => handleComingSoon('고객센터')}
+                        >
+                            <HelpCircle className={styles.menuIcon} />
+                            고객센터
+                        </button>
+
+                        <button
+                            className={styles.menuItem}
+                            onClick={() => handleComingSoon('내 계정')}
+                        >
+                            <User className={styles.menuIcon} />
+                            내 계정
+                        </button>
+                    </nav>
+
+                    <button className={styles.logoutButton} onClick={handleLogout}>
+                        <LogOut size={20} />
+                        로그아웃
+                    </button>
+                </aside>
+
+                {/* Main Content */}
+                <main className={styles.mainContent}>
+                    <div className={styles.sectionHeader}>
+                        <h1 className={styles.sectionTitle}>신청 관리</h1>
+                    </div>
+
                     {approvalRequests.length > 0 ? (
                         <div className={styles.requestList}>
                             {approvalRequests.map(request => {
@@ -269,8 +346,8 @@ export default function RequestsPageClient({
                             <p className={styles.emptySubText}>모든 요청을 처리했습니다.</p>
                         </div>
                     )}
-                </section>
-            </main>
+                </main>
+            </div>
 
             <ResponsiveModal
                 open={confirmConfig.isOpen}
