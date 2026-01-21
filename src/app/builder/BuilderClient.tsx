@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import dynamic from 'next/dynamic';
 import { useInvitationStore, InvitationData } from '@/store/useInvitationStore';
 import { useAuth } from '@/hooks/useAuth';
@@ -15,6 +16,7 @@ import { Sheet, SheetContent, SheetTitle, SheetHeader, SheetDescription } from '
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useShallow } from 'zustand/react/shallow';
 import EditorForm from '@/components/common/EditorForm';
+import { useScrollLock } from '@/hooks/use-scroll-lock';
 
 import { IPhoneFrame } from './IPhoneFrame';
 
@@ -40,6 +42,7 @@ export function BuilderClient() {
     const [isSaving, setIsSaving] = useState(false);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [isReady, setIsReady] = useState(false);
+    const [isMounted, setIsMounted] = useState(false);
     const { user, isProfileComplete, profileLoading, isAdmin } = useAuth();
     const { editingSection, reset } = useInvitationStore(useShallow((state) => ({
         editingSection: state.editingSection,
@@ -52,25 +55,18 @@ export function BuilderClient() {
     const initRef = useRef(false);
 
     useEffect(() => {
+        setIsMounted(true);
         if (initRef.current) return;
         initRef.current = true;
         if (!isEditMode) {
             reset();
             sessionStorage.removeItem('builder-draft-slug');
         }
-        setIsReady(true);
+        // Set ready in next frame to avoid cascading renders
+        requestAnimationFrame(() => setIsReady(true));
     }, [isEditMode, reset]);
 
-    useEffect(() => {
-        if (isPreviewOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
-        return () => {
-            document.body.style.overflow = '';
-        };
-    }, [isPreviewOpen]);
+    useScrollLock(isPreviewOpen);
 
     useEffect(() => {
         if (user && !profileLoading && !isProfileComplete && !profileLockRef.current) {
@@ -81,6 +77,12 @@ export function BuilderClient() {
     const handleLogin = useCallback(() => {
         router.push('/login');
     }, [router]);
+
+    // use-latest or ref for event handlers used in async logic
+    const handleSaveRef = useRef<(() => Promise<void>) | null>(null);
+    const stableSave = useCallback(() => {
+        void handleSaveRef.current?.();
+    }, []);
 
     const handleSave = useCallback(async () => {
         if (!user) {
@@ -96,6 +98,8 @@ export function BuilderClient() {
         setIsSaving(true);
         try {
             const currentStoreState = useInvitationStore.getState();
+
+            // Optimization: Filter functions from state once
             const cleanData = Object.fromEntries(
                 Object.entries(currentStoreState).filter(([, v]) => typeof v !== 'function')
             ) as unknown as InvitationData;
@@ -115,23 +119,41 @@ export function BuilderClient() {
             await invitationService.saveInvitation(currentSlug, cleanData, user.id);
             toast.success('청첩장이 저장되었습니다! 🎉');
             router.push('/mypage');
-        } catch {
+        } catch (error) {
+            console.error('Save error:', error);
             toast.error('저장 중 오류가 발생했습니다. 다시 시도해주세요.');
         } finally {
             setIsSaving(false);
         }
     }, [user, handleLogin, isReady, router, isAdmin]);
 
+    useEffect(() => {
+        handleSaveRef.current = handleSave;
+    }, [handleSave]);
+
     const { registerSaveAction, setIsLoading } = useHeaderStore();
 
     useEffect(() => {
-        registerSaveAction(handleSave);
+        // advanced-event-handler-refs: Ensure the header always has the latest handleSave
+        registerSaveAction(stableSave);
         return () => registerSaveAction(null);
-    }, [handleSave, registerSaveAction]);
+    }, [registerSaveAction, stableSave]);
 
     useEffect(() => {
         setIsLoading(isSaving);
     }, [isSaving, setIsLoading]);
+
+    // Floating Button with Portal to body to avoid stacking context issues
+    const floatingButton = isMounted ? createPortal(
+        <button
+            className={clsx(styles.floatingButton, isPreviewOpen && styles.previewOpen)}
+            onClick={() => setIsPreviewOpen(!isPreviewOpen)}
+            aria-label={isPreviewOpen ? "Close Preview" : "Open Preview"}
+        >
+            {isPreviewOpen ? <X size={24} /> : <Smartphone size={24} />}
+        </button>,
+        document.body
+    ) : null;
 
     return (
         <div className={styles.container}>
@@ -156,13 +178,7 @@ export function BuilderClient() {
                 </section>
             </main>
 
-            <button
-                className={clsx(styles.floatingButton, isPreviewOpen && styles.previewOpen)}
-                onClick={() => setIsPreviewOpen(!isPreviewOpen)}
-                aria-label={isPreviewOpen ? "Close Preview" : "Open Preview"}
-            >
-                {isPreviewOpen ? <X size={24} /> : <Smartphone size={24} />}
-            </button>
+            {floatingButton}
 
             <Sheet open={isPreviewOpen} onOpenChange={setIsPreviewOpen} modal={false}>
                 <SheetContent side="right" className={styles.sheetContent} hideCloseButton>

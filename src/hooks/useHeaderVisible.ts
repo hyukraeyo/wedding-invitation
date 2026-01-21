@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export function useHeaderVisible(threshold = 10, targetId?: string) {
     const [isVisible, setIsVisible] = useState(true);
-    const [lastScrollY, setLastScrollY] = useState(0);
+    const lastScrollY = useRef(0);
 
     useEffect(() => {
         let ticking = false;
@@ -23,25 +23,25 @@ export function useHeaderVisible(threshold = 10, targetId?: string) {
             // Always show at the top
             if (currentScrollY < 10) {
                 setIsVisible(true);
-                setLastScrollY(currentScrollY);
+                lastScrollY.current = currentScrollY;
                 ticking = false;
                 return;
             }
 
             // Ignore small scroll movements
-            if (Math.abs(currentScrollY - lastScrollY) < threshold) {
+            if (Math.abs(currentScrollY - lastScrollY.current) < threshold) {
                 ticking = false;
                 return;
             }
 
             // Hide on scroll down, show on scroll up
-            if (currentScrollY > lastScrollY) {
+            if (currentScrollY > lastScrollY.current) {
                 setIsVisible(false);
             } else {
                 setIsVisible(true);
             }
 
-            setLastScrollY(currentScrollY);
+            lastScrollY.current = currentScrollY;
             ticking = false;
         };
 
@@ -54,7 +54,7 @@ export function useHeaderVisible(threshold = 10, targetId?: string) {
 
         target.addEventListener('scroll', onScroll);
         return () => target.removeEventListener('scroll', onScroll);
-    }, [lastScrollY, threshold, targetId]);
+    }, [threshold, targetId]); // Removed lastScrollY from dependencies
 
     return isVisible;
 }

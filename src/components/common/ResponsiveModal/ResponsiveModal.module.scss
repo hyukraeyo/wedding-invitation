@@ -53,6 +53,13 @@ $color-text-desc: #4E5968;
   width: 100%;
 }
 
+.mainSection {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: v.$white;
+}
+
 .header {
   text-align: center;
   padding-top: 1.5rem;
@@ -63,8 +70,7 @@ $color-text-desc: #4E5968;
   flex-direction: column;
   align-items: center;
   flex-shrink: 0;
-  background-color: v.$white;
-  border-bottom: 1px solid v.$color-border;
+  border-bottom: none;
 
   // Drawer specific overrides
   &.drawerHeader {
@@ -95,7 +101,6 @@ $color-text-desc: #4E5968;
   flex-direction: column;
   overflow-y: auto;
   padding: 2.5rem 2rem; // Increased vertical padding for premium feel
-  background-color: v.$white;
   min-height: 8rem; // Ensure some space for content even if short
   justify-content: center; // Center content vertically for better look with short text
 

@@ -15,7 +15,7 @@ interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
     rows?: number | undefined;
 }
 
-export const TextField = React.forwardRef<HTMLInputElement | HTMLTextAreaElement, TextFieldProps>(
+export const TextField = React.memo(React.forwardRef<HTMLInputElement | HTMLTextAreaElement, TextFieldProps>(
     ({ className, containerClassName, style, label, helpText, hasError, right, disabled, onFocus, onBlur, multiline, rows, ...props }, ref) => {
         const id = props.id || props.name;
 
@@ -71,6 +71,6 @@ export const TextField = React.forwardRef<HTMLInputElement | HTMLTextAreaElement
             </div>
         );
     }
-);
+));
 
 TextField.displayName = 'TextField';

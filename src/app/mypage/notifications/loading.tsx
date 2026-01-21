@@ -1,11 +1,12 @@
 import { Skeleton } from '@/components/ui/Skeleton';
 import styles from './NotificationsPage.module.scss';
 import { MyPageHeader } from '@/components/mypage/MyPageHeader';
+import { MENU_TITLES } from '@/constants/navigation';
 
 export default function Loading() {
     return (
         <div className={styles.container}>
-            <MyPageHeader title="알림 센터" />
+            <MyPageHeader title={MENU_TITLES.NOTIFICATIONS} />
             <div className={styles.content}>
                 <div className={styles.notificationList}>
                     {[1, 2, 3, 4, 5].map((i) => (

@@ -40,11 +40,14 @@
   position: relative;
 }
 
+.spin {
+  animation: spin 1s linear infinite;
+}
+
 .icon {
   width: 3rem; // h-12 (48px)
   height: 3rem; // w-12
   color: v.$color-primary;
-  animation: spin 1s linear infinite;
 }
 
 .backgroundDecoration1 {

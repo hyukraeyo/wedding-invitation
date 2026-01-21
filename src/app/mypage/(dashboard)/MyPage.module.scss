@@ -1,5 +1,5 @@
-@use "../../styles/variables" as v;
-@use "../../styles/mixins" as m;
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
 
 // ============================================
 // Card Grid (MyPage 전용 스타일)
@@ -44,30 +44,30 @@
     align-items: center;
     justify-content: center;
     gap: 1.25rem;
-    background: linear-gradient(135deg, v.$zinc-50 0%, v.$white 100%);
+    background: linear-gradient(135deg, v.$white 0%, v.$zinc-50 100%);
     cursor: pointer;
     transition: all 0.4s v.$ease-ios;
     text-decoration: none;
     position: relative;
     overflow: hidden;
 
-    &::before {
+    &::after {
         content: '';
         position: absolute;
         inset: 0;
-        background: radial-gradient(circle at center, rgba(v.$color-primary, 0.05) 0%, transparent 70%);
+        background: radial-gradient(circle at center, rgba(v.$color-primary, 0.1) 0%, transparent 70%);
         opacity: 0;
         transition: opacity 0.4s ease;
     }
 
     &:hover {
-        border-color: v.$primary-400;
+        border-color: v.$color-primary;
         border-style: solid;
         background-color: v.$white;
         transform: translateY(-8px);
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
 
-        &::before {
+        &::after {
             opacity: 1;
         }
 
@@ -97,7 +97,7 @@
     width: 64px;
     height: 64px;
     border-radius: 50%;
-    background-color: v.$zinc-100;
+    background-color: v.$zinc-50;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -105,6 +105,7 @@
     transition: all 0.4s v.$ease-ios;
     position: relative;
     z-index: 1;
+    border: 1px solid v.$zinc-100;
 }
 
 .createText {
@@ -242,6 +243,11 @@
     font-size: 0.9375rem;
     line-height: 1.6;
     color: v.$zinc-800;
+
+    &.success {
+        background-color: v.$blue-50;
+        border-color: v.$blue-100;
+    }
 }
 
 .rejectionNoticeText {

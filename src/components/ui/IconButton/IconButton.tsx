@@ -15,16 +15,25 @@ export interface IconButtonProps extends Omit<ButtonProps, "size" | "variant"> {
      */
     size?: "xs" | "sm" | "md" | "lg" | "xl"
     /**
+     * Size of the icon specifically. If not provided, will use defaults based on button size.
+     */
+    iconSize?: number
+    /**
+     * Stroke width of the icon.
+     * @default 2
+     */
+    strokeWidth?: number
+    /**
      * Color variant of the button.
      * @default "ghost"
      */
-    variant?: "solid" | "line" | "ghost" | "secondary" | "outline" | "destructive" | "default"
+    variant?: "solid" | "line" | "ghost" | "secondary" | "outline" | "destructive" | "default" | "glass"
     loading?: boolean | undefined;
     "aria-label"?: string;
 }
 
 const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
-    ({ className, icon: Icon, size = "md", variant = "ghost", children, "aria-label": ariaLabel, ...props }, ref) => {
+    ({ className, icon: Icon, size = "md", iconSize, strokeWidth, variant = "ghost", children, "aria-label": ariaLabel, ...props }, ref) => {
         // Map custom size props to Button's size variants
         const sizeMap: Record<NonNullable<IconButtonProps["size"]>, NonNullable<ButtonProps["size"]>> = {
             xs: "icon-xs", // 28px
@@ -49,9 +58,11 @@ const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
             >
                 {Icon ? (
                     <Icon
+                        {...(iconSize !== undefined ? { size: iconSize } : {})}
+                        {...(strokeWidth !== undefined ? { strokeWidth } : {})}
                         className={cn(
                             styles.icon,
-                            styles[size],
+                            !iconSize && styles[size],
                             loading && styles.faded
                         )}
                     />

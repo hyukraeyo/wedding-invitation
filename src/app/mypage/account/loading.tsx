@@ -1,11 +1,12 @@
 import { Skeleton } from '@/components/ui/Skeleton';
 import styles from './AccountPage.module.scss';
 import { MyPageHeader } from '@/components/mypage/MyPageHeader';
+import { MENU_TITLES } from '@/constants/navigation';
 
 export default function Loading() {
     return (
         <div className="view-transition-content">
-            <MyPageHeader title="내 계정 관리" />
+            <MyPageHeader title={MENU_TITLES.ACCOUNT} />
             <div className={styles.contentCard}>
                 <div className={styles.profileHeader}>
                     <Skeleton className={styles.skeletonAvatar} />

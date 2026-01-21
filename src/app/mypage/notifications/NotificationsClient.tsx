@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { clsx } from 'clsx';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { MENU_TITLES } from '@/constants/navigation';
 import { EmptyState } from '@/components/ui/EmptyState';
 
 interface ProfileData {
@@ -58,7 +59,7 @@ export default function NotificationsClient({ userId, notifications }: Notificat
 
     return (
         <div className={styles.container}>
-            <MyPageHeader title="알림 센터" />
+            <MyPageHeader title={MENU_TITLES.NOTIFICATIONS} />
 
             <div className={styles.content}>
                 {notifications.length > 0 ? (

@@ -21,14 +21,14 @@ interface ExampleSelectorModalProps<T extends ExampleItem> {
     className?: string;
 }
 
-export const ExampleSelectorModal = <T extends ExampleItem>({
+export const ExampleSelectorModal = React.memo(function ExampleSelectorModal<T extends ExampleItem>({
     isOpen,
     onClose,
     title,
     items,
     onSelect,
     className
-}: ExampleSelectorModalProps<T>) => {
+}: ExampleSelectorModalProps<T>) {
     const listRef = useRef<HTMLDivElement>(null);
     const [scrollState, setScrollState] = useState({
         isTop: true,
@@ -103,4 +103,9 @@ export const ExampleSelectorModal = <T extends ExampleItem>({
             </div>
         </ResponsiveModal>
     );
+}) as unknown as {
+    <T extends ExampleItem>(props: ExampleSelectorModalProps<T>): React.ReactElement;
+    displayName?: string;
 };
+
+ExampleSelectorModal.displayName = 'ExampleSelectorModal';

@@ -14,6 +14,7 @@ import {
     Bell,
 } from 'lucide-react';
 import { signOut } from 'next-auth/react';
+import { MENU_TITLES } from '@/constants/navigation';
 import styles from './MyPageSidebar.module.scss';
 import { clsx } from 'clsx';
 
@@ -74,7 +75,7 @@ export function MyPageSidebar({
                         className={clsx(styles.menuItem, pathname === '/mypage' && styles.active)}
                     >
                         <FileText size={20} className={styles.menuIcon} />
-                        모바일 청첩장
+                        {MENU_TITLES.DASHBOARD}
                         {invitationCount > 0 && (
                             <span className={styles.menuBadge}>{invitationCount}</span>
                         )}
@@ -86,7 +87,7 @@ export function MyPageSidebar({
                             className={clsx(styles.menuItem, pathname === '/mypage/requests' && styles.active)}
                         >
                             <ClipboardList size={20} className={styles.menuIcon} />
-                            신청 관리
+                            {MENU_TITLES.REQUESTS}
                             {requestCount > 0 && (
                                 <span className={clsx(styles.menuBadge, styles.badgeAlert)}>{requestCount}</span>
                             )}
@@ -98,7 +99,7 @@ export function MyPageSidebar({
                         className={clsx(styles.menuItem, pathname === '/mypage/account' && styles.active)}
                     >
                         <User size={20} className={styles.menuIcon} />
-                        내 계정관리
+                        {MENU_TITLES.ACCOUNT}
                     </ViewTransitionLink>
 
                     <ViewTransitionLink
@@ -106,7 +107,7 @@ export function MyPageSidebar({
                         className={clsx(styles.menuItem, pathname === '/mypage/notifications' && styles.active)}
                     >
                         <Bell size={20} className={styles.menuIcon} />
-                        알림
+                        {MENU_TITLES.NOTIFICATIONS}
                         {notificationCount > 0 && (
                             <span className={clsx(styles.menuBadge, styles.badgeAlert)}>{notificationCount}</span>
                         )}
@@ -117,7 +118,7 @@ export function MyPageSidebar({
                         onClick={() => setIsEventModalOpen(true)}
                     >
                         <span style={{ marginRight: '0.75rem', width: '20px', display: 'flex', justifyContent: 'center' }}>🎉</span>
-                        이벤트
+                        {MENU_TITLES.EVENTS}
                     </button>
 
                     <button
@@ -125,12 +126,12 @@ export function MyPageSidebar({
                         onClick={() => setIsCustomerServiceModalOpen(true)}
                     >
                         <HelpCircle size={20} className={styles.menuIcon} />
-                        고객센터
+                        {MENU_TITLES.CUSTOMER_SERVICE}
                     </button>
 
                     <button className={styles.menuItem} onClick={handleLogout}>
                         <LogOut size={20} className={styles.menuIcon} />
-                        로그아웃
+                        {MENU_TITLES.LOGOUT}
                     </button>
                 </nav>
             </aside>
@@ -162,7 +163,7 @@ export function MyPageSidebar({
             <ResponsiveModal
                 open={isCustomerServiceModalOpen}
                 onOpenChange={setIsCustomerServiceModalOpen}
-                title="고객센터"
+                title={MENU_TITLES.CUSTOMER_SERVICE}
                 description="카카오톡 채널로 연결됩니다. 문의사항을 남겨주시면 빠르게 답변 드리겠습니다."
                 confirmText="확인"
                 cancelText="닫기"

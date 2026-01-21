@@ -13,8 +13,10 @@ export default function LoadingSpinner({ variant = 'fixed', className }: Loading
     return (
         <div className={`${containerClass} ${className || ''}`}>
             <div className={styles.iconWrapper}>
-                {/* Rotating Banana Icon */}
-                <Banana className={styles.icon} />
+                {/* Rotating Banana Icon wrapper for hardware acceleration */}
+                <div className={styles.spin}>
+                    <Banana className={styles.icon} />
+                </div>
             </div>
 
             {/* Subtle floating background elements */}

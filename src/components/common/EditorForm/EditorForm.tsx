@@ -1,23 +1,24 @@
 "use client";
 
 import React, { useState, useCallback, memo, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { Accordion } from '@/components/ui/Accordion';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { useShallow } from 'zustand/react/shallow';
 import styles from './EditorForm.module.scss';
 
-// Static imports for immediate loading (prevents icon pop-in)
-import ThemeSection from '@/components/builder/sections/ThemeSection';
-import MainScreenSection from '@/components/builder/sections/MainScreenSection';
-import BasicInfoSection from '@/components/builder/sections/BasicInfoSection';
-import DateTimeSection from '@/components/builder/sections/DateTimeSection';
-import LocationSection from '@/components/builder/sections/LocationSection';
-import GreetingSection from '@/components/builder/sections/GreetingSection';
-import GallerySection from '@/components/builder/sections/GallerySection';
-import AccountsSection from '@/components/builder/sections/AccountsSection';
-import KakaoShareSection from '@/components/builder/sections/KakaoShareSection';
-import ClosingSection from '@/components/builder/sections/ClosingSection';
+// Dynamic imports for optimized initial bundle
+const ThemeSection = dynamic(() => import('@/components/builder/sections/ThemeSection'));
+const MainScreenSection = dynamic(() => import('@/components/builder/sections/MainScreenSection'));
+const BasicInfoSection = dynamic(() => import('@/components/builder/sections/BasicInfoSection'));
+const DateTimeSection = dynamic(() => import('@/components/builder/sections/DateTimeSection'));
+const LocationSection = dynamic(() => import('@/components/builder/sections/LocationSection'));
+const GreetingSection = dynamic(() => import('@/components/builder/sections/GreetingSection'));
+const GallerySection = dynamic(() => import('@/components/builder/sections/GallerySection'));
+const AccountsSection = dynamic(() => import('@/components/builder/sections/AccountsSection'));
+const KakaoShareSection = dynamic(() => import('@/components/builder/sections/KakaoShareSection'));
+const ClosingSection = dynamic(() => import('@/components/builder/sections/ClosingSection'));
 
 const SECTIONS = [
     { key: 'basic', Component: BasicInfoSection },

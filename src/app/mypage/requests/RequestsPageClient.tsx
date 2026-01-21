@@ -1,13 +1,14 @@
 "use client";
 
 import { parseRejection } from '@/lib/rejection-helpers';
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { approvalRequestService } from '@/services/approvalRequestService';
 import { invitationService } from '@/services/invitationService';
 import { MyPageHeader } from '@/components/mypage/MyPageHeader';
+import { MENU_TITLES } from '@/constants/navigation';
 import { useToast } from '@/hooks/use-toast';
 import {
     Clock,
@@ -77,29 +78,35 @@ export default function RequestsPageClient({
     } = useInfiniteQuery({
         queryKey: ['approval-requests'],
         queryFn: async ({ pageParam = 0 }) => {
-            const requests = await approvalRequestService.getAllRequests(initialLimit, pageParam);
-
-            // 부족한 초대장 정보 보완
-            const missingIds = requests
-                .map(r => r.invitation_id)
-                .filter(id => !invitationCache[id]);
-
-            if (missingIds.length > 0) {
-                const newInvs = await invitationService.getInvitationsByIds(missingIds);
-                setInvitationCache(prev => {
-                    const next = { ...prev };
-                    newInvs.forEach(inv => next[inv.id] = inv);
-                    return next;
-                });
-            }
-
-            return requests;
+            return await approvalRequestService.getAllRequests(initialLimit, pageParam);
         },
         initialPageParam: 0,
         getNextPageParam: (lastPage, allPages) => {
             return lastPage.length === initialLimit ? allPages.flat().length : undefined;
         },
     });
+
+    const allRequests = useMemo(() => data?.pages.flat() ?? [], [data]);
+
+    // 2-1. Hydration 및 무한 스크롤 시 초대장 정보 보완
+    useEffect(() => {
+        const missingIds = allRequests
+            .map(r => r.invitation_id)
+            .filter(id => !invitationCache[id]);
+
+        if (missingIds.length > 0) {
+            invitationService.getInvitationsByIds(missingIds).then(newInvs => {
+                if (newInvs.length === 0) return;
+                setInvitationCache(prev => {
+                    const next = { ...prev };
+                    newInvs.forEach(inv => {
+                        next[inv.id] = inv;
+                    });
+                    return next;
+                });
+            });
+        }
+    }, [allRequests]); // eslint-disable-line react-hooks/exhaustive-deps
 
     // 3. 승인/거절 뮤테이션
     const approveMutation = useMutation({
@@ -146,8 +153,6 @@ export default function RequestsPageClient({
         targetId: null,
     });
 
-    const allRequests = useMemo(() => data?.pages.flat() ?? [], [data]);
-
     const handleConfirmAction = useCallback(() => {
         if (confirmConfig.type === 'APPROVE' && confirmConfig.targetRecord) {
             approveMutation.mutate(confirmConfig.targetRecord);
@@ -159,7 +164,7 @@ export default function RequestsPageClient({
 
     return (
         <div className={styles.container}>
-            <MyPageHeader title="신청 관리" />
+            <MyPageHeader title={MENU_TITLES.REQUESTS} />
 
             {allRequests.length > 0 ? (
                 <div className={styles.requestList}>

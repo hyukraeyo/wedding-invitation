@@ -29,13 +29,15 @@ const getInvitation = cache(async (slug: string) => {
         console.error('Slug decoding error:', e);
     }
 
-    // Try all variations sequentially (early return on first match)
-    for (const possibleSlug of possibleSlugs) {
-        const invitation = await invitationService.getInvitation(possibleSlug, supabase);
-        if (invitation) return invitation;
-    }
-
-    return null;
+    // Try all variations in a single batch query for better performance
+    const invitations = await invitationService.getInvitationsBySlugs(Array.from(possibleSlugs), supabase);
+    
+    if (invitations.length === 0) return null;
+    
+    // If multiple matches found (rare case of slug collisions across encodings), 
+    // prioritize exact match or first one found
+    const exactMatch = invitations.find(inv => inv.slug === slug);
+    return exactMatch || invitations[0];
 });
 
 export async function generateMetadata({ params }: Props) {

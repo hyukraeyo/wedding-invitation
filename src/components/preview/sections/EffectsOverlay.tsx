@@ -89,7 +89,7 @@ const EffectsOverlay = memo(({
 
         const generate = () => {
             const newParticles: Particle[] = [];
-            const count = 40;
+            const count = 25;
 
             for (let i = 0; i < count; i++) {
                 if (effect === 'snow') {
@@ -150,10 +150,12 @@ const EffectsOverlay = memo(({
                 {effect === 'cherry-blossom' ? (
                     particles.map(p => (
                         <div key={p.id} className={clsx(styles.cherryParticle, p.animationClass || styles.animateFallSway)} style={p.style}>
-                            {p.pathIndex === 0 ? <Variant1 /> : null}
-                            {p.pathIndex === 1 ? <Variant2 /> : null}
-                            {p.pathIndex === 2 ? <Variant3 /> : null}
-                            {p.pathIndex === 3 ? <Variant4 /> : null}
+                            <div className={styles.svgWrapper}>
+                                {p.pathIndex === 0 ? <Variant1 /> : null}
+                                {p.pathIndex === 1 ? <Variant2 /> : null}
+                                {p.pathIndex === 2 ? <Variant3 /> : null}
+                                {p.pathIndex === 3 ? <Variant4 /> : null}
+                            </div>
                         </div>
                     ))
                 ) : null}

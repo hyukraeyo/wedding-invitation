@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useEffect, useState, lazy, Suspense } from 'react';
+import React, { useEffect, useState, lazy, Suspense, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Plus, LogIn, Save, Banana, Bell } from 'lucide-react';
+import { LogIn, Save, Banana, Bell } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useRouter, usePathname } from 'next/navigation';
+import type { User } from 'next-auth';
 import { IconButton } from '@/components/ui/IconButton';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 import { cn } from '@/lib/utils';
@@ -19,12 +20,108 @@ import { useHeaderStore } from '@/store/useHeaderStore';
 // Lazy load Button to avoid preload warning
 const Button = lazy(() => import('@/components/ui/Button').then(mod => ({ default: mod.Button })));
 
+const Logo = React.memo(() => (
+    <div className={styles.logoWrapper}>
+        <Link href="/" className={styles.logoLink}>
+            <Image
+                src="/logo.png"
+                alt="Logo"
+                width={44}
+                height={44}
+                className={styles.logoImage}
+                quality={100}
+                priority
+            />
+        </Link>
+    </div>
+));
+Logo.displayName = 'Logo';
+
+interface HeaderActionsProps {
+    user: User | null;
+    onSave?: (() => void) | null;
+    isLoading: boolean;
+    isUploading: boolean;
+    notificationCount: number;
+    onLogin: () => void;
+    onSaveAction: () => void;
+}
+
+const HeaderActions = React.memo(({
+    user,
+    onSave,
+    isLoading,
+    isUploading,
+    notificationCount,
+    onLogin,
+    onSaveAction
+}: HeaderActionsProps) => (
+    <div className={styles.actions}>
+        {onSave && user ? (
+            <IconButton
+                icon={Save}
+                onClick={onSaveAction}
+                loading={isLoading || isUploading}
+                size="sm"
+                iconSize={20}
+                strokeWidth={2.5}
+                variant="ghost"
+                className={styles.actionButton}
+                aria-label="저장하기"
+            />
+        ) : null}
+
+        {user ? (
+            <>
+
+                <Link href="/mypage/notifications" className={styles.notificationLink}>
+                    <IconButton
+                        icon={Bell}
+                        size="sm"
+                        iconSize={20}
+                        strokeWidth={2.5}
+                        variant="ghost"
+                        className={styles.actionButton}
+                        aria-label="알림"
+                    >
+                        {notificationCount > 0 && (
+                            <span className={styles.notificationBadge} />
+                        )}
+                    </IconButton>
+                </Link>
+                <Link href="/mypage" className={styles.profileLink}>
+                    <IconButton
+                        icon={Banana}
+                        size="sm"
+                        iconSize={20}
+                        strokeWidth={2.5}
+                        variant="solid"
+                        className={styles.profileButton}
+                        aria-label="마이페이지"
+                    />
+                </Link>
+            </>
+        ) : (
+            <IconButton
+                icon={LogIn}
+                size="sm"
+                iconSize={20}
+                strokeWidth={2.5}
+                variant="ghost"
+                onClick={onLogin}
+                className={styles.actionButton}
+                aria-label="로그인"
+            />
+        )}
+    </div>
+));
+HeaderActions.displayName = 'HeaderActions';
+
 export default function Header() {
     const router = useRouter();
     const pathname = usePathname();
     // 메인 페이지('/')에서는 헤더를 숨깁니다.
     const isVisible = pathname !== '/';
-    const isMyPage = pathname?.startsWith('/mypage');
     const { user } = useAuth();
 
     // Store states
@@ -42,37 +139,13 @@ export default function Header() {
         router.prefetch('/login');
     }, [router]);
 
-    const handleCreateNew = () => {
-        const state = useInvitationStore.getState();
-
-        if (isMyPage) {
-            reset();
-            router.push('/builder');
-            return;
-        }
-
-        const hasActualContent =
-            state.groom.firstName !== '' ||
-            state.bride.firstName !== '' ||
-            state.location !== '' ||
-            state.imageUrl !== null ||
-            state.gallery.length > 0;
-
-        if (hasActualContent) {
-            setShowResetDialog(true);
-        } else {
-            reset();
-            router.push('/builder');
-        }
-    };
-
-    const confirmReset = () => {
+    const confirmReset = useCallback(() => {
         reset();
         router.push('/builder');
         setShowResetDialog(false);
-    };
+    }, [reset, router]);
 
-    const handleSaveAction = () => {
+    const handleSaveAction = useCallback(() => {
         if (isUploading) {
             toast({
                 variant: 'destructive',
@@ -82,74 +155,25 @@ export default function Header() {
             return;
         }
         onSave?.();
-    };
+    }, [isUploading, onSave, toast]);
+
+    const handleLogin = useCallback(() => {
+        router.push('/login');
+    }, [router]);
 
     return (
         <header className={cn(styles.header, !isVisible && styles.hidden, "view-transition-header")}>
-            {/* Logo */}
-            <div className={styles.logoWrapper}>
-                <Link href="/" className={styles.logoLink}>
-                    <Image
-                        src="/logo.png"
-                        alt="Logo"
-                        width={44}
-                        height={44}
-                        className={styles.logoImage}
-                        quality={100}
-                        priority
-                    />
-                </Link>
-            </div>
+            <Logo />
 
-            {/* Actions */}
-            <div className={styles.actions}>
-                {onSave && user ? (
-                    <IconButton
-                        icon={Save}
-                        onClick={handleSaveAction}
-                        loading={isLoading || isUploading}
-                        size="md"
-                        variant="ghost"
-                        className={styles.saveButton}
-                        aria-label="저장하기"
-                    />
-                ) : null}
-
-                {user ? (
-                    <>
-                        {isMyPage && (
-                            <IconButton
-                                icon={Plus}
-                                size="md"
-                                variant="ghost"
-                                onClick={handleCreateNew}
-                                aria-label="새 청첩장 만들기"
-                            />
-                        )}
-                        <Link href="/mypage/notifications" className={styles.notificationLink}>
-                            <div className={styles.notificationIcon} aria-label="알림">
-                                <Bell size={20} strokeWidth={2.5} />
-                                {notificationCount > 0 && (
-                                    <span className={styles.notificationBadge} />
-                                )}
-                            </div>
-                        </Link>
-                        <Link href="/mypage">
-                            <div className={styles.profileIcon} aria-label="마이페이지">
-                                <Banana size={20} strokeWidth={2.5} />
-                            </div>
-                        </Link>
-                    </>
-                ) : (
-                    <IconButton
-                        icon={LogIn}
-                        size="md"
-                        variant="ghost"
-                        onClick={() => router.push('/login')}
-                        aria-label="로그인"
-                    />
-                )}
-            </div>
+            <HeaderActions
+                user={user}
+                onSave={onSave}
+                isLoading={isLoading}
+                isUploading={isUploading}
+                notificationCount={notificationCount}
+                onLogin={handleLogin}
+                onSaveAction={handleSaveAction}
+            />
 
             <ResponsiveModal
                 open={showResetDialog}

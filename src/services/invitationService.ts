@@ -62,10 +62,21 @@ export const invitationService = {
             .from('invitations')
             .select('*')
             .eq('slug', slug)
-            .single();
+            .maybeSingle();
 
         if (error) return null;
         return data;
+    },
+
+    async getInvitationsBySlugs(slugs: string[], client?: SupabaseClient) {
+        const supabaseClient = client ?? await getDefaultClient();
+        const { data, error } = await supabaseClient
+            .from('invitations')
+            .select('*')
+            .in('slug', slugs);
+
+        if (error) throw error;
+        return data || [];
     },
 
     async getInvitationsByIds(ids: string[], client?: SupabaseClient) {

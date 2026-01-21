@@ -8,9 +8,10 @@
   padding: 2rem;
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 60px); // Header height excluded
+  height: calc(100dvh - v.$header-height);
   position: sticky;
-  top: 60px;
+  top: v.$header-height;
+
 
   @include m.mobile {
     display: none;

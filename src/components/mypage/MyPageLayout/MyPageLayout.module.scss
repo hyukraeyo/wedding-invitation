@@ -7,17 +7,19 @@
 .pageContainer {
     min-height: 100dvh;
     background-color: v.$color-bg-page;
-    padding-top: 3.5rem; // Header height
+    padding-top: v.$header-height;
 }
 
 .layout {
     display: flex;
-    min-height: calc(100dvh - 3.5rem);
+    min-height: calc(100dvh - v.$header-height);
     
     @include m.mobile {
         flex-direction: column;
+        min-height: calc(100dvh - v.$header-height);
     }
 }
+
 
 // ============================================
 // Main Content Area (통일된 스타일)

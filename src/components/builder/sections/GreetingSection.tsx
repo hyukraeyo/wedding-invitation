@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import { MessageSquare, Sparkles } from 'lucide-react';
-import RichTextEditor from '@/components/common/RichTextEditor';
 import dynamic from 'next/dynamic';
+
+const RichTextEditor = dynamic(() => import('@/components/common/RichTextEditor'), {
+    ssr: false,
+    loading: () => <div style={{ height: '160px', width: '100%', backgroundColor: 'rgba(0,0,0,0.03)', borderRadius: '8px', animation: 'pulse 2s infinite' }} />
+});
+
 const ExampleSelectorModal = dynamic(() => import('@/components/common/ExampleSelectorModal').then(mod => mod.ExampleSelectorModal), {
     ssr: false
 });

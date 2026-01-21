@@ -107,23 +107,25 @@ export const ResponsiveModal = ({
                     aria-describedby={description ? undefined : undefined}
                 >
                     <div className={styles.card}>
-                        <DialogHeader className={styles.header}>
-                            <DialogTitle className={styles.title}>
-                                {title || "알림"}
-                            </DialogTitle>
-                        </DialogHeader>
+                        <div className={styles.mainSection}>
+                            <DialogHeader className={styles.header}>
+                                <DialogTitle className={styles.title}>
+                                    {title || "알림"}
+                                </DialogTitle>
+                            </DialogHeader>
 
-                        <div
-                            ref={scrollRef}
-                            className={cn(styles.content, contentClassName)}
-                            onScroll={onScroll}
-                        >
-                            {description ? (
-                                <DialogDescription className={styles.description}>
-                                    {description}
-                                </DialogDescription>
-                            ) : null}
-                            {children}
+                            <div
+                                ref={scrollRef}
+                                className={cn(styles.content, contentClassName)}
+                                onScroll={onScroll}
+                            >
+                                {description ? (
+                                    <DialogDescription className={styles.description}>
+                                        {description}
+                                    </DialogDescription>
+                                ) : null}
+                                {children}
+                            </div>
                         </div>
 
                         {hasActions ? (
@@ -181,29 +183,31 @@ export const ResponsiveModal = ({
                 aria-describedby={description ? undefined : undefined}
             >
                 <div className={styles.drawerLayout}>
-                    <DrawerHeader className={cn(styles.header, styles.drawerHeader)}>
-                        <DrawerTitle className={styles.title}>
-                            {title || "알림"}
-                        </DrawerTitle>
-                    </DrawerHeader>
+                    <div className={styles.mainSection}>
+                        <DrawerHeader className={cn(styles.header, styles.drawerHeader)}>
+                            <DrawerTitle className={styles.title}>
+                                {title || "알림"}
+                            </DrawerTitle>
+                        </DrawerHeader>
 
-                    <div className={cn(styles.content, styles.drawerScrollArea, contentClassName)}>
-                        {description ? (
-                            <DrawerDescription className={cn(styles.description, 'mb-4')}>
-                                {description}
-                            </DrawerDescription>
-                        ) : null}
-                        {children ? (
-                            <DrawerScrollArea
-                                ref={scrollRef}
-                                className={className}
-                                onScroll={onScroll}
-                            >
-                                {children}
-                            </DrawerScrollArea>
-                        ) : (
-                            description ? null : null // Placeholder for clarity
-                        )}
+                        <div className={cn(styles.content, styles.drawerScrollArea, contentClassName)}>
+                            {description ? (
+                                <DrawerDescription className={cn(styles.description, 'mb-4')}>
+                                    {description}
+                                </DrawerDescription>
+                            ) : null}
+                            {children ? (
+                                <DrawerScrollArea
+                                    ref={scrollRef}
+                                    className={className}
+                                    onScroll={onScroll}
+                                >
+                                    {children}
+                                </DrawerScrollArea>
+                            ) : (
+                                description ? null : null // Placeholder for clarity
+                            )}
+                        </div>
                     </div>
 
                     {hasActions ? (

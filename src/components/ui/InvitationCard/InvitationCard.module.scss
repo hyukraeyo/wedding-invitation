@@ -49,13 +49,15 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #ffffff;
+    background-color: v.$primary-50;
 
     .bananaIcon {
-        width: 3rem;
-        height: 3rem;
+        width: 4rem;
+        height: 4rem;
         color: v.$color-primary;
+        opacity: 0.3;
         transform: rotate(-15deg);
+        filter: drop-shadow(0 4px 12px rgba(v.$color-primary, 0.2));
     }
 }
 
@@ -65,25 +67,35 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 0.5rem;
+    padding: 0.75rem;
     background: linear-gradient(to bottom,
-            rgba(0, 0, 0, 0.4) 0%,
-            rgba(0, 0, 0, 0) 25%,
-            rgba(0, 0, 0, 0) 65%,
-            rgba(0, 0, 0, 0.6) 100%);
+            rgba(0, 0, 0, 0.45) 0%,
+            transparent 30%,
+            transparent 60%,
+            rgba(0, 0, 0, 0.65) 100%);
     z-index: 5;
 
     &.noImage {
-        background: none;
+        background: linear-gradient(to bottom,
+                rgba(v.$primary-100, 0.4) 0%,
+                transparent 40%,
+                transparent 70%,
+                rgba(v.$primary-100, 0.2) 100%);
 
         .overlayTitle {
-            color: v.$zinc-800;
+            color: v.$zinc-900;
             text-shadow: none;
         }
 
-        .statusBadge {
-            border: none;
-            // box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        .moreButton {
+            color: v.$zinc-500 !important;
+            background-color: rgba(0, 0, 0, 0.05) !important;
+            border-color: rgba(0, 0, 0, 0.05) !important;
+
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.1) !important;
+                color: v.$zinc-800 !important;
+            }
         }
     }
 }
@@ -92,101 +104,132 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    align-items: flex-start;
+}
+
+.statusRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
 .statusBadge {
     display: inline-flex;
     align-items: center;
-    gap: 0.375rem;
-    background-color: #ffffff;
-    padding: 0.375rem 0.75rem;
-    border-radius: v.$radius-md;
+    padding: 0.375rem 0.625rem;
+    border-radius: v.$radius-sm;
     font-size: 0.75rem;
-    font-weight: 400;
-    color: v.$zinc-600;
-    // box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    font-weight: 700;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 
     &.sampleBadge {
-        background-color: #FEF9C3;
-        color: #CA8A04;
+        background-color: rgba(254, 249, 195, 0.9);
+        color: #854D0E;
     }
 
     &.pendingBadge {
-        background-color: #F3F4F6;
-        color: #4B5563;
+        background-color: rgba(243, 244, 246, 0.9);
+        color: #374151;
     }
 
     &.approvedBadge {
-        background-color: #DCFCE7;
-        color: #16A34A;
+        background-color: rgba(220, 252, 231, 0.9);
+        color: #166534;
     }
 
     &.rejectedBadge {
-        background-color: #FEE2E2;
-        color: #DC2626;
-        border: none;
+        background-color: rgba(254, 226, 226, 0.9);
+        color: #991B1B;
+    }
+}
+
+.moreButton {
+    color: white !important;
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(4px);
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+
+    &:hover {
+        background-color: rgba(255, 255, 255, 0.3) !important;
+        transform: rotate(90deg);
     }
 }
 
 .overlayTitle {
-    display: flex;
-    align-items: center;
-    gap: 0.625rem;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 800;
     color: white;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-
-    svg {
-        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.2));
-    }
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    letter-spacing: -0.03em;
+    line-height: 1.25;
+    word-break: break-all;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .footer {
     display: flex;
-    gap: 0.375rem;
+    gap: 0.5rem;
     width: 100%;
 
-    .footerIconButton,
-    .footerSecondaryButton,
-    .footerPrimaryButton {
-        height: 2.875rem !important; // Override default height for compact card
-        border-radius: v.$radius-md;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        white-space: nowrap;
-        padding: 0 !important;
-        transition: all 0.2s v.$ease-ios;
-    }
-
-    .footerIconButton {
-        flex: 0 0 2.875rem;
-        border-color: transparent !important;
-        background-color: #FFFFFF !important;
-    }
-
-    .footerSecondaryButton {
+    .footerButton {
         flex: 1;
-        font-size: 0.9375rem;
-    }
+        height: 2.75rem !important;
+        border-radius: v.$radius-sm;
+        font-size: 0.875rem;
+        font-weight: 700;
+        transition: all 0.3s v.$ease-ios;
 
-    .footerPrimaryButton {
-        flex: 1.25;
-        font-size: 0.9375rem;
+        &.primary {
+            background-color: v.$color-primary !important;
+            color: v.$zinc-900 !important;
+            border: none !important;
 
-        &:disabled {
-            background-color: v.$zinc-200;
-            color: v.$zinc-400;
-            pointer-events: auto !important; // Allow cursor change to be visible
-            cursor: not-allowed !important;
-            opacity: 1;
-            box-shadow: none;
-            transform: none !important;
+            &:hover {
+                background-color: v.$primary-400 !important;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(v.$color-primary, 0.3);
+            }
+        }
+
+        &.secondary {
+            background-color: rgba(255, 255, 255, 0.9) !important;
+            color: v.$zinc-800 !important;
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+            backdrop-filter: blur(8px);
+
+            &:hover {
+                background-color: white !important;
+                transform: translateY(-2px);
+            }
+        }
+
+        &.share {
+            background-color: v.$color-primary !important;
+            color: v.$zinc-900 !important;
+            border: none !important;
+
+            &:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(v.$color-primary, 0.3);
+            }
+        }
+
+        &.pending {
+            background-color: rgba(255, 255, 255, 0.2) !important;
+            color: white !important;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3) !important;
+
+            &:hover {
+                background-color: rgba(255, 255, 255, 0.3) !important;
+            }
         }
     }
 }
@@ -257,11 +300,12 @@
 }
 
 .dateText {
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-size: 0.75rem;
+    font-weight: 600;
     color: v.$zinc-400;
-    margin-left: 0.5rem;
-    letter-spacing: -0.01em;
+    margin-top: 0.25rem;
+    padding-left: 0.25rem;
+    opacity: 0.8;
 }
 
 .shareContainer {

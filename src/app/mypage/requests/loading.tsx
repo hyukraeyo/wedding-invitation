@@ -1,11 +1,12 @@
 import { Skeleton } from '@/components/ui/Skeleton';
 import styles from './RequestsPage.module.scss';
 import { MyPageHeader } from '@/components/mypage/MyPageHeader';
+import { MENU_TITLES } from '@/constants/navigation';
 
 export default function Loading() {
     return (
         <div className="view-transition-content">
-            <MyPageHeader title="신청 관리" />
+            <MyPageHeader title={MENU_TITLES.REQUESTS} />
             <div className={styles.requestList}>
                 {[1, 2, 3, 4, 5].map((i) => (
                     <div key={i} className={styles.requestItem} style={{ border: 'none' }}>

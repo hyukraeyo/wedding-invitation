@@ -10,14 +10,15 @@ interface LabelProps extends React.ComponentPropsWithoutRef<typeof ShadcnLabel> 
     required?: boolean | undefined;
 }
 
-export const Label = ({ children, className, required, ...props }: LabelProps) => {
+export const Label = React.memo(({ children, className, required, ...props }: LabelProps) => {
     return (
         <ShadcnLabel className={cn(className)} {...props}>
             {children}
             {required ? <span className={styles.requiredStar}>*</span> : null}
         </ShadcnLabel>
     );
-};
+});
+Label.displayName = 'Label';
 
 // --- HelpText ---
 
@@ -29,7 +30,7 @@ interface HelpTextProps {
     iconSize?: number;
 }
 
-export const HelpText = ({
+export const HelpText = React.memo(({
     children,
     variant = 'info',
     className,
@@ -49,7 +50,8 @@ export const HelpText = ({
             <span className={styles.leadingNormal}>{children}</span>
         </div>
     );
-};
+});
+HelpText.displayName = 'HelpText';
 
 // --- Field (Form Group) ---
 
@@ -64,7 +66,7 @@ interface FieldProps {
     action?: React.ReactNode;
 }
 
-export const Field = ({ label, children, className, required, description, error, id, action }: FieldProps) => {
+export const Field = React.memo(({ label, children, className, required, description, error, id, action }: FieldProps) => {
     return (
         <div className={cn(styles.spaceY2, className)}>
             <div className={styles.fieldContainer}>
@@ -90,7 +92,8 @@ export const Field = ({ label, children, className, required, description, error
             </div>
         </div>
     );
-};
+});
+Field.displayName = 'Field';
 
 // --- Section Container ---
 
@@ -99,20 +102,22 @@ interface SectionContainerProps {
     className?: string;
 }
 
-export const SectionContainer = ({ children, className }: SectionContainerProps) => {
+export const SectionContainer = React.memo(({ children, className }: SectionContainerProps) => {
     return (
         <div className={cn(styles.sectionContainer, className)}>
             {children}
         </div>
     );
-};
+});
+SectionContainer.displayName = 'SectionContainer';
 
 // --- Option Group ---
 
-export const OptionGroup = ({ children, className }: { children: React.ReactNode, className?: string }) => {
+export const OptionGroup = React.memo(({ children, className }: { children: React.ReactNode, className?: string }) => {
     return (
         <div className={cn(styles.optionGroup, className)}>
             {children}
         </div>
     );
-};
+});
+OptionGroup.displayName = 'OptionGroup';

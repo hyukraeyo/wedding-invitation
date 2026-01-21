@@ -11,7 +11,7 @@ interface HeaderActionProps {
     className?: string;
 }
 
-export const HeaderAction = ({ icon: Icon, label, onClick, className }: HeaderActionProps) => {
+export const HeaderAction = React.memo(({ icon: Icon, label, onClick, className }: HeaderActionProps) => {
     return (
         <Button
             type="button"
@@ -36,4 +36,6 @@ export const HeaderAction = ({ icon: Icon, label, onClick, className }: HeaderAc
             <span>{label}</span>
         </Button>
     );
-};
+});
+
+HeaderAction.displayName = 'HeaderAction';

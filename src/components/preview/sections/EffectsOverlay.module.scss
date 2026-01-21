@@ -3,7 +3,7 @@
 .overlayMain {
     position: absolute;
     inset: 0;
-    height: 100vh;
+    height: 100dvh;
     z-index: 50;
     pointer-events: none;
     overflow: hidden;
@@ -31,7 +31,7 @@
     }
 
     &.hScreen {
-        height: 100vh;
+        height: 100dvh;
         overflow: hidden;
     }
 }
@@ -72,7 +72,7 @@
     }
 
     100% {
-        transform: translateY(100vh) translateX(20px);
+        transform: translateY(100dvh) translateX(20px);
         opacity: 0;
     }
 }
@@ -88,7 +88,7 @@
     }
 
     100% {
-        transform: translateY(100vh) rotate(360deg) translateX(-50px);
+        transform: translateY(100dvh) rotate(360deg) translateX(-50px);
         opacity: 0;
     }
 }
@@ -104,11 +104,11 @@
     }
 
     50% {
-        transform: translateY(50vh) translateX(50px) rotate(45deg);
+        transform: translateY(50dvh) translateX(50px) rotate(45deg);
     }
 
     100% {
-        transform: translateY(100vh) translateX(-50px) rotate(90deg);
+        transform: translateY(100dvh) translateX(-50px) rotate(90deg);
         opacity: 0;
     }
 }
@@ -124,7 +124,7 @@
     }
 
     100% {
-        transform: translateY(100vh) translateX(100px);
+        transform: translateY(100dvh) translateX(100px);
         opacity: 0;
     }
 }

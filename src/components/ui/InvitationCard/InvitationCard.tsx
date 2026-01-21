@@ -37,6 +37,7 @@ interface InvitationCardProps {
     onRequestApproval: (inv: InvitationSummaryRecord) => void;
     onCancelRequest: (inv: InvitationSummaryRecord) => void;
     onRevokeApproval: (inv: InvitationSummaryRecord) => void;
+    onRevertToDraft?: (inv: InvitationSummaryRecord) => void;
 }
 
 const InvitationCard = React.memo(({
@@ -46,6 +47,7 @@ const InvitationCard = React.memo(({
     onDelete,
     onRequestApproval,
     onCancelRequest,
+    onRevertToDraft,
 }: InvitationCardProps) => {
     const data = invitation.invitation_data;
     const isApproved = !!data?.isApproved;
@@ -57,6 +59,7 @@ const InvitationCard = React.memo(({
 
     const [showRejectionModal, setShowRejectionModal] = useState(false);
     const [showShareModal, setShowShareModal] = useState(false);
+    const [showEditConfirmModal, setShowEditConfirmModal] = useState(false);
     const { toast } = useToast();
 
     const handleLinkShare = () => {
@@ -161,64 +164,72 @@ const InvitationCard = React.memo(({
 
                 <div className={clsx(styles.overlay, !imageUrl && styles.noImage)}>
                     <div className={styles.overlayTop}>
-                        <span className={clsx(
-                            styles.statusBadge,
-                            isRejected ? styles.rejectedBadge :
-                                isApproved ? styles.approvedBadge :
-                                    isRequesting ? styles.pendingBadge : styles.sampleBadge
-                        )}>
-                            {isRejected ? REJECTION_BADGE : isApproved ? '승인 완료' : isRequesting ? '승인 대기' : '샘플 이용중'}
-                        </span>
+                        <div className={styles.statusRow}>
+                            <span className={clsx(
+                                styles.statusBadge,
+                                isRejected ? styles.rejectedBadge :
+                                    isApproved ? styles.approvedBadge :
+                                        isRequesting ? styles.pendingBadge : styles.sampleBadge
+                            )}>
+                                {isRejected ? REJECTION_BADGE : isApproved ? '승인 완료' : isRequesting ? '승인 대기' : '샘플 이용중'}
+                            </span>
+
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <IconButton
+                                        icon={MoreHorizontal}
+                                        className={styles.moreButton}
+                                        variant="glass"
+                                    />
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent side="bottom" align="end" className={styles.dropdownContent}>
+                                    <DropdownMenuItem onClick={handlePreview}>
+                                        <Eye size={16} className="mr-2" /> 미리보기
+                                    </DropdownMenuItem>
+                                    {isApproved && (
+                                        <DropdownMenuItem onClick={() => setShowEditConfirmModal(true)}>
+                                            <Edit2 size={16} className="mr-2" /> 수정하기
+                                        </DropdownMenuItem>
+                                    )}
+                                    {!isRequesting && !isApproved && (
+                                        <DropdownMenuItem onClick={() => onEdit(invitation)}>
+                                            <Edit2 size={16} className="mr-2" /> 편집하기
+                                        </DropdownMenuItem>
+                                    )}
+                                    {isRejected && (
+                                        <DropdownMenuItem onSelect={handleRejectionModalOpen}>
+                                            <AlertCircle size={16} className="mr-2" /> {REJECTION_LABEL} 확인
+                                        </DropdownMenuItem>
+                                    )}
+                                    {!isRequesting && (
+                                        <DropdownMenuItem
+                                            onClick={() => setTimeout(() => onDelete(invitation), 0)}
+                                            style={{ color: '#EF4444' }}
+                                        >
+                                            <Trash2 size={16} className="mr-2" /> 삭제하기
+                                        </DropdownMenuItem>
+                                    )}
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </div>
+
                         <h3 className={styles.overlayTitle}>
                             {title}
                         </h3>
                     </div>
 
                     <div className={styles.footer}>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <IconButton
-                                    icon={MoreHorizontal}
-                                    className={styles.footerIconButton}
-                                    variant="outline"
-                                />
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent side="top" align="start" className={styles.dropdownContent}>
-                                {!isRequesting && !isApproved && (
-                                    <DropdownMenuItem onClick={() => onEdit(invitation)}>
-                                        <Edit2 size={16} className="mr-2" /> 편집하기
-                                    </DropdownMenuItem>
-                                )}
-                                <DropdownMenuItem onClick={handlePreview}>
-                                    <Eye size={16} className="mr-2" /> 미리보기
-                                </DropdownMenuItem>
-                                {isRejected && (
-                                    <DropdownMenuItem onSelect={handleRejectionModalOpen}>
-                                        <AlertCircle size={16} className="mr-2" /> {REJECTION_LABEL} 확인
-                                    </DropdownMenuItem>
-                                )}
-                                {!isRequesting && (
-                                    <DropdownMenuItem
-                                        onClick={() => setTimeout(() => onDelete(invitation), 0)}
-                                        style={{ color: '#EF4444' }}
-                                    >
-                                        <Trash2 size={16} className="mr-2" /> 삭제하기
-                                    </DropdownMenuItem>
-                                )}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-
                         {(!isRequesting && !isApproved) ? (
                             <>
                                 <Button
                                     variant="outline"
-                                    className={clsx(styles.footerSecondaryButton, styles.editButton)}
+                                    className={clsx(styles.footerButton, styles.secondary)}
                                     onClick={() => onEdit(invitation)}
                                 >
                                     편집하기
                                 </Button>
                                 <Button
-                                    className={styles.footerPrimaryButton}
+                                    className={clsx(styles.footerButton, styles.primary)}
                                     variant="solid"
                                     onClick={handlePrimaryAction}
                                 >
@@ -229,17 +240,17 @@ const InvitationCard = React.memo(({
                             <>
                                 <Button
                                     variant="outline"
-                                    className={clsx(styles.footerSecondaryButton, styles.blueButton)}
+                                    className={clsx(styles.footerButton, styles.secondary)}
                                     onClick={handlePreview}
                                 >
                                     미리보기
                                 </Button>
                                 <Button
                                     className={clsx(
-                                        styles.footerPrimaryButton,
-                                        isApproved ? styles.shareYellowButton : styles.requesting
+                                        styles.footerButton,
+                                        isApproved ? styles.share : styles.pending
                                     )}
-                                    variant={isApproved ? "solid" : "solid"}
+                                    variant="solid"
                                     onClick={isApproved ? handleShareModalOpen : handlePrimaryAction}
                                 >
                                     {isApproved ? '공유하기' : '신청 취소'}
@@ -298,6 +309,28 @@ const InvitationCard = React.memo(({
                         <Share2 size={18} />
                         링크 주소 복사하기
                     </Button>
+                </div>
+            </ResponsiveModal>
+
+            {/* Edit Confirmation Modal for Approved Invitations */}
+            <ResponsiveModal
+                open={showEditConfirmModal}
+                onOpenChange={setShowEditConfirmModal}
+                title="청첩장 수정"
+                description={null}
+                showCancel={true}
+                cancelText="취소"
+                confirmText="수정하기"
+                onConfirm={() => {
+                    setShowEditConfirmModal(false);
+                    if (onRevertToDraft) {
+                        onRevertToDraft(invitation);
+                    }
+                }}
+            >
+                <div style={{ textAlign: 'center', lineHeight: '1.6', wordBreak: 'keep-all' }}>
+                    이미 승인이 완료된 청첩장입니다.<br />
+                    수정 모드로 전환 시 <strong>다시 승인 신청</strong>을 해야 공유가 가능합니다. 수정하시겠습니까?
                 </div>
             </ResponsiveModal>
         </div>

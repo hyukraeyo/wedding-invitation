@@ -24,7 +24,8 @@ export interface ButtonProps
     | "ghost"
     | "link"
     | "solid"
-    | "line";
+    | "line"
+    | "glass";
     size?: "default" | "sm" | "lg" | "icon" | "icon-xs" | "icon-sm" | "icon-lg";
     loading?: boolean | undefined;
 }
@@ -67,7 +68,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                 <span className={clsx(styles.content, loading && styles.loadingText)}>{children}</span>
                 {loading && (
                     <div className={styles.loader}>
-                        <Banana className={styles.spin} size={20} />
+                        <div className={styles.spin}>
+                            <Banana size={20} />
+                        </div>
                     </div>
                 )}
             </Comp>

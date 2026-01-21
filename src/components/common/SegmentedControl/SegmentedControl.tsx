@@ -18,13 +18,13 @@ interface SegmentedControlProps<T> {
     size?: 'sm' | 'md' | undefined;
 }
 
-export const OptionsSegmentedControl = <T extends string | number>({
+export const OptionsSegmentedControl = React.memo(function OptionsSegmentedControl<T extends string | number>({
     value,
     options,
     onChange,
     className = "",
     size = 'md'
-}: SegmentedControlProps<T>) => {
+}: SegmentedControlProps<T>) {
     return (
         <BaseSegmentedControl
             value={value}
@@ -42,7 +42,12 @@ export const OptionsSegmentedControl = <T extends string | number>({
             ))}
         </BaseSegmentedControl>
     );
+}) as unknown as {
+    <T extends string | number>(props: SegmentedControlProps<T>): React.ReactElement;
+    displayName?: string;
 };
+
+OptionsSegmentedControl.displayName = 'OptionsSegmentedControl';
 
 // Re-export for convenience
 export { OptionsSegmentedControl as SegmentedControl };

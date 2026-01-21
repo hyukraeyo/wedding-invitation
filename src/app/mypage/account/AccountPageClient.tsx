@@ -9,6 +9,7 @@ import { Banana } from 'lucide-react';
 import { clsx } from 'clsx';
 import { profileService } from '@/services/profileService';
 import { useToast } from '@/hooks/use-toast';
+import { MENU_TITLES } from '@/constants/navigation';
 import { useRouter } from 'next/navigation';
 
 interface ProfileData {
@@ -57,7 +58,7 @@ export default function AccountPageClient({
 
     return (
         <>
-            <MyPageHeader title="계정 관리" />
+            <MyPageHeader title={MENU_TITLES.ACCOUNT} />
 
             <div className={styles.contentCard}>
                 <div className={styles.profileHeader}>

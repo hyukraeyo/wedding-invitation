@@ -16,6 +16,7 @@ import { parseRejection } from '@/lib/rejection-helpers';
 // import { signOut } from 'next-auth/react';
 
 import { useToast } from '@/hooks/use-toast';
+import { MENU_TITLES } from '@/constants/navigation';
 import {
     Banana,
     Plus,
@@ -371,6 +372,33 @@ export default function MyPageClient({
         }
     }, [fetchFullInvitationData, profile, toast, userId, router]);
 
+    const executeRevertToDraft = useCallback(async (inv: InvitationSummaryRecord) => {
+        if (!userId) return;
+        setActionLoading(inv.id);
+        try {
+            const fullData = await fetchFullInvitationData(inv.slug);
+            const updatedData = {
+                ...fullData,
+                isApproved: false,
+                isRequestingApproval: false,
+            };
+
+            await invitationService.saveInvitation(inv.slug, updatedData, userId);
+
+            // Re-fetch invitations
+            const newInvitations = await invitationService.getUserInvitations(userId);
+            setInvitations(newInvitations);
+
+            toast({ description: '수정 모드로 전환되었습니다. 수정 후 다시 승인 신청을 해주세요.' });
+            router.refresh();
+        } catch (error) {
+            console.error('Failed to revert to draft:', error);
+            toast({ variant: 'destructive', description: '수정 모드 전환에 실패했습니다.' });
+        } finally {
+            setActionLoading(null);
+        }
+    }, [userId, fetchFullInvitationData, toast, router]);
+
     const handleConfirmAction = useCallback(() => {
         const { type, targetId, targetRecord } = confirmConfig;
         if (!type || type === 'INFO_ONLY') {
@@ -422,7 +450,7 @@ export default function MyPageClient({
 
     return (
         <div className={styles.contentContainer}>
-            <MyPageHeader title="내 청첩장" />
+            <MyPageHeader title={MENU_TITLES.DASHBOARD} />
 
             {invitations.length === 0 ? (
                 <EmptyState
@@ -474,6 +502,7 @@ export default function MyPageClient({
                                 onRequestApproval={handleRequestApprovalClick}
                                 onCancelRequest={handleCancelRequestClick}
                                 onRevokeApproval={handleAdminRevokeClick}
+                                onRevertToDraft={executeRevertToDraft}
                             />
                         );
                     })}
@@ -543,19 +572,16 @@ export default function MyPageClient({
                 >
                     <div style={{ textAlign: 'center' }}>
                         <div
-                            className={styles.rejectionMessageBox}
+                            className={`${styles.rejectionMessageBox} ${autoNotificationTarget.isApproval ? styles.success : ''}`}
                             dangerouslySetInnerHTML={{
                                 __html: autoNotificationTarget.isApproval
                                     ? `<strong>${autoNotificationTarget.invitation.invitation_data.mainScreen.title}</strong> 청첩장 승인이 완료되었습니다!<br/>이제 자유롭게 공유할 수 있습니다.`
                                     : parseRejection(autoNotificationTarget.rejection).displayReason || '내용이 없습니다.'
                             }}
                         />
-                        <p className={styles.rejectionNoticeText}>
-                            내역을 확인했습니다. [확인] 버튼을 누르면 이 알림이 다시 뜨지 않습니다.
-                        </p>
                     </div>
                 </ResponsiveModal>
             )}
-        </div>
+        </div >
     );
 }

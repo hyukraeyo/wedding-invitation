@@ -20,6 +20,62 @@ interface CalendarSectionViewProps {
 }
 
 /**
+ * Countdown Ticker Component to isolate re-renders
+ */
+const CountdownTimer = ({ weddingDate }: { weddingDate: Date }) => {
+    const [timeLeft, setTimeLeft] = React.useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+    React.useEffect(() => {
+        const calculate = () => {
+            const now = new Date();
+            const diff = weddingDate.getTime() - now.getTime();
+
+            if (diff <= 0) {
+                setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+                return;
+            }
+
+            setTimeLeft({
+                days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+                hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+                minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
+                seconds: Math.floor((diff % (1000 * 60)) / 1000)
+            });
+        };
+
+        calculate();
+        const timer = setInterval(calculate, 1000);
+        return () => clearInterval(timer);
+    }, [weddingDate]);
+
+    return (
+        <div className={styles.countdownArea}>
+            <div className={styles.timerGrid}>
+                <div className={styles.column}>
+                    <span className={styles.label}>DAYS</span>
+                    <span className={styles.value}>{timeLeft.days}</span>
+                </div>
+                <span className={styles.divider}>:</span>
+                <div className={styles.column}>
+                    <span className={styles.label}>HOUR</span>
+                    <span className={styles.value}>{timeLeft.hours}</span>
+                </div>
+                <span className={styles.divider}>:</span>
+                <div className={styles.column}>
+                    <span className={styles.label}>MIN</span>
+                    <span className={styles.value}>{timeLeft.minutes}</span>
+                </div>
+                <span className={styles.divider}>:</span>
+                <div className={styles.column}>
+                    <span className={styles.label}>SEC</span>
+                    <span className={styles.value}>{timeLeft.seconds}</span>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+/**
  * Presentational Component for the Calendar and D-Day section.
  * Renders a monthly calendar view highlighting the wedding date.
  */
@@ -49,32 +105,6 @@ const CalendarSectionView = memo(({
         const d = new Date(year, month, day, hour, min, 0, 0);
         return d;
     }, [date, time]);
-
-    // Countdown Ticker
-    const [timeLeft, setTimeLeft] = React.useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-
-    React.useEffect(() => {
-        const calculate = () => {
-            const now = new Date();
-            const diff = weddingDate.getTime() - now.getTime();
-
-            if (diff <= 0) {
-                setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
-                return;
-            }
-
-            setTimeLeft({
-                days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-                hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-                minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
-                seconds: Math.floor((diff % (1000 * 60)) / 1000)
-            });
-        };
-
-        calculate();
-        const timer = setInterval(calculate, 1000);
-        return () => clearInterval(timer);
-    }, [weddingDate]);
 
     // Parse D-Day Message
     const parsedDdayMessage = useMemo(() => {
@@ -191,29 +221,7 @@ const CalendarSectionView = memo(({
             {/* Countdown Area */}
             {showDday ? (
                 <>
-                    <div className={styles.countdownArea}>
-                        <div className={styles.timerGrid}>
-                            <div className={styles.column}>
-                                <span className={styles.label}>DAYS</span>
-                                <span className={styles.value}>{timeLeft.days}</span>
-                            </div>
-                            <span className={styles.divider}>:</span>
-                            <div className={styles.column}>
-                                <span className={styles.label}>HOUR</span>
-                                <span className={styles.value}>{timeLeft.hours}</span>
-                            </div>
-                            <span className={styles.divider}>:</span>
-                            <div className={styles.column}>
-                                <span className={styles.label}>MIN</span>
-                                <span className={styles.value}>{timeLeft.minutes}</span>
-                            </div>
-                            <span className={styles.divider}>:</span>
-                            <div className={styles.column}>
-                                <span className={styles.label}>SEC</span>
-                                <span className={styles.value}>{timeLeft.seconds}</span>
-                            </div>
-                        </div>
-                    </div>
+                    <CountdownTimer weddingDate={weddingDate} />
 
                     <div className={styles.ddaySection}>
                         <p className={styles.sentence}>

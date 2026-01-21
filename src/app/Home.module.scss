@@ -1,9 +1,9 @@
 @use "@/styles/variables" as *;
 
 .container {
-    min-height: 100vh;
     min-height: 100dvh;
     background: radial-gradient(circle at 50% 30%, #FFFDE7 0%, #FFF9C4 100%); // Subtle banana gradient
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -33,7 +33,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: min(8vh, 3.5rem); // Responsive gap to prevent overflow
+    gap: min(8dvh, 3.5rem); // Responsive gap to prevent overflow
     z-index: 1;
     padding-bottom: 3rem; // Keep space for footer
 }
