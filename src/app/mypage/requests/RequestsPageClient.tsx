@@ -56,8 +56,6 @@ interface ConfirmConfig {
  * TanStack Query의 useInfiniteQuery를 사용하여 고성능 무한 스크롤 및 캐싱을 구현했습니다.
  */
 export default function RequestsPageClient({
-    userId,
-    profile,
     initialLimit,
 }: RequestsPageClientProps) {
     const queryClient = useQueryClient();

@@ -17,35 +17,19 @@ export default async function AccountPage() {
 
     const supabase = await createSupabaseServerClient(session);
 
-    // 1. Kick off essential fetches in parallel
-    const profilePromise = supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', session.user.id)
-        .single();
+    // 1. 모든 독립적인 데이터 패칭을 병렬로 수행 (성능 최적화)
+    const [profileRes, countRes, requestCountRes] = await Promise.all([
+        supabase.from('profiles').select('*').eq('id', session.user.id).single(),
+        supabase.from('invitations').select('*', { count: 'exact', head: true }).eq('user_id', session.user.id),
+        supabase.from('approval_requests').select('*', { count: 'exact', head: true }).in('status', ['pending', 'rejected', 'approved'])
+    ]);
 
-    const countPromise = supabase
-        .from('invitations')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', session.user.id);
-
-    // 2. Await both basic data
-    const [profileRes, countRes] = await Promise.all([profilePromise, countPromise]);
     const profile = profileRes.data;
     const invitationCount = countRes.count || 0;
-
-    // Check admin status early
     const isAdmin = profile?.is_admin || session.user.email === 'admin@test.com';
 
-    // 3. Fetch admin count if needed
-    let requestCount = 0;
-    if (isAdmin) {
-        const { count } = await supabase
-            .from('approval_requests')
-            .select('*', { count: 'exact', head: true })
-            .in('status', ['pending', 'rejected', 'approved']);
-        requestCount = count || 0;
-    }
+    // 관리자일 경우에만 실제 카운트 사용
+    const requestCount = isAdmin ? (requestCountRes.count || 0) : 0;
 
     return (
         <AccountPageClient

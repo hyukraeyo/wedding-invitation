@@ -1,4 +1,5 @@
 import { auth } from '@/auth';
+import type { Session } from 'next-auth';
 import { redirect } from 'next/navigation';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import {
@@ -35,7 +36,7 @@ export default async function RequestsPage() {
     );
 }
 
-async function RequestsDataLayer({ session, userId }: { session: any, userId: string }) {
+async function RequestsDataLayer({ session, userId }: { session: Session | null, userId: string }) {
     const supabase = await createSupabaseServerClient(session);
 
     // 1. 프로필 및 권한 체크 (병렬 수행)

@@ -1,4 +1,5 @@
 import { Suspense } from 'react';
+import type { Session } from 'next-auth';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 import MyPageClient from './MyPageClient';
@@ -34,36 +35,21 @@ export default async function MyPage() {
  * 데이터를 실제로 패칭하는 내부 컴포넌트
  * 이 컴포넌트가 로딩되는 동안 MyPageLoading(스켈레톤)이 즉시 표시됩니다.
  */
-async function MyPageDataFetcher({ userId, session }: { userId: string, session: any }) {
+async function MyPageDataFetcher({ userId, session }: { userId: string, session: Session | null }) {
     const supabase = await createSupabaseServerClient(session);
 
-    // 1. 기본 프로필 및 개수 패칭
-    const [profileRes, countRes] = await Promise.all([
+    // 1. 모든 독립적인 데이터 패칭을 병렬로 수행 (성능 최적화)
+    const [profileRes, invitationsRes, rejectedRes] = await Promise.all([
         supabase.from('profiles').select('is_admin, full_name, phone').eq('id', userId).single(),
-        supabase.from('invitations').select('*', { count: 'exact', head: true }).eq('user_id', userId)
+        supabase.from('invitations').select(INVITATION_SUMMARY_SELECT).eq('user_id', userId).order('updated_at', { ascending: false }),
+        supabase.from('approval_requests').select(APPROVAL_REQUEST_SUMMARY_SELECT).eq('user_id', userId).eq('status', 'rejected').order('created_at', { ascending: false })
     ]);
 
     const profileData = profileRes.data;
     const isAdmin = profileData?.is_admin || false;
-    const invitationCount = countRes.count || 0;
-
-    // 2. 초대장 목록 패칭
-    const invitationsRes = await supabase
-        .from('invitations')
-        .select(INVITATION_SUMMARY_SELECT)
-        .eq('user_id', userId)
-        .order('updated_at', { ascending: false });
 
     const invitationRows = (invitationsRes.data ?? []) as unknown as InvitationSummaryRow[];
     const invitations = invitationRows.map(toInvitationSummary);
-
-    // 3. (옵션) 반려된 요청 패칭
-    const rejectedRes = await supabase
-        .from('approval_requests')
-        .select(APPROVAL_REQUEST_SUMMARY_SELECT)
-        .eq('user_id', userId)
-        .eq('status', 'rejected')
-        .order('created_at', { ascending: false });
 
     const rejectedRequests = (rejectedRes.data ?? []) as unknown as ApprovalRequestSummary[];
 

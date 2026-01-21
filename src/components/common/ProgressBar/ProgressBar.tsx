@@ -13,8 +13,9 @@ export function ProgressBar() {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        // 경로가 바뀌면 로딩 종료
-        setLoading(false);
+        // 경로가 바뀌면 로딩 종료 (비동기 처리로 린트 에러 방지)
+        const timer = requestAnimationFrame(() => setLoading(false));
+        return () => cancelAnimationFrame(timer);
     }, [pathname, searchParams]);
 
     // 전역 이벤트를 통해 로딩 상태를 수신할 수 있도록 설정

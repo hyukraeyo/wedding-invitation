@@ -1,13 +1,16 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import Link, { LinkProps } from "next/link";
-import { MouseEvent, ReactNode, useCallback, useTransition } from "react";
+import Link from "next/link";
+import { MouseEvent, ReactNode, useCallback } from "react";
 
-interface ViewTransitionLinkProps extends LinkProps {
+interface ViewTransitionLinkProps {
+    href: string;
     children: ReactNode;
-    className?: string;
-    onClick?: (event: MouseEvent<HTMLAnchorElement>) => void;
+    className?: string | undefined;
+    onClick?: ((event: MouseEvent<HTMLAnchorElement>) => void) | undefined;
+    id?: string | undefined;
+    style?: React.CSSProperties | undefined;
 }
 
 /**
@@ -22,7 +25,6 @@ export function ViewTransitionLink({
     ...props
 }: ViewTransitionLinkProps) {
     const router = useRouter();
-    const [isPending, startTransition] = useTransition();
 
     const handleClick = useCallback(
         (event: MouseEvent<HTMLAnchorElement>) => {
@@ -55,9 +57,9 @@ export function ViewTransitionLink({
             };
 
             // View Transition API 지원 여부 확인
-            const doc = document as any;
-            if (typeof doc.startViewTransition === "function") {
-                doc.startViewTransition(() => {
+            const vtDocument = document as unknown as { startViewTransition?: (cb: () => void) => void };
+            if (typeof vtDocument.startViewTransition === "function") {
+                vtDocument.startViewTransition(() => {
                     navigate();
                 });
             } else {
@@ -72,7 +74,6 @@ export function ViewTransitionLink({
             href={href}
             className={className}
             onClick={handleClick}
-            data-pending={isPending}
             {...props}
         >
             {children}

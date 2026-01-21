@@ -3,6 +3,7 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { MyPageLayout } from '@/components/mypage/MyPageLayout';
 import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
+import type { Session } from 'next-auth';
 
 /**
  * 🍌 마이페이지 레이아웃 (서버 컴포넌트)
@@ -31,27 +32,25 @@ export default async function MyPageLayoutServer({
     );
 }
 
-async function MyPageLayoutFetcher({ session, children }: { session: any, children: React.ReactNode }) {
+async function MyPageLayoutFetcher({ session, children }: { session: Session | null, children: React.ReactNode }) {
     const supabase = await createSupabaseServerClient(session);
+    const userId = session?.user?.id;
 
-    // Fetch essential sidebar data in parallel
-    const [profileRes, invitationCountRes] = await Promise.all([
-        supabase.from('profiles').select('full_name, phone, is_admin').eq('id', session.user.id).single(),
-        supabase.from('invitations').select('*', { count: 'exact', head: true }).eq('user_id', session.user.id)
+    if (!userId) return null;
+
+    // 1. 필요한 모든 데이터를 병렬로 패칭 (관리자 권한 확인과 동시에 요청 개수 조회)
+    const [profileRes, invitationCountRes, requestCountRes] = await Promise.all([
+        supabase.from('profiles').select('full_name, phone, is_admin').eq('id', userId).single(),
+        supabase.from('invitations').select('*', { count: 'exact', head: true }).eq('user_id', userId),
+        supabase.from('approval_requests').select('*', { count: 'exact', head: true }).in('status', ['pending', 'rejected', 'approved'])
     ]);
 
     const profile = profileRes.data;
     const isAdmin = !!profile?.is_admin;
     const invitationCount = invitationCountRes.count || 0;
 
-    let requestCount = 0;
-    if (isAdmin) {
-        const { count } = await supabase
-            .from('approval_requests')
-            .select('*', { count: 'exact', head: true })
-            .in('status', ['pending', 'rejected', 'approved']);
-        requestCount = count || 0;
-    }
+    // 관리자가 아닐 경우 requestCount는 0으로 처리 (보안 정책에 의해 이미 필터링되지만 로직상 명시)
+    const requestCount = isAdmin ? (requestCountRes.count || 0) : 0;
 
     return (
         <MyPageLayout

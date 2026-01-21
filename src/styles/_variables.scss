@@ -109,6 +109,7 @@ $transition-fast: 150ms;
 $transition-normal: 250ms;
 $transition-slow: 400ms;
 $transition-smooth: 260ms;
+$ease-ios: cubic-bezier(0.16, 1, 0.3, 1);
 
 // ============================================
 // Popup Animation Tokens

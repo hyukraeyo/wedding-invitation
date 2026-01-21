@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import ClientProviders from './ClientProviders';
@@ -149,7 +149,9 @@ export default function RootLayout({
           }}
         />
         <ClientProviders>
-          <ProgressBar />
+          <Suspense fallback={null}>
+            <ProgressBar />
+          </Suspense>
           <Header />
           {children}
         </ClientProviders>
