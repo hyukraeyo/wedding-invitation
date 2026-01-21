@@ -273,3 +273,13 @@
     pointer-events: none;
   }
 }
+
+// ============================================
+// Spin Animation Mixin (Centralized)
+// ============================================
+// 중복된 @keyframes spin을 한 곳에서 관리합니다.
+// 사용법: @include spin-animation; 또는 animation: spin 1s linear infinite;
+// 참조: _animations.scss에 @keyframes spin 정의됨
+@mixin spin-animation($duration: 1s) {
+  animation: spin $duration linear infinite;
+}

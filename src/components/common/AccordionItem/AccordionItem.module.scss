@@ -1,9 +1,10 @@
-@use "../../../styles/variables" as *;
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
 
 .item {
     background-color: #ffffff;
-    border-radius: 1rem; // 조금 더 둥글게 (16px)
-    transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    border-radius: v.$radius-md;
+    transition: background-color 0.2s v.$ease-ios, transform 0.2s v.$ease-ios;
     border: none;
     box-shadow: none; // 그림자 제거 (요청사항 1)
 
@@ -46,7 +47,7 @@
     cursor: pointer;
     text-align: left;
     user-select: none;
-    border-radius: 1rem;
+    border-radius: v.$radius-md;
     transition: all 0.2s;
     background-color: transparent;
     border: none;
@@ -110,7 +111,7 @@
 
     .chevron {
         color: var(--muted-foreground);
-        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        transition: transform 0.5s v.$ease-ios;
 
         &.open {
             transform: rotate(180deg);

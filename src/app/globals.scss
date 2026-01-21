@@ -1,6 +1,6 @@
 @use "../styles/variables" as *;
 @use "../styles/mixins" as m;
-@use "../styles/reset"; // Replaces Tailwind Preflight
+@use "../styles/reset";
 @use "../styles/animations";
 @use "../styles/common";
 
@@ -226,13 +226,9 @@ button {
 @keyframes page-fade-in {
   from {
     opacity: 0;
-    transform: translateY(20px);
-    filter: blur(4px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
-    filter: blur(0);
   }
 }
 

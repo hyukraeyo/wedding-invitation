@@ -12,6 +12,11 @@ import MyPageLoading from './loading';
 
 export const dynamic = 'force-dynamic';
 
+export const metadata = {
+    title: '내 청첩장 | 바나나웨딩',
+    description: '관리 중인 모바일 청첩장 목록입니다.',
+};
+
 /**
  * 🍌 마이페이지 (서버 컴포넌트)
  * Next.js 16 최적화: 최상단 await를 제거하고 Suspense를 사용하여 즉각적인 페이지 전환을 보장합니다.
@@ -24,11 +29,7 @@ export default async function MyPage() {
         redirect('/login');
     }
 
-    return (
-        <Suspense fallback={<MyPageLoading />}>
-            <MyPageDataFetcher userId={user.id} session={session} />
-        </Suspense>
-    );
+    return <MyPageDataFetcher userId={user.id} session={session} />;
 }
 
 /**

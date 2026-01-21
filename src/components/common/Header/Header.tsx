@@ -22,6 +22,8 @@ const Button = lazy(() => import('@/components/ui/Button').then(mod => ({ defaul
 export default function Header() {
     const router = useRouter();
     const pathname = usePathname();
+    // 메인 페이지('/')에서는 헤더를 숨깁니다.
+    const isVisible = pathname !== '/';
     const isMyPage = pathname?.startsWith('/mypage');
     const { user } = useAuth();
 
@@ -34,7 +36,6 @@ export default function Header() {
     const { onSave, isLoading } = useHeaderStore();
 
     const [showResetDialog, setShowResetDialog] = useState(false);
-    const isVisible = true;
     const { toast } = useToast();
 
     useEffect(() => {

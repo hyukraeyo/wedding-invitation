@@ -163,3 +163,38 @@
     justify-content: flex-end;
     gap: 0.5rem;
 }
+
+// ============================================
+// Skeleton UI
+// ============================================
+.skeletonAvatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 1rem;
+}
+
+.skeletonTitle {
+    height: 1.5rem;
+    width: 8rem;
+    margin-bottom: 0.5rem;
+    border-radius: 0.5rem;
+}
+
+.skeletonSub {
+    height: 1rem;
+    width: 12rem;
+    border-radius: 0.25rem;
+}
+
+.skeletonLabel {
+    height: 1rem;
+    width: 4rem;
+    border-radius: 0.25rem;
+}
+
+.skeletonValue {
+    height: 1.25rem;
+    width: 12rem;
+    border-radius: 0.25rem;
+}

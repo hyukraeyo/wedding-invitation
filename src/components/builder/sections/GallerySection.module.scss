@@ -1,5 +1,6 @@
 @use "../../../styles/variables" as v;
 @use "../../../styles/mixins" as m;
+@use "../../../styles/animations";
 
 .container {
   display: flex;
@@ -198,11 +199,7 @@
   animation: spin 0.8s linear infinite;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
+// @keyframes spin은 @use "../../../styles/animations"에서 가져옵니다.
 
 .dragOverlayItem {
   @extend .sortableItem;

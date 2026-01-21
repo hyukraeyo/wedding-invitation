@@ -223,7 +223,7 @@ export default function RequestsPageClient({
                                                     className={styles.approveButton}
                                                     disabled={approveMutation.isPending || rejectMutation.isPending}
                                                 >
-                                                    {approveMutation.isPending && approveMutation.variables?.id === targetInv.id ? <Loader2 className="animate-spin" size={14} /> : '승인'}
+                                                    {approveMutation.isPending && approveMutation.variables?.id === targetInv.id ? <Loader2 className={styles.spin} size={14} /> : '승인'}
                                                 </button>
                                             </>
                                         )}
@@ -240,7 +240,7 @@ export default function RequestsPageClient({
                                 disabled={isFetchingNextPage}
                                 className={styles.loadMoreButton}
                             >
-                                {isFetchingNextPage ? <Loader2 className="animate-spin" /> : '더 보기'}
+                                {isFetchingNextPage ? <Loader2 className={styles.spin} /> : '더 보기'}
                             </button>
                         </div>
                     )}

@@ -16,6 +16,11 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 export const dynamic = 'force-dynamic';
 
+export const metadata = {
+    title: '신청 관리 | 바나나웨딩',
+    description: '접수된 청첩장 신청 목록을 관리합니다.',
+};
+
 /**
  * 🍌 신청 관리 페이지 (서버 컴포넌트)
  * TanStack Query를 사용하여 프리페칭(Prefetching)을 수행하고,
@@ -29,11 +34,7 @@ export default async function RequestsPage() {
         redirect('/login');
     }
 
-    return (
-        <Suspense fallback={<LoadingSpinner variant="full" />}>
-            <RequestsDataLayer session={session} userId={user.id} />
-        </Suspense>
-    );
+    return <RequestsDataLayer session={session} userId={user.id} />;
 }
 
 async function RequestsDataLayer({ session, userId }: { session: Session | null, userId: string }) {

@@ -59,11 +59,8 @@
 
 .cherryParticle {
     position: absolute;
-    // Animation applied via class mixin or additional class in TSX
-    // but the animation name is what matters.
 }
 
-// Animations based on Tailwind defaults or common implementations
 @keyframes fall {
     0% {
         transform: translateY(-20px);

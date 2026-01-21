@@ -1,5 +1,6 @@
 @use "../../../styles/variables" as *;
 @use "../../../styles/mixins" as m;
+@use "../../../styles/animations";
 
 .locationInfo {
     text-align: center;
@@ -184,15 +185,7 @@
     }
 }
 
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-}
+// @keyframes spin은 @use "../../../styles/animations"에서 가져옵니다.
 
 .mapLoading {
     position: relative;

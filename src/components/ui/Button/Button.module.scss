@@ -1,15 +1,7 @@
 @use "../../../styles/variables" as v;
 @use "../../../styles/mixins" as m;
+@use "../../../styles/animations";
 
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
 
 .button {
   @include m.flex-center;
@@ -19,7 +11,7 @@
   border-radius: v.$radius-md;
   font-weight: 600;
   font-size: 15px; // Default
-  transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 0.2s v.$ease-ios, transform 0.2s v.$ease-ios, box-shadow 0.2s v.$ease-ios;
   cursor: pointer;
   user-select: none;
   border: 1px solid transparent;
