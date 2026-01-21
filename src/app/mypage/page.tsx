@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import type { Session } from 'next-auth';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
@@ -8,7 +7,6 @@ import { INVITATION_SUMMARY_SELECT, toInvitationSummary } from '@/lib/invitation
 import type { InvitationSummaryRow } from '@/lib/invitation-summary';
 import { APPROVAL_REQUEST_SUMMARY_SELECT } from '@/lib/approval-request-summary';
 import type { ApprovalRequestSummary } from '@/lib/approval-request-summary';
-import MyPageLoading from './loading';
 
 export const dynamic = 'force-dynamic';
 

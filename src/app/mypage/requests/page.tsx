@@ -11,8 +11,6 @@ import RequestsPageClient from './RequestsPageClient';
 import { APPROVAL_REQUEST_SUMMARY_SELECT } from '@/lib/approval-request-summary';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { headers } from 'next/headers';
-import { Suspense } from 'react';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 export const dynamic = 'force-dynamic';
 
