@@ -13,7 +13,10 @@ const ExampleSelectorModal = dynamic(() => import('@/components/common/ExampleSe
     ssr: false
 });
 
-import MainScreenSectionContent from './MainScreenSectionContent';
+const MainScreenSectionContent = dynamic(() => import('./MainScreenSectionContent'), {
+    loading: () => <div className="p-8 flex justify-center"><div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>,
+    ssr: false
+});
 
 export default function MainScreenSection({ isOpen, value }: SectionProps) {
     const imageUrl = useInvitationStore(state => state.imageUrl);
