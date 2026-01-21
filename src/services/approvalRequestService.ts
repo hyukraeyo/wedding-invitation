@@ -53,8 +53,8 @@ export const approvalRequestService = {
     return true;
   },
 
-  async getAllRequests() {
-    const response = await fetch('/api/approval-requests');
+  async getAllRequests(limit: number = 10, offset: number = 0) {
+    const response = await fetch(`/api/approval-requests?limit=${limit}&offset=${offset}`);
 
     if (!response.ok) {
       throw new Error('Approval request fetch failed');

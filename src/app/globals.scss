@@ -189,40 +189,72 @@ button {
    ============================================ */
 @supports (view-transition-name: none) {
   ::view-transition-group(page-content) {
-    animation-duration: 400ms;
-    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    animation-duration: 300ms;
+    animation-timing-function: var(--ease-ios);
   }
 
   ::view-transition-old(page-content) {
-    animation: 300ms cubic-bezier(0.4, 0, 1, 1) both fade-out;
+    animation: 200ms var(--ease-ios) both page-fade-out;
   }
 
   ::view-transition-new(page-content) {
-    animation: 400ms cubic-bezier(0, 0, 0.2, 1) both fade-in;
+    animation: 300ms var(--ease-ios) both page-fade-in;
+  }
+
+  /* 헤더와 사이드바는 전환 시 그대로 유지 (stable) */
+  ::view-transition-group(page-header),
+  ::view-transition-group(page-sidebar) {
+    animation-duration: 0ms;
   }
 }
 
 
 
-@keyframes fade-out {
+@keyframes page-fade-out {
   from {
     opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
   }
   to {
     opacity: 0;
+    transform: translateY(-6px);
+    filter: blur(2px);
   }
 }
 
-@keyframes fade-in {
+@keyframes page-fade-in {
   from {
     opacity: 0;
+    transform: translateY(20px);
+    filter: blur(4px);
   }
   to {
     opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @supports (view-transition-name: none) {
+    ::view-transition-group(page-content),
+    ::view-transition-old(page-content),
+    ::view-transition-new(page-content) {
+      animation: none !important;
+    }
   }
 }
 
 // Global utility for view transitions to ensure correct naming
 .view-transition-content {
   view-transition-name: page-content;
+}
+
+.view-transition-header {
+  view-transition-name: page-header;
+}
+
+.view-transition-sidebar {
+  view-transition-name: page-sidebar;
 }

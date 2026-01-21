@@ -237,21 +237,27 @@
 // Template (Page Transitions)
 // ============================================
 .templateWrapper {
-    animation: contentIn 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
-    will-change: transform, opacity;
-
-    @supports (view-transition-name: none) {
-        animation: none;
-    }
+    // view-transition-name은 RootTemplate에서 이미 정의되어 있으므로 중복 정의 시 애니메이션이 무시됩니다.
 }
 
-@keyframes contentIn {
-    from {
-        opacity: 0;
-        transform: translateY(12px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+// ============================================
+// Skeleton UI
+// ============================================
+.skeletonCard {
+    aspect-ratio: 3 / 5.5;
+    width: 100%;
+    border-radius: 1rem;
+}
+
+.skeletonText {
+    margin-top: 0.5rem;
+    height: 1.25rem;
+    width: 60%;
+    border-radius: 4px;
+}
+// ============================================
+// Entrance Animation (Pop-in solution)
+// ============================================
+.contentContainer {
+    animation: page-fade-in 400ms var(--ease-ios) both;
 }

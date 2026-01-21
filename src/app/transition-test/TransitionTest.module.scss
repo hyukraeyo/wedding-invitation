@@ -1,0 +1,73 @@
+@use "@/styles/variables" as v;
+
+.stage {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 2.5rem 1.5rem;
+  background:
+    radial-gradient(120% 120% at 10% 10%, #fff7e6 0%, #f8f0dc 45%, #efe3c6 100%),
+    linear-gradient(180deg, #fbf8f1 0%, #f0e6cf 100%);
+  color: v.$zinc-900;
+}
+
+.panel {
+  width: min(520px, 92vw);
+  border-radius: 1.75rem;
+  padding: 2.5rem 2rem;
+  background: white;
+  box-shadow: 0 20px 60px rgba(32, 28, 18, 0.18);
+  text-align: center;
+  display: grid;
+  gap: 1rem;
+  border: 1px solid rgba(32, 28, 18, 0.08);
+}
+
+.toneA {
+  background:
+    linear-gradient(150deg, #fff2db 0%, #ffffff 60%);
+}
+
+.toneB {
+  background:
+    linear-gradient(150deg, #e9f4ff 0%, #ffffff 60%);
+}
+
+.eyebrow {
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: v.$zinc-500;
+}
+
+.title {
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: v.$zinc-600;
+}
+
+.message {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: v.$zinc-800;
+  padding: 1rem;
+  background: rgba(v.$zinc-100, 0.5);
+  border-radius: 1rem;
+  font-style: italic;
+}
+
+.actions {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.hint {
+  font-size: 0.9rem;
+  color: v.$zinc-500;
+}

@@ -158,11 +158,15 @@ export async function GET(request: NextRequest) {
       );
     }
 
+    const limit = parseInt(searchParams.get('limit') || '10');
+    const offset = parseInt(searchParams.get('offset') || '0');
+
     const { data, error } = await db
       .from('approval_requests')
       .select(APPROVAL_REQUEST_SUMMARY_SELECT)
       .in('status', ['pending', 'rejected', 'approved'])
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false })
+      .range(offset, offset + limit - 1);
 
     if (error) {
       console.error('Error fetching approval requests:', error);

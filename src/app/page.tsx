@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { ViewTransitionLink } from "@/components/common/ViewTransitionLink";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import styles from "./Home.module.scss";
@@ -30,13 +30,13 @@ export default function Home() {
 
         {/* Action */}
         <div className={styles.action}>
-          <Link
+          <ViewTransitionLink
             href="/builder"
             className={styles.link}
           >
             <span className={styles.text}>청첩장 만들기</span>
             <ArrowRight className={styles.icon} />
-          </Link>
+          </ViewTransitionLink>
         </div>
 
       </main>

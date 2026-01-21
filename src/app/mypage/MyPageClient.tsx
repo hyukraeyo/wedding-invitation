@@ -312,7 +312,7 @@ export default function MyPageClient({
     }
 
     return (
-        <>
+        <div className={styles.contentContainer}>
             <MyPageHeader title="내 청첩장" />
 
             <div className={styles.cardGrid}>
@@ -414,6 +414,6 @@ export default function MyPageClient({
                     confirmText="승인 취소"
                 />
             ) : null}
-        </>
+        </div>
     );
 }

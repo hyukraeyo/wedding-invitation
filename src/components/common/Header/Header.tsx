@@ -84,7 +84,7 @@ export default function Header() {
     };
 
     return (
-        <header className={cn(styles.header, !isVisible && styles.hidden)}>
+        <header className={cn(styles.header, !isVisible && styles.hidden, "view-transition-header")}>
             {/* Logo */}
             <div className={styles.logoWrapper}>
                 <Link href="/" className={styles.logoLink}>

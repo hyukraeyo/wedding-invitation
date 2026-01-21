@@ -4,6 +4,7 @@ import Script from "next/script";
 import ClientProviders from './ClientProviders';
 import { fontVariables } from '@/lib/fonts';
 import Header from '@/components/common/Header';
+import { ProgressBar } from '@/components/common/ProgressBar/ProgressBar';
 import "./globals.scss";
 import "../styles/_accessibility.scss";
 
@@ -148,6 +149,7 @@ export default function RootLayout({
           }}
         />
         <ClientProviders>
+          <ProgressBar />
           <Header />
           {children}
         </ClientProviders>

@@ -1,8 +1,8 @@
 "use client";
 
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
+import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
 import React from 'react';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
     FileText,
@@ -53,7 +53,7 @@ export function MyPageSidebar({
 
     return (
         <>
-            <aside className={styles.sidebar}>
+            <aside className={clsx(styles.sidebar, "view-transition-sidebar")}>
                 <div className={styles.profileSection}>
                     <div className={styles.avatar}>
                         <Banana size={24} />
@@ -66,7 +66,7 @@ export function MyPageSidebar({
                 </div>
 
                 <nav className={styles.menuList}>
-                    <Link
+                    <ViewTransitionLink
                         href="/mypage"
                         className={clsx(styles.menuItem, pathname === '/mypage' && styles.active)}
                     >
@@ -75,10 +75,10 @@ export function MyPageSidebar({
                         {invitationCount > 0 && (
                             <span className={styles.menuBadge}>{invitationCount}</span>
                         )}
-                    </Link>
+                    </ViewTransitionLink>
 
                     {isAdmin && (
-                        <Link
+                        <ViewTransitionLink
                             href="/mypage/requests"
                             className={clsx(styles.menuItem, pathname === '/mypage/requests' && styles.active)}
                         >
@@ -87,16 +87,16 @@ export function MyPageSidebar({
                             {requestCount > 0 && (
                                 <span className={clsx(styles.menuBadge, styles.badgeAlert)}>{requestCount}</span>
                             )}
-                        </Link>
+                        </ViewTransitionLink>
                     )}
 
-                    <Link
+                    <ViewTransitionLink
                         href="/mypage/account"
                         className={clsx(styles.menuItem, pathname === '/mypage/account' && styles.active)}
                     >
                         <User size={20} className={styles.menuIcon} />
                         내 계정관리
-                    </Link>
+                    </ViewTransitionLink>
 
                     <button
                         className={styles.menuItem}

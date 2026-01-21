@@ -1,15 +1,25 @@
-import { supabaseAdmin } from '@/lib/supabaseAdmin';
-import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
-import { APPROVAL_REQUEST_SUMMARY_SELECT } from '@/lib/approval-request-summary';
-import { INVITATION_SUMMARY_SELECT, toInvitationSummary } from '@/lib/invitation-summary';
-import type { ApprovalRequestSummary } from '@/lib/approval-request-summary';
-import type { InvitationSummaryRow } from '@/lib/invitation-summary';
+import { createSupabaseServerClient } from '@/lib/supabase/server';
+import {
+    QueryClient,
+    HydrationBoundary,
+    dehydrate
+} from '@tanstack/react-query';
 import RequestsPageClient from './RequestsPageClient';
+import { APPROVAL_REQUEST_SUMMARY_SELECT } from '@/lib/approval-request-summary';
+import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { headers } from 'next/headers';
+import { Suspense } from 'react';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 export const dynamic = 'force-dynamic';
 
+/**
+ * 🍌 신청 관리 페이지 (서버 컴포넌트)
+ * TanStack Query를 사용하여 프리페칭(Prefetching)을 수행하고,
+ * 하이드레이션(Hydration)을 통해 클라이언트에 즉시 데이터를 전달합니다.
+ */
 export default async function RequestsPage() {
     const session = await auth();
     const user = session?.user ?? null;
@@ -18,58 +28,62 @@ export default async function RequestsPage() {
         redirect('/login');
     }
 
+    return (
+        <Suspense fallback={<LoadingSpinner variant="full" />}>
+            <RequestsDataLayer session={session} userId={user.id} />
+        </Suspense>
+    );
+}
+
+async function RequestsDataLayer({ session, userId }: { session: any, userId: string }) {
     const supabase = await createSupabaseServerClient(session);
 
-    // 1. Start basic checks in parallel
-    const profilePromise = supabase
+    // 1. 프로필 및 권한 체크 (병렬 수행)
+    const profileRes = await supabase
         .from('profiles')
         .select('is_admin, full_name, phone')
-        .eq('id', user.id)
+        .eq('id', userId)
         .single();
 
-    const countPromise = supabase
-        .from('invitations')
-        .select('*', { count: 'exact', head: true })
-        .eq('user_id', user.id);
-
-    // 2. Await basic checks
-    const [profileRes, countRes] = await Promise.all([profilePromise, countPromise]);
     const profileData = profileRes.data;
     const isAdmin = profileData?.is_admin || false;
-    const invitationCount = countRes.count || 0;
 
     if (!isAdmin) {
         redirect('/mypage');
     }
 
-    // 3. Fetch admin-specific data
+    // 2. 초기 리미트 결정 (기기 환경에 따라)
+    const headerList = await headers();
+    const userAgent = headerList.get('user-agent') || '';
+    const isMobile = /mobile/i.test(userAgent);
+    const initialLimit = isMobile ? 5 : 10;
+
+    // 3. TanStack Query 프리페칭
+    const queryClient = new QueryClient();
     const db = supabaseAdmin || supabase;
-    const approvalRequestsResult = await db.from('approval_requests')
-        .select(APPROVAL_REQUEST_SUMMARY_SELECT)
-        .in('status', ['pending', 'rejected', 'approved'])
-        .order('created_at', { ascending: false });
 
-    const approvalRequests = (approvalRequestsResult.data ?? []) as unknown as ApprovalRequestSummary[];
-    const requestIds = approvalRequests.map(r => r.invitation_id);
+    await queryClient.prefetchInfiniteQuery({
+        queryKey: ['approval-requests'],
+        queryFn: async ({ pageParam = 0 }) => {
+            const { data } = await db
+                .from('approval_requests')
+                .select(APPROVAL_REQUEST_SUMMARY_SELECT)
+                .in('status', ['pending', 'rejected', 'approved'])
+                .order('created_at', { ascending: false })
+                .range(pageParam, pageParam + initialLimit - 1);
 
-    let adminInvitations: ReturnType<typeof toInvitationSummary>[] = [];
-    if (requestIds.length > 0) {
-        const adminQueueResult = await db.from('invitations')
-            .select(INVITATION_SUMMARY_SELECT)
-            .in('id', requestIds)
-            .order('updated_at', { ascending: false });
-
-        const rows = (adminQueueResult.data ?? []) as unknown as InvitationSummaryRow[];
-        adminInvitations = rows.map(toInvitationSummary);
-    }
+            return data ?? [];
+        },
+        initialPageParam: 0,
+    });
 
     return (
-        <RequestsPageClient
-            userId={user.id}
-            initialApprovalRequests={approvalRequests}
-            initialAdminInvitations={adminInvitations}
-            profile={profileData}
-            invitationCount={invitationCount || 0}
-        />
+        <HydrationBoundary state={dehydrate(queryClient)}>
+            <RequestsPageClient
+                userId={userId}
+                profile={profileData}
+                initialLimit={initialLimit}
+            />
+        </HydrationBoundary>
     );
 }

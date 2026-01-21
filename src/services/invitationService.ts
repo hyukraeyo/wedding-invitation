@@ -68,6 +68,18 @@ export const invitationService = {
         return data;
     },
 
+    async getInvitationsByIds(ids: string[], client?: SupabaseClient) {
+        const supabaseClient = client ?? await getDefaultClient();
+        const { data, error } = await supabaseClient
+            .from('invitations')
+            .select(INVITATION_SUMMARY_SELECT)
+            .in('id', ids);
+
+        if (error) throw error;
+        const rows = (data ?? []) as unknown as InvitationSummaryRow[];
+        return rows.map(toInvitationSummary);
+    },
+
     async deleteInvitation(id: string, client?: SupabaseClient) {
         const supabaseClient = client ?? await getDefaultClient();
         const { error } = await supabaseClient

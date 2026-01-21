@@ -5,7 +5,7 @@ import styles from './MyPage.module.scss';
 
 export default function MyPageTemplate({ children }: { children: React.ReactNode }) {
     return (
-        <div className={`${styles.templateWrapper} view-transition-content`}>
+        <div className={styles.templateWrapper}>
             {children}
         </div>
     );
