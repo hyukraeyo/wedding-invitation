@@ -40,8 +40,7 @@
     }
 
     &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
         border-color: v.$zinc-200;
     }
 
@@ -74,7 +73,6 @@
     transition: transform 0.3s v.$ease-ios;
 
     .notificationItem:hover & {
-        transform: scale(1.05);
     }
 }
 
@@ -95,6 +93,11 @@
 
 .itemInfo {
     flex: 1;
+}
+
+.invitationIcon {
+    margin-right: 0.25rem;
+    display: inline-block;
 }
 
 .itemTitle {

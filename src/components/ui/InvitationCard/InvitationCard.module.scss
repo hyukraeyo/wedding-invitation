@@ -13,13 +13,12 @@
     overflow: hidden;
     background-color: #ffffff;
     aspect-ratio: 3 / 5.5;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-    transition: all 0.4s v.$ease-ios;
+    box-shadow: v.$shadow-card;
+    transition: all v.$transition-400 v.$ease-ios;
     border: 1px solid v.$zinc-100;
 
     @include m.hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+        box-shadow: v.$shadow-hover-card;
         border-color: v.$zinc-200;
     }
 }
@@ -35,12 +34,12 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.8s v.$ease-ios;
+        transition: transform v.$transition-800 v.$ease-ios;
     }
 
     @include m.hover {
         img {
-            transform: scale(1.08);
+            transform: scale(v.$scale-hover-sm);
         }
     }
 }
@@ -118,7 +117,7 @@
     align-items: center;
     padding: 0.375rem 0.625rem;
     border-radius: v.$radius-sm;
-    font-size: 0.75rem;
+    font-size: v.$font-size-xs;
     font-weight: 700;
     backdrop-filter: blur(8px);
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -160,7 +159,7 @@
 }
 
 .overlayTitle {
-    font-size: 1.25rem;
+    font-size: v.$font-size-xl;
     font-weight: 800;
     color: white;
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
@@ -182,9 +181,9 @@
         flex: 1;
         height: 2.75rem !important;
         border-radius: v.$radius-sm;
-        font-size: 0.875rem;
+        font-size: v.$font-size-sm;
         font-weight: 700;
-        transition: all 0.3s v.$ease-ios;
+        transition: all v.$transition-300 v.$ease-ios;
 
         &.primary {
             background-color: v.$color-primary !important;
@@ -193,8 +192,7 @@
 
             &:hover {
                 background-color: v.$primary-400 !important;
-                transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(v.$color-primary, 0.3);
+                box-shadow: v.$shadow-hover-primary-md;
             }
         }
 
@@ -206,7 +204,6 @@
 
             &:hover {
                 background-color: white !important;
-                transform: translateY(-2px);
             }
         }
 
@@ -216,8 +213,7 @@
             border: none !important;
 
             &:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(v.$color-primary, 0.3);
+                box-shadow: v.$shadow-hover-primary-md;
             }
         }
 
@@ -300,7 +296,7 @@
 }
 
 .dateText {
-    font-size: 0.75rem;
+    font-size: v.$font-size-xs;
     font-weight: 600;
     color: v.$zinc-400;
     margin-top: 0.25rem;
@@ -322,10 +318,10 @@
     gap: 0.75rem;
     padding: 0.875rem;
     border-radius: v.$radius-md;
-    font-size: 0.9375rem;
+    font-size: v.$font-size-md;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.2s, transform 0.2s;
+    transition: background-color v.$transition-200, transform v.$transition-200;
 
     &.kakaoShare {
         background-color: #FEE500;
@@ -351,8 +347,12 @@
     border-radius: v.$radius-md;
 }
 
+.menuIcon {
+    margin-right: 0.5rem;
+}
+
 .rejectionMessage {
-    font-size: 0.9375rem;
+    font-size: v.$font-size-md;
     color: #374151;
     line-height: 1.7;
     margin-top: 1rem;

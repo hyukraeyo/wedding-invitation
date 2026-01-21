@@ -192,7 +192,7 @@ export const ResponsiveModal = ({
 
                         <div className={cn(styles.content, styles.drawerScrollArea, contentClassName)}>
                             {description ? (
-                                <DrawerDescription className={cn(styles.description, 'mb-4')}>
+                                <DrawerDescription className={cn(styles.description, styles.descriptionSpacing)}>
                                     {description}
                                 </DrawerDescription>
                             ) : null}
@@ -242,7 +242,7 @@ export const ResponsiveModal = ({
 
                     {/* On Desktop it's outside, on Mobile (Drawer) we put it below the main footer but inside content since it's a sheet */}
                     {outerFooter ? (
-                        <div className={cn(styles.outerFooter, 'pb-8 bg-white')}>
+                        <div className={cn(styles.outerFooter, styles.outerFooterMobile)}>
                             {outerFooter}
                         </div>
                     ) : null}

@@ -16,7 +16,7 @@
   cursor: pointer;
 
   &:hover {
-    border-color: v.$zinc-300;
+    border-color: v.$control-hover-border;
   }
 }
 
@@ -43,7 +43,7 @@
   }
 
   &:active {
-    background-color: v.$zinc-50;
+    background-color: v.$control-active-bg;
   }
 
   &.selected {
@@ -52,7 +52,7 @@
 }
 
 .optionText {
-  font-size: 1rem;
+  font-size: v.$font-size-base;
   letter-spacing: -0.01em;
   color: v.$zinc-700;
   transition: all v.$transition-fast;
@@ -89,3 +89,9 @@
 .srOnly {
   @include m.visually-hidden;
 }
+
+.scrollArea {
+  padding-left: 0;
+  padding-right: 0;
+}
+

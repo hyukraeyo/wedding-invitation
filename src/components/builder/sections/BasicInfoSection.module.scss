@@ -22,3 +22,12 @@
     grid-template-columns: 1fr auto;
   }
 }
+
+.deceasedButton {
+  width: 50px;
+  padding: 0;
+}
+
+.deceasedButtonInactive {
+  color: v.$zinc-400;
+}

@@ -11,7 +11,7 @@
   user-select: none;
 
   &:active {
-    background-color: rgba(v.$zinc-200, 0.5); // active:bg-accent/50
+    background-color: v.$control-active-bg-muted; // active:bg-accent/50
   }
 
   &.disabled {
@@ -28,7 +28,7 @@
 }
 
 .label {
-  font-size: 0.9375rem; // 15px
+  font-size: v.$font-size-md; // 15px
   font-weight: 500;
   line-height: 1;
   cursor: pointer;

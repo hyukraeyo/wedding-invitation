@@ -4,9 +4,14 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import dynamic from 'next/dynamic';
 import { AccordionItem } from '@/components/common/AccordionItem';
 import type { SectionProps } from '@/types/builder';
+import styles from './LocationSection.module.scss';
 
 const LocationSectionContent = dynamic(() => import('./LocationSectionContent'), {
-    loading: () => <div className="p-8 flex justify-center"><div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>,
+    loading: () => (
+        <div className={styles.loadingContainer}>
+            <div className={styles.loadingSpinner} />
+        </div>
+    ),
     ssr: false
 });
 

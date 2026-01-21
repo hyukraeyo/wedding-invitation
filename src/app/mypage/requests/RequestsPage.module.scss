@@ -167,12 +167,7 @@
     &:hover:not(:disabled) {
         border-color: #FBC02D;
         color: #FBC02D;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-
-    &:active:not(:disabled) {
-        transform: translateY(0);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
     }
 
     &:disabled {

@@ -20,7 +20,7 @@
 .uploadBox {
   position: relative;
   width: 100%;
-  border: 2px dashed v.$zinc-300; // border-muted-foreground/25 -> 대략 zinc-300
+  border: 2px dashed v.$zinc-300; // border-muted-foreground/25 -> ?�??zinc-300
   border-radius: v.$radius-lg;
   display: flex;
   align-items: center;
@@ -34,7 +34,7 @@
     cursor: pointer;
 
     &:hover {
-      background-color: rgba(v.$zinc-100, 0.5); // hover:bg-muted/50
+      background-color: v.$control-hover-bg-muted; // hover:bg-muted/50
     }
   }
 
@@ -60,7 +60,7 @@
 
 .image {
   object-fit: cover;
-  transition: opacity 300ms;
+  transition: opacity v.$transition-300;
   width: 100%;
   height: auto;
 
@@ -98,17 +98,17 @@
   color: white !important;
   backdrop-filter: blur(4px);
   border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all v.$transition-200 cubic-bezier(0.4, 0, 0.2, 1);
   padding: 0;
 
   &:hover {
     background-color: v.$red-500 !important;
-    transform: scale(1.1);
+    transform: scale(v.$scale-hover);
     color: white !important;
   }
 
   &:active {
-    transform: scale(0.95);
+    transform: scale(v.$scale-press-sm);
   }
 
   svg {
@@ -129,7 +129,7 @@
 
 .iconCircle {
   margin-bottom: 1rem; // mb-4
-  border-radius: 9999px;
+  border-radius: v.$radius-full;
   background-color: v.$zinc-100; // bg-muted
   padding: 0.75rem; // p-3
   display: flex;

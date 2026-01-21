@@ -53,7 +53,7 @@
 .snowParticle {
     position: absolute;
     background-color: white;
-    border-radius: 9999px;
+    border-radius: $radius-full;
     animation: fall linear infinite;
 }
 

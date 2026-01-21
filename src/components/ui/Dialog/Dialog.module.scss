@@ -57,14 +57,14 @@
 }
 
 .title {
-  font-size: 1.125rem;
+  font-size: v.$font-size-lg;
   font-weight: 600;
   color: v.$zinc-900;
   margin: 0;
 }
 
 .description {
-  font-size: 0.875rem;
+  font-size: v.$font-size-sm;
   color: v.$zinc-500;
   margin: 0;
 }
@@ -75,7 +75,7 @@
   top: 1rem;
   border-radius: v.$radius-sm;
   opacity: 0.7;
-  transition: opacity 0.2s;
+  transition: opacity v.$transition-200;
   cursor: pointer;
   background: transparent;
   border: none;
@@ -104,7 +104,7 @@
 @keyframes contentShow {
   from { 
     opacity: 0; 
-    transform: translate(-50%, -35%) scale(0.95); 
+    transform: translate(-50%, -35%) scale(v.$scale-press-sm); 
   }
   to { 
     opacity: 1; 
@@ -119,7 +119,8 @@
   }
   to { 
     opacity: 0; 
-    transform: translate(-50%, -35%) scale(0.95); 
+    transform: translate(-50%, -35%) scale(v.$scale-press-sm); 
   }
 }
+
 

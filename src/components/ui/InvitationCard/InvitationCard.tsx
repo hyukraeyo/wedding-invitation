@@ -182,23 +182,23 @@ const InvitationCard = React.memo(({
                                         variant="glass"
                                     />
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent side="bottom" align="end" className={styles.dropdownContent}>
+                                    <DropdownMenuContent side="bottom" align="end" className={styles.dropdownContent}>
                                     <DropdownMenuItem onClick={handlePreview}>
-                                        <Eye size={16} className="mr-2" /> 미리보기
+                                        <Eye size={16} className={styles.menuIcon} /> 미리보기
                                     </DropdownMenuItem>
                                     {isApproved && (
                                         <DropdownMenuItem onClick={() => setShowEditConfirmModal(true)}>
-                                            <Edit2 size={16} className="mr-2" /> 수정하기
+                                            <Edit2 size={16} className={styles.menuIcon} /> 수정하기
                                         </DropdownMenuItem>
                                     )}
                                     {!isRequesting && !isApproved && (
                                         <DropdownMenuItem onClick={() => onEdit(invitation)}>
-                                            <Edit2 size={16} className="mr-2" /> 편집하기
+                                            <Edit2 size={16} className={styles.menuIcon} /> 편집하기
                                         </DropdownMenuItem>
                                     )}
                                     {isRejected && (
                                         <DropdownMenuItem onSelect={handleRejectionModalOpen}>
-                                            <AlertCircle size={16} className="mr-2" /> {REJECTION_LABEL} 확인
+                                            <AlertCircle size={16} className={styles.menuIcon} /> {REJECTION_LABEL} 확인
                                         </DropdownMenuItem>
                                     )}
                                     {!isRequesting && (
@@ -206,7 +206,7 @@ const InvitationCard = React.memo(({
                                             onClick={() => setTimeout(() => onDelete(invitation), 0)}
                                             style={{ color: '#EF4444' }}
                                         >
-                                            <Trash2 size={16} className="mr-2" /> 삭제하기
+                                            <Trash2 size={16} className={styles.menuIcon} /> 삭제하기
                                         </DropdownMenuItem>
                                     )}
                                 </DropdownMenuContent>

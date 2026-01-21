@@ -39,7 +39,7 @@
             @include m.flex-center;
             font-size: calc(0.95rem * var(--font-scale));
             color: #495057;
-            border-radius: 9999px;
+            border-radius: $radius-full;
             position: relative;
             z-index: 1;
             font-family: var(--font-pretendard);
@@ -113,7 +113,7 @@
 
         .divider {
             color: #e9ecef;
-            font-size: 1rem;
+            font-size: $font-size-base;
             font-weight: 300;
             margin-top: 0.8rem;
         }
@@ -138,7 +138,7 @@
             color: var(--accent-color);
             margin: 0 0.2rem;
             padding: 0.1em 0.3em;
-            border-radius: 1rem; // 16px
+            border-radius: $radius-md; // 16px
         }
     }
 }

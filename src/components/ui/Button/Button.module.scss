@@ -8,10 +8,10 @@
   position: relative;
   gap: 0.5rem;
   white-space: nowrap;
-  border-radius: v.$radius-md;
+  border-radius: v.$button-radius;
   font-weight: 600;
-  font-size: 15px; // Default
-  transition: background-color 0.2s v.$ease-ios, transform 0.2s v.$ease-ios, box-shadow 0.2s v.$ease-ios;
+  font-size: v.$button-font-size;
+  transition: background-color v.$transition-200 v.$ease-ios, transform v.$transition-200 v.$ease-ios, box-shadow v.$transition-200 v.$ease-ios;
   cursor: pointer;
   user-select: none;
   border: 1px solid transparent;
@@ -32,7 +32,7 @@
   }
 
   &:active {
-    transform: scale(0.97);
+    transform: scale(v.$scale-press);
   }
 
   // --- Variants ---
@@ -63,7 +63,7 @@
     color: v.$color-text-primary;
 
     @include m.hover {
-      background-color: v.$zinc-50;
+      background-color: v.$control-hover-bg;
       border-color: v.$color-border-hover;
     }
   }
@@ -73,7 +73,7 @@
     color: v.$zinc-900;
 
     @include m.hover {
-      background-color: v.$zinc-200;
+      background-color: v.$control-hover-bg-stronger;
     }
   }
 
@@ -82,7 +82,7 @@
     color: v.$color-text-primary;
 
     @include m.hover {
-      background-color: v.$zinc-100;
+      background-color: v.$control-hover-bg-strong;
     }
   }
 
@@ -112,48 +112,48 @@
   // --- Sizes ---
 
   &--size-default {
-    height: 48px;
+    height: v.$button-height-default;
     padding: 0 1.25rem;
-    font-size: 15px;
+    font-size: v.$button-font-size;
   }
 
   &--size-sm {
-    height: 36px;
+    height: v.$button-height-sm;
     padding: 0 0.75rem;
-    font-size: 13px;
+    font-size: v.$font-size-2xs;
     border-radius: v.$radius-sm;
   }
 
   &--size-lg {
-    height: 56px;
+    height: v.$button-height-lg;
     padding: 0 2rem;
-    font-size: 18px;
+    font-size: v.$font-size-lg;
     border-radius: v.$radius-lg;
   }
 
   &--size-icon {
-    height: 48px;
-    width: 48px;
+    height: v.$button-height-icon;
+    width: v.$button-height-icon;
     padding: 0;
   }
 
   &--size-icon-xs {
-    height: 28px;
-    width: 28px;
+    height: v.$button-height-icon-xs;
+    width: v.$button-height-icon-xs;
     padding: 0;
     border-radius: v.$radius-sm;
   }
 
   &--size-icon-sm {
-    height: 36px;
-    width: 36px;
+    height: v.$button-height-icon-sm;
+    width: v.$button-height-icon-sm;
     padding: 0;
     border-radius: v.$radius-sm;
   }
 
   &--size-icon-lg {
-    height: 56px;
-    width: 56px;
+    height: v.$button-height-icon-lg;
+    width: v.$button-height-icon-lg;
     padding: 0;
     border-radius: v.$radius-lg;
   }

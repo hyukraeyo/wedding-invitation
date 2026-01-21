@@ -147,7 +147,7 @@ export const ResponsiveSelect = <T extends string | number>({
                             항목 목록
                         </DrawerDescription>
                     </DrawerHeader>
-                    <DrawerScrollArea ref={scrollAreaRef} className="px-0">
+                    <DrawerScrollArea ref={scrollAreaRef} className={styles.scrollArea}>
                         {options.map((option, idx) => {
                             const isSelected = stringValue === String(option.value);
                             return (

@@ -9,7 +9,7 @@
     position: relative;
     width: 100%;
     background-color: v.$zinc-100;
-    border-radius: 1rem; // 16px
+    border-radius: v.$radius-md; // 16px
     padding: 0.25rem; // p-1
     display: grid;
     grid-auto-flow: column;
@@ -17,11 +17,11 @@
     isolation: isolate;
 
     &.large {
-        height: 48px; // Unified with button/input height
+        height: v.$control-height-md; // Unified with button/input height
     }
 
     &.small {
-        height: 2.5rem; // h-10
+        height: v.$control-height-xs; // h-10
     }
 }
 
@@ -31,9 +31,9 @@
     bottom: 0.25rem; // bottom-1
     left: 0.25rem; // left-1
     background-color: white;
-    border-radius: calc(1rem - 4px); // Inner radius for 16px outer
+    border-radius: calc(v.$radius-md - 4px); // Inner radius for 16px outer
     // box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(0, 0, 0, 0.02);
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); // ease-ios
+    transition: transform v.$transition-300 cubic-bezier(0.16, 1, 0.3, 1); // ease-ios
     pointer-events: none;
     z-index: 0; // Fix z-index stacking context
 }
@@ -53,7 +53,7 @@
     z-index: 1;
 
     &:active {
-        transform: scale(0.96);
+        transform: scale(v.$scale-press-sm);
         background-color: rgba(0, 0, 0, 0.02);
     }
 
@@ -68,10 +68,10 @@
 
     // Size variants overrides
     &.large {
-        font-size: 15px; // v.button-base default
+        font-size: v.$font-size-md; // v.button-base default
     }
 
     &.small {
-        font-size: 13px;
+        font-size: v.$font-size-2xs;
     }
 }

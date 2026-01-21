@@ -64,8 +64,7 @@
         border-color: v.$color-primary;
         border-style: solid;
         background-color: v.$white;
-        transform: translateY(-8px);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
 
         &::after {
             opacity: 1;
@@ -84,7 +83,7 @@
     }
 
     &:active {
-        transform: translateY(-4px) scale(0.98);
+        transform: scale(0.98);
     }
 }
 
@@ -253,4 +252,11 @@
 .rejectionNoticeText {
     font-size: 0.875rem;
     color: v.$zinc-500;
+}
+
+.deleteWarning {
+    display: block;
+    margin-top: 0.5rem;
+    font-weight: 700;
+    color: v.$red-500;
 }

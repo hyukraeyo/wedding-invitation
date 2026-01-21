@@ -31,8 +31,8 @@
   align-items: center;
   justify-content: center;
   height: 2.5rem;
-  margin-top: 0.5rem; // 데이트피커 헤더와의 간격 확보
-  margin-bottom: 1rem; // 날짜 그리드와의 간격 약간 증가
+  margin-top: 0.5rem; // ?�이?�피�??�더?�??간격 ?�보
+  margin-bottom: 1rem; // ?�짜 그리?��???간격 ?�간 증�?
   width: 100%;
 }
 
@@ -40,25 +40,25 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.5rem; // 버튼과 텍스트 사이의 간격
+  gap: 1.5rem; // 버튼�??�스???�이??간격
   width: 100%;
 }
 
 .caption_label {
-  font-size: 0.9375rem; 
+  font-size: v.$font-size-md; 
   font-weight: 700;
   color: v.$zinc-900;
   letter-spacing: -0.01em;
   font-family: v.$font-pretendard;
 }
 
-// 명시적으로 nav, button_previous, button_next 클래스 추가
+// 명시?�으�?nav, button_previous, button_next ?�래??추�?
 .nav {
   display: none !important;
 }
 
 .button_previous, .button_next {
-  display: none !important; // 기본 버튼 숨김
+  display: none !important; // 기본 버튼 ?��?
 }
 
 .navButton {
@@ -72,16 +72,16 @@
   background-color: v.$zinc-50;
   border: none;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all v.$transition-200 cubic-bezier(0.16, 1, 0.3, 1);
   
   &:hover:not(:disabled) {
-    background-color: v.$zinc-100;
+    background-color: v.$control-hover-bg-strong;
     color: v.$zinc-900;
   }
   
   &:active:not(:disabled) {
-    background-color: v.$zinc-200;
-    transform: scale(0.92);
+    background-color: v.$control-hover-bg-stronger;
+    transform: scale(v.$scale-press-xs);
   }
   
   &:disabled {
@@ -113,7 +113,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.75rem;
+  font-size: v.$font-size-xs;
   font-weight: 700;
   color: v.$zinc-400;
   height: 1.5rem;
@@ -145,26 +145,26 @@
 .dayButton {
   width: 2.25rem;
   height: 2.25rem;
-  border-radius: 1rem; // 16px
+  border-radius: v.$radius-md; // 16px
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.9375rem;
+  font-size: v.$font-size-md;
   font-weight: 600;
   color: v.$zinc-700;
   background-color: transparent;
   border: 1px solid transparent;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all v.$transition-200 cubic-bezier(0.16, 1, 0.3, 1);
   
   &:hover:not(:disabled) {
     background-color: v.$primary-50;
     color: v.$primary-700;
-    transform: translateY(-1px);
+    box-shadow: v.$shadow-hover-sm;
   }
 
   &:active {
-    transform: scale(0.95);
+    transform: scale(v.$scale-press-sm);
   }
   
   &[data-selected="true"] {
@@ -173,7 +173,6 @@
     color: v.$color-primary-foreground !important;
     font-weight: 800;
     // box-shadow: 0 4px 12px rgba(v.$color-primary, 0.35);
-    transform: scale(1.05);
   }
 
   &.sunday {
@@ -239,3 +238,4 @@
     border-bottom-left-radius: 0;
   }
 }
+

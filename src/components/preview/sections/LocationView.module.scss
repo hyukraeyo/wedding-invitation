@@ -53,7 +53,7 @@
 .mapContainer {
     width: 100%;
     aspect-ratio: 16 / 10;
-    border-radius: 1rem; // 16px
+    border-radius: $radius-md; // 16px
     overflow: hidden;
     margin-bottom: 1.25rem;
     background-color: #f8f9fa;
@@ -89,7 +89,7 @@
         gap: 0.5rem;
         background-color: #ffffff;
         padding-block: 1rem;
-        border-radius: 1rem; // 16px
+        border-radius: $radius-md; // 16px
         border: 1px solid #f1f3f5;
         transition: all $transition-fast;
         text-decoration: none;
@@ -112,7 +112,7 @@
             width: 2rem;
             height: 2rem;
             @include m.flex-center;
-            border-radius: 1rem; // 16px
+            border-radius: $radius-md; // 16px
             background-color: #f8f9fa;
         }
 
@@ -127,7 +127,7 @@
 
 .sketchContainer {
     width: 100%;
-    border-radius: 1rem; // 16px
+    border-radius: $radius-md; // 16px
     overflow: hidden;
     background-color: #f8f9fa;
     border: 1px solid #f1f3f5;
@@ -185,7 +185,7 @@
     }
 }
 
-// @keyframes spin은 @use "../../../styles/animations"에서 가져옵니다.
+// @keyframes spin?� @use "../../../styles/animations"?�서 가?�옵?�다.
 
 .mapLoading {
     position: relative;

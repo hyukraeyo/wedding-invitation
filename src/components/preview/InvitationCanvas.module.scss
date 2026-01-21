@@ -52,6 +52,11 @@
     z-index: 10005;
 }
 
+.gallerySkeleton {
+    height: 10rem;
+    width: 100%;
+}
+
 .watermark {
     position: absolute;
     inset: -50%; // Extend significantly to cover all corners

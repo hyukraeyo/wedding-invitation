@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { cn } from '@/lib/utils';
+import styles from './ColorPicker.module.scss';
 
 interface ColorPickerProps {
     value: string;
@@ -27,15 +28,15 @@ export const ColorPicker = ({ value, colors, onChange, className }: ColorPickerP
     );
 
     return (
-        <div className={cn("grid grid-cols-7 gap-2", className)}>
+        <div className={cn(styles.grid, className)}>
             {colorData.map(({ color, ringColor }) => (
                 <button
                     key={color}
                     onClick={() => onChange(color)}
                     className={cn(
-                        "w-8 h-8 rounded-full border border-black/10 transition-transform active:scale-90",
-                        "hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2",
-                        value === color && "ring-2 ring-offset-2 scale-110"
+                        styles.button,
+                        styles.buttonInteractive,
+                        value === color && styles.selected
                     )}
                     style={{
                         backgroundColor: color,

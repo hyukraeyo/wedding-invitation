@@ -155,7 +155,7 @@ export default function AccountsSectionContent() {
                                         icon={Trash2}
                                         size="sm"
                                         variant="ghost"
-                                        className="text-zinc-400 hover:text-red-600 hover:bg-red-50"
+                                        className={styles.deleteButton}
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             handleRemoveAccount(acc.id);

@@ -4,22 +4,25 @@
 .item {
     background-color: #ffffff;
     border-radius: v.$radius-md;
-    transition: background-color 0.2s v.$ease-ios, transform 0.2s v.$ease-ios;
+    transition: background-color v.$transition-200 v.$ease-ios, transform v.$transition-200 v.$ease-ios;
     border: none;
-    box-shadow: none; // 그림자 제거 (요청사항 1)
+    box-shadow: none; // 그림???�거 (?�청?�항 1)
 
-    // 테두리도 없이 깔끔하게
+    // ?�두리도 ?�이 깔끔?�게
     // border: 1px solid v.$zinc-100; 
 
     &:hover {
-        // 호버 효과 최소화
-        // background-color: v.$zinc-50;
+        // ?�버 ?�과 최소??        // background-color: v.$zinc-50;
     }
 
     &.open {
-        // 열렸을 때도 그림자 없이
+        // ?�렸???�도 그림???�이
         box-shadow: none;
     }
+}
+
+.header {
+  display: flex;
 }
 
 .overlayTrigger {
@@ -38,7 +41,7 @@
 }
 
 .trigger {
-    position: relative; // 💡 Clickable overlay positioning context
+    position: relative; // ?�� Clickable overlay positioning context
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -48,7 +51,7 @@
     text-align: left;
     user-select: none;
     border-radius: v.$radius-md;
-    transition: all 0.2s;
+    transition: all v.$transition-200;
     background-color: transparent;
     border: none;
     font-family: inherit;
@@ -83,17 +86,17 @@
 
     .title {
         font-weight: 700; // font-bold
-        font-size: 1rem; // 16px로 복구
+        font-size: v.$font-size-base; // 16px�?복구
         color: var(--foreground);
         letter-spacing: -0.01em;
     }
 }
 
 .badge {
-    font-size: 0.625rem; // text-[10px]
+    font-size: v.$font-size-3xs; // text-[10px]
     font-weight: 700;
     padding: 0.125rem 0.375rem;
-    border-radius: 9999px;
+    border-radius: v.$radius-full;
     background-color: var(--destructive);
     color: var(--destructive-foreground);
 }
@@ -111,7 +114,7 @@
 
     .chevron {
         color: var(--muted-foreground);
-        transition: transform 0.5s v.$ease-ios;
+        transition: transform v.$transition-500 v.$ease-ios;
 
         &.open {
             transform: rotate(180deg);
@@ -132,5 +135,6 @@
     width: 100%;
     background-color: var(--border);
     margin-bottom: 1rem;
-    opacity: 0.5; // 너무 진하지 않게
+    opacity: 0.5; // ?�무 진하지 ?�게
 }
+

@@ -21,7 +21,7 @@
   border-radius: calc(v.$radius-sm - 2px); // rounded-md
   padding: 0.25rem 0.75rem; // px-3 py-1
   
-  font-size: 0.875rem; // text-sm
+  font-size: v.$font-size-sm; // text-sm
   font-weight: 500; // font-medium
   
   color: inherit;
@@ -29,7 +29,7 @@
   border: none;
   cursor: pointer;
   
-  transition: all 0.2s ease;
+  transition: all v.$transition-200 v.$ease-standard;
 
   @include m.focus-ring;
 
@@ -49,3 +49,4 @@
   margin-top: 0.5rem; // mt-2
   @include m.focus-ring;
 }
+

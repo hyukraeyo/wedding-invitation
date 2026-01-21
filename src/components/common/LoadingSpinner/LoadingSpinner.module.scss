@@ -14,7 +14,7 @@
   position: fixed;
   inset: 0;
   z-index: 10000;
-  // 더욱 투명하면서도 블러가 돋보이게 조정
+  // ?�욱 ?�명?�면?�도 블러가 ?�보?�게 조정
   background-color: rgba(255, 255, 255, 0.2); 
   backdrop-filter: blur(20px) saturate(180%); 
   -webkit-backdrop-filter: blur(20px) saturate(180%);
@@ -27,9 +27,9 @@
   height: 100%;
   min-height: 40vh;
   background-color: transparent;
-  // 스피너 대신 컨텐츠 영역만 살짝 흐리게 처리하여 페이드 효과 준비
+  // ?�피???�??컨텐�??�역�??�짝 ?�리�?처리?�여 ?�이???�과 준�?
   opacity: 0.3;
-  transition: opacity 0.3s ease;
+  transition: opacity v.$transition-300 v.$ease-standard;
 
   .iconWrapper {
     display: none;
@@ -58,7 +58,7 @@
   height: 16rem;
   background-color: rgba(v.$color-primary, 0.05);
   filter: blur(100px);
-  border-radius: 9999px;
+  border-radius: v.$radius-full;
   pointer-events: none;
 }
 
@@ -68,14 +68,14 @@
   right: 25%;
   width: 16rem;
   height: 16rem;
-  // secondary 색상은 정의되어 있지 않으면 primary나 다른 색 사용
+  // secondary ?�상?� ?�의?�어 ?��? ?�으�?primary???�른 ???�용
   background-color: rgba(v.$color-primary, 0.05); 
   filter: blur(100px);
-  border-radius: 9999px;
+  border-radius: v.$radius-full;
   pointer-events: none;
 }
 
-// @keyframes spin은 @use "../../../styles/animations"에서 가져옵니다.
+// @keyframes spin?� @use "../../../styles/animations"?�서 가?�옵?�다.
 
 
 @keyframes fadeIn {
@@ -86,3 +86,4 @@
     opacity: 1;
   }
 }
+

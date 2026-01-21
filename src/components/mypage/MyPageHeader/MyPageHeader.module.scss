@@ -15,12 +15,12 @@
 }
 
 .sectionTitle {
-    font-size: 1.25rem;
+    font-size: v.$font-size-xl;
     font-weight: 700;
     color: v.$zinc-900;
 
     @include m.desktop {
-        font-size: 1.5rem;
+        font-size: v.$font-size-2xl;
     }
 }
 
@@ -28,3 +28,4 @@
     display: flex;
     gap: 0.5rem;
 }
+

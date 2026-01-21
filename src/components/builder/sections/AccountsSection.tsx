@@ -5,9 +5,14 @@ import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '@/components/common/AccordionItem';
 import type { SectionProps } from '@/types/builder';
+import styles from './AccountsSection.module.scss';
 
 const AccountsSectionContent = dynamic(() => import('./AccountsSectionContent'), {
-    loading: () => <div className="p-8 flex justify-center"><div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>,
+    loading: () => (
+        <div className={styles.loadingContainer}>
+            <div className={styles.loadingSpinner} />
+        </div>
+    ),
     ssr: false
 });
 

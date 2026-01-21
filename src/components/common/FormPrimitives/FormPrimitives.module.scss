@@ -2,7 +2,7 @@
 @use "../../../styles/builder" as b;
 
 .label {
-  // Shadcn Label 스타일 상속이 어려우므로 필요한 경우 override
+  // Shadcn Label ?��????�속???�려?��?�??�요??경우 override
 }
 
 .requiredStar {
@@ -55,7 +55,7 @@
 }
 
 .description {
-  font-size: 0.8rem;
+  font-size: v.$font-size-xxs;
   color: v.$color-muted-foreground;
   
   &.error {
@@ -64,7 +64,7 @@
 }
 
 .errorMessage {
-  font-size: 0.8rem;
+  font-size: v.$font-size-xxs;
   font-weight: 500;
   color: v.$color-danger;
 }
@@ -81,3 +81,4 @@
 .optionGroup {
   @include b.builder-stack($gap: 1rem);
 }
+

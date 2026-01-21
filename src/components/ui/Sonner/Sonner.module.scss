@@ -19,7 +19,7 @@
 
 .description {
   color: v.$color-muted-foreground;
-  font-size: 0.875rem;
+  font-size: v.$font-size-sm;
 }
 
 .actionButton {
@@ -27,7 +27,7 @@
   color: v.$color-primary-foreground;
   border-radius: v.$radius-sm;
   padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
+  font-size: v.$font-size-sm;
   font-weight: 500;
   
   &:hover {
@@ -40,10 +40,11 @@
   color: v.$color-muted-foreground;
   border-radius: v.$radius-sm;
   padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
+  font-size: v.$font-size-sm;
   font-weight: 500;
 
   &:hover {
-    background-color: v.$color-border; // darken ëŒ€ì²´
+    background-color: v.$color-border; // darken ?€ì²?
   }
 }
+

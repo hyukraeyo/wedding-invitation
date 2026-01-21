@@ -20,5 +20,6 @@
 }
 
 .circle {
-  border-radius: 9999px; // rounded-full
+  border-radius: v.$radius-full; // rounded-full
 }
+

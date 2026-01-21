@@ -136,11 +136,20 @@ $font-song-myung: var(--font-song-myung), var(--font-nanum-myeongjo), serif;
 $font-script: var(--font-great-vibes), 'Times New Roman', cursive;
 $font-gmarket-sans: 'GmarketSansMedium', sans-serif;
 $font-pretendard: var(--font-pretendard), -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-$font-size-xs: 0.75rem;   // 12px
+$font-size-xxs: 0.8rem;    // 12.8px
+$font-size-xs: 0.75rem;    // 12px
+$font-size-2xs: 0.8125rem; // 13px
+$font-size-3xs: 0.625rem;  // 10px
+$font-size-4xs: 0.6875rem; // 11px
 $font-size-sm: 0.875rem;   // 14px
+$font-size-md: 0.9375rem;  // 15px
+$font-size-17: 1.0625rem;  // 17px
 $font-size-base: 1rem;     // 16px
 $font-size-lg: 1.125rem;   // 18px
 $font-size-xl: 1.25rem;    // 20px
+$font-size-2xl: 1.5rem;    // 24px
+$input-font-size: $font-size-base;
+$button-font-size: 0.9375rem; // 15px
 
 // ============================================
 // Spacing & Layout
@@ -148,8 +157,55 @@ $font-size-xl: 1.25rem;    // 20px
 $radius-sm: 0.5rem;   // 8px
 $radius-md: 1rem;     // 16px
 $radius-lg: 1rem;  // 16px (Unified to 16px as requested)
+$radius-xl: 1.25rem;  // 20px
+$radius-2xl: 1.5rem;  // 24px
+$radius-3xl: 2.5rem;  // 40px
 $radius-full: 9999px;
-$input-height: 48px;
+$input-radius: $radius-sm;
+$button-radius: $radius-md;
+$control-height-sm: 36px;
+$control-height-xs: 40px;
+$control-height-md: 48px;
+$control-height-lg: 56px;
+$control-height-xl: 64px;
+$button-height-default: $control-height-md;
+$button-height-sm: $control-height-sm;
+$button-height-lg: $control-height-lg;
+$button-height-icon: $control-height-md;
+$button-height-icon-xs: 28px;
+$button-height-icon-sm: $control-height-sm;
+$button-height-icon-lg: $control-height-lg;
+$input-height: $control-height-md;
+
+$scale-press: 0.97;
+$scale-press-lg: 0.98;
+$scale-press-md: 0.96;
+$scale-press-sm: 0.95;
+$scale-press-xs: 0.92;
+$scale-press-xxs: 0.9;
+$scale-hover: 1.1;
+$scale-hover-sm: 1.08;
+
+$focus-ring-width: 2px;
+$focus-ring-offset: 2px;
+$focus-ring-color: rgba(251, 192, 45, 0.35);
+$control-hover-bg: $zinc-50;
+$control-hover-bg-strong: $zinc-100;
+$control-hover-bg-stronger: $zinc-200;
+$control-hover-bg-muted: rgba($zinc-100, 0.5);
+$control-active-bg: $zinc-100;
+$control-active-bg-muted: rgba($zinc-200, 0.5);
+$control-hover-border: $zinc-300;
+$control-hover-border-strong: $zinc-400;
+
+$hover-bg-warm: #fffdf0;
+$shadow-hover-sm: 0 2px 6px rgba(0, 0, 0, 0.08);
+$shadow-hover-md: 0 6px 14px rgba(0, 0, 0, 0.06);
+$shadow-hover-primary: 0 12px 24px rgba($color-primary, 0.22);
+$shadow-hover-primary-strong: 0 4px 12px rgba($color-primary, 0.4);
+$shadow-card: 0 4px 12px rgba(0, 0, 0, 0.04);
+$shadow-hover-card: 0 12px 24px rgba(0, 0, 0, 0.08);
+$shadow-hover-primary-md: 0 4px 12px rgba($color-primary, 0.3);
 
 $mobile: 768px;
 $max-mobile: 767px;
@@ -171,10 +227,19 @@ $header-height: 3.5rem; // 56px
 // Transitions
 // ============================================
 $transition-fast: 150ms;
+$transition-100: 100ms;
+$transition-200: 200ms;
+$transition-300: 300ms;
+$transition-400: 400ms;
+$transition-500: 500ms;
+$transition-800: 800ms;
 $transition-normal: 250ms;
 $transition-slow: 400ms;
 $transition-smooth: 260ms;
 $ease-ios: cubic-bezier(0.16, 1, 0.3, 1);
+$ease-standard: ease;
+$ease-in-out: ease-in-out;
+$ease-linear: linear;
 
 // ============================================
 // Popup Animation Tokens

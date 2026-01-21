@@ -19,7 +19,7 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { FontSizeControl } from './elements/FontSizeControl';
 
 const LocationView = dynamic(() => import('./sections/LocationView'), { ssr: false });
-const galleryLoading = <Skeleton className="h-40 w-full" />;
+const galleryLoading = <Skeleton className={styles.gallerySkeleton} />;
 const GalleryView = dynamic(() => import('./sections/GalleryView'), {
   ssr: false,
   loading: () => galleryLoading,

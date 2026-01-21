@@ -1,5 +1,6 @@
 @use "../../../styles/variables" as v;
 @use "../../../styles/builder" as b;
+@use "../../../styles/animations";
 
 .optionWrapper {
   @include b.builder-field-group;
@@ -14,7 +15,7 @@
   @include b.builder-card;
   padding: 0; // Padding handled by children
   overflow: hidden;
-  border-radius: 1rem; // 16px
+  border-radius: v.$radius-md; // 16px
 
   &:hover {
     border-color: v.$zinc-400; // Updated from toss-blue for neutral feel or stick to brand? User asked for common style
@@ -51,7 +52,7 @@
   font-size: 10px;
   font-weight: bold;
   padding: 0.125rem 0.375rem;
-  border-radius: 1rem; // 16px
+  border-radius: v.$radius-md; // 16px
   background-color: v.$zinc-100;
   color: v.$zinc-600;
 
@@ -67,7 +68,7 @@
 }
 
 .name {
-  font-size: 14px;
+  font-size: v.$font-size-sm;
   font-weight: bold;
   color: v.$zinc-900;
 }
@@ -118,9 +119,9 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  font-size: 1rem;
+  font-size: v.$font-size-base;
   font-weight: 500;
-  border-radius: 1rem; // 16px
+  border-radius: v.$radius-md; // 16px
   border: 2px dashed v.$color-border;
   background-color: transparent;
   color: v.$zinc-600;
@@ -138,3 +139,28 @@
     transform: scale(0.98);
   }
 }
+
+.deleteButton {
+  color: v.$zinc-400;
+
+  &:hover {
+    color: v.$red-600;
+    background-color: v.$rose-50;
+  }
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.loadingSpinner {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid rgba(v.$primary-500, 0.2);
+  border-top-color: v.$primary-500;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+

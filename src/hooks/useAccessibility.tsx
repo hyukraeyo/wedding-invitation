@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { FOCUSABLE_SELECTOR } from '@/lib/a11y';
+import styles from './useAccessibility.module.scss';
 
 interface SkipLinkProps {
   href: string;
@@ -12,7 +13,7 @@ export function SkipLink({ href, children }: SkipLinkProps) {
   return (
     <a
       href={href}
-      className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-md"
+      className={styles.skipLink}
     >
       {children}
     </a>
@@ -65,7 +66,7 @@ export function announceToScreenReader(message: string) {
   const announcement = document.createElement('div');
   announcement.setAttribute('role', 'status');
   announcement.setAttribute('aria-live', 'polite');
-  announcement.className = 'sr-only';
+  announcement.className = styles.srOnly ?? '';
   announcement.textContent = message;
 
   document.body.appendChild(announcement);

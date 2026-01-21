@@ -102,12 +102,7 @@
 
   &:hover:not(:disabled) {
     background-color: v.$color-primary-hover;
-    transform: translateY(-1px);
-    // box-shadow: 0 4px 12px rgba(v.$color-primary, 0.25);
-  }
-
-  &:active:not(:disabled) {
-    transform: translateY(0);
+    box-shadow: 0 4px 10px rgba(v.$color-primary, 0.18);
   }
 
   &:disabled {

@@ -42,7 +42,7 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection({ isOpen, va
                                     key={color}
                                     className={cn(
                                         styles.colorItem,
-                                        "transition-transform duration-200 active:scale-90",
+                                        styles.colorItemInteractive,
                                         theme.accentColor === color && styles.active
                                     )}
                                     style={{ backgroundColor: color }}
@@ -93,7 +93,7 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection({ isOpen, va
                         label="하객의 글자 크기 변경 허용"
                         checked={theme.allowFontScale}
                         onChange={(checked) => setTheme({ allowFontScale: checked })}
-                        className="mt-3"
+                        className={styles.switchSpacing}
                     />
                 </Field>
 
@@ -120,7 +120,7 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection({ isOpen, va
                                     className={cn(
                                         styles.colorItem,
                                         styles.lightColorItem,
-                                        "transition-transform duration-200 active:scale-90",
+                                        styles.colorItemInteractive,
                                         theme.backgroundColor === color && styles.active
                                     )}
                                     style={{ backgroundColor: color }}

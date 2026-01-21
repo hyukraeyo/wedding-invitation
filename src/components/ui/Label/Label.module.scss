@@ -2,16 +2,16 @@
 @use "../../../styles/mixins" as m;
 
 .label {
-    font-size: 0.8rem;   // 더욱 축소 (12.8px)
+    font-size: v.$font-size-xxs;   // ?�욱 축소 (12.8px)
     font-weight: 500;    // font-medium
     line-height: 1;      // leading-none
     color: v.$zinc-900;
     user-select: none;
     
     // peer-disabled:cursor-not-allowed peer-disabled:opacity-70
-    // SCSS에서는 형제 선택자나 상태를 직접 제어하기 어려울 수 있으므로,
-    // 필요 시 JS에서 상태를 받아오거나 부모 컨텍스트를 활용해야 함.
-    // 하지만 Radix Label은 보통 Input과 함께 쓰이므로 기본적인 스타일만 정의.
+    // SCSS?�서???�제 ?�택?�나 ?�태�?직접 ?�어?�기 ?�려?????�으므�?
+    // ?�요 ??JS?�서 ?�태�?받아?�거??부�?컨텍?�트�??�용?�야 ??
+    // ?��?�?Radix Label?� 보통 Input�??�께 ?�이므�?기본?�인 ?��??�만 ?�의.
     
     &[data-disabled],
     &:disabled {
@@ -19,3 +19,4 @@
         opacity: 0.7;
     }
 }
+

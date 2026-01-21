@@ -1,0 +1,7 @@
+@use "../../styles/variables" as v;
+
+.fallback {
+  min-height: 100vh;
+  padding-top: v.$header-height;
+  background-color: #f8f9fa;
+}

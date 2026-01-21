@@ -70,6 +70,8 @@
 @mixin focus-ring {
   outline: none;
   &:focus-visible {
+    box-shadow: 0 0 0 $focus-ring-width $color-background,
+      0 0 0 calc(#{$focus-ring-width} + #{$focus-ring-offset}) $focus-ring-color;
   }
 }
 
@@ -120,15 +122,17 @@
 @mixin input-focus-style {
   outline: none;
   border-color: $color-primary;
+  box-shadow: 0 0 0 $focus-ring-width $color-background,
+    0 0 0 calc(#{$focus-ring-width} + #{$focus-ring-offset}) $focus-ring-color;
 }
 
 @mixin input-base {
   width: 100%;
   padding: 0.75rem 1rem;
-  font-size: $font-size-base;
+  font-size: $input-font-size;
   font-family: $font-family-base;
   border: 1px solid $color-border;
-  border-radius: $radius-md;
+  border-radius: $input-radius;
   background: $color-background;
   color: $color-foreground;
   transition: border-color $transition-fast, box-shadow $transition-fast, background-color $transition-fast;
@@ -144,7 +148,7 @@
 
 @mixin input-hover {
   @include hover {
-    border-color: $zinc-300;
+    border-color: $control-hover-border;
   }
 }
 
@@ -167,7 +171,7 @@
   font-weight: 500;
   font-family: $font-family-base;
   border: 1px solid transparent;
-  border-radius: $radius-md;
+  border-radius: $radius-sm;
   cursor: pointer;
   transition: background-color $transition-fast, border-color $transition-fast, box-shadow $transition-fast, transform $transition-fast;
   text-decoration: none;
@@ -202,7 +206,7 @@
   width: 2.5rem;
   height: 1.25rem;
   background: $zinc-200;
-  border-radius: $radius-full;
+  border-radius: $radius-sm;
   cursor: pointer;
   transition: background $transition-fast;
 }
@@ -214,7 +218,7 @@
   padding: 0.75rem 1rem;
   background: $color-ivory;
   border: 1px solid $zinc-200;
-  border-radius: $radius-md;
+  border-radius: $radius-sm;
   font-size: $font-size-sm;
   color: $zinc-700;
   line-height: 1.5;

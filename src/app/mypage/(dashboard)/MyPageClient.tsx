@@ -248,7 +248,7 @@ export default function MyPageClient({
                 description: (
                     <>
                         정말로 이 청첩장을 삭제하시겠습니까?<br />
-                        <span className="text-red-500 font-bold block mt-2">주의: 승인 완료된 청첩장을 삭제하면 공유된 링크로 더 이상 접속할 수 없습니다.</span>
+                        <span className={styles.deleteWarning}>주의: 승인 완료된 청첩장을 삭제하면 공유된 링크로 더 이상 접속할 수 없습니다.</span>
                         <br />
                         삭제된 데이터는 복구할 수 없습니다.
                     </>

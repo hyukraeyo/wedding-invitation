@@ -1,7 +1,7 @@
 @use "../../../styles/variables" as v;
 @use "../../../styles/mixins" as m;
 
-// 하드코딩된 색상 변수화 (필요시 variables.scss에 추가 고려)
+// ?�드코딩???�상 변?�화 (?�요??variables.scss??추�? 고려)
 $color-text-title: #191F28;
 $color-text-desc: #4E5968;
 
@@ -32,14 +32,14 @@ $color-text-desc: #4E5968;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border-radius: 1rem; // 16px
+  border-radius: v.$radius-md; // 16px
   border: none;
   box-shadow: none;
 }
 
 .drawerContent {
-  border-top-left-radius: 1rem; // 16px
-  border-top-right-radius: 1rem; // 16px
+  border-top-left-radius: v.$radius-md; // 16px
+  border-top-right-radius: v.$radius-md; // 16px
   padding: 0;
   border: none;
   overflow: hidden;
@@ -80,19 +80,23 @@ $color-text-desc: #4E5968;
 }
 
 .title {
-  font-size: 1.25rem;
+  font-size: v.$font-size-xl;
   font-weight: 700;
   letter-spacing: -0.03em;
   color: $color-text-title;
 }
 
 .description {
-  font-size: 1.0625rem; // 17px
+  font-size: v.$font-size-17; // 17px
   color: $color-text-desc;
   line-height: 1.625;
   word-break: keep-all;
   text-align: center;
   white-space: pre-wrap;
+}
+
+.descriptionSpacing {
+  margin-bottom: 1rem;
 }
 
 .content {
@@ -139,6 +143,11 @@ $color-text-desc: #4E5968;
   display: flex;
   justify-content: center;
   animation: fadeIn 0.3s ease-out;
+}
+
+.outerFooterMobile {
+  padding-bottom: 2rem;
+  background-color: v.$white;
 }
 
 // Button overrides for ResponsiveModal layout
@@ -191,13 +200,13 @@ $color-text-desc: #4E5968;
 // Dialog Button Height
 .dialogButtonHeight {
   height: 3.5rem !important; // h-14 (56px)
-  font-size: 1rem !important; // 16px
+  font-size: v.$font-size-base !important; // 16px
 }
 
 // Drawer Button Height
 .drawerButtonHeight {
   height: 4rem !important; // h-16 (64px)
-  font-size: 1.0625rem !important; // 17px
+  font-size: v.$font-size-17 !important; // 17px
 }
 
 @keyframes fadeIn {
@@ -211,3 +220,4 @@ $color-text-desc: #4E5968;
     transform: translateY(0);
   }
 }
+

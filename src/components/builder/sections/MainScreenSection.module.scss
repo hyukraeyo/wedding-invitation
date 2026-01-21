@@ -1,5 +1,6 @@
-@use "../../../styles/variables" as v;
+﻿@use "../../../styles/variables" as v;
 @use "../../../styles/builder" as b;
+@use "../../../styles/animations";
 
 .optionWrapper {
   @include b.builder-field-group;
@@ -32,11 +33,11 @@
 }
 
 .helpText {
-  font-size: 13px;
+  font-size: v.$font-size-2xs;
   color: v.$zinc-400;
   padding: 0.75rem 1rem;
   background: v.$zinc-50;
-  border-radius: 1rem; // 16px
+  border-radius: v.$radius-md; // 16px
   margin: 0;
 }
 
@@ -104,7 +105,7 @@
   width: 100%;
   aspect-ratio: 9 / 16;
   border: 1px solid v.$zinc-200;
-  border-radius: 1rem; // 16px
+  border-radius: v.$radius-md; // 16px
   background: #fff;
   overflow: hidden;
   display: flex;
@@ -263,18 +264,18 @@
   align-items: center;
 
   &:has(.sentenceInput) {
-    flex: 1.4; // 성함 칸도 여유 확보
+    flex: 1.4; // ?깊븿 移몃룄 ?ъ쑀 ?뺣낫
   }
 
   &:has(.sentenceConnectorInput) {
-    flex: 1.2; // 20px 정도 더 확보
+    flex: 1.2; // 20px ?뺣룄 ???뺣낫
   }
 
   &:has(.sentenceSuffixInput) {
-    flex: 2.2; // 앞 칸뜰에 공간을 양보
+    flex: 2.2; // ??移몃쑑??怨듦컙???묐낫
   }
 
-  // 이 칸이 남은 공간을 꽉 채우도록 설정
+  // ??移몄씠 ?⑥? 怨듦컙??苑?梨꾩슦?꾨줉 ?ㅼ젙
 }
 
 .sentenceInput,
@@ -284,7 +285,7 @@
   min-width: 0;
 
   input {
-    height: 48px; // 전체 인풋 높인 h-12와 맞춤 (48px)
+    height: 48px; // ?꾩껜 ?명뭼 ?믪씤 h-12? 留욎땄 (48px)
     padding: 0 0.5rem;
     text-align: center;
   }
@@ -313,3 +314,19 @@
     color: v.$primary-dark;
   }
 }
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.loadingSpinner {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid rgba(v.$primary-500, 0.2);
+  border-top-color: v.$primary-500;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+

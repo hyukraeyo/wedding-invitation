@@ -5,5 +5,5 @@
     width: 100%;
     background-color: v.$white;
     overflow: hidden;
-    transition: all 0.2s ease;
+    transition: all v.$transition-200 v.$ease-standard;
 }

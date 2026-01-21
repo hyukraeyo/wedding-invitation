@@ -3,6 +3,7 @@ import InvitationCanvas from '@/components/preview/InvitationCanvas';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
+import styles from './page.module.scss';
 
 interface Props {
     params: Promise<{ slug: string }>;
@@ -123,7 +124,7 @@ export default async function InvitationViewPage({ params }: Props) {
     };
 
     return (
-        <div className="w-full min-h-screen bg-white">
+        <div className={styles.page}>
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

@@ -4,17 +4,17 @@
 
 
 .iconButton {
-  border-radius: 9999px; // rounded-full
+  border-radius: v.$radius-full; // rounded-full
   position: relative;
-  transition: transform 0.1s ease-in-out;
+  transition: transform v.$transition-100 v.$ease-in-out;
   
   &:active {
-    transform: scale(0.92);
+    transform: scale(v.$scale-press-xs);
   }
 }
 
 .icon {
-  transition: opacity 0.2s;
+  transition: opacity v.$transition-200;
   
   &.faded {
     opacity: 0.2;
@@ -43,3 +43,4 @@
   animation: spin 1s linear infinite;
   color: currentColor;
 }
+

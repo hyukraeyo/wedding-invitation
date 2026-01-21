@@ -8,13 +8,18 @@ import { HeaderAction } from '@/components/common/HeaderAction';
 import type { ExampleItem } from '@/components/common/ExampleSelectorModal';
 import type { SectionProps } from '@/types/builder';
 import { MAIN_TITLE_SAMPLES } from '@/constants/samples';
+import styles from './MainScreenSection.module.scss';
 
 const ExampleSelectorModal = dynamic(() => import('@/components/common/ExampleSelectorModal').then(mod => mod.ExampleSelectorModal), {
     ssr: false
 });
 
 const MainScreenSectionContent = dynamic(() => import('./MainScreenSectionContent'), {
-    loading: () => <div className="p-8 flex justify-center"><div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" /></div>,
+    loading: () => (
+        <div className={styles.loadingContainer}>
+            <div className={styles.loadingSpinner} />
+        </div>
+    ),
     ssr: false
 });
 

@@ -5,14 +5,14 @@
 .trigger {
   @include m.input-base;
   @include m.flex-between;
-  height: var(--builder-height, 48px);
+  height: var(--builder-height, #{v.$input-height});
   padding: 0 1rem;
   background-color: white;
   transition: background-color v.$transition-fast, color v.$transition-fast;
   cursor: pointer;
 
   &:hover:not(:disabled) {
-    border-color: v.$zinc-400;
+    border-color: v.$control-hover-border-strong;
   }
 
   &[data-placeholder] {
@@ -52,7 +52,7 @@
     height: 32px;
     z-index: 10;
     pointer-events: none;
-    transition: opacity 0.3s ease;
+    transition: opacity v.$transition-300 v.$ease-standard;
     opacity: 0; // Hidden by default
   }
 
@@ -101,7 +101,7 @@
   border-radius: v.$radius-sm;
   padding: 0.5rem 2rem 0.5rem 0.5rem; // Right padding for indicator
   outline: none;
-  font-size: 14px;
+  font-size: v.$font-size-sm;
   color: v.$zinc-900;
   font-family: var(--builder-font-family, v.$font-pretendard);
   
@@ -133,7 +133,7 @@
 
 .label {
   padding: 0.5rem;
-  font-size: 0.875rem;
+  font-size: v.$font-size-sm;
   font-weight: 600;
   color: v.$zinc-900;
 }
@@ -143,3 +143,4 @@
   height: 1px;
   background-color: v.$zinc-100;
 }
+

@@ -1,0 +1,35 @@
+@use "../../../styles/variables" as v;
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.5rem;
+}
+
+.button {
+  width: 2rem;
+  height: 2rem;
+  border-radius: v.$radius-full;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: transform v.$transition-200 v.$ease-standard;
+}
+
+.buttonInteractive {
+  &:hover {
+    transform: scale(v.$scale-hover);
+  }
+
+  &:active {
+    transform: scale(v.$scale-press-xxs);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px v.$white, 0 0 0 4px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.selected {
+  transform: scale(v.$scale-hover);
+}
+

@@ -1,0 +1,27 @@
+@use "../styles/variables" as v;
+@use "../styles/mixins" as m;
+
+.srOnly {
+  @include m.visually-hidden;
+}
+
+.skipLink {
+  @include m.visually-hidden;
+
+  &:focus-visible {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 50;
+    padding: 0.5rem 1rem;
+    border-radius: v.$radius-md;
+    background: v.$color-primary;
+    color: v.$color-primary-foreground;
+    clip: auto;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    white-space: normal;
+  }
+}

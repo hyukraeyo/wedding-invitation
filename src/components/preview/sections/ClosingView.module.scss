@@ -28,7 +28,7 @@
 
         .imageContainer {
             width: 100%;
-            border-radius: 1rem; // 16px
+            border-radius: v.$radius-md; // 16px
             overflow: hidden;
             background-color: #f8f9fa;
             position: relative;
@@ -74,7 +74,7 @@
             @include m.flex-center;
             gap: 0.75rem;
             padding: 0.875rem;
-            border-radius: 9999px;
+            border-radius: v.$radius-full;
             font-size: calc(0.875rem * var(--font-scale));
             font-weight: 600;
             cursor: pointer;

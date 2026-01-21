@@ -76,7 +76,7 @@ export default function RejectionReasonModal({
                     content={reason}
                     onChange={setReason}
                     placeholder="내용을 입력하세요…"
-                    minHeight="min-h-[180px]"
+                    minHeight={180}
                 />
             </div>
         </ResponsiveModal>

@@ -8,9 +8,9 @@
   flex-shrink: 0;
   cursor: pointer;
   align-items: center;
-  border-radius: 9999px; // rounded-full
+  border-radius: v.$radius-full; // rounded-full
   background-color: #E9E9EA; // unchecked state
-  transition: background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1); // ease-ios equivalent
+  transition: background-color v.$transition-300 cubic-bezier(0.16, 1, 0.3, 1); // ease-ios equivalent
   position: relative;
   
   // Mixins
@@ -33,7 +33,7 @@
   width: 22px;
   height: 22px;
   background-color: white;
-  border-radius: 9999px;
+  border-radius: v.$radius-full;
   // box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   pointer-events: none;
   
@@ -43,7 +43,7 @@
   left: 4px;
   
   // Animation
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform v.$transition-300 cubic-bezier(0.16, 1, 0.3, 1);
   transform: translateX(0);
 
   // Checked translate
@@ -51,3 +51,4 @@
     transform: translateX(20px);
   }
 }
+

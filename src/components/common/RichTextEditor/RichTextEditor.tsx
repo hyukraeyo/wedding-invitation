@@ -24,7 +24,7 @@ interface RichTextEditorProps {
     onChange: (content: string) => void;
     placeholder?: string;
     className?: string;
-    minHeight?: string;
+    minHeight?: number;
 }
 
 export default function RichTextEditor({
@@ -32,7 +32,7 @@ export default function RichTextEditor({
     onChange,
     placeholder,
     className = "",
-    minHeight = "min-h-[120px]"
+    minHeight = 120
 }: RichTextEditorProps) {
 
     const BRAND_COLOR = '#8B5E3C';
@@ -55,7 +55,8 @@ export default function RichTextEditor({
         },
         editorProps: {
             attributes: {
-                class: cn("rich-text-content focus:outline-none", minHeight),
+                class: cn("rich-text-content"),
+                style: `--editor-min-height: ${minHeight}px;`,
             },
         },
     });

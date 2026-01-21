@@ -19,5 +19,5 @@
     opacity: 0.5;
   }
 
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); // ease-ios
+  transition: all v.$transition-200 cubic-bezier(0.16, 1, 0.3, 1); // ease-ios
 }

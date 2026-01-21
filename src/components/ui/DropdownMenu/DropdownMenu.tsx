@@ -30,13 +30,13 @@ const DropdownMenuSubTrigger = React.forwardRef<
         ref={ref}
         className={cn(
             styles.item, // Use item style for sub trigger too
-            inset && "pl-8",
+            inset && styles.inset,
             className
         )}
         {...props}
     >
         {children}
-        <ChevronRight className="ml-auto h-4 w-4" />
+        <ChevronRight className={styles.subTriggerIcon} />
     </DropdownMenuPrimitive.SubTrigger>
 ))
 DropdownMenuSubTrigger.displayName =
@@ -86,7 +86,7 @@ const DropdownMenuItem = React.forwardRef<
         ref={ref}
         className={cn(
             styles.item,
-            inset && "pl-8",
+            inset && styles.inset,
             className
         )}
         {...props}
@@ -102,14 +102,14 @@ const DropdownMenuCheckboxItem = React.forwardRef<
         ref={ref}
         className={cn(
             styles.item,
-            "py-1.5 pl-8 pr-2", // Keep padding overrides for checkbox logic if simpler, or move to scss
+            styles.itemWithIndicator,
             className
         )}
         {...props}
     >
-        <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+        <span className={styles.indicatorContainer}>
             <DropdownMenuPrimitive.ItemIndicator>
-                <Check className="h-4 w-4" />
+                <Check className={styles.indicatorIcon} />
             </DropdownMenuPrimitive.ItemIndicator>
         </span>
         {children}
@@ -126,14 +126,14 @@ const DropdownMenuRadioItem = React.forwardRef<
         ref={ref}
         className={cn(
             styles.item,
-            "py-1.5 pl-8 pr-2",
+            styles.itemWithIndicator,
             className
         )}
         {...props}
     >
-        <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+        <span className={styles.indicatorContainer}>
             <DropdownMenuPrimitive.ItemIndicator>
-                <Circle className="h-2 w-2 fill-current" />
+                <Circle className={styles.indicatorDot} />
             </DropdownMenuPrimitive.ItemIndicator>
         </span>
         {children}
@@ -151,7 +151,7 @@ const DropdownMenuLabel = React.forwardRef<
         ref={ref}
         className={cn(
             styles.label,
-            inset && "pl-8",
+            inset && styles.inset,
             className
         )}
         {...props}

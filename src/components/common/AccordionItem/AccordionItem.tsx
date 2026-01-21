@@ -58,7 +58,7 @@ export const AccordionItem = memo(({
             ref={containerRef}
             className={cn(styles.item, isOpen ? styles.open : null)}
         >
-            <AccordionPrimitive.Header className="flex">
+            <AccordionPrimitive.Header className={styles.header}>
                 <div className={cn(styles.trigger, isOpen ? styles.open : null)}>
                     {/* 1. Full-size clickable overlay trigger (Main toggle) */}
                     <AccordionPrimitive.Trigger

@@ -13,7 +13,7 @@
   padding: 0.375rem 0.75rem;
   background-color: #fffbeb; // yellow-50
   color: #b45309; // yellow-700
-  border-radius: 9999px;
+  border-radius: v.$radius-full;
   border: 1px solid #fef3c7; // yellow-100
   font-size: 12px;
   font-weight: bold;
@@ -53,7 +53,7 @@
 
 .sampleCard {
   border: 1px solid v.$zinc-200;
-  border-radius: 1rem; // 16px
+  border-radius: v.$radius-md; // 16px
   padding: 1rem;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -82,17 +82,17 @@
   color: v.$primary-700;
   background-color: v.$primary-100;
   padding: 0.125rem 0.5rem;
-  border-radius: 1rem; // 16px
+  border-radius: v.$radius-md; // 16px
 }
 
 .sampleTitle {
-  font-size: 14px;
+  font-size: v.$font-size-sm;
   font-weight: bold;
   color: v.$zinc-900;
 }
 
 .sampleContent {
-  font-size: 13px;
+  font-size: v.$font-size-2xs;
   color: v.$zinc-600;
   line-height: 1.6;
   white-space: pre-wrap;

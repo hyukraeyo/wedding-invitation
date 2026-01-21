@@ -53,7 +53,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 type="button"
                                 variant={groom.parents.father.isDeceased ? 'default' : 'outline'}
                                 onClick={() => setGroomParents('father', { isDeceased: !groom.parents.father.isDeceased })}
-                                className={cn("w-[50px] p-0", !groom.parents.father.isDeceased && "text-zinc-400")}
+                                className={cn(styles.deceasedButton, !groom.parents.father.isDeceased && styles.deceasedButtonInactive)}
                             >
                                 故
                             </Button>
@@ -69,7 +69,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 type="button"
                                 variant={groom.parents.mother.isDeceased ? 'default' : 'outline'}
                                 onClick={() => setGroomParents('mother', { isDeceased: !groom.parents.mother.isDeceased })}
-                                className={cn("w-[50px] p-0", !groom.parents.mother.isDeceased && "text-zinc-400")}
+                                className={cn(styles.deceasedButton, !groom.parents.mother.isDeceased && styles.deceasedButtonInactive)}
                             >
                                 故
                             </Button>
@@ -102,7 +102,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 type="button"
                                 variant={bride.parents.father.isDeceased ? 'default' : 'outline'}
                                 onClick={() => setBrideParents('father', { isDeceased: !bride.parents.father.isDeceased })}
-                                className={cn("w-[50px] p-0", !bride.parents.father.isDeceased && "text-zinc-400")}
+                                className={cn(styles.deceasedButton, !bride.parents.father.isDeceased && styles.deceasedButtonInactive)}
                             >
                                 故
                             </Button>
@@ -118,7 +118,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
                                 type="button"
                                 variant={bride.parents.mother.isDeceased ? 'default' : 'outline'}
                                 onClick={() => setBrideParents('mother', { isDeceased: !bride.parents.mother.isDeceased })}
-                                className={cn("w-[50px] p-0", !bride.parents.mother.isDeceased && "text-zinc-400")}
+                                className={cn(styles.deceasedButton, !bride.parents.mother.isDeceased && styles.deceasedButtonInactive)}
                             >
                                 故
                             </Button>

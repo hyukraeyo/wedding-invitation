@@ -91,7 +91,7 @@
     .minimalDateBox {
         padding: 0.5rem 0.75rem;
         background: rgba(0, 0, 0, 0.03);
-        border-radius: 1rem; // 16px
+        border-radius: v.$radius-md; // 16px
         font-family: v.$font-serif;
         font-weight: 300;
         letter-spacing: 0.05em;

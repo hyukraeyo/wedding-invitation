@@ -4,6 +4,7 @@ import React from 'react';
 import { Map as KakaoMap, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk';
 import { Banana } from 'lucide-react';
 import { Skeleton } from '@/components/ui/Skeleton';
+import styles from './KakaoMapContainer.module.scss';
 
 interface KakaoMapContainerProps {
     lat: number;
@@ -22,10 +23,10 @@ export default function KakaoMapContainer({ lat, lng, mapZoom, lockMap }: KakaoM
 
     if (loading) {
         return (
-            <div className="relative w-full h-full">
-                <Skeleton className="absolute inset-0 z-10" />
-                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center">
-                    <Banana className="h-10 w-10 animate-spin text-primary" />
+            <div className={styles.container}>
+                <Skeleton className={styles.skeleton} />
+                <div className={styles.loadingOverlay}>
+                    <Banana className={styles.spinnerIcon} />
                 </div>
             </div>
         );
@@ -33,7 +34,7 @@ export default function KakaoMapContainer({ lat, lng, mapZoom, lockMap }: KakaoM
 
     if (error) {
         return (
-            <div className="relative w-full h-full bg-muted/5 flex items-center justify-center text-sm text-muted-foreground">
+            <div className={styles.errorState}>
                 카카오 지도를 불러올 수 없습니다. (인증 오류)
             </div>
         );

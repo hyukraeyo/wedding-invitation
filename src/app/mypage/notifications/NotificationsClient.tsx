@@ -109,9 +109,9 @@ export default function NotificationsClient({ userId, notifications }: Notificat
                                     </div>
 
                                     {isExpanded && (
-                                        <div className={styles.itemBody}>
-                                            <div className={styles.invitationInfo}>
-                                                <Mail size={14} className="mr-1 inline-block" />
+                                            <div className={styles.itemBody}>
+                                                <div className={styles.invitationInfo}>
+                                                <Mail size={14} className={styles.invitationIcon} />
                                                 청첩장: <strong>{notif.invitation_slug}</strong>
                                             </div>
                                             <div className={styles.reasonBox}>

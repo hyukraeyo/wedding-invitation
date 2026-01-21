@@ -1,6 +1,7 @@
 @use "../../../styles/variables" as v;
 @use "../../../styles/builder" as b;
 @use "../../../styles/mixins" as m;
+@use "../../../styles/animations";
 
 .addressButton {
   @include b.builder-input-base;
@@ -65,4 +66,19 @@
 .addressTextFilled {
   color: v.$zinc-900;
   font-weight: 500;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.loadingSpinner {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid rgba(v.$primary-500, 0.2);
+  border-top-color: v.$primary-500;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
 }
