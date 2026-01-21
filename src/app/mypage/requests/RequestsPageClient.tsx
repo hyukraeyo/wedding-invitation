@@ -20,6 +20,7 @@ import styles from './RequestsPage.module.scss';
 import { clsx } from 'clsx';
 import type { ApprovalRequestSummary } from '@/services/approvalRequestService';
 import type { InvitationSummaryRecord } from '@/lib/invitation-summary';
+import { EmptyState } from '@/components/ui/EmptyState';
 
 const ResponsiveModal = dynamic(
     () => import('@/components/common/ResponsiveModal').then(mod => mod.ResponsiveModal),
@@ -250,10 +251,11 @@ export default function RequestsPageClient({
                     )}
                 </div>
             ) : status !== 'pending' ? (
-                <div className={styles.emptySummary}>
-                    <Inbox size={48} strokeWidth={1} />
-                    <p>대기 중인 신청이 없습니다.</p>
-                </div>
+                <EmptyState
+                    icon={<Inbox size={48} strokeWidth={1} />}
+                    title="대기 중인 신청이 없습니다"
+                    description="중요한 업데이트나 신청 결과가 있을 때 이곳에서 알려드릴게요."
+                />
             ) : null}
 
             {/* Modals... */}

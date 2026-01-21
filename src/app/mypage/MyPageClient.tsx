@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import styles from './MyPage.module.scss';
 import { InvitationCard } from '@/components/ui/InvitationCard';
+import { EmptyState } from '@/components/ui/EmptyState';
 
 const ProfileCompletionModal = dynamic(
     () => import('@/components/auth/ProfileCompletionModal').then(mod => mod.ProfileCompletionModal),
@@ -424,27 +425,21 @@ export default function MyPageClient({
             <MyPageHeader title="내 청첩장" />
 
             {invitations.length === 0 ? (
-                <div className={styles.emptyState}>
-                    <div className={styles.emptyIcon}>
-                        <Banana />
-                    </div>
-                    <h3 className={styles.emptyTitle}>아직 만든 청첩장이 없어요</h3>
-                    <p className={styles.emptyDescription}>
-                        세상에서 가장 행복한 시작을 위해,<br />
-                        나만의 특별한 모바일 청첩장을 지금 바로 만들어보세요.
-                    </p>
-                    <Link
-                        href="/builder"
-                        className={styles.emptyButton}
-                        onClick={(e) => {
+                <EmptyState
+                    icon={<Banana />}
+                    variant="banana"
+                    title="아직 만든 청첩장이 없어요"
+                    description={<>세상에서 가장 행복한 시작을 위해,<br />나만의 특별한 모바일 청첩장을 지금 바로 만들어보세요.</>}
+                    action={{
+                        label: '첫 청첩장 만들기',
+                        href: '/builder',
+                        icon: <Plus size={20} />,
+                        onClick: (e) => {
                             e.preventDefault();
                             handleCreateNew();
-                        }}
-                    >
-                        <Plus size={20} className="mr-2" />
-                        첫 청첩장 만들기
-                    </Link>
-                </div>
+                        }
+                    }}
+                />
             ) : (
                 <div className={styles.cardGrid}>
                     {/* Create New Card */}

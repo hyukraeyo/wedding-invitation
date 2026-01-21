@@ -1,0 +1,93 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem 2rem;
+    text-align: center;
+    background: v.$white;
+    border-radius: v.$radius-lg;
+    border: 1px solid v.$zinc-100;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    width: 100%;
+}
+
+.iconWrapper {
+    width: 100px;
+    height: 100px;
+    border-radius: 40px;
+    background: linear-gradient(135deg, v.$zinc-50 0%, v.$zinc-100 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+    color: v.$zinc-300;
+    
+    // Default animation
+    animation: floating 3s ease-in-out infinite;
+
+    svg {
+        width: 48px;
+        height: 48px;
+    }
+
+    &.banana {
+        background: linear-gradient(135deg, v.$primary-50 0%, v.$primary-100 100%);
+        color: v.$color-primary;
+    }
+}
+
+@keyframes floating {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: v.$zinc-900;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+}
+
+.description {
+    font-size: 1rem;
+    color: v.$zinc-500;
+    line-height: 1.7;
+    word-break: keep-all;
+    max-width: 400px;
+}
+
+.actionButton {
+    margin-top: 2.5rem;
+    display: inline-flex;
+    align-items: center;
+    padding: 1rem 2.5rem;
+    background-color: v.$color-primary;
+    color: v.$white;
+    border: none;
+    border-radius: v.$radius-full;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.3s v.$ease-ios;
+    text-decoration: none;
+    box-shadow: 0 10px 20px rgba(v.$color-primary, 0.2);
+
+    &:hover {
+        background-color: v.$color-primary-dark;
+        transform: translateY(-4px);
+        box-shadow: 0 15px 30px rgba(v.$color-primary, 0.3);
+    }
+
+    &:active {
+        transform: translateY(-2px) scale(0.98);
+    }
+
+    svg {
+        margin-right: 0.5rem;
+    }
+}

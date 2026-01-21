@@ -184,60 +184,6 @@
     word-break: keep-all;
 }
 
-// ============================================
-// Empty State
-// ============================================
-.emptyState {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 6rem 2rem;
-    text-align: center;
-    background: v.$white;
-    border-radius: v.$radius-lg;
-    border: 1px solid v.$zinc-100;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-}
-
-.emptyIcon {
-    width: 100px;
-    height: 100px;
-    border-radius: 40px;
-    background: linear-gradient(135deg, v.$zinc-50 0%, v.$zinc-100 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 2rem;
-    color: v.$zinc-300;
-    animation: bell-shake 3s ease-in-out infinite;
-}
-
-.bellIcon {
-    transform-origin: top center;
-}
-
-@keyframes bell-shake {
-    0%, 100% { transform: rotate(0); }
-    10%, 20% { transform: rotate(10deg); }
-    15% { transform: rotate(-10deg); }
-    25% { transform: rotate(0); }
-}
-
-.emptyTitle {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: v.$zinc-900;
-    margin-bottom: 0.75rem;
-    letter-spacing: -0.02em;
-}
-
-.emptyDescription {
-    font-size: 1rem;
-    color: v.$zinc-500;
-    line-height: 1.7;
-    word-break: keep-all;
-}
 
 @keyframes slideDown {
     from {

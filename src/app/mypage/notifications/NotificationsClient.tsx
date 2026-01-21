@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { clsx } from 'clsx';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
+import { EmptyState } from '@/components/ui/EmptyState';
 
 interface ProfileData {
     full_name: string | null;
@@ -126,16 +127,11 @@ export default function NotificationsClient({ userId, notifications }: Notificat
                         })}
                     </div>
                 ) : (
-                    <div className={styles.emptyState}>
-                        <div className={styles.emptyIcon}>
-                            <Bell size={40} className={styles.bellIcon} />
-                        </div>
-                        <h3 className={styles.emptyTitle}>새로운 알림이 없어요</h3>
-                        <p className={styles.emptyDescription}>
-                            중요한 업데이트나 신청 결과가 있을 때<br />
-                            이곳에서 가장 먼저 알려드릴게요.
-                        </p>
-                    </div>
+                    <EmptyState
+                        icon={<Bell size={40} />}
+                        title="새로운 알림이 없어요"
+                        description={<>중요한 업데이트나 신청 결과가 있을 때<br />이곳에서 가장 먼저 알려드릴게요.</>}
+                    />
                 )}
             </div>
         </div>
