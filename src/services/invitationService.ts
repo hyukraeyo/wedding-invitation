@@ -88,5 +88,31 @@ export const invitationService = {
             .eq('id', id);
 
         if (error) throw error;
+    },
+
+    async markNotificationAsRead(id: string, client?: SupabaseClient) {
+        const supabaseClient = client ?? await getDefaultClient();
+        // Fetch current data first to avoid overriding everything
+        const { data: inv, error: fetchError } = await supabaseClient
+            .from('invitations')
+            .select('invitation_data')
+            .eq('id', id)
+            .single();
+
+        if (fetchError || !inv) throw fetchError || new Error('Invitation not found');
+
+        const updatedData = {
+            ...inv.invitation_data,
+            hasNewRejection: false,
+            hasNewApproval: false
+        };
+
+        const { error: updateError } = await supabaseClient
+            .from('invitations')
+            .update({ invitation_data: updatedData })
+            .eq('id', id);
+
+        if (updateError) throw updateError;
+        return true;
     }
 };

@@ -11,6 +11,7 @@ import {
     User,
     LogOut,
     Banana,
+    Bell,
 } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 import styles from './MyPageSidebar.module.scss';
@@ -27,6 +28,7 @@ interface MyPageSidebarProps {
     isAdmin: boolean;
     invitationCount?: number;
     requestCount?: number;
+    notificationCount?: number;
     userEmail?: string | null;
 }
 
@@ -35,6 +37,7 @@ export function MyPageSidebar({
     isAdmin,
     invitationCount = 0,
     requestCount = 0,
+    notificationCount = 0,
     // userEmail,
 }: MyPageSidebarProps) {
     const pathname = usePathname();
@@ -96,6 +99,17 @@ export function MyPageSidebar({
                     >
                         <User size={20} className={styles.menuIcon} />
                         내 계정관리
+                    </ViewTransitionLink>
+
+                    <ViewTransitionLink
+                        href="/mypage/notifications"
+                        className={clsx(styles.menuItem, pathname === '/mypage/notifications' && styles.active)}
+                    >
+                        <Bell size={20} className={styles.menuIcon} />
+                        알림
+                        {notificationCount > 0 && (
+                            <span className={clsx(styles.menuBadge, styles.badgeAlert)}>{notificationCount}</span>
+                        )}
                     </ViewTransitionLink>
 
                     <button

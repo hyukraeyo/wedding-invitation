@@ -13,11 +13,14 @@
     overflow: hidden;
     background-color: #ffffff;
     aspect-ratio: 3 / 5.5;
-    // box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-    transition: box-shadow 0.3s v.$ease-ios;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    transition: all 0.4s v.$ease-ios;
+    border: 1px solid v.$zinc-100;
 
     @include m.hover {
-        // box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+        border-color: v.$zinc-200;
     }
 }
 
@@ -209,12 +212,12 @@
 .blueButton {
     background-color: #FFFFFF !important;
     border-color: transparent !important;
-    color: #6b7280 !important;
+    color: #374151 !important;
     font-weight: 600 !important;
     
     &:hover {
         background-color: #f9fafb !important;
-        color: #374151 !important;
+        color: #111827 !important;
     }
 }
 
@@ -231,13 +234,13 @@
 
 .editButton {
     background-color: #FFFFFF !important;
-    color: #6b7280 !important;
+    color: #374151 !important;
     border-color: transparent !important;
     font-weight: 600 !important;
     
     &:hover {
         background-color: #f9fafb !important;
-        color: #374151 !important;
+        color: #111827 !important;
     }
 }
 

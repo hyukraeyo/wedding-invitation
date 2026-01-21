@@ -3,6 +3,7 @@
 import { parseRejection } from '@/lib/rejection-helpers';
 import React, { useState, useCallback, useMemo } from 'react';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/navigation';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { approvalRequestService } from '@/services/approvalRequestService';
 import { invitationService } from '@/services/invitationService';
@@ -59,6 +60,7 @@ export default function RequestsPageClient({
     initialLimit,
 }: RequestsPageClientProps) {
     const queryClient = useQueryClient();
+    const router = useRouter();
     const { toast } = useToast();
 
     // 1. 초대장 정보 캐시 (매번 fetch하지 않도록)
@@ -115,6 +117,7 @@ export default function RequestsPageClient({
         onSuccess: () => {
             toast({ description: '사용 승인이 완료되었습니다.' });
             queryClient.invalidateQueries({ queryKey: ['approval-requests'] });
+            router.refresh();
         },
         onError: () => toast({ variant: 'destructive', description: '승인 처리 중 오류 발생' }),
     });
@@ -126,6 +129,7 @@ export default function RequestsPageClient({
         onSuccess: () => {
             toast({ description: '신청이 거절되었습니다.' });
             queryClient.invalidateQueries({ queryKey: ['approval-requests'] });
+            router.refresh();
         },
         onError: () => toast({ variant: 'destructive', description: '거절 처리 중 오류 발생' }),
     });
@@ -263,19 +267,33 @@ export default function RequestsPageClient({
                 <div style={{ textAlign: 'center' }}>{confirmConfig.description}</div>
             </ResponsiveModal>
 
-            {rejectionTarget && (
-                <RejectionReasonModal
-                    isOpen={!!rejectionTarget}
-                    onClose={() => setRejectionTarget(null)}
-                    onSubmit={(reason) => {
-                        rejectMutation.mutate({ inv: rejectionTarget, reason });
-                        setRejectionTarget(null);
-                    }}
-                    loading={rejectMutation.isPending}
-                    requesterName={allRequests.find(r => r.invitation_id === rejectionTarget.id)?.requester_name || ''}
-                    title={rejectionTarget.invitation_data.isApproved ? "승인 취소" : "승인 거절"}
-                />
-            )}
+            {rejectionTarget && (() => {
+                const targetRequest = allRequests.find(r => r.invitation_id === rejectionTarget.id);
+                const isRevoked = targetRequest?.status === 'approved';
+                const statusText = isRevoked ? "승인 취소" : "승인 거절";
+                const requesterName = targetRequest?.requester_name || '';
+
+                return (
+                    <RejectionReasonModal
+                        isOpen={!!rejectionTarget}
+                        onClose={() => setRejectionTarget(null)}
+                        onSubmit={(reason) => {
+                            rejectMutation.mutate({ inv: rejectionTarget, reason });
+                            setRejectionTarget(null);
+                        }}
+                        loading={rejectMutation.isPending}
+                        requesterName={requesterName}
+                        title={statusText}
+                        confirmText={statusText}
+                        description={
+                            <>
+                                <strong>{requesterName}</strong>님의 {isRevoked ? "승인을 취소" : "사용 신청을 거절"}합니다.<br />
+                                {statusText} 사유를 입력해주세요. 사용자가 확인할 수 있습니다.
+                            </>
+                        }
+                    />
+                );
+            })()}
 
             {viewRejectionData && (
                 <ResponsiveModal
@@ -284,9 +302,10 @@ export default function RequestsPageClient({
                     title="거절/취소 사유"
                     showCancel={false}
                 >
-                    <div className={styles.rejectionReasonBox}>
-                        {parseRejection(viewRejectionData).displayReason || '내용이 없습니다.'}
-                    </div>
+                    <div
+                        className={styles.rejectionReasonBox}
+                        dangerouslySetInnerHTML={{ __html: parseRejection(viewRejectionData).displayReason || '내용이 없습니다.' }}
+                    />
                 </ResponsiveModal>
             )}
         </div>

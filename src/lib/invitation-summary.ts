@@ -13,6 +13,8 @@ export const INVITATION_SUMMARY_SELECT = [
   'address:invitation_data->>address',
   'is_approved:invitation_data->>isApproved',
   'is_requesting_approval:invitation_data->>isRequestingApproval',
+  'has_new_rejection:invitation_data->>hasNewRejection',
+  'has_new_approval:invitation_data->>hasNewApproval',
   'kakao_share:invitation_data->kakaoShare',
 ].join(', ');
 
@@ -28,6 +30,8 @@ export interface InvitationSummaryData {
   address?: string;
   isApproved: boolean;
   isRequestingApproval: boolean;
+  hasNewRejection?: boolean;
+  hasNewApproval?: boolean;
   kakaoShare?: {
     title?: string;
     description?: string;
@@ -58,6 +62,8 @@ export interface InvitationSummaryRow {
   address: string | null;
   is_approved: boolean | string | null;
   is_requesting_approval: boolean | string | null;
+  has_new_rejection: boolean | string | null;
+  has_new_approval: boolean | string | null;
   kakao_share: {
     title?: string;
     description?: string;
@@ -86,6 +92,8 @@ export const toInvitationSummary = (row: InvitationSummaryRow): InvitationSummar
     address: row.address ?? '',
     isApproved: toBoolean(row.is_approved),
     isRequestingApproval: toBoolean(row.is_requesting_approval),
+    hasNewRejection: toBoolean(row.has_new_rejection),
+    hasNewApproval: toBoolean(row.has_new_approval),
     ...(row.kakao_share ? { kakaoShare: row.kakao_share } : {}),
   },
 });

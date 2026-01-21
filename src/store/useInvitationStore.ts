@@ -264,6 +264,10 @@ export interface InvitationState {
     isUploading: boolean;
     setIsUploading: (uploading: boolean) => void;
 
+    // Rejection Notification State
+    hasNewRejection: boolean;
+    setHasNewRejection: (has: boolean) => void;
+
     // Actions
     reset: () => void;
 }
@@ -408,6 +412,7 @@ export const INITIAL_STATE = {
     isApproved: false,
     isRequestingApproval: false,
     isUploading: false,
+    hasNewRejection: false,
 };
 
 export const useInvitationStore = create<InvitationState>()(persist((set) => ({
@@ -510,6 +515,7 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
     setSlug: (slug) => set({ slug }),
     setIsApproved: (approved) => set({ isApproved: approved }),
     setIsRequestingApproval: (requesting) => set({ isRequestingApproval: requesting }),
+    setHasNewRejection: (hasNewRejection) => set({ hasNewRejection }),
     reset: () => set(INITIAL_STATE),
 }), {
     name: 'wedding-invitation-storage',

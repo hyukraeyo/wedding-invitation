@@ -39,7 +39,7 @@ interface InvitationCardProps {
     onRevokeApproval: (inv: InvitationSummaryRecord) => void;
 }
 
-const InvitationCard = ({
+const InvitationCard = React.memo(({
     invitation,
     rejectionData = null,
     onEdit,
@@ -48,9 +48,9 @@ const InvitationCard = ({
     onCancelRequest,
 }: InvitationCardProps) => {
     const data = invitation.invitation_data;
-    const isApproved = data?.isApproved;
-    const isRequesting = data?.isRequestingApproval;
-    const isRejected = !!rejectionData;
+    const isApproved = !!data?.isApproved;
+    const isRequesting = !!data?.isRequestingApproval && !isApproved;
+    const isRejected = !!rejectionData && !isApproved && !isRequesting;
     const imageUrl = data?.imageUrl;
     const title = data?.mainScreen?.title || '제목없음';
     const slug = invitation.slug;
@@ -106,8 +106,8 @@ const InvitationCard = ({
 
     const handlePrimaryAction = (e: React.MouseEvent) => {
         e.preventDefault();
-        // Prevent action if approved or rejected (treat as disabled)
-        if (isApproved || isRejected) return;
+        // Prevent action if approved (treat as disabled)
+        if (isApproved) return;
 
         if (isRequesting) {
             onCancelRequest(invitation);
@@ -184,9 +184,11 @@ const InvitationCard = ({
                                 />
                             </DropdownMenuTrigger>
                             <DropdownMenuContent side="top" align="start" className={styles.dropdownContent}>
-                                <DropdownMenuItem onClick={() => onEdit(invitation)}>
-                                    <Edit2 size={16} className="mr-2" /> 편집하기
-                                </DropdownMenuItem>
+                                {!isRequesting && !isApproved && (
+                                    <DropdownMenuItem onClick={() => onEdit(invitation)}>
+                                        <Edit2 size={16} className="mr-2" /> 편집하기
+                                    </DropdownMenuItem>
+                                )}
                                 <DropdownMenuItem onClick={handlePreview}>
                                     <Eye size={16} className="mr-2" /> 미리보기
                                 </DropdownMenuItem>
@@ -195,7 +197,7 @@ const InvitationCard = ({
                                         <AlertCircle size={16} className="mr-2" /> {REJECTION_LABEL} 확인
                                     </DropdownMenuItem>
                                 )}
-                                {!isRequesting && !isApproved && (
+                                {!isRequesting && (
                                     <DropdownMenuItem
                                         onClick={() => setTimeout(() => onDelete(invitation), 0)}
                                         style={{ color: '#EF4444' }}
@@ -206,24 +208,7 @@ const InvitationCard = ({
                             </DropdownMenuContent>
                         </DropdownMenu>
 
-                        {isRejected ? (
-                            <>
-                                <Button
-                                    variant="outline"
-                                    className={clsx(styles.footerSecondaryButton, styles.editButton)}
-                                    onClick={() => onEdit(invitation)}
-                                >
-                                    편집하기
-                                </Button>
-                                <Button
-                                    className={styles.footerPrimaryButton}
-                                    variant="solid"
-                                    onClick={() => setShowRejectionModal(true)}
-                                >
-                                    사용 신청
-                                </Button>
-                            </>
-                        ) : !isRequesting && !isApproved ? (
+                        {(!isRequesting && !isApproved) ? (
                             <>
                                 <Button
                                     variant="outline"
@@ -317,7 +302,7 @@ const InvitationCard = ({
             </ResponsiveModal>
         </div>
     );
-};
+});
 
 InvitationCard.displayName = "InvitationCard";
 

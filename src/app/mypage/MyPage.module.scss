@@ -7,7 +7,8 @@
 .cardGrid {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
-    gap: 1.25rem;
+    gap: 1.5rem;
+    padding-bottom: 2rem;
 
     @media (min-width: 480px) {
         grid-template-columns: repeat(2, 1fr);
@@ -15,7 +16,7 @@
 
     @include m.desktop {
         grid-template-columns: repeat(3, 1fr);
-        gap: 1.5rem;
+        gap: 2rem;
     }
 
     @media (min-width: 1280px) {
@@ -42,54 +43,76 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
-    background-color: v.$zinc-50;
+    gap: 1.25rem;
+    background: linear-gradient(135deg, v.$zinc-50 0%, v.$white 100%);
     cursor: pointer;
-    transition: border-color 0.3s ease, background-color 0.3s ease, transform 0.2s ease;
+    transition: all 0.4s v.$ease-ios;
     text-decoration: none;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at center, rgba(v.$color-primary, 0.05) 0%, transparent 70%);
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
 
     &:hover {
         border-color: v.$primary-400;
-        background-color: v.$primary-50;
+        border-style: solid;
+        background-color: v.$white;
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+
+        &::before {
+            opacity: 1;
+        }
 
         .createIcon {
-            transform: scale(1.1);
-            background-color: v.$primary-200;
-            color: v.$primary-700;
+            transform: scale(1.1) rotate(90deg);
+            background-color: v.$color-primary;
+            color: v.$white;
+            box-shadow: 0 8px 16px rgba(v.$color-primary, 0.3);
         }
 
         .createText {
-            color: v.$primary-700;
+            color: v.$zinc-900;
         }
     }
 
     &:active {
-        transform: scale(0.98);
+        transform: translateY(-4px) scale(0.98);
     }
 }
 
 .createDatePlaceholder {
-    height: 1.25rem; // InvitationCard date text height
+    height: 1.25rem;
     width: 100%;
 }
 
 .createIcon {
-    width: 56px;
-    height: 56px;
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
     background-color: v.$zinc-100;
     display: flex;
     align-items: center;
     justify-content: center;
     color: v.$zinc-400;
-    transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+    transition: all 0.4s v.$ease-ios;
+    position: relative;
+    z-index: 1;
 }
 
 .createText {
-    font-size: 0.9375rem;
-    font-weight: 600;
+    font-size: 1rem;
+    font-weight: 700;
     color: v.$zinc-500;
-    transition: color 0.2s ease;
+    transition: color 0.3s ease;
+    z-index: 1;
 }
 
 // ============================================
@@ -101,55 +124,82 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 4rem 2rem;
+    padding: 6rem 2rem;
     text-align: center;
+    background: v.$white;
+    border-radius: v.$radius-lg;
+    border: 1px solid v.$zinc-100;
+    margin-top: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
 }
 
 .emptyIcon {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background-color: v.$zinc-100;
+    width: 100px;
+    height: 100px;
+    border-radius: 40px;
+    background: linear-gradient(135deg, v.$primary-50 0%, v.$primary-100 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 1.5rem;
-    color: v.$zinc-300;
+    margin-bottom: 2rem;
+    color: v.$color-primary;
+    transform: rotate(-10deg);
+    animation: floating 3s ease-in-out infinite;
+
+    svg {
+        width: 48px;
+        height: 48px;
+    }
+}
+
+@keyframes floating {
+    0%, 100% { transform: translateY(0) rotate(-10deg); }
+    50% { transform: translateY(-10px) rotate(-5deg); }
 }
 
 .emptyTitle {
-    font-size: 1.125rem;
-    font-weight: 700;
-    color: v.$zinc-800;
-    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: v.$zinc-900;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
 }
 
 .emptyDescription {
-    font-size: 0.9375rem;
+    font-size: 1rem;
     color: v.$zinc-500;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    word-break: keep-all;
 }
 
 .emptyButton {
-    padding: 0.875rem 2rem;
-    background-color: v.$zinc-900;
-    color: white;
+    display: inline-flex;
+    align-items: center;
+    padding: 1rem 2.5rem;
+    background-color: v.$color-primary;
+    color: v.$white;
     border: none;
-    border-radius: v.$radius-md;
-    font-size: 0.9375rem;
-    font-weight: 700;
+    border-radius: v.$radius-full;
+    font-size: 1rem;
+    font-weight: 800;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s v.$ease-ios;
     text-decoration: none;
+    box-shadow: 0 10px 20px rgba(v.$color-primary, 0.2);
 
     &:hover {
-        background-color: black;
-        transform: translateY(-1px);
+        background-color: v.$color-primary-dark;
+        transform: translateY(-4px);
+        box-shadow: 0 15px 30px rgba(v.$color-primary, 0.3);
     }
 
     &:active {
-        transform: scale(0.98);
+        transform: translateY(-2px) scale(0.98);
+    }
+
+    svg {
+        margin-right: 0.5rem;
     }
 }
 
@@ -260,4 +310,24 @@
 // ============================================
 .contentContainer {
     animation: page-fade-in 400ms var(--ease-ios) both;
+}
+
+// ============================================
+// Rejection Notification
+// ============================================
+.rejectionMessageBox {
+    margin-bottom: 1.5rem;
+    padding: 1.25rem;
+    background-color: v.$color-danger-bg;
+    border-radius: v.$radius-md;
+    border: 1px solid v.$color-danger-border;
+    text-align: left;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: v.$zinc-800;
+}
+
+.rejectionNoticeText {
+    font-size: 0.875rem;
+    color: v.$zinc-500;
 }

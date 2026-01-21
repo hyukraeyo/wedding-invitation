@@ -11,6 +11,7 @@ export function parseRejection(request: ApprovalRequestSummary | null | undefine
         return {
             isRevoked: false,
             isRejected: false,
+            isApproved: false,
             displayReason: '',
             rawReason: '',
             label: '',
@@ -27,6 +28,7 @@ export function parseRejection(request: ApprovalRequestSummary | null | undefine
     const hasMarker = rawReason.startsWith(REVOKED_MARKER);
     const isRevoked = status === 'revoked' || status === 'canceled' || hasMarker;
     const isRejected = status === 'rejected' && !isRevoked; // 순수 거절
+    const isApproved = status === 'approved';
 
     // 마커 제거된 사유
     const displayReason = hasMarker ? rawReason.replace(REVOKED_MARKER, '') : rawReason;
@@ -34,13 +36,14 @@ export function parseRejection(request: ApprovalRequestSummary | null | undefine
     return {
         isRevoked,
         isRejected, // 순수 거절 상태 (취소 아님)
+        isApproved, // 승인 완료 상태
         displayReason, // UI 표시용 사유
         rawReason,     // 원본 사유
 
         // UI 텍스트 상수를 여기서 통합 관리
-        label: isRevoked ? '취소 사유' : '거절 사유',
-        badge: isRevoked ? '승인 취소' : '승인 거절',
-        title: isRevoked ? '승인 취소 사유' : '승인 거절 사유',
+        label: isApproved ? '승인 메시지' : (isRevoked ? '취소 사유' : '거절 사유'),
+        badge: isApproved ? '승인 완료' : (isRevoked ? '승인 취소' : '승인 거절'),
+        title: isApproved ? '승인이 완료되었습니다' : (isRevoked ? '승인 취소 사유' : '승인 거절 사유'),
         description: '',
     };
 }

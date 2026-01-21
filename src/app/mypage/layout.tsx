@@ -39,15 +39,19 @@ async function MyPageLayoutFetcher({ session, children }: { session: Session | n
     if (!userId) return null;
 
     // 1. 필요한 모든 데이터를 병렬로 패칭 (관리자 권한 확인과 동시에 요청 개수 조회)
-    const [profileRes, invitationCountRes, requestCountRes] = await Promise.all([
+    const [profileRes, invitationCountRes, requestCountRes, notificationCountRes] = await Promise.all([
         supabase.from('profiles').select('full_name, phone, is_admin').eq('id', userId).single(),
         supabase.from('invitations').select('*', { count: 'exact', head: true }).eq('user_id', userId),
-        supabase.from('approval_requests').select('*', { count: 'exact', head: true }).in('status', ['pending', 'rejected', 'approved'])
+        supabase.from('approval_requests').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+        supabase.from('invitations').select('*', { count: 'exact', head: true })
+            .eq('user_id', userId)
+            .or('invitation_data->>hasNewRejection.eq.true,invitation_data->>hasNewApproval.eq.true')
     ]);
 
     const profile = profileRes.data;
     const isAdmin = !!profile?.is_admin;
     const invitationCount = invitationCountRes.count || 0;
+    const notificationCount = notificationCountRes.count || 0;
 
     // 관리자가 아닐 경우 requestCount는 0으로 처리 (보안 정책에 의해 이미 필터링되지만 로직상 명시)
     const requestCount = isAdmin ? (requestCountRes.count || 0) : 0;
@@ -58,6 +62,7 @@ async function MyPageLayoutFetcher({ session, children }: { session: Session | n
             isAdmin={isAdmin}
             invitationCount={invitationCount}
             requestCount={requestCount}
+            notificationCount={notificationCount}
         >
             {children}
         </MyPageLayout>

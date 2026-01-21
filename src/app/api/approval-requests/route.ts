@@ -276,7 +276,8 @@ export async function PUT(request: NextRequest) {
       const newData = {
         ...invData.invitation_data,
         isRequestingApproval: false,
-        isApproved: false
+        isApproved: false,
+        hasNewRejection: true // Mark as new rejection for notification
       };
       await db
         .from('invitations')
@@ -406,22 +407,53 @@ export async function PATCH(request: NextRequest) {
     const db = supabaseAdmin || supabase;
 
     // Update approval_requests status to approved
-    const { error: updateError } = await db
-      .from('approval_requests')
-      .update({
-        status: 'approved',
-        reviewed_by: userId,
-        reviewed_at: new Date().toISOString(),
-      })
-      .eq('invitation_id', validatedData.invitationId)
-      .eq('status', 'pending');
+    const [updateResult, invitationResult] = await Promise.all([
+      db
+        .from('approval_requests')
+        .update({
+          status: 'approved',
+          reviewed_by: userId,
+          reviewed_at: new Date().toISOString(),
+        })
+        .eq('invitation_id', validatedData.invitationId)
+        .eq('status', 'pending'),
+      db
+        .from('invitations')
+        .select('*')
+        .eq('id', validatedData.invitationId)
+        .single(),
+    ]);
 
-    if (updateError) {
-      console.error('Error approving request:', updateError);
+    if (updateResult.error) {
+      console.error('Error approving request:', updateResult.error);
       return NextResponse.json(
         { error: '승인 처리에 실패했습니다.' },
         { status: 500 }
       );
+    }
+
+    const invData = invitationResult.data;
+    if (invData) {
+      const newData = {
+        ...invData.invitation_data,
+        isApproved: true,
+        isRequestingApproval: false,
+        hasNewRejection: false, // Clear rejection flag if approved
+        hasNewApproval: true  // Mark as new approval for notification
+      };
+
+      await Promise.all([
+        db
+          .from('invitations')
+          .update({ invitation_data: newData })
+          .eq('id', validatedData.invitationId),
+        // Clean up old rejected requests for this invitation when approved
+        db
+          .from('approval_requests')
+          .delete()
+          .eq('invitation_id', validatedData.invitationId)
+          .eq('status', 'rejected')
+      ]);
     }
 
     return NextResponse.json({ success: true });

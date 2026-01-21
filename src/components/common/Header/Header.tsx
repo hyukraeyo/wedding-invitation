@@ -3,7 +3,7 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Plus, LogIn, Save, Banana } from 'lucide-react';
+import { Plus, LogIn, Save, Banana, Bell } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useRouter, usePathname } from 'next/navigation';
@@ -33,7 +33,7 @@ export default function Header() {
         isUploading: state.isUploading,
     })));
 
-    const { onSave, isLoading } = useHeaderStore();
+    const { onSave, isLoading, notificationCount } = useHeaderStore();
 
     const [showResetDialog, setShowResetDialog] = useState(false);
     const { toast } = useToast();
@@ -126,6 +126,14 @@ export default function Header() {
                                 aria-label="새 청첩장 만들기"
                             />
                         )}
+                        <Link href="/mypage/notifications" className={styles.notificationLink}>
+                            <div className={styles.notificationIcon} aria-label="알림">
+                                <Bell size={20} strokeWidth={2.5} />
+                                {notificationCount > 0 && (
+                                    <span className={styles.notificationBadge} />
+                                )}
+                            </div>
+                        </Link>
                         <Link href="/mypage">
                             <div className={styles.profileIcon} aria-label="마이페이지">
                                 <Banana size={20} strokeWidth={2.5} />

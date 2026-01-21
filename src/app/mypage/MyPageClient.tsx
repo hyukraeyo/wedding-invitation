@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -12,6 +12,7 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import type { InvitationData } from '@/store/useInvitationStore';
 import { MyPageHeader } from '@/components/mypage/MyPageHeader';
 import { MyPageLayout } from '@/components/mypage/MyPageLayout';
+import { parseRejection } from '@/lib/rejection-helpers';
 // import { signOut } from 'next-auth/react';
 
 import { useToast } from '@/hooks/use-toast';
@@ -91,18 +92,66 @@ export default function MyPageClient({
         targetRecord: null,
     });
 
+    const [autoNotificationTarget, setAutoNotificationTarget] = useState<{
+        invitation: InvitationSummaryRecord;
+        rejection?: ApprovalRequestSummary;
+        isApproval?: boolean;
+    } | null>(null);
+
     const reset = useInvitationStore(state => state.reset);
     const { toast } = useToast();
 
-    const fetchInvitations = useCallback(async () => {
-        if (!userId) return;
-        try {
-            const data = await invitationService.getUserInvitations(userId);
-            setInvitations(data);
-        } catch {
-            // Silent fail - user can refresh
+
+
+    // Check for unread notifications (rejections or approvals) on load
+    useEffect(() => {
+        if (invitations.length === 0) return;
+
+        // 1. Check for new rejections
+        const unreadRejection = invitations.find(inv => inv.invitation_data?.hasNewRejection);
+        if (unreadRejection) {
+            const rejection = rejectedRequests.find(req => req.invitation_id === unreadRejection.id);
+            if (rejection) {
+                setAutoNotificationTarget({
+                    invitation: unreadRejection,
+                    rejection
+                });
+                return; // Prioritize one notification at a time
+            }
         }
-    }, [userId]);
+
+        // 2. Check for new approvals
+        const unreadApproval = invitations.find(inv => inv.invitation_data?.hasNewApproval);
+        if (unreadApproval) {
+            setAutoNotificationTarget({
+                invitation: unreadApproval,
+                isApproval: true
+            });
+        }
+    }, [invitations, rejectedRequests]);
+
+    const handleCloseAutoNotification = useCallback(async () => {
+        if (!autoNotificationTarget) return;
+
+        const targetId = autoNotificationTarget.invitation.id;
+        setAutoNotificationTarget(null);
+
+        try {
+            // async-defer-await: Mark as read immediately, non-blocking UI update
+            invitationService.markNotificationAsRead(targetId);
+
+            setInvitations(prev => prev.map(inv =>
+                inv.id === targetId
+                    ? { ...inv, invitation_data: { ...inv.invitation_data, hasNewRejection: false, hasNewApproval: false } }
+                    : inv
+            ));
+
+            // Sync sidebar counts
+            router.refresh();
+        } catch (error) {
+            console.error('Failed to mark notification as read:', error);
+        }
+    }, [autoNotificationTarget, router]);
 
     const fetchFullInvitationData = useCallback(async (slug: string) => {
         const fullInvitation = await invitationService.getInvitation(slug);
@@ -132,7 +181,11 @@ export default function MyPageClient({
         setActionLoading(id);
         try {
             await invitationService.deleteInvitation(id);
-            await fetchInvitations();
+            // Parallelize re-fetch
+            const newInvitations = await invitationService.getUserInvitations(userId!);
+            setInvitations(newInvitations);
+            // Sync sidebar counts
+            router.refresh();
         } catch {
             toast({
                 variant: 'destructive',
@@ -142,39 +195,87 @@ export default function MyPageClient({
             setActionLoading(null);
             setConfirmConfig(prev => ({ ...prev, isOpen: false }));
         }
-    }, [fetchInvitations, toast]);
+    }, [userId, toast, router]);
 
     const executeCancelRequest = useCallback(async (invitationId: string) => {
         setActionLoading(invitationId);
         try {
             await approvalRequestService.cancelRequest(invitationId);
-            await fetchInvitations();
+            // Parallelize re-fetch
+            const newInvitations = await invitationService.getUserInvitations(userId!);
+            setInvitations(newInvitations);
             toast({ description: '신청이 취소되었습니다.' });
+            // Sync sidebar counts
+            router.refresh();
         } catch {
             toast({ variant: 'destructive', description: '취소 처리에 실패했습니다.' });
         } finally {
             setActionLoading(null);
             setConfirmConfig(prev => ({ ...prev, isOpen: false }));
         }
-    }, [fetchInvitations, toast]);
+    }, [userId, toast, router]);
 
     // --- Action Initiators ---
 
     const handleDeleteClick = useCallback((inv: InvitationSummaryRecord) => {
-        if (inv.invitation_data?.isRequestingApproval || inv.invitation_data?.isApproved) {
+        // Find if this invitation has rejection/revocation data
+        const rejection = rejectedRequests.find(req => req.invitation_id === inv.id);
+        const { isRejected, isRevoked } = parseRejection(rejection);
+
+        // 승인 대기 중인 경우 삭제 불가 (신청 취소 유도)
+        if (inv.invitation_data?.isRequestingApproval && !isRejected && !isRevoked) {
             setConfirmConfig({
                 isOpen: true,
                 type: 'INFO_ONLY',
-                title: '수정/삭제할 수 없습니다',
+                title: '삭제할 수 없습니다',
                 description: <>
-                    승인 신청 중이거나 승인 완료된 청첩장은 직접 수정/삭제할 수 없습니다.<br /><br />
-                    신청 중인 경우 하단의 <strong>[신청취소]</strong> 버튼을 눌러 상태를 변경한 뒤 다시 시도해 주세요.
+                    승인 신청 중인 청첩장은 삭제할 수 없습니다.<br /><br />
+                    하단의 <strong>[신청취소]</strong> 버튼을 눌러 상태를 변경한 뒤 다시 시도해 주세요.
                 </>,
                 targetId: null,
             });
             return;
         }
 
+        // 승인 완료된 경우 (강력한 경고와 함께 삭제 허용)
+        if (inv.invitation_data?.isApproved && !isRejected && !isRevoked) {
+            setConfirmConfig({
+                isOpen: true,
+                type: 'DELETE',
+                title: '청첩장 삭제',
+                description: (
+                    <>
+                        정말로 이 청첩장을 삭제하시겠습니까?<br />
+                        <span className="text-red-500 font-bold block mt-2">주의: 승인 완료된 청첩장을 삭제하면 공유된 링크로 더 이상 접속할 수 없습니다.</span>
+                        <br />
+                        삭제된 데이터는 복구할 수 없습니다.
+                    </>
+                ),
+                targetId: inv.id,
+            });
+            return;
+        }
+
+        // 거절 또는 취소된 경우
+        if (isRejected || isRevoked) {
+            const statusText = isRevoked ? '승인 취소' : '승인 거절';
+            setConfirmConfig({
+                isOpen: true,
+                type: 'DELETE',
+                title: '청첩장 삭제',
+                description: (
+                    <>
+                        정말로 이 청첩장을 삭제하시겠습니까?<br />
+                        현재이 청첩장은 <strong>{statusText}</strong> 상태입니다.<br /><br />
+                        삭제된 데이터는 복구할 수 없습니다.
+                    </>
+                ),
+                targetId: inv.id,
+            });
+            return;
+        }
+
+        // 일반 상태 (작성 중)
         setConfirmConfig({
             isOpen: true,
             type: 'DELETE',
@@ -182,7 +283,7 @@ export default function MyPageClient({
             description: '정말로 이 청첩장을 삭제하시겠습니까? 삭제된 데이터는 복구할 수 없습니다.',
             targetId: inv.id,
         });
-    }, []);
+    }, [rejectedRequests]);
 
     const handleCancelRequestClick = useCallback((inv: InvitationSummaryRecord) => {
         setConfirmConfig({
@@ -233,6 +334,7 @@ export default function MyPageClient({
 
         setActionLoading(inv.id);
         try {
+            // async-api-routes pattern: start operation
             await approvalRequestService.createRequest({
                 invitationId: inv.id,
                 invitationSlug: inv.slug,
@@ -245,12 +347,18 @@ export default function MyPageClient({
                 ...fullData,
                 isRequestingApproval: true,
             };
-            await invitationService.saveInvitation(inv.slug, updatedData, userId);
+
+            // Wait for both save and re-fetch
+            await Promise.all([
+                invitationService.saveInvitation(inv.slug, updatedData, userId),
+                invitationService.getUserInvitations(userId).then(setInvitations)
+            ]);
 
             toast({
                 description: '사용 신청이 완료되었습니다. 관리자 확인 후 처리됩니다.',
             });
-            await fetchInvitations();
+            // Sync sidebar counts
+            router.refresh();
         } catch {
             toast({
                 variant: 'destructive',
@@ -260,7 +368,7 @@ export default function MyPageClient({
             setActionLoading(null);
             setConfirmConfig(prev => ({ ...prev, isOpen: false }));
         }
-    }, [fetchFullInvitationData, fetchInvitations, profile, toast, userId]);
+    }, [fetchFullInvitationData, profile, toast, userId, router]);
 
     const handleConfirmAction = useCallback(() => {
         const { type, targetId, targetRecord } = confirmConfig;
@@ -315,39 +423,50 @@ export default function MyPageClient({
         <div className={styles.contentContainer}>
             <MyPageHeader title="내 청첩장" />
 
-            <div className={styles.cardGrid}>
-                {/* Create New Card */}
-                <div className={styles.createCardWrapper}>
+            {invitations.length === 0 ? (
+                <div className={styles.emptyState}>
+                    <div className={styles.emptyIcon}>
+                        <Banana />
+                    </div>
+                    <h3 className={styles.emptyTitle}>아직 만든 청첩장이 없어요</h3>
+                    <p className={styles.emptyDescription}>
+                        세상에서 가장 행복한 시작을 위해,<br />
+                        나만의 특별한 모바일 청첩장을 지금 바로 만들어보세요.
+                    </p>
                     <Link
                         href="/builder"
-                        className={styles.createCard}
+                        className={styles.emptyButton}
                         onClick={(e) => {
                             e.preventDefault();
                             handleCreateNew();
                         }}
                     >
-                        <div className={styles.createIcon}>
-                            <Plus size={28} />
-                        </div>
-                        <span className={styles.createText}>새 청첩장 만들기</span>
+                        <Plus size={20} className="mr-2" />
+                        첫 청첩장 만들기
                     </Link>
-                    <div className={styles.createDatePlaceholder} />
                 </div>
-
-                {/* Invitation Cards */}
-                {invitations.length === 0 ? (
-                    <div className={styles.emptyState}>
-                        <div className={styles.emptyIcon}>
-                            <Banana size={40} />
-                        </div>
-                        <h3 className={styles.emptyTitle}>아직 청첩장이 없어요</h3>
-                        <p className={styles.emptyDescription}>
-                            나만의 특별한 모바일 청첩장을<br />
-                            쉽고 빠르게 만들어보세요!
-                        </p>
+            ) : (
+                <div className={styles.cardGrid}>
+                    {/* Create New Card */}
+                    <div className={styles.createCardWrapper}>
+                        <Link
+                            href="/builder"
+                            className={styles.createCard}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handleCreateNew();
+                            }}
+                        >
+                            <div className={styles.createIcon}>
+                                <Plus size={28} />
+                            </div>
+                            <span className={styles.createText}>새 청첩장 만들기</span>
+                        </Link>
+                        <div className={styles.createDatePlaceholder} />
                     </div>
-                ) : (
-                    invitations.map((inv) => {
+
+                    {/* Invitation Cards */}
+                    {invitations.map((inv) => {
                         const rejectionData = rejectedRequests.find(req => req.invitation_id === inv.id) || null;
                         return (
                             <InvitationCard
@@ -362,9 +481,9 @@ export default function MyPageClient({
                                 onRevokeApproval={handleAdminRevokeClick}
                             />
                         );
-                    })
-                )}
-            </div>
+                    })}
+                </div>
+            )}
 
             {/* Modals */}
             {userId ? (
@@ -414,6 +533,34 @@ export default function MyPageClient({
                     confirmText="승인 취소"
                 />
             ) : null}
+
+            {/* Auto-Notification Modal */}
+            {autoNotificationTarget && (
+                <ResponsiveModal
+                    open={!!autoNotificationTarget}
+                    onOpenChange={(open) => {
+                        if (!open) handleCloseAutoNotification();
+                    }}
+                    title={autoNotificationTarget.isApproval ? '승인 완료' : parseRejection(autoNotificationTarget.rejection).title}
+                    showCancel={false}
+                    confirmText="확인"
+                    onConfirm={handleCloseAutoNotification}
+                >
+                    <div style={{ textAlign: 'center' }}>
+                        <div
+                            className={styles.rejectionMessageBox}
+                            dangerouslySetInnerHTML={{
+                                __html: autoNotificationTarget.isApproval
+                                    ? `<strong>${autoNotificationTarget.invitation.invitation_data.mainScreen.title}</strong> 청첩장 승인이 완료되었습니다!<br/>이제 자유롭게 공유할 수 있습니다.`
+                                    : parseRejection(autoNotificationTarget.rejection).displayReason || '내용이 없습니다.'
+                            }}
+                        />
+                        <p className={styles.rejectionNoticeText}>
+                            내역을 확인했습니다. [확인] 버튼을 누르면 이 알림이 다시 뜨지 않습니다.
+                        </p>
+                    </div>
+                </ResponsiveModal>
+            )}
         </div>
     );
 }

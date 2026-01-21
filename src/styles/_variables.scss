@@ -20,7 +20,6 @@ $color-border: #E5E5E5;
 $color-border-hover: #D4D4D8; // zinc-300
 $color-input: #E5E5E5;
 
-$color-danger: #EF4444;
 $color-success: #22C55E;
 
 $white: #FFFFFF;
@@ -60,6 +59,66 @@ $zinc-700: #3f3f46;
 $zinc-800: #27272a;
 $zinc-900: #18181b;
 $zinc-950: #09090b;
+
+// Rose Color Scale (Alerts, Negative)
+$rose-50: #fff1f2;
+$rose-100: #ffe4e6;
+$rose-200: #fecdd3;
+$rose-300: #fda4af;
+$rose-400: #fb7185;
+$rose-500: #f43f5e;
+$rose-600: #e11d48;
+$rose-700: #be123c;
+$rose-800: #9f1239;
+$rose-900: #881337;
+
+// Amber Color Scale (Warnings)
+$amber-50: #fffbeb;
+$amber-100: #fef3c7;
+$amber-200: #fde68a;
+$amber-300: #fcd34d;
+$amber-400: #fbbf24;
+$amber-500: #f59e0b;
+$amber-600: #d97706;
+$amber-700: #b45309;
+$amber-800: #92400e;
+$amber-900: #78350f;
+
+// Blue Color Scale (Info)
+$blue-50: #eff6ff;
+$blue-100: #dbeafe;
+$blue-200: #bfdbfe;
+$blue-300: #93c5fd;
+$blue-400: #60a5fa;
+$blue-500: #3b82f6;
+$blue-600: #2563eb;
+$blue-700: #1d4ed8;
+$blue-800: #1e40af;
+$blue-900: #1e3a8a;
+
+// Green Color Scale (Success, Positive)
+$green-50: #f0fdf4;
+$green-100: #dcfce7;
+$green-200: #bbf7d0;
+$green-300: #86efac;
+$green-400: #4ade80;
+$green-500: #22c55e;
+$green-600: #16a34a;
+$green-700: #15803d;
+$green-800: #166534;
+$green-900: #14532d;
+
+// Semantic Aliases
+$color-info: $blue-500;
+$color-info-bg: $blue-50;
+$color-success: $green-500;
+$color-success-bg: $green-50;
+$color-warning: $amber-500;
+$color-warning-bg: $amber-50;
+$color-danger: $rose-500;
+$color-danger-bg: $rose-50;
+$color-danger-border: $rose-100;
+$color-error: $rose-600;
 
 // ============================================
 // Typography

@@ -107,8 +107,8 @@
 
 .menuBadge {
   margin-left: auto;
-  background-color: #f1f3f5;
-  color: #495057;
+  background-color: v.$zinc-100;
+  color: v.$zinc-600;
   font-size: 0.75rem;
   padding: 0.15rem 0.6rem;
   border-radius: 999px;
@@ -122,8 +122,8 @@
 }
 
 .badgeAlert {
-  background-color: #ffe3e3;
-  color: #e03131;
+  background-color: v.$rose-100;
+  color: v.$rose-600;
 }
 
 // Event Modal Styles
