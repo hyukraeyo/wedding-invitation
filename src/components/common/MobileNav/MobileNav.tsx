@@ -60,7 +60,11 @@ export function MobileNav({
 
     const navContent = (
         <>
-            <nav className={clsx(styles.mobileNav, isPreviewMode && styles.previewMode)}>
+            <nav className={clsx(
+                styles.mobileNav,
+                isPreviewMode && styles.previewMode,
+                onPreviewToggle && styles.hasPreviewAction
+            )}>
                 <ViewTransitionLink
                     href="/mypage"
                     className={clsx(

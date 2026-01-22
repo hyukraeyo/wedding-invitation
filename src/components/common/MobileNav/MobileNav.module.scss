@@ -7,23 +7,30 @@
     @include m.mobile {
         display: flex;
         position: fixed;
-        bottom: 0.625rem;
-        left: 0.625rem;
-        right: 0.625rem;
-        height: 4rem;
-        background-color: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(0.75rem);
-        -webkit-backdrop-filter: blur(0.75rem);
-        border: 0.0625rem solid rgba(0, 0, 0, 0.06);
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: calc(4.25rem + env(safe-area-inset-bottom));
+        background-color: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(1.25rem);
+        -webkit-backdrop-filter: blur(1.25rem);
+        border-top: 0.0625rem solid rgba(0, 0, 0, 0.06);
         z-index: 100;
-        padding: 0 0.5rem;
+        padding: 0 1rem;
         padding-bottom: env(safe-area-inset-bottom);
-        box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.12);
-        justify-content: space-between;
-        gap: 0.75rem;
+        box-shadow: 0 -0.25rem 1.5rem rgba(0, 0, 0, 0.04);
+        justify-content: space-around;
+        gap: 0.5rem;
         align-items: center;
-        border-radius: 1rem;
-        transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        border-radius: 1.75rem 1.75rem 0 0;
+        transition: transform 0.3s v.$ease-ios, background-color 0.3s ease;
+
+        // Builder page specific adjustment (when onPreviewToggle is present)
+        &.hasPreviewAction {
+            padding-right: 5rem; // Space for the FAB
+            justify-content: flex-start;
+            gap: 1.25rem;
+        }
     }
 }
 
@@ -103,15 +110,41 @@
 }
 
 .previewButton {
-    position: relative;
-    width: v.$control-height-md;
-    height: v.$control-height-md;
-    padding: 0;
-    border-radius: v.$radius-md;
+    position: absolute;
+    bottom: calc(1.5rem + env(safe-area-inset-bottom));
+    right: 1.25rem;
+    width: 3.75rem;
+    height: 3.75rem;
+    background-color: v.$color-primary;
+    color: v.$white;
+    border-radius: 50%;
+    display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 0.5rem 1.5rem rgba(v.$color-primary, 0.35), 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+    z-index: 110;
+    transition: all 0.4s v.$ease-ios;
+    border: 0.25rem solid v.$white;
+
+    .icon {
+        width: 1.75rem;
+        height: 1.75rem;
+        color: v.$zinc-900;
+    }
+
     &.previewOpen {
-        background-color: rgba(251, 192, 45, 0.35);
+        background-color: v.$zinc-900;
+        transform: scale(0.9) rotate(0deg);
+        box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.2);
+        border-color: rgba(255, 255, 255, 0.2);
+
+        .iconClose {
+            color: v.$white;
+        }
+    }
+
+    &:active {
+        transform: scale(0.85);
     }
 }
 
