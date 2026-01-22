@@ -8,7 +8,7 @@
     flex-direction: column;
     height: 100dvh;
     width: 100vw;
-    background-color: #eeeeee; // 요청: 뒷 배경 #eee
+    background-color: #eeeeee; // ?�청: ??배경 #eee
     overflow: hidden;
     z-index: 10;
     padding-top: v.$header-height;
@@ -55,17 +55,17 @@
             overflow-x: hidden;
 
             // Padding aligned with header being sticky (no longer covering content)
-            padding: 1.5rem 1rem 8rem 1rem; // Bottom padding enlarged for mobile FAB
+            padding: 1.5rem 1rem 5rem 1rem; // Reduced bottom padding
 
             @media (min-width: 768px) {
-                padding: 1.5rem 1rem 6rem 1rem; // 하단 패딩 충분히 확보
+                padding: 1.5rem 1rem 5rem 1rem; // Bottom padding aligned
             }
             
             @include m.mobile {
-                padding-bottom: calc(8rem + 4rem); // Original padding + mobile nav height
+                padding-bottom: 5rem;
             }
 
-            background-color: transparent; // 사이드바 배경(#eee)이 보이도록 투명 처리
+            background-color: transparent; // ?�이?�바 배경(#eee)??보이?�록 ?�명 처리
 
             // Hide scrollbar completely (cross-platform)
             // Width is still usable for scrolling, just invisible
@@ -384,7 +384,7 @@
     overflow-y: auto;
     background-color: white;
     position: relative;
-    z-index: 1; // 낮은 z-index로 닫기 버튼(z-index: 99999)이 위에 올라올 수 있도록
+    z-index: 1; // ??? z-index�??�기 버튼(z-index: 99999)???�에 ?�라?????�도�?
 }
 
 .sheetContent {

@@ -9,7 +9,6 @@ import { useHeaderStore } from '@/store/useHeaderStore';
 import { toast } from 'sonner';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import styles from './BuilderPage.module.scss';
-import { clsx } from 'clsx';
 import { MobileNav } from '@/components/common/MobileNav';
 import { Sheet, SheetContent, SheetTitle, SheetHeader, SheetDescription } from '@/components/ui/Sheet';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';

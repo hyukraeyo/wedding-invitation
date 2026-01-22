@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { usePathname } from 'next/navigation';
-import { ClipboardList, Bell, User, Menu, HelpCircle, LogOut, Sparkles, Save, Eye } from 'lucide-react';
+import { ClipboardList, Bell, User, Menu, HelpCircle, LogOut, Sparkles, Save, Eye, X } from 'lucide-react';
 import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
 import { MENU_TITLES } from '@/constants/navigation';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
@@ -56,12 +56,18 @@ export function MobileNav({
         setIsMoreOpen(false);
     };
 
+    const isPreviewMode = Boolean(onPreviewToggle) && isPreviewOpen;
+
     const navContent = (
         <>
-            <nav className={styles.mobileNav}>
+            <nav className={clsx(styles.mobileNav, isPreviewMode && styles.previewMode)}>
                 <ViewTransitionLink
                     href="/mypage"
-                    className={clsx(styles.navItem, pathname === '/mypage' && styles.active)}
+                    className={clsx(
+                        styles.navItem,
+                        pathname === '/mypage' && styles.active,
+                        isPreviewMode && styles.navItemHidden
+                    )}
                 >
                     <User className={styles.icon} />
                     {invitationCount > 0 && <span className={styles.badge}>{invitationCount}</span>}
@@ -70,7 +76,11 @@ export function MobileNav({
                 {isAdmin && (
                     <ViewTransitionLink
                         href="/mypage/requests"
-                        className={clsx(styles.navItem, pathname === '/mypage/requests' && styles.active)}
+                        className={clsx(
+                            styles.navItem,
+                            pathname === '/mypage/requests' && styles.active,
+                            isPreviewMode && styles.navItemHidden
+                        )}
                     >
                         <ClipboardList className={styles.icon} />
                         {requestCount > 0 && <span className={styles.badge}>{requestCount}</span>}
@@ -79,7 +89,11 @@ export function MobileNav({
 
                 <ViewTransitionLink
                     href="/mypage/notifications"
-                    className={clsx(styles.navItem, pathname === '/mypage/notifications' && styles.active)}
+                    className={clsx(
+                        styles.navItem,
+                        pathname === '/mypage/notifications' && styles.active,
+                        isPreviewMode && styles.navItemHidden
+                    )}
                 >
                     <Bell className={styles.icon} />
                     {notificationCount > 0 && <span className={styles.badge}>{notificationCount}</span>}
@@ -87,7 +101,11 @@ export function MobileNav({
 
                 {onSave && (
                     <button
-                        className={clsx(styles.navItem, isSaving && styles.disabled)}
+                        className={clsx(
+                            styles.navItem,
+                            isSaving && styles.disabled,
+                            isPreviewMode && styles.navItemHidden
+                        )}
                         onClick={onSave}
                         disabled={isSaving}
                     >
@@ -97,14 +115,18 @@ export function MobileNav({
 
                 {onPreviewToggle ? (
                     <button
-                        className={clsx(styles.navItem, isPreviewOpen && styles.active)}
+                        className={clsx(styles.navItem, styles.previewButton, isPreviewOpen && styles.previewOpen)}
                         onClick={onPreviewToggle}
+                        aria-label={isPreviewOpen ? 'Close preview' : 'Open preview'}
                     >
-                        <Eye className={styles.icon} />
+                        <span className={styles.iconSwap}>
+                            <Eye className={styles.iconEye} />
+                            <X className={styles.iconClose} />
+                        </span>
                     </button>
                 ) : (
                     <button
-                        className={clsx(styles.navItem, isMoreOpen && styles.active)}
+                        className={clsx(styles.navItem, isMoreOpen && styles.active, isPreviewMode && styles.navItemHidden)}
                         onClick={() => setIsMoreOpen(true)}
                     >
                         <Menu className={styles.icon} />
