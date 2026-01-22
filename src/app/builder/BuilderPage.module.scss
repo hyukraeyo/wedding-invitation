@@ -11,6 +11,10 @@
     background-color: #eeeeee; // 요청: 뒷 배경 #eee
     overflow: hidden;
     z-index: 10;
+    
+    @include m.mobile {
+        padding-bottom: calc(4rem + 1.25rem); // Height of mobile nav + safe area
+    }
 }
 
 .workspace {
@@ -25,6 +29,7 @@
     @include m.mobile {
         height: 100%;
         margin-top: 0;
+        padding-bottom: 0;
     }
 
     .sidebar {
@@ -53,6 +58,10 @@
 
             @media (min-width: 768px) {
                 padding: 1.5rem 1rem 6rem 1rem; // 하단 패딩 충분히 확보
+            }
+            
+            @include m.mobile {
+                padding-bottom: calc(8rem + 4rem); // Original padding + mobile nav height
             }
 
             background-color: transparent; // 사이드바 배경(#eee)이 보이도록 투명 처리
@@ -353,6 +362,11 @@
 
     @media (min-width: 1024px) {
         display: none;
+    }
+    
+    @include m.mobile {
+        // Adjust for mobile nav: move up to avoid overlapping with mobile nav
+        bottom: calc(1.5rem + 4rem + 0.625rem); // Original bottom + nav height + nav margin
     }
 
     svg {

@@ -35,11 +35,6 @@
 
 ## 🎨 디자인 시스템
 
-### TDS Mobile 기반 커스텀 디자인 시스템
-
-이 프로젝트는 **[TDS Mobile (Toss Design System)](https://tossmini-docs.toss.im/tds-mobile/)**을 참조하여 커스터마이징한 디자인 시스템을 사용합니다.
-
-> TDS는 토스 제품을 만들 때 공통적으로 사용하는 디자인 시스템으로, 수백 개의 컴포넌트와 템플릿으로 구성되어 있습니다. 일관된 인터랙션, 애니메이션, 디자인 템플릿을 통해 제품 완성도를 업계 최고 수준으로 끌어올리는 것을 목표로 합니다.
 
 #### 적용 영역
 
@@ -51,10 +46,6 @@
 
 #### 참조 문서
 
-- [TDS 소개](https://tossmini-docs.toss.im/tds-mobile/) - 디자인 시스템 개요
-- [TDS 시작하기](https://tossmini-docs.toss.im/tds-mobile/start/) - 빠른 시작 가이드
-- [TDS Colors](https://tossmini-docs.toss.im/tds-mobile/foundation/colors/) - 컬러 시스템
-- [TDS Typography](https://tossmini-docs.toss.im/tds-mobile/foundation/typography/) - 타이포그래피 시스템
 
 ---
 

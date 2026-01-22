@@ -12,6 +12,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 import styles from './BuilderPage.module.scss';
 import { clsx } from 'clsx';
 import { Smartphone, X } from 'lucide-react';
+import { BuilderMobileNav } from '@/components/builder/BuilderMobileNav';
 import { Sheet, SheetContent, SheetTitle, SheetHeader, SheetDescription } from '@/components/ui/Sheet';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useShallow } from 'zustand/react/shallow';
@@ -207,6 +208,14 @@ export function BuilderClient() {
                     </div>
                 </SheetContent>
             </Sheet>
+
+            {/* Mobile Navigation Bar */}
+            <BuilderMobileNav
+                onSave={stableSave}
+                onPreviewToggle={() => setIsPreviewOpen(!isPreviewOpen)}
+                isPreviewOpen={isPreviewOpen}
+                isSaving={isSaving}
+            />
         </div>
     );
 }

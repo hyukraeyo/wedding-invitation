@@ -44,7 +44,6 @@ export const pretendard = localFont({
     ],
     variable: '--font-pretendard',
     display: 'swap',
-    preload: true,
 });
 
 /**
@@ -68,7 +67,6 @@ export const gowunDodum = Gowun_Dodum({
     subsets: ['latin'],
     variable: '--font-gowun-dodum',
     display: 'swap',
-    preload: false,
 });
 
 export const gowunBatang = Gowun_Batang({
@@ -76,7 +74,6 @@ export const gowunBatang = Gowun_Batang({
     subsets: ['latin'],
     variable: '--font-gowun-batang',
     display: 'swap',
-    preload: false,
 });
 
 /**
@@ -87,7 +84,6 @@ export const yeonSung = Yeon_Sung({
     subsets: ['latin'],
     variable: '--font-yeon-sung',
     display: 'swap',
-    preload: false,
 });
 
 /**
@@ -97,7 +93,6 @@ export const playfairDisplay = Playfair_Display({
     subsets: ['latin'],
     variable: '--font-playfair',
     display: 'swap',
-    preload: false,
 });
 
 /**
@@ -109,7 +104,6 @@ export const nanumMyeongjo = Nanum_Myeongjo({
     weight: ['400', '700', '800'],
     variable: '--font-nanum-myeongjo',
     display: 'swap',
-    preload: false,
 });
 
 /**
@@ -121,7 +115,6 @@ export const doHyeon = Do_Hyeon({
     weight: '400',
     variable: '--font-do-hyeon',
     display: 'swap',
-    preload: false,
 });
 
 /**
@@ -132,7 +125,6 @@ export const songMyung = Song_Myung({
     weight: '400',
     variable: '--font-song-myung',
     display: 'swap',
-    preload: false,
 });
 
 /**
@@ -143,7 +135,6 @@ export const greatVibes = Great_Vibes({
     weight: '400',
     variable: '--font-great-vibes',
     display: 'swap',
-    preload: false,
 });
 
 // ============================================================================
