@@ -11,9 +11,10 @@
     background-color: #eeeeee; // 요청: 뒷 배경 #eee
     overflow: hidden;
     z-index: 10;
-    
+    padding-top: v.$header-height;
+
     @include m.mobile {
-        padding-bottom: calc(4rem + 1.25rem); // Height of mobile nav + safe area
+        padding-top: 0;
     }
 }
 
@@ -21,8 +22,8 @@
     display: flex;
     flex-direction: row;
     width: 100%;
-    height: calc(100% - 3.5rem); // Adjusted for fixed Header
-    margin-top: 3.5rem; // Account for fixed Header
+    height: 100%;
+    margin-top: 0;
     overflow: hidden;
     position: relative;
 

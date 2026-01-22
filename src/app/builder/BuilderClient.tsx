@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
 import dynamic from 'next/dynamic';
 import { useInvitationStore, InvitationData } from '@/store/useInvitationStore';
 import { useAuth } from '@/hooks/useAuth';
@@ -11,14 +10,12 @@ import { toast } from 'sonner';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import styles from './BuilderPage.module.scss';
 import { clsx } from 'clsx';
-import { Smartphone, X } from 'lucide-react';
-import { BuilderMobileNav } from '@/components/builder/BuilderMobileNav';
+import { MobileNav } from '@/components/common/MobileNav';
 import { Sheet, SheetContent, SheetTitle, SheetHeader, SheetDescription } from '@/components/ui/Sheet';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useShallow } from 'zustand/react/shallow';
 import EditorForm from '@/components/common/EditorForm';
 import { useScrollLock } from '@/hooks/use-scroll-lock';
-import { useCanUseDom } from '@/hooks/useCanUseDom';
 
 import { IPhoneFrame } from './IPhoneFrame';
 
@@ -47,7 +44,6 @@ export function BuilderClient() {
     const [isSaving, setIsSaving] = useState(false);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [isReady, setIsReady] = useState(false);
-    const canUseDOM = useCanUseDom();
     const { user, isProfileComplete, profileLoading, isAdmin } = useAuth();
     const { editingSection, reset } = useInvitationStore(useShallow((state) => ({
         editingSection: state.editingSection,
@@ -159,18 +155,6 @@ export function BuilderClient() {
         setIsLoading(isSaving);
     }, [isSaving, setIsLoading]);
 
-    // Floating Button with Portal to body to avoid stacking context issues
-    const floatingButton = canUseDOM ? createPortal(
-        <button
-            className={clsx(styles.floatingButton, isPreviewOpen && styles.previewOpen)}
-            onClick={() => setIsPreviewOpen(!isPreviewOpen)}
-            aria-label={isPreviewOpen ? "Close Preview" : "Open Preview"}
-        >
-            {isPreviewOpen ? <X size={24} /> : <Smartphone size={24} />}
-        </button>,
-        document.body
-    ) : null;
-
     return (
         <div className={styles.container}>
             {isSaving ? <LoadingSpinner /> : null}
@@ -194,8 +178,6 @@ export function BuilderClient() {
                 </section>
             </main>
 
-            {floatingButton}
-
             <Sheet open={isPreviewOpen} onOpenChange={setIsPreviewOpen} modal={false}>
                 <SheetContent side="right" className={styles.sheetContent} hideCloseButton>
                     <SheetHeader style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>
@@ -210,11 +192,11 @@ export function BuilderClient() {
             </Sheet>
 
             {/* Mobile Navigation Bar */}
-            <BuilderMobileNav
+            <MobileNav
                 onSave={stableSave}
+                isSaving={isSaving}
                 onPreviewToggle={() => setIsPreviewOpen(!isPreviewOpen)}
                 isPreviewOpen={isPreviewOpen}
-                isSaving={isSaving}
             />
         </div>
     );

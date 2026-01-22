@@ -1,31 +1,42 @@
 "use client";
 
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { usePathname } from 'next/navigation';
-import { ClipboardList, Bell, User, Menu, HelpCircle, LogOut, Sparkles } from 'lucide-react';
+import { ClipboardList, Bell, User, Menu, HelpCircle, LogOut, Sparkles, Save, Eye } from 'lucide-react';
 import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
 import { MENU_TITLES } from '@/constants/navigation';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 import { signOut } from 'next-auth/react';
-import styles from './MyPageMobileNav.module.scss';
+import styles from './MobileNav.module.scss';
 import { clsx } from 'clsx';
+import { useCanUseDom } from '@/hooks/useCanUseDom';
 
-interface MyPageMobileNavProps {
-    isAdmin: boolean;
+export interface MobileNavProps {
+    isAdmin?: boolean;
     invitationCount?: number;
     requestCount?: number;
     notificationCount?: number;
+    onSave?: () => void;
+    isSaving?: boolean;
+    onPreviewToggle?: () => void;
+    isPreviewOpen?: boolean;
 }
 
-export function MyPageMobileNav({
-    isAdmin,
+export function MobileNav({
+    isAdmin = false,
     invitationCount = 0,
     requestCount = 0,
     notificationCount = 0,
-}: MyPageMobileNavProps) {
+    onSave,
+    isSaving = false,
+    onPreviewToggle,
+    isPreviewOpen = false,
+}: MobileNavProps) {
     const pathname = usePathname();
     const [isMoreOpen, setIsMoreOpen] = useState(false);
     const [isEventModalOpen, setIsEventModalOpen] = useState(false);
+    const canUseDOM = useCanUseDom();
 
     const handleLogout = async () => {
         await signOut({ callbackUrl: '/login' });
@@ -45,7 +56,7 @@ export function MyPageMobileNav({
         setIsMoreOpen(false);
     };
 
-    return (
+    const navContent = (
         <>
             <nav className={styles.mobileNav}>
                 <ViewTransitionLink
@@ -53,7 +64,6 @@ export function MyPageMobileNav({
                     className={clsx(styles.navItem, pathname === '/mypage' && styles.active)}
                 >
                     <User className={styles.icon} />
-                    <span>마이페이지</span>
                     {invitationCount > 0 && <span className={styles.badge}>{invitationCount}</span>}
                 </ViewTransitionLink>
 
@@ -63,7 +73,6 @@ export function MyPageMobileNav({
                         className={clsx(styles.navItem, pathname === '/mypage/requests' && styles.active)}
                     >
                         <ClipboardList className={styles.icon} />
-                        <span>관리</span>
                         {requestCount > 0 && <span className={styles.badge}>{requestCount}</span>}
                     </ViewTransitionLink>
                 )}
@@ -73,20 +82,36 @@ export function MyPageMobileNav({
                     className={clsx(styles.navItem, pathname === '/mypage/notifications' && styles.active)}
                 >
                     <Bell className={styles.icon} />
-                    <span>알림</span>
                     {notificationCount > 0 && <span className={styles.badge}>{notificationCount}</span>}
                 </ViewTransitionLink>
 
-                <button
-                    className={clsx(styles.navItem, isMoreOpen && styles.active)}
-                    onClick={() => setIsMoreOpen(true)}
-                >
-                    <Menu className={styles.icon} />
-                    <span>전체</span>
-                </button>
+                {onSave && (
+                    <button
+                        className={clsx(styles.navItem, isSaving && styles.disabled)}
+                        onClick={onSave}
+                        disabled={isSaving}
+                    >
+                        <Save className={styles.icon} />
+                    </button>
+                )}
+
+                {onPreviewToggle ? (
+                    <button
+                        className={clsx(styles.navItem, isPreviewOpen && styles.active)}
+                        onClick={onPreviewToggle}
+                    >
+                        <Eye className={styles.icon} />
+                    </button>
+                ) : (
+                    <button
+                        className={clsx(styles.navItem, isMoreOpen && styles.active)}
+                        onClick={() => setIsMoreOpen(true)}
+                    >
+                        <Menu className={styles.icon} />
+                    </button>
+                )}
             </nav>
 
-            {/* "More" Drawer for Mobile */}
             <ResponsiveModal
                 open={isMoreOpen}
                 onOpenChange={setIsMoreOpen}
@@ -119,11 +144,10 @@ export function MyPageMobileNav({
                 </div>
             </ResponsiveModal>
 
-            {/* Event Modal for Mobile (Cascading from "More") */}
             <ResponsiveModal
                 open={isEventModalOpen}
                 onOpenChange={setIsEventModalOpen}
-                title="🎁 오픈 이벤트 준비 중!"
+                title="설날 이벤트 준비중"
                 confirmText="확인"
                 showCancel={false}
                 onConfirm={() => setIsEventModalOpen(false)}
@@ -131,13 +155,21 @@ export function MyPageMobileNav({
                 <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
                     <div style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>🎁</div>
                     <p style={{ fontWeight: 600, fontSize: '1.1rem', marginBottom: '0.5rem' }}>
-                        다양한 혜택을 담은 이벤트를<br />열심히 준비하고 있어요!
+                        다양한 혜택을 준비한 이벤트가
+                        <br />
+                        준비중입니다
                     </p>
                     <p style={{ color: '#666', fontSize: '0.9rem' }}>
-                        곧 찾아올 특별한 소식을 기대해주세요. ✨
+                        곧 찾아올 할인 혜택에 기대해주세요. 😊
                     </p>
                 </div>
             </ResponsiveModal>
         </>
     );
+
+    if (!canUseDOM) {
+        return navContent;
+    }
+
+    return createPortal(navContent, document.body);
 }

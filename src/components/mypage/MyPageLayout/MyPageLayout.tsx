@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { MyPageSidebar } from '@/components/mypage/MyPageSidebar';
-import { MyPageMobileNav } from '@/components/mypage/MyPageMobileNav';
+import { MobileNav } from '@/components/common/MobileNav';
 import { MyPageHeader } from '@/components/mypage/MyPageHeader';
 import { useHeaderStore } from '@/store/useHeaderStore';
 import { usePathname } from 'next/navigation';
@@ -76,7 +76,7 @@ export function MyPageLayout({
                     </div>
                 </main>
             </div>
-            <MyPageMobileNav
+            <MobileNav
                 isAdmin={isAdmin}
                 invitationCount={invitationCount}
                 requestCount={requestCount}
