@@ -4,6 +4,7 @@ import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { clsx } from 'clsx';
 import { invitationService } from '@/services/invitationService';
 import { approvalRequestService } from '@/services/approvalRequestService';
 import type { ApprovalRequestSummary } from '@/services/approvalRequestService';
@@ -29,6 +30,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation } from 'swiper/modules';
 import { MyPageHeader } from '@/components/mypage/MyPageHeader';
 import { IconButton } from '@/components/ui/IconButton';
+import { Skeleton } from '@/components/ui/Skeleton';
 import { MENU_TITLES } from '@/constants/navigation';
 
 import 'swiper/css';
@@ -81,14 +83,12 @@ export default function MyPageClient({
     const router = useRouter();
     const [invitations, setInvitations] = useState<InvitationSummaryRecord[]>(initialInvitations);
     const [rejectedRequests] = useState<ApprovalRequestSummary[]>(initialRejectedRequests);
-    const [viewMode, setViewMode] = useState<'grid' | 'swiper'>('grid');
+    const [viewMode, setViewMode] = useState<'grid' | 'swiper' | null>(null);
 
     // Persistence: Load view mode from localStorage on mount
     useEffect(() => {
         const savedMode = localStorage.getItem('mypage-view-mode') as 'grid' | 'swiper';
-        if (savedMode && (savedMode === 'grid' || savedMode === 'swiper')) {
-            setViewMode(savedMode);
-        }
+        setViewMode(savedMode || 'swiper');
     }, []);
 
     // Persistence: Save view mode to localStorage when it changes
@@ -503,7 +503,25 @@ export default function MyPageClient({
                         }
                     />
 
-                    {viewMode === 'grid' ? (
+                    {viewMode === null ? (
+                        <div className={styles.swiperView}>
+                            <div className={clsx(styles.dashboardSwiper, styles.skeletonSwiper)}>
+                                {[1, 2, 3].map((i) => (
+                                    <div key={i} className={styles.autoWidthSlide}>
+                                        <div className={styles.swiperCardWrapper}>
+                                            <div className={styles.createCardWrapper}>
+                                                <Skeleton className={styles.skeletonCard} />
+                                                <div className={styles.skeletonFooter}>
+                                                    <Skeleton className={styles.skeletonButton} />
+                                                    <Skeleton className={styles.skeletonButton} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    ) : viewMode === 'grid' ? (
                         <div className={styles.cardGrid}>
                             {/* Create New Card */}
                             <div className={styles.createCardWrapper}>
@@ -520,7 +538,6 @@ export default function MyPageClient({
                                     </div>
                                     <span className={styles.createText}>새 청첩장 만들기</span>
                                 </Link>
-                                <div className={styles.createDatePlaceholder} />
                             </div>
 
                             {/* Invitation Cards */}
@@ -539,6 +556,7 @@ export default function MyPageClient({
                                         onCancelRequest={handleCancelRequestClick}
                                         onRevokeApproval={handleAdminRevokeClick}
                                         onRevertToDraft={executeRevertToDraft}
+                                        layout="grid"
                                     />
                                 );
                             })}
@@ -571,7 +589,6 @@ export default function MyPageClient({
                                                 </div>
                                                 <span className={styles.createText}>새 청첩장</span>
                                             </Link>
-                                            <div className={styles.createDatePlaceholder} />
                                         </div>
                                     </div>
                                 </SwiperSlide>
@@ -592,6 +609,7 @@ export default function MyPageClient({
                                                     onCancelRequest={handleCancelRequestClick}
                                                     onRevokeApproval={handleAdminRevokeClick}
                                                     onRevertToDraft={executeRevertToDraft}
+                                                    layout="swiper"
                                                 />
                                             </div>
                                         </SwiperSlide>

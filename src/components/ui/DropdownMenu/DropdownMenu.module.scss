@@ -12,7 +12,8 @@
   color: v.$zinc-900;
   padding: 4px;
   // box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  
+
+  will-change: transform, opacity;
   @include a.popup-animation;
 }
 
@@ -25,7 +26,7 @@
   border-radius: v.$radius-sm;
   padding: 0.6rem 0.75rem;
   outline: none;
-  font-size: v.$font-size-sm; 
+  font-size: v.$font-size-sm;
   font-weight: 500;
   color: v.$zinc-700;
   transition: all v.$transition-100 v.$ease-standard;
@@ -34,10 +35,10 @@
   &[data-highlighted] {
     background-color: v.$primary-100;
     color: v.$primary-700;
-    
+
     // Icon color change on highlight
     svg {
-        color: v.$primary-700;
+      color: v.$primary-700;
     }
   }
 
@@ -45,15 +46,15 @@
     pointer-events: none;
     opacity: 0.5;
   }
-  
+
   // Danger variant (delete)
   &[data-variant="danger"] {
+    color: v.$red-600;
+
+    &[data-highlighted] {
+      background-color: #FEF2F2; // red-50
       color: v.$red-600;
-      
-      &[data-highlighted] {
-          background-color: #FEF2F2; // red-50
-          color: v.$red-600;
-      }
+    }
   }
 }
 
@@ -106,8 +107,7 @@
 }
 
 .shortcut {
-    margin-left: auto;
-    font-size: v.$font-size-xs;
-    color: v.$zinc-400;
+  margin-left: auto;
+  font-size: v.$font-size-xs;
+  color: v.$zinc-400;
 }
-

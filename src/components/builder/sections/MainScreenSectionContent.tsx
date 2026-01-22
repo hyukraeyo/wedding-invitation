@@ -20,33 +20,32 @@ interface StylePreset {
     id: string;
     layout: 'classic' | 'minimal' | 'english' | 'heart' | 'korean' | 'arch' | 'oval' | 'frame' | 'fill' | 'basic';
     label: string;
+    isComingSoon?: boolean;
 }
 
 const STYLE_PRESETS: StylePreset[] = [
     {
         id: 'classic',
         layout: 'classic',
-        label: '클래식',
+        label: '기본',
     },
     {
-        id: 'minimal',
-        layout: 'minimal',
-        label: '미니멀',
+        id: 'coming-soon-1',
+        layout: 'basic',
+        label: '추가 예정',
+        isComingSoon: true,
     },
     {
-        id: 'english',
-        layout: 'english',
-        label: '영문',
+        id: 'coming-soon-2',
+        layout: 'basic',
+        label: '추가 예정',
+        isComingSoon: true,
     },
     {
-        id: 'heart',
-        layout: 'heart',
-        label: '하트',
-    },
-    {
-        id: 'korean',
-        layout: 'korean',
-        label: '한글',
+        id: 'coming-soon-3',
+        layout: 'basic',
+        label: '추가 예정',
+        isComingSoon: true,
     },
 ];
 
@@ -148,52 +147,34 @@ export default function MainScreenSectionContent() {
                                 type="button"
                                 className={cn(
                                     styles.stylePresetCard,
-                                    mainScreen.layout === preset.layout ? styles.selected : ''
+                                    mainScreen.layout === preset.layout ? styles.selected : '',
+                                    preset.isComingSoon && styles.comingSoon
                                 )}
-                                onClick={() => handleSelectPreset(preset, index)}
+                                onClick={() => !preset.isComingSoon && handleSelectPreset(preset, index)}
+                                disabled={preset.isComingSoon}
                             >
-                                <div className={cn(styles.presetThumbnail, preset.layout === 'classic' && styles.classicLayout)}>
-                                    {preset.layout !== 'classic' ? <div className={styles.thumbnailImage} /> : null}
-                                    <div className={styles.thumbnailContent}>
-                                        {preset.layout === 'classic' ? (
-                                            <>
+                                <div className={cn(
+                                    styles.presetThumbnail,
+                                    !preset.isComingSoon && preset.layout === 'classic' && styles.classicLayout
+                                )}>
+                                    {preset.isComingSoon ? (
+                                        <div className={styles.thumbnailPlaceholder}>
+                                            <div className={styles.placeholderIcon} />
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <div className={styles.thumbnailContent}>
                                                 <span className={styles.thumbTitle}>THE MARRIAGE</span>
                                                 <span className={styles.thumbMarriage}>신랑, 신부 결혼합니다.</span>
-                                            </>
-                                        ) : null}
-                                        {preset.layout === 'minimal' ? (
-                                            <>
-                                                <span className={styles.thumbDateMinimal}>2024 / 05 / 25</span>
-                                                <span className={styles.thumbWeekday}>SATURDAY</span>
-                                                <span className={styles.thumbNames}>신랑 · 신부</span>
-                                            </>
-                                        ) : null}
-                                        {preset.layout === 'english' ? (
-                                            <>
-                                                <span className={styles.thumbTitle}>THE NEW BEGINNING</span>
-                                                <span className={styles.thumbNames}>신랑 그리고 신부</span>
-                                                <span className={styles.thumbSubtext}>We are getting married</span>
-                                            </>
-                                        ) : null}
-                                        {preset.layout === 'heart' ? (
-                                            <>
-                                                <span className={styles.thumbHeart}>신랑 ♥ 신부</span>
-                                            </>
-                                        ) : null}
-                                        {preset.layout === 'korean' ? (
-                                            <>
-                                                <span className={styles.thumbKoreanTop}>저희 둘,</span>
-                                                <span className={styles.thumbKoreanBottom}>결혼합니다.</span>
-                                                <span className={styles.thumbNames}>신랑 · 신부</span>
-                                            </>
-                                        ) : null}
-                                    </div>
-                                    {preset.layout === 'classic' ? <div className={styles.thumbnailImage} /> : null}
-                                    <div className={styles.thumbnailFooter}>
-                                        {preset.layout === 'classic' ? <span>초대합니다</span> : null}
-                                        <span>2026년 4월 29일 수요일 오후 12시 </span>
-                                        <span>더 컨벤션 신사 3층 그랜드홀</span>
-                                    </div>
+                                            </div>
+                                            <div className={styles.thumbnailImage} />
+                                            <div className={styles.thumbnailFooter}>
+                                                <span>초대합니다</span>
+                                                <span>2026년 4월 29일 수요일 오후 12시 </span>
+                                                <span>더 컨벤션 신사 3층 그랜드홀</span>
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
                                 <span className={styles.presetLabel}>{preset.label}</span>
                             </button>
@@ -295,81 +276,7 @@ export default function MainScreenSectionContent() {
                 </>
             ) : null}
 
-            {mainScreen.layout === 'minimal' ? (
-                <>
-                    <p className={styles.helpText}>예식일시에서 자동으로 표시됩니다</p>
-                    <div className={styles.andTextWrapper}>
-                        <div className={styles.andTextItem}>
-                            <span className={styles.andTextLabel}>연결 문구</span>
-                            <TextField
-                                type="text"
-                                placeholder="·"
-                                value={mainScreen.andText}
-                                onChange={(e) => updateMain({ andText: e.target.value })}
-                            />
-                        </div>
-                    </div>
-                </>
-            ) : null}
 
-            {mainScreen.layout === 'english' ? (
-                <>
-                    <div className={styles.optionWrapper}>
-                        <TextField
-                            label="제목"
-                            type="text"
-                            placeholder="예: THE NEW BEGINNING"
-                            value={mainScreen.title}
-                            onChange={(e) => updateMain({ title: e.target.value })}
-                        />
-                        <TextField
-                            label="서브텍스트"
-                            type="text"
-                            placeholder="예: We are getting married"
-                            value={mainScreen.subtitle}
-                            onChange={(e) => updateMain({ subtitle: e.target.value })}
-                        />
-                    </div>
-                    <div className={styles.andTextWrapper}>
-                        <div className={styles.andTextItem}>
-                            <span className={styles.andTextLabel}>연결 문구</span>
-                            <TextField
-                                type="text"
-                                placeholder="그리고"
-                                value={mainScreen.andText}
-                                onChange={(e) => updateMain({ andText: e.target.value })}
-                            />
-                        </div>
-                    </div>
-                </>
-            ) : null}
-
-            {mainScreen.layout === 'heart' ? (
-                <>
-                    <p className={styles.helpText}>♥ 아이콘이 자동으로 표시됩니다</p>
-                </>
-            ) : null}
-
-            {mainScreen.layout === 'korean' ? (
-                <>
-                    <div className={styles.optionWrapper}>
-                        <TextField
-                            label="상단 문구"
-                            type="text"
-                            placeholder="예: 저희 둘,"
-                            value={mainScreen.title}
-                            onChange={(e) => updateMain({ title: e.target.value })}
-                        />
-                        <TextField
-                            label="하단 문구"
-                            type="text"
-                            placeholder="예: 결혼합니다."
-                            value={mainScreen.subtitle}
-                            onChange={(e) => updateMain({ subtitle: e.target.value })}
-                        />
-                    </div>
-                </>
-            ) : null}
 
 
 

@@ -42,6 +42,7 @@ interface InvitationCardProps {
     onRevokeApproval: (inv: InvitationSummaryRecord) => void;
     onRevertToDraft?: (inv: InvitationSummaryRecord) => void;
     index?: number;
+    layout?: 'grid' | 'swiper';
 }
 
 const InvitationCard = React.memo(({
@@ -53,6 +54,7 @@ const InvitationCard = React.memo(({
     onRevertToDraft,
     index,
     rejectionData = null,
+    layout = 'swiper',
 }: InvitationCardProps) => {
     const data = invitation.invitation_data;
     const isApproved = !!data?.isApproved;
@@ -65,6 +67,7 @@ const InvitationCard = React.memo(({
     const [showRejectionModal, setShowRejectionModal] = useState(false);
     const [showShareModal, setShowShareModal] = useState(false);
     const [showEditConfirmModal, setShowEditConfirmModal] = useState(false);
+    const isGridMode = layout === 'grid';
     const { toast } = useToast();
 
     const handleLinkShare = () => {
@@ -183,8 +186,9 @@ const InvitationCard = React.memo(({
                                 <DropdownMenuTrigger asChild>
                                     <IconButton
                                         icon={MoreHorizontal}
-                                        className={styles.moreButton}
+                                        className={clsx(styles.moreButton, 'swiper-no-swiping')}
                                         variant="glass"
+                                        onPointerDown={(e) => e.stopPropagation()}
                                     />
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent side="bottom" align="end" className={styles.dropdownContent}>
@@ -202,30 +206,42 @@ const InvitationCard = React.memo(({
                                         </DropdownMenuItem>
                                     )}
 
-                                    {/* Mobile Only Items (Moved from Footer) */}
-                                    {!isRequesting && !isApproved && (
-                                        <DropdownMenuItem
-                                            onClick={() => onRequestApproval(invitation)}
-                                            className={styles.mobileMenuOnly}
-                                        >
-                                            <Send size={16} className={styles.menuIcon} /> 사용 신청
-                                        </DropdownMenuItem>
-                                    )}
-                                    {isApproved && (
-                                        <DropdownMenuItem
-                                            onClick={handleShareModalOpen}
-                                            className={styles.mobileMenuOnly}
-                                        >
-                                            <Share2 size={16} className={styles.menuIcon} /> 공유하기
-                                        </DropdownMenuItem>
-                                    )}
-                                    {isRequesting && (
-                                        <DropdownMenuItem
-                                            onClick={() => onCancelRequest(invitation)}
-                                            className={styles.mobileMenuOnly}
-                                        >
-                                            <XCircle size={16} className={styles.menuIcon} /> 신청 취소
-                                        </DropdownMenuItem>
+                                    {/* Grid Mode Specific Items (Moved from Footer) */}
+                                    {isGridMode && (
+                                        <>
+                                            {!isRequesting && !isApproved && (
+                                                <DropdownMenuItem
+                                                    onSelect={(e) => {
+                                                        e.preventDefault();
+                                                        onRequestApproval(invitation);
+                                                    }}
+                                                    className={styles.accentMenuItem}
+                                                >
+                                                    <Send size={16} className={styles.menuIcon} /> 사용 신청
+                                                </DropdownMenuItem>
+                                            )}
+                                            {isApproved && (
+                                                <DropdownMenuItem
+                                                    onSelect={(e) => {
+                                                        e.preventDefault();
+                                                        handleShareModalOpen();
+                                                    }}
+                                                    className={styles.accentMenuItem}
+                                                >
+                                                    <Share2 size={16} className={styles.menuIcon} /> 공유하기
+                                                </DropdownMenuItem>
+                                            )}
+                                            {isRequesting && (
+                                                <DropdownMenuItem
+                                                    onSelect={(e) => {
+                                                        e.preventDefault();
+                                                        onCancelRequest(invitation);
+                                                    }}
+                                                >
+                                                    <XCircle size={16} className={styles.menuIcon} /> 신청 취소
+                                                </DropdownMenuItem>
+                                            )}
+                                        </>
                                     )}
 
                                     {isRejected && (
@@ -254,46 +270,69 @@ const InvitationCard = React.memo(({
                         </h3>
                     </div>
 
-                    <div className={styles.footer}>
-                        {(!isRequesting && !isApproved) ? (
-                            <>
-                                <Button
-                                    variant="outline"
-                                    className={clsx(styles.footerButton, styles.secondary)}
-                                    onClick={() => onEdit(invitation)}
-                                >
-                                    편집하기
-                                </Button>
-                                <Button
-                                    className={clsx(styles.footerButton, styles.primary)}
-                                    variant="solid"
-                                    onClick={handlePrimaryAction}
-                                >
-                                    사용 신청
-                                </Button>
-                            </>
-                        ) : (
-                            <>
-                                <Button
-                                    variant="outline"
-                                    className={clsx(styles.footerButton, styles.secondary)}
-                                    onClick={handlePreview}
-                                >
-                                    미리보기
-                                </Button>
-                                <Button
-                                    className={clsx(
-                                        styles.footerButton,
-                                        isApproved ? styles.share : styles.pending
-                                    )}
-                                    variant="solid"
-                                    onClick={isApproved ? handleShareModalOpen : handlePrimaryAction}
-                                >
-                                    {isApproved ? '공유하기' : '신청 취소'}
-                                </Button>
-                            </>
-                        )}
-                    </div>
+                    {!isGridMode && (
+                        <div className={styles.footer}>
+                            {(!isRequesting && !isApproved) ? (
+                                <>
+                                    <Button
+                                        variant="outline"
+                                        className={clsx(styles.footerButton, styles.secondary, 'swiper-no-swiping')}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            onEdit(invitation);
+                                        }}
+                                        onPointerDown={(e) => e.stopPropagation()}
+                                    >
+                                        편집하기
+                                    </Button>
+                                    <Button
+                                        className={clsx(styles.footerButton, styles.primary, 'swiper-no-swiping')}
+                                        variant="solid"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handlePrimaryAction(e);
+                                        }}
+                                        onPointerDown={(e) => e.stopPropagation()}
+                                    >
+                                        사용 신청
+                                    </Button>
+                                </>
+                            ) : (
+                                <>
+                                    <Button
+                                        variant="outline"
+                                        className={clsx(styles.footerButton, styles.secondary, 'swiper-no-swiping')}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handlePreview();
+                                        }}
+                                        onPointerDown={(e) => e.stopPropagation()}
+                                    >
+                                        미리보기
+                                    </Button>
+                                    <Button
+                                        className={clsx(
+                                            styles.footerButton,
+                                            isApproved ? styles.share : styles.pending,
+                                            'swiper-no-swiping'
+                                        )}
+                                        variant="solid"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            if (isApproved) {
+                                                handleShareModalOpen();
+                                                return;
+                                            }
+                                            handlePrimaryAction(e);
+                                        }}
+                                        onPointerDown={(e) => e.stopPropagation()}
+                                    >
+                                        {isApproved ? '공유하기' : '신청 취소'}
+                                    </Button>
+                                </>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
 

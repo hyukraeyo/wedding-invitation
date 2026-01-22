@@ -8,8 +8,8 @@ $color-primary-hover: #E6B02A;
 $color-ivory: #FFFBEA;
 
 $color-background: #FFFFFF; // 기본 컴포넌트 배경 (Header 등)
-$color-bg-base: #FFFFFF;    // Alias for background
-$color-bg-page: #F2F4F6;    // 페이지 전체 배경 (Toss-like warm gray)
+$color-bg-base: #FFFFFF; // Alias for background
+$color-bg-page: #F2F4F6; // 페이지 전체 배경 (Toss-like warm gray)
 $color-foreground: #1A1A1A;
 $color-text-primary: #1A1A1A; // Alias for foreground
 
@@ -136,30 +136,30 @@ $font-song-myung: var(--font-song-myung), var(--font-nanum-myeongjo), serif;
 $font-script: var(--font-great-vibes), 'Times New Roman', cursive;
 $font-gmarket-sans: 'GmarketSansMedium', sans-serif;
 $font-pretendard: var(--font-pretendard), -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-$font-size-xxs: 0.8rem;    // 12.8px
-$font-size-xs: 0.75rem;    // 12px
+$font-size-xxs: 0.8rem; // 12.8px
+$font-size-xs: 0.75rem; // 12px
 $font-size-2xs: 0.8125rem; // 13px
-$font-size-3xs: 0.625rem;  // 10px
+$font-size-3xs: 0.625rem; // 10px
 $font-size-4xs: 0.6875rem; // 11px
-$font-size-sm: 0.875rem;   // 14px
-$font-size-md: 0.9375rem;  // 15px
-$font-size-17: 1.0625rem;  // 17px
-$font-size-base: 1rem;     // 16px
-$font-size-lg: 1.125rem;   // 18px
-$font-size-xl: 1.25rem;    // 20px
-$font-size-2xl: 1.5rem;    // 24px
+$font-size-sm: 0.875rem; // 14px
+$font-size-md: 0.9375rem; // 15px
+$font-size-17: 1.0625rem; // 17px
+$font-size-base: 1rem; // 16px
+$font-size-lg: 1.125rem; // 18px
+$font-size-xl: 1.25rem; // 20px
+$font-size-2xl: 1.5rem; // 24px
 $input-font-size: $font-size-base;
 $button-font-size: 0.9375rem; // 15px
 
 // ============================================
 // Spacing & Layout
 // ============================================
-$radius-sm: 0.5rem;   // 8px
-$radius-md: 1rem;     // 16px
-$radius-lg: 1rem;  // 16px (Unified to 16px as requested)
-$radius-xl: 1.25rem;  // 20px
-$radius-2xl: 1.5rem;  // 24px
-$radius-3xl: 2.5rem;  // 40px
+$radius-sm: 0.5rem; // 8px
+$radius-md: 1rem; // 16px
+$radius-lg: 1rem; // 16px (Unified to 16px as requested)
+$radius-xl: 1.25rem; // 20px
+$radius-2xl: 1.5rem; // 24px
+$radius-3xl: 2.5rem; // 40px
 $radius-full: 9999px;
 $input-radius: $radius-sm;
 $button-radius: $radius-md;
@@ -245,13 +245,13 @@ $ease-linear: linear;
 // Popup Animation Tokens
 // ============================================
 // Timing
-$popup-duration: 180ms;
-$popup-easing: cubic-bezier(0.16, 1, 0.3, 1); // iOS-style smooth easing
+$popup-duration: 240ms;
+$popup-easing: cubic-bezier(0.16, 1, 0.3, 1);
 
 // Transform
-$popup-scale-start: 0.95;
+$popup-scale-start: 0.96;
 $popup-scale-end: 1;
-$popup-translate-y: 4px;
+$popup-translate-y: -20px;
 
 // Opacity
 $popup-opacity-start: 0;

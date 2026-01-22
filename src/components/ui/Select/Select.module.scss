@@ -37,7 +37,7 @@
   background-color: white;
   color: v.$zinc-900;
   // box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  
+
   &--popper {
     max-height: min(300px, var(--radix-select-content-available-height));
   }
@@ -76,8 +76,10 @@
     opacity: 1;
   }
 
-  
-  
+
+
+  will-change: transform,
+  opacity;
   @include a.popup-animation;
 }
 
@@ -104,7 +106,7 @@
   font-size: v.$font-size-sm;
   color: v.$zinc-900;
   font-family: var(--builder-font-family, v.$font-pretendard);
-  
+
   &[data-highlighted] {
     background-color: v.$primary-100;
     color: v.$primary-600;
@@ -124,7 +126,8 @@
   justify-content: center;
   width: 1rem;
   height: 1rem;
-  & > svg {
+
+  &>svg {
     width: 1rem;
     height: 1rem;
     color: v.$primary-600;
@@ -143,4 +146,3 @@
   height: 1px;
   background-color: v.$zinc-100;
 }
-

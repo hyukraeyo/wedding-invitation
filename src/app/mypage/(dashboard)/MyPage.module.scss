@@ -141,11 +141,6 @@
     }
 }
 
-.createDatePlaceholder {
-    height: 1.25rem;
-    width: 100%;
-}
-
 .createIcon {
     width: 64px;
     height: 64px;
@@ -271,11 +266,28 @@
     border-radius: v.$radius-md;
 }
 
-.skeletonText {
+.skeletonFooter {
+    display: flex;
+    gap: 0.5rem;
     margin-top: 0.5rem;
-    height: 1.25rem;
-    width: 60%;
-    border-radius: 4px;
+}
+
+.skeletonButton {
+    flex: 1;
+    height: 3.25rem;
+    border-radius: v.$radius-lg;
+}
+
+.skeletonSwiper {
+    display: flex;
+    overflow-x: auto;
+    gap: 1rem;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }
 
 // ============================================
