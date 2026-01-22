@@ -8,14 +8,10 @@
     flex-direction: column;
     height: 100dvh;
     width: 100vw;
-    background-color: #eeeeee; // ?�청: ??배경 #eee
+    background-color: #eeeeee; // ?�청: ??배경 #eee
     overflow: hidden;
     z-index: 10;
-    padding-top: v.$header-height;
-
-    @include m.mobile {
-        padding-top: 0;
-    }
+    @include m.header-offset;
 }
 
 .workspace {
@@ -65,7 +61,7 @@
                 padding-bottom: 5rem;
             }
 
-            background-color: transparent; // ?�이?�바 배경(#eee)??보이?�록 ?�명 처리
+            background-color: transparent; // ?�이?�바 배경(#eee)??보이?�록 ?�명 처리
 
             // Hide scrollbar completely (cross-platform)
             // Width is still usable for scrolling, just invisible
@@ -321,84 +317,22 @@
     }
 }
 
-.floatingButton {
-    position: fixed;
-    bottom: 1.5rem;
-    right: 1.5rem;
-    width: 56px;
-    height: 56px;
-    border-radius: 28px;
-    background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    // box-shadow:
-    //     0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    //     0 2px 4px -1px rgba(0, 0, 0, 0.06),
-    //     0 10px 15px -3px rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    cursor: pointer;
-    z-index: 99999; // Ensure it stays on top of Sheet (z-index 50)
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    -webkit-tap-highlight-color: transparent;
-
-    @media (hover: hover) and (pointer: fine) {
-        &:hover {
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.18);
-        }
-    }
-
-    &:active {
-        transform: scale(0.95);
-    }
-
-    &.previewOpen {
-        background: linear-gradient(135deg, #333 0%, #1a1a1a 100%);
-        
-        svg {
-            transform: rotate(90deg);
-        }
-    }
-
-    @media (min-width: 1024px) {
-        display: none;
-    }
-    
-    @include m.mobile {
-        // Adjust for mobile nav: move up to avoid overlapping with mobile nav
-        bottom: calc(1.5rem + 4rem + 0.625rem); // Original bottom + nav height + nav margin
-    }
-
-    svg {
-        width: 24px;
-        height: 24px;
-        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-}
-
 .mobilePreview {
     height: 100%;
     width: 100%;
     overflow-y: auto;
     background-color: white;
     position: relative;
-    z-index: 1; // ??? z-index�??�기 버튼(z-index: 99999)???�에 ?�라?????�도�?
+    z-index: 1; // ??? z-index�??�기 버튼(z-index: 99999)???�에 ?�라?????�도�?
 }
 
 .sheetContent {
     padding: 0 !important;
     width: 100% !important;
     max-width: 100% !important;
-    position: relative; // Ensure absolute children are positioned correctly
+    position: relative;
 
     @media (min-width: 640px) {
         max-width: 450px !important;
-    }
-
-    // Inside sheet, the button should be absolute to stay within the drawer's context
-    .floatingButton {
-        position: absolute;
     }
 }

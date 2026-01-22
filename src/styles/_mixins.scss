@@ -16,6 +16,17 @@
 }
 
 // ============================================
+// Header Offset (Shared Layout)
+// ============================================
+@mixin header-offset {
+  padding-top: $header-height;
+
+  @include mobile {
+    padding-top: 0;
+  }
+}
+
+// ============================================
 // Modern Viewport Units (Fallback support)
 // ============================================
 @mixin vh($height: 100) {

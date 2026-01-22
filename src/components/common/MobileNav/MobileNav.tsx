@@ -133,59 +133,62 @@ export function MobileNav({
                     </button>
                 )}
             </nav>
+            {!onPreviewToggle && (
+                <>
+                    <ResponsiveModal
+                        open={isMoreOpen}
+                        onOpenChange={setIsMoreOpen}
+                        title="전체 메뉴"
+                        showCancel={false}
+                    >
+                        <div className={styles.drawerContent}>
+                            <div className={styles.drawerMenu}>
+                                <ViewTransitionLink
+                                    href="/mypage/account"
+                                    className={styles.drawerItem}
+                                    onClick={handleDrawerNavClick}
+                                >
+                                    <User size={20} className={styles.drawerIcon} />
+                                    <span>계정</span>
+                                </ViewTransitionLink>
+                                <button className={styles.drawerItem} onClick={handleEventClick}>
+                                    <Sparkles size={20} className={styles.drawerIcon} />
+                                    <span>{MENU_TITLES.EVENTS}</span>
+                                </button>
+                                <button className={styles.drawerItem} onClick={handleCustomerService}>
+                                    <HelpCircle size={20} className={styles.drawerIcon} />
+                                    <span>{MENU_TITLES.CUSTOMER_SERVICE}</span>
+                                </button>
+                                <button className={clsx(styles.drawerItem, styles.logoutButton)} onClick={handleLogout}>
+                                    <LogOut size={20} className={styles.drawerIcon} />
+                                    <span>{MENU_TITLES.LOGOUT}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </ResponsiveModal>
 
-            <ResponsiveModal
-                open={isMoreOpen}
-                onOpenChange={setIsMoreOpen}
-                title="전체 메뉴"
-                showCancel={false}
-            >
-                <div className={styles.drawerContent}>
-                    <div className={styles.drawerMenu}>
-                        <ViewTransitionLink
-                            href="/mypage/account"
-                            className={styles.drawerItem}
-                            onClick={handleDrawerNavClick}
-                        >
-                            <User size={20} className={styles.drawerIcon} />
-                            <span>계정</span>
-                        </ViewTransitionLink>
-                        <button className={styles.drawerItem} onClick={handleEventClick}>
-                            <Sparkles size={20} className={styles.drawerIcon} />
-                            <span>{MENU_TITLES.EVENTS}</span>
-                        </button>
-                        <button className={styles.drawerItem} onClick={handleCustomerService}>
-                            <HelpCircle size={20} className={styles.drawerIcon} />
-                            <span>{MENU_TITLES.CUSTOMER_SERVICE}</span>
-                        </button>
-                        <button className={clsx(styles.drawerItem, styles.logoutButton)} onClick={handleLogout}>
-                            <LogOut size={20} className={styles.drawerIcon} />
-                            <span>{MENU_TITLES.LOGOUT}</span>
-                        </button>
-                    </div>
-                </div>
-            </ResponsiveModal>
-
-            <ResponsiveModal
-                open={isEventModalOpen}
-                onOpenChange={setIsEventModalOpen}
-                title="설날 이벤트 준비중"
-                confirmText="확인"
-                showCancel={false}
-                onConfirm={() => setIsEventModalOpen(false)}
-            >
-                <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
-                    <div style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>🎁</div>
-                    <p style={{ fontWeight: 600, fontSize: '1.1rem', marginBottom: '0.5rem' }}>
-                        다양한 혜택을 준비한 이벤트가
-                        <br />
-                        준비중입니다
-                    </p>
-                    <p style={{ color: '#666', fontSize: '0.9rem' }}>
-                        곧 찾아올 할인 혜택에 기대해주세요. 😊
-                    </p>
-                </div>
-            </ResponsiveModal>
+                    <ResponsiveModal
+                        open={isEventModalOpen}
+                        onOpenChange={setIsEventModalOpen}
+                        title="설날 이벤트 준비중"
+                        confirmText="확인"
+                        showCancel={false}
+                        onConfirm={() => setIsEventModalOpen(false)}
+                    >
+                        <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
+                            <div style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>🎁</div>
+                            <p style={{ fontWeight: 600, fontSize: '1.1rem', marginBottom: '0.5rem' }}>
+                                다양한 혜택을 준비한 이벤트가
+                                <br />
+                                준비중입니다
+                            </p>
+                            <p style={{ color: '#666', fontSize: '0.9rem' }}>
+                                곧 찾아올 할인 혜택에 기대해주세요. 😊
+                            </p>
+                        </div>
+                    </ResponsiveModal>
+                </>
+            )}
         </>
     );
 

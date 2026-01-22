@@ -7,11 +7,7 @@
 .pageContainer {
     @include m.min-vh(100);
     background-color: v.$color-bg-page;
-    padding-top: v.$header-height;
-
-    @include m.mobile {
-        padding-top: 0;
-    }
+    @include m.header-offset;
 }
 
 .layout {

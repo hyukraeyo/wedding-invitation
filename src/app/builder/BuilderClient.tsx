@@ -75,6 +75,10 @@ export function BuilderClient() {
         requestAnimationFrame(() => setIsReady(true));
     }, [isEditMode, reset]);
 
+    const togglePreview = useCallback(() => {
+        setIsPreviewOpen(prev => !prev);
+    }, []);
+
     useScrollLock(isPreviewOpen);
 
     useEffect(() => {
@@ -194,7 +198,7 @@ export function BuilderClient() {
             <MobileNav
                 onSave={stableSave}
                 isSaving={isSaving}
-                onPreviewToggle={() => setIsPreviewOpen(!isPreviewOpen)}
+                onPreviewToggle={togglePreview}
                 isPreviewOpen={isPreviewOpen}
             />
         </div>
