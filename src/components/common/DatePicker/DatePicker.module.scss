@@ -13,7 +13,7 @@
     border-color: v.$control-hover-border-strong;
   }
 
-  & > svg {
+  &>svg {
     width: 1rem;
     height: 1rem;
     opacity: 0.5;
@@ -48,17 +48,16 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem 1rem 2rem 1rem; // 상단 1.5rem, 하단 2rem으로 여백 확보
+  padding: 0 1rem; // 상하단 패딩 제거 (Scroll Fade 적용 위해)
+}
+
+.modalContentNoPadding {
+  padding: 0 !important;
 }
 
 .calendar {
   padding: 0;
   border: 0;
-  transform: scale(v.$scale-hover);
-
-  @include m.desktop {
-    transform: scale(1);
-  }
 }
 
 .popoverContent {

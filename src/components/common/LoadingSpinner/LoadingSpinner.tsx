@@ -2,6 +2,7 @@ import React from 'react';
 import { createPortal } from 'react-dom';
 import { Banana } from 'lucide-react';
 import styles from './LoadingSpinner.module.scss';
+import { useCanUseDom } from '@/hooks/useCanUseDom';
 
 interface LoadingSpinnerProps {
     variant?: 'fixed' | 'full';
@@ -9,11 +10,7 @@ interface LoadingSpinnerProps {
 }
 
 export default function LoadingSpinner({ variant = 'fixed', className }: LoadingSpinnerProps) {
-    const canUseDOM = React.useSyncExternalStore(
-        () => () => {},
-        () => true,
-        () => false
-    );
+    const canUseDOM = useCanUseDom();
 
     const containerClass = variant === 'fixed' ? styles.fixed : styles.full;
 

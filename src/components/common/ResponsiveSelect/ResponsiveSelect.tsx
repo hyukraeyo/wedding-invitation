@@ -137,6 +137,7 @@ export const ResponsiveSelect = <T extends string | number>({
                     </button>
                 }
                 contentClassName={styles.modalContentOverride}
+                className={styles.scrollAreaNoPadding}
             >
                 <div className={styles.optionsList}>
                     {options.map((option, idx) => {

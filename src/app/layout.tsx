@@ -105,7 +105,7 @@ export default async function RootLayout({
         <Script
           id="json-ld"
           type="application/ld+json"
-          strategy="afterInteractive"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify([
               {

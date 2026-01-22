@@ -17,6 +17,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useShallow } from 'zustand/react/shallow';
 import EditorForm from '@/components/common/EditorForm';
 import { useScrollLock } from '@/hooks/use-scroll-lock';
+import { useCanUseDom } from '@/hooks/useCanUseDom';
 
 import { IPhoneFrame } from './IPhoneFrame';
 
@@ -45,11 +46,7 @@ export function BuilderClient() {
     const [isSaving, setIsSaving] = useState(false);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [isReady, setIsReady] = useState(false);
-    const canUseDOM = React.useSyncExternalStore(
-        () => () => {},
-        () => true,
-        () => false
-    );
+    const canUseDOM = useCanUseDom();
     const { user, isProfileComplete, profileLoading, isAdmin } = useAuth();
     const { editingSection, reset } = useInvitationStore(useShallow((state) => ({
         editingSection: state.editingSection,

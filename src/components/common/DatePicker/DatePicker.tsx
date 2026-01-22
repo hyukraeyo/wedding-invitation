@@ -75,6 +75,8 @@ export function DatePicker({ value, onChange, className, placeholder = "날짜 �
                 onOpenChange={setIsOpen}
                 title="날짜를 선택하세요"
                 className={styles.calendarWrapper}
+                contentClassName={styles.modalContentNoPadding}
+                useScrollFade={true}
             >
                 <Calendar
                     mode="single"

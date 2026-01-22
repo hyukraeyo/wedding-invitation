@@ -22,6 +22,7 @@ import {
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 import styles from './ResponsiveModal.module.scss';
+import { useCanUseDom } from '@/hooks/useCanUseDom';
 
 export interface ResponsiveModalProps {
     open?: boolean | undefined;
@@ -142,11 +143,7 @@ export const ResponsiveModal = ({
         onOpenChange?.(false);
     };
 
-    const canUseDOM = React.useSyncExternalStore(
-        () => () => {},
-        () => true,
-        () => false
-    );
+    const canUseDOM = useCanUseDom();
 
     if (!canUseDOM) {
         return null;
@@ -160,7 +157,6 @@ export const ResponsiveModal = ({
                     className={cn(styles.dialogContent, className)}
                     onInteractOutside={(e) => !dismissible && e.preventDefault()}
                     onEscapeKeyDown={(e) => !dismissible && e.preventDefault()}
-                    aria-describedby={description ? undefined : undefined}
                 >
                     <div className={styles.card}>
                         <div className={styles.mainSection}>
@@ -235,7 +231,6 @@ export const ResponsiveModal = ({
             {trigger ? <DrawerTrigger asChild>{trigger}</DrawerTrigger> : null}
             <DrawerContent
                 className={styles.drawerContent}
-                aria-describedby={description ? undefined : undefined}
             >
                 <div className={styles.drawerLayout}>
                     <div className={styles.mainSection}>
@@ -256,6 +251,7 @@ export const ResponsiveModal = ({
                                     ref={setRefs}
                                     className={className}
                                     onScroll={handleScroll}
+                                    style={{ overflowY: 'visible' }}
                                 >
                                     {children}
                                 </DrawerScrollArea>
