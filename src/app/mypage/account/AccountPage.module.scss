@@ -1,43 +1,42 @@
 @use "../../../styles/variables" as v;
 @use "../../../styles/mixins" as m;
 
-// ============================================
-// Content Card (AccountPage 전용 스타일)
-// ============================================
-.contentCard {
-  background: white;
-  border-radius: 1.5rem;
-  padding: 3rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-  max-width: 700px;
-  margin: 0 auto;
+.accountList {
   display: flex;
   flex-direction: column;
-  align-items: center;
-
-  @include m.mobile {
-    padding: 2rem 1.5rem;
-    border-radius: 1rem;
-  }
+  gap: 1rem;
+  padding-bottom: 3rem;
 }
 
+// ============================================
+// Profile Header (Top Section)
+// ============================================
 .profileHeader {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 3rem;
-  text-align: center;
-  padding-bottom: 2.5rem;
-  border-bottom: 1px solid #f3f4f6;
-  width: 100%;
-  max-width: 550px;
+  margin-bottom: 2rem;
+  padding: 1rem 0;
+
+  @include m.desktop {
+    flex-direction: row;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding: 0 0.5rem;
+  }
 }
 
 .avatarWrapper {
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: 100px;
+  height: 100px;
   margin-bottom: 1rem;
+
+  @include m.desktop {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 0;
+  }
 }
 
 .avatar {
@@ -49,152 +48,143 @@
   align-items: center;
   justify-content: center;
   color: white;
-  box-shadow: 0 2px 8px rgba(251, 192, 45, 0.2);
+  box-shadow: 0 4px 12px rgba(251, 192, 45, 0.3);
+}
+
+.headerInfo {
+  text-align: center;
+
+  @include m.desktop {
+    text-align: left;
+  }
 }
 
 .headerName {
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  color: #111;
+  color: v.$zinc-900;
   margin-bottom: 0.25rem;
 }
 
 .headerEmail {
-  font-size: 0.875rem;
-  color: #6b7280;
+  font-size: 1rem;
+  color: v.$zinc-500;
 }
 
-.formSection {
-  width: 100%;
-  max-width: 550px;
+// ============================================
+// Account Items (Card Style)
+// ============================================
+.accountItem {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 1.25rem 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 0.75rem;
+  transition: all 0.2s ease;
+  min-height: 80px;
+  justify-content: center;
+
+  @include m.desktop {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &.editing {
+    border: 1px solid v.$color-primary;
+    box-shadow: 0 4px 12px rgba(251, 192, 45, 0.15);
+  }
 }
 
-.infoRow {
+.itemHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 120px;
+}
+
+.itemLabel {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: v.$zinc-500;
+}
+
+.itemContent {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.5rem 0;
-  border-bottom: 1px solid #f3f4f6;
-  
-  &.editingRow {
-    align-items: flex-start;
-    padding-bottom: 2rem;
-  }
+  gap: 1rem;
+  width: 100%;
 
   @include m.mobile {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.75rem;
-    
-    .actionPlaceholder {
-        display: none;
-    }
-
-    &.editingRow {
-        .labelWrapper {
-            margin-bottom: 0.5rem;
-        }
-    }
   }
 }
 
-.labelWrapper {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  width: 120px;
-  min-width: 120px;
-
-  @include m.mobile {
-    width: 100%;
-  }
+.itemValue {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: v.$zinc-900;
+  word-break: break-all;
 }
 
-.label {
+// ============================================
+// Actions & Inputs
+// ============================================
+.changeButton {
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  background-color: v.$zinc-50;
+  color: v.$zinc-600;
   font-size: 0.875rem;
   font-weight: 600;
-  color: #6b7280;
+  border: 1px solid v.$zinc-100;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+
+  &:hover {
+    background-color: v.$zinc-100;
+    color: v.$zinc-900;
+    border-color: v.$zinc-200;
+  }
+
+  @include m.mobile {
+    align-self: flex-end;
+  }
 }
 
-.value {
-  flex: 1;
-  font-size: 0.9375rem;
-  font-weight: 500;
-  color: #111;
+.editWrapper {
   width: 100%;
   display: flex;
-  align-items: center;
-}
+  flex-direction: column;
+  gap: 0.75rem;
 
-.actionPlaceholder {
-    width: 60px; 
-}
-
-.changeButton {
-    // Button 컴포넌트에 추가 스타일 적용
-    font-weight: 600 !important;
-}
-
-
-
-// Edit Mode
-.editWrapper {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 0.875rem;
-    animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-8px); }
-    to { opacity: 1; transform: translateY(0); }
+  @include m.desktop {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
 }
 
 .phoneInput {
-    // Custom styling for the input component if needed
+  flex: 1;
+  max-width: 100%;
+
+  @include m.desktop {
+    max-width: 300px;
+  }
 }
 
 .editActions {
-    display: flex;
+  display: flex;
+  gap: 0.5rem;
+
+  @include m.mobile {
     justify-content: flex-end;
-    gap: 0.5rem;
-}
-
-// ============================================
-// Skeleton UI
-// ============================================
-.skeletonAvatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    margin-bottom: 1rem;
-}
-
-.skeletonTitle {
-    height: 1.5rem;
-    width: 8rem;
-    margin-bottom: 0.5rem;
-    border-radius: 0.5rem;
-}
-
-.skeletonSub {
-    height: 1rem;
-    width: 12rem;
-    border-radius: 0.25rem;
-}
-
-.skeletonLabel {
-    height: 1rem;
-    width: 4rem;
-    border-radius: 0.25rem;
-}
-
-.skeletonValue {
-    height: 1.25rem;
-    width: 12rem;
-    border-radius: 0.25rem;
+  }
 }

@@ -112,6 +112,8 @@ const GreetingView = memo(({
                                     style={{
                                         objectFit: 'cover'
                                     }}
+                                    priority
+                                    loading="eager"
                                     unoptimized={isBlobUrl(greetingImage)}
                                 />
                             </AspectRatio>
@@ -128,6 +130,8 @@ const GreetingView = memo(({
                                     height: 'auto',
                                     objectFit: 'contain'
                                 }}
+                                priority
+                                loading="eager"
                                 unoptimized={isBlobUrl(greetingImage)}
                             />
                         )}

@@ -6,24 +6,20 @@
 // ============================================
 .cardGrid {
     display: grid;
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
     gap: 1.5rem;
-    padding-bottom: 2rem;
+    padding: 0 1.25rem 2rem; // Consistent horizontal padding on mobile
+    align-items: start;
 
-    @media (min-width: 480px) {
-        grid-template-columns: repeat(2, 1fr);
+    @media (max-width: 480px) {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 1rem;
     }
 
     @include m.desktop {
-        grid-template-columns: repeat(3, 1fr);
         gap: 2rem;
+        padding: 0 0 2rem; // Reset padding for desktop
     }
-
-    @media (min-width: 1280px) {
-        grid-template-columns: repeat(4, 1fr);
-    }
-    
-    align-items: start;
 }
 
 // ============================================
@@ -36,7 +32,7 @@
 }
 
 .createCard {
-    aspect-ratio: 3 / 5.5;
+    aspect-ratio: 3 / 4.5;
     border: 2px dashed v.$zinc-200;
     border-radius: v.$radius-md;
     display: flex;
@@ -116,8 +112,15 @@
 }
 
 @keyframes floating {
-    0%, 100% { transform: translateY(0) rotate(-10deg); }
-    50% { transform: translateY(-10px) rotate(-5deg); }
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(-10deg);
+    }
+
+    50% {
+        transform: translateY(-10px) rotate(-5deg);
+    }
 }
 
 // ============================================
@@ -200,18 +203,12 @@
     color: v.$zinc-600;
     line-height: 1.6;
 }
-// ============================================
-// Template (Page Transitions)
-// ============================================
-.templateWrapper {
-    // view-transition-name은 RootTemplate에서 이미 정의되어 있으므로 중복 정의 시 애니메이션이 무시됩니다.
-}
 
 // ============================================
 // Skeleton UI
 // ============================================
 .skeletonCard {
-    aspect-ratio: 3 / 5.5;
+    aspect-ratio: 3 / 4.5;
     width: 100%;
     border-radius: v.$radius-md;
 }
@@ -222,11 +219,15 @@
     width: 60%;
     border-radius: 4px;
 }
+
 // ============================================
 // Entrance Animation (Pop-in solution)
 // ============================================
 .contentContainer {
     animation: page-fade-in 400ms var(--ease-ios) both;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 // ============================================

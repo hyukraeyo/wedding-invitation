@@ -39,79 +39,88 @@ Logo.displayName = 'Logo';
 
 interface HeaderActionsProps {
     user: User | null;
+    authLoading: boolean;
     onSave?: (() => void) | null;
     isLoading: boolean;
     isUploading: boolean;
     notificationCount: number;
     onLogin: () => void;
     onSaveAction: () => void;
+    showSave: boolean;
 }
 
 const HeaderActions = React.memo(({
     user,
+    authLoading,
     onSave,
     isLoading,
     isUploading,
     notificationCount,
     onLogin,
-    onSaveAction
+    onSaveAction,
+    showSave
 }: HeaderActionsProps) => (
     <div className={styles.actions}>
-        {onSave && user ? (
-            <IconButton
-                icon={Save}
-                onClick={onSaveAction}
-                loading={isLoading || isUploading}
-                size="sm"
-                iconSize={20}
-                strokeWidth={2.5}
-                variant="ghost"
-                className={styles.actionButton}
-                aria-label="저장하기"
-            />
-        ) : null}
-
-        {user ? (
+        {authLoading ? (
+            <div className={styles.actionPlaceholder} />
+        ) : (
             <>
-
-                <Link href="/mypage/notifications" className={styles.notificationLink}>
+                {showSave && user ? (
                     <IconButton
-                        icon={Bell}
+                        icon={Save}
+                        onClick={onSaveAction}
+                        disabled={isLoading || isUploading}
                         size="sm"
                         iconSize={20}
                         strokeWidth={2.5}
                         variant="ghost"
                         className={styles.actionButton}
-                        aria-label="알림"
-                    >
-                        {notificationCount > 0 && (
-                            <span className={styles.notificationBadge} />
-                        )}
-                    </IconButton>
-                </Link>
-                <Link href="/mypage" className={styles.profileLink}>
+                        aria-label="저장하기"
+                    />
+                ) : null}
+
+                {user ? (
+                    <>
+                        <Link href="/mypage/notifications" className={styles.notificationLink}>
+                            <IconButton
+                                icon={Bell}
+                                size="sm"
+                                iconSize={20}
+                                strokeWidth={2.5}
+                                variant="ghost"
+                                className={styles.actionButton}
+                                aria-label="알림"
+                            >
+                                {notificationCount > 0 && (
+                                    <span className={styles.notificationBadge} />
+                                )}
+                            </IconButton>
+                        </Link>
+                        <Link href="/mypage" className={styles.profileLink}>
+                            <IconButton
+                                icon={Banana}
+                                size="sm"
+                                iconSize={20}
+                                strokeWidth={2.5}
+                                variant="solid"
+                                className={styles.profileButton}
+                                aria-label="마이페이지"
+                            />
+                        </Link>
+                    </>
+                ) : (
                     <IconButton
-                        icon={Banana}
+                        icon={LogIn}
                         size="sm"
                         iconSize={20}
                         strokeWidth={2.5}
-                        variant="solid"
-                        className={styles.profileButton}
-                        aria-label="마이페이지"
+                        variant="ghost"
+                        onClick={onLogin}
+                        className={styles.actionButton}
+                        aria-label="로그인"
                     />
-                </Link>
+                )}
             </>
-        ) : (
-            <IconButton
-                icon={LogIn}
-                size="sm"
-                iconSize={20}
-                strokeWidth={2.5}
-                variant="ghost"
-                onClick={onLogin}
-                className={styles.actionButton}
-                aria-label="로그인"
-            />
         )}
     </div>
 ));
@@ -122,7 +131,7 @@ export default function Header() {
     const pathname = usePathname();
     // 메인 페이지('/')에서는 헤더를 숨깁니다.
     const isVisible = pathname !== '/';
-    const { user } = useAuth();
+    const { user, loading: authLoading } = useAuth();
 
     // Store states
     const { reset, isUploading } = useInvitationStore(useShallow((state) => ({
@@ -167,12 +176,14 @@ export default function Header() {
 
             <HeaderActions
                 user={user}
+                authLoading={authLoading}
                 onSave={onSave}
                 isLoading={isLoading}
                 isUploading={isUploading}
                 notificationCount={notificationCount}
                 onLogin={handleLogin}
                 onSaveAction={handleSaveAction}
+                showSave={!!onSave || pathname.startsWith('/builder')}
             />
 
             <ResponsiveModal

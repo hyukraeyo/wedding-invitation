@@ -6,6 +6,12 @@
     max-width: 340px;
     margin-inline: auto;
     padding: 2rem 1.5rem;
+    container-type: inline-size;
+    container-name: calendar-section;
+
+    @container calendar-section (max-width: 300px) {
+        padding: 1.5rem 1rem;
+    }
 
     .calendarHeader {
         text-align: center;
@@ -17,6 +23,10 @@
             color: #212529;
             letter-spacing: 0.1em;
             font-family: var(--font-pretendard);
+
+            @container calendar-section (max-width: 300px) {
+                font-size: calc(1rem * var(--font-scale));
+            }
         }
     }
 

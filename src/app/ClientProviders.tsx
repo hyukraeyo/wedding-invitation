@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { SessionProvider } from 'next-auth/react';
 import { Toaster } from '@/components/ui/Sonner';
 
-export default function ClientProviders({ children }: { children: React.ReactNode }) {
+export default function ClientProviders({ children, session }: { children: React.ReactNode, session?: any }) {
     const [queryClient] = useState(() => new QueryClient({
         defaultOptions: {
             queries: {
@@ -18,7 +18,7 @@ export default function ClientProviders({ children }: { children: React.ReactNod
     }));
 
     return (
-        <SessionProvider>
+        <SessionProvider session={session}>
             <QueryClientProvider client={queryClient}>
                 {children}
                 <Toaster />

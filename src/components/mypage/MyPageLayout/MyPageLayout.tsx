@@ -2,7 +2,11 @@
 
 import React from 'react';
 import { MyPageSidebar } from '@/components/mypage/MyPageSidebar';
+import { MyPageMobileNav } from '@/components/mypage/MyPageMobileNav';
+import { MyPageHeader } from '@/components/mypage/MyPageHeader';
 import { useHeaderStore } from '@/store/useHeaderStore';
+import { usePathname } from 'next/navigation';
+import { MENU_TITLES } from '@/constants/navigation';
 import styles from './MyPageLayout.module.scss';
 
 interface ProfileSummary {
@@ -20,6 +24,16 @@ interface MyPageLayoutProps {
     notificationCount?: number;
 }
 
+/**
+ * 🍌 경로별 타이틀 매핑
+ */
+const ROUTE_TITLES: Record<string, string> = {
+    '/mypage': MENU_TITLES.DASHBOARD,
+    '/mypage/account': MENU_TITLES.ACCOUNT,
+    '/mypage/notifications': MENU_TITLES.NOTIFICATIONS,
+    '/mypage/requests': MENU_TITLES.REQUESTS,
+};
+
 export function MyPageLayout({
     children,
     profile,
@@ -28,12 +42,17 @@ export function MyPageLayout({
     requestCount = 0,
     notificationCount = 0,
 }: MyPageLayoutProps) {
+    const pathname = usePathname();
     const setNotificationCount = useHeaderStore(state => state.setNotificationCount);
+
+    // 현재 경로에 맞는 타이틀 가져오기 (기본값은 빈 문자열)
+    const currentTitle = ROUTE_TITLES[pathname] || '';
 
     // Sync notification count with global header store
     React.useEffect(() => {
         setNotificationCount(notificationCount);
     }, [notificationCount, setNotificationCount]);
+
     return (
         <div className={styles.pageContainer}>
             <div className={styles.layout}>
@@ -45,9 +64,20 @@ export function MyPageLayout({
                     notificationCount={notificationCount}
                 />
                 <main className={styles.mainContent}>
-                    {children}
+                    {/* 공통 헤더: 레이아웃에서 통합 관리 */}
+                    {currentTitle && <MyPageHeader title={currentTitle} />}
+
+                    <div className={styles.childrenWrapper}>
+                        {children}
+                    </div>
                 </main>
             </div>
+            <MyPageMobileNav
+                isAdmin={isAdmin}
+                invitationCount={invitationCount}
+                requestCount={requestCount}
+                notificationCount={notificationCount}
+            />
         </div>
     );
 }

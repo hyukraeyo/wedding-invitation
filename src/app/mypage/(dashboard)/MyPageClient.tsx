@@ -10,6 +10,7 @@ import type { ApprovalRequestSummary } from '@/services/approvalRequestService';
 import type { InvitationSummaryRecord } from '@/lib/invitation-summary';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import type { InvitationData } from '@/store/useInvitationStore';
+import { MyPageContent } from '@/components/mypage/MyPageContent';
 import { MyPageHeader } from '@/components/mypage/MyPageHeader';
 import { MyPageLayout } from '@/components/mypage/MyPageLayout';
 import { parseRejection } from '@/lib/rejection-helpers';
@@ -29,10 +30,7 @@ const ProfileCompletionModal = dynamic(
     () => import('@/components/auth/ProfileCompletionModal').then(mod => mod.ProfileCompletionModal),
     { ssr: false }
 );
-const ResponsiveModal = dynamic(
-    () => import('@/components/common/ResponsiveModal').then(mod => mod.ResponsiveModal),
-    { ssr: false }
-);
+import { DynamicResponsiveModal as ResponsiveModal } from '@/components/common/ResponsiveModal/Dynamic';
 const RejectionReasonModal = dynamic(
     () => import('@/components/common/RejectionReasonModal'),
     { ssr: false }
@@ -449,8 +447,7 @@ export default function MyPageClient({
     }
 
     return (
-        <div className={styles.contentContainer}>
-            <MyPageHeader title={MENU_TITLES.DASHBOARD} />
+        <MyPageContent className={styles.contentContainer}>
 
             {invitations.length === 0 ? (
                 <EmptyState
@@ -489,11 +486,12 @@ export default function MyPageClient({
                     </div>
 
                     {/* Invitation Cards */}
-                    {invitations.map((inv) => {
+                    {invitations.map((inv, index) => {
                         const rejectionData = rejectedRequests.find(req => req.invitation_id === inv.id) || null;
                         return (
                             <InvitationCard
                                 key={inv.id}
+                                index={index}
                                 invitation={inv}
                                 isAdmin={isAdmin}
                                 rejectionData={rejectionData}
@@ -582,6 +580,6 @@ export default function MyPageClient({
                     </div>
                 </ResponsiveModal>
             )}
-        </div >
+        </MyPageContent >
     );
 }

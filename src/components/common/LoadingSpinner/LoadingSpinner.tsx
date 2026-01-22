@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Banana } from 'lucide-react';
 import styles from './LoadingSpinner.module.scss';
 
@@ -8,9 +9,15 @@ interface LoadingSpinnerProps {
 }
 
 export default function LoadingSpinner({ variant = 'fixed', className }: LoadingSpinnerProps) {
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
     const containerClass = variant === 'fixed' ? styles.fixed : styles.full;
 
-    return (
+    const content = (
         <div className={`${containerClass} ${className || ''}`}>
             <div className={styles.iconWrapper}>
                 {/* Rotating Banana Icon wrapper for hardware acceleration */}
@@ -24,4 +31,11 @@ export default function LoadingSpinner({ variant = 'fixed', className }: Loading
             <div className={styles.backgroundDecoration2} />
         </div>
     );
+
+    if (variant === 'fixed') {
+        if (!mounted) return null;
+        return createPortal(content, document.body);
+    }
+
+    return content;
 }

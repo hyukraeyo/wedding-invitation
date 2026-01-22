@@ -5,6 +5,7 @@ import ClientProviders from './ClientProviders';
 import { fontVariables } from '@/lib/fonts';
 import Header from '@/components/common/Header';
 import { ProgressBar } from '@/components/common/ProgressBar/ProgressBar';
+import { auth } from "@/auth";
 import "./globals.scss";
 import "../styles/_accessibility.scss";
 
@@ -78,11 +79,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+
   return (
     <html lang="ko" suppressHydrationWarning data-scroll-behavior="smooth" className={fontVariables}>
       <body>
@@ -148,7 +151,7 @@ export default function RootLayout({
             ])
           }}
         />
-        <ClientProviders>
+        <ClientProviders session={session}>
           <Suspense fallback={null}>
             <ProgressBar />
           </Suspense>

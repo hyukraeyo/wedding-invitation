@@ -38,6 +38,9 @@ const generateSlug = (name: string): string => {
     return `${cleanName}-${randomStr}`;
 };
 
+// Module-level lock for absolute safety across any React re-renders or stale closures.
+let GLOBAL_SAVE_LOCK = false;
+
 export function BuilderClient() {
     const [isSaving, setIsSaving] = useState(false);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
@@ -58,9 +61,13 @@ export function BuilderClient() {
         setIsMounted(true);
         if (initRef.current) return;
         initRef.current = true;
-        if (!isEditMode) {
+        if (isEditMode) {
+            // Re-mount lock reset
+            GLOBAL_SAVE_LOCK = false;
+        } else {
             reset();
             sessionStorage.removeItem('builder-draft-slug');
+            GLOBAL_SAVE_LOCK = false;
         }
         // Set ready in next frame to avoid cascading renders
         requestAnimationFrame(() => setIsReady(true));
@@ -90,11 +97,11 @@ export function BuilderClient() {
             return;
         }
 
-        if (!isReady) {
-            toast.error('잠시 후 다시 시도해주세요.');
+        if (!isReady || isSaving || GLOBAL_SAVE_LOCK) {
             return;
         }
 
+        GLOBAL_SAVE_LOCK = true;
         setIsSaving(true);
         try {
             const currentStoreState = useInvitationStore.getState();
@@ -117,15 +124,17 @@ export function BuilderClient() {
             }
 
             await invitationService.saveInvitation(currentSlug, cleanData, user.id);
-            toast.success('청첩장이 저장되었습니다! 🎉');
+            toast.success('청첩장이 저장되었습니다! 🎉', { id: 'save-invitation' });
             router.push('/mypage');
+            // Note: Don't set isSaving(false) here because we're navigating away.
+            // Keeping it true (and keeping GLOBAL_SAVE_LOCK) prevents any further clicks during the transition.
         } catch (error) {
             console.error('Save error:', error);
             toast.error('저장 중 오류가 발생했습니다. 다시 시도해주세요.');
-        } finally {
             setIsSaving(false);
+            GLOBAL_SAVE_LOCK = false;
         }
-    }, [user, handleLogin, isReady, router, isAdmin]);
+    }, [user, handleLogin, isReady, router, isAdmin, isSaving]);
 
     useEffect(() => {
         handleSaveRef.current = handleSave;

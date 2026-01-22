@@ -9,7 +9,11 @@ import { signIn } from 'next-auth/react';
 import styles from './LoginPage.module.scss';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import { ProfileCompletionModal } from '@/components/auth/ProfileCompletionModal';
+import dynamic from 'next/dynamic';
+const ProfileCompletionModal = dynamic(
+    () => import('@/components/auth/ProfileCompletionModal').then(mod => mod.ProfileCompletionModal),
+    { ssr: false }
+);
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 /**

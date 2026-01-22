@@ -179,7 +179,6 @@ export const ResponsiveModal = ({
             {trigger ? <DrawerTrigger asChild>{trigger}</DrawerTrigger> : null}
             <DrawerContent
                 className={styles.drawerContent}
-                onOpenAutoFocus={(e) => e.preventDefault()}
                 aria-describedby={description ? undefined : undefined}
             >
                 <div className={styles.drawerLayout}>

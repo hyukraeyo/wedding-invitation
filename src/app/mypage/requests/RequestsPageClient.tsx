@@ -7,8 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { approvalRequestService } from '@/services/approvalRequestService';
 import { invitationService } from '@/services/invitationService';
-import { MyPageHeader } from '@/components/mypage/MyPageHeader';
-import { MENU_TITLES } from '@/constants/navigation';
+import { MyPageContent } from '@/components/mypage/MyPageContent';
 import { useToast } from '@/hooks/use-toast';
 import {
     Clock,
@@ -163,8 +162,7 @@ export default function RequestsPageClient({
     if (status === 'error') return <div className={styles.error}>데이터 로딩 중 오류가 발생했습니다.</div>;
 
     return (
-        <div className={styles.container}>
-            <MyPageHeader title={MENU_TITLES.REQUESTS} />
+        <MyPageContent className={styles.container}>
 
             {allRequests.length > 0 ? (
                 <div className={styles.requestList}>
@@ -315,6 +313,6 @@ export default function RequestsPageClient({
                     />
                 </ResponsiveModal>
             )}
-        </div>
+        </MyPageContent>
     );
 }

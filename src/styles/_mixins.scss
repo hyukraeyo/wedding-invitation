@@ -16,11 +16,32 @@
 }
 
 // ============================================
+// Modern Viewport Units (Fallback support)
+// ============================================
+@mixin vh($height: 100) {
+  height: #{$height}vh;
+  height: #{$height}svh;
+  height: #{$height}dvh;
+}
+
+@mixin min-vh($height: 100) {
+  min-height: #{$height}vh;
+  min-height: #{$height}svh;
+  min-height: #{$height}dvh;
+}
+
+@mixin max-vh($height: 100) {
+  max-height: #{$height}vh;
+  max-height: #{$height}svh;
+  max-height: #{$height}dvh;
+}
+
+// ============================================
 // CSS Variables Export
 // ============================================
 @mixin export-css-vars {
-  @each $key, $value in (
-    'background': $color-bg-page,
+
+  @each $key, $value in ('background': $color-bg-page,
     'foreground': $color-foreground,
     'primary': $color-primary,
     'primary-dark': $color-primary-dark,
@@ -69,9 +90,10 @@
 // ============================================
 @mixin focus-ring {
   outline: none;
+
   &:focus-visible {
     box-shadow: 0 0 0 $focus-ring-width $color-background,
-      0 0 0 calc(#{$focus-ring-width} + #{$focus-ring-offset}) $focus-ring-color;
+    0 0 0 calc(#{$focus-ring-width} + #{$focus-ring-offset}) $focus-ring-color;
   }
 }
 
@@ -81,6 +103,7 @@
 @mixin scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+
   &::-webkit-scrollbar {
     display: none;
   }
@@ -123,7 +146,7 @@
   outline: none;
   border-color: $color-primary;
   box-shadow: 0 0 0 $focus-ring-width $color-background,
-    0 0 0 calc(#{$focus-ring-width} + #{$focus-ring-offset}) $focus-ring-color;
+  0 0 0 calc(#{$focus-ring-width} + #{$focus-ring-offset}) $focus-ring-color;
 }
 
 @mixin input-base {
@@ -262,6 +285,7 @@
 // ============================================
 @mixin toggle-state-on {
   background: $color-primary;
+
   &:checked {
     background: $color-primary;
   }

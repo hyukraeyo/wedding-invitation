@@ -2,10 +2,11 @@
 
 import React, { useState } from 'react';
 import { MyPageHeader } from '@/components/mypage/MyPageHeader';
+import { MyPageContent } from '@/components/mypage/MyPageContent';
 import { PhoneField } from '@/components/common/PhoneField';
 import { Button } from '@/components/ui/Button';
 import styles from './AccountPage.module.scss';
-import { Banana } from 'lucide-react';
+import { Banana, User, Mail, Phone } from 'lucide-react';
 import { clsx } from 'clsx';
 import { profileService } from '@/services/profileService';
 import { useToast } from '@/hooks/use-toast';
@@ -57,94 +58,92 @@ export default function AccountPageClient({
 
 
     return (
-        <>
-            <MyPageHeader title={MENU_TITLES.ACCOUNT} />
-
-            <div className={styles.contentCard}>
-                <div className={styles.profileHeader}>
-                    <div className={styles.avatarWrapper}>
-                        <div className={styles.avatar}>
-                            <Banana size={36} strokeWidth={1.5} />
-                        </div>
+        <MyPageContent className={styles.accountList}>
+            <div className={styles.profileHeader}>
+                <div className={styles.avatarWrapper}>
+                    <div className={styles.avatar}>
+                        <Banana size={40} strokeWidth={1.5} />
                     </div>
+                </div>
+                <div className={styles.headerInfo}>
                     <h2 className={styles.headerName}>{profile.full_name || '이름 없음'}</h2>
                     <p className={styles.headerEmail}>{userEmail}</p>
                 </div>
+            </div>
 
-                <div className={styles.formSection}>
-                    {/* Name Row (Read-Only) */}
-                    <div className={styles.infoRow}>
-                        <div className={styles.labelWrapper}>
-                            <span className={styles.label}>이름</span>
-                        </div>
-                        <div className={styles.value}>
-                            {profile.full_name}
-                        </div>
-                        <div className={styles.actionPlaceholder} />
-                    </div>
+            {/* Name Row */}
+            <div className={styles.accountItem}>
+                <div className={styles.itemHeader}>
+                    <User size={16} strokeWidth={2} className={styles.icon} />
+                    <span className={styles.itemLabel}>이름</span>
+                </div>
+                <div className={styles.itemContent}>
+                    <div className={styles.itemValue}>{profile.full_name}</div>
+                </div>
+            </div>
 
-                    {/* Email Row (Read-Only) */}
-                    <div className={styles.infoRow}>
-                        <div className={styles.labelWrapper}>
-                            <span className={styles.label}>이메일</span>
-                        </div>
-                        <div className={styles.value}>
-                            {userEmail}
-                        </div>
-                        <div className={styles.actionPlaceholder} />
-                    </div>
+            {/* Email Row */}
+            <div className={styles.accountItem}>
+                <div className={styles.itemHeader}>
+                    <Mail size={16} strokeWidth={2} className={styles.icon} />
+                    <span className={styles.itemLabel}>이메일</span>
+                </div>
+                <div className={styles.itemContent}>
+                    <div className={styles.itemValue}>{userEmail}</div>
+                </div>
+            </div>
 
-                    {/* Phone Row (Editable) */}
-                    <div className={clsx(styles.infoRow, isEditingPhone && styles.editingRow)}>
-                        <div className={styles.labelWrapper}>
-                            <span className={styles.label}>휴대폰 번호</span>
+            {/* Phone Row */}
+            <div className={clsx(styles.accountItem, isEditingPhone && styles.editing)}>
+                <div className={styles.itemHeader}>
+                    <Phone size={16} strokeWidth={2} className={styles.icon} />
+                    <span className={styles.itemLabel}>휴대폰 번호</span>
+                </div>
+
+                <div className={styles.itemContent}>
+                    {isEditingPhone ? (
+                        <div className={styles.editWrapper}>
+                            <PhoneField
+                                className={styles.phoneInput}
+                                value={formData.phone}
+                                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                placeholder="010-0000-0000"
+                            />
+                            <div className={styles.editActions}>
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => {
+                                        setIsEditingPhone(false);
+                                        setFormData({ phone: profile.phone || '' });
+                                    }}
+                                >
+                                    취소
+                                </Button>
+                                <Button
+                                    variant="default"
+                                    size="sm"
+                                    onClick={handleSavePhone}
+                                >
+                                    저장
+                                </Button>
+                            </div>
                         </div>
-                        <div className={styles.value}>
-                            {isEditingPhone ? (
-                                <div className={styles.editWrapper}>
-                                    <PhoneField
-                                        className={styles.phoneInput}
-                                        value={formData.phone}
-                                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                                        placeholder="010-0000-0000"
-                                    />
-                                    <div className={styles.editActions}>
-                                        <Button
-                                            variant="ghost"
-                                            size="sm"
-                                            onClick={() => {
-                                                setIsEditingPhone(false);
-                                                setFormData({ phone: profile.phone || '' });
-                                            }}
-                                        >
-                                            취소
-                                        </Button>
-                                        <Button
-                                            variant="default"
-                                            size="sm"
-                                            onClick={handleSavePhone}
-                                        >
-                                            저장
-                                        </Button>
-                                    </div>
-                                </div>
-                            ) : (
-                                formData.phone || '설정되지 않음'
-                            )}
-                        </div>
-                        {!isEditingPhone && (
-                            <Button
-                                variant="ghost"
-                                size="sm"
+                    ) : (
+                        <>
+                            <div className={styles.itemValue}>
+                                {formData.phone || '설정되지 않음'}
+                            </div>
+                            <button
                                 onClick={() => setIsEditingPhone(true)}
                                 className={styles.changeButton}
                             >
                                 변경
-                            </Button>
-                        )}
-                    </div>
+                            </button>
+                        </>
+                    )}
                 </div>
             </div>
-        </>
+        </MyPageContent>
     );
 }

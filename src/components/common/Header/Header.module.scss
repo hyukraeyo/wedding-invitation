@@ -84,7 +84,7 @@
   box-shadow: 0 2px 8px rgba(251, 192, 45, 0.25);
   transition: all v.$transition-200 v.$ease-standard;
   color: white !important; // Ensure icon is white
-  
+
   @media (hover: hover) and (pointer: fine) {
     &:hover {
       box-shadow: v.$shadow-hover-primary-strong;
@@ -140,4 +140,9 @@
 
 .suspenseFallback {
   height: 8rem; // h-32
+}
+
+.actionPlaceholder {
+  height: 2.25rem;
+  width: 2.25rem;
 }

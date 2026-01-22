@@ -10,7 +10,9 @@ import {
     AlertCircle,
     Banana,
     Share2,
-    MessageCircle
+    MessageCircle,
+    Send,
+    XCircle
 } from 'lucide-react';
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
@@ -26,7 +28,7 @@ import type { ApprovalRequestSummary } from '@/services/approvalRequestService';
 import styles from './InvitationCard.module.scss';
 import { Button } from '@/components/ui/Button';
 import { IconButton } from '@/components/ui/IconButton';
-import { ResponsiveModal } from '@/components/common/ResponsiveModal';
+import { DynamicResponsiveModal as ResponsiveModal } from '@/components/common/ResponsiveModal/Dynamic';
 
 interface InvitationCardProps {
     invitation: InvitationSummaryRecord;
@@ -38,16 +40,18 @@ interface InvitationCardProps {
     onCancelRequest: (inv: InvitationSummaryRecord) => void;
     onRevokeApproval: (inv: InvitationSummaryRecord) => void;
     onRevertToDraft?: (inv: InvitationSummaryRecord) => void;
+    index?: number;
 }
 
 const InvitationCard = React.memo(({
     invitation,
-    rejectionData = null,
     onEdit,
     onDelete,
     onRequestApproval,
     onCancelRequest,
     onRevertToDraft,
+    index,
+    rejectionData = null,
 }: InvitationCardProps) => {
     const data = invitation.invitation_data;
     const isApproved = !!data?.isApproved;
@@ -152,7 +156,7 @@ const InvitationCard = React.memo(({
                             alt={title}
                             fill
                             sizes="(max-width: 428px) 100vw, 400px"
-                            priority={invitation.invitation_data?.isApproved}
+                            priority={index !== undefined ? index < 2 : invitation.invitation_data?.isApproved}
                             style={{ objectFit: 'cover' }}
                         />
                     </div>
@@ -182,7 +186,7 @@ const InvitationCard = React.memo(({
                                         variant="glass"
                                     />
                                 </DropdownMenuTrigger>
-                                    <DropdownMenuContent side="bottom" align="end" className={styles.dropdownContent}>
+                                <DropdownMenuContent side="bottom" align="end" className={styles.dropdownContent}>
                                     <DropdownMenuItem onClick={handlePreview}>
                                         <Eye size={16} className={styles.menuIcon} /> 미리보기
                                     </DropdownMenuItem>
@@ -196,6 +200,33 @@ const InvitationCard = React.memo(({
                                             <Edit2 size={16} className={styles.menuIcon} /> 편집하기
                                         </DropdownMenuItem>
                                     )}
+
+                                    {/* Mobile Only Items (Moved from Footer) */}
+                                    {!isRequesting && !isApproved && (
+                                        <DropdownMenuItem
+                                            onClick={() => onRequestApproval(invitation)}
+                                            className={styles.mobileMenuOnly}
+                                        >
+                                            <Send size={16} className={styles.menuIcon} /> 사용 신청
+                                        </DropdownMenuItem>
+                                    )}
+                                    {isApproved && (
+                                        <DropdownMenuItem
+                                            onClick={handleShareModalOpen}
+                                            className={styles.mobileMenuOnly}
+                                        >
+                                            <Share2 size={16} className={styles.menuIcon} /> 공유하기
+                                        </DropdownMenuItem>
+                                    )}
+                                    {isRequesting && (
+                                        <DropdownMenuItem
+                                            onClick={() => onCancelRequest(invitation)}
+                                            className={styles.mobileMenuOnly}
+                                        >
+                                            <XCircle size={16} className={styles.menuIcon} /> 신청 취소
+                                        </DropdownMenuItem>
+                                    )}
+
                                     {isRejected && (
                                         <DropdownMenuItem onSelect={handleRejectionModalOpen}>
                                             <AlertCircle size={16} className={styles.menuIcon} /> {REJECTION_LABEL} 확인

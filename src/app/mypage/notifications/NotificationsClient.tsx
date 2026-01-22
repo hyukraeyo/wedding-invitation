@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { MyPageHeader } from '@/components/mypage/MyPageHeader';
 import { AlertCircle, Bell, CheckCircle2, ChevronRight, Mail, XCircle } from 'lucide-react';
 import styles from './NotificationsPage.module.scss';
@@ -30,13 +30,38 @@ interface NotificationsClientProps {
 export default function NotificationsClient({ userId, notifications }: NotificationsClientProps) {
     const router = useRouter();
     const [expandedId, setExpandedId] = useState<string | null>(null);
+    const clearedRef = useRef<string | null>(null);
+
+    // 알림 리스트 메모이제이션 (파싱 및 포맷팅 비용 절감)
+    const processedNotifications = useMemo(() => {
+        return notifications.map(notif => {
+            const parsed = parseRejection(notif);
+            const date = new Date(notif.created_at);
+            const formattedDate = format(date, 'yyyy. MM. dd. HH:mm', { locale: ko });
+            const StatusIcon = parsed.isApproved ? CheckCircle2 :
+                parsed.isRevoked ? XCircle : AlertCircle;
+
+            return {
+                ...notif,
+                ...parsed,
+                formattedDate,
+                StatusIcon
+            };
+        });
+    }, [notifications]);
 
     // UX: 알림 페이지 진입 시 배지(hasNewRejection) 모두 제거
     useEffect(() => {
         const clearNotifications = async () => {
             if (!userId || notifications.length === 0) return;
 
+            // 이미 현재 알림들에 대해 클리어 작업을 수행했다면 중단 (무한 루프 방지)
+            const currentIdsHash = notifications.map(n => n.id).sort().join(',');
+            if (clearedRef.current === currentIdsHash) return;
+
             try {
+                clearedRef.current = currentIdsHash;
+
                 // Find all invitation IDs that have notifications shown here
                 const invitationIds = Array.from(new Set(notifications.map(n => n.invitation_id)));
 
@@ -47,6 +72,8 @@ export default function NotificationsClient({ userId, notifications }: Notificat
                 router.refresh();
             } catch (error) {
                 console.error('Failed to clear notifications:', error);
+                // 에러 발생 시 다음에 다시 시도할 수 있도록 초기화
+                clearedRef.current = null;
             }
         };
 
@@ -59,20 +86,12 @@ export default function NotificationsClient({ userId, notifications }: Notificat
 
     return (
         <div className={styles.container}>
-            <MyPageHeader title={MENU_TITLES.NOTIFICATIONS} />
-
             <div className={styles.content}>
-                {notifications.length > 0 ? (
+                {processedNotifications.length > 0 ? (
                     <div className={styles.notificationList}>
-                        {notifications.map((notif) => {
-                            const { badge, title, displayReason, isRevoked, isRejected, isApproved } = parseRejection(notif);
-                            const date = new Date(notif.created_at);
-                            const formattedDate = format(date, 'yyyy. MM. dd. HH:mm', { locale: ko });
+                        {processedNotifications.map((notif) => {
                             const isExpanded = expandedId === notif.id;
-
-                            // Dynamic icon based on status
-                            const StatusIcon = isApproved ? CheckCircle2 :
-                                isRevoked ? XCircle : AlertCircle;
+                            const { StatusIcon } = notif;
 
                             return (
                                 <div
@@ -80,27 +99,27 @@ export default function NotificationsClient({ userId, notifications }: Notificat
                                     className={clsx(
                                         styles.notificationItem,
                                         isExpanded && styles.expanded,
-                                        isApproved && styles.approvedItem,
-                                        isRejected && styles.rejectedItem,
-                                        isRevoked && styles.revokedItem
+                                        notif.isApproved && styles.approvedItem,
+                                        notif.isRejected && styles.rejectedItem,
+                                        notif.isRevoked && styles.revokedItem
                                     )}
                                     onClick={() => handleToggle(notif.id)}
                                 >
                                     <div className={styles.itemHeader}>
                                         <div className={clsx(
                                             styles.iconWrapper,
-                                            isApproved && styles.iconApproved,
-                                            isRejected && styles.iconRejected,
-                                            isRevoked && styles.iconRevoked
+                                            notif.isApproved && styles.iconApproved,
+                                            notif.isRejected && styles.iconRejected,
+                                            notif.isRevoked && styles.iconRevoked
                                         )}>
                                             <StatusIcon size={20} />
                                         </div>
                                         <div className={styles.itemInfo}>
                                             <div className={styles.itemTitle}>
-                                                <strong>{badge}</strong> 소식이 도착했습니다.
+                                                <strong>{notif.badge}</strong> 소식이 도착했습니다.
                                             </div>
                                             <div className={styles.itemDate}>
-                                                {formattedDate}
+                                                {notif.formattedDate}
                                             </div>
                                         </div>
                                         <div className={clsx(styles.chevronWrapper, isExpanded && styles.expandedChevron)}>
@@ -109,16 +128,16 @@ export default function NotificationsClient({ userId, notifications }: Notificat
                                     </div>
 
                                     {isExpanded && (
-                                            <div className={styles.itemBody}>
-                                                <div className={styles.invitationInfo}>
+                                        <div className={styles.itemBody}>
+                                            <div className={styles.invitationInfo}>
                                                 <Mail size={14} className={styles.invitationIcon} />
                                                 청첩장: <strong>{notif.invitation_slug}</strong>
                                             </div>
                                             <div className={styles.reasonBox}>
-                                                <div className={styles.reasonTitle}>{title}</div>
+                                                <div className={styles.reasonTitle}>{notif.title}</div>
                                                 <div
                                                     className={styles.reasonContent}
-                                                    dangerouslySetInnerHTML={{ __html: displayReason || '상세 사유가 없습니다.' }}
+                                                    dangerouslySetInnerHTML={{ __html: notif.displayReason || '상세 사유가 없습니다.' }}
                                                 />
                                             </div>
                                         </div>

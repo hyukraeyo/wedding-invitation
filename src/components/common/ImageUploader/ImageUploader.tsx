@@ -130,6 +130,8 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                                             isUploading && styles.uploading
                                         )}
                                         sizes={IMAGE_SIZES.builder}
+                                        priority
+                                        loading="eager"
                                         unoptimized={shouldUnoptimize}
                                     />
                                 </AspectRatio>
@@ -144,6 +146,8 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                                         isUploading && styles.uploading
                                     )}
                                     sizes={IMAGE_SIZES.builder}
+                                    priority
+                                    loading="eager"
                                     unoptimized={shouldUnoptimize}
                                 />
                             )}

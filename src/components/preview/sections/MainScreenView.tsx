@@ -291,6 +291,7 @@ const MainScreenView = memo(({
                                     className={clsx(styles.mainImage) || ''}
                                     style={{ objectFit: 'cover' }}
                                     priority
+                                    loading="eager"
                                     unoptimized={isBlobUrl(imageUrl)}
                                 />
                             </AspectRatio>
@@ -303,6 +304,7 @@ const MainScreenView = memo(({
                                 className={clsx(styles.mainImage) || ''}
                                 style={{ objectFit: 'cover' }}
                                 priority
+                                loading="eager"
                                 unoptimized={isBlobUrl(imageUrl)}
                             />
                         ) : (
@@ -315,6 +317,7 @@ const MainScreenView = memo(({
                                 className={clsx(styles.mainImage) || ''}
                                 style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
                                 priority
+                                loading="eager"
                                 unoptimized={isBlobUrl(imageUrl)}
                             />
                         )
