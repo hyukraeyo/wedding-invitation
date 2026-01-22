@@ -72,3 +72,25 @@ npx shadcn@latest add [component]
 - TypeScript strict 모드 필수
 - ESLint 규칙 준수
 - 빌드 에러 없이 커밋
+
+### 6. 모달/드로어 aria-hidden 충돌 방지 (Built-in)
+
+**문제**: Radix UI/Vaul은 모달이 열릴 때 백그라운드에 `aria-hidden="true"`를 적용하지만, 트리거 버튼이 포커스를 유지하면 접근성 충돌 발생
+
+**해결 (이미 적용됨)**: 공통 컴포넌트(`DialogContent`, `DrawerContent`)에서 열릴 때 자동으로 `onOpenAutoFocus` 처리
+
+```tsx
+// 🔑 공통 컴포넌트에 이미 구현됨 - 별도 처리 불필요
+const handleOpenAutoFocus = (event: Event) => {
+    event.preventDefault();
+    // 내부의 첫 번째 포커스 가능한 요소로 포커스 이동
+    const focusableElements = contentRef.current?.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    if (focusableElements?.length) {
+        (focusableElements[0] as HTMLElement).focus();
+    }
+};
+```
+
+**참고**: `ResponsiveModal`, `ConfirmDialog` 등 상위 컴포넌트는 내부적으로 위 컴포넌트를 사용하므로 자동 적용됨
