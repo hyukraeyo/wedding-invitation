@@ -1,223 +1,224 @@
 @use "../../../styles/variables" as v;
 @use "../../../styles/mixins" as m;
 
-// ?�드코딩???�상 변?�화 (?�요??variables.scss??추�? 고려)
+// 하드코딩된 색상 변수화 (필요시 variables.scss에 추가 고려)
 $color-text-title: #191F28;
 $color-text-desc: #4E5968;
 
 .dialogOverlayWrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 // Dialog Content (The positioning wrapper)
 .dialogContent {
-  max-width: 28rem;
-  max-height: 85vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0;
-  border: none;
-  background: transparent; // Make transparent to allow outer elements
-  box-shadow: none;
-  overflow: visible; // Allow outer footer to be seen
+    max-width: 28rem;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    border: none;
+    background: transparent; // Make transparent to allow outer elements
+    box-shadow: none;
+    overflow: visible; // Allow outer footer to be seen
 }
 
 // The actual visual card (was dialogContent)
 .card {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  border-radius: v.$radius-md; // 16px
-  border: none;
-  box-shadow: none;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: v.$radius-md; // 16px
+    border: none;
+    box-shadow: none;
 }
 
 .drawerContent {
-  border-top-left-radius: v.$radius-md; // 16px
-  border-top-right-radius: v.$radius-md; // 16px
-  padding: 0;
-  border: none;
-  overflow: hidden;
-  box-shadow: none !important;
+    border-top-left-radius: v.$radius-md; // 16px
+    border-top-right-radius: v.$radius-md; // 16px
+    padding: 0;
+    border: none;
+    overflow: hidden;
+    box-shadow: none !important;
 }
 
 .drawerLayout {
-  display: flex;
-  flex-direction: column;
-  max-height: 90dvh;
-  width: 100%;
+    display: flex;
+    flex-direction: column;
+    max-height: 90dvh;
+    width: 100%;
+    min-height: 0;
 }
 
 .mainSection {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background-color: v.$white;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: v.$white;
+    min-height: 0;
 }
 
 .header {
-  text-align: center;
-  padding-top: 1.5rem;
-  padding-bottom: 1.5rem;
-  padding-left: 2rem;
-  padding-right: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-shrink: 0;
-  border-bottom: none;
-
-  // Drawer specific overrides
-  &.drawerHeader {
+    text-align: center;
     padding-top: 1.25rem;
     padding-bottom: 1.25rem;
-  }
+    padding-left: 2rem;
+    padding-right: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    border-bottom: 1px solid v.$zinc-200;
 }
 
 .title {
-  font-size: v.$font-size-xl;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  color: $color-text-title;
+    font-size: v.$font-size-xl;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: $color-text-title;
 }
 
 .description {
-  font-size: v.$font-size-17; // 17px
-  color: $color-text-desc;
-  line-height: 1.625;
-  word-break: keep-all;
-  text-align: center;
-  white-space: pre-wrap;
-}
-
-.descriptionSpacing {
-  margin-bottom: 1rem;
+    font-size: v.$font-size-17; // 17px
+    color: $color-text-desc;
+    line-height: 1.625;
+    word-break: keep-all;
+    text-align: center;
+    white-space: pre-wrap;
 }
 
 .content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  padding: 2.5rem 2rem; // Increased vertical padding for premium feel
-  min-height: 8rem; // Ensure some space for content even if short
-  justify-content: center; // Center content vertically for better look with short text
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding: 1.5rem; // Increased vertical padding for premium feel
+    min-height: 8rem; // Ensure some space for content even if short
+    justify-content: center; // Center content vertically for better look with short text
 
-  // Scrollbar hiding
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+    // Scrollbar hiding
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
+    &::-webkit-scrollbar {
+        display: none;
+    }
 
-  // Prevent scroll chaining
-  overscroll-behavior: contain;
-
-  // Drawer scroll area specific overrides
-  &.drawerScrollArea {
-    overflow: hidden;
-    min-height: 0;
-  }
+    // Prevent scroll chaining
+    overscroll-behavior: contain;
 }
 
 .footer {
-  display: flex;
-  width: 100%;
-  margin-top: auto;
-  border-top: none;
-  flex-shrink: 0;
-  overflow: hidden;
-  padding-bottom: env(safe-area-inset-bottom); // iOS Home Indicator safe area
+    display: flex;
+    width: 100%;
+    margin-top: auto;
+    border-top: none;
+    flex-shrink: 0;
+    overflow: hidden;
+    padding-bottom: env(safe-area-inset-bottom); // iOS Home Indicator safe area
 }
 
 .outerFooter {
-  margin-top: 1rem;
-  text-align: center;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  animation: fadeIn 0.3s ease-out;
+    margin-top: 1rem;
+    text-align: center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    animation: fadeIn 0.3s ease-out;
 }
 
 .outerFooterMobile {
-  padding-bottom: 2rem;
-  background-color: v.$white;
+    padding-bottom: 2rem;
+    background-color: v.$white;
 }
 
 // Button overrides for ResponsiveModal layout
 .footer {
-  width: 100%;
-  padding: 0; // Remove padding to let buttons fill
-  
-  button {
-    flex: 1;
-    border-radius: 0; // Reset radius
-    border: none;
-    margin: 0; // Remove margins
-  }
+    width: 100%;
+    padding: 0; // Remove padding to let buttons fill
+
+    button {
+        flex: 1;
+        border-radius: 0; // Reset radius
+        border: none;
+        margin: 0; // Remove margins
+    }
 }
 
 .cancelButton {
-  border-right: 1px solid rgba(255, 255, 255, 0.1) !important; // Subtle separator if needed
-  font-weight: 500 !important;
-  background-color: v.$zinc-600 !important; // Dark Grey Background
-  color: v.$white !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.1) !important; // Subtle separator if needed
+    font-weight: 500 !important;
+    background-color: v.$zinc-600 !important; // Dark Grey Background
+    color: v.$white !important;
 
-  &:hover {
-    background-color: v.$zinc-700 !important;
-  }
+    &:hover {
+        background-color: v.$zinc-700 !important;
+    }
 
-  &:active {
-    transform: none !important;
-  }
+    &:active {
+        transform: none !important;
+    }
 }
 
 .confirmButton {
-  flex: 1;
-  border-radius: 0 !important;
-  border: none !important;
-  font-weight: 700 !important;
-  background-color: v.$color-primary-hover !important; // Ensure it looks active/yellow
-  color: v.$white !important;
+    flex: 1;
+    border-radius: 0 !important;
+    border: none !important;
+    font-weight: 700 !important;
+    background-color: v.$color-primary-hover !important; // Ensure it looks active/yellow
+    color: v.$white !important;
 
-  &:disabled {
-    opacity: 0.5;
-    background-color: v.$zinc-300 !important;
-    color: v.$zinc-500 !important;
-  }
+    &:disabled {
+        opacity: 0.5;
+        background-color: v.$zinc-300 !important;
+        color: v.$zinc-500 !important;
+    }
 
-  &:active {
-    transform: none !important;
-  }
+    &:active {
+        transform: none !important;
+    }
 }
 
 // Dialog Button Height
 .dialogButtonHeight {
-  height: 3.5rem !important; // h-14 (56px)
-  font-size: v.$font-size-base !important; // 16px
+    height: 3.5rem !important; // h-14 (56px)
+    font-size: v.$font-size-base !important; // 16px
 }
 
 // Drawer Button Height
 .drawerButtonHeight {
-  height: 4rem !important; // h-16 (64px)
-  font-size: v.$font-size-17 !important; // 17px
+    height: 4rem !important; // h-16 (64px)
+    font-size: v.$font-size-17 !important; // 17px
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
+// Scroll Fade Masks
+.maskTop {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 2rem);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 2rem);
+}
+
+.maskBottom {
+    -webkit-mask-image: linear-gradient(to top, transparent 0%, black 2rem);
+    mask-image: linear-gradient(to top, transparent 0%, black 2rem);
+}
+
+.maskBoth {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 2rem, black calc(100% - 2rem), transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 2rem, black calc(100% - 2rem), transparent 100%);
+}

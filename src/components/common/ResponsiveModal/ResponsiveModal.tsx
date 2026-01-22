@@ -46,7 +46,8 @@ export interface ResponsiveModalProps {
     confirmLoading?: boolean | undefined;
     dismissible?: boolean;
     onScroll?: (e: React.UIEvent<HTMLDivElement>) => void;
-    scrollRef?: React.Ref<HTMLDivElement>;
+    scrollRef?: (node: HTMLDivElement | null) => void;
+    useScrollFade?: boolean; // New prop
 }
 
 export const ResponsiveModal = ({
@@ -71,9 +72,64 @@ export const ResponsiveModal = ({
     dismissible = true,
     onScroll,
     scrollRef,
+    useScrollFade = false,
 }: ResponsiveModalProps) => {
     const isDesktop = useMediaQuery("(min-width: 768px)");
     const hasActions = onConfirm || footer;
+
+    // Scroll Fade Logic
+    const internalScrollRef = React.useRef<HTMLDivElement>(null);
+    const [scrollState, setScrollState] = React.useState({
+        isTop: true,
+        isBottom: true,
+    });
+
+    // Merge refs to support both internal logic and external scrollRef prop
+    const setRefs = React.useCallback(
+        (node: HTMLDivElement | null) => {
+            internalScrollRef.current = node;
+            scrollRef?.(node);
+        },
+        [scrollRef]
+    );
+
+    const checkScroll = React.useCallback(() => {
+        if (!useScrollFade) return;
+        const el = internalScrollRef.current;
+        if (!el) return;
+
+        requestAnimationFrame(() => {
+            const { scrollTop, scrollHeight, clientHeight } = el;
+            const isScrollable = scrollHeight > clientHeight;
+
+            setScrollState({
+                isTop: scrollTop <= 0,
+                isBottom: !isScrollable || Math.ceil(scrollTop + clientHeight) >= scrollHeight
+            });
+        });
+    }, [useScrollFade]);
+
+    React.useEffect(() => {
+        if (open && useScrollFade) {
+            const timer = setTimeout(checkScroll, 0); // Check initial state after render
+            return () => clearTimeout(timer);
+        }
+        return undefined;
+    }, [open, useScrollFade, children, checkScroll]);
+
+    // Handle internal scroll event + external onScroll
+    const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
+        if (useScrollFade) checkScroll();
+        onScroll?.(e);
+    };
+
+    const scrollMaskClass = useScrollFade
+        ? cn(
+            !scrollState.isTop && !scrollState.isBottom && styles.maskBoth,
+            !scrollState.isTop && scrollState.isBottom && styles.maskTop,
+            scrollState.isTop && !scrollState.isBottom && styles.maskBottom
+        )
+        : "";
 
     const internalOnOpenChange = (newOpen: boolean) => {
         if (!dismissible && !newOpen) return;
@@ -86,13 +142,13 @@ export const ResponsiveModal = ({
         onOpenChange?.(false);
     };
 
-    const [isMounted, setIsMounted] = React.useState(false);
+    const canUseDOM = React.useSyncExternalStore(
+        () => () => {},
+        () => true,
+        () => false
+    );
 
-    React.useEffect(() => {
-        setIsMounted(true);
-    }, []);
-
-    if (!isMounted) {
+    if (!canUseDOM) {
         return null;
     }
 
@@ -115,9 +171,9 @@ export const ResponsiveModal = ({
                             </DialogHeader>
 
                             <div
-                                ref={scrollRef}
-                                className={cn(styles.content, contentClassName)}
-                                onScroll={onScroll}
+                                ref={setRefs}
+                                className={cn(styles.content, contentClassName, scrollMaskClass)}
+                                onScroll={handleScroll}
                             >
                                 {description ? (
                                     <DialogDescription className={styles.description}>
@@ -189,7 +245,7 @@ export const ResponsiveModal = ({
                             </DrawerTitle>
                         </DrawerHeader>
 
-                        <div className={cn(styles.content, styles.drawerScrollArea, contentClassName)}>
+                        <div className={cn(styles.content, styles.drawerScrollArea, contentClassName, scrollMaskClass)}>
                             {description ? (
                                 <DrawerDescription className={cn(styles.description, styles.descriptionSpacing)}>
                                     {description}
@@ -197,9 +253,9 @@ export const ResponsiveModal = ({
                             ) : null}
                             {children ? (
                                 <DrawerScrollArea
-                                    ref={scrollRef}
+                                    ref={setRefs}
                                     className={className}
-                                    onScroll={onScroll}
+                                    onScroll={handleScroll}
                                 >
                                     {children}
                                 </DrawerScrollArea>

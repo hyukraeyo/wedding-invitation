@@ -30,24 +30,29 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.125rem 1.5rem; // Slightly more compact but still large enough
+  padding: 1rem 1.5rem; // Reduced top/bottom padding since outer container has padding
   text-align: left;
   background-color: transparent;
   border: none;
-  border-bottom: 1px solid v.$zinc-50; // Subtle divider
+  border-bottom: 1px solid v.$zinc-100; // Keep subtle divider
   transition: all v.$transition-fast;
   cursor: pointer;
-  
+
   &:last-child {
     border-bottom: none;
   }
 
   &:active {
-    background-color: v.$control-active-bg;
+    background-color: rgba(v.$color-primary, 0.05);
+    margin-left: -1rem;
+    margin-right: -1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    width: calc(100% + 2rem);
   }
 
   &.selected {
-    background-color: rgba(v.$color-primary, 0.08);
+    // background-color: rgba(v.$color-primary, 0.08); // ResponsiveModal is usually white, just text color change is often enough or minimal bg
   }
 }
 
@@ -56,7 +61,7 @@
   letter-spacing: -0.01em;
   color: v.$zinc-700;
   transition: all v.$transition-fast;
-  
+
   &.selected {
     font-weight: 600;
     color: v.$color-primary;
@@ -73,25 +78,17 @@
   width: 100%;
 }
 
-.drawerTitle {
-  text-align: left;
-  font-size: v.$font-size-base;
-  font-weight: 700;
-  color: rgba(v.$color-foreground, 0.9);
-}
-
-.drawerHeader {
-  padding: 1.25rem 1.5rem 1rem;
-  border-bottom: 1px solid v.$zinc-100;
-  margin-bottom: 0.5rem;
-}
-
 .srOnly {
   @include m.visually-hidden;
 }
 
-.scrollArea {
-  padding-left: 0;
-  padding-right: 0;
+// Override ResponsiveModal content padding to be more list-friendly if needed
+.modalContentOverride {
+  padding: 0;
 }
 
+.optionsList {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}

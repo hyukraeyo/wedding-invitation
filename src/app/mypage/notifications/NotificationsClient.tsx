@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { MyPageHeader } from '@/components/mypage/MyPageHeader';
 import { AlertCircle, Bell, CheckCircle2, ChevronRight, Mail, XCircle } from 'lucide-react';
 import styles from './NotificationsPage.module.scss';
 import { parseRejection } from '@/lib/rejection-helpers';
@@ -11,7 +10,6 @@ import { useRouter } from 'next/navigation';
 import { clsx } from 'clsx';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { MENU_TITLES } from '@/constants/navigation';
 import { EmptyState } from '@/components/ui/EmptyState';
 
 interface ProfileData {

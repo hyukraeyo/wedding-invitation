@@ -11,13 +11,11 @@ import type { InvitationSummaryRecord } from '@/lib/invitation-summary';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import type { InvitationData } from '@/store/useInvitationStore';
 import { MyPageContent } from '@/components/mypage/MyPageContent';
-import { MyPageHeader } from '@/components/mypage/MyPageHeader';
 import { MyPageLayout } from '@/components/mypage/MyPageLayout';
 import { parseRejection } from '@/lib/rejection-helpers';
 // import { signOut } from 'next-auth/react';
 
 import { useToast } from '@/hooks/use-toast';
-import { MENU_TITLES } from '@/constants/navigation';
 import {
     Banana,
     Plus,
@@ -100,8 +98,6 @@ export default function MyPageClient({
 
     const reset = useInvitationStore(state => state.reset);
     const { toast } = useToast();
-
-
 
     // Check for unread notifications (rejections or approvals) on load
     useEffect(() => {

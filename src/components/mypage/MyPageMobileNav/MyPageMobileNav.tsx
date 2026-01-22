@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import {
     FileText,
     ClipboardList,
@@ -33,7 +33,6 @@ export function MyPageMobileNav({
     notificationCount = 0,
 }: MyPageMobileNavProps) {
     const pathname = usePathname();
-    const router = useRouter();
     const [isMoreOpen, setIsMoreOpen] = useState(false);
     const [isEventModalOpen, setIsEventModalOpen] = useState(false);
 

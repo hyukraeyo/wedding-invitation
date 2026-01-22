@@ -11,15 +11,7 @@ import {
 import { Label } from '@/components/ui/Label';
 import { cn } from '@/lib/utils';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import {
-    Drawer,
-    DrawerContent,
-    DrawerHeader,
-    DrawerTitle,
-    DrawerDescription,
-    DrawerScrollArea,
-    DrawerTrigger,
-} from '@/components/ui/Drawer';
+import { ResponsiveModal } from '@/components/common/ResponsiveModal/ResponsiveModal';
 import { ChevronDown, Check } from 'lucide-react';
 import styles from './ResponsiveSelect.module.scss';
 
@@ -55,6 +47,9 @@ export const ResponsiveSelect = <T extends string | number>({
     const scrollAreaRef = React.useRef<HTMLDivElement>(null);
     const selectedItemRef = React.useRef<HTMLButtonElement>(null);
     const firstItemRef = React.useRef<HTMLButtonElement>(null);
+    const setScrollRef = React.useCallback((node: HTMLDivElement | null) => {
+        scrollAreaRef.current = node;
+    }, []);
 
     const stringValue = String(value);
     const [optimisticValue, setOptimisticValue] = React.useState(stringValue);
@@ -93,6 +88,8 @@ export const ResponsiveSelect = <T extends string | number>({
                     behavior: 'instant'
                 });
             }
+            // If nothing selected, focus first item
+            (selectedItemRef.current ?? firstItemRef.current)?.focus();
         }, 50);
 
         return () => clearTimeout(timer);
@@ -121,8 +118,14 @@ export const ResponsiveSelect = <T extends string | number>({
     return (
         <div className={cn(styles.container, className)}>
             {label ? <Label className={labelClassName}>{label}</Label> : null}
-            <Drawer open={isOpen} onOpenChange={setIsOpen}>
-                <DrawerTrigger asChild>
+            <ResponsiveModal
+                open={isOpen}
+                onOpenChange={setIsOpen}
+                title={modalTitle || label || placeholder || "항목 선택"}
+                description={<span className={styles.srOnly}>항목 목록</span>}
+                scrollRef={setScrollRef}
+                useScrollFade={true}
+                trigger={
                     <button
                         type="button"
                         className={styles.triggerButton}
@@ -132,50 +135,37 @@ export const ResponsiveSelect = <T extends string | number>({
                         </span>
                         <ChevronDown />
                     </button>
-                </DrawerTrigger>
-                <DrawerContent
-                    onOpenAutoFocus={(event) => {
-                        event.preventDefault();
-                        (selectedItemRef.current ?? firstItemRef.current)?.focus();
-                    }}
-                >
-                    <DrawerHeader className={styles.drawerHeader}>
-                        <DrawerTitle className={styles.drawerTitle}>
-                            {modalTitle || label || placeholder || "항목 선택"}
-                        </DrawerTitle>
-                        <DrawerDescription className={styles.srOnly}>
-                            항목 목록
-                        </DrawerDescription>
-                    </DrawerHeader>
-                    <DrawerScrollArea ref={scrollAreaRef} className={styles.scrollArea}>
-                        {options.map((option, idx) => {
-                            const isSelected = stringValue === String(option.value);
-                            return (
-                                <button
-                                    key={String(option.value)}
-                                    ref={isSelected ? selectedItemRef : idx === 0 ? firstItemRef : null}
-                                    type="button"
-                                    onClick={() => handleValueChange(String(option.value))}
-                                    className={cn(
-                                        styles.optionItem,
-                                        isSelected && styles.selected
-                                    )}
-                                >
-                                    <span className={cn(
-                                        styles.optionText,
-                                        isSelected && styles.selected
-                                    )}>
-                                        {option.label}
-                                    </span>
-                                    {isSelected ? (
-                                        <Check className={styles.checkIcon} strokeWidth={3} />
-                                    ) : null}
-                                </button>
-                            );
-                        })}
-                    </DrawerScrollArea>
-                </DrawerContent>
-            </Drawer>
+                }
+                contentClassName={styles.modalContentOverride}
+            >
+                <div className={styles.optionsList}>
+                    {options.map((option, idx) => {
+                        const isSelected = stringValue === String(option.value);
+                        return (
+                            <button
+                                key={String(option.value)}
+                                ref={isSelected ? selectedItemRef : idx === 0 ? firstItemRef : null}
+                                type="button"
+                                onClick={() => handleValueChange(String(option.value))}
+                                className={cn(
+                                    styles.optionItem,
+                                    isSelected && styles.selected
+                                )}
+                            >
+                                <span className={cn(
+                                    styles.optionText,
+                                    isSelected && styles.selected
+                                )}>
+                                    {option.label}
+                                </span>
+                                {isSelected ? (
+                                    <Check className={styles.checkIcon} strokeWidth={3} />
+                                ) : null}
+                            </button>
+                        );
+                    })}
+                </div>
+            </ResponsiveModal>
         </div >
     );
 };

@@ -9,14 +9,7 @@ import { ko } from 'date-fns/locale';
 import { CalendarIcon } from 'lucide-react';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { SelectSingleEventHandler } from 'react-day-picker';
-import {
-    Drawer,
-    DrawerContent,
-    DrawerHeader,
-    DrawerTitle,
-    DrawerDescription,
-    DrawerScrollArea,
-} from '@/components/ui/Drawer';
+import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 import styles from './DatePicker.module.scss';
 
 interface DatePickerProps {
@@ -41,7 +34,7 @@ export function DatePicker({ value, onChange, className, placeholder = "날짜 �
         }
     };
 
-    const calendarWrapperRef = React.useRef<HTMLDivElement>(null);
+
 
     const TriggerButtonContent = (
         <button
@@ -77,39 +70,20 @@ export function DatePicker({ value, onChange, className, placeholder = "날짜 �
     return (
         <>
             {TriggerButtonContent}
-            <Drawer open={isOpen} onOpenChange={setIsOpen}>
-                <DrawerContent
-                    onOpenAutoFocus={(e) => {
-                        // 모바일 Drawer가 열릴 때 포커스를 강제로 내부로 이동시켜
-                        // 백그라운드 요소(Trigger 등)가 포커스를 유지하여 발생하는 aria-hidden 경고 방지
-                        e.preventDefault();
-                        calendarWrapperRef.current?.focus();
-                    }}
-                >
-                    <DrawerHeader className={styles.drawerHeader}>
-                        <DrawerTitle className={styles.drawerTitle}>
-                            날짜를 선택하세요
-                        </DrawerTitle>
-                        <DrawerDescription className={styles.srOnly}>
-                            날짜 선택
-                        </DrawerDescription>
-                    </DrawerHeader>
-                    {/* 포커스 타겟이 될 수 있도록 tabIndex 추가 */}
-                    <DrawerScrollArea
-                        ref={calendarWrapperRef}
-                        className={styles.calendarWrapper}
-                        tabIndex={-1}
-                    >
-                        <Calendar
-                            mode="single"
-                            selected={dateValue}
-                            defaultMonth={dateValue || new Date()}
-                            onSelect={handleSelect}
-                            className={styles.calendar || ""}
-                        />
-                    </DrawerScrollArea>
-                </DrawerContent>
-            </Drawer>
+            <ResponsiveModal
+                open={isOpen}
+                onOpenChange={setIsOpen}
+                title="날짜를 선택하세요"
+                className={styles.calendarWrapper}
+            >
+                <Calendar
+                    mode="single"
+                    selected={dateValue}
+                    defaultMonth={dateValue || new Date()}
+                    onSelect={handleSelect}
+                    className={styles.calendar || ""}
+                />
+            </ResponsiveModal>
         </>
     );
 }

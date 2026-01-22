@@ -10,15 +10,13 @@ import { TextField } from '@/components/common/TextField';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import { ImageUploader } from '@/components/common/ImageUploader';
 import { HeaderAction } from '@/components/common/HeaderAction';
+import { SampleList } from '@/components/ui/SampleList';
 import styles from './ClosingSection.module.scss';
 
-import type { ExampleItem } from '@/components/common/ExampleSelectorModal';
-import type { SectionProps } from '@/types/builder';
+import type { SectionProps, SamplePhraseItem } from '@/types/builder';
 import { CLOSING_SAMPLES } from '@/constants/samples';
 
-const ExampleSelectorModal = dynamic(() => import('@/components/common/ExampleSelectorModal').then(mod => mod.ExampleSelectorModal), {
-    ssr: false
-});
+import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 
 
 
@@ -30,7 +28,7 @@ export default function ClosingSection({ isOpen, value }: SectionProps) {
 
     const updateClosing = (data: Partial<typeof closing>) => setClosing(data);
 
-    const handleSelectSample = (sample: ExampleItem) => {
+    const handleSelectSample = (sample: SamplePhraseItem) => {
         updateClosing({
             subtitle: sample.subtitle || '',
             title: sample.title,
@@ -94,13 +92,17 @@ export default function ClosingSection({ isOpen, value }: SectionProps) {
             </AccordionItem>
 
             {/* Sample Phrases Modal */}
-            <ExampleSelectorModal
-                isOpen={isSampleModalOpen}
-                onClose={() => setIsSampleModalOpen(false)}
+            <ResponsiveModal
+                open={isSampleModalOpen}
+                onOpenChange={setIsSampleModalOpen}
                 title="마무리 추천 문구"
-                items={CLOSING_SAMPLES}
-                onSelect={handleSelectSample}
-            />
+                useScrollFade={true}
+            >
+                <SampleList
+                    items={CLOSING_SAMPLES}
+                    onSelect={handleSelectSample}
+                />
+            </ResponsiveModal>
         </>
     );
 }

@@ -2,10 +2,16 @@
 
 import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import type { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import { Toaster } from '@/components/ui/Sonner';
 
-export default function ClientProviders({ children, session }: { children: React.ReactNode, session?: any }) {
+interface ClientProvidersProps {
+    children: React.ReactNode;
+    session?: Session | null;
+}
+
+export default function ClientProviders({ children, session }: ClientProvidersProps) {
     const [queryClient] = useState(() => new QueryClient({
         defaultOptions: {
             queries: {
@@ -16,9 +22,10 @@ export default function ClientProviders({ children, session }: { children: React
             },
         },
     }));
+    const sessionValue = session ?? null;
 
     return (
-        <SessionProvider session={session}>
+        <SessionProvider session={sessionValue}>
             <QueryClientProvider client={queryClient}>
                 {children}
                 <Toaster />

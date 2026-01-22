@@ -40,7 +40,6 @@ Logo.displayName = 'Logo';
 interface HeaderActionsProps {
     user: User | null;
     authLoading: boolean;
-    onSave?: (() => void) | null;
     isLoading: boolean;
     isUploading: boolean;
     notificationCount: number;
@@ -52,7 +51,6 @@ interface HeaderActionsProps {
 const HeaderActions = React.memo(({
     user,
     authLoading,
-    onSave,
     isLoading,
     isUploading,
     notificationCount,
@@ -177,7 +175,6 @@ export default function Header() {
             <HeaderActions
                 user={user}
                 authLoading={authLoading}
-                onSave={onSave}
                 isLoading={isLoading}
                 isUploading={isUploading}
                 notificationCount={notificationCount}

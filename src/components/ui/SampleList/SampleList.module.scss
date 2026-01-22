@@ -1,0 +1,59 @@
+@use "../../../styles/variables" as v;
+
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
+.card {
+    border: 1px solid v.$zinc-200;
+    border-radius: v.$radius-md;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    background: white;
+    width: 100%;
+
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            border-color: v.$primary-500;
+            background-color: v.$primary-100;
+        }
+    }
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.badge {
+    font-size: 11px;
+    font-weight: bold;
+    color: v.$primary-700;
+    background-color: v.$primary-100;
+    padding: 0.125rem 0.5rem;
+    border-radius: v.$radius-md;
+}
+
+.title {
+    font-size: v.$font-size-sm;
+    font-weight: bold;
+    color: v.$zinc-900;
+}
+
+.content {
+    font-size: v.$font-size-2xs;
+    color: v.$zinc-600;
+    line-height: 1.6;
+    white-space: pre-wrap;
+
+    p {
+        margin: 0;
+    }
+}

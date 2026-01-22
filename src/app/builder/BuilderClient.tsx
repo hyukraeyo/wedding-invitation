@@ -45,7 +45,11 @@ export function BuilderClient() {
     const [isSaving, setIsSaving] = useState(false);
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [isReady, setIsReady] = useState(false);
-    const [isMounted, setIsMounted] = useState(false);
+    const canUseDOM = React.useSyncExternalStore(
+        () => () => {},
+        () => true,
+        () => false
+    );
     const { user, isProfileComplete, profileLoading, isAdmin } = useAuth();
     const { editingSection, reset } = useInvitationStore(useShallow((state) => ({
         editingSection: state.editingSection,
@@ -58,7 +62,6 @@ export function BuilderClient() {
     const initRef = useRef(false);
 
     useEffect(() => {
-        setIsMounted(true);
         if (initRef.current) return;
         initRef.current = true;
         if (isEditMode) {
@@ -153,7 +156,7 @@ export function BuilderClient() {
     }, [isSaving, setIsLoading]);
 
     // Floating Button with Portal to body to avoid stacking context issues
-    const floatingButton = isMounted ? createPortal(
+    const floatingButton = canUseDOM ? createPortal(
         <button
             className={clsx(styles.floatingButton, isPreviewOpen && styles.previewOpen)}
             onClick={() => setIsPreviewOpen(!isPreviewOpen)}

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from 'react';
-import { MyPageHeader } from '@/components/mypage/MyPageHeader';
 import { MyPageContent } from '@/components/mypage/MyPageContent';
 import { PhoneField } from '@/components/common/PhoneField';
 import { Button } from '@/components/ui/Button';
@@ -10,7 +9,6 @@ import { Banana, User, Mail, Phone } from 'lucide-react';
 import { clsx } from 'clsx';
 import { profileService } from '@/services/profileService';
 import { useToast } from '@/hooks/use-toast';
-import { MENU_TITLES } from '@/constants/navigation';
 import { useRouter } from 'next/navigation';
 
 interface ProfileData {
@@ -54,8 +52,6 @@ export default function AccountPageClient({
             toast({ variant: 'destructive', description: '저장에 실패했습니다.' });
         }
     };
-
-
 
     return (
         <MyPageContent className={styles.accountList}>

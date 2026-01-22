@@ -7,11 +7,10 @@ const RichTextEditor = dynamic(() => import('@/components/common/RichTextEditor'
     loading: () => <div style={{ height: '160px', width: '100%', backgroundColor: 'rgba(0,0,0,0.03)', borderRadius: '8px', animation: 'pulse 2s infinite' }} />
 });
 
-const ExampleSelectorModal = dynamic(() => import('@/components/common/ExampleSelectorModal').then(mod => mod.ExampleSelectorModal), {
-    ssr: false
-});
+import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 
 import { InfoMessage } from '@/components/ui/InfoMessage';
+import { SampleList } from '@/components/ui/SampleList';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '@/components/common/AccordionItem';
 import { TextField } from '@/components/common/TextField';
@@ -23,8 +22,6 @@ import styles from './GreetingSection.module.scss';
 import { useShallow } from 'zustand/react/shallow';
 import type { SectionProps, SamplePhraseItem } from '@/types/builder';
 import { GREETING_SAMPLES } from '@/constants/samples';
-
-
 
 export default function GreetingSection({ isOpen, value }: SectionProps) {
     const {
@@ -191,13 +188,17 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
             </AccordionItem>
 
             {/* Sample Phrases Modal */}
-            <ExampleSelectorModal
-                isOpen={isSampleModalOpen}
-                onClose={() => setIsSampleModalOpen(false)}
+            <ResponsiveModal
+                open={isSampleModalOpen}
+                onOpenChange={setIsSampleModalOpen}
                 title="인사말 추천 문구"
-                items={GREETING_SAMPLES}
-                onSelect={handleSelectSample}
-            />
+                useScrollFade={true}
+            >
+                <SampleList
+                    items={GREETING_SAMPLES}
+                    onSelect={handleSelectSample}
+                />
+            </ResponsiveModal>
         </>
     );
 }

@@ -11,20 +11,18 @@ import { InfoMessage } from '@/components/ui/InfoMessage';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import { ImageUploader } from '@/components/common/ImageUploader';
 import { HeaderAction } from '@/components/common/HeaderAction';
+import { SampleList } from '@/components/ui/SampleList';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 import styles from './KakaoShareSection.module.scss';
 import { KAKAO_SHARE_SAMPLES } from '@/constants/samples';
-import type { ExampleItem } from '@/components/common/ExampleSelectorModal';
-import type { SectionProps } from '@/types/builder';
+import type { SectionProps, SamplePhraseItem } from '@/types/builder';
 
 const ResponsiveModal = dynamic(() => import('@/components/common/ResponsiveModal').then(mod => mod.ResponsiveModal), {
     ssr: false
 });
 
-const ExampleSelectorModal = dynamic(() => import('@/components/common/ExampleSelectorModal').then(mod => mod.ExampleSelectorModal), {
-    ssr: false
-});
+
 
 export default function KakaoShareSection({ isOpen, value }: SectionProps) {
     const kakao = useInvitationStore(useShallow(state => state.kakaoShare));
@@ -32,7 +30,7 @@ export default function KakaoShareSection({ isOpen, value }: SectionProps) {
     const [previewOpen, setPreviewOpen] = useState(false);
     const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
 
-    const handleSelectSample = (sample: ExampleItem) => {
+    const handleSelectSample = (sample: SamplePhraseItem) => {
         setKakao({
             title: sample.title,
             description: sample.content // Map content to description
@@ -179,13 +177,19 @@ export default function KakaoShareSection({ isOpen, value }: SectionProps) {
             </AccordionItem>
 
             {/* Sample Phrases Modal */}
-            <ExampleSelectorModal
-                isOpen={isSampleModalOpen}
-                onClose={() => setIsSampleModalOpen(false)}
+            <ResponsiveModal
+                open={isSampleModalOpen}
+                onOpenChange={setIsSampleModalOpen}
                 title="카카오 공유 추천 문구"
-                items={KAKAO_SHARE_SAMPLES}
-                onSelect={handleSelectSample}
-            />
+                useScrollFade={true}
+            >
+                <div>
+                    <SampleList
+                        items={KAKAO_SHARE_SAMPLES}
+                        onSelect={handleSelectSample}
+                    />
+                </div>
+            </ResponsiveModal>
         </>
     );
 }

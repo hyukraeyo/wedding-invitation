@@ -5,14 +5,12 @@ import { Home, Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '@/components/common/AccordionItem';
 import { HeaderAction } from '@/components/common/HeaderAction';
-import type { ExampleItem } from '@/components/common/ExampleSelectorModal';
-import type { SectionProps } from '@/types/builder';
+import { SampleList } from '@/components/ui/SampleList';
+import type { SectionProps, SamplePhraseItem } from '@/types/builder';
 import { MAIN_TITLE_SAMPLES } from '@/constants/samples';
 import styles from './MainScreenSection.module.scss';
 
-const ExampleSelectorModal = dynamic(() => import('@/components/common/ExampleSelectorModal').then(mod => mod.ExampleSelectorModal), {
-    ssr: false
-});
+import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 
 const MainScreenSectionContent = dynamic(() => import('./MainScreenSectionContent'), {
     loading: () => (
@@ -30,7 +28,7 @@ export default function MainScreenSection({ isOpen, value }: SectionProps) {
 
 
 
-    const handleSelectSample = (sample: ExampleItem) => {
+    const handleSelectSample = (sample: SamplePhraseItem) => {
         setMainScreen({ title: sample.title });
         setIsSampleModalOpen(false);
     };
@@ -55,13 +53,17 @@ export default function MainScreenSection({ isOpen, value }: SectionProps) {
             </AccordionItem>
 
             {/* Sample Titles Modal */}
-            <ExampleSelectorModal
-                isOpen={isSampleModalOpen}
-                onClose={() => setIsSampleModalOpen(false)}
+            <ResponsiveModal
+                open={isSampleModalOpen}
+                onOpenChange={setIsSampleModalOpen}
                 title="추천 제목 문구"
-                items={MAIN_TITLE_SAMPLES}
-                onSelect={handleSelectSample}
-            />
+                useScrollFade={true}
+            >
+                <SampleList
+                    items={MAIN_TITLE_SAMPLES}
+                    onSelect={handleSelectSample}
+                />
+            </ResponsiveModal>
         </>
     );
 }

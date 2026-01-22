@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { createPortal } from 'react-dom';
 import { Banana } from 'lucide-react';
 import styles from './LoadingSpinner.module.scss';
@@ -9,11 +9,11 @@ interface LoadingSpinnerProps {
 }
 
 export default function LoadingSpinner({ variant = 'fixed', className }: LoadingSpinnerProps) {
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
+    const canUseDOM = React.useSyncExternalStore(
+        () => () => {},
+        () => true,
+        () => false
+    );
 
     const containerClass = variant === 'fixed' ? styles.fixed : styles.full;
 
@@ -33,7 +33,7 @@ export default function LoadingSpinner({ variant = 'fixed', className }: Loading
     );
 
     if (variant === 'fixed') {
-        if (!mounted) return null;
+        if (!canUseDOM) return null;
         return createPortal(content, document.body);
     }
 
