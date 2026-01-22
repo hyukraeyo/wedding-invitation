@@ -12,7 +12,8 @@ import {
     Share2,
     MessageCircle,
     Send,
-    XCircle
+    XCircle,
+    Calendar,
 } from 'lucide-react';
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
@@ -240,6 +241,10 @@ const InvitationCard = React.memo(({
                                             <Trash2 size={16} className={styles.menuIcon} /> 삭제하기
                                         </DropdownMenuItem>
                                     )}
+                                    <DropdownMenuItem className={styles.dateMenuItem} disabled>
+                                        <Calendar size={14} className={styles.menuIcon} />
+                                        <span className={styles.dateLabel}>생성일 {formattedDate}</span>
+                                    </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </div>
@@ -290,9 +295,6 @@ const InvitationCard = React.memo(({
                         )}
                     </div>
                 </div>
-            </div>
-            <div className={styles.dateText}>
-                생성일 {formattedDate}
             </div>
 
             {/* Rejection Reason Modal with Re-apply Option */}

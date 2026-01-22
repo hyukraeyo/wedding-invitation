@@ -12,7 +12,7 @@ export default async function AccountPage() {
     const session = await auth();
 
     if (!session?.user) {
-        redirect('/login');
+        redirect('/login?returnTo=/mypage/account');
     }
 
     const supabase = await createSupabaseServerClient(session);

@@ -228,6 +228,20 @@
     margin-right: 0.5rem;
 }
 
+.dateMenuItem {
+    margin-top: 0.4rem;
+    padding-top: 0.4rem !important;
+    border-top: 1px solid v.$zinc-100;
+    opacity: 1 !important;
+    cursor: default !important;
+}
+
+.dateLabel {
+    font-size: v.$font-size-3xs;
+    font-weight: 500;
+    color: v.$zinc-400;
+}
+
 // ...
 
 .rejectionMessage {

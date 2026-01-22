@@ -13,7 +13,7 @@ import styles from './BuilderPage.module.scss';
 import { clsx } from 'clsx';
 import { Smartphone, X } from 'lucide-react';
 import { Sheet, SheetContent, SheetTitle, SheetHeader, SheetDescription } from '@/components/ui/Sheet';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useShallow } from 'zustand/react/shallow';
 import EditorForm from '@/components/common/EditorForm';
 import { useScrollLock } from '@/hooks/use-scroll-lock';
@@ -54,9 +54,15 @@ export function BuilderClient() {
     })));
     const router = useRouter();
     const searchParams = useSearchParams();
+    const pathname = usePathname();
     const isEditMode = searchParams.get('mode') === 'edit';
     const profileLockRef = useRef(false);
     const initRef = useRef(false);
+    const getLoginUrl = useCallback(() => {
+        const search = searchParams.toString();
+        const returnTo = `${pathname}${search ? `?${search}` : ''}`;
+        return `/login?returnTo=${encodeURIComponent(returnTo)}`;
+    }, [pathname, searchParams]);
 
     useEffect(() => {
         if (initRef.current) return;
@@ -77,13 +83,13 @@ export function BuilderClient() {
 
     useEffect(() => {
         if (user && !profileLoading && !isProfileComplete && !profileLockRef.current) {
-            router.replace('/login');
+            router.replace(getLoginUrl());
         }
-    }, [user, profileLoading, isProfileComplete, router]);
+    }, [user, profileLoading, isProfileComplete, router, getLoginUrl]);
 
     const handleLogin = useCallback(() => {
-        router.push('/login');
-    }, [router]);
+        router.push(getLoginUrl());
+    }, [router, getLoginUrl]);
 
     // use-latest or ref for event handlers used in async logic
     const handleSaveRef = useRef<(() => Promise<void>) | null>(null);

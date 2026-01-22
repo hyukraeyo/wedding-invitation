@@ -24,7 +24,7 @@ export default async function MyPage() {
     const user = session?.user ?? null;
 
     if (!user) {
-        redirect('/login');
+        redirect('/login?returnTo=/mypage');
     }
 
     return <MyPageDataFetcher userId={user.id} session={session} />;

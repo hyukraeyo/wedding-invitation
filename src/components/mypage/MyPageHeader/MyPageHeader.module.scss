@@ -8,11 +8,9 @@
     margin-bottom: 1.5rem;
     flex-wrap: wrap;
     gap: 1rem;
-    padding: 1.5rem 1.25rem 0; // Added horizontal padding and top margin for mobile
 
     @include m.desktop {
         margin-bottom: 2rem;
-        padding: 0; // Reset padding for desktop as it's handled by MyPageLayout
     }
 }
 

@@ -23,6 +23,8 @@
 
   &.hidden {
     transform: translateY(-100%);
+    visibility: hidden;
+    pointer-events: none;
   }
 }
 

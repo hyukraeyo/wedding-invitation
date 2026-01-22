@@ -2,6 +2,7 @@
 
 import React, { memo, useMemo, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import { Banana } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import type { InvitationData } from '@/store/useInvitationStore';
@@ -316,6 +317,7 @@ const InvitationCanvasContent = memo(({
         className={clsx(
           styles.scrollArea,
           !isReady && styles.hidden,
+          !isApproved && !isPreviewMode && !hideWatermark && styles.hasNotice,
           theme.pattern === 'flower-sm' ? 'pattern-flower-sm' :
             theme.pattern === 'flower-lg' ? 'pattern-flower-lg' : ''
         )}
@@ -447,14 +449,26 @@ const InvitationCanvasContent = memo(({
 
         {/* Footer Padding */}
         <div className={styles.footerPadding}>
-          <div className={styles.copyright}>COPYRIGHT © 2026 ANTIGRAVITY</div>
+          <div className={styles.copyright}>COPYRIGHT © 2026 BANANA WEDDING</div>
           <div>ALL RIGHTS RESERVED</div>
         </div>
       </div>
 
-      {/* Watermark for unapproved live pages */}
+      {/* Watermark and Notice for unapproved live pages */}
       {!isApproved && !isPreviewMode && !hideWatermark ? (
-        <div className={styles.watermark} />
+        <>
+          <div className={styles.freeNotice}>
+            <div className={styles.marqueeInner}>
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className={styles.marqueeItem}>
+                  <Banana size={16} strokeWidth={2.5} />
+                  <span>BANANA WEDDING PREMIUM • 워터마크 없는 정식 버전을 위해 승인을 요청해 주세요 • Special Day with Banana</span>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className={styles.watermark} />
+        </>
       ) : null}
 
       {/* Portal Root for Modals (to keep them inside the mockup) */}

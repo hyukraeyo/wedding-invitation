@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/Button';
 import { signIn } from 'next-auth/react';
 import styles from './LoginPage.module.scss';
@@ -21,19 +21,21 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
  */
 export default function LoginPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const callbackUrl = searchParams.get('callbackUrl') || searchParams.get('returnTo') || '/builder';
     const { user, profile, isProfileComplete, loading: authLoading, profileLoading, refreshProfile, signOut } = useAuth();
     const { toast } = useToast();
     const [loadingProvider, setLoadingProvider] = useState<'kakao' | 'naver' | null>(null);
 
     useEffect(() => {
         if (!authLoading && user && isProfileComplete) {
-            router.replace('/builder');
+            router.replace(callbackUrl);
         }
-    }, [user, authLoading, isProfileComplete, router]);
+    }, [user, authLoading, isProfileComplete, router, callbackUrl]);
 
     const handleOAuthLogin = useCallback(async (provider: 'kakao' | 'naver') => {
         setLoadingProvider(provider);
-        const result = await signIn(provider, { callbackUrl: "/builder", redirect: false });
+        const result = await signIn(provider, { callbackUrl, redirect: false });
         if (result?.error) {
             toast({ variant: 'destructive', description: result.error });
             setLoadingProvider(null);
@@ -42,7 +44,7 @@ export default function LoginPage() {
         if (result?.url) {
             window.location.href = result.url;
         }
-    }, [toast]);
+    }, [toast, callbackUrl]);
 
     // 로딩 중일 때는 빈 화면 대신 로딩 표시
     if (authLoading) {
@@ -65,7 +67,7 @@ export default function LoginPage() {
                     defaultName={profile?.full_name ?? user.name ?? ''}
                     onComplete={async () => {
                         await refreshProfile();
-                        router.replace('/builder');
+                        router.replace(callbackUrl);
                     }}
                     onLogout={async () => {
                         await signOut();

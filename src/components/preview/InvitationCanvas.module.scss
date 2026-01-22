@@ -1,4 +1,4 @@
-@use "../../styles/variables" as *;
+@use "../../styles/variables" as v;
 @use "../../styles/mixins" as m;
 
 .canvasWrapper {
@@ -10,7 +10,7 @@
     overflow: hidden;
 
     @media (min-width: 768px) {
-        max-width: $max-mobile;
+        max-width: v.$max-mobile;
         margin-inline: auto;
     }
 }
@@ -24,6 +24,11 @@
     overflow-x: hidden;
     @include m.scrollbar-hide;
     transition: background-color 0.5s ease, opacity 0.2s ease;
+    padding-top: 0;
+
+    &.hasNotice {
+        padding-top: 36px;
+    }
 
     &.hidden {
         opacity: 0;
@@ -59,20 +64,77 @@
 
 .watermark {
     position: absolute;
-    inset: -50%; // Extend significantly to cover all corners
+    inset: -50%;
     width: 200%;
     height: 200%;
     pointer-events: none;
-    z-index: 9999;
-
-    // Optimized approach: SVG Background Pattern
-    // This creates an infinite repeating grid without DOM overhead
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23000' fill-opacity='0.1' font-weight='900' font-family='sans-serif' font-size='44' letter-spacing='4'%3EBANANA WEDDING PREVIEW%3C/text%3E%3C/svg%3E");
+    z-index: 9998;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='250'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23FBC02D' fill-opacity='0.12' font-weight='900' font-family='sans-serif' font-size='24' letter-spacing='2'%3EBANANA WEDDING%3C/text%3E%3C/svg%3E");
     background-repeat: repeat;
     background-position: center;
-
     transform: rotate(-30deg);
-
-    // Ensure it covers content nicely
     mix-blend-mode: multiply;
+}
+
+.freeNotice {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: v.$max-mobile;
+    height: 36px;
+    background-color: rgba(251, 192, 45, 0.98); // Banana Yellow
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    z-index: 10000;
+    pointer-events: none;
+
+    .marqueeInner {
+        display: flex;
+        white-space: nowrap;
+        animation: marquee 35s linear infinite;
+        padding-left: 0;
+    }
+
+    .marqueeItem {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding-right: 48px;
+
+        svg {
+            color: v.$zinc-900;
+        }
+
+        span {
+            font-size: 13px;
+            font-weight: 700;
+            color: v.$zinc-900;
+            letter-spacing: -0.02em;
+        }
+    }
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translate(-50%, -100%);
+    }
+
+    to {
+        transform: translate(-50%, 0);
+    }
 }

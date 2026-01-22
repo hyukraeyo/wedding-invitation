@@ -1,21 +1,20 @@
-import { NextResponse } from 'next/server';
 import { auth } from '@/auth-edge';
+import { NextResponse } from 'next/server';
 
-export default auth((request) => {
-  const isLoggedIn = !!request.auth;
-  const { pathname } = request.nextUrl;
+export default auth((req) => {
+  const isLoggedIn = !!req.auth;
+  const { pathname, searchParams } = req.nextUrl;
 
-  if (!isLoggedIn && pathname.startsWith('/builder')) {
-    return NextResponse.redirect(new URL('/login', request.nextUrl));
-  }
-
+  // If logged in and on login page, redirect to callbackUrl or builder
   if (isLoggedIn && pathname === '/login') {
-    return NextResponse.redirect(new URL('/builder', request.nextUrl));
+    const callbackUrl = searchParams.get('callbackUrl') || searchParams.get('returnTo') || '/builder';
+    const targetUrl = callbackUrl.startsWith('/login') ? '/builder' : callbackUrl;
+    return NextResponse.redirect(new URL(targetUrl, req.nextUrl.origin));
   }
 
   return NextResponse.next();
 });
 
 export const config = {
-  matcher: ['/builder/:path*', '/login'],
+  matcher: ['/builder/:path*', '/mypage', '/mypage/:path*', '/login'],
 };

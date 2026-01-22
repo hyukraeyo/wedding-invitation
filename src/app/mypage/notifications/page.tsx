@@ -17,7 +17,7 @@ export default async function NotificationsPage() {
     const user = session?.user ?? null;
 
     if (!user) {
-        redirect('/login');
+        redirect('/login?returnTo=/mypage/notifications');
     }
 
     const supabase = await createSupabaseServerClient(session);

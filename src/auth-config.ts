@@ -127,7 +127,20 @@ export const authConfig = {
             },
         }),
     ],
+    pages: {
+        signIn: '/login',
+    },
     callbacks: {
+        authorized({ auth, request: { nextUrl } }) {
+            const isLoggedIn = !!auth?.user;
+            const isProtected = nextUrl.pathname.startsWith('/builder') || nextUrl.pathname.startsWith('/mypage');
+
+            if (isProtected) {
+                if (isLoggedIn) return true;
+                return false; // Triggers redirect to pages.signIn
+            }
+            return true;
+        },
         async signIn({ user, account, profile }) {
             const provider = account?.provider;
 

@@ -28,7 +28,7 @@ interface MyPageLayoutProps {
  * 🍌 경로별 타이틀 매핑
  */
 const ROUTE_TITLES: Record<string, string> = {
-    '/mypage': MENU_TITLES.DASHBOARD,
+    // '/mypage': MENU_TITLES.DASHBOARD, // Dashboard will handle its own header for toggle actions
     '/mypage/account': MENU_TITLES.ACCOUNT,
     '/mypage/notifications': MENU_TITLES.NOTIFICATIONS,
     '/mypage/requests': MENU_TITLES.REQUESTS,

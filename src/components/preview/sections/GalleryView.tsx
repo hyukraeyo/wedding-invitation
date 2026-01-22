@@ -190,7 +190,6 @@ const GalleryView = memo(({
                                                 alt=""
                                                 fill
                                                 priority={index === 0}
-                                                loading={index === 0 ? 'eager' : 'lazy'}
                                                 sizes={'(max-width: 768px) calc(100vw - 48px), 500px'}
                                                 quality={85}
                                             />
@@ -224,6 +223,7 @@ const GalleryView = memo(({
                                             src={img.url}
                                             alt=""
                                             fill
+                                            priority={index === 0}
                                             loading={index < 3 ? 'eager' : 'lazy'}
                                             sizes="(max-width: 768px) calc(100vw - 64px), 50vw"
                                             quality={85}
@@ -247,12 +247,12 @@ const GalleryView = memo(({
                                         className={clsx(styles.thumbItem, index === currentIndex ? styles.active : '') || ''}
                                         style={index === currentIndex ? { '--active-ring-color': accentColor } as React.CSSProperties : {}}
                                     >
-                                        <Image 
-                                            src={img.url} 
-                                            alt="" 
-                                            fill 
+                                        <Image
+                                            src={img.url}
+                                            alt=""
+                                            fill
                                             loading={index < 5 ? 'eager' : 'lazy'}
-                                            sizes={IMAGE_SIZES.galleryThumb} 
+                                            sizes={IMAGE_SIZES.galleryThumb}
                                             quality={75}
                                         />
                                     </div>
@@ -272,12 +272,13 @@ const GalleryView = memo(({
                                 onClick={() => handleImageClick(i)}
                             >
                                 <AspectRatio ratio={1 / 1} className={clsx(styles.fullSize) || ''}>
-                                    <Image 
-                                        src={img.url} 
-                                        alt="" 
-                                        fill 
+                                    <Image
+                                        src={img.url}
+                                        alt=""
+                                        fill
+                                        priority={i === 0}
                                         loading={i < 6 ? 'eager' : 'lazy'}
-                                        sizes={IMAGE_SIZES.galleryGrid} 
+                                        sizes={IMAGE_SIZES.galleryGrid}
                                         quality={85}
                                     />
                                 </AspectRatio>

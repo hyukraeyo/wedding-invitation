@@ -15,6 +15,13 @@ export const metadata: Metadata = {
     },
 };
 
+import { Suspense } from "react";
+import LoadingSpinner from "@/components/common/LoadingSpinner";
+
 export default function Page() {
-    return <LoginPage />;
+    return (
+        <Suspense fallback={<LoadingSpinner />}>
+            <LoginPage />
+        </Suspense>
+    );
 }

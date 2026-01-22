@@ -19,10 +19,21 @@ import { useToast } from '@/hooks/use-toast';
 import {
     Banana,
     Plus,
+    LayoutGrid,
+    GalleryHorizontal,
 } from 'lucide-react';
 import styles from './MyPage.module.scss';
 import { InvitationCard } from '@/components/ui/InvitationCard';
 import { EmptyState } from '@/components/ui/EmptyState';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, Navigation } from 'swiper/modules';
+import { MyPageHeader } from '@/components/mypage/MyPageHeader';
+import { IconButton } from '@/components/ui/IconButton';
+import { MENU_TITLES } from '@/constants/navigation';
+
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 
 const ProfileCompletionModal = dynamic(
     () => import('@/components/auth/ProfileCompletionModal').then(mod => mod.ProfileCompletionModal),
@@ -70,6 +81,21 @@ export default function MyPageClient({
     const router = useRouter();
     const [invitations, setInvitations] = useState<InvitationSummaryRecord[]>(initialInvitations);
     const [rejectedRequests] = useState<ApprovalRequestSummary[]>(initialRejectedRequests);
+    const [viewMode, setViewMode] = useState<'grid' | 'swiper'>('grid');
+
+    // Persistence: Load view mode from localStorage on mount
+    useEffect(() => {
+        const savedMode = localStorage.getItem('mypage-view-mode') as 'grid' | 'swiper';
+        if (savedMode && (savedMode === 'grid' || savedMode === 'swiper')) {
+            setViewMode(savedMode);
+        }
+    }, []);
+
+    // Persistence: Save view mode to localStorage when it changes
+    const handleViewModeChange = useCallback((mode: 'grid' | 'swiper') => {
+        setViewMode(mode);
+        localStorage.setItem('mypage-view-mode', mode);
+    }, []);
 
     const [actionLoading, setActionLoading] = useState<string | null>(null);
 
@@ -434,7 +460,7 @@ export default function MyPageClient({
                     </div>
                     <h2 className={styles.authTitle}>로그인이 필요합니다</h2>
                     <p className={styles.authDescription}>저장된 청첩장을 보려면 먼저 로그인을 해주세요.</p>
-                    <Link href="/login" className={styles.authButton}>
+                    <Link href="/login?returnTo=/mypage" className={styles.authButton}>
                         로그인하기
                     </Link>
                 </div>
@@ -462,44 +488,118 @@ export default function MyPageClient({
                     }}
                 />
             ) : (
-                <div className={styles.cardGrid}>
-                    {/* Create New Card */}
-                    <div className={styles.createCardWrapper}>
-                        <Link
-                            href="/builder"
-                            className={styles.createCard}
-                            onClick={(e) => {
-                                e.preventDefault();
-                                handleCreateNew();
-                            }}
-                        >
-                            <div className={styles.createIcon}>
-                                <Plus size={28} />
-                            </div>
-                            <span className={styles.createText}>새 청첩장 만들기</span>
-                        </Link>
-                        <div className={styles.createDatePlaceholder} />
-                    </div>
-
-                    {/* Invitation Cards */}
-                    {invitations.map((inv, index) => {
-                        const rejectionData = rejectedRequests.find(req => req.invitation_id === inv.id) || null;
-                        return (
-                            <InvitationCard
-                                key={inv.id}
-                                index={index}
-                                invitation={inv}
-                                isAdmin={isAdmin}
-                                rejectionData={rejectionData}
-                                onEdit={handleEdit}
-                                onDelete={handleDeleteClick}
-                                onRequestApproval={handleRequestApprovalClick}
-                                onCancelRequest={handleCancelRequestClick}
-                                onRevokeApproval={handleAdminRevokeClick}
-                                onRevertToDraft={executeRevertToDraft}
+                <div className={styles.invitationListSection}>
+                    <MyPageHeader
+                        title={MENU_TITLES.DASHBOARD}
+                        actions={
+                            <IconButton
+                                icon={viewMode === 'grid' ? GalleryHorizontal : LayoutGrid}
+                                onClick={() => handleViewModeChange(viewMode === 'grid' ? 'swiper' : 'grid')}
+                                variant="ghost"
+                                size="md"
+                                className={styles.viewToggleButton}
+                                aria-label={viewMode === 'grid' ? '슬라이드 보기' : '그리드 보기'}
                             />
-                        );
-                    })}
+                        }
+                    />
+
+                    {viewMode === 'grid' ? (
+                        <div className={styles.cardGrid}>
+                            {/* Create New Card */}
+                            <div className={styles.createCardWrapper}>
+                                <Link
+                                    href="/builder"
+                                    className={styles.createCard}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        handleCreateNew();
+                                    }}
+                                >
+                                    <div className={styles.createIcon}>
+                                        <Plus size={28} />
+                                    </div>
+                                    <span className={styles.createText}>새 청첩장 만들기</span>
+                                </Link>
+                                <div className={styles.createDatePlaceholder} />
+                            </div>
+
+                            {/* Invitation Cards */}
+                            {invitations.map((inv, index) => {
+                                const rejectionData = rejectedRequests.find(req => req.invitation_id === inv.id) || null;
+                                return (
+                                    <InvitationCard
+                                        key={inv.id}
+                                        index={index}
+                                        invitation={inv}
+                                        isAdmin={isAdmin}
+                                        rejectionData={rejectionData}
+                                        onEdit={handleEdit}
+                                        onDelete={handleDeleteClick}
+                                        onRequestApproval={handleRequestApprovalClick}
+                                        onCancelRequest={handleCancelRequestClick}
+                                        onRevokeApproval={handleAdminRevokeClick}
+                                        onRevertToDraft={executeRevertToDraft}
+                                    />
+                                );
+                            })}
+                        </div>
+                    ) : (
+                        <div className={styles.swiperView}>
+                            <Swiper
+                                modules={[Pagination, Navigation]}
+                                spaceBetween={16}
+                                slidesPerView="auto"
+                                centeredSlides={false}
+                                pagination={{ clickable: true }}
+                                className={styles.dashboardSwiper}
+                                grabCursor={true}
+                            >
+                                {/* Create New Card slide */}
+                                <SwiperSlide className={styles.autoWidthSlide}>
+                                    <div className={styles.swiperCardWrapper}>
+                                        <div className={styles.createCardWrapper}>
+                                            <Link
+                                                href="/builder"
+                                                className={styles.createCard}
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    handleCreateNew();
+                                                }}
+                                            >
+                                                <div className={styles.createIcon}>
+                                                    <Plus size={32} />
+                                                </div>
+                                                <span className={styles.createText}>새 청첩장</span>
+                                            </Link>
+                                            <div className={styles.createDatePlaceholder} />
+                                        </div>
+                                    </div>
+                                </SwiperSlide>
+
+                                {invitations.map((inv, index) => {
+                                    const rejectionData = rejectedRequests.find(req => req.invitation_id === inv.id) || null;
+                                    return (
+                                        <SwiperSlide key={inv.id} className={styles.autoWidthSlide}>
+                                            <div className={styles.swiperCardWrapper}>
+                                                <InvitationCard
+                                                    index={index}
+                                                    invitation={inv}
+                                                    isAdmin={isAdmin}
+                                                    rejectionData={rejectionData}
+                                                    onEdit={handleEdit}
+                                                    onDelete={handleDeleteClick}
+                                                    onRequestApproval={handleRequestApprovalClick}
+                                                    onCancelRequest={handleCancelRequestClick}
+                                                    onRevokeApproval={handleAdminRevokeClick}
+                                                    onRevertToDraft={executeRevertToDraft}
+                                                />
+                                            </div>
+                                        </SwiperSlide>
+                                    );
+                                })}
+                            </Swiper>
+                        </div>
+                    )}
                 </div>
             )}
 

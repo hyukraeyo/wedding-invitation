@@ -29,7 +29,7 @@ export default async function RequestsPage() {
     const user = session?.user ?? null;
 
     if (!user) {
-        redirect('/login');
+        redirect('/login?returnTo=/mypage/requests');
     }
 
     return <RequestsDataLayer session={session} userId={user.id} />;

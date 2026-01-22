@@ -26,19 +26,16 @@
 // ============================================
 .mainContent {
     flex: 1;
-    // On mobile, we remove default padding to allow "full-width" components as requested.
-    // Bottom padding (5rem) is for the mobile navigation bar.
-    padding: 0 0 5rem;
+    padding: 1.25rem;
     max-width: 100%;
     position: relative;
 
     @include m.desktop {
-        padding: 2rem 3rem 3rem;
         max-width: calc(100% - 280px);
+        padding: 2rem;
     }
 }
 
 .childrenWrapper {
     width: 100%;
-    // 필요한 경우 공통 하단 여백 등을 추가
 }

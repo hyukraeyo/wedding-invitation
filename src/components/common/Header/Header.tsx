@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { LogIn, Save, Banana, Bell } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import type { User } from 'next-auth';
 import { IconButton } from '@/components/ui/IconButton';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
@@ -127,8 +127,9 @@ HeaderActions.displayName = 'HeaderActions';
 export default function Header() {
     const router = useRouter();
     const pathname = usePathname();
-    // 메인 페이지('/')에서는 헤더를 숨깁니다.
-    const isVisible = pathname !== '/';
+    const searchParams = useSearchParams();
+    // 메인 페이지('/')와 초대장 보기('/v/'), 미리보기('/preview')에서는 헤더를 숨깁니다.
+    const isVisible = pathname !== '/' && !pathname.startsWith('/v/') && pathname !== '/preview';
     const { user, loading: authLoading } = useAuth();
 
     // Store states
@@ -165,8 +166,10 @@ export default function Header() {
     }, [isUploading, onSave, toast]);
 
     const handleLogin = useCallback(() => {
-        router.push('/login');
-    }, [router]);
+        const search = searchParams.toString();
+        const returnTo = `${pathname}${search ? `?${search}` : ''}`;
+        router.push(`/login?returnTo=${encodeURIComponent(returnTo)}`);
+    }, [router, pathname, searchParams]);
 
     return (
         <header className={cn(styles.header, !isVisible && styles.hidden, "view-transition-header")}>

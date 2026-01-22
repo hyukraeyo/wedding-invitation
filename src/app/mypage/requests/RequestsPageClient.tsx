@@ -292,8 +292,7 @@ export default function RequestsPageClient({
                         confirmText={statusText}
                         description={
                             <>
-                                <strong>{requesterName}</strong>님의 {isRevoked ? "승인을 취소" : "사용 신청을 거절"}합니다.<br />
-                                {statusText} 사유를 입력해주세요. 사용자가 확인할 수 있습니다.
+                                <strong>{requesterName}</strong>님의 {isRevoked ? "승인을 취소" : "사용 신청을 거절"}합니다.
                             </>
                         }
                     />

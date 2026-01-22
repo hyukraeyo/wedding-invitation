@@ -1,7 +1,6 @@
 import { auth } from '@/auth';
 import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { MyPageLayout } from '@/components/mypage/MyPageLayout';
-import { redirect } from 'next/navigation';
 import { Suspense } from 'react';
 import type { Session } from 'next-auth';
 import styles from './layout.module.scss';
@@ -17,9 +16,6 @@ export default async function MyPageLayoutServer({
     children: React.ReactNode;
 }) {
     const session = await auth();
-    if (!session?.user) {
-        redirect('/login');
-    }
 
     // 레이아웃 자체의 블로킹을 최소화하기 위해, 
     // 실제 데이터 패칭이 필요한 MyPageLayout을 별도의 비동기 로직으로 분리하거나 
@@ -34,10 +30,23 @@ export default async function MyPageLayoutServer({
 }
 
 async function MyPageLayoutFetcher({ session, children }: { session: Session | null, children: React.ReactNode }) {
-    const supabase = await createSupabaseServerClient(session);
     const userId = session?.user?.id;
 
-    if (!userId) return null;
+    if (!userId) {
+        return (
+            <MyPageLayout
+                profile={null}
+                isAdmin={false}
+                invitationCount={0}
+                requestCount={0}
+                notificationCount={0}
+            >
+                {children}
+            </MyPageLayout>
+        );
+    }
+
+    const supabase = await createSupabaseServerClient(session);
 
     // 1. 필요한 모든 데이터를 병렬로 패칭 (관리자 권한 확인과 동시에 요청 개수 조회)
     const [profileRes, invitationCountRes, requestCountRes, notificationCountRes] = await Promise.all([

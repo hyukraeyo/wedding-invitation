@@ -8,7 +8,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
     gap: 1.5rem;
-    padding: 0 1.25rem 2rem; // Consistent horizontal padding on mobile
+    padding: 0 0 2rem;
     align-items: start;
 
     @media (max-width: 480px) {
@@ -18,8 +18,66 @@
 
     @include m.desktop {
         gap: 2rem;
-        padding: 0 0 2rem; // Reset padding for desktop
+        padding: 0 0 2rem;
     }
+}
+
+.invitationListSection {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.viewToggleButton {
+    color: v.$zinc-400 !important;
+    transition: all 0.2s ease;
+
+    &:hover {
+        color: v.$color-primary !important;
+        background-color: v.$primary-50 !important;
+    }
+}
+
+
+.swiperView {
+    width: calc(100% + 2.5rem); // parent padding (1.25rem) * 2
+    margin: 0 -1.25rem;
+    overflow: hidden;
+}
+
+.dashboardSwiper {
+    padding: 0.5rem 1.25rem 4rem !important; // Padding on sides to align with content, bottom for pagination
+    overflow: visible !important;
+
+    :global(.swiper-pagination) {
+        bottom: 0.75rem !important;
+    }
+
+    :global(.swiper-pagination-bullet) {
+        background: v.$zinc-300;
+        opacity: 1;
+    }
+
+    :global(.swiper-pagination-bullet-active) {
+        background-color: v.$color-primary !important;
+        width: 16px;
+        border-radius: 4px;
+        transition: width 0.3s ease;
+    }
+}
+
+.autoWidthSlide {
+    width: 320px !important; // Fixed width for slides to make them look like the list
+
+    @media (max-width: 480px) {
+        width: 320px !important;
+    }
+}
+
+.swiperCardWrapper {
+    width: 100%;
+    transition: transform 0.3s v.$ease-ios, opacity 0.3s ease;
 }
 
 // ============================================
