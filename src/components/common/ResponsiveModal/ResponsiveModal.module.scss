@@ -108,8 +108,16 @@ $color-text-desc: #4E5968;
         display: none;
     }
 
-    // Prevent scroll chaining
-    overscroll-behavior: contain;
+    // Drawer scroll area specific overrides (Mobile)
+    &.drawerScrollArea {
+        padding: 0 !important; // Fade Mask를 위해 컨테이너 패딩 제거
+        // overflow-y override 제거됨 -> 부모 스크롤 사용
+    }
+}
+
+.defaultDrawerPadding {
+    padding: 1.5rem; // DrawerChild에 적용할 패딩
+    min-height: 8rem; // Content height
 }
 
 .footer {

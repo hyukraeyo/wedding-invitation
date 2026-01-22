@@ -240,7 +240,11 @@ export const ResponsiveModal = ({
                             </DrawerTitle>
                         </DrawerHeader>
 
-                        <div className={cn(styles.content, styles.drawerScrollArea, contentClassName, scrollMaskClass)}>
+                        <div
+                            ref={setRefs}
+                            className={cn(styles.content, styles.drawerScrollArea, contentClassName, scrollMaskClass)}
+                            onScroll={handleScroll}
+                        >
                             {description ? (
                                 <DrawerDescription className={cn(styles.description, styles.descriptionSpacing)}>
                                     {description}
@@ -248,15 +252,13 @@ export const ResponsiveModal = ({
                             ) : null}
                             {children ? (
                                 <DrawerScrollArea
-                                    ref={setRefs}
-                                    className={className}
-                                    onScroll={handleScroll}
+                                    className={cn(styles.defaultDrawerPadding, className)}
                                     style={{ overflowY: 'visible' }}
                                 >
                                     {children}
                                 </DrawerScrollArea>
                             ) : (
-                                description ? null : null // Placeholder for clarity
+                                description ? null : null
                             )}
                         </div>
                     </div>
