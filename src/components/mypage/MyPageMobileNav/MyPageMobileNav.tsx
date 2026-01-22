@@ -2,16 +2,7 @@
 
 import React, { useState } from 'react';
 import { usePathname } from 'next/navigation';
-import {
-    FileText,
-    ClipboardList,
-    Bell,
-    User,
-    Menu,
-    HelpCircle,
-    LogOut,
-    Sparkles,
-} from 'lucide-react';
+import { ClipboardList, Bell, User, Menu, HelpCircle, LogOut, Sparkles } from 'lucide-react';
 import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
 import { MENU_TITLES } from '@/constants/navigation';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
@@ -50,6 +41,10 @@ export function MyPageMobileNav({
         setIsEventModalOpen(true);
     };
 
+    const handleDrawerNavClick = () => {
+        setIsMoreOpen(false);
+    };
+
     return (
         <>
             <nav className={styles.mobileNav}>
@@ -57,8 +52,8 @@ export function MyPageMobileNav({
                     href="/mypage"
                     className={clsx(styles.navItem, pathname === '/mypage' && styles.active)}
                 >
-                    <FileText className={styles.icon} />
-                    <span>홈</span>
+                    <User className={styles.icon} />
+                    <span>마이페이지</span>
                     {invitationCount > 0 && <span className={styles.badge}>{invitationCount}</span>}
                 </ViewTransitionLink>
 
@@ -82,14 +77,6 @@ export function MyPageMobileNav({
                     {notificationCount > 0 && <span className={styles.badge}>{notificationCount}</span>}
                 </ViewTransitionLink>
 
-                <ViewTransitionLink
-                    href="/mypage/account"
-                    className={clsx(styles.navItem, pathname === '/mypage/account' && styles.active)}
-                >
-                    <User className={styles.icon} />
-                    <span>계정</span>
-                </ViewTransitionLink>
-
                 <button
                     className={clsx(styles.navItem, isMoreOpen && styles.active)}
                     onClick={() => setIsMoreOpen(true)}
@@ -108,6 +95,14 @@ export function MyPageMobileNav({
             >
                 <div className={styles.drawerContent}>
                     <div className={styles.drawerMenu}>
+                        <ViewTransitionLink
+                            href="/mypage/account"
+                            className={styles.drawerItem}
+                            onClick={handleDrawerNavClick}
+                        >
+                            <User size={20} className={styles.drawerIcon} />
+                            <span>계정</span>
+                        </ViewTransitionLink>
                         <button className={styles.drawerItem} onClick={handleEventClick}>
                             <Sparkles size={20} className={styles.drawerIcon} />
                             <span>{MENU_TITLES.EVENTS}</span>

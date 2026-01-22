@@ -68,7 +68,7 @@
 }
 
 .autoWidthSlide {
-    width: 320px !important; // Fixed width for slides to make them look like the list
+    width: min(78vw, 360px) !important; // Match real card size on mobile
 
     @media (max-width: 480px) {
         width: 320px !important;
@@ -264,6 +264,37 @@
     aspect-ratio: 3 / 4.5;
     width: 100%;
     border-radius: v.$radius-md;
+}
+
+.skeletonCardItem {
+    position: relative;
+    border-radius: v.$radius-md;
+    overflow: hidden;
+    aspect-ratio: 3 / 4.5;
+    border: 1px solid v.$zinc-100;
+    background-color: v.$white;
+    box-shadow: v.$shadow-card;
+}
+
+.skeletonOverlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0.75rem;
+}
+
+.skeletonBadge {
+    width: 4.5rem;
+    height: 1.25rem;
+    border-radius: v.$radius-sm;
+}
+
+.skeletonTitle {
+    height: 1.25rem;
+    width: 70%;
+    border-radius: v.$radius-sm;
 }
 
 .skeletonFooter {

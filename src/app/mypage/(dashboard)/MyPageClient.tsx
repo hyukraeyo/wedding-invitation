@@ -83,12 +83,14 @@ export default function MyPageClient({
     const router = useRouter();
     const [invitations, setInvitations] = useState<InvitationSummaryRecord[]>(initialInvitations);
     const [rejectedRequests] = useState<ApprovalRequestSummary[]>(initialRejectedRequests);
-    const [viewMode, setViewMode] = useState<'grid' | 'swiper' | null>(null);
+    const [viewMode, setViewMode] = useState<'grid' | 'swiper'>('swiper');
+    const [isViewModeReady, setIsViewModeReady] = useState(false);
 
     // Persistence: Load view mode from localStorage on mount
     useEffect(() => {
-        const savedMode = localStorage.getItem('mypage-view-mode') as 'grid' | 'swiper';
-        setViewMode(savedMode || 'swiper');
+        const savedMode = localStorage.getItem('mypage-view-mode');
+        setViewMode(savedMode === 'grid' ? 'grid' : 'swiper');
+        setIsViewModeReady(true);
     }, []);
 
     // Persistence: Save view mode to localStorage when it changes
@@ -503,24 +505,50 @@ export default function MyPageClient({
                         }
                     />
 
-                    {viewMode === null ? (
-                        <div className={styles.swiperView}>
-                            <div className={clsx(styles.dashboardSwiper, styles.skeletonSwiper)}>
-                                {[1, 2, 3].map((i) => (
-                                    <div key={i} className={styles.autoWidthSlide}>
-                                        <div className={styles.swiperCardWrapper}>
-                                            <div className={styles.createCardWrapper}>
-                                                <Skeleton className={styles.skeletonCard} />
-                                                <div className={styles.skeletonFooter}>
-                                                    <Skeleton className={styles.skeletonButton} />
-                                                    <Skeleton className={styles.skeletonButton} />
-                                                </div>
+                    {!isViewModeReady ? (
+                        viewMode === 'grid' ? (
+                            <div className={styles.cardGrid}>
+                                {[1, 2, 3, 4].map((i) => (
+                                    <div key={i} className={styles.createCardWrapper}>
+                                        <div className={styles.skeletonCardItem}>
+                                            <Skeleton className={styles.skeletonCard} />
+                                            <div className={styles.skeletonOverlay}>
+                                                <Skeleton className={styles.skeletonBadge} />
+                                                <Skeleton className={styles.skeletonTitle} />
                                             </div>
+                                        </div>
+                                        <div className={styles.skeletonFooter}>
+                                            <Skeleton className={styles.skeletonButton} />
+                                            <Skeleton className={styles.skeletonButton} />
                                         </div>
                                     </div>
                                 ))}
                             </div>
-                        </div>
+                        ) : (
+                            <div className={styles.swiperView}>
+                                <div className={clsx(styles.dashboardSwiper, styles.skeletonSwiper)}>
+                                    {[1, 2, 3].map((i) => (
+                                        <div key={i} className={styles.autoWidthSlide}>
+                                            <div className={styles.swiperCardWrapper}>
+                                                <div className={styles.createCardWrapper}>
+                                                    <div className={styles.skeletonCardItem}>
+                                                        <Skeleton className={styles.skeletonCard} />
+                                                        <div className={styles.skeletonOverlay}>
+                                                            <Skeleton className={styles.skeletonBadge} />
+                                                            <Skeleton className={styles.skeletonTitle} />
+                                                        </div>
+                                                    </div>
+                                                    <div className={styles.skeletonFooter}>
+                                                        <Skeleton className={styles.skeletonButton} />
+                                                        <Skeleton className={styles.skeletonButton} />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )
                     ) : viewMode === 'grid' ? (
                         <div className={styles.cardGrid}>
                             {/* Create New Card */}

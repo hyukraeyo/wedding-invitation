@@ -1,7 +1,12 @@
 @use "../../styles/variables" as v;
+@use "../../styles/mixins" as m;
 
 .fallback {
   min-height: 100vh;
   padding-top: v.$header-height;
   background-color: #f8f9fa;
+
+  @include m.mobile {
+    padding-top: 0;
+  }
 }

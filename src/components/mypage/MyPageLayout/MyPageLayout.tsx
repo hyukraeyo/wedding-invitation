@@ -65,7 +65,11 @@ export function MyPageLayout({
                 />
                 <main className={styles.mainContent}>
                     {/* 공통 헤더: 레이아웃에서 통합 관리 */}
-                    {currentTitle && <MyPageHeader title={currentTitle} />}
+                    {currentTitle && (
+                        <div className={styles.pageHeader}>
+                            <MyPageHeader title={currentTitle} />
+                        </div>
+                    )}
 
                     <div className={styles.childrenWrapper}>
                         {children}

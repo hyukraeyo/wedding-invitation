@@ -17,6 +17,10 @@
   z-index: 50;
   transition: transform v.$transition-400 cubic-bezier(0.16, 1, 0.3, 1); // ease-ios
 
+  @include m.mobile {
+    display: none;
+  }
+
   @include m.desktop {
     padding: 0 1.5rem; // md:px-6
   }

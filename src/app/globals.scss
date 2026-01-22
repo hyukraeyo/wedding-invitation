@@ -76,12 +76,19 @@ body {
 }
 
 /* 3. 애니메이션은 body가 아닌 내부 컨테이너에 적용 */
-#__next,
-main {
+#__next {
   flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 100dvh;
+  position: relative;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
   animation: fadeIn 0.4s var(--ease-ios) both;
   position: relative;
 

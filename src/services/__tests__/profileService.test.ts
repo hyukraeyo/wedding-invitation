@@ -63,8 +63,7 @@ describe('profileService.updateProfile', () => {
         id: 'user-1',
         phone: '01012345678',
         is_profile_complete: true,
-      }),
-      { onConflict: 'id' }
+      })
     );
   });
 });

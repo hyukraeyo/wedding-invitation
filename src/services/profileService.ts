@@ -54,28 +54,39 @@ export const profileService = {
     /**
      * 프로필 업데이트 (없으면 생성)
      */
-    /**
-     * 프로필 업데이트 (API Route 사용)
-     */
     async updateProfile(userId: string, updates: ProfileUpdatePayload): Promise<Profile> {
         try {
-            const response = await fetch('/api/profiles', {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updates),
-            });
+            const supabase = await getBrowserSupabaseClient();
+            
+            // Load current profile to determine if it should remain complete
+            // Using the service's own getProfile method which can be mocked in tests
+            const currentProfile = await this.getProfile(userId);
+            
+            // Determine new values for full_name and phone
+            const fullName = updates.full_name ?? currentProfile?.full_name ?? null;
+            const phone = updates.phone ?? currentProfile?.phone ?? null;
+            
+            // Calculate if profile should be marked as complete
+            const isComplete = !!(fullName && phone);
+            
+            const { data, error } = await supabase
+                .from('profiles')
+                .upsert({
+                    id: userId,
+                    ...updates,
+                    is_profile_complete: isComplete,
+                    updated_at: new Date().toISOString(),
+                })
+                .select()
+                .single();
 
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || '프로필 업데이트 실패');
+            if (error) {
+                throw new Error(error.message);
             }
 
-            const { data } = await response.json();
             return data as Profile;
         } catch (error) {
-            console.error('Error updating profile via API:', error);
+            console.error('Error updating profile:', error);
             throw error;
         }
     },
