@@ -11,6 +11,7 @@ import { signOut } from 'next-auth/react';
 import styles from './MobileNav.module.scss';
 import { clsx } from 'clsx';
 import { useCanUseDom } from '@/hooks/useCanUseDom';
+import { useScrollDirection } from '@/hooks/useScrollDirection';
 
 export interface MobileNavProps {
     isAdmin?: boolean;
@@ -37,6 +38,7 @@ export function MobileNav({
     const [isMoreOpen, setIsMoreOpen] = useState(false);
     const [isEventModalOpen, setIsEventModalOpen] = useState(false);
     const canUseDOM = useCanUseDom();
+    const { isVisible } = useScrollDirection();
 
     const handleLogout = async () => {
         await signOut({ callbackUrl: '/login' });
@@ -56,87 +58,101 @@ export function MobileNav({
         setIsMoreOpen(false);
     };
 
-    const isPreviewMode = Boolean(onPreviewToggle) && isPreviewOpen;
+
+    if (isPreviewOpen) {
+        return null;
+    }
 
     const navContent = (
         <>
-            <nav className={clsx(
-                styles.mobileNav,
-                isPreviewMode && styles.previewMode,
-                onPreviewToggle && styles.hasPreviewAction
-            )}>
-                <ViewTransitionLink
-                    href="/mypage"
-                    className={clsx(
-                        styles.navItem,
-                        pathname === '/mypage' && styles.active,
-                        isPreviewMode && styles.navItemHidden
-                    )}
-                >
-                    <User className={styles.icon} />
-                    {invitationCount > 0 && <span className={styles.badge}>{invitationCount}</span>}
-                </ViewTransitionLink>
-
-                {isAdmin && (
+            {!isPreviewOpen && (
+                <nav className={clsx(
+                    styles.mobileNav,
+                    !isVisible && !isMoreOpen && styles.navHidden
+                )}>
                     <ViewTransitionLink
-                        href="/mypage/requests"
+                        href="/mypage"
                         className={clsx(
                             styles.navItem,
-                            pathname === '/mypage/requests' && styles.active,
-                            isPreviewMode && styles.navItemHidden
+                            pathname === '/mypage' && styles.active
                         )}
                     >
-                        <ClipboardList className={styles.icon} />
-                        {requestCount > 0 && <span className={styles.badge}>{requestCount}</span>}
+                        <User className={styles.icon} />
+                        {invitationCount > 0 && <span className={styles.badge}>{invitationCount}</span>}
                     </ViewTransitionLink>
-                )}
 
-                <ViewTransitionLink
-                    href="/mypage/notifications"
-                    className={clsx(
-                        styles.navItem,
-                        pathname === '/mypage/notifications' && styles.active,
-                        isPreviewMode && styles.navItemHidden
+                    {isAdmin && (
+                        <ViewTransitionLink
+                            href="/mypage/requests"
+                            className={clsx(
+                                styles.navItem,
+                                pathname === '/mypage/requests' && styles.active
+                            )}
+                        >
+                            <ClipboardList className={styles.icon} />
+                            {requestCount > 0 && <span className={styles.badge}>{requestCount}</span>}
+                        </ViewTransitionLink>
                     )}
-                >
-                    <Bell className={styles.icon} />
-                    {notificationCount > 0 && <span className={styles.badge}>{notificationCount}</span>}
-                </ViewTransitionLink>
 
-                {onSave && (
-                    <button
+                    <ViewTransitionLink
+                        href="/mypage/notifications"
                         className={clsx(
                             styles.navItem,
-                            isSaving && styles.disabled,
-                            isPreviewMode && styles.navItemHidden
+                            pathname === '/mypage/notifications' && styles.active
                         )}
-                        onClick={onSave}
-                        disabled={isSaving}
                     >
-                        <Save className={styles.icon} />
-                    </button>
-                )}
+                        <Bell className={styles.icon} />
+                        {notificationCount > 0 && <span className={styles.badge}>{notificationCount}</span>}
+                    </ViewTransitionLink>
 
-                {onPreviewToggle ? (
-                    <button
-                        className={clsx(styles.navItem, styles.previewButton, isPreviewOpen && styles.previewOpen)}
-                        onClick={onPreviewToggle}
-                        aria-label={isPreviewOpen ? 'Close preview' : 'Open preview'}
-                    >
-                        <span className={styles.iconSwap}>
-                            <Eye className={styles.iconEye} />
-                            <X className={styles.iconClose} />
-                        </span>
-                    </button>
-                ) : (
-                    <button
-                        className={clsx(styles.navItem, isMoreOpen && styles.active, isPreviewMode && styles.navItemHidden)}
-                        onClick={() => setIsMoreOpen(true)}
-                    >
-                        <Menu className={styles.icon} />
-                    </button>
-                )}
-            </nav>
+                    {onSave && (
+                        <button
+                            className={clsx(
+                                styles.navItem,
+                                isSaving && styles.disabled
+                            )}
+                            onClick={onSave}
+                            disabled={isSaving}
+                        >
+                            <Save className={styles.icon} />
+                        </button>
+                    )}
+
+                    {onPreviewToggle ? (
+                        <button
+                            className={clsx(styles.navItem, styles.previewButton, isPreviewOpen && styles.previewOpen)}
+                            onClick={onPreviewToggle}
+                            aria-label={isPreviewOpen ? 'Close preview' : 'Open preview'}
+                        >
+                            <span className={styles.iconSwap}>
+                                <Eye className={styles.iconEye} />
+                                <X className={styles.iconClose} />
+                            </span>
+                        </button>
+                    ) : (
+                        <button
+                            className={clsx(styles.navItem, isMoreOpen && styles.active)}
+                            onClick={() => setIsMoreOpen(true)}
+                        >
+                            <Menu className={styles.icon} />
+                        </button>
+                    )}
+                </nav>
+            )}
+
+            {onPreviewToggle && (
+                <button
+                    className={clsx(
+                        styles.floatingPreview,
+                        !isVisible && !isPreviewOpen && styles.fabVisible
+                    )}
+                    onClick={onPreviewToggle}
+                    aria-label="Open preview"
+                >
+                    <Eye className={styles.icon} />
+                </button>
+            )}
+
             {!onPreviewToggle && (
                 <>
                     <ResponsiveModal

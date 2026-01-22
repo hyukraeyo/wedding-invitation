@@ -145,6 +145,53 @@
     }
 }
 
+.floatingPreview {
+    display: none;
+
+    @include m.mobile {
+        display: flex;
+        position: fixed;
+        bottom: 1.125rem;
+        right: 1.625rem;
+        width: 3rem;
+        height: 3rem;
+        background-color: v.$color-primary;
+        color: v.$white;
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.15), 0 0.25rem 0.5rem rgba(v.$color-primary, 0.2);
+        z-index: 105;
+        border: none;
+        transform: translateY(200%);
+        opacity: 0;
+        transition: all 0.4s v.$ease-ios;
+
+        &.fabVisible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        &.previewOpenFab {
+            background-color: v.$zinc-900; // Default to black for "Close" clarity, or keep yellow? 
+            // User screenshot showed yellow, maybe they prefer yellow for consistency.
+            // I'll use zinc-900 but the user can ask to change if they want it yellow.
+            // Wait, I'll use yellow as seen in the screenshot to satisfy "two buttons" issue first.
+            background-color: v.$color-primary; 
+        }
+
+        &:active {
+            transform: scale(0.9);
+        }
+
+        .icon {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: v.$white;
+        }
+    }
+}
+
 /* iPhone Frame Styles */
 .iphoneFrame {
     position: relative;
@@ -338,9 +385,11 @@
     height: 100%;
     width: 100%;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain; // Prevent scroll chaining to parent
     background-color: white;
     position: relative;
-    z-index: 1; // ??? z-index�??�기 버튼(z-index: 99999)???�에 ?�라?????�도�?
+    z-index: 1; // ??? z-index??기 버튼(z-index: 99999)???에 ?라?????도?
 }
 
 .sheetContent {
