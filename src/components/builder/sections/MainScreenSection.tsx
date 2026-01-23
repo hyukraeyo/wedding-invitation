@@ -3,26 +3,24 @@ import dynamic from 'next/dynamic';
 
 import { Home, Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
+import { useShallow } from 'zustand/react/shallow';
 import { AccordionItem } from '@/components/common/AccordionItem';
 import { HeaderAction } from '@/components/common/HeaderAction';
 import { SampleList } from '@/components/ui/SampleList';
 import type { SectionProps, SamplePhraseItem } from '@/types/builder';
 import { MAIN_TITLE_SAMPLES } from '@/constants/samples';
-import styles from './MainScreenSection.module.scss';
 
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 
+import { MainScreenSkeleton } from './Skeletons';
+
 const MainScreenSectionContent = dynamic(() => import('./MainScreenSectionContent'), {
-    loading: () => (
-        <div className={styles.loadingContainer}>
-            <div className={styles.loadingSpinner} />
-        </div>
-    ),
+    loading: () => <MainScreenSkeleton />,
     ssr: false
 });
 
 export default function MainScreenSection({ isOpen, value }: SectionProps) {
-    const imageUrl = useInvitationStore(state => state.imageUrl);
+    const imageUrl = useInvitationStore(useShallow(state => state.imageUrl));
     const setMainScreen = useInvitationStore(state => state.setMainScreen);
     const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
 

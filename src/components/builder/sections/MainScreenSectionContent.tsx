@@ -52,9 +52,9 @@ const STYLE_PRESETS: StylePreset[] = [
 export default function MainScreenSectionContent() {
     const mainScreen = useInvitationStore(useShallow(state => state.mainScreen));
     const setMainScreen = useInvitationStore(state => state.setMainScreen);
-    const imageUrl = useInvitationStore(state => state.imageUrl);
+    const imageUrl = useInvitationStore(useShallow(state => state.imageUrl));
     const setImageUrl = useInvitationStore(state => state.setImageUrl);
-    const imageRatio = useInvitationStore(state => state.imageRatio);
+    const imageRatio = useInvitationStore(useShallow(state => state.imageRatio));
     const setImageRatio = useInvitationStore(state => state.setImageRatio);
     const groom = useInvitationStore(useShallow(state => state.groom));
     const bride = useInvitationStore(useShallow(state => state.bride));

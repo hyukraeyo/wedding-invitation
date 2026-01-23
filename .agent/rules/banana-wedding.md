@@ -94,3 +94,8 @@ const handleOpenAutoFocus = (event: Event) => {
 ```
 
 **참고**: `ResponsiveModal`, `ConfirmDialog` 등 상위 컴포넌트는 내부적으로 위 컴포넌트를 사용하므로 자동 적용됨
+
+### 7. Agent Models & Roles
+- **Sisyphus**: Main Orchestrator (SF Bay Area Engineer Persona)
+- **Frontend UI/UX**: **Gemini 3 Pro** (Visual/Design Specialist)
+- **Oracle**: **GPT-5.2** (Technical Advisor)

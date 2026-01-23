@@ -16,9 +16,9 @@
   @include m.export-css-vars;
 
   /* Font Families */
-  --font-pretendard: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  --font-pretendard: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
   --font-gmarket-sans: "GmarketSansMedium", sans-serif;
-  --font-sans: "Inter", "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
+  --font-sans: "Inter", "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
   --font-serif: "Playfair Display", "Nanum Myeongjo", "Times New Roman", serif;
   --font-gowun-batang: "Gowun Batang", "Nanum Myeongjo", serif;
   --font-gowun-dodum: "Gowun Dodum", "Pretendard", sans-serif;
@@ -40,6 +40,11 @@
   --motion-distance: 24px;
   --motion-scale: 0.98;
   --motion-overlay-blur: 16px;
+}
+
+/* Manual Class for Pretendard (Dynamic Subset) */
+.font-pretendard {
+  font-family: var(--font-pretendard);
 }
 
 * {

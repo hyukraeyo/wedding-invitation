@@ -9,7 +9,6 @@
  */
 
 import { Inter, Playfair_Display, Nanum_Myeongjo, Do_Hyeon, Song_Myung, Great_Vibes, Gowun_Dodum, Gowun_Batang, Yeon_Sung } from 'next/font/google';
-import localFont from 'next/font/local';
 
 // ============================================================================
 // 기본 UI 폰트
@@ -17,34 +16,13 @@ import localFont from 'next/font/local';
 
 /**
  * Pretendard - 한국어 메인 UI 폰트
- * Google Fonts에 없어서 로컬 폰트로 로드
+ * Dynamic Subset 사용 (layout.tsx에서 CSS import)
+ * font-family: "Pretendard Variable"
  */
-export const pretendard = localFont({
-    src: [
-        {
-            path: '../../public/fonts/Pretendard-Regular.woff2',
-            weight: '400',
-            style: 'normal',
-        },
-        {
-            path: '../../public/fonts/Pretendard-Medium.woff2',
-            weight: '500',
-            style: 'normal',
-        },
-        {
-            path: '../../public/fonts/Pretendard-SemiBold.woff2',
-            weight: '600',
-            style: 'normal',
-        },
-        {
-            path: '../../public/fonts/Pretendard-Bold.woff2',
-            weight: '700',
-            style: 'normal',
-        },
-    ],
-    variable: '--font-pretendard',
-    display: 'swap',
-});
+export const pretendard = {
+    variable: 'font-pretendard',
+    style: { fontFamily: "'Pretendard Variable', sans-serif" },
+};
 
 /**
  * Inter - 영문 메인 UI 폰트

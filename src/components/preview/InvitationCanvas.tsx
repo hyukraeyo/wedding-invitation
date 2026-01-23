@@ -1,14 +1,11 @@
 'use client';
 
-import React, { memo, useMemo, useEffect } from 'react';
+import React, { memo, useMemo, useEffect, Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import { Banana } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import type { InvitationData } from '@/store/useInvitationStore';
-import MainScreenView from './sections/MainScreenView';
-import CalendarSectionView from './sections/CalendarSectionView';
-import GreetingView from './sections/GreetingView';
 import AccountsView from './sections/AccountsView';
 import ClosingView from './sections/ClosingView';
 import EffectsOverlay from './sections/EffectsOverlay';
@@ -19,7 +16,11 @@ import { getFontStyle } from '@/lib/utils/font';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { FontSizeControl } from './elements/FontSizeControl';
 
-const LocationView = dynamic(() => import('./sections/LocationView'), { ssr: false });
+ const LocationView = dynamic(() => import('./sections/LocationView'), { ssr: false });
+// Step 5: Lazy load major sections with Suspense skeleton fallbacks
+const MainScreenViewLazy = React.lazy(() => import('./sections/MainScreenView'));
+const GreetingViewLazy = React.lazy(() => import('./sections/GreetingView'));
+const CalendarSectionViewLazy = React.lazy(() => import('./sections/CalendarSectionView'));
 const galleryLoading = <Skeleton className={styles.gallerySkeleton} />;
 const GalleryView = dynamic(() => import('./sections/GalleryView'), {
   ssr: false,
@@ -327,39 +328,43 @@ const InvitationCanvasContent = memo(({
           effectOnlyOnMain={theme.effectOnlyOnMain}
         />
 
-        {/* 1. Main Screen */}
+        {/* 1. Main Screen (lazy with skeleton) */}
         <ScrollReveal id="section-mainScreen" animateEntrance={theme.animateEntrance}>
-          <MainScreenView
-            mainScreen={mainScreen}
-            imageUrl={imageUrl || undefined}
-            imageRatio={imageRatio}
-            groom={groom}
-            bride={bride}
-            date={date}
-            time={time}
-            location={location}
-            detailAddress={detailAddress}
-            accentColor={theme.accentColor}
-          />
+          <Suspense fallback={<Skeleton className={styles.sectionSkeleton} />}>
+            <MainScreenViewLazy
+              mainScreen={mainScreen}
+              imageUrl={imageUrl || undefined}
+              imageRatio={imageRatio}
+              groom={groom}
+              bride={bride}
+              date={date}
+              time={time}
+              location={location}
+              detailAddress={detailAddress}
+              accentColor={theme.accentColor}
+            />
+          </Suspense>
         </ScrollReveal>
 
-        {/* 2. Message / Greeting */}
-        <GreetingView
-          id="section-message"
-          greetingTitle={greetingTitle}
-          greetingSubtitle={greetingSubtitle}
-          greetingContent={message}
-          greetingImage={greetingImage || undefined}
-          greetingRatio={greetingRatio}
-          showNamesAtBottom={showNamesAtBottom}
-          enableFreeformNames={enableFreeformNames}
-          groomNameCustom={groomNameCustom}
-          brideNameCustom={brideNameCustom}
-          groom={groom}
-          bride={bride}
-          accentColor={theme.accentColor}
-          animateEntrance={theme.animateEntrance}
-        />
+        {/* 2. Greeting */}
+        <Suspense fallback={<Skeleton className={styles.sectionSkeleton} />}>
+          <GreetingViewLazy
+            id="section-message"
+            greetingTitle={greetingTitle}
+            greetingSubtitle={greetingSubtitle}
+            greetingContent={message}
+            greetingImage={greetingImage || undefined}
+            greetingRatio={greetingRatio}
+            showNamesAtBottom={showNamesAtBottom}
+            enableFreeformNames={enableFreeformNames}
+            groomNameCustom={groomNameCustom}
+            brideNameCustom={brideNameCustom}
+            groom={groom}
+            bride={bride}
+            accentColor={theme.accentColor}
+            animateEntrance={theme.animateEntrance}
+          />
+        </Suspense>
 
         {/* 3. Gallery (Moved) */}
         <GalleryView
@@ -375,19 +380,21 @@ const InvitationCanvasContent = memo(({
           animateEntrance={theme.animateEntrance}
         />
 
-        {/* 4. Calendar & D-Day */}
-        <CalendarSectionView
-          id="section-date"
-          date={date}
-          time={time}
-          accentColor={theme.accentColor}
-          ddayMessage={ddayMessage}
-          groom={groom}
-          bride={bride}
-          showCalendar={showCalendar}
-          showDday={showDday}
-          animateEntrance={theme.animateEntrance}
-        />
+        {/* 4. Calendar & D-Day (lazy) */}
+        <Suspense fallback={<Skeleton className={styles.sectionSkeleton} />}>
+          <CalendarSectionViewLazy
+            id="section-date"
+            date={date}
+            time={time}
+            accentColor={theme.accentColor}
+            ddayMessage={ddayMessage}
+            groom={groom}
+            bride={bride}
+            showCalendar={showCalendar}
+            showDday={showDday}
+            animateEntrance={theme.animateEntrance}
+          />
+        </Suspense>
 
         {/* 5. Location */}
         <LocationView

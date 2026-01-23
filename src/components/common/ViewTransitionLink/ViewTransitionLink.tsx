@@ -11,6 +11,7 @@ interface ViewTransitionLinkProps {
     onClick?: ((event: MouseEvent<HTMLAnchorElement>) => void) | undefined;
     id?: string | undefined;
     style?: React.CSSProperties | undefined;
+    prefetch?: boolean | undefined;
 }
 
 /**
@@ -22,6 +23,7 @@ export function ViewTransitionLink({
     children,
     className,
     onClick,
+    prefetch,
     ...props
 }: ViewTransitionLinkProps) {
     const router = useRouter();
@@ -74,6 +76,7 @@ export function ViewTransitionLink({
             href={href}
             className={className}
             onClick={handleClick}
+            {...(prefetch !== undefined ? { prefetch } : {})}
             {...props}
         >
             {children}

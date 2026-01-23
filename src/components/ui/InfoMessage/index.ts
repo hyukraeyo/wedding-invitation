@@ -1,1 +1,1 @@
-export * from './InfoMessage';
+export { InfoMessage } from './InfoMessage';

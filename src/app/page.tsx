@@ -32,6 +32,7 @@ export default function Home() {
         <div className={styles.action}>
           <ViewTransitionLink
             href="/builder"
+            prefetch={false}
             className={styles.link}
           >
             <span className={styles.text}>청첩장 만들기</span>

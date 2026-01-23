@@ -7,14 +7,15 @@ import Header from '@/components/common/Header';
 import { ProgressBar } from '@/components/common/ProgressBar/ProgressBar';
 import { auth } from "@/auth";
 import "./globals.scss";
+import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
 import "../styles/_accessibility.scss";
 
 
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 5, // Accessibility: allow zooming
-  userScalable: true,
+  maximumScale: 1,
+  userScalable: false,
   themeColor: "#F9F8E6",
 };
 

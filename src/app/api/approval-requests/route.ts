@@ -127,7 +127,7 @@ export async function GET(request: NextRequest) {
 
     const db = supabaseAdmin || supabase;
 
-    if (userOnly) {
+      if (userOnly) {
       // User fetching their own rejected requests
       const { data, error } = await db
         .from('approval_requests')
@@ -144,10 +144,10 @@ export async function GET(request: NextRequest) {
         );
       }
 
-      return NextResponse.json({
-        success: true,
-        data: (data ?? []) as unknown as ApprovalRequestSummary[],
-      });
+      return NextResponse.json(
+        { success: true, data: (data ?? []) as unknown as ApprovalRequestSummary[] },
+        { status: 200, headers: { 'Cache-Control': 's-maxage=60, stale-while-revalidate=30' } }
+      );
     }
 
     // Admin fetching all requests (pending, rejected, approved)
@@ -176,10 +176,10 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    return NextResponse.json({
-      success: true,
-      data: (data ?? []) as unknown as ApprovalRequestSummary[],
-    });
+    return NextResponse.json(
+      { success: true, data: (data ?? []) as unknown as ApprovalRequestSummary[] },
+      { status: 200, headers: { 'Cache-Control': 's-maxage=60, stale-while-revalidate=30' } }
+    );
   } catch (error) {
     console.error('Unexpected error in GET /api/approval-requests:', error);
     return NextResponse.json(

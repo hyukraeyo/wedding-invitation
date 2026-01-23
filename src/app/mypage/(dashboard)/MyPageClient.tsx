@@ -555,6 +555,7 @@ export default function MyPageClient({
                             <div className={styles.createCardWrapper}>
                                 <Link
                                     href="/builder"
+                                    prefetch={false}
                                     className={styles.createCard}
                                     onClick={(e) => {
                                         e.preventDefault();
@@ -606,6 +607,7 @@ export default function MyPageClient({
                                         <div className={styles.createCardWrapper}>
                                             <Link
                                                 href="/builder"
+                                                prefetch={false}
                                                 className={styles.createCard}
                                                 onClick={(e) => {
                                                     e.preventDefault();

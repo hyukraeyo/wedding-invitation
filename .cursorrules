@@ -50,5 +50,10 @@
 - **State**: Zustand (`useInvitationStore` 단일 스토어 활용)
 - **Data**: Supabase (Remote CLI 사용, Local Docker 미사용)
 
+## 🤖 Agent Models & Roles
+- **Sisyphus**: Main Orchestrator (SF Bay Area Engineer Persona)
+- **Frontend UI/UX**: **Gemini 3 Pro** (Visual/Design Specialist)
+- **Oracle**: **GPT-5.2** (Technical Advisor)
+
 ---
 *이 문서는 프로젝트의 헌법과 같으며, 인공지능 에이전트는 모든 작업 수행 시 이 규칙을 최우선으로 준수해야 합니다.*

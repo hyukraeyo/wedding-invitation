@@ -1,6 +1,7 @@
 import React from 'react';
 import { MapPin } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
+import { useShallow } from 'zustand/react/shallow';
 import dynamic from 'next/dynamic';
 import { AccordionItem } from '@/components/common/AccordionItem';
 import type { SectionProps } from '@/types/builder';
@@ -16,7 +17,7 @@ const LocationSectionContent = dynamic(() => import('./LocationSectionContent'),
 });
 
 const LocationSection = React.memo<SectionProps>(function LocationSection({ value, isOpen }) {
-    const address = useInvitationStore(state => state.address);
+    const address = useInvitationStore(useShallow(state => state.address));
 
     return (
         <AccordionItem

@@ -5,14 +5,10 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import dynamic from 'next/dynamic';
 import { AccordionItem } from '@/components/common/AccordionItem';
 import type { SectionProps } from '@/types/builder';
-import styles from './GallerySection.module.scss';
+import { GallerySkeleton } from './Skeletons';
 
 const GallerySectionContent = dynamic(() => import('./GallerySectionContent'), {
-    loading: () => (
-        <div className={styles.loadingContainer}>
-            <div className={styles.loadingSpinner} />
-        </div>
-    ),
+    loading: () => <GallerySkeleton />,
     ssr: false
 });
 
