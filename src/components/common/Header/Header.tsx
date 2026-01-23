@@ -10,7 +10,7 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import type { User } from 'next-auth';
 import { IconButton } from '@/components/ui/IconButton';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
-import { cn } from '@/lib/utils';
+import { cn, isTossApp } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { useShallow } from 'zustand/react/shallow';
 import styles from './Header.module.scss';
@@ -168,7 +168,13 @@ export default function Header() {
     const handleLogin = useCallback(() => {
         const search = searchParams.toString();
         const returnTo = `${pathname}${search ? `?${search}` : ''}`;
-        router.push(`/login?returnTo=${encodeURIComponent(returnTo)}`);
+        const url = `/login?returnTo=${encodeURIComponent(returnTo)}`;
+
+        if (isTossApp()) {
+            window.location.href = url;
+            return;
+        }
+        router.push(url);
     }, [router, pathname, searchParams]);
 
     return (

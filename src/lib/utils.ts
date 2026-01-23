@@ -292,3 +292,8 @@ export function isAndroid(): boolean {
   if (typeof window === 'undefined') return false;
   return /Android/.test(window.navigator.userAgent);
 }
+
+export function isTossApp(): boolean {
+  if (typeof window === 'undefined') return false;
+  return /Toss/i.test(window.navigator.userAgent);
+}

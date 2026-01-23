@@ -18,6 +18,7 @@ import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useShallow } from 'zustand/react/shallow';
 import EditorForm from '@/components/common/EditorForm';
 import { useScrollLock } from '@/hooks/use-scroll-lock';
+import { isTossApp } from '@/lib/utils';
 
 import { IPhoneFrame } from './IPhoneFrame';
 
@@ -91,7 +92,12 @@ export function BuilderClient() {
     }, [user, profileLoading, isProfileComplete, router, getLoginUrl]);
 
     const handleLogin = useCallback(() => {
-        router.push(getLoginUrl());
+        const url = getLoginUrl();
+        if (isTossApp()) {
+            window.location.href = url;
+            return;
+        }
+        router.push(url);
     }, [router, getLoginUrl]);
 
     // use-latest or ref for event handlers used in async logic

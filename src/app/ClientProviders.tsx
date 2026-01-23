@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import type { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import { Toaster } from '@/components/ui/Sonner';
+import { isTossApp } from '@/lib/utils';
 
 import { TDSMobileAITProvider } from '@toss/tds-mobile-ait';
 
@@ -31,7 +32,7 @@ export default function ClientProviders({ children, session }: ClientProvidersPr
     }, []);
 
     const sessionValue = session ?? null;
-    const isTossApp = typeof window !== 'undefined' && /TossApp/i.test(navigator.userAgent);
+    const tossApp = isTossApp();
 
     const content = (
         <SessionProvider session={sessionValue}>
@@ -47,7 +48,7 @@ export default function ClientProviders({ children, session }: ClientProvidersPr
         return content;
     }
 
-    if (isTossApp) {
+    if (tossApp) {
         return (
             <TDSMobileAITProvider>
                 {content}

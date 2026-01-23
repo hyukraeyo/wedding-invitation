@@ -15,6 +15,7 @@ const ProfileCompletionModal = dynamic(
     { ssr: false }
 );
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import { isTossApp } from '@/lib/utils';
 
 /**
  * LoginPage: 소셜 로그인 전용 페이지
@@ -29,6 +30,10 @@ export default function LoginPage() {
 
     useEffect(() => {
         if (!authLoading && user && isProfileComplete) {
+            if (isTossApp()) {
+                window.location.replace(callbackUrl);
+                return;
+            }
             router.replace(callbackUrl);
         }
     }, [user, authLoading, isProfileComplete, router, callbackUrl]);
