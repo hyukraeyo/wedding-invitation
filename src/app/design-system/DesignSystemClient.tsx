@@ -92,11 +92,17 @@ import { PhoneField } from "@/components/common/PhoneField";
 import { SwitchField } from "@/components/common/SwitchField";
 import { DatePicker } from "@/components/common/DatePicker";
 import { TimePicker } from "@/components/common/TimePicker";
-import RichTextEditor from "@/components/common/RichTextEditor/RichTextEditor";
+import dynamic from "next/dynamic";
+
+const RichTextEditor = dynamic(() => import("@/components/common/RichTextEditor/RichTextEditor"), {
+    ssr: false,
+    loading: () => <div className="h-[200px] flex items-center justify-center border rounded-xl bg-zinc-50 text-zinc-400">에디터 로딩 중...</div>
+});
 
 import { toast } from "sonner";
 import {
     Image as ImageIcon,
+    Heart,
     Settings,
     User,
     LogOut,
@@ -121,12 +127,13 @@ import {
     Monitor,
     Smartphone,
     MousePointer2,
-    ChevronDown,
+    Sparkles,
+    Palette,
     Loader2
 } from "lucide-react";
 import Image from "next/image";
 
-type Category = "Atoms" | "Forms" | "Containers" | "Overlays" | "Complex" | "Feedback";
+type Category = "Foundations" | "Inputs" | "Data Display" | "Overlays" | "Patterns" | "Feedback";
 
 const DUMMY_INVITATION = {
     id: "inv-1",
@@ -150,8 +157,17 @@ const DUMMY_PHRASES = [
     { title: "캐주얼 스타일", content: "드디어 저희 결혼합니다!<br/>맛있는 음식과 즐거운 만남이 가득한 자리에 초대합니다.", badge: "인기" }
 ];
 
+const CATEGORIES: { id: Category; icon: LucideIcon; label: string; desc: string }[] = [
+    { id: "Foundations", icon: Palette, label: "Foundations", desc: "Colors, Typography, Icons & Primitives" },
+    { id: "Inputs", icon: MousePointer2, label: "Inputs", desc: "Form Controls & Interactive Elements" },
+    { id: "Data Display", icon: Layout, label: "Data Display", desc: "Cards, Layouts & Structures" },
+    { id: "Overlays", icon: Layers, label: "Overlays", desc: "Modals, Dialogs & Floating UI" },
+    { id: "Feedback", icon: MessageSquare, label: "Feedback", desc: "Alerts, Toasts & States" },
+    { id: "Patterns", icon: Sparkles, label: "Patterns", desc: "Composite UI & Business Logic" },
+];
+
 export default function DesignSystemClient() {
-    const [activeTab, setActiveTab] = useState<Category>("Atoms");
+    const [activeTab, setActiveTab] = useState<Category>("Foundations");
     const [radius, setRadius] = useState(16);
     const [shadowIntensity, setShadowIntensity] = useState(8);
     const [date, setDate] = useState<Date | undefined>(new Date());
@@ -179,20 +195,12 @@ export default function DesignSystemClient() {
         root.style.setProperty("--shadow-hover-md", `0 6px 14px rgba(0, 0, 0, ${alpha})`);
     }, [radius, shadowIntensity]);
 
-    const categories: { id: Category; icon: LucideIcon; label: string }[] = [
-        { id: "Atoms", icon: MousePointer2, label: "Atoms (Basic)" },
-        { id: "Forms", icon: Layers, label: "Form Fields" },
-        { id: "Containers", icon: Box, label: "Containers" },
-        { id: "Overlays", icon: Layout, label: "Overlays" },
-        { id: "Complex", icon: Settings, label: "Complex UI" },
-        { id: "Feedback", icon: MessageSquare, label: "Feedback" },
-    ];
 
-    const showToast = (variant: 'success' | 'error' | 'info') => {
+    const showToast = React.useCallback((variant: 'success' | 'error' | 'info') => {
         if (variant === 'success') toast.success("성공적으로 저장되었습니다.");
         if (variant === 'error') toast.error("오류가 발생했습니다. 다시 시도해 주세요.");
         if (variant === 'info') toast.info("새로운 공지사항이 있습니다.");
-    };
+    }, []);
 
     return (
         <div className={styles.container}>
@@ -205,7 +213,7 @@ export default function DesignSystemClient() {
                 </div>
 
                 <nav className={styles.nav}>
-                    {categories.map((cat) => (
+                    {CATEGORIES.map((cat) => (
                         <button
                             key={cat.id}
                             className={cn(styles.navItem, activeTab === cat.id && styles.active)}
@@ -266,151 +274,93 @@ export default function DesignSystemClient() {
                             <Smartphone size={14} />
                         </div>
                     </div>
-                    <h2>{categories.find(c => c.id === activeTab)?.label}</h2>
-                    <p>바나나웨딩의 고품격 UI 컴포넌트 라이브러리입니다. 프로젝트 전체에서 일관된 사용자 경험을 실현합니다.</p>
+                    <h2>{CATEGORIES.find(c => c.id === activeTab)?.label}</h2>
+                    <p className="text-muted-foreground">{CATEGORIES.find(c => c.id === activeTab)?.desc}</p>
                 </header>
 
                 <div className={styles.contentArea}>
-                    {activeTab === "Atoms" && (
+                    {activeTab === "Foundations" && (
                         <div className={styles.storySection}>
-                            <Story title="Universal Button System" description="바나나웨딩의 디자인 시스템을 구성하는 전용 버튼 컴포넌트">
+                            <div className={styles.controls}>
+                                <h2>Theme Controls (Real-time)</h2>
+                                <div className={styles.controlItem}>
+                                    <label>
+                                        <span>Border Radius</span>
+                                        <span>{radius}px</span>
+                                    </label>
+                                    <input
+                                        type="range"
+                                        min="0"
+                                        max="40"
+                                        value={radius}
+                                        onChange={(e) => setRadius(parseInt(e.target.value))}
+                                    />
+                                </div>
+
+                                <div className={styles.controlItem}>
+                                    <label>
+                                        <span>Shadow Depth</span>
+                                        <span>{shadowIntensity}%</span>
+                                    </label>
+                                    <input
+                                        type="range"
+                                        min="0"
+                                        max="40"
+                                        value={shadowIntensity}
+                                        onChange={(e) => setShadowIntensity(parseInt(e.target.value))}
+                                    />
+                                </div>
+
+                                <div className={styles.controlItem}>
+                                    <div className={styles.presetGrid}>
+                                        <Button variant="outline" size="sm" onClick={() => { setRadius(4); setShadowIntensity(4); }}>Edge</Button>
+                                        <Button variant="outline" size="sm" onClick={() => { setRadius(16); setShadowIntensity(8); }}>Soft</Button>
+                                        <Button variant="outline" size="sm" onClick={() => { setRadius(32); setShadowIntensity(12); }}>Round</Button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <Story title="Iconography (Lucide)" description="명확한 의미 전달을 위한 아이콘 시스템">
+                                <div className="flex gap-6 text-zinc-600">
+                                    <Banana size={24} />
+                                    <Heart size={24} />
+                                    <User size={24} />
+                                    <Settings size={24} />
+                                    <MessageSquare size={24} />
+                                    <Bell size={24} />
+                                    <Share2 size={24} />
+                                </div>
+                            </Story>
+
+                            <Story title="Action Buttons" description="사용자의 주요 행동을 유도하는 버튼 컴포넌트">
                                 <div className={styles.specTable}>
-                                    {/* Brand Identity */}
                                     <div className={styles.specRow}>
-                                        <h4>1. Brand Actions (Primary)</h4>
+                                        <h4>Variants</h4>
                                         <div className={styles.specGrid}>
-                                            <div className="flex flex-col gap-2">
-                                                <span className={styles.labelChip}>Default</span>
-                                                <Button variant="default">Primary Action</Button>
-                                            </div>
-                                            <div className="flex flex-col gap-2">
-                                                <span className={styles.labelChip}>With Icon</span>
-                                                <Button variant="default">
-                                                    <Banana size={18} />
-                                                    Start Building
-                                                </Button>
-                                            </div>
+                                            <Button>Default</Button>
+                                            <Button variant="solid">Solid (Primary)</Button>
+                                            <Button variant="secondary">Secondary</Button>
+                                            <Button variant="outline">Outline</Button>
+                                            <Button variant="ghost">Ghost</Button>
+                                            <Button variant="destructive">Destructive</Button>
+                                            <Button variant="link">Link Style</Button>
                                         </div>
                                     </div>
-
-                                    {/* Neutral Actions */}
                                     <div className={styles.specRow}>
-                                        <h4>2. Neutral & Secondary Actions</h4>
-                                        <div className={styles.buttonGrid}>
-                                            <div className="flex flex-col gap-2">
-                                                <span className={styles.labelChip}>Secondary</span>
-                                                <Button variant="secondary">Secondary</Button>
-                                            </div>
-                                            <div className="flex flex-col gap-2">
-                                                <span className={styles.labelChip}>Outline</span>
-                                                <Button variant="outline">Outline</Button>
-                                            </div>
-                                            <div className="flex flex-col gap-2">
-                                                <span className={styles.labelChip}>Ghost</span>
-                                                <Button variant="ghost">Ghost Button</Button>
-                                            </div>
-                                            <div className="flex flex-col gap-2">
-                                                <span className={styles.labelChip}>Link</span>
-                                                <Button variant="link">Link Interaction</Button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* System Actions */}
-                                    <div className={styles.specRow}>
-                                        <h4>3. System / Dangerous Actions</h4>
+                                        <h4>Sizes</h4>
                                         <div className={styles.specGrid}>
-                                            <div className="flex flex-col gap-2">
-                                                <span className={styles.labelChip}>Destructive</span>
-                                                <Button variant="destructive">Remove Forever</Button>
-                                            </div>
+                                            <Button size="sm">Small</Button>
+                                            <Button size="default">Default</Button>
+                                            <Button size="lg">Large Action</Button>
+                                            <Button size="icon"><Settings size={18} /></Button>
                                         </div>
                                     </div>
-
-                                    {/* Premium Glass */}
                                     <div className={styles.specRow}>
-                                        <h4>4. Premium Interface (Glass)</h4>
-                                        <div className={styles.glassCanvas}>
-                                            <div className="flex flex-col gap-2">
-                                                <span className="text-[10px] font-bold text-white/50 mb-1">STANDARD</span>
-                                                <Button variant="glass">Glass Action</Button>
-                                            </div>
-                                            <div className="flex flex-col gap-2">
-                                                <span className="text-[10px] font-bold text-white/50 mb-1">BRAND ICON</span>
-                                                <Button variant="glass">
-                                                    <Banana size={16} className="text-yellow-400" />
-                                                    Banana Vision
-                                                </Button>
-                                            </div>
-                                            <div className="flex flex-col gap-2">
-                                                <span className="text-[10px] font-bold text-white/50 mb-1">STATE: LOADING</span>
-                                                <Button variant="glass" loading>Saving...</Button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Sizes */}
-                                    <div className={styles.specRow}>
-                                        <h4>5. Sizing & Responsive Scales</h4>
+                                        <h4>States</h4>
                                         <div className={styles.specGrid}>
-                                            <div className="flex flex-col gap-2">
-                                                <span className={styles.labelChip}>Small (36px)</span>
-                                                <Button size="sm">Small Action</Button>
-                                            </div>
-                                            <div className="flex flex-col gap-2">
-                                                <span className={styles.labelChip}>Base (48px)</span>
-                                                <Button size="default">Default Button</Button>
-                                            </div>
-                                            <div className="flex flex-col gap-2">
-                                                <span className={styles.labelChip}>Large (56px)</span>
-                                                <Button size="lg">Hero Call-to-Action</Button>
-                                            </div>
+                                            <Button disabled>Disabled</Button>
+                                            <Button loading>Loading</Button>
                                         </div>
-                                    </div>
-
-                                    {/* Interaction States */}
-                                    <div className={styles.specRow}>
-                                        <h4>6. Layout & Functional States</h4>
-                                        <div className={styles.specGrid}>
-                                            <div className="flex flex-col gap-2">
-                                                <span className={styles.labelChip}>State: Loading</span>
-                                                <Button loading>Syncing data...</Button>
-                                            </div>
-                                            <div className="flex flex-col gap-2">
-                                                <span className={styles.labelChip}>State: Disabled</span>
-                                                <Button disabled>Action Locked</Button>
-                                            </div>
-                                            <div className="flex flex-col gap-2">
-                                                <span className={styles.labelChip}>Prop: fullWidth</span>
-                                                <div className="w-[300px]">
-                                                    <Button fullWidth variant="secondary">Full Width Action</Button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* Dynamic Options Test */}
-                                    <div className={styles.specRow}>
-                                        <h4>7. Interactive Dynamic Props (NEW)</h4>
-                                        <div className={styles.specGrid}>
-                                            <div className="flex flex-col gap-2">
-                                                <span className={styles.labelChip}>Custom Hex Color</span>
-                                                <Button color={color}>Dynamic Bg</Button>
-                                            </div>
-                                            <div className="flex flex-col gap-2">
-                                                <span className={styles.labelChip}>Custom Radius</span>
-                                                <Button radius={radius}>Radius: {radius}px</Button>
-                                            </div>
-                                            <div className="flex flex-col gap-2">
-                                                <span className={styles.labelChip}>Text Color Override</span>
-                                                <Button color="#18181b" textColor="#FBC02D">Custom Combo</Button>
-                                            </div>
-                                            <div className="flex flex-col gap-2">
-                                                <span className={styles.labelChip}>Rounded Full</span>
-                                                <Button radius={99} variant="outline">Capsule Button</Button>
-                                            </div>
-                                        </div>
-                                        <p className="text-xs text-zinc-400 mt-2">좌측 하단의 Global Theme 컨트롤을 조작하여 실시간 변화를 확인하세요.</p>
                                     </div>
                                 </div>
                             </Story>
@@ -420,28 +370,11 @@ export default function DesignSystemClient() {
                                     <div className={styles.specRow}>
                                         <h4>Icon Button Variants</h4>
                                         <div className={styles.specGrid}>
-                                            <div className="flex flex-col gap-2">
-                                                <span className={styles.labelChip}>Solid</span>
-                                                <IconButton icon={Settings} variant="solid" aria-label="Settings" />
-                                            </div>
-                                            <div className="flex flex-col gap-2">
-                                                <span className={styles.labelChip}>Outline</span>
-                                                <IconButton icon={User} variant="outline" aria-label="User" />
-                                            </div>
-                                            <div className="flex flex-col gap-2">
-                                                <span className={styles.labelChip}>Ghost</span>
-                                                <IconButton icon={LogOut} variant="ghost" aria-label="Logout" />
-                                            </div>
-                                            <div className="flex flex-col gap-2">
-                                                <span className={styles.labelChip}>Secondary</span>
-                                                <IconButton icon={Bell} variant="secondary" aria-label="Notifications" />
-                                            </div>
-                                            <div className="flex flex-col gap-2">
-                                                <span className={styles.labelChip}>Glass</span>
-                                                <div className="bg-zinc-800 p-2 rounded-lg">
-                                                    <IconButton icon={CheckCircle2} variant="glass" aria-label="Success" />
-                                                </div>
-                                            </div>
+                                            <div className="flex flex-col gap-2 items-center"><span className={styles.labelChip}>Solid</span><IconButton icon={Settings} variant="solid" /></div>
+                                            <div className="flex flex-col gap-2 items-center"><span className={styles.labelChip}>Outline</span><IconButton icon={User} variant="outline" /></div>
+                                            <div className="flex flex-col gap-2 items-center"><span className={styles.labelChip}>Ghost</span><IconButton icon={LogOut} variant="ghost" /></div>
+                                            <div className="flex flex-col gap-2 items-center"><span className={styles.labelChip}>Secondary</span><IconButton icon={Bell} variant="secondary" /></div>
+                                            <div className="flex flex-col gap-2 items-center"><span className={styles.labelChip}>Glass</span><IconButton icon={MoreVertical} variant="glass" className="bg-zinc-900 text-white" /></div>
                                         </div>
                                     </div>
 
@@ -547,69 +480,66 @@ export default function DesignSystemClient() {
                         </div>
                     )}
 
-                    {activeTab === "Forms" && (
+                    {activeTab === "Inputs" && (
                         <div className={styles.storySection}>
-                            <div className={styles.grid}>
-                                <Story title="Text Inputs" description="정보 입력을 위한 표준 필드">
-                                    <div className="flex flex-col gap-4 w-full">
-                                        <TextField label="Display Name" placeholder="홍길동" />
-                                        <TextField label="Multiline Field" placeholder="Tell us your story..." helpText="Auto-expanding textarea" multiline rows={4} />
-                                        <div className="space-y-1.5">
-                                            <Label>Raw Textarea</Label>
-                                            <Textarea placeholder="Directly using the ui/Textarea component" />
-                                        </div>
+                            <Story title="Text Fields" description="사용자 입력을 위한 기본 텍스트 필드">
+                                <div className="flex flex-col gap-4 w-full">
+                                    <TextField label="Display Name" placeholder="홍길동" />
+                                    <TextField label="Multiline Field" placeholder="Tell us your story..." helpText="Auto-expanding textarea" multiline rows={4} />
+                                    <div className="space-y-1.5">
+                                        <Label>Raw Textarea</Label>
+                                        <Textarea placeholder="Directly using the ui/Textarea component" />
                                     </div>
-                                </Story>
+                                </div>
+                            </Story>
 
-                                <Story title="Special Fields" description="전용 데이터 입력을 위한 필드">
-                                    <div className="flex flex-col gap-4 w-full">
-                                        <PhoneField label="연락처" placeholder="010-0000-0000" />
-                                        <div className="space-y-3">
-                                            <Label>Selection Group</Label>
-                                            <RadioGroup defaultValue="1" className="flex flex-col gap-2">
-                                                <div className="flex items-center space-x-2">
-                                                    <RadioGroupItem value="1" id="r1" />
-                                                    <Label htmlFor="r1">Option One</Label>
-                                                </div>
-                                                <div className="flex items-center space-x-2">
-                                                    <RadioGroupItem value="2" id="r2" />
-                                                    <Label htmlFor="r2">Option Two</Label>
-                                                </div>
-                                            </RadioGroup>
-                                        </div>
-                                        <SwitchField
-                                            label="알림 설정"
-                                            checked={isNotificationsEnabled}
-                                            onChange={setIsNotificationsEnabled}
+                            <Story title="Special Fields" description="전용 데이터 입력을 위한 필드">
+                                <div className="flex flex-col gap-4 w-full">
+                                    <PhoneField label="연락처" placeholder="010-0000-0000" />
+                                    <div className="space-y-3">
+                                        <Label>Selection Group</Label>
+                                        <RadioGroup defaultValue="1" className="flex flex-col gap-2">
+                                            <div className="flex items-center space-x-2">
+                                                <RadioGroupItem value="1" id="r1" />
+                                                <Label htmlFor="r1">Option One</Label>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <RadioGroupItem value="2" id="r2" />
+                                                <Label htmlFor="r2">Option Two</Label>
+                                            </div>
+                                        </RadioGroup>
+                                    </div>
+                                    <SwitchField
+                                        label="알림 설정"
+                                        checked={isNotificationsEnabled}
+                                        onChange={setIsNotificationsEnabled}
+                                    />
+                                </div>
+                            </Story>
+
+                            <Story title="Common Selectors" description="압축된 선택 및 색상 프리셋">
+                                <div className="space-y-4 w-full">
+                                    <Label>Theme Selection</Label>
+                                    <Select>
+                                        <SelectTrigger className="w-full">
+                                            <SelectValue placeholder="카테고리를 선택하세요" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="minimal">Minimal White</SelectItem>
+                                            <SelectItem value="floral">Sweet Floral</SelectItem>
+                                            <SelectItem value="modern">Modern Dark</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <div className="pt-2">
+                                        <Label className="mb-2 block">Brand Colors</Label>
+                                        <ColorPicker
+                                            value={color}
+                                            onChange={setColor}
+                                            colors={["#FBC02D", "#E53935", "#D81B60", "#8E24AA", "#5E35B1", "#3949AB", "#1E88E5", "#039BE5"]}
                                         />
                                     </div>
-                                </Story>
-
-                                <Story title="Common Selectors" description="압축된 선택 및 색상 프리셋">
-                                    <div className="space-y-4 w-full">
-                                        <Label>Theme Selection</Label>
-                                        <Select>
-                                            <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="카테고리를 선택하세요" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="minimal">Minimal White</SelectItem>
-                                                <SelectItem value="floral">Sweet Floral</SelectItem>
-                                                <SelectItem value="modern">Modern Dark</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <div className="pt-2">
-                                            <Label className="mb-2 block">Brand Colors</Label>
-                                            <ColorPicker
-                                                value={color}
-                                                onChange={setColor}
-                                                colors={["#FBC02D", "#E53935", "#D81B60", "#8E24AA", "#5E35B1", "#3949AB", "#1E88E5", "#039BE5"]}
-                                            />
-                                        </div>
-                                    </div>
-                                </Story>
-                            </div>
-
+                                </div>
+                            </Story>
                             <Story title="Date & Time Controls" description="정밀한 일정 관리를 위한 픽커">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
                                     <div className="space-y-4">
@@ -648,79 +578,81 @@ export default function DesignSystemClient() {
                         </div>
                     )}
 
-                    {activeTab === "Containers" && (
+                    {activeTab === "Data Display" && (
                         <div className={styles.storySection}>
-                            <div className={styles.grid}>
-                                <Story title="Tabs Mechanics" description="콘텐츠 분할 및 전환">
-                                    <Tabs defaultValue="overview" className="w-full">
-                                        <TabsList className="grid w-full grid-cols-2">
-                                            <TabsTrigger value="overview">Overview</TabsTrigger>
-                                            <TabsTrigger value="settings">Settings</TabsTrigger>
-                                        </TabsList>
-                                        <TabsContent value="overview" className="p-6 border rounded-b-xl bg-white">
-                                            Manage your invitation overview here.
-                                        </TabsContent>
-                                        <TabsContent value="settings" className="p-6 border rounded-b-xl bg-white">
-                                            Change your security preferences.
-                                        </TabsContent>
-                                    </Tabs>
-                                </Story>
+                            <Story title="Layout Modules" description="정보 구조화를 위한 컨테이너">
+                                <div className={styles.grid}>
+                                    <Story title="Tabs Mechanics" description="콘텐츠 분할 및 전환">
+                                        <Tabs defaultValue="overview" className="w-full">
+                                            <TabsList className="grid w-full grid-cols-2">
+                                                <TabsTrigger value="overview">Overview</TabsTrigger>
+                                                <TabsTrigger value="settings">Settings</TabsTrigger>
+                                            </TabsList>
+                                            <TabsContent value="overview" className="p-6 border rounded-b-xl bg-white">
+                                                Manage your invitation overview here.
+                                            </TabsContent>
+                                            <TabsContent value="settings" className="p-6 border rounded-b-xl bg-white">
+                                                Change your security preferences.
+                                            </TabsContent>
+                                        </Tabs>
+                                    </Story>
 
-                                <Story title="Dynamic Accordion" description="나누어진 정보를 계층적으로 탐색">
-                                    <Accordion type="single" collapsible className="w-full">
-                                        <AccordionItem value="item-1">
-                                            <AccordionTrigger>What is Banana Wedding?</AccordionTrigger>
-                                            <AccordionContent>A premium mobile invitation builder.</AccordionContent>
-                                        </AccordionItem>
-                                        <AccordionItem value="item-2">
-                                            <AccordionTrigger>Is it responsive?</AccordionTrigger>
-                                            <AccordionContent>Yes, it supports all modern mobile devices.</AccordionContent>
-                                        </AccordionItem>
-                                    </Accordion>
-                                </Story>
-                            </div>
+                                    <Story title="Dynamic Accordion" description="나누어진 정보를 계층적으로 탐색">
+                                        <Accordion type="single" collapsible className="w-full">
+                                            <AccordionItem value="item-1">
+                                                <AccordionTrigger>What is Banana Wedding?</AccordionTrigger>
+                                                <AccordionContent>A premium mobile invitation builder.</AccordionContent>
+                                            </AccordionItem>
+                                            <AccordionItem value="item-2">
+                                                <AccordionTrigger>Is it responsive?</AccordionTrigger>
+                                                <AccordionContent>Yes, it supports all modern mobile devices.</AccordionContent>
+                                            </AccordionItem>
+                                        </Accordion>
+                                    </Story>
+                                </div>
 
-                            <div className={styles.grid}>
-                                <Story title="Collapsible Section" description="접고 펼칠 수 있는 인터페이스">
-                                    <Collapsible className="w-full space-y-2">
-                                        <div className="flex items-center justify-between space-x-4 px-4">
-                                            <h4 className="text-sm font-bold">Advanced Settings</h4>
-                                            <CollapsibleTrigger asChild>
-                                                <Button variant="ghost" size="sm">
-                                                    <ChevronDown size={16} />
-                                                </Button>
-                                            </CollapsibleTrigger>
-                                        </div>
-                                        <div className="rounded-md border px-4 py-3 font-mono text-sm shadow-sm bg-white">
-                                            Base Configuration
-                                        </div>
-                                        <CollapsibleContent className="space-y-2">
-                                            <div className="rounded-md border px-4 py-3 font-mono text-sm shadow-sm bg-white">
-                                                Meta Title Tags
+                                <div className={styles.grid}>
+                                    <Story title="Collapsible Section" description="접고 펼칠 수 있는 인터페이스">
+                                        <Collapsible className="w-full space-y-2">
+                                            <div className="flex items-center justify-between space-x-4 px-4">
+                                                <h4 className="text-sm font-bold">Advanced Settings</h4>
+                                                <CollapsibleTrigger asChild>
+                                                    <Button variant="ghost" size="sm">
+                                                        <ChevronDown size={16} />
+                                                    </Button>
+                                                </CollapsibleTrigger>
                                             </div>
                                             <div className="rounded-md border px-4 py-3 font-mono text-sm shadow-sm bg-white">
-                                                OG Image URL
+                                                Base Configuration
                                             </div>
-                                        </CollapsibleContent>
-                                    </Collapsible>
-                                </Story>
+                                            <CollapsibleContent className="space-y-2">
+                                                <div className="rounded-md border px-4 py-3 font-mono text-sm shadow-sm bg-white">
+                                                    Meta Title Tags
+                                                </div>
+                                                <div className="rounded-md border px-4 py-3 font-mono text-sm shadow-sm bg-white">
+                                                    OG Image URL
+                                                </div>
+                                            </CollapsibleContent>
+                                        </Collapsible>
+                                    </Story>
 
-                                <Story title="Aspect Ratio" description="고정된 비율 유지">
-                                    <div className="w-[300px]">
-                                        <AspectRatio ratio={16 / 9} className="bg-muted rounded-xl overflow-hidden shadow-sm group">
-                                            <Image
-                                                src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=600"
-                                                alt="Wedding Photo"
-                                                fill
-                                                className="object-cover transition-transform group-hover:scale-110"
-                                            />
-                                            <div className="absolute inset-0 bg-black/20 flex items-center justify-center text-white font-bold opacity-0 group-hover:opacity-100 transition-opacity">
-                                                16:9 Aspect
-                                            </div>
-                                        </AspectRatio>
-                                    </div>
-                                </Story>
-                            </div>
+                                    <Story title="Aspect Ratio" description="고정된 비율 유지">
+                                        <div className="w-[300px]">
+                                            <AspectRatio ratio={16 / 9} className="bg-muted rounded-xl overflow-hidden shadow-sm group">
+                                                <Image
+                                                    src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=600"
+                                                    alt="Wedding Photo"
+                                                    fill
+                                                    className="object-cover transition-transform group-hover:scale-110"
+                                                />
+                                                <div className="absolute inset-0 bg-black/20 flex items-center justify-center text-white font-bold opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    16:9 Aspect
+                                                </div>
+                                            </AspectRatio>
+                                        </div>
+                                    </Story>
+                                </div>
+                            </Story>
                         </div>
                     )}
 
@@ -842,9 +774,9 @@ export default function DesignSystemClient() {
                         </div>
                     )}
 
-                    {activeTab === "Complex" && (
+                    {activeTab === "Patterns" && (
                         <div className={styles.storySection}>
-                            <Story title="Wedding Card Display" description="사용자의 청첩장 목록에서 제공되는 실제 카드">
+                            <Story title="Business Patterns" description="실제 서비스에서 사용되는 복합 컴포넌트">
                                 <div className="max-w-[400px] w-full">
                                     <InvitationCard
                                         invitation={DUMMY_INVITATION as any} // eslint-disable-line @typescript-eslint/no-explicit-any
