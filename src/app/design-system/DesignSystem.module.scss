@@ -1,0 +1,249 @@
+@use "../../styles/variables" as v;
+@use "../../styles/mixins" as m;
+
+.container {
+  display: flex;
+  height: 100vh;
+  background-color: v.$color-bg-page;
+  font-family: v.$font-family-base;
+  overflow: hidden;
+
+  @media (max-width: v.$mobile) {
+    flex-direction: column;
+    height: auto;
+    overflow: visible;
+  }
+}
+
+.sidebar {
+  width: 320px;
+  background-color: v.$color-background;
+  border-right: 1px solid v.$color-border;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex-shrink: 0;
+
+  @media (max-width: v.$mobile) {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid v.$color-border;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    padding: 1rem;
+    height: auto;
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
+
+  h1 {
+    font-size: v.$font-size-lg;
+    font-weight: 800;
+    color: v.$color-foreground;
+    letter-spacing: -0.02em;
+  }
+
+  .logo {
+    width: 32px;
+    height: 32px;
+    background-color: v.$color-primary;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+  }
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 2.5rem;
+
+  .navItem {
+    width: 100%;
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: v.$font-size-sm;
+    font-weight: 500;
+    color: v.$color-muted-foreground;
+    transition: all 0.2s v.$ease-ios;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    &:hover {
+      background-color: v.$color-muted;
+      color: v.$color-foreground;
+    }
+
+    &.active {
+      background-color: v.$primary-100;
+      color: v.$color-primary-dark;
+      font-weight: 600;
+    }
+  }
+}
+
+.controls {
+  margin-top: auto;
+  background-color: v.$color-bg-page;
+  padding: 1.25rem;
+  border-radius: 12px;
+  border: 1px solid v.$color-border;
+
+  h2 {
+    font-size: v.$font-size-xs;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    color: v.$color-muted-foreground;
+    margin-bottom: 1rem;
+  }
+}
+
+.controlItem {
+  margin-bottom: 1.25rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  label {
+    display: flex;
+    justify-content: space-between;
+    font-size: v.$font-size-xs;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+
+    span:last-child {
+      color: v.$color-primary;
+    }
+  }
+
+  input[type="range"] {
+    width: 100%;
+    accent-color: v.$color-primary;
+  }
+
+  .presetGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+}
+
+.viewport {
+  flex: 1;
+  overflow-y: auto;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+
+  @media (max-width: v.$mobile) {
+    padding: 1.5rem;
+  }
+}
+
+.pageHeader {
+  max-width: 800px;
+
+  h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 0.5rem;
+    color: v.$color-foreground;
+  }
+
+  p {
+    color: v.$color-muted-foreground;
+    font-size: v.$font-size-md;
+  }
+}
+
+.storySection {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.story {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  .storyHeader {
+    h3 {
+      font-size: v.$font-size-md;
+      font-weight: 700;
+      color: v.$color-foreground;
+    }
+    p {
+      font-size: v.$font-size-sm;
+      color: v.$color-muted-foreground;
+    }
+  }
+
+  .canvas {
+    background-color: v.$color-background;
+    border: 1px solid v.$color-border;
+    border-radius: 12px;
+    padding: 2.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+
+    &.dark {
+      background-color: #1a1a1a;
+      border-color: #333;
+    }
+
+    &.centered {
+      justify-content: center;
+    }
+
+    &.column {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+}
+
+.tag {
+  display: inline-flex;
+  padding: 2px 8px;
+  background-color: v.$color-muted;
+  border-radius: 4px;
+  font-size: 10px;
+  font-family: monospace;
+  color: v.$color-muted-foreground;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.codeSnippet {
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+  padding: 1rem;
+  border-radius: 8px;
+  font-family: 'Fira Code', monospace;
+  font-size: 12px;
+  overflow-x: auto;
+  margin-top: 0.5rem;
+}

@@ -35,7 +35,7 @@ const nextConfig: NextConfig = {
     },
   },
 
-  // 실험적 기능 및 최적화
+// 실험적 기능 및 최적화
   experimental: {
     serverActions: {
       allowedOrigins: ['localhost:3000', 'wedding-invitation-zeta-one.vercel.app'],
@@ -63,6 +63,7 @@ const nextConfig: NextConfig = {
       'framer-motion'
     ],
     viewTransition: true,
+    
   },
 
   turbopack: {
@@ -108,12 +109,45 @@ const nextConfig: NextConfig = {
     ];
   },
 
-  // 웹팩 최적화
+// 웹팩 최적화
   webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/,
       use: ['@svgr/webpack'],
     });
+
+    // bundle-defer-third-party: Split vendor code
+    if (config.name === 'client') {
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: {
+          chunks: 'all',
+          minSize: 20000,
+          maxSize: 244000,
+          cacheGroups: {
+            vendor: {
+              test: /[\\/]node_modules[\\/]/,
+              name: 'vendors',
+              chunks: 'all',
+              priority: 10,
+            },
+            common: {
+              name: 'common',
+              minChunks: 2,
+              chunks: 'all',
+              priority: 5,
+              enforce: true
+            },
+            ui: {
+              test: /[\\/]node_modules[\\/](@radix-ui|lucide-react)[\\/]/,
+              name: 'ui',
+              chunks: 'all',
+              priority: 15
+            }
+          }
+        }
+      }
+    }
 
     return config;
   },

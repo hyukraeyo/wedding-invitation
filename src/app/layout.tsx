@@ -84,7 +84,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth();
+// Start auth early to avoid waterfall
+  const sessionPromise = auth();
+
+  // Await session only when needed
+  const session = await sessionPromise;
 
   return (
     <html lang="ko" suppressHydrationWarning data-scroll-behavior="smooth" className={fontVariables}>

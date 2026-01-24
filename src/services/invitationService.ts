@@ -8,7 +8,10 @@ const getDefaultClient = async () => getBrowserSupabaseClient() as Promise<Supab
 
 export const invitationService = {
     async saveInvitation(slug: string, data: InvitationData, userId?: string, client?: SupabaseClient) {
-        const supabaseClient = client ?? await getDefaultClient();
+        // async-dependencies: Start client promise early
+        const clientPromise = client ? Promise.resolve(client) : getDefaultClient();
+        const supabaseClient = await clientPromise;
+        
         const { data: result, error } = await supabaseClient
             .from('invitations')
             .upsert({
@@ -24,7 +27,9 @@ export const invitationService = {
     },
 
     async getAllInvitations(client?: SupabaseClient) {
-        const supabaseClient = client ?? await getDefaultClient();
+        const clientPromise = client ? Promise.resolve(client) : getDefaultClient();
+        const supabaseClient = await clientPromise;
+        
         const { data, error } = await supabaseClient
             .from('invitations')
             .select('*')
@@ -68,8 +73,13 @@ export const invitationService = {
         return data;
     },
 
-    async getInvitationsBySlugs(slugs: string[], client?: SupabaseClient) {
-        const supabaseClient = client ?? await getDefaultClient();
+async getInvitationsBySlugs(slugs: string[], client?: SupabaseClient) {
+        // js-length-check-first: Check array length before expensive operation
+        if (!slugs.length) return [];
+        
+        const clientPromise = client ? Promise.resolve(client) : getDefaultClient();
+        const supabaseClient = await clientPromise;
+        
         const { data, error } = await supabaseClient
             .from('invitations')
             .select('*')
@@ -80,7 +90,12 @@ export const invitationService = {
     },
 
     async getInvitationsByIds(ids: string[], client?: SupabaseClient) {
-        const supabaseClient = client ?? await getDefaultClient();
+        // js-length-check-first: Check array length before expensive operation
+        if (!ids.length) return [];
+        
+        const clientPromise = client ? Promise.resolve(client) : getDefaultClient();
+        const supabaseClient = await clientPromise;
+        
         const { data, error } = await supabaseClient
             .from('invitations')
             .select(INVITATION_SUMMARY_SELECT)

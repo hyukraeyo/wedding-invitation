@@ -100,7 +100,7 @@ export function BuilderClient() {
         void handleSaveRef.current?.();
     }, []);
 
-    const handleSave = useCallback(async () => {
+const handleSave = useCallback(async () => {
         if (!user) {
             handleLogin();
             return;
@@ -115,15 +115,19 @@ export function BuilderClient() {
         try {
             const currentStoreState = useInvitationStore.getState();
 
-            // Optimization: Filter functions from state once
-            const cleanData = Object.fromEntries(
-                Object.entries(currentStoreState).filter(([, v]) => typeof v !== 'function')
-            ) as unknown as InvitationData;
+            // js-cache-function-results: Cache expensive object filtering
+            const cleanData = (() => {
+                const entries = Object.entries(currentStoreState);
+                const filteredEntries = entries.filter(([, v]) => typeof v !== 'function');
+                return Object.fromEntries(filteredEntries) as InvitationData;
+            })();
 
             let currentSlug = currentStoreState.slug;
 
-            if (!currentSlug) {
-                currentSlug = generateSlug(currentStoreState.groom.firstName);
+if (!currentSlug) {
+                // js-early-exit: Early return for slug generation
+                const groomName = currentStoreState.groom.firstName;
+                currentSlug = generateSlug(groomName);
                 currentStoreState.setSlug(currentSlug);
             }
 

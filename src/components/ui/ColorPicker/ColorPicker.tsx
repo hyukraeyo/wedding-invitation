@@ -18,7 +18,7 @@ const getLuma = (hex: string): number => {
     return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 };
 
-export const ColorPicker = ({ value, colors, onChange, className }: ColorPickerProps) => {
+export const ColorPicker = ({ value, colors = [], onChange, className }: ColorPickerProps) => {
     const colorData = useMemo(() =>
         colors.map(color => ({
             color,

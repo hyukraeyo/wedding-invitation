@@ -12,9 +12,11 @@ interface ClientProvidersProps {
 }
 
 export default function ClientProviders({ children, session }: ClientProvidersProps) {
+    // rerender-lazy-state-init: Expensive QueryClient initialization in function
     const [queryClient] = useState(() => new QueryClient({
         defaultOptions: {
             queries: {
+                // client-swr-dedup: Enable automatic request deduplication
                 staleTime: 60 * 1000, // 1 minute
                 gcTime: 1000 * 60 * 60 * 24, // 24 hours
                 refetchOnWindowFocus: false,

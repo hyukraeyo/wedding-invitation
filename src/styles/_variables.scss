@@ -154,12 +154,12 @@ $button-font-size: 0.9375rem; // 15px
 // ============================================
 // Spacing & Layout
 // ============================================
-$radius-sm: 0.5rem; // 8px
-$radius-md: 1rem; // 16px
-$radius-lg: 1rem; // 16px (Unified to 16px as requested)
-$radius-xl: 1.25rem; // 20px
-$radius-2xl: 1.5rem; // 24px
-$radius-3xl: 2.5rem; // 40px
+$radius-sm: var(--radius-sm, 0.5rem); // 8px
+$radius-md: var(--radius-md, 1rem); // 16px
+$radius-lg: var(--radius-lg, 1rem); // 16px (Unified to 16px as requested)
+$radius-xl: var(--radius-xl, 1.25rem); // 20px
+$radius-2xl: var(--radius-2xl, 1.5rem); // 24px
+$radius-3xl: var(--radius-3xl, 2.5rem); // 40px
 $radius-full: 9999px;
 $input-radius: $radius-sm;
 $button-radius: $radius-md;
@@ -199,13 +199,13 @@ $control-hover-border: $zinc-300;
 $control-hover-border-strong: $zinc-400;
 
 $hover-bg-warm: #fffdf0;
-$shadow-hover-sm: 0 2px 6px rgba(0, 0, 0, 0.08);
-$shadow-hover-md: 0 6px 14px rgba(0, 0, 0, 0.06);
-$shadow-hover-primary: 0 12px 24px rgba($color-primary, 0.22);
-$shadow-hover-primary-strong: 0 4px 12px rgba($color-primary, 0.4);
-$shadow-card: 0 4px 12px rgba(0, 0, 0, 0.04);
-$shadow-hover-card: 0 12px 24px rgba(0, 0, 0, 0.08);
-$shadow-hover-primary-md: 0 4px 12px rgba($color-primary, 0.3);
+$shadow-hover-sm: var(--shadow-hover-sm, 0 2px 6px rgba(0, 0, 0, 0.08));
+$shadow-hover-md: var(--shadow-hover-md, 0 6px 14px rgba(0, 0, 0, 0.06));
+$shadow-hover-primary: var(--shadow-hover-primary, 0 12px 24px rgba($color-primary, 0.22));
+$shadow-hover-primary-strong: var(--shadow-hover-primary-strong, 0 4px 12px rgba($color-primary, 0.4));
+$shadow-card: var(--shadow-card, 0 4px 12px rgba(0, 0, 0, 0.04));
+$shadow-hover-card: var(--shadow-hover-card, 0 12px 24px rgba(0, 0, 0, 0.08));
+$shadow-hover-primary-md: var(--shadow-hover-primary-md, 0 4px 12px rgba($color-primary, 0.3));
 
 $mobile: 768px;
 $max-mobile: 767px;
