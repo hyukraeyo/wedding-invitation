@@ -3,44 +3,50 @@
 
 .checkbox {
   @include m.flex-center;
-  // grid place-content-center replacement
-  display: grid;
-  place-content: center;
-
-  width: 1rem; // h-4
-  height: 1rem; // w-4
+  width: 20px;
+  height: 20px;
   flex-shrink: 0;
-  border-radius: v.$radius-sm; // rounded-sm
-  border: 1px solid v.$color-primary; // border-primary
-  background-color: transparent;
-  color: transparent;
+  border-radius: 6px;
+  border: 1.5px solid v.$zinc-300;
+  background-color: white;
   cursor: pointer;
-  transition: border-color v.$transition-fast, background-color v.$transition-fast, box-shadow v.$transition-fast;
+  transition: all v.$transition-200 v.$ease-ios;
+  position: relative;
 
-  // focus-visible styles via mixin
   @include m.focus-ring;
 
-  // Disabled state
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
+  @include m.hover {
+    border-color: v.$zinc-400;
+    background-color: v.$zinc-50;
   }
 
-  // Checked state
-  &[data-state='checked'] {
-    background-color: v.$color-primary; // bg-primary
-    color: v.$color-primary-foreground; // text-primary-foreground
+  &[data-state="checked"] {
+    background-color: v.$color-primary;
+    border-color: v.$color-primary;
+    color: v.$zinc-900;
+    box-shadow: 0 2px 8px rgba(v.$color-primary, 0.2);
+  }
+
+  &:active {
+    transform: scale(0.92);
+  }
+
+  &:disabled {
+    @include m.disabled;
+    background-color: v.$zinc-100;
+    border-color: v.$zinc-200;
   }
 }
 
 .indicator {
-  @include m.flex-center;
-  color: currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
   
-  // Icon size
   :global(svg) {
-    width: 0.8rem;
-    height: 0.8rem;
-    stroke-width: 3px;
+    width: 14px;
+    height: 14px;
+    stroke-width: 4px;
   }
 }

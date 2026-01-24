@@ -2,22 +2,50 @@
 @use "../../../styles/mixins" as m;
 
 .textarea {
-  @include m.input-base;
-  display: flex;
-  min-height: 60px;
   width: 100%;
-  padding: 0.5rem 0.75rem; // px-3 py-2
-  background-color: transparent;
-  color: v.$color-foreground;
+  min-height: 80px;
+  padding: 0.75rem 1rem;
+  font-size: v.$font-size-sm;
+  font-family: v.$font-family-base;
+  font-weight: 500;
+  border: 1px solid v.$zinc-200;
+  border-radius: v.$radius-md;
+  background-color: white;
+  color: v.$zinc-900;
+  transition: all v.$transition-200 v.$ease-ios;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  resize: vertical;
 
-  &::placeholder {
-    color: v.$color-muted-foreground;
+  @include m.focus-ring;
+
+  @include m.hover {
+    border-color: v.$zinc-300;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  }
+
+  &:focus {
+    border-color: v.$color-primary;
+    box-shadow: 
+      0 0 0 4px rgba(v.$color-primary, 0.1),
+      0 1px 2px rgba(0, 0, 0, 0.05);
+    background-color: white;
+  }
+
+  &[data-error="true"] {
+    border-color: v.$red-500 !important;
+    &:focus {
+      box-shadow: 0 0 0 4px rgba(v.$red-500, 0.1);
+    }
   }
 
   &:disabled {
+    @include m.disabled;
+    background-color: v.$zinc-50;
+    border-color: v.$zinc-200;
     cursor: not-allowed;
-    opacity: 0.5;
   }
 
-  transition: all v.$transition-200 cubic-bezier(0.16, 1, 0.3, 1); // ease-ios
+  &::placeholder {
+    color: v.$zinc-400;
+  }
 }

@@ -2,12 +2,38 @@
 @use "../../../styles/mixins" as m;
 
 .toggle {
-  @include m.toggle-base;
-  @include m.toggle-hover;
-  @include m.toggle-active;
-  @include m.toggle-state-on;
-  
+  @include m.flex-center;
+  height: 40px;
+  min-width: 40px;
+  padding: 0 12px;
+  border-radius: v.$radius-md;
+  background-color: transparent;
+  color: v.$zinc-500;
+  font-size: v.$font-size-sm;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all v.$transition-200 v.$ease-ios;
+  border: 1px solid transparent;
+
+  @include m.focus-ring;
+
+  @include m.hover {
+    background-color: v.$zinc-100;
+    color: v.$zinc-900;
+  }
+
+  &[data-state="on"] {
+    background-color: v.$primary-100;
+    color: v.$color-primary-dark;
+    border-color: rgba(v.$color-primary, 0.2);
+    box-shadow: 0 2px 8px rgba(v.$color-primary, 0.1);
+  }
+
+  &:active {
+    transform: scale(v.$scale-press-sm);
+  }
+
   &:disabled {
-      @include m.input-disabled;
+    @include m.disabled;
   }
 }

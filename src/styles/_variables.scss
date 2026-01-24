@@ -207,6 +207,7 @@ $shadow-card: var(--shadow-card, 0 4px 12px rgba(0, 0, 0, 0.04));
 $shadow-hover-card: var(--shadow-hover-card, 0 12px 24px rgba(0, 0, 0, 0.08));
 $shadow-hover-primary-md: var(--shadow-hover-primary-md, 0 4px 12px rgba($color-primary, 0.3));
 
+$tablet: 1024px;
 $mobile: 768px;
 $max-mobile: 767px;
 $canvas-max-width: 428px;

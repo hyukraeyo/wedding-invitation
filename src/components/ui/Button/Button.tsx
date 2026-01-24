@@ -2,6 +2,7 @@ import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { Banana } from "lucide-react";
 import { clsx } from "clsx";
+import { cn } from "@/lib/utils";
 import styles from "./Button.module.scss";
 
 type ButtonVariantsOptions = {
@@ -28,6 +29,11 @@ export interface ButtonProps
     | "glass";
     size?: "default" | "sm" | "lg" | "icon" | "icon-xs" | "icon-sm" | "icon-lg";
     loading?: boolean | undefined;
+    fullWidth?: boolean | undefined;
+    // Theme Options (Granular Control)
+    color?: string;       // Custom background color (hex, rgb, or brand name)
+    textColor?: string;   // Custom text color
+    radius?: number | string; // Custom border radius
 }
 
 // Compatibility helper for external usage (e.g. AlertDialog)
@@ -49,17 +55,31 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             size = "default",
             asChild = false,
             loading = false,
+            fullWidth = false,
+            color,
+            textColor,
+            radius,
             disabled,
             children,
+            style, // Extract original style to merge
             ...props
         },
         ref
     ) => {
         const Comp = asChild ? Slot : "button";
 
+        // Generate dynamic styles from props
+        const dynamicStyles = {
+            ...(color && { "--btn-bg": color }),
+            ...(textColor && { "--btn-color": textColor }),
+            ...(radius !== undefined && { "--btn-radius": typeof radius === 'number' ? `${radius}px` : radius }),
+            ...style
+        } as React.CSSProperties;
+
         return (
             <Comp
-                className={buttonVariants({ variant, size, className })}
+                className={buttonVariants({ variant, size, className: cn(fullWidth && styles["button--full-width"], className) })}
+                style={dynamicStyles}
                 disabled={disabled || loading}
                 data-loading={loading ? "true" : undefined}
                 ref={ref}

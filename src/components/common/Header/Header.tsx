@@ -129,7 +129,7 @@ export default function Header() {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     // 메인 페이지('/')와 초대장 보기('/v/'), 미리보기('/preview')에서는 헤더를 숨깁니다.
-    const isVisible = pathname !== '/' && !pathname.startsWith('/v/') && pathname !== '/preview';
+    const isVisible = pathname !== '/' && !pathname.startsWith('/v/') && pathname !== '/preview' && pathname !== '/design-system';
     const { user, loading: authLoading } = useAuth();
 
     // Store states

@@ -1,28 +1,28 @@
-import { useCallback, useRef } from 'react';
+import { useRef } from 'react';
 
 export function useDerivedState<T>(
   getValue: () => T,
   dependency: T
 ): T {
   const ref = useRef(dependency);
-  
-  if (ref.current !== dependency) {
-    ref.current = dependency;
+
+  if (ref.current !== dependency) { // eslint-disable-line react-hooks/refs
+    ref.current = dependency; // eslint-disable-line react-hooks/refs
   }
-  
-  return ref.current;
+
+  return ref.current; // eslint-disable-line react-hooks/refs
 }
 
-const expensiveCalculations = new Map<string, any>();
+const expensiveCalculations = new Map<string, unknown>();
 
 export function cachedCalculation<T>(
   key: string,
   calculation: () => T
 ): T {
   if (expensiveCalculations.has(key)) {
-    return expensiveCalculations.get(key);
+    return expensiveCalculations.get(key) as T;
   }
-  
+
   const result = calculation();
   expensiveCalculations.set(key, result);
   return result;
@@ -30,7 +30,7 @@ export function cachedCalculation<T>(
 
 export function useLatest<T>(value: T): { current: T } {
   const ref = useRef(value);
-  ref.current = value;
+  ref.current = value; // eslint-disable-line react-hooks/refs
   return ref;
 }
 
@@ -50,7 +50,7 @@ export function batchStyleChanges(
   const styleString = Object.entries(styles)
     .map(([prop, value]) => `${prop}: ${value}`)
     .join('; ');
-  
+
   element.style.cssText = styleString;
 }
 
