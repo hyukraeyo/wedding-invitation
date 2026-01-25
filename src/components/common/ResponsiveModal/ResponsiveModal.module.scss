@@ -98,7 +98,22 @@ $color-text-desc: #4E5968;
     overflow-y: auto;
     padding: 1.5rem; // Increased vertical padding for premium feel
     min-height: 8rem; // Ensure some space for content even if short
-    justify-content: center; // Center content vertically for better look with short text
+    
+    // Pure CSS Scroll Shadows (Optimized)
+    background:
+        /* Shadow Cover TOP */
+        linear-gradient(white 30%, rgba(255, 255, 255, 0)),
+        /* Shadow Cover BOTTOM */
+        linear-gradient(rgba(255, 255, 255, 0), white 70%) 0 100%,
+        /* Shadow TOP */
+        radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0)),
+        /* Shadow BOTTOM */
+        radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0)) 0 100%;
+    
+    background-repeat: no-repeat;
+    background-color: white;
+    background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
+    background-attachment: local, local, scroll, scroll;
 
     // Scrollbar hiding
     scrollbar-width: none;
@@ -110,8 +125,7 @@ $color-text-desc: #4E5968;
 
     // Drawer scroll area specific overrides (Mobile)
     &.drawerScrollArea {
-        padding: 0 !important; // Fade Mask를 위해 컨테이너 패딩 제거
-        // overflow-y override 제거됨 -> 부모 스크롤 사용
+        padding: 0 !important; // padding must be handled by children or inner padding to avoid shadow cut
     }
 }
 

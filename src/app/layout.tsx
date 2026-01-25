@@ -84,7 +84,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-// Start auth early to avoid waterfall
+  // Start auth early to avoid waterfall
   const sessionPromise = auth();
 
   // Await session only when needed
@@ -149,20 +149,82 @@ export default async function RootLayout({
                   "카카오톡 공유",
                   "지도 연동",
                   "갤러리 시스템",
-                  "계좌번호 관리"
-                ]
-              }
-            ])
-          }}
-        />
-        <ClientProviders session={session}>
-          <Suspense fallback={null}>
-            <ProgressBar />
-          </Suspense>
-          <Header />
-          {children}
-        </ClientProviders>
-      </body>
+
+  return(
+    <html lang = "ko" suppressHydrationWarning data- scroll - behavior= "smooth" className = { fontVariables } >
+            <body>
+              <Script
+                src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.0/kakao.min.js"
+                integrity="sha384-l+xbElFSnPZ2rOaPrU//2FF5B4LB8FiX5q4fXYTlfcG4PGpMkE1vcL7kNXI6Cci0"
+                crossOrigin="anonymous"
+                strategy="afterInteractive"
+              />
+              <Script id="kakao-init" strategy="afterInteractive">
+                {`
+            if (typeof window !== 'undefined' && window.Kakao && !window.Kakao.isInitialized()) {
+              window.Kakao.init('${process.env.NEXT_PUBLIC_KAKAO_APP_KEY}');
+            }
+          `}
+              </Script>
+              <Script
+                id="json-ld"
+                type="application/ld+json"
+                strategy="beforeInteractive"
+                dangerouslySetInnerHTML={{
+                  __html: JSON.stringify([
+                    {
+                      "@context": "https://schema.org",
+                      "@type": "WebSite",
+                      "name": "바나나웨딩",
+                      "alternateName": "Banana Wedding",
+                      "url": "https://wedding-invitation-zeta-one.vercel.app",
+                      "description": "달콤한 시작을 알리는 고품격 모바일 청첩장 플랫폼",
+                      "inLanguage": "ko-KR",
+                      "publisher": {
+                        "@type": "Person",
+                        "name": "Hyuk Rae Yoon",
+                        "url": "https://github.com/hyukraeyo"
+                      },
+                      "potentialAction": {
+                        "@type": "CreateAction",
+                        "target": "https://wedding-invitation-zeta-one.vercel.app/builder",
+                        "description": "나만의 모바일 청첩장 만들기"
+                      }
+                    },
+                    {
+                      "@context": "https://schema.org",
+                      "@type": "SoftwareApplication",
+                      "name": "Wedding Invitation Studio",
+                      "description": "모바일 청첩장 제작 웹 애플리케이션",
+                      "url": "https://wedding-invitation-zeta-one.vercel.app",
+                      "applicationCategory": "WebApplication",
+                      "operatingSystem": "Web Browser",
+                      "offers": {
+                        "@type": "Offer",
+                        "price": "0",
+                        "priceCurrency": "KRW"
+                      },
+                      "featureList": [
+                        "실시간 미리보기",
+                        "카카오톡 공유",
+                        "지도 연동",
+                        "갤러리 시스템",
+                        "계좌번호 관리"
+                      ]
+                    }
+                  ])
+                }}
+              />
+              <ClientProviders session={session}>
+                <div vaul-drawer-wrapper="" style={{ backgroundColor: 'var(--background)', minHeight: '100dvh' }}>
+                  <Suspense fallback={null}>
+                    <ProgressBar />
+                  </Suspense>
+                  <Header />
+                  {children}
+                </div>
+              </ClientProviders>
+            </body>
     </html>
   );
 }

@@ -87,6 +87,25 @@ export default function DataDisplayTab() {
                     </Story>
                 </div>
             </Story>
+
+            <Story title="Accordion" description="Foldable content panels (FAQs, Details)">
+                <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="item-1">
+                        <AccordionTrigger>What is Banana Wedding?</AccordionTrigger>
+                        <AccordionContent>A premium mobile invitation builder.</AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="item-2">
+                        <AccordionTrigger>Is it responsive?</AccordionTrigger>
+                        <AccordionContent>Yes, it supports all modern mobile devices.</AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="item-3">
+                        <AccordionTrigger>Can I customize colors?</AccordionTrigger>
+                        <AccordionContent>Absolutely! We provide a full palette of premium colors.</AccordionContent>
+                    </AccordionItem>
+                </Accordion>
+            </Story>
         </div>
+            </Story >
+        </div >
     );
 }

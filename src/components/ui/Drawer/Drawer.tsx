@@ -86,7 +86,6 @@ const DrawerContent = React.forwardRef<
                 ref={combinedRef}
                 tabIndex={-1}
                 className={cn(styles.content, className)}
-                aria-describedby={undefined}
                 onOpenAutoFocus={handleOpenAutoFocus}
                 {...props}
             >

@@ -78,59 +78,7 @@ export const ResponsiveModal = ({
     const isDesktop = useMediaQuery("(min-width: 768px)");
     const hasActions = onConfirm || footer;
 
-    // Scroll Fade Logic
-    const internalScrollRef = React.useRef<HTMLDivElement>(null);
-    const [scrollState, setScrollState] = React.useState({
-        isTop: true,
-        isBottom: true,
-    });
-
-    // Merge refs to support both internal logic and external scrollRef prop
-    const setRefs = React.useCallback(
-        (node: HTMLDivElement | null) => {
-            internalScrollRef.current = node;
-            scrollRef?.(node);
-        },
-        [scrollRef]
-    );
-
-    const checkScroll = React.useCallback(() => {
-        if (!useScrollFade) return;
-        const el = internalScrollRef.current;
-        if (!el) return;
-
-        requestAnimationFrame(() => {
-            const { scrollTop, scrollHeight, clientHeight } = el;
-            const isScrollable = scrollHeight > clientHeight;
-
-            setScrollState({
-                isTop: scrollTop <= 0,
-                isBottom: !isScrollable || Math.ceil(scrollTop + clientHeight) >= scrollHeight
-            });
-        });
-    }, [useScrollFade]);
-
-    React.useEffect(() => {
-        if (open && useScrollFade) {
-            const timer = setTimeout(checkScroll, 0); // Check initial state after render
-            return () => clearTimeout(timer);
-        }
-        return undefined;
-    }, [open, useScrollFade, children, checkScroll]);
-
-    // Handle internal scroll event + external onScroll
-    const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-        if (useScrollFade) checkScroll();
-        onScroll?.(e);
-    };
-
-    const scrollMaskClass = useScrollFade
-        ? cn(
-            !scrollState.isTop && !scrollState.isBottom && styles.maskBoth,
-            !scrollState.isTop && scrollState.isBottom && styles.maskTop,
-            scrollState.isTop && !scrollState.isBottom && styles.maskBottom
-        )
-        : "";
+    // Scroll Fade Logic Removed in favor of Pure CSS implementation
 
     const internalOnOpenChange = (newOpen: boolean) => {
         if (!dismissible && !newOpen) return;
@@ -171,11 +119,16 @@ export const ResponsiveModal = ({
                                 className={cn(styles.content, contentClassName, scrollMaskClass)}
                                 onScroll={handleScroll}
                             >
-                                {description ? (
-                                    <DialogDescription className={styles.description}>
-                                        {description}
+                                <DialogDescription className={styles.description}>
+                                    {description}
+                                </DialogDescription>
+                                ) : (
+                                <VisuallyHidden>
+                                    <DialogDescription>
+                                        {title ? `${title} 모달입니다.` : "모달 콘텐츠 다이얼로그"}
                                     </DialogDescription>
-                                ) : null}
+                                </VisuallyHidden>
+                                )}
                                 {children}
                             </div>
                         </div>
@@ -241,15 +194,21 @@ export const ResponsiveModal = ({
                         </DrawerHeader>
 
                         <div
-                            ref={setRefs}
-                            className={cn(styles.content, styles.drawerScrollArea, contentClassName, scrollMaskClass)}
-                            onScroll={handleScroll}
+                            className={cn(styles.content, styles.drawerScrollArea, contentClassName)}
+                            onScroll={onScroll}
+                            ref={scrollRef}
                         >
                             {description ? (
                                 <DrawerDescription className={cn(styles.description, styles.descriptionSpacing)}>
                                     {description}
                                 </DrawerDescription>
-                            ) : null}
+                            ) : (
+                                <VisuallyHidden>
+                                    <DrawerDescription>
+                                        {title ? `${title} 모달입니다.` : "모달 콘텐츠 드로어"}
+                                    </DrawerDescription>
+                                </VisuallyHidden>
+                            )}
                             {children ? (
                                 <DrawerScrollArea
                                     className={cn(styles.defaultDrawerPadding, className)}
@@ -257,9 +216,7 @@ export const ResponsiveModal = ({
                                 >
                                     {children}
                                 </DrawerScrollArea>
-                            ) : (
-                                description ? null : null
-                            )}
+                            ) : null}
                         </div>
                     </div>
 
