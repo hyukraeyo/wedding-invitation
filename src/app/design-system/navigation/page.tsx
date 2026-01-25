@@ -154,14 +154,18 @@ const [value, setValue] = useState("option1");
   </TabsList>
 </Tabs>
 
-// Accordion
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/Accordion";
-
+// Accordion (싱글 모드 - 하나만 열림)
 <Accordion type="single" collapsible>
   <AccordionItem value="item1">
     <AccordionTrigger>제목</AccordionTrigger>
     <AccordionContent>내용</AccordionContent>
   </AccordionItem>
+</Accordion>
+
+// Accordion (멀티 모드 - 여러 개 열림)
+<Accordion type="multiple">
+  <AccordionItem value="item1">...</AccordionItem>
+  <AccordionItem value="item2">...</AccordionItem>
 </Accordion>`}
                     </pre>
                 </div>

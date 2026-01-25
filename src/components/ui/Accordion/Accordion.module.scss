@@ -2,7 +2,15 @@
 @use "../../../styles/mixins" as m;
 
 .item {
-  border-bottom: 1px solid v.$zinc-200; // border-b
+  border: 1px solid v.$zinc-200;
+  border-radius: v.$radius-md;
+  margin-bottom: 0.5rem;
+  background-color: v.$white;
+  overflow: hidden;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .header {
@@ -10,15 +18,14 @@
 }
 
 .trigger {
-
   display: flex;
   flex: 1;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  padding: 1rem 0; // py-4
+  padding: 1rem; // py-4
   
-  font-size: v.$font-size-sm; // text-sm
+  font-size: v.$font-size-base; // text-base
   font-weight: 500; // font-medium
   text-align: left;
   
@@ -26,33 +33,37 @@
   border: none;
   cursor: pointer;
   
-  transition: all v.$transition-200 v.$ease-standard;
+  transition: all v.$transition-fast v.$ease-standard;
 
   @include m.focus-ring;
 
   &:hover {
-    text-decoration: underline;
+    background-color: v.$zinc-50;
   }
 
-  // Open state for Icon rotation
+  // Open state style
   &[data-state='open'] {
+    background-color: v.$zinc-50;
+    
     .icon {
       transform: rotate(180deg);
+      color: v.$zinc-900;
     }
   }
 }
 
 .icon {
-  width: 1rem; // h-4
-  height: 1rem;
+  width: 1.25rem; // h-5
+  height: 1.25rem;
   flex-shrink: 0;
-  color: v.$zinc-500; // text-muted-foreground
-  transition: transform v.$transition-200 v.$ease-standard;
+  color: v.$zinc-400; // text-muted-foreground
+  transition: transform v.$transition-fast v.$ease-standard;
 }
 
 .content {
   overflow: hidden;
   font-size: v.$font-size-sm; // text-sm
+  color: v.$zinc-600;
   
   // Animation
   &[data-state='open'] {
@@ -64,8 +75,9 @@
 }
 
 .contentInner {
-  padding-bottom: 1rem; // pb-4
-  padding-top: 0; // pt-0
+  padding: 1rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid transparent; // prevent jump
 }
 
 @keyframes accordion-down {

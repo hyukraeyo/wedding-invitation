@@ -88,7 +88,7 @@ export default function DataDisplayTab() {
                 </div>
             </Story>
 
-            <Story title="Accordion" description="Foldable content panels (FAQs, Details)">
+            <Story title="Accordion (Single Mode)" description="One item open at a time (Auto-close)">
                 <Accordion type="single" collapsible className="w-full">
                     <AccordionItem value="item-1">
                         <AccordionTrigger>What is Banana Wedding?</AccordionTrigger>
@@ -98,9 +98,22 @@ export default function DataDisplayTab() {
                         <AccordionTrigger>Is it responsive?</AccordionTrigger>
                         <AccordionContent>Yes, it supports all modern mobile devices.</AccordionContent>
                     </AccordionItem>
+                </Accordion>
+            </Story>
+
+            <Story title="Accordion (Multi Mode)" description="Multiple items can be open simultaneously">
+                <Accordion type="multiple" className="w-full">
+                    <AccordionItem value="item-1">
+                        <AccordionTrigger>Design Features</AccordionTrigger>
+                        <AccordionContent>Custom fonts, colors, and layout options.</AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="item-2">
+                        <AccordionTrigger>Guest Management</AccordionTrigger>
+                        <AccordionContent>RSVP tracking and guest list export.</AccordionContent>
+                    </AccordionItem>
                     <AccordionItem value="item-3">
-                        <AccordionTrigger>Can I customize colors?</AccordionTrigger>
-                        <AccordionContent>Absolutely! We provide a full palette of premium colors.</AccordionContent>
+                        <AccordionTrigger>Photo Gallery</AccordionTrigger>
+                        <AccordionContent>Upload up to 30 high-res photos.</AccordionContent>
                     </AccordionItem>
                 </Accordion>
             </Story>
