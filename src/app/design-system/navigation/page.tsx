@@ -103,7 +103,7 @@ export default function NavigationPage() {
                         <AccordionItem value="faq1">
                             <AccordionTrigger>청첩장은 어떻게 만들 수 있나요?</AccordionTrigger>
                             <AccordionContent>
-                                회원가입 후 "새 청첩장 만들기" 버튼을 클릭하면 쉽게 시작할 수 있습니다.
+                                회원가입 후 &quot;새 청첩장 만들기&quot; 버튼을 클릭하면 쉽게 시작할 수 있습니다.
                                 템플릿을 선택하고 정보를 입력하면 됩니다.
                             </AccordionContent>
                         </AccordionItem>
@@ -169,3 +169,4 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
         </>
     );
 }
+

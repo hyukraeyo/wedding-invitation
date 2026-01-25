@@ -49,10 +49,10 @@ export const RadioGroupField = ({
             className={className}
         >
             <RadioGroup
-                value={value}
-                defaultValue={defaultValue}
-                onValueChange={onValueChange}
-                name={name}
+                {...(value !== undefined ? { value } : {})}
+                {...(defaultValue !== undefined ? { defaultValue } : {})}
+                {...(onValueChange ? { onValueChange } : {})}
+                {...(name ? { name } : {})}
                 className="flex flex-col gap-3 py-1"
             >
                 {options.map((option) => {
