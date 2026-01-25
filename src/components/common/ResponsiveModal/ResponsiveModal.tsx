@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React from 'react';
 import { useMediaQuery } from '@/hooks/use-media-query';
@@ -9,7 +9,7 @@ import {
     DialogTitle,
     DialogDescription,
     DialogTrigger,
-} from "@/components/ui/Dialog"
+} from "@/components/ui/Dialog";
 import {
     Drawer,
     DrawerContent,
@@ -18,11 +18,12 @@ import {
     DrawerDescription,
     DrawerTrigger,
     DrawerScrollArea,
-} from "@/components/ui/Drawer"
+} from "@/components/ui/Drawer";
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
-import styles from './ResponsiveModal.module.scss';
 import { useCanUseDom } from '@/hooks/useCanUseDom';
+import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
+import styles from './ResponsiveModal.module.scss';
 
 export interface ResponsiveModalProps {
     open?: boolean | undefined;
@@ -31,8 +32,8 @@ export interface ResponsiveModalProps {
     title?: React.ReactNode | undefined;
     description?: React.ReactNode | undefined;
     children?: React.ReactNode | undefined;
-    footer?: React.ReactNode | undefined; // 추가: 커스텀 푸터
-    outerFooter?: React.ReactNode | undefined; // 추가: 카드 외부 푸터 (로그아웃 버튼 등)
+    footer?: React.ReactNode | undefined;
+    outerFooter?: React.ReactNode | undefined;
     className?: string | undefined;
     contentClassName?: string | undefined;
 
@@ -48,7 +49,7 @@ export interface ResponsiveModalProps {
     dismissible?: boolean;
     onScroll?: (e: React.UIEvent<HTMLDivElement>) => void;
     scrollRef?: (node: HTMLDivElement | null) => void;
-    useScrollFade?: boolean; // New prop
+    useScrollFade?: boolean;
 }
 
 export const ResponsiveModal = ({
@@ -73,12 +74,9 @@ export const ResponsiveModal = ({
     dismissible = true,
     onScroll,
     scrollRef,
-    useScrollFade = false,
 }: ResponsiveModalProps) => {
     const isDesktop = useMediaQuery("(min-width: 768px)");
-    const hasActions = onConfirm || footer;
-
-    // Scroll Fade Logic Removed in favor of Pure CSS implementation
+    const hasActions = !!onConfirm || !!footer;
 
     const internalOnOpenChange = (newOpen: boolean) => {
         if (!dismissible && !newOpen) return;
@@ -87,15 +85,11 @@ export const ResponsiveModal = ({
 
     const handleCancel = () => {
         onCancel?.();
-        // Force close even if not dismissible when clicking cancel explicitly
         onOpenChange?.(false);
     };
 
     const canUseDOM = useCanUseDom();
-
-    if (!canUseDOM) {
-        return null;
-    }
+    if (!canUseDOM) return null;
 
     if (isDesktop) {
         return (
@@ -110,24 +104,25 @@ export const ResponsiveModal = ({
                         <div className={styles.mainSection}>
                             <DialogHeader className={styles.header}>
                                 <DialogTitle className={styles.title}>
-                                    {title || "알림"}
+                                    {title || '알림'}
                                 </DialogTitle>
                             </DialogHeader>
 
                             <div
-                                ref={setRefs}
-                                className={cn(styles.content, contentClassName, scrollMaskClass)}
-                                onScroll={handleScroll}
+                                className={cn(styles.content, contentClassName)}
+                                onScroll={onScroll}
+                                ref={scrollRef}
                             >
-                                <DialogDescription className={styles.description}>
-                                    {description}
-                                </DialogDescription>
-                                ) : (
-                                <VisuallyHidden>
-                                    <DialogDescription>
-                                        {title ? `${title} 모달입니다.` : "모달 콘텐츠 다이얼로그"}
+                                {description ? (
+                                    <DialogDescription className={styles.description}>
+                                        {description}
                                     </DialogDescription>
-                                </VisuallyHidden>
+                                ) : (
+                                    <VisuallyHidden>
+                                        <DialogDescription>
+                                            {title ? `${title} 모달입니다.` : '모달 콘텐츠 영역입니다.'}
+                                        </DialogDescription>
+                                    </VisuallyHidden>
                                 )}
                                 {children}
                             </div>
@@ -151,10 +146,7 @@ export const ResponsiveModal = ({
                                             disabled={confirmDisabled || confirmLoading}
                                             loading={confirmLoading}
                                             variant={confirmVariant === 'destructive' ? 'destructive' : 'solid'}
-                                            className={cn(
-                                                styles.confirmButton,
-                                                styles.dialogButtonHeight
-                                            )}
+                                            className={cn(styles.confirmButton, styles.dialogButtonHeight)}
                                         >
                                             {confirmText}
                                         </Button>
@@ -164,14 +156,13 @@ export const ResponsiveModal = ({
                         ) : null}
                     </div>
 
-                    {/* Outer content below the card */}
                     {outerFooter ? (
                         <div className={styles.outerFooter}>
                             {outerFooter}
                         </div>
                     ) : null}
                 </DialogContent>
-            </Dialog >
+            </Dialog>
         );
     }
 
@@ -182,14 +173,12 @@ export const ResponsiveModal = ({
             dismissible={dismissible}
         >
             {trigger ? <DrawerTrigger asChild>{trigger}</DrawerTrigger> : null}
-            <DrawerContent
-                className={styles.drawerContent}
-            >
+            <DrawerContent className={styles.drawerContent}>
                 <div className={styles.drawerLayout}>
                     <div className={styles.mainSection}>
                         <DrawerHeader className={cn(styles.header, styles.drawerHeader)}>
                             <DrawerTitle className={styles.title}>
-                                {title || "알림"}
+                                {title || '알림'}
                             </DrawerTitle>
                         </DrawerHeader>
 
@@ -205,7 +194,7 @@ export const ResponsiveModal = ({
                             ) : (
                                 <VisuallyHidden>
                                     <DrawerDescription>
-                                        {title ? `${title} 모달입니다.` : "모달 콘텐츠 드로어"}
+                                        {title ? `${title} 모달입니다.` : '모달 콘텐츠 영역입니다.'}
                                     </DrawerDescription>
                                 </VisuallyHidden>
                             )}
@@ -238,10 +227,7 @@ export const ResponsiveModal = ({
                                         disabled={confirmDisabled || confirmLoading}
                                         loading={confirmLoading}
                                         variant={confirmVariant === 'destructive' ? 'destructive' : 'solid'}
-                                        className={cn(
-                                            styles.confirmButton,
-                                            styles.drawerButtonHeight
-                                        )}
+                                        className={cn(styles.confirmButton, styles.drawerButtonHeight)}
                                     >
                                         {confirmText}
                                     </Button>
@@ -250,7 +236,6 @@ export const ResponsiveModal = ({
                         </div>
                     ) : null}
 
-                    {/* On Desktop it's outside, on Mobile (Drawer) we put it below the main footer but inside content since it's a sheet */}
                     {outerFooter ? (
                         <div className={cn(styles.outerFooter, styles.outerFooterMobile)}>
                             {outerFooter}

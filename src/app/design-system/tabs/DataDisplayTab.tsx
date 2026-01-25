@@ -105,7 +105,5 @@ export default function DataDisplayTab() {
                 </Accordion>
             </Story>
         </div>
-            </Story >
-        </div >
     );
 }
