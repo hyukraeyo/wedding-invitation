@@ -6,6 +6,14 @@ import { ChevronDown } from "lucide-react"
 import { cn } from "@/lib/utils"
 import styles from "./Accordion.module.scss"
 
+/**
+ * Accordion Component
+ * Based on Radix UI Accordion for accessibility and motion.
+ * 
+ * @param type - "single" (only one item open) or "multiple" (many items open)
+ * @param collapsible - (If type="single") If true, allows closing the already open item
+ * @param defaultValue - The value of the item(s) to be open by default
+ */
 const Accordion = AccordionPrimitive.Root
 
 const AccordionItem = React.forwardRef<

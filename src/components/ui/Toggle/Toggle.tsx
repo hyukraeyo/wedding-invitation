@@ -5,9 +5,8 @@ import * as TogglePrimitive from '@radix-ui/react-toggle';
 import { cn } from '@/lib/utils';
 import styles from './Toggle.module.scss';
 
-interface ToggleProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  pressed: boolean;
-  onPressedChange: (pressed: boolean) => void;
+interface ToggleProps extends React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root> {
+  size?: 'sm' | 'md' | 'lg' | 'square';
 }
 
 /**
@@ -19,24 +18,20 @@ export const Toggle = React.forwardRef<
   React.ElementRef<typeof TogglePrimitive.Root>,
   ToggleProps
 >(({
-  pressed,
-  onPressedChange,
-  children,
+  size = 'md',
   className,
-  disabled,
   ...props
 }, ref) => {
   return (
     <TogglePrimitive.Root
       ref={ref}
-      pressed={pressed}
-      onPressedChange={onPressedChange}
-      disabled={disabled}
-      className={cn(styles.toggle, className)}
+      className={cn(
+        styles.toggle,
+        styles[size],
+        className
+      )}
       {...props}
-    >
-      {children}
-    </TogglePrimitive.Root>
+    />
   );
 });
 

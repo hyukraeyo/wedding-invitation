@@ -88,7 +88,7 @@ export default function DataDisplayTab() {
                 </div>
             </Story>
 
-            <Story title="Accordion (Single Mode)" description="One item open at a time (Auto-close)">
+            <Story title="Accordion (Single Mode)" description="One item open at a time. Use prop: type='single' collapsible">
                 <Accordion type="single" collapsible className="w-full">
                     <AccordionItem value="item-1">
                         <AccordionTrigger>What is Banana Wedding?</AccordionTrigger>
@@ -101,7 +101,7 @@ export default function DataDisplayTab() {
                 </Accordion>
             </Story>
 
-            <Story title="Accordion (Multi Mode)" description="Multiple items can be open simultaneously">
+            <Story title="Accordion (Multi Mode)" description="Multiple items can be open simultaneously. Use prop: type='multiple'">
                 <Accordion type="multiple" className="w-full">
                     <AccordionItem value="item-1">
                         <AccordionTrigger>Design Features</AccordionTrigger>

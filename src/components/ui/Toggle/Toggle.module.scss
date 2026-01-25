@@ -2,38 +2,84 @@
 @use "../../../styles/mixins" as m;
 
 .toggle {
-  @include m.flex-center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   height: 40px;
   min-width: 40px;
-  padding: 0 12px;
-  border-radius: v.$radius-md;
-  background-color: transparent;
+  padding: 0 16px;
+  border-radius: v.$radius-sm;
+  background-color: v.$white;
   color: v.$zinc-500;
   font-size: v.$font-size-sm;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
-  transition: all v.$transition-200 v.$ease-ios;
-  border: 1px solid transparent;
+  transition: all v.$transition-fast v.$ease-ios;
+  border: 1px solid v.$zinc-200;
+  user-select: none;
+  white-space: nowrap;
 
   @include m.focus-ring;
 
   @include m.hover {
-    background-color: v.$zinc-100;
-    color: v.$zinc-900;
+    background-color: v.$zinc-50;
+    border-color: v.$zinc-300;
+    color: v.$zinc-600;
   }
 
   &[data-state="on"] {
-    background-color: v.$primary-100;
-    color: v.$color-primary-dark;
-    border-color: rgba(v.$color-primary, 0.2);
-    box-shadow: 0 2px 8px rgba(v.$color-primary, 0.1);
+    background: linear-gradient(135deg, v.$color-primary 0%, v.$color-primary-hover 100%);
+    color: v.$black;
+    border-color: v.$color-primary;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(v.$color-primary, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+
+    @include m.hover {
+      background: linear-gradient(135deg, v.$color-primary-hover 0%, v.$color-primary-dark 100%);
+      border-color: v.$color-primary-hover;
+      box-shadow: 0 4px 12px rgba(v.$color-primary, 0.35);
+    }
   }
 
   &:active {
     transform: scale(v.$scale-press-sm);
+    opacity: 0.9;
   }
 
   &:disabled {
     @include m.disabled;
+    background-color: v.$zinc-50;
+    border-color: v.$zinc-100;
+    color: v.$zinc-300;
+  }
+}
+
+// Sizes
+.sm {
+  height: 32px;
+  min-width: 32px;
+  padding: 0 12px;
+  font-size: v.$font-size-xs;
+  border-radius: 6px;
+}
+
+.lg {
+  height: 48px;
+  min-width: 48px;
+  padding: 0 20px;
+  font-size: v.$font-size-md;
+}
+
+.square {
+  padding: 0;
+  width: 40px; // Default square size
+  aspect-ratio: 1 / 1;
+
+  &.sm {
+    width: 32px;
+  }
+
+  &.lg {
+    width: 48px;
   }
 }

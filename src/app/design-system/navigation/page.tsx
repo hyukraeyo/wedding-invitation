@@ -96,7 +96,7 @@ export default function NavigationPage() {
             <section className={styles.section}>
                 <div className={styles.sectionHeader}>
                     <h2>Accordion</h2>
-                    <p>접었다 펼 수 있는 콘텐츠 영역입니다.</p>
+                    <p>접었다 펼 수 있는 콘텐츠 영역입니다. (type=&quot;single&quot; | &quot;multiple&quot;)</p>
                 </div>
                 <div className={styles.card}>
                     <Accordion type="single" collapsible style={{ width: "100%" }}>

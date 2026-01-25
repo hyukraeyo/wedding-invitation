@@ -15,6 +15,8 @@ import { TextField } from "@/components/common/TextField";
 import { TimePicker } from "@/components/common/TimePicker";
 import { RadioGroupField } from "@/components/common/RadioGroupField";
 
+import { Toggle } from "@/components/ui/Toggle";
+
 import styles from "../DesignSystem.module.scss";
 import Story from "../Story";
 
@@ -33,6 +35,8 @@ export default function InputsTab() {
     const [dateString, setDateString] = useState("2026-05-24");
     const [timeString, setTimeString] = useState("13:00");
     const [selectedRole, setSelectedRole] = useState("guest");
+    const [isPined, setIsPined] = useState(false);
+    const [isActive, setIsActive] = useState(true);
 
     const roleOptions = [
         { label: "Guest (하객)", value: "guest" },
@@ -42,6 +46,28 @@ export default function InputsTab() {
 
     return (
         <div className={styles.storySection}>
+            <Story title="Toggle Buttons" description="TDS-style toggle switches and chips">
+                <div className="flex flex-col gap-8 w-full">
+                    <div className="space-y-3">
+                        <Label className="text-muted-foreground font-normal text-xs uppercase tracking-wider text-black">Toggle Sizes (Chips)</Label>
+                        <div className="flex items-center gap-2">
+                            <Toggle size="sm">Small Chip</Toggle>
+                            <Toggle size="md" pressed={isActive} onPressedChange={setIsActive}>Medium Chip</Toggle>
+                            <Toggle size="lg">Large Chip</Toggle>
+                        </div>
+                    </div>
+
+                    <div className="space-y-3">
+                        <Label className="text-muted-foreground font-normal text-xs uppercase tracking-wider text-black">Square Toggle (Icons/Text)</Label>
+                        <div className="flex items-center gap-2">
+                            <Toggle size="square" className="sm" pressed={isPined} onPressedChange={setIsPined}>故</Toggle>
+                            <Toggle size="square" pressed={isPined} onPressedChange={setIsPined}>故</Toggle>
+                            <Toggle size="square" className="lg" pressed={isPined} onPressedChange={setIsPined}>故</Toggle>
+                        </div>
+                    </div>
+                </div>
+            </Story>
+
             <Story title="Text Fields" description="Basic text inputs and textarea variants">
                 <div className="flex flex-col gap-4 w-full">
                     <TextField label="Display Name" placeholder="Your name" />
