@@ -9,7 +9,6 @@ import { clsx } from 'clsx';
 import { AspectRatio } from '@/components/ui/AspectRatio';
 import { IMAGE_SIZES } from '@/constants/image';
 import { isBlobUrl } from '@/lib/image';
-import { useInvitationStore } from '@/store/useInvitationStore';
 
 interface Person {
     lastName: string;
@@ -120,9 +119,11 @@ const MainScreenView = memo(({
     time,
     location,
     detailAddress,
-    accentColor
-}: MainScreenViewProps) => {
-    const bgColor = useInvitationStore((state) => state.theme.backgroundColor);
+    accentColor,
+    backgroundColor
+}: MainScreenViewProps & { backgroundColor?: string }) => {
+    // const bgColor = useInvitationStore((state) => state.theme.backgroundColor); // Removed store dependency
+    const bgColor = backgroundColor;
     const mainScreen = rawMainScreen || DEFAULT_MAIN_SCREEN;
     const groom = rawGroom || DEFAULT_PERSON;
     const bride = rawBride || DEFAULT_PERSON;

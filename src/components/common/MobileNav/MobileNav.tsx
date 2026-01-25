@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { ClipboardList, Bell, User, Menu, HelpCircle, LogOut, Sparkles, Save, Eye, X } from 'lucide-react';
 import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
 import { MENU_TITLES } from '@/constants/navigation';
-import { ResponsiveModal } from '@/components/common/ResponsiveModal';
+import { DynamicResponsiveModal as ResponsiveModal } from '@/components/common/ResponsiveModal/Dynamic';
 import { signOut } from 'next-auth/react';
 import styles from './MobileNav.module.scss';
 import { clsx } from 'clsx';

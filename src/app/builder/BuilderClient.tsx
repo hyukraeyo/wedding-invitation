@@ -69,6 +69,9 @@ export function BuilderClient() {
         if (isEditMode) {
             // Re-mount lock reset
             GLOBAL_SAVE_LOCK = false;
+        } else if (searchParams.get('onboarding') === 'true') {
+            sessionStorage.removeItem('builder-draft-slug');
+            GLOBAL_SAVE_LOCK = false;
         } else {
             reset();
             sessionStorage.removeItem('builder-draft-slug');
@@ -76,7 +79,7 @@ export function BuilderClient() {
         }
         // Set ready in next frame to avoid cascading renders
         requestAnimationFrame(() => setIsReady(true));
-    }, [isEditMode, reset]);
+    }, [isEditMode, reset, searchParams]);
 
     const togglePreview = useCallback(() => {
         setIsPreviewOpen(prev => !prev);
@@ -100,7 +103,7 @@ export function BuilderClient() {
         void handleSaveRef.current?.();
     }, []);
 
-const handleSave = useCallback(async () => {
+    const handleSave = useCallback(async () => {
         if (!user) {
             handleLogin();
             return;
@@ -124,7 +127,7 @@ const handleSave = useCallback(async () => {
 
             let currentSlug = currentStoreState.slug;
 
-if (!currentSlug) {
+            if (!currentSlug) {
                 // js-early-exit: Early return for slug generation
                 const groomName = currentStoreState.groom.firstName;
                 currentSlug = generateSlug(groomName);

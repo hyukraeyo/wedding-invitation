@@ -46,6 +46,10 @@ const RejectionReasonModal = dynamic(
     () => import('@/components/common/RejectionReasonModal'),
     { ssr: false }
 );
+const InvitationOnboardingModal = dynamic(
+    () => import('@/components/features/onboarding/InvitationOnboardingModal').then(mod => mod.InvitationOnboardingModal),
+    { ssr: false }
+);
 
 interface ProfileSummary {
     full_name: string | null;
@@ -123,6 +127,9 @@ export default function MyPageClient({
         rejection?: ApprovalRequestSummary;
         isApproval?: boolean;
     } | null>(null);
+
+    const [onboardingModalOpen, setOnboardingModalOpen] = useState(false);
+
 
     const reset = useInvitationStore(state => state.reset);
     const { toast } = useToast();
@@ -445,8 +452,8 @@ export default function MyPageClient({
 
     const handleCreateNew = useCallback(() => {
         reset();
-        router.push('/builder');
-    }, [reset, router]);
+        setOnboardingModalOpen(true);
+    }, [reset]);
 
     if (!userId) {
         return (
@@ -658,6 +665,12 @@ export default function MyPageClient({
                     onComplete={handleProfileComplete}
                 />
             ) : null}
+
+            <InvitationOnboardingModal
+                isOpen={onboardingModalOpen}
+                onClose={() => setOnboardingModalOpen(false)}
+            />
+
 
             <ResponsiveModal
                 open={confirmConfig.isOpen}

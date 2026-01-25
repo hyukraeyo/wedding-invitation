@@ -171,8 +171,10 @@ export default function Header() {
         router.push(`/login?returnTo=${encodeURIComponent(returnTo)}`);
     }, [router, pathname, searchParams]);
 
+    if (!isVisible) return null;
+
     return (
-        <header className={cn(styles.header, !isVisible && styles.hidden, "view-transition-header")}>
+        <header className={cn(styles.header, "view-transition-header")}>
             <Logo />
 
             <HeaderActions

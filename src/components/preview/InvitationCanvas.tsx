@@ -340,6 +340,7 @@ const InvitationCanvasContent = memo(({
             location={location}
             detailAddress={detailAddress}
             accentColor={theme.accentColor}
+            backgroundColor={theme.backgroundColor}
           />
         </ScrollReveal>
 
