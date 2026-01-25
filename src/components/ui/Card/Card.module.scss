@@ -1,0 +1,42 @@
+@use "../../../styles/variables" as v;
+
+.card {
+  border-radius: v.$radius-xl;
+  border: 1px solid v.$color-border;
+  background-color: v.$color-background;
+  color: v.$color-foreground;
+  box-shadow: v.$shadow-card;
+  overflow: hidden;
+
+  &Header {
+    display: flex;
+    flex-direction: column;
+    padding: 24px 24px 0 24px;
+    gap: 6px;
+  }
+
+  &Title {
+    font-size: 1.125rem; // 18px
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: v.$zinc-900;
+  }
+
+  &Description {
+    font-size: 0.875rem;
+    color: v.$zinc-500;
+    line-height: 1.5;
+  }
+
+  &Content {
+    padding: 24px;
+  }
+
+  &Footer {
+    display: flex;
+    align-items: center;
+    padding: 0 24px 24px 24px;
+    gap: 8px;
+  }
+}

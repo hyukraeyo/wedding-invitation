@@ -10,11 +10,14 @@ interface TimePickerProps {
     onChange: (value: string) => void;
     className?: string;
     placeholder?: string;
+    minuteStep?: number;
+    minHour?: number;
+    maxHour?: number;
 }
 
 type Period = 'AM' | 'PM';
 
-export function TimePicker({ value, onChange, className }: TimePickerProps) {
+export function TimePicker({ value, onChange, className, minuteStep = 10, minHour, maxHour }: TimePickerProps) {
     // 1. Parse existing value "HH:mm" -> Period, Hour, Minute
     // Default to 10:00 AM if empty
     const [hStr = '10', mStr = '00'] = value ? value.split(':') : [];
@@ -57,21 +60,36 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
         updateTime(period, displayHour, val);
     };
 
-    // Arrays for dropdown options
-    // Arrays for dropdown options
-    // 오전 7시 ~ 11시
-    const amHours = ['7', '8', '9', '10', '11'];
-    // 오후 12시 ~ 11시
-    const pmHours = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
+    // Generate options dynamically
+    // Full 12-hour cycle for general purpose use
+    const hours = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
 
     const periodHourOptions = [
-        ...amHours.map((hour) => ({
+        ...hours.map((hour) => ({
             label: `오전 ${hour}시`,
             value: `AM:${hour}`
         })),
-        ...pmHours.map((hour) => ({ label: `오후 ${hour}시`, value: `PM:${hour}` })),
-    ];
-    const minutes = Array.from({ length: 6 }, (_, i) => String(i * 10).padStart(2, '0'));
+        ...hours.map((hour) => ({
+            label: `오후 ${hour}시`,
+            value: `PM:${hour}`
+        })),
+    ].filter(option => {
+        const [p, hStr] = option.value.split(':') as [Period, string];
+        let h = parseInt(hStr, 10);
+        if (p === 'PM' && h !== 12) h += 12;
+        if (p === 'AM' && h === 12) h = 0;
+
+        const min = minHour !== undefined ? minHour : 0;
+        const max = maxHour !== undefined ? maxHour : 23;
+
+        return h >= min && h <= max;
+    });
+
+    // Generate minutes based on step
+    const minutes = Array.from(
+        { length: Math.floor(60 / minuteStep) },
+        (_, i) => String(i * minuteStep).padStart(2, '0')
+    );
 
     return (
         <div className={cn(styles.container, className)}>

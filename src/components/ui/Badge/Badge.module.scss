@@ -1,0 +1,71 @@
+@use "../../../styles/variables" as v;
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  border-radius: v.$radius-full;
+  border: 1px solid transparent;
+  padding: 0.25rem 0.625rem; // 4px 10px
+  font-size: v.$font-size-xs;
+  font-weight: 600;
+  transition: colors v.$transition-fast v.$ease-standard;
+  line-height: 1;
+  white-space: nowrap;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px v.$color-background, 0 0 0 4px v.$color-primary;
+  }
+
+  // Variants
+  &--variant-default {
+    border-color: transparent;
+    background-color: v.$color-primary;
+    color: v.$color-primary-foreground;
+
+    &:hover {
+      background-color: v.$color-primary-hover;
+    }
+  }
+
+  &--variant-secondary {
+    border-color: transparent;
+    background-color: v.$zinc-100;
+    color: v.$zinc-900;
+
+    &:hover {
+        background-color: v.$zinc-200;
+    }
+  }
+
+  &--variant-destructive {
+    border-color: transparent;
+    background-color: v.$rose-500;
+    color: white;
+
+    &:hover {
+        background-color: v.$rose-600;
+    }
+  }
+
+  &--variant-outline {
+    border-color: v.$zinc-200;
+    color: v.$zinc-900;
+
+    &:hover {
+        background-color: v.$zinc-50;
+    }
+  }
+
+  &--variant-success {
+      border-color: transparent;
+      background-color: v.$green-100;
+      color: v.$green-800;
+
+      &:hover {
+          background-color: v.$green-200;
+      }
+  }
+
+  // Sizes can be added if needed, currently just one standard size
+}

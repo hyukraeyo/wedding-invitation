@@ -30,8 +30,7 @@
 
   // Desktop/Tablet centering
   @media (min-width: v.$mobile) {
-    left: 50%;
-    transform: translateX(-50%);
+    margin: 0 auto;
     width: 100%;
     max-width: 428px; // Mobile frame standard width
     border-radius: v.$radius-xl v.$radius-xl 0 0;

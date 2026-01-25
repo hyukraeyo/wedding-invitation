@@ -14,6 +14,7 @@ import { PhoneField } from "@/components/common/PhoneField";
 import { SwitchField } from "@/components/common/SwitchField";
 import { TextField } from "@/components/common/TextField";
 import { TimePicker } from "@/components/common/TimePicker";
+import { ResponsiveSelect } from "@/components/common/ResponsiveSelect";
 import styles from "../DesignSystem.module.scss";
 import Story from "../Story";
 
@@ -29,8 +30,15 @@ export default function InputsTab() {
     const [color, setColor] = useState("#FBC02D");
     const [richText, setRichText] = useState("<p>Hello <strong>Banana</strong> Wedding!</p>");
     const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(false);
-    const [dateString, setDateString] = useState("2024-12-24");
-    const [timeString, setTimeString] = useState("12:30");
+    const [dateString, setDateString] = useState("2026-05-24");
+    const [timeString, setTimeString] = useState("13:00");
+    const [selectedRole, setSelectedRole] = useState("guest");
+
+    const roleOptions = [
+        { label: "Guest (하객)", value: "guest" },
+        { label: "Family (혼주)", value: "family" },
+        { label: "Staff (스태프)", value: "staff" },
+    ];
 
     return (
         <div className={styles.storySection}>
@@ -94,22 +102,50 @@ export default function InputsTab() {
             </Story>
 
             <Story title="Date & Time Controls" description="Calendar, date, and time inputs">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full">
-                    <div className="space-y-4">
-                        <Label>Standard Calendar</Label>
-                        <Calendar mode="single" selected={date} onSelect={setDate} className="rounded-2xl border bg-white p-4 shadow-sm" />
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 w-full items-start">
+                    {/* Item 1: Calendar */}
+                    <div className="space-y-3">
+                        <Label className="text-muted-foreground font-normal text-xs uppercase tracking-wider">Calendar Component</Label>
+                        <div className="border bg-white rounded-2xl shadow-sm p-4 w-fit">
+                            <Calendar
+                                mode="single"
+                                selected={date}
+                                onSelect={setDate}
+                                className="p-0"
+                            />
+                        </div>
                     </div>
-                    <div className="space-y-6">
-                        <DatePicker value={dateString} onChange={setDateString} />
-                        <div className="space-y-1.5">
-                            <Label>Event Time</Label>
+
+                    {/* Item 2: Pickers & Controls */}
+                    <div className="space-y-8">
+                        <div className="space-y-3 max-w-[300px]">
+                            <Label className="text-muted-foreground font-normal text-xs uppercase tracking-wider">Responsive Select (Base)</Label>
+                            <ResponsiveSelect
+                                value={selectedRole}
+                                onChange={setSelectedRole}
+                                options={roleOptions}
+                                placeholder="Select role"
+                            />
+                        </div>
+
+                        <div className="space-y-3 max-w-[300px]">
+                            <Label className="text-muted-foreground font-normal text-xs uppercase tracking-wider">Date Picker</Label>
+                            <DatePicker value={dateString} onChange={setDateString} />
+                        </div>
+
+                        <div className="space-y-3 max-w-[200px]">
+                            <Label className="text-muted-foreground font-normal text-xs uppercase tracking-wider">Time Picker</Label>
                             <TimePicker value={timeString} onChange={setTimeString} />
                         </div>
-                        <SegmentedControl defaultValue="s">
-                            <SegmentedControl.Item value="s">Small</SegmentedControl.Item>
-                            <SegmentedControl.Item value="m">Medium</SegmentedControl.Item>
-                            <SegmentedControl.Item value="l">Large</SegmentedControl.Item>
-                        </SegmentedControl>
+
+                        <div className="space-y-3 max-w-[300px]">
+                            <Label className="text-muted-foreground font-normal text-xs uppercase tracking-wider">Segmented Control</Label>
+                            <SegmentedControl defaultValue="m">
+                                <SegmentedControl.Item value="s">Small</SegmentedControl.Item>
+                                <SegmentedControl.Item value="m">Medium</SegmentedControl.Item>
+                                <SegmentedControl.Item value="l">Large</SegmentedControl.Item>
+                            </SegmentedControl>
+                        </div>
                     </div>
                 </div>
             </Story>

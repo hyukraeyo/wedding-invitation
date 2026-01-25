@@ -36,16 +36,47 @@ export default function PatternsTab() {
     return (
         <div className={styles.storySection}>
             <Story title="Business Patterns" description="Composite components and business flows">
-                <div className="max-w-[400px] w-full">
-                    <InvitationCard
-                        invitation={DUMMY_INVITATION as any} // eslint-disable-line @typescript-eslint/no-explicit-any
-                        onEdit={() => { }}
-                        onDelete={() => { }}
-                        onRequestApproval={() => { }}
-                        onCancelRequest={() => { }}
-                        onRevokeApproval={() => { }}
-                        layout="grid"
-                    />
+                <div className="flex flex-wrap gap-4 w-full">
+                    <div className="w-full max-w-[320px]">
+                        <InvitationCard
+                            invitation={{
+                                ...DUMMY_INVITATION,
+                                id: "inv-img",
+                                invitation_data: {
+                                    ...DUMMY_INVITATION.invitation_data,
+                                    // Use a reliable Unsplash ID (Wedding photo)
+                                    imageUrl: "https://images.unsplash.com/photo-1511285560982-1351cdeb9821?q=80&w=800&auto=format&fit=crop"
+                                }
+                            } as any}
+                            onEdit={() => { }}
+                            onDelete={() => { }}
+                            onRequestApproval={() => { }}
+                            onCancelRequest={() => { }}
+                            onRevokeApproval={() => { }}
+                            layout="grid"
+                        />
+                        <p className="mt-2 text-center text-xs text-muted-foreground">With Image</p>
+                    </div>
+
+                    <div className="w-full max-w-[320px]">
+                        <InvitationCard
+                            invitation={{
+                                ...DUMMY_INVITATION,
+                                id: "inv-no-img",
+                                invitation_data: {
+                                    ...DUMMY_INVITATION.invitation_data,
+                                    imageUrl: null
+                                }
+                            } as any}
+                            onEdit={() => { }}
+                            onDelete={() => { }}
+                            onRequestApproval={() => { }}
+                            onCancelRequest={() => { }}
+                            onRevokeApproval={() => { }}
+                            layout="grid"
+                        />
+                        <p className="mt-2 text-center text-xs text-muted-foreground">Fallback (No Image)</p>
+                    </div>
                 </div>
             </Story>
 
