@@ -1,8 +1,6 @@
 import * as React from "react"
-import { cva, type VariantProps } from "class-variance-authority"
-import { cn } from "@/lib/utils"
-import styles from "./Badge.module.scss"
 import { clsx } from "clsx"
+import styles from "./Badge.module.scss"
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
     variant?: "default" | "secondary" | "destructive" | "outline" | "success";

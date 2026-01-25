@@ -8,7 +8,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { TextField } from '@/components/common/TextField';
 import { SwitchField } from '@/components/common/SwitchField';
-import { SegmentedControl } from '@/components/common/SegmentedControl';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import { ImageUploader } from '@/components/common/ImageUploader';
 import styles from './MainScreenSection.module.scss';
@@ -67,6 +67,12 @@ export default function MainScreenSectionContent() {
     const [swiperProgress, setSwiperProgress] = React.useState<'start' | 'middle' | 'end'>('start');
     const updateMain = (data: Partial<typeof mainScreen>) => setMainScreen(data);
     const selectedPresetIndex = STYLE_PRESETS.findIndex(p => p.layout === mainScreen.layout);
+    const resolveThemeEffect = (val: string) =>
+        val === 'cherry-blossom' ? 'cherry-blossom' : val === 'snow' ? 'snow' : 'none';
+    const resolveImageShape = (val: string) =>
+        val === 'arch' ? 'arch' : val === 'oval' ? 'oval' : 'rect';
+    const resolveMainEffect = (val: string) =>
+        val === 'mist' ? 'mist' : val === 'ripple' ? 'ripple' : 'none';
 
     const handleSelectPreset = (preset: StylePreset, index: number) => {
         updateMain({
@@ -184,41 +190,44 @@ export default function MainScreenSectionContent() {
             </Field>
 
             <Field label="흩날림 효과">
-                <SegmentedControl
+                <Tabs
                     value={theme.effect}
-                    onChange={(val) => setTheme({ effect: val as 'none' | 'cherry-blossom' | 'snow' })}
-                    options={[
-                        { label: '없음', value: 'none' },
-                        { label: '벚꽃', value: 'cherry-blossom' },
-                        { label: '눈내림', value: 'snow' },
-                    ]}
-                />
+                    onValueChange={(val) => setTheme({ effect: resolveThemeEffect(val) })}
+                >
+                    <TabsList fluid>
+                        <TabsTrigger value="none">없음</TabsTrigger>
+                        <TabsTrigger value="cherry-blossom">벚꽃</TabsTrigger>
+                        <TabsTrigger value="snow">눈내림</TabsTrigger>
+                    </TabsList>
+                </Tabs>
             </Field>
 
             {mainScreen.layout === 'classic' && (
                 <Field label="사진 형태">
-                    <SegmentedControl
+                    <Tabs
                         value={mainScreen.imageShape || 'rect'}
-                        onChange={(val) => updateMain({ imageShape: val as 'rect' | 'arch' | 'oval' })}
-                        options={[
-                            { label: '기본', value: 'rect' },
-                            { label: '아치', value: 'arch' },
-                            { label: '타원', value: 'oval' },
-                        ]}
-                    />
+                        onValueChange={(val) => updateMain({ imageShape: resolveImageShape(val) })}
+                    >
+                        <TabsList fluid>
+                            <TabsTrigger value="rect">기본</TabsTrigger>
+                            <TabsTrigger value="arch">아치</TabsTrigger>
+                            <TabsTrigger value="oval">타원</TabsTrigger>
+                        </TabsList>
+                    </Tabs>
                 </Field>
             )}
 
             <Field label="사진 효과">
-                <SegmentedControl
+                <Tabs
                     value={mainScreen.effect}
-                    onChange={(val) => updateMain({ effect: val as 'none' | 'mist' | 'ripple' })}
-                    options={[
-                        { label: '없음', value: 'none' },
-                        { label: '안개', value: 'mist' },
-                        { label: '물결', value: 'ripple' },
-                    ]}
-                />
+                    onValueChange={(val) => updateMain({ effect: resolveMainEffect(val) })}
+                >
+                    <TabsList fluid>
+                        <TabsTrigger value="none">없음</TabsTrigger>
+                        <TabsTrigger value="mist">안개</TabsTrigger>
+                        <TabsTrigger value="ripple">물결</TabsTrigger>
+                    </TabsList>
+                </Tabs>
             </Field>
 
             {mainScreen.layout === 'classic' ? (

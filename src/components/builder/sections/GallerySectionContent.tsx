@@ -5,7 +5,7 @@ import { InfoMessage } from '@/components/ui/InfoMessage';
 import { IconButton } from '@/components/ui/IconButton/IconButton';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
-import { SegmentedControl } from '@/components/common/SegmentedControl';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { TextField } from '@/components/common/TextField';
 import { SwitchField } from '@/components/common/SwitchField';
 import { cn } from '@/lib/utils';
@@ -198,13 +198,13 @@ export default React.memo(function GallerySectionContent() {
             await Promise.all(tempItems.map(async (item) => {
                 try {
                     const publicUrl = await uploadImage(item.file, 'images', 'gallery');
-                    setGallery((prev: { id: string; url: string }[]) => 
+                    setGallery((prev: { id: string; url: string }[]) =>
                         prev.map(g => g.id === item.id ? { ...g, url: publicUrl } : g)
                     );
                     URL.revokeObjectURL(item.url);
                 } catch (error) {
                     console.error('Upload failed', error);
-                    setGallery((prev: { id: string; url: string }[]) => 
+                    setGallery((prev: { id: string; url: string }[]) =>
                         prev.filter(g => g.id !== item.id)
                     );
                 }
@@ -344,15 +344,19 @@ export default React.memo(function GallerySectionContent() {
             </Field>
 
             <Field label="전시 형태">
-                <SegmentedControl
+                <Tabs
                     value={galleryType}
-                    options={[
-                        { label: '스와이퍼', value: 'swiper' },
-                        { label: '그리드', value: 'grid' },
-                        { label: '리스트', value: 'thumbnail' },
-                    ]}
-                    onChange={(val) => setGalleryType(val as 'swiper' | 'grid' | 'thumbnail')}
-                />
+                    onValueChange={(val: string) => {
+                        const nextType = val === 'grid' ? 'grid' : val === 'thumbnail' ? 'thumbnail' : 'swiper';
+                        setGalleryType(nextType);
+                    }}
+                >
+                    <TabsList fluid>
+                        <TabsTrigger value="swiper">스와이퍼</TabsTrigger>
+                        <TabsTrigger value="grid">그리드</TabsTrigger>
+                        <TabsTrigger value="thumbnail">리스트</TabsTrigger>
+                    </TabsList>
+                </Tabs>
             </Field>
 
             <Field label="기능 설정">

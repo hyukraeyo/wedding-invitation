@@ -1,11 +1,11 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { Search } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { TextField } from '@/components/common/TextField';
-import { SegmentedControl } from '@/components/common/SegmentedControl';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { SwitchField } from '@/components/common/SwitchField';
 import { PhoneField } from '@/components/common/PhoneField';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
@@ -134,14 +134,14 @@ export default function LocationSectionContent() {
             <KakaoSdkLoader onReady={() => setIsKakaoReady(true)} />
             <SectionContainer>
                 <TextField
-                    label="소제목"
+                    label="부제목"
                     placeholder="예: LOCATION"
                     value={locationSubtitle}
                     onChange={(e) => setLocationSubtitle(e.target.value)}
                 />
                 <TextField
                     label="제목"
-                    placeholder="예: 오시는 길"
+                    placeholder="예: 바나나홀"
                     value={locationTitle}
                     onChange={(e) => setLocationTitle(e.target.value)}
                 />
@@ -155,85 +155,94 @@ export default function LocationSectionContent() {
                             styles.addressText,
                             address ? styles.addressTextFilled : styles.addressTextPlaceholder
                         )}>
-                            {address || "주소를 검색해주세요"}
+                            {address || "주소를 검색해 주세요"}
                         </span>
                         <Search size={18} className={styles.searchIcon} />
                     </div>
                 </Field>
 
                 <TextField
-                    label="예식장명"
+                    label="예식 장소명"
                     type="text"
-                    placeholder="예: 더 컨벤션 신사"
+                    placeholder="예: 바나나 웨딩홀"
                     value={location}
                     onChange={(e) => setLocation(e.target.value)}
                 />
 
                 <TextField
-                    label="층과 홀"
+                    label="층/호수"
                     type="text"
                     placeholder="예: 3층 그랜드홀"
                     value={detailAddress}
                     onChange={(e) => setDetailAddress(e.target.value)}
                 />
-
                 <PhoneField
                     label="연락처"
                     placeholder="예: 02-000-0000"
                     value={locationContact}
-                    onChange={(e) => setLocationContact(e.target.value)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationContact(e.target.value)}
                 />
 
                 <Field label="지도 종류">
-                    <SegmentedControl
+                    <Tabs
                         value={mapType}
-                        options={[
-                            {
-                                label: '네이버',
-                                value: 'naver',
-                                icon: <NaverIcon size={18} className={styles.mapIcon || ''} />
-                            },
-                            {
-                                label: '카카오',
-                                value: 'kakao',
-                                icon: <KakaoIcon size={18} className={styles.mapIcon || ''} />
-                            },
-                        ]}
-                        onChange={(val: 'naver' | 'kakao') => setMapType(val)}
-                    />
+                        onValueChange={(val: string) => {
+                            const nextType = val === 'kakao' ? 'kakao' : 'naver';
+                            setMapType(nextType);
+                        }}
+                    >
+                        <TabsList fluid>
+                            <TabsTrigger value="naver">
+                                <span className={styles.itemContent} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                                    <NaverIcon size={18} className={styles.mapIcon || ""} />
+                                    <span>네이버</span>
+                                </span>
+                            </TabsTrigger>
+                            <TabsTrigger value="kakao">
+                                <span className={styles.itemContent} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                                    <KakaoIcon size={18} className={styles.mapIcon || ""} />
+                                    <span>카카오</span>
+                                </span>
+                            </TabsTrigger>
+                        </TabsList>
+                    </Tabs>
                 </Field>
-
                 <Field label="지도 설정">
                     <div className={styles.mapOptions}>
                         <SwitchField checked={showMap} onChange={setShowMap} label="지도 표시" />
-                        <SwitchField checked={lockMap} onChange={setLockMap} label="지도 잠금" />
-                        <SwitchField checked={showNavigation} onChange={setShowNavigation} label="내비게이션" />
+                        <SwitchField checked={lockMap} onChange={setLockMap} label="지도 고정" />
+                        <SwitchField checked={showNavigation} onChange={setShowNavigation} label="네비게이션 표시" />
                     </div>
                 </Field>
 
                 <Field label="지도 높이">
-                    <SegmentedControl
+                    <Tabs
                         value={mapHeight}
-                        options={[
-                            { label: '기본', value: 'default' },
-                            { label: '확대', value: 'expanded' },
-                        ]}
-                        onChange={(val: 'default' | 'expanded') => setMapHeight(val)}
-                    />
+                        onValueChange={(val: string) => {
+                            const nextHeight = val === 'expanded' ? 'expanded' : 'default';
+                            setMapHeight(nextHeight);
+                        }}
+                    >
+                        <TabsList fluid>
+                            <TabsTrigger value="default">기본</TabsTrigger>
+                            <TabsTrigger value="expanded">확장</TabsTrigger>
+                        </TabsList>
+                    </Tabs>
                 </Field>
 
                 <Field label="줌 레벨">
-                    <SegmentedControl
-                        value={mapZoom}
-                        options={[
-                            { label: '15', value: 15 },
-                            { label: '16', value: 16 },
-                            { label: '17', value: 17 },
-                            { label: '18', value: 18 },
-                            { label: '19', value: 19 },
-                        ]}
-                        onChange={(val: number) => setMapZoom(val)}
-                    />
+                    <Tabs
+                        value={String(mapZoom)}
+                        onValueChange={(val) => setMapZoom(Number(val))}
+                    >
+                        <TabsList fluid>
+                            <TabsTrigger value="15">15</TabsTrigger>
+                            <TabsTrigger value="16">16</TabsTrigger>
+                            <TabsTrigger value="17">17</TabsTrigger>
+                            <TabsTrigger value="18">18</TabsTrigger>
+                            <TabsTrigger value="19">19</TabsTrigger>
+                        </TabsList>
+                    </Tabs>
                 </Field>
             </SectionContainer>
 
@@ -241,7 +250,7 @@ export default function LocationSectionContent() {
                 open={isSearchOpen}
                 onOpenChange={setIsSearchOpen}
                 title="주소 검색"
-                description="도로명 주소 또는 지번 주소를 입력해주세요."
+                description="도로명 주소 또는 지번 주소를 입력해 주세요."
                 contentClassName={styles.postcodeModalContent}
             >
                 <div className={styles.postcodeWrapper}>
@@ -257,3 +266,4 @@ export default function LocationSectionContent() {
         </>
     );
 }
+

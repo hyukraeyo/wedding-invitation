@@ -7,14 +7,15 @@ import { ColorPicker } from "@/components/ui/ColorPicker";
 import { Label } from "@/components/ui/Label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/RadioGroup";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
-import { SegmentedControl } from "@/components/ui/SegmentedControl";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { Textarea } from "@/components/ui/Textarea";
 import { DatePicker } from "@/components/common/DatePicker";
 import { PhoneField } from "@/components/common/PhoneField";
 import { SwitchField } from "@/components/common/SwitchField";
 import { TextField } from "@/components/common/TextField";
 import { TimePicker } from "@/components/common/TimePicker";
-import { ResponsiveSelect } from "@/components/common/ResponsiveSelect";
+import { RadioGroupField } from "@/components/common/RadioGroupField";
+
 import styles from "../DesignSystem.module.scss";
 import Story from "../Story";
 
@@ -54,23 +55,20 @@ export default function InputsTab() {
             </Story>
 
             <Story title="Special Fields" description="Phone, radio, and switch controls">
-                <div className="flex flex-col gap-4 w-full">
+                <div className="flex flex-col gap-6 w-full">
                     <PhoneField label="Phone" placeholder="010-0000-0000" />
-                    <div className="space-y-3">
-                        <Label>Selection Group</Label>
-                        <RadioGroup defaultValue="1" className="flex flex-col gap-2">
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="1" id="r1" />
-                                <Label htmlFor="r1">Option One</Label>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="2" id="r2" />
-                                <Label htmlFor="r2">Option Two</Label>
-                            </div>
-                        </RadioGroup>
-                    </div>
+                    <RadioGroupField
+                        label="Selection Group"
+                        description="Select your role for the event coordinator"
+                        defaultValue="guest"
+                        options={[
+                            { label: "Guest (하객)", value: "guest", description: "Standard access to view invitation" },
+                            { label: "Family (혼주)", value: "family", description: "Extended access to manage guest list" },
+                        ]}
+                    />
                     <SwitchField
                         label="Notifications"
+                        description="Receive alerts when new RSVP comes in"
                         checked={isNotificationsEnabled}
                         onChange={setIsNotificationsEnabled}
                     />
@@ -79,7 +77,7 @@ export default function InputsTab() {
 
             <Story title="Common Selectors" description="Selects and color pickers">
                 <div className="space-y-4 w-full">
-                    <Label>Theme Selection</Label>
+                    <Label>Theme Selection (Low-level)</Label>
                     <Select>
                         <SelectTrigger className="w-full">
                             <SelectValue placeholder="Choose a theme" />
@@ -119,12 +117,23 @@ export default function InputsTab() {
                     {/* Item 2: Pickers & Controls */}
                     <div className="space-y-8">
                         <div className="space-y-3 max-w-[300px]">
-                            <Label className="text-muted-foreground font-normal text-xs uppercase tracking-wider">Responsive Select (Base)</Label>
-                            <ResponsiveSelect
+                            <Label className="text-muted-foreground font-normal text-xs uppercase tracking-wider">Responsive Select (Unified)</Label>
+                            <Select
                                 value={selectedRole}
-                                onChange={setSelectedRole}
+                                onValueChange={setSelectedRole}
                                 options={roleOptions}
                                 placeholder="Select role"
+                            />
+                        </div>
+
+                        <div className="space-y-3 max-w-[300px]">
+                            <Label className="text-muted-foreground font-normal text-xs uppercase tracking-wider">Drawer (Forced Mobile Mode)</Label>
+                            <Select
+                                value={selectedRole}
+                                onValueChange={setSelectedRole}
+                                options={roleOptions}
+                                placeholder="Select role"
+                                mobileOnly
                             />
                         </div>
 
@@ -139,12 +148,14 @@ export default function InputsTab() {
                         </div>
 
                         <div className="space-y-3 max-w-[300px]">
-                            <Label className="text-muted-foreground font-normal text-xs uppercase tracking-wider">Segmented Control</Label>
-                            <SegmentedControl defaultValue="m">
-                                <SegmentedControl.Item value="s">Small</SegmentedControl.Item>
-                                <SegmentedControl.Item value="m">Medium</SegmentedControl.Item>
-                                <SegmentedControl.Item value="l">Large</SegmentedControl.Item>
-                            </SegmentedControl>
+                            <Label className="text-muted-foreground font-normal text-xs uppercase tracking-wider">Tabs (Segmented Control)</Label>
+                            <Tabs defaultValue="m">
+                                <TabsList fluid>
+                                    <TabsTrigger value="s">Small</TabsTrigger>
+                                    <TabsTrigger value="m">Medium</TabsTrigger>
+                                    <TabsTrigger value="l">Large</TabsTrigger>
+                                </TabsList>
+                            </Tabs>
                         </div>
                     </div>
                 </div>

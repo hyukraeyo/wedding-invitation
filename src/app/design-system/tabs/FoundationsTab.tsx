@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/Button";
@@ -90,7 +90,7 @@ export default function FoundationsTab({
                 </div>
             </div>
 
-            <Story title="Iconography (Lucide)" description="紐낇솗???섎? ?꾨떖???꾪븳 ?꾩씠肄??쒖뒪??">
+            <Story title="Iconography (Lucide)" description="명확한 의미 전달을 위한 아이콘 시스템">
                 <div className="flex gap-6 text-zinc-600">
                     <Banana size={24} />
                     <Heart size={24} />
@@ -102,7 +102,7 @@ export default function FoundationsTab({
                 </div>
             </Story>
 
-            <Story title="Action Buttons" description="?ъ슜?먯쓽 二쇱슂 ?됰룞???좊룄?섎뒗 踰꾪듉 而댄룷?뚰듃">
+            <Story title="Action Buttons" description="사용자의 주요 행동을 유도하는 버튼 컴포넌트">
                 <div className={styles.specTable}>
                     <div className={styles.specRow}>
                         <h4>Variants</h4>
@@ -135,7 +135,7 @@ export default function FoundationsTab({
                 </div>
             </Story>
 
-            <Story title="Icon Controls" description="?쒓컖??紐낇솗?깆쓣 ?꾪븳 ?꾩씠肄?以묒떖???≪뀡">
+            <Story title="Icon Controls" description="간결한 아이콘 중심의 액션 버튼">
                 <div className={styles.specTable}>
                     <div className={styles.specRow}>
                         <h4>Icon Button Variants</h4>
@@ -172,7 +172,7 @@ export default function FoundationsTab({
                 </div>
             </Story>
 
-            <Story title="Selection & Toggles" description="?낅┰?곸씤 ?띿꽦 ?쒖뼱瑜??꾪븳 ?ㅼ쐞移?諛??명꽣?숉떚釉?移?">
+            <Story title="Selection & Toggles" description="입력/선택 상태 제어를 위한 스위치와 토글">
                 <div className={styles.specTable}>
                     <div className={styles.specRow}>
                         <h4>Toggle Components</h4>
@@ -225,7 +225,7 @@ export default function FoundationsTab({
                 </div>
             </Story>
 
-            <Story title="Separators" description="肄섑뀗痢??곸뿭 援щ텇???꾪븳 ?쒓컖???쇱씤">
+            <Story title="Separators" description="콘텐츠 영역 구분을 위한 구분선">
                 <div className={styles.specTable}>
                     <div className={styles.specRow}>
                         <h4>Horizontal</h4>

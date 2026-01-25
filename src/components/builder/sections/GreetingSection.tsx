@@ -15,7 +15,7 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '@/components/common/AccordionItem';
 import { TextField } from '@/components/common/TextField';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
-import { SegmentedControl } from '@/components/common/SegmentedControl';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { HeaderAction } from '@/components/common/HeaderAction';
 import { ImageUploader } from '@/components/common/ImageUploader';
 import styles from './GreetingSection.module.scss';
@@ -152,15 +152,16 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
                     {/* Name Options */}
                     <Field label="성함 표기">
                         <div className={styles.optionWrapper}>
-                            <SegmentedControl
+                            <Tabs
                                 value={nameOptionValue}
-                                onChange={handleNameOptionChange}
-                                options={[
-                                    { label: '하단 표기', value: 'bottom' },
-                                    { label: '직접 입력', value: 'custom' },
-                                    { label: '표시 안 함', value: 'none' },
-                                ]}
-                            />
+                                onValueChange={handleNameOptionChange}
+                            >
+                                <TabsList fluid>
+                                    <TabsTrigger value="bottom">하단 표기</TabsTrigger>
+                                    <TabsTrigger value="custom">직접 입력</TabsTrigger>
+                                    <TabsTrigger value="none">표시 안 함</TabsTrigger>
+                                </TabsList>
+                            </Tabs>
 
                             {enableFreeformNames ? (
                                 <div className={styles.optionWrapper}>

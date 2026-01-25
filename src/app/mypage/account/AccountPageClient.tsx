@@ -102,7 +102,9 @@ export default function AccountPageClient({
                             <PhoneField
                                 className={styles.phoneInput}
                                 value={formData.phone}
-                                onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                    setFormData({ ...formData, phone: e.target.value })
+                                }
                                 placeholder="010-0000-0000"
                             />
                             <div className={styles.editActions}>

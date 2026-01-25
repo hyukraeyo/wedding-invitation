@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ResponsiveSelect as Select } from '@/components/common/ResponsiveSelect';
+import { Select } from '@/components/ui/Select';
 import { cn } from '@/lib/utils';
 import styles from './TimePicker.module.scss';
 
@@ -97,7 +97,7 @@ export function TimePicker({ value, onChange, className, minuteStep = 10, minHou
             <div className={styles.hourSection}>
                 <Select
                     value={`${period}:${displayHour}`}
-                    onChange={handlePeriodHourChange}
+                    onValueChange={handlePeriodHourChange}
                     options={periodHourOptions}
                     placeholder="오전/오후 시간"
                     modalTitle="시간"
@@ -110,7 +110,7 @@ export function TimePicker({ value, onChange, className, minuteStep = 10, minHou
             <div className={styles.minuteSection}>
                 <Select
                     value={m}
-                    onChange={handleMinuteChange}
+                    onValueChange={handleMinuteChange}
                     options={minutes.map(min => ({ label: `${min}분`, value: min }))}
                     placeholder="분"
                     modalTitle="분"

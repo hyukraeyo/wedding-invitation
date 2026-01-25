@@ -6,7 +6,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '@/components/common/AccordionItem';
 import { TextField } from '@/components/common/TextField';
-import { SegmentedControl } from '@/components/common/SegmentedControl';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { InfoMessage } from '@/components/ui/InfoMessage';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import { ImageUploader } from '@/components/common/ImageUploader';
@@ -66,14 +66,18 @@ export default function KakaoShareSection({ isOpen, value }: SectionProps) {
                     </Field>
 
                     <Field label="사진 비율">
-                        <SegmentedControl
+                        <Tabs
                             value={kakao.imageRatio}
-                            options={[
-                                { label: '세로형', value: 'portrait' },
-                                { label: '가로형', value: 'landscape' },
-                            ]}
-                            onChange={(val: 'portrait' | 'landscape') => setKakao({ imageRatio: val })}
-                        />
+                            onValueChange={(val: string) => {
+                                const nextRatio = val === 'landscape' ? 'landscape' : 'portrait';
+                                setKakao({ imageRatio: nextRatio });
+                            }}
+                        >
+                            <TabsList fluid>
+                                <TabsTrigger value="portrait">세로형</TabsTrigger>
+                                <TabsTrigger value="landscape">가로형</TabsTrigger>
+                            </TabsList>
+                        </Tabs>
                         <InfoMessage>카카오톡 공유 메시지에서 보여질 사진의 비율입니다.</InfoMessage>
                     </Field>
 
@@ -96,15 +100,19 @@ export default function KakaoShareSection({ isOpen, value }: SectionProps) {
                     />
 
                     <Field label="버튼 스타일">
-                        <SegmentedControl
+                        <Tabs
                             value={kakao.buttonType}
-                            options={[
-                                { label: '위치 안내', value: 'location' },
-                                { label: '참석 여부', value: 'rsvp' },
-                                { label: '사용 안함', value: 'none' },
-                            ]}
-                            onChange={(val) => setKakao({ buttonType: val as 'location' | 'rsvp' | 'none' })}
-                        />
+                            onValueChange={(val: string) => {
+                                const nextType = val === 'rsvp' ? 'rsvp' : val === 'none' ? 'none' : 'location';
+                                setKakao({ buttonType: nextType });
+                            }}
+                        >
+                            <TabsList fluid>
+                                <TabsTrigger value="location">위치 안내</TabsTrigger>
+                                <TabsTrigger value="rsvp">참석 여부</TabsTrigger>
+                                <TabsTrigger value="none">사용 안함</TabsTrigger>
+                            </TabsList>
+                        </Tabs>
                     </Field>
 
 

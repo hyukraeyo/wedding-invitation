@@ -5,8 +5,144 @@ import * as SelectPrimitive from "@radix-ui/react-select"
 import { Check, ChevronDown, ChevronUp } from "lucide-react"
 import { cn } from "@/lib/utils"
 import styles from "./Select.module.scss"
+import { useMediaQuery } from "@/hooks/use-media-query"
+import { ResponsiveModal } from "@/components/common/ResponsiveModal"
 
-const Select = SelectPrimitive.Root
+const SelectRoot = SelectPrimitive.Root
+
+interface SelectOption<T> {
+    label: string;
+    value: T;
+    disabled?: boolean;
+}
+
+interface SelectProps<T> {
+    value?: T;
+    defaultValue?: T;
+    onValueChange?: (value: T) => void;
+    options?: readonly SelectOption<T>[];
+    placeholder?: string;
+    className?: string;
+    triggerClassName?: string;
+    contentClassName?: string;
+    modalTitle?: string;
+    disabled?: boolean;
+    children?: React.ReactNode; // For traditional Shadcn usage
+    /** Force mobile drawer view */
+    mobileOnly?: boolean;
+    /** Disable responsive behavior and always use desktop popover */
+    desktopOnly?: boolean;
+}
+
+const Select = <T extends string | number>({
+    value,
+    defaultValue,
+    onValueChange,
+    options,
+    placeholder = "선택해주세요",
+    className,
+    triggerClassName,
+    contentClassName,
+    modalTitle,
+    disabled,
+    children,
+    mobileOnly = false,
+    desktopOnly = false,
+    ...props
+}: SelectProps<T>) => {
+    const isDesktop = useMediaQuery("(min-width: 768px)");
+    const showDrawer = mobileOnly || (!desktopOnly && !isDesktop);
+    const [isOpen, setIsOpen] = React.useState(false);
+
+    // If options are provided, use the high-level responsive implementation
+    if (options) {
+        const selectedOption = options.find(opt => opt.value === value || opt.value === defaultValue);
+
+        if (showDrawer) {
+            return (
+                <div className={cn(className)}>
+                    <ResponsiveModal
+                        open={isOpen}
+                        onOpenChange={setIsOpen}
+                        title={modalTitle || placeholder}
+                        trigger={
+                            <button
+                                type="button"
+                                disabled={disabled}
+                                className={cn(styles.trigger, triggerClassName)}
+                                onClick={() => setIsOpen(true)}
+                            >
+                                <span className={cn(!selectedOption && styles.placeholder)}>
+                                    {selectedOption ? selectedOption.label : placeholder}
+                                </span>
+                                <ChevronDown className={styles.icon} />
+                            </button>
+                        }
+                    >
+                        <div className={styles.optionsList}>
+                            {options.map((option) => (
+                                <button
+                                    key={String(option.value)}
+                                    type="button"
+                                    disabled={option.disabled}
+                                    className={cn(
+                                        styles.optionItem,
+                                        option.value === value && styles.selected
+                                    )}
+                                    onClick={() => {
+                                        onValueChange?.(option.value);
+                                        setIsOpen(false);
+                                    }}
+                                >
+                                    <span>{option.label}</span>
+                                    {option.value === value && <Check className={styles.checkIcon} />}
+                                </button>
+                            ))}
+                        </div>
+                    </ResponsiveModal>
+                </div>
+            );
+        }
+
+        return (
+            <SelectRoot
+                {...(value !== undefined ? { value: String(value) } : {})}
+                {...(defaultValue !== undefined ? { defaultValue: String(defaultValue) } : {})}
+                onValueChange={(val) => onValueChange?.(val as T)}
+                {...(disabled !== undefined ? { disabled } : {})}
+                {...props}
+            >
+                <SelectTrigger className={cn(triggerClassName)}>
+                    <SelectValue placeholder={placeholder} />
+                </SelectTrigger>
+                <SelectContent className={cn(contentClassName)}>
+                    {options.map((option) => (
+                        <SelectItem
+                            key={String(option.value)}
+                            value={String(option.value)}
+                            {...(option.disabled !== undefined ? { disabled: option.disabled } : {})}
+                        >
+                            {option.label}
+                        </SelectItem>
+                    ))}
+                </SelectContent>
+            </SelectRoot>
+        );
+    }
+
+    // Fallback to traditional Shadcn usage if no options provided
+    return (
+        <SelectRoot
+            {...(value !== undefined ? { value: String(value) } : {})}
+            {...(defaultValue !== undefined ? { defaultValue: String(defaultValue) } : {})}
+            onValueChange={(val) => onValueChange?.(val as T)}
+            {...(disabled !== undefined ? { disabled } : {})}
+            {...props}
+        >
+            {children}
+        </SelectRoot>
+    );
+};
 
 const SelectGroup = SelectPrimitive.Group
 

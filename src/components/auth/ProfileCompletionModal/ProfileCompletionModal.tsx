@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, { useState, useCallback } from 'react';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
@@ -32,7 +32,7 @@ export function ProfileCompletionModal({
 
     const handleSubmit = useCallback(async () => {
         if (!name.trim()) {
-            toast({ variant: 'destructive', description: '이름을 입력해주세요.' });
+            toast({ variant: 'destructive', description: '이름을 입력해 주세요.' });
             return;
         }
 
@@ -49,12 +49,12 @@ export function ProfileCompletionModal({
                 phone: sanitizedPhone,
             });
 
-            toast({ description: '프로필이 저장되었습니다.' });
+            toast({ description: '프로필이 업데이트되었습니다.' });
             onComplete();
         } catch {
             toast({
                 variant: 'destructive',
-                description: '프로필 저장 중 오류가 발생했습니다.',
+                description: '프로필 업데이트 중 오류가 발생했습니다.',
             });
         } finally {
             setLoading(false);
@@ -74,7 +74,7 @@ export function ProfileCompletionModal({
     return (
         <ResponsiveModal
             open={isOpen}
-            onOpenChange={() => { }} // 필수 입력이므로 닫기 비활성화
+            onOpenChange={() => { }} // 필수 입력용으로 닫기 비활성화
             dismissible={false}
             title="프로필 완성"
             description={null}
@@ -91,7 +91,7 @@ export function ProfileCompletionModal({
         >
             <div className={styles.container}>
                 <div style={{ textAlign: 'center', color: '#4E5968', marginBottom: '1.5rem', wordBreak: 'keep-all', fontSize: '1.0625rem' }}>
-                    청첩장 서비스 이용을 위해 이름과 연락처를 입력해주세요.
+                    청첩장 서비스 이용을 위해 이름과 연락처를 입력해 주세요.
                 </div>
                 <div className={styles.inputList}>
                     <div className={styles.inputGroup}>
@@ -99,7 +99,7 @@ export function ProfileCompletionModal({
                             <User size={18} />
                         </div>
                         <TextField
-                            placeholder="성함 (실명)"
+                            placeholder="이름 (실명)"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             className={styles.inputField}
@@ -113,7 +113,7 @@ export function ProfileCompletionModal({
                         <PhoneField
                             placeholder="연락처 (- 없이 입력)"
                             value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhone(e.target.value)}
                             className={styles.inputField}
                         />
                     </div>
@@ -121,9 +121,9 @@ export function ProfileCompletionModal({
 
                 <div className={styles.infoBox}>
                     <p>
-                        입력하신 정보는 청첩장 승인 신청 시 본인 확인용으로만 사용되며,
+                        입력하신 정보는 청첩장 승인 요청 시 본인 확인용으로만 사용되며,
                         <br />
-                        타인에게 공개되거나 광고 목적으로 사용되지 않습니다.
+                        타인에게 공개되거나 광고 목적 등으로 사용되지 않습니다.
                     </p>
                 </div>
             </div>
@@ -133,3 +133,4 @@ export function ProfileCompletionModal({
 
 // Ensure displayName is set if not auto-inferred (good practice)
 ProfileCompletionModal.displayName = "ProfileCompletionModal";
+

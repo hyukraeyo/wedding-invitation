@@ -9,22 +9,22 @@ import { Banana, CalendarDays, Image as ImageIcon } from "lucide-react";
 import { toast } from "sonner";
 import styles from "../DesignSystem.module.scss";
 import Story from "../Story";
+import type { InvitationSummaryRecord } from "@/lib/invitation-summary";
 
-const DUMMY_INVITATION = {
+const DUMMY_INVITATION: InvitationSummaryRecord = {
     id: "inv-1",
     slug: "demo-wedding",
-    userId: "user-1",
-    title: "Emma & Noah Wedding",
+    user_id: "user-1",
     invitation_data: {
         imageUrl: "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop",
-        isApproved: true,
         mainScreen: { title: "You are invited" },
         date: "2024.12.24",
         location: "Banana Wedding Hall",
-        updated_at: new Date().toISOString()
+        isApproved: true,
+        isRequestingApproval: false,
+        address: ""
     },
-    updated_at: new Date().toISOString(),
-    created_at: new Date().toISOString()
+    updated_at: new Date().toISOString()
 };
 
 const DUMMY_PHRASES = [
@@ -47,7 +47,7 @@ export default function PatternsTab() {
                                     // Use a reliable Unsplash ID (Wedding photo)
                                     imageUrl: "https://images.unsplash.com/photo-1511285560982-1351cdeb9821?q=80&w=800&auto=format&fit=crop"
                                 }
-                            } as any}
+                            }}
                             onEdit={() => { }}
                             onDelete={() => { }}
                             onRequestApproval={() => { }}
@@ -67,7 +67,7 @@ export default function PatternsTab() {
                                     ...DUMMY_INVITATION.invitation_data,
                                     imageUrl: null
                                 }
-                            } as any}
+                            }}
                             onEdit={() => { }}
                             onDelete={() => { }}
                             onRequestApproval={() => { }}

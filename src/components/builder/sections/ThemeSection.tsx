@@ -1,11 +1,10 @@
-
-import React from 'react';
+﻿import React from 'react';
 import { Palette, Check } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem } from '@/components/common/AccordionItem';
-import { SegmentedControl } from '@/components/common/SegmentedControl';
-import { ResponsiveSelect as Select } from '@/components/common/ResponsiveSelect';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { Select } from '@/components/ui/Select';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import { SwitchField } from '@/components/common/SwitchField';
 import styles from './ThemeSection.module.scss';
@@ -23,18 +22,19 @@ const PRESET_COLORS = [
 const ThemeSection = React.memo<SectionProps>(function ThemeSection({ isOpen, value }) {
     const theme = useInvitationStore(useShallow(state => state.theme));
     const setTheme = useInvitationStore(state => state.setTheme);
+    const resolvePattern = (val: string) =>
+        val === 'flower-sm' ? 'flower-sm' : val === 'flower-lg' ? 'flower-lg' : 'none';
 
     return (
         <AccordionItem
             value={value}
-            title="테마 및 색상"
+            title="Theme & Color"
             icon={Palette}
             isOpen={isOpen}
             isCompleted={true}
         >
             <SectionContainer>
-                {/* Point Color */}
-                <Field label="포인트 색상">
+                <Field label="Accent color">
                     <div className={styles.optionWrapper}>
                         <div className={styles.colorPicker}>
                             {PRESET_COLORS.map((color) => (
@@ -53,65 +53,62 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection({ isOpen, va
                                     ) : null}
                                 </button>
                             ))}
-
                         </div>
                     </div>
                 </Field>
 
-                {/* Font Style */}
-                <Field label="글꼴">
+                <Field label="Font">
                     <Select
                         value={theme.font}
                         options={[
-                            { label: '고운돋움 (기본)', value: 'gowun-dodum' as ThemeFont },
+                            { label: 'Gowun Dodum (Default)', value: 'gowun-dodum' as ThemeFont },
                             { label: 'Pretendard', value: 'pretendard' as ThemeFont },
-                            { label: '나눔명조', value: 'nanum-myeongjo' as ThemeFont },
-                            { label: '고운바탕', value: 'gowun-batang' as ThemeFont },
-                            { label: '송명체', value: 'song-myung' as ThemeFont },
-                            { label: '연성체', value: 'yeon-sung' as ThemeFont },
-                            { label: '도현체', value: 'do-hyeon' as ThemeFont },
-                            { label: 'G마켓 산스', value: 'gmarket' as ThemeFont },
-                            { label: '기본 명조', value: 'serif' as ThemeFont },
-                            { label: '기본 고딕', value: 'sans' as ThemeFont },
+                            { label: 'Nanum Myeongjo', value: 'nanum-myeongjo' as ThemeFont },
+                            { label: 'Gowun Batang', value: 'gowun-batang' as ThemeFont },
+                            { label: 'Song Myung', value: 'song-myung' as ThemeFont },
+                            { label: 'Yeon Sung', value: 'yeon-sung' as ThemeFont },
+                            { label: 'Do Hyeon', value: 'do-hyeon' as ThemeFont },
+                            { label: 'Gmarket Sans', value: 'gmarket' as ThemeFont },
+                            { label: 'Serif', value: 'serif' as ThemeFont },
+                            { label: 'Sans', value: 'sans' as ThemeFont },
                         ]}
-                        onChange={(val) => setTheme({ font: val as ThemeFont })}
+                        onValueChange={(val) => setTheme({ font: val as ThemeFont })}
                     />
                 </Field>
 
-                {/* Font Size */}
-                <Field label="글자 크기">
-                    <SegmentedControl
-                        value={theme.fontScale || 1}
-                        options={[
-                            { label: '기본', value: 1 },
-                            { label: '크게', value: 1.1 },
-                            { label: '더 크게', value: 1.2 },
-                        ]}
-                        onChange={(val) => setTheme({ fontScale: val as number })}
-                    />
+                <Field label="Font scale">
+                    <Tabs
+                        value={String(theme.fontScale || 1)}
+                        onValueChange={(val) => setTheme({ fontScale: Number(val) })}
+                    >
+                        <TabsList fluid>
+                            <TabsTrigger value="1">Default</TabsTrigger>
+                            <TabsTrigger value="1.1">Medium</TabsTrigger>
+                            <TabsTrigger value="1.2">Large</TabsTrigger>
+                        </TabsList>
+                    </Tabs>
                     <SwitchField
-                        label="하객의 글자 크기 변경 허용"
+                        label="Allow guest font scaling"
                         checked={theme.allowFontScale}
                         onChange={(checked) => setTheme({ allowFontScale: checked })}
-                        className={styles.switchSpacing}
+                        className={styles.switchSpacing || ''}
                     />
                 </Field>
 
-                {/* Background Pattern */}
-                <Field label="배경 무늬">
-                    <SegmentedControl
-                        value={theme.pattern}
-                        options={[
-                            { label: '안함', value: 'none' },
-                            { label: '작은꽃', value: 'flower-sm' },
-                            { label: '큰꽃', value: 'flower-lg' },
-                        ]}
-                        onChange={(val) => setTheme({ pattern: val as 'none' | 'flower-sm' | 'flower-lg' })}
-                    />
+                <Field label="Background pattern">
+                    <Tabs
+                        value={theme.pattern || 'none'}
+                        onValueChange={(val) => setTheme({ pattern: resolvePattern(val) })}
+                    >
+                        <TabsList fluid>
+                            <TabsTrigger value="none">None</TabsTrigger>
+                            <TabsTrigger value="flower-sm">Small floral</TabsTrigger>
+                            <TabsTrigger value="flower-lg">Large floral</TabsTrigger>
+                        </TabsList>
+                    </Tabs>
                 </Field>
 
-                {/* Background Color */}
-                <Field label="배경 색상">
+                <Field label="Background color">
                     <div className={styles.optionWrapper}>
                         <div className={styles.colorPicker}>
                             {['#FFFFFF', '#FFECEF', '#F4F1EA', '#F2EBFA'].map((color) => (

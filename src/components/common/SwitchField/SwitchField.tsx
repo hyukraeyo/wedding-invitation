@@ -1,17 +1,20 @@
+import React from 'react';
 import { Switch as ShadcnSwitch } from '@/components/ui/Switch';
-import { Label } from '@/components/ui/Label';
 import { cn } from '@/lib/utils';
+import { Field } from '@/components/common/FormPrimitives';
 import styles from './SwitchField.module.scss';
 
 interface SwitchProps {
     checked: boolean;
     onChange: (checked: boolean) => void;
-    label?: string | undefined;
-    className?: string | undefined; // Additional className for the container
-    disabled?: boolean | undefined;
+    label?: string;
+    description?: string;
+    className?: string;
+    disabled?: boolean;
 }
 
-export const SwitchField = ({ checked, onChange, label, className, disabled }: SwitchProps) => {
+export const SwitchField = ({ checked, onChange, label, description, className, disabled }: SwitchProps) => {
+    const id = React.useId();
     return (
         <div
             className={cn(
@@ -21,27 +24,22 @@ export const SwitchField = ({ checked, onChange, label, className, disabled }: S
             )}
             onClick={() => !disabled && onChange(!checked)}
         >
-            <div className={styles.content}>
-                {label ? (
-                    <Label
-                        className={styles.label}
-                        onClick={(e) => {
-                            e.preventDefault(); // Prevent double trigger since parent has onClick
-                        }}
-                    >
-                        {label}
-                    </Label>
-                ) : null}
+            <Field
+                id={id}
+                label={label}
+                description={description}
+                layout="horizontal"
+                align="center"
+                className={styles.fieldOverride}
+            >
                 <ShadcnSwitch
+                    id={id}
                     checked={checked}
-                    onCheckedChange={() => {
-                        // This might be redundant if the parent handles it, 
-                        // but good for accessibility if they use keyboard.
-                    }}
+                    onCheckedChange={onChange}
                     disabled={disabled}
-                    className={styles.switch} // Parent handles click
+                    onClick={(e) => e.stopPropagation()} // Prevent double trigger
                 />
-            </div>
+            </Field>
         </div>
     );
 };

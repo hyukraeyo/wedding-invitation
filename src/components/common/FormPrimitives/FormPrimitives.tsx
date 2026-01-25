@@ -2,7 +2,7 @@ import React from 'react';
 import { Info, AlertCircle } from 'lucide-react';
 import { Label as ShadcnLabel } from '@/components/ui/Label';
 import { cn } from '@/lib/utils';
-import styles from './FormPrimitives.module.scss';
+import styles from './FormFields.module.scss';
 
 // --- Label ---
 
@@ -60,33 +60,58 @@ interface FieldProps {
     children: React.ReactNode;
     className?: string | undefined;
     required?: boolean | undefined;
-    description?: string | undefined;
+    description?: React.ReactNode | undefined;
     error?: React.ReactNode;
     id?: string;
     action?: React.ReactNode;
+    layout?: 'vertical' | 'horizontal';
+    align?: 'start' | 'center';
 }
 
-export const Field = React.memo(({ label, children, className, required, description, error, id, action }: FieldProps) => {
+export const Field = React.memo(({
+    label,
+    children,
+    className,
+    required,
+    description,
+    error,
+    id,
+    action,
+    layout = 'vertical',
+    align = 'start'
+}: FieldProps) => {
     return (
-        <div className={cn(styles.spaceY2, className)}>
-            <div className={styles.fieldContainer}>
-                {label ? (
-                    <div className={styles.fieldHeader}>
+        <div className={cn(
+            styles.fieldWrapper,
+            styles[`layout-${layout}`],
+            align === 'center' && styles.alignCenter,
+            className
+        )}>
+            {label ? (
+                <div className={styles.fieldHeader}>
+                    <div className={styles.labelGroup}>
                         <Label htmlFor={id} required={!!required}>
                             {label}
                         </Label>
-                        {action}
+                        {layout === 'vertical' && description && !error ? (
+                            <p className={styles.description}>{description}</p>
+                        ) : null}
                     </div>
-                ) : null}
+                    {action}
+                </div>
+            ) : null}
+
+            <div className={styles.fieldContent}>
                 {children}
-                {description ? (
-                    <p className={cn(styles.description, error && styles.error)}>
-                        {description}
-                    </p>
-                ) : null}
-                {error ? (
-                    <p className={styles.errorMessage}>
-                        {error}
+
+                {/* Horizontal layout description usually goes below children or is hidden */}
+                {(layout === 'horizontal' || error) && (description || error) ? (
+                    <p className={cn(
+                        styles.description,
+                        error && styles.error,
+                        layout === 'horizontal' && styles.horizontalDesc
+                    )}>
+                        {error || description}
                     </p>
                 ) : null}
             </div>
