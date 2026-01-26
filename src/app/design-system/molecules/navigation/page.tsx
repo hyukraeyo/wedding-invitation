@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React from "react";
 import styles from "../../DesignSystem.module.scss";
@@ -6,8 +6,17 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { Info, Settings, Share2 } from "lucide-react";
 import Story from "../../Story";
 import DocSection from "../../DocSection";
+import { usePropControls } from "../../hooks/usePropControls";
 
 export default function NavigationPage() {
+    const { values, getPropItems } = usePropControls({
+        fluid: {
+            type: 'boolean',
+            defaultValue: false,
+            description: "TabsList가 부모 너비를 가득 채울지 여부",
+            componentType: 'boolean'
+        }
+    });
 
     return (
         <>
@@ -20,7 +29,7 @@ export default function NavigationPage() {
                 <Story id="tabs" title="Selection Tabs" description="Deep linking and conditional content rendering using standardized tab patterns">
                     <div className={styles.widthFull}>
                         <Tabs defaultValue="info" className={styles.widthFull}>
-                            <TabsList>
+                            <TabsList fluid={values.fluid as boolean}>
                                 <TabsTrigger value="info"><Info size={14} style={{ marginRight: 6 }} /> Information</TabsTrigger>
                                 <TabsTrigger value="design"><Settings size={14} style={{ marginRight: 6 }} /> Theme Style</TabsTrigger>
                                 <TabsTrigger value="share"><Share2 size={14} style={{ marginRight: 6 }} /> Distribution</TabsTrigger>
@@ -50,11 +59,8 @@ export default function NavigationPage() {
                 </Story>
 
                 <DocSection
-                    
-                    usage={`// Tabs Usage\nimport { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/Tabs";\n\n<Tabs defaultValue="tab1">\n  <TabsList>\n    <TabsTrigger value="tab1">Tab 1</TabsTrigger>\n    <TabsTrigger value="tab2">Tab 2</TabsTrigger>\n  </TabsList>\n  <TabsContent value="tab1">Content 1</TabsContent>\n</Tabs>`}
-                    props={[
-                        { name: "Tabs: fluid", type: "boolean", defaultValue: "false", description: "TabsList가 부모 너비를 가득 채울지 여부" },
-                    ]}
+                    usage={`// Tabs Usage\nimport { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/Tabs";\n\n<Tabs defaultValue="tab1">\n  <TabsList${values.fluid ? " fluid" : ""}>\n    <TabsTrigger value="tab1">Tab 1</TabsTrigger>\n    <TabsTrigger value="tab2">Tab 2</TabsTrigger>\n  </TabsList>\n  <TabsContent value="tab1">Content 1</TabsContent>\n</Tabs>`}
+                    props={getPropItems()}
                 />
             </div>
         </>

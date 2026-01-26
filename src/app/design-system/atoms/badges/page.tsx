@@ -5,8 +5,25 @@ import styles from "../../DesignSystem.module.scss";
 import { Badge } from "@/components/ui/Badge";
 import Story from "../../Story";
 import DocSection from "../../DocSection";
+import { usePropControls } from "../../hooks/usePropControls";
 
 export default function BadgesPage() {
+    const { values, getPropItems } = usePropControls({
+        children: {
+            type: 'text',
+            defaultValue: "Approved",
+            description: "배지 텍스트",
+            componentType: 'ReactNode'
+        },
+        variant: {
+            type: 'segmented',
+            defaultValue: 'default',
+            options: ["default", "secondary", "destructive", "outline", "success"],
+            description: "배지의 시각적 스타일 변형",
+            componentType: '"default" | "secondary" | "destructive" | "outline" | "success"'
+        }
+    });
+
     return (
         <>
             <header className={styles.pageHeader}>
@@ -17,7 +34,9 @@ export default function BadgesPage() {
             <div className={styles.storySection}>
                 <Story title="Standard Library" description="Core badge variants for semantic labeling">
                     <div className={styles.buttonRow}>
-                        <Badge>Primary Default</Badge>
+                        <Badge variant={values.variant as "default" | "secondary" | "destructive" | "outline" | "success"}>
+                            {values.children as string}
+                        </Badge>
                         <Badge variant="secondary">Secondary Muted</Badge>
                         <Badge variant="outline">Ghost Outline</Badge>
                         <Badge variant="destructive">Urgent / Error</Badge>
@@ -51,11 +70,8 @@ export default function BadgesPage() {
                 </Story>
 
                 <DocSection
-                    
-                    usage={`import { Badge } from "@/components/ui/Badge";\n\n<Badge variant="success">Approved</Badge>`}
-                    props={[
-                        { name: "variant", type: '"default" | "secondary" | "destructive" | "outline" | "success"', defaultValue: '"default"', description: "배지의 시각적 스타일 변형" },
-                    ]}
+                    usage={`import { Badge } from "@/components/ui/Badge";\n\n<Badge variant="${values.variant}">${values.children}</Badge>`}
+                    props={getPropItems()}
                 />
             </div>
         </>

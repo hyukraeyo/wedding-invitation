@@ -1,14 +1,33 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import styles from "../../DesignSystem.module.scss";
 import { Toggle } from "@/components/ui/Toggle";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import Story from "../../Story";
 import DocSection from "../../DocSection";
+import { usePropControls } from "../../hooks/usePropControls";
 
 export default function TogglesPage() {
-    const [isActive, setIsActive] = useState(true);
+    const { values, setValue, getPropItems } = usePropControls({
+        pressed: {
+            type: 'boolean',
+            defaultValue: true,
+            description: "활성화 여부",
+            componentType: 'boolean'
+        },
+        size: {
+            type: 'segmented',
+            defaultValue: 'md',
+            options: ['sm', 'md', 'lg', 'square'],
+            description: "토글 크기",
+            componentType: '"sm" | "md" | "lg" | "square"'
+        },
+        onPressedChange: {
+            description: "상태 변경 콜백",
+            componentType: '(pressed: boolean) => void'
+        }
+    });
 
     return (
         <>
@@ -22,7 +41,13 @@ export default function TogglesPage() {
                     <div className={styles.showcaseStack}>
                         <div className={styles.rowGap2}>
                             <Toggle size="sm">Small Chip</Toggle>
-                            <Toggle size="md" pressed={isActive} onPressedChange={setIsActive}>Medium Active</Toggle>
+                            <Toggle
+                                size={values.size as "sm" | "md" | "lg" | "square"}
+                                pressed={values.pressed as boolean}
+                                onPressedChange={(pressed) => setValue('pressed', pressed)}
+                            >
+                                Medium Active
+                            </Toggle>
                             <Toggle size="lg">Large Chip</Toggle>
                         </div>
                     </div>
@@ -43,14 +68,8 @@ export default function TogglesPage() {
                 </Story>
 
                 <DocSection
-                    
-                    usage={`import { Toggle } from "@/components/ui/Toggle";\n\n<Toggle\n  pressed={pressed}\n  onPressedChange={setPressed}\n  size="md"\n>\n  Active\n</Toggle>`}
-                    props={[
-                        { name: "pressed", type: "boolean", description: "활성화 여부" },
-                        { name: "onPressedChange", type: "(pressed: boolean) => void", description: "상태 변경 콜백" },
-                        { name: "size", type: '"sm" | "md" | "lg" | "square"', defaultValue: '"md"', description: "토글 크기" },
-                        { name: "variant", type: '"default" | "outline"', defaultValue: '"default"', description: "시각적 변형" },
-                    ]}
+                    usage={`import { Toggle } from "@/components/ui/Toggle";\n\n<Toggle\n  pressed={pressed}\n  onPressedChange={setPressed}\n  size="${values.size}"\n>\n  Active\n</Toggle>`}
+                    props={getPropItems()}
                 />
             </div>
         </>

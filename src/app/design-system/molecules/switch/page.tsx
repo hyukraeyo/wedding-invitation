@@ -78,12 +78,12 @@ export default function SwitchPage() {
                 content: (
                     <div style={{ width: '100%', maxWidth: values.variant === 'default' ? '400px' : 'auto', display: 'flex', justifyContent: 'center' }}>
                         <Switch
-                            variant={values.variant}
-                            label={values.variant === 'default' ? values.label : undefined}
-                            description={values.variant === 'default' ? values.description : undefined}
-                            checked={values.checked}
+                            variant={values.variant as "default" | "basic"}
+                            label={values.variant === 'default' ? (values.label as string) : undefined}
+                            description={values.variant === 'default' ? (values.description as string) : undefined}
+                            checked={values.checked as boolean}
                             onCheckedChange={(val) => setValue('checked', val)}
-                            disabled={values.disabled}
+                            disabled={values.disabled as boolean}
                         />
                     </div>
                 ),

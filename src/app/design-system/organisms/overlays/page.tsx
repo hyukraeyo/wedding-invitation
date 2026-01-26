@@ -7,13 +7,56 @@ import DocSection from "../../DocSection";
 import { ModalsDemo } from "./_components/ModalsDemo";
 import { DrawersDemo } from "./_components/DrawersDemo";
 import { ContextMenusDemo } from "./_components/ContextMenusDemo";
+import { usePropControls } from "../../hooks/usePropControls";
 
 export default function OverlaysPage() {
+    const { getPropItems } = usePropControls({
+        open: {
+            description: "모달 열림 상태",
+            componentType: 'boolean'
+        },
+        onOpenChange: {
+            description: "열림 상태 변경 콜백",
+            componentType: '(open: boolean) => void'
+        },
+        title: {
+            description: "모달 상단 타이틀",
+            componentType: 'ReactNode'
+        },
+        description: {
+            description: "타이틀 하단 설명",
+            componentType: 'ReactNode'
+        },
+        confirmText: {
+            description: "확인 버튼 텍스트",
+            componentType: 'string',
+            defaultValue: "확인"
+        },
+        cancelText: {
+            description: "취소 버튼 텍스트",
+            componentType: 'string',
+            defaultValue: "취소"
+        },
+        onConfirm: {
+            description: "확인 버튼 클릭 콜백",
+            componentType: '() => void'
+        },
+        onCancel: {
+            description: "취소 버튼 클릭 콜백",
+            componentType: '() => void'
+        },
+        showCancel: {
+            description: "취소 버튼 노출 여부",
+            componentType: 'boolean',
+            defaultValue: "true"
+        }
+    });
+
     return (
         <>
             <header className={styles.pageHeader}>
                 <h1>Modals & Overlays</h1>
-                <p className={styles.textMuted}>사용자 인터렉션 위에 레이어로 표시되는 프리미엄 레이아웃 컴포넌트입니다.</p>
+                <p className={styles.textMuted}>사용자 인터랙션 전에 레이어로 표시되는 오버레이 컴포넌트입니다.</p>
             </header>
 
             <div className={styles.storySection}>
@@ -22,19 +65,8 @@ export default function OverlaysPage() {
                 </Story>
 
                 <DocSection
-                    
                     usage={`import { ResponsiveModal } from "@/components/common/ResponsiveModal";\n\n<ResponsiveModal\n  open={open}\n  onOpenChange={setOpen}\n  \n  onConfirm={handleConfirm}\n>\n  Content\n</ResponsiveModal>`}
-                    props={[
-                        { name: "open", type: "boolean", description: "모달 열림 상태" },
-                        { name: "onOpenChange", type: "(open: boolean) => void", description: "열림 상태 변경 콜백" },
-                        { name: "title", type: "ReactNode", description: "모달 상단 타이틀" },
-                        { name: "description", type: "ReactNode", description: "타이틀 하단 설명" },
-                        { name: "confirmText", type: "string", defaultValue: '"확인"', description: "확인 버튼 텍스트" },
-                        { name: "cancelText", type: "string", defaultValue: '"취소"', description: "취소 버튼 텍스트" },
-                        { name: "onConfirm", type: "() => void", description: "확인 버튼 클릭 콜백" },
-                        { name: "onCancel", type: "() => void", description: "취소 버튼 클릭 콜백" },
-                        { name: "showCancel", type: "boolean", defaultValue: "true", description: "취소 버튼 노출 여부" },
-                    ]}
+                    props={getPropItems()}
                 />
 
                 <Story id="drawers" title="Bottom Sheets (Drawer)" description="iOS-style slide-up panels with multiple surface variants">

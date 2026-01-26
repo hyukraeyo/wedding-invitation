@@ -9,16 +9,28 @@ import { Label } from "@/components/ui/Label";
 import { Settings, CreditCard, User, LogOut } from "lucide-react";
 import Story from "../../Story";
 import DocSection from "../../DocSection";
+import { usePropControls } from "../../hooks/usePropControls";
 
 export default function MenuPage() {
     const [selectedAnimal, setSelectedAnimal] = useState<string>("cat");
     const [isOpen, setIsOpen] = useState(false);
 
+    const { getPropItems } = usePropControls({
+        "Menu.Item props": {
+            description: "아이콘 위치, 설명, 선택 상태 등을 제어",
+            componentType: "left, right, description, selected"
+        },
+        "Menu.CheckItem props": {
+            description: "체크박스 로직을 포함하는 아이템",
+            componentType: "checked, onCheckedChange"
+        }
+    });
+
     return (
         <>
             <header className={styles.pageHeader}>
                 <h1>Menu</h1>
-                <p className={styles.textMuted}>TDS(Toss Design System) 스타일의 합성 컴포넌트 패턴 메뉴입니다.</p>
+                <p className={styles.textMuted}>TDS(Toss Design System) 스타일의 익숙한 메뉴입니다.</p>
             </header>
 
             <div className={styles.storySection}>
@@ -80,7 +92,7 @@ export default function MenuPage() {
                                 <Menu.Item left={<User size={18} />}>프로필 설정</Menu.Item>
                                 <Menu.Item left={<CreditCard size={18} />} description="결제 수단 및 내역 관리">결제 관리</Menu.Item>
                                 <Menu.Separator />
-                                <Menu.Header>어플리케이션</Menu.Header>
+                                <Menu.Header>애플리케이션</Menu.Header>
                                 <Menu.Item left={<Settings size={18} />}>환경 설정</Menu.Item>
                                 <Menu.Separator />
                                 <Menu.Item left={<LogOut size={18} />} className="text-red-500">로그아웃</Menu.Item>
@@ -90,12 +102,8 @@ export default function MenuPage() {
                 </Story>
 
                 <DocSection
-                    
                     usage={`import Menu from "@/components/ui/Menu";\n\n<Menu>\n  <Menu.Header>Title</Menu.Header>\n  <Menu.Item onClick={...}>Item</Menu.Item>\n  <Menu.CheckItem checked={...} onCheckedChange={...}>Checkable</Menu.CheckItem>\n  <Menu.Separator />\n</Menu>`}
-                    props={[
-                        { name: "Menu.Item props", type: "left, right, description, selected", description: "아이콘, 설명, 선택 상태 등을 제어" },
-                        { name: "Menu.CheckItem props", type: "checked, onCheckedChange", description: "체크박스 로직이 포함된 아이템" },
-                    ]}
+                    props={getPropItems()}
                 />
             </div>
         </>

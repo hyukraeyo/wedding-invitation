@@ -65,7 +65,6 @@ const Select = <T extends string | number>({
     const field = useFormField();
     const id = customId || field?.id;
     const describedBy = field?.isError ? field.errorId : field?.descriptionId;
-    const isError = field?.isError;
 
     const currentValue = value !== undefined ? value : internalValue;
 

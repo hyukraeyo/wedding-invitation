@@ -5,13 +5,23 @@ import styles from "../../DesignSystem.module.scss";
 import { Skeleton } from "@/components/ui/Skeleton";
 import Story from "../../Story";
 import DocSection from "../../DocSection";
+import { usePropControls } from "../../hooks/usePropControls";
 
 export default function SkeletonPage() {
+    const { values, getPropItems } = usePropControls({
+        className: {
+            type: 'text',
+            defaultValue: "w-[100px] h-[20px] rounded-full",
+            description: "크기, 형태, 애니메이션 등을 지정할 클래스",
+            componentType: 'string'
+        }
+    });
+
     return (
         <>
             <header className={styles.pageHeader}>
                 <h1>Skeleton</h1>
-                <p>콘텐츠 로딩 중에 사용자에게 대략적인 레이아웃 구조를 체감시켜 이탈을 방지하는 컴포넌트입니다.</p>
+                <p>콘텐츠 로딩 중에 사용자에게 구조를 힌트로 제공해 불안을 줄이는 컴포넌트입니다.</p>
             </header>
 
             <div className={styles.storySection}>
@@ -67,11 +77,8 @@ export default function SkeletonPage() {
                 </Story>
 
                 <DocSection
-                    
-                    usage={`import { Skeleton } from "@/components/ui/Skeleton";\n\n<Skeleton className="w-[100px] h-[20px] rounded-full" />`}
-                    props={[
-                        { name: "className", type: "string", description: "크기, 형태, 애니메이션 등 스타일 지정을 위한 클래스" },
-                    ]}
+                    usage={`import { Skeleton } from "@/components/ui/Skeleton";\n\n<Skeleton className="${values.className}" />`}
+                    props={getPropItems()}
                 />
 
                 <Story title="Full Surface Loading" description="Standard placeholder for main dashboard or editor panels">

@@ -1,15 +1,41 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import DesignSystemPage from "../../DesignSystemPage";
 import { RadioGroup } from "@/components/ui/RadioGroup";
 import { LayoutGrid, List, Layers } from "lucide-react";
+import { usePropControls } from "../../hooks/usePropControls";
 
 export default function RadioGroupPageClient() {
-  const [variant, setVariant] = useState<"segmented" | "basic">("segmented");
-  const [size, setSize] = useState<"sm" | "md" | "lg">("md");
-  const [fullWidth, setFullWidth] = useState(false);
-  const [value, setValue] = useState("apple");
+  const { values, setValue, getPropItems } = usePropControls({
+    variant: {
+      type: 'segmented',
+      defaultValue: 'segmented',
+      options: ['segmented', 'basic'],
+      description: "시각적 스타일 변형",
+      componentType: '"segmented" | "basic"'
+    },
+    size: {
+      type: 'segmented',
+      defaultValue: 'md',
+      options: ['sm', 'md', 'lg'],
+      description: "크기 (segmented 전용)",
+      componentType: '"sm" | "md" | "lg"'
+    },
+    fullWidth: {
+      type: 'boolean',
+      defaultValue: false,
+      description: "전체 너비 차지 여부 (segmented 전용)",
+      componentType: 'boolean'
+    },
+    value: {
+      type: 'segmented',
+      defaultValue: 'apple',
+      options: ['apple', 'orange', 'grape'],
+      description: "현재 선택된 값",
+      componentType: 'string'
+    }
+  });
 
   const options = [
     { label: "사과", value: "apple", icon: <Layers size={16} />, description: "달콤하고 아삭한 사과" },
@@ -17,13 +43,13 @@ export default function RadioGroupPageClient() {
     { label: "포도", value: "grape", icon: <List size={16} />, description: "달콤한 포도 송이" },
   ];
 
-  const radioUsage = variant === "segmented"
+  const radioUsage = values.variant === "segmented"
     ? `import { RadioGroup } from "@/components/ui/RadioGroup";
 
 <RadioGroup
   variant="segmented"
-  size="${size}"
-  ${fullWidth ? "fullWidth" : ""}
+  size="${values.size}"
+  ${values.fullWidth ? "fullWidth" : ""}
   value={value}
   onValueChange={setValue}
   options={[
@@ -44,6 +70,13 @@ export default function RadioGroupPageClient() {
   ]}
 />`;
 
+  const propItems = getPropItems((key, currentValues) => {
+    if (currentValues.variant !== "segmented") {
+      if (key === "size" || key === "fullWidth") return false;
+    }
+    return true;
+  });
+
   return (
     <DesignSystemPage
       title="Radio Group (라디오 그룹)"
@@ -53,62 +86,28 @@ export default function RadioGroupPageClient() {
         description: "라디오 그룹의 다양한 속성을 실시간으로 테스트해보세요.",
         canvasStyle: { alignItems: 'center', justifyContent: 'center', minHeight: '200px' },
         content: (
-          <div style={{ width: fullWidth ? '100%' : 'auto', maxWidth: '400px' }}>
-            {variant === "segmented" ? (
+          <div style={{ width: (values.fullWidth as boolean) ? '100%' : 'auto', maxWidth: '400px' }}>
+            {values.variant === "segmented" ? (
               <RadioGroup
                 variant="segmented"
-                size={size}
-                fullWidth={fullWidth}
-                value={value}
-                onValueChange={setValue}
+                size={values.size as "sm" | "md" | "lg"}
+                fullWidth={values.fullWidth as boolean}
+                value={values.value as string}
+                onValueChange={(val) => setValue('value', val)}
                 options={options}
               />
             ) : (
               <RadioGroup
                 variant="basic"
-                value={value}
-                onValueChange={setValue}
+                value={values.value as string}
+                onValueChange={(val) => setValue('value', val)}
                 options={options.map(({ label, value }) => ({ label, value }))}
               />
             )}
           </div>
         ),
         usage: radioUsage,
-        props: [
-          {
-            name: "variant",
-            type: '"segmented" | "basic"',
-            description: "시각적 스타일 변형",
-            control: {
-              type: 'segmented',
-              value: variant,
-              onChange: (val) => setVariant(val as "segmented" | "basic"),
-              options: ["segmented", "basic"]
-            }
-          },
-          {
-            name: "size",
-            type: '"sm" | "md" | "lg"',
-            description: "크기 (segmented 전용)",
-            control: {
-              type: 'select',
-              value: size,
-              onChange: (val) => setSize(val as "sm" | "md" | "lg"),
-              options: ["sm", "md", "lg"]
-            }
-          },
-          {
-            name: "fullWidth",
-            type: "boolean",
-            description: "전체 너비 차지 여부 (segmented 전용)",
-            control: { type: 'boolean', value: fullWidth, onChange: (val) => setFullWidth(val as boolean) }
-          },
-          {
-            name: "value",
-            type: "string",
-            description: "현재 선택된 값",
-          }
-        ]
+        props: propItems
       }}
     />
   );

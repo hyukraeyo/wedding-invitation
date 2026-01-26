@@ -18,13 +18,47 @@ import {
 } from "lucide-react";
 import Story from "../../../Story";
 import DocSection from "../../../DocSection";
+import { usePropControls } from "../../../hooks/usePropControls";
 
 export default function IconButtonsPage() {
-    const [variant, setVariant] = React.useState<"default" | "secondary" | "outline" | "ghost" | "destructive" | "solid" | "glass" | "line">("ghost");
-    const [size, setSize] = React.useState<"sm" | "md" | "lg">("md");
-    const [disabled, setDisabled] = React.useState(false);
-    const [loading, setLoading] = React.useState(false);
-    const [rounded, setRounded] = React.useState(false);
+    const { values, getPropItems } = usePropControls({
+        icon: {
+            description: "표시할 아이콘 (Lucide React)",
+            componentType: 'LucideIcon'
+        },
+        variant: {
+            type: 'segmented',
+            defaultValue: 'ghost',
+            options: ["default", "secondary", "outline", "ghost", "destructive", "solid", "glass", "line"],
+            description: "버튼의 시각적 스타일 변형",
+            componentType: '"solid" | "line" | "ghost" | "secondary" | "outline" | "destructive" | "default" | "glass"'
+        },
+        size: {
+            type: 'segmented',
+            defaultValue: 'md',
+            options: ["sm", "md", "lg"],
+            description: "버튼의 크기 (Standard Touch Area 고려)",
+            componentType: '"sm" | "md" | "lg"'
+        },
+        disabled: {
+            type: 'boolean',
+            defaultValue: false,
+            description: "비활성화 상태",
+            componentType: 'boolean'
+        },
+        rounded: {
+            type: 'boolean',
+            defaultValue: false,
+            description: "완전한 원형 여부",
+            componentType: 'boolean'
+        },
+        loading: {
+            type: 'boolean',
+            defaultValue: false,
+            description: "로딩 상태 표시",
+            componentType: 'boolean'
+        }
+    });
 
     return (
         <>
@@ -38,93 +72,19 @@ export default function IconButtonsPage() {
                     <div className={styles.canvas} style={{ alignItems: 'center', justifyContent: 'center', minHeight: '300px' }}>
                         <IconButton
                             icon={Banana}
-                            variant={variant}
-                            size={size}
-                            disabled={disabled}
-                            loading={loading}
-                            rounded={rounded}
+                            variant={values.variant as "default" | "secondary" | "outline" | "ghost" | "destructive" | "solid" | "glass" | "line"}
+                            size={values.size as "sm" | "md" | "lg"}
+                            disabled={values.disabled as boolean}
+                            loading={values.loading as boolean}
+                            rounded={values.rounded as boolean}
                             aria-label="banana-button"
                         />
                     </div>
                 </Story>
 
                 <DocSection
-                    usage={`import { IconButton } from "@/components/ui/IconButton";
-import { Banana } from "lucide-react";
-
-<IconButton
-  icon={Banana}
-  variant="${variant}"
-  size="${size}"
-  ${disabled ? 'disabled' : ''}
-  ${loading ? 'loading' : ''}
-  ${rounded ? 'rounded' : ''}
-  aria-label="Banana Button"
-/>`}
-                    props={[
-                        {
-                            name: "icon",
-                            type: "LucideIcon",
-                            description: "표시할 아이콘 (Lucide React)",
-                        },
-                        {
-                            name: "variant",
-                            type: '"solid" | "line" | "ghost" | "secondary" | "outline" | "destructive" | "default" | "glass"',
-                            defaultValue: '"ghost"',
-                            description: "버튼의 시각적 스타일 변형",
-                            control: {
-                                type: 'select',
-                                value: variant,
-                                onChange: (val: string | boolean) => setVariant(val as "default" | "secondary" | "outline" | "ghost" | "destructive" | "solid" | "glass" | "line"),
-                                options: ["default", "secondary", "outline", "ghost", "destructive", "solid", "glass"]
-                            }
-                        },
-                        {
-                            name: "size",
-                            type: '"sm" | "md" | "lg"',
-                            defaultValue: '"md"',
-                            description: "버튼의 크기 (Standard Touch Area 고려)",
-                            control: {
-                                type: 'radio',
-                                value: size,
-                                onChange: (val: string | boolean) => setSize(val as "sm" | "md" | "lg"),
-                                options: ["sm", "md", "lg"]
-                            }
-                        },
-                        {
-                            name: "disabled",
-                            type: "boolean",
-                            defaultValue: "false",
-                            description: "비활성화 상태",
-                            control: {
-                                type: 'boolean',
-                                value: disabled,
-                                onChange: (val: string | boolean) => setDisabled(val as boolean)
-                            }
-                        },
-                        {
-                            name: "rounded",
-                            type: "boolean",
-                            defaultValue: "false",
-                            description: "완전한 원형 여부",
-                            control: {
-                                type: 'boolean',
-                                value: rounded,
-                                onChange: (val: string | boolean) => setRounded(val as boolean)
-                            }
-                        },
-                        {
-                            name: "loading",
-                            type: "boolean",
-                            defaultValue: "false",
-                            description: "로딩 상태 표시",
-                            control: {
-                                type: 'boolean',
-                                value: loading,
-                                onChange: (val: string | boolean) => setLoading(val as boolean)
-                            }
-                        },
-                    ]}
+                    usage={`import { IconButton } from "@/components/ui/IconButton";\nimport { Banana } from "lucide-react";\n\n<IconButton\n  icon={Banana}\n  variant="${values.variant}"\n  size="${values.size}"\n  ${values.disabled ? 'disabled' : ''}\n  ${values.loading ? 'loading' : ''}\n  ${values.rounded ? 'rounded' : ''}\n  aria-label="Banana Button"\n/>`}
+                    props={getPropItems()}
                 />
 
                 <Story title="Variants" description="다양한 목적에 맞는 스타일을 제공합니다.">

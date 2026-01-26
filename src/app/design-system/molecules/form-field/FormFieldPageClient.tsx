@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import DesignSystemPage from "../../DesignSystemPage";
 import { FormField } from "@/components/common/FormField";
 import { Input } from "@/components/ui/Input";
@@ -8,23 +8,56 @@ import { Textarea } from "@/components/ui/Textarea";
 import { Switch } from "@/components/ui/Switch";
 import { RadioGroup } from "@/components/ui/RadioGroup";
 import { Select } from "@/components/ui/Select";
+import { usePropControls } from "../../hooks/usePropControls";
 
 export default function FormFieldPageClient() {
-    const [label, setLabel] = useState("필드 레이블");
-    const [description, setDescription] = useState("성함을 입력해주세요.");
-    const [error, setError] = useState("");
-    const [required, setRequired] = useState(true);
-    const [layout, setLayout] = useState<"vertical" | "horizontal">("vertical");
+    const { values, getPropItems } = usePropControls({
+        label: {
+            type: 'text',
+            defaultValue: "필드 레이블",
+            description: "필드 레이블 (id가 정의된 경우 자동으로 htmlFor 매핑됨)",
+            componentType: 'ReactNode'
+        },
+        description: {
+            type: 'text',
+            defaultValue: "성함을 입력해주세요.",
+            description: "하단 보조 설명",
+            componentType: 'ReactNode'
+        },
+        error: {
+            type: 'text',
+            defaultValue: "",
+            description: "에러 메시지 (값이 있으면 description 대신 노출되며 스타일이 변경됨)",
+            componentType: 'ReactNode'
+        },
+        required: {
+            type: 'boolean',
+            defaultValue: true,
+            description: "필수 여부 (레이블 옆 별표 표시)",
+            componentType: 'boolean'
+        },
+        layout: {
+            type: 'segmented',
+            defaultValue: 'vertical',
+            options: ["vertical", "horizontal"],
+            description: "레이블과 입력 요소의 배치 방향",
+            componentType: '"vertical" | "horizontal"'
+        }
+    });
+
+    const labelText = values.label ? String(values.label) : "";
+    const descriptionText = values.description ? String(values.description) : "";
+    const errorText = values.error ? String(values.error) : "";
 
     const usage = `import { FormField } from "@/components/common/FormField";
 import { Input } from "@/components/ui/Input";
 
 <FormField
-  label="${label}"
-  description="${description}"
-  ${error ? `error="${error}"` : ""}
-  ${required ? "required" : ""}
-  layout="${layout}"
+  label="${labelText}"
+  description="${descriptionText}"
+  ${errorText ? `error="${errorText}"` : ""}
+  ${(values.required as boolean) ? "required" : ""}
+  layout="${values.layout}"
 >
   <Input placeholder="내용을 입력하세요" />
 </FormField>`;
@@ -40,54 +73,18 @@ import { Input } from "@/components/ui/Input";
                 content: (
                     <div style={{ width: '100%', maxWidth: '400px' }}>
                         <FormField
-                            label={label || undefined}
-                            description={description || undefined}
-                            error={error || undefined}
-                            required={required}
-                            layout={layout}
+                            label={labelText || undefined}
+                            description={descriptionText || undefined}
+                            error={errorText || undefined}
+                            required={values.required as boolean}
+                            layout={values.layout as "vertical" | "horizontal"}
                         >
                             <Input placeholder="자동으로 레이블과 연결됩니다" />
                         </FormField>
                     </div>
                 ),
                 usage: usage,
-                props: [
-                    {
-                        name: "label",
-                        type: "ReactNode",
-                        description: "필드 레이블 (id가 정의된 경우 자동으로 htmlFor 매핑됨)",
-                        control: { type: 'text', value: label, onChange: (val) => setLabel(val as string) }
-                    },
-                    {
-                        name: "description",
-                        type: "ReactNode",
-                        description: "하단 보조 설명",
-                        control: { type: 'text', value: description, onChange: (val) => setDescription(val as string) }
-                    },
-                    {
-                        name: "error",
-                        type: "ReactNode",
-                        description: "에러 메시지 (값이 있으면 description 대신 노출되며 스타일이 변경됨)",
-                        control: { type: 'text', value: error, onChange: (val) => setError(val as string) }
-                    },
-                    {
-                        name: "required",
-                        type: "boolean",
-                        description: "필수 여부 (레이블 옆 별표 표시)",
-                        control: { type: 'boolean', value: required, onChange: (val) => setRequired(val as boolean) }
-                    },
-                    {
-                        name: "layout",
-                        type: '"vertical" | "horizontal"',
-                        description: "레이블과 입력 요소의 배치 방향",
-                        control: {
-                            type: 'segmented',
-                            value: layout,
-                            onChange: (val) => setLayout(val as "vertical" | "horizontal"),
-                            options: ["vertical", "horizontal"]
-                        }
-                    },
-                ]
+                props: getPropItems()
             }}
             combinations={{
                 title: "조합 예시",

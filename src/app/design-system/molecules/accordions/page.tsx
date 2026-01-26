@@ -8,8 +8,73 @@ import { Button } from "@/components/ui/Button";
 import { ChevronDown } from "lucide-react";
 import Story from "../../Story";
 import DocSection from "../../DocSection";
+import { usePropControls } from "../../hooks/usePropControls";
 
 export default function AccordionsPage() {
+    const { values, getPropItems } = usePropControls({
+        type: {
+            type: 'segmented',
+            defaultValue: 'single',
+            options: ['single', 'multiple'],
+            description: "아코디언 동작 모드",
+            componentType: '"single" | "multiple"'
+        },
+        collapsible: {
+            type: 'boolean',
+            defaultValue: true,
+            description: "type이 single일 때 모든 아이템을 닫을 수 있는지 여부",
+            componentType: 'boolean'
+        },
+        defaultValue: {
+            type: 'text',
+            defaultValue: 'item-1',
+            description: "초기에 열려 있을 아이템의 value (multiple은 쉼표로 구분)",
+            componentType: 'string | string[]'
+        },
+        asChild: {
+            defaultValue: false,
+            description: "Radix UI Slot 사용 여부",
+            componentType: 'boolean'
+        }
+    });
+
+    const parsedDefaultValue = (() => {
+        const rawValue = values.defaultValue as string | undefined;
+        if (!rawValue) return undefined;
+        if (values.type === 'multiple') {
+            const parsed = rawValue
+                .split(",")
+                .map((value) => value.trim())
+                .filter(Boolean);
+            return parsed.length > 0 ? parsed : undefined;
+        }
+        return rawValue;
+    })();
+
+    const usageLines = [
+        `import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/Accordion";`,
+        ``,
+        `<Accordion`,
+        `  type="${values.type}"`,
+        values.type === "single" ? `  collapsible={${values.collapsible}}` : null,
+        parsedDefaultValue
+            ? values.type === "multiple"
+                ? `  defaultValue={[${(parsedDefaultValue as string[]).map((value) => `"${value}"`).join(", ")}]}`
+                : `  defaultValue="${parsedDefaultValue as string}"`
+            : null,
+        `>`,
+        `  <AccordionItem value="item-1">`,
+        `    <AccordionTrigger>Title</AccordionTrigger>`,
+        `    <AccordionContent>Content here</AccordionContent>`,
+        `  </AccordionItem>`,
+        `</Accordion>`
+    ].filter(Boolean).join("\n");
+
+    const propItems = getPropItems((key, currentValues) => {
+        if (key === 'collapsible' && currentValues.type !== 'single') return false;
+        return true;
+    });
+
     return (
         <>
             <header className={styles.pageHeader}>
@@ -21,43 +86,48 @@ export default function AccordionsPage() {
                 <Story title="Dynamic Accordion" description="Compact, stackable disclosure panels with single/multi modes">
                     <div className={styles.showcaseStack}>
                         <div className={styles.verticalStackSmall}>
-                            <Label className={styles.labelMuted}>Single Mode (Collapsible)</Label>
-                            <Accordion type="single" collapsible className={styles.widthFull}>
-                                <AccordionItem value="item-1">
-                                    <AccordionTrigger>Why choose Banana Wedding?</AccordionTrigger>
-                                    <AccordionContent>Because it provides the most premium mobile experience for your guests.</AccordionContent>
-                                </AccordionItem>
-                                <AccordionItem value="item-2">
-                                    <AccordionTrigger>Is it free?</AccordionTrigger>
-                                    <AccordionContent>We offer both free basic plans and premium design plans.</AccordionContent>
-                                </AccordionItem>
-                            </Accordion>
-                        </div>
-
-                        <div className={styles.verticalStackSmall}>
-                            <Label className={styles.labelMuted}>Multiple Mode</Label>
-                            <Accordion type="multiple" className={styles.widthFull}>
-                                <AccordionItem value="item-1">
-                                    <AccordionTrigger>Design Features</AccordionTrigger>
-                                    <AccordionContent>Custom fonts, colors, and layout options.</AccordionContent>
-                                </AccordionItem>
-                                <AccordionItem value="item-2">
-                                    <AccordionTrigger>Guest Management</AccordionTrigger>
-                                    <AccordionContent>RSVP tracking and guest list export.</AccordionContent>
-                                </AccordionItem>
-                            </Accordion>
+                            <Label className={styles.labelMuted}>
+                                {values.type === "single" ? "Single Mode (Collapsible)" : "Multiple Mode"}
+                            </Label>
+                            {values.type === "single" ? (
+                                <Accordion
+                                    type="single"
+                                    collapsible={values.collapsible as boolean}
+                                    {...(parsedDefaultValue ? { defaultValue: parsedDefaultValue as string } : {})}
+                                    className={styles.widthFull}
+                                >
+                                    <AccordionItem value="item-1">
+                                        <AccordionTrigger>Why choose Banana Wedding?</AccordionTrigger>
+                                        <AccordionContent>Because it provides the most premium mobile experience for your guests.</AccordionContent>
+                                    </AccordionItem>
+                                    <AccordionItem value="item-2">
+                                        <AccordionTrigger>Is it free?</AccordionTrigger>
+                                        <AccordionContent>We offer both free basic plans and premium design plans.</AccordionContent>
+                                    </AccordionItem>
+                                </Accordion>
+                            ) : (
+                                <Accordion
+                                    type="multiple"
+                                    {...(parsedDefaultValue ? { defaultValue: parsedDefaultValue as string[] } : {})}
+                                    className={styles.widthFull}
+                                >
+                                    <AccordionItem value="item-1">
+                                        <AccordionTrigger>Why choose Banana Wedding?</AccordionTrigger>
+                                        <AccordionContent>Because it provides the most premium mobile experience for your guests.</AccordionContent>
+                                    </AccordionItem>
+                                    <AccordionItem value="item-2">
+                                        <AccordionTrigger>Is it free?</AccordionTrigger>
+                                        <AccordionContent>We offer both free basic plans and premium design plans.</AccordionContent>
+                                    </AccordionItem>
+                                </Accordion>
+                            )}
                         </div>
                     </div>
                 </Story>
 
                 <DocSection
-                    usage={`import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/Accordion";\n\n<Accordion type="single" collapsible>\n  <AccordionItem value="item-1">\n    <AccordionTrigger>Title</AccordionTrigger>\n    <AccordionContent>\n      Content here\n    </AccordionContent>\n  </AccordionItem>\n</Accordion>`}
-                    props={[
-                        { name: "type", type: '"single" | "multiple"', description: "아코디언 동작 모드" },
-                        { name: "collapsible", type: "boolean", description: "type이 single일 때 모든 아이템을 닫을 수 있는지 여부" },
-                        { name: "defaultValue", type: "string | string[]", description: "초기에 열려 있을 아이템의 value" },
-                        { name: "asChild", type: "boolean", description: "Radix UI Slot 사용 여부" },
-                    ]}
+                    usage={usageLines}
+                    props={propItems}
                 />
 
                 <Story title="Collapsible Sections" description="Minimalist toggle for auxiliary information or advanced settings">

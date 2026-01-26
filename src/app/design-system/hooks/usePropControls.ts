@@ -4,10 +4,15 @@ import React, { useState } from "react";
 import { PropItem } from "../DocSection";
 
 type ControlType = 'boolean' | 'select' | 'text' | 'radio' | 'segmented';
+type ControlValue = boolean | string;
+
+const getFallbackValue = (type: ControlType): ControlValue => {
+    return type === 'boolean' ? false : '';
+};
 
 export interface ControlConfig {
     type?: ControlType; // If undefined, it will be displayed without a control (e.g. callbacks)
-    defaultValue?: any;
+    defaultValue?: ControlValue;
     description?: string;
     options?: (string | { label: string; value: string; icon?: React.ReactNode })[];
     componentType?: string; // The TypeScript type string to check (e.g. "'default' | 'basic'")
@@ -20,8 +25,8 @@ export type ConfigMap = { [key: string]: ControlConfig };
  * This simplifies the 'playground' code by removing the need to manually create state and PropItem arrays.
  */
 export function usePropControls(config: ConfigMap) {
-    const [values, setValues] = useState<Record<string, any>>(() => {
-        const initial: Record<string, any> = {};
+    const [values, setValues] = useState<Record<string, ControlValue>>(() => {
+        const initial: Record<string, ControlValue> = {};
         Object.entries(config).forEach(([key, cfg]) => {
             // Only set initial value if it exists, otherwise it might be undefined
             if (cfg.defaultValue !== undefined) {
@@ -31,13 +36,13 @@ export function usePropControls(config: ConfigMap) {
         return initial;
     });
 
-    const setValue = (key: string, value: any) => {
+    const setValue = (key: string, value: ControlValue) => {
         setValues(prev => ({ ...prev, [key]: value }));
     };
 
     // Generates the PropItem array for the DocSection
     // accepts an optional filter function to conditionally hide props (e.g. based on current values)
-    const getPropItems = (filter?: (key: string, currentValues: Record<string, any>) => boolean): PropItem[] => {
+    const getPropItems = (filter?: (key: string, currentValues: Record<string, ControlValue>) => boolean): PropItem[] => {
         return Object.entries(config)
             .filter(([key]) => filter ? filter(key, values) : true)
             .map(([key, cfg]) => {
@@ -56,7 +61,7 @@ export function usePropControls(config: ConfigMap) {
                 if (cfg.type) {
                     item.control = {
                         type: cfg.type,
-                        value: values[key],
+                        value: values[key] ?? (cfg.defaultValue ?? getFallbackValue(cfg.type)),
                         onChange: (val) => setValue(key, val),
                         options: cfg.options
                     };

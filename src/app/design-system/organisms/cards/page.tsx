@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { InvitationCard } from "@/components/ui/InvitationCard/InvitationCard";
 import Story from "../../Story";
 import DocSection from "../../DocSection";
+import { usePropControls } from "../../hooks/usePropControls";
 
 // DUMMY Data
 const DUMMY_INVITATION_IMG = {
@@ -37,11 +38,22 @@ const DUMMY_INVITATION_FALLBACK = {
 };
 
 export default function CardsPage() {
+    const { getPropItems } = usePropControls({
+        className: {
+            description: "컴포넌트 스타일 확장",
+            componentType: 'string'
+        },
+        children: {
+            description: "하위 요소",
+            componentType: 'ReactNode'
+        }
+    });
+
     return (
         <>
             <header className={styles.pageHeader}>
                 <h1>Cards & Displays</h1>
-                <p className={styles.textMuted}>단순한 컨테이너부터 비즈니스 로직이 포함된 복합 카드까지의 모음입니다.</p>
+                <p className={styles.textMuted}>디자인 컨테이너부터 비즈니스 로직을 포함한 복합 카드까지의 모음입니다.</p>
             </header>
 
             <div className={styles.storySection}>
@@ -70,7 +82,7 @@ export default function CardsPage() {
                             </CardHeader>
                             <CardContent>
                                 <div className={styles.iconTextRow} style={{ alignItems: 'baseline' }}>
-                                    <span style={{ fontSize: '2rem', fontWeight: 900 }}>₩9,900</span>
+                                    <span style={{ fontSize: '2rem', fontWeight: 900 }}>49,900</span>
                                     <span className={styles.textMuted}>/mo</span>
                                 </div>
                             </CardContent>
@@ -82,12 +94,8 @@ export default function CardsPage() {
                 </Story>
 
                 <DocSection
-                    
                     usage={`import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/Card";\n\n<Card>\n  <CardHeader>\n    <CardTitle>Title</CardTitle>\n    <CardDescription>Description</CardDescription>\n  </CardHeader>\n  <CardContent>\n    Content\n  </CardContent>\n  <CardFooter>\n    Footer\n  </CardFooter>\n</Card>`}
-                    props={[
-                        { name: "className", type: "string", description: "컴포넌트 스타일 확장" },
-                        { name: "children", type: "ReactNode", description: "하위 요소" },
-                    ]}
+                    props={getPropItems()}
                 />
 
                 <Story title="Business Patterns: Invitations" description="Complex components integrated with business data">

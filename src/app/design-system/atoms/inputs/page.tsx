@@ -1,36 +1,66 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import styles from "../../DesignSystem.module.scss";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import Story from "../../Story";
 import DocSection from "../../DocSection";
+import { usePropControls } from "../../hooks/usePropControls";
 
 export default function InputsPage() {
-    const [placeholder, setPlaceholder] = useState("내용을 입력해주세요");
-    const [disabled, setDisabled] = useState(false);
-    const [error, setError] = useState(false);
-    const [inputType, setInputType] = useState<"text" | "password" | "email">("text");
-    const [size, setSize] = useState<"sm" | "md" | "lg">("md");
+    const { values, getPropItems } = usePropControls({
+        placeholder: {
+            type: 'text',
+            defaultValue: "내용을 입력해주세요",
+            description: "입력 필드 힌트 텍스트",
+            componentType: 'string'
+        },
+        type: {
+            type: 'segmented',
+            defaultValue: 'text',
+            options: ['text', 'password', 'email'],
+            description: "HTML Input 타입",
+            componentType: '"text" | "password" | "email"'
+        },
+        size: {
+            type: 'segmented',
+            defaultValue: 'md',
+            options: ['sm', 'md', 'lg'],
+            description: "입력 필드 크기",
+            componentType: '"sm" | "md" | "lg"'
+        },
+        error: {
+            type: 'boolean',
+            defaultValue: false,
+            description: "에러 상태 여부",
+            componentType: 'boolean'
+        },
+        disabled: {
+            type: 'boolean',
+            defaultValue: false,
+            description: "비활성화 여부",
+            componentType: 'boolean'
+        }
+    });
 
     const inputUsage = `import { Input } from "@/components/ui/Input";
 
 <Input
-  placeholder="${placeholder}"
-  ${error ? 'error' : ''}
-  ${disabled ? 'disabled' : ''}
-  type="${inputType}"
-  size="${size}"
+  placeholder="${values.placeholder}"
+  ${values.error ? 'error' : ''}
+  ${values.disabled ? 'disabled' : ''}
+  type="${values.type}"
+  size="${values.size}"
 />`;
 
     const textareaUsage = `import { Textarea } from "@/components/ui/Textarea";
 
 <Textarea
   placeholder="긴 내용을 입력해주세요"
-  ${error ? 'error' : ''}
-  ${disabled ? 'disabled' : ''}
-  size="${size}"
+  ${values.error ? 'error' : ''}
+  ${values.disabled ? 'disabled' : ''}
+  size="${values.size}"
 />`;
 
     return (
@@ -48,11 +78,11 @@ export default function InputsPage() {
                     <div className={styles.canvas} style={{ alignItems: 'center', justifyContent: 'center', minHeight: '150px' }}>
                         <div style={{ width: '100%', maxWidth: '400px' }}>
                             <Input
-                                placeholder={placeholder}
-                                error={error}
-                                disabled={disabled}
-                                type={inputType}
-                                size={size}
+                                placeholder={values.placeholder as string}
+                                error={values.error as boolean}
+                                disabled={values.disabled as boolean}
+                                type={values.type as "text" | "password" | "email"}
+                                size={values.size as "sm" | "md" | "lg"}
                             />
                         </div>
                     </div>
@@ -60,49 +90,7 @@ export default function InputsPage() {
 
                 <DocSection
                     usage={inputUsage}
-                    props={[
-                        {
-                            name: "placeholder",
-                            type: "string",
-                            description: "입력 필드 힌트 텍스트",
-                            control: { type: 'text', value: placeholder, onChange: (val) => setPlaceholder(val as string) }
-                        },
-                        {
-                            name: "type",
-                            type: '"text" | "password" | "email"',
-                            description: "HTML Input 타입",
-                            control: {
-                                type: 'select',
-                                value: inputType,
-                                onChange: (val) => setInputType(val as "text" | "password" | "email"),
-                                options: ["text", "password", "email"]
-                            }
-                        },
-                        {
-                            name: "size",
-                            type: '"sm" | "md" | "lg"',
-                            defaultValue: '"md"',
-                            description: "입력 필드 크기",
-                            control: {
-                                type: 'segmented',
-                                value: size,
-                                onChange: (val) => setSize(val as "sm" | "md" | "lg"),
-                                options: ["sm", "md", "lg"]
-                            }
-                        },
-                        {
-                            name: "error",
-                            type: "boolean",
-                            description: "에러 상태 여부",
-                            control: { type: 'boolean', value: error, onChange: (val) => setError(val as boolean) }
-                        },
-                        {
-                            name: "disabled",
-                            type: "boolean",
-                            description: "비활성화 여부",
-                            control: { type: 'boolean', value: disabled, onChange: (val) => setDisabled(val as boolean) }
-                        },
-                    ]}
+                    props={getPropItems()}
                 />
 
                 <Story id="textarea" title="Textarea">
@@ -110,9 +98,9 @@ export default function InputsPage() {
                         <div style={{ width: '100%', maxWidth: '400px' }}>
                             <Textarea
                                 placeholder="긴 내용을 입력해주세요"
-                                error={error}
-                                disabled={disabled}
-                                size={size}
+                                error={values.error as boolean}
+                                disabled={values.disabled as boolean}
+                                size={values.size as "sm" | "md" | "lg"}
                             />
                         </div>
                     </div>
