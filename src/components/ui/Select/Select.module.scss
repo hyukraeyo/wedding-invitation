@@ -11,6 +11,21 @@
   background-color: white;
   transition: all v.$transition-fast v.$ease-standard;
   cursor: pointer;
+  border-radius: v.$radius-md;
+
+  &.sm {
+    height: v.$control-height-sm;
+    padding: 0 0.75rem;
+    font-size: v.$font-size-2xs;
+    border-radius: v.$radius-sm;
+  }
+
+  &.lg {
+    height: v.$control-height-lg;
+    padding: 0 1.25rem;
+    font-size: v.$font-size-base;
+    border-radius: v.$radius-lg;
+  }
 
   &:hover:not(:disabled) {
     border-color: v.$control-hover-border-strong;

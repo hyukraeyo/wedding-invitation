@@ -41,7 +41,7 @@ export default function EditorPage() {
                 </Story>
 
                 <DocSection
-                    title="RichTextEditor Documentation"
+                    
                     usage={`import { RichTextEditor } from "@/components/ui/RichTextEditor";\n\n<RichTextEditor\n  content={content}\n  onChange={setContent}\n  placeholder="내용을 입력하세요"\n/>`}
                     props={[
                         { name: "content", type: "string", description: "에디터 내용 (HTML)" },

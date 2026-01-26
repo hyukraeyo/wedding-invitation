@@ -147,6 +147,7 @@
   isolation: isolate;
   border: 1px solid v.$zinc-200;
   gap: 2px;
+  height: 48px; // Default height (Medium)
 
   // Disable default flex-direction column from .group
   flex-direction: row;
@@ -156,16 +157,16 @@
     width: 100%;
   }
 
-  &.small {
+  &.sm {
     height: 36px;
     border-radius: v.$radius-sm;
   }
 
-  &.medium {
+  &.md {
     height: 48px;
   }
 
-  &.large {
+  &.lg {
     height: 56px;
   }
 }
@@ -182,7 +183,7 @@
   z-index: 0;
   pointer-events: none;
 
-  .small & {
+  .sm & {
     border-radius: calc(v.$radius-sm - 2px);
   }
 }
@@ -224,15 +225,15 @@
     cursor: not-allowed;
   }
 
-  &.small {
+  &.sm {
     font-size: 0.8125rem;
   }
 
-  &.medium {
+  &.md {
     font-size: 0.875rem;
   }
 
-  &.large {
+  &.lg {
     font-size: 1rem;
     font-weight: 600;
   }

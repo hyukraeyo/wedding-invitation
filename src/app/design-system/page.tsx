@@ -42,7 +42,8 @@ const sections = [
         title: "Molecules",
         description: "두 개 이상의 Atom이 결합되어 기능을 수행하는 컴포넌트",
         items: [
-            { label: "Choices", href: "/design-system/molecules/choices", icon: Circle, desc: "라디오, 스위치" },
+            { label: "Radio Group", href: "/design-system/molecules/radio-group", icon: Circle, desc: "라디오 버튼 그룹" },
+            { label: "Switch", href: "/design-system/molecules/switch", icon: Circle, desc: "온/오프 스위치" },
             { label: "Select", href: "/design-system/molecules/select", icon: FormInput, desc: "선택 및 드롭다운" },
             { label: "Pickers", href: "/design-system/molecules/pickers", icon: Palette, desc: "날짜, 컬러 선택" },
             { label: "Toggles", href: "/design-system/molecules/toggles", icon: FormInput, desc: "토글 칩" },

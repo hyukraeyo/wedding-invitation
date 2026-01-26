@@ -25,7 +25,7 @@ export default function PickersPage() {
                 </Story>
 
                 <DocSection
-                    title="Picker Documentation"
+                    
                     usage={`import { DatePicker } from "@/components/common/DatePicker";\nimport { ColorPicker } from "@/components/ui/ColorPicker";\n\nconst [date, setDate] = useState<Date>();\nconst [color, setColor] = useState("#FBC02D");\n\n<DatePicker value={date} onChange={setDate} />\n<ColorPicker value={color} onChange={setColor} />`}
                     props={[
                         { name: "DatePicker: value", type: "string", description: "YYYY-MM-DD 형식의 날짜 문자열" },

@@ -13,8 +13,8 @@ interface RadioOption {
 }
 
 interface RadioGroupFieldProps {
-    label?: string;
-    description?: string;
+    label?: string | undefined;
+    description?: string | undefined;
     value?: string;
     defaultValue?: string;
     onValueChange?: (value: string) => void;
@@ -24,6 +24,8 @@ interface RadioGroupFieldProps {
     itemClassName?: string;
     required?: boolean;
     error?: React.ReactNode;
+    hideLabel?: boolean;
+    hideDescription?: boolean;
 }
 
 export const RadioGroupField = ({
@@ -38,6 +40,8 @@ export const RadioGroupField = ({
     itemClassName,
     required,
     error,
+    hideLabel,
+    hideDescription,
 }: RadioGroupFieldProps) => {
     const generatedId = React.useId();
 
@@ -48,6 +52,8 @@ export const RadioGroupField = ({
             required={required}
             error={error}
             className={className}
+            hideLabel={hideLabel}
+            hideDescription={hideDescription}
         >
             <RadioGroup
                 {...(value !== undefined ? { value } : {})}

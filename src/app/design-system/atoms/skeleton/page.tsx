@@ -67,7 +67,7 @@ export default function SkeletonPage() {
                 </Story>
 
                 <DocSection
-                    title="Skeleton Documentation"
+                    
                     usage={`import { Skeleton } from "@/components/ui/Skeleton";\n\n<Skeleton className="w-[100px] h-[20px] rounded-full" />`}
                     props={[
                         { name: "className", type: "string", description: "크기, 형태, 애니메이션 등 스타일 지정을 위한 클래스" },

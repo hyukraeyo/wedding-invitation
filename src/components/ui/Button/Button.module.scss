@@ -154,7 +154,7 @@
 
   // --- Sizes ---
 
-  &--size-default {
+  &--size-md {
     height: v.$button-height-default;
     padding: 0 1.25rem;
     font-size: v.$button-font-size;
@@ -180,27 +180,6 @@
     padding: 0;
   }
 
-  &--size-icon-xs {
-    height: v.$button-height-icon-xs;
-    width: v.$button-height-icon-xs;
-    padding: 0;
-    border-radius: v.$radius-sm;
-  }
-
-  &--size-icon-sm {
-    height: v.$button-height-icon-sm;
-    width: v.$button-height-icon-sm;
-    padding: 0;
-    border-radius: v.$radius-sm;
-  }
-
-  &--size-icon-lg {
-    height: v.$button-height-icon-lg;
-    width: v.$button-height-icon-lg;
-    padding: 0;
-    border-radius: v.$radius-lg;
-  }
-
   &--full-width {
     width: 100%;
   }
@@ -222,4 +201,13 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+  width: 100%;
+}
+
+.leftIcon,
+.rightIcon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

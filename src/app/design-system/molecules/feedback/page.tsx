@@ -27,7 +27,7 @@ export default function FeedbackPage() {
                 </Story>
 
                 <DocSection
-                    title="Alert Documentation"
+                    
                     usage={`import { Alert, AlertTitle, AlertDescription } from "@/components/ui/Alert";\n\n<Alert variant="default">\n  <AlertTitle>Title</AlertTitle>\n  <AlertDescription>Description</AlertDescription>\n</Alert>`}
                     props={[
                         { name: "variant", type: '"default" | "destructive"', defaultValue: '"default"', description: "알림의 시각적 스타일 변형" },

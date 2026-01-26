@@ -20,8 +20,8 @@ export default function ModalsPage() {
                 </Story>
 
                 <DocSection
-                    title="ResponsiveModal Documentation"
-                    usage={`import { ResponsiveModal } from "@/components/common/ResponsiveModal";\n\n<ResponsiveModal\n  open={open}\n  onOpenChange={setOpen}\n  title="Title"\n  onConfirm={handleConfirm}\n>\n  Content\n</ResponsiveModal>`}
+                    
+                    usage={`import { ResponsiveModal } from "@/components/common/ResponsiveModal";\n\n<ResponsiveModal\n  open={open}\n  onOpenChange={setOpen}\n  \n  onConfirm={handleConfirm}\n>\n  Content\n</ResponsiveModal>`}
                     props={[
                         { name: "open", type: "boolean", description: "모달 열림 상태" },
                         { name: "onOpenChange", type: "(open: boolean) => void", description: "열림 상태 변경 콜백" },

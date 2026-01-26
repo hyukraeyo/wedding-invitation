@@ -48,16 +48,9 @@ const navSections = [
     {
         title: "Molecules",
         items: [
-            {
-                id: "choices",
-                label: "Choices",
-                icon: Circle,
-                href: "/design-system/molecules/choices",
-                subNav: [
-                    { id: "radio", label: "Radio Groups", href: "/design-system/molecules/choices/radio" },
-                    { id: "switch", label: "Switches", href: "/design-system/molecules/choices/switch" },
-                ]
-            },
+            { id: "form-field", label: "Form Field", icon: FormInput, href: "/design-system/molecules/form-field" },
+            { id: "radio", label: "Radio Groups", icon: Circle, href: "/design-system/molecules/radio-group" },
+            { id: "switch", label: "Switches", icon: Circle, href: "/design-system/molecules/switch" },
             {
                 id: "select",
                 label: "Select",
@@ -127,7 +120,7 @@ export default function DesignSystemLayout({
         root.style.setProperty("--radius-2xl", `${radius * 1.5}px`);
         root.style.setProperty("--radius-3xl", `${radius * 2.5}px`);
 
-        const alpha = (shadowIntensity / 100).toFixed(2);
+        // const alpha = (shadowIntensity / 100).toFixed(2);
         root.style.setProperty("--shadow-card", `none`);
         root.style.setProperty("--shadow-hover-card", `none`);
         root.style.setProperty("--shadow-hover-sm", `none`);

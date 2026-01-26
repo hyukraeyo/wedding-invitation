@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
-import { Banana } from "lucide-react";
+import { Banana, LucideIcon } from "lucide-react";
 import { clsx } from "clsx";
 import { cn } from "@/lib/utils";
 import styles from "./Button.module.scss";
@@ -27,9 +27,13 @@ export interface ButtonProps
     | "solid"
     | "line"
     | "glass";
-    size?: "default" | "sm" | "lg" | "icon" | "icon-xs" | "icon-sm" | "icon-lg";
+    size?: "sm" | "md" | "lg" | "icon";
     loading?: boolean | undefined;
     fullWidth?: boolean | undefined;
+    // Icon Options (Text + Icon)
+    leftIcon?: LucideIcon;
+    rightIcon?: LucideIcon;
+    iconSize?: number;
     // Theme Options (Granular Control)
     color?: string;       // Custom background color (hex, rgb, or brand name)
     textColor?: string;   // Custom text color
@@ -38,7 +42,7 @@ export interface ButtonProps
 
 // Compatibility helper for external usage (e.g. AlertDialog)
 export const buttonVariants = (options: ButtonVariantsOptions = {}): ButtonVariantsResult => {
-    const { variant = "default", size = "default", className } = options;
+    const { variant = "default", size = "md", className } = options;
     return clsx(
         styles.button,
         styles[`button--variant-${variant}`],
@@ -52,10 +56,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {
             className,
             variant = "default",
-            size = "default",
+            size = "md",
             asChild = false,
             loading = false,
             fullWidth = false,
+            leftIcon: LeftIcon,
+            rightIcon: RightIcon,
+            iconSize,
             color,
             textColor,
             radius,
@@ -76,6 +83,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             ...style
         } as React.CSSProperties;
 
+        // Determine default icon size based on button size
+        const defaultIconSize = size === "sm" ? 14 : size === "lg" ? 22 : 18;
+        const currentIconSize = iconSize || defaultIconSize;
+
         return (
             <Comp
                 className={buttonVariants({ variant, size, className: cn(fullWidth && styles["button--full-width"], className) })}
@@ -85,11 +96,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                 ref={ref}
                 {...props}
             >
-                <span className={clsx(styles.content, loading && styles.loadingText)}>{children}</span>
+                <div className={clsx(styles.content, loading && styles.loadingText)}>
+                    {LeftIcon && <LeftIcon size={currentIconSize} className={styles.leftIcon} />}
+                    {children}
+                    {RightIcon && <RightIcon size={currentIconSize} className={styles.rightIcon} />}
+                </div>
                 {loading && (
                     <div className={styles.loader}>
                         <div className={styles.spin}>
-                            <Banana size={20} />
+                            <Banana size={currentIconSize} />
                         </div>
                     </div>
                 )}

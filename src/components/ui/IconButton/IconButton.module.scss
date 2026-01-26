@@ -4,28 +4,65 @@
 
 
 .iconButton {
-  border-radius: v.$radius-full; // rounded-full
   position: relative;
   transition: transform v.$transition-100 v.$ease-in-out;
-  
+  flex-shrink: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   &:active {
     transform: scale(v.$scale-press-xs);
+  }
+
+  // Button Sizes
+  &.sm {
+    width: v.$button-height-icon-sm;
+    height: v.$button-height-icon-sm;
+    border-radius: v.$radius-sm;
+  }
+
+  &.md {
+    width: v.$button-height-icon;
+    height: v.$button-height-icon;
+    border-radius: v.$radius-md;
+  }
+
+  &.lg {
+    width: v.$button-height-icon-lg;
+    height: v.$button-height-icon-lg;
+    border-radius: v.$radius-lg;
+  }
+
+  &.rounded {
+    border-radius: v.$radius-full;
   }
 }
 
 .icon {
   transition: opacity v.$transition-200;
-  
+  flex-shrink: 0;
+
   &.faded {
     opacity: 0.2;
   }
 
   // Icon Sizes
-  &.xs { width: 0.875rem; height: 0.875rem; }
-  &.sm { width: 1rem; height: 1rem; }
-  &.md { width: 1.5rem; height: 1.5rem; }
-  &.lg { width: 1.75rem; height: 1.75rem; }
-  &.xl { width: 2rem; height: 2rem; }
+  &.sm {
+    width: 16px;
+    height: 16px;
+  }
+
+  &.md {
+    width: 24px;
+    height: 24px;
+  }
+
+  &.lg {
+    width: 28px;
+    height: 28px;
+  }
 }
 
 .spinnerOverlay {
@@ -43,4 +80,3 @@
   animation: spin 1s linear infinite;
   color: currentColor;
 }
-

@@ -51,7 +51,7 @@ export default function BadgesPage() {
                 </Story>
 
                 <DocSection
-                    title="Badge Documentation"
+                    
                     usage={`import { Badge } from "@/components/ui/Badge";\n\n<Badge variant="success">Approved</Badge>`}
                     props={[
                         { name: "variant", type: '"default" | "secondary" | "destructive" | "outline" | "success"', defaultValue: '"default"', description: "배지의 시각적 스타일 변형" },

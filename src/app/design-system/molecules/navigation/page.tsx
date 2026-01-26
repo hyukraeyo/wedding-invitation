@@ -50,7 +50,7 @@ export default function NavigationPage() {
                 </Story>
 
                 <DocSection
-                    title="Navigation & Selection Documentation"
+                    
                     usage={`// Tabs Usage\nimport { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/Tabs";\n\n<Tabs defaultValue="tab1">\n  <TabsList>\n    <TabsTrigger value="tab1">Tab 1</TabsTrigger>\n    <TabsTrigger value="tab2">Tab 2</TabsTrigger>\n  </TabsList>\n  <TabsContent value="tab1">Content 1</TabsContent>\n</Tabs>`}
                     props={[
                         { name: "Tabs: fluid", type: "boolean", defaultValue: "false", description: "TabsList가 부모 너비를 가득 채울지 여부" },

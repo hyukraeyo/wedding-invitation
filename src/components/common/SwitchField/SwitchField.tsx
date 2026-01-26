@@ -7,13 +7,15 @@ import styles from './SwitchField.module.scss';
 interface SwitchProps {
     checked: boolean;
     onChange: (checked: boolean) => void;
-    label?: string;
-    description?: string;
+    label?: string | undefined;
+    description?: string | undefined;
     className?: string;
     disabled?: boolean;
+    hideLabel?: boolean;
+    hideDescription?: boolean;
 }
 
-export const SwitchField = ({ checked, onChange, label, description, className, disabled }: SwitchProps) => {
+export const SwitchField = ({ checked, onChange, label, description, className, disabled, hideLabel, hideDescription }: SwitchProps) => {
     const id = React.useId();
     return (
         <div
@@ -31,6 +33,8 @@ export const SwitchField = ({ checked, onChange, label, description, className, 
                 layout="horizontal"
                 align="center"
                 className={styles.fieldOverride}
+                hideLabel={hideLabel}
+                hideDescription={hideDescription}
             >
                 <ShadcnSwitch
                     id={id}

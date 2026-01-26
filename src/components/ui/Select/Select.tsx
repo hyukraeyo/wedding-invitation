@@ -9,6 +9,8 @@ import { useMediaQuery } from "@/hooks/use-media-query"
 import { ResponsiveModal } from "@/components/common/ResponsiveModal"
 import { Menu } from "../Menu"
 
+import { useFormField } from "@/components/common/FormField"
+
 const SelectRoot = SelectPrimitive.Root
 
 interface SelectOption<T> {
@@ -28,11 +30,13 @@ interface SelectProps<T> {
     contentClassName?: string;
     modalTitle?: string;
     disabled?: boolean;
+    size?: 'sm' | 'md' | 'lg';
     children?: React.ReactNode; // For traditional Shadcn usage
     /** Force mobile drawer view */
     mobileOnly?: boolean;
     /** Disable responsive behavior and always use desktop popover */
     desktopOnly?: boolean;
+    id?: string;
 }
 
 const Select = <T extends string | number>({
@@ -46,9 +50,11 @@ const Select = <T extends string | number>({
     contentClassName,
     modalTitle,
     disabled,
+    size = 'md',
     children,
     mobileOnly = false,
     desktopOnly = false,
+    id: customId,
     ...props
 }: SelectProps<T>) => {
     const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -56,12 +62,19 @@ const Select = <T extends string | number>({
     const [isOpen, setIsOpen] = React.useState(false);
     const [internalValue, setInternalValue] = React.useState<T | undefined>(defaultValue);
 
+    const field = useFormField();
+    const id = customId || field?.id;
+    const describedBy = field?.isError ? field.errorId : field?.descriptionId;
+    const isError = field?.isError;
+
     const currentValue = value !== undefined ? value : internalValue;
 
     const handleValueChange = (val: T) => {
         setInternalValue(val);
         onValueChange?.(val);
     };
+
+    const sizeClass = styles[size];
 
     // If options are provided, use the high-level responsive implementation
     if (options) {
@@ -76,10 +89,13 @@ const Select = <T extends string | number>({
                         title={modalTitle || placeholder}
                         trigger={
                             <button
+                                id={id}
                                 type="button"
                                 disabled={disabled}
-                                className={cn(styles.trigger, triggerClassName)}
+                                className={cn(styles.trigger, sizeClass, triggerClassName)}
                                 onClick={() => setIsOpen(true)}
+                                aria-describedby={describedBy}
+                                aria-invalid={isError ? "true" : undefined}
                             >
                                 <span className={cn(!selectedOption && styles.placeholder)}>
                                     {selectedOption ? selectedOption.label : placeholder}
@@ -116,7 +132,13 @@ const Select = <T extends string | number>({
                 {...(disabled !== undefined ? { disabled } : {})}
                 {...props}
             >
-                <SelectTrigger className={cn(triggerClassName)}>
+                <SelectTrigger
+                    id={id}
+                    className={cn(triggerClassName)}
+                    size={size}
+                    aria-describedby={describedBy}
+                    aria-invalid={isError ? "true" : undefined}
+                >
                     <SelectValue placeholder={placeholder} />
                 </SelectTrigger>
                 <SelectContent className={cn(contentClassName)}>
@@ -154,19 +176,22 @@ const SelectValue = SelectPrimitive.Value
 
 const SelectTrigger = React.forwardRef<
     React.ElementRef<typeof SelectPrimitive.Trigger>,
-    React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
-    <SelectPrimitive.Trigger
-        ref={ref}
-        className={cn(styles.trigger, className)}
-        {...props}
-    >
-        {children}
-        <SelectPrimitive.Icon asChild>
-            <ChevronDown className={styles.icon} />
-        </SelectPrimitive.Icon>
-    </SelectPrimitive.Trigger>
-))
+    React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> & { size?: 'sm' | 'md' | 'lg' }
+>(({ className, children, size = 'md', ...props }, ref) => {
+    const sizeClass = styles[size];
+    return (
+        <SelectPrimitive.Trigger
+            ref={ref}
+            className={cn(styles.trigger, sizeClass, className)}
+            {...props}
+        >
+            {children}
+            <SelectPrimitive.Icon asChild>
+                <ChevronDown className={styles.icon} />
+            </SelectPrimitive.Icon>
+        </SelectPrimitive.Trigger>
+    )
+})
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName
 
 const SelectScrollUpButton = React.forwardRef<

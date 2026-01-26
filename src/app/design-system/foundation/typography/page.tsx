@@ -48,7 +48,7 @@ export default function TypographyPage() {
                 </Story>
 
                 <DocSection
-                    title="Typography Usage"
+                    
                     usage={`.myText {\n  font-family: v.$font-sans;\n  font-size: 1.5rem;\n  font-weight: 600;\n  line-height: v.$line-height-base;\n}`}
                 />
 

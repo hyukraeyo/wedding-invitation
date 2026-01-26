@@ -13,22 +13,26 @@ interface BaseTextFieldProps {
     containerClassName?: string;
     multiline?: boolean;
     rows?: number;
+    size?: 'sm' | 'md' | 'lg';
+    hideLabel?: boolean;
+    hideHelpText?: boolean;
 }
 
-type InputTextFieldProps = React.InputHTMLAttributes<HTMLInputElement> & {
+type InputTextFieldProps = Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> & {
     multiline?: false;
 };
 
-type TextareaTextFieldProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
+type TextareaTextFieldProps = Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'> & {
     multiline: true;
 };
 
 export type TextFieldProps = BaseTextFieldProps & (InputTextFieldProps | TextareaTextFieldProps);
 
 export const TextField = React.memo(React.forwardRef<HTMLInputElement | HTMLTextAreaElement, TextFieldProps>(
-    ({ className, containerClassName, style, label, helpText, hasError, right, disabled, multiline, rows, ...props }, ref) => {
+    ({ className, containerClassName, style, label, helpText, hasError, right, disabled, multiline, rows, size = 'md', hideLabel, hideHelpText, ...props }, ref) => {
         const id = props.id || props.name;
-        const inputProps = props as React.InputHTMLAttributes<HTMLInputElement>;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { size: _size, ...inputProps } = props as React.InputHTMLAttributes<HTMLInputElement>;
         const textareaProps = props as React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 
         const fieldProps = {
@@ -38,6 +42,8 @@ export const TextField = React.memo(React.forwardRef<HTMLInputElement | HTMLText
             description: !hasError ? helpText : undefined,
             className: containerClassName,
             required: props.required,
+            hideLabel,
+            hideDescription: hideHelpText,
         };
 
         return (
@@ -47,19 +53,22 @@ export const TextField = React.memo(React.forwardRef<HTMLInputElement | HTMLText
                         <Textarea
                             ref={ref as React.ForwardedRef<HTMLTextAreaElement>}
                             rows={rows}
+                            size={size}
                             disabled={disabled}
-                            className={cn(hasError && styles.errorInput, className)}
+                            className={className}
+                            error={!!hasError}
                             {...textareaProps}
                         />
                     ) : (
                         <Input
                             ref={ref as React.ForwardedRef<HTMLInputElement>}
+                            size={size}
                             disabled={disabled}
                             className={cn(
-                                hasError && styles.errorInput,
                                 right && styles.paddingRight,
                                 className
                             )}
+                            error={!!hasError}
                             {...inputProps}
                         />
                     )}

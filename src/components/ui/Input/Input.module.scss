@@ -3,18 +3,36 @@
 
 .input {
   width: 100%;
-  padding: 0 1rem;
-  font-size: v.$font-size-sm;
   font-family: v.$font-family-base;
   font-weight: 500;
   border: 1px solid v.$zinc-200;
-  border-radius: v.$radius-md;
   background-color: white;
   color: v.$zinc-900;
-  height: v.$control-height-md;
   transition: all v.$transition-200 v.$ease-ios;
 
+  // Sizes
+  &.md {
+    height: v.$control-height-md;
+    padding: 0 1rem;
+    font-size: v.$font-size-sm;
+    border-radius: v.$radius-md;
+  }
+
   @include m.focus-ring;
+
+  &.sm {
+    height: v.$control-height-sm; // 36px
+    padding: 0 0.75rem;
+    font-size: v.$font-size-2xs;
+    border-radius: v.$radius-sm;
+  }
+
+  &.lg {
+    height: v.$control-height-lg; // 56px
+    padding: 0 1.25rem;
+    font-size: v.$font-size-base; // 16px (slightly larger than default)
+    border-radius: v.$radius-lg;
+  }
 
   @include m.hover {
     border-color: v.$zinc-300;
@@ -26,7 +44,7 @@
   }
 
   &[data-error="true"] {
-    border-color: v.$red-500 !important;
+    border-color: v.$color-danger !important;
   }
 
   &:disabled {

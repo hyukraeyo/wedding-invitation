@@ -13,7 +13,7 @@ export interface IconButtonProps extends Omit<ButtonProps, "size" | "variant"> {
      * Size of the button.
      * @default "md"
      */
-    size?: "xs" | "sm" | "md" | "lg" | "xl"
+    size?: "sm" | "md" | "lg"
     /**
      * Size of the icon specifically. If not provided, will use defaults based on button size.
      */
@@ -24,34 +24,46 @@ export interface IconButtonProps extends Omit<ButtonProps, "size" | "variant"> {
      */
     strokeWidth?: number
     /**
+     * Whether the button should be perfectly round.
+     * @default false
+     */
+    rounded?: boolean
+    /**
      * Color variant of the button.
      * @default "ghost"
      */
-    variant?: "solid" | "line" | "ghost" | "secondary" | "outline" | "destructive" | "default" | "glass"
+    variant?: ButtonProps["variant"]
     loading?: boolean | undefined;
     "aria-label"?: string;
 }
 
 const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
-    ({ className, icon: Icon, size = "md", iconSize, strokeWidth, variant = "ghost", children, "aria-label": ariaLabel, ...props }, ref) => {
-        // Map custom size props to Button's size variants
-        const sizeMap: Record<NonNullable<IconButtonProps["size"]>, NonNullable<ButtonProps["size"]>> = {
-            xs: "icon-xs", // 28px
-            sm: "icon-sm", // 32px
-            md: "icon",    // 48px (Standard Touch Area)
-            lg: "icon-lg", // 56px
-            xl: "icon-lg",
-        }
-
+    ({
+        className,
+        icon: Icon,
+        size = "md",
+        iconSize,
+        strokeWidth,
+        variant = "ghost",
+        rounded = false,
+        children,
+        "aria-label": ariaLabel,
+        ...props
+    }, ref) => {
         const { loading, ...rest } = props;
 
         return (
             <Button
                 variant={variant}
-                size={sizeMap[size]}
-                className={cn(styles.iconButton, className)}
+                size="icon"
+                className={cn(
+                    styles.iconButton,
+                    styles[size],
+                    rounded && styles.rounded,
+                    className
+                )}
                 ref={ref}
-                loading={false} // Prevent Button from hiding content
+                loading={false}
                 disabled={loading || rest.disabled}
                 aria-label={ariaLabel || (typeof children === 'string' ? children : undefined)}
                 {...rest}

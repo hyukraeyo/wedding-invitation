@@ -10,6 +10,7 @@ import { IconButton } from '@/components/ui/IconButton';
 import { AspectRatio } from '@/components/ui/AspectRatio';
 import { isBlobUrl } from '@/lib/image';
 import { IMAGE_SIZES } from '@/constants/image';
+import { useFormField } from '@/components/common/FormField';
 import styles from './ImageUploader.module.scss';
 
 interface ImageUploaderProps {
@@ -23,6 +24,7 @@ interface ImageUploaderProps {
     onRatioChange?: ((value: 'fixed' | 'auto') => void) | undefined;
     uploadFolder?: string | undefined;
     allowDelete?: boolean;
+    id?: string;
 }
 
 export function ImageUploader({ value, onChange, label, placeholder = '사진을 업로드해주세요', className, aspectRatio = '16/9', uploadFolder = 'uploads', allowDelete = true, ...props }: ImageUploaderProps) {
@@ -103,10 +105,13 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
     const shouldUnoptimize = isBlobUrl(displayUrl);
     const isAutoRatio = props.ratio === 'auto';
 
+    const field = useFormField();
+    const id = props.id || field?.id;
+
     return (
         <div className={styles.container}>
             <div className={cn(styles.wrapper, className)} style={cssVars}>
-                {label ? <Label className={styles.label}>{label}</Label> : null}
+                {label && !field ? <Label className={styles.label}>{label}</Label> : null}
 
                 <div
                     className={cn(
@@ -180,6 +185,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
 
                     <input
                         ref={inputRef}
+                        id={id}
                         type="file"
                         accept="image/*"
                         onChange={handleUpload}

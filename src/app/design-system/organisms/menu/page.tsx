@@ -90,7 +90,7 @@ export default function MenuPage() {
                 </Story>
 
                 <DocSection
-                    title="Menu Documentation"
+                    
                     usage={`import Menu from "@/components/ui/Menu";\n\n<Menu>\n  <Menu.Header>Title</Menu.Header>\n  <Menu.Item onClick={...}>Item</Menu.Item>\n  <Menu.CheckItem checked={...} onCheckedChange={...}>Checkable</Menu.CheckItem>\n  <Menu.Separator />\n</Menu>`}
                     props={[
                         { name: "Menu.Item props", type: "left, right, description, selected", description: "아이콘, 설명, 선택 상태 등을 제어" },

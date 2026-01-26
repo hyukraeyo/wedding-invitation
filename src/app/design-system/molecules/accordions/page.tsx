@@ -51,7 +51,6 @@ export default function AccordionsPage() {
                 </Story>
 
                 <DocSection
-                    title="Accordion Documentation"
                     usage={`import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/Accordion";\n\n<Accordion type="single" collapsible>\n  <AccordionItem value="item-1">\n    <AccordionTrigger>Title</AccordionTrigger>\n    <AccordionContent>\n      Content here\n    </AccordionContent>\n  </AccordionItem>\n</Accordion>`}
                     props={[
                         { name: "type", type: '"single" | "multiple"', description: "아코디언 동작 모드" },

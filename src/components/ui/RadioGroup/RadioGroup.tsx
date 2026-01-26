@@ -10,7 +10,7 @@ import styles from "./RadioGroup.module.scss"
 // ------------------------------------------------------------------
 
 type RadioGroupVariant = 'default' | 'segmented';
-type RadioGroupSize = 'small' | 'medium' | 'large';
+type RadioGroupSize = 'sm' | 'md' | 'lg';
 
 interface RadioGroupContextValue {
     variant: RadioGroupVariant;
@@ -22,7 +22,7 @@ interface RadioGroupContextValue {
 
 const RadioGroupContext = React.createContext<RadioGroupContextValue>({
     variant: 'default',
-    size: 'medium'
+    size: 'md'
 });
 
 export interface RadioOption {
@@ -43,29 +43,24 @@ interface RadioGroupProps extends React.ComponentPropsWithoutRef<typeof RadioGro
 // Root Component
 // ------------------------------------------------------------------
 
+import { useFormField } from "@/components/common/FormField"
+
 const RadioGroup = React.forwardRef<
     React.ElementRef<typeof RadioGroupPrimitive.Root>,
     RadioGroupProps
->(({ className, variant = "default", size = "medium", options, fullWidth, children, value, defaultValue, onValueChange, ...props }, ref) => {
+>(({ className, variant = "default", size = "md", options, fullWidth, children, value, defaultValue, onValueChange, id: customId, ...props }, ref) => {
+    const field = useFormField();
+    const id = customId || field?.id;
+    const describedBy = field?.isError ? field.errorId : field?.descriptionId;
+
+    // --- Segmented Control Logic ---
 
     // --- Segmented Control Logic ---
     const [indicatorStyle, setIndicatorStyle] = React.useState<React.CSSProperties>({ opacity: 0 });
     const itemRefs = React.useRef<Map<string, HTMLButtonElement>>(new Map());
     const containerRef = React.useRef<HTMLDivElement>(null);
 
-    // Internal state to track value for indicator if controlled/uncontrolled
-    // We only need this for the indicator update logic.
-    // If controlled, 'value' is passed. If uncontrolled, we might not know the value unless we track it or trust defaultValue.
-    // Ideally, for the indicator to work perfectly, it should be controlled or we sync with internal state.
-    // Given the complexity, let's assume 'value' is available or we use an internal one.
-    // But Radix handles the state. We can use onValueChange to update our local knowledge for indicator.
-
     // Simple hack: We need to know the CURRENT value to position the indicator.
-    // If 'value' prop is undefined (uncontrolled), we should probably rely on internal Radix state, 
-    // but Radix doesn't expose it easily outside.
-    // So we wrap the onValueChange to update a local trigger.
-
-    // To support both, let's assume we use 'value' (controlled) or 'defaultValue'.
     const [internalValue, setInternalValue] = React.useState<string | undefined>(value ?? (defaultValue as string | undefined) ?? undefined);
 
     // Sync internal value with prop
@@ -111,7 +106,6 @@ const RadioGroup = React.forwardRef<
 
     // Update indicator on resize, value change, or option change
     React.useEffect(() => {
-        // Use requestAnimationFrame for smoother updates and to avoid layout thrashing during render cycles
         requestAnimationFrame(() => updateIndicator());
 
         const handleResize = () => requestAnimationFrame(() => updateIndicator());
@@ -127,10 +121,12 @@ const RadioGroup = React.forwardRef<
 
     // --- Render Helpers ---
 
+    const sizeClass = styles[size];
+
     const rootClassName = cn(
         variant === 'default' ? styles.group : styles.segmentedRoot,
         variant === 'segmented' && [
-            styles[size],
+            sizeClass,
             fullWidth && styles.fullWidth
         ],
         className
@@ -154,6 +150,8 @@ const RadioGroup = React.forwardRef<
     return (
         <RadioGroupContext.Provider value={contextValue}>
             <RadioGroupPrimitive.Root
+                id={id}
+                aria-describedby={describedBy}
                 className={rootClassName}
                 ref={composedRef}
                 value={value as string}
@@ -238,6 +236,8 @@ const RadioGroupItem = React.forwardRef<
         };
     }, [variant, unregisterItem, props.value]);
 
+    const sizeClass = styles[size];
+
     // 1. Segmented Variant
     if (variant === 'segmented') {
         return (
@@ -245,7 +245,7 @@ const RadioGroupItem = React.forwardRef<
                 ref={composedRef}
                 className={cn(
                     styles.segmentedItem,
-                    styles[size],
+                    sizeClass,
                     className
                 )}
                 {...props}
@@ -256,39 +256,15 @@ const RadioGroupItem = React.forwardRef<
     }
 
     // 2. Default Variant
-    // If children provides specific content, render it.
-    // BUT the original implementation has the circle INSIDE the Item.
-    // So 'children' of RadioGroupItem is typically empty or just label if we change design.
-    // The original design: Item is the circle. Label is outside usually.
-    // Let's stick to original implementation for Default.
-    // But wait, if we use `options` prop in Default mode, we need to render Label + Radio.
-    // The `RadioGroup` loop above renders `RadioGroupItem` + Label text inside?
-    // In the original file: 
-    // <RadioGroupItem ...>
-    //   <Indicator><div class="circle" /></Indicator>
-    // </RadioGroupItem>
-    // So RadioGroupItem IS the button (circle).
-
-    // If we use options prop, we should probably output:
-    // <div class="flex items-center space-x-2">
-    //    <RadioGroupItem value="option-one" id="option-one" />
-    //    <Label htmlFor="option-one">Option One</Label>
-    // </div>
-    //
-    // However, the `RadioGroupItem` component below expects `children` to be passed through potentially?
-    // Usually RadioGroupItem is self-closing in primitive usage.
-
     return (
         <RadioGroupPrimitive.Item
-            ref={composedRef} // Use composed ref just in case, though not needed for default
+            ref={composedRef}
             className={cn(styles.item, className)}
             {...props}
         >
             <RadioGroupPrimitive.Indicator className={styles.indicator}>
                 <div className={styles.circle} />
             </RadioGroupPrimitive.Indicator>
-            {/* If children exist, we render them? Original didn't have children rendering inside Item except Indicator */}
-            {/* But Radix Item can have children. */}
             {children && <span className="sr-only">{children}</span>}
         </RadioGroupPrimitive.Item>
     )

@@ -43,7 +43,7 @@ export default function TogglesPage() {
                 </Story>
 
                 <DocSection
-                    title="Toggle Documentation"
+                    
                     usage={`import { Toggle } from "@/components/ui/Toggle";\n\n<Toggle\n  pressed={pressed}\n  onPressedChange={setPressed}\n  size="md"\n>\n  Active\n</Toggle>`}
                     props={[
                         { name: "pressed", type: "boolean", description: "활성화 여부" },

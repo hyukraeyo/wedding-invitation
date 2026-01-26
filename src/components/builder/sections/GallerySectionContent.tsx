@@ -91,7 +91,7 @@ const SortableItem = React.memo(function SortableItem({ id, url, index, onRemove
 
             <IconButton
                 icon={Trash2}
-                size="xs"
+                size="sm"
                 className={styles.removeButton}
                 onClick={(e) => {
                     e.stopPropagation();

@@ -82,7 +82,7 @@ export default function CardsPage() {
                 </Story>
 
                 <DocSection
-                    title="Card Documentation"
+                    
                     usage={`import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/Card";\n\n<Card>\n  <CardHeader>\n    <CardTitle>Title</CardTitle>\n    <CardDescription>Description</CardDescription>\n  </CardHeader>\n  <CardContent>\n    Content\n  </CardContent>\n  <CardFooter>\n    Footer\n  </CardFooter>\n</Card>`}
                     props={[
                         { name: "className", type: "string", description: "컴포넌트 스타일 확장" },
