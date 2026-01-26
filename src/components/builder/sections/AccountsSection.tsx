@@ -1,5 +1,4 @@
 import React from 'react';
-import { CreditCard } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
@@ -21,7 +20,7 @@ export default function AccountsSection({ value, isOpen }: SectionProps) {
 
     return (
         <AccordionItem value={value} autoScroll>
-            <AccordionTrigger icon={CreditCard}>
+            <AccordionTrigger>
                 축의금 및 계좌번호
             </AccordionTrigger>
             <AccordionContent>

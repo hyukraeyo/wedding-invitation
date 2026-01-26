@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 
 const RichTextEditor = dynamic(() => import('@/components/common/RichTextEditor'), { ssr: false });
-import { Heart, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
@@ -41,7 +41,6 @@ export default function ClosingSection({ isOpen, value }: SectionProps) {
         <>
             <AccordionItem value={value} autoScroll>
                 <AccordionTrigger
-                    icon={Heart}
                     action={
                         <HeaderAction
                             icon={Sparkles}

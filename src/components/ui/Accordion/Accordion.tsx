@@ -71,16 +71,12 @@ const AccordionTrigger = React.forwardRef<
     AccordionTriggerProps
 >(({ className, children, icon: Icon, badge, action, ...props }, ref) => (
     <AccordionPrimitive.Header className={styles.header}>
-        <div className={cn(styles.triggerWrapper, className)}>
-            {/* The actual Radix trigger as an overlay for the whole area */}
+        <div className={styles.triggerWrapper}>
             <AccordionPrimitive.Trigger
                 ref={ref}
-                className={styles.overlayTrigger}
+                className={cn(styles.trigger, className)}
                 {...props}
-            />
-
-            {/* Visual content of the header */}
-            <div className={styles.triggerContent}>
+            >
                 <div className={styles.leftContent}>
                     {Icon && <Icon className={styles.headerIcon} />}
                     <span className={styles.title}>{children}</span>
@@ -88,10 +84,15 @@ const AccordionTrigger = React.forwardRef<
                 </div>
 
                 <div className={styles.rightContent}>
-                    {action && <div className={styles.actionWrapper}>{action}</div>}
                     <ChevronDown className={styles.chevron} />
                 </div>
-            </div>
+            </AccordionPrimitive.Trigger>
+
+            {action && (
+                <div className={styles.actionArea}>
+                    {action}
+                </div>
+            )}
         </div>
     </AccordionPrimitive.Header>
 ))

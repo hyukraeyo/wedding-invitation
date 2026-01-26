@@ -97,7 +97,7 @@ export default async function RootLayout({
   const session = await sessionPromise;
 
   return (
-    <html lang="ko" suppressHydrationWarning data-scroll-behavior="smooth" className={fontVariables}>
+    <html lang="ko" suppressHydrationWarning className={fontVariables}>
       <body>
         <Script
           src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.0/kakao.min.js"

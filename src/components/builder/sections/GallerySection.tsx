@@ -1,5 +1,4 @@
 import React from 'react';
-import { Image as ImageIcon } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import dynamic from 'next/dynamic';
@@ -20,7 +19,7 @@ const GallerySection = React.memo<SectionProps>(function GallerySection({ value,
     const gallery = useInvitationStore(useShallow(state => state.gallery));
     return (
         <AccordionItem value={value} autoScroll>
-            <AccordionTrigger icon={ImageIcon}>
+            <AccordionTrigger>
                 웨딩 갤러리
             </AccordionTrigger>
             <AccordionContent>

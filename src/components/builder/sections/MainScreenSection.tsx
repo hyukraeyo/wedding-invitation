@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 
-import { Home, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
 import { HeaderAction } from '@/components/common/HeaderAction';
@@ -37,7 +37,6 @@ export default function MainScreenSection({ isOpen, value }: SectionProps) {
         <>
             <AccordionItem value={value} autoScroll>
                 <AccordionTrigger
-                    icon={Home}
                     action={
                         <HeaderAction
                             icon={Sparkles}
@@ -51,10 +50,10 @@ export default function MainScreenSection({ isOpen, value }: SectionProps) {
                 <AccordionContent>
                     {isOpen ? <MainScreenSectionContent /> : null}
                 </AccordionContent>
-            </AccordionItem>
+            </AccordionItem >
 
             {/* Sample Titles Modal */}
-            <ResponsiveModal
+            < ResponsiveModal
                 open={isSampleModalOpen}
                 onOpenChange={setIsSampleModalOpen}
                 title="추천 제목 문구"
@@ -64,7 +63,7 @@ export default function MainScreenSection({ isOpen, value }: SectionProps) {
                     items={MAIN_TITLE_SAMPLES}
                     onSelect={handleSelectSample}
                 />
-            </ResponsiveModal>
+            </ResponsiveModal >
         </>
     );
 }

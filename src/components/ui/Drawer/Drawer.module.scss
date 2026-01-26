@@ -18,7 +18,7 @@
   display: flex;
   height: auto;
   min-height: 200px;
-  max-height: 96dvh;
+  max-height: 50dvh; // 🍌 모든 바텀시트 최대 높이 50% 제한
   flex-direction: column;
   border-top-left-radius: v.$radius-xl;
   border-top-right-radius: v.$radius-xl;
@@ -35,6 +35,22 @@
     max-width: 100%;
     border-radius: v.$radius-xl v.$radius-xl 0 0;
     margin-bottom: 0;
+  }
+
+  // 🍌 Floating Variant: 하단과 좌우 여백이 있는 '아일랜드' 타입
+  &.variantFloating {
+    left: 0;
+    right: 0;
+    bottom: 1rem;
+    margin: 0 auto; // 🍌 transform 제거 -> margin으로 센터 정렬 (순간 점프 방지)
+    width: calc(100% - 2rem); // 🍌 좌우 여백 1rem씩을 제외한 가로 100%
+    border-radius: v.$radius-xl;
+    height: auto;
+    max-height: calc(50dvh - 2rem);
+
+    @media (min-width: v.$mobile) {
+      max-width: calc(100% - 2rem); // 🍌 데스크탑 캔버스 영역에서도 가로 꽉 차게
+    }
   }
 }
 
@@ -95,7 +111,6 @@
   padding-left: 0;
   padding-right: 0;
   padding-bottom: env(safe-area-inset-bottom, 2rem);
-  
+
   @include m.scrollbar-hide;
 }
-

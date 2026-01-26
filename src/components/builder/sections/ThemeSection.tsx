@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { Palette, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
@@ -27,7 +27,7 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection({ isOpen, va
 
     return (
         <AccordionItem value={value} autoScroll>
-            <AccordionTrigger icon={Palette}>
+            <AccordionTrigger>
                 Theme & Color
             </AccordionTrigger>
             <AccordionContent>

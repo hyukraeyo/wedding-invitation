@@ -1,5 +1,4 @@
 import React from 'react';
-import { MapPin } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import dynamic from 'next/dynamic';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
@@ -20,7 +19,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ valu
 
     return (
         <AccordionItem value={value} autoScroll>
-            <AccordionTrigger icon={MapPin}>
+            <AccordionTrigger>
                 예식 장소
             </AccordionTrigger>
             <AccordionContent>

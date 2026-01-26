@@ -49,7 +49,7 @@ $color-text-desc: #4E5968;
 .drawerLayout {
     display: flex;
     flex-direction: column;
-    max-height: 90dvh;
+    max-height: 50dvh; // 🍌 바텀시트 최대 높이 50% 제한
     width: 100%;
     min-height: 0;
 }
@@ -98,7 +98,7 @@ $color-text-desc: #4E5968;
     overflow-y: auto;
     padding: 1.5rem; // Increased vertical padding for premium feel
     min-height: 8rem; // Ensure some space for content even if short
-    
+
     // Pure CSS Scroll Shadows (Optimized)
     background:
         /* Shadow Cover TOP */
@@ -109,7 +109,7 @@ $color-text-desc: #4E5968;
         radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0)),
         /* Shadow BOTTOM */
         radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0)) 0 100%;
-    
+
     background-repeat: no-repeat;
     background-color: white;
     background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;

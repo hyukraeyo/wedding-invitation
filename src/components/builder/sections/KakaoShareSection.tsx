@@ -42,7 +42,6 @@ export default function KakaoShareSection({ isOpen, value }: SectionProps) {
         <>
             <AccordionItem value={value} autoScroll>
                 <AccordionTrigger
-                    icon={MessageCircle}
                     action={
                         <HeaderAction
                             icon={Sparkles}

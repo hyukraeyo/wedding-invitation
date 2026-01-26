@@ -50,11 +50,15 @@
 
 html {
   -webkit-tap-highlight-color: transparent;
-  scroll-behavior: smooth;
+  /* 🍌 바텀시트/모달 닫기 시 스크롤 위치 복원 시 애니메이션 충돌(위에서 내려오는 현상) 방지를 위해 전역 smooth 삭제 */
+  // scroll-behavior: smooth; 
+
   /* 1. html, body 높이 보장 */
   height: 100%;
   // 배경색 설정 (모달 오버레이 뒤 영역용)
   background-color: var(--background);
+  // 🍌 모달/바텀시트 오픈 시 스크롤바 사라짐으로 인한 레이아웃 점프 방지
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -224,6 +228,7 @@ button {
     transform: translateY(0);
     filter: blur(0);
   }
+
   to {
     opacity: 0;
     transform: translateY(-6px);
@@ -235,6 +240,7 @@ button {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -242,6 +248,7 @@ button {
 
 @media (prefers-reduced-motion: reduce) {
   @supports (view-transition-name: none) {
+
     ::view-transition-group(page-content),
     ::view-transition-old(page-content),
     ::view-transition-new(page-content) {

@@ -26,37 +26,31 @@
 .triggerWrapper {
   position: relative;
   display: flex;
-  flex: 1;
+  align-items: center;
   width: 100%;
 }
 
-.overlayTrigger {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  z-index: 1;
-  cursor: pointer;
-  background: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
-
-  @include m.focus-ring;
-}
-
-.triggerContent {
+.trigger {
   display: flex;
   flex: 1;
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.25rem;
+  width: 100%;
   background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
   transition: background-color v.$transition-fast v.$ease-standard;
+
+  @include m.focus-ring;
 
   @media (max-width: v.$max-mobile) {
     padding: 1rem;
+  }
+
+  &:hover {
+    background-color: rgba(v.$zinc-100, 0.5);
   }
 }
 
@@ -64,7 +58,6 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  pointer-events: none; // Let overlay trigger handle clicks
 }
 
 .headerIcon {
@@ -93,14 +86,20 @@
 .rightContent {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
 }
 
-.actionWrapper {
-  position: relative;
-  z-index: 2; // Above overlay trigger
+.actionArea {
+  position: absolute;
+  right: 3rem; // Positions to the left of the chevron
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
   display: flex;
   align-items: center;
+
+  @media (max-width: v.$max-mobile) {
+    right: 2.75rem;
+  }
 }
 
 .chevron {
@@ -108,7 +107,6 @@
   height: 1.125rem;
   color: v.$zinc-400;
   transition: transform v.$transition-300 v.$ease-ios;
-  pointer-events: none; // Let overlay trigger handle clicks
 
   [data-state='open'] & {
     transform: rotate(180deg);

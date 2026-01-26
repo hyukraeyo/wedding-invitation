@@ -1,5 +1,4 @@
 import React from 'react';
-import { Calendar } from 'lucide-react';
 import { InfoMessage } from '@/components/ui/InfoMessage';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useShallow } from 'zustand/react/shallow';
@@ -39,7 +38,7 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOp
 
     return (
         <AccordionItem value={value} autoScroll>
-            <AccordionTrigger icon={Calendar}>
+            <AccordionTrigger>
                 예식 일시
             </AccordionTrigger>
             <AccordionContent>

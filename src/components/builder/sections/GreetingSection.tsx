@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MessageSquare, Sparkles } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
 const RichTextEditor = dynamic(() => import('@/components/common/RichTextEditor'), {
@@ -92,7 +92,6 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
         <>
             <AccordionItem value={value} autoScroll>
                 <AccordionTrigger
-                    icon={MessageSquare}
                     action={
                         <HeaderAction
                             icon={Sparkles}
@@ -186,10 +185,10 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
                         </Field>
                     </SectionContainer>
                 </AccordionContent>
-            </AccordionItem>
+            </AccordionItem >
 
             {/* Sample Phrases Modal */}
-            <ResponsiveModal
+            < ResponsiveModal
                 open={isSampleModalOpen}
                 onOpenChange={setIsSampleModalOpen}
                 title="인사말 추천 문구"
@@ -199,7 +198,7 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
                     items={GREETING_SAMPLES}
                     onSelect={handleSelectSample}
                 />
-            </ResponsiveModal>
+            </ResponsiveModal >
         </>
     );
 }

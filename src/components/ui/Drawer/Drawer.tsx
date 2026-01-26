@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils"
 import styles from "./Drawer.module.scss"
 
 const Drawer = ({
-    shouldScaleBackground = true,
+    shouldScaleBackground = false, // 🍌 배경 축소로 인한 레이아웃 틀어짐 방지를 위해 기본값 false로 변경
     ...props
 }: React.ComponentProps<typeof DrawerPrimitive.Root>) => (
     <DrawerPrimitive.Root
@@ -40,10 +40,14 @@ DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName
  * - onOpenAutoFocus를 기본 처리하여 트리거 버튼에 포커스가 남아 있는 것을 방지
  * - 사용처에서 onOpenAutoFocus를 직접 지정하면 해당 핸들러가 우선 적용됨
  */
+interface DrawerContentProps extends React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content> {
+    variant?: "default" | "floating";
+}
+
 const DrawerContent = React.forwardRef<
     React.ElementRef<typeof DrawerPrimitive.Content>,
-    React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
->(({ className, children, onOpenAutoFocus, ...props }, ref) => {
+    DrawerContentProps
+>(({ className, children, onOpenAutoFocus, variant = "default", ...props }, ref) => {
     const contentRef = React.useRef<HTMLDivElement>(null);
 
     // 외부에서 전달된 ref와 내부 ref를 병합
@@ -85,7 +89,11 @@ const DrawerContent = React.forwardRef<
             <DrawerPrimitive.Content
                 ref={combinedRef}
                 tabIndex={-1}
-                className={cn(styles.content, className)}
+                className={cn(
+                    styles.content,
+                    variant === "floating" && styles.variantFloating,
+                    className
+                )}
                 onOpenAutoFocus={handleOpenAutoFocus}
                 {...props}
             >

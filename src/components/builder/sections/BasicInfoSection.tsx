@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { User2 } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
@@ -22,7 +21,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ is
 
     return (
         <AccordionItem value={value} autoScroll>
-            <AccordionTrigger icon={User2}>
+            <AccordionTrigger>
                 기본 정보
             </AccordionTrigger>
             <AccordionContent>

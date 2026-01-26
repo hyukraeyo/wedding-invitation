@@ -50,6 +50,7 @@ export interface ResponsiveModalProps {
     onScroll?: (e: React.UIEvent<HTMLDivElement>) => void;
     scrollRef?: (node: HTMLDivElement | null) => void;
     useScrollFade?: boolean;
+    drawerVariant?: "default" | "floating";
 }
 
 export const ResponsiveModal = ({
@@ -74,6 +75,7 @@ export const ResponsiveModal = ({
     dismissible = true,
     onScroll,
     scrollRef,
+    drawerVariant = "default",
 }: ResponsiveModalProps) => {
     const isDesktop = useMediaQuery("(min-width: 768px)");
     const hasActions = !!onConfirm || !!footer;
@@ -173,7 +175,7 @@ export const ResponsiveModal = ({
             dismissible={dismissible}
         >
             {trigger ? <DrawerTrigger asChild>{trigger}</DrawerTrigger> : null}
-            <DrawerContent className={styles.drawerContent}>
+            <DrawerContent className={styles.drawerContent} variant={drawerVariant}>
                 <div className={styles.drawerLayout}>
                     <div className={styles.mainSection}>
                         <DrawerHeader className={cn(styles.header, styles.drawerHeader)}>

@@ -140,26 +140,57 @@ export default function OverlaysPage() {
             <section className={styles.section}>
                 <div className={styles.sectionHeader}>
                     <h2>Side Surfaces (Drawer)</h2>
-                    <p>측면이나 하단에서 슬라이드하여 나타나는 보조 수페이스입니다.</p>
+                    <p>바텀시트는 화면의 최대 50% 높이로 제한되며, 두 가지 시각적 스타일을 제공합니다.</p>
                 </div>
                 <div className={styles.card}>
-                    <div className="flex flex-wrap gap-4">
-                        <Drawer>
-                            <DrawerTrigger asChild>
-                                <Button variant="secondary">바텀 시트 강제 노출</Button>
-                            </DrawerTrigger>
-                            <DrawerContent>
-                                <DrawerHeader className="text-left">
-                                    <DrawerTitle>시스템 설정</DrawerTitle>
-                                    <DrawerDescription>청첩장 빌더의 보조 설정을 관리합니다.</DrawerDescription>
-                                </DrawerHeader>
-                                <div className="p-6 h-[260px] flex flex-col gap-3">
-                                    <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-100 font-medium">관리자 전용 설정</div>
-                                    <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-100 font-medium">테마 데이터 덤프</div>
-                                    <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-100 font-medium">로그 확인</div>
-                                </div>
-                            </DrawerContent>
-                        </Drawer>
+                    <div className="flex flex-col gap-6">
+                        <div className="flex flex-wrap gap-4 items-center">
+                            <div className="flex flex-col gap-1 mr-4">
+                                <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-tight">Standard Style</span>
+                                <Drawer>
+                                    <DrawerTrigger asChild>
+                                        <Button variant="secondary" className="w-[180px] justify-between">
+                                            하단 밀착형 <span className="text-[10px] opacity-50 font-normal">Standard</span>
+                                        </Button>
+                                    </DrawerTrigger>
+                                    <DrawerContent>
+                                        <DrawerHeader className="text-left">
+                                            <DrawerTitle>하단 밀착형 시트</DrawerTitle>
+                                            <DrawerDescription>기기 너비에 꽉 차는 기본 바텀시트 스타일입니다.</DrawerDescription>
+                                        </DrawerHeader>
+                                        <div className="p-6 h-[260px] flex flex-col gap-3">
+                                            <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-100 font-medium text-sm">기본 설정 관리</div>
+                                            <div className="p-4 bg-zinc-50 rounded-xl border border-zinc-100 font-medium text-sm">데이터 덤프</div>
+                                        </div>
+                                    </DrawerContent>
+                                </Drawer>
+                            </div>
+
+                            <div className="flex flex-col gap-1">
+                                <span className="text-[10px] font-bold text-yellow-500 uppercase tracking-tight">Island Style (New)</span>
+                                <Drawer>
+                                    <DrawerTrigger asChild>
+                                        <Button variant="outline" className="w-[180px] justify-between border-yellow-200 bg-yellow-50/30 hover:bg-yellow-50">
+                                            플로팅 아일랜드 <span className="text-[10px] text-yellow-600 font-normal">Floating</span>
+                                        </Button>
+                                    </DrawerTrigger>
+                                    <DrawerContent variant="floating">
+                                        <DrawerHeader className="text-left">
+                                            <DrawerTitle>플로팅 아일랜드</DrawerTitle>
+                                            <DrawerDescription>하단과 좌우 여백이 있는 프리미엄 스타일입니다.</DrawerDescription>
+                                        </DrawerHeader>
+                                        <div className="p-6 h-[260px] flex flex-col gap-3">
+                                            <div className="p-4 bg-white rounded-xl border border-zinc-100 shadow-sm font-medium text-sm">마무리 추천 문구 1</div>
+                                            <div className="p-4 bg-white rounded-xl border border-zinc-100 shadow-sm font-medium text-sm">마무리 추천 문구 2</div>
+                                        </div>
+                                    </DrawerContent>
+                                </Drawer>
+                            </div>
+                        </div>
+
+                        <InfoMessage>
+                            🍌 <strong>Design Tip:</strong> 중요한 추천 기능이나 감성적인 안내 시에는 <b>플로팅 아일랜드</b> 타입을, 일반적인 설정이나 리스트 선택 시에는 <b>하단 밀착형</b>을 권장합니다.
+                        </InfoMessage>
                     </div>
                 </div>
             </section>
