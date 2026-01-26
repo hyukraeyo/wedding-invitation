@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "./DesignSystem.module.scss";
@@ -18,6 +18,7 @@ import {
     Layers,
     Circle,
     Ruler,
+    ChevronDown,
 } from "lucide-react";
 
 // Sidebar Navigation Items
@@ -38,6 +39,7 @@ const navSections = [
             { id: "badges", label: "Badges", icon: BadgeCheck, href: "/design-system/badges" },
             { id: "forms", label: "Forms & Inputs", icon: FormInput, href: "/design-system/forms" },
             { id: "feedback", label: "Feedback", icon: MessageSquare, href: "/design-system/feedback" },
+            { id: "accordions", label: "Accordions", icon: ChevronDown, href: "/design-system/accordions" },
             { id: "navigation", label: "Navigation", icon: Navigation, href: "/design-system/navigation" },
             { id: "overlays", label: "Modals & Overlays", icon: Layers, href: "/design-system/overlays" },
             { id: "cards", label: "Cards", icon: LayoutGrid, href: "/design-system/cards" },
@@ -53,21 +55,6 @@ export default function DesignSystemLayout({
 }) {
     const pathname = usePathname();
 
-    // Hide global header on mount, restore on unmount
-    useEffect(() => {
-        // Hide header
-        const header = document.querySelector("header");
-        if (header) {
-            header.style.display = "none";
-        }
-
-        // Cleanup: restore header on unmount
-        return () => {
-            if (header) {
-                header.style.display = "";
-            }
-        };
-    }, []);
 
     return (
         <div className={styles.layout}>

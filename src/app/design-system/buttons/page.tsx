@@ -2,6 +2,8 @@
 
 import styles from "../DesignSystem.module.scss";
 import { Button } from "@/components/ui/Button";
+import { Toggle } from "@/components/ui/Toggle";
+import { Label } from "@/components/ui/Label";
 import { Banana, Check, ArrowRight, Download, Heart } from "lucide-react";
 
 export default function ButtonsPage() {
@@ -103,6 +105,35 @@ export default function ButtonsPage() {
                 </div>
                 <div className={styles.card}>
                     <Button fullWidth>전체 너비 버튼</Button>
+                </div>
+            </section>
+
+            {/* Toggle Buttons (Chips) */}
+            <section className={styles.section}>
+                <div className={styles.sectionHeader}>
+                    <h2>Toggle Buttons</h2>
+                    <p>TDS 스타일의 칩 형태 토글 버튼</p>
+                </div>
+                <div className={styles.card}>
+                    <div className={styles.toggleGrid}>
+                        <div className={styles.formItem}>
+                            <Label className="mb-2 block">Toggle Sizes (Chips)</Label>
+                            <div className={styles.componentRow}>
+                                <Toggle size="sm">Small Chip</Toggle>
+                                <Toggle size="md" defaultPressed>Medium Chip</Toggle>
+                                <Toggle size="lg">Large Chip</Toggle>
+                            </div>
+                        </div>
+
+                        <div className={styles.formItem}>
+                            <Label className="mb-2 block">Square Toggle (Icons/Text)</Label>
+                            <div className={styles.componentRow}>
+                                <Toggle size="square" className="sm">故</Toggle>
+                                <Toggle size="square" defaultPressed>故</Toggle>
+                                <Toggle size="square" className="lg">故</Toggle>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 

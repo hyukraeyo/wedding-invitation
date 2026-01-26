@@ -5,36 +5,101 @@
 > **CRITICAL: SYNC MANDATE**
 > 모든 설정 및 가이드 문서(`.agent`, `.codex`, `.cursor`, `.opencode`, `.cursorrules`, `AGENTS.md`, `README.md`, `ARCHITECTURE.md`)는 항상 동일한 기준을 유지하도록 함께 업데이트되어야 합니다. 한 곳의 규칙이 변경되면 언급된 모든 파일에 해당 변경 사항을 명시하고 동기화하십시오.
 
-### 1. Data Fetching & Mutation (Strict Rule)
+### 1. 데이터 접근 정책 (Runtime Boundary 명시)
 
-Next.js App Router의 성능 이점을 극대화하기 위해 다음 패턴을 강제합니다.
+Next.js 16 + Supabase 아키텍처의 성능과 일관성을 위해 다음 런타임 경계를 명확히 정의합니다.
 
-#### **Read: Server Components w/ Direct DB Access**
-- **❌ DO NOT**: 클라이언트 컴포넌트에서 `useEffect`로 데이터를 가져오거나, 서버 컴포넌트에서 `fetch('/api/...')`로 내부 API를 호출하는 행위.
-- **✅ DO**: 서버 컴포넌트(`async` function)에서 Service 계층이나 DB Client를 직접 호출하여 데이터를 확보.
-  ```tsx
-  // app/example/page.tsx
-  import { db } from '@/lib/db';
+#### **1.1 Server Components: 초기 데이터 로딩**
+- **역할**: 페이지 진입 시 데이터 확보, SSR 렌더링, SEO 최적화
+- **허용**: ✅ Supabase 서버 클라이언트 직접 호출 (`src/lib/supabase/server.ts`)
+- **허용**: ✅ 여러 데이터 소스 병렬 요청 (`Promise.all`)
+- **금지**: ❌ 내부 API 라우트 호출 (`fetch('/api/...')`)
+- **금지**: ❌ 클라이언트 사이드 데이터 페칭 on-load
 
-  export default async function Page() {
-    // API 호출 없이 직접 DB 쿼리
-    const data = await db.query('SELECT * ...'); 
-    return <ClientView initialData={data} />;
-  }
-  ```
-
-#### **Write: Server Actions**
-- **❌ DO NOT**: Form submit을 위해 별도의 API Route(`route.ts`)를 만들고 `fetch`로 요청하는 행위.
-- **✅ DO**: **Server Actions**(`'use server'`)를 정의하여 클라이언트에서 함수처럼 직접 호출.
-  ```tsx
-  // actions/updateUser.ts
-  'use server'
+```tsx
+// ✅ 올바른 Server Component 패턴
+export default async function InvitationPage({ params }: PageProps) {
+  const supabase = createServerSupabaseClient();
+  const [invitation, gallery] = await Promise.all([
+    getInvitation(supabase, params.slug),
+    getGallery(supabase, params.slug)
+  ]);
   
-  export async function updateUser(formData: FormData) {
-      await db.update(...);
-      revalidatePath('/profile');
-  }
-  ```
+  return <InvitationCanvas initialData={{ invitation, gallery }} />;
+}
+```
+
+#### **1.2 Server Actions: 클라이언트 mutation**
+- **역할**: 폼 제출, 상태 변경, 데이터 생성/수정/삭제
+- **허용**: ✅ `'use server'` 디렉티브 사용
+- **허용**: ✅ 서버 전용 Supabase 클라이언트 사용
+- **허용**: ✅ `revalidatePath()`로 캐시 무효화
+- **금지**: ❌ 일반 함수로 구현 후 API 라우트 호출
+
+```tsx
+// ✅ 올바른 Server Action 패턴
+'use server'
+
+import { createServerSupabaseClient } from '@/lib/supabase/server';
+import { revalidatePath } from 'next/cache';
+
+export async function updateInvitation(formData: FormData) {
+  const supabase = createServerSupabaseClient();
+  const { data, error } = await supabase
+    .from('invitations')
+    .update({
+      title: formData.get('title'),
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', formData.get('id'));
+    
+  if (error) throw new Error(error.message);
+  revalidatePath('/builder');
+  return { success: true, data };
+}
+```
+
+#### **1.3 API Routes: 명시적 허용 사례**
+- **허용**: ✅ OAuth 콜백 (`/api/auth/[...nextauth]`)
+- **허용**: ✅ 브라우저 Supabase JWT 브릿지 (`/api/supabase/token`)
+- **허용**: ✅ 관리자 전용 서비스 롤 작업 (`/api/admin/*`)
+- **허용**: ✅ 웹훅 수신 (외부 시스템 연동)
+- **제한**: ⚠️ 내부 데이터 페칭 용도로 최소화 권장
+
+#### **1.4 Client Components: 인터랙션 전용**
+- **역할**: 사용자 인터랙션, 상태 관리, 실시간 업데이트
+- **허용**: ✅ Server Actions 직접 호출
+- **허용**: ✅ 브라우저 Supabase 클라이언트 (`src/lib/supabase/client.ts`)
+- **허용**: ✅ TanStack Query로 서버 데이터 캐싱
+- **금지**: ❌ `useEffect` + `fetch` on mount (초기 데이터 로딩)
+- **금지**: ❌ `useEffect` + 내부 API 호출 (불필요한 네트워크 계층)
+
+```tsx
+// ✅ 올바른 Client Component 패턴
+'use client'
+
+import { updateInvitation } from '@/actions/updateInvitation';
+
+export default function InvitationEditor() {
+  const handleSubmit = async (formData: FormData) => {
+    // Server Action 직접 호출
+    const result = await updateInvitation(formData);
+    if (result.success) {
+      toast.success('저장되었습니다');
+    }
+  };
+  
+  return <form action={handleSubmit}>...</form>;
+}
+```
+
+#### **1.5 현재 상태 vs 정책 비교**
+| 구분 | 현재 구현 | 정책 권장 | 개선 필요 |
+|------|----------|----------|----------|
+| 초기 데이터 로딩 | ✅ Server Components + 직접 Supabase | ✅ 일치 | ✅ 양호 |
+| 클라이언트 mutation | ⚠️ 일부 API 라우트 호출 | ✅ Server Actions | ⚠️ 개선 필요 |
+| 내부 API 라우트 | 10개 존재 | ✅ 최소화 (OAuth, JWT, 관리자) | ⚠️ 정리 필요 |
+| 브라우저 데이터 페칭 | ✅ 직접 Supabase | ✅ 허용 | ✅ 양호 |
 
 ### 2. 반응형 모달 시스템 (`ResponsiveModal`)
 

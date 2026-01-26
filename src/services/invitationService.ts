@@ -1,144 +1,113 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { INVITATION_SUMMARY_SELECT, toInvitationSummary } from '@/lib/invitation-summary';
-import type { InvitationSummaryRecord, InvitationSummaryRow } from '@/lib/invitation-summary';
-import { getBrowserSupabaseClient } from '@/lib/supabase';
 import { InvitationData } from '@/store/useInvitationStore';
+import { serverInvitationService } from './serverInvitationService';
+import { clientInvitationService } from './clientInvitationService';
 
-const getDefaultClient = async () => getBrowserSupabaseClient() as Promise<SupabaseClient>;
+type OptionalClient = SupabaseClient | null | undefined;
 
+/**
+ * Unified invitation service API with clear runtime boundaries
+ * 
+ * SERVER COMPONENTS: Use serverInvitationService (requires server client)
+ * CLIENT COMPONENTS: Use clientInvitationService (auto-creates browser client)
+ */
 export const invitationService = {
-    async saveInvitation(slug: string, data: InvitationData, userId?: string, client?: SupabaseClient) {
-        // async-dependencies: Start client promise early
-        const clientPromise = client ? Promise.resolve(client) : getDefaultClient();
-        const supabaseClient = await clientPromise;
-        
-        const { data: result, error } = await supabaseClient
-            .from('invitations')
-            .upsert({
-                slug,
-                invitation_data: data,
-                user_id: userId,
-                updated_at: new Date().toISOString(),
-            }, { onConflict: 'slug' })
-            .select();
+    ...serverInvitationService,
+    ...clientInvitationService,
 
-        if (error) throw error;
-        return result;
-    },
-
-    async getAllInvitations(client?: SupabaseClient) {
-        const clientPromise = client ? Promise.resolve(client) : getDefaultClient();
-        const supabaseClient = await clientPromise;
-        
-        const { data, error } = await supabaseClient
-            .from('invitations')
-            .select('*')
-            .order('updated_at', { ascending: false });
-
-        if (error) throw error;
-        return data;
-    },
-
-    async getAdminInvitations() {
-        const response = await fetch('/api/admin/invitations');
-        if (!response.ok) {
-            throw new Error('Failed to fetch admin invitations');
+    /**
+     * Save invitation data
+     * Runtime boundary handled by specific service implementation
+     */
+    async saveInvitation(slug: string, data: InvitationData, userId?: string, client?: OptionalClient) {
+        if (client) {
+            // When client is provided, use it (works for both server and browser clients)
+            return clientInvitationService.saveInvitation(slug, data, userId, client);
+        } else {
+            // No client: Must be browser environment
+            return clientInvitationService.saveInvitation(slug, data, userId);
         }
-        const result = await response.json();
-        return result.data as InvitationSummaryRecord[];
     },
 
-    async getUserInvitations(userId: string, client?: SupabaseClient) {
-        const supabaseClient = client ?? await getDefaultClient();
-        const { data, error } = await supabaseClient
-            .from('invitations')
-            .select(INVITATION_SUMMARY_SELECT)
-            .eq('user_id', userId)
-            .order('updated_at', { ascending: false });
-
-        if (error) throw error;
-        const rows = (data ?? []) as unknown as InvitationSummaryRow[];
-        return rows.map(toInvitationSummary);
+    /**
+     * Get all invitations (server only)
+     */
+    async getAllInvitations(client?: OptionalClient) {
+        if (!client) {
+            throw new Error('getAllInvitations requires server client');
+        }
+        return serverInvitationService.getAllInvitations(client);
     },
 
-    async getInvitation(slug: string, client?: SupabaseClient) {
-        const supabaseClient = client ?? await getDefaultClient();
-        const { data, error } = await supabaseClient
-            .from('invitations')
-            .select('*')
-            .eq('slug', slug)
-            .maybeSingle();
-
-        if (error) return null;
-        return data;
+    /**
+     * Get user invitations
+     * Runtime boundary handled by specific service implementation
+     */
+    async getUserInvitations(userId: string, client?: OptionalClient) {
+        if (client) {
+            return clientInvitationService.getUserInvitations(userId, client);
+        } else {
+            return clientInvitationService.getUserInvitations(userId);
+        }
     },
 
-async getInvitationsBySlugs(slugs: string[], client?: SupabaseClient) {
-        // js-length-check-first: Check array length before expensive operation
-        if (!slugs.length) return [];
-        
-        const clientPromise = client ? Promise.resolve(client) : getDefaultClient();
-        const supabaseClient = await clientPromise;
-        
-        const { data, error } = await supabaseClient
-            .from('invitations')
-            .select('*')
-            .in('slug', slugs);
-
-        if (error) throw error;
-        return data || [];
+    /**
+     * Get invitation by slug
+     * Runtime boundary handled by specific service implementation
+     */
+    async getInvitation(slug: string, client?: OptionalClient) {
+        if (client) {
+            return clientInvitationService.getInvitation(slug, client);
+        } else {
+            return clientInvitationService.getInvitation(slug);
+        }
     },
 
-    async getInvitationsByIds(ids: string[], client?: SupabaseClient) {
-        // js-length-check-first: Check array length before expensive operation
-        if (!ids.length) return [];
-        
-        const clientPromise = client ? Promise.resolve(client) : getDefaultClient();
-        const supabaseClient = await clientPromise;
-        
-        const { data, error } = await supabaseClient
-            .from('invitations')
-            .select(INVITATION_SUMMARY_SELECT)
-            .in('id', ids);
-
-        if (error) throw error;
-        const rows = (data ?? []) as unknown as InvitationSummaryRow[];
-        return rows.map(toInvitationSummary);
+    /**
+     * Get invitations by slugs
+     * Runtime boundary handled by specific service implementation
+     */
+    async getInvitationsBySlugs(slugs: string[], client?: OptionalClient) {
+        if (client) {
+            return clientInvitationService.getInvitationsBySlugs(slugs, client);
+        } else {
+            return clientInvitationService.getInvitationsBySlugs(slugs);
+        }
     },
 
-    async deleteInvitation(id: string, client?: SupabaseClient) {
-        const supabaseClient = client ?? await getDefaultClient();
-        const { error } = await supabaseClient
-            .from('invitations')
-            .delete()
-            .eq('id', id);
-
-        if (error) throw error;
+    /**
+     * Get invitations by IDs
+     * Runtime boundary handled by specific service implementation
+     */
+    async getInvitationsByIds(ids: string[], client?: OptionalClient) {
+        if (client) {
+            return clientInvitationService.getInvitationsByIds(ids, client);
+        } else {
+            return clientInvitationService.getInvitationsByIds(ids);
+        }
     },
 
-    async markNotificationAsRead(id: string, client?: SupabaseClient) {
-        const supabaseClient = client ?? await getDefaultClient();
-        // Fetch current data first to avoid overriding everything
-        const { data: inv, error: fetchError } = await supabaseClient
-            .from('invitations')
-            .select('invitation_data')
-            .eq('id', id)
-            .single();
+    /**
+     * Delete invitation
+     * Runtime boundary handled by specific service implementation
+     */
+    async deleteInvitation(id: string, client?: OptionalClient) {
+        if (client) {
+            return clientInvitationService.deleteInvitation(id, client);
+        } else {
+            return clientInvitationService.deleteInvitation(id);
+        }
+    },
 
-        if (fetchError || !inv) throw fetchError || new Error('Invitation not found');
-
-        const updatedData = {
-            ...inv.invitation_data,
-            hasNewRejection: false,
-            hasNewApproval: false
-        };
-
-        const { error: updateError } = await supabaseClient
-            .from('invitations')
-            .update({ invitation_data: updatedData })
-            .eq('id', id);
-
-        if (updateError) throw updateError;
-        return true;
+    /**
+     * Mark notification as read
+     * Runtime boundary handled by specific service implementation
+     */
+    async markNotificationAsRead(id: string, client?: OptionalClient) {
+        if (client) {
+            return clientInvitationService.markNotificationAsRead(id, client);
+        } else {
+            return clientInvitationService.markNotificationAsRead(id);
+        }
     }
 };

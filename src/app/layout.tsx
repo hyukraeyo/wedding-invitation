@@ -1,4 +1,4 @@
-﻿import React, { Suspense } from "react";
+import React, { Suspense } from "react";
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import ClientProviders from "./ClientProviders";
@@ -6,6 +6,7 @@ import { fontVariables } from "@/lib/fonts";
 import Header from "@/components/common/Header";
 import { ProgressBar } from "@/components/common/ProgressBar/ProgressBar";
 import { auth } from "@/auth";
+import { SkipLink } from "@/hooks/useAccessibility";
 import "./globals.scss";
 import "../styles/_accessibility.scss";
 
@@ -161,12 +162,15 @@ export default async function RootLayout({
           }}
         />
         <ClientProviders session={session}>
+          <SkipLink href="#main-content">본문 바로가기</SkipLink>
           <div vaul-drawer-wrapper="" style={{ backgroundColor: "var(--background)", minHeight: "100dvh" }}>
             <Suspense fallback={null}>
               <ProgressBar />
             </Suspense>
             <Header />
-            {children}
+            <main id="main-content">
+              {children}
+            </main>
           </div>
         </ClientProviders>
       </body>

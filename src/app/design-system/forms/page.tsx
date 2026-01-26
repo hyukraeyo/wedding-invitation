@@ -8,7 +8,6 @@ import { Switch } from "@/components/ui/Switch";
 import { Checkbox } from "@/components/ui/Checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/RadioGroup";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/Select";
-import { Toggle } from "@/components/ui/Toggle";
 
 export default function FormsPage() {
     return (
@@ -85,34 +84,6 @@ export default function FormsPage() {
                 </div>
             </section>
 
-            {/* Toggle Buttons (Chips) */}
-            <section className={styles.section}>
-                <div className={styles.sectionHeader}>
-                    <h2>Toggle Buttons</h2>
-                    <p>TDS 스타일의 칩 형태 토글 버튼</p>
-                </div>
-                <div className={styles.card}>
-                    <div className={styles.toggleGrid}>
-                        <div className={styles.formItem}>
-                            <Label className="mb-2 block">Toggle Sizes (Chips)</Label>
-                            <div className={styles.componentRow}>
-                                <Toggle size="sm">Small Chip</Toggle>
-                                <Toggle size="md" pressed>Medium Chip</Toggle>
-                                <Toggle size="lg">Large Chip</Toggle>
-                            </div>
-                        </div>
-
-                        <div className={styles.formItem}>
-                            <Label className="mb-2 block">Square Toggle (Icons/Text)</Label>
-                            <div className={styles.componentRow}>
-                                <Toggle size="square" className="sm">故</Toggle>
-                                <Toggle size="square" pressed>故</Toggle>
-                                <Toggle size="square" className="lg">故</Toggle>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
             {/* Switch & Checkbox */}
             <section className={styles.section}>

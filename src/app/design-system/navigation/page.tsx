@@ -3,7 +3,6 @@
 import { useState } from "react";
 import styles from "../DesignSystem.module.scss";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/Accordion";
 import { LayoutGrid, List, Layers } from "lucide-react";
 
 export default function NavigationPage() {
@@ -92,39 +91,6 @@ export default function NavigationPage() {
                 </div>
             </section>
 
-            {/* Accordion */}
-            <section className={styles.section}>
-                <div className={styles.sectionHeader}>
-                    <h2>Accordion</h2>
-                    <p>접었다 펼 수 있는 콘텐츠 영역입니다. (type=&quot;single&quot; | &quot;multiple&quot;)</p>
-                </div>
-                <div className={styles.card}>
-                    <Accordion type="single" collapsible style={{ width: "100%" }}>
-                        <AccordionItem value="faq1">
-                            <AccordionTrigger>청첩장은 어떻게 만들 수 있나요?</AccordionTrigger>
-                            <AccordionContent>
-                                회원가입 후 &quot;새 청첩장 만들기&quot; 버튼을 클릭하면 쉽게 시작할 수 있습니다.
-                                템플릿을 선택하고 정보를 입력하면 됩니다.
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="faq2">
-                            <AccordionTrigger>승인은 얼마나 걸리나요?</AccordionTrigger>
-                            <AccordionContent>
-                                일반적으로 24시간 이내에 승인 결과를 알려드립니다.
-                                주말과 공휴일에는 시간이 더 걸릴 수 있습니다.
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="faq3">
-                            <AccordionTrigger>공유는 어떻게 하나요?</AccordionTrigger>
-                            <AccordionContent>
-                                청첩장을 카카오톡으로 공유하거나 링크를 복사해
-                                원하는 곳에 공유할 수 있습니다.
-                            </AccordionContent>
-                        </AccordionItem>
-                    </Accordion>
-                </div>
-            </section>
-
             {/* Usage */}
             <section className={styles.section}>
                 <div className={styles.sectionHeader}>
@@ -152,21 +118,7 @@ const [value, setValue] = useState("option1");
     <TabsTrigger value="option1">옵션 1</TabsTrigger>
     <TabsTrigger value="option2">옵션 2</TabsTrigger>
   </TabsList>
-</Tabs>
-
-// Accordion (싱글 모드 - 하나만 열림)
-<Accordion type="single" collapsible>
-  <AccordionItem value="item1">
-    <AccordionTrigger>제목</AccordionTrigger>
-    <AccordionContent>내용</AccordionContent>
-  </AccordionItem>
-</Accordion>
-
-// Accordion (멀티 모드 - 여러 개 열림)
-<Accordion type="multiple">
-  <AccordionItem value="item1">...</AccordionItem>
-  <AccordionItem value="item2">...</AccordionItem>
-</Accordion>`}
+</Tabs>`}
                     </pre>
                 </div>
             </section>

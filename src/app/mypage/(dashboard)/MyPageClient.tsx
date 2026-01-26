@@ -103,7 +103,7 @@ export default function MyPageClient({
         localStorage.setItem('mypage-view-mode', mode);
     }, []);
 
-    const [actionLoading, setActionLoading] = useState<string | null>(null);
+    const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
 
     // Profile Completion Modal State
     const [profileModalOpen, setProfileModalOpen] = useState(false);
@@ -169,7 +169,7 @@ export default function MyPageClient({
 
         try {
             // async-defer-await: Mark as read immediately, non-blocking UI update
-            invitationService.markNotificationAsRead(targetId);
+            await invitationService.markNotificationAsRead(targetId);
 
             setInvitations(prev => prev.map(inv =>
                 inv.id === targetId
@@ -208,10 +208,10 @@ export default function MyPageClient({
 
     // --- Action Executors ---
 
-    const executeDelete = useCallback(async (id: string) => {
-        setActionLoading(id);
+    const executeDelete = useCallback(async (targetId: string) => {
+        setActionLoadingId(targetId);
         try {
-            await invitationService.deleteInvitation(id);
+            await invitationService.deleteInvitation(targetId);
             // Parallelize re-fetch
             const newInvitations = await invitationService.getUserInvitations(userId!);
             setInvitations(newInvitations);
@@ -223,13 +223,13 @@ export default function MyPageClient({
                 description: '삭제 중 오류가 발생했습니다.',
             });
         } finally {
-            setActionLoading(null);
+            setActionLoadingId(null);
             setConfirmConfig(prev => ({ ...prev, isOpen: false }));
         }
     }, [userId, toast, router]);
 
     const executeCancelRequest = useCallback(async (invitationId: string) => {
-        setActionLoading(invitationId);
+        setActionLoadingId(invitationId);
         try {
             await approvalRequestService.cancelRequest(invitationId);
             // Parallelize re-fetch
@@ -241,7 +241,7 @@ export default function MyPageClient({
         } catch {
             toast({ variant: 'destructive', description: '취소 처리에 실패했습니다.' });
         } finally {
-            setActionLoading(null);
+            setActionLoadingId(null);
             setConfirmConfig(prev => ({ ...prev, isOpen: false }));
         }
     }, [userId, toast, router]);
@@ -363,7 +363,7 @@ export default function MyPageClient({
     const executeRequestApproval = useCallback(async (inv: InvitationSummaryRecord) => {
         if (!userId || !profile?.full_name || !profile?.phone) return;
 
-        setActionLoading(inv.id);
+        setActionLoadingId(inv.id);
         try {
             // async-api-routes pattern: start operation
             await approvalRequestService.createRequest({
@@ -396,14 +396,14 @@ export default function MyPageClient({
                 description: '신청 처리 중 오류가 발생했습니다.',
             });
         } finally {
-            setActionLoading(null);
+            setActionLoadingId(null);
             setConfirmConfig(prev => ({ ...prev, isOpen: false }));
         }
     }, [fetchFullInvitationData, profile, toast, userId, router]);
 
     const executeRevertToDraft = useCallback(async (inv: InvitationSummaryRecord) => {
         if (!userId) return;
-        setActionLoading(inv.id);
+        setActionLoadingId(inv.id);
         try {
             const fullData = await fetchFullInvitationData(inv.slug);
             const updatedData = {
@@ -424,7 +424,7 @@ export default function MyPageClient({
             console.error('Failed to revert to draft:', error);
             toast({ variant: 'destructive', description: '수정 모드 전환에 실패했습니다.' });
         } finally {
-            setActionLoading(null);
+            setActionLoadingId(null);
         }
     }, [userId, fetchFullInvitationData, toast, router]);
 
@@ -685,8 +685,8 @@ export default function MyPageClient({
                         setConfirmConfig(prev => ({ ...prev, isOpen: false }));
                     }
                 }}
-                confirmLoading={!!actionLoading}
-                dismissible={!actionLoading}
+                confirmLoading={!!actionLoadingId}
+                dismissible={!actionLoadingId}
             >
                 <div style={{ textAlign: 'center', wordBreak: 'keep-all', lineHeight: '1.6' }}>
                     {confirmConfig.description}
@@ -703,7 +703,7 @@ export default function MyPageClient({
                     onSubmit={async () => {
                         // Not used in user view
                     }}
-                    loading={!!actionLoading}
+                    loading={!!actionLoadingId}
                     requesterName=""
                     title="승인 취소"
                     description={<></>}
