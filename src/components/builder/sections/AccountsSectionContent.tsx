@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
 import { useShallow } from 'zustand/react/shallow';
 
-const RichTextEditor = dynamic(() => import('@/components/common/RichTextEditor'), { ssr: false });
+const RichTextEditor = dynamic(() => import('@/components/ui/RichTextEditor').then(mod => mod.RichTextEditor), { ssr: false });
 
 export default function AccountsSectionContent() {
     const {

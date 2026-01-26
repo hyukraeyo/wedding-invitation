@@ -1,117 +1,115 @@
+"use client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import React from "react";
 import styles from "../DesignSystem.module.scss";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
+import { InvitationCard } from "@/components/ui/InvitationCard/InvitationCard";
+import Story from "../Story";
+
+// DUMMY Data
+const DUMMY_INVITATION_IMG = {
+    id: "inv-img",
+    title: "Hyuk & Mi's Wedding",
+    invitation_data: {
+        husband_name: "Kim Hyuk",
+        wife_name: "Lee Mi",
+        wedding_date: "2026-10-24",
+        wedding_time: "12:30",
+        wedding_venue: "Banana Hall",
+        imageUrl: "https://images.unsplash.com/photo-1511285560982-1351cdeb9821?q=80&w=800&auto=format&fit=crop"
+    }
+};
+
+const DUMMY_INVITATION_FALLBACK = {
+    id: "inv-no-img",
+    title: "Classic Ceremony",
+    invitation_data: {
+        husband_name: "Park Jun",
+        wife_name: "Choi Ha",
+        wedding_date: "2026-11-15",
+        wedding_time: "14:00",
+        wedding_venue: "Classic Wedding Hall",
+        imageUrl: null
+    }
+};
 
 export default function CardsPage() {
     return (
         <>
             <header className={styles.pageHeader}>
-                <h1>Cards</h1>
-                <p>관련 콘텐츠를 그룹화하는 컨테이너 컴포넌트입니다.</p>
+                <h1>Cards & Displays</h1>
+                <p className={styles.textMuted}>단순한 컨테이너부터 비즈니스 로직이 포함된 복합 카드까지의 모음입니다.</p>
             </header>
 
-            {/* Basic Card */}
-            <section className={styles.section}>
-                <div className={styles.sectionHeader}>
-                    <h2>Basic Card</h2>
-                    <p>기본 카드 구조</p>
-                </div>
-                <div className={styles.cardGrid}>
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>카드 제목</CardTitle>
-                            <CardDescription>카드에 대한 설명이 들어갑니다.</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <p>카드 본문 내용이 여기에 표시됩니다.</p>
-                        </CardContent>
-                        <CardFooter>
-                            <Button variant="outline" size="sm">취소</Button>
-                            <Button size="sm">확인</Button>
-                        </CardFooter>
-                    </Card>
+            <div className={styles.storySection}>
+                <Story title="Generic UI Cards" description="Basic layout containers for grouping content">
+                    <div className={styles.gridTwoCols}>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Simple Project</CardTitle>
+                                <CardDescription>Basic description for this generic card.</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <p className={styles.textSmall}>Main content area for data display.</p>
+                            </CardContent>
+                            <CardFooter>
+                                <div className={styles.buttonRow}>
+                                    <Button variant="outline" size="sm">Cancel</Button>
+                                    <Button size="sm">Save</Button>
+                                </div>
+                            </CardFooter>
+                        </Card>
 
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>구독 플랜</CardTitle>
-                            <CardDescription>당신에게 맞는 플랜을 선택하세요.</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                            <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
-                                <span style={{ fontSize: "2rem", fontWeight: 700 }}>₩9,900</span>
-                                <span style={{ color: "#71717a" }}>/월</span>
-                            </div>
-                        </CardContent>
-                        <CardFooter>
-                            <Button fullWidth>구독하기</Button>
-                        </CardFooter>
-                    </Card>
-                </div>
-            </section>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Pricing Model</CardTitle>
+                                <CardDescription>Premium plan subscription.</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className={styles.iconTextRow} style={{ alignItems: 'baseline' }}>
+                                    <span style={{ fontSize: '2rem', fontWeight: 900 }}>₩9,900</span>
+                                    <span className={styles.textMuted}>/mo</span>
+                                </div>
+                            </CardContent>
+                            <CardFooter>
+                                <Button fullWidth>Upgrade Now</Button>
+                            </CardFooter>
+                        </Card>
+                    </div>
+                </Story>
 
-            {/* Card Parts */}
-            <section className={styles.section}>
-                <div className={styles.sectionHeader}>
-                    <h2>Card Parts</h2>
-                    <p>카드 구성 요소</p>
-                </div>
-                <div className={styles.card}>
-                    <div className={styles.partsGrid}>
-                        <div className={styles.partItem}>
-                            <code>CardHeader</code>
-                            <span>제목과 설명을 포함하는 헤더 영역</span>
+                <Story title="Business Patterns: Invitations" description="Complex components integrated with business data">
+                    <div className={styles.showcaseRow}>
+                        <div className={styles.cardWrapper}>
+                            <InvitationCard
+                                invitation={DUMMY_INVITATION_IMG as any}
+                                onEdit={() => { }}
+                                onDelete={() => { }}
+                                onRequestApproval={() => { }}
+                                onCancelRequest={() => { }}
+                                onRevokeApproval={() => { }}
+                                layout="grid"
+                            />
+                            <p className={styles.labelCenterMuted}>With Cover Image</p>
                         </div>
-                        <div className={styles.partItem}>
-                            <code>CardTitle</code>
-                            <span>카드의 주요 제목</span>
-                        </div>
-                        <div className={styles.partItem}>
-                            <code>CardDescription</code>
-                            <span>제목 아래 부가 설명</span>
-                        </div>
-                        <div className={styles.partItem}>
-                            <code>CardContent</code>
-                            <span>카드의 본문 콘텐츠 영역</span>
-                        </div>
-                        <div className={styles.partItem}>
-                            <code>CardFooter</code>
-                            <span>액션 버튼 등이 위치하는 하단 영역</span>
+
+                        <div className={styles.cardWrapper}>
+                            <InvitationCard
+                                invitation={DUMMY_INVITATION_FALLBACK as any}
+                                onEdit={() => { }}
+                                onDelete={() => { }}
+                                onRequestApproval={() => { }}
+                                onCancelRequest={() => { }}
+                                onRevokeApproval={() => { }}
+                                layout="grid"
+                            />
+                            <p className={styles.labelCenterMuted}>Fallback (Minimalist)</p>
                         </div>
                     </div>
-                </div>
-            </section>
-
-            {/* Usage */}
-            <section className={styles.section}>
-                <div className={styles.sectionHeader}>
-                    <h2>사용법</h2>
-                </div>
-                <div className={styles.card}>
-                    <pre className={styles.codeBlock}>
-                        {`import { 
-  Card, 
-  CardHeader, 
-  CardTitle, 
-  CardDescription, 
-  CardContent, 
-  CardFooter 
-} from "@/components/ui/Card";
-
-<Card>
-  <CardHeader>
-    <CardTitle>제목</CardTitle>
-    <CardDescription>설명</CardDescription>
-  </CardHeader>
-  <CardContent>
-    본문 내용
-  </CardContent>
-  <CardFooter>
-    <Button>액션</Button>
-  </CardFooter>
-</Card>`}
-                    </pre>
-                </div>
-            </section>
+                </Story>
+            </div>
         </>
     );
 }

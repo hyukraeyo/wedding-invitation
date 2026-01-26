@@ -27,7 +27,7 @@ interface RichTextEditorProps {
     minHeight?: number;
 }
 
-export default function RichTextEditor({
+export function RichTextEditor({
     content,
     onChange,
     placeholder,
@@ -171,3 +171,5 @@ const MenuBtn = ({
         <Icon size={16} />
     </button>
 );
+
+RichTextEditor.displayName = "RichTextEditor";

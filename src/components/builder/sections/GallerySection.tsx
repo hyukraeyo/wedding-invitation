@@ -1,6 +1,4 @@
 import React from 'react';
-import { useShallow } from 'zustand/react/shallow';
-import { useInvitationStore } from '@/store/useInvitationStore';
 import dynamic from 'next/dynamic';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
 import type { SectionProps } from '@/types/builder';
@@ -16,7 +14,7 @@ const GallerySectionContent = dynamic(() => import('./GallerySectionContent'), {
 });
 
 const GallerySection = React.memo<SectionProps>(function GallerySection({ value, isOpen }) {
-    const gallery = useInvitationStore(useShallow(state => state.gallery));
+
     return (
         <AccordionItem value={value} autoScroll>
             <AccordionTrigger>

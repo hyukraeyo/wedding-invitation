@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "./DesignSystem.module.scss";
@@ -19,7 +19,9 @@ import {
     Circle,
     Ruler,
     ChevronDown,
+    Settings
 } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 // Sidebar Navigation Items
 const navSections = [
@@ -54,7 +56,24 @@ export default function DesignSystemLayout({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
+    const [radius, setRadius] = useState(16);
+    const [shadowIntensity, setShadowIntensity] = useState(8);
 
+    useEffect(() => {
+        const root = document.documentElement;
+        root.style.setProperty("--radius-sm", `${radius * 0.5}px`);
+        root.style.setProperty("--radius-md", `${radius}px`);
+        root.style.setProperty("--radius-lg", `${radius}px`);
+        root.style.setProperty("--radius-xl", `${radius * 1.25}px`);
+        root.style.setProperty("--radius-2xl", `${radius * 1.5}px`);
+        root.style.setProperty("--radius-3xl", `${radius * 2.5}px`);
+
+        const alpha = (shadowIntensity / 100).toFixed(2);
+        root.style.setProperty("--shadow-card", `0 4px 12px rgba(0, 0, 0, ${alpha})`);
+        root.style.setProperty("--shadow-hover-card", `0 12px 24px rgba(0, 0, 0, ${(shadowIntensity * 2) / 100})`);
+        root.style.setProperty("--shadow-hover-sm", `0 2px 6px rgba(0, 0, 0, ${alpha})`);
+        root.style.setProperty("--shadow-hover-md", `0 6px 14px rgba(0, 0, 0, ${alpha})`);
+    }, [radius, shadowIntensity]);
 
     return (
         <div className={styles.layout}>
@@ -78,13 +97,54 @@ export default function DesignSystemLayout({
                                         pathname === item.href && styles["sidebarLink--active"]
                                     )}
                                 >
-                                    <item.icon />
+                                    <item.icon size={18} />
                                     {item.label}
                                 </Link>
                             ))}
                         </div>
                     ))}
                 </nav>
+
+                <div className={styles.sidebarControls}>
+                    <div className={styles.sidebarSectionTitle}>
+                        <Settings size={14} style={{ marginRight: 6 }} />
+                        Theme Playground
+                    </div>
+                    <div className={styles.sidebarControlItem}>
+                        <label>
+                            <span>Radius</span>
+                            <span>{radius}px</span>
+                        </label>
+                        <input
+                            type="range"
+                            min="0"
+                            max="32"
+                            value={radius}
+                            onChange={(e) => setRadius(parseInt(e.target.value))}
+                        />
+                    </div>
+                    <div className={styles.sidebarControlItem}>
+                        <label>
+                            <span>Shadow</span>
+                            <span>{shadowIntensity}%</span>
+                        </label>
+                        <input
+                            type="range"
+                            min="0"
+                            max="30"
+                            value={shadowIntensity}
+                            onChange={(e) => setShadowIntensity(parseInt(e.target.value))}
+                        />
+                    </div>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        className={styles.sidebarControlReset}
+                        onClick={() => { setRadius(16); setShadowIntensity(8); }}
+                    >
+                        Reset Defaults
+                    </Button>
+                </div>
             </aside>
 
             {/* Main Content */}
@@ -96,4 +156,3 @@ export default function DesignSystemLayout({
         </div>
     );
 }
-

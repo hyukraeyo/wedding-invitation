@@ -98,11 +98,11 @@
         min-height: var(--editor-min-height, 120px);
         padding: 1rem;
         outline: none;
-        font-size: var(--builder-input-font-size);
-        font-family: v.$font-pretendard;
-        font-weight: 400;
+        font-size: v.$font-size-sm;
+        font-family: v.$font-family-base;
+        font-weight: 500;
         color: v.$zinc-900;
-        line-height: 1.7;
+        line-height: 1.6;
 
         p {
             margin: 0;

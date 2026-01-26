@@ -22,7 +22,7 @@ const MainScreenSectionContent = dynamic(() => import('./MainScreenSectionConten
 });
 
 export default function MainScreenSection({ isOpen, value }: SectionProps) {
-    const imageUrl = useInvitationStore(state => state.imageUrl);
+
     const setMainScreen = useInvitationStore(state => state.setMainScreen);
     const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
 

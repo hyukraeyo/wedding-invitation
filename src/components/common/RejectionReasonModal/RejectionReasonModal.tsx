@@ -5,7 +5,7 @@ import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 import dynamic from 'next/dynamic';
 import styles from './RejectionReasonModal.module.scss';
 
-const RichTextEditor = dynamic(() => import('@/components/common/RichTextEditor'), { ssr: false });
+const RichTextEditor = dynamic(() => import('@/components/ui/RichTextEditor').then(mod => mod.RichTextEditor), { ssr: false });
 
 interface RejectionReasonModalProps {
     isOpen: boolean;

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Sparkles } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
-const RichTextEditor = dynamic(() => import('@/components/common/RichTextEditor'), {
+const RichTextEditor = dynamic(() => import('@/components/ui/RichTextEditor').then(mod => mod.RichTextEditor), {
     ssr: false,
     loading: () => <div style={{ height: '160px', width: '100%', backgroundColor: 'rgba(0,0,0,0.03)', borderRadius: '8px', animation: 'pulse 2s infinite' }} />
 });

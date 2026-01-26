@@ -74,15 +74,22 @@
     background: linear-gradient(to top, white, rgba(255, 255, 255, 0));
   }
 
-  &.showTopFade::before { opacity: 1; }
-  &.showBottomFade::after { opacity: 1; }
+  &.showTopFade::before {
+    opacity: 1;
+  }
 
-  will-change: transform, opacity;
+  &.showBottomFade::after {
+    opacity: 1;
+  }
+
+  will-change: transform,
+  opacity;
   @include a.popup-animation;
 }
 
 .viewport {
   padding: 8px 4px;
+
   &--popper {
     width: 100%;
     min-width: var(--radix-select-trigger-width);
@@ -133,7 +140,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 0.5rem;
+  padding: 0 !important; // 🍌 Drawer 내부 패딩 중복 방지 (강제 적용)
   gap: 2px;
 }
 

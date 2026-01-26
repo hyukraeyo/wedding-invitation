@@ -1,4 +1,8 @@
+"use client";
+
+import React from "react";
 import styles from "../DesignSystem.module.scss";
+import Story from "../Story";
 
 const spacingTokens = [
     { label: "0.25rem", value: "4px", width: 16 },
@@ -17,53 +21,54 @@ export default function SpacingPage() {
         <>
             <header className={styles.pageHeader}>
                 <h1>Spacing</h1>
-                <p>일관된 간격 시스템으로 레이아웃의 조화를 유지합니다. 4px 그리드 기반입니다.</p>
+                <p>일관된 간격 시스템으로 레이아웃의 조화를 유지합니다. 4px 그리드 기반의 디자인 시스템입니다.</p>
             </header>
 
-            <section className={styles.section}>
-                <div className={styles.card}>
-                    {spacingTokens.map((token) => (
-                        <div key={token.value} className={styles.spacingRow}>
-                            <span className={styles.spacingLabel}>{token.value}</span>
-                            <span className={styles.spacingRem}>{token.label}</span>
-                            <div
-                                className={styles.spacingDemo}
-                                style={{ width: `${token.width}px` }}
-                            />
-                        </div>
-                    ))}
-                </div>
-            </section>
+            <div className={styles.storySection}>
+                <Story title="Tokens" description="Base spacing units for defining margins and paddings">
+                    <div className={styles.verticalStack}>
+                        {spacingTokens.map((token) => (
+                            <div key={token.value} className={styles.spacingRow}>
+                                <div className={styles.typographyMeta} style={{ width: 120 }}>
+                                    <span className={styles.label}>{token.value}</span>
+                                    <p className={styles.textSmall} style={{ color: '#a1a1aa' }}>{token.label}</p>
+                                </div>
+                                <div
+                                    className={styles.spacingDemo}
+                                    style={{
+                                        width: `${token.width}px`,
+                                        height: 24,
+                                        backgroundColor: '#FBC02D',
+                                        borderRadius: 4,
+                                        opacity: 0.8
+                                    }}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </Story>
 
-            <section className={styles.section}>
-                <div className={styles.sectionHeader}>
-                    <h2>사용 가이드</h2>
-                </div>
-                <div className={styles.card}>
-                    <div className={styles.usageGuide}>
-                        <div className={styles.usageItem}>
-                            <strong>4px</strong>
-                            <span>아이콘과 텍스트 사이, 작은 요소 간격</span>
+                <Story title="Usage Strategy" description="Guidelines for applying spacing tokens based on architectural needs">
+                    <div className={styles.gridTwoCols}>
+                        <div className={styles.codePanel}>
+                            <h4 className={styles.textBoldSmall}>Micro (4px - 8px)</h4>
+                            <p className={styles.textSmall} style={{ marginTop: 8 }}>Used for icon-text gaps, inline elements, and tightly bound components like input fields.</p>
                         </div>
-                        <div className={styles.usageItem}>
-                            <strong>8px</strong>
-                            <span>관련 요소 그룹 내부 간격</span>
+                        <div className={styles.codePanel}>
+                            <h4 className={styles.textBoldSmall}>Standard (12px - 24px)</h4>
+                            <p className={styles.textSmall} style={{ marginTop: 8 }}>The most common gaps for card padding, item lists, and section-internal grouping.</p>
                         </div>
-                        <div className={styles.usageItem}>
-                            <strong>16px</strong>
-                            <span>섹션 내부 기본 간격, 카드 패딩</span>
+                        <div className={styles.codePanel}>
+                            <h4 className={styles.textBoldSmall}>Macro (32px - 64px)</h4>
+                            <p className={styles.textSmall} style={{ marginTop: 8 }}>Separation between major logical sections of a page and page-level container margins.</p>
                         </div>
-                        <div className={styles.usageItem}>
-                            <strong>24px</strong>
-                            <span>섹션 간 간격, 큰 컴포넌트 내부</span>
-                        </div>
-                        <div className={styles.usageItem}>
-                            <strong>32px+</strong>
-                            <span>페이지 섹션 구분, 대형 레이아웃</span>
+                        <div className={styles.codePanel} style={{ borderStyle: 'dashed' }}>
+                            <h4 className={styles.textBoldSmall}>Special (80px+)</h4>
+                            <p className={styles.textSmall} style={{ marginTop: 8 }}>Used for landing page hero sections and wide visual breathing rooms.</p>
                         </div>
                     </div>
-                </div>
-            </section>
+                </Story>
+            </div>
         </>
     );
 }

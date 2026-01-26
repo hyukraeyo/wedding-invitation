@@ -1,7 +1,5 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
-import { useShallow } from 'zustand/react/shallow';
-import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
 import type { SectionProps } from '@/types/builder';
 import styles from './AccountsSection.module.scss';
@@ -16,7 +14,7 @@ const AccountsSectionContent = dynamic(() => import('./AccountsSectionContent'),
 });
 
 export default function AccountsSection({ value, isOpen }: SectionProps) {
-    const accounts = useInvitationStore(useShallow((state) => state.accounts));
+
 
     return (
         <AccordionItem value={value} autoScroll>

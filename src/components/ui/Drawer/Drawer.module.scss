@@ -108,9 +108,13 @@
   overflow-y: auto;
   // Use scroll-padding to ensure text isn't cut off when auto-scrolling
   scroll-padding: 2rem;
-  padding-left: 0;
-  padding-right: 0;
+  padding: 1.25rem;
   padding-bottom: env(safe-area-inset-bottom, 2rem);
+
+  @media (max-width: v.$max-mobile) {
+    padding: 1rem;
+    padding-bottom: env(safe-area-inset-bottom, 2rem);
+  }
 
   @include m.scrollbar-hide;
 }

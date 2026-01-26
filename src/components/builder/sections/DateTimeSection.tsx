@@ -11,7 +11,7 @@ import { DatePicker } from '@/components/common/DatePicker';
 import styles from './DateTimeSection.module.scss';
 import type { SectionProps } from '@/types/builder';
 
-const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ isOpen, value }) {
+const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ value }) {
     const {
         date,
         setDate,

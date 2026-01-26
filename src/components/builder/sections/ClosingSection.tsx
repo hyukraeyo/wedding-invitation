@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 
-const RichTextEditor = dynamic(() => import('@/components/common/RichTextEditor'), { ssr: false });
+const RichTextEditor = dynamic(() => import('@/components/ui/RichTextEditor').then(mod => mod.RichTextEditor), { ssr: false });
 import { Sparkles } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
@@ -20,7 +20,7 @@ import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 
 
 
-export default function ClosingSection({ isOpen, value }: SectionProps) {
+export default function ClosingSection({ value }: SectionProps) {
     const closing = useInvitationStore(useShallow(state => state.closing));
     const setClosing = useInvitationStore(state => state.setClosing);
 

@@ -3,6 +3,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/RadioGroup';
 import { Label } from '@/components/ui/Label';
 import { Field } from '@/components/common/FormPrimitives';
 import { cn } from '@/lib/utils';
+import styles from './RadioGroupField.module.scss';
 
 interface RadioOption {
     label: string;
@@ -53,30 +54,30 @@ export const RadioGroupField = ({
                 {...(defaultValue !== undefined ? { defaultValue } : {})}
                 {...(onValueChange ? { onValueChange } : {})}
                 {...(name ? { name } : {})}
-                className="flex flex-col gap-3 py-1"
+                className={styles.container}
             >
                 {options.map((option) => {
                     const id = `${generatedId}-${option.value}`;
                     return (
-                        <div key={option.value} className={cn("flex items-start gap-3 cursor-pointer group", itemClassName)}>
+                        <div key={option.value} className={cn(styles.item, itemClassName)}>
                             <RadioGroupItem
                                 value={option.value}
                                 id={id}
                                 disabled={option.disabled}
-                                className="mt-0.5"
+                                className={styles.radio}
                             />
-                            <div className="flex flex-col gap-1 cursor-pointer">
+                            <div className={styles.content}>
                                 <Label
                                     htmlFor={id}
                                     className={cn(
-                                        "cursor-pointer font-medium transition-colors",
-                                        option.disabled ? "opacity-50" : "group-hover:text-zinc-900"
+                                        styles.label,
+                                        option.disabled && styles.disabled
                                     )}
                                 >
                                     {option.label}
                                 </Label>
                                 {option.description && (
-                                    <p className="text-xs text-zinc-500 leading-relaxed cursor-pointer">
+                                    <p className={styles.description}>
                                         {option.description}
                                     </p>
                                 )}

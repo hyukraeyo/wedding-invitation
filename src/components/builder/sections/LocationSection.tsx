@@ -1,5 +1,4 @@
 import React from 'react';
-import { useInvitationStore } from '@/store/useInvitationStore';
 import dynamic from 'next/dynamic';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
 import type { SectionProps } from '@/types/builder';
@@ -15,7 +14,7 @@ const LocationSectionContent = dynamic(() => import('./LocationSectionContent'),
 });
 
 const LocationSection = React.memo<SectionProps>(function LocationSection({ value, isOpen }) {
-    const address = useInvitationStore(state => state.address);
+
 
     return (
         <AccordionItem value={value} autoScroll>

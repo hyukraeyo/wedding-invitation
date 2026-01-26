@@ -19,7 +19,7 @@ const PRESET_COLORS = [
     '#D7A7BE', // Soft Mauve
 ];
 
-const ThemeSection = React.memo<SectionProps>(function ThemeSection({ isOpen, value }) {
+const ThemeSection = React.memo<SectionProps>(function ThemeSection({ value }) {
     const theme = useInvitationStore(useShallow(state => state.theme));
     const setTheme = useInvitationStore(state => state.setTheme);
     const resolvePattern = (val: string) =>

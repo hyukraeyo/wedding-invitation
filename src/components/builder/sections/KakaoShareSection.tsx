@@ -24,7 +24,7 @@ const ResponsiveModal = dynamic(() => import('@/components/common/ResponsiveModa
 
 
 
-export default function KakaoShareSection({ isOpen, value }: SectionProps) {
+export default function KakaoShareSection({ value }: SectionProps) {
     const kakao = useInvitationStore(useShallow(state => state.kakaoShare));
     const setKakao = useInvitationStore(state => state.setKakao);
     const [previewOpen, setPreviewOpen] = useState(false);

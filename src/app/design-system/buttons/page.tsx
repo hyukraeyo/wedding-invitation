@@ -1,10 +1,12 @@
 "use client";
 
+import React from "react";
 import styles from "../DesignSystem.module.scss";
 import { Button } from "@/components/ui/Button";
 import { Toggle } from "@/components/ui/Toggle";
 import { Label } from "@/components/ui/Label";
-import { Banana, Check, ArrowRight, Download, Heart } from "lucide-react";
+import { Banana, Check, ArrowRight, Download, Heart, Settings } from "lucide-react";
+import Story from "../Story";
 
 export default function ButtonsPage() {
     return (
@@ -14,154 +16,90 @@ export default function ButtonsPage() {
                 <p>사용자 인터랙션을 위한 버튼 컴포넌트입니다. 다양한 변형과 상태를 제공합니다.</p>
             </header>
 
-            {/* Variants */}
-            <section className={styles.section}>
-                <div className={styles.sectionHeader}>
-                    <h2>Variants</h2>
-                    <p>용도에 따른 버튼 스타일 변형</p>
-                </div>
-                <div className={styles.card}>
+            <div className={styles.storySection}>
+                <Story title="Variants" description="Primary actions, secondary options, and specialized UI roles">
                     <div className={styles.componentGrid}>
-                        <div className={styles.componentItem}>
-                            <Button>Default</Button>
-                            <span className={styles.componentLabel}>default</span>
+                        <div className={styles.verticalStackSmall}>
+                            <Button>Default (Primary)</Button>
+                            <span className={styles.labelXs}>Primary action</span>
                         </div>
-                        <div className={styles.componentItem}>
+                        <div className={styles.verticalStackSmall}>
                             <Button variant="secondary">Secondary</Button>
-                            <span className={styles.componentLabel}>secondary</span>
+                            <span className={styles.labelXs}>Alternative path</span>
                         </div>
-                        <div className={styles.componentItem}>
-                            <Button variant="destructive">Destructive</Button>
-                            <span className={styles.componentLabel}>destructive</span>
-                        </div>
-                        <div className={styles.componentItem}>
+                        <div className={styles.verticalStackSmall}>
                             <Button variant="outline">Outline</Button>
-                            <span className={styles.componentLabel}>outline</span>
+                            <span className={styles.labelXs}>Subtle secondary</span>
                         </div>
-                        <div className={styles.componentItem}>
+                        <div className={styles.verticalStackSmall}>
                             <Button variant="ghost">Ghost</Button>
-                            <span className={styles.componentLabel}>ghost</span>
+                            <span className={styles.labelXs}>Contextual menu / Low emphasis</span>
                         </div>
-                        <div className={styles.componentItem}>
+                        <div className={styles.verticalStackSmall}>
+                            <Button variant="destructive">Destructive</Button>
+                            <span className={styles.labelXs}>Risk / Delete actions</span>
+                        </div>
+                        <div className={styles.verticalStackSmall}>
                             <Button variant="link">Link</Button>
-                            <span className={styles.componentLabel}>link</span>
+                            <span className={styles.labelXs}>Navigation style</span>
                         </div>
                     </div>
-                </div>
-            </section>
+                </Story>
 
-            {/* Sizes */}
-            <section className={styles.section}>
-                <div className={styles.sectionHeader}>
-                    <h2>Sizes</h2>
-                    <p>다양한 크기의 버튼</p>
-                </div>
-                <div className={styles.card}>
-                    <div className={styles.componentRow}>
-                        <Button size="sm">Small</Button>
-                        <Button size="default">Default</Button>
-                        <Button size="lg">Large</Button>
-                        <Button size="icon"><Banana size={18} /></Button>
+                <Story title="Sizes" description="Adaptive sizing for different layout densities">
+                    <div className={styles.buttonRow}>
+                        <Button size="sm">Small (36px)</Button>
+                        <Button size="default">Default (48px)</Button>
+                        <Button size="lg">Large (56px)</Button>
+                        <Button size="icon"><Settings size={18} /></Button>
                     </div>
-                </div>
-            </section>
+                </Story>
 
-            {/* States */}
-            <section className={styles.section}>
-                <div className={styles.sectionHeader}>
-                    <h2>States</h2>
-                    <p>버튼의 다양한 상태</p>
-                </div>
-                <div className={styles.card}>
-                    <div className={styles.componentRow}>
+                <Story title="Component States" description="Interactive states including loading, disabled, and active">
+                    <div className={styles.buttonRow}>
                         <Button>Normal</Button>
                         <Button disabled>Disabled</Button>
-                        <Button loading>Loading</Button>
+                        <Button loading>Loading State</Button>
                     </div>
-                </div>
-            </section>
+                </Story>
 
-            {/* With Icons */}
-            <section className={styles.section}>
-                <div className={styles.sectionHeader}>
-                    <h2>With Icons</h2>
-                    <p>아이콘과 함께 사용하는 버튼</p>
-                </div>
-                <div className={styles.card}>
-                    <div className={styles.componentRow}>
-                        <Button><Check size={16} style={{ marginRight: 8 }} />승인하기</Button>
-                        <Button variant="secondary">다음 <ArrowRight size={16} style={{ marginLeft: 8 }} /></Button>
-                        <Button variant="outline"><Download size={16} style={{ marginRight: 8 }} />다운로드</Button>
-                        <Button variant="ghost"><Heart size={16} /></Button>
+                <Story title="Icon Enrichment" description="Leading and trailing icons for better visual cues">
+                    <div className={styles.buttonRow}>
+                        <Button><Check size={16} style={{ marginRight: 8 }} /> Approve</Button>
+                        <Button variant="secondary">Next Step <ArrowRight size={16} style={{ marginLeft: 8 }} /></Button>
+                        <Button variant="outline"><Download size={16} style={{ marginRight: 8 }} /> Download PDF</Button>
+                        <Button variant="ghost" size="icon"><Heart size={18} /></Button>
                     </div>
-                </div>
-            </section>
+                </Story>
 
-            {/* Full Width */}
-            <section className={styles.section}>
-                <div className={styles.sectionHeader}>
-                    <h2>Full Width</h2>
-                    <p>전체 너비를 차지하는 버튼</p>
-                </div>
-                <div className={styles.card}>
-                    <Button fullWidth>전체 너비 버튼</Button>
-                </div>
-            </section>
+                <Story title="Layout Control" description="Responsive layout options like full-width expansion">
+                    <div className={styles.widthFull}>
+                        <Button fullWidth>Exapnded Action Button (100% Width)</Button>
+                    </div>
+                </Story>
 
-            {/* Toggle Buttons (Chips) */}
-            <section className={styles.section}>
-                <div className={styles.sectionHeader}>
-                    <h2>Toggle Buttons</h2>
-                    <p>TDS 스타일의 칩 형태 토글 버튼</p>
-                </div>
-                <div className={styles.card}>
-                    <div className={styles.toggleGrid}>
-                        <div className={styles.formItem}>
-                            <Label className="mb-2 block">Toggle Sizes (Chips)</Label>
-                            <div className={styles.componentRow}>
-                                <Toggle size="sm">Small Chip</Toggle>
-                                <Toggle size="md" defaultPressed>Medium Chip</Toggle>
-                                <Toggle size="lg">Large Chip</Toggle>
+                <Story title="Segmented & Toggle Controls" description="TDS-style toggle switches and chip selectors">
+                    <div className={styles.showcaseStack}>
+                        <div className={styles.verticalStackSmall}>
+                            <Label className={styles.labelUppercaseBlack}>Toggle Chips</Label>
+                            <div className={styles.buttonRow}>
+                                <Toggle size="sm">Option A</Toggle>
+                                <Toggle size="md" pressed>Option B (Active)</Toggle>
+                                <Toggle size="lg">Option C</Toggle>
                             </div>
                         </div>
 
-                        <div className={styles.formItem}>
-                            <Label className="mb-2 block">Square Toggle (Icons/Text)</Label>
-                            <div className={styles.componentRow}>
-                                <Toggle size="square" className="sm">故</Toggle>
-                                <Toggle size="square" defaultPressed>故</Toggle>
-                                <Toggle size="square" className="lg">故</Toggle>
+                        <div className={styles.verticalStackSmall}>
+                            <Label className={styles.labelUppercaseBlack}>Square Controls</Label>
+                            <div className={styles.buttonRow}>
+                                <Toggle size="square" className="sm"><Banana size={14} /></Toggle>
+                                <Toggle size="square" pressed><Settings size={18} /></Toggle>
+                                <Toggle size="square" className="lg"><Heart size={20} /></Toggle>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
-
-            {/* Usage */}
-            <section className={styles.section}>
-                <div className={styles.sectionHeader}>
-                    <h2>사용법</h2>
-                </div>
-                <div className={styles.card}>
-                    <pre className={styles.codeBlock}>
-                        {`import { Button } from "@/components/ui/Button";
-
-// 기본 사용
-<Button>Click me</Button>
-
-// Props
-<Button 
-  variant="secondary"  // default | secondary | destructive | outline | ghost | link
-  size="lg"            // sm | default | lg | icon
-  disabled             // 비활성화
-  loading              // 로딩 상태
-  fullWidth            // 전체 너비
->
-  Button Text
-</Button>`}
-                    </pre>
-                </div>
-            </section>
+                </Story>
+            </div>
         </>
     );
 }

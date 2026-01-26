@@ -11,7 +11,7 @@ import styles from './BasicInfoSection.module.scss';
 import { cn } from '@/lib/utils';
 import type { SectionProps } from '@/types/builder';
 
-const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ isOpen, value }) {
+const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ value }) {
     const groom = useInvitationStore(useShallow(state => state.groom));
     const setGroom = useInvitationStore(state => state.setGroom);
     const bride = useInvitationStore(useShallow(state => state.bride));
