@@ -5,15 +5,16 @@ import styles from "./DesignSystem.module.scss";
 import { Switch } from "@/components/ui/Switch";
 import { Input } from "@/components/ui/Input";
 import { RadioGroup } from "@/components/ui/RadioGroup";
+import { Select } from "@/components/ui/Select";
 
-interface PropControl {
-    type: 'boolean' | 'select' | 'text' | 'radio';
+export interface PropControl {
+    type: 'boolean' | 'select' | 'text' | 'radio' | 'segmented';
     value: boolean | string;
     onChange: (value: boolean | string) => void;
-    options?: (string | { label: string; value: string; icon?: React.ReactNode })[]; // For select or radio type
+    options?: (string | { label: string; value: string; icon?: React.ReactNode })[];
 }
 
-interface PropItem {
+export interface PropItem {
     name: string;
     type: string;
     defaultValue?: string;
@@ -80,19 +81,6 @@ export default function DocSection({ usage, props }: DocSectionProps) {
                                                                     aria-label={`Toggle ${prop.name}`}
                                                                 />
                                                             )}
-                                                            {prop.control.type === 'select' && prop.control.options && (
-                                                                <RadioGroup
-                                                                    variant="segmented"
-                                                                    size="md"
-                                                                    value={prop.control.value as string}
-                                                                    onValueChange={prop.control.onChange as (val: string) => void}
-                                                                    aria-label={`Select ${prop.name}`}
-                                                                    options={prop.control.options.map((opt): { label: string; value: string } => {
-                                                                        if (typeof opt === 'string') return { label: opt, value: opt };
-                                                                        return { label: opt.label, value: opt.value };
-                                                                    })}
-                                                                />
-                                                            )}
                                                             {prop.control.type === 'text' && (
                                                                 <Input
                                                                     value={prop.control.value as string}
@@ -101,10 +89,37 @@ export default function DocSection({ usage, props }: DocSectionProps) {
                                                                     aria-label={`Edit ${prop.name}`}
                                                                 />
                                                             )}
+                                                            {prop.control.type === 'segmented' && prop.control.options && (
+                                                                <>
+                                                                    {prop.control.options.length >= 4 ? (
+                                                                        <Select
+                                                                            value={prop.control.value as string}
+                                                                            onValueChange={prop.control.onChange as (val: string) => void}
+                                                                            options={prop.control.options.map(opt =>
+                                                                                typeof opt === 'string'
+                                                                                    ? { label: opt, value: opt }
+                                                                                    : { label: opt.label, value: opt.value }
+                                                                            )}
+                                                                        />
+                                                                    ) : (
+                                                                        <RadioGroup
+                                                                            variant="segmented"
+                                                                            size="md"
+                                                                            value={prop.control.value as string}
+                                                                            onValueChange={prop.control.onChange as (val: string) => void}
+                                                                            aria-label={`Choose ${prop.name}`}
+                                                                            options={prop.control.options.map(opt =>
+                                                                                typeof opt === 'string'
+                                                                                    ? { label: opt, value: opt }
+                                                                                    : opt
+                                                                            )}
+                                                                        />
+                                                                    )}
+                                                                </>
+                                                            )}
                                                             {prop.control.type === 'radio' && prop.control.options && (
                                                                 <RadioGroup
-                                                                    variant="segmented"
-                                                                    size="md"
+                                                                    variant="basic"
                                                                     value={prop.control.value as string}
                                                                     onValueChange={prop.control.onChange as (val: string) => void}
                                                                     aria-label={`Choose ${prop.name}`}
@@ -112,6 +127,17 @@ export default function DocSection({ usage, props }: DocSectionProps) {
                                                                         typeof opt === 'string'
                                                                             ? { label: opt, value: opt }
                                                                             : opt
+                                                                    )}
+                                                                />
+                                                            )}
+                                                            {prop.control.type === 'select' && prop.control.options && (
+                                                                <Select
+                                                                    value={prop.control.value as string}
+                                                                    onValueChange={prop.control.onChange as (val: string) => void}
+                                                                    options={prop.control.options.map(opt =>
+                                                                        typeof opt === 'string'
+                                                                            ? { label: opt, value: opt }
+                                                                            : { label: opt.label, value: opt.value }
                                                                     )}
                                                                 />
                                                             )}
@@ -128,7 +154,6 @@ export default function DocSection({ usage, props }: DocSectionProps) {
                                         </tr>
                                     ))}
                                 </tbody>
-
                             </table>
                         </div>
                     </div>

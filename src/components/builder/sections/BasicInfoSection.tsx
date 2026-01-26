@@ -3,8 +3,7 @@ import React from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
-import { TextField } from '@/components/common/TextField';
-
+import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import styles from './BasicInfoSection.module.scss';
@@ -30,17 +29,17 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ va
                     <Field label="신랑">
                         <div className={styles.formGroup}>
                             <div className={cn(styles.row, styles.full)}>
-                                <TextField
+                                <Input
                                     type="text"
                                     placeholder="신랑 이름"
                                     value={groom.lastName + groom.firstName}
-                                    onChange={(e) => setGroom({ firstName: e.target.value, lastName: '' })}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGroom({ firstName: e.target.value, lastName: '' })}
                                 />
                             </div>
 
                             {/* Groom Parents */}
                             <div className={cn(styles.row, styles.compact)}>
-                                <TextField
+                                <Input
                                     type="text"
                                     placeholder="아버지 성함"
                                     value={groom.parents.father.name}
@@ -56,7 +55,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ va
                                 </Button>
                             </div>
                             <div className={cn(styles.row, styles.compact)}>
-                                <TextField
+                                <Input
                                     type="text"
                                     placeholder="어머니 성함"
                                     value={groom.parents.mother.name}
@@ -79,7 +78,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ va
                     <Field label="신부">
                         <div className={styles.formGroup}>
                             <div className={cn(styles.row, styles.full)}>
-                                <TextField
+                                <Input
                                     type="text"
                                     placeholder="신부 이름"
                                     value={bride.lastName + bride.firstName}
@@ -89,7 +88,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ va
 
                             {/* Bride Parents */}
                             <div className={cn(styles.row, styles.compact)}>
-                                <TextField
+                                <Input
                                     type="text"
                                     placeholder="아버지 성함"
                                     value={bride.parents.father.name}
@@ -105,7 +104,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ va
                                 </Button>
                             </div>
                             <div className={cn(styles.row, styles.compact)}>
-                                <TextField
+                                <Input
                                     type="text"
                                     placeholder="어머니 성함"
                                     value={bride.parents.mother.name}

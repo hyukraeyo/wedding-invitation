@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react';
 import { MyPageContent } from '@/components/mypage/MyPageContent';
-import { PhoneField } from '@/components/common/PhoneField';
+import { FormField } from '@/components/common/FormField';
+import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import styles from './AccountPage.module.scss';
 import { Banana, User, Mail, Phone } from 'lucide-react';
@@ -99,14 +100,15 @@ export default function AccountPageClient({
                 <div className={styles.itemContent}>
                     {isEditingPhone ? (
                         <div className={styles.editWrapper}>
-                            <PhoneField
-                                className={styles.phoneInput}
-                                value={formData.phone}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                    setFormData({ ...formData, phone: e.target.value })
-                                }
-                                placeholder="010-0000-0000"
-                            />
+                            <FormField className={styles.phoneInput}>
+                                <Input
+                                    value={formData.phone || ''}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                        setFormData({ ...formData, phone: e.target.value })
+                                    }
+                                    placeholder="010-0000-0000"
+                                />
+                            </FormField>
                             <div className={styles.editActions}>
                                 <Button
                                     variant="ghost"

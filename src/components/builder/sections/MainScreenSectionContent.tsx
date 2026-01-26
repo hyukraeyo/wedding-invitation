@@ -6,8 +6,9 @@ import 'swiper/css';
 import 'swiper/css/free-mode';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { TextField } from '@/components/common/TextField';
-import { SwitchField } from '@/components/common/SwitchField';
+import { Input } from '@/components/ui/Input';
+import { FormField } from '@/components/common/FormField';
+import { Switch } from '@/components/ui/Switch';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import { ImageUploader } from '@/components/common/ImageUploader';
@@ -108,11 +109,12 @@ export default function MainScreenSectionContent() {
                         aspectRatio="4/5"
 
                     />
-                    <SwitchField
-                        checked={mainScreen.expandPhoto}
-                        onChange={(show) => updateMain({ expandPhoto: show })}
-                        label="사진 꽉 차게"
-                    />
+                    <FormField label="사진 꽉 차게" layout="horizontal" align="center">
+                        <Switch
+                            checked={mainScreen.expandPhoto}
+                            onCheckedChange={(show) => updateMain({ expandPhoto: show })}
+                        />
+                    </FormField>
                 </div>
             </Field>
 
@@ -233,26 +235,26 @@ export default function MainScreenSectionContent() {
             {mainScreen.layout === 'classic' ? (
                 <>
                     <div className={styles.optionWrapper}>
-                        <TextField
-                            label="제목"
-                            type="text"
-                            placeholder="예: THE MARRIAGE"
-                            value={mainScreen.title}
-                            onChange={(e) => updateMain({ title: e.target.value })}
-                        />
-                        <TextField
-                            label="소제목"
-                            type="text"
-                            placeholder="예: 소중한 날에 초대합니다"
-                            value={mainScreen.subtitle}
-                            onChange={(e) => updateMain({ subtitle: e.target.value })}
-                        />
+                        <Field label="제목">
+                            <Input type="text"
+                                placeholder="예: THE MARRIAGE"
+                                value={mainScreen.title}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateMain({ title: e.target.value })}
+                            />
+                        </Field>
+                        <Field label="소제목">
+                            <Input type="text"
+                                placeholder="예: 소중한 날에 초대합니다"
+                                value={mainScreen.subtitle}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateMain({ subtitle: e.target.value })}
+                            />
+                        </Field>
                     </div>
 
                     <div className={styles.sentenceWrapper}>
                         <div className={styles.sentenceItem}>
                             <div className={styles.sentenceInput}>
-                                <TextField
+                                <Input
                                     type="text"
                                     placeholder={groom.lastName || groom.firstName ? `${groom.lastName}${groom.firstName}` : '신랑'}
                                     value={mainScreen.groomName}
@@ -262,7 +264,7 @@ export default function MainScreenSectionContent() {
                         </div>
                         <div className={styles.sentenceItem}>
                             <div className={styles.sentenceConnectorInput}>
-                                <TextField
+                                <Input
                                     type="text"
                                     placeholder="그리고"
                                     value={mainScreen.andText}
@@ -272,7 +274,7 @@ export default function MainScreenSectionContent() {
                         </div>
                         <div className={styles.sentenceItem}>
                             <div className={styles.sentenceInput}>
-                                <TextField
+                                <Input
                                     type="text"
                                     placeholder={bride.lastName || bride.firstName ? `${bride.lastName}${bride.firstName}` : '신부'}
                                     value={mainScreen.brideName}

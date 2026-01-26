@@ -4,12 +4,13 @@ import * as React from "react"
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group"
 import { cn } from "@/lib/utils"
 import styles from "./RadioGroup.module.scss"
+import { useFormField } from "@/components/common/FormField"
 
 // ------------------------------------------------------------------
 // Context & Types
 // ------------------------------------------------------------------
 
-type RadioGroupVariant = 'default' | 'segmented';
+type RadioGroupVariant = 'segmented' | 'basic';
 type RadioGroupSize = 'sm' | 'md' | 'lg';
 
 interface RadioGroupContextValue {
@@ -21,7 +22,7 @@ interface RadioGroupContextValue {
 }
 
 const RadioGroupContext = React.createContext<RadioGroupContextValue>({
-    variant: 'default',
+    variant: 'segmented',
     size: 'md'
 });
 
@@ -43,17 +44,17 @@ interface RadioGroupProps extends React.ComponentPropsWithoutRef<typeof RadioGro
 // Root Component
 // ------------------------------------------------------------------
 
-import { useFormField } from "@/components/common/FormField"
+
 
 const RadioGroup = React.forwardRef<
     React.ElementRef<typeof RadioGroupPrimitive.Root>,
     RadioGroupProps
->(({ className, variant = "default", size = "md", options, fullWidth, children, value, defaultValue, onValueChange, id: customId, ...props }, ref) => {
+>(({ className, variant = "segmented", size = "md", options, fullWidth, children, value, defaultValue, onValueChange, id: customId, ...props }, ref) => {
+    // --- FormField Integration ---
     const field = useFormField();
     const id = customId || field?.id;
     const describedBy = field?.isError ? field.errorId : field?.descriptionId;
-
-    // --- Segmented Control Logic ---
+    const isError = field?.isError;
 
     // --- Segmented Control Logic ---
     const [indicatorStyle, setIndicatorStyle] = React.useState<React.CSSProperties>({ opacity: 0 });
@@ -124,7 +125,7 @@ const RadioGroup = React.forwardRef<
     const sizeClass = styles[size];
 
     const rootClassName = cn(
-        variant === 'default' ? styles.group : styles.segmentedRoot,
+        variant === 'basic' ? styles.group : styles.segmentedRoot,
         variant === 'segmented' && [
             sizeClass,
             fullWidth && styles.fullWidth
@@ -152,6 +153,7 @@ const RadioGroup = React.forwardRef<
             <RadioGroupPrimitive.Root
                 id={id}
                 aria-describedby={describedBy}
+                aria-invalid={isError ? "true" : undefined}
                 className={rootClassName}
                 ref={composedRef}
                 value={value as string}
@@ -255,7 +257,7 @@ const RadioGroupItem = React.forwardRef<
         )
     }
 
-    // 2. Default Variant
+    // 2. Basic Variant
     return (
         <RadioGroupPrimitive.Item
             ref={composedRef}

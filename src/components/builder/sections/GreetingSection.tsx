@@ -13,7 +13,7 @@ import { InfoMessage } from '@/components/ui/InfoMessage';
 import { SampleList } from '@/components/ui/SampleList';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
-import { TextField } from '@/components/common/TextField';
+import { Input } from '@/components/ui/Input';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { HeaderAction } from '@/components/common/HeaderAction';
@@ -107,22 +107,22 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
                 <AccordionContent>
                     <SectionContainer>
                         {/* Subtitle */}
-                        <TextField
-                            label="소제목"
-                            type="text"
-                            value={greetingSubtitle}
-                            onChange={(e) => setGreetingSubtitle(e.target.value)}
-                            placeholder="예: INVITATION"
-                        />
+                        <Field label="소제목">
+                            <Input type="text"
+                                value={greetingSubtitle}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGreetingSubtitle(e.target.value)}
+                                placeholder="예: INVITATION"
+                            />
+                        </Field>
 
                         {/* Title */}
-                        <TextField
-                            label="제목"
-                            type="text"
-                            value={greetingTitle}
-                            onChange={(e) => setGreetingTitle(e.target.value)}
-                            placeholder="예: 소중한 분들을 초대합니다"
-                        />
+                        <Field label="제목">
+                            <Input type="text"
+                                value={greetingTitle}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGreetingTitle(e.target.value)}
+                                placeholder="예: 소중한 분들을 초대합니다"
+                            />
+                        </Field>
 
                         {/* Content */}
                         <Field label="내용">
@@ -164,18 +164,20 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
 
                                 {enableFreeformNames ? (
                                     <div className={styles.optionWrapper}>
-                                        <TextField
-                                            label="신랑 측 표기"
-                                            value={groomNameCustom}
-                                            onChange={(e) => setGroomNameCustom(e.target.value)}
-                                            placeholder="예: 아버지 홍길동 · 어머니 김철수 의 장남 길동"
-                                        />
-                                        <TextField
-                                            label="신부 측 표기"
-                                            value={brideNameCustom}
-                                            onChange={(e) => setBrideNameCustom(e.target.value)}
-                                            placeholder="예: 아버지 임걱정 · 어머니 박순이 의 장녀 순희"
-                                        />
+                                        <Field label="신랑 측 표기">
+                                            <Input
+                                                value={groomNameCustom}
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGroomNameCustom(e.target.value)}
+                                                placeholder="예: 아버지 홍길동 · 어머니 김철수 의 장남 길동"
+                                            />
+                                        </Field>
+                                        <Field label="신부 측 표기">
+                                            <Input
+                                                value={brideNameCustom}
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBrideNameCustom(e.target.value)}
+                                                placeholder="예: 아버지 임걱정 · 어머니 박순이 의 장녀 순희"
+                                            />
+                                        </Field>
                                         <InfoMessage>
                                             기본 성함 표기 대신 사용자가 직접 작성한 문구로 성함을 표시합니다.
                                         </InfoMessage>

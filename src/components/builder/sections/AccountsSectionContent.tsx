@@ -3,7 +3,7 @@ import { Plus, Trash2, ChevronDown } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { IconButton } from '@/components/ui/IconButton';
 import { Button as UIButton } from '@/components/ui/Button';
-import { TextField } from '@/components/common/TextField';
+import { Input } from '@/components/ui/Input';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import { Select } from '@/components/ui/Select';
@@ -112,18 +112,24 @@ export default function AccountsSectionContent() {
 
     return (
         <SectionContainer>
-            <TextField
+            <Field
                 label="소제목"
-                placeholder="예: GIFT"
-                value={accountsSubtitle}
-                onChange={(e) => setAccountsSubtitle(e.target.value)}
-            />
-            <TextField
+            >
+                <Input
+                    placeholder="예: GIFT"
+                    value={accountsSubtitle}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAccountsSubtitle(e.target.value)}
+                />
+            </Field>
+            <Field
                 label="제목"
-                placeholder="예: 마음 전하실 곳"
-                value={accountsTitle}
-                onChange={(e) => setAccountsTitle(e.target.value)}
-            />
+            >
+                <Input
+                    placeholder="예: 마음 전하실 곳"
+                    value={accountsTitle}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAccountsTitle(e.target.value)}
+                />
+            </Field>
 
             <Field label="내용">
                 <RichTextEditor
@@ -213,38 +219,35 @@ export default function AccountsSectionContent() {
                                         </div>
                                     </div>
 
-                                    {!['본인', '아버지', '어머니'].includes(acc.relation) ? (
-                                        <TextField
+                                     {!['본인', '아버지', '어머니'].includes(acc.relation) ? (
+                                        <Input
                                             placeholder="관계를 직접 입력하세요 (예: 본인, 아버지)"
                                             value={acc.relation}
-                                            onChange={(e) => handleUpdateAccount(acc.id, { relation: e.target.value })}
+                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleUpdateAccount(acc.id, { relation: e.target.value })}
                                         />
                                     ) : null}
 
                                     <div className={styles.fieldRow}>
                                         <div className={styles.flex1}>
-                                            <TextField
-                                                label="은행"
+                                            <Input
                                                 placeholder="예: 신한"
                                                 value={acc.bank}
-                                                onChange={(e) => handleUpdateAccount(acc.id, { bank: e.target.value })}
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleUpdateAccount(acc.id, { bank: e.target.value })}
                                             />
                                         </div>
                                         <div className={styles.flex1}>
-                                            <TextField
-                                                label="예금주"
+                                            <Input
                                                 placeholder="성함"
                                                 value={acc.holder}
-                                                onChange={(e) => handleUpdateAccount(acc.id, { holder: e.target.value })}
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleUpdateAccount(acc.id, { holder: e.target.value })}
                                             />
                                         </div>
                                     </div>
 
-                                    <TextField
-                                        label="계좌번호"
+                                    <Input
                                         placeholder="계좌번호를 입력하세요"
                                         value={acc.accountNumber}
-                                        onChange={(e) => {
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                             const value = e.target.value.replace(/[^0-9-]/g, '');
                                             handleUpdateAccount(acc.id, { accountNumber: value });
                                         }}
@@ -266,18 +269,20 @@ export default function AccountsSectionContent() {
             </Field>
 
             {/* Appearance Settings */}
-            <TextField
-                label="신랑측 그룹 제목"
-                placeholder="신랑 측 마음 전하실 곳"
-                value={accountsGroomTitle}
-                onChange={(e) => setAccountsGroomTitle(e.target.value)}
-            />
-            <TextField
-                label="신부측 그룹 제목"
-                placeholder="신부 측 마음 전하실 곳"
-                value={accountsBrideTitle}
-                onChange={(e) => setAccountsBrideTitle(e.target.value)}
-            />
+            <Field label="신랑측 그룹 제목">
+                <Input
+                    placeholder="신랑 측 마음 전하실 곳"
+                    value={accountsGroomTitle}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAccountsGroomTitle(e.target.value)}
+                />
+            </Field>
+            <Field label="신부측 그룹 제목">
+                <Input
+                    placeholder="신부 측 마음 전하실 곳"
+                    value={accountsBrideTitle}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAccountsBrideTitle(e.target.value)}
+                />
+            </Field>
             <Field label="색상 모드">
                 <Tabs
                     value={accountsColorMode}

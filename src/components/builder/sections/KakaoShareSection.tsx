@@ -5,7 +5,7 @@ import { MessageCircle, Sparkles, ChevronRight } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
-import { TextField } from '@/components/common/TextField';
+import { Input } from '@/components/ui/Input';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { InfoMessage } from '@/components/ui/InfoMessage';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
@@ -80,23 +80,23 @@ export default function KakaoShareSection({ value }: SectionProps) {
                             <InfoMessage>카카오톡 공유 메시지에서 보여질 사진의 비율입니다.</InfoMessage>
                         </Field>
 
-                        <TextField
-                            label="제목"
-                            type="text"
-                            placeholder="예: 우리 결혼합니다"
-                            value={kakao.title}
-                            onChange={(e) => setKakao({ title: e.target.value })}
-                            maxLength={25}
-                        />
+                        <Field label="제목">
+                            <Input type="text"
+                                placeholder="예: 우리 결혼합니다"
+                                value={kakao.title}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setKakao({ title: e.target.value })}
+                                maxLength={25}
+                            />
+                        </Field>
 
-                        <TextField
-                            label="설명"
-                            type="text"
-                            placeholder="예: 2024년 10월 12일"
-                            value={kakao.description}
-                            onChange={(e) => setKakao({ description: e.target.value })}
-                            maxLength={35}
-                        />
+                        <Field label="설명">
+                            <Input type="text"
+                                placeholder="예: 2024년 10월 12일"
+                                value={kakao.description}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setKakao({ description: e.target.value })}
+                                maxLength={35}
+                            />
+                        </Field>
 
                         <Field label="버튼 스타일">
                             <Tabs

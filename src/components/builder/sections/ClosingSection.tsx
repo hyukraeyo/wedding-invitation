@@ -6,7 +6,7 @@ import { Sparkles } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
-import { TextField } from '@/components/common/TextField';
+import { Input } from '@/components/ui/Input';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import { ImageUploader } from '@/components/common/ImageUploader';
 import { HeaderAction } from '@/components/common/HeaderAction';
@@ -53,18 +53,18 @@ export default function ClosingSection({ value }: SectionProps) {
                 </AccordionTrigger>
                 <AccordionContent>
                     <SectionContainer>
-                        <TextField
-                            label="소제목"
-                            placeholder="예: CLOSING"
-                            value={closing.subtitle}
-                            onChange={(e) => updateClosing({ subtitle: e.target.value })}
-                        />
-                        <TextField
-                            label="제목"
-                            placeholder="예: 저희의 시작을 함께해주셔서 감사합니다"
-                            value={closing.title}
-                            onChange={(e) => updateClosing({ title: e.target.value })}
-                        />
+                        <Field label="소제목">
+                            <Input placeholder="예: CLOSING"
+                                value={closing.subtitle}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateClosing({ subtitle: e.target.value })}
+                            />
+                        </Field>
+                        <Field label="제목">
+                            <Input placeholder="예: 저희의 시작을 함께해주셔서 감사합니다"
+                                value={closing.title}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateClosing({ title: e.target.value })}
+                            />
+                        </Field>
 
                         <Field label="내용">
                             <RichTextEditor

@@ -1,13 +1,13 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { Search } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { TextField } from '@/components/common/TextField';
+import { Input } from '@/components/ui/Input';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
-import { SwitchField } from '@/components/common/SwitchField';
-import { PhoneField } from '@/components/common/PhoneField';
+import { FormField } from '@/components/common/FormField';
+import { Switch } from '@/components/ui/Switch';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import styles from './LocationSection.module.scss';
 import { cn } from '@/lib/utils';
@@ -133,18 +133,20 @@ export default function LocationSectionContent() {
         <>
             <KakaoSdkLoader onReady={() => setIsKakaoReady(true)} />
             <SectionContainer>
-                <TextField
-                    label="부제목"
-                    placeholder="예: LOCATION"
-                    value={locationSubtitle}
-                    onChange={(e) => setLocationSubtitle(e.target.value)}
-                />
-                <TextField
-                    label="제목"
-                    placeholder="예: 바나나홀"
-                    value={locationTitle}
-                    onChange={(e) => setLocationTitle(e.target.value)}
-                />
+                <Field label="부제목">
+                    <Input
+                        placeholder="예: LOCATION"
+                        value={locationSubtitle}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationSubtitle(e.target.value)}
+                    />
+                </Field>
+                <Field label="제목">
+                    <Input
+                        placeholder="예: 바나나홀"
+                        value={locationTitle}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationTitle(e.target.value)}
+                    />
+                </Field>
 
                 <Field label="주소">
                     <div
@@ -161,27 +163,30 @@ export default function LocationSectionContent() {
                     </div>
                 </Field>
 
-                <TextField
-                    label="예식 장소명"
-                    type="text"
-                    placeholder="예: 바나나 웨딩홀"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                />
+                <Field label="예식 장소명">
+                    <Input
+                        type="text"
+                        placeholder="예: 바나나 웨딩홀"
+                        value={location}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocation(e.target.value)}
+                    />
+                </Field>
 
-                <TextField
-                    label="층/호수"
-                    type="text"
-                    placeholder="예: 3층 그랜드홀"
-                    value={detailAddress}
-                    onChange={(e) => setDetailAddress(e.target.value)}
-                />
-                <PhoneField
-                    label="연락처"
-                    placeholder="예: 02-000-0000"
-                    value={locationContact}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationContact(e.target.value)}
-                />
+                <Field label="층/호수">
+                    <Input
+                        type="text"
+                        placeholder="예: 3층 그랜드홀"
+                        value={detailAddress}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDetailAddress(e.target.value)}
+                    />
+                </Field>
+                <FormField label="연락처">
+                    <Input
+                        placeholder="예: 02-000-0000"
+                        value={locationContact}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationContact(e.target.value)}
+                    />
+                </FormField>
 
                 <Field label="지도 종류">
                     <Tabs
@@ -209,9 +214,15 @@ export default function LocationSectionContent() {
                 </Field>
                 <Field label="지도 설정">
                     <div className={styles.mapOptions}>
-                        <SwitchField checked={showMap} onChange={setShowMap} label="지도 표시" />
-                        <SwitchField checked={lockMap} onChange={setLockMap} label="지도 고정" />
-                        <SwitchField checked={showNavigation} onChange={setShowNavigation} label="네비게이션 표시" />
+                        <FormField label="지도 표시" layout="horizontal" align="center">
+                            <Switch checked={showMap} onCheckedChange={setShowMap} />
+                        </FormField>
+                        <FormField label="지도 고정" layout="horizontal" align="center">
+                            <Switch checked={lockMap} onCheckedChange={setLockMap} />
+                        </FormField>
+                        <FormField label="네비게이션 표시" layout="horizontal" align="center">
+                            <Switch checked={showNavigation} onCheckedChange={setShowNavigation} />
+                        </FormField>
                     </div>
                 </Field>
 

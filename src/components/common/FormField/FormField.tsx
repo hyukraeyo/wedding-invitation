@@ -30,9 +30,6 @@ export interface FormFieldProps {
     action?: React.ReactNode | undefined;
     layout?: 'vertical' | 'horizontal' | undefined;
     align?: 'start' | 'center' | undefined;
-
-    hideLabel?: boolean | undefined;
-    hideDescription?: boolean | undefined;
 }
 
 export const FormField = React.memo(({
@@ -46,8 +43,6 @@ export const FormField = React.memo(({
     action,
     layout = 'vertical',
     align = 'start',
-    hideLabel = false,
-    hideDescription = false,
 }: FormFieldProps) => {
     const reactId = useId();
     const id = customId || reactId;
@@ -66,7 +61,7 @@ export const FormField = React.memo(({
                 role="group"
                 aria-labelledby={label ? `${id}-label` : undefined}
             >
-                {label && !hideLabel ? (
+                {label ? (
                     <div className={styles.fieldHeader}>
                         <div className={styles.labelGroup}>
                             <Label
@@ -76,9 +71,6 @@ export const FormField = React.memo(({
                             >
                                 {label}
                             </Label>
-                            {layout === 'vertical' && description && !error && !hideDescription ? (
-                                <p className={styles.description} id={descriptionId}>{description}</p>
-                            ) : null}
                         </div>
                         {action}
                     </div>
@@ -87,7 +79,7 @@ export const FormField = React.memo(({
                 <div className={styles.fieldContent}>
                     {children}
 
-                    {(layout === 'horizontal' || isError || (description && !hideDescription)) && (description || error) ? (
+                    {(layout === 'horizontal' || isError || description) && (description || error) ? (
                         <p className={cn(
                             styles.description,
                             isError && styles.error,
@@ -95,7 +87,7 @@ export const FormField = React.memo(({
                         )}
                             id={isError ? errorId : descriptionId}
                         >
-                            {error || (hideDescription ? null : description)}
+                            {error || description}
                         </p>
                     ) : null}
                 </div>

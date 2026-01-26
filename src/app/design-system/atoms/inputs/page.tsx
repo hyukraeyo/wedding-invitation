@@ -39,7 +39,7 @@ export default function InputsPage() {
                 <h1>Input</h1>
                 <p className={styles.textMuted}>
                     스타일만 적용된 기본 Input 및 Textarea 컴포넌트입니다. <br />
-                    실제 폼에서는 <strong>TextField</strong> 컴포넌트를 사용하는 것을 권장합니다.
+                    실제 폼에서는 <strong>FormField</strong> 컴포넌트와 함께 사용하는 것을 권장합니다.
                 </p>
             </header>
 
@@ -84,7 +84,7 @@ export default function InputsPage() {
                             defaultValue: '"md"',
                             description: "입력 필드 크기",
                             control: {
-                                type: 'radio',
+                                type: 'segmented',
                                 value: size,
                                 onChange: (val) => setSize(val as "sm" | "md" | "lg"),
                                 options: ["sm", "md", "lg"]

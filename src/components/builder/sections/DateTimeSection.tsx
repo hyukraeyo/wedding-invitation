@@ -3,8 +3,9 @@ import { InfoMessage } from '@/components/ui/InfoMessage';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useShallow } from 'zustand/react/shallow';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
-import { TextField } from '@/components/common/TextField';
-import { SwitchField } from '@/components/common/SwitchField';
+import { Input } from '@/components/ui/Input';
+import { FormField } from '@/components/common/FormField';
+import { Switch } from '@/components/ui/Switch';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import { TimePicker } from '@/components/common/TimePicker';
 import { DatePicker } from '@/components/common/DatePicker';
@@ -58,21 +59,23 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ valu
                     </Field>
 
                     {/* Additional Options */}
-                    <SwitchField
-                        checked={showCalendar}
-                        onChange={setShowCalendar}
-                        label="달력 노출"
-                    />
+                    <FormField label="달력 노출" layout="horizontal" align="center">
+                        <Switch
+                            checked={showCalendar}
+                            onCheckedChange={setShowCalendar}
+                        />
+                    </FormField>
 
                     <div className={styles.switchGroup}>
-                        <SwitchField
-                            checked={showDday}
-                            onChange={setShowDday}
-                            label="D-Day 노출"
-                        />
+                        <FormField label="D-Day 노출" layout="horizontal" align="center">
+                            <Switch
+                                checked={showDday}
+                                onCheckedChange={setShowDday}
+                            />
+                        </FormField>
                         {showDday ? (
                             <div className={styles.ddayInputWrapper}>
-                                <TextField
+                                <Input
                                     placeholder="예: (신랑), (신부)의 결혼식이 (D-Day) 남았습니다"
                                     value={ddayMessage}
                                     onChange={(e) => setDdayMessage(e.target.value)}

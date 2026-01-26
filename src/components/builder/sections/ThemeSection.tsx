@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Check } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
@@ -6,7 +6,8 @@ import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { Select } from '@/components/ui/Select';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
-import { SwitchField } from '@/components/common/SwitchField';
+import { FormField } from '@/components/common/FormField';
+import { Switch } from '@/components/ui/Switch';
 import styles from './ThemeSection.module.scss';
 import { cn } from '@/lib/utils';
 import type { ThemeFont } from '@/lib/utils/font';
@@ -85,12 +86,12 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection({ value }) {
                                 <TabsTrigger value="1.2">Large</TabsTrigger>
                             </TabsList>
                         </Tabs>
-                        <SwitchField
-                            label="Allow guest font scaling"
-                            checked={theme.allowFontScale}
-                            onChange={(checked) => setTheme({ allowFontScale: checked })}
-                            className={styles.switchSpacing || ''}
-                        />
+                        <FormField label="Allow guest font scaling" layout="horizontal" align="center">
+                            <Switch
+                                checked={theme.allowFontScale}
+                                onCheckedChange={(checked) => setTheme({ allowFontScale: checked })}
+                            />
+                        </FormField>
                     </Field>
 
                     <Field label="Background pattern">

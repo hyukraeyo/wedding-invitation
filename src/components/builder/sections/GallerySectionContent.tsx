@@ -6,8 +6,9 @@ import { IconButton } from '@/components/ui/IconButton/IconButton';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
-import { TextField } from '@/components/common/TextField';
-import { SwitchField } from '@/components/common/SwitchField';
+import { Input } from '@/components/ui/Input';
+import { FormField } from '@/components/common/FormField';
+import { Switch } from '@/components/ui/Switch';
 import { cn } from '@/lib/utils';
 import { isBlobUrl } from '@/lib/image';
 import {
@@ -242,20 +243,20 @@ export default React.memo(function GallerySectionContent() {
 
     return (
         <SectionContainer>
-            <TextField
-                label="소제목"
-                type="text"
-                value={gallerySubtitle}
-                onChange={(e) => setGallerySubtitle(e.target.value)}
-                placeholder="예: GALLERY"
-            />
-            <TextField
-                label="제목"
-                type="text"
-                value={galleryTitle}
-                onChange={(e) => setGalleryTitle(e.target.value)}
-                placeholder="예: 웨딩 갤러리"
-            />
+            <Field label="소제목">
+                <Input type="text"
+                    value={gallerySubtitle}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGallerySubtitle(e.target.value)}
+                    placeholder="예: GALLERY"
+                />
+            </Field>
+            <Field label="제목">
+                <Input type="text"
+                    value={galleryTitle}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGalleryTitle(e.target.value)}
+                    placeholder="예: 웨딩 갤러리"
+                />
+            </Field>
 
             <Field
                 label={
@@ -361,23 +362,26 @@ export default React.memo(function GallerySectionContent() {
 
             <Field label="기능 설정">
                 <div className={styles.optionGroup}>
-                    <SwitchField
-                        checked={galleryPopup}
-                        onChange={setGalleryPopup}
-                        label="확대 보기 (팝업)"
-                    />
+                    <FormField label="확대 보기 (팝업)" layout="horizontal" align="center">
+                        <Switch
+                            checked={galleryPopup}
+                            onCheckedChange={setGalleryPopup}
+                        />
+                    </FormField>
                     {galleryType === 'swiper' ? (
                         <>
-                            <SwitchField
-                                checked={galleryAutoplay}
-                                onChange={setGalleryAutoplay}
-                                label="자동 재생"
-                            />
-                            <SwitchField
-                                checked={galleryFade}
-                                onChange={setGalleryFade}
-                                label="페이드 효과"
-                            />
+                            <FormField label="자동 재생" layout="horizontal" align="center">
+                                <Switch
+                                    checked={galleryAutoplay}
+                                    onCheckedChange={setGalleryAutoplay}
+                                />
+                            </FormField>
+                            <FormField label="페이드 효과" layout="horizontal" align="center">
+                                <Switch
+                                    checked={galleryFade}
+                                    onCheckedChange={setGalleryFade}
+                                />
+                            </FormField>
                         </>
                     ) : null}
                 </div>

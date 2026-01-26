@@ -1,9 +1,9 @@
-﻿"use client";
+"use client";
 
 import React, { useState, useCallback } from 'react';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
-import { TextField } from '@/components/common/TextField';
-import { PhoneField } from '@/components/common/PhoneField';
+import { FormField } from '@/components/common/FormField';
+import { Input } from '@/components/ui/Input';
 import { useToast } from '@/hooks/use-toast';
 import { profileService } from '@/services/profileService';
 import { User, Phone } from 'lucide-react';
@@ -98,24 +98,26 @@ export function ProfileCompletionModal({
                         <div className={styles.inputIcon}>
                             <User size={18} />
                         </div>
-                        <TextField
-                            placeholder="이름 (실명)"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            className={styles.inputField}
-                        />
+                        <FormField className={styles.inputField}>
+                            <Input
+                                placeholder="이름 (실명)"
+                                value={name}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+                            />
+                        </FormField>
                     </div>
 
                     <div className={styles.inputGroup}>
                         <div className={styles.inputIcon}>
                             <Phone size={18} />
                         </div>
-                        <PhoneField
-                            placeholder="연락처 (- 없이 입력)"
-                            value={phone}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhone(e.target.value)}
-                            className={styles.inputField}
-                        />
+                        <FormField className={styles.inputField}>
+                            <Input
+                                placeholder="연락처 (- 없이 입력)"
+                                value={phone}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhone(e.target.value)}
+                            />
+                        </FormField>
                     </div>
                 </div>
 
@@ -131,6 +133,4 @@ export function ProfileCompletionModal({
     );
 }
 
-// Ensure displayName is set if not auto-inferred (good practice)
 ProfileCompletionModal.displayName = "ProfileCompletionModal";
-

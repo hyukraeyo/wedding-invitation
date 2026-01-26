@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import styles from "../../DesignSystem.module.scss";
-import Story from "../../Story";
-import DocSection from "../../DocSection";
+import DesignSystemPage from "../../DesignSystemPage";
 import { FormField } from "@/components/common/FormField";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
@@ -17,8 +15,6 @@ export default function FormFieldPageClient() {
     const [error, setError] = useState("");
     const [required, setRequired] = useState(true);
     const [layout, setLayout] = useState<"vertical" | "horizontal">("vertical");
-    const [hideLabel, setHideLabel] = useState(false);
-    const [hideDescription, setHideDescription] = useState(false);
 
     const usage = `import { FormField } from "@/components/common/FormField";
 import { Input } from "@/components/ui/Input";
@@ -29,102 +25,76 @@ import { Input } from "@/components/ui/Input";
   ${error ? `error="${error}"` : ""}
   ${required ? "required" : ""}
   layout="${layout}"
-  ${hideLabel ? "hideLabel" : ""}
-  ${hideDescription ? "hideDescription" : ""}
 >
   <Input placeholder="내용을 입력하세요" />
 </FormField>`;
 
     return (
-        <>
-            <header className={styles.pageHeader}>
-                <h1>Form Field (공통 래퍼)</h1>
-                <p className={styles.textMuted}>
-                    모든 입력 요소의 레이아웃(레이블, 설명, 에러 메시지)을 일관되게 관리하는 공통 래퍼 컴포넌트입니다.
-                    ID 자동 매핑을 통해 웹 접근성(A11y)을 완벽하게 지원합니다.
-                </p>
-            </header>
-
-            <div className={styles.storySection}>
-                <Story id="playground" title="인터랙티브 플레이그라운드" description="다양한 속성을 조절하며 공통 레이아웃 시스템을 테스트해보세요.">
-                    <div
-                        className={styles.canvas}
-                        role="region"
-                        aria-label="FormField Preview Canvas"
-                        style={{ alignItems: 'center', justifyContent: 'center', minHeight: '200px' }}
-                    >
-                        <div style={{ width: '100%', maxWidth: '400px' }}>
-                            <FormField
-                                label={label}
-                                description={description}
-                                error={error}
-                                required={required}
-                                layout={layout}
-                                hideLabel={hideLabel}
-                                hideDescription={hideDescription}
-                            >
-                                <Input placeholder="자동으로 레이블과 연결됩니다" />
-                            </FormField>
-                        </div>
+        <DesignSystemPage
+            title="Form Field (공통 래퍼)"
+            description="모든 입력 요소의 레이아웃(레이블, 설명, 에러 메시지)을 일관되게 관리하는 공통 래퍼 컴포넌트입니다. ID 자동 매핑을 통해 웹 접근성(A11y)을 완벽하게 지원합니다."
+            playground={{
+                title: "인터랙티브 플레이그라운드",
+                description: "다양한 속성을 조절하며 공통 레이아웃 시스템을 테스트해보세요.",
+                canvasStyle: { alignItems: 'center', justifyContent: 'center', minHeight: '200px' },
+                content: (
+                    <div style={{ width: '100%', maxWidth: '400px' }}>
+                        <FormField
+                            label={label || undefined}
+                            description={description || undefined}
+                            error={error || undefined}
+                            required={required}
+                            layout={layout}
+                        >
+                            <Input placeholder="자동으로 레이블과 연결됩니다" />
+                        </FormField>
                     </div>
-                </Story>
-
-                <DocSection
-                    usage={usage}
-                    props={[
-                        {
-                            name: "label",
-                            type: "ReactNode",
-                            description: "필드 레이블 (id가 정의된 경우 자동으로 htmlFor 매핑됨)",
-                            control: { type: 'text', value: label, onChange: (val) => setLabel(val as string) }
-                        },
-                        {
-                            name: "description",
-                            type: "ReactNode",
-                            description: "하단 보조 설명",
-                            control: { type: 'text', value: description, onChange: (val) => setDescription(val as string) }
-                        },
-                        {
-                            name: "error",
-                            type: "ReactNode",
-                            description: "에러 메시지 (값이 있으면 description 대신 노출되며 스타일이 변경됨)",
-                            control: { type: 'text', value: error, onChange: (val) => setError(val as string) }
-                        },
-                        {
-                            name: "required",
-                            type: "boolean",
-                            description: "필수 여부 (레이블 옆 별표 표시)",
-                            control: { type: 'boolean', value: required, onChange: (val) => setRequired(val as boolean) }
-                        },
-                        {
-                            name: "layout",
-                            type: '"vertical" | "horizontal"',
-                            description: "레이블과 입력 요소의 배치 방향",
-                            control: {
-                                type: 'radio',
-                                value: layout,
-                                onChange: (val) => setLayout(val as "vertical" | "horizontal"),
-                                options: ["vertical", "horizontal"]
-                            }
-                        },
-                        {
-                            name: "hideLabel",
-                            type: "boolean",
-                            description: "레이블 숨김 (DOM에는 존재하여 접근성 유지)",
-                            control: { type: 'boolean', value: hideLabel, onChange: (val) => setHideLabel(val as boolean) }
-                        },
-                        {
-                            name: "hideDescription",
-                            type: "boolean",
-                            description: "설명 숨김",
-                            control: { type: 'boolean', value: hideDescription, onChange: (val) => setHideDescription(val as boolean) }
-                        },
-                    ]}
-                />
-
-                <Story id="combinations" title="조합 예시" description="FormField는 모든 종류의 입력 컴포넌트와 작동합니다.">
-                    <div className={styles.canvas} style={{ display: 'flex', flexDirection: 'column', gap: '32px', padding: '40px' }}>
-
+                ),
+                usage: usage,
+                props: [
+                    {
+                        name: "label",
+                        type: "ReactNode",
+                        description: "필드 레이블 (id가 정의된 경우 자동으로 htmlFor 매핑됨)",
+                        control: { type: 'text', value: label, onChange: (val) => setLabel(val as string) }
+                    },
+                    {
+                        name: "description",
+                        type: "ReactNode",
+                        description: "하단 보조 설명",
+                        control: { type: 'text', value: description, onChange: (val) => setDescription(val as string) }
+                    },
+                    {
+                        name: "error",
+                        type: "ReactNode",
+                        description: "에러 메시지 (값이 있으면 description 대신 노출되며 스타일이 변경됨)",
+                        control: { type: 'text', value: error, onChange: (val) => setError(val as string) }
+                    },
+                    {
+                        name: "required",
+                        type: "boolean",
+                        description: "필수 여부 (레이블 옆 별표 표시)",
+                        control: { type: 'boolean', value: required, onChange: (val) => setRequired(val as boolean) }
+                    },
+                    {
+                        name: "layout",
+                        type: '"vertical" | "horizontal"',
+                        description: "레이블과 입력 요소의 배치 방향",
+                        control: {
+                            type: 'segmented',
+                            value: layout,
+                            onChange: (val) => setLayout(val as "vertical" | "horizontal"),
+                            options: ["vertical", "horizontal"]
+                        }
+                    },
+                ]
+            }}
+            combinations={{
+                title: "조합 예시",
+                description: "FormField는 모든 종류의 입력 컴포넌트와 작동합니다.",
+                canvasStyle: { display: 'flex', flexDirection: 'column', gap: '32px', padding: '40px' },
+                content: (
+                    <>
                         <FormField label="자기소개" description="간략한 소개를 남겨주세요." layout="vertical">
                             <Textarea placeholder="안녕하세요..." />
                         </FormField>
@@ -151,9 +121,9 @@ import { Input } from "@/components/ui/Input";
                                 ]}
                             />
                         </FormField>
-                    </div>
-                </Story>
-            </div>
-        </>
+                    </>
+                )
+            }}
+        />
     );
 }
