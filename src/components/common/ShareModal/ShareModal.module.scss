@@ -1,0 +1,48 @@
+.shareContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 24px 0;
+}
+
+.shareMethod {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.shareButton {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 8px;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-default);
+  
+  &:hover {
+    background: var(--color-bg-hover);
+  }
+}
+
+.shareLabel {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.shareButtonRow {
+  width: 100%;
+  display: flex;
+  gap: 12px;
+  padding-top: 16px;
+  
+  .cancelButton {
+    flex: 1;
+  }
+}

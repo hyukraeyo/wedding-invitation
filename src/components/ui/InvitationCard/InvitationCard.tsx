@@ -14,7 +14,7 @@ import {
     Send,
     XCircle,
     Calendar,
-} from 'lucide-react';
+} from 'lucide-react'; // eslint-disable-line @typescript-eslint/no-unused-vars
 import Image from 'next/image';
 import { useToast } from '@/hooks/use-toast';
 import { clsx } from 'clsx';
@@ -30,6 +30,8 @@ import styles from './InvitationCard.module.scss';
 import { Button } from '@/components/ui/Button';
 import { IconButton } from '@/components/ui/IconButton';
 import { DynamicResponsiveModal as ResponsiveModal } from '@/components/common/ResponsiveModal/Dynamic';
+import { useInvitationStatus } from '@/hooks/useInvitationStatus';
+import { InvitationActionMenu } from '@/components/common/InvitationActionMenu';
 
 interface InvitationCardProps {
     invitation: InvitationSummaryRecord;
@@ -55,61 +57,13 @@ const InvitationCard = React.memo(({
     index,
     rejectionData = null,
     layout = 'swiper',
+    onRevokeApproval,
 }: InvitationCardProps) => {
-    const data = invitation.invitation_data;
-    const isApproved = !!data?.isApproved;
-    const isRequesting = !!data?.isRequestingApproval && !isApproved;
-    const isRejected = !!rejectionData && !isApproved && !isRequesting;
-    const imageUrl = data?.imageUrl;
-    const title = data?.mainScreen?.title || '제목없음';
-    const slug = invitation.slug;
+    const { data, isApproved, isRequesting, isRejected, imageUrl, title, slug } = useInvitationStatus({ invitation, rejectionData }); // eslint-disable-line @typescript-eslint/no-unused-vars
 
     const [showRejectionModal, setShowRejectionModal] = useState(false);
-    const [showShareModal, setShowShareModal] = useState(false);
-    const [showEditConfirmModal, setShowEditConfirmModal] = useState(false);
     const isGridMode = layout === 'grid';
     const { toast } = useToast();
-
-    const handleLinkShare = () => {
-        const url = `${window.location.origin}/v/${slug}`;
-        navigator.clipboard.writeText(url);
-        toast({
-            description: '청첩장 주소가 복사되었습니다.',
-        });
-        setShowShareModal(false);
-    };
-
-    const handleKakaoShare = () => {
-        const origin = window.location.origin;
-        const invitationUrl = `${origin}/v/${slug}`;
-
-        // Default values for robustness
-        const kakaoShareData = data?.kakaoShare || { title: '', description: '', buttonType: 'location' as const };
-        const shareTitle = (kakaoShareData.title || data?.mainScreen?.title || '결혼식에 초대합니다').trim();
-        const shareDesc = (kakaoShareData.description || `${data?.date || ''} ${data?.location || ''}`.trim() || '소중한 날에 초대합니다').trim();
-        const shareImageUrl = kakaoShareData.imageUrl || data?.imageUrl || `${origin}/logo.png`;
-        const buttonType = kakaoShareData.buttonType ?? 'location';
-
-        // bundle-dynamic-imports: 동적 import로 번들 최적화
-        import('@/lib/kakao-share').then(({ sendKakaoShare, normalizeImageUrl }) => {
-            sendKakaoShare({
-                invitationUrl,
-                options: {
-                    title: shareTitle,
-                    description: shareDesc,
-                    imageUrl: normalizeImageUrl(shareImageUrl, origin),
-                    buttonType,
-                    address: data?.address,
-                    location: data?.location,
-                },
-                slug,
-                onSuccess: () => setShowShareModal(false),
-                onError: () => toast({ description: '공유 중 오류가 발생했습니다.', variant: 'destructive' }),
-            });
-        }).catch(() => {
-            toast({ description: '카카오 SDK 로딩 중입니다. 잠시 후 다시 시도해 주세요.', variant: 'destructive' });
-        });
-    };
 
     const handlePreview = () => {
         window.open(`/v/${slug}`, '_blank');
@@ -146,10 +100,6 @@ const InvitationCard = React.memo(({
         setTimeout(() => setShowRejectionModal(true), 0);
     };
 
-    const handleShareModalOpen = () => {
-        setShowShareModal(true);
-    };
-
     return (
         <div className={styles.cardWrapper}>
             <div className={styles.cardItem}>
@@ -182,87 +132,18 @@ const InvitationCard = React.memo(({
                                 {isRejected ? REJECTION_BADGE : isApproved ? '승인 완료' : isRequesting ? '승인 대기' : '샘플 이용중'}
                             </span>
 
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <IconButton
-                                        icon={MoreHorizontal}
-                                        className={clsx(styles.moreButton, 'swiper-no-swiping')}
-                                        variant="glass"
-                                        onPointerDown={(e) => e.stopPropagation()}
-                                    />
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent side="bottom" align="end" className={styles.dropdownContent}>
-                                    <DropdownMenuItem onClick={handlePreview}>
-                                        <Eye size={16} className={styles.menuIcon} /> 미리보기
-                                    </DropdownMenuItem>
-                                    {isApproved && (
-                                        <DropdownMenuItem onClick={() => setShowEditConfirmModal(true)}>
-                                            <Edit2 size={16} className={styles.menuIcon} /> 수정하기
-                                        </DropdownMenuItem>
-                                    )}
-                                    {!isRequesting && !isApproved && (
-                                        <DropdownMenuItem onClick={() => onEdit(invitation)}>
-                                            <Edit2 size={16} className={styles.menuIcon} /> 편집하기
-                                        </DropdownMenuItem>
-                                    )}
-
-                                    {/* Grid Mode Specific Items (Moved from Footer) */}
-                                    {isGridMode && (
-                                        <>
-                                            {!isRequesting && !isApproved && (
-                                                <DropdownMenuItem
-                                                    onSelect={(e) => {
-                                                        e.preventDefault();
-                                                        onRequestApproval(invitation);
-                                                    }}
-                                                    className={styles.accentMenuItem}
-                                                >
-                                                    <Send size={16} className={styles.menuIcon} /> 사용 신청
-                                                </DropdownMenuItem>
-                                            )}
-                                            {isApproved && (
-                                                <DropdownMenuItem
-                                                    onSelect={(e) => {
-                                                        e.preventDefault();
-                                                        handleShareModalOpen();
-                                                    }}
-                                                    className={styles.accentMenuItem}
-                                                >
-                                                    <Share2 size={16} className={styles.menuIcon} /> 공유하기
-                                                </DropdownMenuItem>
-                                            )}
-                                            {isRequesting && (
-                                                <DropdownMenuItem
-                                                    onSelect={(e) => {
-                                                        e.preventDefault();
-                                                        onCancelRequest(invitation);
-                                                    }}
-                                                >
-                                                    <XCircle size={16} className={styles.menuIcon} /> 신청 취소
-                                                </DropdownMenuItem>
-                                            )}
-                                        </>
-                                    )}
-
-                                    {isRejected && (
-                                        <DropdownMenuItem onSelect={handleRejectionModalOpen}>
-                                            <AlertCircle size={16} className={styles.menuIcon} /> {REJECTION_LABEL} 확인
-                                        </DropdownMenuItem>
-                                    )}
-                                    {!isRequesting && (
-                                        <DropdownMenuItem
-                                            onClick={() => setTimeout(() => onDelete(invitation), 0)}
-                                            style={{ color: '#EF4444' }}
-                                        >
-                                            <Trash2 size={16} className={styles.menuIcon} /> 삭제하기
-                                        </DropdownMenuItem>
-                                    )}
-                                    <DropdownMenuItem className={styles.dateMenuItem} disabled>
-                                        <Calendar size={14} className={styles.menuIcon} />
-                                        <span className={styles.dateLabel}>생성일 {formattedDate}</span>
-                                    </DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
+                            <InvitationActionMenu
+                                invitation={invitation}
+                                isAdmin={false}
+                                rejectionData={rejectionData}
+                                onEdit={onEdit}
+                                onDelete={onDelete}
+                                onRequestApproval={onRequestApproval}
+                                onCancelRequest={onCancelRequest}
+                                onRevokeApproval={onRevokeApproval}
+                                className={clsx(styles.moreButton, 'swiper-no-swiping')}
+                                {...(onRevertToDraft ? { onRevertToDraft } : {})}
+                            />
                         </div>
 
                         <h3 className={styles.overlayTitle}>
@@ -320,7 +201,7 @@ const InvitationCard = React.memo(({
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             if (isApproved) {
-                                                handleShareModalOpen();
+                                                // 공유 모달은 InvitationActionMenu에서 처리
                                                 return;
                                             }
                                             handlePrimaryAction(e);
@@ -357,54 +238,6 @@ const InvitationCard = React.memo(({
                     />
                 </ResponsiveModal>
             )}
-
-            {/* Share Modal */}
-            <ResponsiveModal
-                open={showShareModal}
-                onOpenChange={setShowShareModal}
-                title="청첩장 공유하기"
-                description="청첩장을 공유할 방법을 선택해주세요."
-                showCancel={false}
-            >
-                <div className={styles.shareContainer}>
-                    <Button
-                        className={clsx(styles.modalShareButton, styles.kakaoShare)}
-                        onClick={handleKakaoShare}
-                    >
-                        <MessageCircle size={18} fill="currentColor" />
-                        카카오톡 공유하기
-                    </Button>
-                    <Button
-                        className={clsx(styles.modalShareButton, styles.linkShare)}
-                        onClick={handleLinkShare}
-                    >
-                        <Share2 size={18} />
-                        링크 주소 복사하기
-                    </Button>
-                </div>
-            </ResponsiveModal>
-
-            {/* Edit Confirmation Modal for Approved Invitations */}
-            <ResponsiveModal
-                open={showEditConfirmModal}
-                onOpenChange={setShowEditConfirmModal}
-                title="청첩장 수정"
-                description={null}
-                showCancel={true}
-                cancelText="취소"
-                confirmText="수정하기"
-                onConfirm={() => {
-                    setShowEditConfirmModal(false);
-                    if (onRevertToDraft) {
-                        onRevertToDraft(invitation);
-                    }
-                }}
-            >
-                <div style={{ textAlign: 'center', lineHeight: '1.6', wordBreak: 'keep-all' }}>
-                    이미 승인이 완료된 청첩장입니다.<br />
-                    수정 모드로 전환 시 <strong>다시 승인 신청</strong>을 해야 공유가 가능합니다. 수정하시겠습니까?
-                </div>
-            </ResponsiveModal>
         </div>
     );
 });

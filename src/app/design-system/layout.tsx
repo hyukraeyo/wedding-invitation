@@ -20,7 +20,8 @@ import {
     Ruler,
     ChevronDown,
     Settings,
-    List
+    List,
+    Calendar,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
@@ -41,6 +42,7 @@ const navSections = [
         items: [
             { id: "buttons", label: "Buttons", icon: MousePointer2, href: "/design-system/atoms/buttons" },
             { id: "badges", label: "Badges", icon: BadgeCheck, href: "/design-system/atoms/badges" },
+            { id: "calendar", label: "Calendar", icon: Calendar, href: "/design-system/atoms/calendar" },
             { id: "inputs", label: "Text Inputs", icon: FormInput, href: "/design-system/atoms/inputs" },
             { id: "skeleton", label: "Skeleton / Loader", icon: Loader, href: "/design-system/atoms/skeleton" },
         ],
@@ -140,7 +142,7 @@ export default function DesignSystemLayout({
                     {navSections.map((section) => (
                         <div key={section.title} className={styles.sidebarSection}>
                             <div className={styles.sidebarSectionTitle}>{section.title}</div>
-                            {section.items.map((item) => {
+                            {section.items.map((item: { id: string; label: string; icon: React.ElementType; href: string; subNav?: Array<{id: string; label: string; href: string}> }) => {
                                 const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
                                 const hasSubNav = item.subNav && item.subNav.length > 0;
 
@@ -153,7 +155,7 @@ export default function DesignSystemLayout({
                                                 isActive && styles["sidebarLink--active"]
                                             )}
                                         >
-                                            <item.icon size={18} />
+                                            {React.createElement(item.icon as React.FC<{ size?: number }>, { size: 18 })}
                                             <span style={{ flex: 1 }}>{item.label}</span>
                                             {hasSubNav && (
                                                 <ChevronDown
@@ -169,7 +171,7 @@ export default function DesignSystemLayout({
 
                                         {hasSubNav && isActive && (
                                             <div className={styles.sidebarSubNav}>
-                                                {item.subNav.map((subItem) => (
+                                                {(item.subNav || []).map((subItem) => (
                                                     <Link
                                                         key={subItem.id}
                                                         href={subItem.href}
