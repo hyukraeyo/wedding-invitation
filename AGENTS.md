@@ -214,3 +214,5 @@ src/
 6. **Accessibility**: Ensure keyboard navigation and screen reader support
 7. **Error Boundaries**: Implement proper error handling at component level
 8. **Design Consistency**: Follow TDS Mobile design principles strictly
+9. **Korean Commit Messages**: Always generate commit messages in **Korean** following [Conventional Commits](https://www.conventionalcommits.org/).
+   - Format: `type: message in Korean` (e.g., `feat: 서비스 소개 페이지 추가`)

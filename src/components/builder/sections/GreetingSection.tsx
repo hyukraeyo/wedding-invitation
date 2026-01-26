@@ -12,7 +12,7 @@ import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 import { InfoMessage } from '@/components/ui/InfoMessage';
 import { SampleList } from '@/components/ui/SampleList';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { AccordionItem } from '@/components/common/AccordionItem';
+import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
 import { TextField } from '@/components/common/TextField';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
@@ -90,102 +90,102 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
 
     return (
         <>
-            <AccordionItem
-                value={value}
-                title="인사말"
-                icon={MessageSquare}
-                isOpen={isOpen}
-                isCompleted={message.length > 0}
-                action={
-                    <HeaderAction
-                        icon={Sparkles}
-                        label="추천 문구"
-                        onClick={() => {
-                            setIsSampleModalOpen(true);
-                        }}
-                    />
-                }
-            >
-                <SectionContainer>
-                    {/* Subtitle */}
-                    <TextField
-                        label="소제목"
-                        type="text"
-                        value={greetingSubtitle}
-                        onChange={(e) => setGreetingSubtitle(e.target.value)}
-                        placeholder="예: INVITATION"
-                    />
+            <AccordionItem value={value} autoScroll>
+                <AccordionTrigger
+                    icon={MessageSquare}
+                    action={
+                        <HeaderAction
+                            icon={Sparkles}
+                            label="추천 문구"
+                            onClick={() => {
+                                setIsSampleModalOpen(true);
+                            }}
+                        />
+                    }
+                >
+                    인사말
+                </AccordionTrigger>
+                <AccordionContent>
+                    <SectionContainer>
+                        {/* Subtitle */}
+                        <TextField
+                            label="소제목"
+                            type="text"
+                            value={greetingSubtitle}
+                            onChange={(e) => setGreetingSubtitle(e.target.value)}
+                            placeholder="예: INVITATION"
+                        />
 
-                    {/* Title */}
-                    <TextField
-                        label="제목"
-                        type="text"
-                        value={greetingTitle}
-                        onChange={(e) => setGreetingTitle(e.target.value)}
-                        placeholder="예: 소중한 분들을 초대합니다"
-                    />
+                        {/* Title */}
+                        <TextField
+                            label="제목"
+                            type="text"
+                            value={greetingTitle}
+                            onChange={(e) => setGreetingTitle(e.target.value)}
+                            placeholder="예: 소중한 분들을 초대합니다"
+                        />
 
-                    {/* Content */}
-                    <Field label="내용">
-                        {isOpen ? (
-                            <RichTextEditor
-                                content={message}
-                                onChange={setMessage}
-                                placeholder="축하해주시는 분들께 전할 소중한 메시지를 입력하세요."
-                            />
-                        ) : null}
-                    </Field>
-
-                    {/* Photo Upload */}
-                    <Field label="사진">
-                        <div className={styles.optionWrapper}>
-                            <ImageUploader
-                                value={greetingImage}
-                                onChange={setGreetingImage}
-                                placeholder="인사말 사진 추가"
-                                ratio={greetingRatio}
-                                onRatioChange={(val) => setGreetingRatio(val)}
-                            />
-                        </div>
-                    </Field>
-
-                    {/* Name Options */}
-                    <Field label="성함 표기">
-                        <div className={styles.optionWrapper}>
-                            <Tabs
-                                value={nameOptionValue}
-                                onValueChange={handleNameOptionChange}
-                            >
-                                <TabsList fluid>
-                                    <TabsTrigger value="bottom">하단 표기</TabsTrigger>
-                                    <TabsTrigger value="custom">직접 입력</TabsTrigger>
-                                    <TabsTrigger value="none">표시 안 함</TabsTrigger>
-                                </TabsList>
-                            </Tabs>
-
-                            {enableFreeformNames ? (
-                                <div className={styles.optionWrapper}>
-                                    <TextField
-                                        label="신랑 측 표기"
-                                        value={groomNameCustom}
-                                        onChange={(e) => setGroomNameCustom(e.target.value)}
-                                        placeholder="예: 아버지 홍길동 · 어머니 김철수 의 장남 길동"
-                                    />
-                                    <TextField
-                                        label="신부 측 표기"
-                                        value={brideNameCustom}
-                                        onChange={(e) => setBrideNameCustom(e.target.value)}
-                                        placeholder="예: 아버지 임걱정 · 어머니 박순이 의 장녀 순희"
-                                    />
-                                    <InfoMessage>
-                                        기본 성함 표기 대신 사용자가 직접 작성한 문구로 성함을 표시합니다.
-                                    </InfoMessage>
-                                </div>
+                        {/* Content */}
+                        <Field label="내용">
+                            {isOpen ? (
+                                <RichTextEditor
+                                    content={message}
+                                    onChange={setMessage}
+                                    placeholder="축하해주시는 분들께 전할 소중한 메시지를 입력하세요."
+                                />
                             ) : null}
-                        </div>
-                    </Field>
-                </SectionContainer>
+                        </Field>
 
+                        {/* Photo Upload */}
+                        <Field label="사진">
+                            <div className={styles.optionWrapper}>
+                                <ImageUploader
+                                    value={greetingImage}
+                                    onChange={setGreetingImage}
+                                    placeholder="인사말 사진 추가"
+                                    ratio={greetingRatio}
+                                    onRatioChange={(val) => setGreetingRatio(val)}
+                                />
+                            </div>
+                        </Field>
+
+                        {/* Name Options */}
+                        <Field label="성함 표기">
+                            <div className={styles.optionWrapper}>
+                                <Tabs
+                                    value={nameOptionValue}
+                                    onValueChange={handleNameOptionChange}
+                                >
+                                    <TabsList fluid>
+                                        <TabsTrigger value="bottom">하단 표기</TabsTrigger>
+                                        <TabsTrigger value="custom">직접 입력</TabsTrigger>
+                                        <TabsTrigger value="none">표시 안 함</TabsTrigger>
+                                    </TabsList>
+                                </Tabs>
+
+                                {enableFreeformNames ? (
+                                    <div className={styles.optionWrapper}>
+                                        <TextField
+                                            label="신랑 측 표기"
+                                            value={groomNameCustom}
+                                            onChange={(e) => setGroomNameCustom(e.target.value)}
+                                            placeholder="예: 아버지 홍길동 · 어머니 김철수 의 장남 길동"
+                                        />
+                                        <TextField
+                                            label="신부 측 표기"
+                                            value={brideNameCustom}
+                                            onChange={(e) => setBrideNameCustom(e.target.value)}
+                                            placeholder="예: 아버지 임걱정 · 어머니 박순이 의 장녀 순희"
+                                        />
+                                        <InfoMessage>
+                                            기본 성함 표기 대신 사용자가 직접 작성한 문구로 성함을 표시합니다.
+                                        </InfoMessage>
+                                    </div>
+                                ) : null}
+                            </div>
+                        </Field>
+                    </SectionContainer>
+                </AccordionContent>
             </AccordionItem>
 
             {/* Sample Phrases Modal */}

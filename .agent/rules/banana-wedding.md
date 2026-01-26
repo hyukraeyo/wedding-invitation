@@ -73,6 +73,11 @@ npx shadcn@latest add [component]
 - ESLint 규칙 준수
 - 빌드 에러 없이 커밋
 
+### 7. Git & Commit Convention (Strict)
+- **한글 사용 필수**: 커밋 메시지 생성(Generation) 시 반드시 **한글**을 사용합니다.
+- **컨벤션**: [Conventional Commits](https://www.conventionalcommits.org/) 형식을 따릅니다.
+  - 예: `feat: 새로운 기능 추가`, `fix: 버그 수정`, `refactor: 코드 리팩토링`
+
 ### 6. 모달/드로어 aria-hidden 충돌 방지 (Built-in)
 
 **문제**: Radix UI/Vaul은 모달이 열릴 때 백그라운드에 `aria-hidden="true"`를 적용하지만, 트리거 버튼이 포커스를 유지하면 접근성 충돌 발생

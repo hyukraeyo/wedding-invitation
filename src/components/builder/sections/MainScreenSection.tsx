@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 
 import { Home, Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { AccordionItem } from '@/components/common/AccordionItem';
+import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
 import { HeaderAction } from '@/components/common/HeaderAction';
 import { SampleList } from '@/components/ui/SampleList';
 import type { SectionProps, SamplePhraseItem } from '@/types/builder';
@@ -35,21 +35,22 @@ export default function MainScreenSection({ isOpen, value }: SectionProps) {
 
     return (
         <>
-            <AccordionItem
-                value={value}
-                title="메인 화면"
-                icon={Home}
-                isOpen={isOpen}
-                isCompleted={!!imageUrl}
-                action={
-                    <HeaderAction
-                        icon={Sparkles}
-                        label="추천 문구"
-                        onClick={() => setIsSampleModalOpen(true)}
-                    />
-                }
-            >
-                {isOpen ? <MainScreenSectionContent /> : null}
+            <AccordionItem value={value} autoScroll>
+                <AccordionTrigger
+                    icon={Home}
+                    action={
+                        <HeaderAction
+                            icon={Sparkles}
+                            label="추천 문구"
+                            onClick={() => setIsSampleModalOpen(true)}
+                        />
+                    }
+                >
+                    메인 화면
+                </AccordionTrigger>
+                <AccordionContent>
+                    {isOpen ? <MainScreenSectionContent /> : null}
+                </AccordionContent>
             </AccordionItem>
 
             {/* Sample Titles Modal */}

@@ -2,7 +2,7 @@ import React from 'react';
 import { MapPin } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import dynamic from 'next/dynamic';
-import { AccordionItem } from '@/components/common/AccordionItem';
+import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
 import type { SectionProps } from '@/types/builder';
 import styles from './LocationSection.module.scss';
 
@@ -19,14 +19,13 @@ const LocationSection = React.memo<SectionProps>(function LocationSection({ valu
     const address = useInvitationStore(state => state.address);
 
     return (
-        <AccordionItem
-            value={value}
-            title="예식 장소"
-            icon={MapPin}
-            isOpen={isOpen}
-            isCompleted={!!address}
-        >
-            {isOpen ? <LocationSectionContent /> : null}
+        <AccordionItem value={value} autoScroll>
+            <AccordionTrigger icon={MapPin}>
+                예식 장소
+            </AccordionTrigger>
+            <AccordionContent>
+                {isOpen ? <LocationSectionContent /> : null}
+            </AccordionContent>
         </AccordionItem>
     );
 });
