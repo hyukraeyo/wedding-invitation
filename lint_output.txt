@@ -1,29 +1,6 @@
 
-> banana-wedding@0.1.0 lint
-> eslint
-
-
-C:\Users\johr9\Documents\git\wedding-invitation\src\app\design-system\DesignSystemPage.tsx
-  74:48  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-
-C:\Users\johr9\Documents\git\wedding-invitation\src\app\design-system\molecules\form-field\FormFieldPageClient.tsx
-    4:8   warning  'styles' is defined but never used  @typescript-eslint/no-unused-vars
-   41:26  error    'FormField' is not defined          react/jsx-no-undef
-   50:30  error    'Input' is not defined              react/jsx-no-undef
-  111:26  error    'FormField' is not defined          react/jsx-no-undef
-  112:30  error    'Textarea' is not defined           react/jsx-no-undef
-  115:26  error    'FormField' is not defined          react/jsx-no-undef
-  116:30  error    'Switch' is not defined             react/jsx-no-undef
-  119:26  error    'FormField' is not defined          react/jsx-no-undef
-  120:30  error    'RadioGroup' is not defined         react/jsx-no-undef
-  128:26  error    'FormField' is not defined          react/jsx-no-undef
-  129:30  error    'Select' is not defined             react/jsx-no-undef
-
-C:\Users\johr9\Documents\git\wedding-invitation\src\app\design-system\molecules\radio-group\RadioGroupPageClient.tsx
-  4:8  warning  'styles' is defined but never used  @typescript-eslint/no-unused-vars
-
 C:\Users\johr9\Documents\git\wedding-invitation\src\components\ui\Select\Select.tsx
   91:29  warning  The attribute aria-invalid is not supported by the role button. This role is implicit on the element button  jsx-a11y/role-supports-aria-props
 
-✖ 14 problems (11 errors, 3 warnings)
+✖ 1 problem (0 errors, 1 warning)
 

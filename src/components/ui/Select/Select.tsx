@@ -95,7 +95,6 @@ const Select = <T extends string | number>({
                                 className={cn(styles.trigger, sizeClass, triggerClassName)}
                                 onClick={() => setIsOpen(true)}
                                 aria-describedby={describedBy}
-                                aria-invalid={isError ? "true" : undefined}
                             >
                                 <span className={cn(!selectedOption && styles.placeholder)}>
                                     {selectedOption ? selectedOption.label : placeholder}
@@ -137,7 +136,6 @@ const Select = <T extends string | number>({
                     className={cn(triggerClassName)}
                     size={size}
                     aria-describedby={describedBy}
-                    aria-invalid={isError ? "true" : undefined}
                 >
                     <SelectValue placeholder={placeholder} />
                 </SelectTrigger>
