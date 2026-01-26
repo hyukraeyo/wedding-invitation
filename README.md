@@ -76,6 +76,7 @@
 3.  **Hybrid Component Pattern**: `ComponentName/ComponentName.tsx` + `ComponentName.module.scss` + `index.ts` 구조를 따릅니다.
 4.  **Server Components First**: 모든 데이터 페칭은 서버 컴포넌트에서 수행하며, 클라이언트 사이드 페칭은 지양합니다.
 5.  **Mobile First**: 모든 디자인과 인터랙션은 모바일 환경(Portrait)에 최적화합니다.
+6.  **Design System Documentation**: 모든 `ui` 컴포넌트는 `src/app/design-system`에 가이드 문서를 포함해야 합니다.
 
 ## 🛠️ 시작하기
 

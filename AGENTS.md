@@ -214,5 +214,6 @@ src/
 6. **Accessibility**: Ensure keyboard navigation and screen reader support
 7. **Error Boundaries**: Implement proper error handling at component level
 8. **Design Consistency**: Follow TDS Mobile design principles strictly
-9. **Korean Commit Messages**: Always generate commit messages in **Korean** following [Conventional Commits](https://www.conventionalcommits.org/).
+9. **Design System Documentation**: When adding new UI components to `src/components/ui`, always create a documentation page in `src/app/design-system` following [Section 9. 디자인 시스템 가이드] in `ARCHITECTURE.md`. Use `usePropControls` for interactive playgrounds.
+10. **Korean Commit Messages**: Always generate commit messages in **Korean** following [Conventional Commits](https://www.conventionalcommits.org/).
    - Format: `type: message in Korean` (e.g., `feat: 서비스 소개 페이지 추가`)
