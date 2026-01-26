@@ -378,3 +378,52 @@ persist((set) => ({...}), {
   - 예: `feat: 새로운 기능 추가`, `fix: 버그 수정`, `refactor: 코드 리팩토링`
 
 ---
+
+### 9. 디자인 시스템 가이드 (Design System Guide)
+
+새로운 UI 컴포넌트(`src/components/ui`)를 추가하거나 수정할 때, 반드시 디자인 시스템 문서(`src/app/design-system`)에도 함께 대응해야 합니다.
+
+#### **9.1 디자인 시스템 폴더 구조**
+- **위치**: 성격에 따라 `foundation`, `atoms`, `molecules`, `organisms` 폴더에 배치합니다.
+- **구성**:
+  - `page.tsx`: 서버 컴포넌트로 구현하며, `Metadata` 정의 및 Client Page 호출만 담당합니다.
+  - `[ComponentName]PageClient.tsx`: 실제 플레이그라운드 인터랙션과 문서화를 담당하는 클라이언트 컴포넌트입니다.
+
+#### **9.2 플레이그라운드 구현 (`usePropControls`)**
+컴포넌트의 Props를 실시간으로 테스트할 수 있도록 `usePropControls` 훅을 활용합니다.
+
+```tsx
+// 구현 예시
+const { values, setValue, getPropItems } = usePropControls({
+  variant: {
+    type: 'segmented',
+    defaultValue: 'default',
+    options: ['default', 'outline', 'ghost'],
+    description: "버튼의 시각적 스타일",
+    componentType: '"default" | "outline" | "ghost"'
+  },
+  // ... 기타 Props
+});
+
+return (
+  <DesignSystemPage
+    title="Button"
+    description="..."
+    playground={{
+      title: "Playground",
+      content: <Button {...values}>Click Me</Button>,
+      usage: `<Button variant="${values.variant}">Click Me</Button>`,
+      props: getPropItems()
+    }}
+  />
+);
+```
+
+#### **9.3 사이드바 등록 (Layout)**
+새로운 디자인 시스템 페이지를 추가한 후에는 반드시 `src/app/design-system/layout.tsx`의 `navSections` 배열에 해당 항목을 등록하여 네비게이션이 가능하도록 합니다.
+
+#### **9.4 일관된 미학 (Banana Styling)**
+- **Primary Color**: 모든 예시에서 기본값은 바나나 옐로우(`#FBC02D`)를 지향합니다.
+- **Canvas Area**: `Story` 또는 `DesignSystemPage`의 `canvasStyle`을 통해 컴포넌트가 돋보일 수 있는 충분한 여백과 배경을 제공합니다.
+
+---

@@ -59,6 +59,17 @@ src/components/ui/ComponentName/
 - ✅ displayName 필수 설정
 - ✅ SCSS 변수는 `@use "../../../styles/variables" as v;`로 import
 
+### 4.2 디자인 시스템 문서화 (Mandatory)
+- 모든 `ui` 컴포넌트는 `src/app/design-system`에 문서화 페이지가 존재해야 함.
+- **구조**: `page.tsx`(Server) + `[Component]PageClient.tsx`(Client).
+- **인터랙션**: `usePropControls`를 사용하여 실시간 Props 변경 기능 제공.
+- **등록**: `src/app/design-system/layout.tsx`의 사이드바에 항목 추가 필수.
+
+### 5. 코드 품질
+- TypeScript strict 모드 필수
+- ESLint 규칙 준수
+- 빌드 에러 없이 커밋
+
 **Shadcn CLI 사용 시**
 ```bash
 npx shadcn@latest add [component]
@@ -68,17 +79,12 @@ npx shadcn@latest add [component]
 # 3. Tailwind 코드를 SCSS Modules로 이전
 ```
 
-### 5. 코드 품질
-- TypeScript strict 모드 필수
-- ESLint 규칙 준수
-- 빌드 에러 없이 커밋
-
-### 7. Git & Commit Convention (Strict)
+### 6. Git & Commit Convention (Strict)
 - **한글 사용 필수**: 커밋 메시지 생성(Generation) 시 반드시 **한글**을 사용합니다.
 - **컨벤션**: [Conventional Commits](https://www.conventionalcommits.org/) 형식을 따릅니다.
   - 예: `feat: 새로운 기능 추가`, `fix: 버그 수정`, `refactor: 코드 리팩토링`
 
-### 6. 모달/드로어 aria-hidden 충돌 방지 (Built-in)
+### 7. 모달/드로어 aria-hidden 충돌 방지 (Built-in)
 
 **문제**: Radix UI/Vaul은 모달이 열릴 때 백그라운드에 `aria-hidden="true"`를 적용하지만, 트리거 버튼이 포커스를 유지하면 접근성 충돌 발생
 
