@@ -42,24 +42,24 @@
   &--variant-solid {
     background-color: var(--btn-bg, v.$color-primary);
     color: var(--btn-color, v.$zinc-900);
-    box-shadow: 
+    /* box-shadow: 
       0 1px 2px rgba(0, 0, 0, 0.05),
       0 0 0 1px rgba(0, 0, 0, 0.02),
-      0 1px 0 rgba(255, 255, 255, 0.25) inset;
+      0 1px 0 rgba(255, 255, 255, 0.25) inset; */
 
     @include m.hover {
       background-color: var(--btn-bg, v.$color-primary-hover);
       filter: brightness(0.95); // Subtle darkening for custom colors
-      box-shadow: 
+      /* box-shadow: 
         0 4px 12px rgba(v.$color-primary, 0.25),
-        0 0 0 1px rgba(0, 0, 0, 0.02);
+        0 0 0 1px rgba(0, 0, 0, 0.02); */
       transform: translateY(-1px);
     }
 
     &:active {
       transform: translateY(0) scale(v.$scale-press);
       background-color: v.$color-primary-dark;
-      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+      // box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
     }
   }
 
@@ -77,13 +77,13 @@
     background-color: white;
     border-color: v.$zinc-200;
     color: v.$zinc-900;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    // box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 
     @include m.hover {
       background-color: v.$zinc-50;
       border-color: v.$zinc-300;
       color: v.$zinc-900;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      // box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
     &:active {
@@ -127,9 +127,9 @@
     border: 1px solid rgba(255, 255, 255, 0.25);
     color: white;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-    box-shadow: 
+    /* box-shadow: 
       0 4px 16px rgba(0, 0, 0, 0.1),
-      inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+      inset 0 0 0 1px rgba(255, 255, 255, 0.1); */
 
     &::before {
       content: "";
@@ -142,7 +142,7 @@
     @include m.hover {
       background: rgba(255, 255, 255, 0.2);
       border-color: rgba(255, 255, 255, 0.45);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      // box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
       transform: translateY(-1px);
     }
 

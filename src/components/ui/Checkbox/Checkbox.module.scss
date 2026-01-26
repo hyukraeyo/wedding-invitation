@@ -24,7 +24,7 @@
     background-color: v.$color-primary;
     border-color: v.$color-primary;
     color: v.$zinc-900;
-    box-shadow: 0 2px 8px rgba(v.$color-primary, 0.2);
+    // box-shadow: 0 2px 8px rgba(v.$color-primary, 0.2);
   }
 
   &:active {
@@ -43,7 +43,7 @@
   align-items: center;
   justify-content: center;
   color: inherit;
-  
+
   :global(svg) {
     width: 14px;
     height: 14px;

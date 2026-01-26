@@ -13,28 +13,20 @@
   color: v.$zinc-900;
   height: v.$control-height-md;
   transition: all v.$transition-200 v.$ease-ios;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
 
   @include m.focus-ring;
 
   @include m.hover {
     border-color: v.$zinc-300;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
   }
 
   &:focus {
     border-color: v.$color-primary;
-    box-shadow: 
-      0 0 0 4px rgba(v.$color-primary, 0.1),
-      0 1px 2px rgba(0, 0, 0, 0.05);
     background-color: white;
   }
 
   &[data-error="true"] {
     border-color: v.$red-500 !important;
-    &:focus {
-      box-shadow: 0 0 0 4px rgba(v.$red-500, 0.1);
-    }
   }
 
   &:disabled {
@@ -51,6 +43,7 @@
   &[type="file"] {
     padding-top: 0.5rem;
     cursor: pointer;
+
     &::file-selector-button {
       @include m.button-base;
       height: 28px;
@@ -60,6 +53,7 @@
       border: 1px solid v.$zinc-200;
       border-radius: v.$radius-sm;
       margin-right: 12px;
+
       &:hover {
         background: v.$zinc-200;
       }

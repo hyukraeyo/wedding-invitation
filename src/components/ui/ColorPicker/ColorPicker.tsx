@@ -40,7 +40,7 @@ export const ColorPicker = ({ value, colors = [], onChange, className }: ColorPi
                     )}
                     style={{
                         backgroundColor: color,
-                        boxShadow: value === color ? `0 0 0 2px white, 0 0 0 4px ${ringColor}` : undefined
+                        color: ringColor
                     }}
                     title={color}
                     type="button"

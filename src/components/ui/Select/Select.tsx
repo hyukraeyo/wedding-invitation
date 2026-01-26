@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils"
 import styles from "./Select.module.scss"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { ResponsiveModal } from "@/components/common/ResponsiveModal"
+import { Menu } from "../Menu"
 
 const SelectRoot = SelectPrimitive.Root
 
@@ -53,10 +54,18 @@ const Select = <T extends string | number>({
     const isDesktop = useMediaQuery("(min-width: 768px)");
     const showDrawer = mobileOnly || (!desktopOnly && !isDesktop);
     const [isOpen, setIsOpen] = React.useState(false);
+    const [internalValue, setInternalValue] = React.useState<T | undefined>(defaultValue);
+
+    const currentValue = value !== undefined ? value : internalValue;
+
+    const handleValueChange = (val: T) => {
+        setInternalValue(val);
+        onValueChange?.(val);
+    };
 
     // If options are provided, use the high-level responsive implementation
     if (options) {
-        const selectedOption = options.find(opt => opt.value === value || opt.value === defaultValue);
+        const selectedOption = options.find(opt => opt.value === currentValue);
 
         if (showDrawer) {
             return (
@@ -81,22 +90,17 @@ const Select = <T extends string | number>({
                     >
                         <div className={styles.optionsList}>
                             {options.map((option) => (
-                                <button
+                                <Menu.CheckItem
                                     key={String(option.value)}
-                                    type="button"
+                                    checked={option.value === currentValue}
                                     disabled={option.disabled}
-                                    className={cn(
-                                        styles.optionItem,
-                                        option.value === value && styles.selected
-                                    )}
                                     onClick={() => {
-                                        onValueChange?.(option.value);
+                                        handleValueChange(option.value);
                                         setIsOpen(false);
                                     }}
                                 >
-                                    <span>{option.label}</span>
-                                    {option.value === value && <Check className={styles.checkIcon} />}
-                                </button>
+                                    {option.label}
+                                </Menu.CheckItem>
                             ))}
                         </div>
                     </ResponsiveModal>
@@ -108,7 +112,7 @@ const Select = <T extends string | number>({
             <SelectRoot
                 {...(value !== undefined ? { value: String(value) } : {})}
                 {...(defaultValue !== undefined ? { defaultValue: String(defaultValue) } : {})}
-                onValueChange={(val) => onValueChange?.(val as T)}
+                onValueChange={(val) => handleValueChange(val as T)}
                 {...(disabled !== undefined ? { disabled } : {})}
                 {...props}
             >
@@ -135,7 +139,7 @@ const Select = <T extends string | number>({
         <SelectRoot
             {...(value !== undefined ? { value: String(value) } : {})}
             {...(defaultValue !== undefined ? { defaultValue: String(defaultValue) } : {})}
-            onValueChange={(val) => onValueChange?.(val as T)}
+            onValueChange={(val) => handleValueChange(val as T)}
             {...(disabled !== undefined ? { disabled } : {})}
             {...props}
         >

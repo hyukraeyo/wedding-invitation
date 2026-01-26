@@ -45,7 +45,6 @@
   border: 1px solid v.$zinc-200;
   background-color: white;
   color: v.$zinc-900;
-  box-shadow: v.$shadow-md;
 
   &--popper {
     max-height: min(300px, var(--radix-select-content-available-height));
@@ -132,48 +131,12 @@
 }
 
 // Mobile Drawer Specific Styles
-.drawerContent {
-  padding: 0;
-}
-
 .optionsList {
   display: flex;
   flex-direction: column;
   width: 100%;
-  padding: 0 !important; // 🍌 Drawer 내부 패딩 중복 방지 (강제 적용)
+  padding: 0;
   gap: 2px;
-}
-
-.optionItem {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 1.25rem;
-  text-align: left;
-  background-color: transparent;
-  border: none;
-  border-radius: v.$radius-md;
-  transition: all v.$transition-fast v.$ease-ios;
-  cursor: pointer;
-  color: v.$zinc-700;
-
-  &:active {
-    background-color: v.$zinc-100;
-    transform: scale(0.98);
-  }
-
-  &.selected {
-    color: v.$color-primary-dark;
-    font-weight: 600;
-    background-color: rgba(v.$color-primary, 0.05);
-  }
-}
-
-.checkIcon {
-  width: 1.25rem;
-  height: 1.25rem;
-  color: v.$color-primary;
 }
 
 .placeholder {

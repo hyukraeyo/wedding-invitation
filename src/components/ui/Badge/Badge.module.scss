@@ -14,7 +14,7 @@
 
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 2px v.$color-background, 0 0 0 4px v.$color-primary;
+    // box-shadow: 0 0 0 2px v.$color-background, 0 0 0 4px v.$color-primary;
   }
 
   // Variants
@@ -34,7 +34,7 @@
     color: v.$zinc-900;
 
     &:hover {
-        background-color: v.$zinc-200;
+      background-color: v.$zinc-200;
     }
   }
 
@@ -44,7 +44,7 @@
     color: white;
 
     &:hover {
-        background-color: v.$rose-600;
+      background-color: v.$rose-600;
     }
   }
 
@@ -53,18 +53,18 @@
     color: v.$zinc-900;
 
     &:hover {
-        background-color: v.$zinc-50;
+      background-color: v.$zinc-50;
     }
   }
 
   &--variant-success {
-      border-color: transparent;
-      background-color: v.$green-100;
-      color: v.$green-800;
+    border-color: transparent;
+    background-color: v.$green-100;
+    color: v.$green-800;
 
-      &:hover {
-          background-color: v.$green-200;
-      }
+    &:hover {
+      background-color: v.$green-200;
+    }
   }
 
   // Sizes can be added if needed, currently just one standard size

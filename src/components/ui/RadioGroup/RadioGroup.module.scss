@@ -16,7 +16,7 @@
   cursor: pointer;
   padding: 0;
   outline: none;
-  
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -44,9 +44,6 @@
   &[data-state='checked'] {
     border-color: v.$color-primary;
     background-color: white;
-    
-    // Slight shadow when active
-    box-shadow: 0 0 0 1px rgba(v.$color-primary, 0.1);
   }
 }
 
@@ -63,7 +60,7 @@
   height: 0.625rem;
   border-radius: v.$radius-full;
   background-color: v.$color-primary;
-  
+
   // Fancy scale animation
   animation: radio-scale v.$transition-200 v.$ease-ios forwards;
 }
@@ -73,9 +70,30 @@
     transform: scale(0);
     opacity: 0;
   }
+
   to {
     transform: scale(1);
     opacity: 1;
+  }
+}
+
+// Option Wrapper (Label + Radio Item)
+.optionWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: v.$zinc-900;
+  line-height: 1;
+  cursor: pointer;
+
+  &[data-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.7;
   }
 }
 
@@ -85,17 +103,17 @@
   display: flex;
   align-items: center;
   gap: 1rem;
-  
+
   padding: 1rem 1.25rem;
   border-radius: v.$radius-md;
   border: 1px solid v.$zinc-200;
   background-color: white;
-  
+
   cursor: pointer;
   transition: all v.$transition-fast v.$ease-standard;
-  
+
   @include m.focus-ring;
-  
+
   &:hover:not(:disabled) {
     border-color: v.$zinc-300;
     background-color: v.$zinc-50;
@@ -104,7 +122,7 @@
   &[data-state='checked'] {
     border-color: v.$color-primary;
     background-color: rgba(v.$color-primary, 0.03);
-    
+
     .item {
       border-color: v.$color-primary;
     }
@@ -113,5 +131,116 @@
   &:disabled {
     cursor: not-allowed;
     opacity: 0.5;
+  }
+}
+
+// ============================================
+// Segmented Variant
+// ============================================
+.segmentedRoot {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  background: v.$zinc-100;
+  border-radius: v.$radius-md;
+  padding: 4px;
+  isolation: isolate;
+  border: 1px solid v.$zinc-200;
+  gap: 2px;
+
+  // Disable default flex-direction column from .group
+  flex-direction: row;
+
+  &.fullWidth {
+    display: flex;
+    width: 100%;
+  }
+
+  &.small {
+    height: 36px;
+    border-radius: v.$radius-sm;
+  }
+
+  &.medium {
+    height: 48px;
+  }
+
+  &.large {
+    height: 56px;
+  }
+}
+
+.segmentedIndicator {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 0;
+  background: white;
+  border-radius: calc(v.$radius-md - 4px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+  transition: transform 350ms v.$ease-ios, width 350ms v.$ease-ios;
+  z-index: 0;
+  pointer-events: none;
+
+  .small & {
+    border-radius: calc(v.$radius-sm - 2px);
+  }
+}
+
+.segmentedItem {
+  position: relative;
+  flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: v.$zinc-500;
+  cursor: pointer;
+  font-weight: 500;
+  transition: color 200ms ease, transform 200ms v.$ease-standard;
+  z-index: 1;
+  padding: 0 16px;
+  white-space: nowrap;
+  outline: none;
+  border-radius: v.$radius-sm;
+
+  &:hover:not([data-state='checked']):not(:disabled) {
+    color: v.$zinc-900;
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+
+  &[data-state='checked'] {
+    color: v.$color-primary-dark;
+    font-weight: 700;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  &.small {
+    font-size: 0.8125rem;
+  }
+
+  &.medium {
+    font-size: 0.875rem;
+  }
+
+  &.large {
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  .itemContent {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1;
   }
 }

@@ -19,33 +19,92 @@ import {
     Circle,
     Ruler,
     ChevronDown,
-    Settings
+    Settings,
+    List
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
+// Sidebar Navigation Items
 // Sidebar Navigation Items
 const navSections = [
     {
         title: "Foundation",
         items: [
-            { id: "colors", label: "Colors", icon: Palette, href: "/design-system/colors" },
-            { id: "typography", label: "Typography", icon: Type, href: "/design-system/typography" },
-            { id: "spacing", label: "Spacing", icon: Ruler, href: "/design-system/spacing" },
-            { id: "radius", label: "Border Radius", icon: Circle, href: "/design-system/radius" },
+            { id: "colors", label: "Colors", icon: Palette, href: "/design-system/foundation/colors" },
+            { id: "typography", label: "Typography", icon: Type, href: "/design-system/foundation/typography" },
+            { id: "spacing", label: "Spacing", icon: Ruler, href: "/design-system/foundation/spacing" },
+            { id: "radius", label: "Border Radius", icon: Circle, href: "/design-system/foundation/radius" },
         ],
     },
     {
-        title: "Components",
+        title: "Atoms",
         items: [
-            { id: "buttons", label: "Buttons", icon: MousePointer2, href: "/design-system/buttons" },
-            { id: "badges", label: "Badges", icon: BadgeCheck, href: "/design-system/badges" },
-            { id: "forms", label: "Forms & Inputs", icon: FormInput, href: "/design-system/forms" },
-            { id: "feedback", label: "Feedback", icon: MessageSquare, href: "/design-system/feedback" },
-            { id: "accordions", label: "Accordions", icon: ChevronDown, href: "/design-system/accordions" },
-            { id: "navigation", label: "Navigation", icon: Navigation, href: "/design-system/navigation" },
-            { id: "overlays", label: "Modals & Overlays", icon: Layers, href: "/design-system/overlays" },
-            { id: "cards", label: "Cards", icon: LayoutGrid, href: "/design-system/cards" },
-            { id: "skeleton", label: "Skeleton", icon: Loader, href: "/design-system/skeleton" },
+            { id: "buttons", label: "Buttons", icon: MousePointer2, href: "/design-system/atoms/buttons" },
+            { id: "badges", label: "Badges", icon: BadgeCheck, href: "/design-system/atoms/badges" },
+            { id: "inputs", label: "Text Inputs", icon: FormInput, href: "/design-system/atoms/inputs" },
+            { id: "skeleton", label: "Skeleton / Loader", icon: Loader, href: "/design-system/atoms/skeleton" },
+        ],
+    },
+    {
+        title: "Molecules",
+        items: [
+            {
+                id: "choices",
+                label: "Choices",
+                icon: Circle,
+                href: "/design-system/molecules/choices",
+                subNav: [
+                    { id: "radio", label: "Radio Groups", href: "/design-system/molecules/choices/radio" },
+                    { id: "switch", label: "Switches", href: "/design-system/molecules/choices/switch" },
+                ]
+            },
+            {
+                id: "select",
+                label: "Select",
+                icon: FormInput,
+                href: "/design-system/molecules/select",
+            },
+            {
+                id: "pickers",
+                label: "Pickers",
+                icon: Palette,
+                href: "/design-system/molecules/pickers",
+                subNav: [
+                    { id: "color-picker", label: "Color Picker", href: "/design-system/molecules/pickers/color-picker" },
+                    { id: "date-picker", label: "Date Picker", href: "/design-system/molecules/pickers/date-picker" },
+                ]
+            },
+            { id: "toggles", label: "Toggle Chips", icon: FormInput, href: "/design-system/molecules/toggles" },
+            { id: "accordions", label: "Accordions", icon: ChevronDown, href: "/design-system/molecules/accordions" },
+            { id: "tabs", label: "Tabs & Navigation", icon: Navigation, href: "/design-system/molecules/navigation#tabs" },
+            {
+                id: "feedback",
+                label: "Alerts & Feedback",
+                icon: MessageSquare,
+                href: "/design-system/molecules/feedback",
+                subNav: [
+                    { id: "alerts", label: "Alert Banners", href: "/design-system/molecules/feedback/alerts" },
+                    { id: "toasts", label: "Toasts (Sonner)", href: "/design-system/molecules/feedback/toasts" },
+                ]
+            },
+        ],
+    },
+    {
+        title: "Organisms",
+        items: [
+            { id: "menu", label: "Menu (TDS)", icon: List, href: "/design-system/organisms/menu" },
+            {
+                id: "overlays",
+                label: "Modals & Overlays",
+                icon: Layers,
+                href: "/design-system/organisms/overlays",
+                subNav: [
+                    { id: "modal-dialog", label: "Modals & Dialogs", href: "/design-system/organisms/overlays/modals" },
+                    { id: "bottom-sheets", label: "Bottom Sheets", href: "/design-system/organisms/overlays/drawers" },
+                ]
+            },
+            { id: "cards", label: "UI Cards", icon: LayoutGrid, href: "/design-system/organisms/cards" },
+            { id: "editor", label: "Rich Content Editor", icon: FormInput, href: "/design-system/organisms/editor" },
         ],
     },
 ];
@@ -69,10 +128,10 @@ export default function DesignSystemLayout({
         root.style.setProperty("--radius-3xl", `${radius * 2.5}px`);
 
         const alpha = (shadowIntensity / 100).toFixed(2);
-        root.style.setProperty("--shadow-card", `0 4px 12px rgba(0, 0, 0, ${alpha})`);
-        root.style.setProperty("--shadow-hover-card", `0 12px 24px rgba(0, 0, 0, ${(shadowIntensity * 2) / 100})`);
-        root.style.setProperty("--shadow-hover-sm", `0 2px 6px rgba(0, 0, 0, ${alpha})`);
-        root.style.setProperty("--shadow-hover-md", `0 6px 14px rgba(0, 0, 0, ${alpha})`);
+        root.style.setProperty("--shadow-card", `none`);
+        root.style.setProperty("--shadow-hover-card", `none`);
+        root.style.setProperty("--shadow-hover-sm", `none`);
+        root.style.setProperty("--shadow-hover-md", `none`);
     }, [radius, shadowIntensity]);
 
     return (
@@ -88,19 +147,52 @@ export default function DesignSystemLayout({
                     {navSections.map((section) => (
                         <div key={section.title} className={styles.sidebarSection}>
                             <div className={styles.sidebarSectionTitle}>{section.title}</div>
-                            {section.items.map((item) => (
-                                <Link
-                                    key={item.id}
-                                    href={item.href}
-                                    className={clsx(
-                                        styles.sidebarLink,
-                                        pathname === item.href && styles["sidebarLink--active"]
-                                    )}
-                                >
-                                    <item.icon size={18} />
-                                    {item.label}
-                                </Link>
-                            ))}
+                            {section.items.map((item) => {
+                                const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+                                const hasSubNav = item.subNav && item.subNav.length > 0;
+
+                                return (
+                                    <React.Fragment key={item.id}>
+                                        <Link
+                                            href={item.href}
+                                            className={clsx(
+                                                styles.sidebarLink,
+                                                isActive && styles["sidebarLink--active"]
+                                            )}
+                                        >
+                                            <item.icon size={18} />
+                                            <span style={{ flex: 1 }}>{item.label}</span>
+                                            {hasSubNav && (
+                                                <ChevronDown
+                                                    size={14}
+                                                    style={{
+                                                        opacity: 0.5,
+                                                        transform: isActive ? 'rotate(0deg)' : 'rotate(-90deg)',
+                                                        transition: 'transform 0.2s ease'
+                                                    }}
+                                                />
+                                            )}
+                                        </Link>
+
+                                        {hasSubNav && isActive && (
+                                            <div className={styles.sidebarSubNav}>
+                                                {item.subNav.map((subItem) => (
+                                                    <Link
+                                                        key={subItem.id}
+                                                        href={subItem.href}
+                                                        className={clsx(
+                                                            styles.sidebarSubLink,
+                                                            pathname === subItem.href && styles["sidebarSubLink--active"]
+                                                        )}
+                                                    >
+                                                        {subItem.label}
+                                                    </Link>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </React.Fragment>
+                                );
+                            })}
                         </div>
                     ))}
                 </nav>
@@ -140,9 +232,9 @@ export default function DesignSystemLayout({
                         variant="ghost"
                         size="sm"
                         className={styles.sidebarControlReset}
-                        onClick={() => { setRadius(16); setShadowIntensity(8); }}
+                        onClick={() => { setRadius(16); }}
                     >
-                        Reset Defaults
+                        Reset Radius
                     </Button>
                 </div>
             </aside>

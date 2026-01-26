@@ -1,22 +1,25 @@
 @use "../../../styles/variables" as v;
 
 .grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
 }
 
 .button {
   width: 2rem;
   height: 2rem;
   border-radius: v.$radius-full;
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  transition: transform v.$transition-200 v.$ease-standard;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: all v.$transition-200 v.$ease-standard;
+  padding: 0;
+  cursor: pointer;
 }
 
 .buttonInteractive {
-  &:hover {
-    transform: scale(v.$scale-hover);
+  &:hover:not(.selected) {
+    transform: scale(v.$scale-hover-sm);
   }
 
   &:active {
@@ -24,12 +27,13 @@
   }
 
   &:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 2px v.$white, 0 0 0 4px rgba(0, 0, 0, 0.15);
+    outline: 2px solid v.$color-primary;
+    outline-offset: 2px;
   }
 }
 
 .selected {
-  transform: scale(v.$scale-hover);
+  transform: scale(1.15);
+  border: 3px solid white;
+  outline: 2px solid currentColor; // Use outline instead of box-shadow
 }
-

@@ -14,6 +14,7 @@ import {
     Circle,
     Ruler,
     ArrowRight,
+    List
 } from "lucide-react";
 
 const sections = [
@@ -21,24 +22,43 @@ const sections = [
         title: "Foundation",
         description: "기본 디자인 토큰과 시각적 기초",
         items: [
-            { label: "Colors", href: "/design-system/colors", icon: Palette, desc: "컬러 팔레트" },
-            { label: "Typography", href: "/design-system/typography", icon: Type, desc: "타이포그래피" },
-            { label: "Spacing", href: "/design-system/spacing", icon: Ruler, desc: "간격 토큰" },
-            { label: "Border Radius", href: "/design-system/radius", icon: Circle, desc: "테두리 반경" },
+            { label: "Colors", href: "/design-system/foundation/colors", icon: Palette, desc: "컬러 팔레트" },
+            { label: "Typography", href: "/design-system/foundation/typography", icon: Type, desc: "타이포그래피" },
+            { label: "Spacing", href: "/design-system/foundation/spacing", icon: Ruler, desc: "간격 토큰" },
+            { label: "Border Radius", href: "/design-system/foundation/radius", icon: Circle, desc: "테두리 반경" },
         ],
     },
     {
-        title: "Components",
-        description: "재사용 가능한 UI 컴포넌트",
+        title: "Atoms",
+        description: "더 이상 분해할 수 없는 최소 단위의 UI 요소",
         items: [
-            { label: "Buttons", href: "/design-system/buttons", icon: MousePointer2, desc: "버튼" },
-            { label: "Badges", href: "/design-system/badges", icon: BadgeCheck, desc: "배지" },
-            { label: "Forms", href: "/design-system/forms", icon: FormInput, desc: "폼 요소" },
-            { label: "Feedback", href: "/design-system/feedback", icon: MessageSquare, desc: "피드백" },
-            { label: "Navigation", href: "/design-system/navigation", icon: Navigation, desc: "네비게이션" },
-            { label: "Overlays", href: "/design-system/overlays", icon: Layers, desc: "모달 및 오버레이" },
-            { label: "Cards", href: "/design-system/cards", icon: LayoutGrid, desc: "카드" },
-            { label: "Skeleton", href: "/design-system/skeleton", icon: Loader, desc: "스켈레톤" },
+            { label: "Buttons", href: "/design-system/atoms/buttons", icon: MousePointer2, desc: "버튼" },
+            { label: "Badges", href: "/design-system/atoms/badges", icon: BadgeCheck, desc: "배지" },
+            { label: "Inputs", href: "/design-system/atoms/inputs", icon: FormInput, desc: "입력 필드" },
+            { label: "Skeleton", href: "/design-system/atoms/skeleton", icon: Loader, desc: "스켈레톤" },
+        ],
+    },
+    {
+        title: "Molecules",
+        description: "두 개 이상의 Atom이 결합되어 기능을 수행하는 컴포넌트",
+        items: [
+            { label: "Choices", href: "/design-system/molecules/choices", icon: Circle, desc: "라디오, 스위치" },
+            { label: "Select", href: "/design-system/molecules/select", icon: FormInput, desc: "선택 및 드롭다운" },
+            { label: "Pickers", href: "/design-system/molecules/pickers", icon: Palette, desc: "날짜, 컬러 선택" },
+            { label: "Toggles", href: "/design-system/molecules/toggles", icon: FormInput, desc: "토글 칩" },
+            { label: "Feedback", href: "/design-system/molecules/feedback", icon: MessageSquare, desc: "알림 및 토스트" },
+            { label: "Navigation", href: "/design-system/molecules/navigation", icon: Navigation, desc: "탭 및 네비게이션" },
+            { label: "Accordions", href: "/design-system/molecules/accordions", icon: ArrowRight, desc: "아코디언" },
+        ],
+    },
+    {
+        title: "Organisms",
+        description: "복잡한 서비스 로직을 포함하거나 독립적인 영역",
+        items: [
+            { label: "Menu", href: "/design-system/organisms/menu", icon: List, desc: "TDS 스타일 메뉴" },
+            { label: "Overlays", href: "/design-system/organisms/overlays", icon: Layers, desc: "모달 및 바텀시트" },
+            { label: "Cards", href: "/design-system/organisms/cards", icon: LayoutGrid, desc: "카드 컴포넌트" },
+            { label: "Editor", href: "/design-system/organisms/editor", icon: FormInput, desc: "리치 텍스트 에디터" },
         ],
     },
 ];

@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import styles from "./DesignSystem.module.scss";
 
 interface StoryProps {
+    id?: string;
     title: string;
     description?: string;
     children: React.ReactNode;
@@ -13,6 +14,7 @@ interface StoryProps {
 }
 
 export default function Story({
+    id,
     title,
     description,
     children,
@@ -20,7 +22,7 @@ export default function Story({
     containerClassName,
 }: StoryProps) {
     return (
-        <article className={cn(styles.story, className)}>
+        <article id={id} className={cn(styles.story, className)}>
             <div className={styles.storyHeader}>
                 <h3>{title}</h3>
                 {description && <p>{description}</p>}
