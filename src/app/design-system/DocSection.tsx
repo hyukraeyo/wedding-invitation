@@ -11,7 +11,7 @@ export interface PropControl {
     type: 'boolean' | 'select' | 'text' | 'radio' | 'segmented';
     value: boolean | string;
     onChange: (value: boolean | string) => void;
-    options?: (string | { label: string; value: string; icon?: React.ReactNode })[];
+    options?: (string | { label: string; value: string; icon?: React.ReactNode })[] | undefined;
 }
 
 export interface PropItem {
