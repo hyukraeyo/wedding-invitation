@@ -1,0 +1,19 @@
+
+> banana-wedding@0.1.0 lint
+> eslint
+
+
+C:\Users\johr9\Documents\git\wedding-invitation\src\components\ui\InvitationCard\InvitationCard.tsx
+   6:5   warning  'MoreHorizontal' is defined but never used                     @typescript-eslint/no-unused-vars
+  13:5   warning  'DropdownMenu' is defined but never used                       @typescript-eslint/no-unused-vars
+  14:5   warning  'DropdownMenuContent' is defined but never used                @typescript-eslint/no-unused-vars
+  15:5   warning  'DropdownMenuItem' is defined but never used                   @typescript-eslint/no-unused-vars
+  16:5   warning  'DropdownMenuTrigger' is defined but never used                @typescript-eslint/no-unused-vars
+  22:10  warning  'IconButton' is defined but never used                         @typescript-eslint/no-unused-vars
+  57:13  warning  'toast' is assigned a value but never used                     @typescript-eslint/no-unused-vars
+  75:11  warning  'formattedDate' is assigned a value but never used             @typescript-eslint/no-unused-vars
+  83:16  warning  'REJECTION_LABEL' is assigned a value but never used           @typescript-eslint/no-unused-vars
+  90:11  warning  'handleRejectionModalOpen' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+✖ 10 problems (0 errors, 10 warnings)
+

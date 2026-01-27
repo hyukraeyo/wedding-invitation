@@ -1,11 +1,9 @@
 "use client";
 
 import React from "react";
-import styles from "../../DesignSystem.module.scss";
+import DesignSystemPage from "../../DesignSystemPage";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
-import Story from "../../Story";
-import DocSection from "../../DocSection";
 import { usePropControls } from "../../hooks/usePropControls";
 
 export default function InputsPage() {
@@ -54,59 +52,42 @@ export default function InputsPage() {
   size="${values.size}"
 />`;
 
-    const textareaUsage = `import { Textarea } from "@/components/ui/Textarea";
-
-<Textarea
-  placeholder="긴 내용을 입력해주세요"
-  ${values.error ? 'error' : ''}
-  ${values.disabled ? 'disabled' : ''}
-  size="${values.size}"
-/>`;
-
     return (
-        <>
-            <header className={styles.pageHeader}>
-                <h1>Input</h1>
-                <p className={styles.textMuted}>
-                    스타일만 적용된 기본 Input 및 Textarea 컴포넌트입니다. <br />
-                    실제 폼에서는 <strong>FormField</strong> 컴포넌트와 함께 사용하는 것을 권장합니다.
-                </p>
-            </header>
-
-            <div className={styles.storySection}>
-                <Story id="input" title="Input">
-                    <div className={styles.canvas} style={{ alignItems: 'center', justifyContent: 'center', minHeight: '150px' }}>
-                        <div style={{ width: '100%', maxWidth: '400px' }}>
-                            <Input
-                                placeholder={values.placeholder as string}
-                                error={values.error as boolean}
-                                disabled={values.disabled as boolean}
-                                type={values.type as "text" | "password" | "email"}
-                                size={values.size as "sm" | "md" | "lg"}
-                            />
-                        </div>
+        <DesignSystemPage
+            title="Text Inputs"
+            description="스타일만 적용된 기본 Input 및 Textarea 컴포넌트입니다. 실제 폼에서는 FormField 컴포넌트와 함께 사용하는 것을 권장합니다."
+            playground={{
+                title: "Playground",
+                description: "Input 컴포넌트의 다양한 속성을 테스트해보세요.",
+                canvasStyle: { alignItems: 'center', justifyContent: 'center', minHeight: '150px' },
+                content: (
+                    <div style={{ width: '100%', maxWidth: '400px' }}>
+                        <Input
+                            placeholder={values.placeholder as string}
+                            error={values.error as boolean}
+                            disabled={values.disabled as boolean}
+                            type={values.type as "text" | "password" | "email"}
+                            size={values.size as "sm" | "md" | "lg"}
+                        />
                     </div>
-                </Story>
-
-                <DocSection
-                    usage={inputUsage}
-                    props={getPropItems()}
-                />
-
-                <Story id="textarea" title="Textarea">
-                    <div className={styles.canvas} style={{ alignItems: 'center', justifyContent: 'center', minHeight: '150px' }}>
-                        <div style={{ width: '100%', maxWidth: '400px' }}>
-                            <Textarea
-                                placeholder="긴 내용을 입력해주세요"
-                                error={values.error as boolean}
-                                disabled={values.disabled as boolean}
-                                size={values.size as "sm" | "md" | "lg"}
-                            />
-                        </div>
+                ),
+                usage: inputUsage,
+                props: getPropItems()
+            }}
+            combinations={{
+                title: "Textarea",
+                description: "긴 텍스트 입력을 위한 컴포넌트입니다.",
+                content: (
+                    <div style={{ width: '100%', maxWidth: '400px' }}>
+                        <Textarea
+                            placeholder="긴 내용을 입력해주세요"
+                            error={values.error as boolean}
+                            disabled={values.disabled as boolean}
+                            size={values.size as "sm" | "md" | "lg"}
+                        />
                     </div>
-                </Story>
-                <DocSection usage={textareaUsage} />
-            </div>
-        </>
+                )
+            }}
+        />
     );
 }

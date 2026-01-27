@@ -8,7 +8,7 @@ import { useFormField } from "@/components/common/FormField"
 
 
 export interface SwitchProps extends React.ComponentPropsWithoutRef<typeof SwitchPrimitive.Root> {
-    variant?: 'default' | 'basic';
+    variant?: 'block' | 'basic';
     label?: React.ReactNode;
     description?: React.ReactNode;
 }
@@ -16,7 +16,7 @@ export interface SwitchProps extends React.ComponentPropsWithoutRef<typeof Switc
 const Switch = React.forwardRef<
     React.ElementRef<typeof SwitchPrimitive.Root>,
     SwitchProps
->(({ className, variant = 'default', label, description, id: customId, ...props }, ref) => {
+>(({ className, variant = 'block', label, description, id: customId, ...props }, ref) => {
     const field = useFormField();
     const id = customId || field?.id;
     const describedBy = field?.isError ? field.errorId : field?.descriptionId;
@@ -29,7 +29,7 @@ const Switch = React.forwardRef<
             aria-invalid={isError ? "true" : undefined}
             className={cn(
                 styles.root,
-                variant === 'basic' ? styles['variant-basic'] : styles['variant-default'],
+                variant === 'basic' ? styles['variant-basic'] : styles['variant-block'],
                 variant === 'basic' && className
             )}
             {...props}
@@ -41,13 +41,15 @@ const Switch = React.forwardRef<
         </SwitchPrimitive.Root>
     );
 
-    if (variant === 'default') {
+    if (variant === 'block') {
         return (
             <label className={cn(styles.blockContainer, className)}>
-                <div className={styles.blockInfo}>
-                    {label && <span className={styles.blockLabel}>{label}</span>}
-                    {description && <span className={styles.blockDescription}>{description}</span>}
-                </div>
+                {(label || description) && (
+                    <div className={styles.blockInfo}>
+                        {label && <span className={styles.blockLabel}>{label}</span>}
+                        {description && <span className={styles.blockDescription}>{description}</span>}
+                    </div>
+                )}
                 {switchNode}
             </label>
         );

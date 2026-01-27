@@ -78,7 +78,7 @@ export default function AccordionsPage() {
     return (
         <>
             <header className={styles.pageHeader}>
-                <h1>Accordions & Disclosure</h1>
+                <h1>Accordions</h1>
                 <p className={styles.textMuted}>계층적 정보를 효과적으로 보여주기 위한 접이식 컴포넌트들입니다.</p>
             </header>
 

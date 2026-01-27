@@ -10,9 +10,9 @@ interface ToggleProps extends React.ComponentPropsWithoutRef<typeof TogglePrimit
 }
 
 /**
- * Toggle Component (Chip style)
+ * Toggle Component
  * Based on Radix UI Toggle for accessibility and state management.
- * Styled to match TDS (Toss Design System) aesthetics.
+ * Used for binary state switching in button form.
  */
 export const Toggle = React.forwardRef<
   React.ElementRef<typeof TogglePrimitive.Root>,

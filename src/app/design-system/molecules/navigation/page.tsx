@@ -21,7 +21,7 @@ export default function NavigationPage() {
     return (
         <>
             <header className={styles.pageHeader}>
-                <h1>Navigation</h1>
+                <h1>Tabs & Navigation</h1>
                 <p>사용자가 정보 계층을 탐색하고 다양한 뷰 사이를 효과적으로 전환할 수 있도록 돕는 컴포넌트입니다.</p>
             </header>
 

@@ -9,7 +9,7 @@ export default function DrawersPage() {
     return (
         <>
             <header className={styles.pageHeader}>
-                <h1>Bottom Sheets (Drawer)</h1>
+                <h1>Bottom Sheets</h1>
                 <p className={styles.textMuted}>iOS-style slide-up panels with multiple surface variants</p>
             </header>
 

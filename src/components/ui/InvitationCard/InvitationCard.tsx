@@ -3,35 +3,17 @@
 import { parseRejection } from '@/lib/rejection-helpers';
 import React, { useState } from 'react';
 import {
-    MoreHorizontal,
-    Edit2,
-    Eye,
-    Trash2,
-    AlertCircle,
     Banana,
-    Share2,
-    MessageCircle,
-    Send,
-    XCircle,
-    Calendar,
-} from 'lucide-react'; // eslint-disable-line @typescript-eslint/no-unused-vars
+} from 'lucide-react';
 import Image from 'next/image';
-import { useToast } from '@/hooks/use-toast';
-import { clsx } from 'clsx';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger
-} from '@/components/ui/DropdownMenu';
 import type { InvitationSummaryRecord } from '@/lib/invitation-summary';
 import type { ApprovalRequestSummary } from '@/services/approvalRequestService';
 import styles from './InvitationCard.module.scss';
 import { Button } from '@/components/ui/Button';
-import { IconButton } from '@/components/ui/IconButton';
 import { DynamicResponsiveModal as ResponsiveModal } from '@/components/common/ResponsiveModal/Dynamic';
 import { useInvitationStatus } from '@/hooks/useInvitationStatus';
 import { InvitationActionMenu } from '@/components/common/InvitationActionMenu';
+import { clsx } from 'clsx';
 
 interface InvitationCardProps {
     invitation: InvitationSummaryRecord;
@@ -59,11 +41,10 @@ const InvitationCard = React.memo(({
     layout = 'swiper',
     onRevokeApproval,
 }: InvitationCardProps) => {
-    const { data, isApproved, isRequesting, isRejected, imageUrl, title, slug } = useInvitationStatus({ invitation, rejectionData }); // eslint-disable-line @typescript-eslint/no-unused-vars
+    const { isApproved, isRequesting, isRejected, imageUrl, title, slug } = useInvitationStatus({ invitation, rejectionData });
 
     const [showRejectionModal, setShowRejectionModal] = useState(false);
     const isGridMode = layout === 'grid';
-    const { toast } = useToast();
 
     const handlePreview = () => {
         window.open(`/v/${slug}`, '_blank');
@@ -81,24 +62,12 @@ const InvitationCard = React.memo(({
         }
     };
 
-    const formattedDate = new Date(invitation.updated_at)
-        .toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' })
-        .replace(/\. /g, '.')
-        .replace(/\.$/, '');
-
     // 유틸리티를 사용하여 상태 분석 및 텍스트 추출
     const {
         displayReason,
-        label: REJECTION_LABEL,
         badge: REJECTION_BADGE,
         title: REJECTION_TITLE
     } = parseRejection(rejectionData);
-
-    // DropdownMenuItem 클릭 시 모달 열기
-    // setTimeout을 사용하여 드롭다운이 닫힌 후 모달이 열리도록 처리 (포커스 경고 방지)
-    const handleRejectionModalOpen = () => {
-        setTimeout(() => setShowRejectionModal(true), 0);
-    };
 
     return (
         <div className={styles.cardWrapper}>

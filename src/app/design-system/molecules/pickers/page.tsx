@@ -23,7 +23,7 @@ export default function PickersPage() {
     return (
         <>
             <header className={styles.pageHeader}>
-                <h1>Pickers & Calendars</h1>
+                <h1>Pickers</h1>
                 <p className={styles.textMuted}>날짜, 시간, 컬러 값을 선택하기 위한 전용 컴포넌트입니다.</p>
             </header>
 

@@ -79,10 +79,10 @@ export default function RadioGroupPageClient() {
 
   return (
     <DesignSystemPage
-      title="Radio Group (라디오 그룹)"
+      title="Radio Groups"
       description="여러 옵션 중 하나를 선택할 때 사용하는 라디오 그룹과 세그먼트 컨트롤입니다. 웹 접근성(WAI-ARIA)을 준수합니다."
       playground={{
-        title: "미리보기",
+        title: "Playground",
         description: "라디오 그룹의 다양한 속성을 실시간으로 테스트해보세요.",
         canvasStyle: { alignItems: 'center', justifyContent: 'center', minHeight: '200px' },
         content: (

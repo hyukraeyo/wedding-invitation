@@ -29,7 +29,7 @@ export default function MenuPage() {
     return (
         <>
             <header className={styles.pageHeader}>
-                <h1>Menu</h1>
+                <h1>Menu (TDS)</h1>
                 <p className={styles.textMuted}>TDS(Toss Design System) 스타일의 익숙한 메뉴입니다.</p>
             </header>
 

@@ -11,6 +11,7 @@ interface StoryProps {
     children: React.ReactNode;
     className?: string;
     containerClassName?: string;
+    containerStyle?: React.CSSProperties;
 }
 
 export default function Story({
@@ -20,6 +21,7 @@ export default function Story({
     children,
     className,
     containerClassName,
+    containerStyle,
 }: StoryProps) {
     return (
         <article id={id} className={cn(styles.story, className)}>
@@ -27,7 +29,7 @@ export default function Story({
                 <h3>{title}</h3>
                 {description && <p>{description}</p>}
             </div>
-            <div className={cn(styles.canvas, containerClassName)}>
+            <div className={cn(styles.canvas, containerClassName)} style={containerStyle}>
                 {children}
             </div>
         </article>

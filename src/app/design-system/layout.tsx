@@ -44,6 +44,8 @@ const navSections = [
             { id: "badges", label: "Badges", icon: BadgeCheck, href: "/design-system/atoms/badges" },
             { id: "calendar", label: "Calendar", icon: Calendar, href: "/design-system/atoms/calendar" },
             { id: "inputs", label: "Text Inputs", icon: FormInput, href: "/design-system/atoms/inputs" },
+            { id: "chips", label: "Chips", icon: BadgeCheck, href: "/design-system/atoms/chips" },
+            { id: "toggles", label: "Toggles", icon: Circle, href: "/design-system/atoms/toggles" },
             { id: "skeleton", label: "Skeleton / Loader", icon: Loader, href: "/design-system/atoms/skeleton" },
         ],
     },
@@ -69,7 +71,6 @@ const navSections = [
                     { id: "date-picker", label: "Date Picker", href: "/design-system/molecules/pickers/date-picker" },
                 ]
             },
-            { id: "toggles", label: "Toggle Chips", icon: FormInput, href: "/design-system/molecules/toggles" },
             { id: "accordions", label: "Accordions", icon: ChevronDown, href: "/design-system/molecules/accordions" },
             { id: "tabs", label: "Tabs & Navigation", icon: Navigation, href: "/design-system/molecules/navigation#tabs" },
             {
@@ -142,7 +143,7 @@ export default function DesignSystemLayout({
                     {navSections.map((section) => (
                         <div key={section.title} className={styles.sidebarSection}>
                             <div className={styles.sidebarSectionTitle}>{section.title}</div>
-                            {section.items.map((item: { id: string; label: string; icon: React.ElementType; href: string; subNav?: Array<{id: string; label: string; href: string}> }) => {
+                            {section.items.map((item: { id: string; label: string; icon: React.ElementType; href: string; subNav?: Array<{ id: string; label: string; href: string }> }) => {
                                 const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
                                 const hasSubNav = item.subNav && item.subNav.length > 0;
 

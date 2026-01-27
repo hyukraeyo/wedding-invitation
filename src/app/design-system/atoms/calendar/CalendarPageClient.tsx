@@ -9,7 +9,7 @@ const calendarUsage = `<Calendar
   mode="single" 
   selected={date} 
   onSelect={setDate}
-  className="rounded-md border"
+  style={{ borderRadius: '8px', border: '1px solid #e4e4e7' }}
 />`;
 
 const CalendarPageClient = () => {
@@ -22,14 +22,14 @@ const CalendarPageClient = () => {
             playground={{
                 title: "Playground",
                 content: (
-                    <div className="p-4 max-w-sm mx-auto">
-                        <Calendar 
+                    <div style={{ padding: '16px', maxWidth: '384px', margin: '0 auto' }}>
+                        <Calendar
                             mode="single"
                             selected={date}
                             onSelect={setDate}
-                            className="rounded-md border"
+                            style={{ borderRadius: '8px', border: '1px solid #e4e4e7' }}
                         />
-                        <div className="mt-4 p-3 bg-gray-50 rounded-md text-center">
+                        <div style={{ marginTop: '16px', padding: '12px', backgroundColor: '#f9fafb', borderRadius: '8px', textAlign: 'center', fontSize: '14px' }}>
                             선택된 날짜: {date ? format(date, 'yyyy-MM-dd') : '선택되지 않음'}
                         </div>
                     </div>
@@ -67,22 +67,22 @@ const CalendarPageClient = () => {
                 description: "Calendar 컴포넌트의 다양한 사용 예시입니다.",
                 canvasStyle: { display: 'flex', flexDirection: 'column', gap: '32px', padding: '40px' },
                 content: (
-                    <div className="space-y-6">
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                         <div>
-                            <h3 className="text-lg font-semibold mb-2">단일 날짜 선택</h3>
-                            <Calendar 
+                            <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '8px' }}>단일 날짜 선택</h3>
+                            <Calendar
                                 mode="single"
                                 selected={date}
                                 onSelect={setDate}
-                                className="rounded-md border"
+                                style={{ borderRadius: '8px', border: '1px solid #e4e4e7' }}
                             />
                         </div>
-                        
+
                         <div>
-                            <h3 className="text-lg font-semibold mb-2">범위 선택</h3>
-                            <Calendar 
+                            <h3 style={{ fontSize: '18px', fontWeight: 600, marginBottom: '8px' }}>범위 선택</h3>
+                            <Calendar
                                 mode="range"
-                                className="rounded-md border"
+                                style={{ borderRadius: '8px', border: '1px solid #e4e4e7' }}
                             />
                         </div>
                     </div>

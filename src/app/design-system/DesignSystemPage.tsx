@@ -40,17 +40,11 @@ export default function DesignSystemPage({
             <div className={styles.storySection}>
                 <Story
                     id="playground"
-                    title={playground.title || "미리보기"}
+                    title={playground.title || "Playground"}
                     description={playground.description || "컴포넌트의 다양한 속성을 실시간으로 테스트해보세요."}
+                    containerStyle={playground.canvasStyle || { alignItems: 'center', justifyContent: 'center', minHeight: '200px' }}
                 >
-                    <div
-                        className={styles.canvas}
-                        role="region"
-                        aria-label={`${title} Preview Canvas`}
-                        style={playground.canvasStyle || { alignItems: 'center', justifyContent: 'center', minHeight: '200px' }}
-                    >
-                        {playground.content}
-                    </div>
+                    {playground.content}
                 </Story>
 
                 <DocSection
@@ -63,13 +57,9 @@ export default function DesignSystemPage({
                         id="combinations"
                         title={combinations.title || "조합 예시"}
                         description={combinations.description || ""}
+                        containerStyle={combinations.canvasStyle || { display: 'flex', flexDirection: 'column', gap: '32px', padding: '40px' }}
                     >
-                        <div
-                            className={styles.canvas}
-                            style={combinations.canvasStyle || { display: 'flex', flexDirection: 'column', gap: '32px', padding: '40px' }}
-                        >
-                            {combinations.content}
-                        </div>
+                        {combinations.content}
                     </Story>
                 )}
             </div>
