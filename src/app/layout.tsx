@@ -5,6 +5,7 @@ import ClientProviders from "./ClientProviders";
 import { fontVariables } from "@/lib/fonts";
 import Header from "@/components/common/Header";
 import { ProgressBar } from "@/components/common/ProgressBar/ProgressBar";
+import { CustomScrollbar } from "@/components/common/CustomScrollbar";
 import { auth } from "@/auth";
 import { SkipLink } from "@/hooks/useAccessibility";
 import "./globals.scss";
@@ -165,6 +166,7 @@ export default async function RootLayout({
           <SkipLink href="#main-content">본문 바로가기</SkipLink>
           <div vaul-drawer-wrapper="" style={{ backgroundColor: "var(--background)", minHeight: "100dvh" }}>
             <Suspense fallback={null}>
+              <CustomScrollbar />
               <ProgressBar />
             </Suspense>
             <Header />

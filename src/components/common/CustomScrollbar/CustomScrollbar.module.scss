@@ -1,0 +1,64 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+
+.wrapper {
+  position: fixed;
+  right: 2px;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s v.$ease-ios;
+
+  &.visible {
+    opacity: 1;
+  }
+}
+
+.thumb {
+  position: absolute;
+  right: 2px;
+  width: 5px;
+  background: rgba(0, 0, 0, 0.28);
+  border-radius: 10px;
+  pointer-events: auto;
+  cursor: grab;
+  transition: width 0.2s v.$ease-ios, background 0.2s v.$ease-ios, opacity 0.2s v.$ease-ios;
+  will-change: transform, height;
+
+  &:hover, &.dragging {
+    width: 6px;
+    right: 1px;
+    background: rgba(0, 0, 0, 0.45);
+  }
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+// 🍌 모바일 기기(터치 위주)에서는 호버 효과 제거 및 항상 얇게 유지
+@include m.mobile {
+  .thumb {
+    width: 4px;
+    right: 2px;
+
+    &:hover, &.dragging {
+      width: 4px;
+      right: 2px;
+    }
+  }
+}
+
+// 다크모드 대응
+:global(.dark) {
+  .thumb {
+    background: rgba(255, 255, 255, 0.35);
+    
+    &:hover, &.dragging {
+      background: rgba(255, 255, 255, 0.55);
+    }
+  }
+}

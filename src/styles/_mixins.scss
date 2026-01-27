@@ -108,16 +108,42 @@
   }
 }
 
-// ============================================
-// Scrollbar Hide
-// ============================================
 @mixin scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 
   &::-webkit-scrollbar {
-    display: none;
+    display: none; /* Chrome, Safari and Opera */
   }
+}
+
+// ============================================
+// Custom Scrollbar
+// ============================================
+@mixin custom-scrollbar($width: $scrollbar-width-default, $thumb-color: $scrollbar-thumb-color, $track-color: $scrollbar-track-color) {
+  &::-webkit-scrollbar {
+    width: $width;
+    height: $width;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $track-color;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $thumb-color;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+
+    &:hover {
+      background-color: $scrollbar-thumb-hover-color;
+    }
+  }
+
+  // Firefox support
+  scrollbar-width: thin;
+  scrollbar-color: $thumb-color $track-color;
 }
 
 // ============================================

@@ -230,6 +230,13 @@ $mobile: 768px;
 $max-mobile: 767px;
 $canvas-max-width: 428px;
 
+// Scrollbar
+$scrollbar-width-default: 6px;
+$scrollbar-thumb-color: rgba(0, 0, 0, 0.2);
+$scrollbar-thumb-hover-color: rgba(0, 0, 0, 0.35);
+$scrollbar-track-color: transparent;
+
+
 $z-index-dropdown: 1000;
 $z-index-modal: 2000;
 $z-modal: $z-index-modal; // Alias for backward compatibility
