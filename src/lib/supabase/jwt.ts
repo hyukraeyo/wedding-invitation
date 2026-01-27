@@ -1,3 +1,4 @@
+import 'server-only';
 import { SignJWT } from 'jose';
 
 const jwtSecret = process.env.SUPABASE_JWT_SECRET!;

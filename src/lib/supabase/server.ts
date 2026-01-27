@@ -1,3 +1,4 @@
+import 'server-only';
 import { createClient } from '@supabase/supabase-js';
 import type { Session } from 'next-auth';
 import { auth } from '@/auth';

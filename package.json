@@ -58,6 +58,7 @@
     "react-dom": "19.2.3",
     "react-kakao-maps-sdk": "^1.2.0",
     "react-naver-maps": "^0.1.4",
+    "server-only": "^0.0.1",
     "sonner": "^2.0.7",
     "swiper": "^11.1.14",
     "vaul": "^1.1.2",
