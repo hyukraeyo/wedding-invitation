@@ -62,58 +62,39 @@ $color-text-desc: #4E5968;
     min-height: 0;
 }
 
-.header {
+.descriptionSpacing {
+    padding: 0 1.5rem 1.25rem;
     text-align: center;
-    padding-top: 1.25rem;
-    padding-bottom: 1.25rem;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    // border-bottom: 1px solid v.$zinc-50; // Minimal: Clean look
+}
+
+.contentWrapper {
+    position: relative;
+    flex: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    flex-shrink: 0;
-    border-bottom: 1px solid v.$zinc-200;
-}
+    min-height: 0;
+    overflow: hidden;
 
-.title {
-    font-size: v.$font-size-xl;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    color: $color-text-title;
-}
-
-.description {
-    font-size: v.$font-size-17; // 17px
-    color: $color-text-desc;
-    line-height: 1.625;
-    word-break: keep-all;
-    text-align: center;
-    white-space: pre-wrap;
+    &.scrollFadeContainer {
+        @include m.scroll-fade(v.$control-height-sm, white);
+    }
 }
 
 .content {
+    position: relative;
     flex: 1;
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    padding: 1.5rem; // Increased vertical padding for premium feel
-    min-height: 8rem; // Ensure some space for content even if short
-
-    // Pure CSS Scroll Shadows (Optimized)
-    background:
-        /* Shadow Cover TOP */
-        linear-gradient(white 30%, rgba(255, 255, 255, 0)),
-        /* Shadow Cover BOTTOM */
-        linear-gradient(rgba(255, 255, 255, 0), white 70%) 0 100%,
-        /* Shadow TOP */
-        radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0)),
-        /* Shadow BOTTOM */
-        radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0)) 0 100%;
-
-    background-repeat: no-repeat;
+    padding: 1.5rem;
+    min-height: 8rem;
     background-color: white;
-    background-size: 100% 40px, 100% 40px, 100% 14px, 100% 14px;
-    background-attachment: local, local, scroll, scroll;
+
+    &.noPadding {
+        padding: 0;
+        min-height: 0;
+    }
 
     // Scrollbar hiding
     scrollbar-width: none;
@@ -129,9 +110,12 @@ $color-text-desc: #4E5968;
     }
 }
 
+.showTopFade {}
+.showBottomFade {}
+
 .defaultDrawerPadding {
-    padding: 1.5rem; // DrawerChild에 적용할 패딩
-    min-height: 8rem; // Content height
+    padding: 1.25rem 1.5rem; // Drawer 여백 최적화
+    min-height: 8rem;
 }
 
 .footer {
@@ -172,7 +156,7 @@ $color-text-desc: #4E5968;
 }
 
 .cancelButton {
-    border-right: 1px solid rgba(255, 255, 255, 0.1) !important; // Subtle separator if needed
+    // border-right: 1px solid rgba(255, 255, 255, 0.1) !important; // Minimal: No separator
     font-weight: 500 !important;
     background-color: v.$zinc-600 !important; // Dark Grey Background
     color: v.$white !important;

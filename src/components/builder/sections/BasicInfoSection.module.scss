@@ -1,6 +1,7 @@
 @use "../../../styles/variables" as v;
 @use "../../../styles/builder" as b;
 
+
 .formGroup {
   @include b.section-form-group;
 }
@@ -17,15 +18,27 @@
     grid-template-columns: 1fr;
   }
 
-  // 혼주 성함 + 故 토글 (2컬럼)
+  // 혼주 성함 + 故 토글 + 노출 토글 (3컬럼)
   &.compact {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 1fr auto auto;
+    gap: 8px;
   }
 }
 
 .deceasedButton {
-  width: 50px;
+  width: 44px;
   padding: 0;
+  font-size: 13px;
+}
+
+.visibilityButton {
+  width: 44px;
+  padding: 0;
+  color: v.$zinc-400;
+
+  &.active {
+    color: v.$banana-yellow;
+  }
 }
 
 .deceasedButtonInactive {

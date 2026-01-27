@@ -4,8 +4,7 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { useShallow } from 'zustand/react/shallow';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
 import { Input } from '@/components/ui/Input';
-import { FormField } from '@/components/common/FormField';
-import { Switch } from '@/components/ui/Switch';
+import { SwitchField } from '@/components/ui/SwitchField';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import { TimePicker } from '@/components/common/TimePicker';
 import { DatePicker } from '@/components/common/DatePicker';
@@ -59,20 +58,18 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ valu
                     </Field>
 
                     {/* Additional Options */}
-                    <FormField label="달력 노출" layout="horizontal" align="center">
-                        <Switch
-                            checked={showCalendar}
-                            onCheckedChange={setShowCalendar}
-                        />
-                    </FormField>
+                    <SwitchField
+                        label="달력 노출"
+                        checked={showCalendar}
+                        onCheckedChange={setShowCalendar}
+                    />
 
                     <div className={styles.switchGroup}>
-                        <FormField label="D-Day 노출" layout="horizontal" align="center">
-                            <Switch
-                                checked={showDday}
-                                onCheckedChange={setShowDday}
-                            />
-                        </FormField>
+                        <SwitchField
+                            label="D-Day 노출"
+                            checked={showDday}
+                            onCheckedChange={setShowDday}
+                        />
                         {showDday ? (
                             <div className={styles.ddayInputWrapper}>
                                 <Input

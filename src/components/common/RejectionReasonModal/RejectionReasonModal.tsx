@@ -60,6 +60,7 @@ export default function RejectionReasonModal({
             confirmDisabled={!reason.trim() || loading}
             confirmLoading={loading}
             dismissible={!loading}
+            useScrollFade={true}
         >
             <div style={{ textAlign: 'center', color: '#4E5968', marginBottom: '1.5rem', wordBreak: 'keep-all', lineHeight: '1.6' }}>
                 {description || (requesterName ? (

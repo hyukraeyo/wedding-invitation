@@ -8,6 +8,7 @@ import styles from "./Select.module.scss"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { ResponsiveModal } from "@/components/common/ResponsiveModal"
 import { Menu } from "../Menu"
+import { useScrollFade as useScrollFadeHook } from "@/hooks/use-scroll-fade"
 
 import { useFormField } from "@/components/common/FormField"
 
@@ -86,6 +87,8 @@ const Select = <T extends string | number>({
                         open={isOpen}
                         onOpenChange={setIsOpen}
                         title={modalTitle || placeholder}
+                        useScrollFade={true}
+                        padding="none"
                         trigger={
                             <button
                                 id={id}
@@ -102,7 +105,23 @@ const Select = <T extends string | number>({
                             </button>
                         }
                     >
-                        <div className={styles.optionsList}>
+                        <Menu
+                            className={styles.menuContainer}
+                            role="listbox"
+                            ref={(node) => {
+                                if (node && isOpen) {
+                                    // 드로어 애니메이션 고려하여 약간의 지연 후 스크롤 및 포커스
+                                    requestAnimationFrame(() => {
+                                        const selectedItem = node.querySelector('[aria-selected="true"]') as HTMLElement;
+                                        if (selectedItem) {
+                                            selectedItem.scrollIntoView({ block: 'nearest', behavior: 'instant' });
+                                            // 접근성을 위해 선택된 요소에 포커스 (스크롤 위치는 유지)
+                                            selectedItem.focus({ preventScroll: true });
+                                        }
+                                    });
+                                }
+                            }}
+                        >
                             {options.map((option) => (
                                 <Menu.CheckItem
                                     key={String(option.value)}
@@ -116,7 +135,7 @@ const Select = <T extends string | number>({
                                     {option.label}
                                 </Menu.CheckItem>
                             ))}
-                        </div>
+                        </Menu>
                     </ResponsiveModal>
                 </div>
             );
@@ -224,36 +243,7 @@ const SelectContent = React.forwardRef<
     React.ElementRef<typeof SelectPrimitive.Content>,
     React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
 >(({ className, children, position = "popper", ...props }, ref) => {
-    const [showTopFade, setShowTopFade] = React.useState(false);
-    const [showBottomFade, setShowBottomFade] = React.useState(false);
-    const viewportRef = React.useRef<HTMLDivElement>(null);
-
-    const handleScroll = React.useCallback(() => {
-        if (!viewportRef.current) return;
-        const { scrollTop, scrollHeight, clientHeight } = viewportRef.current;
-        setShowTopFade(scrollTop > 2);
-        setShowBottomFade(scrollTop + clientHeight < scrollHeight - 2);
-    }, []);
-
-    React.useEffect(() => {
-        const viewport = viewportRef.current;
-        if (!viewport) return;
-
-        // Check initial state (with a small delay to ensure rendering is complete)
-        const timer = setTimeout(handleScroll, 0);
-
-        viewport.addEventListener("scroll", handleScroll);
-
-        // ResizeObserver to handle content changes
-        const resizeObserver = new ResizeObserver(handleScroll);
-        resizeObserver.observe(viewport);
-
-        return () => {
-            clearTimeout(timer);
-            viewport.removeEventListener("scroll", handleScroll);
-            resizeObserver.disconnect();
-        };
-    }, [handleScroll]);
+    const { setViewportRef, showTopFade, showBottomFade } = useScrollFadeHook<HTMLDivElement>();
 
     return (
         <SelectPrimitive.Portal>
@@ -261,17 +251,17 @@ const SelectContent = React.forwardRef<
                 ref={ref}
                 className={cn(
                     styles.content,
-                    showTopFade && styles.showTopFade,
-                    showBottomFade && styles.showBottomFade,
                     position === "popper" && styles["content--popper"],
                     className
                 )}
                 position={position}
                 sideOffset={4}
+                data-top-fade={showTopFade}
+                data-bottom-fade={showBottomFade}
                 {...props}
             >
                 <SelectPrimitive.Viewport
-                    ref={viewportRef}
+                    ref={setViewportRef}
                     className={cn(
                         styles.viewport,
                         position === "popper" && styles["viewport--popper"]

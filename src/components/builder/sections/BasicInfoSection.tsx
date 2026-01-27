@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/Button';
 import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import styles from './BasicInfoSection.module.scss';
 import { cn } from '@/lib/utils';
+import { Eye, EyeOff } from 'lucide-react';
 import type { SectionProps } from '@/types/builder';
 
 const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ value }) {
@@ -47,6 +48,15 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ va
                                 />
                                 <Button
                                     type="button"
+                                    variant="outline"
+                                    onClick={() => setGroomParents('father', { isHidden: !groom.parents.father.isHidden })}
+                                    className={cn(styles.visibilityButton, !groom.parents.father.isHidden && styles.active)}
+                                    title={groom.parents.father.isHidden ? '숨김 상태 (클릭하여 노출)' : '노출 상태 (클릭하여 숨김)'}
+                                >
+                                    {groom.parents.father.isHidden ? <EyeOff size={16} /> : <Eye size={16} />}
+                                </Button>
+                                <Button
+                                    type="button"
                                     variant={groom.parents.father.isDeceased ? 'default' : 'outline'}
                                     onClick={() => setGroomParents('father', { isDeceased: !groom.parents.father.isDeceased })}
                                     className={cn(styles.deceasedButton, !groom.parents.father.isDeceased && styles.deceasedButtonInactive)}
@@ -61,6 +71,15 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ va
                                     value={groom.parents.mother.name}
                                     onChange={(e) => setGroomParents('mother', { name: e.target.value })}
                                 />
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => setGroomParents('mother', { isHidden: !groom.parents.mother.isHidden })}
+                                    className={cn(styles.visibilityButton, !groom.parents.mother.isHidden && styles.active)}
+                                    title={groom.parents.mother.isHidden ? '숨김 상태 (클릭하여 노출)' : '노출 상태 (클릭하여 숨김)'}
+                                >
+                                    {groom.parents.mother.isHidden ? <EyeOff size={16} /> : <Eye size={16} />}
+                                </Button>
                                 <Button
                                     type="button"
                                     variant={groom.parents.mother.isDeceased ? 'default' : 'outline'}
@@ -96,6 +115,15 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ va
                                 />
                                 <Button
                                     type="button"
+                                    variant="outline"
+                                    onClick={() => setBrideParents('father', { isHidden: !bride.parents.father.isHidden })}
+                                    className={cn(styles.visibilityButton, !bride.parents.father.isHidden && styles.active)}
+                                    title={bride.parents.father.isHidden ? '숨김 상태 (클릭하여 노출)' : '노출 상태 (클릭하여 숨김)'}
+                                >
+                                    {bride.parents.father.isHidden ? <EyeOff size={16} /> : <Eye size={16} />}
+                                </Button>
+                                <Button
+                                    type="button"
                                     variant={bride.parents.father.isDeceased ? 'default' : 'outline'}
                                     onClick={() => setBrideParents('father', { isDeceased: !bride.parents.father.isDeceased })}
                                     className={cn(styles.deceasedButton, !bride.parents.father.isDeceased && styles.deceasedButtonInactive)}
@@ -110,6 +138,15 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ va
                                     value={bride.parents.mother.name}
                                     onChange={(e) => setBrideParents('mother', { name: e.target.value })}
                                 />
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => setBrideParents('mother', { isHidden: !bride.parents.mother.isHidden })}
+                                    className={cn(styles.visibilityButton, !bride.parents.mother.isHidden && styles.active)}
+                                    title={bride.parents.mother.isHidden ? '숨김 상태 (클릭하여 노출)' : '노출 상태 (클릭하여 숨김)'}
+                                >
+                                    {bride.parents.mother.isHidden ? <EyeOff size={16} /> : <Eye size={16} />}
+                                </Button>
                                 <Button
                                     type="button"
                                     variant={bride.parents.mother.isDeceased ? 'default' : 'outline'}

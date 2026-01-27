@@ -47,6 +47,11 @@ export default function ModalsPage() {
             description: "취소 버튼 노출 여부",
             componentType: 'boolean',
             defaultValue: "true"
+        },
+        padding: {
+            description: "콘텐츠 영역 패딩 설정 ('none'은 0px)",
+            componentType: "'none' | 'default'",
+            defaultValue: "default"
         }
     });
 

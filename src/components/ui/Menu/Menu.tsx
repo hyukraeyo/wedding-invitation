@@ -9,13 +9,16 @@ interface MenuProps extends React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode;
 }
 
-const MenuBase = ({ children, className, ...props }: MenuProps) => {
-    return (
-        <div className={cn(styles.menu, className)} {...props}>
-            {children}
-        </div>
-    )
-}
+const MenuBase = React.forwardRef<HTMLDivElement, MenuProps>(
+    ({ children, className, ...props }, ref) => {
+        return (
+            <div ref={ref} className={cn(styles.menu, className)} {...props}>
+                {children}
+            </div>
+        )
+    }
+)
+MenuBase.displayName = "Menu"
 
 /**
  * 🍌 Menu 컴포넌트 (TDS 스타일 준수)
@@ -54,6 +57,8 @@ const MenuItem = React.forwardRef<HTMLButtonElement, MenuItemProps>(
             <button
                 ref={ref}
                 type="button"
+                role="option"
+                aria-selected={selected}
                 className={cn(
                     styles.item,
                     selected && styles.selected,

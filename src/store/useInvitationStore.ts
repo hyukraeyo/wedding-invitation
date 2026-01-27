@@ -46,8 +46,8 @@ export interface InvitationState {
         lastName: string;
         relation: string;
         parents: {
-            father: { name: string; isDeceased: boolean };
-            mother: { name: string; isDeceased: boolean };
+            father: { name: string; isDeceased: boolean; isHidden: boolean };
+            mother: { name: string; isDeceased: boolean; isHidden: boolean };
         };
     };
     bride: {
@@ -55,8 +55,8 @@ export interface InvitationState {
         lastName: string;
         relation: string;
         parents: {
-            father: { name: string; isDeceased: boolean };
-            mother: { name: string; isDeceased: boolean };
+            father: { name: string; isDeceased: boolean; isHidden: boolean };
+            mother: { name: string; isDeceased: boolean; isHidden: boolean };
         };
     };
     useFlowerIcon: boolean;
@@ -167,8 +167,8 @@ export interface InvitationState {
 
     setGroom: (data: Partial<InvitationState['groom']>) => void;
     setBride: (data: Partial<InvitationState['bride']>) => void;
-    setGroomParents: (type: 'father' | 'mother', data: { name?: string; isDeceased?: boolean }) => void;
-    setBrideParents: (type: 'father' | 'mother', data: { name?: string; isDeceased?: boolean }) => void;
+    setGroomParents: (type: 'father' | 'mother', data: { name?: string; isDeceased?: boolean; isHidden?: boolean }) => void;
+    setBrideParents: (type: 'father' | 'mother', data: { name?: string; isDeceased?: boolean; isHidden?: boolean }) => void;
     setUseFlowerIcon: (use: boolean) => void;
     setOrder: (order: 'groom-first' | 'bride-first') => void;
     setDate: (date: string) => void;
@@ -298,8 +298,8 @@ export const INITIAL_STATE = {
         lastName: '',
         relation: '아들',
         parents: {
-            father: { name: '', isDeceased: false },
-            mother: { name: '', isDeceased: false },
+            father: { name: '', isDeceased: false, isHidden: false },
+            mother: { name: '', isDeceased: false, isHidden: false },
         },
     },
     bride: {
@@ -307,8 +307,8 @@ export const INITIAL_STATE = {
         lastName: '',
         relation: '딸',
         parents: {
-            father: { name: '', isDeceased: false },
-            mother: { name: '', isDeceased: false },
+            father: { name: '', isDeceased: false, isHidden: false },
+            mother: { name: '', isDeceased: false, isHidden: false },
         },
     },
 

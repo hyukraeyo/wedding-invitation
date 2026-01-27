@@ -65,41 +65,14 @@
     max-height: min(300px, var(--radix-select-content-available-height));
   }
 
-  &::before,
-  &::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 32px;
-    z-index: 10;
-    pointer-events: none;
-    transition: opacity v.$transition-300 v.$ease-standard;
-    opacity: 0;
-  }
+  @include m.scroll-fade;
 
-  &::before {
-    top: 0;
-    background: linear-gradient(to bottom, white, rgba(255, 255, 255, 0));
-  }
-
-  &::after {
-    bottom: 0;
-    background: linear-gradient(to top, white, rgba(255, 255, 255, 0));
-  }
-
-  &.showTopFade::before {
-    opacity: 1;
-  }
-
-  &.showBottomFade::after {
-    opacity: 1;
-  }
-
-  will-change: transform,
-  opacity;
+  will-change: transform, opacity;
   @include a.popup-animation;
 }
+
+.showTopFade {}
+.showBottomFade {}
 
 .viewport {
   padding: 8px 4px;
@@ -145,13 +118,8 @@
   }
 }
 
-// Mobile Drawer Specific Styles
-.optionsList {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 0;
-  gap: 2px;
+.menuContainer {
+  padding: 0.5rem 0; // 페이드 효과와 겹치지 않도록 상하 여백 확보
 }
 
 .placeholder {

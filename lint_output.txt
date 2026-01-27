@@ -3,39 +3,37 @@
 > eslint
 
 
-C:\Users\johr9\Documents\git\wedding-invitation\src\app\design-system\atoms\badges\page.tsx
-  34:55  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+C:\Users\johr9\Documents\git\wedding-invitation\src\components\common\ResponsiveModal\ResponsiveModal.tsx
+  96:14  error  Error: This value cannot be modified
 
-C:\Users\johr9\Documents\git\wedding-invitation\src\app\design-system\atoms\buttons\page.tsx
-  62:56  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
-  63:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+Modifying component props or hook arguments is not allowed. Consider using a local variable instead.
 
-C:\Users\johr9\Documents\git\wedding-invitation\src\app\design-system\atoms\chips\page.tsx
-  10:21  warning  'setValue' is assigned a value but never used  @typescript-eslint/no-unused-vars
-  48:52  error    Unexpected any. Specify a different type       @typescript-eslint/no-explicit-any
+C:\Users\johr9\Documents\git\wedding-invitation\src\components\common\ResponsiveModal\ResponsiveModal.tsx:96:14
+  94 |             externalScrollRef(node);
+  95 |         } else if (externalScrollRef) {
+> 96 |             (externalScrollRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+     |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `externalScrollRef` cannot be modified
+  97 |         }
+  98 |     }, [externalScrollRef, setViewportRef]);
+  99 |  react-hooks/immutability
 
-C:\Users\johr9\Documents\git\wedding-invitation\src\components\ui\InvitationCard\InvitationCard.tsx
-   6:5   warning  'MoreHorizontal' is defined but never used                                                            @typescript-eslint/no-unused-vars
-   7:5   warning  'Edit2' is defined but never used                                                                     @typescript-eslint/no-unused-vars
-   8:5   warning  'Eye' is defined but never used                                                                       @typescript-eslint/no-unused-vars
-   9:5   warning  'Trash2' is defined but never used                                                                    @typescript-eslint/no-unused-vars
-  10:5   warning  'AlertCircle' is defined but never used                                                               @typescript-eslint/no-unused-vars
-  12:5   warning  'Share2' is defined but never used                                                                    @typescript-eslint/no-unused-vars
-  13:5   warning  'MessageCircle' is defined but never used                                                             @typescript-eslint/no-unused-vars
-  14:5   warning  'Send' is defined but never used                                                                      @typescript-eslint/no-unused-vars
-  15:5   warning  'XCircle' is defined but never used                                                                   @typescript-eslint/no-unused-vars
-  16:5   warning  'Calendar' is defined but never used                                                                  @typescript-eslint/no-unused-vars
-  17:24  warning  Unused eslint-disable directive (no problems were reported from '@typescript-eslint/no-unused-vars')
-  22:5   warning  'DropdownMenu' is defined but never used                                                              @typescript-eslint/no-unused-vars
-  23:5   warning  'DropdownMenuContent' is defined but never used                                                       @typescript-eslint/no-unused-vars
-  24:5   warning  'DropdownMenuItem' is defined but never used                                                          @typescript-eslint/no-unused-vars
-  25:5   warning  'DropdownMenuTrigger' is defined but never used                                                       @typescript-eslint/no-unused-vars
-  31:10  warning  'IconButton' is defined but never used                                                                @typescript-eslint/no-unused-vars
-  66:13  warning  'toast' is assigned a value but never used                                                            @typescript-eslint/no-unused-vars
-  84:11  warning  'formattedDate' is assigned a value but never used                                                    @typescript-eslint/no-unused-vars
-  92:16  warning  'REJECTION_LABEL' is assigned a value but never used                                                  @typescript-eslint/no-unused-vars
-  99:11  warning  'handleRejectionModalOpen' is assigned a value but never used                                         @typescript-eslint/no-unused-vars
+C:\Users\johr9\Documents\git\wedding-invitation\src\hooks\use-scroll-fade.ts
+  42:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
 
-✖ 25 problems (4 errors, 21 warnings)
-  0 errors and 1 warning potentially fixable with the `--fix` option.
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\johr9\Documents\git\wedding-invitation\src\hooks\use-scroll-fade.ts:42:9
+  40 |
+  41 |         // 초기 상태 체크
+> 42 |         handleScroll();
+     |         ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  43 |
+  44 |         viewport.addEventListener('scroll', handleScroll, { passive: true });
+  45 |  react-hooks/set-state-in-effect
+
+✖ 2 problems (2 errors, 0 warnings)
 

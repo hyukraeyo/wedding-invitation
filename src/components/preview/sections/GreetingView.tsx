@@ -15,8 +15,8 @@ interface Person {
     firstName: string;
     relation: string;
     parents: {
-        father: { name: string; isDeceased: boolean };
-        mother: { name: string; isDeceased: boolean };
+        father: { name: string; isDeceased: boolean; isHidden: boolean };
+        mother: { name: string; isDeceased: boolean; isHidden: boolean };
     };
 }
 
@@ -61,6 +61,19 @@ const GreetingView = memo(({
         if (!person || !person.parents) return null;
         const { parents } = person;
 
+        const showFather = !parents.father.isHidden;
+        const showMother = !parents.mother.isHidden;
+
+        // 둘 다 숨김인 경우 아예 노출하지 않음
+        if (!showFather && !showMother) {
+            return (
+                <div className={styles.familyGroup}>
+                    <div className={styles.relationLabel}>{role}</div>
+                    <div className={styles.childName}>{person.firstName || role}</div>
+                </div>
+            );
+        }
+
         const fatherName = parents.father.name || '아버지';
         const motherName = parents.mother.name || '어머니';
         const childName = person.firstName || role;
@@ -68,15 +81,19 @@ const GreetingView = memo(({
         return (
             <div className={styles.familyGroup}>
                 <div className={styles.parentsNames}>
-                    <span>
-                        {parents.father.isDeceased ? <span className={styles.deceased}>故</span> : null}
-                        {fatherName}
-                    </span>
-                    <span className={styles.dotSeparator}>·</span>
-                    <span>
-                        {parents.mother.isDeceased ? <span className={styles.deceased}>故</span> : null}
-                        {motherName}
-                    </span>
+                    {showFather && (
+                        <span>
+                            {parents.father.isDeceased ? <span className={styles.deceased}>故</span> : null}
+                            {fatherName}
+                        </span>
+                    )}
+                    {showFather && showMother && <span className={styles.dotSeparator}>·</span>}
+                    {showMother && (
+                        <span>
+                            {parents.mother.isDeceased ? <span className={styles.deceased}>故</span> : null}
+                            {motherName}
+                        </span>
+                    )}
                 </div>
                 <div className={styles.relationSeparator} />
                 <div className={styles.relationLabel}>의 {person.relation || (role === '신랑' ? '장남' : '장녀')}</div>

@@ -48,15 +48,15 @@ const DrawerContent = React.forwardRef<
     React.ElementRef<typeof DrawerPrimitive.Content>,
     DrawerContentProps
 >(({ className, children, onOpenAutoFocus, variant = "default", ...props }, ref) => {
-    const contentRef = React.useRef<HTMLDivElement>(null);
+    const contentRef = React.useRef<HTMLDivElement | null>(null);
 
     // 외부에서 전달된 ref와 내부 ref를 병합
     const combinedRef = React.useCallback((node: HTMLDivElement | null) => {
-        (contentRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        contentRef.current = node;
         if (typeof ref === 'function') {
             ref(node);
         } else if (ref) {
-            ref.current = node;
+            (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
         }
     }, [ref]);
 
@@ -151,18 +151,49 @@ const DrawerDescription = React.forwardRef<
 ))
 DrawerDescription.displayName = DrawerPrimitive.Description.displayName
 
+import { useScrollFade } from "@/hooks/use-scroll-fade"
+
 const DrawerScrollArea = React.forwardRef<
     HTMLDivElement,
-    React.HTMLAttributes<HTMLDivElement>
->(({ className, children, ...props }, ref) => (
-    <div
-        ref={ref}
-        className={cn(styles.scrollArea, className)}
-        {...props}
-    >
-        {children}
-    </div>
-))
+    React.HTMLAttributes<HTMLDivElement> & {
+        useScrollFade?: boolean;
+        padding?: "none" | "default";
+    }
+>(({ className, children, useScrollFade: useFade = false, padding = "default", ...props }, ref) => {
+    const { setViewportRef, showTopFade, showBottomFade } = useScrollFade<HTMLDivElement>({
+        enabled: useFade
+    });
+
+    // Merge refs
+    const setMergedRef = React.useCallback((node: HTMLDivElement | null) => {
+        setViewportRef(node);
+        if (typeof ref === 'function') {
+            ref(node);
+        } else if (ref) {
+            (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        }
+    }, [ref, setViewportRef]);
+
+    return (
+        <div
+            className={cn(styles.scrollAreaWrapper, useFade && styles.scrollFadeContainer)}
+            data-top-fade={useFade && showTopFade}
+            data-bottom-fade={useFade && showBottomFade}
+        >
+            <div
+                ref={setMergedRef}
+                className={cn(
+                    styles.scrollArea,
+                    padding === "none" && styles.noPadding,
+                    className
+                )}
+                {...props}
+            >
+                {children}
+            </div>
+        </div>
+    )
+})
 DrawerScrollArea.displayName = "DrawerScrollArea"
 
 export {

@@ -2,6 +2,7 @@
 // Colors (Banana Wedding Theme)
 // ============================================
 $color-primary: #FBC02D;
+$banana-yellow: $color-primary;
 $color-primary-dark: #F9A825;
 $color-primary-foreground: #FFFFFF;
 $color-primary-hover: #E6B02A;
@@ -238,10 +239,10 @@ $scrollbar-track-color: transparent;
 
 
 $z-index-dropdown: 1000;
-$z-index-modal: 2000;
-$z-modal: $z-index-modal; // Alias for backward compatibility
-$z-index-toast: 3000;
-$z-overlay: 1900;
+$z-index-modal: 10000; // 5000 -> 10000 으로 상향
+$z-modal: $z-index-modal; 
+$z-index-toast: 11000; // 6000 -> 11000
+$z-overlay: 9900; // 4900 -> 9900
 
 // ============================================
 // Layout

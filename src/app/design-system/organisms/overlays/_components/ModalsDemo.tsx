@@ -19,12 +19,16 @@ import {
 
 export function ModalsDemo() {
     const [isRespModalOpen, setIsRespModalOpen] = useState(false);
+    const [isNoPaddingOpen, setIsNoPaddingOpen] = useState(false);
 
     return (
         <>
             <div className={styles.showcaseRow}>
                 <Button onClick={() => setIsRespModalOpen(true)} variant="solid">
                     Open Responsive Modal
+                </Button>
+                <Button onClick={() => setIsNoPaddingOpen(true)} variant="outline">
+                    No Padding Modal
                 </Button>
                 <ResponsiveModal
                     open={isRespModalOpen}
@@ -43,6 +47,33 @@ export function ModalsDemo() {
                         <div className={styles.placeholderArea} style={{ height: 120 }}>
                             <p className={styles.textSmall}>Main Content Area</p>
                         </div>
+                    </div>
+                </ResponsiveModal>
+
+                <ResponsiveModal
+                    open={isNoPaddingOpen}
+                    onOpenChange={setIsNoPaddingOpen}
+                    title="No Padding Example"
+                    description="Useful for full-width items like lists or buttons inside."
+                    padding="none"
+                    onConfirm={() => setIsNoPaddingOpen(false)}
+                >
+                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        {[1, 2, 3, 4].map((i) => (
+                            <button
+                                key={i}
+                                style={{
+                                    padding: '16px 20px',
+                                    textAlign: 'left',
+                                    borderBottom: '1px solid #eee',
+                                    background: i % 2 === 0 ? '#fafafa' : 'white',
+                                    width: '100%'
+                                }}
+                                onClick={() => setIsNoPaddingOpen(false)}
+                            >
+                                Option {i} (Full Width Button)
+                            </button>
+                        ))}
                     </div>
                 </ResponsiveModal>
             </div>
