@@ -17,9 +17,10 @@ interface DatePickerProps {
     onChange: (value: string) => void;
     className?: string;
     placeholder?: string;
+    disabled?: boolean;
 }
 
-export function DatePicker({ value, onChange, className, placeholder = "날짜 선택" }: DatePickerProps) {
+export function DatePicker({ value, onChange, className, placeholder = "날짜 선택", disabled }: DatePickerProps) {
     const isDesktop = useMediaQuery("(min-width: 768px)");
     const isMobile = !isDesktop;
     const [isOpen, setIsOpen] = useState(false);
@@ -40,7 +41,8 @@ export function DatePicker({ value, onChange, className, placeholder = "날짜 �
         <button
             type="button"
             className={cn(styles.triggerButton, className)}
-            onClick={() => setIsOpen(true)}
+            onClick={() => !disabled && setIsOpen(true)}
+            disabled={disabled}
         >
             <span className={cn(!value && styles.placeholder, value && styles.value)}>
                 {dateValue ? format(dateValue, 'PPP', { locale: ko }) : placeholder}

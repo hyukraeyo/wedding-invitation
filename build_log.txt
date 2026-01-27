@@ -21,17 +21,15 @@
   Running TypeScript ...
 Failed to compile.
 
-./src/app/design-system/DesignSystemPage.tsx:62:22
-Type error: Type '{ children: Element; id: string; title: string; description: string | undefined; }' is not assignable to type 'StoryProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
-  Types of property 'description' are incompatible.
-    Type 'string | undefined' is not assignable to type 'string'.
-      Type 'undefined' is not assignable to type 'string'.
+./src/app/design-system/atoms/calendar/CalendarPageClient.tsx:56:33
+Type error: Type 'Date | undefined' is not assignable to type 'DateRange | undefined'.
+  Property 'from' is missing in type 'Date' but required in type 'DateRange'.
 
-[0m [90m 60 |[39m
- [90m 61 |[39m                 {combinations [33m&&[39m (
-[31m[1m>[22m[39m[90m 62 |[39m                     [33m<[39m[33mStory[39m
- [90m    |[39m                      [31m[1m^[22m[39m
- [90m 63 |[39m                         id[33m=[39m[32m"combinations"[39m
- [90m 64 |[39m                         title[33m=[39m{combinations[33m.[39mtitle [33m||[39m [32m"조합 예시"[39m}
- [90m 65 |[39m                         description[33m=[39m{combinations[33m.[39mdescription}[0m
+[0m [90m 54 |[39m                             [33m<[39m[33mCalendar[39m
+ [90m 55 |[39m                                 mode[33m=[39m{values[33m.[39mmode [36mas[39m [32m"single"[39m [33m|[39m [32m"multiple"[39m [33m|[39m [32m"range"[39m [33m|[39m undefined}
+[31m[1m>[22m[39m[90m 56 |[39m                                 selected[33m=[39m{date}
+ [90m    |[39m                                 [31m[1m^[22m[39m
+ [90m 57 |[39m                                 onSelect[33m=[39m{setDate [36mas[39m (date[33m:[39m [33mDate[39m [33m|[39m undefined) [33m=>[39m [36mvoid[39m}
+ [90m 58 |[39m                                 disabled[33m=[39m{values[33m.[39mdisabled [36mas[39m boolean}
+ [90m 59 |[39m                                 showOutsideDays[33m=[39m{values[33m.[39mshowOutsideDays [36mas[39m boolean}[0m
 Next.js build worker exited with code: 1 and signal: null

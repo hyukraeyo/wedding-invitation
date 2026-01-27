@@ -1511,47 +1511,155 @@
   width: 100%;
   overflow-x: auto;
   border: 1px solid v.$zinc-200;
-  border-radius: v.$radius-lg;
+  border-radius: v.$radius-xl;
   background: white;
-  margin-top: 8px;
+  margin-top: 12px;
+  box-shadow: v.$shadow-sm;
 }
 
 .propsTable {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   text-align: left;
 
   th {
     background: v.$zinc-50;
-    padding: 12px 16px;
-    font-weight: 600;
-    color: v.$zinc-700;
-    border-bottom: 1px solid v.$zinc-200;
+    padding: 14px 20px;
+    font-weight: 700;
+    color: v.$zinc-500;
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-bottom: 2px solid v.$zinc-100;
+  }
+
+  tr {
+    transition: background-color v.$transition-fast;
+    
+    &:hover {
+      background-color: rgba(v.$zinc-50, 0.5);
+    }
   }
 
   td {
-    padding: 12px 16px;
+    padding: 16px 20px;
     border-bottom: 1px solid v.$zinc-100;
     color: v.$zinc-600;
-    vertical-align: top;
+    vertical-align: middle;
 
-    code {
+    .propTag {
       font-family: monospace;
-      font-size: 0.8125rem;
-      background: v.$zinc-100;
-      padding: 2px 6px;
-      border-radius: 4px;
+      font-size: 0.75rem;
+      background: v.$primary-50;
+      padding: 4px 10px;
+      border-radius: 6px;
       color: v.$color-primary-dark;
+      font-weight: 700;
+      border: 1px solid v.$primary-100;
+      display: inline-block;
     }
 
     .codeType {
-      color: v.$blue-600;
-      background: v.$blue-50;
+      display: inline-block;
+      font-family: monospace;
+      font-size: 10px;
+      color: v.$zinc-500;
+      background: v.$zinc-100;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-top: 8px;
+      letter-spacing: -0.01em;
+    }
+
+    .description {
+      line-height: 1.6;
+      font-size: 0.875rem;
+      color: v.$zinc-700;
     }
   }
 
   tr:last-child td {
     border-bottom: none;
   }
+}
+// ============================================
+// Code Block Window Style
+// ============================================
+.codeBlockWrapper {
+  border-radius: v.$radius-lg;
+  background: #18181b;
+  overflow: hidden;
+  box-shadow: v.$shadow-2xl;
+  margin-top: 12px;
+}
+
+.codeBlockHeader {
+  background: #27272a;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #3f3f46;
+
+  .dots {
+    display: flex;
+    gap: 6px;
+    span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      &:nth-child(1) { background: #ff5f56; }
+      &:nth-child(2) { background: #ffbd2e; }
+      &:nth-child(3) { background: #27c93f; }
+    }
+  }
+
+  .lang {
+    font-size: 11px;
+    color: #71717a;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+}
+
+.codeBlock {
+  background: transparent !important;
+  color: #e4e4e7 !important;
+  padding: 20px !important;
+  font-family: monospace;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  overflow-x: auto;
+  white-space: pre;
+  margin: 0;
+
+  code {
+    font-family: inherit;
+  }
+}
+
+.copyButton {
+  background: #3f3f46;
+  border: 1px solid #52525b;
+  color: #a1a1aa;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #52525b;
+    color: #f4f4f5;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.nameCell {
+  vertical-align: top !important;
+  padding-top: 20px !important;
 }

@@ -1,11 +1,10 @@
 "use client";
 
 import React from "react";
+import DesignSystemPage from "../../DesignSystemPage";
 import styles from "../../DesignSystem.module.scss";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs";
 import { Info, Settings, Share2 } from "lucide-react";
-import Story from "../../Story";
-import DocSection from "../../DocSection";
 import { usePropControls } from "../../hooks/usePropControls";
 
 export default function NavigationPage() {
@@ -13,28 +12,47 @@ export default function NavigationPage() {
         fluid: {
             type: 'boolean',
             defaultValue: false,
-            description: "TabsList가 부모 너비를 가득 채울지 여부",
+            description: "TabsList가 부모 너비를 가득 채울지 여부 (justify-content: stretch)",
             componentType: 'boolean'
+        },
+        defaultValue: {
+            type: 'segmented',
+            defaultValue: 'info',
+            options: ['info', 'design', 'share'],
+            description: "초기 선택된 탭 값",
+            componentType: 'string'
         }
     });
 
-    return (
-        <>
-            <header className={styles.pageHeader}>
-                <h1>Tabs & Navigation</h1>
-                <p>사용자가 정보 계층을 탐색하고 다양한 뷰 사이를 효과적으로 전환할 수 있도록 돕는 컴포넌트입니다.</p>
-            </header>
+    const tabsUsage = `import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/Tabs";
 
-            <div className={styles.storySection}>
-                <Story id="tabs" title="Selection Tabs" description="Deep linking and conditional content rendering using standardized tab patterns">
-                    <div className={styles.widthFull}>
-                        <Tabs defaultValue="info" className={styles.widthFull}>
+<Tabs defaultValue="${values.defaultValue}">
+  <TabsList${values.fluid ? " fluid" : ""}>
+    <TabsTrigger value="info">Info</TabsTrigger>
+    <TabsTrigger value="design">Design</TabsTrigger>
+    <TabsTrigger value="share">Share</TabsTrigger>
+  </TabsList>
+  <TabsContent value="info">Information Content</TabsContent>
+  <TabsContent value="design">Design Settings</TabsContent>
+  <TabsContent value="share">Sharing Options</TabsContent>
+</Tabs>`;
+
+    return (
+        <DesignSystemPage
+            title="Tabs & Navigation"
+            description="사용자가 정보 계층을 탐색하고 다양한 뷰 사이를 효과적으로 전환할 수 있도록 돕는 컴포넌트입니다."
+            playground={{
+                title: "Playground",
+                description: "Fluid 옵션과 초기값을 변경하며 탭의 동작을 테스트해보세요.",
+                content: (
+                    <div className={styles.widthFull} style={{ maxWidth: '480px', margin: '0 auto' }}>
+                        <Tabs defaultValue={values.defaultValue as string} className={styles.widthFull}>
                             <TabsList fluid={values.fluid as boolean}>
                                 <TabsTrigger value="info"><Info size={14} style={{ marginRight: 6 }} /> Information</TabsTrigger>
                                 <TabsTrigger value="design"><Settings size={14} style={{ marginRight: 6 }} /> Theme Style</TabsTrigger>
                                 <TabsTrigger value="share"><Share2 size={14} style={{ marginRight: 6 }} /> Distribution</TabsTrigger>
                             </TabsList>
-                            <div className={styles.tabsPanel}>
+                            <div className={styles.tabsPanel} style={{ marginTop: '-1px', borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
                                 <TabsContent value="info">
                                     <div className={styles.verticalStackSmall}>
                                         <h4 className={styles.textBoldSmall}>Wedding Metadata</h4>
@@ -56,13 +74,40 @@ export default function NavigationPage() {
                             </div>
                         </Tabs>
                     </div>
-                </Story>
-
-                <DocSection
-                    usage={`// Tabs Usage\nimport { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/Tabs";\n\n<Tabs defaultValue="tab1">\n  <TabsList${values.fluid ? " fluid" : ""}>\n    <TabsTrigger value="tab1">Tab 1</TabsTrigger>\n    <TabsTrigger value="tab2">Tab 2</TabsTrigger>\n  </TabsList>\n  <TabsContent value="tab1">Content 1</TabsContent>\n</Tabs>`}
-                    props={getPropItems()}
-                />
-            </div>
-        </>
+                ),
+                usage: tabsUsage,
+                props: getPropItems()
+            }}
+            combinations={{
+                title: "레이아웃 패턴",
+                description: "다양한 너비와 컨텍스트에서의 활용 예시입니다.",
+                content: (
+                    <div className={styles.gridTwoCols}>
+                        <div className={styles.verticalStackSmall}>
+                            <h4 className={styles.textBoldSmall}>Full Width (Fluid)</h4>
+                            <div className={styles.canvas} style={{ padding: '24px' }}>
+                                <Tabs defaultValue="tab1">
+                                    <TabsList fluid>
+                                        <TabsTrigger value="tab1">Tab 1</TabsTrigger>
+                                        <TabsTrigger value="tab2">Tab 2</TabsTrigger>
+                                    </TabsList>
+                                </Tabs>
+                            </div>
+                        </div>
+                        <div className={styles.verticalStackSmall}>
+                            <h4 className={styles.textBoldSmall}>Compact (Auto Width)</h4>
+                            <div className={styles.canvas} style={{ padding: '24px' }}>
+                                <Tabs defaultValue="tab1">
+                                    <TabsList>
+                                        <TabsTrigger value="tab1">Tab 1</TabsTrigger>
+                                        <TabsTrigger value="tab2">Tab 2</TabsTrigger>
+                                    </TabsList>
+                                </Tabs>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }}
+        />
     );
 }

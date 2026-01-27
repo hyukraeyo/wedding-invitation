@@ -1,0 +1,35 @@
+
+> banana-wedding@0.1.0 build
+> next build --webpack
+
+▲ Next.js 16.1.1 (webpack)
+- Environments: .env.local
+- Experiments (use with caution):
+  · optimizePackageImports
+  · serverActions
+  ✓ viewTransition
+
+  Creating an optimized production build ...
+> [PWA] Compile server
+> [PWA] Compile server
+> [PWA] Compile client (static)
+> [PWA] Auto register service worker with: C:\Users\johr9\Documents\git\wedding-invitation\node_modules\next-pwa\register.js
+> [PWA] Service worker: C:\Users\johr9\Documents\git\wedding-invitation\public\sw.js
+> [PWA]   url: /sw.js
+> [PWA]   scope: /
+✓ Compiled successfully in 7.0s
+  Running TypeScript ...
+Failed to compile.
+
+./src/app/design-system/molecules/pickers/date-picker/page.tsx:89:85
+Type error: Type '{ value: string; onChange: () => void; disabled: true; }' is not assignable to type 'IntrinsicAttributes & DatePickerProps'.
+  Property 'disabled' does not exist on type 'IntrinsicAttributes & DatePickerProps'.
+
+[0m [90m 87 |[39m                             [33m<[39m[33mh4[39m className[33m=[39m{styles[33m.[39mtextBoldSmall}[33m>[39m[33mDisabled[39m [33mState[39m[33m<[39m[33m/[39m[33mh4[39m[33m>[39m
+ [90m 88 |[39m                             [33m<[39m[33mdiv[39m className[33m=[39m{styles[33m.[39mcanvas} style[33m=[39m{{ padding[33m:[39m [32m'24px'[39m }}[33m>[39m
+[31m[1m>[22m[39m[90m 89 |[39m                                 [33m<[39m[33mDatePicker[39m value[33m=[39m[32m"2026-12-25"[39m onChange[33m=[39m{() [33m=>[39m { }} disabled [33m/[39m[33m>[39m
+ [90m    |[39m                                                                                     [31m[1m^[22m[39m
+ [90m 90 |[39m                             [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m
+ [90m 91 |[39m                         [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m
+ [90m 92 |[39m                     [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m[0m
+Next.js build worker exited with code: 1 and signal: null

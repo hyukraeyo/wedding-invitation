@@ -1,0 +1,34 @@
+
+> banana-wedding@0.1.0 build
+> next build --webpack
+
+▲ Next.js 16.1.1 (webpack)
+- Environments: .env.local
+- Experiments (use with caution):
+  · optimizePackageImports
+  · serverActions
+  ✓ viewTransition
+
+  Creating an optimized production build ...
+> [PWA] Compile server
+> [PWA] Compile server
+> [PWA] Compile client (static)
+> [PWA] Auto register service worker with: C:\Users\johr9\Documents\git\wedding-invitation\node_modules\next-pwa\register.js
+> [PWA] Service worker: C:\Users\johr9\Documents\git\wedding-invitation\public\sw.js
+> [PWA]   url: /sw.js
+> [PWA]   scope: /
+✓ Compiled successfully in 8.3s
+  Running TypeScript ...
+Failed to compile.
+
+./src/app/design-system/molecules/pickers/date-picker/page.tsx:82:45
+Type error: Type 'undefined' is not assignable to type 'string'.
+
+[0m [90m 80 |[39m                             [33m<[39m[33mh4[39m className[33m=[39m{styles[33m.[39mtextBoldSmall}[33m>[39m[33mEmpty[39m [33mState[39m[33m<[39m[33m/[39m[33mh4[39m[33m>[39m
+ [90m 81 |[39m                             [33m<[39m[33mdiv[39m className[33m=[39m{styles[33m.[39mcanvas} style[33m=[39m{{ padding[33m:[39m [32m'24px'[39m }}[33m>[39m
+[31m[1m>[22m[39m[90m 82 |[39m                                 [33m<[39m[33mDatePicker[39m value[33m=[39m{undefined} onChange[33m=[39m{() [33m=>[39m { }} placeholder[33m=[39m[32m"예식일 선택"[39m [33m/[39m[33m>[39m
+ [90m    |[39m                                             [31m[1m^[22m[39m
+ [90m 83 |[39m                             [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m
+ [90m 84 |[39m                         [33m<[39m[33m/[39m[33mdiv[39m[33m>[39m
+ [90m 85 |[39m[0m
+Next.js build worker exited with code: 1 and signal: null

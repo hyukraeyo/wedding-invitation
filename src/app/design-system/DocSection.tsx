@@ -40,16 +40,35 @@ export default function DocSection({ usage, props }: DocSectionProps) {
                             <button
                                 onClick={() => setIsExpanded(!isExpanded)}
                                 className={styles.textButton}
-                                style={{ fontSize: '13px', display: 'flex', alignItems: 'center', gap: '4px' }}
+                                style={{ fontSize: '12px', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px', color: '#18181b' }}
                             >
                                 {isExpanded ? "코드 접기" : "코드 펼치기"}
                             </button>
                         </div>
 
                         {isExpanded && (
-                            <pre className={styles.codeBlock}>
-                                <code>{usage}</code>
-                            </pre>
+                            <div className={styles.codeBlockWrapper}>
+                                <div className={styles.codeBlockHeader}>
+                                    <div className={styles.dots}>
+                                        <span></span><span></span><span></span>
+                                    </div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                        <span className={styles.lang}>TSX</span>
+                                        <button
+                                            className={styles.copyButton}
+                                            onClick={() => {
+                                                navigator.clipboard.writeText(usage);
+                                                alert("코드가 복사되었습니다!");
+                                            }}
+                                        >
+                                            Copy
+                                        </button>
+                                    </div>
+                                </div>
+                                <pre className={styles.codeBlock}>
+                                    <code>{usage}</code>
+                                </pre>
+                            </div>
                         )}
                     </div>
                 )}
@@ -69,8 +88,10 @@ export default function DocSection({ usage, props }: DocSectionProps) {
                                 <tbody>
                                     {props.map((prop) => (
                                         <tr key={prop.name}>
-                                            <td style={{ verticalAlign: 'top' }}><code>{prop.name}</code></td>
-                                            <td style={{ verticalAlign: 'top' }}>
+                                            <td className={styles.nameCell}>
+                                                <span className={styles.propTag}>{prop.name}</span>
+                                            </td>
+                                            <td>
                                                 <div className={styles.verticalStackExtraSmall}>
                                                     {prop.control ? (
                                                         <div style={{ width: '100%', minWidth: '120px' }}>
@@ -145,12 +166,21 @@ export default function DocSection({ usage, props }: DocSectionProps) {
                                                     ) : (
                                                         prop.defaultValue ? <code>{prop.defaultValue}</code> : <span className={styles.textMuted}>-</span>
                                                     )}
-                                                    <code className={styles.codeType} style={{ fontSize: '11px', width: 'fit-content' }}>
+                                                    <span className={styles.codeType}>
                                                         {prop.type}
-                                                    </code>
+                                                    </span>
                                                 </div>
                                             </td>
-                                            <td style={{ verticalAlign: 'top' }}>{prop.description}</td>
+                                            <td>
+                                                <div className={styles.description}>
+                                                    {prop.description}
+                                                    {prop.defaultValue && (
+                                                        <div style={{ marginTop: '4px', fontSize: '11px', color: '#a1a1aa' }}>
+                                                            Default: <code>{prop.defaultValue}</code>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>

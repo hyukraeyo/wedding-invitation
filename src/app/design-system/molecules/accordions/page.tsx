@@ -6,8 +6,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/Collapsible";
 import { Button } from "@/components/ui/Button";
 import { ChevronDown } from "lucide-react";
-import Story from "../../Story";
-import DocSection from "../../DocSection";
+import DesignSystemPage from "../../DesignSystemPage";
 import { usePropControls } from "../../hooks/usePropControls";
 
 export default function AccordionsPage() {
@@ -30,11 +29,6 @@ export default function AccordionsPage() {
             defaultValue: 'item-1',
             description: "초기에 열려 있을 아이템의 value (multiple은 쉼표로 구분)",
             componentType: 'string | string[]'
-        },
-        asChild: {
-            defaultValue: false,
-            description: "Radix UI Slot 사용 여부",
-            componentType: 'boolean'
         }
     });
 
@@ -76,62 +70,58 @@ export default function AccordionsPage() {
     });
 
     return (
-        <>
-            <header className={styles.pageHeader}>
-                <h1>Accordions</h1>
-                <p className={styles.textMuted}>계층적 정보를 효과적으로 보여주기 위한 접이식 컴포넌트들입니다.</p>
-            </header>
-
-            <div className={styles.storySection}>
-                <Story title="Dynamic Accordion" description="Compact, stackable disclosure panels with single/multi modes">
-                    <div className={styles.showcaseStack}>
-                        <div className={styles.verticalStackSmall}>
-                            <Label className={styles.labelMuted}>
-                                {values.type === "single" ? "Single Mode (Collapsible)" : "Multiple Mode"}
-                            </Label>
-                            {values.type === "single" ? (
-                                <Accordion
-                                    type="single"
-                                    collapsible={values.collapsible as boolean}
-                                    {...(parsedDefaultValue ? { defaultValue: parsedDefaultValue as string } : {})}
-                                    className={styles.widthFull}
-                                >
-                                    <AccordionItem value="item-1">
-                                        <AccordionTrigger>Why choose Banana Wedding?</AccordionTrigger>
-                                        <AccordionContent>Because it provides the most premium mobile experience for your guests.</AccordionContent>
-                                    </AccordionItem>
-                                    <AccordionItem value="item-2">
-                                        <AccordionTrigger>Is it free?</AccordionTrigger>
-                                        <AccordionContent>We offer both free basic plans and premium design plans.</AccordionContent>
-                                    </AccordionItem>
-                                </Accordion>
-                            ) : (
-                                <Accordion
-                                    type="multiple"
-                                    {...(parsedDefaultValue ? { defaultValue: parsedDefaultValue as string[] } : {})}
-                                    className={styles.widthFull}
-                                >
-                                    <AccordionItem value="item-1">
-                                        <AccordionTrigger>Why choose Banana Wedding?</AccordionTrigger>
-                                        <AccordionContent>Because it provides the most premium mobile experience for your guests.</AccordionContent>
-                                    </AccordionItem>
-                                    <AccordionItem value="item-2">
-                                        <AccordionTrigger>Is it free?</AccordionTrigger>
-                                        <AccordionContent>We offer both free basic plans and premium design plans.</AccordionContent>
-                                    </AccordionItem>
-                                </Accordion>
-                            )}
-                        </div>
+        <DesignSystemPage
+            title="Accordions"
+            description="계층적 정보를 효과적으로 보여주기 위한 접이식 컴포넌트들입니다."
+            playground={{
+                title: "Interactive Playground",
+                description: "아코디언의 동작 방식과 기본 설정을 테스트해 보세요.",
+                content: (
+                    <div style={{ width: '100%', maxWidth: '400px' }}>
+                        {values.type === "single" ? (
+                            <Accordion
+                                key={`single-${values.collapsible}-${values.defaultValue}`}
+                                type="single"
+                                collapsible={values.collapsible as boolean}
+                                {...(parsedDefaultValue ? { defaultValue: parsedDefaultValue as string } : {})}
+                                className={styles.widthFull}
+                            >
+                                <AccordionItem value="item-1">
+                                    <AccordionTrigger>Why choose Banana Wedding?</AccordionTrigger>
+                                    <AccordionContent>Because it provides the most premium mobile experience for your guests.</AccordionContent>
+                                </AccordionItem>
+                                <AccordionItem value="item-2">
+                                    <AccordionTrigger>Is it free?</AccordionTrigger>
+                                    <AccordionContent>We offer both free basic plans and premium design plans.</AccordionContent>
+                                </AccordionItem>
+                            </Accordion>
+                        ) : (
+                            <Accordion
+                                key={`multiple-${values.defaultValue}`}
+                                type="multiple"
+                                {...(parsedDefaultValue ? { defaultValue: parsedDefaultValue as string[] } : {})}
+                                className={styles.widthFull}
+                            >
+                                <AccordionItem value="item-1">
+                                    <AccordionTrigger>Why choose Banana Wedding?</AccordionTrigger>
+                                    <AccordionContent>Because it provides the most premium mobile experience for your guests.</AccordionContent>
+                                </AccordionItem>
+                                <AccordionItem value="item-2">
+                                    <AccordionTrigger>Is it free?</AccordionTrigger>
+                                    <AccordionContent>We offer both free basic plans and premium design plans.</AccordionContent>
+                                </AccordionItem>
+                            </Accordion>
+                        )}
                     </div>
-                </Story>
-
-                <DocSection
-                    usage={usageLines}
-                    props={propItems}
-                />
-
-                <Story title="Collapsible Sections" description="Minimalist toggle for auxiliary information or advanced settings">
-                    <div className={styles.showcaseStack}>
+                ),
+                usage: usageLines,
+                props: propItems
+            }}
+            combinations={{
+                title: "Collapsible Sections",
+                description: "독립적으로 작동하는 접이식 섹션 예시입니다.",
+                content: (
+                    <div className={styles.showcaseStack} style={{ width: '100%', maxWidth: '500px' }}>
                         <Collapsible className={styles.widthFull}>
                             <div className={styles.flexRowBetween}>
                                 <h4 className={styles.textBoldSmall}>Developer Configuration</h4>
@@ -156,13 +146,8 @@ export default function AccordionsPage() {
                             </div>
                         </Collapsible>
                     </div>
-                </Story>
-            </div>
-        </>
+                )
+            }}
+        />
     );
-}
-
-// Minimalist Label component just for this page to avoid breaking imports
-function Label({ children, className, ...props }: React.LabelHTMLAttributes<HTMLLabelElement>) {
-    return <label className={className} {...props}>{children}</label>;
 }
