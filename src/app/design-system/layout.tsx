@@ -58,16 +58,8 @@ const navSections = [
             { id: "switch-field", label: "Switch Field", icon: FormInput, href: "/design-system/molecules/switch-field" },
             { id: "radio", label: "Radio Groups", icon: Circle, href: "/design-system/molecules/radio-group" },
 
-            {
-                id: "pickers",
-                label: "Pickers",
-                icon: Palette,
-                href: "/design-system/molecules/pickers",
-                subNav: [
-                    { id: "color-picker", label: "Color Picker", href: "/design-system/molecules/pickers/color-picker" },
-                    { id: "date-picker", label: "Date Picker", href: "/design-system/molecules/pickers/date-picker" },
-                ]
-            },
+            { id: "color-picker", label: "Color Picker", icon: Palette, href: "/design-system/molecules/pickers/color-picker" },
+            { id: "date-picker", label: "Date Picker", icon: Calendar, href: "/design-system/molecules/pickers/date-picker" },
             { id: "accordions", label: "Accordions", icon: ChevronDown, href: "/design-system/molecules/accordions" },
             { id: "tabs", label: "Tabs & Navigation", icon: Navigation, href: "/design-system/molecules/navigation#tabs" },
             {

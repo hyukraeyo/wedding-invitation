@@ -3,7 +3,7 @@
 import React from "react";
 import DesignSystemPage from "../../DesignSystemPage";
 import { Calendar } from "@/components/ui/Calendar";
-import { format } from 'date-fns';
+
 import { usePropControls } from "../../hooks/usePropControls";
 import styles from "../../DesignSystem.module.scss";
 
@@ -62,12 +62,7 @@ const CalendarPageClient = () => {
                                 style={{ borderRadius: '8px' }}
                             />
                         </div>
-                        <div className={styles.codePanel} style={{ minWidth: '240px', textAlign: 'center' }}>
-                            <span style={{ fontSize: '13px', color: '#71717a' }}>Selected Date: </span>
-                            <span style={{ fontWeight: 600, color: '#18181b' }}>
-                                {date ? format(date, 'yyyy-MM-dd') : 'None'}
-                            </span>
-                        </div>
+
                     </div>
                 ),
                 usage: calendarUsage,
