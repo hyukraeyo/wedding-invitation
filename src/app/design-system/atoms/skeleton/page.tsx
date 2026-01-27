@@ -36,13 +36,15 @@ export default function SkeletonPage() {
                 title: "Interactive Playground",
                 description: "사용자 정의 크기와 스타일을 실시간으로 확인해 보세요.",
                 content: (
-                    <Skeleton
-                        className={String(values.className)}
-                        style={{
-                            width: values.width as string,
-                            height: values.height as string
-                        }}
-                    />
+                    <div style={{ width: '100%', maxWidth: '320px' }}>
+                        <Skeleton
+                            className={String(values.className)}
+                            style={{
+                                width: values.width as string,
+                                height: values.height as string
+                            }}
+                        />
+                    </div>
                 ),
                 usage: `import { Skeleton } from "@/components/ui/Skeleton";\n\n<Skeleton \n  style={{ width: '${values.width}', height: '${values.height}' }}\n  className="${values.className}" \n/>`,
                 props: getPropItems()
@@ -80,7 +82,7 @@ export default function SkeletonPage() {
                                 {/* User Card */}
                                 <div className={styles.verticalStackSmall}>
                                     <span className={styles.labelMuted}>Profile Card Pattern</span>
-                                    <div className={styles.canvas} style={{ padding: 24, gap: 16 }}>
+                                    <div className={styles.card} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                                         <div className={styles.skeletonUserRow}>
                                             <Skeleton className={styles.skeletonAvatar} />
                                             <div className={styles.verticalStackExtraSmall}>
@@ -94,7 +96,7 @@ export default function SkeletonPage() {
                                 {/* List Pattern */}
                                 <div className={styles.verticalStackSmall}>
                                     <span className={styles.labelMuted}>Item List Pattern</span>
-                                    <div className={styles.canvas} style={{ padding: 24, gap: 12 }}>
+                                    <div className={styles.card} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                                         {[1, 2, 3].map((i) => (
                                             <div key={i} className={styles.skeletonUserRow} style={{ justifyContent: 'space-between' }}>
                                                 <div className={styles.rowGap2}>

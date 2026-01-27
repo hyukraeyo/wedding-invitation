@@ -1,11 +1,8 @@
 "use client";
 
 import React from "react";
-import styles from "../../DesignSystem.module.scss";
 import { Select } from "@/components/ui/Select";
-import { Label } from "@/components/ui/Label";
-import Story from "../../Story";
-import DocSection from "../../DocSection";
+import DesignSystemPage from "../../DesignSystemPage";
 import { usePropControls } from "../../hooks/usePropControls";
 
 export default function SelectPage() {
@@ -92,37 +89,28 @@ export default function SelectPage() {
     ].filter(Boolean).join("\n");
 
     return (
-        <>
-            <header className={styles.pageHeader}>
-                <h1>Select</h1>
-                <p className={styles.textMuted}>데스크톱과 모바일 환경을 모두 고려한 반응형 셀렉트 컴포넌트입니다.</p>
-            </header>
-
-            <div className={styles.storySection}>
-                <Story id="fields" title="Basic Select" description="Standard dropdown selection component">
-                    <div className={styles.showcaseStack}>
-                        <div className={styles.verticalStackSmall} style={{ maxWidth: 400 }}>
-                            <Label className={styles.labelMuted}>Preview</Label>
-                            <Select
-                                value={values.value as string}
-                                onValueChange={(value) => setValue('value', value)}
-                                options={roleOptions}
-                                placeholder={String(values.placeholder)}
-                                size={values.size as "sm" | "md" | "lg"}
-                                disabled={values.disabled as boolean}
-                                mobileOnly={values.mobileOnly as boolean}
-                                desktopOnly={values.desktopOnly as boolean}
-                                {...modalTitleProps}
-                            />
-                        </div>
+        <DesignSystemPage
+            title="Select"
+            description="데스크톱과 모바일 환경을 모두 고려한 반응형 셀렉트 컴포넌트입니다."
+            playground={{
+                content: (
+                    <div style={{ width: '100%', maxWidth: '320px' }}>
+                        <Select
+                            value={values.value as string}
+                            onValueChange={(value) => setValue('value', value)}
+                            options={roleOptions}
+                            placeholder={String(values.placeholder)}
+                            size={values.size as "sm" | "md" | "lg"}
+                            disabled={values.disabled as boolean}
+                            mobileOnly={values.mobileOnly as boolean}
+                            desktopOnly={values.desktopOnly as boolean}
+                            {...modalTitleProps}
+                        />
                     </div>
-                </Story>
-
-                <DocSection
-                    usage={usageLines}
-                    props={getPropItems()}
-                />
-            </div>
-        </>
+                ),
+                usage: usageLines,
+                props: getPropItems()
+            }}
+        />
     );
 }
