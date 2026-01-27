@@ -48,6 +48,7 @@ const navSections = [
             { id: "toggles", label: "Toggles", icon: Circle, href: "/design-system/atoms/toggles" },
             { id: "switch", label: "Switch", icon: Circle, href: "/design-system/atoms/switch" },
             { id: "skeleton", label: "Skeleton / Loader", icon: Loader, href: "/design-system/atoms/skeleton" },
+            { id: "select", label: "Select", icon: FormInput, href: "/design-system/atoms/select" },
         ],
     },
     {
@@ -56,12 +57,7 @@ const navSections = [
             { id: "form-field", label: "Form Field", icon: FormInput, href: "/design-system/molecules/form-field" },
             { id: "switch-field", label: "Switch Field", icon: FormInput, href: "/design-system/molecules/switch-field" },
             { id: "radio", label: "Radio Groups", icon: Circle, href: "/design-system/molecules/radio-group" },
-            {
-                id: "select",
-                label: "Select",
-                icon: FormInput,
-                href: "/design-system/molecules/select",
-            },
+
             {
                 id: "pickers",
                 label: "Pickers",
