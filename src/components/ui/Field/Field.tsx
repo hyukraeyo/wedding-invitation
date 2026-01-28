@@ -12,6 +12,9 @@ interface FieldContextValue {
     errorId: string;
     descriptionId: string;
     isError: boolean;
+    variant?: 'default' | 'floating';
+    hasValue?: boolean;
+    setHasValue?: (value: boolean) => void;
 }
 
 const FieldContext = React.createContext<FieldContextValue | null>(null);
@@ -73,23 +76,28 @@ FieldGroup.displayName = 'FieldGroup';
  */
 interface FieldProps extends React.HTMLAttributes<HTMLDivElement> {
     orientation?: 'vertical' | 'horizontal';
+    variant?: 'default' | 'floating';
     isError?: boolean;
 }
 
 export const Field = React.forwardRef<HTMLDivElement, FieldProps>(
-    ({ className, orientation = 'vertical', id: customId, isError = false, ...props }, ref) => {
+    ({ className, orientation = 'vertical', variant = 'default', id: customId, isError = false, ...props }, ref) => {
         const generatedId = React.useId();
         const id = customId || generatedId;
         const errorId = `${id}-error`;
         const descriptionId = `${id}-description`;
 
+        const [hasValue, setHasValue] = React.useState(false);
+
         return (
-            <FieldContext.Provider value={{ id, errorId, descriptionId, isError }}>
+            <FieldContext.Provider value={{ id, errorId, descriptionId, isError, variant, hasValue, setHasValue }}>
                 <div
                     ref={ref}
                     className={cn(
                         styles.field,
                         styles[`orientation-${orientation}`],
+                        styles[`variant-${variant}`],
+                        hasValue && styles.hasValue,
                         className
                     )}
                     {...props}

@@ -219,7 +219,7 @@ export default function AccountsSectionContent() {
                                         </div>
                                     </div>
 
-                                     {!['본인', '아버지', '어머니'].includes(acc.relation) ? (
+                                    {!['본인', '아버지', '어머니'].includes(acc.relation) ? (
                                         <Input
                                             placeholder="관계를 직접 입력하세요 (예: 본인, 아버지)"
                                             value={acc.relation}
@@ -237,7 +237,7 @@ export default function AccountsSectionContent() {
                                         </div>
                                         <div className={styles.flex1}>
                                             <Input
-                                                placeholder="성함"
+                                                placeholder="이름"
                                                 value={acc.holder}
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleUpdateAccount(acc.id, { holder: e.target.value })}
                                             />

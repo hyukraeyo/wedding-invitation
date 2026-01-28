@@ -28,6 +28,7 @@ export interface FormFieldProps {
     action?: ReactNode;
     layout?: 'vertical' | 'horizontal';
     align?: 'start' | 'center';
+    variant?: 'default' | 'floating';
 }
 
 /**
@@ -45,6 +46,7 @@ export const FormField = memo(({
     action,
     layout = 'vertical',
     align = 'start',
+    variant = 'default',
 }: FormFieldProps) => {
     const isError = !!error;
 
@@ -53,6 +55,7 @@ export const FormField = memo(({
             id={id}
             isError={isError}
             orientation={layout}
+            variant={variant}
             className={cn(align === 'center' && 'alignCenter', className)}
         >
             {label ? (

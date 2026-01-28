@@ -149,7 +149,7 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
                         </Field>
 
                         {/* Name Options */}
-                        <Field label="성함 표기">
+                        <Field label="이름 표기">
                             <div className={styles.optionWrapper}>
                                 <Tabs
                                     value={nameOptionValue}
@@ -179,7 +179,7 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
                                             />
                                         </Field>
                                         <InfoMessage>
-                                            기본 성함 표기 대신 사용자가 직접 작성한 문구로 성함을 표시합니다.
+                                            기본 이름 표기 대신 사용자가 직접 작성한 문구로 이름을 표시합니다.
                                         </InfoMessage>
                                     </div>
                                 ) : null}

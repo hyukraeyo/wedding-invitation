@@ -5,11 +5,11 @@
   width: 100%;
   font-family: v.$font-family-base;
   font-weight: 500;
-  border: 1.5px solid v.$zinc-200; // Slightly thicker for modern look
+  border: 1px solid v.$zinc-200; // Thinner border for minimal look
   background-color: v.$white;
   color: v.$zinc-900;
-  transition: all 0.25s v.$ease-ios;
-  letter-spacing: -0.01em;
+  transition: all 0.2s v.$ease-ios;
+  letter-spacing: -0.02em; // Slightly tighter for premium feel
 
   // Sizes
   &.md {
@@ -43,6 +43,20 @@
     background-color: v.$white;
     box-shadow: 0 0 0 4px rgba(v.$color-primary, 0.12), v.$shadow-sm;
     outline: none;
+  }
+
+  // --- Floating/Minimal Variant ---
+  &[data-variant="floating"] {
+    border: none !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    padding-left: 0;
+    padding-right: 0;
+
+    &:focus {
+      background-color: transparent !important;
+      box-shadow: none !important;
+    }
   }
 
   &[data-error="true"] {

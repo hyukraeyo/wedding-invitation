@@ -50,6 +50,46 @@
     &.alignCenter {
         align-items: center;
     }
+
+    // --- Floating Variant ---
+    &.variant-floating {
+        position: relative;
+        gap: 0;
+        padding-top: 1.5rem; // Space for the label to float into
+
+        .fieldLabel {
+            position: absolute;
+            left: 0;
+            top: 2.5rem; // Perfectly centered for 48px input (1.5rem padding + 24px half-height - offset)
+            pointer-events: none;
+            transition: transform 0.3s v.$ease-ios, color 0.3s v.$ease-ios;
+            font-size: v.$font-size-md;
+            font-weight: 450;
+            color: v.$zinc-400;
+            z-index: 10;
+            transform-origin: left top;
+            user-select: none;
+        }
+
+        &.hasValue .fieldLabel,
+        &:focus-within .fieldLabel {
+            transform: translateY(-2rem) scale(0.75); // Slide up and shrink
+            font-weight: 700;
+            color: v.$primary-600;
+            letter-spacing: 0.02em;
+        }
+
+        .fieldContent {
+            gap: 0;
+            border-bottom: 2px solid v.$zinc-100;
+            transition: all 0.3s v.$ease-ios;
+            padding-bottom: 0.125rem;
+
+            &:focus-within {
+                border-bottom-color: v.$primary;
+            }
+        }
+    }
 }
 
 .fieldContent {

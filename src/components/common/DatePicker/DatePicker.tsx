@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/Popover';
 import { Calendar } from '@/components/ui/Calendar';
 import { cn } from '@/lib/utils';
+import { useField } from '@/components/ui/Field';
 import { format, parse } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { CalendarIcon } from 'lucide-react';
@@ -24,6 +25,14 @@ interface DatePickerProps {
 
 export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
     ({ value, onChange, onComplete, className, placeholder = "날짜 선택", disabled, id }, ref) => {
+        const field = useField();
+
+        React.useEffect(() => {
+            if (field?.setHasValue) {
+                field.setHasValue(!!value);
+            }
+        }, [value, field]);
+
         const isDesktop = useMediaQuery("(min-width: 768px)");
         const isMobile = !isDesktop;
         const [isOpen, setIsOpen] = useState(false);
@@ -47,6 +56,7 @@ export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
                 className={cn(styles.triggerButton, className)}
                 onClick={() => !disabled && setIsOpen(true)}
                 disabled={disabled}
+                data-variant={field?.variant}
             >
                 <span className={cn(!value && styles.placeholder, value && styles.value)}>
                     {dateValue ? format(dateValue, 'PPP', { locale: ko }) : placeholder}

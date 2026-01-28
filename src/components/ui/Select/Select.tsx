@@ -21,23 +21,23 @@ interface SelectOption<T> {
 }
 
 interface SelectProps<T> {
-    value?: T;
-    defaultValue?: T;
-    onValueChange?: (value: T) => void;
-    options?: readonly SelectOption<T>[];
-    placeholder?: string;
-    className?: string;
-    triggerClassName?: string;
-    contentClassName?: string;
-    modalTitle?: string;
-    disabled?: boolean;
+    value?: T | undefined;
+    defaultValue?: T | undefined;
+    onValueChange?: ((value: T) => void) | undefined;
+    options?: readonly SelectOption<T>[] | undefined;
+    placeholder?: string | undefined;
+    className?: string | undefined;
+    triggerClassName?: string | undefined;
+    contentClassName?: string | undefined;
+    modalTitle?: string | undefined;
+    disabled?: boolean | undefined;
     size?: 'sm' | 'md' | 'lg';
     children?: React.ReactNode; // For traditional Shadcn usage
     /** Force mobile drawer view */
-    mobileOnly?: boolean;
+    mobileOnly?: boolean | undefined;
     /** Disable responsive behavior and always use desktop popover */
-    desktopOnly?: boolean;
-    id?: string;
+    desktopOnly?: boolean | undefined;
+    id?: string | undefined;
 }
 
 const Select = <T extends string | number>({
@@ -97,6 +97,7 @@ const Select = <T extends string | number>({
                                 className={cn(styles.trigger, sizeClass, triggerClassName)}
                                 onClick={() => setIsOpen(true)}
                                 aria-describedby={describedBy}
+                                data-variant={field?.variant}
                             >
                                 <span className={cn(!selectedOption && styles.placeholder)}>
                                     {selectedOption ? selectedOption.label : placeholder}
@@ -154,6 +155,7 @@ const Select = <T extends string | number>({
                     className={cn(triggerClassName)}
                     size={size}
                     aria-describedby={describedBy}
+                    data-variant={field?.variant}
                 >
                     <SelectValue placeholder={placeholder} />
                 </SelectTrigger>

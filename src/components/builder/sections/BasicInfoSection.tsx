@@ -43,7 +43,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ va
                             <div className={cn(styles.row, styles.compact)}>
                                 <Input
                                     type="text"
-                                    placeholder="아버지 성함"
+                                    placeholder="아버지 이름"
                                     value={groom.parents.father.name}
                                     onChange={(e) => setGroomParents('father', { name: e.target.value })}
                                 />
@@ -68,7 +68,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ va
                             <div className={cn(styles.row, styles.compact)}>
                                 <Input
                                     type="text"
-                                    placeholder="어머니 성함"
+                                    placeholder="어머니 이름"
                                     value={groom.parents.mother.name}
                                     onChange={(e) => setGroomParents('mother', { name: e.target.value })}
                                 />
@@ -110,7 +110,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ va
                             <div className={cn(styles.row, styles.compact)}>
                                 <Input
                                     type="text"
-                                    placeholder="아버지 성함"
+                                    placeholder="아버지 이름"
                                     value={bride.parents.father.name}
                                     onChange={(e) => setBrideParents('father', { name: e.target.value })}
                                 />
@@ -135,7 +135,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ va
                             <div className={cn(styles.row, styles.compact)}>
                                 <Input
                                     type="text"
-                                    placeholder="어머니 성함"
+                                    placeholder="어머니 이름"
                                     value={bride.parents.mother.name}
                                     onChange={(e) => setBrideParents('mother', { name: e.target.value })}
                                 />

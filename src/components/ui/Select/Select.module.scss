@@ -38,6 +38,24 @@
   &[data-placeholder] {
     color: v.$zinc-400;
   }
+
+  // --- Floating/Minimal Variant ---
+  &[data-variant="floating"] {
+    border: none !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    padding-left: 0;
+    padding-right: 0;
+
+    &:hover:not(:disabled) {
+      background-color: transparent !important;
+    }
+
+    &:focus {
+      background-color: transparent !important;
+      box-shadow: none !important;
+    }
+  }
 }
 
 .icon {

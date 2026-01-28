@@ -1,2 +1,0 @@
-src/app/builder/setup/SetupForm.tsx(100,15): error TS7030: Not all code paths return a value.
-src/app/setup/SetupForm.tsx(100,15): error TS7030: Not all code paths return a value.

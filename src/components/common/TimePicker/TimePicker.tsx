@@ -3,6 +3,7 @@
 import React from 'react';
 import { Select } from '@/components/ui/Select';
 import { cn } from '@/lib/utils';
+import { useField } from '@/components/ui/Field';
 import styles from './TimePicker.module.scss';
 
 interface TimePickerProps {
@@ -15,12 +16,21 @@ interface TimePickerProps {
     minHour?: number;
     maxHour?: number;
     id?: string;
+    disabled?: boolean;
 }
 
 type Period = 'AM' | 'PM';
 
 export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
-    ({ value, onChange, onComplete, className, minuteStep = 10, minHour, maxHour, id }, ref) => {
+    ({ value, onChange, onComplete, className, minuteStep = 10, minHour, maxHour, id, disabled }, ref) => {
+        const field = useField();
+
+        React.useEffect(() => {
+            if (field?.setHasValue) {
+                field.setHasValue(!!value);
+            }
+        }, [value, field]);
+
         const hasValue = !!value;
         const [hStr, mStr] = value ? value.split(':') : [];
 
@@ -98,12 +108,13 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
                 {/* Period + Hour Select */}
                 <div className={styles.hourSection}>
                     <Select
-                        {...(id ? { id } : {})}
+                        id={id}
                         value={hasValue ? `${period}:${displayHour}` : ''}
                         onValueChange={handlePeriodHourChange}
                         options={periodHourOptions}
                         placeholder="오전/오후 시간"
                         modalTitle="시간"
+                        disabled={disabled}
                     />
                 </div>
 
@@ -117,6 +128,7 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
                         options={minutes.map(min => ({ label: `${min}분`, value: min }))}
                         placeholder="분"
                         modalTitle="분"
+                        disabled={disabled}
                     />
                 </div>
             </div>

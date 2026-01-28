@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { Input } from '@/components/ui/Input';
 import { Label } from '@/components/ui/Label';
@@ -13,6 +14,7 @@ import { ArrowRight, Sparkles, Link as LinkIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import { parseKoreanName } from '@/lib/utils';
 import { BottomCTA } from '@/components/ui/BottomCTA';
+import { FormField } from '@/components/common/FormField';
 import styles from './SetupForm.module.scss';
 
 const subscribe = () => () => { };
@@ -42,6 +44,8 @@ const SetupForm = () => {
     const slugRef = useRef<HTMLInputElement>(null);
     const bottomRef = useRef<HTMLDivElement>(null);
 
+    const [currentStep, setCurrentStep] = useState(0);
+
     // 🍌 Auto-generate slug from names
     const updateSlugFromNames = (fullName: string) => {
         if (!slug && fullName) {
@@ -53,8 +57,8 @@ const SetupForm = () => {
         }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
+    const handleSubmit = (e?: React.FormEvent) => {
+        if (e) e.preventDefault();
 
         if (!groomFullName || !brideFullName || !date || !time || !slug) {
             toast.error('모든 필수 정보를 입력해주세요.');
@@ -83,6 +87,25 @@ const SetupForm = () => {
         router.push('/builder?onboarding=true');
     };
 
+    const handleNext = () => {
+        if (currentStep < 4) {
+            setCurrentStep(prev => prev + 1);
+        } else {
+            handleSubmit();
+        }
+    };
+
+    const isStepValid = () => {
+        switch (currentStep) {
+            case 0: return !!groomFullName;
+            case 1: return !!brideFullName;
+            case 2: return !!date;
+            case 3: return !!time;
+            case 4: return !!slug;
+            default: return false;
+        }
+    };
+
     const isNamesValid = !!(groomFullName && brideFullName);
     const isDateTimeValid = !!(date && time);
     const isFormValid = !!(isNamesValid && isDateTimeValid && slug);
@@ -106,22 +129,39 @@ const SetupForm = () => {
         }
     };
 
-    // Auto-scroll to bottom when new fields appear
+    // Auto-scroll to top when new fields appear (Reverse Stacking)
     useEffect(() => {
-        if (isNamesValid || isDateTimeValid) {
-            const timer = setTimeout(() => {
-                bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-            }, 300);
-            return () => clearTimeout(timer);
-        }
-        return undefined;
-    }, [isNamesValid, isDateTimeValid]);
+        const timer = setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 100);
+        return () => clearTimeout(timer);
+    }, [currentStep]);
+
+    // Focus current input when step changes
+    useEffect(() => {
+        const focusInput = () => {
+            switch (currentStep) {
+                case 0: groomNameRef.current?.focus(); break;
+                case 1: brideNameRef.current?.focus(); break;
+                case 2: dateRef.current?.focus(); break;
+                case 3: timeRef.current?.querySelector('button')?.focus(); break;
+                case 4: slugRef.current?.focus(); break;
+            }
+        };
+        const timer = setTimeout(focusInput, 500); // Wait for animation
+        return () => clearTimeout(timer);
+    }, [currentStep]);
 
     // Dynamic Header Text
     const getHeaderText = () => {
-        if (!isNamesValid) return { title: "성함을 입력해주세요", subtitle: "신랑, 신부님의 전체 성함을 입력해주세요." };
-        if (!isDateTimeValid) return { title: "예식 일시를 알려주세요", subtitle: "결혼식 날짜와 시간을 선택해주세요." };
-        return { title: "나만의 주소를 만드세요", subtitle: "청첩장 접속에 사용될 URL 경로입니다." };
+        switch (currentStep) {
+            case 0: return { title: "신랑님의 이름을\n알려주세요", subtitle: "" };
+            case 1: return { title: "신부님의 이름을\n알려주세요", subtitle: "" };
+            case 2: return { title: "예식 날짜를\n알려주세요", subtitle: "" };
+            case 3: return { title: "예식 시간을\n알려주세요", subtitle: "" };
+            case 4: return { title: "나만의 주소를\n만드세요", subtitle: "청첩장에 사용될 고유한 주소입니다." };
+            default: return { title: "정보를 입력해주세요", subtitle: "" };
+        }
     };
 
     const { title: headerTitle, subtitle: headerSubtitle } = getHeaderText();
@@ -134,119 +174,180 @@ const SetupForm = () => {
                 document.body
             )}
 
-            <div className={styles.headerArea}>
+            <div className={cn(styles.headerArea, "mb-6")}>
                 <div className={styles.stepTitleArea}>
-                    <h2 className={styles.stepTitle}>{headerTitle}</h2>
-                    <p className={styles.stepSubtitle}>{headerSubtitle}</p>
+                    <h2 key={`title-${currentStep}`} className={cn(styles.stepTitle, styles.titleAnimated)}>{headerTitle}</h2>
+                    {headerSubtitle && (
+                        <p key={`subtitle-${currentStep}`} className={cn(styles.stepSubtitle, styles.titleAnimated)} style={{ animationDelay: '0.1s' }}>
+                            {headerSubtitle}
+                        </p>
+                    )}
                 </div>
             </div>
 
             <form className={styles.form} onSubmit={handleSubmit}>
-                {/* Names Section */}
-                <div className={styles.section}>
-                    <div className={styles.inputGroup}>
-                        <Label htmlFor="groom-name">신랑 성함</Label>
-                        <Input
-                            id="groom-name"
-                            ref={groomNameRef}
-                            placeholder="신랑 성함 (예: 김철수)"
-                            value={groomFullName}
-                            onChange={(e) => {
-                                const val = e.target.value;
-                                setGroomFullName(val);
-                                updateSlugFromNames(val);
-                            }}
-                            onKeyDown={(e) => handleKeyDown(e, brideNameRef)}
-                            required
-                        />
-                    </div>
-
-                    {groomFullName && (
-                        <div className={`${styles.inputGroup} ${styles.sequentialFadeIn}`}>
-                            <Label htmlFor="bride-name">신부 성함</Label>
-                            <Input
-                                id="bride-name"
-                                ref={brideNameRef}
-                                placeholder="신부 성함 (예: 이영희)"
-                                value={brideFullName}
-                                onChange={(e) => {
-                                    const val = e.target.value;
-                                    setBrideFullName(val);
-                                    updateSlugFromNames(val);
-                                }}
-                                required
-                            />
-                        </div>
-                    )}
-                </div>
-
-                {/* Date & Time Section - Visible after Names */}
-                {isNamesValid && (
-                    <div className={`${styles.section} ${styles.sequentialFadeIn}`}>
-                        <div className={styles.inputGroup}>
-                            <Label htmlFor="wedding-date">날짜</Label>
-                            <DatePicker
-                                id="wedding-date"
-                                ref={dateRef}
-                                value={date}
-                                onChange={setDate}
-                                onComplete={() => { }}
-                            />
-                        </div>
-
-                        {date && (
-                            <div className={`${styles.inputGroup} ${styles.sequentialFadeIn}`}>
-                                <Label htmlFor="wedding-time">시간</Label>
-                                <TimePicker
-                                    id="wedding-time"
-                                    ref={timeRef}
-                                    value={time}
-                                    onChange={setTime}
-                                    onComplete={() => { }}
-                                />
-                            </div>
-                        )}
-                    </div>
-                )}
-
-                {/* Slug Section - Visible after Date & Time */}
-                {isNamesValid && isDateTimeValid && (
-                    <div className={`${styles.section} ${styles.sequentialFadeIn}`}>
-                        <div className={styles.inputGroup}>
-                            <Label htmlFor="url-slug">나만의 URL</Label>
+                {/* Step 4: Slug */}
+                {currentStep >= 4 && (
+                    <div className={cn(styles.section, styles.stackIn)}>
+                        <FormField
+                            label="나만의 URL"
+                            id="url-slug"
+                            variant="floating"
+                        >
                             <Input
                                 id="url-slug"
                                 ref={slugRef}
-                                placeholder="url-slug"
                                 value={slug}
                                 onChange={(e) => setSlug(e.target.value.replace(/[^a-zA-Z0-9-]/g, ''))}
+                                className="bg-transparent text-lg font-bold p-0 h-auto h-12"
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' && slug) {
+                                        e.preventDefault();
+                                        handleSubmit();
+                                    }
+                                }}
                                 required
                             />
                             <div className={styles.slugPreview}>
                                 <LinkIcon size={14} />
                                 <span>banana-wedding.com/v/{slug || '...'}</span>
                             </div>
-                        </div>
+                        </FormField>
                     </div>
                 )}
 
-                {/* Formatting spacer for bottom scroll */}
-                <div ref={bottomRef} style={{ height: '20px' }} />
+                {/* Step 3: Time */}
+                {currentStep >= 3 && (
+                    <div className={cn(styles.section, styles.stackIn)}>
+                        <FormField
+                            label="시간"
+                            id="wedding-time"
+                            variant="floating"
+                        >
+                            <TimePicker
+                                id="wedding-time"
+                                ref={timeRef}
+                                value={time}
+                                onChange={(val) => {
+                                    setTime(val);
+                                    if (val) setTimeout(handleNext, 300);
+                                }}
+                                onComplete={() => { }}
+                                disabled={currentStep > 3}
+                                className="border-none bg-transparent text-lg font-bold p-0 shadow-none"
+                            />
+                        </FormField>
+                    </div>
+                )}
 
-                {/* Final Submit Button */}
-                {isFormValid && (
+                {/* Step 2: Date */}
+                {currentStep >= 2 && (
+                    <div className={cn(styles.section, styles.stackIn)}>
+                        <FormField
+                            label="날짜"
+                            id="wedding-date"
+                            variant="floating"
+                        >
+                            <DatePicker
+                                id="wedding-date"
+                                ref={dateRef}
+                                value={date}
+                                onChange={(val) => {
+                                    setDate(val);
+                                    if (val) setTimeout(handleNext, 300);
+                                }}
+                                onComplete={() => { }}
+                                disabled={currentStep > 2}
+                                className="border-none bg-transparent text-lg font-bold p-0 shadow-none h-auto h-12 justify-start"
+                            />
+                        </FormField>
+                    </div>
+                )}
+
+                {/* Step 1: Bride Name */}
+                {currentStep >= 1 && (
+                    <div className={cn(styles.section, styles.stackIn)}>
+                        <FormField
+                            label="신부 이름"
+                            id="bride-name"
+                            variant="floating"
+                        >
+                            <Input
+                                id="bride-name"
+                                ref={brideNameRef}
+                                value={brideFullName}
+                                readOnly={currentStep > 1}
+                                onChange={(e) => {
+                                    const val = e.target.value;
+                                    setBrideFullName(val);
+                                    updateSlugFromNames(val);
+                                }}
+                                className="bg-transparent text-lg font-bold p-0 h-auto h-12"
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter' && brideFullName) {
+                                        e.preventDefault();
+                                        handleNext();
+                                    }
+                                }}
+                                required
+                            />
+                        </FormField>
+                    </div>
+                )}
+
+                {/* Step 0: Groom Name */}
+                <div className={cn(styles.section, styles.stackIn)}>
+                    <FormField
+                        label="신랑 이름"
+                        id="groom-name"
+                        variant="floating"
+                    >
+                        <Input
+                            id="groom-name"
+                            ref={groomNameRef}
+                            value={groomFullName}
+                            readOnly={currentStep > 0}
+                            onChange={(e) => {
+                                const val = e.target.value;
+                                setGroomFullName(val);
+                                updateSlugFromNames(val);
+                            }}
+                            className="bg-transparent text-lg font-bold p-0 h-auto h-12"
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' && groomFullName) {
+                                    e.preventDefault();
+                                    handleNext();
+                                }
+                            }}
+                            required
+                        />
+                    </FormField>
+                </div>
+
+                {/* Formatting spacer */}
+                <div ref={bottomRef} style={{ height: '40px' }} />
+
+                {/* Dynamic Bottom Button */}
+                {isStepValid() && ![2, 3].includes(currentStep) && (
                     <BottomCTA.Single
                         className={styles.ctaContainer}
                         buttonProps={{
                             children: (
                                 <>
-                                    <Sparkles size={18} />
-                                    <span>청첩장 만들기 시작</span>
-                                    <ArrowRight size={20} />
+                                    {currentStep < 4 ? (
+                                        <>
+                                            <span>다음</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Sparkles size={16} />
+                                            <span>시작하기</span>
+                                        </>
+                                    )}
                                 </>
                             ),
-                            onClick: undefined,
-                            type: 'submit'
+                            onClick: handleNext,
+                            type: currentStep === 4 ? 'submit' : 'button'
                         }}
                     />
                 )}

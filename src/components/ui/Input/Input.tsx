@@ -15,6 +15,13 @@ const Input = React.forwardRef<
     const sizeClass = styles[size];
     const field = useFormField();
 
+    // Auto-sync with Field context for floating labels
+    React.useEffect(() => {
+        if (field?.setHasValue) {
+            field.setHasValue(!!props.value || !!props.defaultValue);
+        }
+    }, [props.value, props.defaultValue, field]);
+
     // Auto-sync with FormField context
     const id = customId || field?.id;
     const isError = error || field?.isError;
@@ -26,6 +33,7 @@ const Input = React.forwardRef<
             type={type}
             className={cn(styles.input, sizeClass, className)}
             data-error={isError ? "true" : undefined}
+            data-variant={field?.variant}
             aria-describedby={describedBy}
             aria-invalid={isError ? "true" : undefined}
             ref={ref}
