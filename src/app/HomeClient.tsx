@@ -22,8 +22,8 @@ export function HomeClient() {
                         <Image
                             src="/logo.png"
                             alt="Banana Wedding"
-                            width={100}
-                            height={100}
+                            width={140}
+                            height={140}
                             priority
                         />
                     </div>

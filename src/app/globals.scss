@@ -74,25 +74,12 @@ body {
   font-family: var(--font-pretendard);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* 2. CRITICAL: body에 transform/animation 제거!! (fixed 포지셔닝 파괴 주범) */
   touch-action: manipulation;
   overflow-x: hidden;
   min-height: 100%;
   margin: 0;
   display: flex;
   flex-direction: column;
-
-  // Radix UI가 모달 오픈 시 스크롤 락을 처리함 - 기본 동작 신뢰
-  // (이전에 추가했던 !important 오버라이드 제거)
-}
-
-/* 3. 애니메이션은 body가 아닌 내부 컨테이너에 적용 */
-#__next {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 100dvh;
-  position: relative;
 }
 
 main {
@@ -100,8 +87,9 @@ main {
   display: flex;
   flex-direction: column;
   min-height: 0;
-  animation: fadeIn 0.4s var(--ease-ios) both;
+  width: 100%;
   position: relative;
+  animation: fadeIn 0.4s var(--ease-ios) both;
 
   @supports (view-transition-name: none) {
     animation: none;

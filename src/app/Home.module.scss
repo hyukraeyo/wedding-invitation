@@ -1,14 +1,14 @@
 @use "@/styles/variables" as *;
 
 .container {
-    min-height: 100dvh;
+    min-height: 100%; // 레이아웃에서 이미 100dvh를 보장하므로 여기선 100%로 충분
     background: radial-gradient(circle at 50% 30%, #FFFDE7 0%, #FFF9C4 100%); // Subtle banana gradient
 
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1rem; // No fixed header on home
-    overflow: hidden;
+    padding: 1rem;
+    overflow-x: hidden;
     position: relative;
 
     &::before {
@@ -26,16 +26,16 @@
 
 .main {
     flex: 1;
-    min-height: auto; // Override global min-height: 100dvh
-    max-width: 32rem;
-    width: 100%;
-    text-align: center;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: min(8dvh, 3.5rem); // Responsive gap to prevent overflow
+    align-items: center;
+    width: 100%;
+    max-width: 32rem;
+    text-align: center;
+    gap: 2.5rem; // 고정 값 혹은 rem 기반으로 변경하여 dvh 계산 시의 점프 방지
     z-index: 1;
-    padding-bottom: 3rem; // Keep space for footer
+    padding-bottom: 4rem; // 하단 여백 확보
 }
 
 .hero {
