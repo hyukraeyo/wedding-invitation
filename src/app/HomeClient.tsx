@@ -15,7 +15,7 @@ export function HomeClient() {
 
     return (
         <div className={styles.container}>
-            <main className={styles.main}>
+            <div className={styles.innerMain}>
                 {/* Typographic Hero */}
                 <div className={styles.hero}>
                     <div className={styles.logo}>
@@ -48,7 +48,7 @@ export function HomeClient() {
                     </button>
                     <p className={styles.hint}>간편하게 만드는 나만의 모바일 청첩장</p>
                 </div>
-            </main>
+            </div>
 
             <footer className={styles.footer}>
                 <p>© 2026 banana wedding</p>

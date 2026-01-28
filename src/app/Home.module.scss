@@ -1,7 +1,10 @@
-@use "@/styles/variables" as *;
+@use "../styles/variables" as *;
+@use "../styles/mixins" as m;
 
 .container {
-    min-height: 100%; // 레이아웃에서 이미 100dvh를 보장하므로 여기선 100%로 충분
+    min-height: 100dvh; // 뷰포트 전체 높이 보장
+    width: 100%;
+    @include m.scrollbar-hide; // 자식 요소 스크롤 시에도 배경 유지를 위해 스크롤바 숨김
     background: radial-gradient(circle at 50% 30%, #FFFDE7 0%, #FFF9C4 100%); // Subtle banana gradient
 
     display: flex;
@@ -24,7 +27,7 @@
     }
 }
 
-.main {
+.innerMain {
     flex: 1;
     display: flex;
     flex-direction: column;

@@ -164,7 +164,7 @@ export default async function RootLayout({
         />
         <ClientProviders session={session}>
           <SkipLink href="#main-content">본문 바로가기</SkipLink>
-          <div vaul-drawer-wrapper="" style={{ backgroundColor: "var(--background)", minHeight: "100dvh" }}>
+          <div vaul-drawer-wrapper="" style={{ backgroundColor: "var(--background)", minHeight: "100dvh", display: "flex", flexDirection: "column" }}>
             <Suspense fallback={null}>
               <CustomScrollbar />
               <ProgressBar />
