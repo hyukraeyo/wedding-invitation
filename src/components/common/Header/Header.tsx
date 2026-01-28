@@ -128,8 +128,12 @@ export default function Header() {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    // 메인 페이지('/')와 초대장 보기('/v/'), 미리보기('/preview')에서는 헤더를 숨깁니다.
-    const isVisible = pathname !== '/' && !pathname.startsWith('/v/') && pathname !== '/preview' && !pathname.startsWith('/design-system');
+    // 메인 페이지('/')와 초대장 보기('/v/'), 미리보기('/preview'), 셋업('/builder/setup')에서는 헤더를 숨깁니다.
+    const isVisible = pathname !== '/' &&
+        !pathname.startsWith('/v/') &&
+        pathname !== '/preview' &&
+        pathname !== '/builder/setup' &&
+        !pathname.startsWith('/design-system');
     const { user, loading: authLoading } = useAuth();
 
     // Store states

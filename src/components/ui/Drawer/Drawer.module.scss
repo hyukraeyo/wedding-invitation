@@ -103,17 +103,9 @@
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
-
-  &.scrollFadeContainer {
-    @include m.scroll-fade;
-  }
 }
 
-.scrollArea {
-  flex: 1;
-  overflow-y: auto;
-  // Use scroll-padding to ensure text isn't cut off when auto-scrolling
-  scroll-padding: 2rem;
+.scrollAreaInner {
   padding: 1.25rem;
   padding-bottom: env(safe-area-inset-bottom, 2rem);
 
@@ -125,6 +117,6 @@
   &.noPadding {
     padding: 0;
   }
-
-  @include m.scrollbar-hide;
 }
+
+// scrollArea class is handled by ScrollArea component

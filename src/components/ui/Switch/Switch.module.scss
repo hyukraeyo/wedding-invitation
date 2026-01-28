@@ -21,6 +21,10 @@
     cursor: not-allowed;
   }
 
+  &[aria-invalid="true"] {
+    border-color: v.$red-500;
+  }
+
   &[data-state='checked'] {
     background-color: v.$color-primary;
   }

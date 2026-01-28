@@ -9,6 +9,7 @@ import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import styles from './BasicInfoSection.module.scss';
 import { cn } from '@/lib/utils';
 import { Eye, EyeOff } from 'lucide-react';
+import { parseKoreanName } from '@/lib/utils';
 import type { SectionProps } from '@/types/builder';
 
 const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ value }) {
@@ -33,8 +34,8 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ va
                                 <Input
                                     type="text"
                                     placeholder="신랑 이름"
-                                    value={groom.lastName + groom.firstName}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGroom({ firstName: e.target.value, lastName: '' })}
+                                    value={`${groom.lastName}${groom.firstName}`}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGroom(parseKoreanName(e.target.value))}
                                 />
                             </div>
 
@@ -100,8 +101,8 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection({ va
                                 <Input
                                     type="text"
                                     placeholder="신부 이름"
-                                    value={bride.lastName + bride.firstName}
-                                    onChange={(e) => setBride({ firstName: e.target.value, lastName: '' })}
+                                    value={`${bride.lastName}${bride.firstName}`}
+                                    onChange={(e) => setBride(parseKoreanName(e.target.value))}
                                 />
                             </div>
 

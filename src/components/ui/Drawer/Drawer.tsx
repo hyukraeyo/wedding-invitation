@@ -151,47 +151,22 @@ const DrawerDescription = React.forwardRef<
 ))
 DrawerDescription.displayName = DrawerPrimitive.Description.displayName
 
-import { useScrollFade } from "@/hooks/use-scroll-fade"
+import { ScrollArea } from "@/components/ui/ScrollArea"
 
 const DrawerScrollArea = React.forwardRef<
     HTMLDivElement,
-    React.HTMLAttributes<HTMLDivElement> & {
-        useScrollFade?: boolean;
-        padding?: "none" | "default";
-    }
->(({ className, children, useScrollFade: useFade = false, padding = "default", ...props }, ref) => {
-    const { setViewportRef, showTopFade, showBottomFade } = useScrollFade<HTMLDivElement>({
-        enabled: useFade
-    });
-
-    // Merge refs
-    const setMergedRef = React.useCallback((node: HTMLDivElement | null) => {
-        setViewportRef(node);
-        if (typeof ref === 'function') {
-            ref(node);
-        } else if (ref) {
-            (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
-        }
-    }, [ref, setViewportRef]);
-
+    React.ComponentPropsWithoutRef<typeof ScrollArea> & { padding?: "none" | "default" }
+>(({ className, children, padding = "default", ...props }, ref) => {
     return (
-        <div
-            className={cn(styles.scrollAreaWrapper, useFade && styles.scrollFadeContainer)}
-            data-top-fade={useFade && showTopFade}
-            data-bottom-fade={useFade && showBottomFade}
+        <ScrollArea
+            ref={ref}
+            className={cn(styles.scrollAreaWrapper, className)}
+            {...props}
         >
-            <div
-                ref={setMergedRef}
-                className={cn(
-                    styles.scrollArea,
-                    padding === "none" && styles.noPadding,
-                    className
-                )}
-                {...props}
-            >
+            <div className={cn(styles.scrollAreaInner, padding === "none" && styles.noPadding)}>
                 {children}
             </div>
-        </div>
+        </ScrollArea>
     )
 })
 DrawerScrollArea.displayName = "DrawerScrollArea"

@@ -23,7 +23,7 @@ import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 import { useCanUseDom } from '@/hooks/useCanUseDom';
 import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
-import { useScrollFade as useScrollFadeHook } from '@/hooks/use-scroll-fade';
+import { ScrollArea } from '@/components/ui/ScrollArea';
 import styles from './ResponsiveModal.module.scss';
 
 export interface ResponsiveModalProps {
@@ -83,23 +83,6 @@ export const ResponsiveModal = ({
 }: ResponsiveModalProps) => {
     const isDesktop = useMediaQuery("(min-width: 768px)");
 
-    // Desktop Scroll Fade State
-    const { setViewportRef, showTopFade, showBottomFade } = useScrollFadeHook<HTMLDivElement>({
-        enabled: useScrollFade && isDesktop
-    });
-
-    const setMergedRef = React.useCallback((node: HTMLDivElement | null) => {
-        setViewportRef(node);
-        if (!externalScrollRef) return;
-
-        if (typeof externalScrollRef === 'function') {
-            externalScrollRef(node);
-        } else {
-            // eslint-disable-next-line react-hooks/immutability
-            (externalScrollRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-        }
-    }, [externalScrollRef, setViewportRef]);
-
     const handleInternalScroll = React.useCallback((e: React.UIEvent<HTMLDivElement>) => {
         onScroll?.(e);
     }, [onScroll]);
@@ -137,23 +120,16 @@ export const ResponsiveModal = ({
                             )}
                         </DialogHeader>
 
-                        <div
-                            className={cn(styles.contentWrapper, useScrollFade && styles.scrollFadeContainer)}
-                            data-top-fade={useScrollFade && showTopFade}
-                            data-bottom-fade={useScrollFade && showBottomFade}
+                        <ScrollArea
+                            className={cn(styles.contentWrapper, contentClassName)}
+                            useScrollFade={useScrollFade}
+                            onScroll={handleInternalScroll}
+                            viewportRef={externalScrollRef ?? null}
                         >
-                            <div
-                                className={cn(
-                                    styles.content,
-                                    padding === "none" && styles.noPadding,
-                                    contentClassName
-                                )}
-                                onScroll={handleInternalScroll}
-                                ref={setMergedRef}
-                            >
+                            <div className={cn(styles.content, padding === "none" && styles.noPadding)}>
                                 {children}
                             </div>
-                        </div>
+                        </ScrollArea>
 
                         {hasActions && (
                             <div className={styles.footer}>
@@ -232,7 +208,7 @@ export const ResponsiveModal = ({
                                     contentClassName
                                 )}
                                 useScrollFade={useScrollFade}
-                                onScroll={onScroll}
+                                onScroll={handleInternalScroll}
                                 ref={externalScrollRef}
                                 padding={padding}
                             >

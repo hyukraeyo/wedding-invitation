@@ -2,21 +2,22 @@
 @use "../../../styles/mixins" as m;
 
 .label {
-    font-size: v.$font-size-xxs;   // ?”ìš± ì¶•ì†Œ (12.8px)
-    font-weight: 500;    // font-medium
-    line-height: 1;      // leading-none
-    color: v.$zinc-900;
-    user-select: none;
-    
-    // peer-disabled:cursor-not-allowed peer-disabled:opacity-70
-    // SCSS?ì„œ???•ì œ ? íƒ?ë‚˜ ?íƒœë¥?ì§ì ‘ ?œì–´?˜ê¸° ?´ë ¤?????ˆìœ¼ë¯€ë¡?
-    // ?„ìš” ??JS?ì„œ ?íƒœë¥?ë°›ì•„?¤ê±°??ë¶€ëª?ì»¨í…?¤íŠ¸ë¥??œìš©?´ì•¼ ??
-    // ?˜ì?ë§?Radix Label?€ ë³´í†µ Inputê³??¨ê»˜ ?°ì´ë¯€ë¡?ê¸°ë³¸?ì¸ ?¤í??¼ë§Œ ?•ì˜.
-    
-    &[data-disabled],
-    &:disabled {
-        cursor: not-allowed;
-        opacity: 0.7;
-    }
-}
+  font-size: v.$font-size-sm; // 14px Standard
+  font-weight: 500;
+  line-height: 1;
+  color: v.$zinc-900;
+  user-select: none;
+  cursor: cursor; // Standard cursor for text, but pointer if in label for checkbox? usually label is default.
+  // Actually Shadcn uses 'peer-disabled:cursor-not-allowed'.
+  // I'll stick to basic.
 
+  &[data-disabled],
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  &[aria-invalid="true"] {
+    color: v.$red-500;
+  }
+}

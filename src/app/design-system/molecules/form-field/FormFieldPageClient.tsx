@@ -8,6 +8,16 @@ import { Textarea } from "@/components/ui/Textarea";
 import { Switch } from "@/components/ui/Switch";
 import { RadioGroup } from "@/components/ui/RadioGroup";
 import { Select } from "@/components/ui/Select";
+import {
+    Field,
+    FieldLabel,
+    FieldHeader,
+    FieldDescription,
+    FieldError,
+    FieldSet,
+    FieldLegend,
+    FieldGroup
+} from "@/components/ui/Field";
 import { usePropControls } from "../../hooks/usePropControls";
 
 export default function FormFieldPageClient() {
@@ -121,6 +131,58 @@ import { Input } from "@/components/ui/Input";
                     </>
                 )
             }}
-        />
+        >
+            <div style={{ marginTop: '80px', display: 'flex', flexDirection: 'column', gap: '40px' }}>
+                <section>
+                    <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '16px' }}>Modular Field (조립식 필드)</h2>
+                    <p style={{ color: '#666', marginBottom: '24px' }}>
+                        복잡한 레이아웃이 필요한 경우, <code>Field</code> 하위 컴포넌트들을 직접 조합하여 사용할 수 있습니다.
+                    </p>
+
+                    <div style={{ padding: '40px', border: '1px solid #eee', borderRadius: '12px', display: 'flex', flexDirection: 'column', gap: '40px' }}>
+                        {/* Example 1: Custom Header with multiple actions */}
+                        <div style={{ maxWidth: '400px' }}>
+                            <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '12px' }}>커스텀 헤더 & 액션</h3>
+                            <Field>
+                                <FieldHeader>
+                                    <FieldLabel required>카드 번호</FieldLabel>
+                                    <button style={{ fontSize: '12px', color: '#FBC02D', fontWeight: '600' }}>스캐너 열기</button>
+                                </FieldHeader>
+                                <Input placeholder="0000 0000 0000 0000" />
+                                <FieldDescription>16자리 숫자를 입력해주세요.</FieldDescription>
+                            </Field>
+                        </div>
+
+                        {/* Example 2: FieldSet & FieldGroup */}
+                        <div style={{ maxWidth: '400px' }}>
+                            <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '12px' }}>그룹 및 필드셋</h3>
+                            <FieldSet>
+                                <FieldLegend>배송지 정보</FieldLegend>
+                                <FieldGroup>
+                                    <Field>
+                                        <FieldLabel>수령인</FieldLabel>
+                                        <Input placeholder="이름" />
+                                    </Field>
+                                    <Field>
+                                        <FieldLabel>연락처</FieldLabel>
+                                        <Input placeholder="010-0000-0000" />
+                                    </Field>
+                                </FieldGroup>
+                            </FieldSet>
+                        </div>
+
+                        {/* Example 3: Error state */}
+                        <div style={{ maxWidth: '400px' }}>
+                            <h3 style={{ fontSize: '1rem', fontWeight: '600', marginBottom: '12px' }}>에러 상태</h3>
+                            <Field isError>
+                                <FieldLabel>아이디</FieldLabel>
+                                <Input defaultValue="banana" />
+                                <FieldError>이미 사용 중인 아이디입니다.</FieldError>
+                            </Field>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </DesignSystemPage>
     );
 }

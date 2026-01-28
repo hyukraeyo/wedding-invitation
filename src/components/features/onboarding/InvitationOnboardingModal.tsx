@@ -7,6 +7,7 @@ import { useShallow } from "zustand/react/shallow";
 import { DynamicResponsiveModal as ResponsiveModal } from "@/components/common/ResponsiveModal/Dynamic";
 import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
+import { parseKoreanName } from "@/lib/utils";
 import styles from "./InvitationOnboardingModal.module.scss";
 
 interface InvitationOnboardingModalProps {
@@ -51,8 +52,8 @@ export function InvitationOnboardingModal({ isOpen, onClose }: InvitationOnboard
         setLoading(true);
 
         try {
-            setGroom({ firstName: formData.groomName, lastName: "" });
-            setBride({ firstName: formData.brideName, lastName: "" });
+            setGroom(parseKoreanName(formData.groomName));
+            setBride(parseKoreanName(formData.brideName));
 
             if (formData.date) setDate(formData.date);
             if (formData.time) setTime(formData.time);

@@ -100,7 +100,7 @@ export default function AccountPageClient({
                 <div className={styles.itemContent}>
                     {isEditingPhone ? (
                         <div className={styles.editWrapper}>
-                            <FormField className={styles.phoneInput}>
+                            <FormField className={styles.phoneInput || ''}>
                                 <Input
                                     value={formData.phone || ''}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>

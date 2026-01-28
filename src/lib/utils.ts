@@ -42,6 +42,33 @@ export function capitalizeFirst(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
 
+/**
+ * Parses a Korean name into lastName and firstName.
+ * Default logic: first character is lastName.
+ */
+export function parseKoreanName(fullName: string): { lastName: string; firstName: string } {
+  const trimmed = fullName.trim();
+  if (trimmed.length <= 1) return { lastName: trimmed, firstName: "" };
+
+  // Double-character surnames (복성) list
+  const doubleSurnames = ["남궁", "황보", "제갈", "사공", "선우", "독고", "동고", "망절"];
+
+  for (const surname of doubleSurnames) {
+    if (trimmed.startsWith(surname)) {
+      return {
+        lastName: surname,
+        firstName: trimmed.substring(surname.length),
+      };
+    }
+  }
+
+  // Default: 1 character surname
+  return {
+    lastName: trimmed.substring(0, 1),
+    firstName: trimmed.substring(1),
+  };
+}
+
 export function kebabToCamel(str: string): string {
   return str.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
 }

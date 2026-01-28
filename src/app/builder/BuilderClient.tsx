@@ -47,9 +47,8 @@ export function BuilderClient() {
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [isReady, setIsReady] = useState(false);
     const { user, isProfileComplete, profileLoading, isAdmin } = useAuth();
-    const { editingSection, reset } = useInvitationStore(useShallow((state) => ({
+    const { editingSection } = useInvitationStore(useShallow((state) => ({
         editingSection: state.editingSection,
-        reset: state.reset,
     })));
     const router = useRouter();
     const searchParams = useSearchParams();
@@ -66,20 +65,32 @@ export function BuilderClient() {
     useEffect(() => {
         if (initRef.current) return;
         initRef.current = true;
+
+        const isOnboarding = searchParams.get('onboarding') === 'true';
+
         if (isEditMode) {
             // Re-mount lock reset
             GLOBAL_SAVE_LOCK = false;
-        } else if (searchParams.get('onboarding') === 'true') {
+        } else if (isOnboarding) {
             sessionStorage.removeItem('builder-draft-slug');
             GLOBAL_SAVE_LOCK = false;
         } else {
-            reset();
+            // Check if essential info exists (User might have refreshed or navigated back)
+            const state = useInvitationStore.getState();
+            const hasEssentialInfo = state.groom.firstName && state.bride.firstName && state.slug;
+
+            if (!hasEssentialInfo) {
+                // If no essential info and not in onboarding flow, redirect to setup
+                router.replace('/builder/setup');
+                return;
+            }
+
             sessionStorage.removeItem('builder-draft-slug');
             GLOBAL_SAVE_LOCK = false;
         }
         // Set ready in next frame to avoid cascading renders
         requestAnimationFrame(() => setIsReady(true));
-    }, [isEditMode, reset, searchParams]);
+    }, [isEditMode, router, searchParams]);
 
     const togglePreview = useCallback(() => {
         setIsPreviewOpen(prev => !prev);

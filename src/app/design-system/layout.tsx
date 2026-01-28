@@ -49,6 +49,8 @@ const navSections = [
             { id: "switch", label: "Switch", icon: Circle, href: "/design-system/atoms/switch" },
             { id: "skeleton", label: "Skeleton / Loader", icon: Loader, href: "/design-system/atoms/skeleton" },
             { id: "select", label: "Select", icon: FormInput, href: "/design-system/atoms/select" },
+            { id: "label", label: "Label", icon: Type, href: "/design-system/atoms/label" },
+            { id: "scroll-area", label: "Scroll Area", icon: List, href: "/design-system/atoms/scroll-area" },
         ],
     },
     {
@@ -57,6 +59,7 @@ const navSections = [
             { id: "form-field", label: "Form Field", icon: FormInput, href: "/design-system/molecules/form-field" },
             { id: "switch-field", label: "Switch Field", icon: FormInput, href: "/design-system/molecules/switch-field" },
             { id: "radio", label: "Radio Groups", icon: Circle, href: "/design-system/molecules/radio-group" },
+            { id: "bottom-cta", label: "Bottom CTA (TDS)", icon: Layers, href: "/design-system/molecules/bottom-cta" },
 
             { id: "color-picker", label: "Color Picker", icon: Palette, href: "/design-system/molecules/pickers/color-picker" },
             { id: "date-picker", label: "Date Picker", icon: Calendar, href: "/design-system/molecules/pickers/date-picker" },

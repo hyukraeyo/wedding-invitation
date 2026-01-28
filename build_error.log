@@ -1,0 +1,107 @@
+
+> banana-wedding@0.1.0 build
+> next build --webpack
+
+▲ Next.js 16.1.1 (webpack)
+- Environments: .env.local
+- Experiments (use with caution):
+  · optimizePackageImports
+  · serverActions
+  ✓ viewTransition
+
+  Creating an optimized production build ...
+> [PWA] Compile server
+> [PWA] Compile server
+> [PWA] Compile client (static)
+> [PWA] Auto register service worker with: C:\Users\johr9\Documents\git\wedding-invitation\node_modules\next-pwa\register.js
+> [PWA] Service worker: C:\Users\johr9\Documents\git\wedding-invitation\public\sw.js
+> [PWA]   url: /sw.js
+> [PWA]   scope: /
+⚠ Compiled with warnings in 6.0s
+
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+Attempted import error: 'DesignSystemPage' is not exported from '../../DesignSystemPage' (imported as 'DesignSystemPage').
+
+Import trace for requested module:
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+Attempted import error: 'DocSection' is not exported from '../../DocSection' (imported as 'DocSection').
+
+Import trace for requested module:
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+Attempted import error: 'Story' is not exported from '../../Story' (imported as 'Story').
+
+Import trace for requested module:
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+Attempted import error: 'Story' is not exported from '../../Story' (imported as 'Story').
+
+Import trace for requested module:
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+Attempted import error: 'Story' is not exported from '../../Story' (imported as 'Story').
+
+Import trace for requested module:
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+Attempted import error: 'DocSection' is not exported from '../../DocSection' (imported as 'DocSection').
+
+Import trace for requested module:
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+Attempted import error: 'DesignSystemPage' is not exported from '../../DesignSystemPage' (imported as 'DesignSystemPage').
+
+Import trace for requested module:
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+Attempted import error: 'DocSection' is not exported from '../../DocSection' (imported as 'DocSection').
+
+Import trace for requested module:
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+Attempted import error: 'Story' is not exported from '../../Story' (imported as 'Story').
+
+Import trace for requested module:
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+Attempted import error: 'Story' is not exported from '../../Story' (imported as 'Story').
+
+Import trace for requested module:
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+Attempted import error: 'Story' is not exported from '../../Story' (imported as 'Story').
+
+Import trace for requested module:
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+Attempted import error: 'DocSection' is not exported from '../../DocSection' (imported as 'DocSection').
+
+Import trace for requested module:
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx
+
+  Running TypeScript ...
+Failed to compile.
+
+./src/app/design-system/atoms/scroll-area/ScrollAreaPageClient.tsx:5:10
+Type error: Module '"../../DesignSystemPage"' has no exported member 'DesignSystemPage'. Did you mean to use 'import DesignSystemPage from "../../DesignSystemPage"' instead?
+
+[0m [90m 3 |[39m [36mimport[39m [33mReact[39m [36mfrom[39m [32m"react"[39m
+ [90m 4 |[39m [36mimport[39m { [33mScrollArea[39m } [36mfrom[39m [32m"@/components/ui/ScrollArea"[39m
+[31m[1m>[22m[39m[90m 5 |[39m [36mimport[39m { [33mDesignSystemPage[39m } [36mfrom[39m [32m"../../DesignSystemPage"[39m
+ [90m   |[39m          [31m[1m^[22m[39m
+ [90m 6 |[39m [36mimport[39m { [33mStory[39m } [36mfrom[39m [32m"../../Story"[39m
+ [90m 7 |[39m [36mimport[39m { [33mDocSection[39m } [36mfrom[39m [32m"../../DocSection"[39m
+ [90m 8 |[39m[0m
+Next.js build worker exited with code: 1 and signal: null

@@ -4,7 +4,7 @@ import * as React from "react"
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group"
 import { cn } from "@/lib/utils"
 import styles from "./RadioGroup.module.scss"
-import { useFormField } from "@/components/common/FormField"
+import { useField } from "@/components/ui/Field"
 
 // ------------------------------------------------------------------
 // Context & Types
@@ -50,8 +50,8 @@ const RadioGroup = React.forwardRef<
     React.ElementRef<typeof RadioGroupPrimitive.Root>,
     RadioGroupProps
 >(({ className, variant = "segmented", size = "md", options, fullWidth, children, value, defaultValue, onValueChange, id: customId, ...props }, ref) => {
-    // --- FormField Integration ---
-    const field = useFormField();
+    // --- Field Integration ---
+    const field = useField();
     const id = customId || field?.id;
     const describedBy = field?.isError ? field.errorId : field?.descriptionId;
     const isError = field?.isError;

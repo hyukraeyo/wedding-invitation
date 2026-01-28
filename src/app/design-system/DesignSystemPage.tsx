@@ -22,13 +22,15 @@ interface DesignSystemPageProps {
         content: React.ReactNode;
         canvasStyle?: React.CSSProperties;
     };
+    children?: React.ReactNode;
 }
 
 export default function DesignSystemPage({
     title,
     description,
     playground,
-    combinations
+    combinations,
+    children
 }: DesignSystemPageProps) {
     return (
         <>
@@ -62,6 +64,8 @@ export default function DesignSystemPage({
                         {combinations.content}
                     </Story>
                 )}
+
+                {children}
             </div>
         </>
     );

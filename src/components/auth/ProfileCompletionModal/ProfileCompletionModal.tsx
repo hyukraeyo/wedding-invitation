@@ -98,7 +98,7 @@ export function ProfileCompletionModal({
                         <div className={styles.inputIcon}>
                             <User size={18} />
                         </div>
-                        <FormField className={styles.inputField}>
+                        <FormField className={styles.inputField || ''}>
                             <Input
                                 placeholder="이름 (실명)"
                                 value={name}
@@ -111,7 +111,7 @@ export function ProfileCompletionModal({
                         <div className={styles.inputIcon}>
                             <Phone size={18} />
                         </div>
-                        <FormField className={styles.inputField}>
+                        <FormField className={styles.inputField || ''}>
                             <Input
                                 placeholder="연락처 (- 없이 입력)"
                                 value={phone}

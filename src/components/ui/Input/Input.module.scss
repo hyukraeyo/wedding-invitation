@@ -15,7 +15,7 @@
     height: v.$control-height-md;
     padding: 0 1rem;
     font-size: v.$font-size-sm;
-    border-radius: v.$radius-md;
+    border-radius: v.$input-radius;
   }
 
   @include m.focus-ring;

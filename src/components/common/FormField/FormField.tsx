@@ -1,98 +1,80 @@
-import React, { createContext, useContext, useId } from 'react';
+import React, { ReactNode, memo } from 'react';
 import { cn } from '@/lib/utils';
-import { Label } from '../FormPrimitives';
-import styles from './FormField.module.scss';
+import {
+    Field,
+    FieldLabel,
+    FieldContent,
+    FieldDescription,
+    FieldError,
+    FieldHeader,
+    useField
+} from '@/components/ui/Field';
 
-// --- Context ---
-interface FormFieldContextValue {
-    id: string;
-    errorId?: string;
-    descriptionId?: string;
-    isError: boolean;
-}
-
-const FormFieldContext = createContext<FormFieldContextValue | null>(null);
-
+// --- Context & Hook (Compatibility) ---
 export const useFormField = () => {
-    const context = useContext(FormFieldContext);
-    return context; // null일 수 있음 (단독 사용 시)
+    const context = useField();
+    return context;
 };
 
 // --- Component ---
 export interface FormFieldProps {
-    label?: React.ReactNode | undefined;
-    children: React.ReactNode;
-    className?: string | undefined;
-    required?: boolean | undefined;
-    description?: React.ReactNode | undefined;
-    error?: React.ReactNode | undefined;
-    id?: string | undefined;
-    action?: React.ReactNode | undefined;
-    layout?: 'vertical' | 'horizontal' | undefined;
-    align?: 'start' | 'center' | undefined;
+    label?: ReactNode;
+    children: ReactNode;
+    className?: string;
+    required?: boolean;
+    description?: ReactNode;
+    error?: ReactNode;
+    id?: string;
+    action?: ReactNode;
+    layout?: 'vertical' | 'horizontal';
+    align?: 'start' | 'center';
 }
 
-export const FormField = React.memo(({
+/**
+ * FormField: 최신 UI 가이드라인에 맞게 고도화된 필드 컴포넌트.
+ * 내부적으로 @/components/ui/Field 구성을 사용합니다.
+ */
+export const FormField = memo(({
     label,
     children,
     className,
     required,
     description,
     error,
-    id: customId,
+    id,
     action,
     layout = 'vertical',
     align = 'start',
 }: FormFieldProps) => {
-    const reactId = useId();
-    const id = customId || reactId;
-    const errorId = `${id}-error`;
-    const descriptionId = `${id}-description`;
     const isError = !!error;
 
     return (
-        <FormFieldContext.Provider value={{ id, errorId, descriptionId, isError }}>
-            <div className={cn(
-                styles.fieldWrapper,
-                styles[`layout-${layout}`],
-                align === 'center' && styles.alignCenter,
-                className
-            )}
-                role="group"
-                aria-labelledby={label ? `${id}-label` : undefined}
-            >
-                {label ? (
-                    <div className={styles.fieldHeader}>
-                        <div className={styles.labelGroup}>
-                            <Label
-                                htmlFor={id}
-                                id={`${id}-label`}
-                                required={!!required}
-                            >
-                                {label}
-                            </Label>
-                        </div>
-                        {action}
-                    </div>
+        <Field
+            id={id}
+            isError={isError}
+            orientation={layout}
+            className={cn(align === 'center' && 'alignCenter', className)}
+        >
+            {label ? (
+                <FieldHeader>
+                    <FieldLabel required={!!required}>
+                        {label}
+                    </FieldLabel>
+                    {action}
+                </FieldHeader>
+            ) : null}
+
+            <FieldContent>
+                {children}
+
+                {/* 에러나 설명이 있을 경우만 렌더링 */}
+                {isError ? (
+                    <FieldError>{error}</FieldError>
+                ) : description ? (
+                    <FieldDescription>{description}</FieldDescription>
                 ) : null}
-
-                <div className={styles.fieldContent}>
-                    {children}
-
-                    {(layout === 'horizontal' || isError || description) && (description || error) ? (
-                        <p className={cn(
-                            styles.description,
-                            isError && styles.error,
-                            layout === 'horizontal' && styles.horizontalDesc
-                        )}
-                            id={isError ? errorId : descriptionId}
-                        >
-                            {error || description}
-                        </p>
-                    ) : null}
-                </div>
-            </div>
-        </FormFieldContext.Provider>
+            </FieldContent>
+        </Field>
     );
 });
 

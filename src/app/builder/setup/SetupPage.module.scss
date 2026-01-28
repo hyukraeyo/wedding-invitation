@@ -1,0 +1,76 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: v.$color-bg-page;
+  padding: 2rem 1.25rem;
+  
+  @media (max-width: 768px) {
+    background-color: v.$color-background;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  @media (min-width: 768px) {
+    padding: 4rem 2rem;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.content {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+
+  @media (max-width: 768px) {
+    gap: 0;
+  }
+}
+
+.formWrapper {
+  background-color: v.$color-background;
+  border-radius: 2.5rem;
+  padding: 3rem;
+  border: 1px solid v.$color-border;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.04),
+    0 1px 3px rgba(0, 0, 0, 0.02);
+  animation: setupFadeIn 0.8s v.$ease-ios both;
+  
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+    padding-top: 2rem;
+    padding-bottom: 120px; // 여유 있는 하단 패딩 확보
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    animation: setupFadeInMobile 0.8s v.$ease-ios both;
+  }
+}
+
+@keyframes setupFadeInMobile {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes setupFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+

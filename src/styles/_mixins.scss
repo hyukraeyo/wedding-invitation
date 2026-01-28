@@ -268,7 +268,7 @@
   font-weight: 500;
   font-family: $font-family-base;
   border: 1px solid transparent;
-  border-radius: $radius-sm;
+  border-radius: $button-radius;
   cursor: pointer;
   transition: background-color $transition-fast, border-color $transition-fast, box-shadow $transition-fast, transform $transition-fast;
   text-decoration: none;
