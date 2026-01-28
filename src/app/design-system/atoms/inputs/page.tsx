@@ -103,8 +103,8 @@ import { Input } from "@/components/ui/Input";
                                     <Input
                                         placeholder={values.placeholder as string}
                                         disabled={values.disabled as boolean}
-                                        type={values.type as any}
-                                        size={values.size as any}
+                                        type={values.type as "text" | "password" | "email" | "tel" | "url" | "date" | "number"}
+                                        size={values.size as "sm" | "md" | "lg"}
                                     />
                                 </FormField>
                             </div>
@@ -113,8 +113,8 @@ import { Input } from "@/components/ui/Input";
                                 placeholder={values.placeholder as string}
                                 error={values.error as boolean}
                                 disabled={values.disabled as boolean}
-                                type={values.type as any}
-                                size={values.size as any}
+                                type={values.type as "text" | "password" | "email" | "tel" | "url" | "date" | "number"}
+                                size={values.size as "sm" | "md" | "lg"}
                             />
                         )}
                     </div>

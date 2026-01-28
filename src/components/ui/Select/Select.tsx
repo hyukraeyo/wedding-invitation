@@ -38,6 +38,8 @@ interface SelectProps<T> {
     /** Disable responsive behavior and always use desktop popover */
     desktopOnly?: boolean | undefined;
     id?: string | undefined;
+    /** Force show placeholder even with floating variant */
+    showPlaceholder?: boolean;
 }
 
 const Select = <T extends string | number>({
@@ -56,6 +58,7 @@ const Select = <T extends string | number>({
     mobileOnly = false,
     desktopOnly = false,
     id: customId,
+    showPlaceholder = false,
     ...props
 }: SelectProps<T>) => {
     const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -100,7 +103,7 @@ const Select = <T extends string | number>({
                                 data-variant={field?.variant}
                             >
                                 <span className={cn(!selectedOption && styles.placeholder)}>
-                                    {selectedOption ? selectedOption.label : (field?.variant === 'floating' ? '' : placeholder)}
+                                    {selectedOption ? selectedOption.label : ((field?.variant === 'floating' && !showPlaceholder) ? '' : placeholder)}
                                 </span>
                                 <ChevronDown className={styles.icon} />
                             </button>
@@ -157,7 +160,7 @@ const Select = <T extends string | number>({
                     aria-describedby={describedBy}
                     data-variant={field?.variant}
                 >
-                    <SelectValue placeholder={field?.variant === 'floating' ? '' : placeholder} />
+                    <SelectValue placeholder={(field?.variant === 'floating' && !showPlaceholder) ? '' : placeholder} />
                 </SelectTrigger>
                 <SelectContent className={cn(contentClassName)}>
                     {options.map((option) => (

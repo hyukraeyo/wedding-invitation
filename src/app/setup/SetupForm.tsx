@@ -6,11 +6,10 @@ import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { Input } from '@/components/ui/Input';
-import { Label } from '@/components/ui/Label';
 import { DatePicker } from '@/components/common/DatePicker';
 import { TimePicker } from '@/components/common/TimePicker';
 import { Progress } from '@/components/ui/Progress';
-import { ArrowRight, Sparkles, Link as LinkIcon } from 'lucide-react';
+import { Sparkles, Link as LinkIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import { parseKoreanName } from '@/lib/utils';
 import { BottomCTA } from '@/components/ui/BottomCTA';
@@ -106,28 +105,14 @@ const SetupForm = () => {
         }
     };
 
-    const isNamesValid = !!(groomFullName && brideFullName);
-    const isDateTimeValid = !!(date && time);
-    const isFormValid = !!(isNamesValid && isDateTimeValid && slug);
+
 
     // Progress Calculation
     const fields = [groomFullName, brideFullName, date, time, slug];
     const completedFields = fields.filter(f => !!f).length;
     const progress = (completedFields / fields.length) * 100;
 
-    // Focus Handlers
-    const handleKeyDown = (e: React.KeyboardEvent, nextRef: React.RefObject<HTMLElement | null>) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            nextRef.current?.focus();
-            if (nextRef === dateRef) {
-                nextRef.current?.click();
-            } else if (nextRef === timeRef) {
-                nextRef.current?.querySelector('button')?.focus();
-                nextRef.current?.querySelector('button')?.click();
-            }
-        }
-    };
+
 
     // Auto-scroll to top when new fields appear (Reverse Stacking)
     useEffect(() => {
@@ -219,44 +204,24 @@ const SetupForm = () => {
                 {/* Step 3: Time */}
                 {currentStep >= 3 && (
                     <div className={cn(styles.section, styles.stackIn)}>
-                        <div className="flex gap-3">
-                            <div className="flex-[1.2]">
-                                <FormField
-                                    label="오전/오후"
-                                    id="wedding-time-period"
-                                    variant="floating"
-                                >
-                                    <TimePicker
-                                        id="wedding-time-period"
-                                        ref={timeRef}
-                                        part="period"
-                                        value={time}
-                                        onChange={setTime}
-                                        disabled={currentStep > 3}
-                                        className="border-none bg-transparent text-lg font-bold p-0 shadow-none"
-                                    />
-                                </FormField>
-                            </div>
-                            <div className="flex-[1.8]">
-                                <FormField
-                                    label="예식 시간"
-                                    id="wedding-time-values"
-                                    variant="floating"
-                                >
-                                    <TimePicker
-                                        id="wedding-time-values"
-                                        part="time"
-                                        value={time}
-                                        onChange={(val) => {
-                                            setTime(val);
-                                            if (val) setTimeout(handleNext, 300);
-                                        }}
-                                        disabled={currentStep > 3}
-                                        className="border-none bg-transparent text-lg font-bold p-0 shadow-none"
-                                    />
-                                </FormField>
-                            </div>
-                        </div>
+                        <FormField
+                            label="예식 시간"
+                            id="wedding-time"
+                            variant="floating"
+                        >
+                            <TimePicker
+                                id="wedding-time"
+                                ref={timeRef}
+                                part="all"
+                                value={time}
+                                onChange={setTime}
+                                onComplete={() => {
+                                    setTimeout(handleNext, 400);
+                                }}
+                                disabled={currentStep > 3}
+                                className="border-none bg-transparent text-lg font-bold p-0 shadow-none h-auto h-12 justify-start"
+                            />
+                        </FormField>
                     </div>
                 )}
 

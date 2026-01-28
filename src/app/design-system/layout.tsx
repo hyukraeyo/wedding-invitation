@@ -22,6 +22,7 @@ import {
     Settings,
     List,
     Calendar,
+    Clock,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
@@ -63,6 +64,7 @@ const navSections = [
 
             { id: "color-picker", label: "Color Picker", icon: Palette, href: "/design-system/molecules/pickers/color-picker" },
             { id: "date-picker", label: "Date Picker", icon: Calendar, href: "/design-system/molecules/pickers/date-picker" },
+            { id: "time-picker", label: "Time Picker", icon: Clock, href: "/design-system/molecules/pickers/time-picker" },
             { id: "accordions", label: "Accordions", icon: ChevronDown, href: "/design-system/molecules/accordions" },
             { id: "tabs", label: "Tabs & Navigation", icon: Navigation, href: "/design-system/molecules/navigation#tabs" },
             {

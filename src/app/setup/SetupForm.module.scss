@@ -140,6 +140,17 @@
     }
 }
 
+.row {
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+
+    & > div {
+        flex: 1;
+        min-width: 0;
+    }
+}
+
 .grid {
     display: flex;
     flex-direction: column;
