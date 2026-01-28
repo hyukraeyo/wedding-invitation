@@ -17,12 +17,13 @@ interface TimePickerProps {
     maxHour?: number;
     id?: string;
     disabled?: boolean;
+    part?: 'all' | 'period' | 'time';
 }
 
 type Period = 'AM' | 'PM';
 
 export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
-    ({ value, onChange, onComplete, className, minuteStep = 10, minHour, maxHour, id, disabled }, ref) => {
+    ({ value, onChange, onComplete, className, minuteStep = 10, minHour, maxHour, id, disabled, part = 'all' }, ref) => {
         const field = useField();
 
         React.useEffect(() => {
@@ -65,54 +66,57 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
             }
         };
 
-        const handlePeriodHourChange = (val: string) => {
-            const [nextPeriod, nextHour] = val.split(':') as [Period, string];
-            if (!nextPeriod || !nextHour) return;
-            updateTime(nextPeriod, nextHour, m);
+        const handlePeriodChange = (val: Period) => {
+            updateTime(val, displayHour, m);
+        };
+
+        const handleHourChange = (val: string) => {
+            updateTime(period, val, m);
         };
 
         const handleMinuteChange = (val: string) => {
             updateTime(period, displayHour, val, true);
         };
 
-        const hours = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
+        const periodOptions = [
+            { label: '오전', value: 'AM' },
+            { label: '오후', value: 'PM' }
+        ];
 
-        const periodHourOptions = [
-            ...hours.map((hour) => ({
-                label: `오전 ${hour}시`,
-                value: `AM:${hour}`
-            })),
-            ...hours.map((hour) => ({
-                label: `오후 ${hour}시`,
-                value: `PM:${hour}`
-            })),
-        ].filter(option => {
-            const [p, hStr] = option.value.split(':') as [Period, string];
-            let h = parseInt(hStr, 10);
-            if (p === 'PM' && h !== 12) h += 12;
-            if (p === 'AM' && h === 12) h = 0;
-
-            const min = minHour !== undefined ? minHour : 0;
-            const max = maxHour !== undefined ? maxHour : 23;
-
-            return h >= min && h <= max;
-        });
+        const hourOptions = ['12', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'].map(h => ({
+            label: `${h}시`,
+            value: h
+        }));
 
         const minutes = Array.from(
             { length: Math.floor(60 / minuteStep) },
             (_, i) => String(i * minuteStep).padStart(2, '0')
         );
 
-        return (
-            <div ref={ref} className={cn(styles.container, className)}>
-                {/* Period + Hour Select */}
+        const minuteOptions = minutes.map(min => ({ label: `${min}분`, value: min }));
+
+        const renderPeriod = () => (
+            <div className={styles.periodSection}>
+                <Select
+                    id={id}
+                    value={hasValue ? period : ''}
+                    onValueChange={handlePeriodChange as any}
+                    options={periodOptions}
+                    placeholder="오전/오후"
+                    modalTitle="오전/오후"
+                    disabled={disabled}
+                />
+            </div>
+        );
+
+        const renderTime = () => (
+            <>
                 <div className={styles.hourSection}>
                     <Select
-                        id={id}
-                        value={hasValue ? `${period}:${displayHour}` : ''}
-                        onValueChange={handlePeriodHourChange}
-                        options={periodHourOptions}
-                        placeholder="오전/오후 시간"
+                        value={hasValue ? displayHour : ''}
+                        onValueChange={handleHourChange}
+                        options={hourOptions}
+                        placeholder="시"
                         modalTitle="시간"
                         disabled={disabled}
                     />
@@ -120,17 +124,29 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
 
                 <span className={styles.separator}>:</span>
 
-                {/* Minute Select */}
                 <div className={styles.minuteSection}>
                     <Select
                         value={hasValue ? m : ''}
                         onValueChange={handleMinuteChange}
-                        options={minutes.map(min => ({ label: `${min}분`, value: min }))}
+                        options={minuteOptions}
                         placeholder="분"
                         modalTitle="분"
                         disabled={disabled}
                     />
                 </div>
+            </>
+        );
+
+        return (
+            <div ref={ref} className={cn(styles.container, className)}>
+                {part === 'all' && (
+                    <>
+                        {renderPeriod()}
+                        {renderTime()}
+                    </>
+                )}
+                {part === 'period' && renderPeriod()}
+                {part === 'time' && renderTime()}
             </div>
         );
     }

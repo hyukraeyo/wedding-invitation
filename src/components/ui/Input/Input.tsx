@@ -11,16 +11,30 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
 const Input = React.forwardRef<
     HTMLInputElement,
     InputProps
->(({ className, type, error, size = 'md', id: customId, ...props }, ref) => {
+>(({ className, type, error, size = 'md', id: customId, onChange, ...props }, ref) => {
     const sizeClass = styles[size];
     const field = useFormField();
+    const inputRef = React.useRef<HTMLInputElement>(null);
 
-    // Auto-sync with Field context for floating labels
-    React.useEffect(() => {
-        if (field?.setHasValue) {
-            field.setHasValue(!!props.value || !!props.defaultValue);
+    // Merge refs
+    React.useImperativeHandle(ref, () => inputRef.current!);
+
+    // Function to sync current value with Field context
+    const syncHasValue = React.useCallback(() => {
+        if (field?.setHasValue && inputRef.current) {
+            field.setHasValue(inputRef.current.value.length > 0);
         }
-    }, [props.value, props.defaultValue, field]);
+    }, [field]);
+
+    // Initial sync and sync on prop changes
+    React.useEffect(() => {
+        syncHasValue();
+    }, [syncHasValue, props.value, props.defaultValue]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        syncHasValue();
+        onChange?.(e);
+    };
 
     // Auto-sync with FormField context
     const id = customId || field?.id;
@@ -36,7 +50,8 @@ const Input = React.forwardRef<
             data-variant={field?.variant}
             aria-describedby={describedBy}
             aria-invalid={isError ? "true" : undefined}
-            ref={ref}
+            ref={inputRef}
+            onChange={handleChange}
             {...props}
         />
     )

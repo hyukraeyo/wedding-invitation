@@ -52,6 +52,13 @@ export default function FormFieldPageClient() {
             options: ["vertical", "horizontal"],
             description: "레이블과 입력 요소의 배치 방향",
             componentType: '"vertical" | "horizontal"'
+        },
+        variant: {
+            type: 'segmented',
+            defaultValue: 'default',
+            options: ["default", "floating"],
+            description: "필드 스타일 변이",
+            componentType: '"default" | "floating"'
         }
     });
 
@@ -68,6 +75,7 @@ import { Input } from "@/components/ui/Input";
   ${errorText ? `error="${errorText}"` : ""}
   ${(values.required as boolean) ? "required" : ""}
   layout="${values.layout}"
+  variant="${values.variant}"
 >
   <Input placeholder="내용을 입력하세요" />
 </FormField>`;
@@ -88,6 +96,7 @@ import { Input } from "@/components/ui/Input";
                             error={errorText || undefined}
                             required={values.required as boolean}
                             layout={values.layout as "vertical" | "horizontal"}
+                            variant={values.variant as "default" | "floating"}
                         >
                             <Input placeholder="자동으로 레이블과 연결됩니다" />
                         </FormField>

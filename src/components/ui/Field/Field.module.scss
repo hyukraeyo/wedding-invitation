@@ -83,11 +83,16 @@
             gap: 0;
             border-bottom: 2px solid v.$zinc-100;
             transition: all 0.3s v.$ease-ios;
-            padding-bottom: 0.125rem;
+            padding-bottom: 0px; // Minimal space for the underline
 
             &:focus-within {
                 border-bottom-color: v.$primary;
             }
+        }
+
+        .fieldDescription, 
+        .fieldError {
+            margin-top: 0.5rem;
         }
     }
 }

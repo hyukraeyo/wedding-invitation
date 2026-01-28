@@ -190,7 +190,7 @@ const SetupForm = () => {
                 {currentStep >= 4 && (
                     <div className={cn(styles.section, styles.stackIn)}>
                         <FormField
-                            label="나만의 URL"
+                            label="청첩장 주소"
                             id="url-slug"
                             variant="floating"
                         >
@@ -219,24 +219,44 @@ const SetupForm = () => {
                 {/* Step 3: Time */}
                 {currentStep >= 3 && (
                     <div className={cn(styles.section, styles.stackIn)}>
-                        <FormField
-                            label="시간"
-                            id="wedding-time"
-                            variant="floating"
-                        >
-                            <TimePicker
-                                id="wedding-time"
-                                ref={timeRef}
-                                value={time}
-                                onChange={(val) => {
-                                    setTime(val);
-                                    if (val) setTimeout(handleNext, 300);
-                                }}
-                                onComplete={() => { }}
-                                disabled={currentStep > 3}
-                                className="border-none bg-transparent text-lg font-bold p-0 shadow-none"
-                            />
-                        </FormField>
+                        <div className="flex gap-3">
+                            <div className="flex-[1.2]">
+                                <FormField
+                                    label="오전/오후"
+                                    id="wedding-time-period"
+                                    variant="floating"
+                                >
+                                    <TimePicker
+                                        id="wedding-time-period"
+                                        ref={timeRef}
+                                        part="period"
+                                        value={time}
+                                        onChange={setTime}
+                                        disabled={currentStep > 3}
+                                        className="border-none bg-transparent text-lg font-bold p-0 shadow-none"
+                                    />
+                                </FormField>
+                            </div>
+                            <div className="flex-[1.8]">
+                                <FormField
+                                    label="예식 시간"
+                                    id="wedding-time-values"
+                                    variant="floating"
+                                >
+                                    <TimePicker
+                                        id="wedding-time-values"
+                                        part="time"
+                                        value={time}
+                                        onChange={(val) => {
+                                            setTime(val);
+                                            if (val) setTimeout(handleNext, 300);
+                                        }}
+                                        disabled={currentStep > 3}
+                                        className="border-none bg-transparent text-lg font-bold p-0 shadow-none"
+                                    />
+                                </FormField>
+                            </div>
+                        </div>
                     </div>
                 )}
 
@@ -244,7 +264,7 @@ const SetupForm = () => {
                 {currentStep >= 2 && (
                     <div className={cn(styles.section, styles.stackIn)}>
                         <FormField
-                            label="날짜"
+                            label="예식 날짜"
                             id="wedding-date"
                             variant="floating"
                         >

@@ -59,7 +59,7 @@ export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
                 data-variant={field?.variant}
             >
                 <span className={cn(!value && styles.placeholder, value && styles.value)}>
-                    {dateValue ? format(dateValue, 'PPP', { locale: ko }) : placeholder}
+                    {dateValue ? format(dateValue, 'PPP', { locale: ko }) : (field?.variant === 'floating' ? '' : placeholder)}
                 </span>
                 <CalendarIcon />
             </button>

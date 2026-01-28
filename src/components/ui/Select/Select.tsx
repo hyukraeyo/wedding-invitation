@@ -100,7 +100,7 @@ const Select = <T extends string | number>({
                                 data-variant={field?.variant}
                             >
                                 <span className={cn(!selectedOption && styles.placeholder)}>
-                                    {selectedOption ? selectedOption.label : placeholder}
+                                    {selectedOption ? selectedOption.label : (field?.variant === 'floating' ? '' : placeholder)}
                                 </span>
                                 <ChevronDown className={styles.icon} />
                             </button>
@@ -157,7 +157,7 @@ const Select = <T extends string | number>({
                     aria-describedby={describedBy}
                     data-variant={field?.variant}
                 >
-                    <SelectValue placeholder={placeholder} />
+                    <SelectValue placeholder={field?.variant === 'floating' ? '' : placeholder} />
                 </SelectTrigger>
                 <SelectContent className={cn(contentClassName)}>
                     {options.map((option) => (

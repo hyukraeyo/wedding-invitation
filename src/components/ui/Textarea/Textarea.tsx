@@ -11,9 +11,30 @@ export interface TextareaProps extends Omit<React.TextareaHTMLAttributes<HTMLTex
 const Textarea = React.forwardRef<
   HTMLTextAreaElement,
   TextareaProps
->(({ className, error, size = 'md', id: customId, ...props }, ref) => {
+>(({ className, error, size = 'md', id: customId, onChange, ...props }, ref) => {
   const sizeClass = styles[size];
   const field = useFormField();
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+
+  // Merge refs
+  React.useImperativeHandle(ref, () => textareaRef.current!);
+
+  // Function to sync current value with Field context
+  const syncHasValue = React.useCallback(() => {
+    if (field?.setHasValue && textareaRef.current) {
+      field.setHasValue(textareaRef.current.value.length > 0);
+    }
+  }, [field]);
+
+  // Initial sync and sync on prop changes
+  React.useEffect(() => {
+    syncHasValue();
+  }, [syncHasValue, props.value, props.defaultValue]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    syncHasValue();
+    onChange?.(e);
+  };
 
   // Auto-sync with FormField context
   const id = customId || field?.id;
@@ -25,9 +46,11 @@ const Textarea = React.forwardRef<
       id={id}
       className={cn(styles.textarea, sizeClass, className)}
       data-error={isError ? "true" : undefined}
+      data-variant={field?.variant}
       aria-describedby={describedBy}
       aria-invalid={isError ? "true" : undefined}
-      ref={ref}
+      ref={textareaRef}
+      onChange={handleChange}
       {...props}
     />
   )

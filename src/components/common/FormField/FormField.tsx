@@ -69,14 +69,14 @@ export const FormField = memo(({
 
             <FieldContent>
                 {children}
-
-                {/* 에러나 설명이 있을 경우만 렌더링 */}
-                {isError ? (
-                    <FieldError>{error}</FieldError>
-                ) : description ? (
-                    <FieldDescription>{description}</FieldDescription>
-                ) : null}
             </FieldContent>
+
+            {/* 에러나 설명이 있을 경우만 렌더링 */}
+            {isError ? (
+                <FieldError>{error}</FieldError>
+            ) : description ? (
+                <FieldDescription>{description}</FieldDescription>
+            ) : null}
         </Field>
     );
 });

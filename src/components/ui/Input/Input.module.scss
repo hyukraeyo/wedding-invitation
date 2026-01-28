@@ -74,6 +74,10 @@
     color: v.$zinc-400;
   }
 
+  &[data-variant="floating"]:not(:focus)::placeholder {
+    color: transparent;
+  }
+
   &[type="file"] {
     padding-top: 0.5rem;
     cursor: pointer;

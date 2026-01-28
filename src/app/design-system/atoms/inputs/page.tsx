@@ -4,10 +4,17 @@ import React from "react";
 import DesignSystemPage from "../../DesignSystemPage";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
+import { FormField } from "@/components/common/FormField";
 import { usePropControls } from "../../hooks/usePropControls";
 
 export default function InputsPage() {
     const { values, getPropItems } = usePropControls({
+        label: {
+            type: 'text',
+            defaultValue: "레이블",
+            description: "입력 필드 레이블 (Floating 변이에서 사용)",
+            componentType: 'string'
+        },
         placeholder: {
             type: 'text',
             defaultValue: "내용을 입력해주세요",
@@ -17,9 +24,16 @@ export default function InputsPage() {
         type: {
             type: 'segmented',
             defaultValue: 'text',
-            options: ['text', 'password', 'email'],
+            options: ['text', 'password', 'email', 'tel', 'url', 'date', 'number'],
             description: "HTML Input 타입",
-            componentType: '"text" | "password" | "email"'
+            componentType: '"text" | "password" | "email" | "tel" | "url" | "date" | "number"'
+        },
+        variant: {
+            type: 'segmented',
+            defaultValue: 'default',
+            options: ['default', 'floating'],
+            description: "입력 필드 스타일 변이",
+            componentType: '"default" | "floating"'
         },
         size: {
             type: 'segmented',
@@ -42,7 +56,24 @@ export default function InputsPage() {
         }
     });
 
-    const inputUsage = `import { Input } from "@/components/ui/Input";
+    const isFloating = values.variant === 'floating';
+
+    const inputUsage = isFloating
+        ? `import { FormField } from "@/components/common/FormField";
+import { Input } from "@/components/ui/Input";
+
+<FormField 
+  label="${values.label}" 
+  variant="floating"
+>
+  <Input
+    placeholder="${values.placeholder}"
+    ${values.error ? 'error' : ''}
+    ${values.disabled ? 'disabled' : ''}
+    type="${values.type}"
+  />
+</FormField>`
+        : `import { Input } from "@/components/ui/Input";
 
 <Input
   placeholder="${values.placeholder}"
@@ -55,20 +86,37 @@ export default function InputsPage() {
     return (
         <DesignSystemPage
             title="Text Inputs"
-            description="스타일만 적용된 기본 Input 및 Textarea 컴포넌트입니다. 실제 폼에서는 FormField 컴포넌트와 함께 사용하는 것을 권장합니다."
+            description="스타일만 적용된 기본 Input 및 Textarea 컴포넌트입니다. Floating 레이블 등 고도화된 기능은 FormField와 함께 사용하세요."
             playground={{
                 title: "Playground",
                 description: "Input 컴포넌트의 다양한 속성을 테스트해보세요.",
-                canvasStyle: { alignItems: 'center', justifyContent: 'center', minHeight: '150px' },
+                canvasStyle: { alignItems: 'center', justifyContent: 'center', minHeight: '200px' },
                 content: (
                     <div style={{ width: '100%', maxWidth: '400px' }}>
-                        <Input
-                            placeholder={values.placeholder as string}
-                            error={values.error as boolean}
-                            disabled={values.disabled as boolean}
-                            type={values.type as "text" | "password" | "email"}
-                            size={values.size as "sm" | "md" | "lg"}
-                        />
+                        {isFloating ? (
+                            <div style={{ padding: '20px 0' }}>
+                                <FormField
+                                    label={values.label as string}
+                                    variant="floating"
+                                    error={values.error ? "에러 메시지" : undefined}
+                                >
+                                    <Input
+                                        placeholder={values.placeholder as string}
+                                        disabled={values.disabled as boolean}
+                                        type={values.type as any}
+                                        size={values.size as any}
+                                    />
+                                </FormField>
+                            </div>
+                        ) : (
+                            <Input
+                                placeholder={values.placeholder as string}
+                                error={values.error as boolean}
+                                disabled={values.disabled as boolean}
+                                type={values.type as any}
+                                size={values.size as any}
+                            />
+                        )}
                     </div>
                 ),
                 usage: inputUsage,
