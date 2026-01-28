@@ -5,42 +5,44 @@
   width: 100%;
   font-family: v.$font-family-base;
   font-weight: 500;
-  border: 1px solid v.$zinc-200;
-  background-color: white;
+  border: 1.5px solid v.$zinc-200; // Slightly thicker for modern look
+  background-color: v.$white;
   color: v.$zinc-900;
-  transition: all v.$transition-200 v.$ease-ios;
+  transition: all 0.25s v.$ease-ios;
+  letter-spacing: -0.01em;
 
   // Sizes
   &.md {
     height: v.$control-height-md;
-    padding: 0 1rem;
-    font-size: v.$font-size-sm;
+    padding: 0 1.125rem;
+    font-size: v.$font-size-md; // Using variable for consistency
     border-radius: v.$input-radius;
   }
 
-  @include m.focus-ring;
-
   &.sm {
-    height: v.$control-height-sm; // 36px
-    padding: 0 0.75rem;
+    height: v.$control-height-sm;
+    padding: 0 0.875rem;
     font-size: v.$font-size-2xs;
     border-radius: v.$radius-sm;
   }
 
   &.lg {
-    height: v.$control-height-lg; // 56px
-    padding: 0 1.25rem;
-    font-size: v.$font-size-base; // 16px (slightly larger than default)
+    height: v.$control-height-lg;
+    padding: 0 1.5rem;
+    font-size: v.$font-size-base;
     border-radius: v.$radius-lg;
   }
 
   @include m.hover {
     border-color: v.$zinc-300;
+    background-color: v.$zinc-50;
   }
 
   &:focus {
     border-color: v.$color-primary;
-    background-color: white;
+    background-color: v.$white;
+    box-shadow: 0 0 0 4px rgba(v.$color-primary, 0.12), v.$shadow-sm;
+    outline: none;
   }
 
   &[data-error="true"] {

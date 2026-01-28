@@ -9,8 +9,6 @@ import type { InvitationData } from '@/store/useInvitationStore';
 import MainScreenView from './sections/MainScreenView';
 import CalendarSectionView from './sections/CalendarSectionView';
 import GreetingView from './sections/GreetingView';
-import AccountsView from './sections/AccountsView';
-import ClosingView from './sections/ClosingView';
 import EffectsOverlay from './sections/EffectsOverlay';
 import ScrollReveal from './ScrollReveal';
 import styles from './InvitationCanvas.module.scss';
@@ -20,6 +18,9 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { FontSizeControl } from './elements/FontSizeControl';
 
 const LocationView = dynamic(() => import('./sections/LocationView'), { ssr: false });
+const AccountsView = dynamic(() => import('./sections/AccountsView'));
+const ClosingView = dynamic(() => import('./sections/ClosingView'));
+
 const galleryLoading = <Skeleton className={styles.gallerySkeleton} />;
 const GalleryView = dynamic(() => import('./sections/GalleryView'), {
   ssr: false,

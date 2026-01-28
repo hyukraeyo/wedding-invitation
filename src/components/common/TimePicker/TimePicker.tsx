@@ -21,9 +21,12 @@ type Period = 'AM' | 'PM';
 
 export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
     ({ value, onChange, onComplete, className, minuteStep = 10, minHour, maxHour, id }, ref) => {
-        const [hStr = '10', mStr = '00'] = value ? value.split(':') : [];
-        const hInt = parseInt(hStr, 10);
-        const m = mStr;
+        const hasValue = !!value;
+        const [hStr, mStr] = value ? value.split(':') : [];
+
+        // Defaults for calculation updates
+        const hInt = hStr ? parseInt(hStr, 10) : 10;
+        const m = mStr || '00';
 
         const isPm = hInt >= 12;
         const period: Period = isPm ? 'PM' : 'AM';
@@ -96,7 +99,7 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
                 <div className={styles.hourSection}>
                     <Select
                         {...(id ? { id } : {})}
-                        value={`${period}:${displayHour}`}
+                        value={hasValue ? `${period}:${displayHour}` : ''}
                         onValueChange={handlePeriodHourChange}
                         options={periodHourOptions}
                         placeholder="오전/오후 시간"
@@ -109,7 +112,7 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
                 {/* Minute Select */}
                 <div className={styles.minuteSection}>
                     <Select
-                        value={m}
+                        value={hasValue ? m : ''}
                         onValueChange={handleMinuteChange}
                         options={minutes.map(min => ({ label: `${min}분`, value: min }))}
                         placeholder="분"

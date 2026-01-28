@@ -10,7 +10,7 @@ export function HomeClient() {
     const router = useRouter();
 
     const handleStart = () => {
-        router.push("/builder/setup");
+        router.push("/setup");
     };
 
     return (
@@ -38,9 +38,13 @@ export function HomeClient() {
 
                 {/* Simplified Start Button */}
                 <div className={styles.actions}>
-                    <button onClick={handleStart} className={styles.submitButton}>
+                    <button
+                        onClick={handleStart}
+                        className={styles.submitButton}
+                        aria-label="청첩장 만들기 시작"
+                    >
                         <span className={styles.text}>청첩장 만들기</span>
-                        <ArrowRight className={styles.icon} />
+                        <ArrowRight className={styles.icon} aria-hidden="true" />
                     </button>
                     <p className={styles.hint}>간편하게 만드는 나만의 모바일 청첩장</p>
                 </div>

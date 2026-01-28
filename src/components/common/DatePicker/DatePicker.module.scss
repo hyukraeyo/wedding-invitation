@@ -10,7 +10,8 @@
   cursor: pointer;
 
   &:hover {
-    border-color: v.$control-hover-border-strong;
+    border-color: v.$zinc-300;
+    background-color: v.$zinc-50;
   }
 
   &>svg {

@@ -1,5 +1,5 @@
-@use "../../../styles/variables" as v;
-@use "../../../styles/mixins" as m;
+@use "../../styles/variables" as v;
+@use "../../styles/mixins" as m;
 
 .container {
   min-height: 100vh;
@@ -7,11 +7,30 @@
   flex-direction: column;
   background-color: v.$color-bg-page;
   padding: 2rem 1.25rem;
+  position: relative;
+  overflow: hidden;
+
+  // Background decoration
+  &::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    right: -10%;
+    width: 40%;
+    height: 40%;
+    background: radial-gradient(circle, rgba(v.$primary, 0.08) 0%, transparent 70%);
+    z-index: 0;
+    pointer-events: none;
+  }
   
   @media (max-width: 768px) {
     background-color: v.$color-background;
     padding: 0;
     overflow-x: hidden;
+
+    &::before {
+      display: none;
+    }
   }
 
   @media (min-width: 768px) {
@@ -23,10 +42,11 @@
 
 .content {
   width: 100%;
-  max-width: 480px;
+  max-width: 520px; // Slightly wider for premium feel
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
+  z-index: 1;
 
   @media (max-width: 768px) {
     gap: 0;
@@ -36,17 +56,14 @@
 .formWrapper {
   background-color: v.$color-background;
   border-radius: 2.5rem;
-  padding: 3rem;
-  border: 1px solid v.$color-border;
-  box-shadow: 
-    0 20px 40px rgba(0, 0, 0, 0.04),
-    0 1px 3px rgba(0, 0, 0, 0.02);
+  padding: 3.5rem;
+  border: 1px solid rgba(v.$color-border, 0.6);
+  box-shadow: v.$shadow-card;
   animation: setupFadeIn 0.8s v.$ease-ios both;
   
   @media (max-width: 768px) {
     padding: 1.5rem;
-    padding-top: 2rem;
-    padding-bottom: 120px; // 여유 있는 하단 패딩 확보
+    padding-top: 2.5rem;
     border-radius: 0;
     border: none;
     box-shadow: none;

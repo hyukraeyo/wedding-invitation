@@ -1,0 +1,204 @@
+@use "../../styles/variables" as v;
+@use "../../styles/mixins" as m;
+
+.stepperContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    
+    @media (max-width: 768px) {
+        box-sizing: border-box;
+    }
+
+    @media (min-width: 768px) {
+        min-height: 480px;
+        padding-bottom: 40px;
+    }
+}
+
+.headerArea {
+    margin-bottom: 2.5rem;
+    animation: setupFadeIn 0.8s v.$ease-ios;
+}
+
+.progressBar {
+    // Both Mobile & Desktop: Fixed positioning via Portal
+    position: fixed;
+    left: 0;
+    width: 100%;
+    z-index: 49; // Just below header (50) or same level
+
+    // Mobile: Top 0 (Header is hidden)
+    @media (max-width: 768px) {
+        top: 0;
+        background-color: rgba(v.$zinc-100, 0.5);
+    }
+
+    // Desktop: Below Global Header
+    @media (min-width: 768px) {
+        top: v.$header-height;
+        background-color: v.$zinc-100;
+        border-radius: 0;
+        height: 4px;
+    }
+
+    & > div {
+        background: linear-gradient(90deg, v.$primary, v.$primary-400);
+        height: 100%;
+        border-radius: 0;
+        transition: all 0.6s v.$ease-ios;
+
+        @media (min-width: 768px) {
+            border-radius: 0;
+        }
+    }
+}
+
+.stepTitleArea {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.stepTitle {
+    font-size: 1.875rem; // Slightly larger
+    font-weight: 800;
+    color: v.$color-text-primary;
+    letter-spacing: -0.04em; // Tighter tracking
+    line-height: 1.15;
+    margin-bottom: 0.25rem;
+}
+
+.stepSubtitle {
+    font-size: 1rem; // Slightly clearer
+    color: v.$color-muted-foreground;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    font-weight: 450;
+}
+
+.form {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+
+// Removed slider styles (viewport, stepsWrapper, step)
+
+// Bottom actions are now handled by BottomCTA component
+
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem; // Increased gap
+    margin-bottom: 2.5rem; 
+    
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.sectionTitle {
+    font-size: 1.125rem;
+    font-weight: 800;
+    color: v.$color-text-primary;
+    margin-bottom: 1rem;
+    letter-spacing: -0.03em;
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+
+    &::before {
+        content: '';
+        width: 4px;
+        height: 1.125rem;
+        background: linear-gradient(to bottom, v.$primary, v.$primary-400);
+        border-radius: 2px;
+    }
+}
+
+.grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.label {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: v.$color-text-primary;
+    margin-left: 0.125rem;
+    opacity: 0.9;
+}
+
+.slugPreview {
+    margin-top: 0.75rem;
+    padding: 1.125rem;
+    background-color: v.$primary-50;
+    border-radius: 1.25rem; // More rounded
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: v.$primary-700;
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    border: 1px solid rgba(v.$primary-200, 0.4);
+    box-shadow: inset 0 1px 2px rgba(v.$primary, 0.05);
+    transition: all 0.3s v.$ease-ios;
+
+    svg {
+        color: v.$primary-500;
+    }
+
+    span {
+        letter-spacing: -0.01em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    &:hover {
+        background-color: v.$primary-100;
+        border-color: rgba(v.$primary-300, 0.6);
+    }
+}
+
+@keyframes ctaFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.ctaContainer {
+    // 🍌 "Last moment" fade in
+    // Delaying it slightly so it appears after the slide starts settling
+    animation: ctaFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+@keyframes sequentialFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.sequentialFadeIn {
+    animation: sequentialFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}

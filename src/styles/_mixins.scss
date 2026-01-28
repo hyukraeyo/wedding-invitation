@@ -219,20 +219,32 @@
 @mixin input-focus-style {
   outline: none;
   border-color: $color-primary;
-  box-shadow: 0 0 0 $focus-ring-width $color-background,
-  0 0 0 calc(#{$focus-ring-width} + #{$focus-ring-offset}) $focus-ring-color;
+  background-color: $white;
+  box-shadow: 0 0 0 4px rgba($color-primary, 0.12), $shadow-sm;
 }
 
 @mixin input-base {
   width: 100%;
-  padding: 0.75rem 1rem;
-  font-size: $input-font-size;
+  padding: 0 1.125rem;
+  height: $control-height-md;
+  font-size: $font-size-md;
   font-family: $font-family-base;
-  border: 1px solid $color-border;
+  font-weight: 500;
+  border: 1.5px solid $zinc-200;
   border-radius: $input-radius;
-  background: $color-background;
-  color: $color-foreground;
-  transition: border-color $transition-fast, box-shadow $transition-fast, background-color $transition-fast;
+  background: $white;
+  color: $zinc-900;
+  transition: all 0.25s $ease-ios;
+  letter-spacing: -0.01em;
+
+  &::placeholder {
+    color: $zinc-400;
+  }
+
+  &:hover {
+    border-color: $zinc-300;
+    background-color: $zinc-50;
+  }
 
   &:focus {
     @include input-focus-style;

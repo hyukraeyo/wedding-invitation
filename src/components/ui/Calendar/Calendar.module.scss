@@ -3,239 +3,192 @@
 
 .root {
   position: relative;
-  padding: 1rem;
+  padding: 1rem 0.5rem;
   background-color: transparent;
-  width: min-content;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
 }
 
 .months {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  
-  @media (min-width: v.$mobile) {
-    flex-direction: row;
-  }
 }
 
 .month {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  min-height: 295px; 
 }
 
 .month_caption {
-  position: relative;
   display: flex;
-  align-items: center;
   justify-content: center;
-  height: 2.5rem;
-  margin-top: 0.5rem; // ?�이?�피�??�더?�??간격 ?�보
-  margin-bottom: 1rem; // ?�짜 그리?��???간격 ?�간 증�?
-  width: 100%;
+  align-items: center;
+  position: relative;
+  margin-bottom: 0.5rem;
 }
 
 .customHeader {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 1.5rem; // 버튼�??�스???�이??간격
+  justify-content: space-between;
   width: 100%;
-}
-
-.caption_label {
-  font-size: v.$font-size-md; 
-  font-weight: 700;
-  color: v.$zinc-900;
-  letter-spacing: -0.01em;
-  font-family: v.$font-pretendard;
-}
-
-// 명시?�으�?nav, button_previous, button_next ?�래??추�?
-.nav {
-  display: none !important;
-}
-
-.button_previous, .button_next {
-  display: none !important; // 기본 버튼 ?��?
+  max-width: 240px;
 }
 
 .navButton {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 2rem;
+  height: 2rem;
   border-radius: 50%;
   color: v.$zinc-600;
+  transition: all v.$transition-200;
   background-color: v.$zinc-50;
-  border: none;
-  cursor: pointer;
-  transition: all v.$transition-200 cubic-bezier(0.16, 1, 0.3, 1);
-  
+
   &:hover:not(:disabled) {
-    background-color: v.$control-hover-bg-strong;
+    background-color: v.$zinc-100;
     color: v.$zinc-900;
   }
-  
-  &:active:not(:disabled) {
-    background-color: v.$control-hover-bg-stronger;
-    transform: scale(v.$scale-press-xs);
-  }
-  
+
   &:disabled {
-    opacity: 0.2;
-    cursor: not-allowed;
+    opacity: 0.3;
+    cursor: default;
   }
 
-  & > svg {
+  svg {
     width: 1.125rem;
     height: 1.125rem;
   }
 }
 
+.caption_label {
+  font-size: v.$font-size-md;
+  font-weight: 700;
+  color: v.$zinc-900;
+  min-width: 100px;
+  text-align: center;
+}
+
 .table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 4px;
+  border-collapse: collapse;
+  border-spacing: 0;
+  table-layout: fixed; // 모든 열의 너비를 동일하게 강제
 }
 
 .weekdays {
-  display: flex;
-  margin-bottom: 0.5rem;
-  border-bottom: 1px solid v.$zinc-50;
-  padding-bottom: 0.5rem;
+  width: 100%;
 }
 
 .weekday {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  height: 2.25rem;
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
   font-size: v.$font-size-xs;
   font-weight: 700;
+  letter-spacing: -0.01em;
   color: v.$zinc-400;
-  height: 1.5rem;
 
   &:first-child {
     color: #ff6b6b;
   }
+
   &:last-child {
     color: #4dabf7;
   }
 }
 
 .week {
-  display: flex;
   width: 100%;
 }
 
 .day {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  padding: 0.125rem 0;
   position: relative;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  aspect-ratio: 1 / 1;
-  min-width: 2.5rem;
 }
 
 .dayButton {
   width: 2.25rem;
   height: 2.25rem;
-  border-radius: v.$radius-md; // 16px
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: v.$font-size-md;
-  font-weight: 600;
-  color: v.$zinc-700;
-  background-color: transparent;
-  border: 1px solid transparent;
+  border-radius: 50%;
+  font-size: v.$font-size-sm;
+  font-weight: 500;
+  color: v.$zinc-800;
+  transition: all v.$transition-200;
   cursor: pointer;
-  transition: all v.$transition-200 cubic-bezier(0.16, 1, 0.3, 1);
-  
-  &:hover:not(:disabled) {
-    background-color: v.$primary-50;
-    color: v.$primary-700;
-    box-shadow: v.$shadow-hover-sm;
+  background-color: transparent;
+  border: none;
+  position: relative;
+  z-index: 1;
+
+  &:hover:not([data-selected="true"]) {
+    background-color: v.$zinc-100;
   }
 
-  &:active {
-    transform: scale(v.$scale-press-sm);
-  }
-  
   &[data-selected="true"] {
     background-color: v.$color-primary !important;
-    border-color: v.$color-primary !important;
-    color: v.$color-primary-foreground !important;
-    font-weight: 800;
-    // box-shadow: 0 4px 12px rgba(v.$color-primary, 0.35);
-  }
-
-  &.sunday {
-    color: #ff6b6b;
-  }
-
-  &.saturday {
-    color: #4dabf7;
+    color: v.$white !important;
+    font-weight: 700;
+    box-shadow: v.$shadow-sm;
   }
 }
 
+.sunday {
+  color: #ff6b6b;
+}
+
+.saturday {
+  color: #4dabf7;
+}
+
+.today {
+  font-weight: 800;
+}
+
 .dayToday {
-  color: v.$color-primary !important;
-  font-weight: 800 !important;
-  background-color: v.$primary-50;
-  border-color: v.$primary-100;
-  
   &::after {
-    content: '';
+    content: "";
     position: absolute;
-    bottom: 4px;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
     width: 3px;
     height: 3px;
     border-radius: 50%;
     background-color: v.$color-primary;
   }
+
+  &[data-selected="true"]::after {
+    background-color: v.$white;
+  }
+}
+
+.outside {
+  color: v.$zinc-300;
+  opacity: 0.5;
 }
 
 .dayOutside {
-  color: v.$zinc-300 !important;
-  opacity: 0.4;
-  font-weight: 400 !important;
+  font-weight: 400;
 }
 
 .disabled {
-  color: v.$zinc-100;
+  color: v.$zinc-200;
   cursor: not-allowed;
-  pointer-events: none;
+  opacity: 0.4;
 }
 
 .hidden {
   visibility: hidden;
 }
-
-.range_start {
-  & > button {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-  }
-}
-
-.range_middle {
-  & > button {
-    border-radius: 0;
-    background-color: v.$primary-50;
-    color: v.$primary-700;
-  }
-}
-
-.range_end {
-  & > button {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-  }
-}
-

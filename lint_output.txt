@@ -3,22 +3,8 @@
 > eslint
 
 
-C:\Users\johr9\Documents\git\wedding-invitation\src\components\common\ResponsiveModal\ResponsiveModal.tsx
-  96:14  error  Error: This value cannot be modified
-
-Modifying component props or hook arguments is not allowed. Consider using a local variable instead.
-
-C:\Users\johr9\Documents\git\wedding-invitation\src\components\common\ResponsiveModal\ResponsiveModal.tsx:96:14
-  94 |             externalScrollRef(node);
-  95 |         } else if (externalScrollRef) {
-> 96 |             (externalScrollRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-     |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `externalScrollRef` cannot be modified
-  97 |         }
-  98 |     }, [externalScrollRef, setViewportRef]);
-  99 |  react-hooks/immutability
-
-C:\Users\johr9\Documents\git\wedding-invitation\src\hooks\use-scroll-fade.ts
-  42:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+C:\Users\johr9\Documents\git\wedding-invitation\src\app\setup\SetupForm.tsx
+  25:9  error  Error: Calling setState synchronously within an effect can trigger cascading renders
 
 Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
 * Update external systems with the latest state from React.
@@ -26,14 +12,14 @@ Effects are intended to synchronize state between React and external systems suc
 
 Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
 
-C:\Users\johr9\Documents\git\wedding-invitation\src\hooks\use-scroll-fade.ts:42:9
-  40 |
-  41 |         // 초기 상태 체크
-> 42 |         handleScroll();
-     |         ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
-  43 |
-  44 |         viewport.addEventListener('scroll', handleScroll, { passive: true });
-  45 |  react-hooks/set-state-in-effect
+C:\Users\johr9\Documents\git\wedding-invitation\src\app\setup\SetupForm.tsx:25:9
+  23 |     const [mounted, setMounted] = useState(false);
+  24 |     useEffect(() => {
+> 25 |         setMounted(true);
+     |         ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  26 |     }, []);
+  27 |
+  28 |     const [groomFullName, setGroomFullName] = useState(`${store.groom.lastName}${store.groom.firstName}`);  react-hooks/set-state-in-effect
 
-✖ 2 problems (2 errors, 0 warnings)
+✖ 1 problem (1 error, 0 warnings)
 
