@@ -20,6 +20,7 @@ import {
     DrawerScrollArea,
 } from "@/components/ui/Drawer";
 import { Button } from '@/components/ui/Button';
+import { BottomCTA } from '@/components/ui/BottomCTA';
 import { cn } from '@/lib/utils';
 import { useCanUseDom } from '@/hooks/useCanUseDom';
 import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
@@ -51,8 +52,8 @@ export interface ResponsiveModalProps {
     onScroll?: (e: React.UIEvent<HTMLDivElement>) => void;
     scrollRef?: React.Ref<HTMLDivElement>;
     useScrollFade?: boolean;
-    drawerVariant?: "default" | "floating";
     padding?: "none" | "default";
+    fullWidthActions?: boolean;
 }
 
 export const ResponsiveModal = ({
@@ -78,8 +79,8 @@ export const ResponsiveModal = ({
     onScroll,
     scrollRef: externalScrollRef,
     useScrollFade = false,
-    drawerVariant = "default",
     padding = "default",
+    fullWidthActions = true,
 }: ResponsiveModalProps) => {
     const isDesktop = useMediaQuery("(min-width: 768px)");
 
@@ -107,8 +108,7 @@ export const ResponsiveModal = ({
             <Dialog open={open} onOpenChange={internalOnOpenChange}>
                 {trigger ? <DialogTrigger asChild>{trigger}</DialogTrigger> : null}
                 <DialogContent
-                    className={cn(styles.dialog, className)}
-                    onOpenAutoFocus={(e) => e.preventDefault()}
+                    className={cn(styles.dialogContent, className)}
                 >
                     <div className={styles.mainSection}>
                         <DialogHeader>
@@ -134,26 +134,36 @@ export const ResponsiveModal = ({
                         {hasActions && (
                             <div className={styles.footer}>
                                 {footer || (
-                                    <>
-                                        {showCancel && (
-                                            <Button
-                                                variant="ghost"
-                                                onClick={handleCancel}
-                                                className={cn(styles.cancelButton, styles.dialogButtonHeight)}
-                                            >
-                                                {cancelText}
-                                            </Button>
-                                        )}
-                                        <Button
-                                            onClick={onConfirm}
-                                            disabled={confirmDisabled || confirmLoading}
-                                            loading={confirmLoading}
-                                            variant={confirmVariant === 'destructive' ? 'destructive' : 'solid'}
-                                            className={cn(styles.confirmButton, styles.dialogButtonHeight)}
-                                        >
-                                            {confirmText}
-                                        </Button>
-                                    </>
+                                    showCancel ? (
+                                        <BottomCTA.Double
+                                            inModal
+                                            primaryButtonProps={{
+                                                children: confirmText,
+                                                onClick: onConfirm,
+                                                disabled: confirmDisabled || confirmLoading,
+                                                loading: confirmLoading,
+                                                variant: confirmVariant === 'destructive' ? 'destructive' : 'solid',
+                                                fullWidth: true
+                                            }}
+                                            secondaryButtonProps={{
+                                                children: cancelText,
+                                                onClick: handleCancel,
+                                                variant: 'secondary',
+                                                fullWidth: true
+                                            }}
+                                        />
+                                    ) : (
+                                        <BottomCTA.Single
+                                            inModal
+                                            buttonProps={{
+                                                children: confirmText,
+                                                onClick: onConfirm,
+                                                disabled: confirmDisabled || confirmLoading,
+                                                loading: confirmLoading,
+                                                variant: confirmVariant === 'destructive' ? 'destructive' : 'solid',
+                                            }}
+                                        />
+                                    )
                                 )}
                             </div>
                         )}
@@ -176,80 +186,80 @@ export const ResponsiveModal = ({
             shouldScaleBackground={false}
         >
             {trigger ? <DrawerTrigger asChild>{trigger}</DrawerTrigger> : null}
-            <DrawerContent className={styles.drawerContent} variant={drawerVariant}>
-                <div className={styles.drawerLayout}>
-                    <div className={styles.mainSection}>
-                        <DrawerHeader>
-                            <DrawerTitle>
-                                {title || '알림'}
-                            </DrawerTitle>
-                        </DrawerHeader>
+            <DrawerContent className={className}>
+                <DrawerHeader>
+                    <DrawerTitle>
+                        {title || '알림'}
+                    </DrawerTitle>
+                    {description && (
+                        <DrawerDescription>
+                            {description}
+                        </DrawerDescription>
+                    )}
+                </DrawerHeader>
 
-                        {description && (
-                            <div className={styles.descriptionSpacing}>
-                                <DrawerDescription>
-                                    {description}
-                                </DrawerDescription>
-                            </div>
-                        )}
+                {!description && (
+                    <VisuallyHidden>
+                        <DrawerDescription>
+                            {title ? `${title} 모달입니다.` : '모달 콘텐츠 영역입니다.'}
+                        </DrawerDescription>
+                    </VisuallyHidden>
+                )}
 
-                        {!description && (
-                            <VisuallyHidden>
-                                <DrawerDescription>
-                                    {title ? `${title} 모달입니다.` : '모달 콘텐츠 영역입니다.'}
-                                </DrawerDescription>
-                            </VisuallyHidden>
-                        )}
+                {children && (
+                    <DrawerScrollArea
+                        className={contentClassName}
+                        useScrollFade={useScrollFade}
+                        onScroll={handleInternalScroll}
+                        ref={externalScrollRef}
+                        padding={padding}
+                    >
+                        {children}
+                    </DrawerScrollArea>
+                )}
 
-                        {children && (
-                            <DrawerScrollArea
-                                className={cn(
-                                    padding !== "none" && styles.defaultDrawerPadding,
-                                    contentClassName
-                                )}
-                                useScrollFade={useScrollFade}
-                                onScroll={handleInternalScroll}
-                                ref={externalScrollRef}
-                                padding={padding}
-                            >
-                                {children}
-                            </DrawerScrollArea>
+                {hasActions && (
+                    <div className={styles.footer}>
+                        {footer || (
+                            showCancel ? (
+                                <BottomCTA.Double
+                                    inModal
+                                    primaryButtonProps={{
+                                        children: confirmText,
+                                        onClick: onConfirm,
+                                        disabled: confirmDisabled || confirmLoading,
+                                        loading: confirmLoading,
+                                        variant: confirmVariant === 'destructive' ? 'destructive' : 'solid',
+                                        fullWidth: true
+                                    }}
+                                    secondaryButtonProps={{
+                                        children: cancelText,
+                                        onClick: handleCancel,
+                                        variant: 'secondary',
+                                        fullWidth: true
+                                    }}
+                                />
+                            ) : (
+                                <BottomCTA.Single
+                                    inModal
+                                    buttonProps={{
+                                        children: confirmText,
+                                        onClick: onConfirm,
+                                        disabled: confirmDisabled || confirmLoading,
+                                        loading: confirmLoading,
+                                        variant: confirmVariant === 'destructive' ? 'destructive' : 'solid',
+                                    }}
+                                />
+                            )
                         )}
                     </div>
+                )}
 
-                    {hasActions && (
-                        <div className={styles.footer}>
-                            {footer || (
-                                <>
-                                    {showCancel && (
-                                        <Button
-                                            variant="ghost"
-                                            onClick={handleCancel}
-                                            className={cn(styles.cancelButton, styles.drawerButtonHeight)}
-                                        >
-                                            {cancelText}
-                                        </Button>
-                                    )}
-                                    <Button
-                                        onClick={onConfirm}
-                                        disabled={confirmDisabled || confirmLoading}
-                                        loading={confirmLoading}
-                                        variant={confirmVariant === 'destructive' ? 'destructive' : 'solid'}
-                                        className={cn(styles.confirmButton, styles.drawerButtonHeight)}
-                                    >
-                                        {confirmText}
-                                    </Button>
-                                </>
-                            )}
-                        </div>
-                    )}
-
-                    {outerFooter && (
-                        <div className={cn(styles.outerFooter, styles.outerFooterMobile)}>
-                            {outerFooter}
-                        </div>
-                    )}
-                </div>
+                {outerFooter && (
+                    <div className={cn(styles.outerFooter, styles.outerFooterMobile)}>
+                        {outerFooter}
+                    </div>
+                )}
             </DrawerContent>
         </Drawer>
     );

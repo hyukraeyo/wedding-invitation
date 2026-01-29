@@ -62,13 +62,8 @@
   color: rgba(v.$color-foreground, 0.9);
 }
 
-.calendarWrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem 1rem 2rem 1rem;
-}
+// Bottomsheet padding is now handled by Drawer standard
+
 
 .modalContentNoPadding {
   padding: 0 !important;

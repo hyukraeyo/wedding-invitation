@@ -4,6 +4,7 @@ import * as React from "react"
 import * as SheetPrimitive from "@radix-ui/react-dialog"
 import { X } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { focusFirstFocusable } from "@/lib/a11y"
 import styles from "./Sheet.module.scss"
 
 const Sheet = SheetPrimitive.Root
@@ -46,7 +47,7 @@ const SheetContent = React.forwardRef<
         onOpenAutoFocus?.(event)
         if (event.defaultPrevented) return
         event.preventDefault()
-        contentRef.current?.focus()
+        focusFirstFocusable(event.currentTarget as HTMLElement)
     }
 
     return (

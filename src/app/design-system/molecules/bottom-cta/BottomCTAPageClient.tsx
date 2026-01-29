@@ -1,132 +1,191 @@
 "use client"
 
 import React, { useState } from "react"
+import DesignSystemPage from "../../DesignSystemPage"
 import { BottomCTA } from "@/components/ui/BottomCTA"
-
-import { Card } from "@/components/ui/Card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/Tabs"
+import { usePropControls } from "../../hooks/usePropControls"
 import { Separator } from "@/components/ui/Separator"
-import { Check, Info, Layers } from "lucide-react"
+import Story from "../../Story"
 
 export function BottomCTAPageClient() {
     const [checked, setChecked] = useState(false);
 
+    const { values, getPropItems } = usePropControls({
+        type: {
+            type: 'segmented',
+            defaultValue: 'single',
+            options: ['single', 'double', 'checkFirst'],
+            description: 'CTA 버튼의 구성 타입',
+            componentType: '"single" | "double" | "checkFirst"'
+        },
+        primaryText: {
+            type: 'text',
+            defaultValue: '동의하고 계속하기',
+            description: '주요 버튼 텍스트',
+            componentType: 'string'
+        },
+        secondaryText: {
+            type: 'text',
+            defaultValue: '취소',
+            description: '보조 버튼 텍스트 (Double 전용)',
+            componentType: 'string'
+        },
+        isFixed: {
+            type: 'boolean',
+            defaultValue: false,
+            description: '화면 하단 고정 여부 (Playground에서는 false 권장)',
+            componentType: 'boolean'
+        },
+        inModal: {
+            type: 'boolean',
+            defaultValue: true,
+            description: '모달 내부 통합형 스타일 적용 여부',
+            componentType: 'boolean'
+        }
+    });
+
+    const renderCTA = () => {
+        const commonProps = {
+            isFixed: values.isFixed as boolean,
+            inModal: values.inModal as boolean,
+        };
+
+        if (values.type === 'single') {
+            return (
+                <BottomCTA.Single
+                    {...commonProps}
+                    buttonProps={{ children: values.primaryText as string }}
+                />
+            );
+        }
+
+        if (values.type === 'double') {
+            return (
+                <BottomCTA.Double
+                    {...commonProps}
+                    primaryButtonProps={{ children: values.primaryText as string }}
+                    secondaryButtonProps={{ children: values.secondaryText as string }}
+                />
+            );
+        }
+
+        if (values.type === 'checkFirst') {
+            return (
+                <BottomCTA.CheckFirst
+                    {...commonProps}
+                    checkboxId="playground-check"
+                    label="개인정보 수집 및 이용에 동의합니다"
+                    checked={checked}
+                    onCheckedChange={setChecked}
+                    buttonProps={{
+                        children: values.primaryText as string,
+                        disabled: !checked
+                    }}
+                />
+            );
+        }
+
+        return null;
+    };
+
+    const getUsageCode = () => {
+        if (values.type === 'single') {
+            return `<BottomCTA.Single\n  buttonProps={{ children: '${values.primaryText}' }}\n/>`;
+        }
+        if (values.type === 'double') {
+            return `<BottomCTA.Double\n  primaryButtonProps={{ children: '${values.primaryText}' }}\n  secondaryButtonProps={{ children: '${values.secondaryText}' }}\n/>`;
+        }
+        return `<BottomCTA.CheckFirst\n  label="동의 문구"\n  buttonProps={{ children: '${values.primaryText}' }}\n/>`;
+    };
+
     return (
-        <div style={{ paddingBottom: '200px' }}>
-            <header style={{ marginBottom: '40px' }}>
-                <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '12px' }}>Bottom CTA</h1>
-                <p style={{ fontSize: '1.125rem', color: '#666', lineHeight: 1.6 }}>
-                    화면 하단에 고정되는 주요 액션 버튼 컴포넌트입니다. Toss Mini TDS를 참고하여 구현되었습니다.
-                </p>
-            </header>
-
-            <Tabs defaultValue="single" style={{ marginBottom: '60px' }}>
-                <TabsList>
-                    <TabsTrigger value="single">Single</TabsTrigger>
-                    <TabsTrigger value="double">Double</TabsTrigger>
-                    <TabsTrigger value="check">Check First</TabsTrigger>
-                    <TabsTrigger value="modal">In Modal</TabsTrigger>
-                </TabsList>
-
-                <TabsContent value="single" style={{ marginTop: '24px' }}>
-                    <Card style={{ padding: '40px', backgroundColor: '#f9f9fb', borderRadius: '16px', overflow: 'hidden' }}>
-                        <div style={{ height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#888', border: '2px dashed #eee', borderRadius: '12px', marginBottom: '20px' }}>
-                            페이지 콘텐츠 영역 (스크롤 시 하단 CTA 고정)
-                        </div>
-                        <BottomCTA.Single
-                            buttonProps={{ children: '동의하고 계속하기' }}
-                        />
-                    </Card>
-                    <div style={{ marginTop: '20px' }}>
-                        <h3>Usage</h3>
-                        <pre style={{ padding: '16px', backgroundColor: '#f4f4f5', borderRadius: '8px', overflowX: 'auto' }}>
-                            <code>{`<BottomCTA.Single 
-    buttonProps={{ children: '동의하고 계속하기' }} 
-/>`}</code>
-                        </pre>
-                    </div>
-                </TabsContent>
-
-                <TabsContent value="double" style={{ marginTop: '24px' }}>
-                    <Card style={{ padding: '40px', backgroundColor: '#f9f9fb', borderRadius: '16px', overflow: 'hidden' }}>
-                        <div style={{ height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#888', border: '2px dashed #eee', borderRadius: '12px', marginBottom: '20px' }}>
-                            페이지 콘텐츠 영역
-                        </div>
-                        <BottomCTA.Double
-                            primaryButtonProps={{ children: '확인' }}
-                            secondaryButtonProps={{ children: '취소' }}
-                        />
-                    </Card>
-                </TabsContent>
-
-                <TabsContent value="check" style={{ marginTop: '24px' }}>
-                    <Card style={{ padding: '40px', backgroundColor: '#f9f9fb', borderRadius: '16px', overflow: 'hidden' }}>
-                        <div style={{ height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#888', border: '2px dashed #eee', borderRadius: '12px', marginBottom: '20px' }}>
-                            페이지 콘텐츠 영역
-                        </div>
-                        <BottomCTA.CheckFirst
-                            checkboxId="agree-terms"
-                            label="개인정보 수집 및 이용에 동의합니다"
-                            checked={checked}
-                            onCheckedChange={(val) => setChecked(!!val)}
-                            buttonProps={{
-                                children: '다음으로',
-                                disabled: !checked
-                            }}
-                        />
-                    </Card>
-                </TabsContent>
-
-                <TabsContent value="modal" style={{ marginTop: '24px' }}>
-                    <Card style={{ padding: '0', maxWidth: '400px', margin: '0 auto', border: '1px solid #eee', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}>
+        <DesignSystemPage
+            title="Bottom CTA"
+            description="화면 하단에 고정되는 주요 액션 버튼 컴포넌트입니다. Toss Mini TDS를 참고하여 고풍스럽고 세련된 애니메이션과 유리 질감(Glassmorphism)이 적용되었습니다."
+            playground={{
+                title: "Playground",
+                description: "CTA 타입과 속성을 실시간으로 확인해보세요.",
+                canvasStyle: {
+                    flexDirection: 'column',
+                    padding: '60px 20px',
+                    backgroundColor: '#FFFBEA',
+                    borderRadius: '24px',
+                    position: 'relative',
+                    overflow: 'hidden'
+                },
+                content: (
+                    <div style={{
+                        width: '100%',
+                        maxWidth: '400px',
+                        margin: '0 auto',
+                        backgroundColor: '#fff',
+                        borderRadius: values.inModal ? '0 0 24px 24px' : '24px',
+                        overflow: 'hidden',
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.05)'
+                    }}>
                         <div style={{ padding: '24px' }}>
-                            <h2 style={{ fontSize: '1.25rem', marginBottom: '12px' }}>모달 내부 사용 예시</h2>
-                            <p style={{ color: '#666', fontSize: '0.9375rem', lineHeight: 1.5 }}>
-                                모달이나 바텀시트 내부에서는 <code>inModal</code> prop을 전달하여
-                                하단 고정 위치를 해제하고 일반적인 패딩과 간격을 적용할 수 있습니다.
-                            </p>
-                            <Separator style={{ margin: '20px 0' }} />
-                            <div style={{ minHeight: '100px' }}>콘텐츠 내용...</div>
+                            <div style={{ height: '120px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8B7355', border: '2px dashed #EEDDAA', borderRadius: '16px', backgroundColor: 'rgba(251, 192, 45, 0.05)', fontSize: '0.875rem' }}>
+                                콘텐츠 영역
+                            </div>
                         </div>
-                        <BottomCTA.Double
-                            inModal
-                            primaryButtonProps={{ children: '삭제하기', variant: 'destructive' }}
-                            secondaryButtonProps={{ children: '돌아가기' }}
-                        />
-                    </Card>
-                </TabsContent>
-            </Tabs>
+                        {renderCTA()}
+                    </div>
+                ),
+                usage: getUsageCode(),
+                props: getPropItems()
+            }}
+            combinations={{
+                title: "Use Cases",
+                description: "모달 내부 또는 서비스의 다양한 맥락에서 활용되는 예시입니다.",
+                content: (
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '32px' }}>
+                        {/* Modal Use Case */}
+                        <div style={{ padding: '0', border: '1px solid #f0f0f0', borderRadius: '24px', overflow: 'hidden', backgroundColor: '#fff', boxShadow: '0 8px 32px rgba(0,0,0,0.04)' }}>
+                            <div style={{ padding: '24px' }}>
+                                <h4 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '8px' }}>모달 내부 (Double)</h4>
+                                <p style={{ fontSize: '0.875rem', color: '#666', lineHeight: 1.6 }}>
+                                    <code>inModal</code> 프롭을 사용하면 고정 위치가 해제되고 모달 레이아웃에 맞춰집니다.
+                                </p>
+                            </div>
+                            <BottomCTA.Double
+                                inModal
+                                primaryButtonProps={{ children: '삭제하기', variant: 'destructive' }}
+                                secondaryButtonProps={{ children: '돌아가기' }}
+                            />
+                        </div>
 
-            <section style={{ marginTop: '60px' }}>
-                <h2 style={{ fontSize: '1.75rem', fontWeight: 700, marginBottom: '20px' }}>Features</h2>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
-                    <FeatureItem
-                        icon={<Check size={20} />}
-                        title="Safe Area Support"
-                        description="iOS 하단 홈 바 영역을 자동으로 계산하여 여백을 제공합니다."
-                    />
-                    <FeatureItem
-                        icon={<Layers size={20} />}
-                        title="Glassmorphism"
-                        description="배경에 블러 처리가 적용되어 콘텐츠와 자연스럽게 어우러집니다."
-                    />
-                    <FeatureItem
-                        icon={<Info size={20} />}
-                        title="Conditional Gradient"
-                        description="콘텐츠 상단에 그라데이션을 추가하여 시인성을 높일 수 있습니다."
-                    />
+                        {/* Secondary Style Use Case */}
+                        <div style={{ padding: '0', border: '1px solid #f0f0f0', borderRadius: '24px', overflow: 'hidden', backgroundColor: '#fff', boxShadow: '0 8px 32px rgba(0,0,0,0.04)' }}>
+                            <div style={{ padding: '24px' }}>
+                                <h4 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '8px' }}>보조 버튼 스타일</h4>
+                                <p style={{ fontSize: '0.875rem', color: '#666', lineHeight: 1.6 }}>
+                                    <code>secondary</code> 변형을 활용하여 덜 강조된 액션을 표현할 수 있습니다.
+                                </p>
+                            </div>
+                            <BottomCTA.Single
+                                inModal
+                                buttonProps={{ children: '나중에 하기', variant: 'secondary' }}
+                            />
+                        </div>
+                    </div>
+                )
+            }}
+        >
+            <Story
+                title="Premium Style"
+                description="바나나웨딩만의 독보적인 프리미엄 스타일이 적용되었습니다."
+            >
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+                    <div style={{ padding: '20px', borderRadius: '16px', backgroundColor: '#fff', border: '1px solid #f0f0f0' }}>
+                        <h5 style={{ fontWeight: 600, marginBottom: '8px' }}>Glassmorphism</h5>
+                        <p style={{ fontSize: '0.8125rem', color: '#71717a' }}>배경이 투명하게 비치는 블러 효과가 적용되어 고급스러운 느낌을 줍니다.</p>
+                    </div>
+                    <div style={{ padding: '20px', borderRadius: '16px', backgroundColor: '#fff', border: '1px solid #f0f0f0' }}>
+                        <h5 style={{ fontWeight: 600, marginBottom: '8px' }}>iOS Animation</h5>
+                        <p style={{ fontSize: '0.8125rem', color: '#71717a' }}>iOS 스타일의 부드러운 반응형 애니메이션이 터치감을 극대화합니다.</p>
+                    </div>
                 </div>
-            </section>
-        </div>
-    )
-}
-
-function FeatureItem({ icon, title, description }: { icon: React.ReactNode, title: string, description: string }) {
-    return (
-        <Card style={{ padding: '20px', borderRadius: '12px' }}>
-            <div style={{ color: '#FBC02D', marginBottom: '12px' }}>{icon}</div>
-            <h3 style={{ fontSize: '1.125rem', fontWeight: 600, marginBottom: '8px' }}>{title}</h3>
-            <p style={{ fontSize: '0.875rem', color: '#666', lineHeight: 1.5 }}>{description}</p>
-        </Card>
+            </Story>
+        </DesignSystemPage>
     )
 }

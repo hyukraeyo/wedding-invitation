@@ -18,17 +18,17 @@ export const useFormField = () => {
 
 // --- Component ---
 export interface FormFieldProps {
-    label?: ReactNode;
+    label?: ReactNode | undefined;
     children: ReactNode;
-    className?: string;
-    required?: boolean;
-    description?: ReactNode;
-    error?: ReactNode;
-    id?: string;
-    action?: ReactNode;
-    layout?: 'vertical' | 'horizontal';
-    align?: 'start' | 'center';
-    variant?: 'default' | 'floating';
+    className?: string | undefined;
+    required?: boolean | undefined;
+    description?: ReactNode | undefined;
+    error?: ReactNode | undefined;
+    id?: string | undefined;
+    action?: ReactNode | undefined;
+    layout?: 'vertical' | 'horizontal' | undefined;
+    align?: 'start' | 'center' | undefined;
+    variant?: 'default' | 'floating' | undefined;
 }
 
 /**

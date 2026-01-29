@@ -1,10 +1,6 @@
 @use "../../../styles/variables" as v;
 @use "../../../styles/mixins" as m;
 
-// 하드코딩된 색상 변수화 (필요시 variables.scss에 추가 고려)
-$color-text-title: #191F28;
-$color-text-desc: #4E5968;
-
 .dialogOverlayWrapper {
     display: flex;
     flex-direction: column;
@@ -12,7 +8,7 @@ $color-text-desc: #4E5968;
     justify-content: center;
 }
 
-// Dialog Content (The positioning wrapper)
+// Dialog Content (The positioning wrapper for Desktop)
 .dialogContent {
     max-width: 28rem;
     max-height: 85vh;
@@ -20,52 +16,16 @@ $color-text-desc: #4E5968;
     flex-direction: column;
     align-items: center;
     padding: 0;
-    border: none;
-    background: transparent; // Make transparent to allow outer elements
-    box-shadow: none;
     overflow: visible; // Allow outer footer to be seen
 }
 
-// The actual visual card (was dialogContent)
-.card {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    border-radius: v.$radius-md; // 16px
-    border: none;
-    box-shadow: none;
-}
-
-.drawerContent {
-    border-top-left-radius: v.$radius-md; // 16px
-    border-top-right-radius: v.$radius-md; // 16px
-    padding: 0;
-    border: none;
-    overflow: hidden;
-    box-shadow: none !important;
-}
-
-.drawerLayout {
-    display: flex;
-    flex-direction: column;
-    max-height: 50dvh; // 🍌 바텀시트 최대 높이 50% 제한
-    width: 100%;
-    min-height: 0;
-}
-
+// Visual content area for both Desktop/Mobile if needed
 .mainSection {
     flex: 1;
     display: flex;
     flex-direction: column;
-    background-color: v.$white;
-    min-height: 0;
-}
-
-.descriptionSpacing {
-    padding: 0 1.5rem 1.25rem;
-    text-align: center;
-    // border-bottom: 1px solid v.$zinc-50; // Minimal: Clean look
+    min-height: 200px;
+    width: 100%;
 }
 
 .contentWrapper {
@@ -90,19 +50,6 @@ $color-text-desc: #4E5968;
         padding: 0;
         min-height: 0;
     }
-
-    // Drawer scroll area specific overrides (Mobile)
-    &.drawerScrollArea {
-        padding: 0 !important;
-    }
-}
-
-.showTopFade {}
-.showBottomFade {}
-
-.defaultDrawerPadding {
-    padding: 1.25rem 1.5rem; // Drawer 여백 최적화
-    min-height: 8rem;
 }
 
 .footer {
@@ -112,7 +59,7 @@ $color-text-desc: #4E5968;
     border-top: none;
     flex-shrink: 0;
     overflow: hidden;
-    padding-bottom: env(safe-area-inset-bottom); // iOS Home Indicator safe area
+    // BottomCTA handles padding internally
 }
 
 .outerFooter {
@@ -126,66 +73,6 @@ $color-text-desc: #4E5968;
 
 .outerFooterMobile {
     padding-bottom: 2rem;
-    background-color: v.$white;
-}
-
-// Button overrides for ResponsiveModal layout
-.footer {
-    width: 100%;
-    padding: 0; // Remove padding to let buttons fill
-
-    button {
-        flex: 1;
-        border-radius: 0; // Reset radius
-        border: none;
-        margin: 0; // Remove margins
-    }
-}
-
-.cancelButton {
-    // border-right: 1px solid rgba(255, 255, 255, 0.1) !important; // Minimal: No separator
-    font-weight: 500 !important;
-    background-color: v.$zinc-600 !important; // Dark Grey Background
-    color: v.$white !important;
-
-    &:hover {
-        background-color: v.$zinc-700 !important;
-    }
-
-    &:active {
-        transform: none !important;
-    }
-}
-
-.confirmButton {
-    flex: 1;
-    border-radius: 0 !important;
-    border: none !important;
-    font-weight: 700 !important;
-    background-color: v.$color-primary-hover !important; // Ensure it looks active/yellow
-    color: v.$white !important;
-
-    &:disabled {
-        opacity: 0.5;
-        background-color: v.$zinc-300 !important;
-        color: v.$zinc-500 !important;
-    }
-
-    &:active {
-        transform: none !important;
-    }
-}
-
-// Dialog Button Height
-.dialogButtonHeight {
-    height: 3.5rem !important; // h-14 (56px)
-    font-size: v.$font-size-base !important; // 16px
-}
-
-// Drawer Button Height
-.drawerButtonHeight {
-    height: 4rem !important; // h-16 (64px)
-    font-size: v.$font-size-17 !important; // 17px
 }
 
 @keyframes fadeIn {

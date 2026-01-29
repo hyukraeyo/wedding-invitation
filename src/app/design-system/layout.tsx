@@ -152,19 +152,9 @@ export default function DesignSystemLayout({
                                         >
                                             {React.createElement(item.icon as React.FC<{ size?: number }>, { size: 18 })}
                                             <span style={{ flex: 1 }}>{item.label}</span>
-                                            {hasSubNav && (
-                                                <ChevronDown
-                                                    size={14}
-                                                    style={{
-                                                        opacity: 0.5,
-                                                        transform: isActive ? 'rotate(0deg)' : 'rotate(-90deg)',
-                                                        transition: 'transform 0.2s ease'
-                                                    }}
-                                                />
-                                            )}
                                         </Link>
 
-                                        {hasSubNav && isActive && (
+                                        {hasSubNav && (
                                             <div className={styles.sidebarSubNav}>
                                                 {(item.subNav || []).map((subItem) => (
                                                     <Link

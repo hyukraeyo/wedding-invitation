@@ -90,8 +90,6 @@ export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
                     open={isOpen}
                     onOpenChange={setIsOpen}
                     title="날짜를 선택하세요"
-                    className={styles.calendarWrapper}
-                    contentClassName={styles.modalContentNoPadding}
                     useScrollFade={true}
                 >
                     <Calendar

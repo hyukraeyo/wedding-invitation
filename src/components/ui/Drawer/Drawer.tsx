@@ -3,10 +3,11 @@
 import * as React from "react"
 import { Drawer as DrawerPrimitive } from "vaul"
 import { cn } from "@/lib/utils"
+import { focusFirstFocusable } from "@/lib/a11y"
 import styles from "./Drawer.module.scss"
 
 const Drawer = ({
-    shouldScaleBackground = false, // 🍌 배경 축소로 인한 레이아웃 틀어짐 방지를 위해 기본값 false로 변경
+    shouldScaleBackground = false,
     ...props
 }: React.ComponentProps<typeof DrawerPrimitive.Root>) => (
     <DrawerPrimitive.Root
@@ -36,18 +37,17 @@ DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName
 
 /**
  * 🍌 DrawerContent 컴포넌트
+ * - variant: 'island' (기본값, 아일랜드 스타일) | 'full' (하단 밀착 스타일)
  * - aria-hidden 충돌 방지: Drawer가 열릴 때 포커스를 내부로 자동 이동
- * - onOpenAutoFocus를 기본 처리하여 트리거 버튼에 포커스가 남아 있는 것을 방지
- * - 사용처에서 onOpenAutoFocus를 직접 지정하면 해당 핸들러가 우선 적용됨
  */
 interface DrawerContentProps extends React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content> {
-    variant?: "default" | "floating";
+    variant?: "island" | "full";
 }
 
 const DrawerContent = React.forwardRef<
     React.ElementRef<typeof DrawerPrimitive.Content>,
     DrawerContentProps
->(({ className, children, onOpenAutoFocus, variant = "default", ...props }, ref) => {
+>(({ className, children, variant = "island", onOpenAutoFocus, ...props }, ref) => {
     const contentRef = React.useRef<HTMLDivElement | null>(null);
 
     // 외부에서 전달된 ref와 내부 ref를 병합
@@ -61,26 +61,12 @@ const DrawerContent = React.forwardRef<
     }, [ref]);
 
     const handleOpenAutoFocus = React.useCallback((event: Event) => {
-        // 사용자가 직접 onOpenAutoFocus를 전달한 경우 해당 핸들러 실행
         if (onOpenAutoFocus) {
             onOpenAutoFocus(event);
             return;
         }
-
-        // 기본 동작: 포커스를 Drawer 내부로 이동하여 aria-hidden 충돌 방지
         event.preventDefault();
-
-        // 내부에서 포커스 가능한 첫 번째 요소를 찾아 포커스
-        const focusableElements = contentRef.current?.querySelectorAll(
-            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
-
-        if (focusableElements && focusableElements.length > 0) {
-            (focusableElements[0] as HTMLElement).focus();
-        } else {
-            // 포커스 가능한 요소가 없으면 콘텐츠 자체에 포커스
-            contentRef.current?.focus();
-        }
+        focusFirstFocusable(event.currentTarget as HTMLElement);
     }, [onOpenAutoFocus]);
 
     return (
@@ -91,7 +77,7 @@ const DrawerContent = React.forwardRef<
                 tabIndex={-1}
                 className={cn(
                     styles.content,
-                    variant === "floating" && styles.variantFloating,
+                    variant === "island" ? styles.island : styles.full,
                     className
                 )}
                 onOpenAutoFocus={handleOpenAutoFocus}

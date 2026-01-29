@@ -19,15 +19,15 @@ export function DrawersDemo() {
         <div className={styles.showcaseStack}>
             <div className={styles.showcaseRow}>
                 <div className={styles.verticalStackExtraSmall}>
-                    <Label className={styles.labelMuted}>Standard Surface</Label>
+                    <Label className={styles.labelMuted}>Island Type (Default)</Label>
                     <Drawer>
                         <DrawerTrigger asChild>
                             <Button variant="secondary">Open Sheet</Button>
                         </DrawerTrigger>
                         <DrawerContent>
                             <DrawerHeader className="text-left">
-                                <DrawerTitle>Standard Drawer</DrawerTitle>
-                                <DrawerDescription>Full-width mobile sheet for standard selection.</DrawerDescription>
+                                <DrawerTitle>Island Drawer</DrawerTitle>
+                                <DrawerDescription>Premium floating sheet for standard selection.</DrawerDescription>
                             </DrawerHeader>
                             <div className={styles.verticalStackSmall} style={{ padding: '0 16px 24px' }}>
                                 <div className={styles.codePanel}>List Item 1</div>
@@ -38,12 +38,12 @@ export function DrawersDemo() {
                 </div>
 
                 <div className={styles.verticalStackExtraSmall}>
-                    <Label className={styles.labelMuted}>Island (Floating)</Label>
+                    <Label className={styles.labelMuted}>Island (with Menu)</Label>
                     <Drawer>
                         <DrawerTrigger asChild>
-                            <Button variant="outline">Open Island</Button>
+                            <Button variant="outline">Open Menu Sheet</Button>
                         </DrawerTrigger>
-                        <DrawerContent variant="floating">
+                        <DrawerContent>
                             <DrawerHeader className="text-left">
                                 <DrawerTitle>Floating Island</DrawerTitle>
                                 <DrawerDescription>Premium floating sheet for highlighted content.</DrawerDescription>

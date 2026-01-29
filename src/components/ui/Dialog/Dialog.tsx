@@ -3,6 +3,7 @@
 import * as React from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
 import { cn } from "@/lib/utils"
+import { focusFirstFocusable } from "@/lib/a11y"
 import styles from "./Dialog.module.scss"
 
 const Dialog = DialogPrimitive.Root
@@ -53,18 +54,7 @@ const DialogContent = React.forwardRef<
 
         // 기본 동작: 포커스를 Dialog 내부로 이동하여 aria-hidden 충돌 방지
         event.preventDefault();
-
-        // 내부에서 포커스 가능한 첫 번째 요소를 찾아 포커스
-        const focusableElements = contentRef.current?.querySelectorAll(
-            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
-
-        if (focusableElements && focusableElements.length > 0) {
-            (focusableElements[0] as HTMLElement).focus();
-        } else {
-            // 포커스 가능한 요소가 없으면 콘텐츠 자체에 포커스
-            contentRef.current?.focus();
-        }
+        focusFirstFocusable(event.currentTarget as HTMLElement);
     }, [onOpenAutoFocus]);
 
     return (
@@ -72,6 +62,7 @@ const DialogContent = React.forwardRef<
             <DialogOverlay />
             <DialogPrimitive.Content
                 ref={combinedRef}
+                tabIndex={-1}
                 className={cn(styles.content, className)}
                 aria-describedby={undefined}
                 onOpenAutoFocus={handleOpenAutoFocus}

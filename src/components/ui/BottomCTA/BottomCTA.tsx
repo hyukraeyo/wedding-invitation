@@ -25,7 +25,7 @@ const FixedBottomCTA = React.forwardRef<HTMLDivElement, BottomCTAProps>(
                 {...props}
             >
                 {isFixed && showGradient && !inModal && <div className={styles.gradient} />}
-                <div className={styles.inner}>
+                <div className={cn(styles.inner, isFixed && !inModal && styles.isFixed)}>
                     {children}
                 </div>
             </div>

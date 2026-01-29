@@ -26,7 +26,7 @@ interface TimePickerProps {
 type Period = 'AM' | 'PM';
 
 export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
-    ({ value, onChange, onComplete, className, minuteStep = 10, id, disabled, part = 'all' }, ref) => {
+    ({ value, onChange, onComplete, className, minuteStep = 10, id, disabled, part = 'all', variant = 'default' }, ref) => {
         const field = useField();
 
         React.useEffect(() => {
@@ -165,11 +165,12 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
             }
         }, [isOpen]); // Removed 'value' from dependencies to prevent re-sync while modal is open
 
-        const [tH, tM] = tempValue.split(':');
-        const tHInt = parseInt(tH, 10);
+        const [tH, tM] = (tempValue || '10:00').split(':');
+        const tHInt = parseInt(tH || '10', 10);
         const isTPm = tHInt >= 12;
         const tPeriod: Period = isTPm ? 'PM' : 'AM';
         const tDisplayHour = String(tHInt > 12 ? tHInt - 12 : (tHInt === 0 ? 12 : tHInt));
+        const currentTM = tM || '00';
 
         const updateTempTime = (newP: Period, newH: string, newMin: string) => {
             let h = parseInt(newH, 10);
@@ -215,6 +216,7 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
                 }, 100);
                 return () => clearTimeout(timer);
             }
+            return undefined;
         }, [isOpen]);
 
         const renderColumn = (title: string, options: { label: string, value: string }[], current: string, onSelect: (val: string) => void, columnId: string) => (
@@ -245,12 +247,13 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
                         confirmText="선택 완료"
                         onConfirm={handleConfirm}
                         padding="none"
+                        fullWidthActions={true}
                         trigger={renderUnifiedTrigger()}
                     >
                         <div className={styles.pickerGrid}>
-                            {renderColumn('오전/오후', periodOptions, tPeriod, (v) => updateTempTime(v as Period, tDisplayHour, tM), 'period')}
-                            {renderColumn('시간', hourOptions, tDisplayHour, (v) => updateTempTime(tPeriod, v, tM), 'hour')}
-                            {renderColumn('분', minuteOptions, tM, (v) => updateTempTime(tPeriod, tDisplayHour, v), 'minute')}
+                            {renderColumn('오전/오후', periodOptions, tPeriod, (v) => updateTempTime(v as Period, tDisplayHour, currentTM), 'period')}
+                            {renderColumn('시간', hourOptions, tDisplayHour, (v) => updateTempTime(tPeriod, v, currentTM), 'hour')}
+                            {renderColumn('분', minuteOptions, currentTM, (v) => updateTempTime(tPeriod, tDisplayHour, v), 'minute')}
                         </div>
                     </ResponsiveModal>
                 </div>
