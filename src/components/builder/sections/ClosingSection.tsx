@@ -6,8 +6,8 @@ import { Sparkles } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
-import { Input } from '@/components/ui/Input';
-import { Field, SectionContainer } from '@/components/common/FormPrimitives';
+import { TextField } from '@/components/ui/TextField';
+import { List, ListRow } from '@/components/ui/List';
 import { ImageUploader } from '@/components/common/ImageUploader';
 import { HeaderAction } from '@/components/common/HeaderAction';
 import { SampleList } from '@/components/ui/SampleList';
@@ -52,41 +52,57 @@ export default function ClosingSection({ value }: SectionProps) {
                     마무리
                 </AccordionTrigger>
                 <AccordionContent>
-                    <SectionContainer>
-                        <Field label="소제목">
-                            <Input placeholder="예: CLOSING"
-                                value={closing.subtitle}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateClosing({ subtitle: e.target.value })}
-                            />
-                        </Field>
-                        <Field label="제목">
-                            <Input placeholder="예: 저희의 시작을 함께해주셔서 감사합니다"
-                                value={closing.title}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateClosing({ title: e.target.value })}
-                            />
-                        </Field>
+                    <List>
+                        <ListRow
+                            contents={
+                                <TextField
+                                    variant="line"
+                                    label="소제목"
+                                    placeholder="예: CLOSING"
+                                    value={closing.subtitle}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateClosing({ subtitle: e.target.value })}
+                                />
+                            }
+                        />
+                        <ListRow
+                            contents={
+                                <TextField
+                                    variant="line"
+                                    label="제목"
+                                    placeholder="예: 저희의 시작을 함께해주셔서 감사합니다"
+                                    value={closing.title}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateClosing({ title: e.target.value })}
+                                />
+                            }
+                        />
 
-                        <Field label="내용">
-                            <RichTextEditor
-                                content={closing.content}
-                                onChange={(val: string) => updateClosing({ content: val })}
-                                placeholder="감사의 마음을 담은 짧은 인사말"
-                            />
-                        </Field>
+                        <ListRow
+                            title="내용"
+                            contents={
+                                <RichTextEditor
+                                    content={closing.content}
+                                    onChange={(val: string) => updateClosing({ content: val })}
+                                    placeholder="감사의 마음을 담은 짧은 인사말"
+                                />
+                            }
+                        />
 
                         {/* Photo Upload */}
-                        <Field label="사진">
-                            <div className={styles.optionWrapper}>
-                                <ImageUploader
-                                    value={closing.imageUrl}
-                                    onChange={(url) => updateClosing({ imageUrl: url })}
-                                    placeholder="마무리 사진 추가"
-                                    ratio={closing.ratio}
-                                    onRatioChange={(val) => updateClosing({ ratio: val })}
-                                />
-                            </div>
-                        </Field>
-                    </SectionContainer>
+                        <ListRow
+                            title="사진"
+                            contents={
+                                <div className={styles.optionWrapper}>
+                                    <ImageUploader
+                                        value={closing.imageUrl}
+                                        onChange={(url) => updateClosing({ imageUrl: url })}
+                                        placeholder="마무리 사진 추가"
+                                        ratio={closing.ratio}
+                                        onRatioChange={(val) => updateClosing({ ratio: val })}
+                                    />
+                                </div>
+                            }
+                        />
+                    </List>
                 </AccordionContent>
             </AccordionItem>
 

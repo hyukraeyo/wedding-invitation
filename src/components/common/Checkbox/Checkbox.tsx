@@ -2,7 +2,6 @@
 
 import React, { useId } from 'react';
 import { Checkbox as ShadcnCheckbox } from '@/components/ui/Checkbox';
-import { Label } from '@/components/ui/Label';
 import { cn } from '@/lib/utils';
 import styles from './Checkbox.module.scss';
 
@@ -73,12 +72,12 @@ const CheckboxBase = ({
                 className={cn(variant === 'circle' && styles.circle)}
             />
             {children || label ? (
-                <Label
+                <label
                     htmlFor={uniqueId}
                     className={cn(styles.label, disabled && styles.disabled)}
                 >
                     {label || children}
-                </Label>
+                </label>
             ) : null}
         </div>
     );

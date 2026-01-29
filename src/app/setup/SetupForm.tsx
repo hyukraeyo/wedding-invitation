@@ -5,15 +5,15 @@ import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { Input } from '@/components/ui/Input';
+import { TextField } from '@/components/ui/TextField';
+import { IconButton } from '@/components/ui/IconButton';
 import { DatePicker } from '@/components/common/DatePicker';
 import { TimePicker } from '@/components/common/TimePicker';
-import { Progress } from '@/components/ui/Progress';
-import { Sparkles, Link as LinkIcon } from 'lucide-react';
-import { toast } from 'sonner';
+import { ProgressBar } from '@/components/common/ProgressBar/ProgressBar';
+import { Sparkles, ChevronLeft } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import { parseKoreanName } from '@/lib/utils';
-import { BottomCTA } from '@/components/ui/BottomCTA';
-import { FormField } from '@/components/common/FormField';
+import { FixedBottomCTA } from '@/components/ui/BottomCTA';
 import styles from './SetupForm.module.scss';
 
 const subscribe = () => () => { };
@@ -21,6 +21,7 @@ const subscribe = () => () => { };
 const SetupForm = () => {
     const router = useRouter();
     const store = useInvitationStore();
+    const { toast } = useToast();
 
     // Portal mounted state (using useSyncExternalStore to avoid effect lints)
     const mounted = useSyncExternalStore(
@@ -40,27 +41,30 @@ const SetupForm = () => {
     const brideNameRef = useRef<HTMLInputElement>(null);
     const dateRef = useRef<HTMLButtonElement>(null);
     const timeRef = useRef<HTMLDivElement>(null);
-    const slugRef = useRef<HTMLInputElement>(null);
     const bottomRef = useRef<HTMLDivElement>(null);
 
     const [currentStep, setCurrentStep] = useState(0);
 
-    // 🍌 Auto-generate slug from names
-    const updateSlugFromNames = (fullName: string) => {
-        if (!slug && fullName) {
-            // Get first name part (everything after the first char for Korean names)
-            const firstName = fullName.length > 1 ? fullName.substring(1) : fullName;
-            const randomStr = Math.random().toString(36).substring(2, 6);
-            const generatedSlug = `${firstName.trim().toLowerCase()}-${randomStr}`;
-            setSlug(generatedSlug);
-        }
+    // 🍌 Auto-generate slug helper
+    const generateSlug = (name: string) => {
+        const firstName = name.length > 1 ? name.substring(1) : name;
+        const randomStr = Math.random().toString(36).substring(2, 6);
+        return `${firstName.trim().toLowerCase()}-${randomStr}`;
     };
 
     const handleSubmit = (e?: React.FormEvent) => {
         if (e) e.preventDefault();
 
-        if (!groomFullName || !brideFullName || !date || !time || !slug) {
-            toast.error('모든 필수 정보를 입력해주세요.');
+        // Ensure slug exists or generate it
+        let finalSlug = slug;
+        if (!finalSlug) {
+            const baseName = brideFullName || groomFullName || 'wedding';
+            finalSlug = generateSlug(baseName);
+            setSlug(finalSlug);
+        }
+
+        if (!groomFullName || !brideFullName || !date || !time || !finalSlug) {
+            toast({ variant: 'destructive', text: '모든 필수 정보를 입력해주세요.' });
             return;
         }
 
@@ -72,7 +76,7 @@ const SetupForm = () => {
         store.setBride(parsedBride);
         store.setDate(date);
         store.setTime(time);
-        store.setSlug(slug);
+        store.setSlug(finalSlug);
 
         // Update mainScreen defaults if they are empty
         if (!store.mainScreen.groomName) {
@@ -82,25 +86,34 @@ const SetupForm = () => {
             });
         }
 
-        toast.success('기본 정보가 설정되었습니다. 빌더로 이동합니다!');
+        toast({ text: '기본 정보가 설정되었습니다. 빌더로 이동합니다!' });
         router.push('/builder?onboarding=true');
     };
 
-    const handleNext = () => {
-        if (currentStep < 4) {
+    const handleNext = (force = false) => {
+        if (!force && !isStepValid()) return;
+
+        if (currentStep < 3) {
             setCurrentStep(prev => prev + 1);
         } else {
             handleSubmit();
         }
     };
 
+    const handleBack = () => {
+        if (currentStep > 0) {
+            setCurrentStep(prev => prev - 1);
+        } else {
+            router.back();
+        }
+    };
+
     const isStepValid = () => {
         switch (currentStep) {
-            case 0: return !!groomFullName;
-            case 1: return !!brideFullName;
+            case 0: return !!groomFullName.trim();
+            case 1: return !!brideFullName.trim();
             case 2: return !!date;
             case 3: return !!time;
-            case 4: return !!slug;
             default: return false;
         }
     };
@@ -108,7 +121,7 @@ const SetupForm = () => {
 
 
     // Progress Calculation
-    const fields = [groomFullName, brideFullName, date, time, slug];
+    const fields = [groomFullName, brideFullName, date, time];
     const completedFields = fields.filter(f => !!f).length;
     const progress = (completedFields / fields.length) * 100;
 
@@ -126,11 +139,21 @@ const SetupForm = () => {
     useEffect(() => {
         const focusInput = () => {
             switch (currentStep) {
-                case 0: groomNameRef.current?.focus(); break;
-                case 1: brideNameRef.current?.focus(); break;
-                case 2: dateRef.current?.focus(); break;
-                case 3: timeRef.current?.querySelector('button')?.focus(); break;
-                case 4: slugRef.current?.focus(); break;
+                case 0:
+                    groomNameRef.current?.focus();
+                    break;
+                case 1:
+                    brideNameRef.current?.focus();
+                    break;
+                case 2:
+                    dateRef.current?.focus();
+                    dateRef.current?.click();
+                    break;
+                case 3:
+                    const timeBtn = timeRef.current?.querySelector('button');
+                    timeBtn?.focus();
+                    timeBtn?.click();
+                    break;
             }
         };
         const timer = setTimeout(focusInput, 500); // Wait for animation
@@ -144,7 +167,6 @@ const SetupForm = () => {
             case 1: return { title: "신부님의 이름을\n알려주세요", subtitle: "" };
             case 2: return { title: "예식 날짜를\n알려주세요", subtitle: "" };
             case 3: return { title: "예식 시간을\n알려주세요", subtitle: "" };
-            case 4: return { title: "나만의 주소를\n만드세요", subtitle: "청첩장에 사용될 고유한 주소입니다." };
             default: return { title: "정보를 입력해주세요", subtitle: "" };
         }
     };
@@ -155,7 +177,23 @@ const SetupForm = () => {
         <div className={styles.stepperContainer}>
             {/* Progress Bar: Rendered via Portal to escape parent transforms */}
             {mounted && typeof document !== 'undefined' && createPortal(
-                <Progress value={progress} className={styles.progressBar} />,
+                <>
+                    <div className={styles.mobileHeader}>
+                        <IconButton
+                            className={styles.mobileHeaderAction}
+                            onClick={handleBack}
+                            variant="clear"
+                            aria-label="뒤로가기"
+                            name=""
+                            iconSize={24}
+                        >
+                            <ChevronLeft size={24} />
+                        </IconButton>
+                        <span className={styles.mobileHeaderTitle}>기본 정보</span>
+                        <div className={styles.mobileHeaderAction} /> {/* Spacer for centering */}
+                    </div>
+                    <ProgressBar progress={progress} className={styles.progressBar || ""} />
+                </>,
                 document.body
             )}
 
@@ -171,44 +209,14 @@ const SetupForm = () => {
             </div>
 
             <form className={styles.form} onSubmit={handleSubmit}>
-                {/* Step 4: Slug */}
-                {currentStep >= 4 && (
-                    <div className={cn(styles.section, styles.stackIn)}>
-                        <FormField
-                            label="청첩장 주소"
-                            id="url-slug"
-                            variant="floating"
-                        >
-                            <Input
-                                id="url-slug"
-                                ref={slugRef}
-                                value={slug}
-                                onChange={(e) => setSlug(e.target.value.replace(/[^a-zA-Z0-9-]/g, ''))}
-                                className="bg-transparent text-lg font-bold p-0 h-auto h-12"
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter' && slug) {
-                                        e.preventDefault();
-                                        handleSubmit();
-                                    }
-                                }}
-                                required
-                            />
-                            <div className={styles.slugPreview}>
-                                <LinkIcon size={14} />
-                                <span>banana-wedding.com/v/{slug || '...'}</span>
-                            </div>
-                        </FormField>
-                    </div>
-                )}
-
                 {/* Step 3: Time */}
                 {currentStep >= 3 && (
-                    <div className={cn(styles.section, styles.stackIn)}>
-                        <FormField
-                            label="예식 시간"
-                            id="wedding-time"
-                            variant="floating"
-                        >
+                    <div
+                        className={cn(styles.section, styles.stackIn, currentStep > 3 && styles.clickable)}
+                        onClick={() => currentStep > 3 && setCurrentStep(3)}
+                    >
+                        <div className={styles.fieldWrapper}>
+                            <label className={styles.fieldLabel} htmlFor="wedding-time">예식 시간</label>
                             <TimePicker
                                 id="wedding-time"
                                 ref={timeRef}
@@ -216,125 +224,114 @@ const SetupForm = () => {
                                 value={time}
                                 onChange={setTime}
                                 onComplete={() => {
-                                    setTimeout(handleNext, 400);
+                                    setTimeout(() => handleNext(true), 400);
                                 }}
                                 disabled={currentStep > 3}
                                 className="border-none bg-transparent text-lg font-bold p-0 shadow-none h-auto h-12 justify-start"
                             />
-                        </FormField>
+                        </div>
                     </div>
                 )}
 
                 {/* Step 2: Date */}
                 {currentStep >= 2 && (
-                    <div className={cn(styles.section, styles.stackIn)}>
-                        <FormField
-                            label="예식 날짜"
-                            id="wedding-date"
-                            variant="floating"
-                        >
+                    <div
+                        className={cn(styles.section, styles.stackIn, currentStep > 2 && styles.clickable)}
+                        onClick={() => currentStep > 2 && setCurrentStep(2)}
+                    >
+                        <div className={styles.fieldWrapper}>
+                            <label className={styles.fieldLabel} htmlFor="wedding-date">예식 날짜</label>
                             <DatePicker
                                 id="wedding-date"
                                 ref={dateRef}
                                 value={date}
                                 onChange={(val) => {
                                     setDate(val);
-                                    if (val) setTimeout(handleNext, 300);
+                                    if (val) setTimeout(() => handleNext(true), 300);
                                 }}
                                 onComplete={() => { }}
                                 disabled={currentStep > 2}
                                 className="border-none bg-transparent text-lg font-bold p-0 shadow-none h-auto h-12 justify-start"
                             />
-                        </FormField>
+                        </div>
                     </div>
                 )}
 
                 {/* Step 1: Bride Name */}
                 {currentStep >= 1 && (
-                    <div className={cn(styles.section, styles.stackIn)}>
-                        <FormField
+                    <div
+                        className={cn(styles.section, styles.stackIn, currentStep > 1 && styles.clickable)}
+                        onClick={() => currentStep > 1 && setCurrentStep(1)}
+                    >
+                        <TextField
                             label="신부 이름"
                             id="bride-name"
-                            variant="floating"
-                        >
-                            <Input
-                                id="bride-name"
-                                ref={brideNameRef}
-                                value={brideFullName}
-                                readOnly={currentStep > 1}
-                                onChange={(e) => {
-                                    const val = e.target.value;
-                                    setBrideFullName(val);
-                                    updateSlugFromNames(val);
-                                }}
-                                className="bg-transparent text-lg font-bold p-0 h-auto h-12"
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter' && brideFullName) {
-                                        e.preventDefault();
-                                        handleNext();
-                                    }
-                                }}
-                                required
-                            />
-                        </FormField>
-                    </div>
-                )}
-
-                {/* Step 0: Groom Name */}
-                <div className={cn(styles.section, styles.stackIn)}>
-                    <FormField
-                        label="신랑 이름"
-                        id="groom-name"
-                        variant="floating"
-                    >
-                        <Input
-                            id="groom-name"
-                            ref={groomNameRef}
-                            value={groomFullName}
-                            readOnly={currentStep > 0}
-                            onChange={(e) => {
+                            ref={brideNameRef}
+                            value={brideFullName}
+                            readOnly={currentStep > 1}
+                            variant="line"
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                 const val = e.target.value;
-                                setGroomFullName(val);
-                                updateSlugFromNames(val);
+                                setBrideFullName(val);
                             }}
-                            className="bg-transparent text-lg font-bold p-0 h-auto h-12"
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter' && groomFullName) {
+                            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                                if (e.key === 'Enter' && currentStep === 1 && brideFullName.trim()) {
                                     e.preventDefault();
                                     handleNext();
                                 }
                             }}
                             required
                         />
-                    </FormField>
+                    </div>
+                )}
+
+                {/* Step 0: Groom Name */}
+                <div
+                    className={cn(styles.section, styles.stackIn, currentStep > 0 && styles.clickable)}
+                    onClick={() => currentStep > 0 && setCurrentStep(0)}
+                >
+                    <TextField
+                        label="신랑 이름"
+                        id="groom-name"
+                        ref={groomNameRef}
+                        value={groomFullName}
+                        readOnly={currentStep > 0}
+                        variant="line"
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                            const val = e.target.value;
+                            setGroomFullName(val);
+                        }}
+                        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                            if (e.key === 'Enter' && currentStep === 0 && groomFullName.trim()) {
+                                e.preventDefault();
+                                handleNext();
+                            }
+                        }}
+                        required
+                    />
                 </div>
 
                 {/* Formatting spacer */}
                 <div ref={bottomRef} style={{ height: '40px' }} />
 
                 {/* Dynamic Bottom Button */}
-                {isStepValid() && ![2, 3].includes(currentStep) && (
-                    <BottomCTA.Single
-                        className={styles.ctaContainer}
-                        buttonProps={{
-                            children: (
-                                <>
-                                    {currentStep < 4 ? (
-                                        <>
-                                            <span>다음</span>
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Sparkles size={16} />
-                                            <span>시작하기</span>
-                                        </>
-                                    )}
-                                </>
-                            ),
-                            onClick: handleNext,
-                            type: currentStep === 4 ? 'submit' : 'button'
-                        }}
-                    />
+                {isStepValid() && (
+                    <FixedBottomCTA
+                        // @ts-expect-error - TDS might have restricted these props in types
+                        onClick={() => handleNext()}
+                        type={currentStep === 3 ? 'submit' : 'button'}
+                    >
+                        {currentStep < 3 ? (
+                            <>
+                                <span>다음</span>
+                            </>
+                        ) : (
+                            <>
+                                <Sparkles size={16} />
+                                <span>시작하기</span>
+                            </>
+                        )}
+                    </FixedBottomCTA>
                 )}
             </form>
         </div>

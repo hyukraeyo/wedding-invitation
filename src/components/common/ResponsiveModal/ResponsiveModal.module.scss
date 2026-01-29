@@ -26,6 +26,8 @@
     flex-direction: column;
     min-height: 200px;
     width: 100%;
+    position: relative;
+    z-index: 1;
 }
 
 .contentWrapper {
@@ -58,7 +60,6 @@
     margin-top: auto;
     border-top: none;
     flex-shrink: 0;
-    overflow: hidden;
     // BottomCTA handles padding internally
 }
 

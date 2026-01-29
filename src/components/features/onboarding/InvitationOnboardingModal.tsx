@@ -5,8 +5,7 @@ import { useRouter } from "next/navigation";
 import { useInvitationStore } from "@/store/useInvitationStore";
 import { useShallow } from "zustand/react/shallow";
 import { DynamicResponsiveModal as ResponsiveModal } from "@/components/common/ResponsiveModal/Dynamic";
-import { Input } from "@/components/ui/Input";
-import { Label } from "@/components/ui/Label";
+import { TextField } from "@/components/ui/TextField";
 import { parseKoreanName } from "@/lib/utils";
 import styles from "./InvitationOnboardingModal.module.scss";
 
@@ -83,8 +82,9 @@ export function InvitationOnboardingModal({ isOpen, onClose }: InvitationOnboard
                 <div className={styles.section}>
                     <div className={styles.row}>
                         <div className={styles.field}>
-                            <Label htmlFor="groomName" className={styles.label}>Groom name</Label>
-                            <Input
+                            <TextField
+                                variant="line"
+                                label="Groom name"
                                 id="groomName"
                                 name="groomName"
                                 placeholder="John Kim"
@@ -93,8 +93,9 @@ export function InvitationOnboardingModal({ isOpen, onClose }: InvitationOnboard
                             />
                         </div>
                         <div className={styles.field}>
-                            <Label htmlFor="brideName" className={styles.label}>Bride name</Label>
-                            <Input
+                            <TextField
+                                variant="line"
+                                label="Bride name"
                                 id="brideName"
                                 name="brideName"
                                 placeholder="Emily Park"
@@ -108,36 +109,35 @@ export function InvitationOnboardingModal({ isOpen, onClose }: InvitationOnboard
                 <div className={styles.section}>
                     <div className={styles.row}>
                         <div className={styles.field}>
-                            <Label htmlFor="date" className={styles.label}>Wedding date</Label>
-                            <div className={styles.inputGroup}>
-                                <Input
-                                    id="date"
-                                    name="date"
-                                    type="date"
-                                    value={formData.date}
-                                    onChange={handleChange}
-                                />
-                            </div>
+                            <TextField
+                                variant="line"
+                                label="Wedding date"
+                                id="date"
+                                name="date"
+                                type="date"
+                                value={formData.date}
+                                onChange={handleChange}
+                            />
                         </div>
                         <div className={styles.field}>
-                            <Label htmlFor="time" className={styles.label}>Wedding time</Label>
-                            <div className={styles.inputGroup}>
-                                <Input
-                                    id="time"
-                                    name="time"
-                                    type="time"
-                                    value={formData.time}
-                                    onChange={handleChange}
-                                />
-                            </div>
+                            <TextField
+                                variant="line"
+                                label="Wedding time"
+                                id="time"
+                                name="time"
+                                type="time"
+                                value={formData.time}
+                                onChange={handleChange}
+                            />
                         </div>
                     </div>
                 </div>
 
                 <div className={styles.section}>
                     <div className={styles.field}>
-                        <Label htmlFor="location" className={styles.label}>Venue</Label>
-                        <Input
+                        <TextField
+                            variant="line"
+                            label="Venue"
                             id="location"
                             name="location"
                             placeholder="Banana Wedding Hall"

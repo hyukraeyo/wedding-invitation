@@ -65,30 +65,29 @@ const HeaderActions = React.memo(({
             <>
                 {showSave && user ? (
                     <IconButton
-                        icon={Save}
                         onClick={onSaveAction}
                         disabled={isLoading || isUploading}
-                        size="sm"
                         iconSize={20}
-                        strokeWidth={2.5}
-                        variant="ghost"
+                        variant="clear"
                         className={styles.actionButton}
                         aria-label="저장하기"
-                    />
+                        name=""
+                    >
+                        <Save size={20} strokeWidth={2.5} />
+                    </IconButton>
                 ) : null}
 
                 {user ? (
                     <>
                         <Link href="/mypage/notifications" className={styles.notificationLink}>
                             <IconButton
-                                icon={Bell}
-                                size="sm"
                                 iconSize={20}
-                                strokeWidth={2.5}
-                                variant="ghost"
+                                variant="clear"
                                 className={styles.actionButton}
                                 aria-label="알림"
+                                name=""
                             >
+                                <Bell size={20} strokeWidth={2.5} />
                                 {notificationCount > 0 && (
                                     <span className={styles.notificationBadge} />
                                 )}
@@ -96,27 +95,27 @@ const HeaderActions = React.memo(({
                         </Link>
                         <Link href="/mypage" className={styles.profileLink}>
                             <IconButton
-                                icon={Banana}
-                                size="sm"
                                 iconSize={20}
-                                strokeWidth={2.5}
-                                variant="solid"
+                                variant="fill"
                                 className={styles.profileButton}
                                 aria-label="마이페이지"
-                            />
+                                name=""
+                            >
+                                <Banana size={20} strokeWidth={2.5} />
+                            </IconButton>
                         </Link>
                     </>
                 ) : (
                     <IconButton
-                        icon={LogIn}
-                        size="sm"
                         iconSize={20}
-                        strokeWidth={2.5}
-                        variant="ghost"
+                        variant="clear"
                         onClick={onLogin}
                         className={styles.actionButton}
                         aria-label="로그인"
-                    />
+                        name=""
+                    >
+                        <LogIn size={20} strokeWidth={2.5} />
+                    </IconButton>
                 )}
             </>
         )}
@@ -133,7 +132,8 @@ export default function Header() {
         !pathname.startsWith('/v/') &&
         pathname !== '/preview' &&
         pathname !== '/builder/setup' &&
-        !pathname.startsWith('/design-system');
+        !pathname.startsWith('/design-system') &&
+        !pathname.startsWith('/tds');
     const { user, loading: authLoading } = useAuth();
 
     // Store states
@@ -206,14 +206,15 @@ export default function Header() {
                 <Suspense fallback={<div className={styles.suspenseFallback} />}>
                     <div className={styles.resetDialogContent}>
                         <Button
-                            variant="destructive"
+                            color="danger"
+                            variant="fill"
                             className={styles.confirmButton}
                             onClick={confirmReset}
                         >
                             초기화 및 만들기
                         </Button>
                         <Button
-                            variant="ghost"
+                            variant="weak"
                             className={styles.cancelButton}
                             onClick={() => setShowResetDialog(false)}
                         >

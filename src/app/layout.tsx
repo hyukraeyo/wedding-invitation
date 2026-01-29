@@ -4,12 +4,13 @@ import Script from "next/script";
 import ClientProviders from "./ClientProviders";
 import { fontVariables } from "@/lib/fonts";
 import Header from "@/components/common/Header";
-import { ProgressBar } from "@/components/common/ProgressBar/ProgressBar";
+
 import { CustomScrollbar } from "@/components/common/CustomScrollbar";
 import { auth } from "@/auth";
 import { SkipLink } from "@/hooks/useAccessibility";
 import "./globals.scss";
 import "../styles/_accessibility.scss";
+import { ProgressBar } from "@/components/common/ProgressBar/ProgressBar";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -99,7 +100,7 @@ export default async function RootLayout({
 
   return (
     <html lang="ko" suppressHydrationWarning className={fontVariables}>
-      <body>
+      <body suppressHydrationWarning>
         <Script
           src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.0/kakao.min.js"
           integrity="sha384-l+xbElFSnPZ2rOaPrU//2FF5B4LB8FiX5q4fXYTlfcG4PGpMkE1vcL7kNXI6Cci0"
@@ -162,12 +163,12 @@ export default async function RootLayout({
             ]),
           }}
         />
+        <SkipLink href="#main-content">본문 바로가기</SkipLink>
         <ClientProviders session={session}>
-          <SkipLink href="#main-content">본문 바로가기</SkipLink>
-          <div vaul-drawer-wrapper="" style={{ backgroundColor: "var(--background)", minHeight: "100dvh", display: "flex", flexDirection: "column" }}>
+          <div suppressHydrationWarning vaul-drawer-wrapper="" style={{ backgroundColor: "var(--background)", minHeight: "100dvh", display: "flex", flexDirection: "column" }}>
             <Suspense fallback={null}>
               <CustomScrollbar />
-              <ProgressBar />
+              <ProgressBar size="normal" />
             </Suspense>
             <Header />
             <main id="main-content">
@@ -175,6 +176,7 @@ export default async function RootLayout({
             </main>
           </div>
         </ClientProviders>
+
       </body>
     </html>
   );

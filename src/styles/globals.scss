@@ -12,3 +12,8 @@ body {
   min-height: 100dvh;
 }
 
+// 🍌 Vaul 라이브러리 기본 스타일 오버라이드
+// Vaul이 드로어 하단에 height: 200% 가상요소를 추가해서 큰 빈 공간이 생기는 문제 수정
+[data-vaul-drawer][data-vaul-drawer-direction="bottom"]::after {
+  height: 0 !important;
+}

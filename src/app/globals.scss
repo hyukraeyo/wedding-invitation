@@ -40,6 +40,20 @@
   --motion-distance: 24px;
   --motion-scale: 0.98;
   --motion-overlay-blur: 16px;
+
+  /* Radix Radius Scale */
+  --radius-1: 3px;
+  --radius-2: 4px;
+  --radius-3: 6px;
+  --radius-4: 8px;
+  --radius-5: 12px;
+  --radius-6: 16px;
+  --radius-full: 9999px;
+
+  /* TDS Button Theme (Banana Wedding) */
+  --button-background-color: #FBC02D;
+  --button-color: #000000;
+  --button-pressed-background-color: #F9A825;
 }
 
 * {
@@ -57,10 +71,10 @@ html {
   height: 100%;
   // 배경색 설정 (모달 오버레이 뒤 영역용)
   background-color: var(--background);
-  
+
   // 🍌 커스텀 스크롤바 사용을 위해 기본 스크롤바 숨김
   @include m.scrollbar-hide;
-  
+
   // 🍌 모달 오픈 시 레이아웃 점프 방지는 Radix UI/Vaul이 처리하므로 stable 제거 검토
   // scrollbar-gutter: stable;
 

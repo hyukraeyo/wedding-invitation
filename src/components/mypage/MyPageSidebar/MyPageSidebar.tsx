@@ -2,6 +2,7 @@
 
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
+import { Badge } from '@/components/ui/Badge';
 import React from 'react';
 import { usePathname } from 'next/navigation';
 import {
@@ -77,7 +78,7 @@ export function MyPageSidebar({
                         <FileText size={20} className={styles.menuIcon} />
                         {MENU_TITLES.DASHBOARD}
                         {invitationCount > 0 && (
-                            <span className={styles.menuBadge}>{invitationCount}</span>
+                            <Badge color="elephant" variant="weak" size="small" style={{ marginLeft: 'auto' }}>{invitationCount}</Badge>
                         )}
                     </ViewTransitionLink>
 
@@ -89,7 +90,7 @@ export function MyPageSidebar({
                             <ClipboardList size={20} className={styles.menuIcon} />
                             {MENU_TITLES.REQUESTS}
                             {requestCount > 0 && (
-                                <span className={clsx(styles.menuBadge, styles.badgeAlert)}>{requestCount}</span>
+                                <Badge color="red" variant="weak" size="small" style={{ marginLeft: 'auto' }}>{requestCount}</Badge>
                             )}
                         </ViewTransitionLink>
                     )}
@@ -109,7 +110,7 @@ export function MyPageSidebar({
                         <Bell size={20} className={styles.menuIcon} />
                         {MENU_TITLES.NOTIFICATIONS}
                         {notificationCount > 0 && (
-                            <span className={clsx(styles.menuBadge, styles.badgeAlert)}>{notificationCount}</span>
+                            <Badge color="red" variant="weak" size="small" style={{ marginLeft: 'auto' }}>{notificationCount}</Badge>
                         )}
                     </ViewTransitionLink>
 

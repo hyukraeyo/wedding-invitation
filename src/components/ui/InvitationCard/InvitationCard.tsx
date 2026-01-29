@@ -10,6 +10,7 @@ import type { InvitationSummaryRecord } from '@/lib/invitation-summary';
 import type { ApprovalRequestSummary } from '@/services/approvalRequestService';
 import styles from './InvitationCard.module.scss';
 import { Button } from '@/components/ui/Button';
+import { Badge } from '@/components/ui/Badge';
 import { DynamicResponsiveModal as ResponsiveModal } from '@/components/common/ResponsiveModal/Dynamic';
 import { useInvitationStatus } from '@/hooks/useInvitationStatus';
 import { InvitationActionMenu } from '@/components/common/InvitationActionMenu';
@@ -92,14 +93,15 @@ const InvitationCard = React.memo(({
                 <div className={clsx(styles.overlay, !imageUrl && styles.noImage)}>
                     <div className={styles.overlayTop}>
                         <div className={styles.statusRow}>
-                            <span className={clsx(
-                                styles.statusBadge,
-                                isRejected ? styles.rejectedBadge :
-                                    isApproved ? styles.approvedBadge :
-                                        isRequesting ? styles.pendingBadge : styles.sampleBadge
-                            )}>
-                                {isRejected ? REJECTION_BADGE : isApproved ? '승인 완료' : isRequesting ? '승인 대기' : '샘플 이용중'}
-                            </span>
+                            {isRejected ? (
+                                <Badge color="red" variant="weak" size="small">{REJECTION_BADGE}</Badge>
+                            ) : isApproved ? (
+                                <Badge color="green" variant="weak" size="small">승인 완료</Badge>
+                            ) : isRequesting ? (
+                                <Badge color="elephant" variant="weak" size="small">승인 대기</Badge>
+                            ) : (
+                                <Badge color="yellow" variant="weak" size="small">샘플 이용중</Badge>
+                            )}
 
                             <InvitationActionMenu
                                 invitation={invitation}
@@ -125,7 +127,7 @@ const InvitationCard = React.memo(({
                             {(!isRequesting && !isApproved) ? (
                                 <>
                                     <Button
-                                        variant="outline"
+                                        variant="weak"
                                         className={clsx(styles.footerButton, styles.secondary, 'swiper-no-swiping')}
                                         onClick={(e) => {
                                             e.stopPropagation();
@@ -137,7 +139,7 @@ const InvitationCard = React.memo(({
                                     </Button>
                                     <Button
                                         className={clsx(styles.footerButton, styles.primary, 'swiper-no-swiping')}
-                                        variant="solid"
+                                        variant="fill"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             handlePrimaryAction(e);
@@ -150,7 +152,7 @@ const InvitationCard = React.memo(({
                             ) : (
                                 <>
                                     <Button
-                                        variant="outline"
+                                        variant="weak"
                                         className={clsx(styles.footerButton, styles.secondary, 'swiper-no-swiping')}
                                         onClick={(e) => {
                                             e.stopPropagation();
@@ -166,7 +168,7 @@ const InvitationCard = React.memo(({
                                             isApproved ? styles.share : styles.pending,
                                             'swiper-no-swiping'
                                         )}
-                                        variant="solid"
+                                        variant="fill"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             if (isApproved) {

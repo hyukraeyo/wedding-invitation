@@ -12,9 +12,9 @@ import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 import { InfoMessage } from '@/components/ui/InfoMessage';
 import { SampleList } from '@/components/ui/SampleList';
 import { useInvitationStore } from '@/store/useInvitationStore';
+import { TextField } from '@/components/ui/TextField';
+import { List, ListRow } from '@/components/ui/List';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
-import { Input } from '@/components/ui/Input';
-import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { HeaderAction } from '@/components/common/HeaderAction';
 import { ImageUploader } from '@/components/common/ImageUploader';
@@ -105,87 +105,106 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
                     인사말
                 </AccordionTrigger>
                 <AccordionContent>
-                    <SectionContainer>
+                    <List>
                         {/* Subtitle */}
-                        <Field label="소제목">
-                            <Input type="text"
-                                value={greetingSubtitle}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGreetingSubtitle(e.target.value)}
-                                placeholder="예: INVITATION"
-                            />
-                        </Field>
+                        <ListRow
+                            contents={
+                                <TextField
+                                    variant="line"
+                                    label="소제목"
+                                    type="text"
+                                    value={greetingSubtitle}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGreetingSubtitle(e.target.value)}
+                                    placeholder="예: INVITATION"
+                                />
+                            }
+                        />
 
                         {/* Title */}
-                        <Field label="제목">
-                            <Input type="text"
-                                value={greetingTitle}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGreetingTitle(e.target.value)}
-                                placeholder="예: 소중한 분들을 초대합니다"
-                            />
-                        </Field>
+                        <ListRow
+                            contents={
+                                <TextField
+                                    variant="line"
+                                    label="제목"
+                                    type="text"
+                                    value={greetingTitle}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGreetingTitle(e.target.value)}
+                                    placeholder="예: 소중한 분들을 초대합니다"
+                                />
+                            }
+                        />
 
                         {/* Content */}
-                        <Field label="내용">
-                            {isOpen ? (
-                                <RichTextEditor
-                                    content={message}
-                                    onChange={setMessage}
-                                    placeholder="축하해주시는 분들께 전할 소중한 메시지를 입력하세요."
-                                />
-                            ) : null}
-                        </Field>
+                        <ListRow
+                            title="내용"
+                            contents={
+                                isOpen ? (
+                                    <RichTextEditor
+                                        content={message}
+                                        onChange={setMessage}
+                                        placeholder="축하해주시는 분들께 전할 소중한 메시지를 입력하세요."
+                                    />
+                                ) : null
+                            }
+                        />
 
                         {/* Photo Upload */}
-                        <Field label="사진">
-                            <div className={styles.optionWrapper}>
-                                <ImageUploader
-                                    value={greetingImage}
-                                    onChange={setGreetingImage}
-                                    placeholder="인사말 사진 추가"
-                                    ratio={greetingRatio}
-                                    onRatioChange={(val) => setGreetingRatio(val)}
-                                />
-                            </div>
-                        </Field>
+                        <ListRow
+                            title="사진"
+                            contents={
+                                <div className={styles.optionWrapper}>
+                                    <ImageUploader
+                                        value={greetingImage}
+                                        onChange={setGreetingImage}
+                                        placeholder="인사말 사진 추가"
+                                        ratio={greetingRatio}
+                                        onRatioChange={(val) => setGreetingRatio(val)}
+                                    />
+                                </div>
+                            }
+                        />
 
                         {/* Name Options */}
-                        <Field label="이름 표기">
-                            <div className={styles.optionWrapper}>
-                                <Tabs
-                                    value={nameOptionValue}
-                                    onValueChange={handleNameOptionChange}
-                                >
-                                    <TabsList fluid>
-                                        <TabsTrigger value="bottom">하단 표기</TabsTrigger>
-                                        <TabsTrigger value="custom">직접 입력</TabsTrigger>
-                                        <TabsTrigger value="none">표시 안 함</TabsTrigger>
-                                    </TabsList>
-                                </Tabs>
+                        <ListRow
+                            title="이름 표기"
+                            contents={
+                                <div className={styles.optionWrapper}>
+                                    <Tabs
+                                        value={nameOptionValue}
+                                        onValueChange={handleNameOptionChange}
+                                    >
+                                        <TabsList fluid>
+                                            <TabsTrigger value="bottom">하단 표기</TabsTrigger>
+                                            <TabsTrigger value="custom">직접 입력</TabsTrigger>
+                                            <TabsTrigger value="none">표시 안 함</TabsTrigger>
+                                        </TabsList>
+                                    </Tabs>
 
-                                {enableFreeformNames ? (
-                                    <div className={styles.optionWrapper}>
-                                        <Field label="신랑 측 표기">
-                                            <Input
+                                    {enableFreeformNames && (
+                                        <div className={styles.nameForm}>
+                                            <TextField
+                                                variant="line"
+                                                label="신랑 측 표기"
                                                 value={groomNameCustom}
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGroomNameCustom(e.target.value)}
                                                 placeholder="예: 아버지 홍길동 · 어머니 김철수 의 장남 길동"
                                             />
-                                        </Field>
-                                        <Field label="신부 측 표기">
-                                            <Input
+                                            <TextField
+                                                variant="line"
+                                                label="신부 측 표기"
                                                 value={brideNameCustom}
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBrideNameCustom(e.target.value)}
                                                 placeholder="예: 아버지 임걱정 · 어머니 박순이 의 장녀 순희"
                                             />
-                                        </Field>
-                                        <InfoMessage>
-                                            기본 이름 표기 대신 사용자가 직접 작성한 문구로 이름을 표시합니다.
-                                        </InfoMessage>
-                                    </div>
-                                ) : null}
-                            </div>
-                        </Field>
-                    </SectionContainer>
+                                            <InfoMessage>
+                                                기본 이름 표기 대신 사용자가 직접 작성한 문구로 이름을 표시합니다.
+                                            </InfoMessage>
+                                        </div>
+                                    )}
+                                </div>
+                            }
+                        />
+                    </List>
                 </AccordionContent>
             </AccordionItem >
 

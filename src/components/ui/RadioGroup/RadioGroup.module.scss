@@ -1,147 +1,11 @@
 @use "../../../styles/variables" as v;
 @use "../../../styles/mixins" as m;
 
-.group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-
-  &[aria-invalid="true"] .item {
-    border-color: v.$red-500;
-  }
-}
-
-.item {
-  width: 1.25rem;
-  height: 1.25rem;
-  border-radius: v.$radius-full;
-  border: 1.5px solid v.$zinc-300;
-  background-color: white;
-  cursor: pointer;
-  padding: 0;
-  outline: none;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-
-  transition: all v.$transition-fast v.$ease-standard;
-
-  &:hover:not(:disabled) {
-    border-color: v.$zinc-400;
-    background-color: v.$zinc-50;
-  }
-
-  &:active:not(:disabled) {
-    transform: scale(0.94);
-  }
-
-  @include m.focus-ring;
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.4;
-    background-color: v.$zinc-100;
-  }
-
-  &[data-state='checked'] {
-    border-color: v.$color-primary;
-    background-color: white;
-  }
-}
-
-.indicator {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-}
-
-.circle {
-  width: 0.625rem; // 10px
-  height: 0.625rem;
-  border-radius: v.$radius-full;
-  background-color: v.$color-primary;
-
-  // Fancy scale animation
-  animation: radio-scale v.$transition-200 v.$ease-ios forwards;
-}
-
-@keyframes radio-scale {
-  from {
-    transform: scale(0);
-    opacity: 0;
-  }
-
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-// Option Wrapper (Label + Radio Item)
-.optionWrapper {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.label {
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: v.$zinc-900;
-  line-height: 1;
-  cursor: pointer;
-
-  &[data-disabled="true"] {
-    cursor: not-allowed;
-    opacity: 0.7;
-  }
-}
-
-// Card Style Radio Item (Usually used for selection cards)
-.cardItem {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-
-  padding: 1rem 1.25rem;
-  border-radius: v.$radius-md;
-  border: 1px solid v.$zinc-200;
-  background-color: white;
-
-  cursor: pointer;
-  transition: all v.$transition-fast v.$ease-standard;
-
-  @include m.focus-ring;
-
-  &:hover:not(:disabled) {
-    border-color: v.$zinc-300;
-    background-color: v.$zinc-50;
-  }
-
-  &[data-state='checked'] {
-    border-color: v.$color-primary;
-    background-color: rgba(v.$color-primary, 0.03);
-
-    .item {
-      border-color: v.$color-primary;
-    }
-  }
-
-  &:disabled {
-    cursor: not-allowed;
-    opacity: 0.5;
-  }
-}
-
 // ============================================
-// Segmented Variant
+// Root Components
 // ============================================
-.segmentedRoot {
+
+.root {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -149,16 +13,16 @@
   border-radius: v.$radius-md;
   padding: 4px;
   isolation: isolate;
-  border: 1px solid v.$zinc-200;
-  gap: 2px;
-  height: 48px; // Default height (Medium)
+  // border: 1px solid v.$zinc-200; // Removed border for cleaner look, relying on background contrast
+  gap: 0; // Gap handled by padding/layout
+  height: 40px; // Default height adjusted to standard 40px
+
+  user-select: none;
+  touch-action: none; // Prevent scrolling while dragging (if we added drag)
 
   &[aria-invalid="true"] {
-    border-color: v.$red-500;
+    box-shadow: 0 0 0 1px v.$red-500;
   }
-
-  // Disable default flex-direction column from .group
-  flex-direction: row;
 
   &.fullWidth {
     display: flex;
@@ -166,73 +30,87 @@
   }
 
   &.sm {
-    height: 36px;
+    height: 32px;
     border-radius: v.$radius-sm;
+    padding: 3px;
   }
 
   &.md {
-    height: 48px;
+    height: 40px;
   }
 
   &.lg {
-    height: 56px;
+    height: 48px;
+    padding: 4px;
   }
 }
 
-.segmentedIndicator {
+// ============================================
+// Indicator (Sliding Background)
+// ============================================
+
+.indicator {
   position: absolute;
   top: 4px;
   bottom: 4px;
   left: 0;
+
   background: white;
   border-radius: calc(v.$radius-md - 4px);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
-  transition: transform 350ms v.$ease-ios, width 350ms v.$ease-ios;
-  z-index: 0;
+  box-shadow:
+    0 1px 2px 0 rgba(0, 0, 0, 0.05),
+    0 1px 1px 0 rgba(0, 0, 0, 0.05); // Subtle shadow
+
+  transition:
+    transform 250ms v.$ease-ios,
+    width 250ms v.$ease-ios;
+
+  z-index: 1;
   pointer-events: none;
 
   .sm & {
-    border-radius: calc(v.$radius-sm - 2px);
+    top: 3px;
+    bottom: 3px;
+    border-radius: calc(v.$radius-sm - 3px);
+  }
+
+  .lg & {
+    top: 4px;
+    bottom: 4px;
   }
 }
 
-.segmentedItem {
+// ============================================
+// Item
+// ============================================
+
+.item {
   position: relative;
   flex: 1;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+
   border: none;
   background: transparent;
   color: v.$zinc-500;
-  cursor: pointer;
+
+  font-size: 0.875rem;
   font-weight: 500;
-  transition: color 200ms ease, transform 200ms v.$ease-standard;
-  z-index: 1;
-  padding: 0 16px;
+  line-height: 1;
+  letter-spacing: -0.01em;
+
+  cursor: pointer;
+  z-index: 2; // Above indicator
+  padding: 0 12px;
   white-space: nowrap;
   outline: none;
   border-radius: v.$radius-sm;
 
-  &:hover:not([data-state='checked']):not(:disabled) {
-    color: v.$zinc-900;
-  }
+  transition: color 200ms ease;
 
-  &:active:not(:disabled) {
-    transform: scale(0.97);
-  }
-
-  &[data-state='checked'] {
-    color: v.$color-primary-dark;
-    font-weight: 700;
-  }
-
-  &:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-
+  // Typography for sizes
   &.sm {
     font-size: 0.8125rem;
   }
@@ -246,10 +124,35 @@
     font-weight: 600;
   }
 
+  // Hover state (inactive)
+  &:hover:not([data-state='checked']):not(:disabled) {
+    color: v.$zinc-700;
+  }
+
+  // Active/Checked state
+  &[data-state='checked'] {
+    color: v.$zinc-900;
+    font-weight: 600; // Slightly bolder text for selected state
+  }
+
+  // Disabled state
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  // Focus visible
+  &:focus-visible {
+    outline: none;
+    box-shadow: inset 0 0 0 2px v.$zinc-400;
+    z-index: 3;
+  }
+
+  // Content wrapper for icon + text
   .itemContent {
     display: flex;
     align-items: center;
-    gap: 8px;
-    line-height: 1;
+    gap: 6px;
+    pointer-events: none; // Let clicks pass to button
   }
 }

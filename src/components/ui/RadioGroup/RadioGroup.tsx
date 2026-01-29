@@ -4,17 +4,15 @@ import * as React from "react"
 import * as RadioGroupPrimitive from "@radix-ui/react-radio-group"
 import { cn } from "@/lib/utils"
 import styles from "./RadioGroup.module.scss"
-import { useField } from "@/components/ui/Field"
+// useField removed
 
 // ------------------------------------------------------------------
 // Context & Types
 // ------------------------------------------------------------------
 
-type RadioGroupVariant = 'segmented' | 'basic';
 type RadioGroupSize = 'sm' | 'md' | 'lg';
 
 interface RadioGroupContextValue {
-    variant: RadioGroupVariant;
     size: RadioGroupSize;
     value?: string | undefined;
     registerItem?: ((value: string, element: HTMLButtonElement) => void) | undefined;
@@ -22,7 +20,6 @@ interface RadioGroupContextValue {
 }
 
 const RadioGroupContext = React.createContext<RadioGroupContextValue>({
-    variant: 'segmented',
     size: 'md'
 });
 
@@ -34,7 +31,6 @@ export interface RadioOption {
 }
 
 interface RadioGroupProps extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root> {
-    variant?: RadioGroupVariant;
     size?: RadioGroupSize;
     options?: RadioOption[];
     fullWidth?: boolean;
@@ -49,19 +45,16 @@ interface RadioGroupProps extends React.ComponentPropsWithoutRef<typeof RadioGro
 const RadioGroup = React.forwardRef<
     React.ElementRef<typeof RadioGroupPrimitive.Root>,
     RadioGroupProps
->(({ className, variant = "segmented", size = "md", options, fullWidth, children, value, defaultValue, onValueChange, id: customId, ...props }, ref) => {
-    // --- Field Integration ---
-    const field = useField();
-    const id = customId || field?.id;
-    const describedBy = field?.isError ? field.errorId : field?.descriptionId;
-    const isError = field?.isError;
+>(({
+    className, size = "md", options, fullWidth, children, value, defaultValue, onValueChange, id: customId, ...props
+}, ref) => {
 
     // --- Segmented Control Logic ---
     const [indicatorStyle, setIndicatorStyle] = React.useState<React.CSSProperties>({ opacity: 0 });
     const itemRefs = React.useRef<Map<string, HTMLButtonElement>>(new Map());
     const containerRef = React.useRef<HTMLDivElement>(null);
 
-    // Simple hack: We need to know the CURRENT value to position the indicator.
+    // Track current value for indicator positioning
     const [internalValue, setInternalValue] = React.useState<string | undefined>(value ?? (defaultValue as string | undefined) ?? undefined);
 
     // Sync internal value with prop
@@ -85,7 +78,10 @@ const RadioGroup = React.forwardRef<
     }, []);
 
     const updateIndicator = React.useCallback(() => {
-        if (variant !== 'segmented' || !internalValue) return;
+        if (!internalValue) {
+            setIndicatorStyle({ opacity: 0 });
+            return;
+        }
 
         const container = containerRef.current;
         const activeItem = itemRefs.current.get(internalValue);
@@ -103,7 +99,7 @@ const RadioGroup = React.forwardRef<
         } else {
             setIndicatorStyle({ opacity: 0 });
         }
-    }, [internalValue, variant]);
+    }, [internalValue]);
 
     // Update indicator on resize, value change, or option change
     React.useEffect(() => {
@@ -123,13 +119,10 @@ const RadioGroup = React.forwardRef<
     // --- Render Helpers ---
 
     const sizeClass = styles[size];
-
     const rootClassName = cn(
-        variant === 'basic' ? styles.group : styles.segmentedRoot,
-        variant === 'segmented' && [
-            sizeClass,
-            fullWidth && styles.fullWidth
-        ],
+        styles.root,
+        sizeClass,
+        fullWidth && styles.fullWidth,
         className
     );
 
@@ -141,19 +134,16 @@ const RadioGroup = React.forwardRef<
     }, [ref]);
 
     const contextValue = React.useMemo<RadioGroupContextValue>(() => ({
-        variant,
         size,
         value: internalValue,
-        registerItem: variant === 'segmented' ? registerItem : undefined,
-        unregisterItem: variant === 'segmented' ? unregisterItem : undefined,
-    }), [variant, size, internalValue, registerItem, unregisterItem]);
+        registerItem,
+        unregisterItem,
+    }), [size, internalValue, registerItem, unregisterItem]);
 
     return (
         <RadioGroupContext.Provider value={contextValue}>
             <RadioGroupPrimitive.Root
-                id={id}
-                aria-describedby={describedBy}
-                aria-invalid={isError ? "true" : undefined}
+                id={customId}
                 className={rootClassName}
                 ref={composedRef}
                 value={value as string}
@@ -161,40 +151,20 @@ const RadioGroup = React.forwardRef<
                 onValueChange={handleValueChange}
                 {...props}
             >
-                {variant === 'segmented' && (
-                    <div className={styles.segmentedIndicator} style={indicatorStyle} />
-                )}
+                <div className={styles.indicator} style={indicatorStyle} />
 
                 {options ? (
                     options.map((option) => (
-                        <React.Fragment key={option.value}>
-                            {variant === 'segmented' ? (
-                                <RadioGroupItem
-                                    value={option.value}
-                                    disabled={option.disabled}
-                                >
-                                    <span className={styles.itemContent}>
-                                        {option.icon}
-                                        <span>{option.label}</span>
-                                    </span>
-                                </RadioGroupItem>
-                            ) : (
-                                <div className={styles.optionWrapper}>
-                                    <RadioGroupItem
-                                        value={option.value}
-                                        id={option.value}
-                                        disabled={option.disabled}
-                                    />
-                                    <label
-                                        htmlFor={option.value}
-                                        className={styles.label}
-                                        data-disabled={option.disabled}
-                                    >
-                                        {option.label}
-                                    </label>
-                                </div>
-                            )}
-                        </React.Fragment>
+                        <RadioGroupItem
+                            key={option.value}
+                            value={option.value}
+                            disabled={option.disabled}
+                        >
+                            <span className={styles.itemContent}>
+                                {option.icon}
+                                <span>{option.label}</span>
+                            </span>
+                        </RadioGroupItem>
                     ))
                 ) : (
                     children
@@ -213,7 +183,7 @@ const RadioGroupItem = React.forwardRef<
     React.ElementRef<typeof RadioGroupPrimitive.Item>,
     React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item>
 >(({ className, children, ...props }, ref) => {
-    const { variant, size, registerItem, unregisterItem } = React.useContext(RadioGroupContext);
+    const { size, registerItem, unregisterItem } = React.useContext(RadioGroupContext);
     const itemRef = React.useRef<HTMLButtonElement>(null);
 
     // Combine refs for Segmented Logic
@@ -221,53 +191,36 @@ const RadioGroupItem = React.forwardRef<
         itemRef.current = node;
 
         // Handle Segmented Registration
-        if (variant === 'segmented' && node && registerItem) {
+        if (node && registerItem) {
             registerItem(props.value, node);
         }
 
         if (typeof ref === 'function') ref(node);
         else if (ref) (ref as React.MutableRefObject<HTMLButtonElement | null>).current = node;
-    }, [ref, variant, registerItem, props.value]);
+    }, [ref, registerItem, props.value]);
 
     // Cleanup on unmount
     React.useEffect(() => {
         return () => {
-            if (variant === 'segmented' && unregisterItem) {
+            if (unregisterItem) {
                 unregisterItem(props.value);
             }
         };
-    }, [variant, unregisterItem, props.value]);
+    }, [unregisterItem, props.value]);
 
     const sizeClass = styles[size];
 
-    // 1. Segmented Variant
-    if (variant === 'segmented') {
-        return (
-            <RadioGroupPrimitive.Item
-                ref={composedRef}
-                className={cn(
-                    styles.segmentedItem,
-                    sizeClass,
-                    className
-                )}
-                {...props}
-            >
-                {children}
-            </RadioGroupPrimitive.Item>
-        )
-    }
-
-    // 2. Basic Variant
     return (
         <RadioGroupPrimitive.Item
             ref={composedRef}
-            className={cn(styles.item, className)}
+            className={cn(
+                styles.item,
+                sizeClass,
+                className
+            )}
             {...props}
         >
-            <RadioGroupPrimitive.Indicator className={styles.indicator}>
-                <div className={styles.circle} />
-            </RadioGroupPrimitive.Indicator>
-            {children && <span className="sr-only">{children}</span>}
+            {children}
         </RadioGroupPrimitive.Item>
     )
 })

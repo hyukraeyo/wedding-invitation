@@ -4,11 +4,11 @@ import React, { useState, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { Search } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { Input } from '@/components/ui/Input';
+import { TextField } from '@/components/ui/TextField';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
-import { FormField } from '@/components/common/FormField';
+import { List, ListRow } from '@/components/ui/List';
 import { Switch } from '@/components/ui/Switch';
-import { Field, SectionContainer } from '@/components/common/FormPrimitives';
+import { PhoneField } from '@/components/common/PhoneField';
 import styles from './LocationSection.module.scss';
 import { cn } from '@/lib/utils';
 import { NaverIcon, KakaoIcon } from '@/components/common/Icons';
@@ -132,137 +132,182 @@ export default function LocationSectionContent() {
     return (
         <>
             <KakaoSdkLoader onReady={() => setIsKakaoReady(true)} />
-            <SectionContainer>
-                <Field label="부제목">
-                    <Input
-                        placeholder="예: LOCATION"
-                        value={locationSubtitle}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationSubtitle(e.target.value)}
-                    />
-                </Field>
-                <Field label="제목">
-                    <Input
-                        placeholder="예: 바나나홀"
-                        value={locationTitle}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationTitle(e.target.value)}
-                    />
-                </Field>
+            <List>
+                <ListRow
+                    contents={
+                        <TextField
+                            label="부제목"
+                            variant="line"
+                            placeholder="예: LOCATION"
+                            value={locationSubtitle}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationSubtitle(e.target.value)}
+                        />
+                    }
+                />
+                <ListRow
+                    contents={
+                        <TextField
+                            label="제목"
+                            variant="line"
+                            placeholder="예: 바나나홀"
+                            value={locationTitle}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationTitle(e.target.value)}
+                        />
+                    }
+                />
 
-                <Field label="주소">
-                    <div
-                        onClick={handleAddressSearch}
-                        className={styles.addressButton}
-                    >
-                        <span className={cn(
-                            styles.addressText,
-                            address ? styles.addressTextFilled : styles.addressTextPlaceholder
-                        )}>
-                            {address || "주소를 검색해 주세요"}
-                        </span>
-                        <Search size={18} className={styles.searchIcon} />
-                    </div>
-                </Field>
+                <ListRow
+                    title="주소"
+                    contents={
+                        <div
+                            onClick={handleAddressSearch}
+                            className={styles.addressButton}
+                        >
+                            <span className={cn(
+                                styles.addressText,
+                                address ? styles.addressTextFilled : styles.addressTextPlaceholder
+                            )}>
+                                {address || "주소를 검색해 주세요"}
+                            </span>
+                            <Search size={18} className={styles.searchIcon} />
+                        </div>
+                    }
+                />
 
-                <Field label="예식 장소명">
-                    <Input
-                        type="text"
-                        placeholder="예: 바나나 웨딩홀"
-                        value={location}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocation(e.target.value)}
-                    />
-                </Field>
+                <ListRow
+                    contents={
+                        <TextField
+                            label="예식 장소명"
+                            variant="line"
+                            type="text"
+                            placeholder="예: 바나나 웨딩홀"
+                            value={location}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocation(e.target.value)}
+                        />
+                    }
+                />
 
-                <Field label="층/호수">
-                    <Input
-                        type="text"
-                        placeholder="예: 3층 그랜드홀"
-                        value={detailAddress}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDetailAddress(e.target.value)}
-                    />
-                </Field>
-                <FormField label="연락처">
-                    <Input
-                        placeholder="예: 02-000-0000"
-                        value={locationContact}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationContact(e.target.value)}
-                    />
-                </FormField>
+                <ListRow
+                    contents={
+                        <TextField
+                            label="층/호수"
+                            variant="line"
+                            type="text"
+                            placeholder="예: 3층 그랜드홀"
+                            value={detailAddress}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDetailAddress(e.target.value)}
+                        />
+                    }
+                />
+                <ListRow
+                    title="연락처"
+                    contents={
+                        <PhoneField
+                            variant="line"
+                            placeholder="예: 02-000-0000"
+                            value={locationContact}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationContact(e.target.value)}
+                        />
+                    }
+                />
 
-                <Field label="지도 종류">
-                    <Tabs
-                        value={mapType}
-                        onValueChange={(val: string) => {
-                            const nextType = val === 'kakao' ? 'kakao' : 'naver';
-                            setMapType(nextType);
-                        }}
-                    >
-                        <TabsList fluid>
-                            <TabsTrigger value="naver">
-                                <span className={styles.itemContent} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                                    <NaverIcon size={18} className={styles.mapIcon || ""} />
-                                    <span>네이버</span>
-                                </span>
-                            </TabsTrigger>
-                            <TabsTrigger value="kakao">
-                                <span className={styles.itemContent} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                                    <KakaoIcon size={18} className={styles.mapIcon || ""} />
-                                    <span>카카오</span>
-                                </span>
-                            </TabsTrigger>
-                        </TabsList>
-                    </Tabs>
-                </Field>
-                <Field label="지도 설정">
-                    <div className={styles.mapOptions}>
-                        <FormField label="지도 표시" layout="horizontal" align="center">
-                            <Switch checked={showMap} onCheckedChange={setShowMap} />
-                        </FormField>
-                        <FormField label="지도 고정" layout="horizontal" align="center">
-                            <Switch checked={lockMap} onCheckedChange={setLockMap} />
-                        </FormField>
-                        <FormField label="네비게이션 표시" layout="horizontal" align="center">
-                            <Switch checked={showNavigation} onCheckedChange={setShowNavigation} />
-                        </FormField>
-                    </div>
-                </Field>
+                <ListRow
+                    title="지도 종류"
+                    contents={
+                        <Tabs
+                            value={mapType}
+                            onValueChange={(val: string) => {
+                                const nextType = val === 'kakao' ? 'kakao' : 'naver';
+                                setMapType(nextType);
+                            }}
+                        >
+                            <TabsList fluid>
+                                <TabsTrigger value="naver">
+                                    <span className={styles.itemContent} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                                        <NaverIcon size={18} />
+                                        <span>네이버</span>
+                                    </span>
+                                </TabsTrigger>
+                                <TabsTrigger value="kakao">
+                                    <span className={styles.itemContent} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                                        <KakaoIcon size={18} />
+                                        <span>카카오</span>
+                                    </span>
+                                </TabsTrigger>
+                            </TabsList>
+                        </Tabs>
+                    }
+                />
+                <ListRow
+                    title="지도 표시"
+                    right={
+                        <Switch
+                            checked={showMap}
+                            onChange={(_, checked) => setShowMap(checked)}
+                        />
+                    }
+                />
+                <ListRow
+                    title="지도 고정"
+                    right={
+                        <Switch
+                            checked={lockMap}
+                            onChange={(_, checked) => setLockMap(checked)}
+                        />
+                    }
+                />
+                <ListRow
+                    title="네비게이션 표시"
+                    right={
+                        <Switch
+                            checked={showNavigation}
+                            onChange={(_, checked) => setShowNavigation(checked)}
+                        />
+                    }
+                />
 
-                <Field label="지도 높이">
-                    <Tabs
-                        value={mapHeight}
-                        onValueChange={(val: string) => {
-                            const nextHeight = val === 'expanded' ? 'expanded' : 'default';
-                            setMapHeight(nextHeight);
-                        }}
-                    >
-                        <TabsList fluid>
-                            <TabsTrigger value="default">기본</TabsTrigger>
-                            <TabsTrigger value="expanded">확장</TabsTrigger>
-                        </TabsList>
-                    </Tabs>
-                </Field>
+                <ListRow
+                    title="지도 높이"
+                    contents={
+                        <Tabs
+                            value={mapHeight}
+                            onValueChange={(val: string) => {
+                                const nextHeight = val === 'expanded' ? 'expanded' : 'default';
+                                setMapHeight(nextHeight);
+                            }}
+                        >
+                            <TabsList fluid>
+                                <TabsTrigger value="default">기본</TabsTrigger>
+                                <TabsTrigger value="expanded">확장</TabsTrigger>
+                            </TabsList>
+                        </Tabs>
+                    }
+                />
 
-                <Field label="줌 레벨">
-                    <Tabs
-                        value={String(mapZoom)}
-                        onValueChange={(val) => setMapZoom(Number(val))}
-                    >
-                        <TabsList fluid>
-                            <TabsTrigger value="15">15</TabsTrigger>
-                            <TabsTrigger value="16">16</TabsTrigger>
-                            <TabsTrigger value="17">17</TabsTrigger>
-                            <TabsTrigger value="18">18</TabsTrigger>
-                            <TabsTrigger value="19">19</TabsTrigger>
-                        </TabsList>
-                    </Tabs>
-                </Field>
-            </SectionContainer>
+                <ListRow
+                    title="줌 레벨"
+                    contents={
+                        <Tabs
+                            value={String(mapZoom)}
+                            onValueChange={(val) => setMapZoom(Number(val))}
+                        >
+                            <TabsList fluid>
+                                <TabsTrigger value="15">15</TabsTrigger>
+                                <TabsTrigger value="16">16</TabsTrigger>
+                                <TabsTrigger value="17">17</TabsTrigger>
+                                <TabsTrigger value="18">18</TabsTrigger>
+                                <TabsTrigger value="19">19</TabsTrigger>
+                            </TabsList>
+                        </Tabs>
+                    }
+                />
+            </List>
 
             <ResponsiveModal
                 open={isSearchOpen}
                 onOpenChange={setIsSearchOpen}
+                padding="none"
                 title="주소 검색"
-                description="도로명 주소 또는 지번 주소를 입력해 주세요."
-                contentClassName={styles.postcodeModalContent}
             >
                 <div className={styles.postcodeWrapper}>
                     {isSearchOpen && (
@@ -277,4 +322,5 @@ export default function LocationSectionContent() {
         </>
     );
 }
+
 

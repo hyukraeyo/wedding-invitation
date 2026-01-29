@@ -106,26 +106,7 @@
   transition: color 0.2s ease;
 }
 
-.menuBadge {
-  margin-left: auto;
-  background-color: v.$zinc-100;
-  color: v.$zinc-600;
-  font-size: v.$font-size-xs;
-  padding: 0.15rem 0.6rem;
-  border-radius: 999px;
-  font-weight: 600;
-  min-width: 1.5rem;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1.2;
-}
 
-.badgeAlert {
-  background-color: v.$rose-100;
-  color: v.$rose-600;
-}
 
 // Event Modal Styles
 .eventModalContent {
@@ -137,37 +118,39 @@
 }
 
 .eventIconWrapper {
-    width: 80px;
-    height: 80px;
-    background-color: #FFF9C4; // Light yellow background
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1.5rem;
-    animation: bounce 2s infinite;
+  width: 80px;
+  height: 80px;
+  background-color: #FFF9C4; // Light yellow background
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  animation: bounce 2s infinite;
 }
 
 @keyframes bounce {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-8px);
   }
 }
 
 .eventMainText {
-    font-size: v.$font-size-lg;
-    font-weight: 700;
-    color: #111;
-    margin-bottom: 0.75rem;
-    line-height: 1.5;
+  font-size: v.$font-size-lg;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 0.75rem;
+  line-height: 1.5;
 }
 
 .eventSubText {
-    font-size: 0.95rem;
-    color: #666;
-    line-height: 1.5;
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.5;
 }
-

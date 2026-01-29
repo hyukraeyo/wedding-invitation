@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
+  transpilePackages: ['@toss/tds-mobile'],
 
   images: {
     remotePatterns: [
@@ -35,7 +36,7 @@ const nextConfig: NextConfig = {
     },
   },
 
-// 실험적 기능 및 최적화
+  // 실험적 기능 및 최적화
   experimental: {
     serverActions: {
       allowedOrigins: ['localhost:3000', 'wedding-invitation-zeta-one.vercel.app'],
@@ -60,10 +61,11 @@ const nextConfig: NextConfig = {
       '@radix-ui/react-visually-hidden',
       'date-fns',
       'lodash',
-      'framer-motion'
+      'framer-motion',
+      '@toss/tds-mobile'
     ],
     viewTransition: true,
-    
+
   },
 
   turbopack: {
@@ -109,7 +111,7 @@ const nextConfig: NextConfig = {
     ];
   },
 
-// 웹팩 최적화
+  // 웹팩 최적화
   webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/,

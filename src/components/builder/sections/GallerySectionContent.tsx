@@ -2,13 +2,12 @@ import React, { useMemo, useCallback, useState, useRef } from 'react';
 import Image from 'next/image';
 import { Plus, Trash2 } from 'lucide-react';
 import { InfoMessage } from '@/components/ui/InfoMessage';
-import { IconButton } from '@/components/ui/IconButton/IconButton';
+import { IconButton } from '@/components/ui/IconButton';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { Field, SectionContainer } from '@/components/common/FormPrimitives';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
-import { Input } from '@/components/ui/Input';
-import { FormField } from '@/components/common/FormField';
+import { TextField } from '@/components/ui/TextField';
+import { List, ListRow } from '@/components/ui/List';
 import { Switch } from '@/components/ui/Switch';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { cn } from '@/lib/utils';
 import { isBlobUrl } from '@/lib/image';
 import {
@@ -91,15 +90,19 @@ const SortableItem = React.memo(function SortableItem({ id, url, index, onRemove
             ) : null}
 
             <IconButton
-                icon={Trash2}
-                size="sm"
+                iconSize={20}
                 className={styles.removeButton}
                 onClick={(e) => {
                     e.stopPropagation();
                     onRemove(id);
                 }}
                 onPointerDown={(e) => e.stopPropagation()}
-            />
+                variant="clear"
+                name=""
+                aria-label="삭제"
+            >
+                <Trash2 size={20} />
+            </IconButton>
         </div>
     );
 });
@@ -242,150 +245,168 @@ export default React.memo(function GallerySectionContent() {
     );
 
     return (
-        <SectionContainer>
-            <Field label="소제목">
-                <Input type="text"
-                    value={gallerySubtitle}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGallerySubtitle(e.target.value)}
-                    placeholder="예: GALLERY"
-                />
-            </Field>
-            <Field label="제목">
-                <Input type="text"
-                    value={galleryTitle}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGalleryTitle(e.target.value)}
-                    placeholder="예: 웨딩 갤러리"
-                />
-            </Field>
-
-            <Field
-                label={
-                    <div className={styles.counter}>
-                        <span className={styles.labelText}>사진 관리</span>
-                        <span className={styles.countText}>
-                            <span style={{ color: accentColor }}>{gallery.length}</span>
-                            <span className={styles.countTotal}> / 10</span>
-                        </span>
-                    </div>
+        <List>
+            <ListRow
+                contents={
+                    <TextField
+                        variant="line"
+                        label="소제목"
+                        type="text"
+                        value={gallerySubtitle}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGallerySubtitle(e.target.value)}
+                        placeholder="예: GALLERY"
+                    />
                 }
-            >
-                <div className={styles.galleryManager}>
-                    <DndContext
-                        sensors={sensors}
-                        collisionDetection={closestCenter}
-                        onDragStart={handleDragStart}
-                        onDragEnd={handleDragEnd}
-                    >
-                        <SortableContext
-                            items={gallery.map(g => g.id)}
-                            strategy={rectSortingStrategy}
+            />
+            <ListRow
+                contents={
+                    <TextField
+                        variant="line"
+                        label="제목"
+                        type="text"
+                        value={galleryTitle}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGalleryTitle(e.target.value)}
+                        placeholder="예: 웨딩 갤러리"
+                    />
+                }
+            />
+
+            <ListRow
+                title="사진 관리"
+                contents={
+                    <div className={styles.galleryManager}>
+                        <div className={styles.counter}>
+                            <span className={styles.labelText}>현재 등록된 사진</span>
+                            <span className={styles.countText}>
+                                <span style={{ color: accentColor }}>{gallery.length}</span>
+                                <span className={styles.countTotal}> / 10</span>
+                            </span>
+                        </div>
+                        <DndContext
+                            sensors={sensors}
+                            collisionDetection={closestCenter}
+                            onDragStart={handleDragStart}
+                            onDragEnd={handleDragEnd}
                         >
-                            <div className={styles.grid}>
-                                {gallery.map((item, index) => (
-                                    <SortableItem
-                                        key={item.id}
-                                        id={item.id}
-                                        index={index}
-                                        url={item.url}
-                                        onRemove={handleRemove}
-                                    />
-                                ))}
-                                {gallery.length < 10 && (
-                                    <div className={styles.uploadItem} onClick={handleUploadClick}>
-                                        <Plus className={styles.uploadIcon} />
-                                        <span className={styles.uploadText}>추가</span>
-                                        <input
-                                            type="file"
-                                            ref={fileInputRef}
-                                            multiple
-                                            accept="image/*"
-                                            className={styles.hiddenInput}
-                                            onChange={handleFileChange}
+                            <SortableContext
+                                items={gallery.map(g => g.id)}
+                                strategy={rectSortingStrategy}
+                            >
+                                <div className={styles.grid}>
+                                    {gallery.map((item, index) => (
+                                        <SortableItem
+                                            key={item.id}
+                                            id={item.id}
+                                            index={index}
+                                            url={item.url}
+                                            onRemove={handleRemove}
+                                        />
+                                    ))}
+                                    {gallery.length < 10 && (
+                                        <div className={styles.uploadItem} onClick={handleUploadClick}>
+                                            <Plus className={styles.uploadIcon} />
+                                            <span className={styles.uploadText}>추가</span>
+                                            <input
+                                                type="file"
+                                                ref={fileInputRef}
+                                                multiple
+                                                accept="image/*"
+                                                className={styles.hiddenInput}
+                                                onChange={handleFileChange}
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                            </SortableContext>
+
+                            <ResponsiveModal
+                                open={isLimitModalOpen}
+                                onOpenChange={setIsLimitModalOpen}
+                                title="알림"
+                                description="사진은 최대 10장까지 등록 가능합니다."
+                                onConfirm={() => setIsLimitModalOpen(false)}
+                                confirmText="확인"
+                                showCancel={false}
+                            />
+
+                            <DragOverlay dropAnimation={{
+                                sideEffects: defaultDropAnimationSideEffects({
+                                    styles: {
+                                        active: { opacity: '0.4' }
+                                    }
+                                })
+                            }}>
+                                {activeId && activeImage ? (
+                                    <div className={styles.dragOverlayItem}>
+                                        <Image
+                                            src={activeImage.url}
+                                            alt=""
+                                            fill
+                                            unoptimized
+                                            className={styles.image}
                                         />
                                     </div>
-                                )}
-                            </div>
-                        </SortableContext>
+                                ) : null}
+                            </DragOverlay>
+                        </DndContext>
 
-                        <ResponsiveModal
-                            open={isLimitModalOpen}
-                            onOpenChange={setIsLimitModalOpen}
-                            title="알림"
-                            description="사진은 최대 10장까지 등록 가능합니다."
-                            onConfirm={() => setIsLimitModalOpen(false)}
-                            confirmText="확인"
-                            showCancel={false}
-                        />
+                        <InfoMessage>
+                            사진을 길게 눌러 순서를 변경할 수 있습니다. (첫 번째 사진이 대표 사진)
+                        </InfoMessage>
+                    </div>
+                }
+            />
 
-                        <DragOverlay dropAnimation={{
-                            sideEffects: defaultDropAnimationSideEffects({
-                                styles: {
-                                    active: { opacity: '0.4' }
-                                }
-                            })
-                        }}>
-                            {activeId && activeImage ? (
-                                <div className={styles.dragOverlayItem}>
-                                    <Image
-                                        src={activeImage.url}
-                                        alt=""
-                                        fill
-                                        unoptimized
-                                        className={styles.image}
-                                    />
-                                </div>
-                            ) : null}
-                        </DragOverlay>
-                    </DndContext>
+            <ListRow
+                title="전시 형태"
+                contents={
+                    <Tabs
+                        value={galleryType}
+                        onValueChange={(val: string) => {
+                            const nextType = val === 'grid' ? 'grid' : val === 'thumbnail' ? 'thumbnail' : 'swiper';
+                            setGalleryType(nextType);
+                        }}
+                    >
+                        <TabsList fluid>
+                            <TabsTrigger value="swiper">스와이퍼</TabsTrigger>
+                            <TabsTrigger value="grid">그리드</TabsTrigger>
+                            <TabsTrigger value="thumbnail">리스트</TabsTrigger>
+                        </TabsList>
+                    </Tabs>
+                }
+            />
 
-                    <InfoMessage>
-                        사진을 길게 눌러 순서를 변경할 수 있습니다. (첫 번째 사진이 대표 사진)
-                    </InfoMessage>
-                </div>
-            </Field>
-
-            <Field label="전시 형태">
-                <Tabs
-                    value={galleryType}
-                    onValueChange={(val: string) => {
-                        const nextType = val === 'grid' ? 'grid' : val === 'thumbnail' ? 'thumbnail' : 'swiper';
-                        setGalleryType(nextType);
-                    }}
-                >
-                    <TabsList fluid>
-                        <TabsTrigger value="swiper">스와이퍼</TabsTrigger>
-                        <TabsTrigger value="grid">그리드</TabsTrigger>
-                        <TabsTrigger value="thumbnail">리스트</TabsTrigger>
-                    </TabsList>
-                </Tabs>
-            </Field>
-
-            <Field label="기능 설정">
-                <div className={styles.optionGroup}>
-                    <FormField label="확대 보기 (팝업)" layout="horizontal" align="center">
-                        <Switch
-                            checked={galleryPopup}
-                            onCheckedChange={setGalleryPopup}
-                        />
-                    </FormField>
-                    {galleryType === 'swiper' ? (
-                        <>
-                            <FormField label="자동 재생" layout="horizontal" align="center">
-                                <Switch
-                                    checked={galleryAutoplay}
-                                    onCheckedChange={setGalleryAutoplay}
-                                />
-                            </FormField>
-                            <FormField label="페이드 효과" layout="horizontal" align="center">
-                                <Switch
-                                    checked={galleryFade}
-                                    onCheckedChange={setGalleryFade}
-                                />
-                            </FormField>
-                        </>
-                    ) : null}
-                </div>
-            </Field>
-        </SectionContainer>
+            <ListRow
+                title="확대 보기 (팝업)"
+                right={
+                    <Switch
+                        checked={galleryPopup}
+                        onChange={(_: unknown, checked: boolean) => setGalleryPopup(checked)}
+                    />
+                }
+            />
+            {galleryType === 'swiper' ? (
+                <>
+                    <ListRow
+                        title="자동 재생"
+                        right={
+                            <Switch
+                                checked={galleryAutoplay}
+                                onChange={(_: unknown, checked: boolean) => setGalleryAutoplay(checked)}
+                            />
+                        }
+                    />
+                    <ListRow
+                        title="페이드 효과"
+                        right={
+                            <Switch
+                                checked={galleryFade}
+                                onChange={(_: unknown, checked: boolean) => setGalleryFade(checked)}
+                            />
+                        }
+                    />
+                </>
+            ) : null}
+        </List>
     );
 });

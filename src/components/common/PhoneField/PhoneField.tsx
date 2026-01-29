@@ -1,21 +1,23 @@
 import React, { forwardRef } from 'react';
-import { TextField, TextFieldProps } from '../TextField';
+import { TextField, TextFieldProps } from '@/components/ui/TextField';
+import { formatPhoneNumber } from '@/lib/utils';
 
-export interface PhoneFieldProps extends TextFieldProps { }
+export type PhoneFieldProps = TextFieldProps;
 
 /**
  * PhoneField: 전화번호 입력에 최적화된 TextField입니다.
  */
 export const PhoneField = forwardRef<HTMLInputElement, PhoneFieldProps>((props, ref) => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value.replace(/[^0-9]/g, '');
-        // simple formatter logic can be added here if needed
+        const value = e.target.value;
+        const formattedValue = formatPhoneNumber(value);
+
         if (props.onChange) {
             const event = {
                 ...e,
                 target: {
                     ...e.target,
-                    value: value
+                    value: formattedValue
                 }
             } as React.ChangeEvent<HTMLInputElement>;
             props.onChange(event);

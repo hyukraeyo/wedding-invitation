@@ -10,7 +10,7 @@ import { ResponsiveModal } from "@/components/common/ResponsiveModal"
 import { Menu } from "../Menu"
 import { useScrollFade as useScrollFadeHook } from "@/hooks/use-scroll-fade"
 
-import { useFormField } from "@/components/common/FormField"
+// field import removed
 
 const SelectRoot = SelectPrimitive.Root
 
@@ -38,8 +38,7 @@ interface SelectProps<T> {
     /** Disable responsive behavior and always use desktop popover */
     desktopOnly?: boolean | undefined;
     id?: string | undefined;
-    /** Force show placeholder even with floating variant */
-    showPlaceholder?: boolean;
+
 }
 
 const Select = <T extends string | number>({
@@ -58,7 +57,7 @@ const Select = <T extends string | number>({
     mobileOnly = false,
     desktopOnly = false,
     id: customId,
-    showPlaceholder = false,
+
     ...props
 }: SelectProps<T>) => {
     const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -66,9 +65,7 @@ const Select = <T extends string | number>({
     const [isOpen, setIsOpen] = React.useState(false);
     const [internalValue, setInternalValue] = React.useState<T | undefined>(defaultValue);
 
-    const field = useFormField();
-    const id = customId || field?.id;
-    const describedBy = field?.isError ? field.errorId : field?.descriptionId;
+    // useFormField usage removed
 
     const currentValue = value !== undefined ? value : internalValue;
 
@@ -94,16 +91,14 @@ const Select = <T extends string | number>({
                         padding="none"
                         trigger={
                             <button
-                                id={id}
+                                id={customId}
                                 type="button"
                                 disabled={disabled}
                                 className={cn(styles.trigger, sizeClass, triggerClassName)}
                                 onClick={() => setIsOpen(true)}
-                                aria-describedby={describedBy}
-                                data-variant={field?.variant}
                             >
                                 <span className={cn(!selectedOption && styles.placeholder)}>
-                                    {selectedOption ? selectedOption.label : ((field?.variant === 'floating' && !showPlaceholder) ? '' : placeholder)}
+                                    {selectedOption ? selectedOption.label : placeholder}
                                 </span>
                                 <ChevronDown className={styles.icon} />
                             </button>
@@ -154,13 +149,11 @@ const Select = <T extends string | number>({
                 {...props}
             >
                 <SelectTrigger
-                    id={id}
+                    id={customId}
                     className={cn(triggerClassName)}
                     size={size}
-                    aria-describedby={describedBy}
-                    data-variant={field?.variant}
                 >
-                    <SelectValue placeholder={(field?.variant === 'floating' && !showPlaceholder) ? '' : placeholder} />
+                    <SelectValue placeholder={placeholder} />
                 </SelectTrigger>
                 <SelectContent className={cn(contentClassName)}>
                     {options.map((option) => (

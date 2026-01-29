@@ -5,7 +5,7 @@ import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
 
 import { cn } from "@/lib/utils"
 import { focusFirstFocusable } from "@/lib/a11y"
-import { buttonVariants } from "@/components/ui/Button"
+import { Button } from "@/components/ui/Button"
 import styles from "./AlertDialog.module.scss"
 
 const AlertDialog = AlertDialogPrimitive.Root
@@ -115,28 +115,38 @@ AlertDialogDescription.displayName = AlertDialogPrimitive.Description.displayNam
 const AlertDialogAction = React.forwardRef<
     React.ElementRef<typeof AlertDialogPrimitive.Action>,
     React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Action>
->(({ className, ...props }, ref) => (
+>(({ className, children, ...props }, ref) => (
     <AlertDialogPrimitive.Action
         ref={ref}
-        className={cn(buttonVariants(), className)}
+        asChild
         {...props}
-    />
+    >
+        <Button variant="fill" className={className}>
+            {children}
+        </Button>
+    </AlertDialogPrimitive.Action>
 ))
 AlertDialogAction.displayName = AlertDialogPrimitive.Action.displayName
 
 const AlertDialogCancel = React.forwardRef<
     React.ElementRef<typeof AlertDialogPrimitive.Cancel>,
     React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Cancel>
->(({ className, ...props }, ref) => (
+>(({ className, children, ...props }, ref) => (
     <AlertDialogPrimitive.Cancel
         ref={ref}
-        className={cn(
-            buttonVariants({ variant: "outline" }),
-            styles.cancelSpacing,
-            className
-        )}
+        asChild
         {...props}
-    />
+    >
+        <Button
+            variant="weak"
+            className={cn(
+                styles.cancelSpacing,
+                className
+            )}
+        >
+            {children}
+        </Button>
+    </AlertDialogPrimitive.Cancel>
 ))
 AlertDialogCancel.displayName = AlertDialogPrimitive.Cancel.displayName
 

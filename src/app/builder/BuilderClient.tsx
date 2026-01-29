@@ -8,7 +8,7 @@ import { useInvitationStore, InvitationData } from '@/store/useInvitationStore';
 import { useAuth } from '@/hooks/useAuth';
 import { invitationService } from '@/services/invitationService';
 import { useHeaderStore } from '@/store/useHeaderStore';
-import { toast } from 'sonner';
+import { useToast } from '@/hooks/use-toast';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import styles from './BuilderPage.module.scss';
 import { MobileNav } from '@/components/common/MobileNav';
@@ -44,6 +44,7 @@ let GLOBAL_SAVE_LOCK = false;
 
 export function BuilderClient() {
     const [isSaving, setIsSaving] = useState(false);
+    const { toast } = useToast();
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
     const [isReady, setIsReady] = useState(false);
     const { user, isProfileComplete, profileLoading, isAdmin } = useAuth();
@@ -81,7 +82,7 @@ export function BuilderClient() {
 
             if (!hasEssentialInfo) {
                 // If no essential info and not in onboarding flow, redirect to setup
-                router.replace('/builder/setup');
+                router.replace('/setup');
                 return;
             }
 
@@ -146,22 +147,22 @@ export function BuilderClient() {
             }
 
             if (!isAdmin && (currentStoreState.isRequestingApproval || currentStoreState.isApproved)) {
-                toast.error('승인 신청 중이거나 승인된 청첩장은 수정할 수 없습니다.');
+                toast({ variant: 'destructive', description: '승인 신청 중이거나 승인된 청첩장은 수정할 수 없습니다.' });
                 return;
             }
 
             await invitationService.saveInvitation(currentSlug, cleanData, user.id);
-            toast.success('청첩장이 저장되었습니다! 🎉', { id: 'save-invitation' });
+            toast({ description: '청첩장이 저장되었습니다! 🎉' });
             router.push('/mypage');
             // Note: Don't set isSaving(false) here because we're navigating away.
             // Keeping it true (and keeping GLOBAL_SAVE_LOCK) prevents any further clicks during the transition.
         } catch (error) {
             console.error('Save error:', error);
-            toast.error('저장 중 오류가 발생했습니다. 다시 시도해주세요.');
+            toast({ variant: 'destructive', description: '저장 중 오류가 발생했습니다. 다시 시도해주세요.' });
             setIsSaving(false);
             GLOBAL_SAVE_LOCK = false;
         }
-    }, [user, handleLogin, isReady, router, isAdmin, isSaving]);
+    }, [user, handleLogin, isReady, router, isAdmin, isSaving, toast]);
 
     useEffect(() => {
         handleSaveRef.current = handleSave;

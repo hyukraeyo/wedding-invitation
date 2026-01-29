@@ -22,7 +22,7 @@
     z-index: 0;
     pointer-events: none;
   }
-  
+
   @media (max-width: 768px) {
     background-color: v.$color-background;
     padding: 0;
@@ -60,10 +60,10 @@
   border: 1px solid rgba(v.$color-border, 0.6);
   box-shadow: v.$shadow-card;
   animation: setupFadeIn 0.8s v.$ease-ios both;
-  
+
   @media (max-width: 768px) {
     padding: 1.5rem;
-    padding-top: 2.5rem;
+    padding-top: 5rem; // Clear fixed mobile header (54px) + spacing
     border-radius: 0;
     border: none;
     box-shadow: none;
@@ -75,6 +75,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -85,9 +86,9 @@
     opacity: 0;
     transform: translateY(20px) scale(0.98);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
   }
 }
-

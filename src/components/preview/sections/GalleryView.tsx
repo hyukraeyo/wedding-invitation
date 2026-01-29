@@ -18,7 +18,7 @@ import SectionHeader from '../SectionHeader';
 import styles from './GalleryView.module.scss';
 import { clsx } from 'clsx';
 import { AspectRatio } from '@/components/ui/AspectRatio';
-import { IconButton } from '@/components/ui/IconButton/IconButton';
+import { IconButton } from '@/components/ui/IconButton';
 import { useScrollLock } from '@/hooks/use-scroll-lock';
 import { useFocusTrap } from '@/hooks/useAccessibility';
 import { MOTION_CLASSES } from '@/constants/motion';
@@ -324,12 +324,15 @@ const GalleryView = memo(({
                         </span>
                         <IconButton
                             ref={closeBtnRef}
-                            icon={X}
-                            variant="ghost"
+                            variant="clear"
                             onClick={() => setPopupIndex(null)}
                             className={clsx(styles.closeBtn) || ''}
                             aria-label="창 닫기"
-                        />
+                            name=""
+                            iconSize={20}
+                        >
+                            <X size={20} />
+                        </IconButton>
                     </div>
 
                     <div className={clsx(styles.modalSwiperContainer, MOTION_CLASSES.dialog) || ''}>

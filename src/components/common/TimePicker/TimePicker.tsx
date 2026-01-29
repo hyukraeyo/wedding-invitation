@@ -3,7 +3,7 @@
 import React from 'react';
 import { Select } from '@/components/ui/Select';
 import { cn } from '@/lib/utils';
-import { useField } from '@/components/ui/Field';
+// import useField removed
 import { Clock } from 'lucide-react';
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 import styles from './TimePicker.module.scss';
@@ -27,13 +27,7 @@ type Period = 'AM' | 'PM';
 
 export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
     ({ value, onChange, onComplete, className, minuteStep = 10, id, disabled, part = 'all', variant = 'default' }, ref) => {
-        const field = useField();
-
-        React.useEffect(() => {
-            if (field?.setHasValue) {
-                field.setHasValue(!!value);
-            }
-        }, [value, field]);
+        // useField usage removed
 
         const hasValue = !!value;
         const [hStr, mStr] = value && value.includes(':') ? value.split(':') : ['', ''];
@@ -163,7 +157,7 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
                 // Use current value if available, otherwise default to '10:00'
                 setTempValue(value || '10:00');
             }
-        }, [isOpen]); // Removed 'value' from dependencies to prevent re-sync while modal is open
+        }, [isOpen]); // eslint-disable-line react-hooks/exhaustive-deps
 
         const [tH, tM] = (tempValue || '10:00').split(':');
         const tHInt = parseInt(tH || '10', 10);
@@ -192,9 +186,8 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
                     id={id}
                     type="button"
                     disabled={disabled}
-                    className={cn(styles.unifiedTrigger, field?.variant === 'floating' && styles.floatingTrigger, className)}
+                    className={cn(styles.unifiedTrigger, className)}
                     onClick={() => setIsOpen(true)}
-                    data-variant={field?.variant}
                 >
                     <span className={cn(!hasValue && styles.placeholder)}>
                         {displayStr}
@@ -221,7 +214,7 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
 
         const renderColumn = (title: string, options: { label: string, value: string }[], current: string, onSelect: (val: string) => void, columnId: string) => (
             <div className={styles.column}>
-                <div className={styles.columnHeader}>{title}</div>
+                {title && <div className={styles.columnHeader}>{title}</div>}
                 <div className={styles.scrollWrapper} data-column={columnId}>
                     {options.map(opt => (
                         <button
@@ -247,13 +240,12 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
                         confirmText="선택 완료"
                         onConfirm={handleConfirm}
                         padding="none"
-                        fullWidthActions={true}
                         trigger={renderUnifiedTrigger()}
                     >
                         <div className={styles.pickerGrid}>
-                            {renderColumn('오전/오후', periodOptions, tPeriod, (v) => updateTempTime(v as Period, tDisplayHour, currentTM), 'period')}
-                            {renderColumn('시간', hourOptions, tDisplayHour, (v) => updateTempTime(tPeriod, v, currentTM), 'hour')}
-                            {renderColumn('분', minuteOptions, currentTM, (v) => updateTempTime(tPeriod, tDisplayHour, v), 'minute')}
+                            {renderColumn('', periodOptions, tPeriod, (v) => updateTempTime(v as Period, tDisplayHour, currentTM), 'period')}
+                            {renderColumn('', hourOptions, tDisplayHour, (v) => updateTempTime(tPeriod, v, currentTM), 'hour')}
+                            {renderColumn('', minuteOptions, currentTM, (v) => updateTempTime(tPeriod, tDisplayHour, v), 'minute')}
                         </div>
                     </ResponsiveModal>
                 </div>

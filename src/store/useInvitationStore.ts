@@ -278,12 +278,6 @@ export type InvitationData = {
 
 export type InvitationStateType = InvitationState;
 
-const getDefaultDate = () => {
-    const d = new Date();
-    d.setDate(d.getDate() + 100);
-    return d.toISOString().split('T')[0] || '';
-};
-
 export const INITIAL_STATE = {
     kakaoShare: {
         title: '소중한 분들을 초대합니다',

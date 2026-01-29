@@ -5,10 +5,10 @@ import { MessageCircle, Sparkles, ChevronRight } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
-import { Input } from '@/components/ui/Input';
+import { TextField } from '@/components/ui/TextField';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { List, ListRow, ListFooter } from '@/components/ui/List';
 import { InfoMessage } from '@/components/ui/InfoMessage';
-import { Field, SectionContainer } from '@/components/common/FormPrimitives';
 import { ImageUploader } from '@/components/common/ImageUploader';
 import { HeaderAction } from '@/components/common/HeaderAction';
 import { SampleList } from '@/components/ui/SampleList';
@@ -53,66 +53,87 @@ export default function KakaoShareSection({ value }: SectionProps) {
                     카카오 초대장 썸네일
                 </AccordionTrigger>
                 <AccordionContent>
-                    <SectionContainer>
+                    <List>
                         {/* Photo Upload */}
-                        <Field label="사진">
-                            <ImageUploader
-                                value={kakao.imageUrl}
-                                onChange={(url) => setKakao({ imageUrl: url })}
-                                aspectRatio={kakao.imageRatio === 'portrait' ? '3/4' : '16/9'}
-                                placeholder="썸네일 추가"
-                            />
-                        </Field>
+                        <ListRow
+                            title="사진"
+                            contents={
+                                <ImageUploader
+                                    value={kakao.imageUrl}
+                                    onChange={(url) => setKakao({ imageUrl: url })}
+                                    aspectRatio={kakao.imageRatio === 'portrait' ? '3/4' : '16/9'}
+                                    placeholder="썸네일 추가"
+                                />
+                            }
+                        />
 
-                        <Field label="사진 비율">
-                            <Tabs
-                                value={kakao.imageRatio}
-                                onValueChange={(val: string) => {
-                                    const nextRatio = val === 'landscape' ? 'landscape' : 'portrait';
-                                    setKakao({ imageRatio: nextRatio });
-                                }}
-                            >
-                                <TabsList fluid>
-                                    <TabsTrigger value="portrait">세로형</TabsTrigger>
-                                    <TabsTrigger value="landscape">가로형</TabsTrigger>
-                                </TabsList>
-                            </Tabs>
+                        <ListRow
+                            title="사진 비율"
+                            contents={
+                                <Tabs
+                                    value={kakao.imageRatio}
+                                    onValueChange={(val: string) => {
+                                        const nextRatio = val === 'landscape' ? 'landscape' : 'portrait';
+                                        setKakao({ imageRatio: nextRatio });
+                                    }}
+                                >
+                                    <TabsList fluid>
+                                        <TabsTrigger value="portrait">세로형</TabsTrigger>
+                                        <TabsTrigger value="landscape">가로형</TabsTrigger>
+                                    </TabsList>
+                                </Tabs>
+                            }
+                        />
+                        <ListFooter>
                             <InfoMessage>카카오톡 공유 메시지에서 보여질 사진의 비율입니다.</InfoMessage>
-                        </Field>
+                        </ListFooter>
 
-                        <Field label="제목">
-                            <Input type="text"
-                                placeholder="예: 우리 결혼합니다"
-                                value={kakao.title}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setKakao({ title: e.target.value })}
-                                maxLength={25}
-                            />
-                        </Field>
+                        <ListRow
+                            contents={
+                                <TextField
+                                    label="제목"
+                                    variant="line"
+                                    type="text"
+                                    placeholder="예: 우리 결혼합니다"
+                                    value={kakao.title}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setKakao({ title: e.target.value })}
+                                    maxLength={25}
+                                />
+                            }
+                        />
 
-                        <Field label="설명">
-                            <Input type="text"
-                                placeholder="예: 2024년 10월 12일"
-                                value={kakao.description}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setKakao({ description: e.target.value })}
-                                maxLength={35}
-                            />
-                        </Field>
+                        <ListRow
+                            contents={
+                                <TextField
+                                    label="설명"
+                                    variant="line"
+                                    type="text"
+                                    placeholder="예: 2024년 10월 12일"
+                                    value={kakao.description}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setKakao({ description: e.target.value })}
+                                    maxLength={35}
+                                />
+                            }
+                        />
 
-                        <Field label="버튼 스타일">
-                            <Tabs
-                                value={kakao.buttonType}
-                                onValueChange={(val: string) => {
-                                    const nextType = val === 'rsvp' ? 'rsvp' : val === 'none' ? 'none' : 'location';
-                                    setKakao({ buttonType: nextType });
-                                }}
-                            >
-                                <TabsList fluid>
-                                    <TabsTrigger value="location">위치 안내</TabsTrigger>
-                                    <TabsTrigger value="rsvp">참석 여부</TabsTrigger>
-                                    <TabsTrigger value="none">사용 안함</TabsTrigger>
-                                </TabsList>
-                            </Tabs>
-                        </Field>
+                        <ListRow
+                            title="버튼 스타일"
+                            contents={
+                                <Tabs
+                                    value={kakao.buttonType}
+                                    onValueChange={(val: string) => {
+                                        const nextType = val === 'rsvp' ? 'rsvp' : val === 'none' ? 'none' : 'location';
+                                        setKakao({ buttonType: nextType });
+                                    }}
+                                >
+                                    <TabsList fluid>
+                                        <TabsTrigger value="location">위치 안내</TabsTrigger>
+                                        <TabsTrigger value="rsvp">참석 여부</TabsTrigger>
+                                        <TabsTrigger value="none">사용 안함</TabsTrigger>
+                                    </TabsList>
+                                </Tabs>
+                            }
+                        />
 
 
                         <div className={styles.bottomActions}>
@@ -123,7 +144,7 @@ export default function KakaoShareSection({ value }: SectionProps) {
                                 trigger={
                                     <Button
                                         type="button"
-                                        variant="secondary"
+                                        variant="weak"
                                         className={styles.fullPreviewBtn}
                                     >
                                         <MessageCircle size={16} />
@@ -180,7 +201,7 @@ export default function KakaoShareSection({ value }: SectionProps) {
                                 </div>
                             </ResponsiveModal>
                         </div>
-                    </SectionContainer>
+                    </List>
                 </AccordionContent>
             </AccordionItem>
 

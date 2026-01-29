@@ -50,16 +50,18 @@ export const ShareModal: React.FC<ShareModalProps> = ({
         >
             <div className={styles.shareContainer}>
                 <div className={styles.shareMethod}>
-                    <IconButton 
+                    <IconButton
                         onClick={handleLinkShare}
                         className={styles.shareButton}
                         aria-label="링크 복사"
+                        variant="clear"
+                        name=""
                     >
                         {copied ? <Check size={20} /> : <Copy size={20} />}
                     </IconButton>
                     <span className={styles.shareLabel}>링크 복사</span>
                 </div>
-                
+
                 <div className={styles.shareMethod}>
                     <KakaoShareButton
                         invitationUrl={invitationUrl}
@@ -69,19 +71,21 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                         slug={slug}
                         onSuccess={() => onOpenChange(false)}
                     >
-                        <IconButton 
+                        <IconButton
                             className={styles.shareButton}
                             aria-label="카카오톡 공유"
+                            variant="clear"
+                            name=""
                         >
                             <Share2 size={20} />
                         </IconButton>
                     </KakaoShareButton>
                     <span className={styles.shareLabel}>카카오톡</span>
                 </div>
-                
+
                 <div className={styles.shareButtonRow}>
-                    <Button 
-                        variant="outline" 
+                    <Button
+                        variant="weak"
                         onClick={() => onOpenChange(false)}
                         className={styles.cancelButton}
                     >

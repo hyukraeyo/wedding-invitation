@@ -19,7 +19,7 @@
   margin: 0 auto;
   height: auto;
   min-height: 200px;
-  max-height: 85dvh;
+  max-height: 60dvh;
   border: none;
   background-color: white;
   outline: none;
@@ -31,11 +31,16 @@
     bottom: 0.75rem;
     width: calc(100% - 1.5rem);
     max-width: calc(v.$canvas-max-width - 1.5rem);
-    max-height: calc(85dvh - 1.5rem);
+    max-height: calc(60dvh - 1.5rem);
     border-radius: v.$radius-xl;
 
     @media (min-width: v.$mobile) {
       bottom: 1rem;
+    }
+
+    // Hide vaul's background extension (rubber-band fill) for floating drawers
+    &::after {
+      display: none !important;
     }
   }
 
@@ -54,7 +59,7 @@
   width: 36px;
   flex-shrink: 0;
   border-radius: v.$radius-full;
-  background-color: v.$zinc-200; // Minimal: Keep subtle
+  background-color: v.$zinc-300; // Minimal: Keep subtle but visible
   z-index: 10;
 }
 
@@ -105,7 +110,7 @@
 
   @media (max-width: v.$max-mobile) {
     padding: 1.25rem 1.5rem;
-    padding-bottom: env(safe-area-inset-bottom, 2.5rem);
+    //padding-bottom: env(safe-area-inset-bottom, 2.5rem);
   }
 
   &.noPadding {
@@ -114,9 +119,3 @@
 }
 
 // scrollArea class is handled by ScrollArea component
-
-// 🍌 Vaul 라이브러리 기본 스타일 오버라이드
-// Vaul이 드로어 하단에 height: 200% 가상요소를 추가해서 큰 빈 공간이 생기는 문제 수정
-:global([data-vaul-drawer][data-vaul-drawer-direction="bottom"])::after {
-  height: 0 !important;
-}

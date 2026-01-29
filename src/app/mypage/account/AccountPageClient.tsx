@@ -2,8 +2,7 @@
 
 import React, { useState } from 'react';
 import { MyPageContent } from '@/components/mypage/MyPageContent';
-import { FormField } from '@/components/common/FormField';
-import { Input } from '@/components/ui/Input';
+import { TextField } from '@/components/ui/TextField';
 import { Button } from '@/components/ui/Button';
 import styles from './AccountPage.module.scss';
 import { Banana, User, Mail, Phone } from 'lucide-react';
@@ -100,19 +99,19 @@ export default function AccountPageClient({
                 <div className={styles.itemContent}>
                     {isEditingPhone ? (
                         <div className={styles.editWrapper}>
-                            <FormField className={styles.phoneInput || ''}>
-                                <Input
-                                    value={formData.phone || ''}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                                        setFormData({ ...formData, phone: e.target.value })
-                                    }
-                                    placeholder="010-0000-0000"
-                                />
-                            </FormField>
+                            <TextField
+                                variant="line"
+                                value={formData.phone || ''}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                                    setFormData({ ...formData, phone: e.target.value })
+                                }
+                                placeholder="010-0000-0000"
+                                className={styles.phoneInput || ''}
+                            />
                             <div className={styles.editActions}>
                                 <Button
-                                    variant="ghost"
-                                    size="sm"
+                                    variant="weak"
+                                    size="small"
                                     onClick={() => {
                                         setIsEditingPhone(false);
                                         setFormData({ phone: profile.phone || '' });
@@ -121,8 +120,8 @@ export default function AccountPageClient({
                                     취소
                                 </Button>
                                 <Button
-                                    variant="default"
-                                    size="sm"
+                                    variant="fill"
+                                    size="small"
                                     onClick={handleSavePhone}
                                 >
                                     저장

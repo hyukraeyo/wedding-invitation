@@ -502,13 +502,15 @@ export default function MyPageClient({
                         title={MENU_TITLES.DASHBOARD}
                         actions={
                             <IconButton
-                                icon={viewMode === 'grid' ? GalleryHorizontal : LayoutGrid}
                                 onClick={() => handleViewModeChange(viewMode === 'grid' ? 'swiper' : 'grid')}
-                                variant="ghost"
-                                size="md"
+                                variant="clear"
+                                iconSize={20}
                                 className={styles.viewToggleButton}
                                 aria-label={viewMode === 'grid' ? '슬라이드 보기' : '그리드 보기'}
-                            />
+                                name=""
+                            >
+                                {viewMode === 'grid' ? <GalleryHorizontal size={20} /> : <LayoutGrid size={20} />}
+                            </IconButton>
                         }
                     />
 

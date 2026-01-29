@@ -2,9 +2,10 @@
 
 import React from "react";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
+
 import { useRouter } from "next/navigation";
 import styles from "./Home.module.scss";
+import { Button } from "@/components/ui/Button";
 
 export function HomeClient() {
     const router = useRouter();
@@ -38,14 +39,7 @@ export function HomeClient() {
 
                 {/* Simplified Start Button */}
                 <div className={styles.actions}>
-                    <button
-                        onClick={handleStart}
-                        className={styles.submitButton}
-                        aria-label="청첩장 만들기 시작"
-                    >
-                        <span className={styles.text}>청첩장 만들기</span>
-                        <ArrowRight className={styles.icon} aria-hidden="true" />
-                    </button>
+                    <Button onClick={handleStart}>청첩장 만들기</Button>
                     <p className={styles.hint}>간편하게 만드는 나만의 모바일 청첩장</p>
                 </div>
             </div>

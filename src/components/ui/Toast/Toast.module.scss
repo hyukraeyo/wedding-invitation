@@ -1,0 +1,6 @@
+@use "../../../styles/variables" as v;
+
+.toast {
+    // TDS Toast 스타일 커스텀이 필요할 경우 여기에 작성합니다.
+    z-index: v.$z-index-toast;
+}

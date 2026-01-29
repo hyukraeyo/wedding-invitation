@@ -1,16 +1,14 @@
 import React, { ChangeEvent, useRef } from 'react';
 import Image from 'next/image';
 import { Trash2, UploadCloud, Banana } from 'lucide-react';
-import { Label } from '@/components/common/FormPrimitives';
-import { useInvitationStore } from '@/store/useInvitationStore';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { useInvitationStore } from '@/store/useInvitationStore';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { IconButton } from '@/components/ui/IconButton';
 import { AspectRatio } from '@/components/ui/AspectRatio';
 import { isBlobUrl } from '@/lib/image';
 import { IMAGE_SIZES } from '@/constants/image';
-import { useFormField } from '@/components/common/FormField';
 import styles from './ImageUploader.module.scss';
 
 interface ImageUploaderProps {
@@ -105,13 +103,10 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
     const shouldUnoptimize = isBlobUrl(displayUrl);
     const isAutoRatio = props.ratio === 'auto';
 
-    const field = useFormField();
-    const id = props.id || field?.id;
-
     return (
         <div className={styles.container}>
             <div className={cn(styles.wrapper, className)} style={cssVars}>
-                {label && !field ? <Label className={styles.label}>{label}</Label> : null}
+                {label ? <div className={styles.label}>{label}</div> : null}
 
                 <div
                     className={cn(
@@ -165,12 +160,15 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                                 <IconButton
                                     type="button"
                                     onClick={handleRemove}
-                                    variant="ghost"
-                                    size="sm"
-                                    icon={Trash2}
+                                    variant="clear"
+                                    iconSize={20}
                                     className={styles.removeButton}
                                     disabled={isUploading}
-                                />
+                                    name=""
+                                    aria-label="삭제"
+                                >
+                                    <Trash2 size={20} />
+                                </IconButton>
                             )}
                         </div>
                     ) : (
@@ -185,7 +183,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
 
                     <input
                         ref={inputRef}
-                        id={id}
+                        id={props.id}
                         type="file"
                         accept="image/*"
                         onChange={handleUpload}

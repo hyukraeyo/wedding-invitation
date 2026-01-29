@@ -19,8 +19,8 @@ import {
     DrawerTrigger,
     DrawerScrollArea,
 } from "@/components/ui/Drawer";
-import { Button } from '@/components/ui/Button';
 import { BottomCTA } from '@/components/ui/BottomCTA';
+import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 import { useCanUseDom } from '@/hooks/useCanUseDom';
 import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
@@ -45,7 +45,7 @@ export interface ResponsiveModalProps {
     onConfirm?: (() => void) | undefined;
     onCancel?: (() => void) | undefined;
     showCancel?: boolean | undefined;
-    confirmVariant?: 'default' | 'destructive' | 'solid' | undefined;
+    confirmVariant?: 'primary' | 'danger' | 'light' | 'dark' | undefined;
     confirmDisabled?: boolean | undefined;
     confirmLoading?: boolean | undefined;
     dismissible?: boolean;
@@ -53,7 +53,6 @@ export interface ResponsiveModalProps {
     scrollRef?: React.Ref<HTMLDivElement>;
     useScrollFade?: boolean;
     padding?: "none" | "default";
-    fullWidthActions?: boolean;
 }
 
 export const ResponsiveModal = ({
@@ -72,7 +71,7 @@ export const ResponsiveModal = ({
     onConfirm,
     onCancel,
     showCancel = true,
-    confirmVariant = 'default',
+    confirmVariant = 'primary',
     confirmDisabled = false,
     confirmLoading = false,
     dismissible = true,
@@ -80,7 +79,6 @@ export const ResponsiveModal = ({
     scrollRef: externalScrollRef,
     useScrollFade = false,
     padding = "default",
-    fullWidthActions = true,
 }: ResponsiveModalProps) => {
     const isDesktop = useMediaQuery("(min-width: 768px)");
 
@@ -136,33 +134,45 @@ export const ResponsiveModal = ({
                                 {footer || (
                                     showCancel ? (
                                         <BottomCTA.Double
-                                            inModal
-                                            primaryButtonProps={{
-                                                children: confirmText,
-                                                onClick: onConfirm,
-                                                disabled: confirmDisabled || confirmLoading,
-                                                loading: confirmLoading,
-                                                variant: confirmVariant === 'destructive' ? 'destructive' : 'solid',
-                                                fullWidth: true
-                                            }}
-                                            secondaryButtonProps={{
-                                                children: cancelText,
-                                                onClick: handleCancel,
-                                                variant: 'secondary',
-                                                fullWidth: true
-                                            }}
+                                            fixed={false}
+                                            rightButton={
+                                                <Button
+                                                    onClick={onConfirm}
+                                                    disabled={confirmDisabled || confirmLoading}
+                                                    loading={confirmLoading}
+                                                    color={confirmVariant === 'danger' ? 'danger' : 'primary'}
+                                                    variant="fill"
+                                                    size="large"
+                                                    style={{ width: '100%' }}
+                                                >
+                                                    {confirmText}
+                                                </Button>
+                                            }
+                                            leftButton={
+                                                <Button
+                                                    onClick={handleCancel}
+                                                    variant="weak"
+                                                    color="primary"
+                                                    size="large"
+                                                    style={{ width: '100%' }}
+                                                >
+                                                    {cancelText}
+                                                </Button>
+                                            }
                                         />
                                     ) : (
                                         <BottomCTA.Single
-                                            inModal
-                                            buttonProps={{
-                                                children: confirmText,
-                                                onClick: onConfirm,
-                                                disabled: confirmDisabled || confirmLoading,
-                                                loading: confirmLoading,
-                                                variant: confirmVariant === 'destructive' ? 'destructive' : 'solid',
-                                            }}
-                                        />
+                                            fixed={false}
+                                            // @ts-expect-error - TDS BottomCTA might have slightly different prop names in type definition
+                                            onClick={onConfirm}
+                                            disabled={confirmDisabled || confirmLoading}
+                                            loading={confirmLoading}
+                                            color={confirmVariant === 'danger' ? 'danger' : 'primary'}
+                                            variant="fill"
+                                            size="large"
+                                        >
+                                            {confirmText}
+                                        </BottomCTA.Single>
                                     )
                                 )}
                             </div>
@@ -223,33 +233,45 @@ export const ResponsiveModal = ({
                         {footer || (
                             showCancel ? (
                                 <BottomCTA.Double
-                                    inModal
-                                    primaryButtonProps={{
-                                        children: confirmText,
-                                        onClick: onConfirm,
-                                        disabled: confirmDisabled || confirmLoading,
-                                        loading: confirmLoading,
-                                        variant: confirmVariant === 'destructive' ? 'destructive' : 'solid',
-                                        fullWidth: true
-                                    }}
-                                    secondaryButtonProps={{
-                                        children: cancelText,
-                                        onClick: handleCancel,
-                                        variant: 'secondary',
-                                        fullWidth: true
-                                    }}
+                                    fixed={false}
+                                    rightButton={
+                                        <Button
+                                            onClick={onConfirm}
+                                            disabled={confirmDisabled || confirmLoading}
+                                            loading={confirmLoading}
+                                            color={confirmVariant === 'danger' ? 'danger' : 'primary'}
+                                            variant="fill"
+                                            size="large"
+                                            style={{ width: '100%' }}
+                                        >
+                                            {confirmText}
+                                        </Button>
+                                    }
+                                    leftButton={
+                                        <Button
+                                            onClick={handleCancel}
+                                            variant="weak"
+                                            color="primary"
+                                            size="large"
+                                            style={{ width: '100%' }}
+                                        >
+                                            {cancelText}
+                                        </Button>
+                                    }
                                 />
                             ) : (
                                 <BottomCTA.Single
-                                    inModal
-                                    buttonProps={{
-                                        children: confirmText,
-                                        onClick: onConfirm,
-                                        disabled: confirmDisabled || confirmLoading,
-                                        loading: confirmLoading,
-                                        variant: confirmVariant === 'destructive' ? 'destructive' : 'solid',
-                                    }}
-                                />
+                                    fixed={false}
+                                    // @ts-expect-error - TDS BottomCTA might have slightly different prop names in type definition
+                                    onClick={onConfirm}
+                                    disabled={confirmDisabled || confirmLoading}
+                                    loading={confirmLoading}
+                                    color={confirmVariant === 'danger' ? 'danger' : 'primary'}
+                                    variant="fill"
+                                    size="large"
+                                >
+                                    {confirmText}
+                                </BottomCTA.Single>
                             )
                         )}
                     </div>

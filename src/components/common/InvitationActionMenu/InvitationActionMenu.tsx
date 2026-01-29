@@ -1,22 +1,22 @@
 'use client';
 
 import React, { useState } from 'react';
-import { 
-    DropdownMenu, 
-    DropdownMenuContent, 
-    DropdownMenuItem, 
-    DropdownMenuTrigger 
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
 } from '@/components/ui/DropdownMenu';
-import { 
-    Share2, 
-    Edit3, 
-    Trash2, 
-    XCircle, 
-    AlertCircle, 
+import {
+    Share2,
+    Edit3,
+    Trash2,
+    XCircle,
+    AlertCircle,
     MoreVertical,
-    Calendar 
+    Calendar
 } from 'lucide-react';
-import { Button } from '@/components/ui/Button';
+import { IconButton } from '@/components/ui/IconButton';
 import { ResponsiveModal } from '../ResponsiveModal';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
@@ -68,8 +68,6 @@ export const InvitationActionMenu: React.FC<InvitationActionMenuProps> = ({
         setShowRejectionModal(true);
     };
 
-
-
     const handleEditClick = () => {
         if (isApproved && onRevertToDraft) {
             setShowEditConfirmModal(true);
@@ -93,21 +91,22 @@ export const InvitationActionMenu: React.FC<InvitationActionMenuProps> = ({
         <>
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Button 
-                        variant="ghost" 
-                        size="icon"
+                    <IconButton
+                        variant="clear"
+                        iconSize={20}
                         className={className}
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
                         }}
                         aria-label="메뉴 열기"
+                        name=""
                     >
-                        <MoreVertical size={18} />
-                    </Button>
+                        <MoreVertical size={20} />
+                    </IconButton>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent 
-                    align="end" 
+                <DropdownMenuContent
+                    align="end"
                     onClick={(e) => {
                         e.stopPropagation();
                     }}
@@ -115,7 +114,7 @@ export const InvitationActionMenu: React.FC<InvitationActionMenuProps> = ({
                 >
                     {!isApproved && !isRequesting && (
                         <>
-                            <DropdownMenuItem 
+                            <DropdownMenuItem
                                 onSelect={(e) => {
                                     e.preventDefault();
                                     handleEditClick();
@@ -123,8 +122,8 @@ export const InvitationActionMenu: React.FC<InvitationActionMenuProps> = ({
                             >
                                 <Edit3 size={16} className="menuIcon" /> 수정하기
                             </DropdownMenuItem>
-                            
-                            <DropdownMenuItem 
+
+                            <DropdownMenuItem
                                 onSelect={(e) => {
                                     e.preventDefault();
                                     onRequestApproval(invitation);
@@ -138,7 +137,7 @@ export const InvitationActionMenu: React.FC<InvitationActionMenuProps> = ({
                     {(isApproved || isRequesting) && (
                         <>
                             {!isRequesting && (
-                                <DropdownMenuItem 
+                                <DropdownMenuItem
                                     onSelect={(e) => {
                                         e.preventDefault();
                                         setShowShareModal(true);
@@ -211,9 +210,9 @@ export const InvitationActionMenu: React.FC<InvitationActionMenuProps> = ({
                 description="관리자가 작성한 거절 사유입니다"
                 showCancel={false}
             >
-                <div style={{ 
-                    backgroundColor: '#FEF3F2', 
-                    borderRadius: '8px', 
+                <div style={{
+                    backgroundColor: '#FEF3F2',
+                    borderRadius: '8px',
                     padding: '16px',
                     whiteSpace: 'pre-wrap',
                     lineHeight: '1.6'

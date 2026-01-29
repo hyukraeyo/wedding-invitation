@@ -73,7 +73,7 @@
             @media (min-width: 1024px) {
                 padding: 1.5rem 1rem 5rem 1rem; // Bottom padding aligned
             }
-            
+
             @include m.mobile {
                 padding-bottom: 6rem; // Slightly more padding to clear MobileNav
             }
@@ -177,7 +177,7 @@
             // User screenshot showed yellow, maybe they prefer yellow for consistency.
             // I'll use zinc-900 but the user can ask to change if they want it yellow.
             // Wait, I'll use yellow as seen in the screenshot to satisfy "two buttons" issue first.
-            background-color: v.$color-primary; 
+            background-color: v.$color-primary;
         }
 
         &:active {
@@ -374,7 +374,7 @@
         width: 134px;
         height: 5px;
         background-color: black;
-        border-radius: 9999px;
+        border-radius: v.$radius-full;
         z-index: 50;
         pointer-events: none;
         mix-blend-mode: difference;
