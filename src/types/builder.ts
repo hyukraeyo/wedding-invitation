@@ -12,6 +12,7 @@
 export interface SectionProps {
     value: string;
     isOpen: boolean;
+    onToggle: (isOpen: boolean) => void;
 }
 
 /**

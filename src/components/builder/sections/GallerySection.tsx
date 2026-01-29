@@ -1,6 +1,6 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
-import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
+import { BoardRow } from '@/components/ui/BoardRow';
 import type { SectionProps } from '@/types/builder';
 import styles from './GallerySection.module.scss';
 
@@ -13,17 +13,17 @@ const GallerySectionContent = dynamic(() => import('./GallerySectionContent'), {
     ssr: false
 });
 
-const GallerySection = React.memo<SectionProps>(function GallerySection({ value, isOpen }) {
-
+const GallerySection = React.memo<SectionProps>(function GallerySection(props) {
     return (
-        <AccordionItem value={value} autoScroll>
-            <AccordionTrigger>
-                웨딩 갤러리
-            </AccordionTrigger>
-            <AccordionContent>
-                {isOpen ? <GallerySectionContent /> : null}
-            </AccordionContent>
-        </AccordionItem>
+        <BoardRow
+            title="웨딩 갤러리"
+            isOpened={props.isOpen}
+            onOpen={() => props.onToggle?.(true)}
+            onClose={() => props.onToggle?.(false)}
+            icon={<BoardRow.ArrowIcon />}
+        >
+            {props.isOpen ? <GallerySectionContent /> : null}
+        </BoardRow>
     );
 });
 

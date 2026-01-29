@@ -44,28 +44,19 @@ const nextConfig: NextConfig = {
     // bundle-barrel-imports: lucide-react 등 barrel file 최적화
     optimizePackageImports: [
       'lucide-react',
-      '@radix-ui/react-accordion',
       '@radix-ui/react-dialog',
       '@radix-ui/react-dropdown-menu',
       '@radix-ui/react-popover',
       '@radix-ui/react-select',
       '@radix-ui/react-tabs',
       '@radix-ui/react-checkbox',
-      '@radix-ui/react-label',
-      '@radix-ui/react-radio-group',
       '@radix-ui/react-separator',
-      '@radix-ui/react-slot',
-      '@radix-ui/react-switch',
       '@radix-ui/react-toggle',
       '@radix-ui/react-toggle-group',
       '@radix-ui/react-visually-hidden',
       'date-fns',
-      'lodash',
-      'framer-motion',
-      '@toss/tds-mobile'
     ],
     viewTransition: true,
-
   },
 
   turbopack: {

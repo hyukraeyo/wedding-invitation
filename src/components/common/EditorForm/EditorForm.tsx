@@ -3,7 +3,6 @@
 import React, { useState, useCallback, memo, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { Accordion } from '@/components/ui/Accordion';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { useShallow } from 'zustand/react/shallow';
 import styles from './EditorForm.module.scss';
@@ -65,6 +64,14 @@ const EditorForm = memo(function EditorForm() {
         return () => cancelAnimationFrame(timer);
     }, []);
 
+    const handleToggle = useCallback((key: string, isOpen: boolean) => {
+        const nextOpenSections = isOpen
+            ? [...openSections, key]
+            : openSections.filter(s => s !== key);
+
+        handleValueChange(nextOpenSections);
+    }, [openSections, handleValueChange]);
+
     if (!isReady) {
         return (
             <div className={styles.loadingContainer}>
@@ -86,20 +93,16 @@ const EditorForm = memo(function EditorForm() {
 
     return (
         <div className={styles.wrapper}>
-            <Accordion
-                type="multiple"
-                value={openSections}
-                onValueChange={handleValueChange}
-                className={styles.list}
-            >
+            <div className={styles.list}>
                 {SECTIONS.map(({ key, Component }) => (
                     <Component
                         key={key}
                         value={key}
                         isOpen={openSections.includes(key)}
+                        onToggle={(isOpen) => handleToggle(key, isOpen)}
                     />
                 ))}
-            </Accordion>
+            </div>
         </div>
     );
 });

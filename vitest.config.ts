@@ -11,7 +11,7 @@ export default defineConfig({
     setupFiles: ['./vitest.setup.ts'],
     css: true,
     include: ['**/*.{test,spec}.{js,jsx,ts,tsx}'],
-    exclude: ['node_modules', '.next', 'out'],
+    exclude: ['node_modules', '.next', 'out', '.agent', '.opencode', '.codex', '.cursor', 'public'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],

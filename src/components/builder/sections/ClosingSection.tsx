@@ -5,7 +5,7 @@ const RichTextEditor = dynamic(() => import('@/components/ui/RichTextEditor').th
 import { Sparkles } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
+import { BoardRow } from '@/components/ui/BoardRow';
 import { TextField } from '@/components/ui/TextField';
 import { List, ListRow } from '@/components/ui/List';
 import { ImageUploader } from '@/components/common/ImageUploader';
@@ -20,7 +20,7 @@ import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 
 
 
-export default function ClosingSection({ value }: SectionProps) {
+export default function ClosingSection(props: SectionProps) {
     const closing = useInvitationStore(useShallow(state => state.closing));
     const setClosing = useInvitationStore(state => state.setClosing);
 
@@ -39,20 +39,26 @@ export default function ClosingSection({ value }: SectionProps) {
 
     return (
         <>
-            <AccordionItem value={value} autoScroll>
-                <AccordionTrigger
-                    action={
-                        <HeaderAction
-                            icon={Sparkles}
-                            label="추천 문구"
-                            onClick={() => setIsSampleModalOpen(true)}
-                        />
-                    }
+            <>
+                <BoardRow
+                    title="마무리"
+                    isOpened={props.isOpen}
+                    onOpen={() => props.onToggle?.(true)}
+                    onClose={() => props.onToggle?.(false)}
+                    icon={<BoardRow.ArrowIcon />}
                 >
-                    마무리
-                </AccordionTrigger>
-                <AccordionContent>
                     <List>
+                        {/* Sample Trigger */}
+                        <div style={{ padding: '0 24px 12px', display: 'flex', justifyContent: 'flex-end' }}>
+                            <HeaderAction
+                                icon={Sparkles}
+                                label="추천 문구"
+                                onClick={() => {
+                                    setIsSampleModalOpen(true);
+                                }}
+                            />
+                        </div>
+
                         <ListRow
                             contents={
                                 <TextField
@@ -79,11 +85,13 @@ export default function ClosingSection({ value }: SectionProps) {
                         <ListRow
                             title="내용"
                             contents={
-                                <RichTextEditor
-                                    content={closing.content}
-                                    onChange={(val: string) => updateClosing({ content: val })}
-                                    placeholder="감사의 마음을 담은 짧은 인사말"
-                                />
+                                props.isOpen ? (
+                                    <RichTextEditor
+                                        content={closing.content}
+                                        onChange={(val: string) => updateClosing({ content: val })}
+                                        placeholder="감사의 마음을 담은 짧은 인사말"
+                                    />
+                                ) : null
                             }
                         />
 
@@ -103,21 +111,21 @@ export default function ClosingSection({ value }: SectionProps) {
                             }
                         />
                     </List>
-                </AccordionContent>
-            </AccordionItem>
+                </BoardRow>
 
-            {/* Sample Phrases Modal */}
-            <ResponsiveModal
-                open={isSampleModalOpen}
-                onOpenChange={setIsSampleModalOpen}
-                title="마무리 추천 문구"
-                useScrollFade={true}
-            >
-                <SampleList
-                    items={CLOSING_SAMPLES}
-                    onSelect={handleSelectSample}
-                />
-            </ResponsiveModal>
+                {/* Sample Phrases Modal */}
+                <ResponsiveModal
+                    open={isSampleModalOpen}
+                    onOpenChange={setIsSampleModalOpen}
+                    title="마무리 추천 문구"
+                    useScrollFade={true}
+                >
+                    <SampleList
+                        items={CLOSING_SAMPLES}
+                        onSelect={handleSelectSample}
+                    />
+                </ResponsiveModal>
+            </>
         </>
     );
 }

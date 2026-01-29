@@ -1,6 +1,6 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
-import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
+import { BoardRow } from '@/components/ui/BoardRow';
 import type { SectionProps } from '@/types/builder';
 import styles from './AccountsSection.module.scss';
 
@@ -13,17 +13,16 @@ const AccountsSectionContent = dynamic(() => import('./AccountsSectionContent'),
     ssr: false
 });
 
-export default function AccountsSection({ value, isOpen }: SectionProps) {
-
-
+export default function AccountsSection(props: SectionProps) {
     return (
-        <AccordionItem value={value} autoScroll>
-            <AccordionTrigger>
-                축의금 및 계좌번호
-            </AccordionTrigger>
-            <AccordionContent>
-                {isOpen ? <AccountsSectionContent /> : null}
-            </AccordionContent>
-        </AccordionItem>
+        <BoardRow
+            title="축의금 및 계좌번호"
+            isOpened={props.isOpen}
+            onOpen={() => props.onToggle?.(true)}
+            onClose={() => props.onToggle?.(false)}
+            icon={<BoardRow.ArrowIcon />}
+        >
+            {props.isOpen ? <AccountsSectionContent /> : null}
+        </BoardRow>
     );
 }

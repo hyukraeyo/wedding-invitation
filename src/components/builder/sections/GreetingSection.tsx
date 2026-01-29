@@ -14,7 +14,7 @@ import { SampleList } from '@/components/ui/SampleList';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { TextField } from '@/components/ui/TextField';
 import { List, ListRow } from '@/components/ui/List';
-import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
+import { BoardRow } from '@/components/ui/BoardRow';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { HeaderAction } from '@/components/common/HeaderAction';
 import { ImageUploader } from '@/components/common/ImageUploader';
@@ -23,7 +23,7 @@ import { useShallow } from 'zustand/react/shallow';
 import type { SectionProps, SamplePhraseItem } from '@/types/builder';
 import { GREETING_SAMPLES } from '@/constants/samples';
 
-export default function GreetingSection({ isOpen, value }: SectionProps) {
+export default function GreetingSection(props: SectionProps) {
     const {
         message,
         setMessage,
@@ -90,22 +90,26 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
 
     return (
         <>
-            <AccordionItem value={value} autoScroll>
-                <AccordionTrigger
-                    action={
-                        <HeaderAction
-                            icon={Sparkles}
-                            label="추천 문구"
-                            onClick={() => {
-                                setIsSampleModalOpen(true);
-                            }}
-                        />
-                    }
+            <>
+                <BoardRow
+                    title="인사말"
+                    isOpened={props.isOpen}
+                    onOpen={() => props.onToggle?.(true)}
+                    onClose={() => props.onToggle?.(false)}
+                    icon={<BoardRow.ArrowIcon />}
                 >
-                    인사말
-                </AccordionTrigger>
-                <AccordionContent>
                     <List>
+                        {/* Sample Trigger */}
+                        <div style={{ padding: '0 24px 12px', display: 'flex', justifyContent: 'flex-end' }}>
+                            <HeaderAction
+                                icon={Sparkles}
+                                label="추천 문구"
+                                onClick={() => {
+                                    setIsSampleModalOpen(true);
+                                }}
+                            />
+                        </div>
+
                         {/* Subtitle */}
                         <ListRow
                             contents={
@@ -138,7 +142,7 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
                         <ListRow
                             title="내용"
                             contents={
-                                isOpen ? (
+                                props.isOpen ? (
                                     <RichTextEditor
                                         content={message}
                                         onChange={setMessage}
@@ -205,21 +209,21 @@ export default function GreetingSection({ isOpen, value }: SectionProps) {
                             }
                         />
                     </List>
-                </AccordionContent>
-            </AccordionItem >
+                </BoardRow>
 
-            {/* Sample Phrases Modal */}
-            < ResponsiveModal
-                open={isSampleModalOpen}
-                onOpenChange={setIsSampleModalOpen}
-                title="인사말 추천 문구"
-                useScrollFade={true}
-            >
-                <SampleList
-                    items={GREETING_SAMPLES}
-                    onSelect={handleSelectSample}
-                />
-            </ResponsiveModal >
+                {/* Sample Phrases Modal */}
+                < ResponsiveModal
+                    open={isSampleModalOpen}
+                    onOpenChange={setIsSampleModalOpen}
+                    title="인사말 추천 문구"
+                    useScrollFade={true}
+                >
+                    <SampleList
+                        items={GREETING_SAMPLES}
+                        onSelect={handleSelectSample}
+                    />
+                </ResponsiveModal >
+            </>
         </>
     );
 }

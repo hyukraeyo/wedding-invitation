@@ -2,7 +2,7 @@ import React from 'react';
 import { InfoMessage } from '@/components/ui/InfoMessage';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useShallow } from 'zustand/react/shallow';
-import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
+import { BoardRow } from '@/components/ui/BoardRow';
 import { TextField } from '@/components/ui/TextField';
 import { List, ListRow } from '@/components/ui/List';
 import { Switch } from '@/components/ui/Switch';
@@ -11,7 +11,7 @@ import { DatePicker } from '@/components/common/DatePicker';
 import styles from './DateTimeSection.module.scss';
 import type { SectionProps } from '@/types/builder';
 
-const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ value }) {
+const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props) {
     const {
         date,
         setDate,
@@ -37,73 +37,74 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection({ valu
     })));
 
     return (
-        <AccordionItem value={value} autoScroll>
-            <AccordionTrigger>
-                예식 일시
-            </AccordionTrigger>
-            <AccordionContent>
-                <List>
-                    {/* Date & Time Picking */}
-                    <ListRow
-                        title="예식일"
-                        contents={
-                            <DatePicker
-                                value={date}
-                                onChange={(value) => setDate(value)}
-                            />
-                        }
-                    />
-                    <ListRow
-                        title="예식 시간"
-                        contents={
-                            <TimePicker
-                                value={time}
-                                onChange={(value) => setTime(value)}
-                            />
-                        }
-                    />
-
-                    {/* Additional Options */}
-                    <ListRow
-                        title="달력 노출"
-                        right={
-                            <Switch
-                                checked={showCalendar}
-                                onChange={(_, checked) => setShowCalendar(checked)}
-                            />
-                        }
-                    />
-
-                    <ListRow
-                        title="D-Day 노출"
-                        right={
-                            <Switch
-                                checked={showDday}
-                                onChange={(_, checked) => setShowDday(checked)}
-                            />
-                        }
-                    />
-                    {showDday && (
-                        <ListRow
-                            contents={
-                                <div className={styles.ddayInputWrapper}>
-                                    <TextField
-                                        variant="line"
-                                        label="D-Day 메시지"
-                                        placeholder="예: (신랑), (신부)의 결혼식이 (D-Day) 남았습니다"
-                                        value={ddayMessage}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDdayMessage(e.target.value)}
-                                    />
-                                    <InfoMessage>
-                                        (신랑), (신부), (D-Day)는 실제 이름과 날짜로 자동 치환됩니다.
-                                    </InfoMessage>
-                                </div>
-                            }
+        <BoardRow
+            title="예식 일시"
+            isOpened={props.isOpen}
+            onOpen={() => props.onToggle?.(true)}
+            onClose={() => props.onToggle?.(false)}
+            icon={<BoardRow.ArrowIcon />}
+        >
+            <List>
+                {/* Date & Time Picking */}
+                <ListRow
+                    title="예식일"
+                    contents={
+                        <DatePicker
+                            value={date}
+                            onChange={(value) => setDate(value)}
                         />
-                    )}
-                </List>
-            </AccordionContent>
-        </AccordionItem>
+                    }
+                />
+                <ListRow
+                    title="예식 시간"
+                    contents={
+                        <TimePicker
+                            value={time}
+                            onChange={(value) => setTime(value)}
+                        />
+                    }
+                />
+
+                {/* Additional Options */}
+                <ListRow
+                    title="달력 노출"
+                    right={
+                        <Switch
+                            checked={showCalendar}
+                            onChange={(_, checked) => setShowCalendar(checked)}
+                        />
+                    }
+                />
+
+                <ListRow
+                    title="D-Day 노출"
+                    right={
+                        <Switch
+                            checked={showDday}
+                            onChange={(_, checked) => setShowDday(checked)}
+                        />
+                    }
+                />
+                {showDday && (
+                    <ListRow
+                        contents={
+                            <div className={styles.ddayInputWrapper}>
+                                <TextField
+                                    variant="line"
+                                    label="D-Day 메시지"
+                                    placeholder="예: (신랑), (신부)의 결혼식이 (D-Day) 남았습니다"
+                                    value={ddayMessage}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDdayMessage(e.target.value)}
+                                />
+                                <InfoMessage>
+                                    (신랑), (신부), (D-Day)는 실제 이름과 날짜로 자동 치환됩니다.
+                                </InfoMessage>
+                            </div>
+                        }
+                    />
+                )}
+            </List>
+        </BoardRow>
     );
 });
 

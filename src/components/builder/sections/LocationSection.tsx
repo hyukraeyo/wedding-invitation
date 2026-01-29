@@ -1,6 +1,6 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
-import { AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/Accordion';
+import { BoardRow } from '@/components/ui/BoardRow';
 import type { SectionProps } from '@/types/builder';
 import styles from './LocationSection.module.scss';
 
@@ -13,18 +13,17 @@ const LocationSectionContent = dynamic(() => import('./LocationSectionContent'),
     ssr: false
 });
 
-const LocationSection = React.memo<SectionProps>(function LocationSection({ value, isOpen }) {
-
-
+const LocationSection = React.memo<SectionProps>(function LocationSection(props) {
     return (
-        <AccordionItem value={value} autoScroll>
-            <AccordionTrigger>
-                예식 장소
-            </AccordionTrigger>
-            <AccordionContent>
-                {isOpen ? <LocationSectionContent /> : null}
-            </AccordionContent>
-        </AccordionItem>
+        <BoardRow
+            title="예식 장소"
+            isOpened={props.isOpen}
+            onOpen={() => props.onToggle?.(true)}
+            onClose={() => props.onToggle?.(false)}
+            icon={<BoardRow.ArrowIcon />}
+        >
+            {props.isOpen ? <LocationSectionContent /> : null}
+        </BoardRow>
     );
 });
 

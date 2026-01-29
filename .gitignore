@@ -43,3 +43,19 @@ next-env.d.ts
 # PWA (next-pwa generated files)
 public/sw.js
 public/workbox-*.js
+
+# Project specific ignores
+*.log
+build_log*.txt
+build_output*.txt
+build-output.txt
+build_results.txt
+lint-results.json
+lint_final.txt
+lint_output.txt
+lint_results.txt
+exports_report.txt
+*_keys.txt
+node_modules_list.txt
+check_exports*
+*.sql
