@@ -19,12 +19,7 @@ npm run start              # Start production server
 npm run lint               # Run ESLint (uses @typescript-eslint/parser)
 npm run analyze            # Analyze bundle size (ANALYZE=true npm run build, opens analyzer UI)
 
-# Testing (Vitest + jsdom)
-npm run test               # Run all tests
-npm run test -- path/to/test.test.ts  # Run single test file
-npm run test:watch         # Watch mode for development
-npm run test:ui            # Open Vitest UI
-npm run test:coverage      # Generate coverage report (v8 provider)
+
 ```
 
 ## Core Standards (from `.cursorrules`)
@@ -137,27 +132,7 @@ export default ComponentName;
 - **Validation**: Use Zod schemas for runtime validation
 - **User feedback**: Use `sonner` toast notifications for user actions
 
-### Testing Patterns (Vitest + Testing Library)
-```typescript
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { ComponentName } from '@/components/ui/ComponentName';
 
-describe('ComponentName', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
-  it('should render correctly', () => {
-    render(<ComponentName>Test</ComponentName>);
-    expect(screen.getByText('Test')).toBeInTheDocument();
-  });
-});
-```
 
 ## Project Architecture
 
@@ -168,7 +143,7 @@ describe('ComponentName', () => {
 - **State Management**: Zustand (client), TanStack Query (server state)
 - **Database**: Supabase (Remote CLI, no local Docker)
 - **UI Components**: Radix UI primitives + custom styling
-- **Testing**: Vitest + Testing Library + jsdom
+
 - **Build**: Webpack (not Turbopack for production)
 
 ### Key Directories
@@ -210,7 +185,7 @@ src/
 2. **Mobile Priority**: Design for mobile first, then enhance for desktop
 3. **Type Safety**: Maintain strict TypeScript configuration
 4. **Performance**: Optimize bundle size and loading performance
-5. **Testing**: Write tests for critical user flows and utilities
+
 6. **Accessibility**: Ensure keyboard navigation and screen reader support
 7. **Error Boundaries**: Implement proper error handling at component level
 8. **Design Consistency**: Follow TDS Mobile design principles strictly

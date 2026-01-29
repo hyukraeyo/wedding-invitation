@@ -13,7 +13,7 @@
 - 🐛 **버그 리포트**: 발견한 버그를 상세히 보고
 - 💡 **기능 제안**: 새로운 기능 아이디어 제안
 - 📝 **문서 개선**: 오타 수정, 문서 추가, 설명 개선
-- 🧪 **테스트 작성**: 테스트 커버리지 향상
+
 - 🔧 **버그 수정**: 이슈에 등록된 버그 해결
 - ✨ **신규 기능**: 새로운 기능 구현
 - 🎨 **디자인 개선**: UI/UX 개선
@@ -162,7 +162,7 @@ git push origin feature/your-feature-name
 - `docs`: 문서 수정
 - `style`: 코드 스타일 변경 (포맷팅 등)
 - `refactor`: 코드 리팩토링
-- `test`: 테스트 추가/수정
+
 - `chore`: 빌드/도구 설정 변경
 - `perf`: 성능 개선
 - `ci`: CI/CD 관련 변경
@@ -422,88 +422,7 @@ export interface InvitationResponse extends ApiResponse<Invitation> {}
 
 ## 6. 품질 보증
 
-### 🧪 테스트 작성 가이드
 
-#### 컴포넌트 테스트
-```typescript
-// ComponentName.test.tsx
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import { ComponentName } from './ComponentName'
-
-describe('ComponentName', () => {
-  const user = userEvent.setup()
-  
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-  
-  describe('Rendering', () => {
-    it('renders correctly with default props', () => {
-      render(<ComponentName>Test</ComponentName>)
-      expect(screen.getByRole('button')).toBeInTheDocument()
-    })
-    
-    it('applies correct variant styles', () => {
-      render(<ComponentName variant="primary">Primary Button</ComponentName>)
-      const button = screen.getByRole('button')
-      expect(button).toHaveClass('variant-primary')
-    })
-  })
-  
-  describe('Interactions', () => {
-    it('handles click events', async () => {
-      const handleClick = vi.fn()
-      render(<ComponentName onClick={handleClick}>Click me</ComponentName>)
-      
-      await user.click(screen.getByRole('button'))
-      expect(handleClick).toHaveBeenCalledTimes(1)
-    })
-  })
-  
-  describe('Accessibility', () => {
-    it('is keyboard accessible', async () => {
-      render(<ComponentName>Accessible Button</ComponentName>)
-      const button = screen.getByRole('button')
-      
-      button.focus()
-      expect(button).toHaveFocus()
-      
-      await user.keyboard('{Enter}')
-      // 엔터 키 동작 확인
-    })
-  })
-})
-```
-
-#### 유틸리티 함수 테스트
-```typescript
-// utils/dateUtils.test.ts
-import { describe, it, expect } from 'vitest'
-import { formatDate, calculateDaysUntil } from './dateUtils'
-
-describe('dateUtils', () => {
-  describe('formatDate', () => {
-    it('formats date correctly', () => {
-      const date = new Date('2024-06-15')
-      expect(formatDate(date)).toBe('2024-06-15')
-    })
-    
-    it('handles invalid dates', () => {
-      expect(() => formatDate(new Date('invalid'))).toThrow()
-    })
-  })
-  
-  describe('calculateDaysUntil', () => {
-    it('calculates days until future date', () => {
-      const futureDate = new Date()
-      futureDate.setDate(futureDate.getDate() + 10)
-      expect(calculateDaysUntil(futureDate)).toBe(10)
-    })
-  })
-})
-```
 
 ### 📋 코드 리뷰 체크리스트
 
@@ -579,7 +498,7 @@ git rebase main
 # 2. 코드 품질 검사
 npm run lint
 npm run type-check
-npm run test
+
 
 # 3. 빌드 테스트
 npm run build
@@ -769,7 +688,7 @@ npm run analyze
 #### 프로젝트 특화 자료
 - [프로젝트 아키텍처](./ARCHITECTURE.md)
 - [스타일 가이드](./AGENTS.md)
-- [테스트 가이드](./TESTING.md)
+
 - [배포 가이드](./DEPLOYMENT.md)
 - [성능 최적화](./PERFORMANCE.md)
 
@@ -783,7 +702,7 @@ npm run analyze
 - **코드 기여**: 기능 개발, 버그 수정
 - **문서 기여**: 문서 작성, 번역, 개선
 - **디자인 기여**: UI/UX 디자인, 아이콘 제작
-- **테스트 기여**: 테스트 작성, 버그 발견
+
 - **커뮤니티**: 질문 답변, 코드 리뷰
 
 #### 인정 방법
