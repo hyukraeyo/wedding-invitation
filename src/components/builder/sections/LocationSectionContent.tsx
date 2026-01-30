@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import { Search } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { TextField } from '@/components/ui/TextField';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { List, ListRow } from '@/components/ui/List';
 import { Switch } from '@/components/ui/Switch';
 import { PhoneField } from '@/components/common/PhoneField';
@@ -214,28 +214,24 @@ export default function LocationSectionContent() {
                 <ListRow
                     title="지도 종류"
                     contents={
-                        <Tabs
+                        <SegmentedControl
+                            alignment="fluid"
                             value={mapType}
-                            onValueChange={(val: string) => {
-                                const nextType = val === 'kakao' ? 'kakao' : 'naver';
-                                setMapType(nextType);
-                            }}
+                            onChange={(val: string) => setMapType(val as 'naver' | 'kakao')}
                         >
-                            <TabsList fluid>
-                                <TabsTrigger value="naver">
-                                    <span className={styles.itemContent} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                                        <NaverIcon size={18} />
-                                        <span>네이버</span>
-                                    </span>
-                                </TabsTrigger>
-                                <TabsTrigger value="kakao">
-                                    <span className={styles.itemContent} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                                        <KakaoIcon size={18} />
-                                        <span>카카오</span>
-                                    </span>
-                                </TabsTrigger>
-                            </TabsList>
-                        </Tabs>
+                            <SegmentedControl.Item value="naver">
+                                <span className={styles.itemContent} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                                    <NaverIcon size={18} />
+                                    <span>네이버</span>
+                                </span>
+                            </SegmentedControl.Item>
+                            <SegmentedControl.Item value="kakao">
+                                <span className={styles.itemContent} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                                    <KakaoIcon size={18} />
+                                    <span>카카오</span>
+                                </span>
+                            </SegmentedControl.Item>
+                        </SegmentedControl>
                     }
                 />
                 <ListRow
@@ -269,36 +265,45 @@ export default function LocationSectionContent() {
                 <ListRow
                     title="지도 높이"
                     contents={
-                        <Tabs
+                        <SegmentedControl
+                            alignment="fluid"
                             value={mapHeight}
-                            onValueChange={(val: string) => {
-                                const nextHeight = val === 'expanded' ? 'expanded' : 'default';
-                                setMapHeight(nextHeight);
-                            }}
+                            onChange={(val: string) => setMapHeight(val as 'default' | 'expanded')}
                         >
-                            <TabsList fluid>
-                                <TabsTrigger value="default">기본</TabsTrigger>
-                                <TabsTrigger value="expanded">확장</TabsTrigger>
-                            </TabsList>
-                        </Tabs>
+                            <SegmentedControl.Item value="default">
+                                기본
+                            </SegmentedControl.Item>
+                            <SegmentedControl.Item value="expanded">
+                                확장
+                            </SegmentedControl.Item>
+                        </SegmentedControl>
                     }
                 />
 
                 <ListRow
                     title="줌 레벨"
                     contents={
-                        <Tabs
+                        <SegmentedControl
+                            alignment="fluid"
                             value={String(mapZoom)}
-                            onValueChange={(val) => setMapZoom(Number(val))}
+                            onChange={(val: string) => setMapZoom(Number(val))}
                         >
-                            <TabsList fluid>
-                                <TabsTrigger value="15">15</TabsTrigger>
-                                <TabsTrigger value="16">16</TabsTrigger>
-                                <TabsTrigger value="17">17</TabsTrigger>
-                                <TabsTrigger value="18">18</TabsTrigger>
-                                <TabsTrigger value="19">19</TabsTrigger>
-                            </TabsList>
-                        </Tabs>
+                            <SegmentedControl.Item value="15">
+                                15
+                            </SegmentedControl.Item>
+                            <SegmentedControl.Item value="16">
+                                16
+                            </SegmentedControl.Item>
+                            <SegmentedControl.Item value="17">
+                                17
+                            </SegmentedControl.Item>
+                            <SegmentedControl.Item value="18">
+                                18
+                            </SegmentedControl.Item>
+                            <SegmentedControl.Item value="19">
+                                19
+                            </SegmentedControl.Item>
+                        </SegmentedControl>
                     }
                 />
             </List>

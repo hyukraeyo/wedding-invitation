@@ -2,14 +2,7 @@
 
 import React from 'react';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogDescription,
-    DialogTrigger,
-} from "@/components/ui/Dialog";
+import { Modal } from '@toss/tds-mobile';
 import {
     Drawer,
     DrawerContent,
@@ -103,89 +96,96 @@ export const ResponsiveModal = ({
 
     if (isDesktop) {
         return (
-            <Dialog open={open} onOpenChange={internalOnOpenChange}>
-                {trigger ? <DialogTrigger asChild>{trigger}</DialogTrigger> : null}
-                <DialogContent
-                    className={cn(styles.dialogContent, className)}
-                >
-                    <div className={styles.mainSection}>
-                        <DialogHeader>
-                            <DialogTitle>{title || '알림'}</DialogTitle>
-                            {description && (
-                                <DialogDescription>
-                                    {description}
-                                </DialogDescription>
-                            )}
-                        </DialogHeader>
-
-                        <ScrollArea
-                            className={cn(styles.contentWrapper, contentClassName)}
-                            useScrollFade={useScrollFade}
-                            onScroll={handleInternalScroll}
-                            viewportRef={externalScrollRef ?? null}
-                        >
-                            <div className={cn(styles.content, padding === "none" && styles.noPadding)}>
-                                {children}
-                            </div>
-                        </ScrollArea>
-
-                        {hasActions && (
-                            <div className={styles.footer}>
-                                {footer || (
-                                    showCancel ? (
-                                        <BottomCTA.Double
-                                            fixed={false}
-                                            rightButton={
-                                                <Button
-                                                    onClick={onConfirm}
-                                                    disabled={confirmDisabled || confirmLoading}
-                                                    loading={confirmLoading}
-                                                    color={confirmVariant === 'danger' ? 'danger' : 'primary'}
-                                                    variant="fill"
-                                                    size="large"
-                                                    style={{ width: '100%' }}
-                                                >
-                                                    {confirmText}
-                                                </Button>
-                                            }
-                                            leftButton={
-                                                <Button
-                                                    onClick={handleCancel}
-                                                    variant="weak"
-                                                    color="primary"
-                                                    size="large"
-                                                    style={{ width: '100%' }}
-                                                >
-                                                    {cancelText}
-                                                </Button>
-                                            }
-                                        />
-                                    ) : (
-                                        <BottomCTA.Single
-                                            fixed={false}
-                                            // @ts-expect-error - TDS BottomCTA might have slightly different prop names in type definition
-                                            onClick={onConfirm}
-                                            disabled={confirmDisabled || confirmLoading}
-                                            loading={confirmLoading}
-                                            color={confirmVariant === 'danger' ? 'danger' : 'primary'}
-                                            variant="fill"
-                                            size="large"
-                                        >
-                                            {confirmText}
-                                        </BottomCTA.Single>
-                                    )
+            <>
+                {trigger && React.cloneElement(trigger as React.ReactElement<{ onClick?: React.MouseEventHandler }>, {
+                    onClick: (e: React.MouseEvent) => {
+                        (trigger as React.ReactElement<{ onClick?: React.MouseEventHandler }>).props.onClick?.(e);
+                        internalOnOpenChange(true);
+                    }
+                })}
+                <Modal open={open} onOpenChange={(val: boolean) => internalOnOpenChange(val)}>
+                    <div
+                        className={cn(styles.dialogContent, className)}
+                    >
+                        <div className={styles.mainSection}>
+                            <div>
+                                <h2 style={{ fontSize: '1.125rem', fontWeight: 700, textAlign: 'center', marginBottom: '1rem' }}>{title || '알림'}</h2>
+                                {description && (
+                                    <p style={{ fontSize: '0.875rem', color: '#666', textAlign: 'center', marginBottom: '1rem' }}>
+                                        {description}
+                                    </p>
                                 )}
+                            </div>
+
+                            <ScrollArea
+                                className={cn(styles.contentWrapper, contentClassName)}
+                                useScrollFade={useScrollFade}
+                                onScroll={handleInternalScroll}
+                                viewportRef={externalScrollRef ?? null}
+                            >
+                                <div className={cn(styles.content, padding === "none" && styles.noPadding)}>
+                                    {children}
+                                </div>
+                            </ScrollArea>
+
+                            {hasActions && (
+                                <div className={styles.footer}>
+                                    {footer || (
+                                        showCancel ? (
+                                            <BottomCTA.Double
+                                                fixed={false}
+                                                rightButton={
+                                                    <Button
+                                                        onClick={onConfirm}
+                                                        disabled={confirmDisabled || confirmLoading}
+                                                        loading={confirmLoading}
+                                                        color={confirmVariant === 'danger' ? 'danger' : 'primary'}
+                                                        variant="fill"
+                                                        size="large"
+                                                        style={{ width: '100%' }}
+                                                    >
+                                                        {confirmText}
+                                                    </Button>
+                                                }
+                                                leftButton={
+                                                    <Button
+                                                        onClick={handleCancel}
+                                                        variant="weak"
+                                                        color="primary"
+                                                        size="large"
+                                                        style={{ width: '100%' }}
+                                                    >
+                                                        {cancelText}
+                                                    </Button>
+                                                }
+                                            />
+                                        ) : (
+                                            <BottomCTA.Single
+                                                fixed={false}
+                                                // @ts-expect-error - TDS BottomCTA might have slightly different prop names in type definition
+                                                onClick={onConfirm}
+                                                disabled={confirmDisabled || confirmLoading}
+                                                loading={confirmLoading}
+                                                color={confirmVariant === 'danger' ? 'danger' : 'primary'}
+                                                variant="fill"
+                                                size="large"
+                                            >
+                                                {confirmText}
+                                            </BottomCTA.Single>
+                                        )
+                                    )}
+                                </div>
+                            )}
+                        </div>
+
+                        {outerFooter && (
+                            <div className={styles.outerFooter}>
+                                {outerFooter}
                             </div>
                         )}
                     </div>
-
-                    {outerFooter && (
-                        <div className={styles.outerFooter}>
-                            {outerFooter}
-                        </div>
-                    )}
-                </DialogContent>
-            </Dialog>
+                </Modal>
+            </>
         );
     }
 

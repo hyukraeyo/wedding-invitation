@@ -10,7 +10,7 @@ import { TextField } from '@/components/ui/TextField';
 import { List, ListRow } from '@/components/ui/List';
 import { ImageUploader } from '@/components/common/ImageUploader';
 import { HeaderAction } from '@/components/common/HeaderAction';
-import { SampleList } from '@/components/ui/SampleList';
+import { SampleList } from '@/components/common/SampleList';
 import styles from './ClosingSection.module.scss';
 
 import type { SectionProps, SamplePhraseItem } from '@/types/builder';

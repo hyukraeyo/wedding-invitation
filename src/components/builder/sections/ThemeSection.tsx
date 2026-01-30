@@ -3,8 +3,8 @@ import { Check } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { BoardRow } from '@/components/ui/BoardRow';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
-import { Select } from '@/components/ui/Select';
+import { SegmentedControl } from '@/components/ui/SegmentedControl';
+import { MenuSelect } from '@/components/ui/MenuSelect';
 import { Switch } from '@/components/ui/Switch';
 import { List, ListRow } from '@/components/ui/List';
 import styles from './ThemeSection.module.scss';
@@ -22,8 +22,6 @@ const PRESET_COLORS = [
 const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
     const theme = useInvitationStore(useShallow(state => state.theme));
     const setTheme = useInvitationStore(state => state.setTheme);
-    const resolvePattern = (val: string) =>
-        val === 'flower-sm' ? 'flower-sm' : val === 'flower-lg' ? 'flower-lg' : 'none';
 
     return (
         <BoardRow
@@ -63,7 +61,7 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
                 <ListRow
                     title="Font"
                     contents={
-                        <Select
+                        <MenuSelect
                             value={theme.font}
                             options={[
                                 { label: 'Gowun Dodum (Default)', value: 'gowun-dodum' as ThemeFont },
@@ -77,7 +75,7 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
                                 { label: 'Serif', value: 'serif' as ThemeFont },
                                 { label: 'Sans', value: 'sans' as ThemeFont },
                             ]}
-                            onValueChange={(val) => setTheme({ font: val as ThemeFont })}
+                            onValueChange={(val: string) => setTheme({ font: val as ThemeFont })}
                         />
                     }
                 />
@@ -85,16 +83,21 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
                 <ListRow
                     title="Font scale"
                     contents={
-                        <Tabs
-                            value={String(theme.fontScale || 1)}
-                            onValueChange={(val) => setTheme({ fontScale: Number(val) })}
+                        <SegmentedControl
+                            alignment="fluid"
+                            value={String(theme.fontScale || '1')}
+                            onChange={(val: string) => setTheme({ fontScale: Number(val) })}
                         >
-                            <TabsList fluid>
-                                <TabsTrigger value="1">Default</TabsTrigger>
-                                <TabsTrigger value="1.1">Medium</TabsTrigger>
-                                <TabsTrigger value="1.2">Large</TabsTrigger>
-                            </TabsList>
-                        </Tabs>
+                            <SegmentedControl.Item value="1">
+                                Default
+                            </SegmentedControl.Item>
+                            <SegmentedControl.Item value="1.1">
+                                Medium
+                            </SegmentedControl.Item>
+                            <SegmentedControl.Item value="1.2">
+                                Large
+                            </SegmentedControl.Item>
+                        </SegmentedControl>
                     }
                 />
 
@@ -111,16 +114,21 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
                 <ListRow
                     title="Background pattern"
                     contents={
-                        <Tabs
+                        <SegmentedControl
+                            alignment="fluid"
                             value={theme.pattern || 'none'}
-                            onValueChange={(val) => setTheme({ pattern: resolvePattern(val) })}
+                            onChange={(val: string) => setTheme({ pattern: val as 'none' | 'flower-sm' | 'flower-lg' })}
                         >
-                            <TabsList fluid>
-                                <TabsTrigger value="none">None</TabsTrigger>
-                                <TabsTrigger value="flower-sm">Small floral</TabsTrigger>
-                                <TabsTrigger value="flower-lg">Large floral</TabsTrigger>
-                            </TabsList>
-                        </Tabs>
+                            <SegmentedControl.Item value="none">
+                                None
+                            </SegmentedControl.Item>
+                            <SegmentedControl.Item value="flower-sm">
+                                Small floral
+                            </SegmentedControl.Item>
+                            <SegmentedControl.Item value="flower-lg">
+                                Large floral
+                            </SegmentedControl.Item>
+                        </SegmentedControl>
                     }
                 />
 

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Select } from '@/components/ui/Select';
+import { MenuSelect } from '@/components/ui/MenuSelect';
 import { cn } from '@/lib/utils';
 // import useField removed
 import { Clock } from 'lucide-react';
@@ -102,7 +102,7 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
 
         const renderPeriod = () => (
             <div className={styles.periodSection}>
-                <Select
+                <MenuSelect
                     id={id}
                     value={hasValue ? period : ''}
                     onValueChange={(val: string) => handlePeriodChange(val as Period)}
@@ -116,7 +116,7 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
 
         const renderHour = () => (
             <div className={styles.hourSection}>
-                <Select
+                <MenuSelect
                     value={hasValue ? displayHour : ''}
                     onValueChange={handleHourChange}
                     options={hourOptions}
@@ -129,7 +129,7 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
 
         const renderMinute = () => (
             <div className={styles.minuteSection}>
-                <Select
+                <MenuSelect
                     value={hasValue ? m : ''}
                     onValueChange={handleMinuteChange}
                     options={minuteOptions}

@@ -10,12 +10,12 @@ const RichTextEditor = dynamic(() => import('@/components/ui/RichTextEditor').th
 import { ResponsiveModal } from '@/components/common/ResponsiveModal';
 
 import { InfoMessage } from '@/components/ui/InfoMessage';
-import { SampleList } from '@/components/ui/SampleList';
+import { SampleList } from '@/components/common/SampleList';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { TextField } from '@/components/ui/TextField';
 import { List, ListRow } from '@/components/ui/List';
 import { BoardRow } from '@/components/ui/BoardRow';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { HeaderAction } from '@/components/common/HeaderAction';
 import { ImageUploader } from '@/components/common/ImageUploader';
 import styles from './GreetingSection.module.scss';
@@ -173,16 +173,21 @@ export default function GreetingSection(props: SectionProps) {
                             title="이름 표기"
                             contents={
                                 <div className={styles.optionWrapper}>
-                                    <Tabs
+                                    <SegmentedControl
+                                        alignment="fluid"
                                         value={nameOptionValue}
-                                        onValueChange={handleNameOptionChange}
+                                        onChange={(val: string) => handleNameOptionChange(val)}
                                     >
-                                        <TabsList fluid>
-                                            <TabsTrigger value="bottom">하단 표기</TabsTrigger>
-                                            <TabsTrigger value="custom">직접 입력</TabsTrigger>
-                                            <TabsTrigger value="none">표시 안 함</TabsTrigger>
-                                        </TabsList>
-                                    </Tabs>
+                                        <SegmentedControl.Item value="bottom">
+                                            하단 표기
+                                        </SegmentedControl.Item>
+                                        <SegmentedControl.Item value="custom">
+                                            직접 입력
+                                        </SegmentedControl.Item>
+                                        <SegmentedControl.Item value="none">
+                                            표시 안 함
+                                        </SegmentedControl.Item>
+                                    </SegmentedControl>
 
                                     {enableFreeformNames && (
                                         <div className={styles.nameForm}>

@@ -6,12 +6,12 @@ import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { BoardRow } from '@/components/ui/BoardRow';
 import { TextField } from '@/components/ui/TextField';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { List, ListRow, ListFooter } from '@/components/ui/List';
 import { InfoMessage } from '@/components/ui/InfoMessage';
 import { ImageUploader } from '@/components/common/ImageUploader';
 import { HeaderAction } from '@/components/common/HeaderAction';
-import { SampleList } from '@/components/ui/SampleList';
+import { SampleList } from '@/components/common/SampleList';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
 import styles from './KakaoShareSection.module.scss';
@@ -75,18 +75,18 @@ export default function KakaoShareSection(props: SectionProps) {
                     <ListRow
                         title="사진 비율"
                         contents={
-                            <Tabs
-                                value={kakao.imageRatio}
-                                onValueChange={(val: string) => {
-                                    const nextRatio = val === 'landscape' ? 'landscape' : 'portrait';
-                                    setKakao({ imageRatio: nextRatio });
-                                }}
+                            <SegmentedControl
+                                alignment="fluid"
+                                value={kakao.imageRatio || 'landscape'}
+                                onChange={(val: string) => setKakao({ imageRatio: val as 'portrait' | 'landscape' })}
                             >
-                                <TabsList fluid>
-                                    <TabsTrigger value="portrait">세로형</TabsTrigger>
-                                    <TabsTrigger value="landscape">가로형</TabsTrigger>
-                                </TabsList>
-                            </Tabs>
+                                <SegmentedControl.Item value="portrait">
+                                    세로형
+                                </SegmentedControl.Item>
+                                <SegmentedControl.Item value="landscape">
+                                    가로형
+                                </SegmentedControl.Item>
+                            </SegmentedControl>
                         }
                     />
                     <ListFooter>
@@ -124,19 +124,21 @@ export default function KakaoShareSection(props: SectionProps) {
                     <ListRow
                         title="버튼 스타일"
                         contents={
-                            <Tabs
-                                value={kakao.buttonType}
-                                onValueChange={(val: string) => {
-                                    const nextType = val === 'rsvp' ? 'rsvp' : val === 'none' ? 'none' : 'location';
-                                    setKakao({ buttonType: nextType });
-                                }}
+                            <SegmentedControl
+                                alignment="fluid"
+                                value={kakao.buttonType || 'location'}
+                                onChange={(val: string) => setKakao({ buttonType: val as 'location' | 'rsvp' | 'none' })}
                             >
-                                <TabsList fluid>
-                                    <TabsTrigger value="location">위치 안내</TabsTrigger>
-                                    <TabsTrigger value="rsvp">참석 여부</TabsTrigger>
-                                    <TabsTrigger value="none">사용 안함</TabsTrigger>
-                                </TabsList>
-                            </Tabs>
+                                <SegmentedControl.Item value="location">
+                                    위치 안내
+                                </SegmentedControl.Item>
+                                <SegmentedControl.Item value="rsvp">
+                                    참석 여부
+                                </SegmentedControl.Item>
+                                <SegmentedControl.Item value="none">
+                                    사용 안함
+                                </SegmentedControl.Item>
+                            </SegmentedControl>
                         }
                     />
 

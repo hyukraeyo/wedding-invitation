@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useRef } from 'react';
 import Image from 'next/image';
 import { Trash2, UploadCloud, Banana } from 'lucide-react';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -194,18 +194,18 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
 
             {props.ratio && props.onRatioChange ? (
                 <div className={styles.ratioControl}>
-                    <Tabs
+                    <SegmentedControl
+                        alignment="fluid"
                         value={props.ratio}
-                        onValueChange={(val: string) => {
-                            const nextRatio = val === 'auto' ? 'auto' : 'fixed';
-                            props.onRatioChange?.(nextRatio);
-                        }}
+                        onChange={(val: string) => props.onRatioChange?.(val as 'fixed' | 'auto')}
                     >
-                        <TabsList fluid>
-                            <TabsTrigger value="fixed">고정 (기본)</TabsTrigger>
-                            <TabsTrigger value="auto">자동 (원본 비율)</TabsTrigger>
-                        </TabsList>
-                    </Tabs>
+                        <SegmentedControl.Item value="fixed">
+                            고정 (기본)
+                        </SegmentedControl.Item>
+                        <SegmentedControl.Item value="auto">
+                            자동 (원본 비율)
+                        </SegmentedControl.Item>
+                    </SegmentedControl>
                 </div>
             ) : null}
         </div>

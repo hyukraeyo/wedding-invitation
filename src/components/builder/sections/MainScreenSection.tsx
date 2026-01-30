@@ -5,7 +5,7 @@ import { Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { BoardRow } from '@/components/ui/BoardRow';
 import { HeaderAction } from '@/components/common/HeaderAction';
-import { SampleList } from '@/components/ui/SampleList';
+import { SampleList } from '@/components/common/SampleList';
 import type { SectionProps, SamplePhraseItem } from '@/types/builder';
 import { MAIN_TITLE_SAMPLES } from '@/constants/samples';
 import styles from './MainScreenSection.module.scss';

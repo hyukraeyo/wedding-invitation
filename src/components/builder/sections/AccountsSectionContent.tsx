@@ -4,9 +4,9 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { IconButton } from '@/components/ui/IconButton';
 import { Button as UIButton } from '@/components/ui/Button';
 import { TextField } from '@/components/ui/TextField';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { List, ListRow } from '@/components/ui/List';
-import { Select } from '@/components/ui/Select';
+import { MenuSelect } from '@/components/ui/MenuSelect';
 import styles from './AccountsSection.module.scss';
 import { cn } from '@/lib/utils';
 import dynamic from 'next/dynamic';
@@ -190,10 +190,10 @@ export default function AccountsSectionContent() {
                                     <div className={styles.accountBody}>
                                         <div className={styles.fieldRow}>
                                             <div className={styles.flex3}>
-                                                <Tabs
+                                                <SegmentedControl
                                                     value={acc.type}
-                                                    onValueChange={(val: string) => {
-                                                        const newType = val === 'bride' ? 'bride' : 'groom';
+                                                    onChange={(val: string) => {
+                                                        const newType = val as 'groom' | 'bride';
                                                         const newHolder = getHolderName(acc.relation, newType);
                                                         const updates: Record<string, string> = { type: newType };
                                                         if (newHolder) {
@@ -201,15 +201,18 @@ export default function AccountsSectionContent() {
                                                         }
                                                         handleUpdateAccount(acc.id, updates);
                                                     }}
+                                                    alignment="fluid"
                                                 >
-                                                    <TabsList fluid>
-                                                        <TabsTrigger value="groom">신랑측</TabsTrigger>
-                                                        <TabsTrigger value="bride">신부측</TabsTrigger>
-                                                    </TabsList>
-                                                </Tabs>
+                                                    <SegmentedControl.Item value="groom">
+                                                        신랑측
+                                                    </SegmentedControl.Item>
+                                                    <SegmentedControl.Item value="bride">
+                                                        신부측
+                                                    </SegmentedControl.Item>
+                                                </SegmentedControl>
                                             </div>
                                             <div className={styles.flex2}>
-                                                <Select
+                                                <MenuSelect
                                                     value={['본인', '아버지', '어머니'].includes(acc.relation) ? acc.relation : 'custom'}
                                                     options={[
                                                         { label: '본인', value: '본인' },
@@ -311,19 +314,21 @@ export default function AccountsSectionContent() {
             <ListRow
                 title="색상 모드"
                 contents={
-                    <Tabs
+                    <SegmentedControl
                         value={accountsColorMode}
-                        onValueChange={(val: string) => {
-                            const nextMode = val === 'subtle' ? 'subtle' : val === 'white' ? 'white' : 'accent';
-                            setAccountsColorMode(nextMode);
-                        }}
+                        onChange={(val: string) => setAccountsColorMode(val as 'accent' | 'subtle' | 'white')}
+                        alignment="fluid"
                     >
-                        <TabsList fluid>
-                            <TabsTrigger value="accent">강조</TabsTrigger>
-                            <TabsTrigger value="subtle">은은하게</TabsTrigger>
-                            <TabsTrigger value="white">화이트</TabsTrigger>
-                        </TabsList>
-                    </Tabs>
+                        <SegmentedControl.Item value="accent">
+                            강조
+                        </SegmentedControl.Item>
+                        <SegmentedControl.Item value="subtle">
+                            은은하게
+                        </SegmentedControl.Item>
+                        <SegmentedControl.Item value="white">
+                            화이트
+                        </SegmentedControl.Item>
+                    </SegmentedControl>
                 }
             />
         </List >

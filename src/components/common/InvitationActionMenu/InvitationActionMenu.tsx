@@ -1,12 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger
-} from '@/components/ui/DropdownMenu';
+import { Menu } from '@/components/ui/Menu';
 import {
     Share2,
     Edit3,
@@ -59,6 +54,11 @@ export const InvitationActionMenu: React.FC<InvitationActionMenuProps> = ({
     const [showRejectionModal, setShowRejectionModal] = useState(false);
     const [showShareModal, setShowShareModal] = useState(false);
     const [showEditConfirmModal, setShowEditConfirmModal] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+    // TDS Menu items have strict internal types; using typed wrappers for standard prop access
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const DropdownItem = Menu.DropdownItem as React.FC<any>;
 
     const REJECTION_LABEL = data?.kakaoShare?.buttonType === 'rsvp' ? '답장 거절 사유' : '청첩장 거절 사유';
 
@@ -89,107 +89,122 @@ export const InvitationActionMenu: React.FC<InvitationActionMenuProps> = ({
 
     return (
         <>
-            <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                    <IconButton
-                        variant="clear"
-                        iconSize={20}
-                        className={className}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                        }}
-                        aria-label="메뉴 열기"
-                        name=""
-                    >
-                        <MoreVertical size={20} />
-                    </IconButton>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                    align="end"
+            <Menu.Trigger
+                open={isMenuOpen}
+                onOpen={() => setIsMenuOpen(true)}
+                onClose={() => setIsMenuOpen(false)}
+                placement="bottom-end"
+                dropdown={
+                    <Menu.Dropdown>
+                        {!isApproved && !isRequesting && (
+                            <>
+                                <DropdownItem
+                                    onClick={() => {
+                                        setIsMenuOpen(false);
+                                        handleEditClick();
+                                    }}
+                                    left={<Edit3 size={16} />}
+                                >
+                                    수정하기
+                                </DropdownItem>
+
+                                <DropdownItem
+                                    onClick={() => {
+                                        setIsMenuOpen(false);
+                                        onRequestApproval(invitation);
+                                    }}
+                                    left={<Share2 size={16} style={{ color: 'var(--color-primary)' }} />}
+                                >
+                                    승인 신청
+                                </DropdownItem>
+                            </>
+                        )}
+
+                        {(isApproved || isRequesting) && (
+                            <>
+                                {!isRequesting && (
+                                    <DropdownItem
+                                        onClick={() => {
+                                            setIsMenuOpen(false);
+                                            setShowShareModal(true);
+                                        }}
+                                        left={<Share2 size={16} style={{ color: 'var(--color-primary)' }} />}
+                                    >
+                                        공유하기
+                                    </DropdownItem>
+                                )}
+                                {isRequesting && (
+                                    <DropdownItem
+                                        onClick={() => {
+                                            setIsMenuOpen(false);
+                                            onCancelRequest(invitation);
+                                        }}
+                                        left={<XCircle size={16} />}
+                                    >
+                                        신청 취소
+                                    </DropdownItem>
+                                )}
+                            </>
+                        )}
+
+                        {isAdmin && isApproved && (
+                            <DropdownItem
+                                onClick={() => {
+                                    setIsMenuOpen(false);
+                                    onRevokeApproval?.(invitation);
+                                }}
+                                left={<XCircle size={16} />}
+                            >
+                                승인 철회
+                            </DropdownItem>
+                        )}
+
+                        {isRejected && (
+                            <DropdownItem
+                                onClick={(e: React.MouseEvent) => {
+                                    setIsMenuOpen(false);
+                                    handleRejectionModalOpen(e.nativeEvent);
+                                }}
+                                left={<AlertCircle size={16} />}
+                            >
+                                {REJECTION_LABEL} 확인
+                            </DropdownItem>
+                        )}
+                        {!isRequesting && (
+                            <DropdownItem
+                                onClick={() => {
+                                    setIsMenuOpen(false);
+                                    setTimeout(() => onDelete(invitation), 0);
+                                }}
+                                style={{ color: '#EF4444' }}
+                                left={<Trash2 size={16} />}
+                            >
+                                삭제하기
+                            </DropdownItem>
+                        )}
+                        <DropdownItem
+                            disabled
+                            left={<Calendar size={14} />}
+                        >
+                            <span style={{ fontSize: '12px', color: '#999' }}>생성일 {formattedDate}</span>
+                        </DropdownItem>
+                    </Menu.Dropdown>
+                }
+            >
+                <IconButton
+                    variant="clear"
+                    iconSize={20}
+                    className={className}
                     onClick={(e) => {
+                        e.preventDefault();
                         e.stopPropagation();
                     }}
-                    style={{ minWidth: '160px' }}
+                    aria-label="메뉴 열기"
+                    name=""
                 >
-                    {!isApproved && !isRequesting && (
-                        <>
-                            <DropdownMenuItem
-                                onSelect={(e) => {
-                                    e.preventDefault();
-                                    handleEditClick();
-                                }}
-                            >
-                                <Edit3 size={16} className="menuIcon" /> 수정하기
-                            </DropdownMenuItem>
-
-                            <DropdownMenuItem
-                                onSelect={(e) => {
-                                    e.preventDefault();
-                                    onRequestApproval(invitation);
-                                }}
-                            >
-                                <Share2 size={16} className="accentMenuItem" /> 승인 신청
-                            </DropdownMenuItem>
-                        </>
-                    )}
-
-                    {(isApproved || isRequesting) && (
-                        <>
-                            {!isRequesting && (
-                                <DropdownMenuItem
-                                    onSelect={(e) => {
-                                        e.preventDefault();
-                                        setShowShareModal(true);
-                                    }}
-                                >
-                                    <Share2 size={16} className="accentMenuItem" /> 공유하기
-                                </DropdownMenuItem>
-                            )}
-                            {isRequesting && (
-                                <DropdownMenuItem
-                                    onSelect={(e) => {
-                                        e.preventDefault();
-                                        onCancelRequest(invitation);
-                                    }}
-                                >
-                                    <XCircle size={16} className="menuIcon" /> 신청 취소
-                                </DropdownMenuItem>
-                            )}
-                        </>
-                    )}
-
-                    {isAdmin && isApproved && (
-                        <DropdownMenuItem
-                            onSelect={(e) => {
-                                e.preventDefault();
-                                onRevokeApproval?.(invitation);
-                            }}
-                            className="accentMenuItem"
-                        >
-                            <XCircle size={16} className="menuIcon" /> 승인 철회
-                        </DropdownMenuItem>
-                    )}
-
-                    {isRejected && (
-                        <DropdownMenuItem onSelect={handleRejectionModalOpen}>
-                            <AlertCircle size={16} className="menuIcon" /> {REJECTION_LABEL} 확인
-                        </DropdownMenuItem>
-                    )}
-                    {!isRequesting && (
-                        <DropdownMenuItem
-                            onClick={() => setTimeout(() => onDelete(invitation), 0)}
-                            style={{ color: '#EF4444' }}
-                        >
-                            <Trash2 size={16} className="menuIcon" /> 삭제하기
-                        </DropdownMenuItem>
-                    )}
-                    <DropdownMenuItem className="dateMenuItem" disabled>
-                        <Calendar size={14} className="menuIcon" />
-                        <span className="dateLabel">생성일 {formattedDate}</span>
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
+                    <MoreVertical size={20} />
+                </IconButton>
+            </Menu.Trigger>
 
             {/* 공유 모달 */}
             <ShareModal

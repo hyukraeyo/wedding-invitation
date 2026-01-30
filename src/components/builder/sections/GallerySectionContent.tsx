@@ -7,7 +7,7 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { TextField } from '@/components/ui/TextField';
 import { List, ListRow } from '@/components/ui/List';
 import { Switch } from '@/components/ui/Switch';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { cn } from '@/lib/utils';
 import { isBlobUrl } from '@/lib/image';
 import {
@@ -360,19 +360,21 @@ export default React.memo(function GallerySectionContent() {
             <ListRow
                 title="전시 형태"
                 contents={
-                    <Tabs
+                    <SegmentedControl
+                        alignment="fluid"
                         value={galleryType}
-                        onValueChange={(val: string) => {
-                            const nextType = val === 'grid' ? 'grid' : val === 'thumbnail' ? 'thumbnail' : 'swiper';
-                            setGalleryType(nextType);
-                        }}
+                        onChange={(val: string) => setGalleryType(val as 'swiper' | 'grid' | 'thumbnail')}
                     >
-                        <TabsList fluid>
-                            <TabsTrigger value="swiper">스와이퍼</TabsTrigger>
-                            <TabsTrigger value="grid">그리드</TabsTrigger>
-                            <TabsTrigger value="thumbnail">리스트</TabsTrigger>
-                        </TabsList>
-                    </Tabs>
+                        <SegmentedControl.Item value="swiper">
+                            스와이퍼
+                        </SegmentedControl.Item>
+                        <SegmentedControl.Item value="grid">
+                            그리드
+                        </SegmentedControl.Item>
+                        <SegmentedControl.Item value="thumbnail">
+                            리스트
+                        </SegmentedControl.Item>
+                    </SegmentedControl>
                 }
             />
 

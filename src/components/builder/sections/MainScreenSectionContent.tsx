@@ -9,7 +9,7 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { TextField } from '@/components/ui/TextField';
 import { List, ListRow } from '@/components/ui/List';
 import { Switch } from '@/components/ui/Switch';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/Tabs';
+import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { ImageUploader } from '@/components/common/ImageUploader';
 import styles from './MainScreenSection.module.scss';
 import { cn } from '@/lib/utils';
@@ -64,12 +64,6 @@ export default function MainScreenSectionContent() {
     const [swiperProgress, setSwiperProgress] = React.useState<'start' | 'middle' | 'end'>('start');
     const updateMain = (data: Partial<typeof mainScreen>) => setMainScreen(data);
     const selectedPresetIndex = STYLE_PRESETS.findIndex(p => p.layout === mainScreen.layout);
-    const resolveThemeEffect = (val: string) =>
-        val === 'cherry-blossom' ? 'cherry-blossom' : val === 'snow' ? 'snow' : 'none';
-    const resolveImageShape = (val: string) =>
-        val === 'arch' ? 'arch' : val === 'oval' ? 'oval' : 'rect';
-    const resolveMainEffect = (val: string) =>
-        val === 'mist' ? 'mist' : val === 'ripple' ? 'ripple' : 'none';
 
     const handleSelectPreset = (preset: StylePreset, index: number) => {
         updateMain({
@@ -199,16 +193,21 @@ export default function MainScreenSectionContent() {
             <ListRow
                 title="흩날림 효과"
                 contents={
-                    <Tabs
+                    <SegmentedControl
+                        alignment="fluid"
                         value={theme.effect}
-                        onValueChange={(val) => setTheme({ effect: resolveThemeEffect(val) })}
+                        onChange={(val: string) => setTheme({ effect: val as 'none' | 'cherry-blossom' | 'snow' })}
                     >
-                        <TabsList fluid>
-                            <TabsTrigger value="none">없음</TabsTrigger>
-                            <TabsTrigger value="cherry-blossom">벚꽃</TabsTrigger>
-                            <TabsTrigger value="snow">눈내림</TabsTrigger>
-                        </TabsList>
-                    </Tabs>
+                        <SegmentedControl.Item value="none">
+                            없음
+                        </SegmentedControl.Item>
+                        <SegmentedControl.Item value="cherry-blossom">
+                            벚꽃
+                        </SegmentedControl.Item>
+                        <SegmentedControl.Item value="snow">
+                            눈내림
+                        </SegmentedControl.Item>
+                    </SegmentedControl>
                 }
             />
 
@@ -216,16 +215,21 @@ export default function MainScreenSectionContent() {
                 <ListRow
                     title="사진 형태"
                     contents={
-                        <Tabs
+                        <SegmentedControl
+                            alignment="fluid"
                             value={mainScreen.imageShape || 'rect'}
-                            onValueChange={(val) => updateMain({ imageShape: resolveImageShape(val) })}
+                            onChange={(val: string) => updateMain({ imageShape: val as 'rect' | 'arch' | 'oval' })}
                         >
-                            <TabsList fluid>
-                                <TabsTrigger value="rect">기본</TabsTrigger>
-                                <TabsTrigger value="arch">아치</TabsTrigger>
-                                <TabsTrigger value="oval">타원</TabsTrigger>
-                            </TabsList>
-                        </Tabs>
+                            <SegmentedControl.Item value="rect">
+                                기본
+                            </SegmentedControl.Item>
+                            <SegmentedControl.Item value="arch">
+                                아치
+                            </SegmentedControl.Item>
+                            <SegmentedControl.Item value="oval">
+                                타원
+                            </SegmentedControl.Item>
+                        </SegmentedControl>
                     }
                 />
             )}
@@ -233,16 +237,21 @@ export default function MainScreenSectionContent() {
             <ListRow
                 title="사진 효과"
                 contents={
-                    <Tabs
+                    <SegmentedControl
+                        alignment="fluid"
                         value={mainScreen.effect}
-                        onValueChange={(val) => updateMain({ effect: resolveMainEffect(val) })}
+                        onChange={(val: string) => updateMain({ effect: val as 'none' | 'mist' | 'ripple' })}
                     >
-                        <TabsList fluid>
-                            <TabsTrigger value="none">없음</TabsTrigger>
-                            <TabsTrigger value="mist">안개</TabsTrigger>
-                            <TabsTrigger value="ripple">물결</TabsTrigger>
-                        </TabsList>
-                    </Tabs>
+                        <SegmentedControl.Item value="none">
+                            없음
+                        </SegmentedControl.Item>
+                        <SegmentedControl.Item value="mist">
+                            안개
+                        </SegmentedControl.Item>
+                        <SegmentedControl.Item value="ripple">
+                            물결
+                        </SegmentedControl.Item>
+                    </SegmentedControl>
                 }
             />
 
