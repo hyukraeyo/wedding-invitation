@@ -42,6 +42,7 @@ const ModalContent = React.forwardRef<
         <DialogPrimitive.Content
             ref={ref}
             className={cn(styles.content, className)}
+            aria-describedby={props['aria-describedby'] || undefined}
             {...props}
         >
             {children}

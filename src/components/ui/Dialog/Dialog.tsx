@@ -34,7 +34,10 @@ export const ConfirmDialog = ({
         <Root open={!!open} {...(onOpenChange && { onOpenChange })}>
             <AlertDialogPrimitive.Portal>
                 <AlertDialogPrimitive.Overlay className={styles.overlay} />
-                <AlertDialogPrimitive.Content className={styles.content}>
+                <AlertDialogPrimitive.Content
+                    className={styles.content}
+                    {...(!description && { 'aria-describedby': undefined })}
+                >
                     {title && (
                         <AlertDialogPrimitive.Title className={styles.title}>
                             {title}
