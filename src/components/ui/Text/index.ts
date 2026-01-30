@@ -1,3 +1,3 @@
 'use client';
-export { Text } from '@toss/tds-mobile';
-export type { TextProps } from '@toss/tds-mobile';
+
+export * from './Text';

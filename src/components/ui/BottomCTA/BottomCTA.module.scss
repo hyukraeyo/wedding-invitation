@@ -1,0 +1,30 @@
+@use "../../../styles/variables" as v;
+
+.fixedBottom {
+  width: 100%;
+  padding: 16px;
+  background-color: v.$white;
+  box-sizing: border-box;
+  
+  &.fixed {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+    
+    // Support for safe area in mobile
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    
+    // When inside a container with max-width
+    max-width: v.$canvas-max-width;
+    margin: 0 auto;
+  }
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}

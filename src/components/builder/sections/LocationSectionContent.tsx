@@ -6,7 +6,6 @@ import { Search } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { TextField } from '@/components/ui/TextField';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
-import { List, ListRow } from '@/components/ui/List';
 import { Switch } from '@/components/ui/Switch';
 import { PhoneField } from '@/components/common/PhoneField';
 import styles from './LocationSection.module.scss';
@@ -129,181 +128,167 @@ export default function LocationSectionContent() {
     return (
         <>
             <KakaoSdkLoader onReady={() => setIsKakaoReady(true)} />
-            <List>
-                <ListRow
-                    contents={
-                        <TextField
-                            label="부제목"
-                            variant="line"
-                            placeholder="예: LOCATION"
-                            value={locationSubtitle}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationSubtitle(e.target.value)}
-                        />
-                    }
-                />
-                <ListRow
-                    contents={
-                        <TextField
-                            label="제목"
-                            variant="line"
-                            placeholder="예: 바나나홀"
-                            value={locationTitle}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationTitle(e.target.value)}
-                        />
-                    }
-                />
+            <div className={styles.container}>
+                <div className={styles.optionItem}>
+                    <TextField
+                        label="부제목"
+                        variant="line"
+                        placeholder="예: LOCATION"
+                        value={locationSubtitle}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationSubtitle(e.target.value)}
+                    />
+                </div>
+                <div className={styles.optionItem}>
+                    <TextField
+                        label="제목"
+                        variant="line"
+                        placeholder="예: 바나나홀"
+                        value={locationTitle}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationTitle(e.target.value)}
+                    />
+                </div>
 
-                <ListRow
-                    title="주소"
-                    contents={
-                        <div
-                            onClick={handleAddressSearch}
-                            className={styles.addressButton}
-                        >
-                            <span className={cn(
-                                styles.addressText,
-                                address ? styles.addressTextFilled : styles.addressTextPlaceholder
-                            )}>
-                                {address || "주소를 검색해 주세요"}
+                <div className={styles.optionItem}>
+                    <div className={styles.rowTitle}>주소</div>
+                    <div
+                        onClick={handleAddressSearch}
+                        className={styles.addressButton}
+                    >
+                        <span className={cn(
+                            styles.addressText,
+                            address ? styles.addressTextFilled : styles.addressTextPlaceholder
+                        )}>
+                            {address || "주소를 검색해 주세요"}
+                        </span>
+                        <Search size={18} className={styles.searchIcon} />
+                    </div>
+                </div>
+
+                <div className={styles.optionItem}>
+                    <TextField
+                        label="예식 장소명"
+                        variant="line"
+                        type="text"
+                        placeholder="예: 바나나 웨딩홀"
+                        value={location}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocation(e.target.value)}
+                    />
+                </div>
+
+                <div className={styles.optionItem}>
+                    <TextField
+                        label="층/호수"
+                        variant="line"
+                        type="text"
+                        placeholder="예: 3층 그랜드홀"
+                        value={detailAddress}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDetailAddress(e.target.value)}
+                    />
+                </div>
+
+                <div className={styles.optionItem}>
+                    <div className={styles.rowTitle}>연락처</div>
+                    <PhoneField
+                        variant="line"
+                        placeholder="예: 02-000-0000"
+                        value={locationContact}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationContact(e.target.value)}
+                    />
+                </div>
+
+                <div className={styles.optionItem}>
+                    <div className={styles.rowTitle}>지도 종류</div>
+                    <SegmentedControl
+                        alignment="fluid"
+                        value={mapType}
+                        onChange={(val: string) => setMapType(val as 'naver' | 'kakao')}
+                    >
+                        <SegmentedControl.Item value="naver">
+                            <span className={styles.itemContent} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                                <NaverIcon size={18} />
+                                <span>네이버</span>
                             </span>
-                            <Search size={18} className={styles.searchIcon} />
-                        </div>
-                    }
-                />
+                        </SegmentedControl.Item>
+                        <SegmentedControl.Item value="kakao">
+                            <span className={styles.itemContent} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                                <KakaoIcon size={18} />
+                                <span>카카오</span>
+                            </span>
+                        </SegmentedControl.Item>
+                    </SegmentedControl>
+                </div>
 
-                <ListRow
-                    contents={
-                        <TextField
-                            label="예식 장소명"
-                            variant="line"
-                            type="text"
-                            placeholder="예: 바나나 웨딩홀"
-                            value={location}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocation(e.target.value)}
-                        />
-                    }
-                />
-
-                <ListRow
-                    contents={
-                        <TextField
-                            label="층/호수"
-                            variant="line"
-                            type="text"
-                            placeholder="예: 3층 그랜드홀"
-                            value={detailAddress}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDetailAddress(e.target.value)}
-                        />
-                    }
-                />
-                <ListRow
-                    title="연락처"
-                    contents={
-                        <PhoneField
-                            variant="line"
-                            placeholder="예: 02-000-0000"
-                            value={locationContact}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationContact(e.target.value)}
-                        />
-                    }
-                />
-
-                <ListRow
-                    title="지도 종류"
-                    contents={
-                        <SegmentedControl
-                            alignment="fluid"
-                            value={mapType}
-                            onChange={(val: string) => setMapType(val as 'naver' | 'kakao')}
-                        >
-                            <SegmentedControl.Item value="naver">
-                                <span className={styles.itemContent} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                                    <NaverIcon size={18} />
-                                    <span>네이버</span>
-                                </span>
-                            </SegmentedControl.Item>
-                            <SegmentedControl.Item value="kakao">
-                                <span className={styles.itemContent} style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                                    <KakaoIcon size={18} />
-                                    <span>카카오</span>
-                                </span>
-                            </SegmentedControl.Item>
-                        </SegmentedControl>
-                    }
-                />
-                <ListRow
-                    title="지도 표시"
-                    right={
+                <div className={styles.optionItem}>
+                    <div className={styles.rowTitle}>지도 표시</div>
+                    <div className={styles.rowRight}>
                         <Switch
                             checked={showMap}
                             onCheckedChange={(checked) => setShowMap(checked)}
                         />
-                    }
-                />
-                <ListRow
-                    title="지도 고정"
-                    right={
+                    </div>
+                </div>
+
+                <div className={styles.optionItem}>
+                    <div className={styles.rowTitle}>지도 고정</div>
+                    <div className={styles.rowRight}>
                         <Switch
                             checked={lockMap}
                             onCheckedChange={(checked) => setLockMap(checked)}
                         />
-                    }
-                />
-                <ListRow
-                    title="네비게이션 표시"
-                    right={
+                    </div>
+                </div>
+
+                <div className={styles.optionItem}>
+                    <div className={styles.rowTitle}>네비게이션 표시</div>
+                    <div className={styles.rowRight}>
                         <Switch
                             checked={showNavigation}
                             onCheckedChange={(checked) => setShowNavigation(checked)}
                         />
-                    }
-                />
+                    </div>
+                </div>
 
-                <ListRow
-                    title="지도 높이"
-                    contents={
-                        <SegmentedControl
-                            alignment="fluid"
-                            value={mapHeight}
-                            onChange={(val: string) => setMapHeight(val as 'default' | 'expanded')}
-                        >
-                            <SegmentedControl.Item value="default">
-                                기본
-                            </SegmentedControl.Item>
-                            <SegmentedControl.Item value="expanded">
-                                확장
-                            </SegmentedControl.Item>
-                        </SegmentedControl>
-                    }
-                />
+                <div className={styles.optionItem}>
+                    <div className={styles.rowTitle}>지도 높이</div>
+                    <SegmentedControl
+                        alignment="fluid"
+                        value={mapHeight}
+                        onChange={(val: string) => setMapHeight(val as 'default' | 'expanded')}
+                    >
+                        <SegmentedControl.Item value="default">
+                            기본
+                        </SegmentedControl.Item>
+                        <SegmentedControl.Item value="expanded">
+                            확장
+                        </SegmentedControl.Item>
+                    </SegmentedControl>
+                </div>
 
-                <ListRow
-                    title="줌 레벨"
-                    contents={
-                        <SegmentedControl
-                            alignment="fluid"
-                            value={String(mapZoom)}
-                            onChange={(val: string) => setMapZoom(Number(val))}
-                        >
-                            <SegmentedControl.Item value="15">
-                                15
-                            </SegmentedControl.Item>
-                            <SegmentedControl.Item value="16">
-                                16
-                            </SegmentedControl.Item>
-                            <SegmentedControl.Item value="17">
-                                17
-                            </SegmentedControl.Item>
-                            <SegmentedControl.Item value="18">
-                                18
-                            </SegmentedControl.Item>
-                            <SegmentedControl.Item value="19">
-                                19
-                            </SegmentedControl.Item>
-                        </SegmentedControl>
-                    }
-                />
-            </List>
+                <div className={styles.optionItem}>
+                    <div className={styles.rowTitle}>줌 레벨</div>
+                    <SegmentedControl
+                        alignment="fluid"
+                        value={String(mapZoom)}
+                        onChange={(val: string) => setMapZoom(Number(val))}
+                    >
+                        <SegmentedControl.Item value="15">
+                            15
+                        </SegmentedControl.Item>
+                        <SegmentedControl.Item value="16">
+                            16
+                        </SegmentedControl.Item>
+                        <SegmentedControl.Item value="17">
+                            17
+                        </SegmentedControl.Item>
+                        <SegmentedControl.Item value="18">
+                            18
+                        </SegmentedControl.Item>
+                        <SegmentedControl.Item value="19">
+                            19
+                        </SegmentedControl.Item>
+                    </SegmentedControl>
+                </div>
+            </div>
 
             <Modal open={isSearchOpen} onOpenChange={setIsSearchOpen}>
                 <Modal.Overlay />

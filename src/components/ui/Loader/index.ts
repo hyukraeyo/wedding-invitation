@@ -1,2 +1,3 @@
 'use client';
-export { Loader, LoaderAnimation } from '@toss/tds-mobile';
+
+export * from './Loader';

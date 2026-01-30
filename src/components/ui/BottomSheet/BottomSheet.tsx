@@ -1,31 +1,64 @@
 'use client';
 
-import React from 'react';
-import { BottomSheet as TDSBottomSheet, BottomSheetProps as TDSBottomSheetProps } from '@toss/tds-mobile';
-import styles from './BottomSheet.module.scss';
+import * as React from 'react';
+import { Drawer } from 'vaul';
+import { clsx } from 'clsx';
+import s from './BottomSheet.module.scss';
 
-interface BottomSheetBodyProps {
+export interface BottomSheetProps {
+    open?: boolean;
+    onClose?: () => void;
+    onOpenChange?: (open: boolean) => void;
     children: React.ReactNode;
-    className?: string | undefined;
+    header?: React.ReactNode;
+    cta?: React.ReactNode;
+    className?: string;
 }
 
-const BottomSheetBody = ({ children, className }: BottomSheetBodyProps) => (
-    <div className={`${styles.body} ${className || ''}`}>
+const BottomSheetMain = ({
+    open,
+    onClose,
+    onOpenChange,
+    children,
+    header,
+    cta,
+    className
+}: BottomSheetProps) => {
+    return (
+        <Drawer.Root
+            open={open as any}
+            onOpenChange={(val) => {
+                onOpenChange?.(val);
+                if (!val) onClose?.();
+            }}
+        >
+            <Drawer.Portal>
+                <Drawer.Overlay className={s.overlay} />
+                <Drawer.Content className={clsx(s.content, className as any)}>
+                    <div className={s.handle} />
+                    {header && (
+                        <div className={s.header}>
+                            <Drawer.Title className={s.title}>{header}</Drawer.Title>
+                        </div>
+                    )}
+                    {children}
+                    {cta && (
+                        <div className={s.footer}>
+                            {cta}
+                        </div>
+                    )}
+                </Drawer.Content>
+            </Drawer.Portal>
+        </Drawer.Root>
+    );
+};
+
+const BottomSheetBody = ({ children, className }: { children: React.ReactNode; className?: string }) => (
+    <div className={clsx(s.body, className)}>
         {children}
     </div>
 );
 
-const BottomSheetMain = (props: TDSBottomSheetProps) => {
-    return <TDSBottomSheet {...props} />;
-};
-
-BottomSheetMain.displayName = 'BottomSheet';
-
-export const BottomSheet = Object.assign(
-    BottomSheetMain,
-    {
-        Body: BottomSheetBody,
-    }
-);
-
-BottomSheetBody.displayName = 'BottomSheet.Body';
+export const BottomSheet = Object.assign(BottomSheetMain, {
+    Body: BottomSheetBody,
+});

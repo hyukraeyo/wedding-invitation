@@ -5,7 +5,6 @@ import { InfoMessage } from '@/components/ui/InfoMessage';
 import { IconButton } from '@/components/ui/IconButton';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { TextField } from '@/components/ui/TextField';
-import { List, ListRow } from '@/components/ui/List';
 import { Switch } from '@/components/ui/Switch';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { cn } from '@/lib/utils';
@@ -246,186 +245,178 @@ export default React.memo(function GallerySectionContent() {
     );
 
     return (
-        <List>
-            <ListRow
-                contents={
-                    <TextField
-                        variant="line"
-                        label="소제목"
-                        type="text"
-                        value={gallerySubtitle}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGallerySubtitle(e.target.value)}
-                        placeholder="예: GALLERY"
-                    />
-                }
-            />
-            <ListRow
-                contents={
-                    <TextField
-                        variant="line"
-                        label="제목"
-                        type="text"
-                        value={galleryTitle}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGalleryTitle(e.target.value)}
-                        placeholder="예: 웨딩 갤러리"
-                    />
-                }
-            />
+        <div className={styles.container}>
+            <div className={styles.optionItem}>
+                <TextField
+                    variant="line"
+                    label="소제목"
+                    type="text"
+                    value={gallerySubtitle}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGallerySubtitle(e.target.value)}
+                    placeholder="예: GALLERY"
+                />
+            </div>
+            <div className={styles.optionItem}>
+                <TextField
+                    variant="line"
+                    label="제목"
+                    type="text"
+                    value={galleryTitle}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGalleryTitle(e.target.value)}
+                    placeholder="예: 웨딩 갤러리"
+                />
+            </div>
 
-            <ListRow
-                title="사진 관리"
-                contents={
-                    <div className={styles.galleryManager}>
-                        <div className={styles.counter}>
-                            <span className={styles.labelText}>현재 등록된 사진</span>
-                            <span className={styles.countText}>
-                                <span style={{ color: accentColor }}>{gallery.length}</span>
-                                <span className={styles.countTotal}> / 10</span>
-                            </span>
-                        </div>
-                        <DndContext
-                            sensors={sensors}
-                            collisionDetection={closestCenter}
-                            onDragStart={handleDragStart}
-                            onDragEnd={handleDragEnd}
+            <div className={styles.optionItem}>
+                <div className={styles.rowTitle}>사진 관리</div>
+                <div className={styles.galleryManager}>
+                    <div className={styles.counter}>
+                        <span className={styles.labelText}>현재 등록된 사진</span>
+                        <span className={styles.countText}>
+                            <span style={{ color: accentColor }}>{gallery.length}</span>
+                            <span className={styles.countTotal}> / 10</span>
+                        </span>
+                    </div>
+                    <DndContext
+                        sensors={sensors}
+                        collisionDetection={closestCenter}
+                        onDragStart={handleDragStart}
+                        onDragEnd={handleDragEnd}
+                    >
+                        <SortableContext
+                            items={gallery.map(g => g.id)}
+                            strategy={rectSortingStrategy}
                         >
-                            <SortableContext
-                                items={gallery.map(g => g.id)}
-                                strategy={rectSortingStrategy}
-                            >
-                                <div className={styles.grid}>
-                                    {gallery.map((item, index) => (
-                                        <SortableItem
-                                            key={item.id}
-                                            id={item.id}
-                                            index={index}
-                                            url={item.url}
-                                            onRemove={handleRemove}
-                                        />
-                                    ))}
-                                    {gallery.length < 10 && (
-                                        <div className={styles.uploadItem} onClick={handleUploadClick}>
-                                            <Plus className={styles.uploadIcon} />
-                                            <span className={styles.uploadText}>추가</span>
-                                            <input
-                                                type="file"
-                                                ref={fileInputRef}
-                                                multiple
-                                                accept="image/*"
-                                                className={styles.hiddenInput}
-                                                onChange={handleFileChange}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                            </SortableContext>
-
-                            <Modal
-                                open={isLimitModalOpen}
-                                onOpenChange={setIsLimitModalOpen}
-                            >
-                                <Modal.Overlay />
-                                <Modal.Content>
-                                    <Modal.Header title="알림" />
-                                    <Modal.Body className={styles.centerBody}>
-                                        <p style={{ fontSize: '1rem', color: '#666' }}>
-                                            사진은 최대 10장까지 등록 가능합니다.
-                                        </p>
-                                    </Modal.Body>
-                                    <Modal.Footer className={styles.paddedFooter}>
-                                        <Button
-                                            variant="fill"
-                                            color="primary"
-                                            size="lg"
-                                            style={{ width: '100%' }}
-                                            onClick={() => setIsLimitModalOpen(false)}
-                                        >
-                                            확인
-                                        </Button>
-                                    </Modal.Footer>
-                                </Modal.Content>
-                            </Modal>
-
-                            <DragOverlay dropAnimation={{
-                                sideEffects: defaultDropAnimationSideEffects({
-                                    styles: {
-                                        active: { opacity: '0.4' }
-                                    }
-                                })
-                            }}>
-                                {activeId && activeImage ? (
-                                    <div className={styles.dragOverlayItem}>
-                                        <Image
-                                            src={activeImage.url}
-                                            alt=""
-                                            fill
-                                            unoptimized
-                                            className={styles.image}
+                            <div className={styles.grid}>
+                                {gallery.map((item, index) => (
+                                    <SortableItem
+                                        key={item.id}
+                                        id={item.id}
+                                        index={index}
+                                        url={item.url}
+                                        onRemove={handleRemove}
+                                    />
+                                ))}
+                                {gallery.length < 10 && (
+                                    <div className={styles.uploadItem} onClick={handleUploadClick}>
+                                        <Plus className={styles.uploadIcon} />
+                                        <span className={styles.uploadText}>추가</span>
+                                        <input
+                                            type="file"
+                                            ref={fileInputRef}
+                                            multiple
+                                            accept="image/*"
+                                            className={styles.hiddenInput}
+                                            onChange={handleFileChange}
                                         />
                                     </div>
-                                ) : null}
-                            </DragOverlay>
-                        </DndContext>
+                                )}
+                            </div>
+                        </SortableContext>
 
-                        <InfoMessage>
-                            사진을 길게 눌러 순서를 변경할 수 있습니다. (첫 번째 사진이 대표 사진)
-                        </InfoMessage>
-                    </div>
-                }
-            />
+                        <Modal
+                            open={isLimitModalOpen}
+                            onOpenChange={setIsLimitModalOpen}
+                        >
+                            <Modal.Overlay />
+                            <Modal.Content>
+                                <Modal.Header title="알림" />
+                                <Modal.Body className={styles.centerBody}>
+                                    <p style={{ fontSize: '1rem', color: '#666' }}>
+                                        사진은 최대 10장까지 등록 가능합니다.
+                                    </p>
+                                </Modal.Body>
+                                <Modal.Footer className={styles.paddedFooter}>
+                                    <Button
+                                        variant="fill"
+                                        color="primary"
+                                        size="lg"
+                                        style={{ width: '100%' }}
+                                        onClick={() => setIsLimitModalOpen(false)}
+                                    >
+                                        확인
+                                    </Button>
+                                </Modal.Footer>
+                            </Modal.Content>
+                        </Modal>
 
-            <ListRow
-                title="전시 형태"
-                contents={
-                    <SegmentedControl
-                        alignment="fluid"
-                        value={galleryType}
-                        onChange={(val: string) => setGalleryType(val as 'swiper' | 'grid' | 'thumbnail')}
-                    >
-                        <SegmentedControl.Item value="swiper">
-                            스와이퍼
-                        </SegmentedControl.Item>
-                        <SegmentedControl.Item value="grid">
-                            그리드
-                        </SegmentedControl.Item>
-                        <SegmentedControl.Item value="thumbnail">
-                            리스트
-                        </SegmentedControl.Item>
-                    </SegmentedControl>
-                }
-            />
+                        <DragOverlay dropAnimation={{
+                            sideEffects: defaultDropAnimationSideEffects({
+                                styles: {
+                                    active: { opacity: '0.4' }
+                                }
+                            })
+                        }}>
+                            {activeId && activeImage ? (
+                                <div className={styles.dragOverlayItem}>
+                                    <Image
+                                        src={activeImage.url}
+                                        alt=""
+                                        fill
+                                        unoptimized
+                                        className={styles.image}
+                                    />
+                                </div>
+                            ) : null}
+                        </DragOverlay>
+                    </DndContext>
 
-            <ListRow
-                title="확대 보기 (팝업)"
-                right={
+                    <InfoMessage>
+                        사진을 길게 눌러 순서를 변경할 수 있습니다. (첫 번째 사진이 대표 사진)
+                    </InfoMessage>
+                </div>
+            </div>
+
+            <div className={styles.optionItem}>
+                <div className={styles.rowTitle}>전시 형태</div>
+                <SegmentedControl
+                    alignment="fluid"
+                    value={galleryType}
+                    onChange={(val: string) => setGalleryType(val as 'swiper' | 'grid' | 'thumbnail')}
+                >
+                    <SegmentedControl.Item value="swiper">
+                        스와이퍼
+                    </SegmentedControl.Item>
+                    <SegmentedControl.Item value="grid">
+                        그리드
+                    </SegmentedControl.Item>
+                    <SegmentedControl.Item value="thumbnail">
+                        리스트
+                    </SegmentedControl.Item>
+                </SegmentedControl>
+            </div>
+
+            <div className={styles.optionItem}>
+                <div className={styles.rowTitle}>확대 보기 (팝업)</div>
+                <div className={styles.rowRight}>
                     <Switch
                         checked={galleryPopup}
                         onCheckedChange={(checked) => setGalleryPopup(checked)}
                     />
-                }
-            />
+                </div>
+            </div>
             {galleryType === 'swiper' ? (
                 <>
-                    <ListRow
-                        title="자동 재생"
-                        right={
+                    <div className={styles.optionItem}>
+                        <div className={styles.rowTitle}>자동 재생</div>
+                        <div className={styles.rowRight}>
                             <Switch
                                 checked={galleryAutoplay}
                                 onCheckedChange={(checked) => setGalleryAutoplay(checked)}
                             />
-                        }
-                    />
-                    <ListRow
-                        title="페이드 효과"
-                        right={
+                        </div>
+                    </div>
+                    <div className={styles.optionItem}>
+                        <div className={styles.rowTitle}>페이드 효과</div>
+                        <div className={styles.rowRight}>
                             <Switch
                                 checked={galleryFade}
                                 onCheckedChange={(checked) => setGalleryFade(checked)}
                             />
-                        }
-                    />
+                        </div>
+                    </div>
                 </>
             ) : null}
-        </List>
+        </div>
     );
 });

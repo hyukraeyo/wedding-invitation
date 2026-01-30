@@ -8,7 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import type { User } from 'next-auth';
-import { IconButton, Top, Modal, Flex, Box } from '@/components/ui';
+import { IconButton, Modal, Flex, Box } from '@/components/ui';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { useShallow } from 'zustand/react/shallow';
@@ -177,22 +177,21 @@ export default function Header() {
 
     return (
         <>
-            <Top
-                className={cn(styles.header, "view-transition-header")}
-                title={<Logo />}
-                right={
-                    <HeaderActions
-                        user={user}
-                        authLoading={authLoading}
-                        isLoading={isLoading}
-                        isUploading={isUploading}
-                        notificationCount={notificationCount}
-                        onLogin={handleLogin}
-                        onSaveAction={handleSaveAction}
-                        showSave={!!onSave || pathname.startsWith('/builder')}
-                    />
-                }
-            />
+            <header className={cn(styles.header, "view-transition-header")}>
+                <div className={styles.logoWrapper}>
+                    <Logo />
+                </div>
+                <HeaderActions
+                    user={user}
+                    authLoading={authLoading}
+                    isLoading={isLoading}
+                    isUploading={isUploading}
+                    notificationCount={notificationCount}
+                    onLogin={handleLogin}
+                    onSaveAction={handleSaveAction}
+                    showSave={!!onSave || pathname.startsWith('/builder')}
+                />
+            </header>
             <Modal open={showResetDialog} onOpenChange={setShowResetDialog}>
                 <Modal.Overlay />
                 <Modal.Content>

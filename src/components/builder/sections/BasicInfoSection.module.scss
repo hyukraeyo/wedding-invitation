@@ -2,6 +2,10 @@
 @use "../../../styles/builder" as b;
 
 
+.container {
+  padding: 16px 24px;
+}
+
 .formGroup {
   @include b.section-form-group;
 }

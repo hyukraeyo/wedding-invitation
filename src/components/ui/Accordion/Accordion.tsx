@@ -40,7 +40,7 @@ const AccordionTrigger = React.forwardRef<
             className={clsx(s.Trigger, className)}
             {...props}
         >
-            {children}
+            <div className={s.TriggerContent}>{children}</div>
             <ChevronDown className={s.Chevron} aria-hidden />
         </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
@@ -61,4 +61,37 @@ const AccordionContent = React.forwardRef<
 ));
 AccordionContent.displayName = AccordionPrimitive.Content.displayName;
 
-export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
+/**
+ * SectionAccordion - A wrapper for builder sections that replaces BoardRow
+ */
+export interface SectionAccordionProps {
+    title: React.ReactNode;
+    value: string;
+    isOpen?: boolean;
+    onToggle?: (isOpen: boolean) => void;
+    children?: React.ReactNode;
+    className?: string;
+}
+
+const SectionAccordion = ({ title, value, isOpen, onToggle, children, className }: SectionAccordionProps) => {
+    return (
+        <Accordion
+            type="single"
+            collapsible
+            value={isOpen ? value : ''}
+            onValueChange={(v) => onToggle?.(v === value)}
+            className={className}
+        >
+            <AccordionItem value={value} className={s.SectionItem}>
+                <AccordionTrigger className={s.SectionTrigger}>
+                    {title}
+                </AccordionTrigger>
+                <AccordionContent className={s.SectionContent}>
+                    {children}
+                </AccordionContent>
+            </AccordionItem>
+        </Accordion>
+    );
+};
+
+export { Accordion, AccordionItem, AccordionTrigger, AccordionContent, SectionAccordion };

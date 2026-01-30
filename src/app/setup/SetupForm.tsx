@@ -291,10 +291,6 @@ const SetupForm = () => {
                 {isStepValid() && (
                     <BottomCTA.Single
                         fixed
-                        background="none"
-                        fixedAboveKeyboard={true}
-                        showAfterDelay={{ animation: 'slide', delay: 0 }}
-                        // @ts-expect-error - BottomCTA.Single typing issue
                         onClick={() => handleNext()}
                     >
                         {currentStep < 3 ? (

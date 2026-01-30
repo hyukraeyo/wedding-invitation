@@ -1,8 +1,8 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
-import { BoardRow } from '@/components/ui/BoardRow';
-import type { SectionProps } from '@/types/builder';
+import { SectionAccordion } from '@/components/ui/Accordion';
 import styles from './LocationSection.module.scss';
+import type { SectionProps } from '@/types/builder';
 
 const LocationSectionContent = dynamic(() => import('./LocationSectionContent'), {
     loading: () => (
@@ -15,15 +15,14 @@ const LocationSectionContent = dynamic(() => import('./LocationSectionContent'),
 
 const LocationSection = React.memo<SectionProps>(function LocationSection(props) {
     return (
-        <BoardRow
+        <SectionAccordion
             title="예식 장소"
-            isOpened={props.isOpen}
-            onOpen={() => props.onToggle?.(true)}
-            onClose={() => props.onToggle?.(false)}
-            icon={<BoardRow.ArrowIcon />}
+            value="location"
+            isOpen={props.isOpen}
+            onToggle={props.onToggle}
         >
             {props.isOpen ? <LocationSectionContent /> : null}
-        </BoardRow>
+        </SectionAccordion>
     );
 });
 

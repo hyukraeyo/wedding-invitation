@@ -7,16 +7,10 @@ const RichTextEditor = dynamic(() => import('@/components/ui/RichTextEditor').th
     loading: () => <div style={{ height: '160px', width: '100%', backgroundColor: 'rgba(0,0,0,0.03)', borderRadius: '8px', animation: 'pulse 2s infinite' }} />
 });
 
-import { Modal } from '@/components/ui/Modal';
-import { BottomSheet } from '@/components/ui/BottomSheet';
-import { useMediaQuery } from '@/hooks/use-media-query';
-
 import { InfoMessage } from '@/components/ui/InfoMessage';
 import { SampleList } from '@/components/common/SampleList';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { TextField } from '@/components/ui/TextField';
-import { List, ListRow, ListHeader } from '@/components/ui/List';
-import { BoardRow } from '@/components/ui/BoardRow';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { Button } from '@/components/ui/Button';
 import { BottomCTA } from '@/components/ui/BottomCTA';
@@ -25,6 +19,10 @@ import styles from './GreetingSection.module.scss';
 import { useShallow } from 'zustand/react/shallow';
 import type { SectionProps, SamplePhraseItem } from '@/types/builder';
 import { GREETING_SAMPLES } from '@/constants/samples';
+import { SectionAccordion } from '@/components/ui/Accordion';
+import { Modal } from '@/components/ui/Modal';
+import { BottomSheet } from '@/components/ui/BottomSheet';
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 export default function GreetingSection(props: SectionProps) {
     const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -101,132 +99,119 @@ export default function GreetingSection(props: SectionProps) {
 
     return (
         <>
-            <BoardRow
+            <SectionAccordion
                 title="인사말"
-                isOpened={props.isOpen}
-                onOpen={() => props.onToggle?.(true)}
-                onClose={() => props.onToggle?.(false)}
-                icon={<BoardRow.ArrowIcon />}
+                value="greeting"
+                isOpen={props.isOpen}
+                onToggle={props.onToggle}
             >
-                <List>
-                    <ListHeader
-                        title="추천 문구"
-                        right={
-                            <Button
-                                type="button"
-                                variant="weak"
-                                size="sm"
-                                onClick={(e) => {
-                                    e.stopPropagation();
-                                    setIsSampleModalOpen(true);
-                                }}
+                <div className={styles.container}>
+                    <div style={{ padding: '0 0 12px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ fontSize: '13px', fontWeight: 600 }}>추천 문구</span>
+                        <Button
+                            type="button"
+                            variant="weak"
+                            size="sm"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsSampleModalOpen(true);
+                            }}
+                        >
+                            <Sparkles size={14} style={{ marginRight: '4px' }} />
+                            <span>선택하기</span>
+                        </Button>
+                    </div>
+
+                    <div className={styles.optionItem}>
+                        <TextField
+                            variant="line"
+                            label="소제목"
+                            type="text"
+                            value={greetingSubtitle}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGreetingSubtitle(e.target.value)}
+                            placeholder="예: INVITATION"
+                        />
+                    </div>
+
+                    <div className={styles.optionItem}>
+                        <TextField
+                            variant="line"
+                            label="제목"
+                            type="text"
+                            value={greetingTitle}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGreetingTitle(e.target.value)}
+                            placeholder="예: 소중한 분들을 초대합니다"
+                        />
+                    </div>
+
+                    <div className={styles.optionItem}>
+                        <div className={styles.rowTitle}>내용</div>
+                        {props.isOpen ? (
+                            <RichTextEditor
+                                content={message}
+                                onChange={setMessage}
+                                placeholder="축하해주시는 분들께 전할 소중한 메시지를 입력하세요."
+                            />
+                        ) : null}
+                    </div>
+
+                    <div className={styles.optionItem}>
+                        <div className={styles.rowTitle}>사진</div>
+                        <div className={styles.optionWrapper}>
+                            <ImageUploader
+                                value={greetingImage}
+                                onChange={setGreetingImage}
+                                placeholder="인사말 사진 추가"
+                                ratio={greetingRatio}
+                                onRatioChange={(val) => setGreetingRatio(val)}
+                            />
+                        </div>
+                    </div>
+
+                    <div className={styles.optionItem}>
+                        <div className={styles.rowTitle}>이름 표기</div>
+                        <div className={styles.optionWrapper}>
+                            <SegmentedControl
+                                alignment="fluid"
+                                value={nameOptionValue}
+                                onChange={(val: string) => handleNameOptionChange(val)}
                             >
-                                <Sparkles size={14} style={{ marginRight: '4px' }} />
-                                <span>선택하기</span>
-                            </Button>
-                        }
-                    />
+                                <SegmentedControl.Item value="bottom">
+                                    하단 표기
+                                </SegmentedControl.Item>
+                                <SegmentedControl.Item value="custom">
+                                    직접 입력
+                                </SegmentedControl.Item>
+                                <SegmentedControl.Item value="none">
+                                    표시 안 함
+                                </SegmentedControl.Item>
+                            </SegmentedControl>
 
-                    <ListRow
-                        contents={
-                            <TextField
-                                variant="line"
-                                label="소제목"
-                                type="text"
-                                value={greetingSubtitle}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGreetingSubtitle(e.target.value)}
-                                placeholder="예: INVITATION"
-                            />
-                        }
-                    />
-
-                    <ListRow
-                        contents={
-                            <TextField
-                                variant="line"
-                                label="제목"
-                                type="text"
-                                value={greetingTitle}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGreetingTitle(e.target.value)}
-                                placeholder="예: 소중한 분들을 초대합니다"
-                            />
-                        }
-                    />
-
-                    <ListRow
-                        title="내용"
-                        contents={
-                            props.isOpen ? (
-                                <RichTextEditor
-                                    content={message}
-                                    onChange={setMessage}
-                                    placeholder="축하해주시는 분들께 전할 소중한 메시지를 입력하세요."
-                                />
-                            ) : null
-                        }
-                    />
-
-                    <ListRow
-                        title="사진"
-                        contents={
-                            <div className={styles.optionWrapper}>
-                                <ImageUploader
-                                    value={greetingImage}
-                                    onChange={setGreetingImage}
-                                    placeholder="인사말 사진 추가"
-                                    ratio={greetingRatio}
-                                    onRatioChange={(val) => setGreetingRatio(val)}
-                                />
-                            </div>
-                        }
-                    />
-
-                    <ListRow
-                        title="이름 표기"
-                        contents={
-                            <div className={styles.optionWrapper}>
-                                <SegmentedControl
-                                    alignment="fluid"
-                                    value={nameOptionValue}
-                                    onChange={(val: string) => handleNameOptionChange(val)}
-                                >
-                                    <SegmentedControl.Item value="bottom">
-                                        하단 표기
-                                    </SegmentedControl.Item>
-                                    <SegmentedControl.Item value="custom">
-                                        직접 입력
-                                    </SegmentedControl.Item>
-                                    <SegmentedControl.Item value="none">
-                                        표시 안 함
-                                    </SegmentedControl.Item>
-                                </SegmentedControl>
-
-                                {enableFreeformNames && (
-                                    <div className={styles.nameForm}>
-                                        <TextField
-                                            variant="line"
-                                            label="신랑 측 표기"
-                                            value={groomNameCustom}
-                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGroomNameCustom(e.target.value)}
-                                            placeholder="예: 아버지 홍길동 · 어머니 김철수 의 장남 길동"
-                                        />
-                                        <TextField
-                                            variant="line"
-                                            label="신부 측 표기"
-                                            value={brideNameCustom}
-                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBrideNameCustom(e.target.value)}
-                                            placeholder="예: 아버지 임걱정 · 어머니 박순이 의 장녀 순희"
-                                        />
-                                        <InfoMessage>
-                                            기본 이름 표기 대신 사용자가 직접 작성한 문구로 이름을 표시합니다.
-                                        </InfoMessage>
-                                    </div>
-                                )}
-                            </div>
-                        }
-                    />
-                </List>
-            </BoardRow>
+                            {enableFreeformNames && (
+                                <div className={styles.nameForm}>
+                                    <TextField
+                                        variant="line"
+                                        label="신랑 측 표기"
+                                        value={groomNameCustom}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGroomNameCustom(e.target.value)}
+                                        placeholder="예: 아버지 홍길동 · 어머니 김철수 의 장남 길동"
+                                    />
+                                    <TextField
+                                        variant="line"
+                                        label="신부 측 표기"
+                                        value={brideNameCustom}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBrideNameCustom(e.target.value)}
+                                        placeholder="예: 아버지 임걱정 · 어머니 박순이 의 장녀 순희"
+                                    />
+                                    <InfoMessage>
+                                        기본 이름 표기 대신 사용자가 직접 작성한 문구로 이름을 표시합니다.
+                                    </InfoMessage>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </SectionAccordion>
 
             {isDesktop ? (
                 <Modal
@@ -240,16 +225,16 @@ export default function GreetingSection(props: SectionProps) {
                             {renderSampleList()}
                         </Modal.Body>
                         <Modal.Footer>
+
                             <BottomCTA.Single
                                 fixed={false}
-                                // @ts-expect-error - BottomCTA.Single typing issue
                                 onClick={() => setIsSampleModalOpen(false)}
                             >
                                 닫기
                             </BottomCTA.Single>
                         </Modal.Footer>
                     </Modal.Content>
-                </Modal>
+                </Modal >
             ) : (
                 <BottomSheet
                     open={isSampleModalOpen}
@@ -258,7 +243,6 @@ export default function GreetingSection(props: SectionProps) {
                     cta={
                         <BottomCTA.Single
                             fixed={false}
-                            // @ts-expect-error - BottomCTA.Single typing issue
                             onClick={() => setIsSampleModalOpen(false)}
                         >
                             닫기
@@ -269,7 +253,8 @@ export default function GreetingSection(props: SectionProps) {
                         {renderSampleList()}
                     </BottomSheet.Body>
                 </BottomSheet>
-            )}
+            )
+            }
         </>
     );
 }

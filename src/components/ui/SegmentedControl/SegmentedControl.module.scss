@@ -1,0 +1,40 @@
+@use "../../../styles/variables" as v;
+
+.root {
+  display: flex;
+  background-color: v.$grey-100;
+  padding: 2px;
+  border-radius: v.$radius-md;
+  width: fit-content;
+  
+  &.fluid {
+    width: 100%;
+  }
+}
+
+.item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: calc(v.$radius-md - 2px);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: v.$grey-600;
+  cursor: pointer;
+  transition: all 0.2s v.$ease-ios;
+  border: none;
+  background: transparent;
+  white-space: nowrap;
+  
+  &:hover {
+    color: v.$grey-900;
+  }
+  
+  &.active {
+    background-color: v.$white;
+    color: v.$grey-900;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+}

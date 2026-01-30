@@ -5,9 +5,7 @@ const RichTextEditor = dynamic(() => import('@/components/ui/RichTextEditor').th
 import { Sparkles } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { BoardRow } from '@/components/ui/BoardRow';
 import { TextField } from '@/components/ui/TextField';
-import { List, ListRow } from '@/components/ui/List';
 import { ImageUploader } from '@/components/common/ImageUploader';
 import { SampleList } from '@/components/common/SampleList';
 import { Button } from '@/components/ui/Button';
@@ -19,6 +17,7 @@ import styles from './ClosingSection.module.scss';
 
 import type { SectionProps, SamplePhraseItem } from '@/types/builder';
 import { CLOSING_SAMPLES } from '@/constants/samples';
+import { SectionAccordion } from '@/components/ui/Accordion';
 
 export default function ClosingSection(props: SectionProps) {
     const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -47,15 +46,15 @@ export default function ClosingSection(props: SectionProps) {
 
     return (
         <>
-            <BoardRow
+            <SectionAccordion
                 title="마무리"
-                isOpened={props.isOpen}
-                onOpen={() => props.onToggle?.(true)}
-                onClose={() => props.onToggle?.(false)}
-                icon={<BoardRow.ArrowIcon />}
+                value="closing"
+                isOpen={props.isOpen}
+                onToggle={props.onToggle}
             >
-                <List>
-                    <div className={styles.sampleBtnWrapper}>
+                <div className={styles.container}>
+                    <div className={styles.sampleActionRow}>
+                        <span className={styles.rowTitle}>추천 문구</span>
                         <Button
                             type="button"
                             variant="weak"
@@ -66,65 +65,56 @@ export default function ClosingSection(props: SectionProps) {
                                 e.stopPropagation();
                                 setIsSampleModalOpen(true);
                             }}
-                            className={styles.sampleBtn}
                         >
                             <Sparkles size={14} className={styles.sparkleIcon} />
-                            <span>추천 문구</span>
+                            <span>선택하기</span>
                         </Button>
                     </div>
 
-                    <ListRow
-                        contents={
-                            <TextField
-                                variant="line"
-                                label="소제목"
-                                placeholder="예: CLOSING"
-                                value={closing.subtitle}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateClosing({ subtitle: e.target.value })}
-                            />
-                        }
-                    />
-                    <ListRow
-                        contents={
-                            <TextField
-                                variant="line"
-                                label="제목"
-                                placeholder="예: 저희의 시작을 함께해주셔서 감사합니다"
-                                value={closing.title}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateClosing({ title: e.target.value })}
-                            />
-                        }
-                    />
+                    <div className={styles.optionItem}>
+                        <TextField
+                            variant="line"
+                            label="소제목"
+                            placeholder="예: CLOSING"
+                            value={closing.subtitle}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateClosing({ subtitle: e.target.value })}
+                        />
+                    </div>
+                    <div className={styles.optionItem}>
+                        <TextField
+                            variant="line"
+                            label="제목"
+                            placeholder="예: 저희의 시작을 함께해주셔서 감사합니다"
+                            value={closing.title}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateClosing({ title: e.target.value })}
+                        />
+                    </div>
 
-                    <ListRow
-                        title="내용"
-                        contents={
-                            props.isOpen ? (
-                                <RichTextEditor
-                                    content={closing.content}
-                                    onChange={(val: string) => updateClosing({ content: val })}
-                                    placeholder="감사의 마음을 담은 짧은 인사말"
-                                />
-                            ) : null
-                        }
-                    />
+                    <div className={styles.optionItem}>
+                        <div className={styles.rowTitle}>내용</div>
+                        {props.isOpen ? (
+                            <RichTextEditor
+                                content={closing.content}
+                                onChange={(val: string) => updateClosing({ content: val })}
+                                placeholder="감사의 마음을 담은 짧은 인사말"
+                            />
+                        ) : null}
+                    </div>
 
-                    <ListRow
-                        title="사진"
-                        contents={
-                            <div className={styles.optionWrapper}>
-                                <ImageUploader
-                                    value={closing.imageUrl}
-                                    onChange={(url) => updateClosing({ imageUrl: url })}
-                                    placeholder="마무리 사진 추가"
-                                    ratio={closing.ratio}
-                                    onRatioChange={(val) => updateClosing({ ratio: val })}
-                                />
-                            </div>
-                        }
-                    />
-                </List>
-            </BoardRow>
+                    <div className={styles.optionItem}>
+                        <div className={styles.rowTitle}>사진</div>
+                        <div className={styles.optionWrapper}>
+                            <ImageUploader
+                                value={closing.imageUrl}
+                                onChange={(url) => updateClosing({ imageUrl: url })}
+                                placeholder="마무리 사진 추가"
+                                ratio={closing.ratio}
+                                onRatioChange={(val) => updateClosing({ ratio: val })}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </SectionAccordion>
 
             {isDesktop ? (
                 <Modal
@@ -138,16 +128,16 @@ export default function ClosingSection(props: SectionProps) {
                             {renderSampleList()}
                         </Modal.Body>
                         <Modal.Footer>
+
                             <BottomCTA.Single
                                 fixed={false}
-                                // @ts-expect-error - BottomCTA.Single typing issue
                                 onClick={() => setIsSampleModalOpen(false)}
                             >
                                 닫기
                             </BottomCTA.Single>
                         </Modal.Footer>
                     </Modal.Content>
-                </Modal>
+                </Modal >
             ) : (
                 <BottomSheet
                     open={isSampleModalOpen}
@@ -156,7 +146,6 @@ export default function ClosingSection(props: SectionProps) {
                     cta={
                         <BottomCTA.Single
                             fixed={false}
-                            // @ts-expect-error - BottomCTA.Single typing issue
                             onClick={() => setIsSampleModalOpen(false)}
                         >
                             닫기
@@ -167,7 +156,8 @@ export default function ClosingSection(props: SectionProps) {
                         {renderSampleList()}
                     </BottomSheet.Body>
                 </BottomSheet>
-            )}
+            )
+            }
         </>
     );
 }

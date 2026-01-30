@@ -1,0 +1,8 @@
+@use "../../../styles/variables" as v;
+
+.list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: v.$white;
+}

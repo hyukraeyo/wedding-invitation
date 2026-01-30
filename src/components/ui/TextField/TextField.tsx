@@ -92,7 +92,7 @@ export interface TextFieldButtonProps extends React.ButtonHTMLAttributes<HTMLBut
 }
 
 const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps>(
-    ({ className, children, label, variant = 'surface', ...props }, ref) => {
+    ({ className, children, label, labelOption, variant = 'surface', ...props }, ref) => {
         // Map 'box' to 'surface' for compatibility
         const mappedVariant = (variant === 'box' ? 'surface' : variant) as any;
 

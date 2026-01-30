@@ -1,8 +1,8 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
-import { BoardRow } from '@/components/ui/BoardRow';
-import type { SectionProps } from '@/types/builder';
+import { SectionAccordion } from '@/components/ui/Accordion';
 import styles from './GallerySection.module.scss';
+import type { SectionProps } from '@/types/builder';
 
 const GallerySectionContent = dynamic(() => import('./GallerySectionContent'), {
     loading: () => (
@@ -15,15 +15,14 @@ const GallerySectionContent = dynamic(() => import('./GallerySectionContent'), {
 
 const GallerySection = React.memo<SectionProps>(function GallerySection(props) {
     return (
-        <BoardRow
+        <SectionAccordion
             title="웨딩 갤러리"
-            isOpened={props.isOpen}
-            onOpen={() => props.onToggle?.(true)}
-            onClose={() => props.onToggle?.(false)}
-            icon={<BoardRow.ArrowIcon />}
+            value="gallery"
+            isOpen={props.isOpen}
+            onToggle={props.onToggle}
         >
             {props.isOpen ? <GallerySectionContent /> : null}
-        </BoardRow>
+        </SectionAccordion>
     );
 });
 

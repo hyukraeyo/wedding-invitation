@@ -1,13 +1,62 @@
 @use "../../../styles/variables" as v;
 
-.body {
-    padding: 0 24px 24px;
-    max-height: 70vh;
-    overflow-y: auto;
-    background-color: v.$white;
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 10000;
 }
 
-// Optionally handle footer if needed beyond TDS 'cta' prop
+.content {
+  background-color: v.$white;
+  display: flex;
+  flex-direction: column;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  height: auto;
+  max-height: 96%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  outline: none;
+  z-index: 10001;
+  
+  // Max width for desktop/tablet mockup
+  max-width: v.$canvas-max-width;
+  margin: 0 auto;
+}
+
+.handle {
+  width: 40px;
+  height: 4px;
+  background-color: v.$grey-200;
+  border-radius: 2px;
+  margin: 12px auto 8px;
+  flex-shrink: 0;
+}
+
+.header {
+  padding: 16px 24px 8px;
+  text-align: center;
+}
+
+.title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: v.$grey-900;
+  margin: 0;
+}
+
+.body {
+  padding: 0 24px 24px;
+  max-height: 70vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .footer {
-    padding: 0;
+  padding: 0;
+  
+  // Safe area handling is usually inside BottomCTA which is passed as cta
 }

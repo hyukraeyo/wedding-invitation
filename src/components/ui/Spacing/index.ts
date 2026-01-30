@@ -1,2 +1,3 @@
 'use client';
-export { Spacing } from '@toss/tds-mobile';
+
+export * from './Spacing';

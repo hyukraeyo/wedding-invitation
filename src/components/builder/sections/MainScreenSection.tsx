@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
-
 import { Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { BoardRow } from '@/components/ui/BoardRow';
 import { SampleList } from '@/components/common/SampleList';
-import type { SectionProps, SamplePhraseItem } from '@/types/builder';
-import { MAIN_TITLE_SAMPLES } from '@/constants/samples';
-import styles from './MainScreenSection.module.scss';
 import { Button } from '@/components/ui/Button';
 import { BottomCTA } from '@/components/ui/BottomCTA';
 import { Modal } from '@/components/ui/Modal';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import styles from './MainScreenSection.module.scss';
+
+import type { SectionProps, SamplePhraseItem } from '@/types/builder';
+import { MAIN_TITLE_SAMPLES } from '@/constants/samples';
+import { SectionAccordion } from '@/components/ui/Accordion';
 
 const MainScreenSectionContent = dynamic(() => import('./MainScreenSectionContent'), {
     loading: () => (
@@ -42,15 +42,15 @@ export default function MainScreenSection(props: SectionProps) {
 
     return (
         <>
-            <BoardRow
+            <SectionAccordion
                 title="메인 화면"
-                isOpened={props.isOpen}
-                onOpen={() => props.onToggle?.(true)}
-                onClose={() => props.onToggle?.(false)}
-                icon={<BoardRow.ArrowIcon />}
+                value="main"
+                isOpen={props.isOpen}
+                onToggle={props.onToggle}
             >
-                <div style={{ display: props.isOpen ? 'block' : 'none', padding: '0 0 24px' }}>
-                    <div className={styles.sampleBtnWrapper} style={{ padding: '0 24px 12px' }}>
+                <div style={{ paddingBottom: '16px' }}>
+                    <div className={styles.sampleActionRow} style={{ padding: '0 24px 12px' }}>
+                        <span className={styles.rowTitle}>추천 문구</span>
                         <Button
                             type="button"
                             variant="weak"
@@ -61,15 +61,14 @@ export default function MainScreenSection(props: SectionProps) {
                                 e.stopPropagation();
                                 setIsSampleModalOpen(true);
                             }}
-                            className={styles.sampleBtn}
                         >
-                            <Sparkles size={14} className={styles.sparkleIcon} />
-                            <span>추천 문구</span>
+                            <Sparkles size={14} style={{ marginRight: '4px' }} />
+                            <span>선택하기</span>
                         </Button>
                     </div>
-                    <MainScreenSectionContent />
+                    {props.isOpen && <MainScreenSectionContent />}
                 </div>
-            </BoardRow>
+            </SectionAccordion>
 
             {isDesktop ? (
                 <Modal
@@ -85,7 +84,6 @@ export default function MainScreenSection(props: SectionProps) {
                         <Modal.Footer>
                             <BottomCTA.Single
                                 fixed={false}
-                                // @ts-expect-error - BottomCTA.Single typing issue
                                 onClick={() => setIsSampleModalOpen(false)}
                             >
                                 닫기
@@ -101,7 +99,6 @@ export default function MainScreenSection(props: SectionProps) {
                     cta={
                         <BottomCTA.Single
                             fixed={false}
-                            // @ts-expect-error - BottomCTA.Single typing issue
                             onClick={() => setIsSampleModalOpen(false)}
                         >
                             닫기

@@ -7,117 +7,82 @@ import 'swiper/css/free-mode';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { TextField } from '@/components/ui/TextField';
-import { List, ListRow } from '@/components/ui/List';
-import { Button } from '@/components/ui/Button';
-import { Switch } from '@/components/ui/Switch';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
+import { Button } from '@/components/ui/Button';
 import { ImageUploader } from '@/components/common/ImageUploader';
-import styles from './MainScreenSection.module.scss';
+import { Switch } from '@/components/ui/Switch';
 import { cn } from '@/lib/utils';
-interface StylePreset {
-    id: string;
-    layout: 'classic' | 'minimal' | 'english' | 'heart' | 'korean' | 'arch' | 'oval' | 'frame' | 'fill' | 'basic';
-    label: string;
-    isComingSoon?: boolean;
-}
-
-const STYLE_PRESETS: StylePreset[] = [
-    {
-        id: 'classic',
-        layout: 'classic',
-        label: '기본',
-    },
-    {
-        id: 'coming-soon-1',
-        layout: 'basic',
-        label: '추가 예정',
-        isComingSoon: true,
-    },
-    {
-        id: 'coming-soon-2',
-        layout: 'basic',
-        label: '추가 예정',
-        isComingSoon: true,
-    },
-    {
-        id: 'coming-soon-3',
-        layout: 'basic',
-        label: '추가 예정',
-        isComingSoon: true,
-    },
-];
+import styles from './MainScreenSection.module.scss';
+import { STYLE_PRESETS } from '@/constants/samples';
 
 export default function MainScreenSectionContent() {
-    const mainScreen = useInvitationStore(useShallow(state => state.mainScreen));
-    const setMainScreen = useInvitationStore(state => state.setMainScreen);
-    const imageUrl = useInvitationStore(state => state.imageUrl);
-    const setImageUrl = useInvitationStore(state => state.setImageUrl);
-    const imageRatio = useInvitationStore(state => state.imageRatio);
-    const setImageRatio = useInvitationStore(state => state.setImageRatio);
-    const groom = useInvitationStore(useShallow(state => state.groom));
-    const bride = useInvitationStore(useShallow(state => state.bride));
-    const theme = useInvitationStore(useShallow(state => state.theme));
-    const setTheme = useInvitationStore(state => state.setTheme);
-
-
-
     const swiperRef = useRef<SwiperType | null>(null);
     const [swiperProgress, setSwiperProgress] = React.useState<'start' | 'middle' | 'end'>('start');
-    const updateMain = (data: Partial<typeof mainScreen>) => setMainScreen(data);
-    const selectedPresetIndex = STYLE_PRESETS.findIndex(p => p.layout === mainScreen.layout);
 
-    const handleSelectPreset = (preset: StylePreset, index: number) => {
-        updateMain({
+    const {
+        mainScreen,
+        setMainScreen,
+        theme,
+        setTheme,
+        groom,
+        bride,
+    } = useInvitationStore(useShallow((state) => ({
+        mainScreen: state.mainScreen,
+        setMainScreen: state.setMainScreen,
+        theme: state.theme,
+        setTheme: state.setTheme,
+        groom: state.groom,
+        bride: state.bride,
+    })));
+
+    const imageUrl = mainScreen.imageUrl;
+    const setImageUrl = (url: string) => setMainScreen({ imageUrl: url });
+    const imageRatio = mainScreen.imageRatio;
+    const setImageRatio = (ratio: '4/5' | '1/1' | 'auto') => setMainScreen({ imageRatio: ratio });
+
+    const updateMain = (data: Partial<typeof mainScreen>) => setMainScreen(data);
+
+    const handleSelectPreset = (preset: typeof STYLE_PRESETS[0], index: number) => {
+        setMainScreen({
             layout: preset.layout,
+            imageShape: preset.imageShape,
         });
         if (swiperRef.current) {
-            const swiper = swiperRef.current;
-            const slidesPerView = Math.floor(swiper.width / (90 + 12));
-            const maxIndex = STYLE_PRESETS.length - slidesPerView;
-
-            let targetIndex = index;
-            if (index <= 0) {
-                targetIndex = 0;
-            } else if (index >= STYLE_PRESETS.length - 1) {
-                targetIndex = maxIndex > 0 ? maxIndex : 0;
-            } else {
-                targetIndex = Math.max(0, Math.min(index - 1, maxIndex));
-            }
-            swiper.slideTo(targetIndex);
+            swiperRef.current.slideTo(index);
         }
     };
 
-    return (
-        <List>
-            <ListRow
-                contents={
-                    <div className={styles.optionWrapper}>
-                        <ImageUploader
-                            value={imageUrl}
-                            onChange={setImageUrl}
-                            placeholder="메인 이미지 추가"
-                            ratio={imageRatio}
-                            onRatioChange={setImageRatio}
-                            aspectRatio="4/5"
-                        />
-                    </div>
-                }
-                title="메인 사진"
-            />
+    const selectedPresetIndex = STYLE_PRESETS.findIndex(p => p.layout === mainScreen.layout);
 
-            <ListRow
-                title="사진 꽉 차게"
-                right={
+    return (
+        <div className={styles.container}>
+            <div className={styles.optionItem}>
+                <div className={styles.rowTitle}>메인 사진</div>
+                <div className={styles.optionWrapper}>
+                    <ImageUploader
+                        value={imageUrl}
+                        onChange={setImageUrl}
+                        placeholder="메인 이미지 추가"
+                        ratio={imageRatio}
+                        onRatioChange={setImageRatio}
+                        aspectRatio="4/5"
+                    />
+                </div>
+            </div>
+
+            <div className={styles.optionItem}>
+                <div className={styles.rowTitle}>사진 꽉 차게</div>
+                <div className={styles.rowRight}>
                     <Switch
                         checked={mainScreen.expandPhoto}
                         onCheckedChange={(checked) => updateMain({ expandPhoto: checked })}
                     />
-                }
-            />
+                </div>
+            </div>
 
-            <ListRow
-                title="스타일"
-                contents={
+            <div className={styles.optionItem}>
+                <div className={styles.rowTitle}>스타일</div>
+                <div className={styles.swiperWrapper}>
                     <Swiper
                         modules={[FreeMode]}
                         freeMode={{
@@ -190,129 +155,119 @@ export default function MainScreenSectionContent() {
                             </SwiperSlide>
                         ))}
                     </Swiper>
-                }
-            />
+                </div>
+            </div>
 
-            <ListRow
-                title="흩날림 효과"
-                contents={
-                    <SegmentedControl
-                        alignment="fluid"
-                        value={theme.effect}
-                        onChange={(val: string) => setTheme({ effect: val as 'none' | 'cherry-blossom' | 'snow' })}
-                    >
-                        <SegmentedControl.Item value="none">
-                            없음
-                        </SegmentedControl.Item>
-                        <SegmentedControl.Item value="cherry-blossom">
-                            벚꽃
-                        </SegmentedControl.Item>
-                        <SegmentedControl.Item value="snow">
-                            눈내림
-                        </SegmentedControl.Item>
-                    </SegmentedControl>
-                }
-            />
+            <div className={styles.optionItem}>
+                <div className={styles.rowTitle}>흩날림 효과</div>
+                <SegmentedControl
+                    alignment="fluid"
+                    value={theme.effect}
+                    onChange={(val: string) => setTheme({ effect: val as 'none' | 'cherry-blossom' | 'snow' })}
+                >
+                    <SegmentedControl.Item value="none">
+                        없음
+                    </SegmentedControl.Item>
+                    <SegmentedControl.Item value="cherry-blossom">
+                        벚꽃
+                    </SegmentedControl.Item>
+                    <SegmentedControl.Item value="snow">
+                        눈내림
+                    </SegmentedControl.Item>
+                </SegmentedControl>
+            </div>
 
             {mainScreen.layout === 'classic' && (
-                <ListRow
-                    title="사진 형태"
-                    contents={
-                        <SegmentedControl
-                            alignment="fluid"
-                            value={mainScreen.imageShape || 'rect'}
-                            onChange={(val: string) => updateMain({ imageShape: val as 'rect' | 'arch' | 'oval' })}
-                        >
-                            <SegmentedControl.Item value="rect">
-                                기본
-                            </SegmentedControl.Item>
-                            <SegmentedControl.Item value="arch">
-                                아치
-                            </SegmentedControl.Item>
-                            <SegmentedControl.Item value="oval">
-                                타원
-                            </SegmentedControl.Item>
-                        </SegmentedControl>
-                    }
-                />
-            )}
-
-            <ListRow
-                title="사진 효과"
-                contents={
+                <div className={styles.optionItem}>
+                    <div className={styles.rowTitle}>사진 형태</div>
                     <SegmentedControl
                         alignment="fluid"
-                        value={mainScreen.effect}
-                        onChange={(val: string) => updateMain({ effect: val as 'none' | 'mist' | 'ripple' })}
+                        value={mainScreen.imageShape || 'rect'}
+                        onChange={(val: string) => updateMain({ imageShape: val as 'rect' | 'arch' | 'oval' })}
                     >
-                        <SegmentedControl.Item value="none">
-                            없음
+                        <SegmentedControl.Item value="rect">
+                            기본
                         </SegmentedControl.Item>
-                        <SegmentedControl.Item value="mist">
-                            안개
+                        <SegmentedControl.Item value="arch">
+                            아치
                         </SegmentedControl.Item>
-                        <SegmentedControl.Item value="ripple">
-                            물결
+                        <SegmentedControl.Item value="oval">
+                            타원
                         </SegmentedControl.Item>
                     </SegmentedControl>
-                }
-            />
+                </div>
+            )}
+
+            <div className={styles.optionItem}>
+                <div className={styles.rowTitle}>사진 효과</div>
+                <SegmentedControl
+                    alignment="fluid"
+                    value={mainScreen.effect}
+                    onChange={(val: string) => updateMain({ effect: val as 'none' | 'mist' | 'ripple' })}
+                >
+                    <SegmentedControl.Item value="none">
+                        없음
+                    </SegmentedControl.Item>
+                    <SegmentedControl.Item value="mist">
+                        안개
+                    </SegmentedControl.Item>
+                    <SegmentedControl.Item value="ripple">
+                        물결
+                    </SegmentedControl.Item>
+                </SegmentedControl>
+            </div>
 
             {mainScreen.layout === 'classic' ? (
                 <>
-                    <ListRow
-                        contents={
-                            <div className={styles.optionWrapper}>
-                                <TextField
-                                    label="제목"
-                                    variant="line"
-                                    placeholder="예: THE MARRIAGE"
-                                    value={mainScreen.title}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateMain({ title: e.target.value })}
-                                />
-                                <TextField
-                                    label="소제목"
-                                    variant="line"
-                                    placeholder="예: 소중한 날에 초대합니다"
-                                    value={mainScreen.subtitle}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateMain({ subtitle: e.target.value })}
-                                />
-                            </div>
-                        }
-                    />
+                    <div className={styles.optionItem}>
+                        <div className={styles.optionWrapper}>
+                            <TextField
+                                label="제목"
+                                variant="line"
+                                placeholder="예: THE MARRIAGE"
+                                value={mainScreen.title}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateMain({ title: e.target.value })}
+                            />
+                            <TextField
+                                label="소제목"
+                                variant="line"
+                                placeholder="예: 소중한 날에 초대합니다"
+                                value={mainScreen.subtitle}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateMain({ subtitle: e.target.value })}
+                            />
+                        </div>
+                    </div>
 
-                    <ListRow
-                        contents={
-                            <div className={styles.sentenceWrapper}>
-                                <div className={styles.sentenceItem}>
-                                    <TextField
-                                        variant="line"
-                                        placeholder={groom.lastName || groom.firstName ? `${groom.lastName}${groom.firstName}` : '신랑'}
-                                        value={mainScreen.groomName}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateMain({ groomName: e.target.value })}
-                                    />
-                                </div>
-                                <div className={styles.sentenceItem}>
-                                    <TextField
-                                        variant="line"
-                                        placeholder="그리고"
-                                        value={mainScreen.andText}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateMain({ andText: e.target.value })}
-                                    />
-                                </div>
-                                <div className={styles.sentenceItem}>
-                                    <TextField
-                                        variant="line"
-                                        placeholder={bride.lastName || bride.firstName ? `${bride.lastName}${bride.firstName}` : '신부'}
-                                        value={mainScreen.brideName}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateMain({ brideName: e.target.value })}
-                                    />
-                                </div>
+                    <div className={styles.optionItem}>
+                        <div className={styles.sentenceWrapper}>
+                            <div className={styles.sentenceItem}>
+                                <TextField
+                                    variant="line"
+                                    placeholder={groom.lastName || groom.firstName ? `${groom.lastName}${groom.firstName}` : '신랑'}
+                                    value={mainScreen.groomName}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateMain({ groomName: e.target.value })}
+                                />
                             </div>
-                        }
-                    />
+                            <div className={styles.sentenceItem}>
+                                <TextField
+                                    variant="line"
+                                    placeholder="그리고"
+                                    value={mainScreen.andText}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateMain({ andText: e.target.value })}
+                                />
+                            </div>
+                            <div className={styles.sentenceItem}>
+                                <TextField
+                                    variant="line"
+                                    placeholder={bride.lastName || bride.firstName ? `${bride.lastName}${bride.firstName}` : '신부'}
+                                    value={mainScreen.brideName}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateMain({ brideName: e.target.value })}
+                                />
+                            </div>
+                        </div>
+                    </div>
                 </>
             ) : null}
-        </List>
+        </div>
     );
 }

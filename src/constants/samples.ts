@@ -160,3 +160,31 @@ export const KAKAO_SHARE_SAMPLES: SamplePhraseItem[] = [
         content: '저희의 결혼식에 소중한 분들을 초대합니다.'
     }
 ];
+
+/**
+ * 메인 화면 스타일 프리셋
+ */
+export const STYLE_PRESETS = [
+    {
+        id: 'classic',
+        label: '클래식',
+        layout: 'classic',
+        imageShape: 'rect',
+        isComingSoon: false,
+    },
+    {
+        id: 'full',
+        label: '풀스크린',
+        layout: 'full',
+        imageShape: 'rect',
+        isComingSoon: true,
+    },
+    {
+        id: 'modern',
+        label: '모던',
+        layout: 'modern',
+        imageShape: 'rect',
+        isComingSoon: true,
+    },
+];
+

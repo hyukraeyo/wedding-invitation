@@ -1,0 +1,21 @@
+@use "../../../styles/variables" as v;
+
+.skeleton {
+  background-color: v.$grey-200;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  border-radius: v.$radius-sm;
+  width: 100%;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.circle {
+  border-radius: 50%;
+}

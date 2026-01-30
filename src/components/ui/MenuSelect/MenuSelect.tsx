@@ -89,12 +89,12 @@ export const MenuSelect = <T extends string | number>({
                             <Modal.Header title={modalTitle || placeholder} />
                         )}
                         <Modal.Body className={styles.bodyPadding}>
-                            <Menu.Dropdown className={styles.dropdown}>
+                            <Menu.Dropdown className={styles.dropdown as any}>
                                 {options.map((option) => (
                                     <Menu.DropdownCheckItem
                                         key={String(option.value)}
                                         checked={option.value === currentValue}
-                                        onCheckedChange={(checked) => {
+                                        onCheckedChange={(checked: boolean) => {
                                             if (option.disabled) return;
                                             if (checked) {
                                                 handleValueChange(option.value);
@@ -120,12 +120,12 @@ export const MenuSelect = <T extends string | number>({
                 onClose={() => setIsOpen(false)}
                 placement="bottom-start"
                 dropdown={
-                    <Menu.Dropdown className={styles.dropdown}>
+                    <Menu.Dropdown className={styles.dropdown as any}>
                         {options.map((option) => (
                             <Menu.DropdownCheckItem
                                 key={String(option.value)}
                                 checked={option.value === currentValue}
-                                onCheckedChange={(checked) => {
+                                onCheckedChange={(checked: boolean) => {
                                     if (option.disabled) return;
                                     if (checked) {
                                         handleValueChange(option.value);
