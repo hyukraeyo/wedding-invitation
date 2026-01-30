@@ -67,14 +67,14 @@
 - **Framework**: Next.js 16.1.1 (App Router)
 - **Library**: React 19
 - **Language**: TypeScript 5 (Strict Mode)
-- **Styling**: SCSS Modules (Strict) + Toss Design System (TDS) Mobile
+- **Styling**: SCSS Modules (Strict) + Radix UI Primitives (TDS Style)
 - **State Management**: Zustand (Client), Tanstack Query (Server)
 - **Database/Auth**: Supabase
 - **Icons**: Lucide React
 
 ## 🎨 핵심 개발 원칙
 
-1.  **Toss Design System First**: UI 컴포넌트는 우선적으로 **Toss Design System (TDS) Mobile**을 사용합니다. 없는 기능에 한해 **Radix UI**를 사용합니다.
+1.  **Radix UI First (Gradual Migration)**: UI 컴포넌트는 점진적으로 **Radix UI Primitives** 기반으로 전환하며, 기존 TDS 컴포넌트를 대체합니다. 스타일은 TDS의 미학을 따르되 로직은 Radix UI를 사용합니다.
 2.  **Strict Styling**: 모든 컴포넌트는 **SCSS Modules**로 작성합니다. Tailwind CSS는 컴포넌트 내부에서 사용하지 않습니다.
 2.  **PascalCase Convention**: 모든 컴포넌트 폴더와 파일명은 **PascalCase**를 사용합니다.
 3.  **Hybrid Component Pattern**: `ComponentName/ComponentName.tsx` + `ComponentName.module.scss` + `index.ts` 구조를 따릅니다.

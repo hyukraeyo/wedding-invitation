@@ -66,7 +66,10 @@ export const DatePicker = ({ value, onChange, onComplete, className, label, plac
                     <Modal.Footer className={styles.footer}>
                         <Button
                             className={styles.fullWidth}
-                            onClick={() => setIsOpen(false)}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsOpen(false);
+                            }}
                         >
                             닫기
                         </Button>

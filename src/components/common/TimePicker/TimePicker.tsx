@@ -118,7 +118,8 @@ const TimePickerRaw = ({
     }, []);
 
     // Confirm selection
-    const handleConfirm = useCallback(() => {
+    const handleConfirm = useCallback((e?: React.MouseEvent) => {
+        e?.stopPropagation();
         onChange(tempValue);
         setIsOpen(false);
         onComplete?.();

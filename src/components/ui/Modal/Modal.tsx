@@ -39,8 +39,58 @@ const ModalFooter = ({ children, className }: ModalFooterProps) => (
     </div>
 );
 
-const ModalMain = ({ children, ...props }: TDSModalProps) => {
-    return <TDSModal {...props}>{children}</TDSModal>;
+interface ModalProps extends React.ComponentProps<typeof TDSModal> {
+    onOpenChange?: (open: boolean) => void;
+}
+
+const ModalContext = React.createContext<{ onClose?: () => void }>({});
+
+const ModalOverlay = ({ onClick, ...props }: any) => {
+    const { onClose } = React.useContext(ModalContext);
+
+    return (
+        <TDSModal.Overlay
+            {...props}
+            onClick={(e) => {
+                e.stopPropagation();
+                onClose?.(); // 딤드 클릭 시 명시적으로 닫기 호출
+                onClick?.(e);
+            }}
+        />
+    );
+};
+
+const ModalContentWrapper = ({ children, ...props }: any) => {
+    return (
+        <TDSModal.Content
+            {...props}
+            onClick={(e) => {
+                e.stopPropagation();
+                props.onClick?.(e);
+            }}
+        >
+            {children}
+        </TDSModal.Content>
+    );
+};
+
+const ModalMain = ({ children, open, onOpenChange, onClose, ...props }: ModalProps) => {
+    const handleClose = React.useCallback(() => {
+        onClose?.();
+        onOpenChange?.(false);
+    }, [onClose, onOpenChange]);
+
+    return (
+        <ModalContext.Provider value={{ onClose: handleClose }}>
+            <TDSModal
+                {...props}
+                open={open}
+                onClose={handleClose}
+            >
+                {children}
+            </TDSModal>
+        </ModalContext.Provider>
+    );
 };
 
 ModalMain.displayName = 'Modal';
@@ -48,8 +98,8 @@ ModalMain.displayName = 'Modal';
 export const Modal = Object.assign(
     ModalMain,
     {
-        Overlay: TDSModal.Overlay,
-        Content: TDSModal.Content,
+        Overlay: ModalOverlay,
+        Content: ModalContentWrapper,
         Header: ModalHeader,
         Body: ModalContent,
         Footer: ModalFooter,
@@ -59,3 +109,5 @@ export const Modal = Object.assign(
 ModalHeader.displayName = 'Modal.Header';
 ModalContent.displayName = 'Modal.Body';
 ModalFooter.displayName = 'Modal.Footer';
+ModalOverlay.displayName = 'Modal.Overlay';
+ModalContentWrapper.displayName = 'Modal.Content';
