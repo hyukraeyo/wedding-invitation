@@ -1,113 +1,88 @@
 'use client';
 
 import React from 'react';
-import { Modal as TDSModal, ModalProps as TDSModalProps } from '@toss/tds-mobile';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
+import { cn } from '@/lib/utils';
 import styles from './Modal.module.scss';
 
-interface ModalHeaderProps {
-    title?: string;
-    children?: React.ReactNode;
-    className?: string | undefined;
+interface ModalProps extends Omit<DialogPrimitive.DialogProps, 'open' | 'onOpenChange'> {
+    open?: boolean | undefined;
+    onOpenChange?: ((open: boolean) => void) | undefined;
 }
 
-const ModalHeader = ({ title, children, className }: ModalHeaderProps) => (
-    <div className={`${styles.header} ${className || ''}`}>
-        {title && <h2 className={styles.title}>{title}</h2>}
-        {children}
-    </div>
-);
-
-interface ModalContentProps {
-    children: React.ReactNode;
-    className?: string | undefined;
-}
-
-const ModalContent = ({ children, className }: ModalContentProps) => (
-    <div className={`${styles.content} ${className || ''}`}>
-        {children}
-    </div>
-);
-
-interface ModalFooterProps {
-    children: React.ReactNode;
-    className?: string | undefined;
-}
-
-const ModalFooter = ({ children, className }: ModalFooterProps) => (
-    <div className={`${styles.footer} ${className || ''}`}>
-        {children}
-    </div>
-);
-
-interface ModalProps extends React.ComponentProps<typeof TDSModal> {
-    onOpenChange?: (open: boolean) => void;
-}
-
-const ModalContext = React.createContext<{ onClose?: () => void }>({});
-
-const ModalOverlay = ({ onClick, ...props }: any) => {
-    const { onClose } = React.useContext(ModalContext);
-
+const ModalMain = ({ children, open, onOpenChange, ...props }: ModalProps) => {
+    // exactOptionalPropertyTypes: true 대응을 위해 임시로 any 캐스팅 사용
+    const Root = DialogPrimitive.Root as React.FC<any>;
     return (
-        <TDSModal.Overlay
-            {...props}
-            onClick={(e) => {
-                e.stopPropagation();
-                onClose?.(); // 딤드 클릭 시 명시적으로 닫기 호출
-                onClick?.(e);
-            }}
-        />
+        <Root open={open} onOpenChange={onOpenChange} {...props}>
+            {children}
+        </Root>
     );
 };
 
-const ModalContentWrapper = ({ children, ...props }: any) => {
-    return (
-        <TDSModal.Content
+const ModalOverlay = React.forwardRef<
+    React.ElementRef<typeof DialogPrimitive.Overlay>,
+    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
+>(({ className, ...props }, ref) => (
+    <DialogPrimitive.Portal>
+        <DialogPrimitive.Overlay
+            ref={ref}
+            className={cn(styles.overlay, className)}
             {...props}
-            onClick={(e) => {
-                e.stopPropagation();
-                props.onClick?.(e);
-            }}
+        />
+    </DialogPrimitive.Portal>
+));
+ModalOverlay.displayName = DialogPrimitive.Overlay.displayName;
+
+const ModalContent = React.forwardRef<
+    React.ElementRef<typeof DialogPrimitive.Content>,
+    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
+>(({ className, children, ...props }, ref) => (
+    <DialogPrimitive.Portal>
+        <DialogPrimitive.Content
+            ref={ref}
+            className={cn(styles.content, className)}
+            {...props}
         >
             {children}
-        </TDSModal.Content>
-    );
-};
+        </DialogPrimitive.Content>
+    </DialogPrimitive.Portal>
+));
+ModalContent.displayName = DialogPrimitive.Content.displayName;
 
-const ModalMain = ({ children, open, onOpenChange, onClose, ...props }: ModalProps) => {
-    const handleClose = React.useCallback(() => {
-        onClose?.();
-        onOpenChange?.(false);
-    }, [onClose, onOpenChange]);
+const ModalHeader = ({ title, children, className }: { title?: string | undefined; children?: React.ReactNode; className?: string | undefined }) => (
+    <div className={cn(styles.header, className)}>
+        {title && <DialogPrimitive.Title className={styles.title}>{title}</DialogPrimitive.Title>}
+        {children}
+    </div>
+);
 
-    return (
-        <ModalContext.Provider value={{ onClose: handleClose }}>
-            <TDSModal
-                {...props}
-                open={open}
-                onClose={handleClose}
-            >
-                {children}
-            </TDSModal>
-        </ModalContext.Provider>
-    );
-};
+const ModalBody = ({ children, className }: { children: React.ReactNode; className?: string | undefined }) => (
+    <div className={cn(styles.body, className)}>
+        {children}
+    </div>
+);
 
-ModalMain.displayName = 'Modal';
+const ModalFooter = ({ children, className }: { children: React.ReactNode; className?: string | undefined }) => (
+    <div className={cn(styles.footer, className)}>
+        {children}
+    </div>
+);
 
 export const Modal = Object.assign(
     ModalMain,
     {
         Overlay: ModalOverlay,
-        Content: ModalContentWrapper,
+        Content: ModalContent,
         Header: ModalHeader,
-        Body: ModalContent,
+        Body: ModalBody,
         Footer: ModalFooter,
+        Close: DialogPrimitive.Close,
+        Trigger: DialogPrimitive.Trigger,
     }
 );
 
+ModalMain.displayName = 'Modal';
 ModalHeader.displayName = 'Modal.Header';
-ModalContent.displayName = 'Modal.Body';
+ModalBody.displayName = 'Modal.Body';
 ModalFooter.displayName = 'Modal.Footer';
-ModalOverlay.displayName = 'Modal.Overlay';
-ModalContentWrapper.displayName = 'Modal.Content';

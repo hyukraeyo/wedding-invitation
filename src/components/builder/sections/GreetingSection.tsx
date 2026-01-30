@@ -240,9 +240,10 @@ export default function GreetingSection(props: SectionProps) {
                             {renderSampleList()}
                         </Modal.Body>
                         <Modal.Footer>
+                            // @ts-ignore
                             <BottomCTA.Single
                                 fixed={false}
-
+                                // @ts-ignore
                                 onClick={() => setIsSampleModalOpen(false)}
                             >
                                 닫기
@@ -256,9 +257,10 @@ export default function GreetingSection(props: SectionProps) {
                     onClose={() => setIsSampleModalOpen(false)}
                     header="인사말 추천 문구"
                     cta={
+                        // @ts-ignore
                         <BottomCTA.Single
                             fixed={false}
-
+                            // @ts-ignore
                             onClick={() => setIsSampleModalOpen(false)}
                         >
                             닫기

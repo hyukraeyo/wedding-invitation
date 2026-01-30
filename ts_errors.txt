@@ -1,0 +1,140 @@
+src/app/mypage/(dashboard)/MyPageClient.tsx(690,22): error TS2375: Type '{ children: (false | Element)[]; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/app/mypage/(dashboard)/MyPageClient.tsx(761,26): error TS2375: Type '{ children: Element; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/app/mypage/requests/RequestsPageClient.tsx(268,22): error TS2375: Type '{ children: ReactNode; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/app/mypage/requests/RequestsPageClient.tsx(271,22): error TS2375: Type '{ children: (false | Element)[]; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/app/mypage/requests/RequestsPageClient.tsx(335,26): error TS2375: Type '{ children: Element; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/app/setup/SetupForm.tsx(297,25): error TS2322: Type '{ children: Element; fixed: true; background: "none"; fixedAboveKeyboard: true; showAfterDelay: { animation: "slide"; delay: number; }; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+  Property 'onClick' does not exist on type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+src/components/auth/ProfileCompletionModal/ProfileCompletionModal.tsx(121,18): error TS2375: Type '{ children: (Element | undefined)[]; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/builder/sections/ClosingSection.tsx(144,33): error TS2322: Type '{ children: string; fixed: false; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+  Property 'onClick' does not exist on type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+src/components/builder/sections/ClosingSection.tsx(160,29): error TS2322: Type '{ children: string; fixed: false; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+  Property 'onClick' does not exist on type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+src/components/builder/sections/GallerySectionContent.tsx(330,38): error TS2375: Type '{ children: Element; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/builder/sections/GallerySectionContent.tsx(335,38): error TS2375: Type '{ children: Element; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/builder/sections/GreetingSection.tsx(246,33): error TS2322: Type '{ children: string; fixed: false; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+  Property 'onClick' does not exist on type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+src/components/builder/sections/GreetingSection.tsx(262,29): error TS2322: Type '{ children: string; fixed: false; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+  Property 'onClick' does not exist on type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+src/components/builder/sections/KakaoShareSection.tsx(156,34): error TS2375: Type '{ children: Element; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/builder/sections/KakaoShareSection.tsx(203,34): error TS2375: Type '{ children: Element; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/builder/sections/KakaoShareSection.tsx(229,22): error TS2375: Type '{ children: Element; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/builder/sections/LocationSectionContent.tsx(312,22): error TS2375: Type '{ children: Element; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/builder/sections/MainScreenSection.tsx(89,33): error TS2322: Type '{ children: string; fixed: false; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+  Property 'onClick' does not exist on type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+src/components/builder/sections/MainScreenSection.tsx(105,29): error TS2322: Type '{ children: string; fixed: false; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+  Property 'onClick' does not exist on type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+src/components/common/DatePicker/DatePicker.tsx(57,22): error TS2375: Type '{ children: Element; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/common/DatePicker/DatePicker.tsx(66,22): error TS2375: Type '{ children: Element; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/common/Header/Header.tsx(204,22): error TS2375: Type '{ children: (string | Element)[]; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/common/InvitationActionMenu/InvitationActionMenu.tsx(240,22): error TS2375: Type '{ children: Element; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/common/InvitationActionMenu/InvitationActionMenu.tsx(258,22): error TS2375: Type '{ children: (string | Element)[]; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/common/InvitationActionMenu/InvitationActionMenu.tsx(262,22): error TS2375: Type '{ children: Element[]; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/common/MobileNav/MobileNav.tsx(175,30): error TS2375: Type '{ children: Element; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/common/MobileNav/MobileNav.tsx(218,30): error TS2375: Type '{ children: Element[]; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/common/MobileNav/MobileNav.tsx(229,30): error TS2375: Type '{ children: Element; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/common/RejectionReasonModal/RejectionReasonModal.tsx(75,18): error TS2375: Type '{ children: Element[]; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/common/ShareModal/ShareModal.tsx(91,18): error TS2375: Type '{ children: Element; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/common/TimePicker/TimePicker.tsx(231,22): error TS2375: Type '{ children: Element; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/features/onboarding/InvitationOnboardingModal.tsx(151,18): error TS2375: Type '{ children: Element[]; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/mypage/MyPageSidebar/MyPageSidebar.tsx(169,22): error TS2375: Type '{ children: Element; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/mypage/MyPageSidebar/MyPageSidebar.tsx(186,22): error TS2375: Type '{ children: Element[]; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/ui/Dialog/Dialog.tsx(33,10): error TS2375: Type '{ children: Element; open: boolean | undefined; onOpenChange: ((open: boolean) => void) | undefined; }' is not assignable to type 'DialogProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'open' are incompatible.
+    Type 'boolean | undefined' is not assignable to type 'boolean'.
+      Type 'undefined' is not assignable to type 'boolean'.
+src/components/ui/Dialog/Dialog.tsx(54,29): error TS2322: Type '"red" | "primary"' is not assignable to type 'TDSButtonColor'.
+  Type '"red"' is not assignable to type 'TDSButtonColor'.
+src/components/ui/InvitationCard/InvitationCard.tsx(203,26): error TS2375: Type '{ children: Element[]; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/ui/MenuSelect/MenuSelect.tsx(91,26): error TS2375: Type '{ children: Element; className: string | undefined; }' is not assignable to type '{ children: ReactNode; className?: string; }' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'className' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+src/components/ui/Modal/Modal.tsx(14,10): error TS2375: Type '{ children: ReactNode; defaultOpen?: boolean; modal?: boolean; open: boolean | undefined; onOpenChange: ((open: boolean) => void) | undefined; }' is not assignable to type 'DialogProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'open' are incompatible.
+    Type 'boolean | undefined' is not assignable to type 'boolean'.
+      Type 'undefined' is not assignable to type 'boolean'.

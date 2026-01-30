@@ -91,29 +91,31 @@ const TimePickerRaw = ({
         return minutes.map(min => ({ label: `${min}분`, value: min }));
     }, [minuteStep]);
 
-    // Functional update to avoid stale closures - 수정된 버전
+    // Functional update to avoid stale closures
     const updateTempTime = useCallback((updates: { period?: Period, hour?: string, minute?: string }) => {
         setTempValue(prev => {
-            const [hStr, mStr] = prev.split(':');
-            const h = parseInt(hStr || '14', 10);
+            const currentVal = prev || '12:00';
+            const [hStr, mStr] = currentVal.split(':');
+            const h = parseInt(hStr || '12', 10);
             const m = mStr || '00';
 
-            // 현재 24시간 형식에서 period와 display hour 계산
+            // 현재 상태 계산
             const isPm = h >= 12;
             const currentPeriod: Period = isPm ? 'PM' : 'AM';
             const currentDisplayH = h > 12 ? h - 12 : (h === 0 ? 12 : h);
 
-            // updates에서 제공된 값 사용, 없으면 현재 값 유지
+            // 새 값 결정
             const p = updates.period !== undefined ? updates.period : currentPeriod;
             const dh = updates.hour !== undefined ? updates.hour : String(currentDisplayH);
             const min = updates.minute !== undefined ? updates.minute : m;
 
-            // display hour를 24시간 형식으로 변환
+            // 24시간 형식으로 재계산
             let newH = parseInt(dh, 10);
             if (p === 'PM' && newH !== 12) newH += 12;
             else if (p === 'AM' && newH === 12) newH = 0;
 
-            return `${String(newH).padStart(2, '0')}:${min}`;
+            const nextValue = `${String(newH).padStart(2, '0')}:${min}`;
+            return nextValue;
         });
     }, []);
 
@@ -128,13 +130,9 @@ const TimePickerRaw = ({
     // Handle modal close
     const handleModalClose = useCallback((open: boolean) => {
         setIsOpen(open);
-        if (!open) {
-            // 모달이 닫힐 때 tempValue를 현재 value로 리셋
-            setTempValue(value || '14:00');
-        }
-    }, [value]);
+    }, []);
 
-    // Scroll to current selection when modal opens or tempValue changes
+    // Scroll to current selection when modal opens
     useEffect(() => {
         if (!isOpen) return;
 
@@ -146,12 +144,12 @@ const TimePickerRaw = ({
                     el.scrollIntoView({ block: 'center', behavior: 'auto' });
                 });
             }
-        }, 100);
+        }, 150);
 
         return () => clearTimeout(timer);
-    }, [isOpen, tempValue]);
+    }, [isOpen]);
 
-    // Render column helper - Toss Button 사용
+    // Render column helper
     const renderColumn = (
         options: { label: string, value: string }[],
         current: string,
@@ -167,6 +165,7 @@ const TimePickerRaw = ({
                         color="dark"
                         className={cn(styles.optionItem, current === opt.value && styles.active)}
                         onClick={(e) => {
+                            e.preventDefault();
                             e.stopPropagation();
                             if (columnType === 'hour') {
                                 updateTempTime({ hour: opt.value });
@@ -182,8 +181,6 @@ const TimePickerRaw = ({
         </div>
     );
 
-
-
     return (
         <>
             <TextField.Button
@@ -196,7 +193,7 @@ const TimePickerRaw = ({
                 value={displayValue}
                 onClick={() => {
                     if (!disabled) {
-                        setTempValue(value || '14:00');
+                        setTempValue(value || '12:00');
                         setIsOpen(true);
                     }
                 }}
@@ -207,14 +204,16 @@ const TimePickerRaw = ({
                 <Modal.Content className={styles.modalContent}>
                     <Modal.Header title="예식 시간 선택" />
 
-                    <Modal.Body>
-                        <div className={styles.periodContainer}>
+                    <Modal.Body className={styles.modalBody}>
+                        <div
+                            className={styles.periodContainer}
+                            onClick={(e) => e.stopPropagation()}
+                            onPointerDown={(e) => e.stopPropagation()}
+                        >
                             <SegmentedControl
                                 value={tPeriod}
-                                onChange={(v: string) => {
-                                    if (v === 'AM' || v === 'PM') {
-                                        updateTempTime({ period: v as Period });
-                                    }
+                                onChange={(v: any) => {
+                                    updateTempTime({ period: v as Period });
                                 }}
                             >
                                 <SegmentedControl.Item value="AM">오전</SegmentedControl.Item>

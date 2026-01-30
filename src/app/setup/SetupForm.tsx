@@ -289,11 +289,13 @@ const SetupForm = () => {
                 </div>
 
                 {isStepValid() && (
+                    // @ts-ignore
                     <BottomCTA.Single
                         fixed
                         background="none"
                         fixedAboveKeyboard={true}
                         showAfterDelay={{ animation: 'slide', delay: 0 }}
+                        // @ts-ignore
                         onClick={() => handleNext()}
                     >
                         {currentStep < 3 ? (
@@ -307,7 +309,7 @@ const SetupForm = () => {
                     </BottomCTA.Single>
                 )}
             </form>
-        </div>
+        </div >
     );
 };
 

@@ -1,0 +1,12 @@
+src/components/builder/sections/ClosingSection.tsx(144,33): error TS2322: Type '{ children: string; fixed: false; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+  Property 'onClick' does not exist on type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+src/components/builder/sections/ClosingSection.tsx(160,29): error TS2322: Type '{ children: string; fixed: false; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+  Property 'onClick' does not exist on type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+src/components/builder/sections/GreetingSection.tsx(246,33): error TS2322: Type '{ children: string; fixed: false; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+  Property 'onClick' does not exist on type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+src/components/builder/sections/GreetingSection.tsx(262,29): error TS2322: Type '{ children: string; fixed: false; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+  Property 'onClick' does not exist on type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+src/components/builder/sections/MainScreenSection.tsx(89,33): error TS2322: Type '{ children: string; fixed: false; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+  Property 'onClick' does not exist on type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+src/components/builder/sections/MainScreenSection.tsx(105,29): error TS2322: Type '{ children: string; fixed: false; onClick: () => void; }' is not assignable to type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
+  Property 'onClick' does not exist on type 'IntrinsicAttributes & BottomCTATypeAProps & RefAttributes<HTMLButtonElement>'.
