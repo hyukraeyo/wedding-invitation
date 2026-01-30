@@ -47,9 +47,9 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
             <List>
                 {/* Date & Time Picking */}
                 <ListRow
-                    title="예식일"
                     contents={
                         <DatePicker
+                            label="예식일"
                             value={date}
                             onChange={(value) => setDate(value)}
                         />

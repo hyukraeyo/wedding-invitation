@@ -7,34 +7,6 @@
   padding-top: 8px;
 }
 
-.triggerButton {
-  @include m.input-base;
-  @include m.flex-between;
-  width: 100%;
-  padding: 0 1rem;
-  background-color: white;
-  transition: all v.$transition-fast v.$ease-standard;
-  min-height: v.$input-height;
-
-  &:active:not(:disabled) {
-    transform: scale(0.98);
-  }
-
-  svg {
-    width: 1rem;
-    height: 1rem;
-    opacity: 0.5;
-  }
-}
-
-.placeholder {
-  color: v.$zinc-400;
-}
-
-.value {
-  color: v.$color-text-primary;
-}
-
 .calendar {
   width: auto;
   margin: 0 auto;

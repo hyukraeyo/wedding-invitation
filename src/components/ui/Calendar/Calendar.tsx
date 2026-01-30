@@ -93,7 +93,7 @@ function CustomMonthCaption(props: MonthCaptionProps) {
           onClick={handlePrev}
           disabled={!previousMonth || false}
           aria-label="이전 달"
-          name="prev-month"
+          name="chevron-left"
         >
           <ChevronLeftIcon />
         </IconButton>
@@ -109,7 +109,7 @@ function CustomMonthCaption(props: MonthCaptionProps) {
           onClick={handleNext}
           disabled={!nextMonth || false}
           aria-label="다음 달"
-          name="next-month"
+          name="chevron-right"
         >
           <ChevronRightIcon />
         </IconButton>
