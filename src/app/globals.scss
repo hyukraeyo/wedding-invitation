@@ -54,7 +54,6 @@
   --button-background-color: #FBC02D;
   --button-color: #000000;
   --button-pressed-background-color: #F9A825;
-  --adaptiveFloatBackground: #ffffff;
 }
 
 * {
@@ -278,4 +277,21 @@ button {
 
 .view-transition-sidebar {
   view-transition-name: page-sidebar;
+}
+
+/* TDS Component Overrides */
+.t-bottom-sheet {
+  background-color: $white !important;
+  border-radius: $radius-xl $radius-xl 0 0 !important;
+}
+
+.t-modal-content {
+  display: flex !important;
+  flex-direction: column !important;
+  max-height: 85vh !important;
+  width: 400px !important;
+  background-color: $white !important;
+  padding: 0 !important;
+  border-radius: $radius-xl !important;
+  overflow: hidden !important;
 }

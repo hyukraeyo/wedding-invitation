@@ -9,7 +9,6 @@ import { MENU_TITLES } from '@/constants/navigation';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { IconButton } from '@/components/ui/IconButton';
-import { Text } from '@/components/ui/Text';
 import { signOut } from 'next-auth/react';
 import styles from './MobileNav.module.scss';
 import { clsx } from 'clsx';
@@ -170,70 +169,69 @@ export function MobileNav({
             {!onPreviewToggle && (
                 <>
                     <Modal open={isMoreOpen} onOpenChange={setIsMoreOpen}>
-                        <div className={styles.header}>
-                            <Text typography="t4" fontWeight="bold">전체 메뉴</Text>
-                        </div>
-                        <div className={styles.drawerContent}>
-                            <div className={styles.drawerMenu}>
-                                <ViewTransitionLink
-                                    href="/mypage/account"
-                                    className={styles.drawerItem}
-                                    onClick={handleDrawerNavClick}
-                                >
-                                    <User size={20} className={styles.drawerIcon} />
-                                    <span>계정</span>
-                                </ViewTransitionLink>
-                                <Button
-                                    variant="weak"
-                                    className={styles.drawerItem}
-                                    onClick={handleEventClick}
-                                    style={{ justifyContent: 'flex-start', height: 'auto', padding: '16px' }}
-                                >
-                                    <Sparkles size={20} className={styles.drawerIcon} />
-                                    <span>{MENU_TITLES.EVENTS}</span>
-                                </Button>
-                                <Button
-                                    variant="weak"
-                                    className={styles.drawerItem}
-                                    onClick={handleCustomerService}
-                                    style={{ justifyContent: 'flex-start', height: 'auto', padding: '16px' }}
-                                >
-                                    <HelpCircle size={20} className={styles.drawerIcon} />
-                                    <span>{MENU_TITLES.CUSTOMER_SERVICE}</span>
-                                </Button>
-                                <Button
-                                    variant="weak"
-                                    className={clsx(styles.drawerItem, styles.logoutButton)}
-                                    onClick={handleLogout}
-                                    style={{ justifyContent: 'flex-start', height: 'auto', padding: '16px' }}
-                                >
-                                    <LogOut size={20} className={styles.drawerIcon} />
-                                    <span>{MENU_TITLES.LOGOUT}</span>
-                                </Button>
-                            </div>
-                        </div>
+                        <Modal.Overlay />
+                        <Modal.Content>
+                            <Modal.Header title="전체 메뉴" />
+                            <Modal.Body className={styles.drawerPadding}>
+                                <div className={styles.drawerMenu}>
+                                    <ViewTransitionLink
+                                        href="/mypage/account"
+                                        className={styles.drawerItem}
+                                        onClick={handleDrawerNavClick}
+                                    >
+                                        <User size={20} className={styles.drawerIcon} />
+                                        <span>계정</span>
+                                    </ViewTransitionLink>
+                                    <Button
+                                        variant="weak"
+                                        className={styles.drawerItem}
+                                        onClick={handleEventClick}
+                                    >
+                                        <Sparkles size={20} className={styles.drawerIcon} />
+                                        <span>{MENU_TITLES.EVENTS}</span>
+                                    </Button>
+                                    <Button
+                                        variant="weak"
+                                        className={styles.drawerItem}
+                                        onClick={handleCustomerService}
+                                    >
+                                        <HelpCircle size={20} className={styles.drawerIcon} />
+                                        <span>{MENU_TITLES.CUSTOMER_SERVICE}</span>
+                                    </Button>
+                                    <Button
+                                        variant="weak"
+                                        className={clsx(styles.drawerItem, styles.logoutButton)}
+                                        onClick={handleLogout}
+                                    >
+                                        <LogOut size={20} className={styles.drawerIcon} />
+                                        <span>{MENU_TITLES.LOGOUT}</span>
+                                    </Button>
+                                </div>
+                            </Modal.Body>
+                        </Modal.Content>
                     </Modal>
 
                     <Modal open={isEventModalOpen} onOpenChange={setIsEventModalOpen}>
-                        <div className={styles.header}>
-                            <Text typography="t4" fontWeight="bold">설날 이벤트 준비중</Text>
-                        </div>
-                        <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
-                            <div style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>🎁</div>
-                            <p style={{ fontWeight: 600, fontSize: '1.1rem', marginBottom: '0.5rem' }}>
-                                다양한 혜택을 준비한 이벤트가
-                                <br />
-                                준비중입니다
-                            </p>
-                            <p style={{ color: '#666', fontSize: '0.9rem' }}>
-                                곧 찾아올 할인 혜택에 기대해주세요. 😊
-                            </p>
-                        </div>
-                        <div className={styles.footer}>
-                            <Button style={{ width: '100%' }} variant="fill" size="large" onClick={() => setIsEventModalOpen(false)}>
-                                확인
-                            </Button>
-                        </div>
+                        <Modal.Overlay />
+                        <Modal.Content>
+                            <Modal.Header title="설날 이벤트 준비중" />
+                            <Modal.Body className={styles.centerBody}>
+                                <div className={styles.eventIcon}>🎁</div>
+                                <p className={styles.eventTitle}>
+                                    다양한 혜택을 준비한 이벤트가
+                                    <br />
+                                    준비중입니다
+                                </p>
+                                <p className={styles.eventDesc}>
+                                    곧 찾아올 할인 혜택에 기대해주세요. 😊
+                                </p>
+                            </Modal.Body>
+                            <Modal.Footer className={styles.modalFooter}>
+                                <Button className={styles.fullWidth} variant="fill" size="large" onClick={() => setIsEventModalOpen(false)}>
+                                    확인
+                                </Button>
+                            </Modal.Footer>
+                        </Modal.Content>
                     </Modal>
                 </>
             )}

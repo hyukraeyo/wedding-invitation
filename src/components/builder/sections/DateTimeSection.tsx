@@ -49,16 +49,16 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
                 <ListRow
                     contents={
                         <DatePicker
-                            label="예식일"
+                            label="예식 날짜"
                             value={date}
                             onChange={(value) => setDate(value)}
                         />
                     }
                 />
                 <ListRow
-                    title="예식 시간"
                     contents={
                         <TimePicker
+                            label="예식 시간"
                             value={time}
                             onChange={(value) => setTime(value)}
                         />
@@ -90,7 +90,7 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
                         contents={
                             <div className={styles.ddayInputWrapper}>
                                 <TextField
-                                    variant="line"
+                                    variant="box"
                                     label="D-Day 메시지"
                                     placeholder="예: (신랑), (신부)의 결혼식이 (D-Day) 남았습니다"
                                     value={ddayMessage}

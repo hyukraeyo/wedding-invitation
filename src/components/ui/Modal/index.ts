@@ -1,3 +1,4 @@
 'use client';
-export { Modal } from '@toss/tds-mobile';
+
+export * from './Modal';
 export type { ModalProps } from '@toss/tds-mobile';

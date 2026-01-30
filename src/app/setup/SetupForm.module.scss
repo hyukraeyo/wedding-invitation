@@ -149,6 +149,15 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+
+    .buttonWrapper {
+        margin-top: auto;
+        padding-top: 2.5rem;
+
+        .submitButton {
+            width: 100%;
+        }
+    }
 }
 
 
@@ -159,28 +168,38 @@
 .section {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.25rem;
     background-color: transparent; // 카드 배경 제거
     border-radius: 1rem; // v.$radius-lg
     border: 1px solid transparent;
     position: relative;
     transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); // v.$ease-ios
 
-    // 비활성화된(이전) 단계는 작고 미니멀하게
-    opacity: 0.4;
-    transform: scale(0.96);
-    pointer-events: none;
-    border-radius: 0;
-    margin-bottom: 1rem;
+    // 기본적으로 내용은 포인터 이벤트 차단하지 않음
+    margin-bottom: 1.5rem;
+
+    // 비활성화된(이전) 단계 스타일
+    @media (hover: hover) {
+        // 모바일에서는 opacity 조정 최소화, 데스크탑 등 hover 환경 고려
+    }
+
+    &:not(.active) {
+        opacity: 0.4;
+        transform: scale(0.98); // Slightly less scale down
+        // pointer-events: none; // 제거됨 - 사용자가 수정을 원함
+    }
 
     &.clickable {
-        pointer-events: auto;
-        cursor: pointer;
+        pointer-events: auto; // 다시 클릭 가능하게 (컨테이너 전체)
+        cursor: text; // 텍스트 입력 느낌
         transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); // v.$ease-ios
+
+        // 오버레이로 클릭 영역 확보는 이제 필요없음 (각 인풋이 살아있으므로)
+        // &::after { ... } 
 
         &:hover {
             opacity: 0.8 !important;
-            filter: brightness(1.1);
+            filter: brightness(1.05);
         }
     }
 
@@ -188,32 +207,29 @@
         gap: 0.25rem;
     }
 
-    // 가장 상단에 있는(최신) 섹션은 강조 (배경/테두리 제거됨)
-    &:first-of-type {
+    // 활성화된 단계
+    &.active {
         opacity: 1;
         transform: scale(1);
         pointer-events: auto;
         z-index: 10;
-        margin-bottom: 1.25rem; // More breathing room for active step
+        margin-bottom: 1.5rem; // More breathing room for active step
     }
 }
 
-.sectionTitle {
-    font-size: 1.125rem;
-    font-weight: 800;
-    color: #1A1A1A; // v.$color-text-primary
-    margin-bottom: 1rem;
-    letter-spacing: -0.03em;
-    display: flex;
-    align-items: center;
-    gap: 0.625rem;
+// 🍌 Added label style
+.label {
+    display: block;
+    font-size: 0.9375rem; // 15px
+    font-weight: 500;
+    color: #4E5968; // v.$grey-700
+    margin-bottom: 8px;
+    margin-left: 4px;
+    line-height: 1.4;
+    transition: color 0.2s ease;
 
-    &::before {
-        content: '';
-        width: 4px;
-        height: 1.125rem;
-        background: #FBC02D; // v.$primary
-        border-radius: 2px;
+    .active & {
+        color: #333D4B; // v.$grey-800 (Darker when active)
     }
 }
 
@@ -234,51 +250,10 @@
     gap: 1.5rem;
 }
 
-.inputGroup {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-}
-
-.label,
-.fieldLabel {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #D97706; // v.$primary-600
-    margin-left: 0.125rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.125rem;
-}
-
-.fieldWrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    width: 100%;
-    border-bottom: 1px solid #e4e4e7; // v.$zinc-200
-    padding-bottom: 0.5rem;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); // v.$ease-ios
-
-    &:focus-within {
-        border-color: #FBC02D; // v.$primary
-    }
-}
-
-// 비활성 단계의 요약 룩
-.section:not(:first-of-type) {
-    .label {
-        font-size: 0.65rem;
-        color: #a1a1aa; // v.$zinc-400
-        opacity: 0.8;
-    }
-
-    input,
-    button,
-    span {
-        font-size: 0.9375rem !important; // 요약된 텍스트 크기
-        color: #52525b !important; // v.$zinc-600
-    }
+// 비활성 단계의 요약 룩 (TDS Box 타입에 맞춰 조정)
+.section:not(.active) {
+    opacity: 0.5;
+    transform: scale(0.98);
 }
 
 .slugPreview {
@@ -335,7 +310,7 @@
         transform: translateY(0);
         filter: blur(0);
         max-height: 500px; // Large enough for content
-        margin-bottom: 1.25rem;
+        margin-bottom: 1.5rem; // Matched with .section margin
         overflow: visible; // Allow floating labels to overflow
     }
 }

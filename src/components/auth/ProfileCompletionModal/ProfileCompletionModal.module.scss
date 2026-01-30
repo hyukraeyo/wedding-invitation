@@ -5,9 +5,6 @@
   margin-bottom: 24px;
 }
 
-.title {
-  // handled by Text
-}
 
 .container {
   display: flex;
@@ -92,12 +89,24 @@
   }
 }
 
+.introText {
+  text-align: center;
+  color: #4E5968;
+  margin-bottom: 1.5rem;
+  word-break: keep-all;
+  font-size: 1.0625rem;
+}
+
 .footer {
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-top: 24px;
+  padding: 0 24px 24px;
+}
+
+.fullWidth {
+  width: 100%;
 }
 
 .submitButton {

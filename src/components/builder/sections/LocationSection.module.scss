@@ -17,6 +17,20 @@
   padding-right: 2.5rem; // Make space for the icon
 }
 
+.postcodeBody {
+  padding: 0 !important;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .searchIcon {
   position: absolute;
   right: 0.75rem;

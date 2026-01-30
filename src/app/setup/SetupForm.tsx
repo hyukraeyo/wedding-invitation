@@ -14,7 +14,7 @@ import { Top } from '@/components/ui/Top';
 import { Sparkles, ChevronLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { parseKoreanName } from '@/lib/utils';
-import { FixedBottomCTA } from '@/components/ui/BottomCTA';
+import { BottomCTA } from '@/components/ui/BottomCTA';
 import styles from './SetupForm.module.scss';
 
 const subscribe = () => () => { };
@@ -41,10 +41,18 @@ const SetupForm = () => {
     const groomNameRef = useRef<HTMLInputElement>(null);
     const brideNameRef = useRef<HTMLInputElement>(null);
     const dateRef = useRef<HTMLButtonElement>(null);
-    const timeRef = useRef<HTMLDivElement>(null);
-    const bottomRef = useRef<HTMLDivElement>(null);
+    const timeRef = useRef<HTMLButtonElement>(null);
+
 
     const [currentStep, setCurrentStep] = useState(0);
+    const [highestStepReached, setHighestStepReached] = useState(() => {
+        if (store.time) return 3;
+        if (store.date) return 2;
+        if (store.bride.firstName || store.bride.lastName) return 1;
+        return 0;
+    });
+
+
 
     // 🍌 Auto-generate slug helper
     const generateSlug = (name: string) => {
@@ -96,6 +104,7 @@ const SetupForm = () => {
 
         if (currentStep < 3) {
             setCurrentStep(prev => prev + 1);
+            setHighestStepReached(prev => Math.max(prev, currentStep + 1));
         } else {
             handleSubmit();
         }
@@ -151,9 +160,8 @@ const SetupForm = () => {
                     dateRef.current?.click();
                     break;
                 case 3:
-                    const timeBtn = timeRef.current?.querySelector('button');
-                    timeBtn?.focus();
-                    timeBtn?.click();
+                    timeRef.current?.focus();
+                    timeRef.current?.click();
                     break;
             }
         };
@@ -214,66 +222,61 @@ const SetupForm = () => {
 
             <form className={styles.form} onSubmit={handleSubmit}>
                 {/* Step 3: Time */}
-                {currentStep >= 3 && (
+                {highestStepReached >= 3 && (
                     <div
-                        className={cn(styles.section, styles.stackIn, currentStep > 3 && styles.clickable)}
-                        onClick={() => currentStep > 3 && setCurrentStep(3)}
+                        className={cn(styles.section, styles.stackIn, currentStep === 3 && styles.active, currentStep !== 3 && styles.clickable)}
+                        onClick={() => currentStep !== 3 && setCurrentStep(3)}
                     >
-                        <div className={styles.fieldWrapper}>
-                            <label className={styles.fieldLabel} htmlFor="wedding-time">예식 시간</label>
-                            <TimePicker
-                                id="wedding-time"
-                                ref={timeRef}
-                                part="all"
-                                value={time}
-                                onChange={setTime}
-                                onComplete={() => {
-                                    setTimeout(() => handleNext(true), 400);
-                                }}
-                                disabled={currentStep > 3}
-                                className="border-none bg-transparent text-lg font-bold p-0 shadow-none h-auto h-12 justify-start"
-                            />
-                        </div>
+                        <TimePicker
+                            id="wedding-time"
+                            ref={timeRef}
+                            value={time}
+                            label="예식 시간"
+                            labelOption="sustain"
+                            onChange={setTime}
+                            onComplete={() => {
+                                setTimeout(() => handleNext(true), 400);
+                            }}
+                            disabled={false}
+                        />
                     </div>
                 )}
 
                 {/* Step 2: Date */}
-                {currentStep >= 2 && (
+                {highestStepReached >= 2 && (
                     <div
-                        className={cn(styles.section, styles.stackIn, currentStep > 2 && styles.clickable)}
-                        onClick={() => currentStep > 2 && setCurrentStep(2)}
+                        className={cn(styles.section, styles.stackIn, currentStep === 2 && styles.active, currentStep !== 2 && styles.clickable)}
+                        onClick={() => currentStep !== 2 && setCurrentStep(2)}
                     >
-                        <div className={styles.fieldWrapper}>
-                            <label className={styles.fieldLabel} htmlFor="wedding-date">예식 날짜</label>
-                            <DatePicker
-                                id="wedding-date"
-                                ref={dateRef}
-                                value={date}
-                                onChange={(val) => {
-                                    setDate(val);
-                                    if (val) setTimeout(() => handleNext(true), 300);
-                                }}
-                                onComplete={() => { }}
-                                disabled={currentStep > 2}
-                                className="border-none bg-transparent text-lg font-bold p-0 shadow-none h-auto h-12 justify-start"
-                            />
-                        </div>
+                        <DatePicker
+                            id="wedding-date"
+                            ref={dateRef}
+                            value={date}
+                            label="예식 날짜"
+                            labelOption="sustain"
+                            onChange={(val) => {
+                                setDate(val);
+                                if (val) setTimeout(() => handleNext(true), 300);
+                            }}
+                            disabled={false}
+                        />
                     </div>
                 )}
 
                 {/* Step 1: Bride Name */}
-                {currentStep >= 1 && (
+                {highestStepReached >= 1 && (
                     <div
-                        className={cn(styles.section, styles.stackIn, currentStep > 1 && styles.clickable)}
-                        onClick={() => currentStep > 1 && setCurrentStep(1)}
+                        className={cn(styles.section, styles.stackIn, currentStep === 1 && styles.active, currentStep !== 1 && styles.clickable)}
+                        onClick={() => currentStep !== 1 && setCurrentStep(1)}
                     >
                         <TextField
                             label="신부 이름"
+                            labelOption="sustain"
                             id="bride-name"
                             ref={brideNameRef}
                             value={brideFullName}
-                            readOnly={currentStep > 1}
-                            variant="line"
+                            readOnly={false}
+                            variant="box"
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                 const val = e.target.value;
                                 setBrideFullName(val);
@@ -291,16 +294,17 @@ const SetupForm = () => {
 
                 {/* Step 0: Groom Name */}
                 <div
-                    className={cn(styles.section, styles.stackIn, currentStep > 0 && styles.clickable)}
-                    onClick={() => currentStep > 0 && setCurrentStep(0)}
+                    className={cn(styles.section, styles.stackIn, currentStep === 0 && styles.active, currentStep !== 0 && styles.clickable)}
+                    onClick={() => currentStep !== 0 && setCurrentStep(0)}
                 >
                     <TextField
                         label="신랑 이름"
+                        labelOption="sustain"
                         id="groom-name"
                         ref={groomNameRef}
                         value={groomFullName}
-                        readOnly={currentStep > 0}
-                        variant="line"
+                        readOnly={false}
+                        variant="box"
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                             const val = e.target.value;
                             setGroomFullName(val);
@@ -315,14 +319,16 @@ const SetupForm = () => {
                     />
                 </div>
 
-                {/* Formatting spacer */}
-                <div ref={bottomRef} style={{ height: '40px' }} />
+
 
                 {/* Dynamic Bottom Button */}
                 {isStepValid() && (
-                    <FixedBottomCTA
+                    <BottomCTA.Single
+                        fixed
+                        background="none"
+                        fixedAboveKeyboard={true}
+                        showAfterDelay={{ animation: 'slide', delay: 0 }}
                         onClick={() => handleNext()}
-                        type={currentStep === 3 ? 'submit' : 'button'}
                     >
                         {currentStep < 3 ? (
                             <>
@@ -334,7 +340,7 @@ const SetupForm = () => {
                                 <span>시작하기</span>
                             </>
                         )}
-                    </FixedBottomCTA>
+                    </BottomCTA.Single>
                 )}
             </form>
         </div>

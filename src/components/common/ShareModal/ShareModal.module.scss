@@ -44,11 +44,14 @@
   text-align: center;
 }
 
+.footer {
+  padding: 0 24px 24px;
+}
+
 .shareButtonRow {
   width: 100%;
   display: flex;
   gap: 12px;
-  padding-top: 16px;
 
   .cancelButton {
     flex: 1;

@@ -8,7 +8,6 @@ import styles from './MenuSelect.module.scss';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
-import { Text } from '@/components/ui/Text';
 
 interface MenuSelectOption<T> {
     label: string;
@@ -84,27 +83,30 @@ export const MenuSelect = <T extends string | number>({
             <div className={cn(className)}>
                 {trigger}
                 <Modal open={isOpen} onOpenChange={setIsOpen}>
-                    {(modalTitle || placeholder) && (
-                        <div className={styles.header}>
-                            <Text typography="t4" fontWeight="bold">{modalTitle || placeholder}</Text>
-                        </div>
-                    )}
-                    <Menu.Dropdown className={styles.dropdown}>
-                        {options.map((option) => (
-                            <Menu.DropdownCheckItem
-                                key={String(option.value)}
-                                checked={option.value === currentValue}
-                                onCheckedChange={(checked) => {
-                                    if (option.disabled) return;
-                                    if (checked) {
-                                        handleValueChange(option.value);
-                                    }
-                                }}
-                            >
-                                {option.label}
-                            </Menu.DropdownCheckItem>
-                        ))}
-                    </Menu.Dropdown>
+                    <Modal.Overlay />
+                    <Modal.Content>
+                        {(modalTitle || placeholder) && (
+                            <Modal.Header title={modalTitle || placeholder} />
+                        )}
+                        <Modal.Body className={styles.bodyPadding}>
+                            <Menu.Dropdown className={styles.dropdown}>
+                                {options.map((option) => (
+                                    <Menu.DropdownCheckItem
+                                        key={String(option.value)}
+                                        checked={option.value === currentValue}
+                                        onCheckedChange={(checked) => {
+                                            if (option.disabled) return;
+                                            if (checked) {
+                                                handleValueChange(option.value);
+                                            }
+                                        }}
+                                    >
+                                        {option.label}
+                                    </Menu.DropdownCheckItem>
+                                ))}
+                            </Menu.Dropdown>
+                        </Modal.Body>
+                    </Modal.Content>
                 </Modal>
             </div>
         );

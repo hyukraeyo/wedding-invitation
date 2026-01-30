@@ -1,0 +1,13 @@
+@use "../../../styles/variables" as v;
+
+.body {
+    padding: 0 24px 24px;
+    max-height: 70vh;
+    overflow-y: auto;
+    background-color: v.$white;
+}
+
+// Optionally handle footer if needed beyond TDS 'cta' prop
+.footer {
+    padding: 0;
+}

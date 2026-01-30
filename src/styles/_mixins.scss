@@ -60,10 +60,129 @@
     'input': $color-input,
     'muted': $color-muted,
     'muted-foreground': $color-muted-foreground,
+    'text-field-line-border-color': $text-field-line-border-color,
+    'text-field-line-border-color-focused': $text-field-line-border-color-focused,
+    'text-field-line-border-color-error': $text-field-line-border-color-error,
+
+    // TDS Adaptive Colors (Full Sync)
+    'adaptiveBackground': $adaptive-background,
+    'adaptiveBackgroundDimmed': $adaptive-background-dimmed,
+    'adaptiveBackgroundLevel01': $adaptive-background-level-01,
+    'adaptiveBackgroundLevel02': $adaptive-background-level-02,
+    'adaptiveBackgroundLevelB01': $adaptive-background-level-b01,
+    'adaptiveDimmedBackground': $adaptive-dimmed-background,
+    'adaptiveFloatBackground': $adaptive-float-background,
+    'adaptiveLayeredBackground': $adaptive-layered-background,
+    'adaptiveGreyBackground': $adaptive-grey-background,
+    'adaptiveHairlineBorder': $adaptive-hairline-border,
+
+    'adaptiveBlue50': $adaptive-blue-50,
+    'adaptiveBlue100': $adaptive-blue-100,
+    'adaptiveBlue200': $adaptive-blue-200,
+    'adaptiveBlue300': $adaptive-blue-300,
+    'adaptiveBlue400': $adaptive-blue-400,
+    'adaptiveBlue500': $adaptive-blue-500,
+    'adaptiveBlue600': $adaptive-blue-600,
+    'adaptiveBlue700': $adaptive-blue-700,
+    'adaptiveBlue800': $adaptive-blue-800,
+    'adaptiveBlue900': $adaptive-blue-900,
+
+    'adaptiveGreen50': $adaptive-green-50,
+    'adaptiveGreen100': $adaptive-green-100,
+    'adaptiveGreen200': $adaptive-green-200,
+    'adaptiveGreen300': $adaptive-green-300,
+    'adaptiveGreen400': $adaptive-green-400,
+    'adaptiveGreen500': $adaptive-green-500,
+    'adaptiveGreen600': $adaptive-green-600,
+    'adaptiveGreen700': $adaptive-green-700,
+    'adaptiveGreen800': $adaptive-green-800,
+    'adaptiveGreen900': $adaptive-green-900,
+
+    'adaptiveGrey50': $adaptive-grey-50,
+    'adaptiveGrey100': $adaptive-grey-100,
+    'adaptiveGrey200': $adaptive-grey-200,
+    'adaptiveGrey300': $adaptive-grey-300,
+    'adaptiveGrey400': $adaptive-grey-400,
+    'adaptiveGrey500': $adaptive-grey-500,
+    'adaptiveGrey600': $adaptive-grey-600,
+    'adaptiveGrey700': $adaptive-grey-700,
+    'adaptiveGrey800': $adaptive-grey-800,
+    'adaptiveGrey900': $adaptive-grey-900,
+
+    'adaptiveOrange50': $adaptive-orange-50,
+    'adaptiveOrange100': $adaptive-orange-100,
+    'adaptiveOrange200': $adaptive-orange-200,
+    'adaptiveOrange300': $adaptive-orange-300,
+    'adaptiveOrange400': $adaptive-orange-400,
+    'adaptiveOrange500': $adaptive-orange-500,
+    'adaptiveOrange600': $adaptive-orange-600,
+    'adaptiveOrange700': $adaptive-orange-700,
+    'adaptiveOrange800': $adaptive-orange-800,
+    'adaptiveOrange900': $adaptive-orange-900,
+
+    'adaptivePurple50': $adaptive-purple-50,
+    'adaptivePurple100': $adaptive-purple-100,
+    'adaptivePurple200': $adaptive-purple-200,
+    'adaptivePurple300': $adaptive-purple-300,
+    'adaptivePurple400': $adaptive-purple-400,
+    'adaptivePurple500': $adaptive-purple-500,
+    'adaptivePurple600': $adaptive-purple-600,
+    'adaptivePurple700': $adaptive-purple-700,
+    'adaptivePurple800': $adaptive-purple-800,
+    'adaptivePurple900': $adaptive-purple-900,
+
+    'adaptiveRed50': $adaptive-red-50,
+    'adaptiveRed100': $adaptive-red-100,
+    'adaptiveRed200': $adaptive-red-200,
+    'adaptiveRed300': $adaptive-red-300,
+    'adaptiveRed400': $adaptive-red-400,
+    'adaptiveRed500': $adaptive-red-500,
+    'adaptiveRed600': $adaptive-red-600,
+    'adaptiveRed700': $adaptive-red-700,
+    'adaptiveRed800': $adaptive-red-800,
+    'adaptiveRed900': $adaptive-red-900,
+
+    'adaptiveTeal50': $adaptive-teal-50,
+    'adaptiveTeal100': $adaptive-teal-100,
+    'adaptiveTeal200': $adaptive-teal-200,
+    'adaptiveTeal300': $adaptive-teal-300,
+    'adaptiveTeal400': $adaptive-teal-400,
+    'adaptiveTeal500': $adaptive-teal-500,
+    'adaptiveTeal600': $adaptive-teal-600,
+    'adaptiveTeal700': $adaptive-teal-700,
+    'adaptiveTeal800': $adaptive-teal-800,
+    'adaptiveTeal900': $adaptive-teal-900,
+
+    'adaptiveYellow50': $adaptive-yellow-50,
+    'adaptiveYellow100': $adaptive-yellow-100,
+    'adaptiveYellow200': $adaptive-yellow-200,
+    'adaptiveYellow300': $adaptive-yellow-300,
+    'adaptiveYellow400': $adaptive-yellow-400,
+    'adaptiveYellow500': $adaptive-yellow-500,
+    'adaptiveYellow600': $adaptive-yellow-600,
+    'adaptiveYellow700': $adaptive-yellow-700,
+    'adaptiveYellow800': $adaptive-yellow-800,
+    'adaptiveYellow900': $adaptive-yellow-900,
+
+    'adaptiveGreyOpacity50': $adaptive-grey-opacity-50,
+    'adaptiveGreyOpacity100': $adaptive-grey-opacity-100,
+    'adaptiveGreyOpacity200': $adaptive-grey-opacity-200,
+    'adaptiveGreyOpacity300': $adaptive-grey-opacity-300,
+    'adaptiveGreyOpacity400': $adaptive-grey-opacity-400,
+    'adaptiveGreyOpacity500': $adaptive-grey-opacity-500,
+    'adaptiveGreyOpacity600': $adaptive-grey-opacity-600,
+    'adaptiveGreyOpacity700': $adaptive-grey-opacity-700,
+    'adaptiveGreyOpacity800': $adaptive-grey-opacity-800,
+    'adaptiveGreyOpacity900': $adaptive-grey-opacity-900,
+
+    'adaptiveDisabledBlue500': $adaptive-disabled-blue-500,
+    'tRadioIndicatorBackgroundColor': $t-radio-indicator-background-color,
+    'tGradientToBottom': $t-gradient-to-bottom,
   ) {
     --#{$key}: #{$value};
   }
 }
+
 
 // ============================================
 // Flexbox Tools
@@ -109,11 +228,14 @@
 }
 
 @mixin scrollbar-hide {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 
   &::-webkit-scrollbar {
-    display: none; /* Chrome, Safari and Opera */
+    display: none;
+    /* Chrome, Safari and Opera */
   }
 }
 

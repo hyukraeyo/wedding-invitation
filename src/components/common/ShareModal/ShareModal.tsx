@@ -43,55 +43,63 @@ export const ShareModal: React.FC<ShareModalProps> = ({
 
     return (
         <Modal open={open} onOpenChange={onOpenChange}>
-            <div className={styles.header}>
-                <Text typography="t4" fontWeight="bold">청첩장 공유하기</Text>
-                <Text typography="t6" color="#666">원하는 방법으로 청첩장을 공유해보세요</Text>
-            </div>
-            <div className={styles.shareContainer}>
-                <div className={styles.shareMethod}>
-                    <IconButton
-                        onClick={handleLinkShare}
-                        className={styles.shareButton}
-                        aria-label="링크 복사"
-                        variant="clear"
-                        name=""
-                    >
-                        {copied ? <Check size={20} /> : <Copy size={20} />}
-                    </IconButton>
-                    <span className={styles.shareLabel}>링크 복사</span>
-                </div>
+            <Modal.Overlay />
+            <Modal.Content>
+                <Modal.Header>
+                    <div className={styles.header}>
+                        <Text typography="t4" fontWeight="bold">청첩장 공유하기</Text>
+                        <Text typography="t6" color="#666">원하는 방법으로 청첩장을 공유해보세요</Text>
+                    </div>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className={styles.shareContainer}>
+                        <div className={styles.shareMethod}>
+                            <IconButton
+                                onClick={handleLinkShare}
+                                className={styles.shareButton}
+                                aria-label="링크 복사"
+                                variant="clear"
+                                name=""
+                            >
+                                {copied ? <Check size={20} /> : <Copy size={20} />}
+                            </IconButton>
+                            <span className={styles.shareLabel}>링크 복사</span>
+                        </div>
 
-                <div className={styles.shareMethod}>
-                    <KakaoShareButton
-                        invitationUrl={invitationUrl}
-                        invitationTitle={invitationTitle || ''}
-                        invitationDescription={invitationDescription || ''}
-                        invitationImageUrl={invitationImageUrl || ''}
-                        slug={slug}
-                        onSuccess={() => onOpenChange(false)}
-                    >
-                        <IconButton
-                            className={styles.shareButton}
-                            aria-label="카카오톡 공유"
-                            variant="clear"
-                            name=""
+                        <div className={styles.shareMethod}>
+                            <KakaoShareButton
+                                invitationUrl={invitationUrl}
+                                invitationTitle={invitationTitle || ''}
+                                invitationDescription={invitationDescription || ''}
+                                invitationImageUrl={invitationImageUrl || ''}
+                                slug={slug}
+                                onSuccess={() => onOpenChange(false)}
+                            >
+                                <IconButton
+                                    className={styles.shareButton}
+                                    aria-label="카카오톡 공유"
+                                    variant="clear"
+                                    name=""
+                                >
+                                    <Share2 size={20} />
+                                </IconButton>
+                            </KakaoShareButton>
+                            <span className={styles.shareLabel}>카카오톡</span>
+                        </div>
+                    </div>
+                </Modal.Body>
+                <Modal.Footer className={styles.footer}>
+                    <div className={styles.shareButtonRow}>
+                        <Button
+                            variant="weak"
+                            onClick={() => onOpenChange(false)}
+                            className={styles.cancelButton}
                         >
-                            <Share2 size={20} />
-                        </IconButton>
-                    </KakaoShareButton>
-                    <span className={styles.shareLabel}>카카오톡</span>
-                </div>
-
-                <div className={styles.shareButtonRow}>
-                    <Button
-                        variant="weak"
-                        onClick={() => onOpenChange(false)}
-                        className={styles.cancelButton}
-                    >
-                        닫기
-                    </Button>
-                </div>
-            </div>
+                            닫기
+                        </Button>
+                    </div>
+                </Modal.Footer>
+            </Modal.Content>
         </Modal>
     );
 };

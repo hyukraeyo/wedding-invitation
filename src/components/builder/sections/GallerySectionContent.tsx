@@ -325,28 +325,24 @@ export default React.memo(function GallerySectionContent() {
                                 onOpenChange={setIsLimitModalOpen}
                             >
                                 <Modal.Overlay />
-                                <Modal.Content
-                                    style={{
-                                        padding: '32px 20px 20px',
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        alignItems: 'center',
-                                        textAlign: 'center',
-                                    }}
-                                >
-                                    <h2 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '8px' }}>알림</h2>
-                                    <p style={{ fontSize: '1rem', color: '#666', marginBottom: '24px' }}>
-                                        사진은 최대 10장까지 등록 가능합니다.
-                                    </p>
-                                    <Button
-                                        variant="fill"
-                                        color="primary"
-                                        size="large"
-                                        style={{ width: '100%' }}
-                                        onClick={() => setIsLimitModalOpen(false)}
-                                    >
-                                        확인
-                                    </Button>
+                                <Modal.Content>
+                                    <Modal.Header title="알림" />
+                                    <Modal.Body className={styles.centerBody}>
+                                        <p style={{ fontSize: '1rem', color: '#666' }}>
+                                            사진은 최대 10장까지 등록 가능합니다.
+                                        </p>
+                                    </Modal.Body>
+                                    <Modal.Footer className={styles.paddedFooter}>
+                                        <Button
+                                            variant="fill"
+                                            color="primary"
+                                            size="large"
+                                            style={{ width: '100%' }}
+                                            onClick={() => setIsLimitModalOpen(false)}
+                                        >
+                                            확인
+                                        </Button>
+                                    </Modal.Footer>
                                 </Modal.Content>
                             </Modal>
 

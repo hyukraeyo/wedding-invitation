@@ -36,6 +36,8 @@ interface InvitationActionMenuProps {
     className?: string;
 }
 
+import styles from './InvitationActionMenu.module.scss';
+
 export const InvitationActionMenu: React.FC<InvitationActionMenuProps> = ({
     invitation,
     isAdmin = false,
@@ -222,45 +224,50 @@ export const InvitationActionMenu: React.FC<InvitationActionMenuProps> = ({
 
             {/* 거절 사유 모달 */}
             <Modal open={showRejectionModal} onOpenChange={setShowRejectionModal}>
-                <div style={{ textAlign: 'center', marginBottom: '24px', paddingTop: '8px' }}>
-                    <Text typography="t4" fontWeight="bold">{REJECTION_LABEL}</Text>
-                    <Text typography="t6" color="#666">관리자가 작성한 거절 사유입니다</Text>
-                </div>
-                <div style={{
-                    backgroundColor: '#FEF3F2',
-                    borderRadius: '8px',
-                    padding: '16px',
-                    whiteSpace: 'pre-wrap',
-                    lineHeight: '1.6',
-                    marginBottom: '24px'
-                }}>
-                    {rejectionData?.rejection_reason || '거절 사유가 없습니다.'}
-                </div>
-                <div style={{ display: 'flex' }}>
-                    <Button style={{ flex: 1 }} variant="fill" size="large" onClick={() => setShowRejectionModal(false)}>
-                        확인
-                    </Button>
-                </div>
+                <Modal.Overlay />
+                <Modal.Content>
+                    <Modal.Header>
+                        <div className={styles.centerHeader}>
+                            <Text typography="t4" fontWeight="bold">{REJECTION_LABEL}</Text>
+                            <Text typography="t6" color="#666">관리자가 작성한 거절 사유입니다</Text>
+                        </div>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <div className={styles.rejectionBox}>
+                            {rejectionData?.rejection_reason || '거절 사유가 없습니다.'}
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer className={styles.footer}>
+                        <Button className={styles.flex1} variant="fill" size="large" onClick={() => setShowRejectionModal(false)}>
+                            확인
+                        </Button>
+                    </Modal.Footer>
+                </Modal.Content>
             </Modal>
 
             {/* 수정 확인 모달 */}
             <Modal open={showEditConfirmModal} onOpenChange={setShowEditConfirmModal}>
-                <div style={{ textAlign: 'center', marginBottom: '24px', paddingTop: '8px' }}>
-                    <Text typography="t4" fontWeight="bold">수정 확인</Text>
-                    <Text typography="t6" color="#666">이미 승인이 완료된 청첩장입니다</Text>
-                </div>
-                <div style={{ textAlign: 'center', lineHeight: '1.6', wordBreak: 'keep-all', marginBottom: '24px' }}>
-                    이미 승인이 완료된 청첩장입니다.<br />
-                    수정 모드로 전환 시 <strong>다시 승인 신청</strong>을 해야 공유가 가능합니다. 수정하시겠습니까?
-                </div>
-                <div style={{ display: 'flex', gap: '8px' }}>
-                    <Button style={{ flex: 1 }} variant="weak" size="large" onClick={() => setShowEditConfirmModal(false)}>
-                        취소
-                    </Button>
-                    <Button style={{ flex: 1 }} variant="fill" size="large" onClick={handleConfirmEdit}>
-                        수정하기
-                    </Button>
-                </div>
+                <Modal.Overlay />
+                <Modal.Content>
+                    <Modal.Header>
+                        <div className={styles.centerHeader}>
+                            <Text typography="t4" fontWeight="bold">수정 확인</Text>
+                            <Text typography="t6" color="#666">이미 승인이 완료된 청첩장입니다</Text>
+                        </div>
+                    </Modal.Header>
+                    <Modal.Body className={styles.centerBody}>
+                        이미 승인이 완료된 청첩장입니다.<br />
+                        수정 모드로 전환 시 <strong>다시 승인 신청</strong>을 해야 공유가 가능합니다. 수정하시겠습니까?
+                    </Modal.Body>
+                    <Modal.Footer className={styles.footer}>
+                        <Button className={styles.flex1} variant="weak" size="large" onClick={() => setShowEditConfirmModal(false)}>
+                            취소
+                        </Button>
+                        <Button className={styles.flex1} variant="fill" size="large" onClick={handleConfirmEdit}>
+                            수정하기
+                        </Button>
+                    </Modal.Footer>
+                </Modal.Content>
             </Modal>
         </>
     );

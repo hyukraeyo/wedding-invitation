@@ -132,28 +132,20 @@ export default function ClosingSection(props: SectionProps) {
                     onOpenChange={setIsSampleModalOpen}
                 >
                     <Modal.Overlay />
-                    <Modal.Content
-                        style={{
-                            padding: '32px 0 0',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            maxHeight: '80vh',
-                            width: '400px',
-                            backgroundColor: '#fff'
-                        }}
-                    >
-                        <div style={{ textAlign: 'center', marginBottom: '1.5rem', flexShrink: 0 }}>
-                            <h2 style={{ fontSize: '1.125rem', fontWeight: 700 }}>마무리 추천 문구</h2>
-                        </div>
-                        <div style={{ flex: 1, overflowY: 'auto', padding: '0 20px 20px' }}>
+                    <Modal.Content>
+                        <Modal.Header title="마무리 추천 문구" />
+                        <Modal.Body>
                             {renderSampleList()}
-                        </div>
-                        <BottomCTA.Single
-                            fixed={false}
-                            onClick={() => setIsSampleModalOpen(false)}
-                        >
-                            닫기
-                        </BottomCTA.Single>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <BottomCTA.Single
+                                fixed={false}
+
+                                onClick={() => setIsSampleModalOpen(false)}
+                            >
+                                닫기
+                            </BottomCTA.Single>
+                        </Modal.Footer>
                     </Modal.Content>
                 </Modal>
             ) : (
@@ -164,15 +156,16 @@ export default function ClosingSection(props: SectionProps) {
                     cta={
                         <BottomCTA.Single
                             fixed={false}
+
                             onClick={() => setIsSampleModalOpen(false)}
                         >
                             닫기
                         </BottomCTA.Single>
                     }
                 >
-                    <div style={{ padding: '0 24px 24px', maxHeight: '60vh', overflowY: 'auto', backgroundColor: '#fff' }}>
+                    <BottomSheet.Body>
                         {renderSampleList()}
-                    </div>
+                    </BottomSheet.Body>
                 </BottomSheet>
             )}
         </>

@@ -24,7 +24,6 @@ import { EmptyState } from '@/components/ui/EmptyState';
 
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
-import { Text } from '@/components/ui/Text';
 const RejectionReasonModal = dynamic(
     () => import('@/components/common/RejectionReasonModal'),
     { ssr: false }
@@ -263,33 +262,36 @@ export default function RequestsPageClient({
             {/* Modals... */}
             {/* Modals... */}
             <Modal open={confirmConfig.isOpen} onOpenChange={(o) => setConfirmConfig(p => ({ ...p, isOpen: o }))}>
-                <div className={styles.modalHeader}>
-                    <Text typography="t4" fontWeight="bold">{confirmConfig.title}</Text>
-                </div>
-                <div style={{ textAlign: 'center' }}>{confirmConfig.description}</div>
-                <div className={styles.modalFooter}>
-                    {confirmConfig.type !== 'INFO_ONLY' && (
+                <Modal.Overlay />
+                <Modal.Content>
+                    <Modal.Header title={confirmConfig.title} />
+                    <Modal.Body className={styles.centerBody}>
+                        {confirmConfig.description}
+                    </Modal.Body>
+                    <Modal.Footer className={styles.modalFooter}>
+                        {confirmConfig.type !== 'INFO_ONLY' && (
+                            <Button
+                                className={styles.flex1}
+                                variant="weak"
+                                size="large"
+                                onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
+                                disabled={approveMutation.isPending}
+                            >
+                                취소
+                            </Button>
+                        )}
                         <Button
-                            style={{ flex: 1 }}
-                            variant="weak"
+                            className={styles.flex1}
+                            variant="fill"
                             size="large"
-                            onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
+                            loading={approveMutation.isPending}
                             disabled={approveMutation.isPending}
+                            onClick={handleConfirmAction}
                         >
-                            취소
+                            승인
                         </Button>
-                    )}
-                    <Button
-                        style={{ flex: 1 }}
-                        variant="fill"
-                        size="large"
-                        loading={approveMutation.isPending}
-                        disabled={approveMutation.isPending}
-                        onClick={handleConfirmAction}
-                    >
-                        승인
-                    </Button>
-                </div>
+                    </Modal.Footer>
+                </Modal.Content>
             </Modal>
 
             {rejectionTarget && (() => {
@@ -321,18 +323,21 @@ export default function RequestsPageClient({
 
             {viewRejectionData && (
                 <Modal open={!!viewRejectionData} onOpenChange={() => setViewRejectionData(null)}>
-                    <div className={styles.modalHeader}>
-                        <Text typography="t4" fontWeight="bold">거절/취소 사유</Text>
-                    </div>
-                    <div
-                        className={styles.rejectionReasonBox}
-                        dangerouslySetInnerHTML={{ __html: parseRejection(viewRejectionData).displayReason || '내용이 없습니다.' }}
-                    />
-                    <div className={styles.modalFooter}>
-                        <Button style={{ flex: 1 }} variant="fill" size="large" onClick={() => setViewRejectionData(null)}>
-                            확인
-                        </Button>
-                    </div>
+                    <Modal.Overlay />
+                    <Modal.Content>
+                        <Modal.Header title="거절/취소 사유" />
+                        <Modal.Body>
+                            <div
+                                className={styles.rejectionReasonBox}
+                                dangerouslySetInnerHTML={{ __html: parseRejection(viewRejectionData).displayReason || '내용이 없습니다.' }}
+                            />
+                        </Modal.Body>
+                        <Modal.Footer className={styles.modalFooter}>
+                            <Button className={styles.flex1} variant="fill" size="large" onClick={() => setViewRejectionData(null)}>
+                                확인
+                            </Button>
+                        </Modal.Footer>
+                    </Modal.Content>
                 </Modal>
             )}
         </MyPageContent>

@@ -3,7 +3,6 @@
 import React, { useState } from 'react';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
-import { Text } from '@/components/ui/Text';
 import dynamic from 'next/dynamic';
 import styles from './RejectionReasonModal.module.scss';
 
@@ -48,51 +47,53 @@ export default function RejectionReasonModal({
 
     return (
         <Modal open={isOpen} onOpenChange={(open) => !open && handleClose()}>
-            <div className={styles.header}>
-                <Text typography="t4" fontWeight="bold">{title}</Text>
-            </div>
+            <Modal.Overlay />
+            <Modal.Content>
+                <Modal.Header title={title} />
+                <Modal.Body>
+                    <div className={styles.description}>
+                        {description || (requesterName ? (
+                            <>
+                                <strong>{requesterName}</strong>님의 사용 신청을 거절합니다.<br />
+                                승인 거절 사유를 입력해주세요. 사용자가 확인할 수 있습니다.
+                            </>
+                        ) : (
+                            '승인 거절 사유를 입력해주세요. 사용자가 확인할 수 있습니다.'
+                        ))}
+                    </div>
 
-            <div className={styles.description}>
-                {description || (requesterName ? (
-                    <>
-                        <strong>{requesterName}</strong>님의 사용 신청을 거절합니다.<br />
-                        승인 거절 사유를 입력해주세요. 사용자가 확인할 수 있습니다.
-                    </>
-                ) : (
-                    '승인 거절 사유를 입력해주세요. 사용자가 확인할 수 있습니다.'
-                ))}
-            </div>
+                    <div className={styles.editorWrapper}>
+                        <RichTextEditor
+                            content={reason}
+                            onChange={setReason}
+                            placeholder="내용을 입력하세요…"
+                            minHeight={180}
+                        />
+                    </div>
+                </Modal.Body>
 
-            <div className={styles.editorWrapper}>
-                <RichTextEditor
-                    content={reason}
-                    onChange={setReason}
-                    placeholder="내용을 입력하세요…"
-                    minHeight={180}
-                />
-            </div>
-
-            <div className={styles.footer}>
-                <Button
-                    style={{ flex: 1 }}
-                    variant="weak"
-                    size="large"
-                    onClick={handleClose}
-                    disabled={loading}
-                >
-                    취소
-                </Button>
-                <Button
-                    style={{ flex: 1 }}
-                    variant="fill"
-                    size="large"
-                    loading={loading}
-                    disabled={!reason.trim() || loading}
-                    onClick={handleSubmit}
-                >
-                    {confirmText}
-                </Button>
-            </div>
+                <Modal.Footer className={styles.footer}>
+                    <Button
+                        className={styles.button}
+                        variant="weak"
+                        size="large"
+                        onClick={handleClose}
+                        disabled={loading}
+                    >
+                        취소
+                    </Button>
+                    <Button
+                        className={styles.button}
+                        variant="fill"
+                        size="large"
+                        loading={loading}
+                        disabled={!reason.trim() || loading}
+                        onClick={handleSubmit}
+                    >
+                        {confirmText}
+                    </Button>
+                </Modal.Footer>
+            </Modal.Content>
         </Modal>
     );
 }

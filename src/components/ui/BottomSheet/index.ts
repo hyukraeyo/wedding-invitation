@@ -1,3 +1,4 @@
 'use client';
-export { BottomSheet } from '@toss/tds-mobile';
+
+export * from './BottomSheet';
 export type { BottomSheetProps } from '@toss/tds-mobile';

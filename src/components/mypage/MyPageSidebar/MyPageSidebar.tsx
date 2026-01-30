@@ -2,7 +2,6 @@
 
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
-import { Text } from '@/components/ui/Text';
 import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
 import { Badge } from '@/components/ui/Badge';
 import React from 'react';
@@ -149,44 +148,50 @@ export function MyPageSidebar({
             </aside>
 
             <Modal open={isEventModalOpen} onOpenChange={setIsEventModalOpen}>
-                <div className={styles.header}>
-                    <Text typography="t4" fontWeight="bold">🎁 오픈 이벤트 준비 중!</Text>
-                </div>
-                <div className={styles.eventModalContent}>
-                    <div className={styles.eventIconWrapper}>
-                        <span style={{ fontSize: '3rem' }}>🎁</span>
-                    </div>
-                    <p className={styles.eventMainText}>
-                        다양한 혜택을 담은 이벤트를<br />
-                        열심히 준비하고 있어요!
-                    </p>
-                    <p className={styles.eventSubText}>
-                        곧 찾아올 특별한 소식을 기대해주세요.<br />
-                        (커밍 쑨- ✨)
-                    </p>
-                </div>
-                <div className={styles.footer}>
-                    <Button style={{ width: '100%' }} variant="fill" size="large" onClick={() => setIsEventModalOpen(false)}>
-                        확인
-                    </Button>
-                </div>
+                <Modal.Overlay />
+                <Modal.Content>
+                    <Modal.Header title="🎁 오픈 이벤트 준비 중!" />
+                    <Modal.Body>
+                        <div className={styles.eventModalContent}>
+                            <div className={styles.eventIconWrapper}>
+                                <span style={{ fontSize: '3rem' }}>🎁</span>
+                            </div>
+                            <p className={styles.eventMainText}>
+                                다양한 혜택을 담은 이벤트를<br />
+                                열심히 준비하고 있어요!
+                            </p>
+                            <p className={styles.eventSubText}>
+                                곧 찾아올 특별한 소식을 기대해주세요.<br />
+                                (커밍 쑨- ✨)
+                            </p>
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer className={styles.footer}>
+                        <Button className={styles.fullWidth} variant="fill" size="large" onClick={() => setIsEventModalOpen(false)}>
+                            확인
+                        </Button>
+                    </Modal.Footer>
+                </Modal.Content>
             </Modal>
 
             <Modal open={isCustomerServiceModalOpen} onOpenChange={setIsCustomerServiceModalOpen}>
-                <div className={styles.header}>
-                    <Text typography="t4" fontWeight="bold">{MENU_TITLES.CUSTOMER_SERVICE}</Text>
-                </div>
-                <div className={styles.description}>
-                    카카오톡 채널로 연결됩니다. 문의사항을 남겨주시면 빠르게 답변 드리겠습니다.
-                </div>
-                <div className={styles.footer}>
-                    <Button style={{ flex: 1 }} variant="weak" size="large" onClick={() => setIsCustomerServiceModalOpen(false)}>
-                        닫기
-                    </Button>
-                    <Button style={{ flex: 1 }} variant="fill" size="large" onClick={handleCustomerServiceConfirm}>
-                        확인
-                    </Button>
-                </div>
+                <Modal.Overlay />
+                <Modal.Content>
+                    <Modal.Header title={MENU_TITLES.CUSTOMER_SERVICE} />
+                    <Modal.Body>
+                        <div className={styles.description}>
+                            카카오톡 채널로 연결됩니다. 문의사항을 남겨주시면 빠르게 답변 드리겠습니다.
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer className={styles.footer}>
+                        <Button className={styles.flex1} variant="weak" size="large" onClick={() => setIsCustomerServiceModalOpen(false)}>
+                            닫기
+                        </Button>
+                        <Button className={styles.flex1} variant="fill" size="large" onClick={handleCustomerServiceConfirm}>
+                            확인
+                        </Button>
+                    </Modal.Footer>
+                </Modal.Content>
             </Modal>
         </>
     );

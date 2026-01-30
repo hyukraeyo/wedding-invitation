@@ -2,14 +2,12 @@
 
 import React, { useState } from 'react';
 import { Calendar } from '@/components/ui/Calendar';
-import { cn } from '@/lib/utils';
 import { format, parse } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { SelectSingleEventHandler } from 'react-day-picker';
 import { Modal } from '@/components/ui/Modal';
 import { TextField } from '@/components/ui/TextField';
 import { Button } from '@/components/ui/Button';
-import { Text } from '@/components/ui/Text';
 import styles from './DatePicker.module.scss';
 
 interface DatePickerProps {
@@ -22,9 +20,10 @@ interface DatePickerProps {
     disabled?: boolean;
     id?: string;
     ref?: React.Ref<HTMLButtonElement>;
+    labelOption?: "appear" | "sustain";
 }
 
-export const DatePicker = ({ value, onChange, onComplete, className, label, placeholder = "날짜 선택", disabled, id, ref }: DatePickerProps) => {
+export const DatePicker = ({ value, onChange, onComplete, className, label, placeholder = "날짜 선택", disabled, id, ref, labelOption = "appear" }: DatePickerProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
     // Parse string date (YYYY-MM-DD) to Date object
@@ -44,30 +43,18 @@ export const DatePicker = ({ value, onChange, onComplete, className, label, plac
                 ref={ref}
                 id={id}
                 label={label || ''}
-                variant="line"
+                labelOption={labelOption}
+                variant="box"
                 placeholder={placeholder}
                 value={dateValue ? format(dateValue, 'PPP', { locale: ko }) : ""}
                 onClick={() => !disabled && setIsOpen(true)}
-                disabled={disabled ?? false}
                 className={className}
             />
             <Modal open={isOpen} onOpenChange={setIsOpen}>
                 <Modal.Overlay />
-                <Modal.Content
-                    style={{
-                        padding: '32px 0 0',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        maxHeight: '80vh',
-                        width: '90vw',
-                        maxWidth: '400px',
-                        backgroundColor: '#fff'
-                    }}
-                >
-                    <div style={{ textAlign: 'center', marginBottom: '1.5rem', flexShrink: 0 }}>
-                        <Text typography="t4" fontWeight="bold">날짜를 선택하세요</Text>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'center', padding: '0 20px 20px' }}>
+                <Modal.Content>
+                    <Modal.Header title="날짜를 선택하세요" />
+                    <Modal.Body className={styles.calendarBody}>
                         <Calendar
                             mode="single"
                             selected={dateValue}
@@ -75,15 +62,15 @@ export const DatePicker = ({ value, onChange, onComplete, className, label, plac
                             onSelect={handleSelect}
                             className={styles.calendar || ""}
                         />
-                    </div>
-                    <div style={{ padding: '20px', paddingTop: 0 }}>
+                    </Modal.Body>
+                    <Modal.Footer className={styles.footer}>
                         <Button
-                            style={{ width: '100%' }}
+                            className={styles.fullWidth}
                             onClick={() => setIsOpen(false)}
                         >
                             닫기
                         </Button>
-                    </div>
+                    </Modal.Footer>
                 </Modal.Content>
             </Modal>
         </>

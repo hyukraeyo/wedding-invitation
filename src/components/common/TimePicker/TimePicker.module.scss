@@ -3,13 +3,20 @@
 
 .header {
   text-align: center;
-  margin-bottom: 16px;
-  padding-top: 8px;
+  padding: 32px 20px 0;
+  flex-shrink: 0;
+}
+
+.periodContainer {
+  padding: 0 20px 16px;
 }
 
 .footer {
-  margin-top: 16px;
-  display: flex;
+  padding: 0 24px 24px;
+}
+
+.fullWidth {
+  width: 100%;
 }
 
 .container {
@@ -61,10 +68,10 @@
 
 .pickerGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 1rem;
   padding: 1rem;
-  min-height: 240px;
+  min-height: 200px;
 
   @media (max-width: 768px) {
     // v.$mobile
@@ -109,23 +116,31 @@
 }
 
 .optionItem {
-  width: 100%;
-  padding: 0.75rem 0.5rem;
-  border-radius: 1rem; // v.$radius-md
-  font-size: 1rem;
-  font-weight: 500;
-  color: #52525b; // v.$zinc-600
-  text-align: center;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); // v.$ease-ios
+  width: 100% !important;
+  padding: 10px 0 !important;
+  margin: 0 !important; // Sibling margin 제거
+  border-radius: 10px;
+  transition: all 0.2s v.$ease-ios;
+  cursor: pointer;
+  border: none;
+  background: transparent;
 
-  &:hover {
-    background-color: #fafafa; // v.$zinc-50
+  // Selector(button) 내부 텍스트 중앙 정렬 강제 및 외부 밀림 방지
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  margin-left: 0 !important; // 이미지에서 확인된 인접 형제 마진 제거
+
+  &:active {
+    transform: scale(0.96);
+    background-color: rgba(0, 0, 0, 0.02);
   }
 
   &.active {
-    background-color: v.$primary-50;
-    color: v.$primary-700;
-    font-weight: 700;
+    background-color: #FEF9C3; // Light yellow (Banana sub)
+    color: #A16207; // Darker yellow/brown for contrast
+    font-weight: 700 !important;
   }
 }
 

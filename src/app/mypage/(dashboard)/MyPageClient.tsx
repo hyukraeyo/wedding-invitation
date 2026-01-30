@@ -43,7 +43,6 @@ const ProfileCompletionModal = dynamic(
 );
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
-import { Text } from '@/components/ui/Text';
 const RejectionReasonModal = dynamic(
     () => import('@/components/common/RejectionReasonModal'),
     { ssr: false }
@@ -680,41 +679,44 @@ export default function MyPageClient({
                 open={confirmConfig.isOpen}
                 onOpenChange={(open) => setConfirmConfig(prev => ({ ...prev, isOpen: open }))}
             >
-                <div className={styles.modalHeader}>
-                    <Text typography="t4" fontWeight="bold">{confirmConfig.title}</Text>
-                </div>
-                <div style={{ textAlign: 'center', wordBreak: 'keep-all', lineHeight: '1.6' }}>
-                    {confirmConfig.description}
-                </div>
-                <div className={styles.modalFooter}>
-                    {confirmConfig.type !== 'INFO_ONLY' && (
+                <Modal.Overlay />
+                <Modal.Content>
+                    <Modal.Header title={confirmConfig.title} />
+                    <Modal.Body>
+                        <div className={styles.modalDescription}>
+                            {confirmConfig.description}
+                        </div>
+                    </Modal.Body>
+                    <Modal.Footer className={styles.modalFooter}>
+                        {confirmConfig.type !== 'INFO_ONLY' && (
+                            <Button
+                                className={styles.flex1}
+                                variant="weak"
+                                size="large"
+                                onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
+                                disabled={!!actionLoadingId}
+                            >
+                                취소
+                            </Button>
+                        )}
                         <Button
-                            style={{ flex: 1 }}
-                            variant="weak"
+                            className={styles.flex1}
+                            variant="fill"
                             size="large"
-                            onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
+                            loading={!!actionLoadingId}
                             disabled={!!actionLoadingId}
+                            onClick={() => {
+                                if (confirmConfig.type !== 'INFO_ONLY') {
+                                    handleConfirmAction();
+                                } else {
+                                    setConfirmConfig(prev => ({ ...prev, isOpen: false }));
+                                }
+                            }}
                         >
-                            취소
+                            확인
                         </Button>
-                    )}
-                    <Button
-                        style={{ flex: 1 }}
-                        variant="fill"
-                        size="large"
-                        loading={!!actionLoadingId}
-                        disabled={!!actionLoadingId}
-                        onClick={() => {
-                            if (confirmConfig.type !== 'INFO_ONLY') {
-                                handleConfirmAction();
-                            } else {
-                                setConfirmConfig(prev => ({ ...prev, isOpen: false }));
-                            }
-                        }}
-                    >
-                        확인
-                    </Button>
-                </div>
+                    </Modal.Footer>
+                </Modal.Content>
             </Modal>
 
             {rejectionTarget ? (
@@ -743,24 +745,25 @@ export default function MyPageClient({
                         if (!open) handleCloseAutoNotification();
                     }}
                 >
-                    <div className={styles.modalHeader}>
-                        <Text typography="t4" fontWeight="bold">{autoNotificationTarget.isApproval ? '승인 완료' : parseRejection(autoNotificationTarget.rejection).title}</Text>
-                    </div>
-                    <div style={{ textAlign: 'center' }}>
-                        <div
-                            className={`${styles.rejectionMessageBox} ${autoNotificationTarget.isApproval ? styles.success : ''}`}
-                            dangerouslySetInnerHTML={{
-                                __html: autoNotificationTarget.isApproval
-                                    ? `<strong>${autoNotificationTarget.invitation.invitation_data.mainScreen.title}</strong> 청첩장 승인이 완료되었습니다!<br/>이제 자유롭게 공유할 수 있습니다.`
-                                    : parseRejection(autoNotificationTarget.rejection).displayReason || '내용이 없습니다.'
-                            }}
-                        />
-                    </div>
-                    <div className={styles.modalFooter}>
-                        <Button style={{ flex: 1 }} variant="fill" size="large" onClick={handleCloseAutoNotification}>
-                            확인
-                        </Button>
-                    </div>
+                    <Modal.Overlay />
+                    <Modal.Content>
+                        <Modal.Header title={autoNotificationTarget.isApproval ? '승인 완료' : parseRejection(autoNotificationTarget.rejection).title} />
+                        <Modal.Body>
+                            <div
+                                className={`${styles.rejectionMessageBox} ${autoNotificationTarget.isApproval ? styles.success : ''}`}
+                                dangerouslySetInnerHTML={{
+                                    __html: autoNotificationTarget.isApproval
+                                        ? `<strong>${autoNotificationTarget.invitation.invitation_data.mainScreen.title}</strong> 청첩장 승인이 완료되었습니다!<br/>이제 자유롭게 공유할 수 있습니다.`
+                                        : parseRejection(autoNotificationTarget.rejection).displayReason || '내용이 없습니다.'
+                                }}
+                            />
+                        </Modal.Body>
+                        <Modal.Footer className={styles.modalFooter}>
+                            <Button className={styles.flex1} variant="fill" size="large" onClick={handleCloseAutoNotification}>
+                                확인
+                            </Button>
+                        </Modal.Footer>
+                    </Modal.Content>
                 </Modal>
             )}
         </MyPageContent >
