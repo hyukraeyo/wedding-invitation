@@ -6,22 +6,22 @@ import s from './TextField.module.scss';
 
 // --- Context for sharing props between Root and Input/Slot ---
 interface TextFieldContextValue {
-    size?: '1' | '2' | '3';
-    variant?: 'surface' | 'classic' | 'soft';
-    color?: string;
-    radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
-    disabled?: boolean;
+    size?: '1' | '2' | '3' | undefined;
+    variant?: 'surface' | 'classic' | 'soft' | undefined;
+    color?: string | undefined;
+    radius?: 'none' | 'small' | 'medium' | 'large' | 'full' | undefined;
+    disabled?: boolean | undefined;
 }
 
 const TextFieldContext = React.createContext<TextFieldContextValue>({});
 
 // --- TextField.Root ---
 export interface TextFieldRootProps extends React.HTMLAttributes<HTMLDivElement> {
-    size?: '1' | '2' | '3';
-    variant?: 'surface' | 'classic' | 'soft';
-    radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
-    highContrast?: boolean;
-    disabled?: boolean;
+    size?: '1' | '2' | '3' | undefined;
+    variant?: 'surface' | 'classic' | 'soft' | undefined;
+    radius?: 'none' | 'small' | 'medium' | 'large' | 'full' | undefined;
+    highContrast?: boolean | undefined;
+    disabled?: boolean | undefined;
 }
 
 const TextFieldRoot = React.forwardRef<HTMLDivElement, TextFieldRootProps>(
@@ -85,16 +85,15 @@ TextFieldSlot.displayName = 'TextField.Slot';
 
 // --- TextField.Button ---
 export interface TextFieldButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    label?: string;
-    labelOption?: 'appear' | 'sustain';
-    variant?: 'surface' | 'classic' | 'soft' | 'box';
-    placeholder?: string;
+    label?: string | undefined;
+    labelOption?: 'appear' | 'sustain' | undefined;
+    variant?: 'surface' | 'classic' | 'soft' | 'box' | undefined;
+    placeholder?: string | undefined;
 }
 
 const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps>(
-    ({ className, children, label, labelOption, variant = 'surface', ...props }, ref) => {
-        // Map 'box' to 'surface' for compatibility
-        const mappedVariant = (variant === 'box' ? 'surface' : variant) as any;
+    ({ className, children, label, variant = 'surface', ...props }, ref) => {
+        const mappedVariant = (variant === 'box' ? 'surface' : variant) as TextFieldRootProps['variant'];
 
         const button = (
             <TextFieldRoot variant={mappedVariant} className={className}>
@@ -127,19 +126,18 @@ TextFieldButton.displayName = 'TextField.Button';
 // Existing code uses <TextField label="..." variant="line" />
 // We convert 'line' to 'classic' and handle the label.
 export interface TextFieldLegacyProps extends Omit<TextFieldInputProps, 'size'> {
-    label?: string;
-    variant?: 'surface' | 'classic' | 'soft' | 'line' | 'box';
-    size?: '1' | '2' | '3';
-    radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
-    leftSlot?: React.ReactNode;
-    rightSlot?: React.ReactNode;
+    label?: string | undefined;
+    variant?: 'surface' | 'classic' | 'soft' | 'line' | 'box' | undefined;
+    size?: '1' | '2' | '3' | undefined;
+    radius?: 'none' | 'small' | 'medium' | 'large' | 'full' | undefined;
+    leftSlot?: React.ReactNode | undefined;
+    rightSlot?: React.ReactNode | undefined;
 }
 
 const TextField = React.forwardRef<HTMLInputElement, TextFieldLegacyProps>(
     ({ label, variant = 'surface', size = '2', radius = 'medium', leftSlot, rightSlot, className, ...props }, ref) => {
         // Map existing 'line' or 'box' variant to Radix 'classic' or 'surface'
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        let mappedVariant = variant as any;
+        let mappedVariant = variant as TextFieldRootProps['variant'];
         if (variant === 'line') mappedVariant = 'classic';
         if (variant === 'box') mappedVariant = 'surface';
 

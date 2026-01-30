@@ -8,20 +8,19 @@ import {
     DropdownMenuItem,
     DropdownMenuCheckboxItem,
 } from '../DropdownMenu';
-import { clsx } from 'clsx';
 
 export interface MenuTriggerProps {
     children: React.ReactNode;
-    open?: boolean;
-    onOpen?: () => void;
-    onClose?: () => void;
-    placement?: any;
-    dropdown?: React.ReactNode;
+    open?: boolean | undefined;
+    onOpen?: (() => void) | undefined;
+    onClose?: (() => void) | undefined;
+    placement?: string | undefined;
+    dropdown?: React.ReactNode | undefined;
 }
 
 const MenuTrigger = ({ children, open, onOpen, onClose, dropdown }: MenuTriggerProps) => {
     return (
-        <DropdownMenu open={open as any} onOpenChange={(val) => val ? onOpen?.() : onClose?.()}>
+        <DropdownMenu open={!!open} onOpenChange={(val) => val ? onOpen?.() : onClose?.()}>
             <DropdownMenuTrigger asChild>
                 {children}
             </DropdownMenuTrigger>
@@ -30,7 +29,7 @@ const MenuTrigger = ({ children, open, onOpen, onClose, dropdown }: MenuTriggerP
     );
 };
 
-export const MenuDropdown = ({ children, className }: { children: React.ReactNode; className?: string }) => {
+export const MenuDropdown = ({ children, className }: { children: React.ReactNode; className?: string | undefined }) => {
     return (
         <DropdownMenuContent align="end" sideOffset={8} className={className}>
             {children}
@@ -40,17 +39,17 @@ export const MenuDropdown = ({ children, className }: { children: React.ReactNod
 
 export interface MenuDropdownItemProps {
     children: React.ReactNode;
-    onClick?: (e: React.MouseEvent) => void;
-    left?: React.ReactNode;
-    disabled?: boolean;
-    style?: React.CSSProperties;
+    onClick?: ((e: React.MouseEvent) => void) | undefined;
+    left?: React.ReactNode | undefined;
+    disabled?: boolean | undefined;
+    style?: React.CSSProperties | undefined;
 }
 
 export const MenuDropdownItem = ({ children, onClick, left, disabled, style }: MenuDropdownItemProps) => {
     return (
         <DropdownMenuItem
-            onClick={onClick as any}
-            disabled={disabled as any}
+            onClick={onClick}
+            disabled={!!disabled}
             style={{
                 height: '44px', // mobile friendly
                 padding: '0 16px',
@@ -63,7 +62,13 @@ export const MenuDropdownItem = ({ children, onClick, left, disabled, style }: M
     );
 };
 
-export const MenuDropdownCheckItem = ({ children, checked, onCheckedChange }: any) => {
+interface MenuDropdownCheckItemProps {
+    children: React.ReactNode;
+    checked: boolean;
+    onCheckedChange: (checked: boolean) => void;
+}
+
+export const MenuDropdownCheckItem = ({ children, checked, onCheckedChange }: MenuDropdownCheckItemProps) => {
     return (
         <DropdownMenuCheckboxItem checked={checked} onCheckedChange={onCheckedChange}>
             {children}

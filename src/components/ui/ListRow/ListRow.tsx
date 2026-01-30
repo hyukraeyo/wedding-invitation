@@ -17,11 +17,13 @@ const ListRow = React.forwardRef<HTMLDivElement, ListRowProps>(
 
         return (
             <Comp
+                /* eslint-disable @typescript-eslint/no-explicit-any */
                 ref={ref as any}
                 className={clsx(s.listRow, onClick && s.isClickable, className)}
                 onClick={onClick}
-                type={onClick ? 'button' : undefined}
+                {...(onClick ? { type: 'button' as const } : {})}
                 {...(props as any)}
+            /* eslint-enable @typescript-eslint/no-explicit-any */
             >
                 {left && <div className={s.left}>{left}</div>}
                 <div className={s.contents}>{contents || children}</div>

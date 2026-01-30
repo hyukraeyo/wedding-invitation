@@ -5,17 +5,17 @@ import { clsx } from 'clsx';
 import s from './SegmentedControl.module.scss';
 
 export interface SegmentedControlProps {
-    value?: string;
-    defaultValue?: string;
-    onChange?: (value: string) => void;
+    value?: string | undefined;
+    defaultValue?: string | undefined;
+    onChange?: ((value: string) => void) | undefined;
     children: React.ReactNode;
-    alignment?: 'auto' | 'fluid';
-    className?: string;
+    alignment?: 'auto' | 'fluid' | undefined;
+    className?: string | undefined;
 }
 
 const SegmentedControlContext = React.createContext<{
-    value?: string;
-    onChange?: (value: string) => void;
+    value?: string | undefined;
+    onChange?: ((value: string) => void) | undefined;
 }>({});
 
 const SegmentedControlMain = ({ value: propsValue, defaultValue, onChange, children, alignment = 'auto', className }: SegmentedControlProps) => {
@@ -31,7 +31,7 @@ const SegmentedControlMain = ({ value: propsValue, defaultValue, onChange, child
     };
 
     return (
-        <SegmentedControlContext.Provider value={{ value: value as any, onChange: handleChange as any }}>
+        <SegmentedControlContext.Provider value={{ value, onChange: handleChange }}>
             <div className={clsx(s.root, alignment === 'fluid' && s.fluid, className)}>
                 {children}
             </div>
@@ -42,7 +42,7 @@ const SegmentedControlMain = ({ value: propsValue, defaultValue, onChange, child
 export interface SegmentedControlItemProps {
     value: string;
     children: React.ReactNode;
-    className?: string;
+    className?: string | undefined;
 }
 
 const Item = ({ value: itemValue, children, className }: SegmentedControlItemProps) => {

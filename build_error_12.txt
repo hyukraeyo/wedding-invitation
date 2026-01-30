@@ -1,0 +1,37 @@
+
+> banana-wedding@0.1.0 build
+> next build --webpack
+
+▲ Next.js 16.1.1 (webpack)
+- Environments: .env.local
+- Experiments (use with caution):
+  · optimizePackageImports
+  · serverActions
+  ✓ viewTransition
+
+  Creating an optimized production build ...
+> [PWA] Compile server
+> [PWA] Compile server
+> [PWA] Compile client (static)
+> [PWA] Auto register service worker with: C:\Users\johr9\Documents\git\wedding-invitation\node_modules\next-pwa\register.js
+> [PWA] Service worker: C:\Users\johr9\Documents\git\wedding-invitation\public\sw.js
+> [PWA]   url: /sw.js
+> [PWA]   scope: /
+✓ Compiled successfully in 5.4s
+  Running TypeScript ...
+Failed to compile.
+
+./src/components/ui/DropdownMenu/DropdownMenu.tsx:83:6
+Type error: Type '{ children: (ReactNode | Element)[]; id?: string | undefined; style?: CSSProperties | undefined; nonce?: string | undefined; accessKey?: string | undefined; ... 280 more ...; checked: CheckedState | undefined; }' is not assignable to type 'DropdownMenuCheckboxItemProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'checked' are incompatible.
+    Type 'CheckedState | undefined' is not assignable to type 'CheckedState'.
+      Type 'undefined' is not assignable to type 'CheckedState'.
+
+[0m [90m 81 |[39m     [33mReact[39m[33m.[39m[33mComponentPropsWithoutRef[39m[33m<[39m[36mtypeof[39m [33mDropdownMenuPrimitive[39m[33m.[39m[33mCheckboxItem[39m[33m>[39m
+ [90m 82 |[39m [33m>[39m(({ className[33m,[39m children[33m,[39m checked[33m,[39m [33m...[39mprops }[33m,[39m ref) [33m=>[39m (
+[31m[1m>[22m[39m[90m 83 |[39m     [33m<[39m[33mDropdownMenuPrimitive[39m[33m.[39m[33mCheckboxItem[39m
+ [90m    |[39m      [31m[1m^[22m[39m
+ [90m 84 |[39m         ref[33m=[39m{ref}
+ [90m 85 |[39m         className[33m=[39m{clsx(s[33m.[39m[33mItem[39m[33m,[39m className)} [90m// Uses Item style[39m
+ [90m 86 |[39m         checked[33m=[39m{checked}[0m
+Next.js build worker exited with code: 1 and signal: null

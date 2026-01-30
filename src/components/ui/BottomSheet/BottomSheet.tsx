@@ -6,13 +6,13 @@ import { clsx } from 'clsx';
 import s from './BottomSheet.module.scss';
 
 export interface BottomSheetProps {
-    open?: boolean;
-    onClose?: () => void;
-    onOpenChange?: (open: boolean) => void;
+    open?: boolean | undefined;
+    onClose?: (() => void) | undefined;
+    onOpenChange?: ((open: boolean) => void) | undefined;
     children: React.ReactNode;
-    header?: React.ReactNode;
-    cta?: React.ReactNode;
-    className?: string;
+    header?: React.ReactNode | undefined;
+    cta?: React.ReactNode | undefined;
+    className?: string | undefined;
 }
 
 const BottomSheetMain = ({
@@ -26,7 +26,7 @@ const BottomSheetMain = ({
 }: BottomSheetProps) => {
     return (
         <Drawer.Root
-            open={open as any}
+            open={!!open}
             onOpenChange={(val) => {
                 onOpenChange?.(val);
                 if (!val) onClose?.();
@@ -34,7 +34,7 @@ const BottomSheetMain = ({
         >
             <Drawer.Portal>
                 <Drawer.Overlay className={s.overlay} />
-                <Drawer.Content className={clsx(s.content, className as any)}>
+                <Drawer.Content className={clsx(s.content, className)}>
                     <div className={s.handle} />
                     {header && (
                         <div className={s.header}>

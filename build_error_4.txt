@@ -1,0 +1,34 @@
+
+> banana-wedding@0.1.0 build
+> next build --webpack
+
+▲ Next.js 16.1.1 (webpack)
+- Environments: .env.local
+- Experiments (use with caution):
+  · optimizePackageImports
+  · serverActions
+  ✓ viewTransition
+
+  Creating an optimized production build ...
+> [PWA] Compile server
+> [PWA] Compile server
+> [PWA] Compile client (static)
+> [PWA] Auto register service worker with: C:\Users\johr9\Documents\git\wedding-invitation\node_modules\next-pwa\register.js
+> [PWA] Service worker: C:\Users\johr9\Documents\git\wedding-invitation\public\sw.js
+> [PWA]   url: /sw.js
+> [PWA]   scope: /
+✓ Compiled successfully in 5.3s
+  Running TypeScript ...
+Failed to compile.
+
+./src/components/builder/sections/MainScreenSectionContent.tsx:64:32
+Type error: Cannot find name 'imageUrl'.
+
+[0m [90m 62 |[39m                 [33m<[39m[33mdiv[39m className[33m=[39m{styles[33m.[39moptionWrapper}[33m>[39m
+ [90m 63 |[39m                     [33m<[39m[33mImageUploader[39m
+[31m[1m>[22m[39m[90m 64 |[39m                         value[33m=[39m{imageUrl}
+ [90m    |[39m                                [31m[1m^[22m[39m
+ [90m 65 |[39m                         onChange[33m=[39m{setImageUrl}
+ [90m 66 |[39m                         placeholder[33m=[39m[32m"메인 이미지 추가"[39m
+ [90m 67 |[39m                         ratio[33m=[39m{imageRatio}[0m
+Next.js build worker exited with code: 1 and signal: null

@@ -1,0 +1,37 @@
+
+> banana-wedding@0.1.0 build
+> next build --webpack
+
+▲ Next.js 16.1.1 (webpack)
+- Environments: .env.local
+- Experiments (use with caution):
+  · optimizePackageImports
+  · serverActions
+  ✓ viewTransition
+
+  Creating an optimized production build ...
+> [PWA] Compile server
+> [PWA] Compile server
+> [PWA] Compile client (static)
+> [PWA] Auto register service worker with: C:\Users\johr9\Documents\git\wedding-invitation\node_modules\next-pwa\register.js
+> [PWA] Service worker: C:\Users\johr9\Documents\git\wedding-invitation\public\sw.js
+> [PWA]   url: /sw.js
+> [PWA]   scope: /
+✓ Compiled successfully in 4.6s
+  Running TypeScript ...
+Failed to compile.
+
+./src/components/ui/BottomCTA/BottomCTA.tsx:36:10
+Type error: Type '{ children: ReactNode; size: "4"; fullWidth: true; color: "primary"; variant: "fill"; onClick: ((e: MouseEvent<HTMLButtonElement, MouseEvent>) => void) | undefined; loading: boolean | undefined; disabled: boolean | undefined; className: string | undefined; type: "button" | ... 1 more ... | "reset"; }' is not assignable to type 'ButtonProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'loading' are incompatible.
+    Type 'boolean | undefined' is not assignable to type 'boolean'.
+      Type 'undefined' is not assignable to type 'boolean'.
+
+[0m [90m 34 |[39m [36mconst[39m [33mSingle[39m [33m=[39m ({ children[33m,[39m onClick[33m,[39m fixed [33m=[39m [36mtrue[39m[33m,[39m loading[33m,[39m disabled[33m,[39m className[33m,[39m type [33m=[39m [32m'button'[39m[33m,[39m transparent }[33m:[39m [33mBottomCTASingleProps[39m) [33m=>[39m {
+ [90m 35 |[39m     [36mconst[39m button [33m=[39m (
+[31m[1m>[22m[39m[90m 36 |[39m         [33m<[39m[33mButton[39m
+ [90m    |[39m          [31m[1m^[22m[39m
+ [90m 37 |[39m             size[33m=[39m[32m"4"[39m
+ [90m 38 |[39m             fullWidth
+ [90m 39 |[39m             color[33m=[39m[32m"primary"[39m[0m
+Next.js build worker exited with code: 1 and signal: null

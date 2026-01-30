@@ -1,0 +1,37 @@
+
+> banana-wedding@0.1.0 build
+> next build --webpack
+
+▲ Next.js 16.1.1 (webpack)
+- Environments: .env.local
+- Experiments (use with caution):
+  · optimizePackageImports
+  · serverActions
+  ✓ viewTransition
+
+  Creating an optimized production build ...
+> [PWA] Compile server
+> [PWA] Compile server
+> [PWA] Compile client (static)
+> [PWA] Auto register service worker with: C:\Users\johr9\Documents\git\wedding-invitation\node_modules\next-pwa\register.js
+> [PWA] Service worker: C:\Users\johr9\Documents\git\wedding-invitation\public\sw.js
+> [PWA]   url: /sw.js
+> [PWA]   scope: /
+✓ Compiled successfully in 5.0s
+  Running TypeScript ...
+Failed to compile.
+
+./src/components/ui/Menu/Menu.tsx:50:10
+Type error: Type '{ children: (false | "" | 0 | 0n | Element | null | undefined)[]; onClick: ((e: MouseEvent<Element, MouseEvent>) => void) | undefined; disabled: boolean | undefined; style: { ...; }; }' is not assignable to type 'Omit<DropdownMenuItemProps & RefAttributes<HTMLDivElement>, "ref">' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'disabled' are incompatible.
+    Type 'boolean | undefined' is not assignable to type 'boolean'.
+      Type 'undefined' is not assignable to type 'boolean'.
+
+[0m [90m 48 |[39m [36mexport[39m [36mconst[39m [33mMenuDropdownItem[39m [33m=[39m ({ children[33m,[39m onClick[33m,[39m left[33m,[39m disabled[33m,[39m style }[33m:[39m [33mMenuDropdownItemProps[39m) [33m=>[39m {
+ [90m 49 |[39m     [36mreturn[39m (
+[31m[1m>[22m[39m[90m 50 |[39m         [33m<[39m[33mDropdownMenuItem[39m
+ [90m    |[39m          [31m[1m^[22m[39m
+ [90m 51 |[39m             onClick[33m=[39m{onClick}
+ [90m 52 |[39m             disabled[33m=[39m{disabled}
+ [90m 53 |[39m             style[33m=[39m{{[0m
+Next.js build worker exited with code: 1 and signal: null

@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { Button, ButtonProps } from '../Button';
 
-export interface CTAButtonProps extends ButtonProps { }
+export type CTAButtonProps = ButtonProps;
 
 const CTAButton = React.forwardRef<HTMLButtonElement, CTAButtonProps>(
     (props, ref) => {

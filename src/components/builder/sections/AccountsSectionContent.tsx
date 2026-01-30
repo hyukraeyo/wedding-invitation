@@ -5,7 +5,6 @@ import { IconButton } from '@/components/ui/IconButton';
 import { Button as UIButton } from '@/components/ui/Button';
 import { TextField } from '@/components/ui/TextField';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
-import { List, ListRow } from '@/components/ui/List';
 import { MenuSelect } from '@/components/ui/MenuSelect';
 import styles from './AccountsSection.module.scss';
 import { cn } from '@/lib/utils';

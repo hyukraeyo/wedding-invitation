@@ -83,7 +83,7 @@ const DropdownMenuCheckboxItem = React.forwardRef<
     <DropdownMenuPrimitive.CheckboxItem
         ref={ref}
         className={clsx(s.Item, className)} // Uses Item style
-        checked={checked as any}
+        {...(checked !== undefined && { checked })}
         {...props}
     >
         <span className={s.ItemIndicator}>

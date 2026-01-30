@@ -3,13 +3,13 @@ import { create } from 'zustand';
 export interface ToastData {
     id: string;
     message: string;
-    variant?: 'default' | 'destructive' | 'success';
-    duration?: number;
+    variant?: 'default' | 'destructive' | 'success' | undefined;
+    duration?: number | undefined;
 }
 
 interface ToastState {
     toasts: ToastData[];
-    addToast: (message: string, options?: Omit<ToastData, 'id' | 'message'>) => void;
+    addToast: (message: string, options?: Omit<ToastData, 'id' | 'message'> | undefined) => void;
     removeToast: (id: string) => void;
 }
 

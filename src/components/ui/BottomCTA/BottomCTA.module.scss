@@ -6,6 +6,11 @@
   background-color: v.$white;
   box-sizing: border-box;
   
+  &.transparent {
+    background-color: transparent;
+    box-shadow: none;
+  }
+
   &.fixed {
     position: fixed;
     bottom: 0;

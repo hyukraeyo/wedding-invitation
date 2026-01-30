@@ -26,6 +26,10 @@ export default function MainScreenSectionContent() {
         setTheme,
         groom,
         bride,
+        imageUrl,
+        setImageUrl,
+        imageRatio,
+        setImageRatio,
     } = useInvitationStore(useShallow((state) => ({
         mainScreen: state.mainScreen,
         setMainScreen: state.setMainScreen,
@@ -33,19 +37,20 @@ export default function MainScreenSectionContent() {
         setTheme: state.setTheme,
         groom: state.groom,
         bride: state.bride,
+        imageUrl: state.imageUrl,
+        setImageUrl: state.setImageUrl,
+        imageRatio: state.imageRatio,
+        setImageRatio: state.setImageRatio,
     })));
-
-    const imageUrl = mainScreen.imageUrl;
-    const setImageUrl = (url: string) => setMainScreen({ imageUrl: url });
-    const imageRatio = mainScreen.imageRatio;
-    const setImageRatio = (ratio: '4/5' | '1/1' | 'auto') => setMainScreen({ imageRatio: ratio });
 
     const updateMain = (data: Partial<typeof mainScreen>) => setMainScreen(data);
 
     const handleSelectPreset = (preset: typeof STYLE_PRESETS[0], index: number) => {
         setMainScreen({
-            layout: preset.layout,
-            imageShape: preset.imageShape,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            layout: preset.layout as any,
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            imageShape: preset.imageShape as any,
         });
         if (swiperRef.current) {
             swiperRef.current.slideTo(index);
@@ -64,7 +69,7 @@ export default function MainScreenSectionContent() {
                         onChange={setImageUrl}
                         placeholder="메인 이미지 추가"
                         ratio={imageRatio}
-                        onRatioChange={setImageRatio}
+                        onRatioChange={(r) => setImageRatio(r as 'fixed' | 'auto')}
                         aspectRatio="4/5"
                     />
                 </div>

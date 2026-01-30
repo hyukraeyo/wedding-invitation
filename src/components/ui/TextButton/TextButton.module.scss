@@ -1,6 +1,8 @@
 @use "../../../styles/variables" as v;
 @use "../../../styles/mixins" as m;
 
+@use "sass:color";
+
 .textButton {
   @include m.button-base;
   background: transparent;
@@ -15,7 +17,7 @@
   
   &.primary {
     color: v.$banana-yellow;
-    &.active { color: darken(v.$banana-yellow, 10%); }
+    &.active { color: color.adjust(v.$banana-yellow, $lightness: -10%); }
   }
   
   &.blue {

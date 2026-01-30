@@ -7,13 +7,14 @@ import s from './BottomCTA.module.scss';
 
 export interface FixedBottomCTAProps {
     children: React.ReactNode;
-    fixed?: boolean;
-    className?: string;
+    fixed?: boolean | undefined;
+    className?: string | undefined;
+    transparent?: boolean | undefined;
 }
 
-export const FixedBottomCTA = ({ children, fixed = true, className }: FixedBottomCTAProps) => {
+export const FixedBottomCTA = ({ children, fixed = true, className, transparent }: FixedBottomCTAProps) => {
     return (
-        <div className={clsx(s.fixedBottom, fixed && s.fixed, className)}>
+        <div className={clsx(s.fixedBottom, !!fixed && s.fixed, !!transparent && s.transparent, className)}>
             {children}
         </div>
     );
@@ -21,15 +22,16 @@ export const FixedBottomCTA = ({ children, fixed = true, className }: FixedBotto
 
 export interface BottomCTASingleProps {
     children: React.ReactNode;
-    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-    fixed?: boolean;
-    loading?: boolean;
-    disabled?: boolean;
-    className?: string;
-    type?: 'button' | 'submit' | 'reset';
+    onClick?: ((e: React.MouseEvent<HTMLButtonElement>) => void) | undefined;
+    fixed?: boolean | undefined;
+    loading?: boolean | undefined;
+    disabled?: boolean | undefined;
+    className?: string | undefined;
+    type?: 'button' | 'submit' | 'reset' | undefined;
+    transparent?: boolean | undefined;
 }
 
-const Single = ({ children, onClick, fixed = true, loading, disabled, className, type = 'button' }: BottomCTASingleProps) => {
+const Single = ({ children, onClick, fixed = true, loading, disabled, className, type = 'button', transparent }: BottomCTASingleProps) => {
     const button = (
         <Button
             size="4"
@@ -37,8 +39,8 @@ const Single = ({ children, onClick, fixed = true, loading, disabled, className,
             color="primary"
             variant="fill"
             onClick={onClick}
-            loading={loading as any}
-            disabled={disabled as any}
+            loading={!!loading}
+            disabled={!!disabled}
             className={className}
             type={type}
         >
@@ -47,7 +49,7 @@ const Single = ({ children, onClick, fixed = true, loading, disabled, className,
     );
 
     if (fixed) {
-        return <FixedBottomCTA>{button}</FixedBottomCTA>;
+        return <FixedBottomCTA transparent={!!transparent}>{button}</FixedBottomCTA>;
     }
 
     return button;
@@ -56,14 +58,15 @@ const Single = ({ children, onClick, fixed = true, loading, disabled, className,
 export interface BottomCTADoubleProps {
     leftChildren: React.ReactNode;
     rightChildren: React.ReactNode;
-    onLeftClick?: () => void;
-    onRightClick?: () => void;
-    fixed?: boolean;
-    leftLoading?: boolean;
-    rightLoading?: boolean;
-    leftDisabled?: boolean;
-    rightDisabled?: boolean;
-    className?: string;
+    onLeftClick?: (() => void) | undefined;
+    onRightClick?: (() => void) | undefined;
+    fixed?: boolean | undefined;
+    leftLoading?: boolean | undefined;
+    rightLoading?: boolean | undefined;
+    leftDisabled?: boolean | undefined;
+    rightDisabled?: boolean | undefined;
+    className?: string | undefined;
+    transparent?: boolean | undefined;
 }
 
 const Double = ({
@@ -76,7 +79,8 @@ const Double = ({
     rightLoading,
     leftDisabled,
     rightDisabled,
-    className
+    className,
+    transparent
 }: BottomCTADoubleProps) => {
     const content = (
         <div className={s.buttonGroup}>
@@ -86,8 +90,8 @@ const Double = ({
                 color="grey"
                 variant="soft"
                 onClick={onLeftClick}
-                loading={leftLoading as any}
-                disabled={leftDisabled as any}
+                loading={!!leftLoading}
+                disabled={!!leftDisabled}
             >
                 {leftChildren}
             </Button>
@@ -97,8 +101,8 @@ const Double = ({
                 color="primary"
                 variant="fill"
                 onClick={onRightClick}
-                loading={rightLoading as any}
-                disabled={rightDisabled as any}
+                loading={!!rightLoading}
+                disabled={!!rightDisabled}
             >
                 {rightChildren}
             </Button>
@@ -106,7 +110,7 @@ const Double = ({
     );
 
     if (fixed) {
-        return <FixedBottomCTA className={className as any}>{content}</FixedBottomCTA>;
+        return <FixedBottomCTA className={className} transparent={!!transparent}>{content}</FixedBottomCTA>;
     }
 
     return <div className={clsx(s.buttonGroup, className)}>{content}</div>;

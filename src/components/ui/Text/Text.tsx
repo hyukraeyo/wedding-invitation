@@ -43,6 +43,7 @@ const Text = React.forwardRef<HTMLElement, TextProps>(
 
         return (
             <Comp
+                /* eslint-disable @typescript-eslint/no-explicit-any */
                 ref={ref as any}
                 style={customStyle}
                 className={clsx(
@@ -52,11 +53,12 @@ const Text = React.forwardRef<HTMLElement, TextProps>(
                     fontWeight && s[`weight_${fontWeight}`],
                     align && s[`align_${align}`],
                     trim !== 'normal' && s[`trim_${trim}`],
-                    isPredefinedColor && s[color as string],
+                    isPredefinedColor && s[color as keyof typeof s],
                     highContrast && s.highContrast,
                     className
                 )}
-                {...props}
+                {...(props as any)}
+            /* eslint-enable @typescript-eslint/no-explicit-any */
             />
         );
     }

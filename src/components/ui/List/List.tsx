@@ -4,7 +4,7 @@ import * as React from 'react';
 import { clsx } from 'clsx';
 import s from './List.module.scss';
 
-export interface ListProps extends React.HTMLAttributes<HTMLDivElement> { }
+export type ListProps = React.HTMLAttributes<HTMLDivElement>;
 
 const List = React.forwardRef<HTMLDivElement, ListProps>(
     ({ className, ...props }, ref) => {

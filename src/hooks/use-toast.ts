@@ -1,17 +1,17 @@
 "use client"
 
-import { useToastStore, ToastData } from "@/store/useToastStore"
+import { useToastStore } from "@/store/useToastStore"
 import type { ReactNode } from "react"
 
 export type ToastProps = {
-  message?: string
-  text?: string
-  description?: string
-  title?: string
-  variant?: "default" | "destructive" | "success"
-  position?: "top" | "bottom"
-  button?: ReactNode | { text: string; onClick: () => void }
-  duration?: number
+  message?: string | undefined
+  text?: string | undefined
+  description?: string | undefined
+  title?: string | undefined
+  variant?: "default" | "destructive" | "success" | undefined
+  position?: "top" | "bottom" | undefined
+  button?: ReactNode | { text: string; onClick: () => void } | undefined
+  duration?: number | undefined
 }
 
 function useToast() {
@@ -20,8 +20,8 @@ function useToast() {
   const openToast = (message: string, options?: Omit<ToastProps, "message">) => {
     const { variant, duration } = options || {}
     addToast(message, {
-      variant: variant as any,
-      duration: duration as any
+      variant,
+      duration
     })
   }
 

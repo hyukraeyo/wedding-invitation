@@ -1,0 +1,37 @@
+
+> banana-wedding@0.1.0 build
+> next build --webpack
+
+▲ Next.js 16.1.1 (webpack)
+- Environments: .env.local
+- Experiments (use with caution):
+  · optimizePackageImports
+  · serverActions
+  ✓ viewTransition
+
+  Creating an optimized production build ...
+> [PWA] Compile server
+> [PWA] Compile server
+> [PWA] Compile client (static)
+> [PWA] Auto register service worker with: C:\Users\johr9\Documents\git\wedding-invitation\node_modules\next-pwa\register.js
+> [PWA] Service worker: C:\Users\johr9\Documents\git\wedding-invitation\public\sw.js
+> [PWA]   url: /sw.js
+> [PWA]   scope: /
+✓ Compiled successfully in 5.0s
+  Running TypeScript ...
+Failed to compile.
+
+./src/components/ui/Menu/Menu.tsx:23:10
+Type error: Type '{ children: (ReactNode | Element)[]; open: boolean | undefined; onOpenChange: (val: boolean) => void; }' is not assignable to type 'DropdownMenuProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'open' are incompatible.
+    Type 'boolean | undefined' is not assignable to type 'boolean'.
+      Type 'undefined' is not assignable to type 'boolean'.
+
+[0m [90m 21 |[39m [36mconst[39m [33mMenuTrigger[39m [33m=[39m ({ children[33m,[39m open[33m,[39m onOpen[33m,[39m onClose[33m,[39m dropdown }[33m:[39m [33mMenuTriggerProps[39m) [33m=>[39m {
+ [90m 22 |[39m     [36mreturn[39m (
+[31m[1m>[22m[39m[90m 23 |[39m         [33m<[39m[33mDropdownMenu[39m open[33m=[39m{open} onOpenChange[33m=[39m{(val) [33m=>[39m val [33m?[39m onOpen[33m?[39m[33m.[39m() [33m:[39m onClose[33m?[39m[33m.[39m()}[33m>[39m
+ [90m    |[39m          [31m[1m^[22m[39m
+ [90m 24 |[39m             [33m<[39m[33mDropdownMenuTrigger[39m asChild[33m>[39m
+ [90m 25 |[39m                 {children}
+ [90m 26 |[39m             [33m<[39m[33m/[39m[33mDropdownMenuTrigger[39m[33m>[39m[0m
+Next.js build worker exited with code: 1 and signal: null

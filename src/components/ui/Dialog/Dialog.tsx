@@ -9,7 +9,7 @@ interface ConfirmDialogProps {
     open?: boolean | undefined;
     onOpenChange?: ((open: boolean) => void) | undefined;
     title?: string | undefined;
-    description?: React.ReactNode;
+    description?: React.ReactNode | undefined;
     confirmText?: string | undefined;
     cancelText?: string | undefined;
     onConfirm?: (() => void) | undefined;
@@ -17,7 +17,7 @@ interface ConfirmDialogProps {
     variant?: 'primary' | 'danger' | undefined;
 }
 
-const Root = AlertDialogPrimitive.Root as React.FC<any>;
+const Root = AlertDialogPrimitive.Root;
 
 export const ConfirmDialog = ({
     open,
@@ -31,7 +31,7 @@ export const ConfirmDialog = ({
     variant = 'primary'
 }: ConfirmDialogProps) => {
     return (
-        <Root open={open} onOpenChange={onOpenChange}>
+        <Root open={!!open} {...(onOpenChange && { onOpenChange })}>
             <AlertDialogPrimitive.Portal>
                 <AlertDialogPrimitive.Overlay className={styles.overlay} />
                 <AlertDialogPrimitive.Content className={styles.content}>

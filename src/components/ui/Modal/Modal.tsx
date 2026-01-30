@@ -10,11 +10,11 @@ interface ModalProps extends Omit<DialogPrimitive.DialogProps, 'open' | 'onOpenC
     onOpenChange?: ((open: boolean) => void) | undefined;
 }
 
-const Root = DialogPrimitive.Root as React.ComponentType<any>;
+const Root = DialogPrimitive.Root;
 
 const ModalMain = ({ children, open, onOpenChange, ...props }: ModalProps) => {
     return (
-        <Root open={open} onOpenChange={onOpenChange} {...props}>
+        <Root open={!!open} {...(onOpenChange && { onOpenChange })} {...props}>
             {children}
         </Root>
     );

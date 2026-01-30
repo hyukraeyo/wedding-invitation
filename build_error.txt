@@ -1,0 +1,71 @@
+
+> banana-wedding@0.1.0 build
+> next build --webpack
+
+▲ Next.js 16.1.1 (webpack)
+- Environments: .env.local
+- Experiments (use with caution):
+  · optimizePackageImports
+  · serverActions
+  ✓ viewTransition
+
+  Creating an optimized production build ...
+> [PWA] Compile server
+> [PWA] Compile server
+> [PWA] Compile client (static)
+> [PWA] Auto register service worker with: C:\Users\johr9\Documents\git\wedding-invitation\node_modules\next-pwa\register.js
+> [PWA] Service worker: C:\Users\johr9\Documents\git\wedding-invitation\public\sw.js
+> [PWA]   url: /sw.js
+> [PWA]   scope: /
+⚠ Compiled with warnings in 5.4s
+
+./src/components/ui/TextButton/TextButton.module.scss
+Deprecation Warning on line 17, column 22 of file:///C:/Users/johr9/Documents/git/wedding-invitation/src/components/ui/TextButton/TextButton.module.scss:17:22:
+Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use color.adjust instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+17 |     &.active { color: darken(v.$banana-yellow, 10%); }
+
+src\components\ui\TextButton\TextButton.module.scss 18:23  root stylesheet
+
+Import trace for requested module:
+./src/components/ui/TextButton/TextButton.module.scss
+./src/components/ui/TextButton/TextButton.tsx
+./src/components/ui/TextButton/index.ts
+./src/components/ui/index.ts
+
+./src/components/ui/TextButton/TextButton.module.scss
+Deprecation Warning on line 17, column 22 of file:///C:/Users/johr9/Documents/git/wedding-invitation/src/components/ui/TextButton/TextButton.module.scss:17:22:
+darken() is deprecated. Suggestions:
+
+color.scale($color, $lightness: -17.2297297297%)
+color.adjust($color, $lightness: -10%)
+
+More info: https://sass-lang.com/d/color-functions
+
+17 |     &.active { color: darken(v.$banana-yellow, 10%); }
+
+src\components\ui\TextButton\TextButton.module.scss 18:23  root stylesheet
+
+Import trace for requested module:
+./src/components/ui/TextButton/TextButton.module.scss
+./src/components/ui/TextButton/TextButton.tsx
+./src/components/ui/TextButton/index.ts
+./src/components/ui/index.ts
+
+  Running TypeScript ...
+Failed to compile.
+
+./src/components/builder/sections/MainScreenSectionContent.tsx:38:33
+Type error: Property 'imageUrl' does not exist on type '{ layout: "fill" | "basic" | "classic" | "minimal" | "english" | "heart" | "korean" | "arch" | "oval" | "frame"; showBorder: boolean; expandPhoto: boolean; effect: "none" | "mist" | "ripple"; ... 11 more ...; showDatePlace: boolean; }'.
+
+[0m [90m 36 |[39m     })))[33m;[39m
+ [90m 37 |[39m
+[31m[1m>[22m[39m[90m 38 |[39m     [36mconst[39m imageUrl [33m=[39m mainScreen[33m.[39mimageUrl[33m;[39m
+ [90m    |[39m                                 [31m[1m^[22m[39m
+ [90m 39 |[39m     [36mconst[39m setImageUrl [33m=[39m (url[33m:[39m string) [33m=>[39m setMainScreen({ imageUrl[33m:[39m url })[33m;[39m
+ [90m 40 |[39m     [36mconst[39m imageRatio [33m=[39m mainScreen[33m.[39mimageRatio[33m;[39m
+ [90m 41 |[39m     [36mconst[39m setImageRatio [33m=[39m (ratio[33m:[39m [32m'4/5'[39m [33m|[39m [32m'1/1'[39m [33m|[39m [32m'auto'[39m) [33m=>[39m setMainScreen({ imageRatio[33m:[39m ratio })[33m;[39m[0m
+Next.js build worker exited with code: 1 and signal: null

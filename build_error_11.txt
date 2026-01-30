@@ -1,0 +1,37 @@
+
+> banana-wedding@0.1.0 build
+> next build --webpack
+
+▲ Next.js 16.1.1 (webpack)
+- Environments: .env.local
+- Experiments (use with caution):
+  · optimizePackageImports
+  · serverActions
+  ✓ viewTransition
+
+  Creating an optimized production build ...
+> [PWA] Compile server
+> [PWA] Compile server
+> [PWA] Compile client (static)
+> [PWA] Auto register service worker with: C:\Users\johr9\Documents\git\wedding-invitation\node_modules\next-pwa\register.js
+> [PWA] Service worker: C:\Users\johr9\Documents\git\wedding-invitation\public\sw.js
+> [PWA]   url: /sw.js
+> [PWA]   scope: /
+✓ Compiled successfully in 5.6s
+  Running TypeScript ...
+Failed to compile.
+
+./src/components/ui/Dialog/Dialog.tsx:34:10
+Type error: Type '{ children: Element; open: boolean; onOpenChange: ((open: boolean) => void) | undefined; }' is not assignable to type 'AlertDialogProps' with 'exactOptionalPropertyTypes: true'. Consider adding 'undefined' to the types of the target's properties.
+  Types of property 'onOpenChange' are incompatible.
+    Type '((open: boolean) => void) | undefined' is not assignable to type '(open: boolean) => void'.
+      Type 'undefined' is not assignable to type '(open: boolean) => void'.
+
+[0m [90m 32 |[39m }[33m:[39m [33mConfirmDialogProps[39m) [33m=>[39m {
+ [90m 33 |[39m     [36mreturn[39m (
+[31m[1m>[22m[39m[90m 34 |[39m         [33m<[39m[33mRoot[39m open[33m=[39m{[33m![39m[33m![39mopen} onOpenChange[33m=[39m{onOpenChange}[33m>[39m
+ [90m    |[39m          [31m[1m^[22m[39m
+ [90m 35 |[39m             [33m<[39m[33mAlertDialogPrimitive[39m[33m.[39m[33mPortal[39m[33m>[39m
+ [90m 36 |[39m                 [33m<[39m[33mAlertDialogPrimitive[39m[33m.[39m[33mOverlay[39m className[33m=[39m{styles[33m.[39moverlay} [33m/[39m[33m>[39m
+ [90m 37 |[39m                 [33m<[39m[33mAlertDialogPrimitive[39m[33m.[39m[33mContent[39m className[33m=[39m{styles[33m.[39mcontent}[33m>[39m[0m
+Next.js build worker exited with code: 1 and signal: null
