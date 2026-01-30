@@ -33,7 +33,8 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import styles from './GallerySection.module.scss';
 import { useShallow } from 'zustand/react/shallow';
-import { ResponsiveModal } from '@/components/common/ResponsiveModal/ResponsiveModal';
+import { Modal } from '@/components/ui/Modal';
+import { Button } from '@/components/ui/Button';
 
 interface SortableItemProps {
     id: string;
@@ -319,15 +320,35 @@ export default React.memo(function GallerySectionContent() {
                                 </div>
                             </SortableContext>
 
-                            <ResponsiveModal
+                            <Modal
                                 open={isLimitModalOpen}
                                 onOpenChange={setIsLimitModalOpen}
-                                title="알림"
-                                description="사진은 최대 10장까지 등록 가능합니다."
-                                onConfirm={() => setIsLimitModalOpen(false)}
-                                confirmText="확인"
-                                showCancel={false}
-                            />
+                            >
+                                <Modal.Overlay />
+                                <Modal.Content
+                                    style={{
+                                        padding: '32px 20px 20px',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    <h2 style={{ fontSize: '1.2rem', fontWeight: 700, marginBottom: '8px' }}>알림</h2>
+                                    <p style={{ fontSize: '1rem', color: '#666', marginBottom: '24px' }}>
+                                        사진은 최대 10장까지 등록 가능합니다.
+                                    </p>
+                                    <Button
+                                        variant="fill"
+                                        color="primary"
+                                        size="large"
+                                        style={{ width: '100%' }}
+                                        onClick={() => setIsLimitModalOpen(false)}
+                                    >
+                                        확인
+                                    </Button>
+                                </Modal.Content>
+                            </Modal>
 
                             <DragOverlay dropAnimation={{
                                 sideEffects: defaultDropAnimationSideEffects({

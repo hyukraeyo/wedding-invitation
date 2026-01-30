@@ -2,10 +2,8 @@
 
 import React from 'react';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import { Modal } from '@toss/tds-mobile';
-import {
-    Drawer,
-} from "@/components/ui/Drawer";
+
+import { BottomSheet as Drawer } from "@/components/ui/BottomSheet";
 import { BottomCTA } from '@/components/ui/BottomCTA';
 import { Button } from '@/components/ui/Button';
 import { cn } from '@/lib/utils';
@@ -13,6 +11,7 @@ import { useCanUseDom } from '@/hooks/useCanUseDom';
 import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
 import { ScrollArea } from '@/components/ui/ScrollArea';
 import styles from './ResponsiveModal.module.scss';
+import { Modal } from '@/components/ui/Modal';
 
 export interface ResponsiveModalProps {
     open?: boolean | undefined;
@@ -188,11 +187,15 @@ export const ResponsiveModal = ({
             open={open}
             onClose={() => internalOnOpenChange(false)}
             header={
-                <Drawer.Header>
-                    {title || '알림'}
-                </Drawer.Header>
+                <div className={styles.headerWrapper}>
+                    <div className={styles.headerTitle}>{title || '알림'}</div>
+                    {description && (
+                        <div className={styles.headerDescription}>
+                            {description}
+                        </div>
+                    )}
+                </div>
             }
-            headerDescription={description ? <Drawer.HeaderDescription>{description}</Drawer.HeaderDescription> : undefined}
             cta={hasActions ? (
                 <div className={styles.footer}>
                     {footer || (

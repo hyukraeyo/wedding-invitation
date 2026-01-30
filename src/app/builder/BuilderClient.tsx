@@ -9,7 +9,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { invitationService } from '@/services/invitationService';
 import { useHeaderStore } from '@/store/useHeaderStore';
 import { useToast } from '@/hooks/use-toast';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import styles from './BuilderPage.module.scss';
 import { MobileNav } from '@/components/common/MobileNav';
 import { Sheet, SheetContent, SheetTitle, SheetHeader, SheetDescription } from '@/components/ui/Sheet';

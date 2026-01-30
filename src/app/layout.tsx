@@ -10,7 +10,7 @@ import { auth } from "@/auth";
 import { SkipLink } from "@/hooks/useAccessibility";
 import "./globals.scss";
 import "../styles/_accessibility.scss";
-import { ProgressBar } from "@/components/common/ProgressBar/ProgressBar";
+import { ProgressBar } from "@/components/ui/ProgressBar";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -168,7 +168,7 @@ export default async function RootLayout({
           <div suppressHydrationWarning vaul-drawer-wrapper="" style={{ backgroundColor: "var(--background)", minHeight: "100dvh", display: "flex", flexDirection: "column" }}>
             <Suspense fallback={null}>
               <CustomScrollbar />
-              <ProgressBar size="normal" />
+              <ProgressBar />
             </Suspense>
             <Header />
             <main id="main-content">

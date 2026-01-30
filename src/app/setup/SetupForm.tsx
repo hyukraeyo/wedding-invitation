@@ -9,7 +9,7 @@ import { TextField } from '@/components/ui/TextField';
 import { IconButton } from '@/components/ui/IconButton';
 import { DatePicker } from '@/components/common/DatePicker';
 import { TimePicker } from '@/components/common/TimePicker';
-import { ProgressBar } from '@/components/common/ProgressBar/ProgressBar';
+import { ProgressBar } from '@/components/ui/ProgressBar';
 import { Sparkles, ChevronLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { parseKoreanName } from '@/lib/utils';
@@ -192,7 +192,7 @@ const SetupForm = () => {
                         <span className={styles.mobileHeaderTitle}>기본 정보</span>
                         <div className={styles.mobileHeaderAction} /> {/* Spacer for centering */}
                     </div>
-                    <ProgressBar progress={progress} className={styles.progressBar || ""} />
+                    <ProgressBar progress={progress / 100} size="normal" className={styles.progressBar || ""} />
                 </>,
                 document.body
             )}

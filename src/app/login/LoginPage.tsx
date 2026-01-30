@@ -14,7 +14,7 @@ const ProfileCompletionModal = dynamic(
     () => import('@/components/auth/ProfileCompletionModal').then(mod => mod.ProfileCompletionModal),
     { ssr: false }
 );
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 
 /**
  * LoginPage: 소셜 로그인 전용 페이지

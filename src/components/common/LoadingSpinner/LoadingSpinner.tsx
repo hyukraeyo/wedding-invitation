@@ -11,7 +11,7 @@ interface LoadingSpinnerProps {
     className?: string;
 }
 
-export default function LoadingSpinner({ variant = 'fixed', className }: LoadingSpinnerProps) {
+export function LoadingSpinner({ variant = 'fixed', className }: LoadingSpinnerProps) {
     const canUseDOM = useCanUseDom();
 
     const containerClass = variant === 'fixed' ? styles.fixed : styles.full;
@@ -38,3 +38,5 @@ export default function LoadingSpinner({ variant = 'fixed', className }: Loading
 
     return content;
 }
+
+LoadingSpinner.displayName = 'LoadingSpinner';
