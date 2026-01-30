@@ -18,7 +18,10 @@
   transition: transform v.$transition-400 cubic-bezier(0.16, 1, 0.3, 1); // ease-ios
 
   @include m.mobile {
-    display: none;
+    // display: none; // 모바일에서도 공통 헤더 노출을 위해 주석 처리하거나 제거
+    padding: 0 1rem;
+    height: v.$header-height;
+    border-bottom: 1px solid v.$color-border;
   }
 
   @include m.desktop {

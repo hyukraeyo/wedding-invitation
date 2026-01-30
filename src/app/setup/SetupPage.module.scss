@@ -6,9 +6,10 @@
   display: flex;
   flex-direction: column;
   background-color: v.$color-bg-page;
-  padding: 2rem 1.25rem;
+  padding: 0;
   position: relative;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 
   // Background decoration
   &::before {
@@ -34,7 +35,7 @@
   }
 
   @media (min-width: 768px) {
-    padding: 4rem 2rem;
+    padding: 3rem 1.5rem;
     align-items: center;
     justify-content: center;
   }
@@ -55,15 +56,15 @@
 
 .formWrapper {
   background-color: v.$color-background;
-  border-radius: 2.5rem;
-  padding: 3.5rem;
-  border: 1px solid rgba(v.$color-border, 0.6);
-  box-shadow: v.$shadow-card;
+  border-radius: 2rem; // Slightly smaller rounded corners for modern look
+  padding: 2.5rem; // Reduced padding
+  border: 1px solid rgba(v.$color-border, 0.4);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
   animation: setupFadeIn 0.8s v.$ease-ios both;
 
   @media (max-width: 768px) {
-    padding: 1.5rem;
-    padding-top: 5rem; // Clear fixed mobile header (54px) + spacing
+    padding: 1.25rem;
+    padding-top: 4.5rem; // Reduced to fit common header height (3.5rem) better
     border-radius: 0;
     border: none;
     box-shadow: none;

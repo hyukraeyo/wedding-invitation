@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/Button';
 import { TextField } from '@/components/ui/TextField';
 
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
-import { Selector } from '@/components/ui/Selector';
 import styles from './TimePicker.module.scss';
 
 interface TimePickerProps {
@@ -24,7 +23,7 @@ interface TimePickerProps {
 
 type Period = 'AM' | 'PM';
 
-export const TimePicker = ({
+const TimePickerRaw = ({
     value,
     onChange,
     onComplete,
@@ -34,14 +33,10 @@ export const TimePicker = ({
     minuteStep = 10,
     id,
     disabled,
-    ref,
     labelOption = "appear"
-}: TimePickerProps) => {
+}: TimePickerProps, ref: React.Ref<HTMLButtonElement>) => {
     const [isOpen, setIsOpen] = useState(false);
     const [tempValue, setTempValue] = useState(value || '14:00');
-
-    // Sync tempValue when modal opens
-
 
     // Parse values for display and modal state
     const { displayValue, currentTM, tPeriod, tDisplayHour } = useMemo(() => {
@@ -74,7 +69,6 @@ export const TimePicker = ({
 
         return {
             displayValue: display,
-            tHInt: thi,
             currentTM: tM || '00',
             tPeriod: tp,
             tDisplayHour: tdh
@@ -97,12 +91,30 @@ export const TimePicker = ({
         return minutes.map(min => ({ label: `${min}분`, value: min }));
     }, [minuteStep]);
 
-    // Update temp time
-    const updateTempTime = useCallback((newP: Period, newH: string, newMin: string) => {
-        let h = parseInt(newH, 10);
-        if (newP === 'PM' && h !== 12) h += 12;
-        else if (newP === 'AM' && h === 12) h = 0;
-        setTempValue(`${String(h).padStart(2, '0')}:${newMin}`);
+    // Functional update to avoid stale closures - 수정된 버전
+    const updateTempTime = useCallback((updates: { period?: Period, hour?: string, minute?: string }) => {
+        setTempValue(prev => {
+            const [hStr, mStr] = prev.split(':');
+            const h = parseInt(hStr || '14', 10);
+            const m = mStr || '00';
+
+            // 현재 24시간 형식에서 period와 display hour 계산
+            const isPm = h >= 12;
+            const currentPeriod: Period = isPm ? 'PM' : 'AM';
+            const currentDisplayH = h > 12 ? h - 12 : (h === 0 ? 12 : h);
+
+            // updates에서 제공된 값 사용, 없으면 현재 값 유지
+            const p = updates.period !== undefined ? updates.period : currentPeriod;
+            const dh = updates.hour !== undefined ? updates.hour : String(currentDisplayH);
+            const min = updates.minute !== undefined ? updates.minute : m;
+
+            // display hour를 24시간 형식으로 변환
+            let newH = parseInt(dh, 10);
+            if (p === 'PM' && newH !== 12) newH += 12;
+            else if (p === 'AM' && newH === 12) newH = 0;
+
+            return `${String(newH).padStart(2, '0')}:${min}`;
+        });
     }, []);
 
     // Confirm selection
@@ -112,43 +124,64 @@ export const TimePicker = ({
         onComplete?.();
     }, [onChange, tempValue, onComplete]);
 
+    // Handle modal close
+    const handleModalClose = useCallback((open: boolean) => {
+        setIsOpen(open);
+        if (!open) {
+            // 모달이 닫힐 때 tempValue를 현재 value로 리셋
+            setTempValue(value || '14:00');
+        }
+    }, [value]);
+
     // Scroll to current selection when modal opens or tempValue changes
     useEffect(() => {
         if (!isOpen) return;
 
         const timer = setTimeout(() => {
-            const activeElements = document.querySelectorAll(`.${styles.active}`);
-            activeElements.forEach(el => {
-                el.scrollIntoView({ block: 'center', behavior: 'auto' });
-            });
-        }, 50);
+            const container = document.querySelector(`.${styles.pickerGrid}`);
+            if (container) {
+                const activeElements = container.querySelectorAll(`.${styles.active}`);
+                activeElements.forEach(el => {
+                    el.scrollIntoView({ block: 'center', behavior: 'auto' });
+                });
+            }
+        }, 100);
 
         return () => clearTimeout(timer);
-    }, [isOpen]);
+    }, [isOpen, tempValue]);
 
-    // Render column helper
+    // Render column helper - Toss Button 사용
     const renderColumn = (
         options: { label: string, value: string }[],
         current: string,
-        onSelect: (val: string) => void,
-        columnId: string
+        columnType: 'hour' | 'minute'
     ) => (
         <div className={styles.column}>
-            <div className={styles.scrollWrapper} data-column={columnId}>
+            <div className={styles.scrollWrapper} data-column={columnType}>
                 {options.map(opt => (
-                    <Selector
+                    <Button
                         key={opt.value}
-                        type="clear"
-                        typography="t6"
+                        variant="weak"
+                        size="medium"
+                        color="dark"
                         className={cn(styles.optionItem, current === opt.value && styles.active)}
-                        onClick={() => onSelect(opt.value)}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (columnType === 'hour') {
+                                updateTempTime({ hour: opt.value });
+                            } else {
+                                updateTempTime({ minute: opt.value });
+                            }
+                        }}
                     >
                         {opt.label}
-                    </Selector>
+                    </Button>
                 ))}
             </div>
         </div>
     );
+
+
 
     return (
         <>
@@ -168,7 +201,7 @@ export const TimePicker = ({
                 }}
                 className={className}
             />
-            <Modal open={isOpen} onOpenChange={setIsOpen}>
+            <Modal open={isOpen} onOpenChange={handleModalClose}>
                 <Modal.Overlay />
                 <Modal.Content className={styles.modalContent}>
                     <Modal.Header title="예식 시간 선택" />
@@ -177,7 +210,11 @@ export const TimePicker = ({
                         <div className={styles.periodContainer}>
                             <SegmentedControl
                                 value={tPeriod}
-                                onChange={(v: string) => updateTempTime(v as Period, tDisplayHour, currentTM)}
+                                onChange={(v: string) => {
+                                    if (v === 'AM' || v === 'PM') {
+                                        updateTempTime({ period: v as Period });
+                                    }
+                                }}
                             >
                                 <SegmentedControl.Item value="AM">오전</SegmentedControl.Item>
                                 <SegmentedControl.Item value="PM">오후</SegmentedControl.Item>
@@ -185,8 +222,8 @@ export const TimePicker = ({
                         </div>
 
                         <div className={styles.pickerGrid}>
-                            {renderColumn(hourOptions, tDisplayHour, (v) => updateTempTime(tPeriod, v, currentTM), 'hour')}
-                            {renderColumn(minuteOptions, currentTM, (v) => updateTempTime(tPeriod, tDisplayHour, v), 'minute')}
+                            {renderColumn(hourOptions, tDisplayHour, 'hour')}
+                            {renderColumn(minuteOptions, currentTM, 'minute')}
                         </div>
                     </Modal.Body>
 
@@ -205,5 +242,7 @@ export const TimePicker = ({
         </>
     );
 };
+
+export const TimePicker = React.forwardRef(TimePickerRaw);
 
 TimePicker.displayName = "TimePicker";
