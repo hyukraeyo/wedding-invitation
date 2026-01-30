@@ -273,7 +273,7 @@ export default function RequestsPageClient({
                             <Button
                                 className={styles.flex1}
                                 variant="weak"
-                                size="large"
+                                size="lg"
                                 onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
                                 disabled={approveMutation.isPending}
                             >
@@ -283,7 +283,7 @@ export default function RequestsPageClient({
                         <Button
                             className={styles.flex1}
                             variant="fill"
-                            size="large"
+                            size="lg"
                             loading={approveMutation.isPending}
                             disabled={approveMutation.isPending}
                             onClick={handleConfirmAction}
@@ -333,7 +333,7 @@ export default function RequestsPageClient({
                             />
                         </Modal.Body>
                         <Modal.Footer className={styles.modalFooter}>
-                            <Button className={styles.flex1} variant="fill" size="large" onClick={() => setViewRejectionData(null)}>
+                            <Button className={styles.flex1} variant="fill" size="lg" onClick={() => setViewRejectionData(null)}>
                                 확인
                             </Button>
                         </Modal.Footer>

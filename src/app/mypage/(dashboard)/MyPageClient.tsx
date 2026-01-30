@@ -692,7 +692,7 @@ export default function MyPageClient({
                             <Button
                                 className={styles.flex1}
                                 variant="weak"
-                                size="large"
+                                size="lg"
                                 onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
                                 disabled={!!actionLoadingId}
                             >
@@ -702,7 +702,7 @@ export default function MyPageClient({
                         <Button
                             className={styles.flex1}
                             variant="fill"
-                            size="large"
+                            size="lg"
                             loading={!!actionLoadingId}
                             disabled={!!actionLoadingId}
                             onClick={() => {
@@ -759,7 +759,7 @@ export default function MyPageClient({
                             />
                         </Modal.Body>
                         <Modal.Footer className={styles.modalFooter}>
-                            <Button className={styles.flex1} variant="fill" size="large" onClick={handleCloseAutoNotification}>
+                            <Button className={styles.flex1} variant="fill" size="lg" onClick={handleCloseAutoNotification}>
                                 확인
                             </Button>
                         </Modal.Footer>

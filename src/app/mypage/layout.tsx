@@ -4,6 +4,7 @@ import { MyPageLayout } from '@/components/mypage/MyPageLayout';
 import { Suspense } from 'react';
 import type { Session } from 'next-auth';
 import styles from './layout.module.scss';
+import { Box } from "@/components/ui";
 
 /**
  * 🍌 마이페이지 레이아웃 (서버 컴포넌트)
@@ -21,7 +22,7 @@ export default async function MyPageLayoutServer({
     // 실제 데이터 패칭이 필요한 MyPageLayout을 별도의 비동기 로직으로 분리하거나 
     // 즉시 렌더링 가능한 구조로 유지합니다.
     return (
-        <Suspense fallback={<div className={styles.fallback} />}>
+        <Suspense fallback={<Box className={styles.fallback} />}>
             <MyPageLayoutFetcher session={session}>
                 {children}
             </MyPageLayoutFetcher>

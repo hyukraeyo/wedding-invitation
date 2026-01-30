@@ -236,7 +236,7 @@ export default function LocationSectionContent() {
                     right={
                         <Switch
                             checked={showMap}
-                            onChange={(_, checked) => setShowMap(checked)}
+                            onCheckedChange={(checked) => setShowMap(checked)}
                         />
                     }
                 />
@@ -245,7 +245,7 @@ export default function LocationSectionContent() {
                     right={
                         <Switch
                             checked={lockMap}
-                            onChange={(_, checked) => setLockMap(checked)}
+                            onCheckedChange={(checked) => setLockMap(checked)}
                         />
                     }
                 />
@@ -254,7 +254,7 @@ export default function LocationSectionContent() {
                     right={
                         <Switch
                             checked={showNavigation}
-                            onChange={(_, checked) => setShowNavigation(checked)}
+                            onCheckedChange={(checked) => setShowNavigation(checked)}
                         />
                     }
                 />

@@ -71,7 +71,7 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
                     right={
                         <Switch
                             checked={showCalendar}
-                            onChange={(_, checked) => setShowCalendar(checked)}
+                            onCheckedChange={(checked) => setShowCalendar(checked)}
                         />
                     }
                 />
@@ -81,7 +81,7 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
                     right={
                         <Switch
                             checked={showDday}
-                            onChange={(_, checked) => setShowDday(checked)}
+                            onCheckedChange={(checked) => setShowDday(checked)}
                         />
                     }
                 />
@@ -90,7 +90,7 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
                         contents={
                             <div className={styles.ddayInputWrapper}>
                                 <TextField
-                                    variant="box"
+                                    variant="surface"
                                     label="D-Day 메시지"
                                     placeholder="예: (신랑), (신부)의 결혼식이 (D-Day) 남았습니다"
                                     value={ddayMessage}

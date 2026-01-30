@@ -4,6 +4,7 @@ import Script from "next/script";
 import ClientProviders from "./ClientProviders";
 import { fontVariables } from "@/lib/fonts";
 import Header from "@/components/common/Header";
+import { Flex, Box } from "@/components/ui";
 
 import { CustomScrollbar } from "@/components/common/CustomScrollbar";
 import { auth } from "@/auth";
@@ -164,15 +165,15 @@ export default async function RootLayout({
         />
         <SkipLink href="#main-content">본문 바로가기</SkipLink>
         <ClientProviders session={session}>
-          <div suppressHydrationWarning vaul-drawer-wrapper="" style={{ backgroundColor: "var(--background)", minHeight: "100dvh", display: "flex", flexDirection: "column" }}>
+          <Flex direction="column" suppressHydrationWarning vaul-drawer-wrapper="" style={{ backgroundColor: "var(--background)", minHeight: "100dvh" }}>
             <Suspense fallback={null}>
               <CustomScrollbar />
             </Suspense>
             <Header />
-            <main id="main-content">
+            <Box as="main" id="main-content" flexGrow={1}>
               {children}
-            </main>
-          </div>
+            </Box>
+          </Flex>
         </ClientProviders>
 
       </body>

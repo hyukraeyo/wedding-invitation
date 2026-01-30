@@ -59,7 +59,7 @@ export default function ClosingSection(props: SectionProps) {
                         <Button
                             type="button"
                             variant="weak"
-                            size="small"
+                            size="sm"
                             onPointerDown={(e) => e.stopPropagation()}
                             onMouseDown={(e) => e.stopPropagation()}
                             onClick={(e) => {
@@ -138,10 +138,9 @@ export default function ClosingSection(props: SectionProps) {
                             {renderSampleList()}
                         </Modal.Body>
                         <Modal.Footer>
-                            // @ts-ignore
                             <BottomCTA.Single
                                 fixed={false}
-                                // @ts-ignore
+                                // @ts-expect-error - BottomCTA.Single typing issue
                                 onClick={() => setIsSampleModalOpen(false)}
                             >
                                 닫기
@@ -155,10 +154,9 @@ export default function ClosingSection(props: SectionProps) {
                     onClose={() => setIsSampleModalOpen(false)}
                     header="마무리 추천 문구"
                     cta={
-                        // @ts-ignore
                         <BottomCTA.Single
                             fixed={false}
-                            // @ts-ignore
+                            // @ts-expect-error - BottomCTA.Single typing issue
                             onClick={() => setIsSampleModalOpen(false)}
                         >
                             닫기

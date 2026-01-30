@@ -1,0 +1,59 @@
+@use "../../../styles/variables" as v;
+
+.root {
+  position: relative;
+  display: flex;
+  align-items: center;
+  user-select: none;
+  touch-action: none;
+  width: 200px;
+  height: 20px;
+
+  &[data-orientation='vertical'] {
+    flex-direction: column;
+    width: 20px;
+    height: 100px;
+  }
+}
+
+.track {
+  background-color: v.$grey-200;
+  position: relative;
+  flex-grow: 1;
+  border-radius: 9999px;
+
+  &[data-orientation='horizontal'] {
+    height: 3px;
+  }
+  &[data-orientation='vertical'] {
+    width: 3px;
+  }
+}
+
+.range {
+  position: absolute;
+  background-color: v.$banana-yellow;
+  border-radius: 9999px;
+  height: 100%;
+}
+
+.thumb {
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  box-shadow: 0 2px 10px v.$grey-400;
+  border-radius: 10px;
+  cursor: grab;
+
+  &:hover {
+    background-color: v.$grey-50;
+  }
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(v.$banana-yellow, 0.3);
+  }
+  &:active {
+    cursor: grabbing;
+  }
+}

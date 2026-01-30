@@ -111,7 +111,7 @@ export default function AccountPageClient({
                             <div className={styles.editActions}>
                                 <Button
                                     variant="weak"
-                                    size="small"
+                                    size="sm"
                                     onClick={() => {
                                         setIsEditingPhone(false);
                                         setFormData({ phone: profile.phone || '' });
@@ -121,7 +121,7 @@ export default function AccountPageClient({
                                 </Button>
                                 <Button
                                     variant="fill"
-                                    size="small"
+                                    size="sm"
                                     onClick={handleSavePhone}
                                 >
                                     저장

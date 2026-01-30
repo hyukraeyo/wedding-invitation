@@ -238,7 +238,7 @@ export const InvitationActionMenu: React.FC<InvitationActionMenuProps> = ({
                         </div>
                     </Modal.Body>
                     <Modal.Footer className={styles.footer}>
-                        <Button className={styles.flex1} variant="fill" size="large" onClick={() => setShowRejectionModal(false)}>
+                        <Button className={styles.flex1} variant="fill" size="lg" onClick={() => setShowRejectionModal(false)}>
                             확인
                         </Button>
                     </Modal.Footer>
@@ -260,10 +260,10 @@ export const InvitationActionMenu: React.FC<InvitationActionMenuProps> = ({
                         수정 모드로 전환 시 <strong>다시 승인 신청</strong>을 해야 공유가 가능합니다. 수정하시겠습니까?
                     </Modal.Body>
                     <Modal.Footer className={styles.footer}>
-                        <Button className={styles.flex1} variant="weak" size="large" onClick={() => setShowEditConfirmModal(false)}>
+                        <Button className={styles.flex1} variant="weak" size="lg" onClick={() => setShowEditConfirmModal(false)}>
                             취소
                         </Button>
-                        <Button className={styles.flex1} variant="fill" size="large" onClick={handleConfirmEdit}>
+                        <Button className={styles.flex1} variant="fill" size="lg" onClick={handleConfirmEdit}>
                             수정하기
                         </Button>
                     </Modal.Footer>

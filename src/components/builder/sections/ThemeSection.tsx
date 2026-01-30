@@ -108,7 +108,7 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
                     right={
                         <Switch
                             checked={theme.allowFontScale}
-                            onChange={(_: unknown, checked: boolean) => setTheme({ allowFontScale: checked })}
+                            onCheckedChange={(checked) => setTheme({ allowFontScale: checked })}
                         />
                     }
                 />

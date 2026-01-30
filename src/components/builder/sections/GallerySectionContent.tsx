@@ -336,7 +336,7 @@ export default React.memo(function GallerySectionContent() {
                                         <Button
                                             variant="fill"
                                             color="primary"
-                                            size="large"
+                                            size="lg"
                                             style={{ width: '100%' }}
                                             onClick={() => setIsLimitModalOpen(false)}
                                         >
@@ -400,7 +400,7 @@ export default React.memo(function GallerySectionContent() {
                 right={
                     <Switch
                         checked={galleryPopup}
-                        onChange={(_: unknown, checked: boolean) => setGalleryPopup(checked)}
+                        onCheckedChange={(checked) => setGalleryPopup(checked)}
                     />
                 }
             />
@@ -411,7 +411,7 @@ export default React.memo(function GallerySectionContent() {
                         right={
                             <Switch
                                 checked={galleryAutoplay}
-                                onChange={(_: unknown, checked: boolean) => setGalleryAutoplay(checked)}
+                                onCheckedChange={(checked) => setGalleryAutoplay(checked)}
                             />
                         }
                     />
@@ -420,7 +420,7 @@ export default React.memo(function GallerySectionContent() {
                         right={
                             <Switch
                                 checked={galleryFade}
-                                onChange={(_: unknown, checked: boolean) => setGalleryFade(checked)}
+                                onCheckedChange={(checked) => setGalleryFade(checked)}
                             />
                         }
                     />

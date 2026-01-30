@@ -1,4 +1,4 @@
-import React from 'react';
+import { Heading } from '@/components/ui/Heading';
 import styles from './MyPageHeader.module.scss';
 
 interface MyPageHeaderProps {
@@ -9,7 +9,7 @@ interface MyPageHeaderProps {
 export function MyPageHeader({ title, actions }: MyPageHeaderProps) {
     return (
         <div className={styles.sectionHeader}>
-            <h1 className={styles.sectionTitle}>{title}</h1>
+            <Heading as="h1" size="5" weight="bold" className={styles.sectionTitle}>{title}</Heading>
             {actions && <div className={styles.actions}>{actions}</div>}
         </div>
     );

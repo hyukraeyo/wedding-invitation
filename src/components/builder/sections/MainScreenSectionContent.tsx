@@ -110,7 +110,7 @@ export default function MainScreenSectionContent() {
                 right={
                     <Switch
                         checked={mainScreen.expandPhoto}
-                        onChange={(_, checked) => updateMain({ expandPhoto: checked })}
+                        onCheckedChange={(checked) => updateMain({ expandPhoto: checked })}
                     />
                 }
             />

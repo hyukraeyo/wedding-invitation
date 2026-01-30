@@ -10,9 +10,9 @@ interface ModalProps extends Omit<DialogPrimitive.DialogProps, 'open' | 'onOpenC
     onOpenChange?: ((open: boolean) => void) | undefined;
 }
 
+const Root = DialogPrimitive.Root as React.ComponentType<any>;
+
 const ModalMain = ({ children, open, onOpenChange, ...props }: ModalProps) => {
-    // exactOptionalPropertyTypes: true 대응을 위해 임시로 any 캐스팅 사용
-    const Root = DialogPrimitive.Root as React.FC<any>;
     return (
         <Root open={open} onOpenChange={onOpenChange} {...props}>
             {children}

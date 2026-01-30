@@ -1,0 +1,60 @@
+@use "../../../styles/variables" as v;
+
+.Content {
+  min-width: 220px;
+  background-color: white;
+  border-radius: 6px;
+  padding: 5px;
+  box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35), 0px 10px 20px -15px rgba(22, 23, 24, 0.2);
+  border: 1px solid v.$grey-200;
+  animation-duration: 400ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.Item {
+  font-size: 14px;
+  line-height: normal;
+  color: v.$grey-900;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 10px; // Increased padding for better touch
+  position: relative;
+  user-select: none;
+  cursor: pointer;
+  outline: none;
+
+  &[data-disabled] {
+    color: v.$grey-400;
+    pointer-events: none;
+  }
+
+  &[data-highlighted] {
+    background-color: v.$banana-yellow;
+    color: black;
+  }
+}
+
+.Separator {
+  height: 1px;
+  background-color: v.$grey-100;
+  margin: 5px;
+}
+
+.ItemIndicator {
+  position: absolute;
+  left: 0;
+  width: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Label {
+  padding-left: 25px;
+  font-size: 12px;
+  line-height: 25px;
+  color: v.$grey-500;
+}

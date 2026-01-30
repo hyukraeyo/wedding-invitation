@@ -1,0 +1,42 @@
+@use "../../../styles/variables" as v;
+
+.Flex {
+  display: flex;
+}
+
+.direction-row { flex-direction: row; }
+.direction-column { flex-direction: column; }
+.direction-row-reverse { flex-direction: row-reverse; }
+.direction-column-reverse { flex-direction: column-reverse; }
+
+.align-start { align-items: flex-start; }
+.align-center { align-items: center; }
+.align-end { align-items: flex-end; }
+.align-baseline { align-items: baseline; }
+.align-stretch { align-items: stretch; }
+
+.justify-start { justify-content: flex-start; }
+.justify-center { justify-content: center; }
+.justify-end { justify-content: flex-end; }
+.justify-between { justify-content: space-between; }
+.justify-around { justify-content: space-around; }
+
+.wrap-nowrap { flex-wrap: nowrap; }
+.wrap-wrap { flex-wrap: wrap; }
+.wrap-wrap-reverse { flex-wrap: wrap-reverse; }
+
+$spacing: (
+  "1": 4px,
+  "2": 8px,
+  "3": 12px,
+  "4": 16px,
+  "5": 24px,
+  "6": 32px,
+  "7": 40px,
+  "8": 48px,
+  "9": 64px,
+);
+
+@each $key, $value in $spacing {
+  .gap-#{$key} { gap: $value; }
+}

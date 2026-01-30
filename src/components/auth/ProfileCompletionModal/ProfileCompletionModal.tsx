@@ -82,31 +82,27 @@ export function ProfileCompletionModal({
                         청첩장 서비스 이용을 위해 이름과 연락처를 입력해 주세요.
                     </div>
                     <div className={styles.inputList}>
-                        <div className={styles.inputGroup}>
-                            <div className={styles.inputIcon}>
+                        <TextField.Root variant="classic" className={styles.inputField}>
+                            <TextField.Slot side="left">
                                 <User size={18} />
-                            </div>
-                            <TextField
-                                variant="line"
+                            </TextField.Slot>
+                            <TextField.Input
                                 placeholder="이름 (실명)"
                                 value={name}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
-                                className={styles.inputField || ''}
                             />
-                        </div>
+                        </TextField.Root>
 
-                        <div className={styles.inputGroup}>
-                            <div className={styles.inputIcon}>
+                        <TextField.Root variant="classic" className={styles.inputField}>
+                            <TextField.Slot side="left">
                                 <Phone size={18} />
-                            </div>
-                            <TextField
-                                variant="line"
+                            </TextField.Slot>
+                            <TextField.Input
                                 placeholder="연락처 (- 없이 입력)"
                                 value={phone}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhone(e.target.value)}
-                                className={styles.inputField || ''}
                             />
-                        </div>
+                        </TextField.Root>
                     </div>
 
                     <div className={styles.infoBox}>
@@ -122,7 +118,7 @@ export function ProfileCompletionModal({
                     <Button
                         className={styles.fullWidth}
                         variant="fill"
-                        size="large"
+                        size="lg"
                         loading={loading}
                         disabled={loading || !name.trim() || !phone.trim()}
                         onClick={handleSubmit}

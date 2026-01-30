@@ -1,0 +1,198 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+
+.button {
+  @include m.button-base;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s v.$ease-ios;
+  gap: 8px;
+  border: none;
+  isolation: isolate;
+  
+  // Sizes (Radix UI Themes Mapping: 1=xs, 2=sm/md, 3=lg, 4=xl)
+  &.xl, &.large_xl, &.size_4 {
+    height: v.$control-height-xl;
+    padding: 0 24px;
+    font-size: v.$font-size-base;
+  }
+  
+  &.lg, &.large, &.size_3 {
+    height: v.$control-height-lg;
+    padding: 0 20px;
+    font-size: v.$font-size-base;
+  }
+  
+  &.md, &.medium, &.size_2 {
+    height: v.$control-height-md;
+    padding: 0 16px;
+    font-size: v.$font-size-md;
+  }
+  
+  &.sm, &.small {
+    height: v.$control-height-sm;
+    padding: 0 12px;
+    font-size: v.$font-size-sm;
+  }
+  
+  &.xs, &.tiny, &.size_1 {
+    height: v.$control-height-xs;
+    padding: 0 8px;
+    font-size: v.$font-size-xs;
+  }
+  
+  // Radius
+  &.radius_none { border-radius: 0; }
+  &.radius_small { border-radius: v.$radius-sm; }
+  &.radius_medium { border-radius: v.$radius-md; }
+  &.radius_large { border-radius: v.$radius-lg; }
+  &.radius_full { border-radius: v.$radius-full; }
+  
+  // Default radius if not specified
+  &:not([class*="radius_"]) {
+    border-radius: v.$radius-md;
+  }
+
+  // Colors (Semantic)
+  &.primary {
+    --btn-bg: #{v.$banana-yellow};
+    --btn-text: #{v.$grey-900};
+    --btn-weak-bg: #{rgba(v.$banana-yellow, 0.15)};
+    --btn-weak-text: #{v.$yellow-900};
+    --btn-outline: #{v.$banana-yellow};
+    
+    &.highContrast {
+      --btn-bg: #{v.$yellow-700};
+      --btn-text: #{v.$white};
+      --btn-weak-bg: #{rgba(v.$banana-yellow, 0.25)};
+    }
+  }
+  
+  &.secondary {
+    --btn-bg: #{v.$grey-100};
+    --btn-text: #{v.$grey-800};
+    --btn-weak-bg: #{v.$grey-opacity-100};
+    --btn-weak-text: #{v.$grey-700};
+    --btn-outline: #{v.$grey-300};
+
+    &.highContrast {
+      --btn-bg: #{v.$grey-800};
+      --btn-text: #{v.$white};
+    }
+  }
+  
+  &.danger {
+    --btn-bg: #{v.$red-500};
+    --btn-text: #{v.$white};
+    --btn-weak-bg: #{v.$red-50};
+    --btn-weak-text: #{v.$red-600};
+    --btn-outline: #{v.$red-500};
+
+    &.highContrast {
+      --btn-bg: #{v.$red-700};
+    }
+  }
+
+  // Variants (Style)
+  &.filled, &.fill, &.solid {
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
+    
+    @include m.hover {
+      filter: brightness(0.95);
+    }
+  }
+  
+  &.weak, &.soft {
+    background-color: var(--btn-weak-bg);
+    color: var(--btn-weak-text);
+    
+    @include m.hover {
+      background-color: color-mix(in srgb, var(--btn-weak-bg), black 5%);
+    }
+  }
+  
+  &.outline {
+    background-color: transparent;
+    border: 1.5px solid var(--btn-outline);
+    color: var(--btn-weak-text);
+    
+    @include m.hover {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+  }
+  
+  &.ghost, &.clear {
+    background-color: transparent;
+    color: var(--btn-weak-text);
+    
+    @include m.hover {
+      background-color: rgba(0, 0, 0, 0.04);
+    }
+  }
+  
+  // Custom Styles
+  &.fullWidth {
+    width: 100%;
+  }
+  
+  // States
+  &:active:not(:disabled) {
+    transform: scale(0.96);
+  }
+  
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+
+  &.isLoading {
+    color: transparent !important;
+    pointer-events: none;
+    
+    .spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      color: currentColor; // This will use the button's text color (when not transparent)
+      // Actually we need the spinner to be visible while text is transparent
+      
+      &::after {
+        content: "";
+        width: 1.2em;
+        height: 1.2em;
+        border: 2px solid rgba(0,0,0,0.1);
+        border-top-color: var(--btn-text);
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+      }
+    }
+    
+    &.weak {
+      .spinner::after {
+        border-top-color: var(--btn-weak-text);
+      }
+    }
+
+    &.outline, &.ghost {
+       .spinner::after {
+        border-top-color: var(--btn-weak-text);
+      }
+    }
+  }
+  
+  // Icon Support
+  .icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

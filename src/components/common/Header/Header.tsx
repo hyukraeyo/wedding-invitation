@@ -8,9 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import type { User } from 'next-auth';
-import { IconButton } from '@/components/ui/IconButton';
-import { Top } from '@/components/ui/Top';
-import { Modal } from '@/components/ui/Modal';
+import { IconButton, Top, Modal, Flex, Box } from '@/components/ui';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { useShallow } from 'zustand/react/shallow';
@@ -22,7 +20,7 @@ import { useHeaderStore } from '@/store/useHeaderStore';
 const Button = lazy(() => import('@/components/ui/Button').then(mod => ({ default: mod.Button })));
 
 const Logo = React.memo(() => (
-    <div className={styles.logoWrapper}>
+    <Box className={styles.logoWrapper}>
         <Link href="/" className={styles.logoLink}>
             <Image
                 src="/logo.png"
@@ -34,7 +32,7 @@ const Logo = React.memo(() => (
                 priority
             />
         </Link>
-    </div>
+    </Box>
 ));
 Logo.displayName = 'Logo';
 
@@ -59,9 +57,9 @@ const HeaderActions = React.memo(({
     onSaveAction,
     showSave
 }: HeaderActionsProps) => (
-    <div className={styles.actions}>
+    <Flex align="center" gap="2" className={styles.actions}>
         {authLoading ? (
-            <div className={styles.actionPlaceholder} />
+            <Box className={styles.actionPlaceholder} />
         ) : (
             <>
                 {showSave && user ? (
@@ -79,7 +77,7 @@ const HeaderActions = React.memo(({
                 ) : null}
 
                 {user ? (
-                    <>
+                    <Flex align="center" gap="2">
                         <Link href="/mypage/notifications" className={styles.notificationLink}>
                             <IconButton
                                 iconSize={20}
@@ -105,7 +103,7 @@ const HeaderActions = React.memo(({
                                 <Banana size={20} strokeWidth={2.5} />
                             </IconButton>
                         </Link>
-                    </>
+                    </Flex>
                 ) : (
                     <IconButton
                         iconSize={20}
@@ -120,7 +118,7 @@ const HeaderActions = React.memo(({
                 )}
             </>
         )}
-    </div>
+    </Flex>
 ));
 HeaderActions.displayName = 'HeaderActions';
 
@@ -133,9 +131,7 @@ export default function Header() {
         !pathname.startsWith('/v/') &&
         pathname !== '/preview' &&
         pathname !== '/builder/setup' &&
-        !pathname.startsWith('/setup') &&
-        !pathname.startsWith('/design-system') &&
-        !pathname.startsWith('/tds');
+        !pathname.startsWith('/setup');
     const { user, loading: authLoading } = useAuth();
 
     // Store states
@@ -207,8 +203,8 @@ export default function Header() {
                         (작성된 내용은 초기화됩니다.)
                     </Modal.Body>
                     <Modal.Footer>
-                        <Suspense fallback={<div className={styles.suspenseFallback} />}>
-                            <div className={styles.resetDialogContent}>
+                        <Suspense fallback={<Flex className={styles.suspenseFallback} />}>
+                            <Flex direction="column" gap="2" className={styles.resetDialogContent}>
                                 <Button
                                     color="danger"
                                     variant="fill"
@@ -224,7 +220,7 @@ export default function Header() {
                                 >
                                     취소
                                 </Button>
-                            </div>
+                            </Flex>
                         </Suspense>
                     </Modal.Footer>
                 </Modal.Content>

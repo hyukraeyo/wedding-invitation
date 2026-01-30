@@ -162,7 +162,7 @@ const TimePickerRaw = ({
                         key={opt.value}
                         variant="weak"
                         size="medium"
-                        color="dark"
+                        color="grey"
                         className={cn(styles.optionItem, current === opt.value && styles.active)}
                         onClick={(e) => {
                             e.preventDefault();
@@ -212,7 +212,7 @@ const TimePickerRaw = ({
                         >
                             <SegmentedControl
                                 value={tPeriod}
-                                onChange={(v: any) => {
+                                onChange={(v: string) => {
                                     updateTempTime({ period: v as Period });
                                 }}
                             >
@@ -231,7 +231,7 @@ const TimePickerRaw = ({
                         <Button
                             className={styles.fullWidth}
                             variant="fill"
-                            size="large"
+                            size="lg"
                             onClick={handleConfirm}
                         >
                             선택 완료

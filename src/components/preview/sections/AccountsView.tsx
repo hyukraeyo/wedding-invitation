@@ -65,7 +65,7 @@ const AccountsView = memo(({
                 <div key={acc.id} className={styles.accountCard}>
                     <div className={styles.accountHeader}>
                         <span className={styles.relationLabel}>{acc.relation}</span>
-                        <Button variant="weak" size="small" className={styles.copyButton} onClick={() => handleCopy(acc.accountNumber)}>복사하기</Button>
+                        <Button variant="weak" size="sm" className={styles.copyButton} onClick={() => handleCopy(acc.accountNumber)}>복사하기</Button>
                     </div>
                     <div className={styles.accountInfo}>
                         <div className={styles.bankAndHolder}>

@@ -79,7 +79,7 @@ export function MyPageSidebar({
                         <FileText size={20} className={styles.menuIcon} />
                         {MENU_TITLES.DASHBOARD}
                         {invitationCount > 0 && (
-                            <Badge color="elephant" variant="weak" size="small" style={{ marginLeft: 'auto' }}>{invitationCount}</Badge>
+                            <Badge color="secondary" variant="soft" size="1" radius="full" style={{ marginLeft: 'auto' }}>{invitationCount}</Badge>
                         )}
                     </ViewTransitionLink>
 
@@ -91,7 +91,7 @@ export function MyPageSidebar({
                             <ClipboardList size={20} className={styles.menuIcon} />
                             {MENU_TITLES.REQUESTS}
                             {requestCount > 0 && (
-                                <Badge color="red" variant="weak" size="small" style={{ marginLeft: 'auto' }}>{requestCount}</Badge>
+                                <Badge color="danger" variant="soft" size="1" radius="full" style={{ marginLeft: 'auto' }}>{requestCount}</Badge>
                             )}
                         </ViewTransitionLink>
                     )}
@@ -111,7 +111,7 @@ export function MyPageSidebar({
                         <Bell size={20} className={styles.menuIcon} />
                         {MENU_TITLES.NOTIFICATIONS}
                         {notificationCount > 0 && (
-                            <Badge color="red" variant="weak" size="small" style={{ marginLeft: 'auto' }}>{notificationCount}</Badge>
+                            <Badge color="danger" variant="soft" size="1" radius="full" style={{ marginLeft: 'auto' }}>{notificationCount}</Badge>
                         )}
                     </ViewTransitionLink>
 
@@ -167,7 +167,7 @@ export function MyPageSidebar({
                         </div>
                     </Modal.Body>
                     <Modal.Footer className={styles.footer}>
-                        <Button className={styles.fullWidth} variant="fill" size="large" onClick={() => setIsEventModalOpen(false)}>
+                        <Button className={styles.fullWidth} variant="fill" size="lg" onClick={() => setIsEventModalOpen(false)}>
                             확인
                         </Button>
                     </Modal.Footer>
@@ -184,10 +184,10 @@ export function MyPageSidebar({
                         </div>
                     </Modal.Body>
                     <Modal.Footer className={styles.footer}>
-                        <Button className={styles.flex1} variant="weak" size="large" onClick={() => setIsCustomerServiceModalOpen(false)}>
+                        <Button className={styles.flex1} variant="weak" size="lg" onClick={() => setIsCustomerServiceModalOpen(false)}>
                             닫기
                         </Button>
-                        <Button className={styles.flex1} variant="fill" size="large" onClick={handleCustomerServiceConfirm}>
+                        <Button className={styles.flex1} variant="fill" size="lg" onClick={handleCustomerServiceConfirm}>
                             확인
                         </Button>
                     </Modal.Footer>

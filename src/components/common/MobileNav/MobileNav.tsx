@@ -227,7 +227,7 @@ export function MobileNav({
                                 </p>
                             </Modal.Body>
                             <Modal.Footer className={styles.modalFooter}>
-                                <Button className={styles.fullWidth} variant="fill" size="large" onClick={() => setIsEventModalOpen(false)}>
+                                <Button className={styles.fullWidth} variant="fill" size="lg" onClick={() => setIsEventModalOpen(false)}>
                                     확인
                                 </Button>
                             </Modal.Footer>

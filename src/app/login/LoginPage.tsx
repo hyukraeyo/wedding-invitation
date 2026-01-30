@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Button } from '@/components/ui/Button';
+import { Button, Heading, Flex, Box } from '@/components/ui';
 import { signIn } from 'next-auth/react';
 import styles from './LoginPage.module.scss';
 import { useAuth } from '@/hooks/useAuth';
@@ -83,19 +83,19 @@ export default function LoginPage() {
             {/* Full Screen Loading Animation */}
             {loadingProvider ? <LoadingSpinner /> : null}
 
-            <div className={styles.overlay}>
-                <div className={styles.modal}>
+            <Flex align="center" justify="center" className={styles.overlay}>
+                <Box className={styles.modal}>
                     {/* Header */}
-                    <div className={styles.header}>
-                        <h1 className={styles.title}>
+                    <Box className={styles.header}>
+                        <Heading as="h1" size="7" weight="bold" className={styles.title}>
                             바나나웨딩 시작하기 🍌
-                        </h1>
+                        </Heading>
                         <p className={styles.subtitle}>
                             유통기한 없는 우리만의 특별한 시작,<br />바나나웨딩과 함께 쉽고 빠르게 만들어보세요.
                         </p>
-                    </div>
+                    </Box>
 
-                    <div className={styles.socialButtons}>
+                    <Flex direction="column" gap="3" className={styles.socialButtons}>
                         <button
                             className={`${styles.socialButton} ${styles.kakao}`}
                             onClick={() => handleOAuthLogin('kakao')}
@@ -124,12 +124,12 @@ export default function LoginPage() {
                             </svg>
                             <span>네이버로 시작하기</span>
                         </Button>
-                    </div>
+                    </Flex>
 
                     {/* Hidden Admin Login Trigger (Triple click on title to show admin login?) - For now, fully removed as requested */}
 
                     {/* Footer */}
-                    <div className={styles.footer}>
+                    <Box className={styles.footer}>
                         <p>
                             계속 진행함으로써 귀하는 당사의
                             <Link href="/privacy" target="_blank" className={styles.link}>
@@ -137,19 +137,19 @@ export default function LoginPage() {
                             </Link>
                             및<br />이용약관에 동의하게 됩니다.
                         </p>
-                    </div>
+                    </Box>
 
                     {/* Back to Home */}
-                    <div className={styles.backToHomeWrapper}>
+                    <Box className={styles.backToHomeWrapper}>
                         <Link
                             href="/"
                             className={styles.backToHomeLink}
                         >
                             ← 홈으로 돌아가기
                         </Link>
-                    </div>
-                </div>
-            </div>
+                    </Box>
+                </Box>
+            </Flex>
         </>
     );
 }

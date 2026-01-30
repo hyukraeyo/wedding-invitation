@@ -19,58 +19,8 @@
   gap: 1.25rem;
 }
 
-.inputGroup {
-  position: relative;
-  transition: transform v.$transition-fast ease-in-out;
-
-  &:focus-within {
-    .inputIcon {
-      color: v.$color-primary;
-      transform: translateY(-50%) scale(1.1);
-    }
-  }
-}
-
-.inputIcon {
-  position: absolute;
-  left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: v.$color-muted-foreground;
-  transition: all v.$transition-fast ease-in-out;
-  z-index: 10;
-  pointer-events: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .inputField {
   width: 100%;
-  height: 3.5rem; // 56px for better touch area
-  padding-left: 3rem !important; // Make room for icon
-  background-color: rgb(250 250 252 / 0.5);
-  border: 1px solid v.$zinc-200;
-  border-radius: v.$radius-lg;
-  transition: all v.$transition-smooth;
-  // box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  font-size: v.$font-size-base;
-
-  &:hover {
-    border-color: v.$zinc-300;
-    background-color: v.$white;
-  }
-
-  &:focus {
-    background-color: v.$white;
-    border-color: v.$color-primary;
-    // box-shadow: 0 0 0 4px rgba(v.$color-primary, 0.1);
-    outline: none;
-  }
-
-  &::placeholder {
-    color: v.$zinc-400;
-  }
 }
 
 .infoBox {

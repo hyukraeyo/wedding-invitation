@@ -2,7 +2,6 @@
 
 import React from 'react';
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog';
-import { cn } from '@/lib/utils';
 import { Button } from '../Button';
 import styles from './Dialog.module.scss';
 
@@ -18,6 +17,8 @@ interface ConfirmDialogProps {
     variant?: 'primary' | 'danger' | undefined;
 }
 
+const Root = AlertDialogPrimitive.Root as React.FC<any>;
+
 export const ConfirmDialog = ({
     open,
     onOpenChange,
@@ -29,8 +30,6 @@ export const ConfirmDialog = ({
     onCancel,
     variant = 'primary'
 }: ConfirmDialogProps) => {
-    // exactOptionalPropertyTypes: true 대응을 위해 임시로 any 캐스팅 사용
-    const Root = AlertDialogPrimitive.Root as React.FC<any>;
     return (
         <Root open={open} onOpenChange={onOpenChange}>
             <AlertDialogPrimitive.Portal>
@@ -57,8 +56,7 @@ export const ConfirmDialog = ({
                         </AlertDialogPrimitive.Cancel>
                         <AlertDialogPrimitive.Action asChild>
                             <Button
-                                // @ts-ignore
-                                color={variant === 'danger' ? 'red' : 'primary'}
+                                color={variant === 'danger' ? 'danger' : 'primary'}
                                 onClick={onConfirm}
                             >
                                 {confirmText}

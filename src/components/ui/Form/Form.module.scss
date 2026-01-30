@@ -1,0 +1,25 @@
+@use "../../../styles/variables" as v;
+
+.FormRoot {
+  width: 100%;
+}
+
+.FormField {
+  display: grid;
+  margin-bottom: 20px;
+}
+
+.FormLabel {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: v.$grey-900;
+  margin-bottom: 8px;
+}
+
+.FormMessage {
+  font-size: 13px;
+  color: v.$red-500;
+  opacity: 0.8;
+  margin-top: 6px;
+}

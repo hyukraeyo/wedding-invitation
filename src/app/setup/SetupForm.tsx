@@ -3,11 +3,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { TextField } from '@/components/ui/TextField';
-import { IconButton } from '@/components/ui/IconButton';
+import { TextField, IconButton, ProgressBar, Heading, Flex, Box } from '@/components/ui';
 import { DatePicker } from '@/components/common/DatePicker';
 import { TimePicker } from '@/components/common/TimePicker';
-import { ProgressBar } from '@/components/ui/ProgressBar';
 import { Sparkles, ChevronLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { parseKoreanName, cn } from '@/lib/utils';
@@ -167,9 +165,9 @@ const SetupForm = () => {
     };
 
     return (
-        <div className={styles.container}>
-            <header className={styles.formHeader}>
-                <div className={styles.headerTop}>
+        <Box className={styles.container}>
+            <Box as="header" className={styles.formHeader}>
+                <Flex align="center" className={styles.headerTop}>
                     <IconButton
                         onClick={handleBack}
                         variant="clear"
@@ -181,21 +179,23 @@ const SetupForm = () => {
                         <ChevronLeft size={24} />
                     </IconButton>
                     <span className={styles.mainTitle}>청첩장 시작하기</span>
-                    <div className={styles.headerSpacer} />
-                </div>
+                    <Box className={styles.headerSpacer} />
+                </Flex>
 
-                <div className={styles.progressBarWrapper}>
-                    <ProgressBar progress={progress / 100} size="normal" />
-                </div>
+                <Box className={styles.progressBarWrapper}>
+                    <ProgressBar value={progress} />
+                </Box>
 
-                <div key={currentStep} className={cn(styles.headerContent, styles.titleUpdate)}>
-                    <h1 className={styles.stepHeading}>{headerTitle}</h1>
-                </div>
-            </header>
+                <Box key={currentStep} className={cn(styles.headerContent, styles.titleUpdate)}>
+                    <Heading as="h1" size="8" weight="bold" className={styles.stepHeading}>
+                        {headerTitle}
+                    </Heading>
+                </Box>
+            </Box>
 
-            <form onSubmit={handleSubmit} className={styles.form}>
+            <Flex as="form" direction="column" onSubmit={handleSubmit} className={styles.form}>
                 {highestStepReached >= 3 && (
-                    <div
+                    <Box
                         className={cn(styles.fieldWrapper, currentStep !== 3 && styles.inactive)}
                         onClick={() => handleFieldClick(3)}
                     >
@@ -204,18 +204,18 @@ const SetupForm = () => {
                             ref={timeRef}
                             value={time}
                             label="예식 시간"
-                            labelOption="sustain"
+
                             onChange={setTime}
                             onComplete={() => {
                                 setTimeout(() => handleNext(true), 400);
                             }}
                             disabled={false}
                         />
-                    </div>
+                    </Box>
                 )}
 
                 {highestStepReached >= 2 && (
-                    <div
+                    <Box
                         className={cn(styles.fieldWrapper, currentStep !== 2 && styles.inactive)}
                         onClick={() => handleFieldClick(2)}
                     >
@@ -224,29 +224,29 @@ const SetupForm = () => {
                             ref={dateRef}
                             value={date}
                             label="예식 날짜"
-                            labelOption="sustain"
+
                             onChange={(val) => {
                                 setDate(val);
                                 if (val) setTimeout(() => handleNext(true), 300);
                             }}
                             disabled={false}
                         />
-                    </div>
+                    </Box>
                 )}
 
                 {highestStepReached >= 1 && (
-                    <div
+                    <Box
                         className={cn(styles.fieldWrapper, currentStep !== 1 && styles.inactive)}
                         onClick={() => handleFieldClick(1)}
                     >
                         <TextField
                             label="신부 이름"
-                            labelOption="sustain"
+
                             id="bride-name"
                             ref={brideNameRef}
                             value={brideFullName}
                             readOnly={currentStep !== 1}
-                            variant="box"
+                            variant="surface"
                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                                 const val = e.target.value;
                                 setBrideFullName(val);
@@ -259,21 +259,21 @@ const SetupForm = () => {
                             }}
                             required
                         />
-                    </div>
+                    </Box>
                 )}
 
-                <div
+                <Box
                     className={cn(styles.fieldWrapper, currentStep !== 0 && styles.inactive)}
                     onClick={() => handleFieldClick(0)}
                 >
                     <TextField
                         label="신랑 이름"
-                        labelOption="sustain"
+
                         id="groom-name"
                         ref={groomNameRef}
                         value={groomFullName}
                         readOnly={currentStep !== 0}
-                        variant="box"
+                        variant="surface"
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                             const val = e.target.value;
                             setGroomFullName(val);
@@ -286,30 +286,29 @@ const SetupForm = () => {
                         }}
                         required
                     />
-                </div>
+                </Box>
 
                 {isStepValid() && (
-                    // @ts-ignore
                     <BottomCTA.Single
                         fixed
                         background="none"
                         fixedAboveKeyboard={true}
                         showAfterDelay={{ animation: 'slide', delay: 0 }}
-                        // @ts-ignore
+                        // @ts-expect-error - BottomCTA.Single typing issue
                         onClick={() => handleNext()}
                     >
                         {currentStep < 3 ? (
                             <span>다음</span>
                         ) : (
-                            <>
-                                <Sparkles size={16} style={{ marginRight: 4 }} />
+                            <Flex align="center" gap="1">
+                                <Sparkles size={16} />
                                 <span>시작하기</span>
-                            </>
+                            </Flex>
                         )}
                     </BottomCTA.Single>
                 )}
-            </form>
-        </div >
+            </Flex>
+        </Box >
     );
 };
 

@@ -115,7 +115,7 @@ export default function GreetingSection(props: SectionProps) {
                             <Button
                                 type="button"
                                 variant="weak"
-                                size="small"
+                                size="sm"
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     setIsSampleModalOpen(true);
@@ -240,10 +240,9 @@ export default function GreetingSection(props: SectionProps) {
                             {renderSampleList()}
                         </Modal.Body>
                         <Modal.Footer>
-                            // @ts-ignore
                             <BottomCTA.Single
                                 fixed={false}
-                                // @ts-ignore
+                                // @ts-expect-error - BottomCTA.Single typing issue
                                 onClick={() => setIsSampleModalOpen(false)}
                             >
                                 닫기
@@ -257,10 +256,9 @@ export default function GreetingSection(props: SectionProps) {
                     onClose={() => setIsSampleModalOpen(false)}
                     header="인사말 추천 문구"
                     cta={
-                        // @ts-ignore
                         <BottomCTA.Single
                             fixed={false}
-                            // @ts-ignore
+                            // @ts-expect-error - BottomCTA.Single typing issue
                             onClick={() => setIsSampleModalOpen(false)}
                         >
                             닫기

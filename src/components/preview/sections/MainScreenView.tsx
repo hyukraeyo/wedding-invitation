@@ -4,6 +4,7 @@ import React, { memo } from 'react';
 import Image from 'next/image';
 import { Heart } from 'lucide-react';
 import { AmpersandSVG, HeartSVG, RingIcon } from '../../common/Icons';
+import { Heading } from '@/components/ui/Heading';
 import styles from './MainScreenView.module.scss';
 import { clsx } from 'clsx';
 import { IMAGE_SIZES } from '@/constants/image';
@@ -144,12 +145,14 @@ const MainScreenView = memo(({
                 {/* 1. Header Area */}
                 <div className={clsx(styles.headerArea, isBasicLayout ? styles.headerVisible : styles.headerHidden) || ''}>
                     {mainScreen.layout === 'classic' ? (
-                        <h1
+                        <Heading
+                            as="h1"
+                            size="1"
                             className={clsx(styles.mainTitle) || ''}
                             style={{ fontSize: 'calc(10px * var(--font-scale))', color: accentColor }}
                         >
                             {mainScreen.title || 'THE MARRIAGE'}
-                        </h1>
+                        </Heading>
                     ) : null}
 
                     {mainScreen.layout === 'minimal' ? (
@@ -176,21 +179,23 @@ const MainScreenView = memo(({
 
                     {mainScreen.layout === 'english' ? (
                         mainScreen.title ? (
-                            <h1
+                            <Heading
+                                as="h1"
+                                size="1"
                                 className={clsx(styles.mainTitle) || ''}
                                 style={{ fontSize: 'calc(12px * var(--font-scale))', color: accentColor, letterSpacing: '0.15em' }}
                             >
                                 {mainScreen.title}
-                            </h1>
+                            </Heading>
                         ) : null
                     ) : null}
 
                     {mainScreen.layout === 'korean' ? (
                         <>
                             {mainScreen.title ? (
-                                <h1 className={clsx(styles.koreanTitle) || ''} style={{ fontSize: 'calc(18px * var(--font-scale))' }}>
+                                <Heading as="h1" size="5" className={clsx(styles.koreanTitle) || ''} style={{ fontSize: 'calc(18px * var(--font-scale))' }}>
                                     {mainScreen.title}
-                                </h1>
+                                </Heading>
                             ) : null}
                             {mainScreen.subtitle ? (
                                 <div className={clsx(styles.koreanSubtitle) || ''} style={{ fontSize: 'calc(24px * var(--font-scale))' }}>
@@ -235,14 +240,16 @@ const MainScreenView = memo(({
                     ) : null}
 
                     {mainScreen.layout === 'heart' ? (
-                        <h1
+                        <Heading
+                            as="h1"
+                            size="3"
                             className={clsx(styles.heartNamesRow) || ''}
                             style={{ fontSize: 'calc(22px * var(--font-scale))' }}
                         >
                             <span>{mainScreen.groomName || (groom.lastName || groom.firstName ? `${groom.lastName}${groom.firstName}` : '신랑')}</span>
                             <span className={clsx(styles.heartIcon) || ''} style={{ color: '#e74c3c' }}>♥</span>
                             <span>{mainScreen.brideName || (bride.lastName || bride.firstName ? `${bride.lastName}${bride.firstName}` : '신부')}</span>
-                        </h1>
+                        </Heading>
                     ) : null}
 
                     {(mainScreen.layout === 'english' && mainScreen.subtitle) ? (

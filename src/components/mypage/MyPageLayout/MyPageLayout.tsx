@@ -8,6 +8,7 @@ import { useHeaderStore } from '@/store/useHeaderStore';
 import { usePathname } from 'next/navigation';
 import { MENU_TITLES } from '@/constants/navigation';
 import styles from './MyPageLayout.module.scss';
+import { Flex, Box } from '@/components/ui';
 
 interface ProfileSummary {
     full_name: string | null;
@@ -54,8 +55,8 @@ export function MyPageLayout({
     }, [notificationCount, setNotificationCount]);
 
     return (
-        <div className={styles.pageContainer}>
-            <div className={styles.layout}>
+        <Flex direction="column" className={styles.pageContainer}>
+            <Flex className={styles.layout}>
                 <MyPageSidebar
                     profile={profile}
                     isAdmin={isAdmin}
@@ -63,25 +64,25 @@ export function MyPageLayout({
                     requestCount={requestCount}
                     notificationCount={notificationCount}
                 />
-                <main className={styles.mainContent}>
+                <Box as="main" className={styles.mainContent}>
                     {/* 공통 헤더: 레이아웃에서 통합 관리 */}
                     {currentTitle && (
-                        <div className={styles.pageHeader}>
+                        <Box className={styles.pageHeader}>
                             <MyPageHeader title={currentTitle} />
-                        </div>
+                        </Box>
                     )}
 
-                    <div className={styles.childrenWrapper}>
+                    <Box className={styles.childrenWrapper}>
                         {children}
-                    </div>
-                </main>
-            </div>
+                    </Box>
+                </Box>
+            </Flex>
             <MobileNav
                 isAdmin={isAdmin}
                 invitationCount={invitationCount}
                 requestCount={requestCount}
                 notificationCount={notificationCount}
             />
-        </div>
+        </Flex>
     );
 }

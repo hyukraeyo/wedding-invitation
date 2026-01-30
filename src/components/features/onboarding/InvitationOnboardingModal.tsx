@@ -149,10 +149,10 @@ export function InvitationOnboardingModal({ isOpen, onClose }: InvitationOnboard
                     </div>
                 </Modal.Body>
                 <Modal.Footer className={styles.footer}>
-                    <Button className={styles.button} variant="weak" size="large" onClick={onClose}>
+                    <Button className={styles.button} variant="weak" size="lg" onClick={onClose}>
                         Cancel
                     </Button>
-                    <Button className={styles.button} variant="fill" size="large" loading={loading} onClick={handleSubmit}>
+                    <Button className={styles.button} variant="fill" size="lg" loading={loading} onClick={handleSubmit}>
                         Start
                     </Button>
                 </Modal.Footer>

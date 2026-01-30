@@ -1,0 +1,86 @@
+@use "../../../styles/variables" as v;
+
+.Trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 6px;
+  padding: 0 15px;
+  font-size: 14px;
+  line-height: normal;
+  height: 48px;
+  gap: 5px;
+  background-color: white;
+  border: 1px solid v.$grey-300;
+  color: v.$grey-900;
+  width: 100%;
+  cursor: pointer;
+
+  &:hover {
+    background-color: v.$grey-50;
+  }
+
+  &[data-placeholder] {
+    color: v.$grey-500;
+  }
+}
+
+.Icon {
+  color: v.$grey-500;
+}
+
+.Content {
+  overflow: hidden;
+  background-color: white;
+  border-radius: 6px;
+  box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35), 0px 10px 20px -15px rgba(22, 23, 24, 0.2);
+  border: 1px solid v.$grey-200;
+  z-index: 1000;
+}
+
+.Viewport {
+  padding: 5px;
+}
+
+.Item {
+  font-size: 14px;
+  line-height: normal;
+  color: v.$grey-900;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 35px 0 25px;
+  position: relative;
+  user-select: none;
+  cursor: pointer;
+
+  &[data-disabled] {
+    color: v.$grey-400;
+    pointer-events: none;
+  }
+
+  &[data-highlighted] {
+    outline: none;
+    background-color: v.$banana-yellow;
+  }
+}
+
+.ItemIndicator {
+  position: absolute;
+  left: 0;
+  width: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ScrollButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 25px;
+  background-color: white;
+  color: v.$grey-700;
+  cursor: default;
+}

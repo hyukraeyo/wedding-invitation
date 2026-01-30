@@ -61,11 +61,6 @@ src/components/ui/ComponentName/
 - ✅ displayName 필수 설정
 - ✅ SCSS 변수는 `@use "../../../styles/variables" as v;`로 import
 
-### 4.2 디자인 시스템 문서화 (Mandatory)
-- 모든 `ui` 컴포넌트는 `src/app/design-system`에 문서화 페이지가 존재해야 함.
-- **구조**: `page.tsx`(Server) + `[Component]PageClient.tsx`(Client).
-- **인터랙션**: `usePropControls`를 사용하여 실시간 Props 변경 기능 제공.
-- **등록**: `src/app/design-system/layout.tsx`의 사이드바에 항목 추가 필수.
 
 ### 5. 코드 품질
 - TypeScript strict 모드 필수

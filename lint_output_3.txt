@@ -1,0 +1,19 @@
+
+> banana-wedding@0.1.0 lint
+> eslint
+
+
+C:\Users\johr9\Documents\git\wedding-invitation\src\components\ui\Checkbox\Checkbox.tsx
+  9:18  error  An interface declaring no members is equivalent to its supertype  @typescript-eslint/no-empty-object-type
+
+C:\Users\johr9\Documents\git\wedding-invitation\src\components\ui\Dialog\Dialog.tsx
+  7:15  warning  'ComponentProps' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\johr9\Documents\git\wedding-invitation\src\components\ui\Form\Form.tsx
+  7:10  warning  'Label' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\johr9\Documents\git\wedding-invitation\src\components\ui\RadioGroup\RadioGroup.tsx
+  5:10  warning  'Circle' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 4 problems (1 error, 3 warnings)
+

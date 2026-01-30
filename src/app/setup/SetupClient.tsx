@@ -3,16 +3,17 @@
 import React from 'react';
 import { SetupForm } from './SetupForm';
 import styles from './SetupPage.module.scss';
+import { Flex, Box } from '@/components/ui';
 
 const SetupClient = () => {
     return (
-        <div className={styles.container}>
-            <div className={styles.content}>
-                <div className={styles.formWrapper}>
+        <Flex direction="column" className={styles.container}>
+            <Flex direction="column" className={styles.content}>
+                <Box className={styles.formWrapper}>
                     <SetupForm />
-                </div>
-            </div>
-        </div>
+                </Box>
+            </Flex>
+        </Flex>
     );
 };
 

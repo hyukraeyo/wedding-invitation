@@ -22,7 +22,7 @@ export const SampleList = ({ items, onSelect, className }: SampleListProps) => {
                     contents={
                         <div className={styles.itemContent}>
                             <div className={styles.itemHeader}>
-                                <Badge size="small" variant="weak" color="yellow">{item.badge || `예시 ${idx + 1}`}</Badge>
+                                <Badge size="1" variant="soft" color="primary">{item.badge || `예시 ${idx + 1}`}</Badge>
                                 <span className={styles.itemTitle}>{item.title}</span>
                             </div>
                             <Spacing size={8} />

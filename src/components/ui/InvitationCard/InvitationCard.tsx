@@ -94,13 +94,13 @@ const InvitationCard = React.memo(({
                     <div className={styles.overlayTop}>
                         <div className={styles.statusRow}>
                             {isRejected ? (
-                                <Badge color="red" variant="weak" size="small">{REJECTION_BADGE}</Badge>
+                                <Badge color="red" variant="soft" size="1">{REJECTION_BADGE}</Badge>
                             ) : isApproved ? (
-                                <Badge color="green" variant="weak" size="small">승인 완료</Badge>
+                                <Badge color="green" variant="soft" size="1">승인 완료</Badge>
                             ) : isRequesting ? (
-                                <Badge color="elephant" variant="weak" size="small">승인 대기</Badge>
+                                <Badge color="secondary" variant="soft" size="1">승인 대기</Badge>
                             ) : (
-                                <Badge color="yellow" variant="weak" size="small">샘플 이용중</Badge>
+                                <Badge color="primary" variant="soft" size="1">샘플 이용중</Badge>
                             )}
 
                             <InvitationActionMenu
@@ -201,10 +201,10 @@ const InvitationCard = React.memo(({
                             />
                         </Modal.Body>
                         <Modal.Footer className={styles.modalFooter}>
-                            <Button className={styles.flex1} variant="weak" size="large" onClick={() => setShowRejectionModal(false)}>
+                            <Button className={styles.flex1} variant="weak" size="lg" onClick={() => setShowRejectionModal(false)}>
                                 닫기
                             </Button>
-                            <Button className={styles.flex1} variant="fill" size="large" onClick={() => {
+                            <Button className={styles.flex1} variant="fill" size="lg" onClick={() => {
                                 setShowRejectionModal(false);
                                 onRequestApproval(invitation);
                             }}>

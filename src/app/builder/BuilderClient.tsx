@@ -12,7 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import styles from './BuilderPage.module.scss';
 import { MobileNav } from '@/components/common/MobileNav';
-import { BottomSheet } from '@/components/ui/BottomSheet';
+import { BottomSheet, Flex, Box } from '@/components/ui';
 import { clsx } from 'clsx';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useShallow } from 'zustand/react/shallow';
@@ -181,40 +181,40 @@ export function BuilderClient() {
     }, [isSaving, setIsLoading]);
 
     return (
-        <div className={styles.container}>
+        <Flex direction="column" className={styles.container}>
             {isSaving ? <LoadingSpinner /> : null}
 
-            <main className={styles.workspace}>
-                <section className={styles.sidebar} id="sidebar-portal-root">
-                    <div className={styles.scrollArea} id="builder-sidebar-scroll">
+            <Flex as="main" className={styles.workspace}>
+                <Box as="section" className={styles.sidebar} id="sidebar-portal-root">
+                    <Box className={styles.scrollArea} id="builder-sidebar-scroll">
                         <EditorForm />
-                    </div>
-                </section>
+                    </Box>
+                </Box>
 
-                <section className={styles.previewArea}>
-                    <div className={styles.backgroundPattern} />
-                    <div className={styles.previewContent}>
+                <Flex as="section" align="center" justify="center" className={styles.previewArea}>
+                    <Box className={styles.backgroundPattern} />
+                    <Flex direction="column" align="center" className={styles.previewContent}>
                         <IPhoneFrame>
                             <InvitationCanvas key="desktop-preview" editingSection={editingSection} hideWatermark />
                         </IPhoneFrame>
 
                         <p className={styles.label}>MOBILE PREVIEW</p>
-                    </div>
-                </section>
-            </main>
+                    </Flex>
+                </Flex>
+            </Flex>
 
             <BottomSheet
                 open={isPreviewOpen}
                 onClose={() => setIsPreviewOpen(false)}
                 header="Mobile Preview"
             >
-                <div style={{ textAlign: 'center', fontSize: '0.875rem', color: '#666', marginBottom: '16px' }}>
+                <Box style={{ textAlign: 'center', fontSize: '0.875rem', color: '#666', marginBottom: '16px' }}>
                     나만의 달콤한 바나나웨딩 청첩장 미리보기
-                </div>
+                </Box>
 
-                <div className={styles.mobilePreview}>
+                <Box className={styles.mobilePreview}>
                     <InvitationCanvas key="mobile-preview" isPreviewMode editingSection={editingSection} hideWatermark />
-                </div>
+                </Box>
 
                 {/* Preview Close FAB */}
                 <button
@@ -234,6 +234,6 @@ export function BuilderClient() {
                 onPreviewToggle={togglePreview}
                 isPreviewOpen={isPreviewOpen}
             />
-        </div>
+        </Flex>
     );
 }

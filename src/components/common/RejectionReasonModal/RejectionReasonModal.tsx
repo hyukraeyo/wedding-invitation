@@ -76,7 +76,7 @@ export default function RejectionReasonModal({
                     <Button
                         className={styles.button}
                         variant="weak"
-                        size="large"
+                        size="lg"
                         onClick={handleClose}
                         disabled={loading}
                     >
@@ -85,7 +85,7 @@ export default function RejectionReasonModal({
                     <Button
                         className={styles.button}
                         variant="fill"
-                        size="large"
+                        size="lg"
                         loading={loading}
                         disabled={!reason.trim() || loading}
                         onClick={handleSubmit}
