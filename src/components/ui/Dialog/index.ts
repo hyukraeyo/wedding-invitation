@@ -1,3 +1,4 @@
+'use client';
 "use client";
 
 export { AlertDialog, ConfirmDialog } from '@toss/tds-mobile';

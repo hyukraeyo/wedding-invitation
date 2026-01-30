@@ -1,9 +1,28 @@
 @use '@/styles/variables' as v;
 
+.header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.description {
+    text-align: center;
+    color: #4E5968;
+    margin-bottom: 1.5rem;
+    word-break: keep-all;
+    line-height: 1.6;
+}
+
 .editorWrapper {
     margin-top: 1rem;
     width: 100%;
     background-color: v.$white;
     overflow: hidden;
     transition: all v.$transition-200 v.$ease-standard;
+}
+
+.footer {
+    display: flex;
+    gap: 8px;
+    margin-top: 24px;
 }

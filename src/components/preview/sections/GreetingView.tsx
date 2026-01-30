@@ -6,7 +6,6 @@ import SectionContainer from '../SectionContainer';
 import SectionHeader from '../SectionHeader';
 import { clsx } from 'clsx';
 import styles from './GreetingView.module.scss';
-import { AspectRatio } from '@/components/ui/AspectRatio';
 import { IMAGE_SIZES } from '@/constants/image';
 import { isBlobUrl } from '@/lib/image';
 
@@ -119,7 +118,7 @@ const GreetingView = memo(({
                 {greetingImage ? (
                     <div className={clsx(styles.imageContainer, styles[greetingRatio])}>
                         {greetingRatio === 'fixed' ? (
-                            <AspectRatio ratio={800 / 550}>
+                            <div style={{ position: 'relative', width: '100%', aspectRatio: '800 / 550' }}>
                                 <Image
                                     src={greetingImage}
                                     alt="인사말 이미지"
@@ -133,7 +132,7 @@ const GreetingView = memo(({
                                     loading="eager"
                                     unoptimized={isBlobUrl(greetingImage)}
                                 />
-                            </AspectRatio>
+                            </div>
                         ) : (
                             <Image
                                 src={greetingImage}

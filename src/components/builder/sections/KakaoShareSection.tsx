@@ -18,9 +18,8 @@ import styles from './KakaoShareSection.module.scss';
 import { KAKAO_SHARE_SAMPLES } from '@/constants/samples';
 import type { SectionProps, SamplePhraseItem } from '@/types/builder';
 
-const ResponsiveModal = dynamic(() => import('@/components/common/ResponsiveModal').then(mod => mod.ResponsiveModal), {
-    ssr: false
-});
+import { Modal } from '@/components/ui/Modal';
+import { Text } from '@/components/ui/Text';
 
 
 
@@ -143,21 +142,19 @@ export default function KakaoShareSection(props: SectionProps) {
                     />
 
                     <div className={styles.bottomActions}>
-                        <ResponsiveModal
-                            open={previewOpen}
-                            onOpenChange={setPreviewOpen}
-                            title="카카오톡 공유 미리보기"
-                            trigger={
-                                <Button
-                                    type="button"
-                                    variant="weak"
-                                    className={styles.fullPreviewBtn}
-                                >
-                                    <MessageCircle size={16} />
-                                    미리보기
-                                </Button>
-                            }
+                        <Button
+                            type="button"
+                            variant="weak"
+                            className={styles.fullPreviewBtn}
+                            onClick={() => setPreviewOpen(true)}
                         >
+                            <MessageCircle size={16} />
+                            미리보기
+                        </Button>
+                        <Modal open={previewOpen} onOpenChange={setPreviewOpen}>
+                            <div className={styles.header}>
+                                <Text typography="t4" fontWeight="bold">카카오톡 공유 미리보기</Text>
+                            </div>
                             <div className={styles.modalBody}>
                                 <div className={styles.card}>
                                     {kakao.imageUrl ? (
@@ -205,23 +202,21 @@ export default function KakaoShareSection(props: SectionProps) {
                                     </div>
                                 </div>
                             </div>
-                        </ResponsiveModal>
+                        </Modal>
                     </div>
                 </List>
             </BoardRow>
 
             {/* Sample Phrases Modal */}
-            <ResponsiveModal
-                open={isSampleModalOpen}
-                onOpenChange={setIsSampleModalOpen}
-                title="카카오 공유 추천 문구"
-                useScrollFade={true}
-            >
+            <Modal open={isSampleModalOpen} onOpenChange={setIsSampleModalOpen}>
+                <div className={styles.header}>
+                    <Text typography="t4" fontWeight="bold">카카오 공유 추천 문구</Text>
+                </div>
                 <SampleList
                     items={KAKAO_SHARE_SAMPLES}
                     onSelect={handleSelectSample}
                 />
-            </ResponsiveModal>
+            </Modal>
         </>
     );
 }

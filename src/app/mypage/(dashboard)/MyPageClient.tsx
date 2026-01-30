@@ -41,7 +41,9 @@ const ProfileCompletionModal = dynamic(
     () => import('@/components/auth/ProfileCompletionModal').then(mod => mod.ProfileCompletionModal),
     { ssr: false }
 );
-import { DynamicResponsiveModal as ResponsiveModal } from '@/components/common/ResponsiveModal/Dynamic';
+import { Modal } from '@/components/ui/Modal';
+import { Button } from '@/components/ui/Button';
+import { Text } from '@/components/ui/Text';
 const RejectionReasonModal = dynamic(
     () => import('@/components/common/RejectionReasonModal'),
     { ssr: false }
@@ -520,15 +522,15 @@ export default function MyPageClient({
                                 {[1, 2, 3, 4].map((i) => (
                                     <div key={i} className={styles.createCardWrapper}>
                                         <div className={styles.skeletonCardItem}>
-                                            <Skeleton className={styles.skeletonCard} />
+                                            <Skeleton className={styles.skeletonCard ?? ''} />
                                             <div className={styles.skeletonOverlay}>
-                                                <Skeleton className={styles.skeletonBadge} />
-                                                <Skeleton className={styles.skeletonTitle} />
+                                                <Skeleton className={styles.skeletonBadge ?? ''} />
+                                                <Skeleton className={styles.skeletonTitle ?? ''} />
                                             </div>
                                         </div>
                                         <div className={styles.skeletonFooter}>
-                                            <Skeleton className={styles.skeletonButton} />
-                                            <Skeleton className={styles.skeletonButton} />
+                                            <Skeleton className={styles.skeletonButton ?? ''} />
+                                            <Skeleton className={styles.skeletonButton ?? ''} />
                                         </div>
                                     </div>
                                 ))}
@@ -541,15 +543,15 @@ export default function MyPageClient({
                                             <div className={styles.swiperCardWrapper}>
                                                 <div className={styles.createCardWrapper}>
                                                     <div className={styles.skeletonCardItem}>
-                                                        <Skeleton className={styles.skeletonCard} />
+                                                        <Skeleton className={styles.skeletonCard ?? ''} />
                                                         <div className={styles.skeletonOverlay}>
-                                                            <Skeleton className={styles.skeletonBadge} />
-                                                            <Skeleton className={styles.skeletonTitle} />
+                                                            <Skeleton className={styles.skeletonBadge ?? ''} />
+                                                            <Skeleton className={styles.skeletonTitle ?? ''} />
                                                         </div>
                                                     </div>
                                                     <div className={styles.skeletonFooter}>
-                                                        <Skeleton className={styles.skeletonButton} />
-                                                        <Skeleton className={styles.skeletonButton} />
+                                                        <Skeleton className={styles.skeletonButton ?? ''} />
+                                                        <Skeleton className={styles.skeletonButton ?? ''} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -674,26 +676,46 @@ export default function MyPageClient({
             />
 
 
-            <ResponsiveModal
+            <Modal
                 open={confirmConfig.isOpen}
                 onOpenChange={(open) => setConfirmConfig(prev => ({ ...prev, isOpen: open }))}
-                title={confirmConfig.title}
-                description={null}
-                showCancel={confirmConfig.type !== 'INFO_ONLY'}
-                onConfirm={() => {
-                    if (confirmConfig.type !== 'INFO_ONLY') {
-                        handleConfirmAction();
-                    } else {
-                        setConfirmConfig(prev => ({ ...prev, isOpen: false }));
-                    }
-                }}
-                confirmLoading={!!actionLoadingId}
-                dismissible={!actionLoadingId}
             >
+                <div className={styles.modalHeader}>
+                    <Text typography="t4" fontWeight="bold">{confirmConfig.title}</Text>
+                </div>
                 <div style={{ textAlign: 'center', wordBreak: 'keep-all', lineHeight: '1.6' }}>
                     {confirmConfig.description}
                 </div>
-            </ResponsiveModal>
+                <div className={styles.modalFooter}>
+                    {confirmConfig.type !== 'INFO_ONLY' && (
+                        <Button
+                            style={{ flex: 1 }}
+                            variant="weak"
+                            size="large"
+                            onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
+                            disabled={!!actionLoadingId}
+                        >
+                            취소
+                        </Button>
+                    )}
+                    <Button
+                        style={{ flex: 1 }}
+                        variant="fill"
+                        size="large"
+                        loading={!!actionLoadingId}
+                        disabled={!!actionLoadingId}
+                        onClick={() => {
+                            if (confirmConfig.type !== 'INFO_ONLY') {
+                                handleConfirmAction();
+                            } else {
+                                setConfirmConfig(prev => ({ ...prev, isOpen: false }));
+                            }
+                        }}
+                    >
+                        확인
+                    </Button>
+                </div>
+            </Modal>
 
             {rejectionTarget ? (
                 <RejectionReasonModal
@@ -715,16 +737,15 @@ export default function MyPageClient({
 
             {/* Auto-Notification Modal */}
             {autoNotificationTarget && (
-                <ResponsiveModal
+                <Modal
                     open={!!autoNotificationTarget}
                     onOpenChange={(open) => {
                         if (!open) handleCloseAutoNotification();
                     }}
-                    title={autoNotificationTarget.isApproval ? '승인 완료' : parseRejection(autoNotificationTarget.rejection).title}
-                    showCancel={false}
-                    confirmText="확인"
-                    onConfirm={handleCloseAutoNotification}
                 >
+                    <div className={styles.modalHeader}>
+                        <Text typography="t4" fontWeight="bold">{autoNotificationTarget.isApproval ? '승인 완료' : parseRejection(autoNotificationTarget.rejection).title}</Text>
+                    </div>
                     <div style={{ textAlign: 'center' }}>
                         <div
                             className={`${styles.rejectionMessageBox} ${autoNotificationTarget.isApproval ? styles.success : ''}`}
@@ -735,7 +756,12 @@ export default function MyPageClient({
                             }}
                         />
                     </div>
-                </ResponsiveModal>
+                    <div className={styles.modalFooter}>
+                        <Button style={{ flex: 1 }} variant="fill" size="large" onClick={handleCloseAutoNotification}>
+                            확인
+                        </Button>
+                    </div>
+                </Modal>
             )}
         </MyPageContent >
     );

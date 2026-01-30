@@ -78,13 +78,13 @@ const EditorForm = memo(function EditorForm() {
                 {Array.from({ length: 10 }).map((_, i) => (
                     <div key={i} className={styles.skeletonItem}>
                         <div className={styles.skeletonLeft}>
-                            <Skeleton className={styles.skeletonIcon} />
+                            <Skeleton className={styles.skeletonIcon ?? ''} />
                             <div className={styles.skeletonText}>
-                                <Skeleton className={styles.skeletonTitle} />
-                                <Skeleton className={styles.skeletonSubtitle} />
+                                <Skeleton className={styles.skeletonTitle ?? ''} />
+                                <Skeleton className={styles.skeletonSubtitle ?? ''} />
                             </div>
                         </div>
-                        <Skeleton className={styles.skeletonChevron} />
+                        <Skeleton className={styles.skeletonChevron ?? ''} />
                     </div>
                 ))}
             </div>

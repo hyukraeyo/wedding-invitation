@@ -5,7 +5,9 @@ import { MenuSelect } from '@/components/ui/MenuSelect';
 import { cn } from '@/lib/utils';
 // import useField removed
 import { Clock } from 'lucide-react';
-import { ResponsiveModal } from '@/components/common/ResponsiveModal';
+import { Modal } from '@/components/ui/Modal';
+import { Button } from '@/components/ui/Button';
+import { Text } from '@/components/ui/Text';
 import styles from './TimePicker.module.scss';
 
 interface TimePickerProps {
@@ -182,10 +184,10 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
         const renderUnifiedTrigger = () => {
             const displayStr = hasValue ? `${period === 'AM' ? '오전' : '오후'} ${displayHour}시 ${m}분` : '';
             return (
-                <button
+                <Button
                     id={id}
                     type="button"
-                    disabled={disabled}
+                    disabled={disabled || false}
                     className={cn(styles.unifiedTrigger, className)}
                     onClick={() => setIsOpen(true)}
                 >
@@ -193,7 +195,7 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
                         {displayStr}
                     </span>
                     <Clock className={styles.icon} />
-                </button>
+                </Button>
             );
         };
 
@@ -217,14 +219,15 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
                 {title && <div className={styles.columnHeader}>{title}</div>}
                 <div className={styles.scrollWrapper} data-column={columnId}>
                     {options.map(opt => (
-                        <button
+                        <Button
                             key={opt.value}
                             type="button"
+                            variant="weak"
                             className={cn(styles.optionItem, current === opt.value && styles.active)}
                             onClick={() => onSelect(opt.value)}
                         >
                             {opt.label}
-                        </button>
+                        </Button>
                     ))}
                 </div>
             </div>
@@ -233,21 +236,22 @@ export const TimePicker = React.forwardRef<HTMLDivElement, TimePickerProps>(
         if (part === 'all' || variant === 'unified') {
             return (
                 <div ref={ref} className={cn(styles.unifiedContainer)}>
-                    <ResponsiveModal
-                        open={isOpen}
-                        onOpenChange={setIsOpen}
-                        title="예식 시간 선택"
-                        confirmText="선택 완료"
-                        onConfirm={handleConfirm}
-                        padding="none"
-                        trigger={renderUnifiedTrigger()}
-                    >
+                    {renderUnifiedTrigger()}
+                    <Modal open={isOpen} onOpenChange={setIsOpen}>
+                        <div className={styles.header}>
+                            <Text typography="t4" fontWeight="bold">예식 시간 선택</Text>
+                        </div>
                         <div className={styles.pickerGrid}>
                             {renderColumn('', periodOptions, tPeriod, (v) => updateTempTime(v as Period, tDisplayHour, currentTM), 'period')}
                             {renderColumn('', hourOptions, tDisplayHour, (v) => updateTempTime(tPeriod, v, currentTM), 'hour')}
                             {renderColumn('', minuteOptions, currentTM, (v) => updateTempTime(tPeriod, tDisplayHour, v), 'minute')}
                         </div>
-                    </ResponsiveModal>
+                        <div className={styles.footer}>
+                            <Button style={{ flex: 1 }} variant="fill" size="large" onClick={handleConfirm}>
+                                선택 완료
+                            </Button>
+                        </div>
+                    </Modal>
                 </div>
             );
         }

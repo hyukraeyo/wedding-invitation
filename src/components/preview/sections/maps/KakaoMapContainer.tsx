@@ -24,7 +24,7 @@ export default function KakaoMapContainer({ lat, lng, mapZoom, lockMap }: KakaoM
     if (loading) {
         return (
             <div className={styles.container}>
-                <Skeleton className={styles.skeleton} />
+                <Skeleton className={styles.skeleton ?? ''} />
                 <div className={styles.loadingOverlay}>
                     <Banana className={styles.spinnerIcon} />
                 </div>

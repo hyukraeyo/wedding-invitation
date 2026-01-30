@@ -1,6 +1,8 @@
 "use client";
 
-import { ResponsiveModal } from '@/components/common/ResponsiveModal';
+import { Modal } from '@/components/ui/Modal';
+import { Button } from '@/components/ui/Button';
+import { Text } from '@/components/ui/Text';
 import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
 import { Badge } from '@/components/ui/Badge';
 import React from 'react';
@@ -114,38 +116,42 @@ export function MyPageSidebar({
                         )}
                     </ViewTransitionLink>
 
-                    <button
+                    <Button
+                        variant="weak"
                         className={styles.menuItem}
                         onClick={() => setIsEventModalOpen(true)}
+                        style={{ justifyContent: 'flex-start', height: 'auto', padding: '0.75rem 1rem' }}
                     >
                         <span style={{ marginRight: '0.75rem', width: '20px', display: 'flex', justifyContent: 'center' }}>🎉</span>
                         {MENU_TITLES.EVENTS}
-                    </button>
+                    </Button>
 
-                    <button
+                    <Button
+                        variant="weak"
                         className={styles.menuItem}
                         onClick={() => setIsCustomerServiceModalOpen(true)}
+                        style={{ justifyContent: 'flex-start', height: 'auto', padding: '0.75rem 1rem' }}
                     >
                         <HelpCircle size={20} className={styles.menuIcon} />
                         {MENU_TITLES.CUSTOMER_SERVICE}
-                    </button>
+                    </Button>
 
-                    <button className={styles.menuItem} onClick={handleLogout}>
+                    <Button
+                        variant="weak"
+                        className={styles.menuItem}
+                        onClick={handleLogout}
+                        style={{ justifyContent: 'flex-start', height: 'auto', padding: '0.75rem 1rem' }}
+                    >
                         <LogOut size={20} className={styles.menuIcon} />
                         {MENU_TITLES.LOGOUT}
-                    </button>
+                    </Button>
                 </nav>
             </aside>
 
-            <ResponsiveModal
-                open={isEventModalOpen}
-                onOpenChange={setIsEventModalOpen}
-                title="🎁 오픈 이벤트 준비 중!"
-                description=""
-                confirmText="확인"
-                showCancel={false}
-                onConfirm={() => setIsEventModalOpen(false)}
-            >
+            <Modal open={isEventModalOpen} onOpenChange={setIsEventModalOpen}>
+                <div className={styles.header}>
+                    <Text typography="t4" fontWeight="bold">🎁 오픈 이벤트 준비 중!</Text>
+                </div>
                 <div className={styles.eventModalContent}>
                     <div className={styles.eventIconWrapper}>
                         <span style={{ fontSize: '3rem' }}>🎁</span>
@@ -159,18 +165,29 @@ export function MyPageSidebar({
                         (커밍 쑨- ✨)
                     </p>
                 </div>
-            </ResponsiveModal>
+                <div className={styles.footer}>
+                    <Button style={{ width: '100%' }} variant="fill" size="large" onClick={() => setIsEventModalOpen(false)}>
+                        확인
+                    </Button>
+                </div>
+            </Modal>
 
-            <ResponsiveModal
-                open={isCustomerServiceModalOpen}
-                onOpenChange={setIsCustomerServiceModalOpen}
-                title={MENU_TITLES.CUSTOMER_SERVICE}
-                description="카카오톡 채널로 연결됩니다. 문의사항을 남겨주시면 빠르게 답변 드리겠습니다."
-                confirmText="확인"
-                cancelText="닫기"
-                showCancel={true}
-                onConfirm={handleCustomerServiceConfirm}
-            />
+            <Modal open={isCustomerServiceModalOpen} onOpenChange={setIsCustomerServiceModalOpen}>
+                <div className={styles.header}>
+                    <Text typography="t4" fontWeight="bold">{MENU_TITLES.CUSTOMER_SERVICE}</Text>
+                </div>
+                <div className={styles.description}>
+                    카카오톡 채널로 연결됩니다. 문의사항을 남겨주시면 빠르게 답변 드리겠습니다.
+                </div>
+                <div className={styles.footer}>
+                    <Button style={{ flex: 1 }} variant="weak" size="large" onClick={() => setIsCustomerServiceModalOpen(false)}>
+                        닫기
+                    </Button>
+                    <Button style={{ flex: 1 }} variant="fill" size="large" onClick={handleCustomerServiceConfirm}>
+                        확인
+                    </Button>
+                </div>
+            </Modal>
         </>
     );
 }

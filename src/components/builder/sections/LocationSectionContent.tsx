@@ -16,10 +16,8 @@ import { useShallow } from 'zustand/react/shallow';
 
 const DaumPostcodeEmbed = dynamic(() => import('react-daum-postcode'), { ssr: false });
 const KakaoSdkLoader = dynamic(() => import('./KakaoSdkLoader'), { ssr: false });
-const ResponsiveModal = dynamic(
-    () => import('@/components/common/ResponsiveModal').then(mod => mod.ResponsiveModal),
-    { ssr: false }
-);
+import { Modal } from '@/components/ui/Modal';
+import { Text } from '@/components/ui/Text';
 
 export default function LocationSectionContent() {
     const {
@@ -308,12 +306,10 @@ export default function LocationSectionContent() {
                 />
             </List>
 
-            <ResponsiveModal
-                open={isSearchOpen}
-                onOpenChange={setIsSearchOpen}
-                padding="none"
-                title="주소 검색"
-            >
+            <Modal open={isSearchOpen} onOpenChange={setIsSearchOpen}>
+                <div className={styles.header}>
+                    <Text typography="t4" fontWeight="bold">주소 검색</Text>
+                </div>
                 <div className={styles.postcodeWrapper}>
                     {isSearchOpen && (
                         <DaumPostcodeEmbed
@@ -323,7 +319,7 @@ export default function LocationSectionContent() {
                         />
                     )}
                 </div>
-            </ResponsiveModal>
+            </Modal>
         </>
     );
 }

@@ -21,7 +21,7 @@ const LocationView = dynamic(() => import('./sections/LocationView'), { ssr: fal
 const AccountsView = dynamic(() => import('./sections/AccountsView'));
 const ClosingView = dynamic(() => import('./sections/ClosingView'));
 
-const galleryLoading = <Skeleton className={styles.gallerySkeleton} />;
+const galleryLoading = <Skeleton className={styles.gallerySkeleton ?? ''} />;
 const GalleryView = dynamic(() => import('./sections/GalleryView'), {
   ssr: false,
   loading: () => galleryLoading,

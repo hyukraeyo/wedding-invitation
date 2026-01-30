@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ResponsiveModal } from '../ResponsiveModal';
+import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
 import { IconButton } from '@/components/ui/IconButton';
+import { Text } from '@/components/ui/Text';
 import { Copy, Share2, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { KakaoShareButton } from '../KakaoShareButton/KakaoShareButton';
@@ -41,13 +42,11 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     };
 
     return (
-        <ResponsiveModal
-            open={open}
-            onOpenChange={onOpenChange}
-            title="청첩장 공유하기"
-            description="원하는 방법으로 청첩장을 공유해보세요"
-            showCancel={false}
-        >
+        <Modal open={open} onOpenChange={onOpenChange}>
+            <div className={styles.header}>
+                <Text typography="t4" fontWeight="bold">청첩장 공유하기</Text>
+                <Text typography="t6" color="#666">원하는 방법으로 청첩장을 공유해보세요</Text>
+            </div>
             <div className={styles.shareContainer}>
                 <div className={styles.shareMethod}>
                     <IconButton
@@ -93,6 +92,6 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                     </Button>
                 </div>
             </div>
-        </ResponsiveModal>
+        </Modal>
     );
 };

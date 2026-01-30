@@ -6,7 +6,6 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { IconButton } from '@/components/ui/IconButton';
-import { AspectRatio } from '@/components/ui/AspectRatio';
 import { isBlobUrl } from '@/lib/image';
 import { IMAGE_SIZES } from '@/constants/image';
 import styles from './ImageUploader.module.scss';
@@ -120,7 +119,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                     {displayUrl ? (
                         <div className={cn(styles.previewWrapper, isAutoRatio ? styles.minHeight : styles.absoluteFull)}>
                             {!isAutoRatio ? (
-                                <AspectRatio ratio={aspectRatio.split('/').map(Number).reduce((a, b) => a / b)}>
+                                <div style={{ position: 'relative', width: '100%', aspectRatio: aspectRatio.replace('/', ' / ') }}>
                                     <Image
                                         src={displayUrl}
                                         alt="Uploaded"
@@ -134,7 +133,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                                         loading="eager"
                                         unoptimized={shouldUnoptimize}
                                     />
-                                </AspectRatio>
+                                </div>
                             ) : (
                                 <Image
                                     src={displayUrl}

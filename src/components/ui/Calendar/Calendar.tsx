@@ -8,6 +8,7 @@ import {
 import { DayButton, DayPicker, useDayPicker, MonthCaptionProps, ClassNames } from "react-day-picker"
 import { format, isValid, isSameMonth } from "date-fns"
 import { ko } from "date-fns/locale"
+import { IconButton } from "@/components/ui/IconButton"
 import { cn } from "@/lib/utils"
 import styles from "./Calendar.module.scss"
 
@@ -85,29 +86,33 @@ function CustomMonthCaption(props: MonthCaptionProps) {
   return (
     <div className={styles.month_caption}>
       <div className={styles.customHeader}>
-        <button
-          type="button"
+        <IconButton
+          variant="clear"
+          iconSize={20}
           className={styles.navButton}
           onClick={handlePrev}
-          disabled={!previousMonth}
+          disabled={!previousMonth || false}
           aria-label="이전 달"
+          name="prev-month"
         >
           <ChevronLeftIcon />
-        </button>
+        </IconButton>
 
         <span className={styles.caption_label}>
           {formattedDate}
         </span>
 
-        <button
-          type="button"
+        <IconButton
+          variant="clear"
+          iconSize={20}
           className={styles.navButton}
           onClick={handleNext}
-          disabled={!nextMonth}
+          disabled={!nextMonth || false}
           aria-label="다음 달"
+          name="next-month"
         >
           <ChevronRightIcon />
-        </button>
+        </IconButton>
       </div>
     </div>
   );

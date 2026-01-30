@@ -1,6 +1,17 @@
 @use "../../../styles/variables" as v;
 @use "../../../styles/mixins" as m;
 
+.header {
+  text-align: center;
+  margin-bottom: 16px;
+  padding-top: 8px;
+}
+
+.footer {
+  margin-top: 16px;
+  display: flex;
+}
+
 .container {
   display: flex;
   width: 100%;
@@ -16,10 +27,10 @@
   @include m.input-base;
   @include m.flex-between;
   width: 100%;
-  height: v.$input-height;
+  height: 48px; // v.$input-height
   padding: 0 1rem;
   background-color: white;
-  transition: all v.$transition-fast v.$ease-standard;
+  transition: all 150ms ease; // v.$transition-fast v.$ease-standard
   cursor: pointer;
 
   &.floatingTrigger {
@@ -41,11 +52,11 @@
   opacity: 0.5;
   width: 1rem;
   height: 1rem;
-  transition: transform v.$transition-200 v.$ease-standard;
+  transition: transform 200ms ease; // v.$transition-200 v.$ease-standard
 }
 
 .placeholder {
-  color: v.$zinc-400;
+  color: #a1a1aa; // v.$zinc-400
 }
 
 .pickerGrid {
@@ -55,7 +66,8 @@
   padding: 1rem;
   min-height: 240px;
 
-  @media (max-width: v.$mobile) {
+  @media (max-width: 768px) {
+    // v.$mobile
     padding: 1.5rem 1rem;
     gap: 0.5rem;
   }
@@ -70,7 +82,7 @@
 .columnHeader {
   font-size: 0.75rem;
   font-weight: 700;
-  color: v.$zinc-400;
+  color: #a1a1aa; // v.$zinc-400
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -91,7 +103,7 @@
   }
 
   &::-webkit-scrollbar-thumb {
-    background: v.$zinc-200;
+    background: #e4e4e7; // v.$zinc-200
     border-radius: 2px;
   }
 }
@@ -99,20 +111,20 @@
 .optionItem {
   width: 100%;
   padding: 0.75rem 0.5rem;
-  border-radius: v.$radius-md;
+  border-radius: 1rem; // v.$radius-md
   font-size: 1rem;
   font-weight: 500;
-  color: v.$zinc-600;
+  color: #52525b; // v.$zinc-600
   text-align: center;
-  transition: all 0.2s v.$ease-ios;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); // v.$ease-ios
 
   &:hover {
-    background-color: v.$zinc-50;
+    background-color: #fafafa; // v.$zinc-50
   }
 
   &.active {
-    background-color: v.$primary-50;
-    color: v.$primary-700;
+    background-color: #FFFBEA; // v.$primary-50
+    color: #B45309; // v.$primary-700
     font-weight: 700;
   }
 }
@@ -128,7 +140,7 @@
 }
 
 .separator {
-  color: v.$zinc-300;
+  color: #d4d4d8; // v.$zinc-300
   font-weight: 300;
   margin: 0 0.125rem;
 }

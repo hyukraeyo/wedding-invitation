@@ -12,7 +12,10 @@ import {
     Calendar
 } from 'lucide-react';
 import { IconButton } from '@/components/ui/IconButton';
-import { ResponsiveModal } from '../ResponsiveModal';
+import { Modal } from '@/components/ui/Modal';
+import { Button } from '@/components/ui/Button';
+import { Text } from '@/components/ui/Text';
+
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { InvitationSummaryRecord } from '@/lib/invitation-summary';
@@ -195,7 +198,7 @@ export const InvitationActionMenu: React.FC<InvitationActionMenuProps> = ({
                     variant="clear"
                     iconSize={20}
                     className={className}
-                    onClick={(e) => {
+                    onClick={(e: React.MouseEvent) => {
                         e.preventDefault();
                         e.stopPropagation();
                     }}
@@ -218,39 +221,47 @@ export const InvitationActionMenu: React.FC<InvitationActionMenuProps> = ({
             />
 
             {/* 거절 사유 모달 */}
-            <ResponsiveModal
-                open={showRejectionModal}
-                onOpenChange={setShowRejectionModal}
-                title={REJECTION_LABEL}
-                description="관리자가 작성한 거절 사유입니다"
-                showCancel={false}
-            >
+            <Modal open={showRejectionModal} onOpenChange={setShowRejectionModal}>
+                <div style={{ textAlign: 'center', marginBottom: '24px', paddingTop: '8px' }}>
+                    <Text typography="t4" fontWeight="bold">{REJECTION_LABEL}</Text>
+                    <Text typography="t6" color="#666">관리자가 작성한 거절 사유입니다</Text>
+                </div>
                 <div style={{
                     backgroundColor: '#FEF3F2',
                     borderRadius: '8px',
                     padding: '16px',
                     whiteSpace: 'pre-wrap',
-                    lineHeight: '1.6'
+                    lineHeight: '1.6',
+                    marginBottom: '24px'
                 }}>
                     {rejectionData?.rejection_reason || '거절 사유가 없습니다.'}
                 </div>
-            </ResponsiveModal>
+                <div style={{ display: 'flex' }}>
+                    <Button style={{ flex: 1 }} variant="fill" size="large" onClick={() => setShowRejectionModal(false)}>
+                        확인
+                    </Button>
+                </div>
+            </Modal>
 
             {/* 수정 확인 모달 */}
-            <ResponsiveModal
-                open={showEditConfirmModal}
-                onOpenChange={setShowEditConfirmModal}
-                title="수정 확인"
-                description="이미 승인이 완료된 청첩장입니다"
-                cancelText="취소"
-                confirmText="수정하기"
-                onConfirm={handleConfirmEdit}
-            >
-                <div style={{ textAlign: 'center', lineHeight: '1.6', wordBreak: 'keep-all' }}>
+            <Modal open={showEditConfirmModal} onOpenChange={setShowEditConfirmModal}>
+                <div style={{ textAlign: 'center', marginBottom: '24px', paddingTop: '8px' }}>
+                    <Text typography="t4" fontWeight="bold">수정 확인</Text>
+                    <Text typography="t6" color="#666">이미 승인이 완료된 청첩장입니다</Text>
+                </div>
+                <div style={{ textAlign: 'center', lineHeight: '1.6', wordBreak: 'keep-all', marginBottom: '24px' }}>
                     이미 승인이 완료된 청첩장입니다.<br />
                     수정 모드로 전환 시 <strong>다시 승인 신청</strong>을 해야 공유가 가능합니다. 수정하시겠습니까?
                 </div>
-            </ResponsiveModal>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                    <Button style={{ flex: 1 }} variant="weak" size="large" onClick={() => setShowEditConfirmModal(false)}>
+                        취소
+                    </Button>
+                    <Button style={{ flex: 1 }} variant="fill" size="large" onClick={handleConfirmEdit}>
+                        수정하기
+                    </Button>
+                </div>
+            </Modal>
         </>
     );
 };

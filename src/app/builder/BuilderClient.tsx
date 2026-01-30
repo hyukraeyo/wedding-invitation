@@ -12,7 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 import styles from './BuilderPage.module.scss';
 import { MobileNav } from '@/components/common/MobileNav';
-import { Sheet, SheetContent, SheetTitle, SheetHeader, SheetDescription } from '@/components/ui/Sheet';
+import { BottomSheet } from '@/components/ui/BottomSheet';
 import { clsx } from 'clsx';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useShallow } from 'zustand/react/shallow';
@@ -203,27 +203,29 @@ export function BuilderClient() {
                 </section>
             </main>
 
-            <Sheet open={isPreviewOpen} onOpenChange={setIsPreviewOpen} modal={true}>
-                <SheetContent side="right" className={styles.sheetContent} hideCloseButton>
-                    <SheetHeader style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>
-                        <SheetTitle>Mobile Preview</SheetTitle>
-                        <SheetDescription>나만의 달콤한 바나나웨딩 청첩장 미리보기</SheetDescription>
-                    </SheetHeader>
+            <BottomSheet
+                open={isPreviewOpen}
+                onClose={() => setIsPreviewOpen(false)}
+                header="Mobile Preview"
+            >
+                <div style={{ textAlign: 'center', fontSize: '0.875rem', color: '#666', marginBottom: '16px' }}>
+                    나만의 달콤한 바나나웨딩 청첩장 미리보기
+                </div>
 
-                    <div className={styles.mobilePreview}>
-                        <InvitationCanvas key="mobile-preview" isPreviewMode editingSection={editingSection} hideWatermark />
-                    </div>
+                <div className={styles.mobilePreview}>
+                    <InvitationCanvas key="mobile-preview" isPreviewMode editingSection={editingSection} hideWatermark />
+                </div>
 
-                    {/* Preview Close FAB (Inside Sheet Content for modal accessibility) */}
-                    <button
-                        className={clsx(styles.floatingPreview, styles.fabVisible, styles.previewOpenFab)}
-                        onClick={togglePreview}
-                        aria-label="Close preview"
-                    >
-                        <X className={styles.icon} />
-                    </button>
-                </SheetContent>
-            </Sheet>
+                {/* Preview Close FAB */}
+                <button
+                    className={clsx(styles.floatingPreview, styles.fabVisible, styles.previewOpenFab)}
+                    onClick={togglePreview}
+                    aria-label="Close preview"
+                    style={{ zIndex: 1000 }} // Ensure it's above other elements
+                >
+                    <X className={styles.icon} />
+                </button>
+            </BottomSheet>
 
             {/* Mobile Navigation Bar */}
             <MobileNav

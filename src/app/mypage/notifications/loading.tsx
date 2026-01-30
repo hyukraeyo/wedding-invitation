@@ -9,10 +9,10 @@ export default function Loading() {
                 <div className={styles.notificationList}>
                     {[1, 2, 3, 4, 5].map((i) => (
                         <div key={i} className={styles.skeletonItem}>
-                            <Skeleton pattern="listOnly" repeatLastItemCount={1} className={styles.skeletonIcon} />
+                            <Skeleton className={styles.skeletonIcon ?? ''} />
                             <div className={styles.skeletonInfo}>
-                                <Skeleton pattern="listOnly" repeatLastItemCount={1} className={styles.skeletonTitle} />
-                                <Skeleton pattern="listOnly" repeatLastItemCount={1} className={styles.skeletonDate} />
+                                <Skeleton className={styles.skeletonTitle ?? ''} />
+                                <Skeleton className={styles.skeletonDate ?? ''} />
                             </div>
                         </div>
                     ))}

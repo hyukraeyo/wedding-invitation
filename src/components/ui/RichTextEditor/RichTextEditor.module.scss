@@ -21,8 +21,8 @@
     align-items: center;
     gap: 0.375rem;
     padding: 0.5rem 0.75rem;
-    border-bottom: 1px solid v.$zinc-100;
-    background-color: v.$zinc-50;
+    border-bottom: 1px solid #f4f4f5; // v.$zinc-100
+    background-color: #fafafa; // v.$zinc-50
 }
 
 .toolbarGroup {
@@ -35,7 +35,7 @@
     height: 1.25rem;
     margin: 0 0.5rem;
     width: 1px;
-    background-color: v.$zinc-200;
+    background-color: #e4e4e7; // v.$zinc-200
 }
 
 // Improved toolbar toggle button
@@ -48,11 +48,11 @@
     height: 2rem;
     padding: 0;
     border: 1px solid transparent;
-    border-radius: v.$radius-md; // 16px
+    border-radius: 1rem; // v.$radius-md
     background: transparent;
-    color: v.$zinc-500;
+    color: #71717a; // v.$zinc-500
     cursor: pointer;
-    transition: all 0.15s v.$ease-standard;
+    transition: all 0.15s ease; // v.$ease-standard
 
     svg {
         width: 1rem;
@@ -62,30 +62,29 @@
 
     @media (hover: hover) and (pointer: fine) {
         &:hover {
-            background-color: v.$zinc-100;
-            color: v.$zinc-700;
+            background-color: #f4f4f5; // v.$zinc-100
+            color: #3f3f46; // v.$zinc-700
         }
     }
 
     &:active {
-        transform: scale(v.$scale-press-sm);
+        transform: scale(0.95); // v.$scale-press-sm
     }
 
     &[data-state="on"] {
-        background-color: v.$primary-100;
-        color: v.$primary-700;
-        border-color: v.$primary-200;
+        background-color: #FEF3C7; // v.$primary-100
+        color: #B45309; // v.$primary-700
+        border-color: #FDE68A; // v.$primary-200
 
         @media (hover: hover) and (pointer: fine) {
             &:hover {
-                background-color: v.$primary-200;
+                background-color: #FDE68A; // v.$primary-200
             }
         }
     }
 
     &:focus-visible {
         outline: none;
-        // box-shadow: 0 0 0 2px v.$primary-500;
     }
 }
 
@@ -98,10 +97,10 @@
         min-height: var(--editor-min-height, 120px);
         padding: 1rem;
         outline: none;
-        font-size: v.$font-size-sm;
-        font-family: v.$font-family-base;
+        font-size: 0.875rem; // v.$font-size-sm
+        font-family: var(--font-pretendard), -apple-system, BlinkMacSystemFont, system-ui, sans-serif; // v.$font-family-base
         font-weight: 500;
-        color: v.$zinc-900;
+        color: #18181b; // v.$zinc-900
         line-height: 1.6;
 
         p {
@@ -111,7 +110,7 @@
 
         // Placeholder styles
         p.is-editor-empty:first-child::before {
-            color: v.$zinc-400;
+            color: #a1a1aa; // v.$zinc-400
             content: attr(data-placeholder);
             float: left;
             height: 0;

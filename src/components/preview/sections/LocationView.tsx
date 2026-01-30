@@ -9,8 +9,8 @@ import SectionContainer from '../SectionContainer';
 import SectionHeader from '../SectionHeader';
 import { NaverIcon, KakaoIcon } from '../../common/Icons';
 import { clsx } from 'clsx';
-import { AspectRatio } from '@/components/ui/AspectRatio';
 import { Skeleton } from '@/components/ui/Skeleton';
+import { Button } from '@/components/ui/Button';
 import styles from './LocationView.module.scss';
 import { IMAGE_SIZES } from '@/constants/image';
 import { isBlobUrl } from '@/lib/image';
@@ -39,7 +39,7 @@ interface LocationViewProps {
 
 const MapLoading = () => (
     <div className={styles.mapLoading}>
-        <Skeleton className={styles.mapLoadingSkeleton} />
+        <Skeleton className={styles.mapLoadingSkeleton ?? ''} />
         <div className={styles.loadingOverlay}>
             <Banana className={styles.spinner} />
         </div>
@@ -119,7 +119,7 @@ const LocationView = memo(({
 
             {showMap ? (
                 <div className={clsx(styles.mapContainer, mapHeight === 'expanded' && styles.expanded)}>
-                    <AspectRatio ratio={mapHeight === 'expanded' ? 1.25 : 16 / 10}>
+                    <div style={{ position: 'relative', width: '100%', aspectRatio: mapHeight === 'expanded' ? 1.25 : 16 / 10 }}>
                         {mapType === 'naver' ? (
                             <NaverMapContainer
                                 key={`naver-${lat}-${lng}`}
@@ -137,37 +137,52 @@ const LocationView = memo(({
                                 lockMap={lockMap}
                             />
                         )}
-                    </AspectRatio>
+                    </div>
                 </div>
             ) : null}
 
             {showNavigation ? (
                 <div className={styles.navLinks}>
-                    <button onClick={() => handleNavClick('kakao')} className={styles.navButton}>
+                    <Button
+                        variant="weak"
+                        onClick={() => handleNavClick('kakao')}
+                        className={styles.navButton}
+                        style={{ display: 'flex', flexDirection: 'column', height: 'auto', padding: '12px 0', flex: 1, gap: '8px' }}
+                    >
                         <div className={styles.navIconWrapper}>
                             <KakaoIcon size={24} />
                         </div>
                         <span className={styles.navLabel}>카카오맵</span>
-                    </button>
-                    <button onClick={() => handleNavClick('naver')} className={styles.navButton}>
+                    </Button>
+                    <Button
+                        variant="weak"
+                        onClick={() => handleNavClick('naver')}
+                        className={styles.navButton}
+                        style={{ display: 'flex', flexDirection: 'column', height: 'auto', padding: '12px 0', flex: 1, gap: '8px' }}
+                    >
                         <div className={styles.navIconWrapper}>
                             <NaverIcon size={24} />
                         </div>
                         <span className={styles.navLabel}>네이버지도</span>
-                    </button>
-                    <button onClick={handleCopyAddress} className={styles.navButton}>
+                    </Button>
+                    <Button
+                        variant="weak"
+                        onClick={handleCopyAddress}
+                        className={styles.navButton}
+                        style={{ display: 'flex', flexDirection: 'column', height: 'auto', padding: '12px 0', flex: 1, gap: '8px' }}
+                    >
                         <div className={styles.navIconWrapper}>
                             <Copy size={20} className={styles.copyIcon} />
                         </div>
                         <span className={styles.navLabel}>주소 복사</span>
-                    </button>
+                    </Button>
                 </div>
             ) : null}
 
             {sketchUrl ? (
                 <div className={clsx(styles.sketchContainer, styles[sketchRatio])}>
                     {sketchRatio === 'fixed' ? (
-                        <AspectRatio ratio={4 / 3}>
+                        <div style={{ position: 'relative', width: '100%', aspectRatio: '4/3' }}>
                             <Image
                                 src={sketchUrl}
                                 alt="약도"
@@ -179,7 +194,7 @@ const LocationView = memo(({
                                 }}
                                 unoptimized={isBlobUrl(sketchUrl)}
                             />
-                        </AspectRatio>
+                        </div>
                     ) : (
                         <Image
                             src={sketchUrl}

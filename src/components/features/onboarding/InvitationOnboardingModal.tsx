@@ -4,7 +4,9 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useInvitationStore } from "@/store/useInvitationStore";
 import { useShallow } from "zustand/react/shallow";
-import { DynamicResponsiveModal as ResponsiveModal } from "@/components/common/ResponsiveModal/Dynamic";
+import { Modal } from "@/components/ui/Modal";
+import { Button } from "@/components/ui/Button";
+import { Text } from "@/components/ui/Text";
 import { TextField } from "@/components/ui/TextField";
 import { parseKoreanName } from "@/lib/utils";
 import styles from "./InvitationOnboardingModal.module.scss";
@@ -66,18 +68,12 @@ export function InvitationOnboardingModal({ isOpen, onClose }: InvitationOnboard
     };
 
     return (
-        <ResponsiveModal
-            open={isOpen}
-            onOpenChange={(open) => !open && onClose()}
-            title="Invitation basics"
-            description="Enter the essentials now. You can edit everything later."
-            showCancel={true}
-            cancelText="Cancel"
-            confirmText="Start"
-            onConfirm={handleSubmit}
-            onCancel={onClose}
-            confirmLoading={loading}
-        >
+        <Modal open={isOpen} onOpenChange={(open) => !open && onClose()}>
+            <div className={styles.header}>
+                <Text typography="t4" fontWeight="bold">Invitation basics</Text>
+                <Text typography="t6" color="#666">Enter the essentials now. You can edit everything later.</Text>
+            </div>
+
             <div className={styles.container}>
                 <div className={styles.section}>
                     <div className={styles.row}>
@@ -147,7 +143,16 @@ export function InvitationOnboardingModal({ isOpen, onClose }: InvitationOnboard
                     </div>
                 </div>
             </div>
-        </ResponsiveModal>
+
+            <div className={styles.footer}>
+                <Button style={{ flex: 1 }} variant="weak" size="large" onClick={onClose}>
+                    Cancel
+                </Button>
+                <Button style={{ flex: 1 }} variant="fill" size="large" loading={loading} onClick={handleSubmit}>
+                    Start
+                </Button>
+            </div>
+        </Modal>
     );
 }
 

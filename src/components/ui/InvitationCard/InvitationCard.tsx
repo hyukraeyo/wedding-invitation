@@ -11,7 +11,8 @@ import type { ApprovalRequestSummary } from '@/services/approvalRequestService';
 import styles from './InvitationCard.module.scss';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { DynamicResponsiveModal as ResponsiveModal } from '@/components/common/ResponsiveModal/Dynamic';
+import { Modal } from '@/components/ui/Modal';
+import { Text } from '@/components/ui/Text';
 import { useInvitationStatus } from '@/hooks/useInvitationStatus';
 import { InvitationActionMenu } from '@/components/common/InvitationActionMenu';
 import { clsx } from 'clsx';
@@ -190,24 +191,26 @@ const InvitationCard = React.memo(({
 
             {/* Rejection Reason Modal with Re-apply Option */}
             {isRejected && rejectionData && (
-                <ResponsiveModal
-                    open={showRejectionModal}
-                    onOpenChange={setShowRejectionModal}
-                    title={REJECTION_TITLE}
-                    showCancel={true}
-                    cancelText="닫기"
-                    confirmText="사용 신청"
-                    onConfirm={() => {
-                        setShowRejectionModal(false);
-                        onRequestApproval(invitation);
-                    }}
-                    onCancel={() => setShowRejectionModal(false)}
-                >
+                <Modal open={showRejectionModal} onOpenChange={setShowRejectionModal}>
+                    <div className={styles.modalHeader}>
+                        <Text typography="t4" fontWeight="bold">{REJECTION_TITLE}</Text>
+                    </div>
                     <div
                         className={styles.rejectionMessage}
                         dangerouslySetInnerHTML={{ __html: displayReason || '내용이 없습니다.' }}
                     />
-                </ResponsiveModal>
+                    <div className={styles.modalFooter}>
+                        <Button style={{ flex: 1 }} variant="weak" size="large" onClick={() => setShowRejectionModal(false)}>
+                            닫기
+                        </Button>
+                        <Button style={{ flex: 1 }} variant="fill" size="large" onClick={() => {
+                            setShowRejectionModal(false);
+                            onRequestApproval(invitation);
+                        }}>
+                            사용 신청
+                        </Button>
+                    </div>
+                </Modal>
             )}
         </div>
     );

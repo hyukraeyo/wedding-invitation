@@ -10,6 +10,7 @@ import { IconButton } from '@/components/ui/IconButton';
 import { DatePicker } from '@/components/common/DatePicker';
 import { TimePicker } from '@/components/common/TimePicker';
 import { ProgressBar } from '@/components/ui/ProgressBar';
+import { Top } from '@/components/ui/Top';
 import { Sparkles, ChevronLeft } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { parseKoreanName } from '@/lib/utils';
@@ -177,23 +178,26 @@ const SetupForm = () => {
         <div className={styles.stepperContainer}>
             {/* Progress Bar: Rendered via Portal to escape parent transforms */}
             {mounted && typeof document !== 'undefined' && createPortal(
-                <>
+                <div className={styles.fixedTopContainer}>
                     <div className={styles.mobileHeader}>
-                        <IconButton
-                            className={styles.mobileHeaderAction}
-                            onClick={handleBack}
-                            variant="clear"
-                            aria-label="뒤로가기"
-                            name=""
-                            iconSize={24}
-                        >
-                            <ChevronLeft size={24} />
-                        </IconButton>
-                        <span className={styles.mobileHeaderTitle}>기본 정보</span>
-                        <div className={styles.mobileHeaderAction} /> {/* Spacer for centering */}
+                        <Top
+                            title={<span className={styles.mobileHeaderTitle}>기본 정보</span>}
+                        />
+                        <div className={styles.backButtonWrapper}>
+                            <IconButton
+                                className={styles.mobileHeaderAction}
+                                onClick={handleBack}
+                                variant="clear"
+                                aria-label="뒤로가기"
+                                name=""
+                                iconSize={24}
+                            >
+                                <ChevronLeft size={24} />
+                            </IconButton>
+                        </div>
                     </div>
                     <ProgressBar progress={progress / 100} size="normal" className={styles.progressBar || ""} />
-                </>,
+                </div>,
                 document.body
             )}
 
@@ -317,7 +321,6 @@ const SetupForm = () => {
                 {/* Dynamic Bottom Button */}
                 {isStepValid() && (
                     <FixedBottomCTA
-                        // @ts-expect-error - TDS might have restricted these props in types
                         onClick={() => handleNext()}
                         type={currentStep === 3 ? 'submit' : 'button'}
                     >

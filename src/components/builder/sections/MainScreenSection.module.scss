@@ -46,6 +46,35 @@
   justify-content: flex-end;
 }
 
+.sampleBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  background-color: v.$blue-100;
+  color: v.$blue-700;
+  border-radius: v.$radius-lg;
+  border: none;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: v.$blue-200;
+    }
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+}
+
+.sparkleIcon {
+  transition: transform 0.2s ease;
+}
+
 // Style Preset Swiper
 .stylePresetSwiper {
   width: calc(100% + 8px);
@@ -344,7 +373,7 @@
   padding: 0;
 
   &:hover {
-    color: v.$primary-dark;
+    color: #F9A825; // v.$primary-dark
   }
 }
 
@@ -357,8 +386,8 @@
 .loadingSpinner {
   width: 1.5rem;
   height: 1.5rem;
-  border: 2px solid rgba(v.$primary-500, 0.2);
-  border-top-color: v.$primary-500;
+  border: 2px solid rgba(251, 192, 45, 0.2); // v.$primary-500
+  border-top-color: #FBC02D; // v.$primary-500
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }

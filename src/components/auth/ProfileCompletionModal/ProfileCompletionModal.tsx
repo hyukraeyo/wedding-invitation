@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState, useCallback } from 'react';
-import { ResponsiveModal } from '@/components/common/ResponsiveModal';
+import { Modal } from '@/components/ui/Modal';
+import { Button } from '@/components/ui/Button';
+import { Text } from '@/components/ui/Text';
 import { TextField } from '@/components/ui/TextField';
 import { useToast } from '@/hooks/use-toast';
 import { profileService } from '@/services/profileService';
@@ -61,33 +63,22 @@ export function ProfileCompletionModal({
     }, [name, phone, userId, toast, onComplete]);
 
     const logoutButton = onLogout ? (
-        <button
+        <Button
             type="button"
+            variant="weak"
             onClick={onLogout}
             className={styles.logoutButton}
         >
             로그아웃
-        </button>
+        </Button>
     ) : undefined;
 
     return (
-        <ResponsiveModal
-            open={isOpen}
-            onOpenChange={() => { }} // 필수 입력용으로 닫기 비활성화
-            dismissible={false}
-            title="프로필 완성"
-            description={null}
+        <Modal open={isOpen} onOpenChange={() => { }}>
+            <div className={styles.header}>
+                <Text typography="t4" fontWeight="bold">프로필 완성</Text>
+            </div>
 
-            // Native Footer Props for "Sticky Bottom" style
-            onConfirm={handleSubmit}
-            confirmText="시작하기"
-            showCancel={false}
-            confirmDisabled={loading || !name.trim() || !phone.trim()}
-            confirmLoading={loading}
-
-            // Outer Footer for Logout
-            outerFooter={logoutButton}
-        >
             <div className={styles.container}>
                 <div style={{ textAlign: 'center', color: '#4E5968', marginBottom: '1.5rem', wordBreak: 'keep-all', fontSize: '1.0625rem' }}>
                     청첩장 서비스 이용을 위해 이름과 연락처를 입력해 주세요.
@@ -128,7 +119,25 @@ export function ProfileCompletionModal({
                     </p>
                 </div>
             </div>
-        </ResponsiveModal>
+
+            <div className={styles.footer}>
+                <Button
+                    style={{ width: '100%' }}
+                    variant="fill"
+                    size="large"
+                    loading={loading}
+                    disabled={loading || !name.trim() || !phone.trim()}
+                    onClick={handleSubmit}
+                >
+                    시작하기
+                </Button>
+                {logoutButton && (
+                    <div className={styles.outerFooter}>
+                        {logoutButton}
+                    </div>
+                )}
+            </div>
+        </Modal>
     );
 }
 

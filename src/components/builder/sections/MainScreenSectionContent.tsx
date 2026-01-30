@@ -8,6 +8,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { TextField } from '@/components/ui/TextField';
 import { List, ListRow } from '@/components/ui/List';
+import { Button } from '@/components/ui/Button';
 import { Switch } from '@/components/ui/Switch';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { ImageUploader } from '@/components/common/ImageUploader';
@@ -149,15 +150,17 @@ export default function MainScreenSectionContent() {
                     >
                         {STYLE_PRESETS.map((preset, index) => (
                             <SwiperSlide key={preset.id} className={styles.stylePresetSlide}>
-                                <button
+                                <Button
                                     type="button"
+                                    variant="weak"
                                     className={cn(
                                         styles.stylePresetCard,
                                         mainScreen.layout === preset.layout ? styles.selected : '',
                                         preset.isComingSoon && styles.comingSoon
                                     )}
                                     onClick={() => !preset.isComingSoon && handleSelectPreset(preset, index)}
-                                    disabled={preset.isComingSoon}
+                                    disabled={preset.isComingSoon || false}
+                                    style={{ height: 'auto', padding: 0 }}
                                 >
                                     <div className={cn(
                                         styles.presetThumbnail,
@@ -183,7 +186,7 @@ export default function MainScreenSectionContent() {
                                         )}
                                     </div>
                                     <span className={preset.isComingSoon ? styles.comingSoonLabel : styles.presetLabel}>{preset.label}</span>
-                                </button>
+                                </Button>
                             </SwiperSlide>
                         ))}
                     </Swiper>

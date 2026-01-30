@@ -5,6 +5,7 @@ import { useToast } from '@/hooks/use-toast';
 import SectionContainer from '../SectionContainer';
 import SectionHeader from '../SectionHeader';
 import PreviewAccordion from '../PreviewAccordion';
+import { Button } from '@/components/ui/Button';
 import styles from './AccountsView.module.scss';
 
 interface Account {
@@ -64,7 +65,7 @@ const AccountsView = memo(({
                 <div key={acc.id} className={styles.accountCard}>
                     <div className={styles.accountHeader}>
                         <span className={styles.relationLabel}>{acc.relation}</span>
-                        <button className={styles.copyButton} onClick={() => handleCopy(acc.accountNumber)}>복사하기</button>
+                        <Button variant="weak" size="small" className={styles.copyButton} onClick={() => handleCopy(acc.accountNumber)}>복사하기</Button>
                     </div>
                     <div className={styles.accountInfo}>
                         <div className={styles.bankAndHolder}>

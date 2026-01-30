@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { clsx } from 'clsx';
+import { Button } from '@/components/ui/Button';
 import styles from './EmptyState.module.scss';
 
 interface EmptyStateProps {
@@ -44,14 +45,16 @@ export function EmptyState({
         }
 
         return (
-            <button
+            <Button
                 type="button"
+                variant="weak"
                 className={styles.actionButton}
                 onClick={action.onClick as React.MouseEventHandler<HTMLButtonElement>}
+                style={{ width: 'auto' }}
             >
                 {action.icon}
                 {action.label}
-            </button>
+            </Button>
         );
     };
 

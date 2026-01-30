@@ -6,7 +6,10 @@ import { usePathname } from 'next/navigation';
 import { ClipboardList, Bell, User, Menu, HelpCircle, LogOut, Sparkles, Save, Eye, X } from 'lucide-react';
 import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
 import { MENU_TITLES } from '@/constants/navigation';
-import { DynamicResponsiveModal as ResponsiveModal } from '@/components/common/ResponsiveModal/Dynamic';
+import { Modal } from '@/components/ui/Modal';
+import { Button } from '@/components/ui/Button';
+import { IconButton } from '@/components/ui/IconButton';
+import { Text } from '@/components/ui/Text';
 import { signOut } from 'next-auth/react';
 import styles from './MobileNav.module.scss';
 import { clsx } from 'clsx';
@@ -106,61 +109,70 @@ export function MobileNav({
                     </ViewTransitionLink>
 
                     {onSave && (
-                        <button
+                        <IconButton
                             className={clsx(
                                 styles.navItem,
                                 isSaving && styles.disabled
                             )}
                             onClick={onSave}
-                            disabled={isSaving}
+                            disabled={isSaving || false}
+                            iconSize={24}
+                            aria-label="저장하기"
+                            name="save"
                         >
                             <Save className={styles.icon} />
-                        </button>
+                        </IconButton>
                     )}
 
                     {onPreviewToggle ? (
-                        <button
+                        <IconButton
                             className={clsx(styles.navItem, styles.previewButton, isPreviewOpen && styles.previewOpen)}
                             onClick={onPreviewToggle}
                             aria-label={isPreviewOpen ? 'Close preview' : 'Open preview'}
+                            iconSize={24}
+                            name="preview"
                         >
                             <span className={styles.iconSwap}>
                                 <Eye className={styles.iconEye} />
                                 <X className={styles.iconClose} />
                             </span>
-                        </button>
+                        </IconButton>
                     ) : (
-                        <button
+                        <IconButton
                             className={clsx(styles.navItem, isMoreOpen && styles.active)}
                             onClick={() => setIsMoreOpen(true)}
+                            aria-label="메뉴 열기"
+                            iconSize={24}
+                            name="menu"
                         >
                             <Menu className={styles.icon} />
-                        </button>
+                        </IconButton>
                     )}
                 </nav>
             )}
 
             {onPreviewToggle && (
-                <button
+                <IconButton
                     className={clsx(
                         styles.floatingPreview,
                         !isVisible && !isPreviewOpen && styles.fabVisible
                     )}
                     onClick={onPreviewToggle}
                     aria-label="Open preview"
+                    iconSize={24}
+                    variant="fill"
+                    name="floating-preview"
                 >
                     <Eye className={styles.icon} />
-                </button>
+                </IconButton>
             )}
 
             {!onPreviewToggle && (
                 <>
-                    <ResponsiveModal
-                        open={isMoreOpen}
-                        onOpenChange={setIsMoreOpen}
-                        title="전체 메뉴"
-                        showCancel={false}
-                    >
+                    <Modal open={isMoreOpen} onOpenChange={setIsMoreOpen}>
+                        <div className={styles.header}>
+                            <Text typography="t4" fontWeight="bold">전체 메뉴</Text>
+                        </div>
                         <div className={styles.drawerContent}>
                             <div className={styles.drawerMenu}>
                                 <ViewTransitionLink
@@ -171,30 +183,41 @@ export function MobileNav({
                                     <User size={20} className={styles.drawerIcon} />
                                     <span>계정</span>
                                 </ViewTransitionLink>
-                                <button className={styles.drawerItem} onClick={handleEventClick}>
+                                <Button
+                                    variant="weak"
+                                    className={styles.drawerItem}
+                                    onClick={handleEventClick}
+                                    style={{ justifyContent: 'flex-start', height: 'auto', padding: '16px' }}
+                                >
                                     <Sparkles size={20} className={styles.drawerIcon} />
                                     <span>{MENU_TITLES.EVENTS}</span>
-                                </button>
-                                <button className={styles.drawerItem} onClick={handleCustomerService}>
+                                </Button>
+                                <Button
+                                    variant="weak"
+                                    className={styles.drawerItem}
+                                    onClick={handleCustomerService}
+                                    style={{ justifyContent: 'flex-start', height: 'auto', padding: '16px' }}
+                                >
                                     <HelpCircle size={20} className={styles.drawerIcon} />
                                     <span>{MENU_TITLES.CUSTOMER_SERVICE}</span>
-                                </button>
-                                <button className={clsx(styles.drawerItem, styles.logoutButton)} onClick={handleLogout}>
+                                </Button>
+                                <Button
+                                    variant="weak"
+                                    className={clsx(styles.drawerItem, styles.logoutButton)}
+                                    onClick={handleLogout}
+                                    style={{ justifyContent: 'flex-start', height: 'auto', padding: '16px' }}
+                                >
                                     <LogOut size={20} className={styles.drawerIcon} />
                                     <span>{MENU_TITLES.LOGOUT}</span>
-                                </button>
+                                </Button>
                             </div>
                         </div>
-                    </ResponsiveModal>
+                    </Modal>
 
-                    <ResponsiveModal
-                        open={isEventModalOpen}
-                        onOpenChange={setIsEventModalOpen}
-                        title="설날 이벤트 준비중"
-                        confirmText="확인"
-                        showCancel={false}
-                        onConfirm={() => setIsEventModalOpen(false)}
-                    >
+                    <Modal open={isEventModalOpen} onOpenChange={setIsEventModalOpen}>
+                        <div className={styles.header}>
+                            <Text typography="t4" fontWeight="bold">설날 이벤트 준비중</Text>
+                        </div>
                         <div style={{ textAlign: 'center', padding: '1.5rem 0' }}>
                             <div style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>🎁</div>
                             <p style={{ fontWeight: 600, fontSize: '1.1rem', marginBottom: '0.5rem' }}>
@@ -206,7 +229,12 @@ export function MobileNav({
                                 곧 찾아올 할인 혜택에 기대해주세요. 😊
                             </p>
                         </div>
-                    </ResponsiveModal>
+                        <div className={styles.footer}>
+                            <Button style={{ width: '100%' }} variant="fill" size="large" onClick={() => setIsEventModalOpen(false)}>
+                                확인
+                            </Button>
+                        </div>
+                    </Modal>
                 </>
             )}
         </>

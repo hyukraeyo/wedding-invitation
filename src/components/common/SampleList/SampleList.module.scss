@@ -8,8 +8,8 @@
 }
 
 .card {
-    border: 1px solid v.$zinc-200;
-    border-radius: v.$radius-md;
+    border: 1px solid #e4e4e7; // v.$zinc-200
+    border-radius: 1rem; // v.$radius-md
     padding: 1rem;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -19,8 +19,8 @@
 
     @media (hover: hover) and (pointer: fine) {
         &:hover {
-            border-color: v.$primary-500;
-            background-color: v.$primary-100;
+            border-color: #FBC02D; // v.$primary-500
+            background-color: #FEF3C7; // v.$primary-100
         }
     }
 }
@@ -35,21 +35,21 @@
 .badge {
     font-size: 11px;
     font-weight: bold;
-    color: v.$primary-700;
-    background-color: v.$primary-100;
+    color: #B45309; // v.$primary-700
+    background-color: #FEF3C7; // v.$primary-100
     padding: 0.125rem 0.5rem;
-    border-radius: v.$radius-md;
+    border-radius: 1rem; // v.$radius-md
 }
 
 .title {
-    font-size: v.$font-size-sm;
+    font-size: 0.875rem; // v.$font-size-sm
     font-weight: bold;
-    color: v.$zinc-900;
+    color: #18181b; // v.$zinc-900
 }
 
 .content {
-    font-size: v.$font-size-2xs;
-    color: v.$zinc-600;
+    font-size: 0.8125rem; // v.$font-size-2xs
+    color: #52525b; // v.$zinc-600
     line-height: 1.6;
     white-space: pre-wrap;
 

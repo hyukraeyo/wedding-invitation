@@ -9,7 +9,9 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import type { User } from 'next-auth';
 import { IconButton } from '@/components/ui/IconButton';
-import { ResponsiveModal } from '@/components/common/ResponsiveModal';
+import { Top } from '@/components/ui/Top';
+import { Modal } from '@/components/ui/Modal';
+import { Text } from '@/components/ui/Text';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { useShallow } from 'zustand/react/shallow';
@@ -178,26 +180,27 @@ export default function Header() {
     if (!isVisible) return null;
 
     return (
-        <header className={cn(styles.header, "view-transition-header")}>
-            <Logo />
-
-            <HeaderActions
-                user={user}
-                authLoading={authLoading}
-                isLoading={isLoading}
-                isUploading={isUploading}
-                notificationCount={notificationCount}
-                onLogin={handleLogin}
-                onSaveAction={handleSaveAction}
-                showSave={!!onSave || pathname.startsWith('/builder')}
+        <>
+            <Top
+                className={cn(styles.header, "view-transition-header")}
+                title={<Logo />}
+                right={
+                    <HeaderActions
+                        user={user}
+                        authLoading={authLoading}
+                        isLoading={isLoading}
+                        isUploading={isUploading}
+                        notificationCount={notificationCount}
+                        onLogin={handleLogin}
+                        onSaveAction={handleSaveAction}
+                        showSave={!!onSave || pathname.startsWith('/builder')}
+                    />
+                }
             />
-
-            <ResponsiveModal
-                open={showResetDialog}
-                onOpenChange={setShowResetDialog}
-                title="새 청첩장 만들기"
-                description={null}
-            >
+            <Modal open={showResetDialog} onOpenChange={setShowResetDialog}>
+                <div className={styles.modalHeader}>
+                    <Text typography="t4" fontWeight="bold">새 청첩장 만들기</Text>
+                </div>
                 <div style={{ textAlign: 'center', wordBreak: 'keep-all', lineHeight: '1.6', marginBottom: '1.5rem' }}>
                     작성 중인 내용이 있습니다. 정말 새 청첩장을 만드시겠습니까?
                     <br />
@@ -222,7 +225,7 @@ export default function Header() {
                         </Button>
                     </div>
                 </Suspense>
-            </ResponsiveModal>
-        </header>
+            </Modal>
+        </>
     );
 }

@@ -4,12 +4,15 @@ import dynamic from 'next/dynamic';
 import { Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { BoardRow } from '@/components/ui/BoardRow';
-import { HeaderAction } from '@/components/common/HeaderAction';
 import { SampleList } from '@/components/common/SampleList';
 import type { SectionProps, SamplePhraseItem } from '@/types/builder';
 import { MAIN_TITLE_SAMPLES } from '@/constants/samples';
 import styles from './MainScreenSection.module.scss';
-import { ResponsiveModal } from '@/components/common/ResponsiveModal';
+import { Button } from '@/components/ui/Button';
+import { BottomCTA } from '@/components/ui/BottomCTA';
+import { Modal } from '@/components/ui/Modal';
+import { BottomSheet } from '@/components/ui/BottomSheet';
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 const MainScreenSectionContent = dynamic(() => import('./MainScreenSectionContent'), {
     loading: () => (
@@ -21,56 +24,102 @@ const MainScreenSectionContent = dynamic(() => import('./MainScreenSectionConten
 });
 
 export default function MainScreenSection(props: SectionProps) {
-
+    const isDesktop = useMediaQuery("(min-width: 768px)");
     const setMainScreen = useInvitationStore(state => state.setMainScreen);
     const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
-
-
 
     const handleSelectSample = (sample: SamplePhraseItem) => {
         setMainScreen({ title: sample.title });
         setIsSampleModalOpen(false);
     };
 
+    const renderSampleList = () => (
+        <SampleList
+            items={MAIN_TITLE_SAMPLES}
+            onSelect={handleSelectSample}
+        />
+    );
+
     return (
         <>
-            <>
-                <BoardRow
-                    title="메인 화면"
-                    isOpened={props.isOpen}
-                    onOpen={() => props.onToggle?.(true)}
-                    onClose={() => props.onToggle?.(false)}
-                    icon={<BoardRow.ArrowIcon />}
-                >
-                    {props.isOpen ? (
-                        <div style={{ padding: '0 0 24px' }}>
-                            <div style={{ padding: '0 24px 12px', display: 'flex', justifyContent: 'flex-end' }}>
-                                <HeaderAction
-                                    icon={Sparkles}
-                                    label="추천 문구"
-                                    onClick={() => {
-                                        setIsSampleModalOpen(true);
-                                    }}
-                                />
-                            </div>
-                            <MainScreenSectionContent />
-                        </div>
-                    ) : null}
-                </BoardRow>
+            <BoardRow
+                title="메인 화면"
+                isOpened={props.isOpen}
+                onOpen={() => props.onToggle?.(true)}
+                onClose={() => props.onToggle?.(false)}
+                icon={<BoardRow.ArrowIcon />}
+            >
+                <div style={{ display: props.isOpen ? 'block' : 'none', padding: '0 0 24px' }}>
+                    <div className={styles.sampleBtnWrapper} style={{ padding: '0 24px 12px' }}>
+                        <Button
+                            type="button"
+                            variant="weak"
+                            size="small"
+                            onPointerDown={(e) => e.stopPropagation()}
+                            onMouseDown={(e) => e.stopPropagation()}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsSampleModalOpen(true);
+                            }}
+                            className={styles.sampleBtn}
+                        >
+                            <Sparkles size={14} className={styles.sparkleIcon} />
+                            <span>추천 문구</span>
+                        </Button>
+                    </div>
+                    <MainScreenSectionContent />
+                </div>
+            </BoardRow>
 
-                {/* Sample Titles Modal */}
-                < ResponsiveModal
+            {isDesktop ? (
+                <Modal
                     open={isSampleModalOpen}
                     onOpenChange={setIsSampleModalOpen}
-                    title="추천 제목 문구"
-                    useScrollFade={true}
                 >
-                    <SampleList
-                        items={MAIN_TITLE_SAMPLES}
-                        onSelect={handleSelectSample}
-                    />
-                </ResponsiveModal >
-            </>
+                    <Modal.Overlay />
+                    <Modal.Content
+                        style={{
+                            padding: '32px 0 0',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            maxHeight: '80vh',
+                            width: '400px',
+                            backgroundColor: '#fff'
+                        }}
+                    >
+                        <div style={{ textAlign: 'center', marginBottom: '1.5rem', flexShrink: 0 }}>
+                            <h2 style={{ fontSize: '1.125rem', fontWeight: 700 }}>추천 제목 문구</h2>
+                        </div>
+                        <div style={{ flex: 1, overflowY: 'auto', padding: '0 20px 20px' }}>
+                            {renderSampleList()}
+                        </div>
+                        <BottomCTA.Single
+                            fixed={false}
+                            onClick={() => setIsSampleModalOpen(false)}
+                        >
+                            닫기
+                        </BottomCTA.Single>
+                    </Modal.Content>
+                </Modal>
+            ) : (
+                <BottomSheet
+                    open={isSampleModalOpen}
+                    onClose={() => setIsSampleModalOpen(false)}
+                    header="추천 제목 문구"
+                    cta={
+                        <BottomCTA.Single
+                            fixed={false}
+                            onClick={() => setIsSampleModalOpen(false)}
+                        >
+                            닫기
+                        </BottomCTA.Single>
+                    }
+                >
+                    <div style={{ padding: '0 24px 24px', maxHeight: '60vh', overflowY: 'auto', backgroundColor: '#fff' }}>
+                        {renderSampleList()}
+                    </div>
+                </BottomSheet>
+            )}
         </>
     );
 }

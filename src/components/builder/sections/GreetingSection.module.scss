@@ -4,6 +4,7 @@
 .sampleBtnWrapper {
   display: flex;
   justify-content: flex-end;
+  padding: 0 24px 12px;
 }
 
 .sampleBtn {
@@ -11,15 +12,14 @@
   align-items: center;
   gap: 0.375rem;
   padding: 0.375rem 0.75rem;
-  background-color: #fffbeb; // yellow-50
-  color: #b45309; // yellow-700
-  border-radius: v.$radius-full;
-  border: 1px solid #fef3c7; // yellow-100
-  font-size: 12px;
-  font-weight: bold;
+  background-color: #dbeafe; // v.$blue-100
+  color: #1d4ed8; // v.$blue-700
+  border-radius: 1rem; // v.$radius-lg
+  border: none;
+  font-size: 11px;
+  font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  // box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {
@@ -53,17 +53,17 @@
   align-items: flex-start;
   gap: 0.625rem;
   padding: 0.875rem;
-  background-color: v.$zinc-50;
-  border: 1px solid v.$zinc-100;
-  border-radius: v.$radius-md; // 16px
-  color: v.$zinc-600;
+  background-color: #fafafa; // v.$zinc-50
+  border: 1px solid #f4f4f5; // v.$zinc-100
+  border-radius: 1rem; // v.$radius-md
+  color: #52525b; // v.$zinc-600
   font-size: 12px;
   line-height: 1.6;
 
   .infoIcon {
     flex-shrink: 0;
     margin-top: 0.125rem;
-    color: v.$zinc-400;
+    color: #a1a1aa; // v.$zinc-400
   }
 }
 

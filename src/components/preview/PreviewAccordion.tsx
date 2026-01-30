@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { Button } from '@/components/ui/Button';
 import styles from './PreviewAccordion.module.scss';
 import { clsx } from 'clsx';
 
@@ -40,6 +41,8 @@ export default function PreviewAccordion({
 
     const textColor = mode === 'accent' ? getContrastColor(accentColor) : 'inherit';
 
+    // ... (existing code) ...
+
     return (
         <div
             className={clsx(styles.groupContainer, styles[mode], className)}
@@ -48,10 +51,12 @@ export default function PreviewAccordion({
                 '--accent-text': textColor
             } as React.CSSProperties}
         >
-            <button
+            <Button
+                variant="weak"
                 className={styles.groupHeader}
                 onClick={() => setIsOpen(!isOpen)}
                 aria-expanded={isOpen}
+                style={{ height: 'auto', padding: '16px 20px', justifyContent: 'space-between' }}
             >
                 <span className={styles.groupTitle} dangerouslySetInnerHTML={{ __html: title }} />
                 {isOpen ? (
@@ -59,7 +64,7 @@ export default function PreviewAccordion({
                 ) : (
                     <ChevronDown size={20} className={styles.icon} />
                 )}
-            </button>
+            </Button>
             <div
                 className={clsx(styles.groupContent, isOpen && styles.open)}
                 style={{ maxHeight: isOpen ? '1000px' : '0' }}

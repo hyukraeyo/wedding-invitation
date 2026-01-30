@@ -22,15 +22,15 @@ $builder-radius-lg: 1.125rem;
 $builder-radius-xl: 1.5rem;
 
 // ----- Color Variables (Standardized for Banana Wedding) -----
-$builder-border-light: v.$zinc-100;
-$builder-border-default: v.$zinc-200;
-$builder-border-dark: var(--builder-border-color, v.$zinc-300);
-$builder-bg-subtle: v.$zinc-50;
-$builder-bg-hover: v.$zinc-100;
-$builder-text-muted: v.$zinc-400;
-$builder-text-secondary: v.$zinc-500;
-$builder-text-default: v.$zinc-700;
-$builder-text-heading: v.$zinc-900;
+$builder-border-light: #f4f4f5; // v.$zinc-100
+$builder-border-default: #e4e4e7; // v.$zinc-200
+$builder-border-dark: var(--builder-border-color, #d4d4d8); // v.$zinc-300
+$builder-bg-subtle: #fafafa; // v.$zinc-50
+$builder-bg-hover: #f4f4f5; // v.$zinc-100
+$builder-text-muted: #a1a1aa; // v.$zinc-400
+$builder-text-secondary: #71717a; // v.$zinc-500
+$builder-text-default: #3f3f46; // v.$zinc-700
+$builder-text-heading: #18181b; // v.$zinc-900
 
 // ----- Typography Tokens -----
 $builder-font-xs: 11px;
@@ -85,7 +85,7 @@ $builder-font-xl: 17px;
   border: 1px solid $builder-border-light;
   background: white;
   padding: $builder-gap-md;
-  transition: all v.$transition-fast;
+  transition: all 150ms; // v.$transition-fast
 }
 
 // Subtle divider
@@ -104,7 +104,7 @@ $builder-font-xl: 17px;
   font-size: 13px;
   line-height: 1.5; // 19.5px
   font-weight: 600; // semibold
-  color: v.$zinc-600;
+  color: #52525b; // v.$zinc-600
   display: block;
   margin-bottom: 6px;
   padding-left: 2px;
@@ -119,14 +119,13 @@ $builder-font-xl: 17px;
   color: $builder-text-secondary;
   flex-shrink: 0;
   min-width: 3.5rem;
-  // align-self: center; // optional
 }
 
 @mixin builder-input-base {
   @include m.input-base;
 
   &::placeholder {
-    color: v.$color-muted-foreground;
+    color: #737373; // v.$color-muted-foreground
   }
 
   @include m.input-hover;
@@ -146,9 +145,9 @@ $builder-font-xl: 17px;
 
 // Active state for toggleable buttons
 @mixin builder-button-active {
-  color: v.$primary-dark;
-  background: v.$ivory;
-  border-color: v.$primary;
+  color: #F9A825; // v.$primary-dark
+  background: #FFFBEA; // v.$ivory
+  border-color: #FBC02D; // v.$primary
   font-weight: 700;
 }
 
@@ -231,7 +230,7 @@ $builder-font-xl: 17px;
   }
 
   &.active {
-    border-color: v.$primary-500;
+    border-color: #FBC02D; // v.$primary-500
     transform: scale(1.1);
   }
 }
@@ -253,9 +252,9 @@ $builder-font-xl: 17px;
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {
-      border-color: v.$primary-500;
-      color: v.$primary-500;
-      background-color: v.$primary-100;
+      border-color: #FBC02D; // v.$primary-500
+      color: #FBC02D; // v.$primary-500
+      background-color: #FEF3C7; // v.$primary-100
     }
   }
 }

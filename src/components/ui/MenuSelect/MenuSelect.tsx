@@ -6,7 +6,9 @@ import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import styles from './MenuSelect.module.scss';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import { ResponsiveModal } from '@/components/common/ResponsiveModal';
+import { Modal } from '@/components/ui/Modal';
+import { Button } from '@/components/ui/Button';
+import { Text } from '@/components/ui/Text';
 
 interface MenuSelectOption<T> {
     label: string;
@@ -60,11 +62,13 @@ export const MenuSelect = <T extends string | number>({
 
     const sizeClass = styles[size];
 
+    // ... (existing code) ...
+
     const trigger = (
-        <button
+        <Button
             id={id}
             type="button"
-            disabled={disabled}
+            disabled={disabled || false}
             className={cn(styles.trigger, sizeClass, triggerClassName)}
             onClick={() => !disabled && setIsOpen(prev => !prev)}
         >
@@ -72,22 +76,20 @@ export const MenuSelect = <T extends string | number>({
                 {selectedOption ? selectedOption.label : placeholder}
             </span>
             <ChevronDown className={cn(styles.icon, isOpen && styles.open)} />
-        </button>
+        </Button>
     );
 
     if (showDrawer) {
         return (
             <div className={cn(className)}>
-                <ResponsiveModal
-                    open={isOpen}
-                    onOpenChange={setIsOpen}
-                    title={modalTitle || placeholder}
-                    useScrollFade={true}
-                    padding="none"
-                    trigger={trigger}
-                >
+                {trigger}
+                <Modal open={isOpen} onOpenChange={setIsOpen}>
+                    {(modalTitle || placeholder) && (
+                        <div className={styles.header}>
+                            <Text typography="t4" fontWeight="bold">{modalTitle || placeholder}</Text>
+                        </div>
+                    )}
                     <Menu.Dropdown className={styles.dropdown}>
-                        {modalTitle || placeholder ? <Menu.Header>{modalTitle || placeholder}</Menu.Header> : null}
                         {options.map((option) => (
                             <Menu.DropdownCheckItem
                                 key={String(option.value)}
@@ -103,7 +105,7 @@ export const MenuSelect = <T extends string | number>({
                             </Menu.DropdownCheckItem>
                         ))}
                     </Menu.Dropdown>
-                </ResponsiveModal>
+                </Modal>
             </div>
         );
     }

@@ -6,7 +6,6 @@ import { Heart } from 'lucide-react';
 import { AmpersandSVG, HeartSVG, RingIcon } from '../../common/Icons';
 import styles from './MainScreenView.module.scss';
 import { clsx } from 'clsx';
-import { AspectRatio } from '@/components/ui/AspectRatio';
 import { IMAGE_SIZES } from '@/constants/image';
 import { isBlobUrl } from '@/lib/image';
 
@@ -283,7 +282,7 @@ const MainScreenView = memo(({
                 >
                     {imageUrl ? (
                         imageRatio === 'fixed' && !isFillLayout ? (
-                            <AspectRatio ratio={4 / 5} className={clsx(styles.fullSize) || ''}>
+                            <div className={clsx(styles.fullSize) || ''} style={{ position: 'relative', width: '100%', aspectRatio: '4/5' }}>
                                 <Image
                                     src={imageUrl}
                                     alt={imageAlt}
@@ -295,7 +294,7 @@ const MainScreenView = memo(({
                                     loading="eager"
                                     unoptimized={isBlobUrl(imageUrl)}
                                 />
-                            </AspectRatio>
+                            </div>
                         ) : isFillLayout ? (
                             <Image
                                 src={imageUrl}

@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { IconButton } from '@/components/ui/IconButton';
 import styles from './RichTextEditor.module.scss';
 
 interface RichTextEditorProps {
@@ -158,18 +159,20 @@ const MenuBtn = ({
     isActive: boolean,
     title: string
 }) => (
-    <button
-        type="button"
-        onClick={(e) => {
+    <IconButton
+        onClick={(e: React.MouseEvent) => {
             e.preventDefault();
             onClick();
         }}
         className={cn(styles.toggleButton)}
+        aria-label={title}
+        name={title}
+        iconSize={16}
+        variant="clear"
         data-state={isActive ? 'on' : 'off'}
-        title={title}
     >
         <Icon size={16} />
-    </button>
+    </IconButton>
 );
 
 RichTextEditor.displayName = "RichTextEditor";

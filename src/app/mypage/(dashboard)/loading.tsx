@@ -7,15 +7,13 @@ export default function Loading() {
         <div className={clsx("view-transition-content", styles.cardGrid)}>
             {/* Create New Card Skeleton */}
             <div className={styles.createCardWrapper}>
-                <Skeleton pattern="cardOnly" className={styles.skeletonCard} />
-                <Skeleton pattern="listOnly" repeatLastItemCount={1} className={styles.skeletonText} />
+                <Skeleton className={styles.skeletonCard ?? ''} />
             </div>
 
             {/* Invitation Cards Skeleton */}
             {[1, 2, 3].map((i) => (
                 <div key={i} className={styles.createCardWrapper}>
-                    <Skeleton pattern="cardOnly" className={styles.skeletonCard} />
-                    <Skeleton pattern="listOnly" repeatLastItemCount={1} className={styles.skeletonText} />
+                    <Skeleton className={styles.skeletonCard ?? ''} />
                 </div>
             ))}
         </div>

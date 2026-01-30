@@ -35,7 +35,7 @@
 
     &:hover {
         color: v.$color-primary !important;
-        background-color: v.$primary-50 !important;
+        background-color: #FFFBEA !important; // v.$primary-50
     }
 }
 
@@ -243,12 +243,12 @@
     width: 64px;
     height: 64px;
     border-radius: 50%;
-    background-color: v.$primary-100;
+    background-color: #FEF3C7; // v.$primary-100
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 1rem;
-    color: v.$primary-600;
+    color: #D97706; // v.$primary-600
 }
 
 .comingSoonText {
@@ -337,9 +337,9 @@
 .rejectionMessageBox {
     margin-bottom: 1.5rem;
     padding: 1.25rem;
-    background-color: v.$color-danger-bg;
+    background-color: #fff1f2; // v.$color-danger-bg
     border-radius: v.$radius-md;
-    border: 1px solid v.$color-danger-border;
+    border: 1px solid #ffe4e6; // v.$color-danger-border
     text-align: left;
     font-size: 0.9375rem;
     line-height: 1.6;
@@ -361,4 +361,15 @@
     margin-top: 0.5rem;
     font-weight: 700;
     color: v.$red-500;
+}
+
+.modalHeader {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.modalFooter {
+    display: flex;
+    gap: 8px;
+    margin-top: 24px;
 }

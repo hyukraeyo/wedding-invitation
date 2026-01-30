@@ -3,242 +3,240 @@
 @use "../../../styles/animations";
 
 .container {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
 .counter {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .labelText {
-  font-size: v.$font-size-sm;
-  font-weight: 600;
-  color: v.$zinc-700;
+    font-size: v.$font-size-sm;
+    font-weight: 600;
+    color: v.$zinc-700;
 }
 
 .countText {
-  font-size: v.$font-size-sm;
-  font-weight: 500;
-  color: v.$zinc-500;
+    font-size: v.$font-size-sm;
+    font-weight: 500;
+    color: v.$zinc-500;
 }
 
 .countTotal {
-  color: v.$zinc-400;
+    color: v.$zinc-400;
 }
 
 .grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  user-select: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    user-select: none;
 
-  @include m.desktop {
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1rem; // 16px
-  }
+    @include m.desktop {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem; // 16px
+    }
 }
 
 .sortableItem {
-  position: relative;
-  aspect-ratio: 1 / 1;
-  border-radius: v.$radius-md; // 16px
-  overflow: hidden;
-  background-color: v.$zinc-100;
-  cursor: grab;
-  touch-action: none;
-  transform-origin: center;
-  transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s;
-  isolation: isolate;
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
+    position: relative;
+    aspect-ratio: 1 / 1;
     border-radius: v.$radius-md; // 16px
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    pointer-events: none;
-    z-index: 2;
-  }
+    overflow: hidden;
+    background-color: v.$zinc-100;
+    cursor: grab;
+    touch-action: none;
+    transform-origin: center;
+    transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.2s;
+    isolation: isolate;
 
-  &.dragging {
-    z-index: 50;
-    // box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-    cursor: grabbing;
-    opacity: 0.9;
-  }
+    &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: v.$radius-md; // 16px
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        pointer-events: none;
+        z-index: 2;
+    }
 
-  &:active {
-    cursor: grabbing;
-    transform: scale(0.98);
-  }
+    &.dragging {
+        z-index: 50;
+        // box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        cursor: grabbing;
+        opacity: 0.9;
+    }
+
+    &:active {
+        cursor: grabbing;
+        transform: scale(0.98);
+    }
 }
 
 .image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  pointer-events: none;
-  transition: opacity 0.2s;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    transition: opacity 0.2s;
 }
 
 .mainTag {
-  position: absolute;
-  top: 6px;
-  left: 6px;
-  background-color: v.$primary-500;
-  color: v.$color-primary-foreground;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 3px 6px;
-  border-radius: v.$radius-md; // 16px
-  z-index: 10;
-  // box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  letter-spacing: -0.02em;
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    background-color: #FBC02D; // v.$primary-500
+    color: v.$color-primary-foreground;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 6px;
+    border-radius: v.$radius-md; // 16px
+    z-index: 10;
+    // box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: -0.02em;
 }
 
 .removeButton {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  z-index: 10;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255, 255, 255, 0.9);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  padding: 0;
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    z-index: 10;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.9);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
 
-  &:hover {
-    background-color: v.$red-500;
-    transform: scale(1.1);
-    color: white;
-  }
+    &:hover {
+        background-color: v.$red-500;
+        transform: scale(1.1);
+        color: white;
+    }
 
-  &:active {
-    transform: scale(0.9);
-  }
+    &:active {
+        transform: scale(0.9);
+    }
 
-  svg {
-    width: 14px;
-    height: 14px;
-  }
+    svg {
+        width: 14px;
+        height: 14px;
+    }
 }
 
 .uploadItem {
-  aspect-ratio: 1 / 1;
-  border: 1px dashed v.$zinc-300;
-  background-color: v.$zinc-50;
-  border-radius: v.$radius-md; // 16px
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  color: v.$zinc-400;
-  gap: 4px;
+    aspect-ratio: 1 / 1;
+    border: 1px dashed v.$zinc-300;
+    background-color: v.$zinc-50;
+    border-radius: v.$radius-md; // 16px
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    color: v.$zinc-400;
+    gap: 4px;
 
-  @media (hover: hover) and (pointer: fine) {
-    &:hover {
-      border-color: v.$primary-500;
-      background-color: rgba(v.$primary-500, 0.05);
-      color: v.$primary-600;
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            border-color: #FBC02D; // v.$primary-500
+            background-color: rgba(251, 192, 45, 0.05); // v.$primary-500 rgba
+            color: #D97706; // v.$primary-600
 
-      .uploadIcon {
-        transform: scale(1.1);
-      }
+            .uploadIcon {
+                transform: scale(1.1);
+            }
+        }
     }
-  }
 
-  &:active {
-    transform: scale(0.96);
-    background-color: v.$zinc-100;
-  }
+    &:active {
+        transform: scale(0.96);
+        background-color: v.$zinc-100;
+    }
 }
 
 .uploadIcon {
-  transition: transform 0.2s ease;
+    transition: transform 0.2s ease;
 }
 
 .uploadText {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
 }
 
 .uploadingOverlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(2px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 20;
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 20;
 }
 
 .spinner {
-  width: 1.5rem;
-  height: 1.5rem;
-  border: 2px solid rgba(v.$primary-500, 0.2);
-  border-top-color: v.$primary-500;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 2px solid rgba(251, 192, 45, 0.2); // v.$primary-500 rgba
+    border-top-color: #FBC02D; // v.$primary-500
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
 }
 
-// @keyframes spin?Ä @use "../../../styles/animations"?êÏÑú Í∞Ä?∏Ïòµ?àÎã§.
-
+// from animations
 .dragOverlayItem {
-  @extend .sortableItem;
-  cursor: grabbing;
-  opacity: 0.9;
-  // box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    @extend .sortableItem;
+    cursor: grabbing;
+    opacity: 0.9;
+    // box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 
-  .image {
-    border-radius: v.$radius-md; // 16px
-  }
+    .image {
+        border-radius: v.$radius-md; // 16px
+    }
 }
 
 .hiddenInput {
-  display: none;
+    display: none;
 }
 
 .optionGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .galleryManager {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 }
 
 .loadingContainer {
-  display: flex;
-  justify-content: center;
-  padding: 2rem;
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
 }
 
 .loadingSpinner {
-  width: 1.5rem;
-  height: 1.5rem;
-  border: 2px solid rgba(v.$primary-500, 0.2);
-  border-top-color: v.$primary-500;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+    width: 1.5rem;
+    height: 1.5rem;
+    border: 2px solid rgba(251, 192, 45, 0.2); // v.$primary-500 rgba
+    border-top-color: #FBC02D; // v.$primary-500
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
 }
-

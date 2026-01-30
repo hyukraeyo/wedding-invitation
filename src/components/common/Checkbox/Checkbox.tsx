@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useId } from 'react';
-import { Checkbox as ShadcnCheckbox } from '@/components/ui/Checkbox';
+import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import styles from './Checkbox.module.scss';
 
@@ -63,14 +63,21 @@ const CheckboxBase = ({
 
     return (
         <div className={cn(styles.container, className)}>
-            <ShadcnCheckbox
+            <button
+                type="button"
+                role="checkbox"
+                aria-checked={checked ?? defaultChecked ?? false}
                 id={uniqueId}
-                {...(checked !== undefined ? { checked } : {})}
-                {...(defaultChecked !== undefined ? { defaultChecked } : {})}
-                onCheckedChange={handleCheckedChange}
-                disabled={disabled ?? undefined}
-                className={cn(variant === 'circle' && styles.circle)}
-            />
+                onClick={() => handleCheckedChange(!(checked ?? defaultChecked))}
+                disabled={disabled}
+                className={cn(
+                    styles.checkbox,
+                    variant === 'circle' && styles.circle,
+                    (checked ?? defaultChecked) && styles.checked
+                )}
+            >
+                {(checked ?? defaultChecked) && <Check size={14} className={styles.icon} />}
+            </button>
             {children || label ? (
                 <label
                     htmlFor={uniqueId}

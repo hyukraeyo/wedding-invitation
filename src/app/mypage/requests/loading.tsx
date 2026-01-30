@@ -8,13 +8,13 @@ export default function Loading() {
             {[1, 2, 3, 4, 5].map((i) => (
                 <div key={i} className={styles.requestItem}>
                     <div className={styles.requestInfo}>
-                        <Skeleton className={styles.skeletonTitle} />
-                        <Skeleton className={styles.skeletonSub} />
+                        <Skeleton className={styles.skeletonTitle ?? ''} />
+                        <Skeleton className={styles.skeletonSub ?? ''} />
                     </div>
                     <div className={styles.adminButtonGroup}>
-                        <Skeleton className={styles.skeletonButton} />
-                        <Skeleton className={styles.skeletonButtonSm} />
-                        <Skeleton className={styles.skeletonButtonSm} />
+                        <Skeleton className={styles.skeletonButton ?? ''} />
+                        <Skeleton className={styles.skeletonButtonSm ?? ''} />
+                        <Skeleton className={styles.skeletonButtonSm ?? ''} />
                     </div>
                 </div>
             ))}

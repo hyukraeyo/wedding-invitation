@@ -32,6 +32,11 @@
   }
 }
 
+.modalHeader {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
 .logoWrapper {
   display: flex;
   align-items: center;
@@ -116,7 +121,7 @@
   right: 4px;
   width: 8px;
   height: 8px;
-  background-color: v.$color-danger;
+  background-color: #f43f5e; // v.$color-danger
   border-radius: 50%;
   border: 1.5px solid white;
   z-index: 10;

@@ -34,13 +34,13 @@
 .visibilityButton {
   width: 44px;
   padding: 0;
-  color: v.$zinc-400;
+  color: #a1a1aa; // v.$zinc-400
 
   &.active {
-    color: v.$banana-yellow;
+    color: #FBC02D; // v.$banana-yellow
   }
 }
 
 .deceasedButtonInactive {
-  color: v.$zinc-400;
+  color: #a1a1aa; // v.$zinc-400
 }

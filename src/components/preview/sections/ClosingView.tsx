@@ -7,7 +7,6 @@ import { MessageCircle, Share2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import type { InvitationData } from '@/store/useInvitationStore';
 import SectionContainer from '../SectionContainer';
-import { AspectRatio } from '@/components/ui/AspectRatio';
 import { Button } from '@/components/ui/Button';
 import SectionHeader from '../SectionHeader';
 import styles from './ClosingView.module.scss';
@@ -112,7 +111,7 @@ const ClosingView = memo(({
                     <div className={clsx(styles.imageSection, styles[ratio]) || ''}>
                         <div className={clsx(styles.imageContainer) || ''}>
                             {ratio === 'fixed' ? (
-                                <AspectRatio ratio={16 / 9} className={clsx(styles.fullSize) || ''}>
+                                <div className={clsx(styles.fullSize) || ''} style={{ position: 'relative', width: '100%', aspectRatio: '16/9' }}>
                                     <Image
                                         src={imageUrl}
                                         alt="Ending Illustration"
@@ -124,7 +123,7 @@ const ClosingView = memo(({
                                         }}
                                         unoptimized={isBlobUrl(imageUrl)}
                                     />
-                                </AspectRatio>
+                                </div>
                             ) : (
                                 <>
                                     <Image

@@ -7,6 +7,7 @@ import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { MenuSelect } from '@/components/ui/MenuSelect';
 import { Switch } from '@/components/ui/Switch';
 import { List, ListRow } from '@/components/ui/List';
+import { Button } from '@/components/ui/Button';
 import styles from './ThemeSection.module.scss';
 import { cn } from '@/lib/utils';
 import type { ThemeFont } from '@/lib/utils/font';
@@ -38,20 +39,21 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
                         <div className={styles.optionWrapper}>
                             <div className={styles.colorPicker}>
                                 {PRESET_COLORS.map((color) => (
-                                    <button
+                                    <Button
                                         key={color}
+                                        variant="weak"
                                         className={cn(
                                             styles.colorItem,
                                             styles.colorItemInteractive,
                                             theme.accentColor === color && styles.active
                                         )}
-                                        style={{ backgroundColor: color }}
+                                        style={{ backgroundColor: color, padding: 0, minWidth: 0, height: '32px', width: '32px' }}
                                         onClick={() => setTheme({ accentColor: color })}
                                     >
                                         {theme.accentColor === color ? (
                                             <Check size={16} className={styles.checkIcon} />
                                         ) : null}
-                                    </button>
+                                    </Button>
                                 ))}
                             </div>
                         </div>
@@ -138,21 +140,22 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
                         <div className={styles.optionWrapper}>
                             <div className={styles.colorPicker}>
                                 {['#FFFFFF', '#FFECEF', '#F4F1EA', '#F2EBFA'].map((color) => (
-                                    <button
+                                    <Button
                                         key={color}
+                                        variant="weak"
                                         className={cn(
                                             styles.colorItem,
                                             styles.lightColorItem,
                                             styles.colorItemInteractive,
                                             theme.backgroundColor === color && styles.active
                                         )}
-                                        style={{ backgroundColor: color }}
+                                        style={{ backgroundColor: color, padding: 0, minWidth: 0, height: '32px', width: '32px' }}
                                         onClick={() => setTheme({ backgroundColor: color })}
                                     >
                                         {theme.backgroundColor === color ? (
                                             <Check size={16} className={styles.checkIcon} />
                                         ) : null}
-                                    </button>
+                                    </Button>
                                 ))}
                             </div>
                         </div>

@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState } from 'react';
-import { ResponsiveModal } from '@/components/common/ResponsiveModal';
+import { Modal } from '@/components/ui/Modal';
+import { Button } from '@/components/ui/Button';
+import { Text } from '@/components/ui/Text';
 import dynamic from 'next/dynamic';
 import styles from './RejectionReasonModal.module.scss';
 
@@ -45,24 +47,12 @@ export default function RejectionReasonModal({
     };
 
     return (
-        <ResponsiveModal
-            open={isOpen}
-            onOpenChange={(open) => {
-                if (!open) handleClose();
-            }}
-            title={title}
-            description={null}
-            confirmText={confirmText}
-            cancelText="취소"
-            onConfirm={handleSubmit}
-            onCancel={handleClose}
-            showCancel={!loading}
-            confirmDisabled={!reason.trim() || loading}
-            confirmLoading={loading}
-            dismissible={!loading}
-            useScrollFade={true}
-        >
-            <div style={{ textAlign: 'center', color: '#4E5968', marginBottom: '1.5rem', wordBreak: 'keep-all', lineHeight: '1.6' }}>
+        <Modal open={isOpen} onOpenChange={(open) => !open && handleClose()}>
+            <div className={styles.header}>
+                <Text typography="t4" fontWeight="bold">{title}</Text>
+            </div>
+
+            <div className={styles.description}>
                 {description || (requesterName ? (
                     <>
                         <strong>{requesterName}</strong>님의 사용 신청을 거절합니다.<br />
@@ -72,6 +62,7 @@ export default function RejectionReasonModal({
                     '승인 거절 사유를 입력해주세요. 사용자가 확인할 수 있습니다.'
                 ))}
             </div>
+
             <div className={styles.editorWrapper}>
                 <RichTextEditor
                     content={reason}
@@ -80,6 +71,28 @@ export default function RejectionReasonModal({
                     minHeight={180}
                 />
             </div>
-        </ResponsiveModal>
+
+            <div className={styles.footer}>
+                <Button
+                    style={{ flex: 1 }}
+                    variant="weak"
+                    size="large"
+                    onClick={handleClose}
+                    disabled={loading}
+                >
+                    취소
+                </Button>
+                <Button
+                    style={{ flex: 1 }}
+                    variant="fill"
+                    size="large"
+                    loading={loading}
+                    disabled={!reason.trim() || loading}
+                    onClick={handleSubmit}
+                >
+                    {confirmText}
+                </Button>
+            </div>
+        </Modal>
     );
 }

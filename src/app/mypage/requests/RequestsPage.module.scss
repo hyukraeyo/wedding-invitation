@@ -1,9 +1,12 @@
 @use "../../../styles/variables" as v;
 @use "../../../styles/mixins" as m;
 
-// ============================================
-// Requests List Styles (RequestsPage 전용)
-// ============================================
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
 .requestList {
     display: flex;
     flex-direction: column;
@@ -11,10 +14,10 @@
 }
 
 .requestItem {
-    background-color: white;
-    border-radius: 1rem; // 16px
+    background: white;
+    border: 1px solid v.$zinc-200;
+    border-radius: v.$radius-md;
     padding: 1.25rem;
-    // border: 1px solid v.$zinc-200;
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -27,37 +30,37 @@
     }
 
     &.rejectedItem {
-        background-color: v.$rose-50;
-        border-color: v.$rose-100;
+        background-color: #fff1f2; // v.$rose-50
+        border-color: #ffe4e6; // v.$rose-100
     }
 
     &.approvedItem {
-        background-color: v.$green-50;
-        border-color: v.$green-100;
+        background-color: #f0fdf4; // v.$green-50
+        border-color: #dcfce7; // v.$green-100
     }
 }
 
 .requestInfo {
-    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.25rem;
+    flex: 1;
 }
 
 .requester {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
     font-size: 1rem;
     color: v.$zinc-900;
 
     strong {
         font-weight: 600;
+        margin-right: 0.5rem;
     }
 
     .phone {
         color: v.$zinc-500;
-        font-size: 0.875rem;
+        font-size: 0.9em;
     }
 }
 
@@ -66,154 +69,154 @@
     align-items: center;
     gap: 0.375rem;
     font-size: 0.8125rem;
-    color: v.$zinc-500;
+    color: v.$zinc-400;
 }
 
 .adminButtonGroup {
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
-}
 
-.previewButton,
-.viewReasonButton,
-.revokeButton,
-.rejectButton,
-.approveButton {
-    padding: 0.5rem 1rem;
-    border-radius: 0.75rem;
-    font-size: 0.875rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border: none;
+    button {
+        height: 36px;
+        padding: 0 1rem;
+        border-radius: v.$radius-md;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        white-space: nowrap;
+
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
 }
 
 .previewButton {
-    background-color: white;
-    color: v.$zinc-600;
     border: 1px solid v.$zinc-200;
+    background: white;
+    color: v.$zinc-700;
 
-    &:hover {
-        background-color: v.$zinc-50;
+    &:hover:not(:disabled) {
+        background: v.$zinc-50;
         border-color: v.$zinc-300;
     }
 }
 
-.viewReasonButton {
-    background-color: v.$rose-100;
-    color: v.$rose-600;
-
-    &:hover {
-        background-color: v.$rose-200;
-    }
-}
-
-.revokeButton {
-    background-color: v.$rose-100;
-    color: v.$rose-600;
-
-    &:hover {
-        background-color: v.$rose-200;
-    }
-}
-
 .rejectButton {
-    background-color: v.$zinc-100;
-    color: v.$zinc-700;
+    background: #fff1f2; // v.$rose-50
+    color: v.$red-600;
+    border: 1px solid #fecdd3; // v.$rose-200
 
-    &:hover {
-        background-color: v.$zinc-200;
+    &:hover:not(:disabled) {
+        background: #ffe4e6; // v.$rose-100
     }
 }
 
 .approveButton {
-    background-color: v.$primary-400;
-    color: #1a1a1a;
-
-    &:hover {
-        background-color: v.$primary-500;
-    }
-}
-
-
-.countBadge {
-    background-color: v.$primary-100;
-    color: v.$primary-700;
-    font-size: 0.75rem;
-    font-weight: 700;
-    padding: 0.25rem 0.625rem;
-    border-radius: 99px;
-}
-
-.loadMoreWrapper {
-    display: flex;
-    justify-content: center;
-    padding: 2rem 0;
-}
-
-.loadMoreButton {
-    padding: 0.75rem 2.5rem;
-    border-radius: 2rem;
-    background-color: #fff;
-    border: 1px solid #e5e7eb;
-    color: #4b5563;
-    font-size: 0.875rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    background: v.$zinc-900;
+    color: white;
+    border: none;
+    min-width: 80px;
 
     &:hover:not(:disabled) {
-        border-color: #FBC02D;
-        color: #FBC02D;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-    }
-
-    &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
+        background: black;
     }
 }
 
-// ============================================
-// Skeleton UI
-// ============================================
-.skeletonTitle {
-    height: 1.5rem;
-    width: 8rem;
-    margin-bottom: 0.5rem;
-    border-radius: 0.5rem;
+.revokeButton {
+    background: #ffe4e6; // v.$rose-100
+    color: v.$red-600;
+    border: 1px solid #fecdd3; // v.$rose-200
+
+    &:hover:not(:disabled) {
+        background: #fecdd3; // v.$rose-200
+    }
 }
 
-.skeletonSub {
-    height: 1rem;
-    width: 12rem;
-    border-radius: 0.25rem;
-}
+.viewReasonButton {
+    background: white;
+    color: v.$zinc-600;
+    border: 1px solid v.$zinc-300;
 
-.skeletonButton {
-    height: 2.5rem;
-    width: 6rem;
-    border-radius: 0.75rem;
-}
-
-.skeletonButtonSm {
-    height: 2.5rem;
-    width: 4rem;
-    border-radius: 0.75rem;
+    &:hover:not(:disabled) {
+        background: v.$zinc-50;
+    }
 }
 
 .spin {
     animation: spin 1s linear infinite;
 }
 
-.skeletonItem {
-    border-bottom: 1px solid v.$zinc-100;
-    padding-bottom: 1.5rem;
-    margin-bottom: 1.5rem;
-    
-    &:last-child {
-        border-bottom: none;
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
     }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loadMoreWrapper {
+    display: flex;
+    justify-content: center;
+    padding: 1rem 0;
+}
+
+.loadMoreButton {
+    height: 40px;
+    padding: 0 1.5rem;
+    border-radius: 20px;
+    background: white;
+    border: 1px solid v.$zinc-200;
+    color: v.$zinc-600;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &:hover:not(:disabled) {
+        background: v.$zinc-50;
+        border-color: v.$zinc-300;
+    }
+
+    &:disabled {
+        opacity: 0.7;
+    }
+}
+
+.error {
+    padding: 2rem;
+    text-align: center;
+    color: v.$red-500;
+    background: #fff1f2; // v.$rose-50
+    border-radius: v.$radius-md;
+}
+
+.rejectionReasonBox {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: #FEF2F2;
+    border-radius: v.$radius-md;
+    border: 1px solid #FEE2E2;
+    font-size: v.$font-size-md;
+    color: #374151;
+    line-height: 1.6;
+}
+
+.modalHeader {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.modalFooter {
+    display: flex;
+    gap: 8px;
+    margin-top: 24px;
 }

@@ -17,7 +17,6 @@ import SectionContainer from '../SectionContainer';
 import SectionHeader from '../SectionHeader';
 import styles from './GalleryView.module.scss';
 import { clsx } from 'clsx';
-import { AspectRatio } from '@/components/ui/AspectRatio';
 import { IconButton } from '@/components/ui/IconButton';
 import { useScrollLock } from '@/hooks/use-scroll-lock';
 import { useFocusTrap } from '@/hooks/useAccessibility';
@@ -271,7 +270,7 @@ const GalleryView = memo(({
                                 className={clsx(styles.gridItem, galleryPopup ? styles.cursorPointer : '') || ''}
                                 onClick={() => handleImageClick(i)}
                             >
-                                <AspectRatio ratio={1 / 1} className={clsx(styles.fullSize) || ''}>
+                                <div className={clsx(styles.fullSize) || ''} style={{ position: 'relative', width: '100%', aspectRatio: '1/1' }}>
                                     <Image
                                         src={img.url}
                                         alt=""
@@ -281,7 +280,7 @@ const GalleryView = memo(({
                                         sizes={IMAGE_SIZES.galleryGrid}
                                         quality={85}
                                     />
-                                </AspectRatio>
+                                </div>
                             </div>
                         ))}
                     </div>
