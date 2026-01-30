@@ -6,6 +6,7 @@ import type { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 
 import { useViewportHeight } from '@/hooks/use-viewport-height';
+import { WarningSuppressionProvider } from '@/components/providers/WarningSuppressionProvider';
 
 import { TDSMobileProvider } from '@toss/tds-mobile';
 
@@ -33,17 +34,20 @@ export default function ClientProviders({ children, session }: ClientProvidersPr
     const sessionValue = session ?? null;
 
     return (
-        <SessionProvider session={sessionValue}>
-            <QueryClientProvider client={queryClient}>
-                <div suppressHydrationWarning style={{ display: 'contents' }}>
-                    <TDSMobileProvider
-                        userAgent={{ isIOS: true, isAndroid: false, fontScale: 1, fontA11y: undefined }}
-                        config={{}}
-                    >
-                        {children}
-                    </TDSMobileProvider>
-                </div>
-            </QueryClientProvider>
-        </SessionProvider>
+        <WarningSuppressionProvider>
+            <SessionProvider session={sessionValue}>
+                <QueryClientProvider client={queryClient}>
+                    <div suppressHydrationWarning style={{ display: 'contents' }}>
+                        <TDSMobileProvider
+                            userAgent={{ isIOS: true, isAndroid: false, fontScale: 1, fontA11y: undefined }}
+                            config={{}}
+                        >
+                            {children}
+                        </TDSMobileProvider>
+                    </div>
+                </QueryClientProvider>
+            </SessionProvider>
+        </WarningSuppressionProvider>
     );
 }
+

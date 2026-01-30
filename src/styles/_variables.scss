@@ -131,7 +131,13 @@ $floated-background: #FFFFFF;
 // ============================================
 $banana-yellow: #FBC02D;
 $primary: $banana-yellow;
+$primary-50: #FFFDE7;
 $primary-100: #FFF9C4;
+$primary-200: #FFF59D;
+$primary-300: #FFF176;
+$primary-400: #FFEE58;
+$primary-500: $banana-yellow;
+$primary-600: #FDD835;
 $primary-700: #F9A825;
 
 // Legacy Primary Support (Mapped)
@@ -163,6 +169,7 @@ $background-overlay: rgba(0, 0, 0, 0.4);
 // Status
 $color-success: $green-500;
 $color-error: $red-500;
+$color-danger: $red-500;
 $color-info: $blue-500;
 $color-warning: $orange-500;
 

@@ -123,8 +123,8 @@
   }
 
   &.active {
-    background-color: #FFFBEA; // v.$primary-50
-    color: #B45309; // v.$primary-700
+    background-color: v.$primary-50;
+    color: v.$primary-700;
     font-weight: 700;
   }
 }
