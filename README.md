@@ -46,7 +46,10 @@
 
 #### 참조 문서
 
+#### 참조 문서
 
+- [Toss Design System Mobile](https://tossmini-docs.toss.im/tds-mobile/)
+- [Radix UI Primitives](https://www.radix-ui.com/) (Fallback for missing components)
 ---
 
 # 🍌 바나나웨딩 (Banana Wedding)
@@ -64,14 +67,15 @@
 - **Framework**: Next.js 16.1.1 (App Router)
 - **Library**: React 19
 - **Language**: TypeScript 5 (Strict Mode)
-- **Styling**: SCSS Modules (Strict) + Toss Style UI
+- **Styling**: SCSS Modules (Strict) + Toss Design System (TDS) Mobile
 - **State Management**: Zustand (Client), Tanstack Query (Server)
 - **Database/Auth**: Supabase
 - **Icons**: Lucide React
 
 ## 🎨 핵심 개발 원칙
 
-1.  **Strict Styling**: 모든 컴포넌트는 **SCSS Modules**로 작성합니다. Tailwind CSS는 컴포넌트 내부에서 사용하지 않습니다.
+1.  **Toss Design System First**: UI 컴포넌트는 우선적으로 **Toss Design System (TDS) Mobile**을 사용합니다. 없는 기능에 한해 **Radix UI**를 사용합니다.
+2.  **Strict Styling**: 모든 컴포넌트는 **SCSS Modules**로 작성합니다. Tailwind CSS는 컴포넌트 내부에서 사용하지 않습니다.
 2.  **PascalCase Convention**: 모든 컴포넌트 폴더와 파일명은 **PascalCase**를 사용합니다.
 3.  **Hybrid Component Pattern**: `ComponentName/ComponentName.tsx` + `ComponentName.module.scss` + `index.ts` 구조를 따릅니다.
 4.  **Server Components First**: 모든 데이터 페칭은 서버 컴포넌트에서 수행하며, 클라이언트 사이드 페칭은 지양합니다.

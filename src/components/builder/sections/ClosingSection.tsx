@@ -9,7 +9,7 @@ import { BoardRow } from '@/components/ui/BoardRow';
 import { TextField } from '@/components/ui/TextField';
 import { List, ListRow } from '@/components/ui/List';
 import { ImageUploader } from '@/components/common/ImageUploader';
-import { HeaderAction } from '@/components/common/HeaderAction';
+import { Button } from '@/components/ui/Button';
 import { SampleList } from '@/components/common/SampleList';
 import styles from './ClosingSection.module.scss';
 
@@ -49,14 +49,14 @@ export default function ClosingSection(props: SectionProps) {
                 >
                     <List>
                         {/* Sample Trigger */}
-                        <div style={{ padding: '0 24px 12px', display: 'flex', justifyContent: 'flex-end' }}>
-                            <HeaderAction
-                                icon={Sparkles}
-                                label="추천 문구"
-                                onClick={() => {
-                                    setIsSampleModalOpen(true);
-                                }}
-                            />
+                        <div className={styles.sampleBtnWrapper}>
+                            <Button
+                                className={styles.sampleBtn}
+                                onClick={() => setIsSampleModalOpen(true)}
+                            >
+                                <Sparkles size={14} className={styles.sparkleIcon} />
+                                <span>추천 문구</span>
+                            </Button>
                         </div>
 
                         <ListRow

@@ -5,12 +5,6 @@ import { useMediaQuery } from '@/hooks/use-media-query';
 import { Modal } from '@toss/tds-mobile';
 import {
     Drawer,
-    DrawerContent,
-    DrawerHeader,
-    DrawerTitle,
-    DrawerDescription,
-    DrawerTrigger,
-    DrawerScrollArea,
 } from "@/components/ui/Drawer";
 import { BottomCTA } from '@/components/ui/BottomCTA';
 import { Button } from '@/components/ui/Button';
@@ -192,97 +186,79 @@ export const ResponsiveModal = ({
     return (
         <Drawer
             open={open}
-            onOpenChange={internalOnOpenChange}
-            shouldScaleBackground={false}
-        >
-            {trigger ? <DrawerTrigger asChild>{trigger}</DrawerTrigger> : null}
-            <DrawerContent className={className}>
-                <DrawerHeader>
-                    <DrawerTitle>
-                        {title || '알림'}
-                    </DrawerTitle>
-                    {description && (
-                        <DrawerDescription>
-                            {description}
-                        </DrawerDescription>
+            onClose={() => internalOnOpenChange(false)}
+            header={
+                <Drawer.Header>
+                    {title || '알림'}
+                </Drawer.Header>
+            }
+            headerDescription={description ? <Drawer.HeaderDescription>{description}</Drawer.HeaderDescription> : undefined}
+            cta={hasActions ? (
+                <div className={styles.footer}>
+                    {footer || (
+                        showCancel ? (
+                            <BottomCTA.Double
+                                fixed={false}
+                                rightButton={
+                                    <Button
+                                        onClick={onConfirm}
+                                        disabled={confirmDisabled || confirmLoading}
+                                        loading={confirmLoading}
+                                        color={confirmVariant === 'danger' ? 'danger' : 'primary'}
+                                        variant="fill"
+                                        size="large"
+                                        style={{ width: '100%' }}
+                                    >
+                                        {confirmText}
+                                    </Button>
+                                }
+                                leftButton={
+                                    <Button
+                                        onClick={handleCancel}
+                                        variant="weak"
+                                        color="primary"
+                                        size="large"
+                                        style={{ width: '100%' }}
+                                    >
+                                        {cancelText}
+                                    </Button>
+                                }
+                            />
+                        ) : (
+                            <BottomCTA.Single
+                                fixed={false}
+                                // @ts-expect-error - TDS BottomCTA might have slightly different prop names in type definition
+                                onClick={onConfirm}
+                                disabled={confirmDisabled || confirmLoading}
+                                loading={confirmLoading}
+                                color={confirmVariant === 'danger' ? 'danger' : 'primary'}
+                                variant="fill"
+                                size="large"
+                            >
+                                {confirmText}
+                            </BottomCTA.Single>
+                        )
                     )}
-                </DrawerHeader>
+                </div>
+            ) : undefined}
+        >
+            {trigger ? React.cloneElement(trigger as React.ReactElement<{ onClick?: React.MouseEventHandler }>, {
+                onClick: (e: React.MouseEvent) => {
+                    (trigger as React.ReactElement<{ onClick?: React.MouseEventHandler }>).props.onClick?.(e);
+                    internalOnOpenChange(true);
+                }
+            }) : null}
 
-                {!description && (
-                    <VisuallyHidden>
-                        <DrawerDescription>
-                            {title ? `${title} 모달입니다.` : '모달 콘텐츠 영역입니다.'}
-                        </DrawerDescription>
-                    </VisuallyHidden>
-                )}
-
-                {children && (
-                    <DrawerScrollArea
-                        className={contentClassName}
-                        useScrollFade={useScrollFade}
-                        onScroll={handleInternalScroll}
-                        ref={externalScrollRef}
-                        padding={padding}
-                    >
-                        {children}
-                    </DrawerScrollArea>
-                )}
-
-                {hasActions && (
-                    <div className={styles.footer}>
-                        {footer || (
-                            showCancel ? (
-                                <BottomCTA.Double
-                                    fixed={false}
-                                    rightButton={
-                                        <Button
-                                            onClick={onConfirm}
-                                            disabled={confirmDisabled || confirmLoading}
-                                            loading={confirmLoading}
-                                            color={confirmVariant === 'danger' ? 'danger' : 'primary'}
-                                            variant="fill"
-                                            size="large"
-                                            style={{ width: '100%' }}
-                                        >
-                                            {confirmText}
-                                        </Button>
-                                    }
-                                    leftButton={
-                                        <Button
-                                            onClick={handleCancel}
-                                            variant="weak"
-                                            color="primary"
-                                            size="large"
-                                            style={{ width: '100%' }}
-                                        >
-                                            {cancelText}
-                                        </Button>
-                                    }
-                                />
-                            ) : (
-                                <BottomCTA.Single
-                                    fixed={false}
-                                    // @ts-expect-error - TDS BottomCTA might have slightly different prop names in type definition
-                                    onClick={onConfirm}
-                                    disabled={confirmDisabled || confirmLoading}
-                                    loading={confirmLoading}
-                                    color={confirmVariant === 'danger' ? 'danger' : 'primary'}
-                                    variant="fill"
-                                    size="large"
-                                >
-                                    {confirmText}
-                                </BottomCTA.Single>
-                            )
-                        )}
-                    </div>
-                )}
-
-                {outerFooter && (
-                    <div className={cn(styles.outerFooter, styles.outerFooterMobile)}>
-                        {outerFooter}
-                    </div>
-                )}
-            </DrawerContent>
+            <ScrollArea
+                className={cn(styles.contentWrapper, contentClassName)}
+                useScrollFade={useScrollFade}
+                onScroll={handleInternalScroll}
+                viewportRef={externalScrollRef ?? null}
+            >
+                <div className={cn(styles.content, padding === "none" && styles.noPadding)}>
+                    {children}
+                </div>
+            </ScrollArea>
         </Drawer>
     );
 };

@@ -27,7 +27,7 @@ npm run analyze            # Analyze bundle size (ANALYZE=true npm run build, op
 ### 🎨 Styling: Strict SCSS Modules
 - **SCSS Modules mandatory**: All components must use `.module.scss` files
 - **Tailwind CSS prohibited**: Maintains design consistency across project
-- **TDS Mobile Design System**: Based on Toss Design System Mobile aesthetics
+- **TDS Mobile First**: Use [Toss Design System Mobile](https://tossmini-docs.toss.im/tds-mobile/) components primarily. Use Radix UI only for missing features.
 - **Design tokens**: Use `@use "@/styles/variables" as v;` and `@use "@/styles/mixins" as m;`
 - **Primary color**: Banana yellow `#FBC02D` (theme identity)
 - **Color variables**: Use semantic variables like `$color-primary`, `$color-bg-page`, etc.
@@ -142,7 +142,7 @@ export default ComponentName;
 - **Styling**: SCSS Modules + TDS Mobile design system
 - **State Management**: Zustand (client), TanStack Query (server state)
 - **Database**: Supabase (Remote CLI, no local Docker)
-- **UI Components**: Radix UI primitives + custom styling
+- **UI Components**: TDS Mobile (Primary) + Radix UI (Fallback)
 
 - **Build**: Webpack (not Turbopack for production)
 

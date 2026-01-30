@@ -38,6 +38,8 @@ trigger: always_on
 - `/builder`: 새 청첩장 생성 (스토어 초기화)
 
 ### 4. 스타일링 및 UI 컴포넌트
+- **TDS Mobile First**: UI는 [Toss Design System Mobile](https://tossmini-docs.toss.im/tds-mobile/)을 최우선으로 사용
+- **Radix UI**: TDS에 없는 컴포넌트는 Radix UI 사용
 - Primary 컬러: 바나나 옐로우 `#FBC02D`
 - 애니메이션: iOS 느낌 (`cubic-bezier(0.16, 1, 0.3, 1)`)
 - **SCSS Modules 필수 사용 (Tailwind 금지)**

@@ -13,7 +13,7 @@
 ## 🎨 스타일링 및 디자인 시스템 (Strict Rule)
 - **SCSS Modules 필수**: 모든 컴포넌트 스타일링은 반드시 SCSS Modules를 사용합니다.
 - **Tailwind 금지**: 컴포넌트 단위에서 Tailwind CSS 유틸리티 클래스 사용을 엄격히 금지합니다. (일관된 디자인 시스템 유지 목적)
-- **TDS Mobile 기반**: [Toss Design System Mobile](https://tossmini-docs.toss.im/tds-mobile/)의 미학을 따릅니다.
+- **TDS Mobile First**: UI 개발 시 [Toss Design System Mobile](https://tossmini-docs.toss.im/tds-mobile/) 컴포넌트를 최우선으로 사용합니다. TDS에 없는 기능만 Radix UI를 사용합니다.
 - **디자인 토큰**: `src/styles/_variables.scss` 및 `_mixins.scss`에 정의된 토큰을 `@use`하여 사용합니다.
 - **Primary Color**: 바나나 옐로우 `#FBC02D`를 주력으로 사용합니다.
 - **디자인 시스템 문서화**: 신규 컴포넌트 추가 시 `ARCHITECTURE.md`의 [Section 9. 디자인 시스템 가이드]를 준수하여 문서화 페이지를 반드시 생성합니다.
