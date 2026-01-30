@@ -21,74 +21,73 @@ interface DatePickerProps {
     placeholder?: string;
     disabled?: boolean;
     id?: string;
+    ref?: React.Ref<HTMLButtonElement>;
 }
 
-export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
-    ({ value, onChange, onComplete, className, label, placeholder = "날짜 선택", disabled, id }, ref) => {
-        const [isOpen, setIsOpen] = useState(false);
+export const DatePicker = ({ value, onChange, onComplete, className, label, placeholder = "날짜 선택", disabled, id, ref }: DatePickerProps) => {
+    const [isOpen, setIsOpen] = useState(false);
 
-        // Parse string date (YYYY-MM-DD) to Date object
-        const dateValue = value ? parse(value, 'yyyy-MM-dd', new Date()) : undefined;
+    // Parse string date (YYYY-MM-DD) to Date object
+    const dateValue = value ? parse(value, 'yyyy-MM-dd', new Date()) : undefined;
 
-        const handleSelect: SelectSingleEventHandler = (date) => {
-            if (date) {
-                onChange(format(date, 'yyyy-MM-dd'));
-                setIsOpen(false);
-                onComplete?.();
-            }
-        };
+    const handleSelect: SelectSingleEventHandler = (date) => {
+        if (date) {
+            onChange(format(date, 'yyyy-MM-dd'));
+            setIsOpen(false);
+            onComplete?.();
+        }
+    };
 
-        return (
-            <>
-                <TextField.Button
-                    ref={ref}
-                    id={id}
-                    label={label || ''}
-                    variant="line"
-                    placeholder={placeholder}
-                    value={dateValue ? format(dateValue, 'PPP', { locale: ko }) : ""}
-                    onClick={() => !disabled && setIsOpen(true)}
-                    disabled={disabled ?? false}
-                    className={className}
-                />
-                <Modal open={isOpen} onOpenChange={setIsOpen}>
-                    <Modal.Overlay />
-                    <Modal.Content
-                        style={{
-                            padding: '32px 0 0',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            maxHeight: '80vh',
-                            width: '90vw',
-                            maxWidth: '400px',
-                            backgroundColor: '#fff'
-                        }}
-                    >
-                        <div style={{ textAlign: 'center', marginBottom: '1.5rem', flexShrink: 0 }}>
-                            <Text typography="t4" fontWeight="bold">날짜를 선택하세요</Text>
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'center', padding: '0 20px 20px' }}>
-                            <Calendar
-                                mode="single"
-                                selected={dateValue}
-                                defaultMonth={dateValue || new Date()}
-                                onSelect={handleSelect}
-                                className={styles.calendar || ""}
-                            />
-                        </div>
-                        <div style={{ padding: '20px', paddingTop: 0 }}>
-                            <Button
-                                style={{ width: '100%' }}
-                                onClick={() => setIsOpen(false)}
-                            >
-                                닫기
-                            </Button>
-                        </div>
-                    </Modal.Content>
-                </Modal>
-            </>
-        );
-    }
-);
+    return (
+        <>
+            <TextField.Button
+                ref={ref}
+                id={id}
+                label={label || ''}
+                variant="line"
+                placeholder={placeholder}
+                value={dateValue ? format(dateValue, 'PPP', { locale: ko }) : ""}
+                onClick={() => !disabled && setIsOpen(true)}
+                disabled={disabled ?? false}
+                className={className}
+            />
+            <Modal open={isOpen} onOpenChange={setIsOpen}>
+                <Modal.Overlay />
+                <Modal.Content
+                    style={{
+                        padding: '32px 0 0',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        maxHeight: '80vh',
+                        width: '90vw',
+                        maxWidth: '400px',
+                        backgroundColor: '#fff'
+                    }}
+                >
+                    <div style={{ textAlign: 'center', marginBottom: '1.5rem', flexShrink: 0 }}>
+                        <Text typography="t4" fontWeight="bold">날짜를 선택하세요</Text>
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'center', padding: '0 20px 20px' }}>
+                        <Calendar
+                            mode="single"
+                            selected={dateValue}
+                            defaultMonth={dateValue || new Date()}
+                            onSelect={handleSelect}
+                            className={styles.calendar || ""}
+                        />
+                    </div>
+                    <div style={{ padding: '20px', paddingTop: 0 }}>
+                        <Button
+                            style={{ width: '100%' }}
+                            onClick={() => setIsOpen(false)}
+                        >
+                            닫기
+                        </Button>
+                    </div>
+                </Modal.Content>
+            </Modal>
+        </>
+    );
+};
 
 DatePicker.displayName = "DatePicker";
