@@ -115,7 +115,7 @@ const SetupForm = () => {
             <Card variant="ghost" className={styles.whiteBox}>
                 {headerTitle && (
                     <Box key={currentStep} className={cn(styles.headerContent, styles.titleUpdate)}>
-                        <Heading as="h1" size="8" weight="bold" className={styles.stepHeading}>
+                        <Heading as="h1" size="6" weight="bold" className={styles.stepHeading}>
                             {headerTitle.split('\n').map((line, i) => (
                                 <React.Fragment key={i}>
                                     {line}
