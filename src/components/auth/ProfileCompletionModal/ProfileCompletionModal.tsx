@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useCallback } from 'react';
-import { Modal } from '@/components/ui/Modal';
+import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
 import { TextField } from '@/components/ui/TextField';
 import { useToast } from '@/hooks/use-toast';
@@ -73,11 +73,11 @@ export function ProfileCompletionModal({
     ) : undefined;
 
     return (
-        <Modal open={isOpen} onOpenChange={() => { }}>
-            <Modal.Overlay />
-            <Modal.Content>
-                <Modal.Header title="프로필 완성" />
-                <Modal.Body>
+        <Dialog open={isOpen} onOpenChange={() => { }}>
+            <Dialog.Overlay />
+            <Dialog.Content>
+                <Dialog.Header title="프로필 완성" />
+                <Dialog.Body>
                     <div className={styles.introText}>
                         청첩장 서비스 이용을 위해 이름과 연락처를 입력해 주세요.
                     </div>
@@ -112,9 +112,9 @@ export function ProfileCompletionModal({
                             타인에게 공개되거나 광고 목적 등으로 사용되지 않습니다.
                         </p>
                     </div>
-                </Modal.Body>
+                </Dialog.Body>
 
-                <Modal.Footer className={styles.footer}>
+                <Dialog.Footer className={styles.footer}>
                     <Button
                         className={styles.fullWidth}
                         variant="fill"
@@ -130,9 +130,9 @@ export function ProfileCompletionModal({
                             {logoutButton}
                         </div>
                     )}
-                </Modal.Footer>
-            </Modal.Content>
-        </Modal>
+                </Dialog.Footer>
+            </Dialog.Content>
+        </Dialog>
     );
 }
 

@@ -1,75 +1,134 @@
 'use client';
 
 import React from 'react';
-import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog';
-import { Button } from '../Button';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
+import { cn } from '@/lib/utils';
 import styles from './Dialog.module.scss';
 
-interface ConfirmDialogProps {
-    open?: boolean | undefined;
-    onOpenChange?: ((open: boolean) => void) | undefined;
-    title?: string | undefined;
-    description?: React.ReactNode | undefined;
-    confirmText?: string | undefined;
-    cancelText?: string | undefined;
-    onConfirm?: (() => void) | undefined;
-    onCancel?: (() => void) | undefined;
-    variant?: 'primary' | 'danger' | undefined;
-}
+const DialogRoot = DialogPrimitive.Root;
+const DialogTrigger = DialogPrimitive.Trigger;
+const DialogPortal = DialogPrimitive.Portal;
+const DialogClose = DialogPrimitive.Close;
 
-const Root = AlertDialogPrimitive.Root;
+const DialogOverlay = React.forwardRef<
+    React.ElementRef<typeof DialogPrimitive.Overlay>,
+    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
+>(({ className, ...props }, ref) => (
+    <DialogPrimitive.Overlay
+        ref={ref}
+        className={cn(styles.overlay, className)}
+        {...props}
+    />
+));
+DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
-export const ConfirmDialog = ({
-    open,
-    onOpenChange,
+const DialogContent = React.forwardRef<
+    React.ElementRef<typeof DialogPrimitive.Content>,
+    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
+>(({ className, children, ...props }, ref) => (
+    <DialogPortal>
+        <DialogOverlay />
+        <DialogPrimitive.Content
+            ref={ref}
+            className={cn(styles.content, className)}
+            {...props}
+            aria-describedby={props['aria-describedby'] || undefined}
+        >
+            {children}
+        </DialogPrimitive.Content>
+    </DialogPortal>
+));
+DialogContent.displayName = DialogPrimitive.Content.displayName;
+
+const DialogHeader = ({
+    className,
     title,
-    description,
-    confirmText = '확인',
-    cancelText = '취소',
-    onConfirm,
-    onCancel,
-    variant = 'primary'
-}: ConfirmDialogProps) => {
-    return (
-        <Root open={!!open} {...(onOpenChange && { onOpenChange })}>
-            <AlertDialogPrimitive.Portal>
-                <AlertDialogPrimitive.Overlay className={styles.overlay} />
-                <AlertDialogPrimitive.Content
-                    className={styles.content}
-                    {...(!description && { 'aria-describedby': undefined })}
-                >
-                    {title && (
-                        <AlertDialogPrimitive.Title className={styles.title}>
-                            {title}
-                        </AlertDialogPrimitive.Title>
-                    )}
-                    {description && (
-                        <AlertDialogPrimitive.Description className={styles.description}>
-                            {description}
-                        </AlertDialogPrimitive.Description>
-                    )}
-                    <div className={styles.footer}>
-                        <AlertDialogPrimitive.Cancel asChild>
-                            <Button
-                                variant="weak"
-                                onClick={onCancel}
-                            >
-                                {cancelText}
-                            </Button>
-                        </AlertDialogPrimitive.Cancel>
-                        <AlertDialogPrimitive.Action asChild>
-                            <Button
-                                color={variant === 'danger' ? 'danger' : 'primary'}
-                                onClick={onConfirm}
-                            >
-                                {confirmText}
-                            </Button>
-                        </AlertDialogPrimitive.Action>
-                    </div>
-                </AlertDialogPrimitive.Content>
-            </AlertDialogPrimitive.Portal>
-        </Root>
-    );
-};
+    children,
+    ...props
+}: React.HTMLAttributes<HTMLDivElement> & { title?: string }) => (
+    <div
+        className={cn(styles.header, className)}
+        {...props}
+    >
+        {title && (
+            <DialogPrimitive.Title className={styles.title}>
+                {title}
+            </DialogPrimitive.Title>
+        )}
+        {children}
+    </div>
+);
+DialogHeader.displayName = 'DialogHeader';
 
-export const AlertDialog = ConfirmDialog;
+const DialogFooter = ({
+    className,
+    ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+    <div
+        className={cn(styles.footer, className)}
+        {...props}
+    />
+);
+DialogFooter.displayName = 'DialogFooter';
+
+const DialogTitle = React.forwardRef<
+    React.ElementRef<typeof DialogPrimitive.Title>,
+    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
+>(({ className, ...props }, ref) => (
+    <DialogPrimitive.Title
+        ref={ref}
+        className={cn(styles.title, className)}
+        {...props}
+    />
+));
+DialogTitle.displayName = DialogPrimitive.Title.displayName;
+
+const DialogDescription = React.forwardRef<
+    React.ElementRef<typeof DialogPrimitive.Description>,
+    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
+>(({ className, ...props }, ref) => (
+    <DialogPrimitive.Description
+        ref={ref}
+        className={cn(styles.description, className)}
+        {...props}
+    />
+));
+DialogDescription.displayName = DialogPrimitive.Description.displayName;
+
+const DialogBody = ({
+    className,
+    ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+    <div
+        className={cn(styles.body, className)}
+        {...props}
+    />
+);
+DialogBody.displayName = 'DialogBody';
+
+const Dialog = Object.assign(DialogRoot, {
+    Trigger: DialogTrigger,
+    Portal: DialogPortal,
+    Overlay: DialogOverlay,
+    Content: DialogContent,
+    Header: DialogHeader,
+    Footer: DialogFooter,
+    Title: DialogTitle,
+    Description: DialogDescription,
+    Body: DialogBody,
+    Close: DialogClose,
+});
+
+export {
+    Dialog,
+    DialogPortal,
+    DialogOverlay,
+    DialogTrigger,
+    DialogClose,
+    DialogContent,
+    DialogHeader,
+    DialogFooter,
+    DialogTitle,
+    DialogDescription,
+    DialogBody,
+};

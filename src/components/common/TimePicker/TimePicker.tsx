@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { cn } from '@/lib/utils';
-import { Modal } from '@/components/ui/Modal';
+import { Dialog as Modal } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
 import { TextField } from '@/components/ui/TextField';
 
@@ -18,7 +18,6 @@ interface TimePickerProps {
     id?: string;
     disabled?: boolean;
     ref?: React.Ref<HTMLButtonElement>;
-    labelOption?: "appear" | "sustain";
 }
 
 type Period = 'AM' | 'PM';
@@ -33,10 +32,9 @@ const TimePickerRaw = ({
     minuteStep = 10,
     id,
     disabled,
-    labelOption = "appear"
 }: TimePickerProps, ref: React.Ref<HTMLButtonElement>) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [tempValue, setTempValue] = useState(value || '14:00');
+    const [tempValue, setTempValue] = useState(value || '13:00');
 
     // Parse values for display and modal state
     const { displayValue, currentTM, tPeriod, tDisplayHour } = useMemo(() => {
@@ -61,8 +59,8 @@ const TimePickerRaw = ({
             : '';
 
         // Temp value parsing
-        const [tH, tM] = (tempValue || '14:00').split(':');
-        const thi = parseInt(tH || '14', 10);
+        const [tH, tM] = (tempValue || '13:00').split(':');
+        const thi = parseInt(tH || '13', 10);
         const tPm = thi >= 12;
         const tp: Period = tPm ? 'PM' : 'AM';
         const tdh = String(thi > 12 ? thi - 12 : (thi === 0 ? 12 : thi));
@@ -94,9 +92,9 @@ const TimePickerRaw = ({
     // Functional update to avoid stale closures
     const updateTempTime = useCallback((updates: { period?: Period, hour?: string, minute?: string }) => {
         setTempValue(prev => {
-            const currentVal = prev || '12:00';
+            const currentVal = prev || '13:00';
             const [hStr, mStr] = currentVal.split(':');
-            const h = parseInt(hStr || '12', 10);
+            const h = parseInt(hStr || '13', 10);
             const m = mStr || '00';
 
             // 현재 상태 계산
@@ -187,13 +185,12 @@ const TimePickerRaw = ({
                 ref={ref}
                 id={id}
                 label={label || ''}
-                labelOption={labelOption}
                 variant="box"
                 placeholder={placeholder}
                 value={displayValue}
                 onClick={() => {
                     if (!disabled) {
-                        setTempValue(value || '12:00');
+                        setTempValue(value || '13:00');
                         setIsOpen(true);
                     }
                 }}

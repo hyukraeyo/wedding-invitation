@@ -309,7 +309,7 @@ export const INITIAL_STATE = {
     useFlowerIcon: true,
     order: 'groom-first' as const,
     date: '',
-    time: '',
+    time: '13:00',
     location: '',
     address: '',
     detailAddress: '',

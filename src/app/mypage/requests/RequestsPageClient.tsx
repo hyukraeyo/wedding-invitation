@@ -22,7 +22,7 @@ import type { ApprovalRequestSummary } from '@/services/approvalRequestService';
 import type { InvitationSummaryRecord } from '@/lib/invitation-summary';
 import { EmptyState } from '@/components/ui/EmptyState';
 
-import { Modal } from '@/components/ui/Modal';
+import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
 const RejectionReasonModal = dynamic(
     () => import('@/components/common/RejectionReasonModal'),
@@ -261,14 +261,14 @@ export default function RequestsPageClient({
 
             {/* Modals... */}
             {/* Modals... */}
-            <Modal open={confirmConfig.isOpen} onOpenChange={(o) => setConfirmConfig(p => ({ ...p, isOpen: o }))}>
-                <Modal.Overlay />
-                <Modal.Content>
-                    <Modal.Header title={confirmConfig.title} />
-                    <Modal.Body className={styles.centerBody}>
+            <Dialog open={confirmConfig.isOpen} onOpenChange={(o) => setConfirmConfig(p => ({ ...p, isOpen: o }))}>
+                <Dialog.Overlay />
+                <Dialog.Content>
+                    <Dialog.Header title={confirmConfig.title} />
+                    <Dialog.Body className={styles.centerBody}>
                         {confirmConfig.description}
-                    </Modal.Body>
-                    <Modal.Footer className={styles.modalFooter}>
+                    </Dialog.Body>
+                    <Dialog.Footer className={styles.modalFooter}>
                         {confirmConfig.type !== 'INFO_ONLY' && (
                             <Button
                                 className={styles.flex1}
@@ -290,9 +290,9 @@ export default function RequestsPageClient({
                         >
                             승인
                         </Button>
-                    </Modal.Footer>
-                </Modal.Content>
-            </Modal>
+                    </Dialog.Footer>
+                </Dialog.Content>
+            </Dialog>
 
             {rejectionTarget && (() => {
                 const targetRequest = allRequests.find(r => r.invitation_id === rejectionTarget.id);
@@ -322,23 +322,23 @@ export default function RequestsPageClient({
             })()}
 
             {viewRejectionData && (
-                <Modal open={!!viewRejectionData} onOpenChange={() => setViewRejectionData(null)}>
-                    <Modal.Overlay />
-                    <Modal.Content>
-                        <Modal.Header title="거절/취소 사유" />
-                        <Modal.Body>
+                <Dialog open={!!viewRejectionData} onOpenChange={() => setViewRejectionData(null)}>
+                    <Dialog.Overlay />
+                    <Dialog.Content>
+                        <Dialog.Header title="거절/취소 사유" />
+                        <Dialog.Body>
                             <div
                                 className={styles.rejectionReasonBox}
                                 dangerouslySetInnerHTML={{ __html: parseRejection(viewRejectionData).displayReason || '내용이 없습니다.' }}
                             />
-                        </Modal.Body>
-                        <Modal.Footer className={styles.modalFooter}>
+                        </Dialog.Body>
+                        <Dialog.Footer className={styles.modalFooter}>
                             <Button className={styles.flex1} variant="fill" size="lg" onClick={() => setViewRejectionData(null)}>
                                 확인
                             </Button>
-                        </Modal.Footer>
-                    </Modal.Content>
-                </Modal>
+                        </Dialog.Footer>
+                    </Dialog.Content>
+                </Dialog>
             )}
         </MyPageContent>
     );

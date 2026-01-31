@@ -32,7 +32,7 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import styles from './GallerySection.module.scss';
 import { useShallow } from 'zustand/react/shallow';
-import { Modal } from '@/components/ui/Modal';
+import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
 
 interface SortableItemProps {
@@ -314,19 +314,19 @@ export default React.memo(function GallerySectionContent() {
                             </div>
                         </SortableContext>
 
-                        <Modal
+                        <Dialog
                             open={isLimitModalOpen}
                             onOpenChange={setIsLimitModalOpen}
                         >
-                            <Modal.Overlay />
-                            <Modal.Content>
-                                <Modal.Header title="알림" />
-                                <Modal.Body className={styles.centerBody}>
+                            <Dialog.Overlay />
+                            <Dialog.Content>
+                                <Dialog.Header title="알림" />
+                                <Dialog.Body className={styles.centerBody}>
                                     <p style={{ fontSize: '1rem', color: '#666' }}>
                                         사진은 최대 10장까지 등록 가능합니다.
                                     </p>
-                                </Modal.Body>
-                                <Modal.Footer className={styles.paddedFooter}>
+                                </Dialog.Body>
+                                <Dialog.Footer className={styles.paddedFooter}>
                                     <Button
                                         variant="fill"
                                         color="primary"
@@ -336,9 +336,9 @@ export default React.memo(function GallerySectionContent() {
                                     >
                                         확인
                                     </Button>
-                                </Modal.Footer>
-                            </Modal.Content>
-                        </Modal>
+                                </Dialog.Footer>
+                            </Dialog.Content>
+                        </Dialog>
 
                         <DragOverlay dropAnimation={{
                             sideEffects: defaultDropAnimationSideEffects({

@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useInvitationStore } from "@/store/useInvitationStore";
 import { useShallow } from "zustand/react/shallow";
-import { Modal } from "@/components/ui/Modal";
+import { Dialog } from "@/components/ui/Dialog";
 import { Button } from "@/components/ui/Button";
 import { Text } from "@/components/ui/Text";
 import { TextField } from "@/components/ui/TextField";
@@ -68,16 +68,16 @@ export function InvitationOnboardingModal({ isOpen, onClose }: InvitationOnboard
     };
 
     return (
-        <Modal open={isOpen} onOpenChange={(open) => !open && onClose()}>
-            <Modal.Overlay />
-            <Modal.Content>
-                <Modal.Header>
+        <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+            <Dialog.Overlay />
+            <Dialog.Content>
+                <Dialog.Header>
                     <div className={styles.header}>
                         <Text typography="t4" fontWeight="bold">Invitation basics</Text>
                         <Text typography="t6" color="#666">Enter the essentials now. You can edit everything later.</Text>
                     </div>
-                </Modal.Header>
-                <Modal.Body>
+                </Dialog.Header>
+                <Dialog.Body>
                     <div className={styles.container}>
                         <div className={styles.section}>
                             <div className={styles.row}>
@@ -147,17 +147,17 @@ export function InvitationOnboardingModal({ isOpen, onClose }: InvitationOnboard
                             </div>
                         </div>
                     </div>
-                </Modal.Body>
-                <Modal.Footer className={styles.footer}>
+                </Dialog.Body>
+                <Dialog.Footer className={styles.footer}>
                     <Button className={styles.button} variant="weak" size="lg" onClick={onClose}>
                         Cancel
                     </Button>
                     <Button className={styles.button} variant="fill" size="lg" loading={loading} onClick={handleSubmit}>
                         Start
                     </Button>
-                </Modal.Footer>
-            </Modal.Content>
-        </Modal>
+                </Dialog.Footer>
+            </Dialog.Content>
+        </Dialog>
     );
 }
 

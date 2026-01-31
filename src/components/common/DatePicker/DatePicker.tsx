@@ -5,7 +5,7 @@ import { Calendar } from '@/components/ui/Calendar';
 import { format, parse } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { SelectSingleEventHandler } from 'react-day-picker';
-import { Modal } from '@/components/ui/Modal';
+import { Dialog as Modal } from '@/components/ui/Dialog';
 import { TextField } from '@/components/ui/TextField';
 import { Button } from '@/components/ui/Button';
 import styles from './DatePicker.module.scss';
@@ -20,10 +20,9 @@ interface DatePickerProps {
     disabled?: boolean;
     id?: string;
     ref?: React.Ref<HTMLButtonElement>;
-    labelOption?: "appear" | "sustain";
 }
 
-export const DatePicker = ({ value, onChange, onComplete, className, label, placeholder = "날짜 선택", disabled, id, ref, labelOption = "appear" }: DatePickerProps) => {
+export const DatePicker = ({ value, onChange, onComplete, className, label, placeholder = "날짜 선택", disabled, id, ref }: DatePickerProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
     // Parse string date (YYYY-MM-DD) to Date object
@@ -43,7 +42,6 @@ export const DatePicker = ({ value, onChange, onComplete, className, label, plac
                 ref={ref}
                 id={id}
                 label={label || ''}
-                labelOption={labelOption}
                 variant="box"
                 placeholder={placeholder}
                 value={dateValue ? format(dateValue, 'PPP', { locale: ko }) : ""}

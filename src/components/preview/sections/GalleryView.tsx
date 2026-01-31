@@ -74,7 +74,7 @@ const GalleryView = memo(({
     const focusTrapRef = useFocusTrap<HTMLDivElement>(popupIndex !== null);
 
     useScrollLock(popupIndex !== null, {
-        containerSelector: '#invitation-modal-root',
+        containerSelector: '#invitation-dialog-root',
         usePreviousSibling: true,
     });
 
@@ -97,7 +97,7 @@ const GalleryView = memo(({
 
     useEffect(() => {
         const timer = setTimeout(() => {
-            setPortalElement(document.getElementById('invitation-modal-root') || document.body);
+            setPortalElement(document.getElementById('invitation-dialog-root') || document.body);
         }, 0);
         return () => clearTimeout(timer);
     }, []);

@@ -473,8 +473,8 @@ const InvitationCanvasContent = memo(({
         </>
       ) : null}
 
-      {/* Portal Root for Modals (to keep them inside the mockup) */}
-      <div id="invitation-modal-root" className={styles.modalRoot} />
+      {/* Portal Root for Dialogs (to keep them inside the mockup) */}
+      <div id="invitation-dialog-root" className={styles.modalRoot} />
 
       {/* Font Size UX/UI */}
       {theme.allowFontScale && (

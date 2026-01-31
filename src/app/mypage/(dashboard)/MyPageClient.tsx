@@ -41,7 +41,7 @@ const ProfileCompletionModal = dynamic(
     () => import('@/components/auth/ProfileCompletionModal').then(mod => mod.ProfileCompletionModal),
     { ssr: false }
 );
-import { Modal } from '@/components/ui/Modal';
+import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
 const RejectionReasonModal = dynamic(
     () => import('@/components/common/RejectionReasonModal'),
@@ -675,19 +675,19 @@ export default function MyPageClient({
             />
 
 
-            <Modal
+            <Dialog
                 open={confirmConfig.isOpen}
                 onOpenChange={(open) => setConfirmConfig(prev => ({ ...prev, isOpen: open }))}
             >
-                <Modal.Overlay />
-                <Modal.Content>
-                    <Modal.Header title={confirmConfig.title} />
-                    <Modal.Body>
+                <Dialog.Overlay />
+                <Dialog.Content>
+                    <Dialog.Header title={confirmConfig.title} />
+                    <Dialog.Body>
                         <div className={styles.modalDescription}>
                             {confirmConfig.description}
                         </div>
-                    </Modal.Body>
-                    <Modal.Footer className={styles.modalFooter}>
+                    </Dialog.Body>
+                    <Dialog.Footer className={styles.modalFooter}>
                         {confirmConfig.type !== 'INFO_ONLY' && (
                             <Button
                                 className={styles.flex1}
@@ -715,9 +715,9 @@ export default function MyPageClient({
                         >
                             확인
                         </Button>
-                    </Modal.Footer>
-                </Modal.Content>
-            </Modal>
+                    </Dialog.Footer>
+                </Dialog.Content>
+            </Dialog>
 
             {rejectionTarget ? (
                 <RejectionReasonModal
@@ -739,16 +739,16 @@ export default function MyPageClient({
 
             {/* Auto-Notification Modal */}
             {autoNotificationTarget && (
-                <Modal
+                <Dialog
                     open={!!autoNotificationTarget}
                     onOpenChange={(open) => {
                         if (!open) handleCloseAutoNotification();
                     }}
                 >
-                    <Modal.Overlay />
-                    <Modal.Content>
-                        <Modal.Header title={autoNotificationTarget.isApproval ? '승인 완료' : parseRejection(autoNotificationTarget.rejection).title} />
-                        <Modal.Body>
+                    <Dialog.Overlay />
+                    <Dialog.Content>
+                        <Dialog.Header title={autoNotificationTarget.isApproval ? '승인 완료' : parseRejection(autoNotificationTarget.rejection).title} />
+                        <Dialog.Body>
                             <div
                                 className={`${styles.rejectionMessageBox} ${autoNotificationTarget.isApproval ? styles.success : ''}`}
                                 dangerouslySetInnerHTML={{
@@ -757,14 +757,14 @@ export default function MyPageClient({
                                         : parseRejection(autoNotificationTarget.rejection).displayReason || '내용이 없습니다.'
                                 }}
                             />
-                        </Modal.Body>
-                        <Modal.Footer className={styles.modalFooter}>
+                        </Dialog.Body>
+                        <Dialog.Footer className={styles.modalFooter}>
                             <Button className={styles.flex1} variant="fill" size="lg" onClick={handleCloseAutoNotification}>
                                 확인
                             </Button>
-                        </Modal.Footer>
-                    </Modal.Content>
-                </Modal>
+                        </Dialog.Footer>
+                    </Dialog.Content>
+                </Dialog>
             )}
         </MyPageContent >
     );

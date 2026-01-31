@@ -6,15 +6,10 @@
 
 .FormField {
   display: grid;
-  margin-bottom: 20px;
 }
 
 .FormLabel {
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 1.5;
-  color: v.$grey-900;
-  margin-bottom: 8px;
+  font-family: inherit;
 }
 
 .FormMessage {

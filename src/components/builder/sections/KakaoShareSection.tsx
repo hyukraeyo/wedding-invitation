@@ -16,7 +16,7 @@ import styles from './KakaoShareSection.module.scss';
 import { KAKAO_SHARE_SAMPLES } from '@/constants/samples';
 import type { SectionProps, SamplePhraseItem } from '@/types/builder';
 
-import { Modal } from '@/components/ui/Modal';
+import { Dialog } from '@/components/ui/Dialog';
 
 export default function KakaoShareSection(props: SectionProps) {
     const kakao = useInvitationStore(useShallow(state => state.kakaoShare));
@@ -133,11 +133,11 @@ export default function KakaoShareSection(props: SectionProps) {
                             <MessageCircle size={16} />
                             미리보기
                         </Button>
-                        <Modal open={previewOpen} onOpenChange={setPreviewOpen}>
-                            <Modal.Overlay />
-                            <Modal.Content>
-                                <Modal.Header title="카카오톡 공유 미리보기" />
-                                <Modal.Body className={styles.modalBody}>
+                        <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
+                            <Dialog.Overlay />
+                            <Dialog.Content>
+                                <Dialog.Header title="카카오톡 공유 미리보기" />
+                                <Dialog.Body className={styles.modalBody}>
                                     <div className={styles.card}>
                                         {kakao.imageUrl ? (
                                             <div className={cn(
@@ -183,8 +183,8 @@ export default function KakaoShareSection(props: SectionProps) {
                                             <ChevronRight size={12} className={styles.footerChevron} />
                                         </div>
                                     </div>
-                                </Modal.Body>
-                                <Modal.Footer className={styles.paddedFooter}>
+                                </Dialog.Body>
+                                <Dialog.Footer className={styles.paddedFooter}>
                                     <Button
                                         variant="weak"
                                         onClick={() => setPreviewOpen(false)}
@@ -192,25 +192,25 @@ export default function KakaoShareSection(props: SectionProps) {
                                     >
                                         닫기
                                     </Button>
-                                </Modal.Footer>
-                            </Modal.Content>
-                        </Modal>
+                                </Dialog.Footer>
+                            </Dialog.Content>
+                        </Dialog>
                     </div>
                 </div>
             </SectionAccordion>
 
             {/* Sample Phrases Modal */}
-            <Modal open={isSampleModalOpen} onOpenChange={setIsSampleModalOpen}>
-                <Modal.Overlay />
-                <Modal.Content>
-                    <Modal.Header title="카카오 공유 추천 문구" />
-                    <Modal.Body>
+            <Dialog open={isSampleModalOpen} onOpenChange={setIsSampleModalOpen}>
+                <Dialog.Overlay />
+                <Dialog.Content>
+                    <Dialog.Header title="카카오 공유 추천 문구" />
+                    <Dialog.Body>
                         <SampleList
                             items={KAKAO_SHARE_SAMPLES}
                             onSelect={handleSelectSample}
                         />
-                    </Modal.Body>
-                    <Modal.Footer className={styles.paddedFooter}>
+                    </Dialog.Body>
+                    <Dialog.Footer className={styles.paddedFooter}>
                         <Button
                             variant="weak"
                             onClick={() => setIsSampleModalOpen(false)}
@@ -218,9 +218,9 @@ export default function KakaoShareSection(props: SectionProps) {
                         >
                             닫기
                         </Button>
-                    </Modal.Footer>
-                </Modal.Content>
-            </Modal>
+                    </Dialog.Footer>
+                </Dialog.Content>
+            </Dialog>
         </>
     );
 }

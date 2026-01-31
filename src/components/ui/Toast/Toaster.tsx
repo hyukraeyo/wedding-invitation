@@ -15,7 +15,11 @@ export const Toaster = () => {
                     key={toast.id}
                     className={clsx(s.toast, toast.variant && s[toast.variant])}
                 >
-                    {toast.message}
+                    {toast.icon && <span className={s.icon}>{toast.icon}</span>}
+                    <div className={s.content}>
+                        {toast.title && <div className={s.title}>{toast.title}</div>}
+                        <div className={s.message}>{toast.message}</div>
+                    </div>
                 </div>
             ))}
         </div>

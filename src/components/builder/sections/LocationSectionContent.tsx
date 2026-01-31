@@ -15,7 +15,7 @@ import { useShallow } from 'zustand/react/shallow';
 
 const DaumPostcodeEmbed = dynamic(() => import('react-daum-postcode'), { ssr: false });
 const KakaoSdkLoader = dynamic(() => import('./KakaoSdkLoader'), { ssr: false });
-import { Modal } from '@/components/ui/Modal';
+import { Dialog } from '@/components/ui/Dialog';
 
 export default function LocationSectionContent() {
     const {
@@ -290,11 +290,11 @@ export default function LocationSectionContent() {
                 </div>
             </div>
 
-            <Modal open={isSearchOpen} onOpenChange={setIsSearchOpen}>
-                <Modal.Overlay />
-                <Modal.Content>
-                    <Modal.Header title="주소 검색" />
-                    <Modal.Body className={styles.postcodeBody}>
+            <Dialog open={isSearchOpen} onOpenChange={setIsSearchOpen}>
+                <Dialog.Overlay />
+                <Dialog.Content>
+                    <Dialog.Header title="주소 검색" />
+                    <Dialog.Body className={styles.postcodeBody}>
                         <div className={styles.postcodeWrapper}>
                             {isSearchOpen && (
                                 <DaumPostcodeEmbed
@@ -304,9 +304,9 @@ export default function LocationSectionContent() {
                                 />
                             )}
                         </div>
-                    </Modal.Body>
-                </Modal.Content>
-            </Modal>
+                    </Dialog.Body>
+                </Dialog.Content>
+            </Dialog>
         </>
     );
 }

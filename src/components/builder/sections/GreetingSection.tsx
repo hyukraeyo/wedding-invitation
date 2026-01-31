@@ -20,7 +20,7 @@ import { useShallow } from 'zustand/react/shallow';
 import type { SectionProps, SamplePhraseItem } from '@/types/builder';
 import { GREETING_SAMPLES } from '@/constants/samples';
 import { SectionAccordion } from '@/components/ui/Accordion';
-import { Modal } from '@/components/ui/Modal';
+import { Dialog } from '@/components/ui/Dialog';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { useMediaQuery } from '@/hooks/use-media-query';
 
@@ -214,17 +214,17 @@ export default function GreetingSection(props: SectionProps) {
             </SectionAccordion>
 
             {isDesktop ? (
-                <Modal
+                <Dialog
                     open={isSampleModalOpen}
                     onOpenChange={setIsSampleModalOpen}
                 >
-                    <Modal.Overlay />
-                    <Modal.Content>
-                        <Modal.Header title="인사말 추천 문구" />
-                        <Modal.Body>
+                    <Dialog.Overlay />
+                    <Dialog.Content>
+                        <Dialog.Header title="인사말 추천 문구" />
+                        <Dialog.Body>
                             {renderSampleList()}
-                        </Modal.Body>
-                        <Modal.Footer>
+                        </Dialog.Body>
+                        <Dialog.Footer>
 
                             <BottomCTA.Single
                                 fixed={false}
@@ -232,9 +232,9 @@ export default function GreetingSection(props: SectionProps) {
                             >
                                 닫기
                             </BottomCTA.Single>
-                        </Modal.Footer>
-                    </Modal.Content>
-                </Modal >
+                        </Dialog.Footer>
+                    </Dialog.Content>
+                </Dialog >
             ) : (
                 <BottomSheet
                     open={isSampleModalOpen}

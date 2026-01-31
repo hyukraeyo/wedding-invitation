@@ -6,7 +6,7 @@ import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import styles from './MenuSelect.module.scss';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import { Modal } from '@/components/ui/Modal';
+import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
 
 interface MenuSelectOption<T> {
@@ -82,13 +82,13 @@ export const MenuSelect = <T extends string | number>({
         return (
             <div className={cn(className)}>
                 {trigger}
-                <Modal open={isOpen} onOpenChange={setIsOpen}>
-                    <Modal.Overlay />
-                    <Modal.Content>
+                <Dialog open={isOpen} onOpenChange={setIsOpen}>
+                    <Dialog.Overlay />
+                    <Dialog.Content>
                         {(modalTitle || placeholder) && (
-                            <Modal.Header title={modalTitle || placeholder} />
+                            <Dialog.Header title={modalTitle || placeholder} />
                         )}
-                        <Modal.Body className={styles.bodyPadding}>
+                        <Dialog.Body className={styles.bodyPadding}>
                             <Menu.Dropdown className={styles.dropdown}>
                                 {options.map((option) => (
                                     <Menu.DropdownCheckItem
@@ -105,9 +105,9 @@ export const MenuSelect = <T extends string | number>({
                                     </Menu.DropdownCheckItem>
                                 ))}
                             </Menu.Dropdown>
-                        </Modal.Body>
-                    </Modal.Content>
-                </Modal>
+                        </Dialog.Body>
+                    </Dialog.Content>
+                </Dialog>
             </div>
         );
     }

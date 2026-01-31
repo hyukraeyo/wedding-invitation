@@ -54,42 +54,5 @@
   }
 }
 
-.formWrapper {
-  background-color: v.$color-background;
-  border-radius: 2rem; // Slightly smaller rounded corners for modern look
-  padding: 2.5rem; // Reduced padding
-  border: 1px solid rgba(v.$color-border, 0.4);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
-  animation: setupFadeIn 0.8s v.$ease-ios both;
 
-  @media (max-width: 768px) {
-    padding: 1.25rem;
-    padding-top: 4.5rem; // Reduced to fit common header height (3.5rem) better
-    border-radius: 0;
-    border: none;
-    box-shadow: none;
-    animation: setupFadeInMobile 0.8s v.$ease-ios both;
-  }
-}
 
-@keyframes setupFadeInMobile {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes setupFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px) scale(0.98);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}

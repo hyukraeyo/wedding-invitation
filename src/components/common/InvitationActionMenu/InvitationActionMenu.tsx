@@ -12,7 +12,7 @@ import {
     Calendar
 } from 'lucide-react';
 import { IconButton } from '@/components/ui/IconButton';
-import { Modal } from '@/components/ui/Modal';
+import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
 import { Text } from '@/components/ui/Text';
 
@@ -223,52 +223,52 @@ export const InvitationActionMenu: React.FC<InvitationActionMenuProps> = ({
             />
 
             {/* 거절 사유 모달 */}
-            <Modal open={showRejectionModal} onOpenChange={setShowRejectionModal}>
-                <Modal.Overlay />
-                <Modal.Content>
-                    <Modal.Header>
+            <Dialog open={showRejectionModal} onOpenChange={setShowRejectionModal}>
+                <Dialog.Overlay />
+                <Dialog.Content>
+                    <Dialog.Header>
                         <div className={styles.centerHeader}>
                             <Text typography="t4" fontWeight="bold">{REJECTION_LABEL}</Text>
                             <Text typography="t6" color="#666">관리자가 작성한 거절 사유입니다</Text>
                         </div>
-                    </Modal.Header>
-                    <Modal.Body>
+                    </Dialog.Header>
+                    <Dialog.Body>
                         <div className={styles.rejectionBox}>
                             {rejectionData?.rejection_reason || '거절 사유가 없습니다.'}
                         </div>
-                    </Modal.Body>
-                    <Modal.Footer className={styles.footer}>
+                    </Dialog.Body>
+                    <Dialog.Footer className={styles.footer}>
                         <Button className={styles.flex1} variant="fill" size="lg" onClick={() => setShowRejectionModal(false)}>
                             확인
                         </Button>
-                    </Modal.Footer>
-                </Modal.Content>
-            </Modal>
+                    </Dialog.Footer>
+                </Dialog.Content>
+            </Dialog>
 
             {/* 수정 확인 모달 */}
-            <Modal open={showEditConfirmModal} onOpenChange={setShowEditConfirmModal}>
-                <Modal.Overlay />
-                <Modal.Content>
-                    <Modal.Header>
+            <Dialog open={showEditConfirmModal} onOpenChange={setShowEditConfirmModal}>
+                <Dialog.Overlay />
+                <Dialog.Content>
+                    <Dialog.Header>
                         <div className={styles.centerHeader}>
                             <Text typography="t4" fontWeight="bold">수정 확인</Text>
                             <Text typography="t6" color="#666">이미 승인이 완료된 청첩장입니다</Text>
                         </div>
-                    </Modal.Header>
-                    <Modal.Body className={styles.centerBody}>
+                    </Dialog.Header>
+                    <Dialog.Body className={styles.centerBody}>
                         이미 승인이 완료된 청첩장입니다.<br />
                         수정 모드로 전환 시 <strong>다시 승인 신청</strong>을 해야 공유가 가능합니다. 수정하시겠습니까?
-                    </Modal.Body>
-                    <Modal.Footer className={styles.footer}>
+                    </Dialog.Body>
+                    <Dialog.Footer className={styles.footer}>
                         <Button className={styles.flex1} variant="weak" size="lg" onClick={() => setShowEditConfirmModal(false)}>
                             취소
                         </Button>
                         <Button className={styles.flex1} variant="fill" size="lg" onClick={handleConfirmEdit}>
                             수정하기
                         </Button>
-                    </Modal.Footer>
-                </Modal.Content>
-            </Modal>
+                    </Dialog.Footer>
+                </Dialog.Content>
+            </Dialog>
         </>
     );
 };

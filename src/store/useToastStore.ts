@@ -3,8 +3,10 @@ import { create } from 'zustand';
 export interface ToastData {
     id: string;
     message: string;
-    variant?: 'default' | 'destructive' | 'success' | undefined;
+    title?: string | undefined;
+    variant?: 'default' | 'destructive' | 'success' | 'info' | undefined;
     duration?: number | undefined;
+    icon?: React.ReactNode | undefined;
 }
 
 interface ToastState {

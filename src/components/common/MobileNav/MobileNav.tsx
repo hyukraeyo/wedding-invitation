@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { ClipboardList, Bell, User, Menu, HelpCircle, LogOut, Sparkles, Save, Eye, X } from 'lucide-react';
 import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
 import { MENU_TITLES } from '@/constants/navigation';
-import { Modal } from '@/components/ui/Modal';
+import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
 import { IconButton } from '@/components/ui/IconButton';
 import { signOut } from 'next-auth/react';
@@ -168,11 +168,11 @@ export function MobileNav({
 
             {!onPreviewToggle && (
                 <>
-                    <Modal open={isMoreOpen} onOpenChange={setIsMoreOpen}>
-                        <Modal.Overlay />
-                        <Modal.Content>
-                            <Modal.Header title="전체 메뉴" />
-                            <Modal.Body className={styles.drawerPadding}>
+                    <Dialog open={isMoreOpen} onOpenChange={setIsMoreOpen}>
+                        <Dialog.Overlay />
+                        <Dialog.Content>
+                            <Dialog.Header title="전체 메뉴" />
+                            <Dialog.Body className={styles.drawerPadding}>
                                 <div className={styles.drawerMenu}>
                                     <ViewTransitionLink
                                         href="/mypage/account"
@@ -207,15 +207,15 @@ export function MobileNav({
                                         <span>{MENU_TITLES.LOGOUT}</span>
                                     </Button>
                                 </div>
-                            </Modal.Body>
-                        </Modal.Content>
-                    </Modal>
+                            </Dialog.Body>
+                        </Dialog.Content>
+                    </Dialog>
 
-                    <Modal open={isEventModalOpen} onOpenChange={setIsEventModalOpen}>
-                        <Modal.Overlay />
-                        <Modal.Content>
-                            <Modal.Header title="설날 이벤트 준비중" />
-                            <Modal.Body className={styles.centerBody}>
+                    <Dialog open={isEventModalOpen} onOpenChange={setIsEventModalOpen}>
+                        <Dialog.Overlay />
+                        <Dialog.Content>
+                            <Dialog.Header title="설날 이벤트 준비중" />
+                            <Dialog.Body className={styles.centerBody}>
                                 <div className={styles.eventIcon}>🎁</div>
                                 <p className={styles.eventTitle}>
                                     다양한 혜택을 준비한 이벤트가
@@ -225,14 +225,14 @@ export function MobileNav({
                                 <p className={styles.eventDesc}>
                                     곧 찾아올 할인 혜택에 기대해주세요. 😊
                                 </p>
-                            </Modal.Body>
-                            <Modal.Footer className={styles.modalFooter}>
+                            </Dialog.Body>
+                            <Dialog.Footer className={styles.modalFooter}>
                                 <Button className={styles.fullWidth} variant="fill" size="lg" onClick={() => setIsEventModalOpen(false)}>
                                     확인
                                 </Button>
-                            </Modal.Footer>
-                        </Modal.Content>
-                    </Modal>
+                            </Dialog.Footer>
+                        </Dialog.Content>
+                    </Dialog>
                 </>
             )}
         </>

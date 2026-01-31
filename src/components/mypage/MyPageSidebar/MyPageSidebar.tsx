@@ -1,6 +1,6 @@
 "use client";
 
-import { Modal } from '@/components/ui/Modal';
+import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
 import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
 import { Badge } from '@/components/ui/Badge';
@@ -147,11 +147,11 @@ export function MyPageSidebar({
                 </nav>
             </aside>
 
-            <Modal open={isEventModalOpen} onOpenChange={setIsEventModalOpen}>
-                <Modal.Overlay />
-                <Modal.Content>
-                    <Modal.Header title="🎁 오픈 이벤트 준비 중!" />
-                    <Modal.Body>
+            <Dialog open={isEventModalOpen} onOpenChange={setIsEventModalOpen}>
+                <Dialog.Overlay />
+                <Dialog.Content>
+                    <Dialog.Header title="🎁 오픈 이벤트 준비 중!" />
+                    <Dialog.Body>
                         <div className={styles.eventModalContent}>
                             <div className={styles.eventIconWrapper}>
                                 <span style={{ fontSize: '3rem' }}>🎁</span>
@@ -165,34 +165,34 @@ export function MyPageSidebar({
                                 (커밍 쑨- ✨)
                             </p>
                         </div>
-                    </Modal.Body>
-                    <Modal.Footer className={styles.footer}>
+                    </Dialog.Body>
+                    <Dialog.Footer className={styles.footer}>
                         <Button className={styles.fullWidth} variant="fill" size="lg" onClick={() => setIsEventModalOpen(false)}>
                             확인
                         </Button>
-                    </Modal.Footer>
-                </Modal.Content>
-            </Modal>
+                    </Dialog.Footer>
+                </Dialog.Content>
+            </Dialog>
 
-            <Modal open={isCustomerServiceModalOpen} onOpenChange={setIsCustomerServiceModalOpen}>
-                <Modal.Overlay />
-                <Modal.Content>
-                    <Modal.Header title={MENU_TITLES.CUSTOMER_SERVICE} />
-                    <Modal.Body>
+            <Dialog open={isCustomerServiceModalOpen} onOpenChange={setIsCustomerServiceModalOpen}>
+                <Dialog.Overlay />
+                <Dialog.Content>
+                    <Dialog.Header title={MENU_TITLES.CUSTOMER_SERVICE} />
+                    <Dialog.Body>
                         <div className={styles.description}>
                             카카오톡 채널로 연결됩니다. 문의사항을 남겨주시면 빠르게 답변 드리겠습니다.
                         </div>
-                    </Modal.Body>
-                    <Modal.Footer className={styles.footer}>
+                    </Dialog.Body>
+                    <Dialog.Footer className={styles.footer}>
                         <Button className={styles.flex1} variant="weak" size="lg" onClick={() => setIsCustomerServiceModalOpen(false)}>
                             닫기
                         </Button>
                         <Button className={styles.flex1} variant="fill" size="lg" onClick={handleCustomerServiceConfirm}>
                             확인
                         </Button>
-                    </Modal.Footer>
-                </Modal.Content>
-            </Modal>
+                    </Dialog.Footer>
+                </Dialog.Content>
+            </Dialog>
         </>
     );
 }

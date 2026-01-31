@@ -8,7 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import type { User } from 'next-auth';
-import { IconButton, Modal, Flex, Box } from '@/components/ui';
+import { IconButton, Dialog, Flex, Box } from '@/components/ui';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { useShallow } from 'zustand/react/shallow';
@@ -192,16 +192,16 @@ export default function Header() {
                     showSave={!!onSave || pathname.startsWith('/builder')}
                 />
             </header>
-            <Modal open={showResetDialog} onOpenChange={setShowResetDialog}>
-                <Modal.Overlay />
-                <Modal.Content>
-                    <Modal.Header title="새 청첩장 만들기" />
-                    <Modal.Body className={styles.centerBody}>
+            <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
+                <Dialog.Overlay />
+                <Dialog.Content>
+                    <Dialog.Header title="새 청첩장 만들기" />
+                    <Dialog.Body className={styles.centerBody}>
                         작성 중인 내용이 있습니다. 정말 새 청첩장을 만드시겠습니까?
                         <br />
                         (작성된 내용은 초기화됩니다.)
-                    </Modal.Body>
-                    <Modal.Footer>
+                    </Dialog.Body>
+                    <Dialog.Footer>
                         <Suspense fallback={<Flex className={styles.suspenseFallback} />}>
                             <Flex direction="column" gap="2" className={styles.resetDialogContent}>
                                 <Button
@@ -221,9 +221,9 @@ export default function Header() {
                                 </Button>
                             </Flex>
                         </Suspense>
-                    </Modal.Footer>
-                </Modal.Content>
-            </Modal>
+                    </Dialog.Footer>
+                </Dialog.Content>
+            </Dialog>
         </>
     );
 }

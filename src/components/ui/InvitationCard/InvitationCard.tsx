@@ -11,7 +11,7 @@ import type { ApprovalRequestSummary } from '@/services/approvalRequestService';
 import styles from './InvitationCard.module.scss';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
-import { Modal } from '@/components/ui/Modal';
+import { Dialog } from '@/components/ui/Dialog';
 import { useInvitationStatus } from '@/hooks/useInvitationStatus';
 import { InvitationActionMenu } from '@/components/common/InvitationActionMenu';
 import { clsx } from 'clsx';
@@ -190,17 +190,17 @@ const InvitationCard = React.memo(({
 
             {/* Rejection Reason Modal with Re-apply Option */}
             {isRejected && rejectionData && (
-                <Modal open={showRejectionModal} onOpenChange={setShowRejectionModal}>
-                    <Modal.Overlay />
-                    <Modal.Content>
-                        <Modal.Header title={REJECTION_TITLE} />
-                        <Modal.Body>
+                <Dialog open={showRejectionModal} onOpenChange={setShowRejectionModal}>
+                    <Dialog.Overlay />
+                    <Dialog.Content>
+                        <Dialog.Header title={REJECTION_TITLE} />
+                        <Dialog.Body>
                             <div
                                 className={styles.rejectionMessage}
                                 dangerouslySetInnerHTML={{ __html: displayReason || '내용이 없습니다.' }}
                             />
-                        </Modal.Body>
-                        <Modal.Footer className={styles.modalFooter}>
+                        </Dialog.Body>
+                        <Dialog.Footer className={styles.modalFooter}>
                             <Button className={styles.flex1} variant="weak" size="lg" onClick={() => setShowRejectionModal(false)}>
                                 닫기
                             </Button>
@@ -210,9 +210,9 @@ const InvitationCard = React.memo(({
                             }}>
                                 사용 신청
                             </Button>
-                        </Modal.Footer>
-                    </Modal.Content>
-                </Modal>
+                        </Dialog.Footer>
+                    </Dialog.Content>
+                </Dialog>
             )}
         </div>
     );

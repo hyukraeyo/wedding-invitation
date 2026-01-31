@@ -85,11 +85,20 @@
 .form {
     display: flex;
     flex-direction: column;
+    gap: 1.75rem;
 }
 
 .fieldWrapper {
     cursor: pointer;
     transition: opacity 0.4s v.$ease-ios, transform 0.4s v.$ease-ios, filter 0.4s v.$ease-ios;
+
+    .label {
+        font-size: v.$font-size-xs;
+        font-weight: 600;
+        color: v.$grey-600;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
 
     &.inactive {
         opacity: 0.5;
@@ -117,4 +126,51 @@
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+@keyframes setupFadeInMobile {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes setupFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.whiteBox {
+    background-color: v.$color-background;
+    border-radius: 2rem;
+    padding: 2.5rem;
+    border: 1px solid rgba(v.$color-border, 0.4);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.04);
+    animation: setupFadeIn 0.8s v.$ease-ios both;
+    width: 100%;
+    box-sizing: border-box;
+
+    @media (max-width: 768px) {
+        padding: 1.25rem;
+        padding-top: 4.5rem;
+        border-radius: 0;
+        border: none;
+        box-shadow: none;
+        animation: setupFadeInMobile 0.8s v.$ease-ios both;
+    }
+}
+
+.ctaWrapper {
+    margin-top: 1rem;
+    width: 100%;
 }

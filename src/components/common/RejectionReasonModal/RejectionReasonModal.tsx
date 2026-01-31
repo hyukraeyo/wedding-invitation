@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Modal } from '@/components/ui/Modal';
+import { Dialog as Modal } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
 import dynamic from 'next/dynamic';
 import styles from './RejectionReasonModal.module.scss';

@@ -48,11 +48,15 @@ const Single = ({ children, onClick, fixed = true, loading, disabled, className,
         </Button>
     );
 
-    if (fixed) {
-        return <FixedBottomCTA transparent={!!transparent}>{button}</FixedBottomCTA>;
+    if (!fixed && !transparent) {
+        return button;
     }
 
-    return button;
+    return (
+        <FixedBottomCTA fixed={fixed} transparent={!!transparent}>
+            {button}
+        </FixedBottomCTA>
+    );
 };
 
 export interface BottomCTADoubleProps {
@@ -109,11 +113,15 @@ const Double = ({
         </div>
     );
 
-    if (fixed) {
-        return <FixedBottomCTA className={className} transparent={!!transparent}>{content}</FixedBottomCTA>;
+    if (!fixed && !transparent) {
+        return <div className={clsx(s.buttonGroup, className)}>{content}</div>;
     }
 
-    return <div className={clsx(s.buttonGroup, className)}>{content}</div>;
+    return (
+        <FixedBottomCTA fixed={fixed} className={className} transparent={!!transparent}>
+            {content}
+        </FixedBottomCTA>
+    );
 };
 
 export const BottomCTA = {

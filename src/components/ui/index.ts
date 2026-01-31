@@ -15,7 +15,7 @@ export * from './IconButton';
 export * from './TextButton';
 export * from './Badge';
 export * from './Dialog';
-export * from './Modal';
+export * from './AlertDialog';
 export * from './BottomSheet';
 export * from './InfoMessage';
 export * from './EmptyState';

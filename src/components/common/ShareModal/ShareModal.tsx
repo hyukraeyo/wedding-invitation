@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Modal } from '@/components/ui/Modal';
+import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
 import { IconButton } from '@/components/ui/IconButton';
 import { Text } from '@/components/ui/Text';
@@ -42,16 +42,16 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     };
 
     return (
-        <Modal open={open} onOpenChange={onOpenChange}>
-            <Modal.Overlay />
-            <Modal.Content>
-                <Modal.Header>
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <Dialog.Overlay />
+            <Dialog.Content>
+                <Dialog.Header>
                     <div className={styles.header}>
                         <Text typography="t4" fontWeight="bold">청첩장 공유하기</Text>
                         <Text typography="t6" color="#666">원하는 방법으로 청첩장을 공유해보세요</Text>
                     </div>
-                </Modal.Header>
-                <Modal.Body>
+                </Dialog.Header>
+                <Dialog.Body>
                     <div className={styles.shareContainer}>
                         <div className={styles.shareMethod}>
                             <IconButton
@@ -87,8 +87,8 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                             <span className={styles.shareLabel}>카카오톡</span>
                         </div>
                     </div>
-                </Modal.Body>
-                <Modal.Footer className={styles.footer}>
+                </Dialog.Body>
+                <Dialog.Footer className={styles.footer}>
                     <div className={styles.shareButtonRow}>
                         <Button
                             variant="weak"
@@ -98,8 +98,8 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                             닫기
                         </Button>
                     </div>
-                </Modal.Footer>
-            </Modal.Content>
-        </Modal>
+                </Dialog.Footer>
+            </Dialog.Content>
+        </Dialog>
     );
 };

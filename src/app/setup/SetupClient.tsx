@@ -9,9 +9,7 @@ const SetupClient = () => {
     return (
         <Flex direction="column" className={styles.container}>
             <Flex direction="column" className={styles.content}>
-                <Box className={styles.formWrapper}>
-                    <SetupForm />
-                </Box>
+                <SetupForm />
             </Flex>
         </Flex>
     );
