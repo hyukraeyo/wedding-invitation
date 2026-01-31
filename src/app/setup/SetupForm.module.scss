@@ -70,9 +70,54 @@
     gap: 1.75rem;
 }
 
+.fieldContainer {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition: grid-template-rows 0.5s v.$ease-ios, opacity 0.5s v.$ease-ios, margin-bottom 0.5s v.$ease-ios;
+    overflow: hidden;
+    margin-bottom: 0px;
+
+    &.visible {
+        grid-template-rows: 1fr;
+        opacity: 1;
+        margin-bottom: 1.75rem;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        .fieldWrapper {
+            transform: translateY(0);
+            filter: blur(0);
+            opacity: 1;
+
+            &.inactive {
+                opacity: 0.5;
+                filter: grayscale(0.2);
+                transform: scale(0.98);
+
+                &:hover {
+                    opacity: 0.7;
+                    filter: grayscale(0);
+                    transform: scale(1);
+                }
+            }
+        }
+    }
+}
+
+.fieldInner {
+    min-height: 0;
+}
+
 .fieldWrapper {
     cursor: pointer;
-    transition: opacity 0.4s v.$ease-ios, transform 0.4s v.$ease-ios, filter 0.4s v.$ease-ios;
+    transition: opacity 0.5s v.$ease-ios, transform 0.6s v.$ease-ios, filter 0.5s v.$ease-ios;
+    padding-top: 2px; // Visual breathing room
+    transform: translateY(-12px);
+    filter: blur(4px);
+    opacity: 0;
 
     .label {
         font-size: v.$font-size-sm;
@@ -80,35 +125,6 @@
         color: v.$grey-500; // Softer gray for label
         margin-bottom: 0.75rem;
         display: block;
-    }
-
-    &.inactive {
-        opacity: 0.5;
-        filter: grayscale(0.2);
-        transform: scale(0.98);
-
-        &:hover {
-            opacity: 0.7;
-            filter: grayscale(0);
-            transform: scale(1);
-        }
-    }
-
-    // Animation for newly appearing fields (Smooth sweep)
-    animation: fieldAppear 0.8s v.$ease-ios both;
-}
-
-@keyframes fieldAppear {
-    from {
-        opacity: 0;
-        transform: translateY(-24px);
-        filter: blur(4px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-        filter: blur(0);
     }
 }
 
