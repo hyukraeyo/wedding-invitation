@@ -1,5 +1,5 @@
-import { LoadingSpinner } from '@/components/common/LoadingSpinner';
+import { Loader } from '@/components/ui';
 
 export default function Loading() {
-    return <LoadingSpinner variant="full" />;
+    return <Loader.Banana variant="full" />;
 }

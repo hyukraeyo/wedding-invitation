@@ -16,11 +16,11 @@ export const metadata: Metadata = {
 };
 
 import { Suspense } from "react";
-import { LoadingSpinner } from "@/components/common/LoadingSpinner";
+import { Loader } from "@/components/ui";
 
 export default function Page() {
     return (
-        <Suspense fallback={<LoadingSpinner />}>
+        <Suspense fallback={<Loader.Banana />}>
             <LoginPage />
         </Suspense>
     );

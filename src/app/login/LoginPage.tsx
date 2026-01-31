@@ -4,17 +4,17 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Button, Heading, Flex, Box } from '@/components/ui';
+import { Heading, Flex, Box, Loader } from '@/components/ui';
 import { signIn } from 'next-auth/react';
 import styles from './LoginPage.module.scss';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import dynamic from 'next/dynamic';
+
 const ProfileCompletionModal = dynamic(
     () => import('@/components/auth/ProfileCompletionModal').then(mod => mod.ProfileCompletionModal),
     { ssr: false }
 );
-import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 
 /**
  * LoginPage: 소셜 로그인 전용 페이지
@@ -48,13 +48,11 @@ export default function LoginPage() {
 
     // 로딩 중일 때는 빈 화면 대신 로딩 표시
     if (authLoading) {
-        return <LoadingSpinner />;
+        return <Loader.Banana />;
     }
 
     // 이미 로그인하고 프로필도 완성했다면 리디렉션되므로 렌더링 안 함
     if (user && isProfileComplete) return null;
-
-
 
     // 로그인 상태이지만 프로필이 미완성인 경우 프로필 완성 모달 표시
     // profileLoading이 아닐 때만 표시 (로딩 중일 때는 깜빡임 방지)
@@ -81,7 +79,7 @@ export default function LoginPage() {
     return (
         <>
             {/* Full Screen Loading Animation */}
-            {loadingProvider ? <LoadingSpinner /> : null}
+            {loadingProvider ? <Loader.Banana /> : null}
 
             <Flex align="center" justify="center" className={styles.overlay}>
                 <Box className={styles.modal}>
@@ -99,7 +97,6 @@ export default function LoginPage() {
                         <button
                             className={`${styles.socialButton} ${styles.kakao}`}
                             onClick={() => handleOAuthLogin('kakao')}
-
                             disabled={!!loadingProvider}
                             type="button"
                         >
@@ -112,10 +109,9 @@ export default function LoginPage() {
                             <span>카카오로 시작하기</span>
                         </button>
 
-                        <Button
+                        <button
                             className={`${styles.socialButton} ${styles.naver}`}
                             onClick={() => handleOAuthLogin('naver')}
-
                             disabled={!!loadingProvider}
                             type="button"
                         >
@@ -123,10 +119,8 @@ export default function LoginPage() {
                                 <path d="M16.273 12.845L7.376 0H0v24h7.726V11.156L16.624 24H24V0h-7.727v12.845z" />
                             </svg>
                             <span>네이버로 시작하기</span>
-                        </Button>
+                        </button>
                     </Flex>
-
-                    {/* Hidden Admin Login Trigger (Triple click on title to show admin login?) - For now, fully removed as requested */}
 
                     {/* Footer */}
                     <Box className={styles.footer}>

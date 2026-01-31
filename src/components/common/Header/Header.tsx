@@ -8,7 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import type { User } from 'next-auth';
-import { IconButton, Dialog, Flex, Box } from '@/components/ui';
+import { IconButton, Dialog, Flex, Box, ProgressBar } from '@/components/ui';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { useShallow } from 'zustand/react/shallow';
@@ -138,7 +138,7 @@ export default function Header() {
         isUploading: state.isUploading,
     })));
 
-    const { onSave, isLoading, notificationCount, title, showBack, onBack } = useHeaderStore();
+    const { onSave, isLoading, notificationCount, title, showBack, onBack, progress } = useHeaderStore();
 
     const [showResetDialog, setShowResetDialog] = useState(false);
     const { toast } = useToast();
@@ -217,6 +217,12 @@ export default function Header() {
                         <div className={styles.actionSpacer} />
                     )}
                 </div>
+
+                {progress !== null && (
+                    <div className={styles.progressWrapper}>
+                        <ProgressBar value={progress} className={styles.headerProgressBar} />
+                    </div>
+                )}
             </header>
             <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
                 <Dialog.Overlay />

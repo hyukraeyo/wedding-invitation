@@ -9,10 +9,9 @@ import { useAuth } from '@/hooks/useAuth';
 import { invitationService } from '@/services/invitationService';
 import { useHeaderStore } from '@/store/useHeaderStore';
 import { useToast } from '@/hooks/use-toast';
-import { LoadingSpinner } from '@/components/common/LoadingSpinner';
+import { Loader, BottomSheet, Flex, Box } from '@/components/ui';
 import styles from './BuilderPage.module.scss';
 import { MobileNav } from '@/components/common/MobileNav';
-import { BottomSheet, Flex, Box } from '@/components/ui';
 import { clsx } from 'clsx';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { useShallow } from 'zustand/react/shallow';
@@ -182,7 +181,7 @@ export function BuilderClient() {
 
     return (
         <Flex direction="column" className={styles.container}>
-            {isSaving ? <LoadingSpinner /> : null}
+            {isSaving ? <Loader.Banana variant="fixed" /> : null}
 
             <Flex as="main" className={styles.workspace}>
                 <Box as="section" className={styles.sidebar} id="sidebar-portal-root">

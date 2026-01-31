@@ -1,210 +1,127 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useHeaderStore } from '@/store/useHeaderStore';
-import { TextField, IconButton, ProgressBar, Heading, Flex, Box, Form, FormField, FormLabel, FormControl } from '@/components/ui';
+import { TextField, Heading, Flex, Box, Form, FormField, FormLabel, FormControl, Card } from '@/components/ui';
 import { DatePicker } from '@/components/common/DatePicker';
 import { TimePicker } from '@/components/common/TimePicker';
-import { Sparkles, ChevronLeft } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { parseKoreanName, cn } from '@/lib/utils';
 import { BottomCTA } from '@/components/ui/BottomCTA';
 import styles from './SetupForm.module.scss';
 
+const STEPS = [
+    { title: "신랑님의 성함을\n알려주세요", field: "groom" },
+    { title: "신부님의 성함을\n알려주세요", field: "bride" },
+    { title: "예식일은\n언제인가요?", field: "date" },
+    { title: "예식 시간은\n언제인가요?", field: "time" }
+];
+
 const SetupForm = () => {
     const router = useRouter();
-    const store = useInvitationStore();
     const { toast } = useToast();
+    const { groom, bride, date, time, setGroom, setBride, setDate, setTime, setSlug } = useInvitationStore();
+    const { setHeader, resetHeader } = useHeaderStore();
 
-    const [groomFullName, setGroomFullName] = useState(`${store.groom.lastName}${store.groom.firstName}`);
-    const [brideFullName, setBrideFullName] = useState(`${store.bride.lastName}${store.bride.firstName}`);
-    const [date, setDate] = useState(store.date);
-    const [time, setTime] = useState(store.time);
-    const [slug, setSlug] = useState(store.slug);
+    const [currentStep, setCurrentStep] = useState(0);
+    const [highestStepReached, setHighestStepReached] = useState(0);
 
-    // Refs for auto-focus
+    const [groomFullName, setGroomFullName] = useState(groom.firstName ? `${groom.lastName}${groom.firstName}` : '');
+    const [brideFullName, setBrideFullName] = useState(bride.firstName ? `${bride.lastName}${bride.firstName}` : '');
+
     const groomNameRef = useRef<HTMLInputElement>(null);
     const brideNameRef = useRef<HTMLInputElement>(null);
     const dateRef = useRef<HTMLButtonElement>(null);
     const timeRef = useRef<HTMLButtonElement>(null);
 
-
-    const [currentStep, setCurrentStep] = useState(0);
-    const [highestStepReached, setHighestStepReached] = useState(() => {
-        const hasGroom = !!(store.groom.firstName || store.groom.lastName);
-        const hasBride = !!(store.bride.firstName || store.bride.lastName);
-        const hasDate = !!store.date;
-
-        if (hasDate) return 3;
-        if (hasBride) return 2;
-        if (hasGroom) return 1;
-        return 0;
-    });
-
-    // 🍌 Auto-generate slug helper
-    const generateSlug = (name: string) => {
-        const firstName = name.length > 1 ? name.substring(1) : name;
-        const randomStr = Math.random().toString(36).substring(2, 6);
-        return `${firstName.trim().toLowerCase()}-${randomStr}`;
-    };
-
-    const handleSubmit = (e?: React.FormEvent) => {
-        if (e) e.preventDefault();
-
-        // Ensure slug exists or generate it
-        let finalSlug = slug;
-        if (!finalSlug) {
-            const baseName = brideFullName || groomFullName || 'wedding';
-            finalSlug = generateSlug(baseName);
-            setSlug(finalSlug);
-        }
-
-        if (!groomFullName || !brideFullName || !date || !time || !finalSlug) {
-            toast({ variant: 'destructive', text: '모든 필수 정보를 입력해주세요.' });
-            return;
-        }
-
-        const parsedGroom = parseKoreanName(groomFullName);
-        const parsedBride = parseKoreanName(brideFullName);
-
-        // Update Store
-        store.setGroom(parsedGroom);
-        store.setBride(parsedBride);
-        store.setDate(date);
-        store.setTime(time);
-        store.setSlug(finalSlug);
-
-        // Update mainScreen defaults if they are empty
-        if (!store.mainScreen.groomName) {
-            store.setMainScreen({
-                groomName: parsedGroom.firstName,
-                brideName: parsedBride.firstName
-            });
-        }
-
-        toast({
-            variant: 'success',
-            text: '기본 정보가 설정되었습니다. 빌더로 이동합니다!'
-        });
-        router.push('/builder?onboarding=true');
-    };
-
-    const handleNext = (force = false) => {
-        // 모든 필드가 노출된 상태(시작하기 버튼 노출 상태)에서는 바로 제출
-        if (highestStepReached >= 3) {
-            handleSubmit();
-            return;
-        }
-
-        if (!force && !isStepValid()) return;
-
-        if (currentStep < 3) {
-            setCurrentStep(prev => prev + 1);
-            setHighestStepReached(prev => Math.max(prev, currentStep + 1));
-        }
-    };
-
-    const handleBack = () => {
-        router.back();
-    };
-
-    const isStepValid = () => {
+    const isStepValid = useCallback(() => {
         switch (currentStep) {
-            case 0: return !!groomFullName.trim();
-            case 1: return !!brideFullName.trim();
+            case 0: return groomFullName.trim().length > 0;
+            case 1: return brideFullName.trim().length > 0;
             case 2: return !!date;
             case 3: return !!time;
             default: return false;
         }
-    };
+    }, [currentStep, groomFullName, brideFullName, date, time]);
 
-    // Progress Calculation
-    const fields = [groomFullName, brideFullName, date, time];
-    const completedFields = fields.filter(f => !!f).length;
-    const progress = (completedFields / fields.length) * 100;
+    const progress = Math.round(((currentStep + 1) / STEPS.length) * 100);
 
-    const { setHeader, resetHeader } = useHeaderStore();
+    const handleBack = useCallback(() => {
+        if (currentStep > 0) {
+            setCurrentStep(prev => prev - 1);
+        } else {
+            router.back();
+        }
+    }, [currentStep, router]);
 
-    // Sync Header
     useEffect(() => {
         setHeader({
             title: "청첩장 시작하기",
             showBack: true,
-            onBack: handleBack
+            onBack: handleBack,
+            progress: progress
         });
-        // We don't reset on every step, but on unmount
         return () => resetHeader();
-    }, []);
+    }, [progress, handleBack, setHeader, resetHeader]);
 
-    // Focus current input when step changes
     useEffect(() => {
-        const focusInput = () => {
-            switch (currentStep) {
-                case 0:
-                    groomNameRef.current?.focus();
-                    break;
-                case 1:
-                    brideNameRef.current?.focus();
-                    break;
-                case 2:
-                    dateRef.current?.focus();
-                    dateRef.current?.click();
-                    break;
-                case 3:
-                    timeRef.current?.focus();
-                    timeRef.current?.click();
-                    break;
-            }
-        };
-        const timer = setTimeout(focusInput, 300);
-        return () => clearTimeout(timer);
+        if (currentStep === 0) groomNameRef.current?.focus();
+        else if (currentStep === 1) brideNameRef.current?.focus();
     }, [currentStep]);
 
-    // Dynamic Header Text
-    const getHeaderText = () => {
-        // 모든 필드가 노출된 상태 (최고 단계 도달)
-        if (highestStepReached >= 3) {
-            return { title: "", subtitle: "" };
+    const handleNext = (isAuto = false) => {
+        if (!isStepValid()) {
+            if (!isAuto) toast({ variant: 'destructive', description: "정보를 입력해주세요." });
+            return;
         }
 
-        switch (currentStep) {
-            case 0: return { title: "신랑님의 이름을 알려주세요", subtitle: "" };
-            case 1: return { title: "신부님의 이름을 알려주세요", subtitle: "" };
-            case 2: return { title: "예식 날짜를 알려주세요", subtitle: "" };
-            case 3: return { title: "예식 시간을 알려주세요", subtitle: "" };
-            default: return { title: "정보를 입력해주세요", subtitle: "" };
+        if (currentStep === 0) {
+            const { lastName, firstName } = parseKoreanName(groomFullName);
+            setGroom({ lastName, firstName });
+        } else if (currentStep === 1) {
+            const { lastName, firstName } = parseKoreanName(brideFullName);
+            setBride({ lastName, firstName });
         }
-    };
 
-    const { title: headerTitle } = getHeaderText();
-
-    const handleFieldClick = (stepIndex: number) => {
-        if (currentStep !== stepIndex) {
-            setCurrentStep(stepIndex);
+        if (currentStep < STEPS.length - 1) {
+            const nextStep = currentStep + 1;
+            setCurrentStep(nextStep);
+            setHighestStepReached(prev => Math.max(prev, nextStep));
         } else {
-            // Already active step - boost interaction
-            switch (stepIndex) {
-                case 0: groomNameRef.current?.focus(); break;
-                case 1: brideNameRef.current?.focus(); break;
-                case 2: dateRef.current?.click(); break;
-                case 3: timeRef.current?.click(); break;
-            }
+            const slug = `${groomFullName.trim()}-${Math.random().toString(36).substring(2, 6)}`;
+            setSlug(slug);
+            router.push(`/builder?onboarding=true`);
         }
     };
+
+    const handleFieldClick = (step: number) => {
+        if (step <= highestStepReached) {
+            setCurrentStep(step);
+        }
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        handleNext();
+    };
+
+    const headerTitle = STEPS[currentStep]?.title;
 
     return (
         <Box className={styles.container}>
-            <Box className={styles.progressBarWrapper}>
-                <ProgressBar value={progress} className={styles.topProgressBar} />
-            </Box>
-
-            <Box className={styles.whiteBox}>
+            <Card variant="ghost" className={styles.whiteBox}>
                 {headerTitle && (
                     <Box key={currentStep} className={cn(styles.headerContent, styles.titleUpdate)}>
                         <Heading as="h1" size="8" weight="bold" className={styles.stepHeading}>
-                            {headerTitle}
+                            {headerTitle.split('\n').map((line, i) => (
+                                <React.Fragment key={i}>
+                                    {line}
+                                    {i !== headerTitle.split('\n').length - 1 && <br />}
+                                </React.Fragment>
+                            ))}
                         </Heading>
                     </Box>
                 )}
@@ -317,8 +234,7 @@ const SetupForm = () => {
                         </Box>
                     )}
                 </Form>
-
-            </Box>
+            </Card>
 
             {(currentStep === 3 || isStepValid()) && (
                 <Box className={styles.ctaWrapper}>
@@ -339,7 +255,7 @@ const SetupForm = () => {
                     </BottomCTA.Single>
                 </Box>
             )}
-        </Box >
+        </Box>
     );
 };
 

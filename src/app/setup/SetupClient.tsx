@@ -3,7 +3,7 @@
 import React from 'react';
 import { SetupForm } from './SetupForm';
 import styles from './SetupPage.module.scss';
-import { Flex, Box } from '@/components/ui';
+import { Flex } from '@/components/ui';
 
 const SetupClient = () => {
     return (

@@ -28,9 +28,12 @@ const DialogContent = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
     const internalRef = React.useRef<HTMLDivElement>(null);
     const setRefs = React.useCallback((node: HTMLDivElement | null) => {
-        (internalRef as any).current = node;
-        if (typeof ref === 'function') ref(node);
-        else if (ref) (ref as any).current = node;
+        (internalRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        if (typeof ref === 'function') {
+            ref(node);
+        } else if (ref) {
+            (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        }
     }, [ref]);
 
     const handleOpenAutoFocus = (event: Event) => {

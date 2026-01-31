@@ -207,3 +207,26 @@
     color: v.$grey-900;
   }
 }
+
+.progressWrapper {
+  position: absolute;
+  bottom: -1px; // Sit on top of or just below the border
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 2px;
+  z-index: 10;
+  overflow: hidden;
+  background-color: transparent;
+}
+
+.headerProgressBar {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 0 !important;
+  
+  // Override the internal container if needed
+  :global(.ProgressBar_container__xxxx) { // Just in case, but let's check ProgressBar implementation
+    border-radius: 0 !important;
+  }
+}

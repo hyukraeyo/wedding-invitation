@@ -30,7 +30,6 @@ interface TimePickerProps {
 
 type Period = 'AM' | 'PM';
 
-const ITEM_HEIGHT = 44;
 
 const WheelColumn = ({
     options,

@@ -46,3 +46,4 @@ export * from './SegmentedControl';
 export * from './Tabs';
 export * from './Spacing';
 export * from './Toast';
+export * from './Card';
