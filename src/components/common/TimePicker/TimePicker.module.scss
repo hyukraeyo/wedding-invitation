@@ -4,20 +4,30 @@
 .modalContent {
   border-radius: 32px !important;
   margin: 16px;
-  bottom: 16px !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  width: calc(100% - 32px) !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  transform: none !important;
+  width: auto !important;
   max-width: v.$canvas-max-width !important;
   overflow: hidden;
   border: none !important;
   
+  // Mobile Bottom handling
+  @media (max-width: v.$mobile) {
+    position: fixed !important;
+    margin: 0;
+    border-radius: 32px 32px 0 0 !important;
+  }
+
   // Desktop handling override
   @media (min-width: v.$mobile) {
     bottom: auto !important;
     top: 50% !important;
+    left: 50% !important;
     transform: translate(-50%, -50%) !important;
-    margin: 0;
+    width: 400px !important;
+    border-radius: 32px !important;
   }
 }
 
@@ -31,7 +41,7 @@
   padding: 24px 24px 8px;
   display: flex;
   justify-content: center;
-  z-index: 20; // Ensure it's above picker grid
+  z-index: 20; 
   position: relative;
 }
 
@@ -55,8 +65,8 @@
     background: linear-gradient(
       to bottom,
       v.$white 0%,
-      rgba(v.$white, 0) 25%,
-      rgba(v.$white, 0) 75%,
+      rgba(v.$white, 0) 30%,
+      rgba(v.$white, 0) 70%,
       v.$white 100%
     );
   }
@@ -83,18 +93,16 @@
   z-index: 5;
 }
 
-.scrollWrapper {
+.swiperContainer {
   height: 100%;
-  overflow-y: scroll;
-  scroll-snap-type: y mandatory;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  scroll-behavior: smooth;
-  padding: 0 16px;
+  width: 100%;
+}
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
+.swiperSlide {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 44px !important;
 }
 
 .optionItem {
@@ -102,7 +110,6 @@
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  scroll-snap-align: center;
   font-size: 1.125rem;
   color: v.$grey-400;
   border: none;

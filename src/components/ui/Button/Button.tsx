@@ -10,39 +10,39 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
      * @default 'primary'
      * Radix UI Themes style color 
      */
-    color?: 'primary' | 'secondary' | 'danger' | 'grey';
+    color?: 'primary' | 'secondary' | 'danger' | 'grey' | undefined;
 
     /** 
      * @default 'solid'
      * Radix UI Themes style variants (with TDS aliases)
      */
-    variant?: 'solid' | 'soft' | 'outline' | 'ghost' | 'surface' | 'filled' | 'fill' | 'weak' | 'clear';
+    variant?: 'solid' | 'soft' | 'outline' | 'ghost' | 'surface' | 'filled' | 'fill' | 'weak' | 'clear' | undefined;
 
     /** 
      * @default '2'
      * size 1 (xs) to 4 (xl) 
      */
-    size?: '1' | '2' | '3' | '4' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'tiny' | 'medium' | 'large' | 'large_xl';
+    size?: '1' | '2' | '3' | '4' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'tiny' | 'medium' | 'large' | 'large_xl' | undefined;
 
     /** 
      * @default 'medium'
      */
-    radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
+    radius?: 'none' | 'small' | 'medium' | 'large' | 'full' | undefined;
 
     /** 
      * Whether to use high contrast colors
      */
-    highContrast?: boolean;
+    highContrast?: boolean | undefined;
 
     /** 
      * Show loading spinner and disable interaction
      */
-    loading?: boolean;
+    loading?: boolean | undefined;
 
-    fullWidth?: boolean;
-    asChild?: boolean;
-    leftIcon?: React.ReactNode;
-    rightIcon?: React.ReactNode;
+    fullWidth?: boolean | undefined;
+    asChild?: boolean | undefined;
+    leftIcon?: React.ReactNode | undefined;
+    rightIcon?: React.ReactNode | undefined;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(

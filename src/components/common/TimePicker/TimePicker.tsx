@@ -4,6 +4,14 @@ import { Dialog as Modal } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
 import { TextField } from '@/components/ui/TextField';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { FreeMode, Mousewheel } from 'swiper/modules';
+import type { Swiper as SwiperClass } from 'swiper';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/free-mode';
+
 import styles from './TimePicker.module.scss';
 
 interface TimePickerProps {
@@ -31,67 +39,60 @@ const WheelColumn = ({
     value: string,
     onChange: (val: string) => void,
 }) => {
-    const scrollRef = useRef<HTMLDivElement>(null);
-    const isScrollingRef = useRef(false);
-    const timeoutRef = useRef<NodeJS.Timeout>(null);
+    const swiperRef = useRef<SwiperClass | null>(null);
+    const isInternalUpdateRef = useRef(false);
 
-    // Sync scroll position when value changes externally
+    const initialIndex = useMemo(() => {
+        const index = options.findIndex(opt => opt.value === value);
+        return index !== -1 ? index : 0;
+    }, [options, value]);
+
+    // External value change -> Swiper sync
     useEffect(() => {
-        if (scrollRef.current && !isScrollingRef.current) {
+        if (swiperRef.current && !isInternalUpdateRef.current) {
             const index = options.findIndex(opt => opt.value === value);
-            if (index !== -1) {
-                scrollRef.current.scrollTop = index * ITEM_HEIGHT;
+            if (index !== -1 && index !== swiperRef.current.activeIndex) {
+                swiperRef.current.slideTo(index);
             }
         }
+        // Always reset the flag in the next frame or after the potential sync
+        isInternalUpdateRef.current = false;
     }, [value, options]);
-
-    const handleScroll = useCallback(() => {
-        if (!scrollRef.current) return;
-        isScrollingRef.current = true;
-
-        const scrollTop = scrollRef.current.scrollTop;
-        const index = Math.round(scrollTop / ITEM_HEIGHT);
-
-        if (options[index] && options[index].value !== value) {
-            onChange(options[index].value);
-        }
-
-        if (timeoutRef.current) clearTimeout(timeoutRef.current);
-        timeoutRef.current = setTimeout(() => {
-            isScrollingRef.current = false;
-        }, 150);
-    }, [options, value, onChange]);
 
     return (
         <div className={styles.column}>
-            <div
-                ref={scrollRef}
-                className={styles.scrollWrapper}
-                onScroll={handleScroll}
+            <Swiper
+                direction="vertical"
+                modules={[FreeMode, Mousewheel]}
+                slidesPerView={5}
+                centeredSlides={true}
+                mousewheel={true}
+                initialSlide={initialIndex}
+                onSwiper={(swiper) => {
+                    swiperRef.current = swiper;
+                }}
+                onSlideChange={(swiper) => {
+                    const index = swiper.activeIndex;
+                    if (options[index] && options[index].value !== value) {
+                        isInternalUpdateRef.current = true;
+                        onChange(options[index].value);
+                    }
+                }}
+                className={styles.swiperContainer}
+                slideToClickedSlide={true}
+                grabCursor={true}
+                resistanceRatio={0.5}
             >
-                <div style={{ height: ITEM_HEIGHT * 2 }} />
-                {options.map((opt) => {
-                    const isActive = value === opt.value;
-                    return (
-                        <div
-                            key={opt.value}
-                            className={cn(styles.optionItem, isActive && styles.active)}
-                            onClick={() => {
-                                if (scrollRef.current) {
-                                    const index = options.findIndex(o => o.value === opt.value);
-                                    scrollRef.current.scrollTo({
-                                        top: index * ITEM_HEIGHT,
-                                        behavior: 'smooth'
-                                    });
-                                }
-                            }}
-                        >
-                            {opt.label}
-                        </div>
-                    );
-                })}
-                <div style={{ height: ITEM_HEIGHT * 2 }} />
-            </div>
+                {options.map((opt) => (
+                    <SwiperSlide key={opt.value} className={styles.swiperSlide}>
+                        {({ isActive }) => (
+                            <div className={cn(styles.optionItem, isActive && styles.active)}>
+                                {opt.label}
+                            </div>
+                        )}
+                    </SwiperSlide>
+                ))}
+            </Swiper>
         </div>
     );
 };
@@ -110,34 +111,29 @@ const TimePickerRaw = ({
     const [isOpen, setIsOpen] = useState(false);
     const [tempValue, setTempValue] = useState(value || '13:00');
 
-    // Sync from parent
-    useEffect(() => {
-        if (value) setTempValue(value);
-    }, [value]);
-
-    const { displayValue, currentTM, tPeriod, tDisplayHour } = useMemo(() => {
-        const hasValue = !!value;
-        const [hStr, mStr] = (value || '13:00').split(':');
-        const hInt = parseInt(hStr, 10);
+    // Parse value for display button
+    const displayValue = useMemo(() => {
+        if (!value) return '';
+        const [hStr, mStr] = value.split(':');
+        const hInt = parseInt(hStr || '13', 10);
         const period: Period = hInt >= 12 ? 'PM' : 'AM';
         const displayH = hInt > 12 ? hInt - 12 : (hInt === 0 ? 12 : hInt);
+        return `${period === 'AM' ? '오전' : '오후'} ${displayH}시 ${mStr || '00'}분`;
+    }, [value]);
 
-        const display = hasValue
-            ? `${period === 'AM' ? '오전' : '오후'} ${displayH}시 ${mStr}분`
-            : '';
-
+    // Parse tempValue for wheel state
+    const { currentTM, tPeriod, tDisplayHour } = useMemo(() => {
         const [tHStr, tMStr] = (tempValue || '13:00').split(':');
-        const tHInt = parseInt(tHStr, 10);
+        const tHInt = parseInt(tHStr || '13', 10);
         const tp: Period = tHInt >= 12 ? 'PM' : 'AM';
         const tdh = String(tHInt > 12 ? tHInt - 12 : (tHInt === 0 ? 12 : tHInt));
 
         return {
-            displayValue: display,
             currentTM: tMStr || '00',
             tPeriod: tp,
             tDisplayHour: tdh
         };
-    }, [value, tempValue]);
+    }, [tempValue]);
 
     const hourOptions = useMemo(() =>
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(h => ({
@@ -154,31 +150,34 @@ const TimePickerRaw = ({
         return minutes.map(min => ({ label: `${min}분`, value: min }));
     }, [minuteStep]);
 
-    const updateTempTime = useCallback((updates: { period?: Period, hour?: string, minute?: string }) => {
-        setTempValue(prev => {
-            const [hStr, mStr] = prev.split(':');
-            const h = parseInt(hStr, 10);
-            const currentPeriod: Period = h >= 12 ? 'PM' : 'AM';
-            const currentDisplayH = h > 12 ? h - 12 : (h === 0 ? 12 : h);
+    // Update tempValue logic - NO side effects (onChange) inside here
+    const getNextValue = useCallback((updates: { period?: Period, hour?: string, minute?: string }) => {
+        const [hStr, mStr] = (tempValue || '13:00').split(':');
+        const h = parseInt(hStr || '13', 10);
+        const currentPeriod: Period = h >= 12 ? 'PM' : 'AM';
+        const currentDisplayH = h > 12 ? h - 12 : (h === 0 ? 12 : h);
 
-            const p = updates.period ?? currentPeriod;
-            const dh = updates.hour ?? String(currentDisplayH);
-            const min = updates.minute ?? mStr;
+        const p = updates.period ?? currentPeriod;
+        const dh = updates.hour ?? String(currentDisplayH);
+        const min = updates.minute ?? (mStr || '00');
 
-            let newH = parseInt(dh, 10);
-            if (p === 'PM' && newH !== 12) newH += 12;
-            else if (p === 'AM' && newH === 12) newH = 0;
+        let newH = parseInt(dh, 10);
+        if (p === 'PM' && newH !== 12) newH += 12;
+        else if (p === 'AM' && newH === 12) newH = 0;
 
-            return `${String(newH).padStart(2, '0')}:${min}`;
-        });
-    }, []);
+        return `${String(newH).padStart(2, '0')}:${min}`;
+    }, [tempValue]);
 
-    // Sync to parent
-    useEffect(() => {
-        if (isOpen && tempValue !== value) {
-            onChange(tempValue);
+    const handleTempChange = useCallback((updates: { period?: Period, hour?: string, minute?: string }) => {
+        const finalValue = getNextValue(updates);
+        setTempValue(finalValue);
+
+        // 🍌 Live sync - use a microtask or update it directly if not in a render cycle
+        // Calling onChange here is safe as long as it's an event handler and not an updater function.
+        if (finalValue !== value) {
+            onChange(finalValue);
         }
-    }, [tempValue, isOpen, onChange, value]);
+    }, [onChange, value, getNextValue]);
 
     const handleConfirm = useCallback((e?: React.MouseEvent) => {
         e?.stopPropagation();
@@ -186,6 +185,13 @@ const TimePickerRaw = ({
         setIsOpen(false);
         onComplete?.();
     }, [onChange, tempValue, onComplete]);
+
+    const handleOpenModal = useCallback(() => {
+        if (!disabled) {
+            setTempValue(value || '13:00');
+            setIsOpen(true);
+        }
+    }, [disabled, value]);
 
     return (
         <>
@@ -196,12 +202,7 @@ const TimePickerRaw = ({
                 variant="box"
                 placeholder={placeholder}
                 value={displayValue}
-                onClick={() => {
-                    if (!disabled) {
-                        setTempValue(value || '13:00');
-                        setIsOpen(true);
-                    }
-                }}
+                onClick={handleOpenModal}
                 className={className}
             />
             <Modal open={isOpen} onOpenChange={setIsOpen}>
@@ -218,7 +219,7 @@ const TimePickerRaw = ({
                                 value={tPeriod}
                                 alignment="fluid"
                                 size="md"
-                                onChange={(v: string) => updateTempTime({ period: v as Period })}
+                                onChange={(v: string) => handleTempChange({ period: v as Period })}
                             >
                                 <SegmentedControl.Item value="AM">오전</SegmentedControl.Item>
                                 <SegmentedControl.Item value="PM">오후</SegmentedControl.Item>
@@ -231,12 +232,12 @@ const TimePickerRaw = ({
                             <WheelColumn
                                 options={hourOptions}
                                 value={tDisplayHour}
-                                onChange={(h) => updateTempTime({ hour: h })}
+                                onChange={(h) => handleTempChange({ hour: h })}
                             />
                             <WheelColumn
                                 options={minuteOptions}
                                 value={currentTM}
-                                onChange={(m) => updateTempTime({ minute: m })}
+                                onChange={(m) => handleTempChange({ minute: m })}
                             />
                         </div>
                     </Modal.Body>

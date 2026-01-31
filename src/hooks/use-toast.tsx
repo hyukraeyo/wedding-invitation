@@ -1,6 +1,6 @@
 "use client"
 
-import { useToastStore } from "@/store/useToastStore"
+import { useToastStore, type ToastData } from "@/store/useToastStore"
 import type { ReactNode } from "react"
 import { AlertCircle, CheckCircle2, Info } from "lucide-react"
 
@@ -60,12 +60,13 @@ function useToast() {
       }
     }
 
-    useToastStore.getState().addToast(message, {
-      variant,
-      duration,
-      icon: finalIcon,
-      title,
-    })
+    const toastOptions: Omit<ToastData, 'id' | 'message'> = {};
+    if (variant) toastOptions.variant = variant;
+    if (duration) toastOptions.duration = duration;
+    if (finalIcon) toastOptions.icon = finalIcon;
+    if (title) toastOptions.title = title;
+
+    useToastStore.getState().addToast(message, toastOptions);
   }
 
   return {

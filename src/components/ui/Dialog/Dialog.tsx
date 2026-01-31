@@ -25,19 +25,39 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 const DialogContent = React.forwardRef<
     React.ElementRef<typeof DialogPrimitive.Content>,
     React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
-    <DialogPortal>
-        <DialogOverlay />
-        <DialogPrimitive.Content
-            ref={ref}
-            className={cn(styles.content, className)}
-            {...props}
-            aria-describedby={props['aria-describedby'] || undefined}
-        >
-            {children}
-        </DialogPrimitive.Content>
-    </DialogPortal>
-));
+>(({ className, children, ...props }, ref) => {
+    const internalRef = React.useRef<HTMLDivElement>(null);
+    const setRefs = React.useCallback((node: HTMLDivElement | null) => {
+        (internalRef as any).current = node;
+        if (typeof ref === 'function') ref(node);
+        else if (ref) (ref as any).current = node;
+    }, [ref]);
+
+    const handleOpenAutoFocus = (event: Event) => {
+        event.preventDefault();
+        const focusableElements = internalRef.current?.querySelectorAll(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusableElements?.length) {
+            (focusableElements[0] as HTMLElement).focus();
+        }
+    };
+
+    return (
+        <DialogPortal>
+            <DialogOverlay />
+            <DialogPrimitive.Content
+                ref={setRefs}
+                className={cn(styles.content, className)}
+                onOpenAutoFocus={handleOpenAutoFocus}
+                {...props}
+                aria-describedby={props['aria-describedby'] || undefined}
+            >
+                {children}
+            </DialogPrimitive.Content>
+        </DialogPortal>
+    );
+});
 DialogContent.displayName = DialogPrimitive.Content.displayName;
 
 const DialogHeader = ({
