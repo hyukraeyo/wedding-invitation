@@ -2,7 +2,23 @@
 @use "../../../styles/mixins" as m;
 
 .modalContent {
-  border-radius: 32px 32px 0 0 !important;
+  border-radius: 32px !important;
+  margin: 16px;
+  bottom: 16px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: calc(100% - 32px) !important;
+  max-width: v.$canvas-max-width !important;
+  overflow: hidden;
+  border: none !important;
+  
+  // Desktop handling override
+  @media (min-width: v.$mobile) {
+    bottom: auto !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0;
+  }
 }
 
 .modalBody {
@@ -12,32 +28,20 @@
 }
 
 .periodContainer {
-  padding: 16px 24px;
+  padding: 24px 24px 8px;
   display: flex;
   justify-content: center;
+  z-index: 20; // Ensure it's above picker grid
+  position: relative;
 }
 
 .pickerGrid {
   position: relative;
   display: flex;
-  height: 240px;
-  padding: 0 24px;
+  height: 220px;
   background-color: v.$white;
-  margin-bottom: 16px;
-
-  // Modern Focus Lines
-  &::before, &::after {
-    content: '';
-    position: absolute;
-    left: 24px;
-    right: 24px;
-    height: 1px;
-    background-color: v.$grey-100;
-    z-index: 2;
-  }
-
-  &::before { top: 96px; }
-  &::after { top: 144px; }
+  margin: 8px 0;
+  overflow: hidden;
 
   // Faded Edges Mask
   .mask {
@@ -47,7 +51,7 @@
     right: 0;
     bottom: 0;
     pointer-events: none;
-    z-index: 2;
+    z-index: 10;
     background: linear-gradient(
       to bottom,
       v.$white 0%,
@@ -56,11 +60,27 @@
       v.$white 100%
     );
   }
+
+  .highlightLine {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    right: 16px;
+    height: 44px;
+    transform: translateY(-50%);
+    background-color: v.$grey-50;
+    border: 1px solid v.$grey-100;
+    border-radius: 12px;
+    pointer-events: none;
+    z-index: 1;
+  }
 }
 
 .column {
   flex: 1;
   height: 100%;
+  position: relative;
+  z-index: 5;
 }
 
 .scrollWrapper {
@@ -69,7 +89,8 @@
   scroll-snap-type: y mandatory;
   -ms-overflow-style: none;
   scrollbar-width: none;
-  padding: 96px 0; // Padding to allow first/last items to center (48px * 2)
+  scroll-behavior: smooth;
+  padding: 0 16px;
 
   &::-webkit-scrollbar {
     display: none;
@@ -77,7 +98,7 @@
 }
 
 .optionItem {
-  height: 48px;
+  height: 44px;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -87,12 +108,13 @@
   border: none;
   background: transparent;
   width: 100% !important;
-  transition: all 0.2s v.$ease-ios;
+  transition: all 0.25s v.$ease-ios;
   cursor: pointer;
+  user-select: none;
 
   &.active {
     color: v.$grey-900;
-    font-weight: 700 !important;
+    font-weight: 700;
     font-size: 1.25rem;
   }
 
@@ -102,30 +124,9 @@
 }
 
 .footer {
-  padding: 16px 24px 24px;
+  padding: 8px 24px 24px;
 }
 
 .fullWidth {
   width: 100%;
-}
-
-.periodSection {
-  flex: 1.2;
-  min-width: 0;
-}
-
-.hourSection {
-  flex: 1;
-  min-width: 0;
-}
-
-.separator {
-  color: #d4d4d8; // v.$zinc-300
-  font-weight: 300;
-  margin: 0 0.125rem;
-}
-
-.minuteSection {
-  flex: 1;
-  min-width: 0;
 }

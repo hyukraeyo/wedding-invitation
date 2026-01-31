@@ -1,9 +1,8 @@
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { Dialog as Modal } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
 import { TextField } from '@/components/ui/TextField';
-
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import styles from './TimePicker.module.scss';
 
@@ -17,10 +16,85 @@ interface TimePickerProps {
     minuteStep?: number;
     id?: string;
     disabled?: boolean;
-    ref?: React.Ref<HTMLButtonElement>;
 }
 
 type Period = 'AM' | 'PM';
+
+const ITEM_HEIGHT = 44;
+
+const WheelColumn = ({
+    options,
+    value,
+    onChange,
+}: {
+    options: { label: string, value: string }[],
+    value: string,
+    onChange: (val: string) => void,
+}) => {
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const isScrollingRef = useRef(false);
+    const timeoutRef = useRef<NodeJS.Timeout>(null);
+
+    // Sync scroll position when value changes externally
+    useEffect(() => {
+        if (scrollRef.current && !isScrollingRef.current) {
+            const index = options.findIndex(opt => opt.value === value);
+            if (index !== -1) {
+                scrollRef.current.scrollTop = index * ITEM_HEIGHT;
+            }
+        }
+    }, [value, options]);
+
+    const handleScroll = useCallback(() => {
+        if (!scrollRef.current) return;
+        isScrollingRef.current = true;
+
+        const scrollTop = scrollRef.current.scrollTop;
+        const index = Math.round(scrollTop / ITEM_HEIGHT);
+
+        if (options[index] && options[index].value !== value) {
+            onChange(options[index].value);
+        }
+
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(() => {
+            isScrollingRef.current = false;
+        }, 150);
+    }, [options, value, onChange]);
+
+    return (
+        <div className={styles.column}>
+            <div
+                ref={scrollRef}
+                className={styles.scrollWrapper}
+                onScroll={handleScroll}
+            >
+                <div style={{ height: ITEM_HEIGHT * 2 }} />
+                {options.map((opt) => {
+                    const isActive = value === opt.value;
+                    return (
+                        <div
+                            key={opt.value}
+                            className={cn(styles.optionItem, isActive && styles.active)}
+                            onClick={() => {
+                                if (scrollRef.current) {
+                                    const index = options.findIndex(o => o.value === opt.value);
+                                    scrollRef.current.scrollTo({
+                                        top: index * ITEM_HEIGHT,
+                                        behavior: 'smooth'
+                                    });
+                                }
+                            }}
+                        >
+                            {opt.label}
+                        </div>
+                    );
+                })}
+                <div style={{ height: ITEM_HEIGHT * 2 }} />
+            </div>
+        </div>
+    );
+};
 
 const TimePickerRaw = ({
     value,
@@ -36,48 +110,39 @@ const TimePickerRaw = ({
     const [isOpen, setIsOpen] = useState(false);
     const [tempValue, setTempValue] = useState(value || '13:00');
 
-    // Parse values for display and modal state
+    // Sync from parent
+    useEffect(() => {
+        if (value) setTempValue(value);
+    }, [value]);
+
     const { displayValue, currentTM, tPeriod, tDisplayHour } = useMemo(() => {
         const hasValue = !!value;
-        const [hStr, mStr] = value && value.includes(':') ? value.split(':') : ['', ''];
-        const hInt = hStr ? parseInt(hStr, 10) : undefined;
-        const m = mStr || '';
-
-        const isPm = hInt !== undefined ? hInt >= 12 : false;
-        const period: Period = isPm ? 'PM' : 'AM';
-
-        let displayHour = '';
-        if (hInt !== undefined) {
-            let displayHourInt = hInt;
-            if (hInt > 12) displayHourInt = hInt - 12;
-            else if (hInt === 0) displayHourInt = 12;
-            displayHour = String(displayHourInt);
-        }
+        const [hStr, mStr] = (value || '13:00').split(':');
+        const hInt = parseInt(hStr, 10);
+        const period: Period = hInt >= 12 ? 'PM' : 'AM';
+        const displayH = hInt > 12 ? hInt - 12 : (hInt === 0 ? 12 : hInt);
 
         const display = hasValue
-            ? `${period === 'AM' ? '오전' : '오후'} ${displayHour}시 ${m}분`
+            ? `${period === 'AM' ? '오전' : '오후'} ${displayH}시 ${mStr}분`
             : '';
 
-        // Temp value parsing
-        const [tH, tM] = (tempValue || '13:00').split(':');
-        const thi = parseInt(tH || '13', 10);
-        const tPm = thi >= 12;
-        const tp: Period = tPm ? 'PM' : 'AM';
-        const tdh = String(thi > 12 ? thi - 12 : (thi === 0 ? 12 : thi));
+        const [tHStr, tMStr] = (tempValue || '13:00').split(':');
+        const tHInt = parseInt(tHStr, 10);
+        const tp: Period = tHInt >= 12 ? 'PM' : 'AM';
+        const tdh = String(tHInt > 12 ? tHInt - 12 : (tHInt === 0 ? 12 : tHInt));
 
         return {
             displayValue: display,
-            currentTM: tM || '00',
+            currentTM: tMStr || '00',
             tPeriod: tp,
             tDisplayHour: tdh
         };
     }, [value, tempValue]);
 
-    // Options
     const hourOptions = useMemo(() =>
-        ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'].map(h => ({
+        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(h => ({
             label: `${h}시`,
-            value: h
+            value: String(h)
         })), []
     );
 
@@ -89,108 +154,38 @@ const TimePickerRaw = ({
         return minutes.map(min => ({ label: `${min}분`, value: min }));
     }, [minuteStep]);
 
-    // Functional update to avoid stale closures
     const updateTempTime = useCallback((updates: { period?: Period, hour?: string, minute?: string }) => {
         setTempValue(prev => {
-            const currentVal = prev || '13:00';
-            const [hStr, mStr] = currentVal.split(':');
-            const h = parseInt(hStr || '13', 10);
-            const m = mStr || '00';
-
-            // 현재 상태 계산
-            const isPm = h >= 12;
-            const currentPeriod: Period = isPm ? 'PM' : 'AM';
+            const [hStr, mStr] = prev.split(':');
+            const h = parseInt(hStr, 10);
+            const currentPeriod: Period = h >= 12 ? 'PM' : 'AM';
             const currentDisplayH = h > 12 ? h - 12 : (h === 0 ? 12 : h);
 
-            // 새 값 결정
-            const p = updates.period !== undefined ? updates.period : currentPeriod;
-            const dh = updates.hour !== undefined ? updates.hour : String(currentDisplayH);
-            const min = updates.minute !== undefined ? updates.minute : m;
+            const p = updates.period ?? currentPeriod;
+            const dh = updates.hour ?? String(currentDisplayH);
+            const min = updates.minute ?? mStr;
 
-            // 24시간 형식으로 재계산
             let newH = parseInt(dh, 10);
             if (p === 'PM' && newH !== 12) newH += 12;
             else if (p === 'AM' && newH === 12) newH = 0;
 
-            const nextValue = `${String(newH).padStart(2, '0')}:${min}`;
-            return nextValue;
+            return `${String(newH).padStart(2, '0')}:${min}`;
         });
     }, []);
 
-    // Confirm selection
+    // Sync to parent
+    useEffect(() => {
+        if (isOpen && tempValue !== value) {
+            onChange(tempValue);
+        }
+    }, [tempValue, isOpen, onChange, value]);
+
     const handleConfirm = useCallback((e?: React.MouseEvent) => {
         e?.stopPropagation();
         onChange(tempValue);
         setIsOpen(false);
         onComplete?.();
     }, [onChange, tempValue, onComplete]);
-
-    // Handle modal close
-    const handleModalClose = useCallback((open: boolean) => {
-        setIsOpen(open);
-        if (!open) {
-            // 🍌 Final Sync: ensure value is applied when closing via outside click
-            onChange(tempValue);
-        }
-    }, [onChange, tempValue]);
-
-    // Scroll to current selection when modal opens
-    useEffect(() => {
-        if (!isOpen) return;
-
-        const timer = setTimeout(() => {
-            const container = document.querySelector(`.${styles.pickerGrid}`);
-            if (container) {
-                const activeElements = container.querySelectorAll(`.${styles.active}`);
-                activeElements.forEach(el => {
-                    el.scrollIntoView({ block: 'center', behavior: 'auto' });
-                });
-            }
-        }, 150);
-
-        return () => clearTimeout(timer);
-    }, [isOpen]);
-
-    // Render column helper
-    const renderColumn = (
-        options: { label: string, value: string }[],
-        current: string,
-        columnType: 'hour' | 'minute'
-    ) => (
-        <div className={styles.column}>
-            <div className={styles.scrollWrapper} data-column={columnType}>
-                {options.map(opt => (
-                    <Button
-                        key={opt.value}
-                        variant="weak"
-                        size="medium"
-                        color="grey"
-                        className={cn(styles.optionItem, current === opt.value && styles.active)}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            if (columnType === 'hour') {
-                                updateTempTime({ hour: opt.value });
-                                // 🍌 Optimize: Update parent immediately
-                                const [hStr, mStr] = tempValue.split(':');
-                                let newH = parseInt(opt.value, 10);
-                                if (tPeriod === 'PM' && newH !== 12) newH += 12;
-                                else if (tPeriod === 'AM' && newH === 12) newH = 0;
-                                onChange(`${String(newH).padStart(2, '0')}:${mStr}`);
-                            } else {
-                                updateTempTime({ minute: opt.value });
-                                // 🍌 Optimize: Update parent immediately
-                                const [hStr] = tempValue.split(':');
-                                onChange(`${hStr}:${opt.value}`);
-                            }
-                        }}
-                    >
-                        {opt.label}
-                    </Button>
-                ))}
-            </div>
-        </div>
-    );
 
     return (
         <>
@@ -209,31 +204,21 @@ const TimePickerRaw = ({
                 }}
                 className={className}
             />
-            <Modal open={isOpen} onOpenChange={handleModalClose}>
+            <Modal open={isOpen} onOpenChange={setIsOpen}>
                 <Modal.Overlay />
                 <Modal.Content className={styles.modalContent}>
                     <Modal.Header title="예식 시간 선택" />
-
                     <Modal.Body className={styles.modalBody}>
                         <div
                             className={styles.periodContainer}
-                            onClick={(e) => e.stopPropagation()}
                             onPointerDown={(e) => e.stopPropagation()}
+                            onClick={(e) => e.stopPropagation()}
                         >
                             <SegmentedControl
                                 value={tPeriod}
                                 alignment="fluid"
                                 size="md"
-                                onChange={(v: string) => {
-                                    updateTempTime({ period: v as Period });
-                                    // 🍌 Optimize: Update parent immediately when period changes
-                                    const h = parseInt(tempValue.split(':')[0] || '13', 10);
-                                    const m = tempValue.split(':')[1] || '00';
-                                    let newH = parseInt(String(h > 12 ? h - 12 : (h === 0 ? 12 : h)), 10);
-                                    if (v === 'PM' && newH !== 12) newH += 12;
-                                    else if (v === 'AM' && newH === 12) newH = 0;
-                                    onChange(`${String(newH).padStart(2, '0')}:${m}`);
-                                }}
+                                onChange={(v: string) => updateTempTime({ period: v as Period })}
                             >
                                 <SegmentedControl.Item value="AM">오전</SegmentedControl.Item>
                                 <SegmentedControl.Item value="PM">오후</SegmentedControl.Item>
@@ -242,11 +227,19 @@ const TimePickerRaw = ({
 
                         <div className={styles.pickerGrid}>
                             <div className={styles.mask} />
-                            {renderColumn(hourOptions, tDisplayHour, 'hour')}
-                            {renderColumn(minuteOptions, currentTM, 'minute')}
+                            <div className={styles.highlightLine} />
+                            <WheelColumn
+                                options={hourOptions}
+                                value={tDisplayHour}
+                                onChange={(h) => updateTempTime({ hour: h })}
+                            />
+                            <WheelColumn
+                                options={minuteOptions}
+                                value={currentTM}
+                                onChange={(m) => updateTempTime({ minute: m })}
+                            />
                         </div>
                     </Modal.Body>
-
                     <Modal.Footer className={styles.footer}>
                         <Button
                             className={styles.fullWidth}
@@ -264,5 +257,4 @@ const TimePickerRaw = ({
 };
 
 export const TimePicker = React.forwardRef(TimePickerRaw);
-
 TimePicker.displayName = "TimePicker";
