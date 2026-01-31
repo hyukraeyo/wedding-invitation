@@ -17,12 +17,14 @@ interface DatePickerProps {
     className?: string;
     label?: string;
     placeholder?: string;
+    variant?: 'surface' | 'classic' | 'soft' | 'box';
+    radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
     disabled?: boolean;
     id?: string;
     ref?: React.Ref<HTMLButtonElement>;
 }
 
-export const DatePicker = ({ value, onChange, onComplete, className, label, placeholder = "날짜 선택", disabled, id, ref }: DatePickerProps) => {
+export const DatePicker = ({ value, onChange, onComplete, className, label, placeholder = "날짜 선택", variant = "soft", radius = "large", disabled, id, ref }: DatePickerProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
     // Parse string date (YYYY-MM-DD) to Date object
@@ -42,7 +44,8 @@ export const DatePicker = ({ value, onChange, onComplete, className, label, plac
                 ref={ref}
                 id={id}
                 label={label || ''}
-                variant="box"
+                variant={variant}
+                radius={radius}
                 placeholder={placeholder}
                 value={dateValue ? format(dateValue, 'PPP', { locale: ko }) : ""}
                 onClick={() => !disabled && setIsOpen(true)}

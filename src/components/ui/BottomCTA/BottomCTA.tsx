@@ -27,11 +27,22 @@ export interface BottomCTASingleProps {
     loading?: boolean | undefined;
     disabled?: boolean | undefined;
     className?: string | undefined;
+    wrapperClassName?: string | undefined;
     type?: 'button' | 'submit' | 'reset' | undefined;
     transparent?: boolean | undefined;
 }
 
-const Single = ({ children, onClick, fixed = true, loading, disabled, className, type = 'button', transparent }: BottomCTASingleProps) => {
+const Single = ({
+    children,
+    onClick,
+    fixed = true,
+    loading,
+    disabled,
+    className,
+    wrapperClassName,
+    type = 'button',
+    transparent
+}: BottomCTASingleProps) => {
     const button = (
         <Button
             size="4"
@@ -53,7 +64,7 @@ const Single = ({ children, onClick, fixed = true, loading, disabled, className,
     }
 
     return (
-        <FixedBottomCTA fixed={fixed} transparent={!!transparent}>
+        <FixedBottomCTA fixed={fixed} transparent={!!transparent} className={wrapperClassName}>
             {button}
         </FixedBottomCTA>
     );
@@ -70,6 +81,7 @@ export interface BottomCTADoubleProps {
     leftDisabled?: boolean | undefined;
     rightDisabled?: boolean | undefined;
     className?: string | undefined;
+    wrapperClassName?: string | undefined;
     transparent?: boolean | undefined;
 }
 
@@ -84,6 +96,7 @@ const Double = ({
     leftDisabled,
     rightDisabled,
     className,
+    wrapperClassName,
     transparent
 }: BottomCTADoubleProps) => {
     const content = (
@@ -118,7 +131,7 @@ const Double = ({
     }
 
     return (
-        <FixedBottomCTA fixed={fixed} className={className} transparent={!!transparent}>
+        <FixedBottomCTA fixed={fixed} className={clsx(wrapperClassName, className)} transparent={!!transparent}>
             {content}
         </FixedBottomCTA>
     );

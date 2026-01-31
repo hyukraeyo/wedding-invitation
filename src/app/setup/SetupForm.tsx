@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useInvitationStore } from '@/store/useInvitationStore';
+import { useHeaderStore } from '@/store/useHeaderStore';
 import { TextField, IconButton, ProgressBar, Heading, Flex, Box, Form, FormField, FormLabel, FormControl } from '@/components/ui';
 import { DatePicker } from '@/components/common/DatePicker';
 import { TimePicker } from '@/components/common/TimePicker';
@@ -91,8 +92,8 @@ const SetupForm = () => {
     };
 
     const handleNext = (force = false) => {
-        // 마지막 단계인 경우 유효성 검사 및 제출을 handleSubmit에서 처리하도록 함
-        if (currentStep === 3) {
+        // 모든 필드가 노출된 상태(시작하기 버튼 노출 상태)에서는 바로 제출
+        if (highestStepReached >= 3) {
             handleSubmit();
             return;
         }
@@ -124,6 +125,19 @@ const SetupForm = () => {
     const completedFields = fields.filter(f => !!f).length;
     const progress = (completedFields / fields.length) * 100;
 
+    const { setHeader, resetHeader } = useHeaderStore();
+
+    // Sync Header
+    useEffect(() => {
+        setHeader({
+            title: "청첩장 시작하기",
+            showBack: true,
+            onBack: handleBack
+        });
+        // We don't reset on every step, but on unmount
+        return () => resetHeader();
+    }, []);
+
     // Focus current input when step changes
     useEffect(() => {
         const focusInput = () => {
@@ -150,6 +164,11 @@ const SetupForm = () => {
 
     // Dynamic Header Text
     const getHeaderText = () => {
+        // 모든 필드가 노출된 상태 (최고 단계 도달)
+        if (highestStepReached >= 3) {
+            return { title: "", subtitle: "" };
+        }
+
         switch (currentStep) {
             case 0: return { title: "신랑님의 이름을 알려주세요", subtitle: "" };
             case 1: return { title: "신부님의 이름을 알려주세요", subtitle: "" };
@@ -177,49 +196,76 @@ const SetupForm = () => {
 
     return (
         <Box className={styles.container}>
+            <Box className={styles.progressBarWrapper}>
+                <ProgressBar value={progress} className={styles.topProgressBar} />
+            </Box>
+
             <Box className={styles.whiteBox}>
-                <Box as="header" className={styles.formHeader}>
-                    <Flex align="center" className={styles.headerTop}>
-                        <IconButton
-                            onClick={handleBack}
-                            variant="clear"
-                            aria-label="뒤로가기"
-                            name=""
-                            iconSize={24}
-                            className={styles.backButton}
-                        >
-                            <ChevronLeft size={24} />
-                        </IconButton>
-                        <span className={styles.mainTitle}>청첩장 시작하기</span>
-                        <Box className={styles.headerSpacer} />
-                    </Flex>
-
-                    <Box className={styles.progressBarWrapper}>
-                        <ProgressBar value={progress} />
-                    </Box>
-
+                {headerTitle && (
                     <Box key={currentStep} className={cn(styles.headerContent, styles.titleUpdate)}>
                         <Heading as="h1" size="8" weight="bold" className={styles.stepHeading}>
                             {headerTitle}
                         </Heading>
                     </Box>
-                </Box>
+                )}
 
                 <Form onSubmit={handleSubmit} className={styles.form}>
-                    {highestStepReached >= 3 && (
+                    <Box
+                        className={cn(styles.fieldWrapper, currentStep !== 0 && styles.inactive)}
+                        onClick={() => handleFieldClick(0)}
+                    >
+                        <FormField name="groom-name">
+                            <FormLabel className={styles.label}>신랑 이름</FormLabel>
+                            <FormControl asChild>
+                                <TextField
+                                    id="groom-name"
+                                    ref={groomNameRef}
+                                    value={groomFullName}
+                                    readOnly={currentStep !== 0}
+                                    variant="surface"
+                                    radius="large"
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                        const val = e.target.value;
+                                        setGroomFullName(val);
+                                    }}
+                                    onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                                        if (e.key === 'Enter' && currentStep === 0 && groomFullName.trim()) {
+                                            e.preventDefault();
+                                            handleNext();
+                                        }
+                                    }}
+                                    required
+                                />
+                            </FormControl>
+                        </FormField>
+                    </Box>
+
+                    {highestStepReached >= 1 && (
                         <Box
-                            className={cn(styles.fieldWrapper, currentStep !== 3 && styles.inactive)}
-                            onClick={() => handleFieldClick(3)}
+                            className={cn(styles.fieldWrapper, currentStep !== 1 && styles.inactive)}
+                            onClick={() => handleFieldClick(1)}
                         >
-                            <FormField name="wedding-time">
-                                <FormLabel className={styles.label}>예식 시간</FormLabel>
+                            <FormField name="bride-name">
+                                <FormLabel className={styles.label}>신부 이름</FormLabel>
                                 <FormControl asChild>
-                                    <TimePicker
-                                        id="wedding-time"
-                                        ref={timeRef}
-                                        value={time}
-                                        onChange={setTime}
-                                        disabled={false}
+                                    <TextField
+                                        id="bride-name"
+                                        ref={brideNameRef}
+                                        value={brideFullName}
+                                        readOnly={currentStep !== 1}
+                                        variant="surface"
+                                        radius="large"
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                            const val = e.target.value;
+                                            setBrideFullName(val);
+                                        }}
+                                        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                                            if (e.key === 'Enter' && currentStep === 1 && brideFullName.trim()) {
+                                                e.preventDefault();
+                                                handleNext();
+                                            }
+                                        }}
+                                        required
                                     />
                                 </FormControl>
                             </FormField>
@@ -238,6 +284,7 @@ const SetupForm = () => {
                                         id="wedding-date"
                                         ref={dateRef}
                                         value={date}
+                                        variant="surface"
                                         onChange={(val) => {
                                             setDate(val);
                                             if (val) setTimeout(() => handleNext(true), 300);
@@ -249,65 +296,26 @@ const SetupForm = () => {
                         </Box>
                     )}
 
-                    {highestStepReached >= 1 && (
+                    {highestStepReached >= 3 && (
                         <Box
-                            className={cn(styles.fieldWrapper, currentStep !== 1 && styles.inactive)}
-                            onClick={() => handleFieldClick(1)}
+                            className={cn(styles.fieldWrapper, currentStep !== 3 && styles.inactive)}
+                            onClick={() => handleFieldClick(3)}
                         >
-                            <FormField name="bride-name">
-                                <FormLabel className={styles.label}>신부 이름</FormLabel>
+                            <FormField name="wedding-time">
+                                <FormLabel className={styles.label}>예식 시간</FormLabel>
                                 <FormControl asChild>
-                                    <TextField
-                                        id="bride-name"
-                                        ref={brideNameRef}
-                                        value={brideFullName}
-                                        readOnly={currentStep !== 1}
+                                    <TimePicker
+                                        id="wedding-time"
+                                        ref={timeRef}
+                                        value={time}
                                         variant="surface"
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                            const val = e.target.value;
-                                            setBrideFullName(val);
-                                        }}
-                                        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                                            if (e.key === 'Enter' && currentStep === 1 && brideFullName.trim()) {
-                                                e.preventDefault();
-                                                handleNext();
-                                            }
-                                        }}
-                                        required
+                                        onChange={setTime}
+                                        disabled={false}
                                     />
                                 </FormControl>
                             </FormField>
                         </Box>
                     )}
-
-                    <Box
-                        className={cn(styles.fieldWrapper, currentStep !== 0 && styles.inactive)}
-                        onClick={() => handleFieldClick(0)}
-                    >
-                        <FormField name="groom-name">
-                            <FormLabel className={styles.label}>신랑 이름</FormLabel>
-                            <FormControl asChild>
-                                <TextField
-                                    id="groom-name"
-                                    ref={groomNameRef}
-                                    value={groomFullName}
-                                    readOnly={currentStep !== 0}
-                                    variant="surface"
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                        const val = e.target.value;
-                                        setGroomFullName(val);
-                                    }}
-                                    onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                                        if (e.key === 'Enter' && currentStep === 0 && groomFullName.trim()) {
-                                            e.preventDefault();
-                                            handleNext();
-                                        }
-                                    }}
-                                    required
-                                />
-                            </FormControl>
-                        </FormField>
-                    </Box>
                 </Form>
 
             </Box>
@@ -317,9 +325,10 @@ const SetupForm = () => {
                     <BottomCTA.Single
                         fixed={true}
                         transparent
+                        wrapperClassName={styles.bottomCta}
                         onClick={() => handleNext()}
                     >
-                        {currentStep < 3 ? (
+                        {highestStepReached < 3 ? (
                             <span>다음</span>
                         ) : (
                             <Flex align="center" gap="1">

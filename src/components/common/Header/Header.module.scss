@@ -162,3 +162,48 @@
   height: 2.25rem;
   width: 2.25rem;
 }
+.left, .right {
+  display: flex;
+  align-items: center;
+  min-width: 44px;
+}
+
+.right {
+  justify-content: flex-end;
+}
+
+.titleWrapper {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  pointer-events: none;
+}
+
+.headerTitle {
+  font-size: v.$font-size-md;
+  font-weight: 700;
+  color: v.$grey-800;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.actionSpacer {
+  width: 24px;
+  height: 24px;
+}
+
+.backButton {
+  padding: 0;
+  margin-left: -8px; 
+  color: v.$grey-500;
+  transition: all v.$transition-200 v.$ease-standard;
+
+  &:active {
+    transform: scale(v.$scale-press-xs);
+    color: v.$grey-900;
+  }
+}

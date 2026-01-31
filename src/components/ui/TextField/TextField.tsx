@@ -87,15 +87,17 @@ TextFieldSlot.displayName = 'TextField.Slot';
 export interface TextFieldButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     label?: string | undefined;
     variant?: 'surface' | 'classic' | 'soft' | 'box' | undefined;
+    size?: '1' | '2' | '3' | undefined;
+    radius?: 'none' | 'small' | 'medium' | 'large' | 'full' | undefined;
     placeholder?: string | undefined;
 }
 
 const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps>(
-    ({ className, children, label, variant = 'surface', ...props }, ref) => {
+    ({ className, children, label, variant = 'surface', size = '2', radius = 'medium', ...props }, ref) => {
         const mappedVariant = (variant === 'box' ? 'surface' : variant) as TextFieldRootProps['variant'];
 
         const button = (
-            <TextFieldRoot variant={mappedVariant} className={className}>
+            <TextFieldRoot variant={mappedVariant} size={size} radius={radius} className={className}>
                 <button
                     ref={ref}
                     type="button"

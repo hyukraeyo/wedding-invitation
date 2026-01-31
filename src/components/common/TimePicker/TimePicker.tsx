@@ -22,6 +22,8 @@ interface TimePickerProps {
     label?: string;
     placeholder?: string;
     minuteStep?: number;
+    variant?: 'surface' | 'classic' | 'soft' | 'box';
+    radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
     id?: string;
     disabled?: boolean;
 }
@@ -105,6 +107,8 @@ const TimePickerRaw = ({
     label,
     placeholder = "시간 선택",
     minuteStep = 10,
+    variant = "soft",
+    radius = "large",
     id,
     disabled,
 }: TimePickerProps, ref: React.Ref<HTMLButtonElement>) => {
@@ -199,7 +203,8 @@ const TimePickerRaw = ({
                 ref={ref}
                 id={id}
                 label={label || ''}
-                variant="box"
+                variant={variant}
+                radius={radius}
                 placeholder={placeholder}
                 value={displayValue}
                 onClick={handleOpenModal}

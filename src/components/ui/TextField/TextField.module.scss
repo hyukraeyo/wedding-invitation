@@ -12,25 +12,28 @@
   
   // Sizes
   &.size_1 {
-    height: 24px;
-    font-size: 0.75rem; // 12px
-    --slot-padding: 6px;
+    height: 32px;
+    font-size: 0.8125rem; // 13px
+    --slot-padding: 8px;
+    --input-padding: 12px;
   }
   &.size_2 {
-    height: v.$control-height-md; // 48px or similar from variables
-    font-size: 0.9375rem; // 15px
+    height: 52px; // Toss medium is around 52-56px
+    font-size: 1rem; // 16px
     --slot-padding: 12px;
+    --input-padding: 16px;
   }
   &.size_3 {
-    height: v.$control-height-lg; // 56px or similar
-    font-size: 1rem; // 16px
+    height: 60px;
+    font-size: 1.125rem; // 18px
     --slot-padding: 16px;
+    --input-padding: 20px;
   }
 
   // Variants
   &.surface {
     background-color: v.$white;
-    box-shadow: inset 0 0 0 1px v.$grey-300;
+    box-shadow: inset 0 0 0 1px v.$grey-200;
     
     &:focus-within {
       box-shadow: inset 0 0 0 1px v.$banana-yellow, 0 0 0 1px v.$banana-yellow;
@@ -38,31 +41,30 @@
   }
 
   &.classic {
-    background-color: v.$white;
-    border-bottom: 1px solid v.$grey-300;
+    background-color: transparent;
+    border-bottom: 2px solid v.$grey-200;
     border-radius: 0 !important;
     
     &:focus-within {
       border-bottom-color: v.$banana-yellow;
-      box-shadow: 0 1px 0 0 v.$banana-yellow;
     }
   }
 
   &.soft {
-    background-color: v.$grey-50;
+    background-color: v.$grey-100;
     box-shadow: none;
     
     &:focus-within {
-      background-color: v.$white;
+      background-color: v.$grey-50;
       box-shadow: inset 0 0 0 1px v.$banana-yellow;
     }
   }
 
   // Radius
   &.radius_none { border-radius: 0; }
-  &.radius_small { border-radius: v.$radius-sm; }
-  &.radius_medium { border-radius: v.$radius-md; }
-  &.radius_large { border-radius: v.$radius-lg; }
+  &.radius_small { border-radius: 8px; }
+  &.radius_medium { border-radius: 14px; } // Toss-like roundedness
+  &.radius_large { border-radius: 18px; }
   &.radius_full { border-radius: 9999px; }
 
   // High Contrast
@@ -85,14 +87,16 @@
   height: 100%;
   border: none;
   background: transparent;
-  padding: 0 12px;
+  padding: 0 var(--input-padding, 16px);
   font-family: inherit;
   font-size: inherit;
   color: v.$grey-900;
   outline: none;
+  font-weight: 500;
   
   &::placeholder {
     color: v.$grey-400;
+    font-weight: 400;
   }
 
   &.button {

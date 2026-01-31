@@ -3,7 +3,7 @@
 import React, { useEffect, useState, lazy, Suspense, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { LogIn, Save, Banana, Bell } from 'lucide-react';
+import { LogIn, Save, Banana, Bell, ChevronLeft } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
@@ -126,12 +126,10 @@ export default function Header() {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    // 메인 페이지('/')와 초대장 보기('/v/'), 미리보기('/preview'), 셋업('/builder/setup', '/setup')에서는 헤더를 숨깁니다.
     const isVisible = pathname !== '/' &&
         !pathname.startsWith('/v/') &&
         pathname !== '/preview' &&
-        pathname !== '/builder/setup' &&
-        !pathname.startsWith('/setup');
+        pathname !== '/builder/setup';
     const { user, loading: authLoading } = useAuth();
 
     // Store states
@@ -140,7 +138,7 @@ export default function Header() {
         isUploading: state.isUploading,
     })));
 
-    const { onSave, isLoading, notificationCount } = useHeaderStore();
+    const { onSave, isLoading, notificationCount, title, showBack, onBack } = useHeaderStore();
 
     const [showResetDialog, setShowResetDialog] = useState(false);
     const { toast } = useToast();
@@ -178,19 +176,47 @@ export default function Header() {
     return (
         <>
             <header className={cn(styles.header, "view-transition-header")}>
-                <div className={styles.logoWrapper}>
-                    <Logo />
+                <div className={styles.left}>
+                    {showBack ? (
+                        <IconButton
+                            onClick={() => onBack?.() || router.back()}
+                            variant="clear"
+                            aria-label="뒤로가기"
+                            name=""
+                            iconSize={24}
+                            className={styles.backButton}
+                        >
+                            <ChevronLeft size={24} />
+                        </IconButton>
+                    ) : (
+                        <div className={styles.logoWrapper}>
+                            <Logo />
+                        </div>
+                    )}
                 </div>
-                <HeaderActions
-                    user={user}
-                    authLoading={authLoading}
-                    isLoading={isLoading}
-                    isUploading={isUploading}
-                    notificationCount={notificationCount}
-                    onLogin={handleLogin}
-                    onSaveAction={handleSaveAction}
-                    showSave={!!onSave || pathname.startsWith('/builder')}
-                />
+
+                {title && (
+                    <div className={styles.titleWrapper}>
+                        <span className={styles.headerTitle}>{title}</span>
+                    </div>
+                )}
+
+                <div className={styles.right}>
+                    {!title ? (
+                        <HeaderActions
+                            user={user}
+                            authLoading={authLoading}
+                            isLoading={isLoading}
+                            isUploading={isUploading}
+                            notificationCount={notificationCount}
+                            onLogin={handleLogin}
+                            onSaveAction={handleSaveAction}
+                            showSave={!!onSave || pathname.startsWith('/builder')}
+                        />
+                    ) : (
+                        <div className={styles.actionSpacer} />
+                    )}
+                </div>
             </header>
             <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
                 <Dialog.Overlay />
