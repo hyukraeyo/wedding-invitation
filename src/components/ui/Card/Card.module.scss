@@ -8,7 +8,8 @@
 
 .surface {
     background-color: white;
-    box-shadow: v.$shadow-sm;
+    box-shadow: none;
+    border: 1px solid v.$grey-opacity-100; // 그림자 대신 아주 연한 선으로 구분
 }
 
 .classic {

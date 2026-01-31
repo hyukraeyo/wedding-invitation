@@ -56,7 +56,7 @@ const Single = ({
 }: BottomCTASingleProps) => {
     const button = (
         <Button
-            size="4"
+            size="3"
             fullWidth
             color="primary"
             variant="fill"
@@ -120,7 +120,7 @@ const Double = ({
     const content = (
         <div className={s.buttonGroup}>
             <Button
-                size="4"
+                size="3"
                 fullWidth
                 color="grey"
                 variant="soft"
@@ -131,7 +131,7 @@ const Double = ({
                 {leftChildren}
             </Button>
             <Button
-                size="4"
+                size="3"
                 fullWidth
                 color="primary"
                 variant="fill"

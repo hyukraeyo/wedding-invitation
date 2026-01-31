@@ -17,7 +17,6 @@
     left: 0;
     right: 0;
     z-index: 1000;
-    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
     
     // Support for safe area in mobile
     padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));

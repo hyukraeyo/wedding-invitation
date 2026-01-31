@@ -222,8 +222,8 @@
   outline: none;
 
   &:focus-visible {
-    box-shadow: 0 0 0 $focus-ring-width $color-background,
-    0 0 0 calc(#{$focus-ring-width} + #{$focus-ring-offset}) $focus-ring-color;
+    outline: $focus-ring-width solid $focus-ring-color;
+    outline-offset: $focus-ring-offset;
   }
 }
 
@@ -342,7 +342,7 @@
   outline: none;
   border-color: $color-primary;
   background-color: $white;
-  box-shadow: 0 0 0 4px rgba($color-primary, 0.12), $shadow-sm;
+  box-shadow: none;
 }
 
 @mixin input-base {

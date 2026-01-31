@@ -33,13 +33,41 @@
 }
 
 .headerContent {
-    min-height: 40px;
-    display: flex;
-    align-items: center;
+    min-height: 84px; // 2 lines + padding
+    position: relative;
     margin-bottom: 2rem;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
 
     &.titleUpdate {
-        animation: titleFade 0.4s v.$ease-ios;
+        // Wrapper level animation removed in favor of child transition
+    }
+}
+
+.titleWrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: 
+        opacity 0.45s v.$ease-ios, 
+        transform 0.5s v.$ease-ios;
+    pointer-events: none;
+    will-change: opacity, transform;
+
+    &.active {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+        z-index: 10;
+    }
+
+    &.inactive {
+        opacity: 0;
+        transform: translateY(-12px);
     }
 }
 
@@ -53,11 +81,11 @@
 }
 
 @keyframes titleFade {
+    // Legacy support, children now use transitions
     from {
         opacity: 0;
-        transform: translateY(-4px);
+        transform: translateY(4px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
@@ -74,9 +102,13 @@
     display: grid;
     grid-template-rows: 0fr;
     opacity: 0;
-    transition: grid-template-rows 0.5s v.$ease-ios, opacity 0.5s v.$ease-ios, margin-bottom 0.5s v.$ease-ios;
+    transition: 
+        grid-template-rows 0.65s v.$ease-ios, 
+        opacity 0.4s v.$ease-ios, 
+        margin-bottom 0.65s v.$ease-ios;
     overflow: hidden;
     margin-bottom: 0px;
+    will-change: grid-template-rows, opacity, margin-bottom;
 
     &.visible {
         grid-template-rows: 1fr;
@@ -89,7 +121,6 @@
 
         .fieldWrapper {
             transform: translateY(0);
-            filter: blur(0);
             opacity: 1;
 
             &.inactive {
@@ -113,24 +144,27 @@
 
 .fieldWrapper {
     cursor: pointer;
-    transition: opacity 0.5s v.$ease-ios, transform 0.6s v.$ease-ios;
+    transition: 
+        opacity 0.5s v.$ease-ios, 
+        transform 0.6s v.$ease-ios;
     padding-top: 2px;
-    transform: translateY(-12px);
+    transform: translateY(12px);
     opacity: 0;
     position: relative;
+    will-change: transform, opacity;
 
     .label {
         font-size: v.$font-size-sm;
-        font-weight: 600;
-        color: v.$banana-yellow; // 활성 상태는 브랜드 컬러 (노란색)
-        margin-bottom: 0.75rem;
+        font-weight: 500;
+        color: v.$grey-700;
+        margin-bottom: 0.5rem;
         display: block;
         transition: color 0.3s v.$ease-ios;
     }
 
     &.inactive {
         .label {
-            color: v.$grey-400; // 비활성은 흐리게
+            color: v.$grey-400;
         }
     }
 }
@@ -158,15 +192,14 @@
 }
 
 .whiteBox {
-    background-color: v.$white; // 투명에서 흰색으로 변경
-    padding: 2.5rem 1rem;
+    background-color: v.$white;
+    padding: 2.5rem 1.5rem;
     width: 100%;
     max-width: v.$canvas-max-width;
     box-sizing: border-box;
     margin-top: 1rem;
     margin-bottom: 2rem;
     border-radius: v.$radius-2xl;
-    box-shadow: v.$shadow-md;
     animation: setupFadeInMobile 0.8s v.$ease-ios both;
 
     @media (max-width: 768px) {
@@ -176,7 +209,7 @@
         flex: 1;
         display: flex;
         flex-direction: column;
-        background-color: transparent; // 모바일은 다시 투명하게 (컨테이너 배경 사용)
+        background-color: transparent;
     }
 }
 

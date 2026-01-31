@@ -9,6 +9,11 @@
   gap: 8px;
   border: none;
   isolation: isolate;
+  box-shadow: none; // 모든 버튼 쉐도우 제거
+  
+  @include m.hover {
+    box-shadow: none;
+  }
   
   // Sizes (Radix UI Themes Mapping: 1=xs, 2=sm/md, 3=lg, 4=xl)
   &.xl, &.large_xl, &.size_4 {
@@ -139,6 +144,7 @@
   // States
   &:active:not(:disabled) {
     transform: scale(0.96);
+    box-shadow: none;
   }
   
   &:disabled {

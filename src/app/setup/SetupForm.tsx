@@ -54,7 +54,9 @@ const SetupForm = () => {
 
     const handleBack = useCallback(() => {
         if (currentStep > 0) {
-            setCurrentStep(prev => prev - 1);
+            const prevStep = currentStep - 1;
+            setCurrentStep(prevStep);
+            setHighestStepReached(prevStep); // Back button should also pull back the title
         } else {
             router.back();
         }
@@ -120,23 +122,30 @@ const SetupForm = () => {
         handleNext();
     };
 
-    const headerTitle = STEPS[currentStep]?.title;
-
     return (
         <Box className={styles.container}>
             <Card variant="ghost" className={styles.whiteBox}>
-                {headerTitle && (
-                    <Box key={currentStep} className={cn(styles.headerContent, styles.titleUpdate)}>
-                        <Heading as="h1" size="6" weight="bold" className={styles.stepHeading}>
-                            {headerTitle.split('\n').map((line, i) => (
-                                <React.Fragment key={i}>
-                                    {line}
-                                    {i !== headerTitle.split('\n').length - 1 && <br />}
-                                </React.Fragment>
-                            ))}
-                        </Heading>
-                    </Box>
-                )}
+                <Box className={styles.headerContent}>
+                    {STEPS.map((step, index) => (
+                        <div
+                            key={index}
+                            className={cn(
+                                styles.titleWrapper,
+                                highestStepReached === index ? styles.active : styles.inactive
+                            )}
+                            aria-hidden={highestStepReached !== index}
+                        >
+                            <Heading as="h1" size="6" weight="bold" className={styles.stepHeading}>
+                                {step.title.split('\n').map((line, i) => (
+                                    <React.Fragment key={i}>
+                                        {line}
+                                        {i !== step.title.split('\n').length - 1 && <br />}
+                                    </React.Fragment>
+                                ))}
+                            </Heading>
+                        </div>
+                    ))}
+                </Box>
 
                 <Form onSubmit={handleSubmit} className={styles.form} style={{ gap: 0 }}>
                     <div className={cn(styles.fieldContainer, highestStepReached >= 3 && styles.visible)}>

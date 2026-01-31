@@ -33,14 +33,14 @@
   // Variants
   &.surface {
     background-color: v.$white;
-    box-shadow: inset 0 0 0 1px v.$grey-200;
+    border: 1px solid v.$grey-200;
     
     &:hover:not(:focus-within) {
-      box-shadow: inset 0 0 0 1px v.$grey-300;
+      border-color: v.$grey-300;
     }
 
     &:focus-within {
-      box-shadow: inset 0 0 0 1px v.$banana-yellow;
+      border-color: v.$banana-yellow;
     }
   }
 
@@ -56,11 +56,11 @@
 
   &.soft {
     background-color: v.$grey-100;
-    box-shadow: none;
+    border: 1px solid transparent; // Maintain size parity
     
     &:focus-within {
       background-color: v.$white;
-      box-shadow: inset 0 0 0 1px v.$banana-yellow;
+      border-color: v.$banana-yellow;
     }
   }
 
@@ -154,7 +154,7 @@
 
 .label {
   font-size: v.$font-size-xs;
-  font-weight: 600;
-  color: v.$grey-600;
+  font-weight: 500;
+  color: v.$grey-700;
   margin-left: 4px;
 }
