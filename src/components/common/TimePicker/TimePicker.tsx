@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
-import { Dialog as Modal } from '@/components/ui/Dialog';
+import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
 import { TextField } from '@/components/ui/TextField';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
@@ -18,6 +18,8 @@ interface TimePickerProps {
     value: string;
     onChange: (value: string) => void;
     onComplete?: () => void;
+    open?: boolean;
+    onOpenChange?: (open: boolean) => void;
     className?: string;
     label?: string;
     placeholder?: string;
@@ -29,7 +31,6 @@ interface TimePickerProps {
 }
 
 type Period = 'AM' | 'PM';
-
 
 const WheelColumn = ({
     options,
@@ -102,6 +103,8 @@ const TimePickerRaw = ({
     value,
     onChange,
     onComplete,
+    open: externalOpen,
+    onOpenChange: setExternalOpen,
     className,
     label,
     placeholder = "시간 선택",
@@ -111,7 +114,17 @@ const TimePickerRaw = ({
     id,
     disabled,
 }: TimePickerProps, ref: React.Ref<HTMLButtonElement>) => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [internalOpen, setInternalOpen] = useState(false);
+    const isOpen = externalOpen !== undefined ? externalOpen : internalOpen;
+
+    const setIsOpen = useCallback((open: boolean) => {
+        if (setExternalOpen) {
+            setExternalOpen(open);
+        } else {
+            setInternalOpen(open);
+        }
+    }, [setExternalOpen]);
+
     const [tempValue, setTempValue] = useState(value || '13:00');
 
     // Parse value for display button
@@ -187,14 +200,14 @@ const TimePickerRaw = ({
         onChange(tempValue);
         setIsOpen(false);
         onComplete?.();
-    }, [onChange, tempValue, onComplete]);
+    }, [onChange, tempValue, onComplete, setIsOpen]);
 
     const handleOpenModal = useCallback(() => {
         if (!disabled) {
             setTempValue(value || '13:00');
             setIsOpen(true);
         }
-    }, [disabled, value]);
+    }, [disabled, value, setIsOpen]);
 
     return (
         <>
@@ -209,54 +222,56 @@ const TimePickerRaw = ({
                 onClick={handleOpenModal}
                 className={className}
             />
-            <Modal open={isOpen} onOpenChange={setIsOpen}>
-                <Modal.Overlay />
-                <Modal.Content>
-                    <Modal.Header title="예식 시간 선택" />
-                    <Modal.Body className={styles.modalBody} padding={false}>
-                        <div
-                            className={styles.periodContainer}
-                            onPointerDown={(e) => e.stopPropagation()}
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <SegmentedControl
-                                value={tPeriod}
-                                alignment="fluid"
-                                size="md"
-                                onChange={(v: string) => handleTempChange({ period: v as Period })}
+            <Dialog open={isOpen} onOpenChange={setIsOpen} mobileBottomSheet>
+                <Dialog.Portal>
+                    <Dialog.Overlay />
+                    <Dialog.Content>
+                        <Dialog.Header title="예식 시간 선택" />
+                        <Dialog.Body className={styles.modalBody} padding={false}>
+                            <div
+                                className={styles.periodContainer}
+                                onPointerDown={(e) => e.stopPropagation()}
+                                onClick={(e) => e.stopPropagation()}
                             >
-                                <SegmentedControl.Item value="AM">오전</SegmentedControl.Item>
-                                <SegmentedControl.Item value="PM">오후</SegmentedControl.Item>
-                            </SegmentedControl>
-                        </div>
+                                <SegmentedControl
+                                    value={tPeriod}
+                                    alignment="fluid"
+                                    size="md"
+                                    onChange={(v: string) => handleTempChange({ period: v as Period })}
+                                >
+                                    <SegmentedControl.Item value="AM">오전</SegmentedControl.Item>
+                                    <SegmentedControl.Item value="PM">오후</SegmentedControl.Item>
+                                </SegmentedControl>
+                            </div>
 
-                        <div className={styles.pickerGrid}>
-                            <div className={styles.mask} />
-                            <div className={styles.highlightLine} />
-                            <WheelColumn
-                                options={hourOptions}
-                                value={tDisplayHour}
-                                onChange={(h) => handleTempChange({ hour: h })}
-                            />
-                            <WheelColumn
-                                options={minuteOptions}
-                                value={currentTM}
-                                onChange={(m) => handleTempChange({ minute: m })}
-                            />
-                        </div>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button
-                            className={styles.fullWidth}
-                            variant="fill"
-                            size="lg"
-                            onClick={handleConfirm}
-                        >
-                            선택 완료
-                        </Button>
-                    </Modal.Footer>
-                </Modal.Content>
-            </Modal>
+                            <div className={styles.pickerGrid}>
+                                <div className={styles.mask} />
+                                <div className={styles.highlightLine} />
+                                <WheelColumn
+                                    options={hourOptions}
+                                    value={tDisplayHour}
+                                    onChange={(h) => handleTempChange({ hour: h })}
+                                />
+                                <WheelColumn
+                                    options={minuteOptions}
+                                    value={currentTM}
+                                    onChange={(m) => handleTempChange({ minute: m })}
+                                />
+                            </div>
+                        </Dialog.Body>
+                        <Dialog.Footer>
+                            <Button
+                                className={styles.fullWidth}
+                                variant="fill"
+                                size="lg"
+                                onClick={handleConfirm}
+                            >
+                                선택 완료
+                            </Button>
+                        </Dialog.Footer>
+                    </Dialog.Content>
+                </Dialog.Portal>
+            </Dialog>
         </>
     );
 };

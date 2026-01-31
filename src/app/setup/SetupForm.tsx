@@ -29,6 +29,9 @@ const SetupForm = () => {
     const [currentStep, setCurrentStep] = useState(0);
     const [highestStepReached, setHighestStepReached] = useState(0);
 
+    const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+    const [isTimePickerOpen, setIsTimePickerOpen] = useState(false);
+
     const [groomFullName, setGroomFullName] = useState(groom.firstName ? `${groom.lastName}${groom.firstName}` : '');
     const [brideFullName, setBrideFullName] = useState(bride.firstName ? `${bride.lastName}${bride.firstName}` : '');
 
@@ -90,6 +93,13 @@ const SetupForm = () => {
             const nextStep = currentStep + 1;
             setCurrentStep(nextStep);
             setHighestStepReached(prev => Math.max(prev, nextStep));
+
+            // 🍌 자동 모달 열기
+            if (nextStep === 2) {
+                setTimeout(() => setIsDatePickerOpen(true), 100);
+            } else if (nextStep === 3) {
+                setTimeout(() => setIsTimePickerOpen(true), 100);
+            }
         } else {
             const slug = `${groomFullName.trim()}-${Math.random().toString(36).substring(2, 6)}`;
             setSlug(slug);
@@ -100,6 +110,8 @@ const SetupForm = () => {
     const handleFieldClick = (step: number) => {
         if (step <= highestStepReached) {
             setCurrentStep(step);
+            if (step === 2) setIsDatePickerOpen(true);
+            if (step === 3) setIsTimePickerOpen(true);
         }
     };
 
@@ -140,10 +152,15 @@ const SetupForm = () => {
                                             id="wedding-time"
                                             ref={timeRef}
                                             value={time}
+                                            open={isTimePickerOpen}
+                                            onOpenChange={setIsTimePickerOpen}
                                             variant="surface"
                                             radius="large"
                                             onChange={setTime}
                                             disabled={false}
+                                            onComplete={() => {
+                                                // 시간 선택 후 다음 로직이 필요하다면 여기에 추가
+                                            }}
                                         />
                                     </FormControl>
                                 </FormField>
@@ -164,11 +181,16 @@ const SetupForm = () => {
                                             id="wedding-date"
                                             ref={dateRef}
                                             value={date}
+                                            open={isDatePickerOpen}
+                                            onOpenChange={setIsDatePickerOpen}
                                             variant="surface"
                                             radius="large"
                                             onChange={(val) => {
                                                 setDate(val);
-                                                if (val) setTimeout(() => handleNext(true), 300);
+                                                if (val) {
+                                                    setIsDatePickerOpen(false);
+                                                    setTimeout(() => handleNext(true), 300);
+                                                }
                                             }}
                                             disabled={false}
                                         />

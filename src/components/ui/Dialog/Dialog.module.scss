@@ -6,11 +6,27 @@
   inset: 0;
   z-index: v.$z-overlay;
   animation: overlayShow v.$transition-normal v.$ease-ios;
+
+  &.bottomSheetOverlay {
+    animation: none;
+  }
 }
 
 .content {
   background-color: v.$white;
-  border-radius: v.$radius-xl v.$radius-xl 0 0;
+  z-index: v.$z-modal;
+  box-shadow: v.$shadow-xl;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+// Standard Dialog (centered) behavior
+.dialogContent {
   position: fixed;
   bottom: 0;
   left: 50%;
@@ -18,32 +34,10 @@
   width: 100%;
   max-width: v.$canvas-max-width;
   max-height: 90vh;
-  display: flex;
-  flex-direction: column;
-  z-index: v.$z-modal;
-  box-shadow: v.$shadow-xl;
+  border-radius: v.$radius-xl v.$radius-xl 0 0;
   animation: contentShow v.$transition-smooth v.$ease-ios;
-  overflow: hidden;
 
-  &:focus {
-    outline: none;
-  }
-
-  // Handle bar for mobile bottom sheet
-  &::before {
-    content: "";
-    width: 36px;
-    height: 4px;
-    background-color: v.$grey-300;
-    border-radius: 2px;
-    margin: 8px auto 0;
-    flex-shrink: 0;
-  }
-}
-
-// Tablet/Desktop handling
-@media (min-width: v.$mobile) {
-  .content {
+  @media (min-width: v.$mobile) {
     bottom: auto;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -52,6 +46,37 @@
     max-width: 480px;
     animation: contentShowDesktop v.$transition-smooth v.$ease-ios;
   }
+}
+
+// Bottom Sheet (Vaul) behavior
+.bottomSheetContent {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  z-index: v.$z-modal;
+  background-color: v.$white;
+  border-radius: v.$radius-xl v.$radius-xl 0 0;
+  width: 100%;
+  max-width: v.$canvas-max-width;
+  display: flex;
+  flex-direction: column;
+  outline: none;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.handle {
+  width: 36px;
+  height: 4px;
+  background-color: v.$grey-300;
+  border-radius: 2px;
+  margin: 8px auto 0;
+  flex-shrink: 0;
+}
+
+.bottomSheetHeader {
+  padding: 24px 24px 16px; // Slightly less top padding for bottom sheets
 }
 
 .header {

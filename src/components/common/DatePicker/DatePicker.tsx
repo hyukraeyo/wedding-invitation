@@ -5,7 +5,7 @@ import { Calendar } from '@/components/ui/Calendar';
 import { format, parse } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { SelectSingleEventHandler } from 'react-day-picker';
-import { Dialog as Modal } from '@/components/ui/Dialog';
+import { Dialog } from '@/components/ui/Dialog';
 import { TextField } from '@/components/ui/TextField';
 import { Button } from '@/components/ui/Button';
 import styles from './DatePicker.module.scss';
@@ -14,6 +14,8 @@ interface DatePickerProps {
     value: string;
     onChange: (value: string) => void;
     onComplete?: () => void;
+    open?: boolean;
+    onOpenChange?: (open: boolean) => void;
     className?: string;
     label?: string;
     placeholder?: string;
@@ -24,8 +26,31 @@ interface DatePickerProps {
     ref?: React.Ref<HTMLButtonElement>;
 }
 
-export const DatePicker = ({ value, onChange, onComplete, className, label, placeholder = "날짜 선택", variant = "soft", radius = "large", disabled, id, ref }: DatePickerProps) => {
-    const [isOpen, setIsOpen] = useState(false);
+export const DatePicker = ({
+    value,
+    onChange,
+    onComplete,
+    open: externalOpen,
+    onOpenChange: setExternalOpen,
+    className,
+    label,
+    placeholder = "날짜 선택",
+    variant = "soft",
+    radius = "large",
+    disabled,
+    id,
+    ref
+}: DatePickerProps) => {
+    const [internalOpen, setInternalOpen] = useState(false);
+    const isOpen = externalOpen !== undefined ? externalOpen : internalOpen;
+
+    const setIsOpen = (open: boolean) => {
+        if (setExternalOpen) {
+            setExternalOpen(open);
+        } else {
+            setInternalOpen(open);
+        }
+    };
 
     // Parse string date (YYYY-MM-DD) to Date object
     const dateValue = value ? parse(value, 'yyyy-MM-dd', new Date()) : undefined;
@@ -51,34 +76,36 @@ export const DatePicker = ({ value, onChange, onComplete, className, label, plac
                 onClick={() => !disabled && setIsOpen(true)}
                 className={className}
             />
-            <Modal open={isOpen} onOpenChange={setIsOpen}>
-                <Modal.Overlay />
-                <Modal.Content>
-                    <Modal.Header title="날짜를 선택하세요" />
-                    <Modal.Body className={styles.calendarBody}>
-                        <Calendar
-                            mode="single"
-                            selected={dateValue}
-                            defaultMonth={dateValue || new Date()}
-                            onSelect={handleSelect}
-                            className={styles.calendar || ""}
-                        />
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button
-                            className={styles.fullWidth}
-                            variant="fill"
-                            size="lg"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setIsOpen(false);
-                            }}
-                        >
-                            닫기
-                        </Button>
-                    </Modal.Footer>
-                </Modal.Content>
-            </Modal>
+            <Dialog open={isOpen} onOpenChange={setIsOpen} mobileBottomSheet>
+                <Dialog.Portal>
+                    <Dialog.Overlay />
+                    <Dialog.Content>
+                        <Dialog.Header title="날짜를 선택하세요" />
+                        <Dialog.Body className={styles.calendarBody}>
+                            <Calendar
+                                mode="single"
+                                selected={dateValue}
+                                defaultMonth={dateValue || new Date()}
+                                onSelect={handleSelect}
+                                className={styles.calendar || ""}
+                            />
+                        </Dialog.Body>
+                        <Dialog.Footer>
+                            <Button
+                                className={styles.fullWidth}
+                                variant="fill"
+                                size="lg"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    setIsOpen(false);
+                                }}
+                            >
+                                닫기
+                            </Button>
+                        </Dialog.Footer>
+                    </Dialog.Content>
+                </Dialog.Portal>
+            </Dialog>
         </>
     );
 };
