@@ -1,29 +1,51 @@
 @use "../../../styles/variables" as v;
 
 .root {
+  position: relative;
   display: flex;
   background-color: v.$grey-100;
   padding: 2px;
-  border-radius: v.$radius-md;
+  border-radius: v.$radius-md; // 16px
   width: fit-content;
+  overflow: hidden;
   
   &.fluid {
     width: 100%;
   }
+
+  // Matching Button Heights
+  &.sm { height: v.$control-height-sm; } // 36px
+  &.md { height: v.$control-height-md; } // 48px
+  &.lg { height: v.$control-height-lg; } // 56px
+}
+
+.indicator {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 0;
+  background-color: v.$white;
+  border-radius: calc(v.$radius-md - 2px); // 14px
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s v.$ease-ios, width 0.3s v.$ease-ios, opacity 0.2s;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .item {
+  position: relative;
+  z-index: 1;
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 12px;
+  padding: 0 12px; // Height is controlled by root parent flex
   border-radius: calc(v.$radius-md - 2px);
   font-size: 0.875rem;
   font-weight: 500;
   color: v.$grey-600;
   cursor: pointer;
-  transition: all 0.2s v.$ease-ios;
+  transition: color 0.2s v.$ease-ios;
   border: none;
   background: transparent;
   white-space: nowrap;
@@ -33,8 +55,6 @@
   }
   
   &.active {
-    background-color: v.$white;
     color: v.$grey-900;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
 }

@@ -128,7 +128,11 @@ const TimePickerRaw = ({
     // Handle modal close
     const handleModalClose = useCallback((open: boolean) => {
         setIsOpen(open);
-    }, []);
+        if (!open) {
+            // 🍌 Final Sync: ensure value is applied when closing via outside click
+            onChange(tempValue);
+        }
+    }, [onChange, tempValue]);
 
     // Scroll to current selection when modal opens
     useEffect(() => {
@@ -167,8 +171,17 @@ const TimePickerRaw = ({
                             e.stopPropagation();
                             if (columnType === 'hour') {
                                 updateTempTime({ hour: opt.value });
+                                // 🍌 Optimize: Update parent immediately
+                                const [hStr, mStr] = tempValue.split(':');
+                                let newH = parseInt(opt.value, 10);
+                                if (tPeriod === 'PM' && newH !== 12) newH += 12;
+                                else if (tPeriod === 'AM' && newH === 12) newH = 0;
+                                onChange(`${String(newH).padStart(2, '0')}:${mStr}`);
                             } else {
                                 updateTempTime({ minute: opt.value });
+                                // 🍌 Optimize: Update parent immediately
+                                const [hStr] = tempValue.split(':');
+                                onChange(`${hStr}:${opt.value}`);
                             }
                         }}
                     >
@@ -210,8 +223,16 @@ const TimePickerRaw = ({
                             <SegmentedControl
                                 value={tPeriod}
                                 alignment="fluid"
+                                size="md"
                                 onChange={(v: string) => {
                                     updateTempTime({ period: v as Period });
+                                    // 🍌 Optimize: Update parent immediately when period changes
+                                    const h = parseInt(tempValue.split(':')[0] || '13', 10);
+                                    const m = tempValue.split(':')[1] || '00';
+                                    let newH = parseInt(String(h > 12 ? h - 12 : (h === 0 ? 12 : h)), 10);
+                                    if (v === 'PM' && newH !== 12) newH += 12;
+                                    else if (v === 'AM' && newH === 12) newH = 0;
+                                    onChange(`${String(newH).padStart(2, '0')}:${m}`);
                                 }}
                             >
                                 <SegmentedControl.Item value="AM">오전</SegmentedControl.Item>
