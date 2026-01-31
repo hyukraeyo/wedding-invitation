@@ -3,7 +3,8 @@
 .container {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    min-height: 100vh;
+    background-color: v.$color-background;
 }
 
 .formHeader {
@@ -164,11 +165,15 @@
 
     @media (max-width: 768px) {
         padding: 1.25rem;
-        padding-top: 4.5rem;
+        padding-top: 2rem; // Adjusted for a balanced top space
+        padding-bottom: 80px; // Space for fixed bottom CTA
         border-radius: 0;
         border: none;
         box-shadow: none;
         animation: setupFadeInMobile 0.8s v.$ease-ios both;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
     }
 }
 

@@ -25,6 +25,16 @@
     // When inside a container with max-width
     max-width: v.$canvas-max-width;
     margin: 0 auto;
+
+    &.transparent {
+      background-color: transparent;
+      box-shadow: none;
+    }
+  }
+
+  &.transparent {
+    background-color: transparent;
+    box-shadow: none;
   }
 }
 

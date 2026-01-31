@@ -315,7 +315,7 @@ const SetupForm = () => {
             {(currentStep === 3 || isStepValid()) && (
                 <Box className={styles.ctaWrapper}>
                     <BottomCTA.Single
-                        fixed={false}
+                        fixed={true}
                         transparent
                         onClick={() => handleNext()}
                     >
