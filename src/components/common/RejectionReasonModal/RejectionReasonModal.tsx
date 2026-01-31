@@ -72,7 +72,7 @@ export default function RejectionReasonModal({
                     </div>
                 </Modal.Body>
 
-                <Modal.Footer className={styles.footer}>
+                <Modal.Footer>
                     <Button
                         className={styles.button}
                         variant="weak"

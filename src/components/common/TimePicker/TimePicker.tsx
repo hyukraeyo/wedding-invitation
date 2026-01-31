@@ -207,9 +207,9 @@ const TimePickerRaw = ({
             />
             <Modal open={isOpen} onOpenChange={setIsOpen}>
                 <Modal.Overlay />
-                <Modal.Content className={styles.modalContent}>
+                <Modal.Content>
                     <Modal.Header title="예식 시간 선택" />
-                    <Modal.Body className={styles.modalBody}>
+                    <Modal.Body className={styles.modalBody} padding={false}>
                         <div
                             className={styles.periodContainer}
                             onPointerDown={(e) => e.stopPropagation()}
@@ -241,7 +241,7 @@ const TimePickerRaw = ({
                             />
                         </div>
                     </Modal.Body>
-                    <Modal.Footer className={styles.footer}>
+                    <Modal.Footer>
                         <Button
                             className={styles.fullWidth}
                             variant="fill"

@@ -117,10 +117,11 @@ DialogDescription.displayName = DialogPrimitive.Description.displayName;
 
 const DialogBody = ({
     className,
+    padding = true,
     ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
+}: React.HTMLAttributes<HTMLDivElement> & { padding?: boolean }) => (
     <div
-        className={cn(styles.body, className)}
+        className={cn(styles.body, !padding && styles.noPadding, className)}
         {...props}
     />
 );

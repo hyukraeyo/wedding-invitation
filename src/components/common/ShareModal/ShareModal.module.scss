@@ -1,10 +1,4 @@
-.header {
-  text-align: center;
-  margin-bottom: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
+
 
 .shareContainer {
   display: flex;
@@ -44,16 +38,3 @@
   text-align: center;
 }
 
-.footer {
-  padding: 0 24px 24px;
-}
-
-.shareButtonRow {
-  width: 100%;
-  display: flex;
-  gap: 12px;
-
-  .cancelButton {
-    flex: 1;
-  }
-}

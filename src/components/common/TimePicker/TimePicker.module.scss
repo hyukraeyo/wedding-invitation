@@ -1,35 +1,7 @@
 @use "../../../styles/variables" as v;
 @use "../../../styles/mixins" as m;
 
-.modalContent {
-  border-radius: 32px !important;
-  margin: 16px;
-  bottom: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  transform: none !important;
-  width: auto !important;
-  max-width: v.$canvas-max-width !important;
-  overflow: hidden;
-  border: none !important;
-  
-  // Mobile Bottom handling
-  @media (max-width: v.$mobile) {
-    position: fixed !important;
-    margin: 0;
-    border-radius: 32px 32px 0 0 !important;
-  }
 
-  // Desktop handling override
-  @media (min-width: v.$mobile) {
-    bottom: auto !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    width: 400px !important;
-    border-radius: 32px !important;
-  }
-}
 
 .modalBody {
   padding: 0;
@@ -130,9 +102,7 @@
   }
 }
 
-.footer {
-  padding: 8px 24px 24px;
-}
+
 
 .fullWidth {
   width: 100%;

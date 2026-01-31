@@ -45,11 +45,10 @@ export const ShareModal: React.FC<ShareModalProps> = ({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <Dialog.Overlay />
             <Dialog.Content>
-                <Dialog.Header>
-                    <div className={styles.header}>
-                        <Text typography="t4" fontWeight="bold">청첩장 공유하기</Text>
-                        <Text typography="t6" color="#666">원하는 방법으로 청첩장을 공유해보세요</Text>
-                    </div>
+                <Dialog.Header title="청첩장 공유하기">
+                    <Text typography="t6" color="#666" style={{ textAlign: 'center', marginTop: '4px', display: 'block' }}>
+                        원하는 방법으로 청첩장을 공유해보세요
+                    </Text>
                 </Dialog.Header>
                 <Dialog.Body>
                     <div className={styles.shareContainer}>
@@ -88,16 +87,14 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                         </div>
                     </div>
                 </Dialog.Body>
-                <Dialog.Footer className={styles.footer}>
-                    <div className={styles.shareButtonRow}>
-                        <Button
-                            variant="weak"
-                            onClick={() => onOpenChange(false)}
-                            className={styles.cancelButton}
-                        >
-                            닫기
-                        </Button>
-                    </div>
+                <Dialog.Footer>
+                    <Button
+                        variant="weak"
+                        onClick={() => onOpenChange(false)}
+                        size="lg"
+                    >
+                        닫기
+                    </Button>
                 </Dialog.Footer>
             </Dialog.Content>
         </Dialog>

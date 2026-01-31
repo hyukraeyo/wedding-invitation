@@ -61,9 +61,11 @@ export const DatePicker = ({ value, onChange, onComplete, className, label, plac
                             className={styles.calendar || ""}
                         />
                     </Modal.Body>
-                    <Modal.Footer className={styles.footer}>
+                    <Modal.Footer>
                         <Button
                             className={styles.fullWidth}
+                            variant="fill"
+                            size="lg"
                             onClick={(e) => {
                                 e.stopPropagation();
                                 setIsOpen(false);
