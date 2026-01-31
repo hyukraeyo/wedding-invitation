@@ -23,7 +23,7 @@ const STEPS = [
 const SetupForm = () => {
     const router = useRouter();
     const { toast } = useToast();
-    const { groom, bride, date, time, setGroom, setBride, setDate, setTime, setSlug } = useInvitationStore();
+    const { groom, bride, date, time, setGroom, setBride, setDate, setTime, setSlug, reset } = useInvitationStore();
     const { setHeader, resetHeader } = useHeaderStore();
 
     const [currentStep, setCurrentStep] = useState(0);
@@ -34,6 +34,17 @@ const SetupForm = () => {
 
     const [groomFullName, setGroomFullName] = useState(groom.firstName ? `${groom.lastName}${groom.firstName}` : '');
     const [brideFullName, setBrideFullName] = useState(bride.firstName ? `${bride.lastName}${bride.firstName}` : '');
+
+    // 🍌 새로고침 시 데이터 초기화
+    useEffect(() => {
+        reset();
+    }, [reset]);
+
+    // 스토어가 초기화되면 로컬 상태도 동기화
+    useEffect(() => {
+        if (!groom.firstName && !groom.lastName) setGroomFullName('');
+        if (!bride.firstName && !bride.lastName) setBrideFullName('');
+    }, [groom, bride]);
 
     const groomNameRef = useRef<HTMLInputElement>(null);
     const brideNameRef = useRef<HTMLInputElement>(null);
@@ -165,10 +176,13 @@ const SetupForm = () => {
                                             onOpenChange={setIsTimePickerOpen}
                                             variant="surface"
                                             radius="large"
+                                            placeholder="예식 시간을 선택해주세요"
                                             onChange={setTime}
                                             disabled={false}
                                             onComplete={() => {
-                                                // 시간 선택 후 다음 로직이 필요하다면 여기에 추가
+                                                if (time) {
+                                                    setTimeout(() => handleNext(true), 300);
+                                                }
                                             }}
                                         />
                                     </FormControl>
@@ -194,6 +208,7 @@ const SetupForm = () => {
                                             onOpenChange={setIsDatePickerOpen}
                                             variant="surface"
                                             radius="large"
+                                            placeholder="예식 날짜를 선택해주세요"
                                             onChange={(val) => {
                                                 setDate(val);
                                                 if (val) {

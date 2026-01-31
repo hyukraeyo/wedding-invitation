@@ -7,6 +7,7 @@ import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Mousewheel } from 'swiper/modules';
 import type { Swiper as SwiperClass } from 'swiper';
+import { useMediaQuery } from '@/hooks/use-media-query';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -209,6 +210,9 @@ const TimePickerRaw = ({
         }
     }, [disabled, value, setIsOpen]);
 
+    const isMobile = useMediaQuery('(max-width: 768px)');
+    const showFooter = !isMobile;
+
     return (
         <>
             <TextField.Button
@@ -259,16 +263,18 @@ const TimePickerRaw = ({
                                 />
                             </div>
                         </Dialog.Body>
-                        <Dialog.Footer>
-                            <Button
-                                className={styles.fullWidth}
-                                variant="fill"
-                                size="lg"
-                                onClick={handleConfirm}
-                            >
-                                선택 완료
-                            </Button>
-                        </Dialog.Footer>
+                        {showFooter && (
+                            <Dialog.Footer>
+                                <Button
+                                    className={styles.fullWidth}
+                                    variant="fill"
+                                    size="lg"
+                                    onClick={handleConfirm}
+                                >
+                                    선택 완료
+                                </Button>
+                            </Dialog.Footer>
+                        )}
                     </Dialog.Content>
                 </Dialog.Portal>
             </Dialog>

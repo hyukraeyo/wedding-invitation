@@ -96,12 +96,14 @@ const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps
     ({ className, children, label, variant = 'surface', size = '2', radius = 'medium', ...props }, ref) => {
         const mappedVariant = (variant === 'box' ? 'surface' : variant) as TextFieldRootProps['variant'];
 
+        const isPlaceholder = !props.value && !!props.placeholder;
+
         const button = (
             <TextFieldRoot variant={mappedVariant} size={size} radius={radius} className={className}>
                 <button
                     ref={ref}
                     type="button"
-                    className={clsx(s.input, s.button, className)}
+                    className={clsx(s.input, s.button, isPlaceholder && s.placeholder, className)}
                     {...props}
                 >
                     {props.value || props.placeholder || children}
