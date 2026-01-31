@@ -10,11 +10,20 @@ export interface FixedBottomCTAProps {
     fixed?: boolean | undefined;
     className?: string | undefined;
     transparent?: boolean | undefined;
+    animated?: boolean | undefined;
 }
 
-export const FixedBottomCTA = ({ children, fixed = true, className, transparent }: FixedBottomCTAProps) => {
+export const FixedBottomCTA = ({ children, fixed = true, className, transparent, animated }: FixedBottomCTAProps) => {
     return (
-        <div className={clsx(s.fixedBottom, !!fixed && s.fixed, !!transparent && s.transparent, className)}>
+        <div
+            className={clsx(
+                s.fixedBottom,
+                !!fixed && s.fixed,
+                !!transparent && s.transparent,
+                !!animated && s.animated,
+                className
+            )}
+        >
             {children}
         </div>
     );
@@ -30,6 +39,7 @@ export interface BottomCTASingleProps {
     wrapperClassName?: string | undefined;
     type?: 'button' | 'submit' | 'reset' | undefined;
     transparent?: boolean | undefined;
+    animated?: boolean | undefined;
 }
 
 const Single = ({
@@ -41,7 +51,8 @@ const Single = ({
     className,
     wrapperClassName,
     type = 'button',
-    transparent
+    transparent,
+    animated
 }: BottomCTASingleProps) => {
     const button = (
         <Button
@@ -64,7 +75,12 @@ const Single = ({
     }
 
     return (
-        <FixedBottomCTA fixed={fixed} transparent={!!transparent} className={wrapperClassName}>
+        <FixedBottomCTA
+            fixed={fixed}
+            transparent={!!transparent}
+            className={wrapperClassName}
+            animated={animated}
+        >
             {button}
         </FixedBottomCTA>
     );
@@ -83,6 +99,7 @@ export interface BottomCTADoubleProps {
     className?: string | undefined;
     wrapperClassName?: string | undefined;
     transparent?: boolean | undefined;
+    animated?: boolean | undefined;
 }
 
 const Double = ({
@@ -97,7 +114,8 @@ const Double = ({
     rightDisabled,
     className,
     wrapperClassName,
-    transparent
+    transparent,
+    animated
 }: BottomCTADoubleProps) => {
     const content = (
         <div className={s.buttonGroup}>
@@ -131,7 +149,12 @@ const Double = ({
     }
 
     return (
-        <FixedBottomCTA fixed={fixed} className={clsx(wrapperClassName, className)} transparent={!!transparent}>
+        <FixedBottomCTA
+            fixed={fixed}
+            className={clsx(wrapperClassName, className)}
+            transparent={!!transparent}
+            animated={animated}
+        >
             {content}
         </FixedBottomCTA>
     );

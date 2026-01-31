@@ -247,6 +247,7 @@ const SetupForm = () => {
                         transparent
                         wrapperClassName={styles.bottomCta}
                         onClick={() => handleNext()}
+                        animated={true}
                     >
                         {highestStepReached < 3 ? (
                             <span>다음</span>
