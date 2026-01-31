@@ -127,62 +127,22 @@ const SetupForm = () => {
                 )}
 
                 <Form onSubmit={handleSubmit} className={styles.form}>
-                    <Box
-                        className={cn(styles.fieldWrapper, currentStep !== 0 && styles.inactive)}
-                        onClick={() => handleFieldClick(0)}
-                    >
-                        <FormField name="groom-name">
-                            <FormLabel className={styles.label}>신랑 이름</FormLabel>
-                            <FormControl asChild>
-                                <TextField
-                                    id="groom-name"
-                                    ref={groomNameRef}
-                                    value={groomFullName}
-                                    readOnly={currentStep !== 0}
-                                    variant="surface"
-                                    radius="large"
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                        const val = e.target.value;
-                                        setGroomFullName(val);
-                                    }}
-                                    onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                                        if (e.key === 'Enter' && currentStep === 0 && groomFullName.trim()) {
-                                            e.preventDefault();
-                                            handleNext();
-                                        }
-                                    }}
-                                    required
-                                />
-                            </FormControl>
-                        </FormField>
-                    </Box>
-
-                    {highestStepReached >= 1 && (
+                    {highestStepReached >= 3 && (
                         <Box
-                            className={cn(styles.fieldWrapper, currentStep !== 1 && styles.inactive)}
-                            onClick={() => handleFieldClick(1)}
+                            className={cn(styles.fieldWrapper, currentStep !== 3 && styles.inactive)}
+                            onClick={() => handleFieldClick(3)}
                         >
-                            <FormField name="bride-name">
-                                <FormLabel className={styles.label}>신부 이름</FormLabel>
+                            <FormField name="wedding-time">
+                                <FormLabel className={styles.label}>예식 시간</FormLabel>
                                 <FormControl asChild>
-                                    <TextField
-                                        id="bride-name"
-                                        ref={brideNameRef}
-                                        value={brideFullName}
-                                        readOnly={currentStep !== 1}
+                                    <TimePicker
+                                        id="wedding-time"
+                                        ref={timeRef}
+                                        value={time}
                                         variant="surface"
                                         radius="large"
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                                            const val = e.target.value;
-                                            setBrideFullName(val);
-                                        }}
-                                        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                                            if (e.key === 'Enter' && currentStep === 1 && brideFullName.trim()) {
-                                                e.preventDefault();
-                                                handleNext();
-                                            }
-                                        }}
-                                        required
+                                        onChange={setTime}
+                                        disabled={false}
                                     />
                                 </FormControl>
                             </FormField>
@@ -202,6 +162,7 @@ const SetupForm = () => {
                                         ref={dateRef}
                                         value={date}
                                         variant="surface"
+                                        radius="large"
                                         onChange={(val) => {
                                             setDate(val);
                                             if (val) setTimeout(() => handleNext(true), 300);
@@ -213,26 +174,69 @@ const SetupForm = () => {
                         </Box>
                     )}
 
-                    {highestStepReached >= 3 && (
+                    {highestStepReached >= 1 && (
                         <Box
-                            className={cn(styles.fieldWrapper, currentStep !== 3 && styles.inactive)}
-                            onClick={() => handleFieldClick(3)}
+                            className={cn(styles.fieldWrapper, currentStep !== 1 && styles.inactive)}
+                            onClick={() => handleFieldClick(1)}
                         >
-                            <FormField name="wedding-time">
-                                <FormLabel className={styles.label}>예식 시간</FormLabel>
+                            <FormField name="bride-name">
+                                <FormLabel className={styles.label}>신부 이름</FormLabel>
                                 <FormControl asChild>
-                                    <TimePicker
-                                        id="wedding-time"
-                                        ref={timeRef}
-                                        value={time}
+                                    <TextField
+                                        id="bride-name"
+                                        ref={brideNameRef}
+                                        value={brideFullName}
+                                        readOnly={currentStep !== 1}
                                         variant="surface"
-                                        onChange={setTime}
-                                        disabled={false}
+                                        radius="large"
+                                        placeholder="신부 성함을 입력해주세요"
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                            const val = e.target.value;
+                                            setBrideFullName(val);
+                                        }}
+                                        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                                            if (e.key === 'Enter' && currentStep === 1 && brideFullName.trim()) {
+                                                e.preventDefault();
+                                                handleNext();
+                                            }
+                                        }}
+                                        required
                                     />
                                 </FormControl>
                             </FormField>
                         </Box>
                     )}
+
+                    <Box
+                        className={cn(styles.fieldWrapper, currentStep !== 0 && styles.inactive)}
+                        onClick={() => handleFieldClick(0)}
+                    >
+                        <FormField name="groom-name">
+                            <FormLabel className={styles.label}>신랑 이름</FormLabel>
+                            <FormControl asChild>
+                                <TextField
+                                    id="groom-name"
+                                    ref={groomNameRef}
+                                    value={groomFullName}
+                                    readOnly={currentStep !== 0}
+                                    variant="surface"
+                                    radius="large"
+                                    placeholder="신랑 성함을 입력해주세요"
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                        const val = e.target.value;
+                                        setGroomFullName(val);
+                                    }}
+                                    onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                                        if (e.key === 'Enter' && currentStep === 0 && groomFullName.trim()) {
+                                            e.preventDefault();
+                                            handleNext();
+                                        }
+                                    }}
+                                    required
+                                />
+                            </FormControl>
+                        </FormField>
+                    </Box>
                 </Form>
             </Card>
 
