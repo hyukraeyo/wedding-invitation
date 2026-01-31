@@ -209,6 +209,7 @@ const TimePickerRaw = ({
                         >
                             <SegmentedControl
                                 value={tPeriod}
+                                alignment="fluid"
                                 onChange={(v: string) => {
                                     updateTempTime({ period: v as Period });
                                 }}
@@ -219,6 +220,7 @@ const TimePickerRaw = ({
                         </div>
 
                         <div className={styles.pickerGrid}>
+                            <div className={styles.mask} />
                             {renderColumn(hourOptions, tDisplayHour, 'hour')}
                             {renderColumn(minuteOptions, currentTM, 'minute')}
                         </div>

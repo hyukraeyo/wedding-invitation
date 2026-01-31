@@ -32,9 +32,13 @@ const SetupForm = () => {
 
     const [currentStep, setCurrentStep] = useState(0);
     const [highestStepReached, setHighestStepReached] = useState(() => {
-        if (store.time) return 3;
-        if (store.date) return 2;
-        if (store.bride.firstName || store.bride.lastName) return 1;
+        const hasGroom = !!(store.groom.firstName || store.groom.lastName);
+        const hasBride = !!(store.bride.firstName || store.bride.lastName);
+        const hasDate = !!store.date;
+
+        if (hasDate) return 3;
+        if (hasBride) return 2;
+        if (hasGroom) return 1;
         return 0;
     });
 
@@ -305,6 +309,7 @@ const SetupForm = () => {
                         </FormField>
                     </Box>
                 </Form>
+
             </Box>
 
             {(currentStep === 3 || isStepValid()) && (

@@ -112,19 +112,21 @@
         }
     }
 
-    // Animation for newly appearing fields
-    animation: fieldAppear 0.5s v.$ease-ios both;
+    // Animation for newly appearing fields (Smooth sweep)
+    animation: fieldAppear 0.8s v.$ease-ios both;
 }
 
 @keyframes fieldAppear {
     from {
         opacity: 0;
-        transform: translateY(-16px);
+        transform: translateY(-24px);
+        filter: blur(4px);
     }
 
     to {
         opacity: 1;
         transform: translateY(0);
+        filter: blur(0);
     }
 }
 
