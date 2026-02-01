@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useHeaderStore } from '@/store/useHeaderStore';
-import { TextField, Heading, Flex, Box, Form, FormField, FormLabel, FormControl, Card } from '@/components/ui';
+import { TextField, Heading, Flex, Box, Form, FormField, FormLabel, FormControl, Card, Skeleton } from '@/components/ui';
 import { DatePicker } from '@/components/common/DatePicker';
 import { TimePicker } from '@/components/common/TimePicker';
 import { Sparkles } from 'lucide-react';
@@ -102,13 +102,21 @@ const SetupForm = () => {
         else if (currentStep === 1) brideNameRef.current?.focus();
     }, [currentStep]);
 
-    // 초기화 완료 전에는 로딩 표시
+    // 초기화 완료 전에는 스켈레톤 표시
     if (!isHydrated) {
         return (
             <Box className={styles.container}>
-                <Flex align="center" justify="center" style={{ height: '100vh' }}>
-                    <div>로딩중...</div>
-                </Flex>
+                <Card variant="ghost" className={styles.whiteBox}>
+                    <Box className={styles.headerContent}>
+                        <Skeleton width="60%" height="84px" style={{ borderRadius: '12px' }} />
+                    </Box>
+                    <div className={styles.formWindow} style={{ height: '88px' }}>
+                        <div className={styles.fieldContainer} style={{ opacity: 1 }}>
+                            <Skeleton width="80px" height="18px" style={{ marginBottom: '0.5rem' }} />
+                            <Skeleton width="100%" height="48px" style={{ borderRadius: '12px' }} />
+                        </div>
+                    </div>
+                </Card>
             </Box>
         );
     }
@@ -212,8 +220,7 @@ const SetupForm = () => {
                                         onChange={setTime}
                                         disabled={false}
                                         onComplete={() => {
-                                            // 확인 버튼을 클릭하면 onComplete가 호출되므로 바로 다음 스텝으로 진행
-                                            setTimeout(() => handleNext(true), 300);
+                                            setIsTimePickerOpen(false);
                                         }}
                                     />
                                 </FormControl>

@@ -88,6 +88,7 @@ export const DatePicker = ({
                                 onSelect={handleSelect}
                                 className={styles.calendar || ""}
                                 hideTodayIndicator={!dateValue}
+                                showOutsideDays={false}
                             />
                         </Dialog.Body>
                     </Dialog.Content>
