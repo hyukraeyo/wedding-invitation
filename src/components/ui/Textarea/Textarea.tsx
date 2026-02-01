@@ -4,15 +4,18 @@ import * as React from 'react';
 import { clsx } from 'clsx';
 import s from './Textarea.module.scss';
 
+type TextareaVariant = 'surface' | 'classic' | 'soft';
+type TextareaRadius = 'none' | 'small' | 'medium' | 'large';
+
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
     label?: string;
-    variant?: 'surface' | 'classic' | 'soft';
-    radius?: 'none' | 'small' | 'medium' | 'large';
+    variant?: TextareaVariant;
+    radius?: TextareaRadius;
     highContrast?: boolean;
 }
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-    ({ label, variant = 'surface', radius = 'medium', highContrast = false, className, id, ...props }, ref) => {
+    ({ label, variant = 'surface', radius = 'medium', highContrast = false, className, id, disabled, ...props }, ref) => {
         const generatedId = React.useId();
         const textareaId = id || generatedId;
 
@@ -23,11 +26,11 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
                     s[variant],
                     s[`radius_${radius}`],
                     highContrast && s.highContrast,
-                    props.disabled && s.disabled,
+                    disabled && s.disabled,
                     className
                 )}
             >
-                <textarea ref={ref} id={textareaId} className={s.textarea} {...props} />
+                <textarea ref={ref} id={textareaId} className={s.textarea} disabled={disabled} {...props} />
             </div>
         );
 

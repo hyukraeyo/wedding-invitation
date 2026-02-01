@@ -5,23 +5,29 @@ import { clsx } from 'clsx';
 import s from './TextField.module.scss';
 
 // --- Context for sharing props between Root and Input/Slot ---
+type TextFieldSize = '1' | '2' | '3';
+type TextFieldVariant = 'surface' | 'classic' | 'soft';
+type TextFieldRadius = 'none' | 'small' | 'medium' | 'large' | 'full';
+type TextFieldButtonVariant = TextFieldVariant | 'box';
+type TextFieldLegacyVariant = TextFieldVariant | 'line' | 'box';
+
 interface TextFieldContextValue {
-    size?: '1' | '2' | '3' | undefined;
-    variant?: 'surface' | 'classic' | 'soft' | undefined;
-    color?: string | undefined;
-    radius?: 'none' | 'small' | 'medium' | 'large' | 'full' | undefined;
-    disabled?: boolean | undefined;
+    size?: TextFieldSize;
+    variant?: TextFieldVariant;
+    color?: string;
+    radius?: TextFieldRadius;
+    disabled?: boolean;
 }
 
 const TextFieldContext = React.createContext<TextFieldContextValue>({});
 
 // --- TextField.Root ---
 export interface TextFieldRootProps extends React.HTMLAttributes<HTMLDivElement> {
-    size?: '1' | '2' | '3' | undefined;
-    variant?: 'surface' | 'classic' | 'soft' | undefined;
-    radius?: 'none' | 'small' | 'medium' | 'large' | 'full' | undefined;
-    highContrast?: boolean | undefined;
-    disabled?: boolean | undefined;
+    size?: TextFieldSize;
+    variant?: TextFieldVariant;
+    radius?: TextFieldRadius;
+    highContrast?: boolean;
+    disabled?: boolean;
 }
 
 const TextFieldRoot = React.forwardRef<HTMLDivElement, TextFieldRootProps>(
@@ -85,11 +91,11 @@ TextFieldSlot.displayName = 'TextField.Slot';
 
 // --- TextField.Button ---
 export interface TextFieldButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    label?: string | undefined;
-    variant?: 'surface' | 'classic' | 'soft' | 'box' | undefined;
-    size?: '1' | '2' | '3' | undefined;
-    radius?: 'none' | 'small' | 'medium' | 'large' | 'full' | undefined;
-    placeholder?: string | undefined;
+    label?: string;
+    variant?: TextFieldButtonVariant;
+    size?: TextFieldSize;
+    radius?: TextFieldRadius;
+    placeholder?: string;
 }
 
 const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps>(
@@ -132,12 +138,12 @@ TextFieldButton.displayName = 'TextField.Button';
 // Existing code uses <TextField label="..." variant="line" />
 // We convert 'line' to 'classic' and handle the label.
 export interface TextFieldLegacyProps extends Omit<TextFieldInputProps, 'size'> {
-    label?: string | undefined;
-    variant?: 'surface' | 'classic' | 'soft' | 'line' | 'box' | undefined;
-    size?: '1' | '2' | '3' | undefined;
-    radius?: 'none' | 'small' | 'medium' | 'large' | 'full' | undefined;
-    leftSlot?: React.ReactNode | undefined;
-    rightSlot?: React.ReactNode | undefined;
+    label?: string;
+    variant?: TextFieldLegacyVariant;
+    size?: TextFieldSize;
+    radius?: TextFieldRadius;
+    leftSlot?: React.ReactNode;
+    rightSlot?: React.ReactNode;
 }
 
 const TextField = React.forwardRef<HTMLInputElement, TextFieldLegacyProps>(

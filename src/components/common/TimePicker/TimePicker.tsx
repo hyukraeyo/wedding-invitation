@@ -248,7 +248,7 @@ const TimePickerRaw = ({
                                 </SegmentedControl>
                             </div>
 
-                            <div className={styles.pickerGrid}>
+                            <div className={styles.pickerGrid} data-vaul-no-drag>
                                 <div className={styles.mask} />
                                 <div className={styles.highlightLine} />
                                 <WheelColumn

@@ -5,8 +5,10 @@ import { Slot } from '@radix-ui/react-slot';
 import { clsx } from 'clsx';
 import s from './Heading.module.scss';
 
-export interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
-    as?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'span' | 'div';
+type HeadingAs = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'span' | 'div';
+
+export interface HeadingProps extends React.HTMLAttributes<HTMLElement> {
+    as?: HeadingAs;
     size?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
     weight?: 'light' | 'regular' | 'medium' | 'bold';
     align?: 'left' | 'center' | 'right';
@@ -16,7 +18,7 @@ export interface HeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
     asChild?: boolean;
 }
 
-const Heading = React.forwardRef<HTMLHeadingElement, HeadingProps>(
+const Heading = React.forwardRef<HTMLElement, HeadingProps>(
     (
         {
             className,

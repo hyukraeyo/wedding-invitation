@@ -5,8 +5,22 @@ import { Slot } from '@radix-ui/react-slot';
 import { clsx } from 'clsx';
 import s from './Text.module.scss';
 
-export interface TextProps extends React.HTMLAttributes<HTMLSpanElement> {
-    as?: 'span' | 'div' | 'p' | 'label' | 'strong' | 'em' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+type TextAs =
+    | 'span'
+    | 'div'
+    | 'p'
+    | 'label'
+    | 'strong'
+    | 'em'
+    | 'h1'
+    | 'h2'
+    | 'h3'
+    | 'h4'
+    | 'h5'
+    | 'h6';
+
+export interface TextProps extends React.HTMLAttributes<HTMLElement> {
+    as?: TextAs;
     size?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
     typography?: 't1' | 't2' | 't3' | 't4' | 't5' | 't6' | 't7';
     fontWeight?: 'light' | 'regular' | 'medium' | 'bold';
@@ -43,8 +57,7 @@ const Text = React.forwardRef<HTMLElement, TextProps>(
 
         return (
             <Comp
-                /* eslint-disable @typescript-eslint/no-explicit-any */
-                ref={ref as any}
+                ref={ref}
                 style={customStyle}
                 className={clsx(
                     s.text,
@@ -57,8 +70,7 @@ const Text = React.forwardRef<HTMLElement, TextProps>(
                     highContrast && s.highContrast,
                     className
                 )}
-                {...(props as any)}
-            /* eslint-enable @typescript-eslint/no-explicit-any */
+                {...props}
             />
         );
     }

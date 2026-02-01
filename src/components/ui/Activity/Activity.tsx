@@ -3,16 +3,20 @@
 import * as React from 'react';
 import { Activity as ReactActivity } from 'react';
 
-interface ActivityProps {
+type ActivityMode = 'visible' | 'hidden';
+
+interface ActivityProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  mode: 'visible' | 'hidden';
+  mode?: ActivityMode;
 }
 
 export const Activity = React.forwardRef<HTMLDivElement, ActivityProps>(
-  ({ children, mode }, ref) => {
+  ({ children, mode = 'visible', className, ...props }, ref) => {
     return (
       <ReactActivity mode={mode}>
-        <div ref={ref}>{children}</div>
+        <div ref={ref} className={className} {...props}>
+          {children}
+        </div>
       </ReactActivity>
     );
   }

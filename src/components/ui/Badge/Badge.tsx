@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { Slot } from '@radix-ui/react-slot';
 import { clsx } from 'clsx';
 import s from './Badge.module.scss';
 
@@ -10,6 +11,7 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
     color?: 'primary' | 'secondary' | 'danger' | 'grey' | 'blue' | 'green' | 'red';
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
     highContrast?: boolean;
+    asChild?: boolean;
 }
 
 const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
@@ -21,12 +23,15 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
             color = 'secondary',
             radius = 'medium',
             highContrast = false,
+            asChild = false,
             ...props
         },
         ref
     ) => {
+        const Comp = asChild ? Slot : 'span';
+
         return (
-            <span
+            <Comp
                 ref={ref}
                 className={clsx(
                     s.badge,

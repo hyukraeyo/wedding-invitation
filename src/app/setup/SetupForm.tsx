@@ -98,9 +98,10 @@ const SetupForm = () => {
     }, [progress, handleBack, setHeader, resetHeader]);
 
     useEffect(() => {
+        if (!isHydrated) return;
         if (currentStep === 0) groomNameRef.current?.focus();
         else if (currentStep === 1) brideNameRef.current?.focus();
-    }, [currentStep]);
+    }, [currentStep, isHydrated]);
 
     // 초기화 완료 전에는 스켈레톤 표시
     if (!isHydrated) {
