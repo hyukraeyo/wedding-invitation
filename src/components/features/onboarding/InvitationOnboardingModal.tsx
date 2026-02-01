@@ -38,7 +38,7 @@ export function InvitationOnboardingModal({ isOpen, onClose }: InvitationOnboard
         groomName: "",
         brideName: "",
         date: "",
-        time: "13:00",
+        time: "",
         location: "",
     });
 

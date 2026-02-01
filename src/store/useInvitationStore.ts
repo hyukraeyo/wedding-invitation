@@ -529,7 +529,15 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
     })),
     // Merge function to handle new fields added to the store
     merge: (persistedState, currentState) => {
-        const persisted = persistedState as Partial<InvitationState>;
+        const persisted = persistedState as Partial<InvitationState> & { _version?: number };
+        
+        // 버전이 다르면 저장된 상태를 무시하고 초기 상태 사용
+        // 버전을 올리면 모든 사용자의 저장된 데이터가 초기화됨
+        const CURRENT_VERSION = 3;
+        if (persisted._version !== CURRENT_VERSION) {
+            return currentState;
+        }
+        
         return {
             ...currentState,
             ...persisted,
@@ -568,6 +576,10 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
             },
         };
     },
+    partialize: (state) => ({ 
+        ...state, 
+        _version: 3 
+    }),
     // Removed partialize to allow gallery and images to be saved in IndexedDB
     // IndexedDB has much higher limits than localStorage
 }));

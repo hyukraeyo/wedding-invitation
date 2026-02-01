@@ -26,7 +26,6 @@
   left: 0;
   background-color: v.$white;
   border-radius: calc(v.$radius-md - 2px); // 14px
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s v.$ease-ios, width 0.3s v.$ease-ios, opacity 0.2s;
   pointer-events: none;
   z-index: 0;

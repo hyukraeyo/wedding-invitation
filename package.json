@@ -2,12 +2,33 @@
   "name": "banana-wedding",
   "version": "0.1.0",
   "private": true,
+  "description": "쉽고 빠른 모바일 청첩장 제작 플랫폼 - Next.js 16, React 19, TypeScript",
+  "author": "Hyuk Rae Yoon <hyukraeyo@gmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
+  "browserslist": [
+    ">= 0.5%",
+    "last 2 major versions",
+    "not dead",
+    "Chrome >= 90",
+    "Firefox >= 88",
+    "Safari >= 14",
+    "Edge >= 90"
+  ],
   "scripts": {
     "dev": "next dev --turbo",
     "dev:turbo": "next dev --turbo",
     "build": "next build --webpack",
+    "build:turbo": "next build --turbo",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "analyze": "cross-env ANALYZE=true next build --webpack",
+    "type-check": "tsc --noEmit",
+    "clean": "rimraf .next out dist"
   },
   "dependencies": {
     "@auth/supabase-adapter": "^1.11.1",
@@ -73,14 +94,18 @@
     "zustand": "^5.0.9"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^16.1.1",
     "@svgr/webpack": "^8.1.0",
     "@types/node": "^20",
     "@types/react": "^19.2.10",
     "@types/react-dom": "^19.2.3",
     "@typescript-eslint/parser": "^8.53.0",
+    "babel-plugin-react-compiler": "^19.0.0-beta-55955c9-20241129",
+    "cross-env": "^7.0.3",
     "dotenv": "^17.2.3",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
+    "rimraf": "^5.0.10",
     "sass": "^1.97.2",
     "typescript": "^5"
   },

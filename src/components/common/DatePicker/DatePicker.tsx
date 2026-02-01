@@ -7,8 +7,6 @@ import { ko } from 'date-fns/locale';
 import { SelectSingleEventHandler } from 'react-day-picker';
 import { Dialog } from '@/components/ui/Dialog';
 import { TextField } from '@/components/ui/TextField';
-import { Button } from '@/components/ui/Button';
-import { useMediaQuery } from '@/hooks/use-media-query';
 import styles from './DatePicker.module.scss';
 
 interface DatePickerProps {
@@ -42,9 +40,6 @@ export const DatePicker = ({
     id,
     ref
 }: DatePickerProps) => {
-    const isMobile = useMediaQuery('(max-width: 768px)');
-    const showFooter = !isMobile;
-
     const [internalOpen, setInternalOpen] = useState(false);
     const isOpen = externalOpen !== undefined ? externalOpen : internalOpen;
 
@@ -88,27 +83,13 @@ export const DatePicker = ({
                         <Dialog.Body className={styles.calendarBody}>
                             <Calendar
                                 mode="single"
-                                selected={dateValue || new Date()}
-                                defaultMonth={dateValue || new Date()}
+                                selected={dateValue}
+                                defaultMonth={new Date()}
                                 onSelect={handleSelect}
                                 className={styles.calendar || ""}
+                                hideTodayIndicator={!dateValue}
                             />
                         </Dialog.Body>
-                        {showFooter && (
-                            <Dialog.Footer>
-                                <Button
-                                    className={styles.fullWidth}
-                                    variant="fill"
-                                    size="lg"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        setIsOpen(false);
-                                    }}
-                                >
-                                    닫기
-                                </Button>
-                            </Dialog.Footer>
-                        )}
                     </Dialog.Content>
                 </Dialog.Portal>
             </Dialog>

@@ -7,7 +7,6 @@ import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Mousewheel } from 'swiper/modules';
 import type { Swiper as SwiperClass } from 'swiper';
-import { useMediaQuery } from '@/hooks/use-media-query';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -37,18 +36,24 @@ const WheelColumn = ({
     options,
     value,
     onChange,
+    hasValue,
 }: {
     options: { label: string, value: string }[],
     value: string,
     onChange: (val: string) => void,
+    hasValue: boolean;
 }) => {
     const swiperRef = useRef<SwiperClass | null>(null);
     const isInternalUpdateRef = useRef(false);
 
     const initialIndex = useMemo(() => {
+        if (!hasValue) {
+            // 값이 없으면 중앙에 빈 공간을 보여주기 위해 -2 반환 (슬라이드되지 않음)
+            return 2; // 중앙 위치를 기본으로
+        }
         const index = options.findIndex(opt => opt.value === value);
         return index !== -1 ? index : 0;
-    }, [options, value]);
+    }, [options, value, hasValue]);
 
     // External value change -> Swiper sync
     useEffect(() => {
@@ -89,7 +94,7 @@ const WheelColumn = ({
                 {options.map((opt) => (
                     <SwiperSlide key={opt.value} className={styles.swiperSlide}>
                         {({ isActive }) => (
-                            <div className={cn(styles.optionItem, isActive && styles.active)}>
+                            <div className={cn(styles.optionItem, isActive && hasValue && styles.active)}>
                                 {opt.label}
                             </div>
                         )}
@@ -126,7 +131,7 @@ const TimePickerRaw = ({
         }
     }, [setExternalOpen]);
 
-    const [tempValue, setTempValue] = useState(value || '13:00');
+    const [tempValue, setTempValue] = useState(value || '');
 
     // Parse value for display button
     const displayValue = useMemo(() => {
@@ -140,8 +145,10 @@ const TimePickerRaw = ({
 
     // Parse tempValue for wheel state
     const { currentTM, tPeriod, tDisplayHour } = useMemo(() => {
-        const [tHStr, tMStr] = (tempValue || '13:00').split(':');
-        const tHInt = parseInt(tHStr || '13', 10);
+        // tempValue가 없으면 기본값 12:00 (정오)으로 설정하되, 선택된 것으로 표시하지 않음
+        const effectiveValue = tempValue || '12:00';
+        const [tHStr, tMStr] = effectiveValue.split(':');
+        const tHInt = parseInt(tHStr || '12', 10);
         const tp: Period = tHInt >= 12 ? 'PM' : 'AM';
         const tdh = String(tHInt > 12 ? tHInt - 12 : (tHInt === 0 ? 12 : tHInt));
 
@@ -169,8 +176,9 @@ const TimePickerRaw = ({
 
     // Update tempValue logic - NO side effects (onChange) inside here
     const getNextValue = useCallback((updates: { period?: Period, hour?: string, minute?: string }) => {
-        const [hStr, mStr] = (tempValue || '13:00').split(':');
-        const h = parseInt(hStr || '13', 10);
+        const effectiveTempValue = tempValue || '12:00';
+        const [hStr, mStr] = effectiveTempValue.split(':');
+        const h = parseInt(hStr || '12', 10);
         const currentPeriod: Period = h >= 12 ? 'PM' : 'AM';
         const currentDisplayH = h > 12 ? h - 12 : (h === 0 ? 12 : h);
 
@@ -188,30 +196,24 @@ const TimePickerRaw = ({
     const handleTempChange = useCallback((updates: { period?: Period, hour?: string, minute?: string }) => {
         const finalValue = getNextValue(updates);
         setTempValue(finalValue);
-
-        // 🍌 Live sync - use a microtask or update it directly if not in a render cycle
-        // Calling onChange here is safe as long as it's an event handler and not an updater function.
-        if (finalValue !== value) {
-            onChange(finalValue);
-        }
-    }, [onChange, value, getNextValue]);
+        // 🍌 값은 모달 내부에서만 임시 저장되고, 확인 버튼을 클릭할 때만 onChange가 호출됨
+    }, [getNextValue]);
 
     const handleConfirm = useCallback((e?: React.MouseEvent) => {
         e?.stopPropagation();
-        onChange(tempValue);
+        // tempValue가 빈 문자열이면 기본값(휠에 표시된 12:00)을 사용
+        const finalValue = tempValue || '12:00';
+        onChange(finalValue);
         setIsOpen(false);
         onComplete?.();
     }, [onChange, tempValue, onComplete, setIsOpen]);
 
     const handleOpenModal = useCallback(() => {
         if (!disabled) {
-            setTempValue(value || '13:00');
+            setTempValue(value || '');
             setIsOpen(true);
         }
     }, [disabled, value, setIsOpen]);
-
-    const isMobile = useMediaQuery('(max-width: 768px)');
-    const showFooter = !isMobile;
 
     return (
         <>
@@ -255,26 +257,24 @@ const TimePickerRaw = ({
                                     options={hourOptions}
                                     value={tDisplayHour}
                                     onChange={(h) => handleTempChange({ hour: h })}
+                                    hasValue={!!tempValue}
                                 />
                                 <WheelColumn
                                     options={minuteOptions}
                                     value={currentTM}
                                     onChange={(m) => handleTempChange({ minute: m })}
+                                    hasValue={!!tempValue}
                                 />
                             </div>
                         </Dialog.Body>
-                        {showFooter && (
-                            <Dialog.Footer>
-                                <Button
-                                    className={styles.fullWidth}
-                                    variant="fill"
-                                    size="lg"
-                                    onClick={handleConfirm}
-                                >
-                                    선택 완료
-                                </Button>
-                            </Dialog.Footer>
-                        )}
+                        <Dialog.Footer className={styles.footer}>
+                            <Button
+                                variant="solid"
+                                onClick={handleConfirm}
+                            >
+                                확인
+                            </Button>
+                        </Dialog.Footer>
                     </Dialog.Content>
                 </Dialog.Portal>
             </Dialog>

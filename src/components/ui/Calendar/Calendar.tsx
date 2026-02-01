@@ -11,12 +11,18 @@ import { ko } from "date-fns/locale"
 import { cn } from "@/lib/utils"
 import styles from "./Calendar.module.scss"
 
+type CalendarProps = React.ComponentProps<typeof DayPicker> & {
+  hideTodayIndicator?: boolean;
+};
+
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
+  hideTodayIndicator = false,
+  modifiers,
   ...props
-}: React.ComponentProps<typeof DayPicker>) {
+}: CalendarProps) {
   const defaultClassNames: ClassNames = {
     months: styles.months,
     month: styles.month,
@@ -25,7 +31,7 @@ function Calendar({
     weekday: styles.weekday,
     week: styles.week,
     day: styles.day,
-    today: styles.today,
+    today: hideTodayIndicator ? undefined : styles.today,
     outside: styles.outside,
     disabled: styles.disabled,
     range_start: styles.range_start,
@@ -35,6 +41,11 @@ function Calendar({
     ...classNames,
   } as ClassNames;
 
+  // 오늘 날짜 표시를 숨기려면 today modifier를 undefined로 설정
+  const customModifiers = hideTodayIndicator
+    ? { ...modifiers, today: undefined }
+    : modifiers;
+
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -42,6 +53,7 @@ function Calendar({
       className={cn(styles.root, className)}
       locale={ko}
       classNames={defaultClassNames}
+      modifiers={customModifiers}
       components={{
         MonthCaption: CustomMonthCaption,
         Nav: () => <></>,
