@@ -5,7 +5,14 @@
   position: fixed;
   inset: 0;
   z-index: v.$z-overlay;
-  animation: overlayShow v.$transition-normal v.$ease-ios;
+  
+  &[data-state='open'] {
+    animation: overlayShow v.$transition-normal v.$ease-ios;
+  }
+  
+  &[data-state='closed'] {
+    animation: overlayHide v.$transition-normal v.$ease-ios;
+  }
 
   &.bottomSheetOverlay {
     animation: none;
@@ -35,7 +42,15 @@
   max-width: v.$canvas-max-width;
   max-height: 90vh;
   border-radius: v.$radius-xl v.$radius-xl 0 0;
-  animation: contentShow v.$transition-smooth v.$ease-ios;
+  
+  &[data-state='open'] {
+    // 260ms -> 300ms 정도로 약간 더 부드럽게 (스~윽 느낌)
+    animation: contentShow 0.3s v.$ease-ios;
+  }
+  
+  &[data-state='closed'] {
+    animation: contentHide 0.25s v.$ease-ios;
+  }
 
   @media (min-width: v.$mobile) {
     bottom: auto;
@@ -44,7 +59,14 @@
     border-radius: v.$radius-xl;
     width: 90vw;
     max-width: 480px;
-    animation: contentShowDesktop v.$transition-smooth v.$ease-ios;
+    
+    &[data-state='open'] {
+      animation: contentShowDesktop 0.35s v.$ease-ios;
+    }
+    
+    &[data-state='closed'] {
+      animation: contentHideDesktop 0.25s v.$ease-ios;
+    }
   }
 }
 
@@ -111,22 +133,52 @@
   to { opacity: 1; }
 }
 
+@keyframes overlayHide {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
 @keyframes contentShow {
   from {
+    opacity: 0;
     transform: translateX(-50%) translateY(100%);
   }
   to {
+    opacity: 1;
     transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes contentHide {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(100%);
   }
 }
 
 @keyframes contentShowDesktop {
   from {
     opacity: 0;
-    transform: translate(-50%, -48%) scale(0.96);
+    // 아래에서 위로 '스~윽' 올라오는 느낌을 위해 translateY 값을 더 크게 설정
+    transform: translate(-50%, -40%) scale(0.96);
   }
   to {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes contentHideDesktop {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
   }
 }

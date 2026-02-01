@@ -79,7 +79,7 @@ export const DatePicker = ({
                 <Dialog.Portal>
                     <Dialog.Overlay />
                     <Dialog.Content>
-                        <Dialog.Header title="날짜를 선택하세요" />
+                        <Dialog.Header title="날짜를 선택하세요" visuallyHidden />
                         <Dialog.Body className={styles.calendarBody}>
                             <Calendar
                                 mode="single"

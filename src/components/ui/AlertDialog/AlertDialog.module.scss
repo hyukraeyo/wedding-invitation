@@ -5,7 +5,14 @@
   position: fixed;
   inset: 0;
   z-index: v.$z-overlay;
-  animation: overlayShow v.$transition-normal v.$ease-ios;
+  
+  &[data-state='open'] {
+    animation: overlayShow v.$transition-normal v.$ease-ios;
+  }
+  
+  &[data-state='closed'] {
+    animation: overlayHide v.$transition-normal v.$ease-ios;
+  }
 }
 
 .content {
@@ -21,9 +28,16 @@
   flex-direction: column;
   z-index: v.$z-modal;
   box-shadow: v.$shadow-xl;
-  animation: contentShow v.$transition-smooth v.$ease-ios;
   overflow: hidden;
   padding: 24px;
+
+  &[data-state='open'] {
+    animation: contentShow 0.35s v.$ease-ios;
+  }
+  
+  &[data-state='closed'] {
+    animation: contentHide 0.2s v.$ease-ios;
+  }
 
   &:focus {
     outline: none;
@@ -61,13 +75,29 @@
   to { opacity: 1; }
 }
 
+@keyframes overlayHide {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
 @keyframes contentShow {
   from {
     opacity: 0;
-    transform: translate(-50%, -48%) scale(0.96);
+    transform: translate(-50%, -40%) scale(0.96);
   }
   to {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes contentHide {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -48%) scale(0.96);
   }
 }

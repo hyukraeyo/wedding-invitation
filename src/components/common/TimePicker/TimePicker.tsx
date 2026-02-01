@@ -230,7 +230,7 @@ const TimePickerRaw = ({
                 <Dialog.Portal>
                     <Dialog.Overlay />
                     <Dialog.Content>
-                        <Dialog.Header title="예식 시간 선택" />
+                        <Dialog.Header title="예식 시간 선택" visuallyHidden />
                         <Dialog.Body className={styles.modalBody} padding={false}>
                             <div
                                 className={styles.periodContainer}

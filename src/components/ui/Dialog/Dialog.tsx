@@ -3,6 +3,7 @@
 import React, { memo, useMemo, useContext, useCallback, useRef } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { BottomSheet } from '@/components/ui/BottomSheet';
+import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { cn } from '@/lib/utils';
 import styles from './Dialog.module.scss';
@@ -139,11 +140,20 @@ const DialogContent = memo(React.forwardRef<
             className={cn(styles.content, styles.dialogContent, className)}
             onOpenAutoFocus={handleOpenAutoFocus}
             {...props}
-            aria-describedby={props['aria-describedby'] || undefined}
         >
-            <DialogPrimitive.Description className="sr-only">
-                {props['aria-describedby'] || 'Dialog description'}
-            </DialogPrimitive.Description>
+            {/* Accessibility: Always provide Title and Description */}
+            {!children?.toString().includes('DialogTitle') && !children?.toString().includes('DialogHeader') && (
+                <VisuallyHidden>
+                    <DialogPrimitive.Title>
+                        {props['aria-label'] || 'Dialog'}
+                    </DialogPrimitive.Title>
+                </VisuallyHidden>
+            )}
+            <VisuallyHidden>
+                <DialogPrimitive.Description>
+                    {props['aria-describedby'] || 'Dialog description'}
+                </DialogPrimitive.Description>
+            </VisuallyHidden>
             {children}
         </DialogPrimitive.Content>
     );
@@ -154,23 +164,28 @@ const DialogHeader = memo(({
     className,
     title,
     children,
+    visuallyHidden,
     ...props
-}: React.HTMLAttributes<HTMLDivElement> & { title?: string }) => {
+}: React.HTMLAttributes<HTMLDivElement> & { title?: string; visuallyHidden?: boolean }) => {
     const { isBottomSheet } = useContext(DialogContext);
 
     if (isBottomSheet) {
-        return (
+        const headerContent = (
             <BottomSheet.Header
                 className={className}
                 title={title}
                 {...props}
             >
-                {!title && children}
+                {children}
             </BottomSheet.Header>
         );
+
+        return visuallyHidden ? (
+            <VisuallyHidden>{headerContent}</VisuallyHidden>
+        ) : headerContent;
     }
 
-    return (
+    const headerContent = (
         <div
             className={cn(styles.header, className)}
             {...props}
@@ -183,6 +198,10 @@ const DialogHeader = memo(({
             {children}
         </div>
     );
+
+    return visuallyHidden ? (
+        <VisuallyHidden>{headerContent}</VisuallyHidden>
+    ) : headerContent;
 });
 DialogHeader.displayName = 'DialogHeader';
 
@@ -227,8 +246,13 @@ const DialogDescription = memo(React.forwardRef<
 >(({ className, ...props }, ref) => {
     const { isBottomSheet } = useContext(DialogContext);
     if (isBottomSheet) {
-        // BottomSheet는 Description을 자동으로 처리하므로 null 반환
-        return null;
+        return (
+            <BottomSheet.Description
+                ref={ref as React.Ref<HTMLParagraphElement>}
+                className={className}
+                {...props}
+            />
+        );
     }
     return (
         <DialogPrimitive.Description
@@ -249,7 +273,7 @@ const DialogBody = memo(({
     const { isBottomSheet } = useContext(DialogContext);
 
     if (isBottomSheet) {
-        return <BottomSheet.Body className={className} {...props}>{children}</BottomSheet.Body>;
+        return <BottomSheet.Body className={className} padding={padding} {...props}>{children}</BottomSheet.Body>;
     }
 
     return (

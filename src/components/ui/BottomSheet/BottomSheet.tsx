@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { Drawer } from 'vaul';
 import { clsx } from 'clsx';
+import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
 import s from './BottomSheet.module.scss';
 
 export interface BottomSheetRootProps {
@@ -71,11 +72,18 @@ const BottomSheetContent = React.forwardRef<
         )}
         {...props}
     >
-        <div className={s.handle} />
-        <Drawer.Description className="sr-only">
-            {props['aria-describedby'] || 'Bottom sheet description'}
-        </Drawer.Description>
-        {children}
+        <div className={s.wrapper}>
+            <div className={s.handle} />
+            <VisuallyHidden>
+                <Drawer.Title>
+                    {props['aria-label'] || 'Bottom Sheet'}
+                </Drawer.Title>
+                <Drawer.Description>
+                    {props['aria-describedby'] || 'Bottom sheet description'}
+                </Drawer.Description>
+            </VisuallyHidden>
+            {children}
+        </div>
     </Drawer.Content>
 ));
 BottomSheetContent.displayName = 'BottomSheetContent';
@@ -93,8 +101,8 @@ const BottomSheetHeader = ({
     ...props
 }: BottomSheetHeaderProps) => (
     <div className={clsx(s.header, className)} {...props}>
-        {title && <Drawer.Title className={s.title}>{title}</Drawer.Title>}
-        {!title && children}
+        {title && <BottomSheetTitle>{title}</BottomSheetTitle>}
+        {children}
     </div>
 );
 BottomSheetHeader.displayName = 'BottomSheetHeader';
@@ -108,13 +116,23 @@ const BottomSheetTitle = React.forwardRef<
 ));
 BottomSheetTitle.displayName = 'BottomSheetTitle';
 
+// Description component
+const BottomSheetDescription = React.forwardRef<
+    HTMLParagraphElement,
+    React.ComponentPropsWithoutRef<typeof Drawer.Description>
+>(({ className, ...props }, ref) => (
+    <Drawer.Description ref={ref} className={clsx(s.description, className)} {...props} />
+));
+BottomSheetDescription.displayName = 'BottomSheetDescription';
+
 // Body component
 const BottomSheetBody = ({
     children,
     className,
+    padding = true,
     ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-    <div className={clsx(s.body, className)} {...props}>
+}: React.HTMLAttributes<HTMLDivElement> & { padding?: boolean }) => (
+    <div className={clsx(s.body, !padding && s.noPadding, className)} {...props}>
         {children}
     </div>
 );
@@ -177,6 +195,7 @@ export const BottomSheet = Object.assign(BottomSheetLegacy, {
     Content: BottomSheetContent,
     Header: BottomSheetHeader,
     Title: BottomSheetTitle,
+    Description: BottomSheetDescription,
     Body: BottomSheetBody,
     Footer: BottomSheetFooter,
     Close: BottomSheetClose,

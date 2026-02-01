@@ -3,13 +3,14 @@
 
 .root {
   position: relative;
-  padding: 1.5rem 1rem;
+  padding: 1.5rem 0.5rem; // 패딩 축소 (1rem -> 0.5rem)
   background-color: transparent;
   width: 100%;
   max-width: 360px;
   margin: 0 auto;
   display: block;
   user-select: none;
+  overflow: hidden; // 넘침 방지
 }
 
 .months {
@@ -59,7 +60,7 @@
 .captionYear {
   font-size: 0.75rem;
   font-weight: 500;
-  color: v.$grey-400;
+  color: v.$grey-500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -111,7 +112,7 @@
   display: grid !important;
   grid-template-columns: repeat(7, 1fr);
   width: 100% !important;
-  gap: 4px; // 간격 넓힘
+  gap: 2px; // 간격 축소 (4px -> 2px)
   margin: 0;
   padding: 0;
 
@@ -160,9 +161,10 @@
 }
 
 .dayButtonBase {
-  width: 2.75rem !important;
-  height: 2.75rem !important;
-  padding: 0 !important; // 패딩 제거로 정중앙 정렬 보장
+  width: 2.5rem !important; // 크기 약간 축소 (2.75rem -> 2.5rem)
+  height: 2.5rem !important;
+  max-width: 100%;
+  padding: 0 !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
