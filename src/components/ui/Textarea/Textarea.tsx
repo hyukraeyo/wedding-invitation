@@ -8,10 +8,11 @@ type TextareaVariant = 'surface' | 'classic' | 'soft';
 type TextareaRadius = 'none' | 'small' | 'medium' | 'large';
 
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-    label?: string;
-    variant?: TextareaVariant;
-    radius?: TextareaRadius;
-    highContrast?: boolean;
+    label?: string | undefined;
+    variant?: TextareaVariant | undefined;
+    radius?: TextareaRadius | undefined;
+    highContrast?: boolean | undefined;
+    className?: string | undefined;
 }
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(

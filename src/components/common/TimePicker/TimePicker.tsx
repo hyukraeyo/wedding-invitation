@@ -17,18 +17,18 @@ import styles from './TimePicker.module.scss';
 interface TimePickerProps {
     value: string;
     onChange: (value: string) => void;
-    onComplete?: () => void;
-    open?: boolean;
-    onOpenChange?: (open: boolean) => void;
-    className?: string;
-    label?: string;
-    placeholder?: string;
-    defaultValue?: string; // 모달이 열릴 때 표시할 기본 시간 (예: '14:00')
-    minuteStep?: number;
-    variant?: 'surface' | 'classic' | 'soft' | 'box';
-    radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
-    id?: string;
-    disabled?: boolean;
+    onComplete?: (() => void) | undefined;
+    open?: boolean | undefined;
+    onOpenChange?: ((open: boolean) => void) | undefined;
+    className?: string | undefined;
+    label?: string | undefined;
+    placeholder?: string | undefined;
+    defaultValue?: string | undefined; // 모달이 열릴 때 표시할 기본 시간 (예: '14:00')
+    minuteStep?: number | undefined;
+    variant?: 'surface' | 'classic' | 'soft' | 'box' | undefined;
+    radius?: 'none' | 'small' | 'medium' | 'large' | 'full' | undefined;
+    id?: string | undefined;
+    disabled?: boolean | undefined;
 }
 
 type Period = 'AM' | 'PM';

@@ -12,6 +12,10 @@
     z-index: 10;
     @include m.header-offset;
 
+    @include m.mobile {
+        padding-top: v.$header-height;
+    }
+
     // Desktop: Keep fixed layout for app-like feeling
     @media (min-width: 1024px) {
         position: fixed;

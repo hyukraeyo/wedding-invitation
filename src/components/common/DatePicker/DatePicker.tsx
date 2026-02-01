@@ -12,17 +12,17 @@ import styles from './DatePicker.module.scss';
 interface DatePickerProps {
     value: string;
     onChange: (value: string) => void;
-    onComplete?: () => void;
-    open?: boolean;
-    onOpenChange?: (open: boolean) => void;
-    className?: string;
-    label?: string;
-    placeholder?: string;
-    variant?: 'surface' | 'classic' | 'soft' | 'box';
-    radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
-    disabled?: boolean;
-    id?: string;
-    ref?: React.Ref<HTMLButtonElement>;
+    onComplete?: (() => void) | undefined;
+    open?: boolean | undefined;
+    onOpenChange?: ((open: boolean) => void) | undefined;
+    className?: string | undefined;
+    label?: string | undefined;
+    placeholder?: string | undefined;
+    variant?: 'surface' | 'classic' | 'soft' | 'box' | undefined;
+    radius?: 'none' | 'small' | 'medium' | 'large' | 'full' | undefined;
+    disabled?: boolean | undefined;
+    id?: string | undefined;
+    ref?: React.Ref<HTMLButtonElement> | undefined;
 }
 
 export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(({

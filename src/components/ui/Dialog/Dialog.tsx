@@ -15,7 +15,7 @@ interface DialogContextValue {
 const DialogContext = React.createContext<DialogContextValue>({ isBottomSheet: false });
 
 interface DialogProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Root> {
-    mobileBottomSheet?: boolean;
+    mobileBottomSheet?: boolean | undefined;
 }
 
 const DialogRoot = ({
@@ -166,7 +166,7 @@ const DialogHeader = memo(({
     children,
     visuallyHidden,
     ...props
-}: React.HTMLAttributes<HTMLDivElement> & { title?: string; visuallyHidden?: boolean }) => {
+}: React.HTMLAttributes<HTMLDivElement> & { title?: string | undefined; visuallyHidden?: boolean | undefined }) => {
     const { isBottomSheet } = useContext(DialogContext);
 
     if (isBottomSheet) {
@@ -269,7 +269,7 @@ const DialogBody = memo(({
     children,
     padding = true,
     ...props
-}: React.HTMLAttributes<HTMLDivElement> & { padding?: boolean }) => {
+}: React.HTMLAttributes<HTMLDivElement> & { padding?: boolean | undefined }) => {
     const { isBottomSheet } = useContext(DialogContext);
 
     if (isBottomSheet) {

@@ -1,5 +1,7 @@
 'use client';
 
+'use client';
+
 import * as React from 'react';
 import { createPortal } from 'react-dom';
 import { Banana } from 'lucide-react';
@@ -7,7 +9,7 @@ import { clsx } from 'clsx';
 import s from './Loader.module.scss';
 
 export interface LoaderProps extends React.HTMLAttributes<HTMLDivElement> {
-    size?: 'sm' | 'md' | 'lg' | 'xl';
+    size?: 'sm' | 'md' | 'lg' | 'xl' | undefined;
 }
 
 const LoaderBase = React.forwardRef<HTMLDivElement, LoaderProps>(
@@ -27,17 +29,11 @@ const LoaderBase = React.forwardRef<HTMLDivElement, LoaderProps>(
 LoaderBase.displayName = 'Loader';
 
 export interface BananaLoaderProps {
-    variant?: 'fixed' | 'full';
-    className?: string;
+    variant?: 'fixed' | 'full' | undefined;
+    className?: string | undefined;
 }
 
 const BananaLoader = ({ variant = 'fixed', className }: BananaLoaderProps) => {
-    const [mounted, setMounted] = React.useState(false);
-
-    React.useEffect(() => {
-        setMounted(true);
-    }, []);
-
     const content = (
         <div className={clsx(s.bananaLoader, s[variant], className)}>
             <div className={s.iconWrapper}>

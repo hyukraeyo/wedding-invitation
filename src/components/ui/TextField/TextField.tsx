@@ -12,22 +12,23 @@ type TextFieldButtonVariant = TextFieldVariant | 'box';
 type TextFieldLegacyVariant = TextFieldVariant | 'line' | 'box';
 
 interface TextFieldContextValue {
-    size?: TextFieldSize;
-    variant?: TextFieldVariant;
-    color?: string;
-    radius?: TextFieldRadius;
-    disabled?: boolean;
+    size?: TextFieldSize | undefined;
+    variant?: TextFieldVariant | undefined;
+    color?: string | undefined;
+    radius?: TextFieldRadius | undefined;
+    disabled?: boolean | undefined;
 }
 
 const TextFieldContext = React.createContext<TextFieldContextValue>({});
 
 // --- TextField.Root ---
 export interface TextFieldRootProps extends React.HTMLAttributes<HTMLDivElement> {
-    size?: TextFieldSize;
-    variant?: TextFieldVariant;
-    radius?: TextFieldRadius;
-    highContrast?: boolean;
-    disabled?: boolean;
+    size?: TextFieldSize | undefined;
+    variant?: TextFieldVariant | undefined;
+    radius?: TextFieldRadius | undefined;
+    highContrast?: boolean | undefined;
+    disabled?: boolean | undefined;
+    className?: string | undefined;
 }
 
 const TextFieldRoot = React.forwardRef<HTMLDivElement, TextFieldRootProps>(
@@ -73,7 +74,7 @@ TextFieldInput.displayName = 'TextField.Input';
 
 // --- TextField.Slot ---
 export interface TextFieldSlotProps extends React.HTMLAttributes<HTMLDivElement> {
-    side?: 'left' | 'right';
+    side?: 'left' | 'right' | undefined;
 }
 
 const TextFieldSlot = React.forwardRef<HTMLDivElement, TextFieldSlotProps>(
@@ -91,11 +92,11 @@ TextFieldSlot.displayName = 'TextField.Slot';
 
 // --- TextField.Button ---
 export interface TextFieldButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    label?: string;
-    variant?: TextFieldButtonVariant;
-    size?: TextFieldSize;
-    radius?: TextFieldRadius;
-    placeholder?: string;
+    label?: string | undefined;
+    variant?: TextFieldButtonVariant | undefined;
+    size?: TextFieldSize | undefined;
+    radius?: TextFieldRadius | undefined;
+    placeholder?: string | undefined;
 }
 
 const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps>(
@@ -138,12 +139,12 @@ TextFieldButton.displayName = 'TextField.Button';
 // Existing code uses <TextField label="..." variant="line" />
 // We convert 'line' to 'classic' and handle the label.
 export interface TextFieldLegacyProps extends Omit<TextFieldInputProps, 'size'> {
-    label?: string;
-    variant?: TextFieldLegacyVariant;
-    size?: TextFieldSize;
-    radius?: TextFieldRadius;
-    leftSlot?: React.ReactNode;
-    rightSlot?: React.ReactNode;
+    label?: string | undefined;
+    variant?: TextFieldLegacyVariant | undefined;
+    size?: TextFieldSize | undefined;
+    radius?: TextFieldRadius | undefined;
+    leftSlot?: React.ReactNode | undefined;
+    rightSlot?: React.ReactNode | undefined;
 }
 
 const TextField = React.forwardRef<HTMLInputElement, TextFieldLegacyProps>(
