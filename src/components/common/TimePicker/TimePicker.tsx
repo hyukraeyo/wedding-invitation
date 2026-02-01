@@ -23,6 +23,7 @@ interface TimePickerProps {
     className?: string;
     label?: string;
     placeholder?: string;
+    defaultValue?: string; // 모달이 열릴 때 표시할 기본 시간 (예: '14:00')
     minuteStep?: number;
     variant?: 'surface' | 'classic' | 'soft' | 'box';
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
@@ -47,13 +48,9 @@ const WheelColumn = ({
     const isInternalUpdateRef = useRef(false);
 
     const initialIndex = useMemo(() => {
-        if (!hasValue) {
-            // 값이 없으면 중앙에 빈 공간을 보여주기 위해 -2 반환 (슬라이드되지 않음)
-            return 2; // 중앙 위치를 기본으로
-        }
         const index = options.findIndex(opt => opt.value === value);
         return index !== -1 ? index : 0;
-    }, [options, value, hasValue]);
+    }, [options, value]);
 
     // External value change -> Swiper sync
     useEffect(() => {
@@ -114,6 +111,7 @@ const TimePickerRaw = ({
     className,
     label,
     placeholder = "시간 선택",
+    defaultValue = "11:00",
     minuteStep = 10,
     variant = "soft",
     radius = "large",
@@ -145,8 +143,8 @@ const TimePickerRaw = ({
 
     // Parse tempValue for wheel state
     const { currentTM, tPeriod, tDisplayHour } = useMemo(() => {
-        // tempValue가 없으면 기본값 12:00 (정오)으로 설정하되, 선택된 것으로 표시하지 않음
-        const effectiveValue = tempValue || '12:00';
+        // tempValue가 없으면 defaultValue 사용
+        const effectiveValue = tempValue || defaultValue;
         const [tHStr, tMStr] = effectiveValue.split(':');
         const tHInt = parseInt(tHStr || '12', 10);
         const tp: Period = tHInt >= 12 ? 'PM' : 'AM';
@@ -157,7 +155,7 @@ const TimePickerRaw = ({
             tPeriod: tp,
             tDisplayHour: tdh
         };
-    }, [tempValue]);
+    }, [tempValue, defaultValue]);
 
     const hourOptions = useMemo(() =>
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(h => ({
@@ -176,7 +174,7 @@ const TimePickerRaw = ({
 
     // Update tempValue logic - NO side effects (onChange) inside here
     const getNextValue = useCallback((updates: { period?: Period, hour?: string, minute?: string }) => {
-        const effectiveTempValue = tempValue || '12:00';
+        const effectiveTempValue = tempValue || defaultValue;
         const [hStr, mStr] = effectiveTempValue.split(':');
         const h = parseInt(hStr || '12', 10);
         const currentPeriod: Period = h >= 12 ? 'PM' : 'AM';
@@ -191,7 +189,7 @@ const TimePickerRaw = ({
         else if (p === 'AM' && newH === 12) newH = 0;
 
         return `${String(newH).padStart(2, '0')}:${min}`;
-    }, [tempValue]);
+    }, [tempValue, defaultValue]);
 
     const handleTempChange = useCallback((updates: { period?: Period, hour?: string, minute?: string }) => {
         const finalValue = getNextValue(updates);
@@ -201,12 +199,12 @@ const TimePickerRaw = ({
 
     const handleConfirm = useCallback((e?: React.MouseEvent) => {
         e?.stopPropagation();
-        // tempValue가 빈 문자열이면 기본값(휠에 표시된 12:00)을 사용
-        const finalValue = tempValue || '12:00';
+        // tempValue가 빈 문자열이면 defaultValue 사용
+        const finalValue = tempValue || defaultValue;
         onChange(finalValue);
         setIsOpen(false);
         onComplete?.();
-    }, [onChange, tempValue, onComplete, setIsOpen]);
+    }, [onChange, tempValue, defaultValue, onComplete, setIsOpen]);
 
     const handleOpenModal = useCallback(() => {
         if (!disabled) {
@@ -257,13 +255,13 @@ const TimePickerRaw = ({
                                     options={hourOptions}
                                     value={tDisplayHour}
                                     onChange={(h) => handleTempChange({ hour: h })}
-                                    hasValue={!!tempValue}
+                                    hasValue={true}
                                 />
                                 <WheelColumn
                                     options={minuteOptions}
                                     value={currentTM}
                                     onChange={(m) => handleTempChange({ minute: m })}
-                                    hasValue={!!tempValue}
+                                    hasValue={true}
                                 />
                             </div>
                         </Dialog.Body>

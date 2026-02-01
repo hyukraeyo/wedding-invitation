@@ -45,6 +45,32 @@ trigger: always_on
 - **SCSS Modules 필수 사용 (Tailwind 금지)**: Radix UI의 스타일링은 SCSS Modules를 통해 직접 제어합니다.
 - 디자인 토큰은 `src/styles/_variables.scss`에서 관리
 
+#### 4.0 컬러 사용 규칙 (Strict)
+- ❌ **하드코딩된 색상 값 절대 금지**: `#FBC02D`, `#ffffff`, `rgba(0,0,0,0.5)` 등 직접 사용 금지
+- ✅ **반드시 `_variables.scss`에 정의된 변수 사용**
+  ```scss
+  // ❌ 잘못된 예
+  color: #FBC02D;
+  background: #ffffff;
+  border: 1px solid #e5e5e5;
+  
+  // ✅ 올바른 예
+  @use "../../../styles/variables" as v;
+  color: v.$primary;
+  background: v.$white;
+  border: 1px solid v.$grey-200;
+  ```
+- **주요 컬러 변수**:
+  - Primary: `v.$primary` (`#FBC02D`)
+  - Text: `v.$text-primary`, `v.$text-secondary`, `v.$text-tertiary`
+  - Background: `v.$white`, `v.$grey-50`, `v.$grey-100`
+  - Border: `v.$grey-200`, `v.$grey-300`
+  - Status: `v.$color-success`, `v.$color-error`, `v.$color-warning`
+- **타이포그래피 변수**: `v.$font-size-sm`, `v.$font-size-base`, `v.$font-size-xl` 등
+- **간격/레이아웃 변수**: `v.$radius-md`, `v.$shadow-lg`, `v.$transition-200` 등
+- **미디어 쿼리**: `v.$mobile`, `v.$tablet` 사용
+
+
 ### 4.1 UI 컴포넌트 생성 규칙 (Hybrid Component Pattern)
 
 **폴더 구조 (필수)**
