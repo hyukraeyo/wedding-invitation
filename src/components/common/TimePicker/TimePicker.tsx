@@ -25,8 +25,8 @@ interface TimePickerProps {
     placeholder?: string | undefined;
     defaultValue?: string | undefined; // 모달이 열릴 때 표시할 기본 시간 (예: '14:00')
     minuteStep?: number | undefined;
-    variant?: 'surface' | 'classic' | 'soft' | 'box' | undefined;
-    radius?: 'none' | 'small' | 'medium' | 'large' | 'full' | undefined;
+    variant?: React.ComponentProps<typeof TextField.Button>['variant'];
+    radius?: React.ComponentProps<typeof TextField.Button>['radius'];
     id?: string | undefined;
     disabled?: boolean | undefined;
 }
@@ -229,52 +229,49 @@ const TimePickerRaw = ({
                 {...props}
             />
             <Dialog open={isOpen} onOpenChange={setIsOpen} mobileBottomSheet>
-                <Dialog.Portal>
-                    <Dialog.Overlay />
-                    <Dialog.Content>
-                        <Dialog.Header title="예식 시간 선택" visuallyHidden />
-                        <Dialog.Body className={styles.modalBody} padding={false}>
-                            <div
-                                className={styles.periodContainer}
-                            >
-                                <SegmentedControl
-                                    value={tPeriod}
-                                    alignment="fluid"
-                                    size="md"
-                                    onChange={(v: string) => handleTempChange({ period: v as Period })}
-                                >
-                                    <SegmentedControl.Item value="AM">오전</SegmentedControl.Item>
-                                    <SegmentedControl.Item value="PM">오후</SegmentedControl.Item>
-                                </SegmentedControl>
-                            </div>
 
-                            <div className={styles.pickerGrid} data-vaul-no-drag>
-                                <div className={styles.mask} />
-                                <div className={styles.highlightLine} />
-                                <WheelColumn
-                                    options={hourOptions}
-                                    value={tDisplayHour}
-                                    onChange={(h) => handleTempChange({ hour: h })}
-                                    hasValue={true}
-                                />
-                                <WheelColumn
-                                    options={minuteOptions}
-                                    value={currentTM}
-                                    onChange={(m) => handleTempChange({ minute: m })}
-                                    hasValue={true}
-                                />
-                            </div>
-                        </Dialog.Body>
-                        <Dialog.Footer className={styles.footer}>
-                            <Button
-                                variant="solid"
-                                onClick={handleConfirm}
-                            >
-                                확인
-                            </Button>
-                        </Dialog.Footer>
-                    </Dialog.Content>
-                </Dialog.Portal>
+                <Dialog.Header title="예식 시간 선택" visuallyHidden />
+                <Dialog.Body className={styles.modalBody} padding={false}>
+                    <div
+                        className={styles.periodContainer}
+                    >
+                        <SegmentedControl
+                            value={tPeriod}
+                            alignment="fluid"
+                            size="md"
+                            onChange={(v: string) => handleTempChange({ period: v as Period })}
+                        >
+                            <SegmentedControl.Item value="AM">오전</SegmentedControl.Item>
+                            <SegmentedControl.Item value="PM">오후</SegmentedControl.Item>
+                        </SegmentedControl>
+                    </div>
+
+                    <div className={styles.pickerGrid} data-vaul-no-drag>
+                        <div className={styles.mask} />
+                        <div className={styles.highlightLine} />
+                        <WheelColumn
+                            options={hourOptions}
+                            value={tDisplayHour}
+                            onChange={(h) => handleTempChange({ hour: h })}
+                            hasValue={true}
+                        />
+                        <WheelColumn
+                            options={minuteOptions}
+                            value={currentTM}
+                            onChange={(m) => handleTempChange({ minute: m })}
+                            hasValue={true}
+                        />
+                    </div>
+                </Dialog.Body>
+                <Dialog.Footer className={styles.footer}>
+                    <Button
+                        variant="solid"
+                        onClick={handleConfirm}
+                    >
+                        확인
+                    </Button>
+                </Dialog.Footer>
+
             </Dialog>
         </>
     );

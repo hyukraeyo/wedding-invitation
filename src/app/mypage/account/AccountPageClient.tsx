@@ -100,7 +100,7 @@ export default function AccountPageClient({
                     {isEditingPhone ? (
                         <div className={styles.editWrapper}>
                             <TextField
-                                variant="line"
+
                                 value={formData.phone || ''}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                                     setFormData({ ...formData, phone: e.target.value })

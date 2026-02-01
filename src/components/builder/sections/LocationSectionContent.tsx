@@ -132,7 +132,7 @@ export default function LocationSectionContent() {
                 <div className={styles.optionItem}>
                     <TextField
                         label="부제목"
-                        variant="line"
+
                         placeholder="예: LOCATION"
                         value={locationSubtitle}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationSubtitle(e.target.value)}
@@ -141,7 +141,7 @@ export default function LocationSectionContent() {
                 <div className={styles.optionItem}>
                     <TextField
                         label="제목"
-                        variant="line"
+
                         placeholder="예: 바나나홀"
                         value={locationTitle}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationTitle(e.target.value)}
@@ -167,7 +167,7 @@ export default function LocationSectionContent() {
                 <div className={styles.optionItem}>
                     <TextField
                         label="예식 장소명"
-                        variant="line"
+
                         type="text"
                         placeholder="예: 바나나 웨딩홀"
                         value={location}
@@ -178,7 +178,7 @@ export default function LocationSectionContent() {
                 <div className={styles.optionItem}>
                     <TextField
                         label="층/호수"
-                        variant="line"
+
                         type="text"
                         placeholder="예: 3층 그랜드홀"
                         value={detailAddress}
@@ -189,7 +189,7 @@ export default function LocationSectionContent() {
                 <div className={styles.optionItem}>
                     <div className={styles.rowTitle}>연락처</div>
                     <PhoneField
-                        variant="line"
+
                         placeholder="예: 02-000-0000"
                         value={locationContact}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationContact(e.target.value)}

@@ -43,60 +43,59 @@ export const ShareModal: React.FC<ShareModalProps> = ({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <Dialog.Overlay />
-            <Dialog.Content>
-                <Dialog.Header title="청첩장 공유하기">
-                    <Text typography="t6" color="#666" style={{ textAlign: 'center', marginTop: '4px', display: 'block' }}>
-                        원하는 방법으로 청첩장을 공유해보세요
-                    </Text>
-                </Dialog.Header>
-                <Dialog.Body>
-                    <div className={styles.shareContainer}>
-                        <div className={styles.shareMethod}>
+
+            <Dialog.Header title="청첩장 공유하기">
+                <Text typography="t6" color="#666" style={{ textAlign: 'center', marginTop: '4px', display: 'block' }}>
+                    원하는 방법으로 청첩장을 공유해보세요
+                </Text>
+            </Dialog.Header>
+            <Dialog.Body>
+                <div className={styles.shareContainer}>
+                    <div className={styles.shareMethod}>
+                        <IconButton
+                            onClick={handleLinkShare}
+                            className={styles.shareButton}
+                            aria-label="링크 복사"
+                            variant="clear"
+                            name=""
+                        >
+                            {copied ? <Check size={20} /> : <Copy size={20} />}
+                        </IconButton>
+                        <span className={styles.shareLabel}>링크 복사</span>
+                    </div>
+
+                    <div className={styles.shareMethod}>
+                        <KakaoShareButton
+                            invitationUrl={invitationUrl}
+                            invitationTitle={invitationTitle || ''}
+                            invitationDescription={invitationDescription || ''}
+                            invitationImageUrl={invitationImageUrl || ''}
+                            slug={slug}
+                            onSuccess={() => onOpenChange(false)}
+                        >
                             <IconButton
-                                onClick={handleLinkShare}
                                 className={styles.shareButton}
-                                aria-label="링크 복사"
+                                aria-label="카카오톡 공유"
                                 variant="clear"
                                 name=""
                             >
-                                {copied ? <Check size={20} /> : <Copy size={20} />}
+                                <Share2 size={20} />
                             </IconButton>
-                            <span className={styles.shareLabel}>링크 복사</span>
-                        </div>
-
-                        <div className={styles.shareMethod}>
-                            <KakaoShareButton
-                                invitationUrl={invitationUrl}
-                                invitationTitle={invitationTitle || ''}
-                                invitationDescription={invitationDescription || ''}
-                                invitationImageUrl={invitationImageUrl || ''}
-                                slug={slug}
-                                onSuccess={() => onOpenChange(false)}
-                            >
-                                <IconButton
-                                    className={styles.shareButton}
-                                    aria-label="카카오톡 공유"
-                                    variant="clear"
-                                    name=""
-                                >
-                                    <Share2 size={20} />
-                                </IconButton>
-                            </KakaoShareButton>
-                            <span className={styles.shareLabel}>카카오톡</span>
-                        </div>
+                        </KakaoShareButton>
+                        <span className={styles.shareLabel}>카카오톡</span>
                     </div>
-                </Dialog.Body>
-                <Dialog.Footer>
-                    <Button
-                        variant="weak"
-                        onClick={() => onOpenChange(false)}
-                        size="lg"
-                    >
-                        닫기
-                    </Button>
-                </Dialog.Footer>
-            </Dialog.Content>
+                </div>
+            </Dialog.Body>
+            <Dialog.Footer>
+                <Button
+                    variant="weak"
+                    onClick={() => onOpenChange(false)}
+                    size="lg"
+                >
+                    닫기
+                </Button>
+            </Dialog.Footer>
+
         </Dialog>
     );
 };

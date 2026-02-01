@@ -8,8 +8,6 @@ import s from './TextField.module.scss';
 type TextFieldSize = '1' | '2' | '3';
 type TextFieldVariant = 'surface' | 'classic' | 'soft';
 type TextFieldRadius = 'none' | 'small' | 'medium' | 'large' | 'full';
-type TextFieldButtonVariant = TextFieldVariant | 'box';
-type TextFieldLegacyVariant = TextFieldVariant | 'line' | 'box';
 
 interface TextFieldContextValue {
     size?: TextFieldSize | undefined;
@@ -93,7 +91,7 @@ TextFieldSlot.displayName = 'TextField.Slot';
 // --- TextField.Button ---
 export interface TextFieldButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     label?: string | undefined;
-    variant?: TextFieldButtonVariant | undefined;
+    variant?: TextFieldVariant | undefined;
     size?: TextFieldSize | undefined;
     radius?: TextFieldRadius | undefined;
     placeholder?: string | undefined;
@@ -103,12 +101,11 @@ const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps
     ({ className, children, label, variant = 'surface', size = '2', radius = 'medium', id, ...props }, ref) => {
         const generatedId = React.useId();
         const inputId = id || generatedId;
-        const mappedVariant = (variant === 'box' ? 'surface' : variant) as TextFieldRootProps['variant'];
 
         const isPlaceholder = !props.value && !!props.placeholder;
 
         const button = (
-            <TextFieldRoot variant={mappedVariant} size={size} radius={radius} className={className}>
+            <TextFieldRoot variant={variant} size={size} radius={radius} className={className}>
                 <button
                     ref={ref}
                     id={inputId}
@@ -136,29 +133,23 @@ const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps
 TextFieldButton.displayName = 'TextField.Button';
 
 // --- Combined / Compatibility Export ---
-// Existing code uses <TextField label="..." variant="line" />
-// We convert 'line' to 'classic' and handle the label.
-export interface TextFieldLegacyProps extends Omit<TextFieldInputProps, 'size'> {
+// --- Combined / Compatibility Export ---
+export interface TextFieldProps extends Omit<TextFieldInputProps, 'size'> {
     label?: string | undefined;
-    variant?: TextFieldLegacyVariant | undefined;
+    variant?: TextFieldVariant | undefined;
     size?: TextFieldSize | undefined;
     radius?: TextFieldRadius | undefined;
     leftSlot?: React.ReactNode | undefined;
     rightSlot?: React.ReactNode | undefined;
 }
 
-const TextField = React.forwardRef<HTMLInputElement, TextFieldLegacyProps>(
+const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     ({ label, variant = 'surface', size = '2', radius = 'medium', leftSlot, rightSlot, className, id, ...props }, ref) => {
         const generatedId = React.useId();
         const inputId = id || generatedId;
 
-        // Map existing 'line' or 'box' variant to Radix 'classic' or 'surface'
-        let mappedVariant = variant as TextFieldRootProps['variant'];
-        if (variant === 'line') mappedVariant = 'classic';
-        if (variant === 'box') mappedVariant = 'surface';
-
         const input = (
-            <TextFieldRoot variant={mappedVariant} size={size} radius={radius} className={className}>
+            <TextFieldRoot variant={variant} size={size} radius={radius} className={className}>
                 {leftSlot && <TextFieldSlot side="left">{leftSlot}</TextFieldSlot>}
                 <TextFieldInput ref={ref} id={inputId} {...props} />
                 {rightSlot && <TextFieldSlot side="right">{rightSlot}</TextFieldSlot>}
@@ -188,4 +179,3 @@ const TextFieldNamespace = Object.assign(TextField, {
 });
 
 export { TextFieldNamespace as TextField };
-export type { TextFieldLegacyProps as TextFieldProps };

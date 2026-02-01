@@ -6,8 +6,7 @@ import { SampleList } from '@/components/common/SampleList';
 import { Button } from '@/components/ui/Button';
 import { BottomCTA } from '@/components/ui/BottomCTA';
 import { Dialog } from '@/components/ui/Dialog';
-import { BottomSheet } from '@/components/ui/BottomSheet';
-import { useMediaQuery } from '@/hooks/use-media-query';
+
 import styles from './MainScreenSection.module.scss';
 
 import type { SectionProps, SamplePhraseItem } from '@/types/builder';
@@ -24,7 +23,7 @@ const MainScreenSectionContent = dynamic(() => import('./MainScreenSectionConten
 });
 
 export default function MainScreenSection(props: SectionProps) {
-    const isDesktop = useMediaQuery("(min-width: 768px)");
+
     const setMainScreen = useInvitationStore(state => state.setMainScreen);
     const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
 
@@ -70,46 +69,24 @@ export default function MainScreenSection(props: SectionProps) {
                 </div>
             </SectionAccordion>
 
-            {isDesktop ? (
-                <Dialog
-                    open={isSampleModalOpen}
-                    onOpenChange={setIsSampleModalOpen}
-                >
-                    <Dialog.Overlay />
-                    <Dialog.Content>
-                        <Dialog.Header title="추천 제목 문구" />
-                        <Dialog.Body>
-                            {renderSampleList()}
-                        </Dialog.Body>
-                        <Dialog.Footer>
-                            <BottomCTA.Single
-                                fixed={false}
-                                onClick={() => setIsSampleModalOpen(false)}
-                            >
-                                닫기
-                            </BottomCTA.Single>
-                        </Dialog.Footer>
-                    </Dialog.Content>
-                </Dialog>
-            ) : (
-                <BottomSheet
-                    open={isSampleModalOpen}
-                    onClose={() => setIsSampleModalOpen(false)}
-                    header="추천 제목 문구"
-                    cta={
-                        <BottomCTA.Single
-                            fixed={false}
-                            onClick={() => setIsSampleModalOpen(false)}
-                        >
-                            닫기
-                        </BottomCTA.Single>
-                    }
-                >
-                    <BottomSheet.Body>
-                        {renderSampleList()}
-                    </BottomSheet.Body>
-                </BottomSheet>
-            )}
+            <Dialog
+                open={isSampleModalOpen}
+                onOpenChange={setIsSampleModalOpen}
+                mobileBottomSheet
+            >
+                <Dialog.Header title="추천 제목 문구" />
+                <Dialog.Body>
+                    {renderSampleList()}
+                </Dialog.Body>
+                <Dialog.Footer>
+                    <BottomCTA.Single
+                        fixed={false}
+                        onClick={() => setIsSampleModalOpen(false)}
+                    >
+                        닫기
+                    </BottomCTA.Single>
+                </Dialog.Footer>
+            </Dialog>
         </>
     );
 }

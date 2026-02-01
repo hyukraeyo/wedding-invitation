@@ -14,25 +14,41 @@ interface DialogContextValue {
 
 const DialogContext = React.createContext<DialogContextValue>({ isBottomSheet: false });
 
-interface DialogProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Root> {
+interface DialogProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Root>,
+    Omit<React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>, 'asChild'> {
     mobileBottomSheet?: boolean | undefined;
 }
 
 const DialogRoot = ({
     children,
     mobileBottomSheet = false,
-    ...props
+    open,
+    defaultOpen,
+    onOpenChange,
+    modal,
+    ...contentProps
 }: DialogProps) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
     const isBottomSheet = mobileBottomSheet && isMobile;
 
     const value = useMemo(() => ({ isBottomSheet }), [isBottomSheet]);
 
+    // exactOptionalPropertyTypes: true fix
+    // We must not pass explicit undefined for optional props
+    const rootProps = {
+        ...(open !== undefined && { open }),
+        ...(defaultOpen !== undefined && { defaultOpen }),
+        ...(onOpenChange !== undefined && { onOpenChange }),
+        ...(modal !== undefined && { modal }),
+    };
+
     if (isBottomSheet) {
         return (
             <DialogContext.Provider value={value}>
-                <BottomSheet.Root {...props}>
-                    {children}
+                <BottomSheet.Root {...rootProps}>
+                    <DialogContent {...contentProps}>
+                        {children}
+                    </DialogContent>
                 </BottomSheet.Root>
             </DialogContext.Provider>
         );
@@ -40,8 +56,10 @@ const DialogRoot = ({
 
     return (
         <DialogContext.Provider value={value}>
-            <DialogPrimitive.Root {...props}>
-                {children}
+            <DialogPrimitive.Root {...rootProps}>
+                <DialogContent {...contentProps}>
+                    {children}
+                </DialogContent>
             </DialogPrimitive.Root>
         </DialogContext.Provider>
     );
@@ -54,12 +72,7 @@ const DialogTrigger = memo((props: React.ComponentPropsWithoutRef<typeof DialogP
 });
 DialogTrigger.displayName = 'DialogTrigger';
 
-const DialogPortal = memo((props: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Portal>) => {
-    const { isBottomSheet } = useContext(DialogContext);
-    if (isBottomSheet) return <BottomSheet.Portal {...props} />;
-    return <DialogPrimitive.Portal {...props} />;
-});
-DialogPortal.displayName = 'DialogPortal';
+
 
 const DialogClose = memo((props: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Close>) => {
     const { isBottomSheet } = useContext(DialogContext);
@@ -94,6 +107,28 @@ const DialogOverlay = memo(React.forwardRef<
 }));
 DialogOverlay.displayName = 'DialogOverlay';
 
+const DialogPortal = memo(({ children, ...props }: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Portal>) => {
+    const { isBottomSheet } = useContext(DialogContext);
+
+    if (isBottomSheet) {
+        return (
+            <BottomSheet.Portal {...props}>
+                <DialogOverlay />
+                {children}
+            </BottomSheet.Portal>
+        );
+    }
+
+    return (
+        <DialogPrimitive.Portal {...props}>
+            <DialogOverlay />
+            {children}
+        </DialogPrimitive.Portal>
+    );
+});
+DialogPortal.displayName = 'DialogPortal';
+
+
 const DialogContent = memo(React.forwardRef<
     React.ElementRef<typeof DialogPrimitive.Content>,
     React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
@@ -120,21 +155,17 @@ const DialogContent = memo(React.forwardRef<
         }
     }, []);
 
-    if (isBottomSheet) {
-        return (
-            <BottomSheet.Content
-                ref={setRefs as React.Ref<HTMLDivElement>}
-                className={className}
-                variant="floating"
-                onOpenAutoFocus={handleOpenAutoFocus}
-                {...props}
-            >
-                {children}
-            </BottomSheet.Content>
-        );
-    }
-
-    return (
+    const content = isBottomSheet ? (
+        <BottomSheet.Content
+            ref={setRefs as React.Ref<HTMLDivElement>}
+            className={className}
+            variant="floating"
+            onOpenAutoFocus={handleOpenAutoFocus}
+            {...props}
+        >
+            {children}
+        </BottomSheet.Content>
+    ) : (
         <DialogPrimitive.Content
             ref={setRefs}
             className={cn(styles.content, styles.dialogContent, className)}
@@ -156,6 +187,12 @@ const DialogContent = memo(React.forwardRef<
             </VisuallyHidden>
             {children}
         </DialogPrimitive.Content>
+    );
+
+    return (
+        <DialogPortal>
+            {content}
+        </DialogPortal>
     );
 }));
 DialogContent.displayName = 'DialogContent';

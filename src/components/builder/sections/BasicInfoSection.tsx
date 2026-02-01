@@ -31,7 +31,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
                 <div className={styles.formGroup}>
                     <div className={cn(styles.row, styles.full)}>
                         <TextField
-                            variant="line"
+
                             label="신랑"
                             type="text"
                             placeholder="신랑 이름"
@@ -43,7 +43,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
                     {/* Groom Parents */}
                     <div className={cn(styles.row, styles.compact)}>
                         <TextField
-                            variant="line"
+
                             type="text"
                             placeholder="아버지 이름"
                             value={groom.parents.father.name}
@@ -72,7 +72,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
                     </div>
                     <div className={cn(styles.row, styles.compact)}>
                         <TextField
-                            variant="line"
+
                             type="text"
                             placeholder="어머니 이름"
                             value={groom.parents.mother.name}
@@ -106,7 +106,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
                 <div className={styles.formGroup}>
                     <div className={cn(styles.row, styles.full)}>
                         <TextField
-                            variant="line"
+
                             label="신부"
                             type="text"
                             placeholder="신부 이름"
@@ -118,7 +118,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
                     {/* Bride Parents */}
                     <div className={cn(styles.row, styles.compact)}>
                         <TextField
-                            variant="line"
+
                             type="text"
                             placeholder="아버지 이름"
                             value={bride.parents.father.name}
@@ -147,7 +147,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
                     </div>
                     <div className={cn(styles.row, styles.compact)}>
                         <TextField
-                            variant="line"
+
                             type="text"
                             placeholder="어머니 이름"
                             value={bride.parents.mother.name}

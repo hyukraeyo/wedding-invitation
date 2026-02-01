@@ -74,64 +74,63 @@ export function ProfileCompletionModal({
 
     return (
         <Dialog open={isOpen} onOpenChange={() => { }}>
-            <Dialog.Overlay />
-            <Dialog.Content>
-                <Dialog.Header title="프로필 완성" />
-                <Dialog.Body>
-                    <div className={styles.introText}>
-                        청첩장 서비스 이용을 위해 이름과 연락처를 입력해 주세요.
-                    </div>
-                    <div className={styles.inputList}>
-                        <TextField.Root variant="classic" className={styles.inputField}>
-                            <TextField.Slot side="left">
-                                <User size={18} />
-                            </TextField.Slot>
-                            <TextField.Input
-                                placeholder="이름 (실명)"
-                                value={name}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
-                            />
-                        </TextField.Root>
 
-                        <TextField.Root variant="classic" className={styles.inputField}>
-                            <TextField.Slot side="left">
-                                <Phone size={18} />
-                            </TextField.Slot>
-                            <TextField.Input
-                                placeholder="연락처 (- 없이 입력)"
-                                value={phone}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhone(e.target.value)}
-                            />
-                        </TextField.Root>
-                    </div>
+            <Dialog.Header title="프로필 완성" />
+            <Dialog.Body>
+                <div className={styles.introText}>
+                    청첩장 서비스 이용을 위해 이름과 연락처를 입력해 주세요.
+                </div>
+                <div className={styles.inputList}>
+                    <TextField.Root className={styles.inputField}>
+                        <TextField.Slot side="left">
+                            <User size={18} />
+                        </TextField.Slot>
+                        <TextField.Input
+                            placeholder="이름 (실명)"
+                            value={name}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+                        />
+                    </TextField.Root>
 
-                    <div className={styles.infoBox}>
-                        <p>
-                            입력하신 정보는 청첩장 승인 요청 시 본인 확인용으로만 사용되며,
-                            <br />
-                            타인에게 공개되거나 광고 목적 등으로 사용되지 않습니다.
-                        </p>
-                    </div>
-                </Dialog.Body>
+                    <TextField.Root className={styles.inputField}>
+                        <TextField.Slot side="left">
+                            <Phone size={18} />
+                        </TextField.Slot>
+                        <TextField.Input
+                            placeholder="연락처 (- 없이 입력)"
+                            value={phone}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPhone(e.target.value)}
+                        />
+                    </TextField.Root>
+                </div>
 
-                <Dialog.Footer className={styles.footer}>
-                    <Button
-                        className={styles.fullWidth}
-                        variant="fill"
-                        size="lg"
-                        loading={loading}
-                        disabled={loading || !name.trim() || !phone.trim()}
-                        onClick={handleSubmit}
-                    >
-                        시작하기
-                    </Button>
-                    {logoutButton && (
-                        <div className={styles.outerFooter}>
-                            {logoutButton}
-                        </div>
-                    )}
-                </Dialog.Footer>
-            </Dialog.Content>
+                <div className={styles.infoBox}>
+                    <p>
+                        입력하신 정보는 청첩장 승인 요청 시 본인 확인용으로만 사용되며,
+                        <br />
+                        타인에게 공개되거나 광고 목적 등으로 사용되지 않습니다.
+                    </p>
+                </div>
+            </Dialog.Body>
+
+            <Dialog.Footer className={styles.footer}>
+                <Button
+                    className={styles.fullWidth}
+                    variant="fill"
+                    size="lg"
+                    loading={loading}
+                    disabled={loading || !name.trim() || !phone.trim()}
+                    onClick={handleSubmit}
+                >
+                    시작하기
+                </Button>
+                {logoutButton && (
+                    <div className={styles.outerFooter}>
+                        {logoutButton}
+                    </div>
+                )}
+            </Dialog.Footer>
+
         </Dialog>
     );
 }

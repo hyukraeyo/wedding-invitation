@@ -18,8 +18,8 @@ interface DatePickerProps {
     className?: string | undefined;
     label?: string | undefined;
     placeholder?: string | undefined;
-    variant?: 'surface' | 'classic' | 'soft' | 'box' | undefined;
-    radius?: 'none' | 'small' | 'medium' | 'large' | 'full' | undefined;
+    variant?: React.ComponentProps<typeof TextField.Button>['variant'];
+    radius?: React.ComponentProps<typeof TextField.Button>['radius'];
     disabled?: boolean | undefined;
     id?: string | undefined;
     ref?: React.Ref<HTMLButtonElement> | undefined;
@@ -77,23 +77,22 @@ export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>((
                 {...props}
             />
             <Dialog open={isOpen} onOpenChange={setIsOpen} mobileBottomSheet>
-                <Dialog.Portal>
-                    <Dialog.Overlay />
-                    <Dialog.Content>
-                        <Dialog.Header title="날짜를 선택하세요" visuallyHidden />
-                        <Dialog.Body className={styles.calendarBody}>
-                            <Calendar
-                                mode="single"
-                                selected={dateValue}
-                                defaultMonth={new Date()}
-                                onSelect={handleSelect}
-                                className={styles.calendar || ""}
-                                hideTodayIndicator={!dateValue}
-                                showOutsideDays={false}
-                            />
-                        </Dialog.Body>
-                    </Dialog.Content>
-                </Dialog.Portal>
+
+
+                <Dialog.Header title="날짜를 선택하세요" visuallyHidden />
+                <Dialog.Body className={styles.calendarBody}>
+                    <Calendar
+                        mode="single"
+                        selected={dateValue}
+                        defaultMonth={new Date()}
+                        onSelect={handleSelect}
+                        className={styles.calendar || ""}
+                        hideTodayIndicator={!dateValue}
+                        showOutsideDays={false}
+                    />
+                </Dialog.Body>
+
+
             </Dialog>
         </>
     );

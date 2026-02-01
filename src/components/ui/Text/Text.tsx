@@ -49,7 +49,7 @@ const Text = React.forwardRef<HTMLElement, TextProps>(
         },
         ref
     ) => {
-        const Comp = asChild ? Slot : as;
+        const Comp = (asChild ? Slot : as) as React.ElementType;
 
         // If color is a hex/rgb string (not a predefined key), apply it via style
         const isPredefinedColor = color && (s[color] || ['primary', 'secondary', 'tertiary', 'danger', 'grey', 'white'].includes(color));
@@ -57,7 +57,7 @@ const Text = React.forwardRef<HTMLElement, TextProps>(
 
         return (
             <Comp
-                ref={ref}
+                ref={ref as React.Ref<HTMLElement>}
                 style={customStyle}
                 className={clsx(
                     s.text,

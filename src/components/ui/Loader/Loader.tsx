@@ -1,7 +1,5 @@
 'use client';
 
-'use client';
-
 import * as React from 'react';
 import { createPortal } from 'react-dom';
 import { Banana } from 'lucide-react';
@@ -34,6 +32,12 @@ export interface BananaLoaderProps {
 }
 
 const BananaLoader = ({ variant = 'fixed', className }: BananaLoaderProps) => {
+    const [mounted, setMounted] = React.useState(false);
+
+    React.useEffect(() => {
+        setMounted(true);
+    }, []);
+
     const content = (
         <div className={clsx(s.bananaLoader, s[variant], className)}>
             <div className={s.iconWrapper}>

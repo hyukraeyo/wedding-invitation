@@ -11,8 +11,7 @@ import { SampleList } from '@/components/common/SampleList';
 import { Button } from '@/components/ui/Button';
 import { BottomCTA } from '@/components/ui/BottomCTA';
 import { Dialog } from '@/components/ui/Dialog';
-import { BottomSheet } from '@/components/ui/BottomSheet';
-import { useMediaQuery } from '@/hooks/use-media-query';
+
 import styles from './ClosingSection.module.scss';
 
 import type { SectionProps, SamplePhraseItem } from '@/types/builder';
@@ -20,7 +19,7 @@ import { CLOSING_SAMPLES } from '@/constants/samples';
 import { SectionAccordion } from '@/components/ui/Accordion';
 
 export default function ClosingSection(props: SectionProps) {
-    const isDesktop = useMediaQuery("(min-width: 768px)");
+
     const closing = useInvitationStore(useShallow(state => state.closing));
     const setClosing = useInvitationStore(state => state.setClosing);
 
@@ -73,7 +72,7 @@ export default function ClosingSection(props: SectionProps) {
 
                     <div className={styles.optionItem}>
                         <TextField
-                            variant="line"
+
                             label="소제목"
                             placeholder="예: CLOSING"
                             value={closing.subtitle}
@@ -82,7 +81,7 @@ export default function ClosingSection(props: SectionProps) {
                     </div>
                     <div className={styles.optionItem}>
                         <TextField
-                            variant="line"
+
                             label="제목"
                             placeholder="예: 저희의 시작을 함께해주셔서 감사합니다"
                             value={closing.title}
@@ -116,48 +115,24 @@ export default function ClosingSection(props: SectionProps) {
                 </div>
             </SectionAccordion>
 
-            {isDesktop ? (
-                <Dialog
-                    open={isSampleModalOpen}
-                    onOpenChange={setIsSampleModalOpen}
-                >
-                    <Dialog.Overlay />
-                    <Dialog.Content>
-                        <Dialog.Header title="마무리 추천 문구" />
-                        <Dialog.Body>
-                            {renderSampleList()}
-                        </Dialog.Body>
-                        <Dialog.Footer>
-
-                            <BottomCTA.Single
-                                fixed={false}
-                                onClick={() => setIsSampleModalOpen(false)}
-                            >
-                                닫기
-                            </BottomCTA.Single>
-                        </Dialog.Footer>
-                    </Dialog.Content>
-                </Dialog >
-            ) : (
-                <BottomSheet
-                    open={isSampleModalOpen}
-                    onClose={() => setIsSampleModalOpen(false)}
-                    header="마무리 추천 문구"
-                    cta={
-                        <BottomCTA.Single
-                            fixed={false}
-                            onClick={() => setIsSampleModalOpen(false)}
-                        >
-                            닫기
-                        </BottomCTA.Single>
-                    }
-                >
-                    <BottomSheet.Body>
-                        {renderSampleList()}
-                    </BottomSheet.Body>
-                </BottomSheet>
-            )
-            }
+            <Dialog
+                open={isSampleModalOpen}
+                onOpenChange={setIsSampleModalOpen}
+                mobileBottomSheet
+            >
+                <Dialog.Header title="마무리 추천 문구" />
+                <Dialog.Body>
+                    {renderSampleList()}
+                </Dialog.Body>
+                <Dialog.Footer>
+                    <BottomCTA.Single
+                        fixed={false}
+                        onClick={() => setIsSampleModalOpen(false)}
+                    >
+                        닫기
+                    </BottomCTA.Single>
+                </Dialog.Footer>
+            </Dialog>
         </>
     );
 }

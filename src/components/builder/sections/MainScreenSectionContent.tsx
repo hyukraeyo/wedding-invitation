@@ -228,14 +228,14 @@ export default function MainScreenSectionContent() {
                         <div className={styles.optionWrapper}>
                             <TextField
                                 label="제목"
-                                variant="line"
+
                                 placeholder="예: THE MARRIAGE"
                                 value={mainScreen.title}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateMain({ title: e.target.value })}
                             />
                             <TextField
                                 label="소제목"
-                                variant="line"
+
                                 placeholder="예: 소중한 날에 초대합니다"
                                 value={mainScreen.subtitle}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateMain({ subtitle: e.target.value })}
@@ -247,7 +247,7 @@ export default function MainScreenSectionContent() {
                         <div className={styles.sentenceWrapper}>
                             <div className={styles.sentenceItem}>
                                 <TextField
-                                    variant="line"
+
                                     placeholder={groom.lastName || groom.firstName ? `${groom.lastName}${groom.firstName}` : '신랑'}
                                     value={mainScreen.groomName}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateMain({ groomName: e.target.value })}
@@ -255,7 +255,7 @@ export default function MainScreenSectionContent() {
                             </div>
                             <div className={styles.sentenceItem}>
                                 <TextField
-                                    variant="line"
+
                                     placeholder="그리고"
                                     value={mainScreen.andText}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateMain({ andText: e.target.value })}
@@ -263,7 +263,7 @@ export default function MainScreenSectionContent() {
                             </div>
                             <div className={styles.sentenceItem}>
                                 <TextField
-                                    variant="line"
+
                                     placeholder={bride.lastName || bride.firstName ? `${bride.lastName}${bride.firstName}` : '신부'}
                                     value={mainScreen.brideName}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateMain({ brideName: e.target.value })}

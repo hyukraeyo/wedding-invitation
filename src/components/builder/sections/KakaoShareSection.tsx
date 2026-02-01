@@ -83,7 +83,7 @@ export default function KakaoShareSection(props: SectionProps) {
                     <div className={styles.optionItem}>
                         <TextField
                             label="제목"
-                            variant="line"
+
                             type="text"
                             placeholder="예: 우리 결혼합니다"
                             value={kakao.title}
@@ -95,7 +95,7 @@ export default function KakaoShareSection(props: SectionProps) {
                     <div className={styles.optionItem}>
                         <TextField
                             label="설명"
-                            variant="line"
+
                             type="text"
                             placeholder="예: 2024년 10월 12일"
                             value={kakao.description}

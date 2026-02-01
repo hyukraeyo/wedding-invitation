@@ -169,69 +169,71 @@ export function MobileNav({
             {!onPreviewToggle && (
                 <>
                     <Dialog open={isMoreOpen} onOpenChange={setIsMoreOpen}>
-                        <Dialog.Overlay />
-                        <Dialog.Content>
-                            <Dialog.Header title="전체 메뉴" />
-                            <Dialog.Body className={styles.drawerPadding}>
-                                <div className={styles.drawerMenu}>
-                                    <ViewTransitionLink
-                                        href="/mypage/account"
-                                        className={styles.drawerItem}
-                                        onClick={handleDrawerNavClick}
-                                    >
-                                        <User size={20} className={styles.drawerIcon} />
-                                        <span>계정</span>
-                                    </ViewTransitionLink>
-                                    <Button
-                                        variant="weak"
-                                        className={styles.drawerItem}
-                                        onClick={handleEventClick}
-                                    >
-                                        <Sparkles size={20} className={styles.drawerIcon} />
-                                        <span>{MENU_TITLES.EVENTS}</span>
-                                    </Button>
-                                    <Button
-                                        variant="weak"
-                                        className={styles.drawerItem}
-                                        onClick={handleCustomerService}
-                                    >
-                                        <HelpCircle size={20} className={styles.drawerIcon} />
-                                        <span>{MENU_TITLES.CUSTOMER_SERVICE}</span>
-                                    </Button>
-                                    <Button
-                                        variant="weak"
-                                        className={clsx(styles.drawerItem, styles.logoutButton)}
-                                        onClick={handleLogout}
-                                    >
-                                        <LogOut size={20} className={styles.drawerIcon} />
-                                        <span>{MENU_TITLES.LOGOUT}</span>
-                                    </Button>
-                                </div>
-                            </Dialog.Body>
-                        </Dialog.Content>
+
+
+                        <Dialog.Header title="전체 메뉴" />
+                        <Dialog.Body className={styles.drawerPadding}>
+                            <div className={styles.drawerMenu}>
+                                <ViewTransitionLink
+                                    href="/mypage/account"
+                                    className={styles.drawerItem}
+                                    onClick={handleDrawerNavClick}
+                                >
+                                    <User size={20} className={styles.drawerIcon} />
+                                    <span>계정</span>
+                                </ViewTransitionLink>
+                                <Button
+                                    variant="weak"
+                                    className={styles.drawerItem}
+                                    onClick={handleEventClick}
+                                >
+                                    <Sparkles size={20} className={styles.drawerIcon} />
+                                    <span>{MENU_TITLES.EVENTS}</span>
+                                </Button>
+                                <Button
+                                    variant="weak"
+                                    className={styles.drawerItem}
+                                    onClick={handleCustomerService}
+                                >
+                                    <HelpCircle size={20} className={styles.drawerIcon} />
+                                    <span>{MENU_TITLES.CUSTOMER_SERVICE}</span>
+                                </Button>
+                                <Button
+                                    variant="weak"
+                                    className={clsx(styles.drawerItem, styles.logoutButton)}
+                                    onClick={handleLogout}
+                                >
+                                    <LogOut size={20} className={styles.drawerIcon} />
+                                    <span>{MENU_TITLES.LOGOUT}</span>
+                                </Button>
+                            </div>
+                        </Dialog.Body>
+
+
                     </Dialog>
 
                     <Dialog open={isEventModalOpen} onOpenChange={setIsEventModalOpen}>
-                        <Dialog.Overlay />
-                        <Dialog.Content>
-                            <Dialog.Header title="설날 이벤트 준비중" />
-                            <Dialog.Body className={styles.centerBody}>
-                                <div className={styles.eventIcon}>🎁</div>
-                                <p className={styles.eventTitle}>
-                                    다양한 혜택을 준비한 이벤트가
-                                    <br />
-                                    준비중입니다
-                                </p>
-                                <p className={styles.eventDesc}>
-                                    곧 찾아올 할인 혜택에 기대해주세요. 😊
-                                </p>
-                            </Dialog.Body>
-                            <Dialog.Footer className={styles.modalFooter}>
-                                <Button className={styles.fullWidth} variant="fill" size="lg" onClick={() => setIsEventModalOpen(false)}>
-                                    확인
-                                </Button>
-                            </Dialog.Footer>
-                        </Dialog.Content>
+
+
+                        <Dialog.Header title="설날 이벤트 준비중" />
+                        <Dialog.Body className={styles.centerBody}>
+                            <div className={styles.eventIcon}>🎁</div>
+                            <p className={styles.eventTitle}>
+                                다양한 혜택을 준비한 이벤트가
+                                <br />
+                                준비중입니다
+                            </p>
+                            <p className={styles.eventDesc}>
+                                곧 찾아올 할인 혜택에 기대해주세요. 😊
+                            </p>
+                        </Dialog.Body>
+                        <Dialog.Footer className={styles.modalFooter}>
+                            <Button className={styles.fullWidth} variant="fill" size="lg" onClick={() => setIsEventModalOpen(false)}>
+                                확인
+                            </Button>
+                        </Dialog.Footer>
+
+
                     </Dialog>
                 </>
             )}

@@ -113,7 +113,7 @@ export default function AccountsSectionContent() {
         <div className={styles.container}>
             <div className={styles.optionItem}>
                 <TextField
-                    variant="line"
+
                     label="소제목"
                     placeholder="예: GIFT"
                     value={accountsSubtitle}
@@ -122,7 +122,7 @@ export default function AccountsSectionContent() {
             </div>
             <div className={styles.optionItem}>
                 <TextField
-                    variant="line"
+
                     label="제목"
                     placeholder="예: 마음 전하실 곳"
                     value={accountsTitle}
@@ -228,7 +228,7 @@ export default function AccountsSectionContent() {
 
                                     {!['본인', '아버지', '어머니'].includes(acc.relation) ? (
                                         <TextField
-                                            variant="line"
+
                                             placeholder="관계를 직접 입력하세요 (예: 본인, 아버지)"
                                             value={acc.relation}
                                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleUpdateAccount(acc.id, { relation: e.target.value })}
@@ -238,7 +238,7 @@ export default function AccountsSectionContent() {
                                     <div className={styles.fieldRow}>
                                         <div className={styles.flex1}>
                                             <TextField
-                                                variant="line"
+
                                                 placeholder="예: 신한"
                                                 value={acc.bank}
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleUpdateAccount(acc.id, { bank: e.target.value })}
@@ -246,7 +246,7 @@ export default function AccountsSectionContent() {
                                         </div>
                                         <div className={styles.flex1}>
                                             <TextField
-                                                variant="line"
+
                                                 placeholder="이름"
                                                 value={acc.holder}
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleUpdateAccount(acc.id, { holder: e.target.value })}
@@ -255,7 +255,7 @@ export default function AccountsSectionContent() {
                                     </div>
 
                                     <TextField
-                                        variant="line"
+
                                         placeholder="계좌번호를 입력하세요"
                                         value={acc.accountNumber}
                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -282,7 +282,7 @@ export default function AccountsSectionContent() {
             {/* Appearance Settings */}
             <div className={styles.optionItem}>
                 <TextField
-                    variant="line"
+
                     label="신랑측 그룹 제목"
                     placeholder="신랑 측 마음 전하실 곳"
                     value={accountsGroomTitle}
@@ -291,7 +291,7 @@ export default function AccountsSectionContent() {
             </div>
             <div className={styles.optionItem}>
                 <TextField
-                    variant="line"
+
                     label="신부측 그룹 제목"
                     placeholder="신부 측 마음 전하실 곳"
                     value={accountsBrideTitle}

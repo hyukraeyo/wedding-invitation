@@ -21,11 +21,10 @@ import type { SectionProps, SamplePhraseItem } from '@/types/builder';
 import { GREETING_SAMPLES } from '@/constants/samples';
 import { SectionAccordion } from '@/components/ui/Accordion';
 import { Dialog } from '@/components/ui/Dialog';
-import { BottomSheet } from '@/components/ui/BottomSheet';
-import { useMediaQuery } from '@/hooks/use-media-query';
+
 
 export default function GreetingSection(props: SectionProps) {
-    const isDesktop = useMediaQuery("(min-width: 768px)");
+
     const {
         message,
         setMessage,
@@ -124,7 +123,7 @@ export default function GreetingSection(props: SectionProps) {
 
                     <div className={styles.optionItem}>
                         <TextField
-                            variant="line"
+
                             label="소제목"
                             type="text"
                             value={greetingSubtitle}
@@ -135,7 +134,7 @@ export default function GreetingSection(props: SectionProps) {
 
                     <div className={styles.optionItem}>
                         <TextField
-                            variant="line"
+
                             label="제목"
                             type="text"
                             value={greetingTitle}
@@ -190,14 +189,14 @@ export default function GreetingSection(props: SectionProps) {
                             {enableFreeformNames && (
                                 <div className={styles.nameForm}>
                                     <TextField
-                                        variant="line"
+
                                         label="신랑 측 표기"
                                         value={groomNameCustom}
                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGroomNameCustom(e.target.value)}
                                         placeholder="예: 아버지 홍길동 · 어머니 김철수 의 장남 길동"
                                     />
                                     <TextField
-                                        variant="line"
+
                                         label="신부 측 표기"
                                         value={brideNameCustom}
                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBrideNameCustom(e.target.value)}
@@ -213,48 +212,24 @@ export default function GreetingSection(props: SectionProps) {
                 </div>
             </SectionAccordion>
 
-            {isDesktop ? (
-                <Dialog
-                    open={isSampleModalOpen}
-                    onOpenChange={setIsSampleModalOpen}
-                >
-                    <Dialog.Overlay />
-                    <Dialog.Content>
-                        <Dialog.Header title="인사말 추천 문구" />
-                        <Dialog.Body>
-                            {renderSampleList()}
-                        </Dialog.Body>
-                        <Dialog.Footer>
-
-                            <BottomCTA.Single
-                                fixed={false}
-                                onClick={() => setIsSampleModalOpen(false)}
-                            >
-                                닫기
-                            </BottomCTA.Single>
-                        </Dialog.Footer>
-                    </Dialog.Content>
-                </Dialog >
-            ) : (
-                <BottomSheet
-                    open={isSampleModalOpen}
-                    onClose={() => setIsSampleModalOpen(false)}
-                    header="인사말 추천 문구"
-                    cta={
-                        <BottomCTA.Single
-                            fixed={false}
-                            onClick={() => setIsSampleModalOpen(false)}
-                        >
-                            닫기
-                        </BottomCTA.Single>
-                    }
-                >
-                    <BottomSheet.Body>
-                        {renderSampleList()}
-                    </BottomSheet.Body>
-                </BottomSheet>
-            )
-            }
+            <Dialog
+                open={isSampleModalOpen}
+                onOpenChange={setIsSampleModalOpen}
+                mobileBottomSheet
+            >
+                <Dialog.Header title="인사말 추천 문구" />
+                <Dialog.Body>
+                    {renderSampleList()}
+                </Dialog.Body>
+                <Dialog.Footer>
+                    <BottomCTA.Single
+                        fixed={false}
+                        onClick={() => setIsSampleModalOpen(false)}
+                    >
+                        닫기
+                    </BottomCTA.Single>
+                </Dialog.Footer>
+            </Dialog>
         </>
     );
 }

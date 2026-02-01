@@ -34,11 +34,11 @@ const Heading = React.forwardRef<HTMLElement, HeadingProps>(
         },
         ref
     ) => {
-        const Comp = asChild ? Slot : as;
+        const Comp = (asChild ? Slot : as) as React.ElementType;
 
         return (
             <Comp
-                ref={ref}
+                ref={ref as React.Ref<HTMLElement>}
                 className={clsx(
                     s.heading,
                     s[`size_${size}`],

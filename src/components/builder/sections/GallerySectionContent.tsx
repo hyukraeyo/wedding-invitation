@@ -248,7 +248,7 @@ export default React.memo(function GallerySectionContent() {
         <div className={styles.container}>
             <div className={styles.optionItem}>
                 <TextField
-                    variant="line"
+
                     label="소제목"
                     type="text"
                     value={gallerySubtitle}
@@ -258,7 +258,7 @@ export default React.memo(function GallerySectionContent() {
             </div>
             <div className={styles.optionItem}>
                 <TextField
-                    variant="line"
+
                     label="제목"
                     type="text"
                     value={galleryTitle}
@@ -318,26 +318,23 @@ export default React.memo(function GallerySectionContent() {
                             open={isLimitModalOpen}
                             onOpenChange={setIsLimitModalOpen}
                         >
-                            <Dialog.Overlay />
-                            <Dialog.Content>
-                                <Dialog.Header title="알림" />
-                                <Dialog.Body className={styles.centerBody}>
-                                    <p style={{ fontSize: '1rem', color: '#666' }}>
-                                        사진은 최대 10장까지 등록 가능합니다.
-                                    </p>
-                                </Dialog.Body>
-                                <Dialog.Footer className={styles.paddedFooter}>
-                                    <Button
-                                        variant="fill"
-                                        color="primary"
-                                        size="lg"
-                                        style={{ width: '100%' }}
-                                        onClick={() => setIsLimitModalOpen(false)}
-                                    >
-                                        확인
-                                    </Button>
-                                </Dialog.Footer>
-                            </Dialog.Content>
+                            <Dialog.Header title="알림" />
+                            <Dialog.Body className={styles.centerBody}>
+                                <p style={{ fontSize: '1rem', color: '#666' }}>
+                                    사진은 최대 10장까지 등록 가능합니다.
+                                </p>
+                            </Dialog.Body>
+                            <Dialog.Footer className={styles.paddedFooter}>
+                                <Button
+                                    variant="fill"
+                                    color="primary"
+                                    size="lg"
+                                    style={{ width: '100%' }}
+                                    onClick={() => setIsLimitModalOpen(false)}
+                                >
+                                    확인
+                                </Button>
+                            </Dialog.Footer>
                         </Dialog>
 
                         <DragOverlay dropAnimation={{
@@ -395,28 +392,30 @@ export default React.memo(function GallerySectionContent() {
                     />
                 </div>
             </div>
-            {galleryType === 'swiper' ? (
-                <>
-                    <div className={styles.optionItem}>
-                        <div className={styles.rowTitle}>자동 재생</div>
-                        <div className={styles.rowRight}>
-                            <Switch
-                                checked={galleryAutoplay}
-                                onCheckedChange={(checked) => setGalleryAutoplay(checked)}
-                            />
+            {
+                galleryType === 'swiper' ? (
+                    <>
+                        <div className={styles.optionItem}>
+                            <div className={styles.rowTitle}>자동 재생</div>
+                            <div className={styles.rowRight}>
+                                <Switch
+                                    checked={galleryAutoplay}
+                                    onCheckedChange={(checked) => setGalleryAutoplay(checked)}
+                                />
+                            </div>
                         </div>
-                    </div>
-                    <div className={styles.optionItem}>
-                        <div className={styles.rowTitle}>페이드 효과</div>
-                        <div className={styles.rowRight}>
-                            <Switch
-                                checked={galleryFade}
-                                onCheckedChange={(checked) => setGalleryFade(checked)}
-                            />
+                        <div className={styles.optionItem}>
+                            <div className={styles.rowTitle}>페이드 효과</div>
+                            <div className={styles.rowRight}>
+                                <Switch
+                                    checked={galleryFade}
+                                    onCheckedChange={(checked) => setGalleryFade(checked)}
+                                />
+                            </div>
                         </div>
-                    </div>
-                </>
-            ) : null}
-        </div>
+                    </>
+                ) : null
+            }
+        </div >
     );
 });
