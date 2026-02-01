@@ -13,5 +13,24 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  return <HomeClient />;
+  return (
+    <>
+      {/* Pretendard 폰트 preload로 초기 로딩 최적화 */}
+      <link
+        rel="preload"
+        href="/fonts/Pretendard-Regular.woff2"
+        as="font"
+        type="font/woff2"
+        crossOrigin="anonymous"
+      />
+      <link
+        rel="preload"
+        href="/fonts/Pretendard-Bold.woff2"
+        as="font"
+        type="font/woff2"
+        crossOrigin="anonymous"
+      />
+      <HomeClient />
+    </>
+  );
 }

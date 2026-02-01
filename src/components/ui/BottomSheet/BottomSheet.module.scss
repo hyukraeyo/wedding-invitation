@@ -27,6 +27,18 @@
   margin: 0 auto;
 }
 
+.floating {
+  // 플로팅 스타일: 좌우 및 하단 여백 추가
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  border-radius: 20px; // 전체 모서리를 둥글게
+  max-height: calc(96% - 16px);
+  
+  // 데스크톱에서는 중앙 정렬 유지
+  max-width: calc(v.$canvas-max-width - 32px);
+}
+
 .handle {
   width: 40px;
   height: 4px;

@@ -2,7 +2,7 @@
 
 import React, { memo, useMemo, useContext, useCallback, useRef } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { Drawer } from 'vaul';
+import { BottomSheet } from '@/components/ui/BottomSheet';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { cn } from '@/lib/utils';
 import styles from './Dialog.module.scss';
@@ -30,9 +30,9 @@ const DialogRoot = ({
     if (isBottomSheet) {
         return (
             <DialogContext.Provider value={value}>
-                <Drawer.Root {...props}>
+                <BottomSheet.Root {...props}>
                     {children}
-                </Drawer.Root>
+                </BottomSheet.Root>
             </DialogContext.Provider>
         );
     }
@@ -48,21 +48,21 @@ const DialogRoot = ({
 
 const DialogTrigger = memo((props: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Trigger>) => {
     const { isBottomSheet } = useContext(DialogContext);
-    if (isBottomSheet) return <Drawer.Trigger {...props} />;
+    if (isBottomSheet) return <BottomSheet.Trigger {...props} />;
     return <DialogPrimitive.Trigger {...props} />;
 });
 DialogTrigger.displayName = 'DialogTrigger';
 
 const DialogPortal = memo((props: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Portal>) => {
     const { isBottomSheet } = useContext(DialogContext);
-    if (isBottomSheet) return <Drawer.Portal {...props} />;
+    if (isBottomSheet) return <BottomSheet.Portal {...props} />;
     return <DialogPrimitive.Portal {...props} />;
 });
 DialogPortal.displayName = 'DialogPortal';
 
 const DialogClose = memo((props: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Close>) => {
     const { isBottomSheet } = useContext(DialogContext);
-    if (isBottomSheet) return <Drawer.Close {...props} />;
+    if (isBottomSheet) return <BottomSheet.Close {...props} />;
     return <DialogPrimitive.Close {...props} />;
 });
 DialogClose.displayName = 'DialogClose';
@@ -75,9 +75,9 @@ const DialogOverlay = memo(React.forwardRef<
 
     if (isBottomSheet) {
         return (
-            <Drawer.Overlay
+            <BottomSheet.Overlay
                 ref={ref as React.Ref<HTMLDivElement>}
-                className={cn(styles.overlay, className)}
+                className={className}
                 {...props}
             />
         );
@@ -121,18 +121,15 @@ const DialogContent = memo(React.forwardRef<
 
     if (isBottomSheet) {
         return (
-            <Drawer.Content
+            <BottomSheet.Content
                 ref={setRefs as React.Ref<HTMLDivElement>}
-                className={cn(styles.bottomSheetContent, className)}
+                className={className}
+                variant="floating"
                 onOpenAutoFocus={handleOpenAutoFocus}
                 {...props}
             >
-                <div className={styles.handle} />
-                <Drawer.Description className="sr-only">
-                    {props['aria-describedby'] || 'Dialog description'}
-                </Drawer.Description>
                 {children}
-            </Drawer.Content>
+            </BottomSheet.Content>
         );
     }
 
@@ -161,20 +158,28 @@ const DialogHeader = memo(({
 }: React.HTMLAttributes<HTMLDivElement> & { title?: string }) => {
     const { isBottomSheet } = useContext(DialogContext);
 
+    if (isBottomSheet) {
+        return (
+            <BottomSheet.Header
+                className={className}
+                title={title}
+                {...props}
+            >
+                {!title && children}
+            </BottomSheet.Header>
+        );
+    }
+
     return (
         <div
-            className={cn(styles.header, isBottomSheet && styles.bottomSheetHeader, className)}
+            className={cn(styles.header, className)}
             {...props}
         >
-            {title && (
-                isBottomSheet ? (
-                    <Drawer.Title className={styles.title}>{title}</Drawer.Title>
-                ) : (
-                    <DialogPrimitive.Title className={styles.title}>
-                        {title}
-                    </DialogPrimitive.Title>
-                )
-            )}
+            {title ? (
+                <DialogPrimitive.Title className={styles.title}>
+                    {title}
+                </DialogPrimitive.Title>
+            ) : null}
             {children}
         </div>
     );
@@ -184,12 +189,20 @@ DialogHeader.displayName = 'DialogHeader';
 const DialogFooter = memo(({
     className,
     ...props
-}: React.HTMLAttributes<HTMLDivElement>) => (
-    <div
-        className={cn(styles.footer, className)}
-        {...props}
-    />
-));
+}: React.HTMLAttributes<HTMLDivElement>) => {
+    const { isBottomSheet } = useContext(DialogContext);
+
+    if (isBottomSheet) {
+        return <BottomSheet.Footer className={className} {...props} />;
+    }
+
+    return (
+        <div
+            className={cn(styles.footer, className)}
+            {...props}
+        />
+    );
+});
 DialogFooter.displayName = 'DialogFooter';
 
 const DialogTitle = memo(React.forwardRef<
@@ -197,7 +210,7 @@ const DialogTitle = memo(React.forwardRef<
     React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
 >(({ className, ...props }, ref) => {
     const { isBottomSheet } = useContext(DialogContext);
-    if (isBottomSheet) return <Drawer.Title ref={ref as React.Ref<HTMLHeadingElement>} className={cn(styles.title, className)} {...props} />;
+    if (isBottomSheet) return <BottomSheet.Title ref={ref as React.Ref<HTMLHeadingElement>} className={className} {...props} />;
     return (
         <DialogPrimitive.Title
             ref={ref}
@@ -213,7 +226,10 @@ const DialogDescription = memo(React.forwardRef<
     React.ComponentPropsWithoutRef<typeof DialogPrimitive.Description>
 >(({ className, ...props }, ref) => {
     const { isBottomSheet } = useContext(DialogContext);
-    if (isBottomSheet) return <Drawer.Description ref={ref as React.Ref<HTMLParagraphElement>} className={cn(styles.description, className)} {...props} />;
+    if (isBottomSheet) {
+        // BottomSheet는 Description을 자동으로 처리하므로 null 반환
+        return null;
+    }
     return (
         <DialogPrimitive.Description
             ref={ref}
@@ -226,14 +242,25 @@ DialogDescription.displayName = 'DialogDescription';
 
 const DialogBody = memo(({
     className,
+    children,
     padding = true,
     ...props
-}: React.HTMLAttributes<HTMLDivElement> & { padding?: boolean }) => (
-    <div
-        className={cn(styles.body, !padding && styles.noPadding, className)}
-        {...props}
-    />
-));
+}: React.HTMLAttributes<HTMLDivElement> & { padding?: boolean }) => {
+    const { isBottomSheet } = useContext(DialogContext);
+
+    if (isBottomSheet) {
+        return <BottomSheet.Body className={className} {...props}>{children}</BottomSheet.Body>;
+    }
+
+    return (
+        <div
+            className={cn(styles.body, !padding && styles.noPadding, className)}
+            {...props}
+        >
+            {children}
+        </div>
+    );
+});
 DialogBody.displayName = 'DialogBody';
 
 const Dialog = Object.assign(DialogRoot, {

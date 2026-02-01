@@ -43,7 +43,8 @@ export const pretendard = localFont({
         },
     ],
     variable: '--font-pretendard',
-    display: 'swap',
+    display: 'optional', // Layout shift 방지를 위해 optional 사용
+    adjustFontFallback: false, // Next.js의 자동 fallback 조정 비활성화
 });
 
 /**

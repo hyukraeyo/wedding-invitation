@@ -1,185 +1,148 @@
-"use client"
+'use client';
 
-import * as React from "react"
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-} from "lucide-react"
-import { DayButton, DayPicker, useDayPicker, MonthCaptionProps, ClassNames } from "react-day-picker"
-import { format, isValid, isSameMonth } from "date-fns"
-import { ko } from "date-fns/locale"
-import { cn } from "@/lib/utils"
-import styles from "./Calendar.module.scss"
+import * as React from 'react';
+import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { DayPicker, useNavigation, UI, DayFlag, type DayButtonProps } from 'react-day-picker';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/Button';
 
-type CalendarProps = React.ComponentProps<typeof DayPicker> & {
+import styles from './Calendar.module.scss';
+
+export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
   hideTodayIndicator?: boolean;
 };
 
+/**
+ * 월 표시와 내비게이션 커스텀 컴포넌트
+ */
+const CustomMonthCaption = (props: { calendarMonth: { date: Date } }) => {
+  const { previousMonth, nextMonth, goToMonth } = useNavigation();
+
+  return (
+    <div className={styles.customCaption}>
+      <button
+        type="button"
+        className={styles.navButtonSmall}
+        disabled={!previousMonth}
+        onClick={() => previousMonth && goToMonth(previousMonth)}
+        aria-label="이전 달"
+      >
+        <ChevronLeftIcon />
+      </button>
+
+      <div className={styles.captionTitleGroup}>
+        <span className={styles.captionYear}>
+          {format(props.calendarMonth.date, 'yyyy')}
+        </span>
+        <span className={styles.captionMonth}>
+          {format(props.calendarMonth.date, 'M월')}
+        </span>
+      </div>
+
+      <button
+        type="button"
+        className={styles.navButtonSmall}
+        disabled={!nextMonth}
+        onClick={() => nextMonth && goToMonth(nextMonth)}
+        aria-label="다음 달"
+      >
+        <ChevronRightIcon />
+      </button>
+    </div>
+  );
+};
+
+/**
+ * 날짜 버튼 커스텀 컴포넌트
+ */
+const CustomDayButton = (dayButtonProps: DayButtonProps) => {
+  const { day, modifiers, className: rdpClassName, ...others } = dayButtonProps;
+  const isSelected = !!modifiers.selected;
+  const isToday = !!modifiers.today;
+  const isOutside = !!modifiers.outside;
+
+  const dayOfWeek = day.date.getDay();
+  const isSunday = dayOfWeek === 0;
+  const isSaturday = dayOfWeek === 6;
+
+  return (
+    <Button
+      {...others}
+      variant={isSelected ? "solid" : "ghost"}
+      color={(isSelected ? "primary" : "grey") as "primary" | "grey"}
+      size="tiny"
+      radius="full"
+      className={cn(
+        styles.dayButtonBase,
+        isSelected && styles.daySelected,
+        isToday && styles.dayToday,
+        isOutside && styles.dayOutside,
+        isSunday && !isSelected && !isOutside && styles.sunday,
+        isSaturday && !isSelected && !isOutside && styles.saturday,
+        rdpClassName
+      )}
+    >
+      {day.date.getDate()}
+    </Button>
+  );
+};
+
+/**
+ * Calendar 컴포넌트
+ * react-day-picker v9에 기반하며 Banana Wedding 디자인 시스템을 따릅니다.
+ */
 function Calendar({
   className,
   classNames,
   showOutsideDays = true,
   hideTodayIndicator = false,
-  modifiers,
   ...props
 }: CalendarProps) {
-  const defaultClassNames: ClassNames = {
-    months: styles.months,
-    month: styles.month,
-    table: styles.table,
-    weekdays: styles.weekdays,
-    weekday: styles.weekday,
-    week: styles.week,
-    day: styles.day,
-    today: hideTodayIndicator ? undefined : styles.today,
-    outside: styles.outside,
-    disabled: styles.disabled,
-    range_start: styles.range_start,
-    range_middle: styles.range_middle,
-    range_end: styles.range_end,
-    hidden: styles.hidden,
+  // exactOptionalPropertyTypes: true 설정 대응을 위해 undefined인 클래스는 제외합니다.
+  const defaultClassNames = Object.entries({
+    [UI.Months]: styles.months,
+    [UI.Month]: styles.month,
+    [UI.MonthCaption]: styles.month_caption,
+    [UI.MonthGrid]: styles.table,
+    [UI.Weekdays]: styles.weekdays,
+    [UI.Weekday]: styles.weekday,
+    [UI.Weeks]: styles.weeks,
+    [UI.Week]: styles.week,
+    [UI.Day]: styles.day,
+    [UI.DayButton]: styles.dayButtonBase,
+    [DayFlag.outside]: styles.dayOutside,
+    [DayFlag.disabled]: styles.disabled,
+    [DayFlag.hidden]: styles.hidden,
     ...classNames,
-  } as ClassNames;
+  }).reduce((acc, [key, value]) => {
+    if (value) acc[key] = value;
+    return acc;
+  }, {} as Record<string, string>);
 
-  // 오늘 날짜 표시를 숨기려면 today modifier를 undefined로 설정
-  const customModifiers = hideTodayIndicator
-    ? { ...modifiers, today: undefined }
-    : modifiers;
+  // 컴포넌트 레퍼런스 안정화
+  const components = React.useMemo(() => ({
+    MonthCaption: CustomMonthCaption,
+    DayButton: CustomDayButton,
+  }), []);
 
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
-      fixedWeeks
       className={cn(styles.root, className)}
-      locale={ko}
       classNames={defaultClassNames}
-      modifiers={customModifiers}
-      components={{
-        MonthCaption: CustomMonthCaption,
-        Nav: () => <></>,
-        DayButton: CalendarDayButton,
+      locale={ko}
+      hideNavigation
+      modifiers={{
+        today: hideTodayIndicator ? [] : [new Date()],
       }}
+      components={components}
       {...props}
     />
-  )
-}
-
-/**
- * MonthCaption 컴포넌트를 커스텀하여 텍스트 양옆에 네비게이션 버튼을 배치합니다.
- * react-day-picker v9에서는 MonthCaption이 헤더의 핵심 역할을 합니다.
- */
-function CustomMonthCaption(props: MonthCaptionProps) {
-  const { calendarMonth } = props;
-  const { goToMonth, previousMonth, nextMonth } = useDayPicker();
-
-  const handlePrev = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (previousMonth) {
-      goToMonth(previousMonth);
-    }
-  };
-
-  const handleNext = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (nextMonth) {
-      goToMonth(nextMonth);
-    }
-  };
-
-  // 날짜 유효성 검사 및 포맷팅 (calendarMonth.date 사용)
-  const displayDate = calendarMonth.date;
-  const formattedDate = isValid(displayDate)
-    ? format(displayDate, "yyyy년 M월")
-    : "";
-
-  return (
-    <div className={styles.month_caption}>
-      <div className={styles.customHeader}>
-        <button
-          type="button"
-          className={styles.navButton}
-          onClick={handlePrev}
-          disabled={!previousMonth || false}
-          aria-label="이전 달"
-        >
-          <ChevronLeftIcon size={20} />
-        </button>
-
-        <span className={styles.caption_label}>
-          {formattedDate}
-        </span>
-
-        <button
-          type="button"
-          className={styles.navButton}
-          onClick={handleNext}
-          disabled={!nextMonth || false}
-          aria-label="다음 달"
-        >
-          <ChevronRightIcon size={20} />
-        </button>
-      </div>
-    </div>
   );
 }
 
-function CalendarDayButton({
-  className,
-  day,
-  modifiers,
-  ...props
-}: React.ComponentProps<typeof DayButton>) {
-  const ref = React.useRef<HTMLButtonElement>(null)
-  const { goToMonth, months } = useDayPicker();
+Calendar.displayName = "Calendar";
 
-  React.useEffect(() => {
-    if (ref.current && modifiers.focused) {
-      ref.current.focus();
-    }
-  }, [modifiers.focused])
-
-  const isSelected = !!modifiers.selected
-  const isSunday = day.date.getDay() === 0
-  const isSaturday = day.date.getDay() === 6
-
-  // 외부 날짜(이전/다음 달) 클릭 시 선택 대신 달 이동 처리
-  const handleDayClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const currentMonth = months?.[0]?.date;
-
-    // 현재 표시된 달과 클릭된 날짜의 달이 다르면 (Outside Day)
-    // 원래의 선택 동작(props.onClick)을 막고 달만 이동시킴
-    if (currentMonth && !isSameMonth(day.date, currentMonth)) {
-      e.preventDefault();
-      e.stopPropagation(); // 상위로 이벤트 전파 방지 (DatePicker 닫힘 방지)
-      goToMonth(day.date);
-      return;
-    }
-
-    // 현재 달의 날짜면 원래 동작 수행
-    props.onClick?.(e);
-  };
-
-  return (
-    <button
-      {...props}
-      ref={ref}
-      type="button"
-      onClick={handleDayClick}
-      data-selected={isSelected}
-      className={cn(
-        styles.dayButton,
-        modifiers.today && styles.dayToday,
-        modifiers.outside && styles.dayOutside,
-        !isSelected && !modifiers.outside && isSunday && styles.sunday,
-        !isSelected && !modifiers.outside && isSaturday && styles.saturday,
-        className
-      )}
-    >
-      {day.date.getDate()}
-    </button>
-  )
-}
-
-export { Calendar, CalendarDayButton }
+export { Calendar };

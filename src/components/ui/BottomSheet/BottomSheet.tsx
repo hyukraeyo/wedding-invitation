@@ -5,25 +5,33 @@ import { Drawer } from 'vaul';
 import { clsx } from 'clsx';
 import s from './BottomSheet.module.scss';
 
-export interface BottomSheetProps {
+export interface BottomSheetRootProps {
     open?: boolean | undefined;
     onClose?: (() => void) | undefined;
     onOpenChange?: ((open: boolean) => void) | undefined;
     children: React.ReactNode;
+}
+
+export interface BottomSheetContentProps {
+    className?: string | undefined;
+    variant?: 'default' | 'floating';
+    children: React.ReactNode;
+}
+
+export interface BottomSheetProps extends BottomSheetRootProps {
     header?: React.ReactNode | undefined;
     cta?: React.ReactNode | undefined;
     className?: string | undefined;
+    variant?: 'default' | 'floating';
 }
 
-const BottomSheetMain = ({
+// Root component
+const BottomSheetRoot = ({
     open,
     onClose,
     onOpenChange,
     children,
-    header,
-    cta,
-    className
-}: BottomSheetProps) => {
+}: BottomSheetRootProps) => {
     return (
         <Drawer.Root
             open={!!open}
@@ -32,33 +40,144 @@ const BottomSheetMain = ({
                 if (!val) onClose?.();
             }}
         >
-            <Drawer.Portal>
-                <Drawer.Overlay className={s.overlay} />
-                <Drawer.Content className={clsx(s.content, className)}>
-                    <div className={s.handle} />
-                    {header && (
-                        <div className={s.header}>
-                            <Drawer.Title className={s.title}>{header}</Drawer.Title>
-                        </div>
-                    )}
-                    {children}
-                    {cta && (
-                        <div className={s.footer}>
-                            {cta}
-                        </div>
-                    )}
-                </Drawer.Content>
-            </Drawer.Portal>
+            {children}
         </Drawer.Root>
     );
 };
 
-const BottomSheetBody = ({ children, className }: { children: React.ReactNode; className?: string }) => (
-    <div className={clsx(s.body, className)}>
+// Portal component
+const BottomSheetPortal = Drawer.Portal;
+
+// Overlay component
+const BottomSheetOverlay = React.forwardRef<
+    HTMLDivElement,
+    React.ComponentPropsWithoutRef<typeof Drawer.Overlay>
+>(({ className, ...props }, ref) => (
+    <Drawer.Overlay ref={ref} className={clsx(s.overlay, className)} {...props} />
+));
+BottomSheetOverlay.displayName = 'BottomSheetOverlay';
+
+// Content component
+const BottomSheetContent = React.forwardRef<
+    HTMLDivElement,
+    BottomSheetContentProps & React.ComponentPropsWithoutRef<typeof Drawer.Content>
+>(({ className, variant = 'floating', children, ...props }, ref) => (
+    <Drawer.Content
+        ref={ref}
+        className={clsx(
+            s.content,
+            variant === 'floating' && s.floating,
+            className
+        )}
+        {...props}
+    >
+        <div className={s.handle} />
+        <Drawer.Description className="sr-only">
+            {props['aria-describedby'] || 'Bottom sheet description'}
+        </Drawer.Description>
+        {children}
+    </Drawer.Content>
+));
+BottomSheetContent.displayName = 'BottomSheetContent';
+
+// Header component
+export interface BottomSheetHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
+    title?: string | undefined;
+    children?: React.ReactNode;
+}
+
+const BottomSheetHeader = ({
+    children,
+    className,
+    title,
+    ...props
+}: BottomSheetHeaderProps) => (
+    <div className={clsx(s.header, className)} {...props}>
+        {title && <Drawer.Title className={s.title}>{title}</Drawer.Title>}
+        {!title && children}
+    </div>
+);
+BottomSheetHeader.displayName = 'BottomSheetHeader';
+
+// Title component
+const BottomSheetTitle = React.forwardRef<
+    HTMLHeadingElement,
+    React.ComponentPropsWithoutRef<typeof Drawer.Title>
+>(({ className, ...props }, ref) => (
+    <Drawer.Title ref={ref} className={clsx(s.title, className)} {...props} />
+));
+BottomSheetTitle.displayName = 'BottomSheetTitle';
+
+// Body component
+const BottomSheetBody = ({
+    children,
+    className,
+    ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+    <div className={clsx(s.body, className)} {...props}>
         {children}
     </div>
 );
+BottomSheetBody.displayName = 'BottomSheetBody';
 
-export const BottomSheet = Object.assign(BottomSheetMain, {
+// Footer component
+const BottomSheetFooter = ({
+    children,
+    className,
+    ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
+    <div className={clsx(s.footer, className)} {...props}>
+        {children}
+    </div>
+);
+BottomSheetFooter.displayName = 'BottomSheetFooter';
+
+// Close component
+const BottomSheetClose = Drawer.Close;
+
+// Trigger component
+const BottomSheetTrigger = Drawer.Trigger;
+
+// Legacy API - 기존 사용법 유지
+const BottomSheetLegacy = ({
+    open,
+    onClose,
+    onOpenChange,
+    children,
+    header,
+    cta,
+    className,
+    variant = 'floating'
+}: BottomSheetProps) => {
+    return (
+        <BottomSheetRoot open={open} onClose={onClose} onOpenChange={onOpenChange}>
+            <BottomSheetPortal>
+                <BottomSheetOverlay />
+                <BottomSheetContent className={className} variant={variant}>
+                    {header && (
+                        typeof header === 'string' ? (
+                            <BottomSheetHeader title={header} />
+                        ) : (
+                            <BottomSheetHeader>{header}</BottomSheetHeader>
+                        )
+                    )}
+                    {children}
+                    {cta && <BottomSheetFooter>{cta}</BottomSheetFooter>}
+                </BottomSheetContent>
+            </BottomSheetPortal>
+        </BottomSheetRoot>
+    );
+};
+
+export const BottomSheet = Object.assign(BottomSheetLegacy, {
+    Root: BottomSheetRoot,
+    Portal: BottomSheetPortal,
+    Overlay: BottomSheetOverlay,
+    Trigger: BottomSheetTrigger,
+    Content: BottomSheetContent,
+    Header: BottomSheetHeader,
+    Title: BottomSheetTitle,
     Body: BottomSheetBody,
+    Footer: BottomSheetFooter,
+    Close: BottomSheetClose,
 });

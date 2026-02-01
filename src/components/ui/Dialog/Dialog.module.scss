@@ -48,37 +48,6 @@
   }
 }
 
-// Bottom Sheet (Vaul) behavior
-.bottomSheetContent {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  z-index: v.$z-modal;
-  background-color: v.$white;
-  border-radius: v.$radius-xl v.$radius-xl 0 0;
-  width: 100%;
-  max-width: v.$canvas-max-width;
-  display: flex;
-  flex-direction: column;
-  outline: none;
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-.handle {
-  width: 36px;
-  height: 4px;
-  background-color: v.$grey-300;
-  border-radius: 2px;
-  margin: 8px auto 0;
-  flex-shrink: 0;
-}
-
-.bottomSheetHeader {
-  padding: 24px 24px 16px; // Slightly less top padding for bottom sheets
-}
-
 .header {
   padding: 32px 24px 16px;
   text-align: center;
