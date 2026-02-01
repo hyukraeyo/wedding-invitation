@@ -1,115 +1,99 @@
 # AGENTS.md
 
 Guidance for agentic coding agents working in `wedding-invitation`.
-This file consolidates repo conventions plus Cursor rules from `.cursorrules`.
 
 > **CRITICAL: SYNC MANDATE**
-> 모든 설정 및 가이드 문서(`.agent`, `.codex`, `.cursor`, `.opencode`, `.cursorrules`, `AGENTS.md`, `README.md`, `ARCHITECTURE.md`)는 항상 동일한 기준을 유지하도록 함께 업데이트되어야 합니다. 한 곳의 규칙이 변경되면 언급된 모든 파일에 해당 변경 사항을 명시하고 동기화하십시오.
+> All guide docs (`.cursorrules`, `AGENTS.md`, `README.md`) must stay in sync. Update all when changing rules.
 
 ## Build / Lint / Test Commands
 
 ```bash
 # Development
-npm run dev                # Start dev server at http://localhost:3000
-npm run dev:turbo          # Start dev server with Turbo
-npm run build              # Production build (includes type checking)
+npm run dev                # Start dev server (Turbo) at http://localhost:3000
+npm run build              # Production build with webpack + type checking
 npm run start              # Start production server
 
 # Code Quality
-npm run lint               # Run ESLint (uses @typescript-eslint/parser)
-npm run analyze            # Analyze bundle size (ANALYZE=true npm run build, opens analyzer UI)
-
-
+npm run lint               # Run ESLint
+npm run lint:fix           # Run ESLint with auto-fix
+npm run type-check         # Run TypeScript compiler (no emit)
+npm run analyze            # Bundle size analysis
+npm run clean              # Clean .next, out, dist directories
 ```
 
-## Core Standards (from `.cursorrules`)
+## Core Standards
 
 ### 🎨 Styling: Strict SCSS Modules
-- **SCSS Modules mandatory**: All components must use `.module.scss` files
-- **Tailwind CSS prohibited**: Maintains design consistency across project
-- **Radix UI First**: Use **Radix UI Primitives** primarily for all UI components. Inherit the aesthetics of [Toss Design System Mobile](https://tossmini-docs.toss.im/tds-mobile/) but implement logic using Radix UI.
+- **SCSS Modules mandatory**: All components use `.module.scss` files
+- **Tailwind CSS prohibited**: Maintains design consistency
+- **Radix UI First**: Use **Radix UI Primitives** for all UI components
 - **Design tokens**: Use `@use "@/styles/variables" as v;` and `@use "@/styles/mixins" as m;`
-- **Primary color**: Banana yellow `#FBC02D` (theme identity)
-- **Color variables**: Use semantic variables like `$color-primary`, `$color-bg-page`, etc.
+- **Primary color**: Banana yellow `#FBC02D`
 
 ### 📁 Naming: PascalCase Folders & Files
-- **Component structure**: Mandatory hybrid pattern:
+- **Component structure** (mandatory):
   ```
   ComponentName/
-  ├── ComponentName.tsx        # Component logic
-  ├── ComponentName.module.scss # SCSS modules styling
-  └── index.ts                # Re-export (export * from './ComponentName')
+  ├── ComponentName.tsx
+  ├── ComponentName.module.scss
+  └── index.ts
   ```
 - **Folder/File names**: PascalCase (`src/components/ui/Button/Button.tsx`)
 - **Functions/Variables**: camelCase (`getUserData`, `isLoading`)
 - **Types/Interfaces**: PascalCase (`ApiResponse`, `UserProfile`)
 - **Constants**: UPPER_SNAKE_CASE (`MAX_RETRY_COUNT`)
 
-### 📱 Mobile-First UX (Top Priority)
-- **Mobile first design**: Portrait mode priority
-- **Premium animations**: iOS-style `cubic-bezier(0.16, 1, 0.3, 1)`
-- **Responsive patterns**: Use `ResponsiveModal` for Desktop↔Mobile dialog conversion
-- **Device detection**: Use `isMobile()`, `isIOS()`, `isAndroid()` utils
+### 📱 Mobile-First UX
+- **Mobile first**: Portrait mode priority
+- **Animations**: iOS-style `cubic-bezier(0.16, 1, 0.3, 1)`
+- **Device utils**: Use `isMobile()`, `isIOS()`, `isAndroid()`
 
-### 🚀 Next.js 16+ Patterns (Strict)
+### 🚀 Next.js 16+ Patterns
 - **Server components default**: Data fetching in server components
-- **No client fetches on load**: Prohibit `useEffect` + `fetch` on initial page load
-- **Server Actions**: All mutations use `'use server'` directive
+- **No client fetches on load**: Prohibit `useEffect` + `fetch` on initial load
+- **Server Actions**: All mutations use `'use server'`
 - **Direct DB access**: Supabase service layer, no internal API routes
-- **App Router**: Use Next.js 16.1.1 App Router patterns
+- **App Router**: Next.js 16.1.1 patterns
 
 ## Code Style Guidelines
 
 ### Import Organization
 ```typescript
 // 1. React imports
-import React from 'react';
+import * as React from 'react';
 
 // 2. External libraries (alphabetical)
 import { clsx } from 'clsx';
-import * as TogglePrimitive from '@radix-ui/react-toggle';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
 
 // 3. Internal imports (alphabetical by path)
 import { cn } from '@/lib/utils';
-import { profileService } from '@/services/profileService';
 import styles from './ComponentName.module.scss';
 ```
 
 ### TypeScript Patterns
-- **Strict mode enforced**: No `any`, use proper typing
+- **Strict mode**: No `any`, proper typing required
 - **Explicit props**: Define interfaces, avoid `React.FC`
-- **Return types**: Use explicit returns for exported functions
-- **Utility types**: Use generics with proper constraints
 - **Type guards**: Implement for complex type narrowing
 
 ### Component Structure
 ```typescript
-"use client"; // when needed
+'use client'; // when needed
 
-import React from 'react';
+import * as React from 'react';
 import { cn } from '@/lib/utils';
 import styles from './ComponentName.module.scss';
 
 interface ComponentNameProps {
-  // Define props explicitly
   children: React.ReactNode;
   className?: string;
   disabled?: boolean;
 }
 
-/**
- * Component description following TDS design patterns
- * Based on Radix UI for accessibility when applicable
- */
 export const ComponentName = React.forwardRef<
   HTMLButtonElement,
   ComponentNameProps
->(({
-  children,
-  className,
-  disabled = false,
-  ...props
-}, ref) => {
+>(({ children, className, disabled = false, ...props }, ref) => {
   return (
     <button
       ref={ref}
@@ -122,29 +106,25 @@ export const ComponentName = React.forwardRef<
   );
 });
 
-ComponentName.displayName = "ComponentName";
+ComponentName.displayName = 'ComponentName';
 export default ComponentName;
 ```
 
 ### Error Handling
-- **Server errors**: Use proper error boundaries and toast notifications
-- **Async errors**: Use try-catch with proper error typing
-- **Validation**: Use Zod schemas for runtime validation
-- **User feedback**: Use `sonner` toast notifications for user actions
-
-
+- Use `sonner` toast notifications for user actions
+- Use Zod for runtime validation
+- Proper error boundaries
 
 ## Project Architecture
 
 ### Technology Stack
 - **Framework**: Next.js 16.1.1 (App Router)
 - **Language**: TypeScript 5 (strict mode)
-- **Styling**: SCSS Modules + Radix UI Primitives (TDS Style)
-- **State Management**: Zustand (client), TanStack Query (server state)
-- **Database**: Supabase (Remote CLI, no local Docker)
-- **UI Components**: Radix UI Primitives (Primary) + TDS Style Inheritance
-
-- **Build**: Webpack (not Turbopack for production)
+- **Styling**: SCSS Modules + Radix UI Primitives
+- **State**: Zustand (client), TanStack Query (server)
+- **Database**: Supabase (Remote CLI)
+- **UI**: Radix UI Primitives + TDS Style
+- **Build**: Webpack (production)
 
 ### Key Directories
 ```
@@ -161,33 +141,14 @@ src/
 ├── store/            # Zustand stores
 ├── hooks/            # Custom React hooks
 ├── types/            # TypeScript type definitions
-├── styles/           # Global SCSS files and design tokens
+├── styles/           # Global SCSS and design tokens
 └── constants/        # Application constants
 ```
 
-### Performance Guidelines
-- **Code splitting**: Use dynamic imports for heavy components
-- **Image optimization**: Use Next.js Image component
-- **Bundle analysis**: Run `npm run analyze` before production
-- **Server components**: Prefer for static content and data fetching
-- **Client components**: Only when interactivity needed
-
-### Accessibility Standards
-- **ARIA attributes**: Follow Radix UI patterns
-- **Keyboard navigation**: Test with tab navigation
-- **Screen readers**: Use semantic HTML and proper labeling
-- **Focus management**: Implement focus traps in modals
-- **Color contrast**: Follow WCAG AA standards
-
 ## Critical Development Rules
 
-1. **Reuse First**: Always search existing components before creating new ones
-2. **Mobile Priority**: Design for mobile first, then enhance for desktop
-3. **Type Safety**: Maintain strict TypeScript configuration
-4. **Performance**: Optimize bundle size and loading performance
-
-6. **Accessibility**: Ensure keyboard navigation and screen reader support
-7. **Error Boundaries**: Implement proper error handling at component level
-8. **Design Consistency**: Follow TDS Mobile design principles strictly
-10. **Korean Commit Messages**: Always generate commit messages in **Korean** following [Conventional Commits](https://www.conventionalcommits.org/).
-   - Format: `type: message in Korean` (e.g., `feat: 서비스 소개 페이지 추가`)
+1. **Reuse First**: Search existing components before creating new ones
+2. **Mobile Priority**: Design for mobile first, enhance for desktop
+3. **Type Safety**: Strict TypeScript, no `any`
+4. **Git Commits**: Always in **Korean** following Conventional Commits
+   - Format: `type: message in Korean` (e.g., `feat: 로그인 기능 추가`)

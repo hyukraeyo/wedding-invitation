@@ -12,8 +12,6 @@ import { APPROVAL_REQUEST_SUMMARY_SELECT } from '@/lib/approval-request-summary'
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { headers } from 'next/headers';
 
-export const dynamic = 'force-dynamic';
-
 export const metadata = {
     title: '신청 관리 | 바나나웨딩',
     description: '접수된 청첩장 신청 목록을 관리합니다.',

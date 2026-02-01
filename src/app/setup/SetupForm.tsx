@@ -206,7 +206,7 @@ const SetupForm = () => {
                         {/* 4. 예식 시간 */}
                         <div className={cn(styles.fieldContainer, highestStepReached >= 3 && styles.visible)}>
                             <FormField name="wedding-time">
-                                <FormLabel className={styles.label}>예식 시간</FormLabel>
+                                <FormLabel className={styles.label} htmlFor="wedding-time">예식 시간</FormLabel>
                                 <FormControl asChild>
                                     <TimePicker
                                         id="wedding-time"
@@ -230,7 +230,7 @@ const SetupForm = () => {
                         {/* 3. 예식 날짜 */}
                         <div className={cn(styles.fieldContainer, highestStepReached >= 2 && styles.visible)}>
                             <FormField name="wedding-date">
-                                <FormLabel className={styles.label}>예식 날짜</FormLabel>
+                                <FormLabel className={styles.label} htmlFor="wedding-date">예식 날짜</FormLabel>
                                 <FormControl asChild>
                                     <DatePicker
                                         id="wedding-date"
@@ -261,7 +261,7 @@ const SetupForm = () => {
                         {/* 2. 신부 이름 */}
                         <div className={cn(styles.fieldContainer, highestStepReached >= 1 && styles.visible)}>
                             <FormField name="bride-name">
-                                <FormLabel className={styles.label}>신부 이름</FormLabel>
+                                <FormLabel className={styles.label} htmlFor="bride-name">신부 이름</FormLabel>
                                 <FormControl asChild>
                                     <TextField
                                         id="bride-name"
@@ -288,7 +288,7 @@ const SetupForm = () => {
                         {/* 1. 신랑 이름 */}
                         <div className={cn(styles.fieldContainer, styles.visible)}>
                             <FormField name="groom-name">
-                                <FormLabel className={styles.label}>신랑 이름</FormLabel>
+                                <FormLabel className={styles.label} htmlFor="groom-name">신랑 이름</FormLabel>
                                 <FormControl asChild>
                                     <TextField
                                         id="groom-name"

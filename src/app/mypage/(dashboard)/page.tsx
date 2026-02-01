@@ -8,8 +8,6 @@ import type { InvitationSummaryRow } from '@/lib/invitation-summary';
 import { APPROVAL_REQUEST_SUMMARY_SELECT } from '@/lib/approval-request-summary';
 import type { ApprovalRequestSummary } from '@/lib/approval-request-summary';
 
-export const dynamic = 'force-dynamic';
-
 export const metadata = {
     title: '내 청첩장 | 바나나웨딩',
     description: '관리 중인 모바일 청첩장 목록입니다.',

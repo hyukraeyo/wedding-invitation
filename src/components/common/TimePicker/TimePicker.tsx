@@ -117,6 +117,7 @@ const TimePickerRaw = ({
     radius = "large",
     id,
     disabled,
+    ...props
 }: TimePickerProps, ref: React.Ref<HTMLButtonElement>) => {
     const [internalOpen, setInternalOpen] = useState(false);
     const isOpen = externalOpen !== undefined ? externalOpen : internalOpen;
@@ -218,13 +219,14 @@ const TimePickerRaw = ({
             <TextField.Button
                 ref={ref}
                 id={id}
-                label={label || ''}
                 variant={variant}
                 radius={radius}
+                label={label}
                 placeholder={placeholder}
                 value={displayValue}
                 onClick={handleOpenModal}
                 className={className}
+                {...props}
             />
             <Dialog open={isOpen} onOpenChange={setIsOpen} mobileBottomSheet>
                 <Dialog.Portal>

@@ -25,7 +25,7 @@ interface DatePickerProps {
     ref?: React.Ref<HTMLButtonElement>;
 }
 
-export const DatePicker = ({
+export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(({
     value,
     onChange,
     onComplete,
@@ -38,8 +38,8 @@ export const DatePicker = ({
     radius = "large",
     disabled,
     id,
-    ref
-}: DatePickerProps) => {
+    ...props
+}, ref) => {
     const [internalOpen, setInternalOpen] = useState(false);
     const isOpen = externalOpen !== undefined ? externalOpen : internalOpen;
 
@@ -67,13 +67,14 @@ export const DatePicker = ({
             <TextField.Button
                 ref={ref}
                 id={id}
-                label={label || ''}
                 variant={variant}
                 radius={radius}
+                label={label}
                 placeholder={placeholder}
                 value={dateValue ? format(dateValue, 'PPP', { locale: ko }) : ""}
                 onClick={() => !disabled && setIsOpen(true)}
                 className={className}
+                {...props}
             />
             <Dialog open={isOpen} onOpenChange={setIsOpen} mobileBottomSheet>
                 <Dialog.Portal>
@@ -96,6 +97,6 @@ export const DatePicker = ({
             </Dialog>
         </>
     );
-};
+});
 
 DatePicker.displayName = "DatePicker";

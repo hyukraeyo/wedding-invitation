@@ -12,7 +12,10 @@ export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextArea
 }
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-    ({ label, variant = 'surface', radius = 'medium', highContrast = false, className, ...props }, ref) => {
+    ({ label, variant = 'surface', radius = 'medium', highContrast = false, className, id, ...props }, ref) => {
+        const generatedId = React.useId();
+        const textareaId = id || generatedId;
+
         const textarea = (
             <div
                 className={clsx(
@@ -24,13 +27,13 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
                     className
                 )}
             >
-                <textarea ref={ref} className={s.textarea} {...props} />
+                <textarea ref={ref} id={textareaId} className={s.textarea} {...props} />
             </div>
         );
 
         if (label) {
             return (
-                <label className={s.container}>
+                <label htmlFor={textareaId} className={s.container}>
                     <span className={s.label}>{label}</span>
                     {textarea}
                 </label>

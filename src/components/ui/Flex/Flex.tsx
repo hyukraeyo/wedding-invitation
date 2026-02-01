@@ -1,5 +1,4 @@
-
-import React from 'react';
+import * as React from 'react';
 import { Box, BoxProps } from '../Box';
 import { clsx } from 'clsx';
 import styles from './Flex.module.scss';

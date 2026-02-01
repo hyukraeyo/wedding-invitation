@@ -93,7 +93,9 @@ export interface TextFieldButtonProps extends React.ButtonHTMLAttributes<HTMLBut
 }
 
 const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps>(
-    ({ className, children, label, variant = 'surface', size = '2', radius = 'medium', ...props }, ref) => {
+    ({ className, children, label, variant = 'surface', size = '2', radius = 'medium', id, ...props }, ref) => {
+        const generatedId = React.useId();
+        const inputId = id || generatedId;
         const mappedVariant = (variant === 'box' ? 'surface' : variant) as TextFieldRootProps['variant'];
 
         const isPlaceholder = !props.value && !!props.placeholder;
@@ -102,6 +104,7 @@ const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps
             <TextFieldRoot variant={mappedVariant} size={size} radius={radius} className={className}>
                 <button
                     ref={ref}
+                    id={inputId}
                     type="button"
                     className={clsx(s.input, s.button, isPlaceholder && s.placeholder, className)}
                     {...props}
@@ -113,7 +116,7 @@ const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps
 
         if (label) {
             return (
-                <label className={s.container}>
+                <label htmlFor={inputId} className={s.container}>
                     <span className={s.label}>{label}</span>
                     {button}
                 </label>
@@ -138,7 +141,10 @@ export interface TextFieldLegacyProps extends Omit<TextFieldInputProps, 'size'> 
 }
 
 const TextField = React.forwardRef<HTMLInputElement, TextFieldLegacyProps>(
-    ({ label, variant = 'surface', size = '2', radius = 'medium', leftSlot, rightSlot, className, ...props }, ref) => {
+    ({ label, variant = 'surface', size = '2', radius = 'medium', leftSlot, rightSlot, className, id, ...props }, ref) => {
+        const generatedId = React.useId();
+        const inputId = id || generatedId;
+
         // Map existing 'line' or 'box' variant to Radix 'classic' or 'surface'
         let mappedVariant = variant as TextFieldRootProps['variant'];
         if (variant === 'line') mappedVariant = 'classic';
@@ -147,14 +153,14 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldLegacyProps>(
         const input = (
             <TextFieldRoot variant={mappedVariant} size={size} radius={radius} className={className}>
                 {leftSlot && <TextFieldSlot side="left">{leftSlot}</TextFieldSlot>}
-                <TextFieldInput ref={ref} {...props} />
+                <TextFieldInput ref={ref} id={inputId} {...props} />
                 {rightSlot && <TextFieldSlot side="right">{rightSlot}</TextFieldSlot>}
             </TextFieldRoot>
         );
 
         if (label) {
             return (
-                <label className={s.container}>
+                <label htmlFor={inputId} className={s.container}>
                     <span className={s.label}>{label}</span>
                     {input}
                 </label>

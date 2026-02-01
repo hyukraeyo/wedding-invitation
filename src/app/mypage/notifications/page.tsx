@@ -5,8 +5,6 @@ import { APPROVAL_REQUEST_SUMMARY_SELECT } from '@/lib/approval-request-summary'
 import type { ApprovalRequestSummary } from '@/lib/approval-request-summary';
 import NotificationsClient from './NotificationsClient';
 
-export const dynamic = 'force-dynamic';
-
 export const metadata = {
     title: '알림 | 바나나웨딩',
     description: '바나나웨딩의 소식을 확인하세요.',

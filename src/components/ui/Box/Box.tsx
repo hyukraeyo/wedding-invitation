@@ -1,5 +1,4 @@
-
-import React from 'react';
+import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { clsx } from 'clsx';
 import styles from './Box.module.scss';
@@ -7,7 +6,6 @@ import styles from './Box.module.scss';
 export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
     asChild?: boolean;
     as?: React.ElementType;
-    /** Padding */
     p?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
     px?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
     py?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
@@ -15,7 +13,6 @@ export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
     pr?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
     pb?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
     pl?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
-    /** Margin */
     m?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
     mx?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
     my?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
@@ -23,7 +20,6 @@ export interface BoxProps extends React.HTMLAttributes<HTMLDivElement> {
     mr?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
     mb?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
     ml?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
-    /** Layout */
     display?: 'none' | 'inline' | 'block' | 'inline-block' | 'flex' | 'inline-flex' | 'grid' | 'inline-grid';
     width?: string;
     height?: string;
