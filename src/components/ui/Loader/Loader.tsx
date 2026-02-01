@@ -62,4 +62,4 @@ const Loader = Object.assign(LoaderBase, {
     Banana: BananaLoader,
 });
 
-export { Loader };
+export { Loader, BananaLoader };

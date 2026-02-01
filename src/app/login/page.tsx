@@ -16,11 +16,11 @@ export const metadata: Metadata = {
 };
 
 import { Suspense } from "react";
-import { Loader } from "@/components/ui";
+import { BananaLoader } from "@/components/ui/Loader";
 
 export default function Page() {
     return (
-        <Suspense fallback={<Loader.Banana />}>
+        <Suspense fallback={<BananaLoader />}>
             <LoginPage />
         </Suspense>
     );

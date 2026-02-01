@@ -236,8 +236,6 @@ const TimePickerRaw = ({
                         <Dialog.Body className={styles.modalBody} padding={false}>
                             <div
                                 className={styles.periodContainer}
-                                onPointerDown={(e) => e.stopPropagation()}
-                                onClick={(e) => e.stopPropagation()}
                             >
                                 <SegmentedControl
                                     value={tPeriod}

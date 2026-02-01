@@ -1,59 +1,70 @@
 # Cursor Rules for Wedding Invitation Project
-# Next.js 16+ 및 React 19 최적화 / SCSS Modules 기반 토스 스타일 프로젝트
+# Next.js 16+ �?React 19.2 최적??/ SCSS Modules 기반 ?�스 ?��????�로?�트
 
 > **CRITICAL: SYNC MANDATE**
-> 모든 설정 및 가이드 문서(`.agent`, `.codex`, `.cursor`, `.opencode`, `.cursorrules`, `AGENTS.md`, `README.md`, `ARCHITECTURE.md`)는 항상 동일한 기준을 유지하도록 함께 업데이트되어야 합니다. 한 곳의 규칙이 변경되면 언급된 모든 파일에 해당 변경 사항을 명시하고 동기화하십시오.
+> 모든 ?�정 �?가?�드 문서(`.agent`, `.codex`, `.cursor`, `.opencode`, `.cursorrules`, `AGENTS.md`, `README.md`, `ARCHITECTURE.md`)????�� ?�일??기�????��??�도�??�께 ?�데?�트?�어???�니?? ??곳의 규칙??변경되�??�급??모든 ?�일???�당 변�??�항??명시?�고 ?�기?�하??��??
 
 ---
 
-## ⚡ Vercel React Best Practices (최상위 우선순위)
-- **최우선 원칙**: React/Next.js 관련 모든 작업은 Vercel Best Practices를 최우선으로 준수합니다.
-- **참조 문서**: `.codex/skills/vercel-react-best-practices/SKILL.md` 및 하위 `rules/*` 문서를 기준으로 결정합니다.
+## ??Vercel React Best Practices (최상???�선?�위)
+- **최우???�칙**: React/Next.js 관??모든 ?�업?� Vercel Best Practices�?최우?�으�?준?�합?�다.
+- **참조 문서**: `.codex/skills/vercel-react-best-practices/SKILL.md` �??�위 `rules/*` 문서�?기�??�로 결정?�니??
 
-## 🎨 스타일링 (Strict Rule)
-- **SCSS Modules 필수**: 모든 컴포넌트 스타일링은 반드시 SCSS Modules를 사용합니다.
-- **Tailwind 금지**: 컴포넌트 단위에서 Tailwind CSS 유틸리티 클래스 사용을 엄격히 금지합니다. (일관된 스타일 유지 목적)
-- **Radix UI First**: UI 개발 시 **Radix UI Primitives**를 최우선으로 사용합니다. 스타일링은 TDS(Toss Design System)의 미학을 계승하되, 컴포넌트 로직은 Radix UI를 기반으로 구현합니다. (기존 TDS 컴포넌트는 점진적으로 대체됨)
-- **디자인 토큰**: `src/styles/_variables.scss` 및 `_mixins.scss`에 정의된 토큰을 `@use`하여 사용합니다.
-- **Primary Color**: 바나나 옐로우 `#FBC02D`를 주력으로 사용합니다.
+## ?�� ?��??�링 (Strict Rule)
+- **SCSS Modules ?�수**: 모든 컴포?�트 ?��??�링?� 반드??SCSS Modules�??�용?�니??
+- **Tailwind 금�?**: 컴포?�트 ?�위?�서 Tailwind CSS ?�틸리티 ?�래???�용???�격??금�??�니?? (?��????��????��? 목적)
+- **Radix UI First**: UI 개발 ??**Radix UI Primitives**�?최우?�으�??�용?�니?? ?��??�링?� TDS(Toss Design System)??미학??계승?�되, 컴포?�트 로직?� Radix UI�?기반?�로 구현?�니?? (기존 TDS 컴포?�트???�진?�으�??�체됨)
+- **?�자???�큰**: `src/styles/_variables.scss` �?`_mixins.scss`???�의???�큰??`@use`?�여 ?�용?�니??
+- **Primary Color**: 바나???�로??`#FBC02D`�?주력?�로 ?�용?�니??
 
-## 📱 모바일 최적화 및 UX
-- **모바일 퍼스트**: 모든 UI는 모바일 환경(포트레이트 모드)에서의 경험을 최우선으로 설계합니다.
-- **프리미엄 미학**: iOS 스타일의 부드러운 애니메이션(`cubic-bezier(0.16, 1, 0.3, 1)`)과 글래스모피즘을 적극 활용합니다.
-- **반응형 모달**: Desktop(Dialog) ↔ Mobile(Drawer) 변환 패턴(`ResponsiveModal`)을 필수 사용합니다.
+## ?�� 모바??최적??�?UX
+- **모바???�스??*: 모든 UI??모바???�경(?�트?�이??모드)?�서??경험??최우?�으�??�계?�니??
+- **?�리미엄 미학**: iOS ?��??�의 부?�러???�니메이??`cubic-bezier(0.16, 1, 0.3, 1)`)�?글?�스모피즘을 ?�극 ?�용?�니??
+- **반응??모달**: Desktop(Dialog) ??Mobile(Drawer) 변???�턴(`ResponsiveModal`)???�수 ?�용?�니??
 
-## 📂 폴더 구조 및 네이밍 컨벤션 (PascalCase)
-- **컴포넌트 폴더/파일명**: 반드시 **PascalCase**를 사용합니다.
-  - ✅ `src/components/ui/Button/Button.tsx`
-  - ❌ `src/components/ui/button/button.tsx`
-- **하이브리드 컴포넌트 패턴**: 명확한 파일명 식별과 깔끔한 import를 위해 다음 구조를 엄수합니다.
+## ?�� ?�더 구조 �??�이�?컨벤??(PascalCase)
+- **컴포?�트 ?�더/?�일�?*: 반드??**PascalCase**�??�용?�니??
+  - ??`src/components/ui/Button/Button.tsx`
+  - ??`src/components/ui/button/button.tsx`
+- **?�이브리??컴포?�트 ?�턴**: 명확???�일�??�별�?깔끔??import�??�해 ?�음 구조�??�수?�니??
   ```
   ComponentName/
-  ├── ComponentName.tsx        # 컴포넌트 로직
-  ├── ComponentName.module.scss # 스타일
-  └── index.ts                # Re-export (export * from './ComponentName')
+  ?��??� ComponentName.tsx        # 컴포?�트 로직
+  ?��??� ComponentName.module.scss # ?��???
+  ?��??� index.ts                # Re-export (export * from './ComponentName')
   ```
-- **기타 네이밍**: 
-  - 함수/변수: `camelCase`
-  - 상수: `UPPER_SNAKE_CASE`
-  - 타입/인터페이스: `PascalCase`
+- **기�? ?�이�?*: 
+  - ?�수/변?? `camelCase`
+  - ?�수: `UPPER_SNAKE_CASE`
+  - ?�???�터?�이?? `PascalCase`
 
-## 🚀 Next.js 16+ App Router 패턴
-- **서버 컴포넌트 기본**: 데이터 페칭은 서버 컴포넌트에서 직접 수행합니다.
-- **Client Fetch 금지**: 페이지 초기 진입 시 `useEffect`나 `fetch`를 통한 클라이언트 데이터 로딩을 금지합니다.
-- **서버 액션**: 모든 데이터 변경(Mutation)은 `'use server'` 액션을 통해 처리합니다.
-- **직접 DB 접근**: 서버 컴포넌트에서는 API Route를 거치지 않고 Supabase Service 계층을 직접 호출합니다.
+## ?? Next.js 16+ App Router ?�턴
+- **?�버 컴포?�트 기본**: ?�이???�칭?� ?�버 컴포?�트?�서 직접 ?�행?�니??
+- **Client Fetch 금�?**: ?�이지 초기 진입 ??`useEffect`??`fetch`�??�한 ?�라?�언???�이??로딩??금�??�니??
+- **?�버 ?�션**: 모든 ?�이??변�?Mutation)?� `'use server'` ?�션???�해 처리?�니??
+- **직접 DB ?�근**: ?�버 컴포?�트?�서??API Route�?거치지 ?�고 Supabase Service 계층??직접 ?�출?�니??- **Cache Components (PPR)**: Use `use cache` for cacheable server components/functions, wrap dynamic UI in `Suspense`
+- **View Transitions**: Keep transitions compatible with navigation updates
+- **React Compiler**: Prefer compiler-driven memoization over manual `useMemo`/`React.memo`
+## Latest Platform Guidance (React 19.2 + Next 16)
+- **Target versions**: React/ReactDOM 19.2.x, Next.js 16.1.x (keep latest patch)
+- **React 19.2 APIs**: Prefer <Activity />, useEffectEvent, cacheSignal (RSC) when appropriate
+- **Caching APIs**: Use revalidateTag, updateTag, refresh for on-demand cache updates
+- **Turbopack dev**: Use npm run dev (Turbo) for fastest local iteration
+- **Webpack prod**: Keep npm run build with webpack for current production parity
 
-## 🔧 기술 스택 및 설정
-- **Framework**: Next.js 16.1.1 (App Router)
-- **Language**: TypeScript 5 (Strict Mode 필수)
-- **State**: Zustand (`useInvitationStore` 단일 스토어 활용)
-- **Data**: Supabase (Remote CLI 사용, Local Docker 미사용)
+## ?�� 기술 ?�택 �??�정
+- **Framework**: Next.js 16.1.x (App Router, Cache Components, View Transitions)
+- **Language**: TypeScript 5 (Strict Mode ?�수)
+- **State**: Zustand (`useInvitationStore` ?�일 ?�토???�용)
+- **Data**: Supabase (Remote CLI ?�용, Local Docker 미사??
 
-## 📝 Git & Commit Convention (Strict)
-- **한글 사용 필수**: 커밋 메시지 생성(Generation) 시 반드시 **한글**을 사용합니다.
-- **컨벤션**: [Conventional Commits](https://www.conventionalcommits.org/) 형식을 따릅니다.
-  - 예: `feat: 새로운 기능 추가`, `fix: 버그 수정`, `refactor: 코드 리팩토링`
+## ?�� Git & Commit Convention (Strict)
+- **?��? ?�용 ?�수**: 커밋 메시지 ?�성(Generation) ??반드??**?��?**???�용?�니??
+- **컨벤??*: [Conventional Commits](https://www.conventionalcommits.org/) ?�식???�릅?�다.
+  - ?? `feat: ?�로??기능 추�?`, `fix: 버그 ?�정`, `refactor: 코드 리팩?�링`
 
 ---
-*이 문서는 프로젝트의 헌법과 같으며, 인공지능 에이전트는 모든 작업 수행 시 이 규칙을 최우선으로 준수해야 합니다.*
+*??문서???�로?�트???�법�?같으�? ?�공지???�이?�트??모든 ?�업 ?�행 ????규칙??최우?�으�?준?�해???�니??*
+
+
+

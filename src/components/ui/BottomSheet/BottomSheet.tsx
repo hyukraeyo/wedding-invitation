@@ -62,30 +62,76 @@ BottomSheetOverlay.displayName = 'BottomSheetOverlay';
 const BottomSheetContent = React.forwardRef<
     HTMLDivElement,
     BottomSheetContentProps & React.ComponentPropsWithoutRef<typeof Drawer.Content>
->(({ className, variant = 'floating', children, ...props }, ref) => (
-    <Drawer.Content
-        ref={ref}
-        className={clsx(
-            s.content,
-            variant === 'floating' && s.floating,
-            className
-        )}
-        {...props}
-    >
-        <div className={s.wrapper}>
-            <div className={s.handle} />
-            <VisuallyHidden>
-                <Drawer.Title>
-                    {props['aria-label'] || 'Bottom Sheet'}
-                </Drawer.Title>
-                <Drawer.Description>
-                    {props['aria-describedby'] || 'Bottom sheet description'}
-                </Drawer.Description>
-            </VisuallyHidden>
-            {children}
-        </div>
-    </Drawer.Content>
-));
+>(({ className, variant = 'floating', children, ...props }, ref) => {
+    const internalRef = React.useRef<HTMLDivElement>(null);
+
+    // Ref merging util
+    const setRefs = React.useCallback((node: HTMLDivElement | null) => {
+        internalRef.current = node;
+        if (typeof ref === 'function') {
+            ref(node);
+        } else if (ref) {
+            (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        }
+    }, [ref]);
+
+    // 🍌 바텀시트 내부의 Swiper 등 제스처 충돌 요소에 대해 드래그 방지 속성 자동 부여
+    React.useEffect(() => {
+        const preventDragOnSwiper = () => {
+            const element = internalRef.current;
+            if (!element) return;
+
+            // Swiper JS 컨테이너 클래스 감지 (.swiper, .swiper-container)
+            // TimePicker 등에서 사용하는 Swiper가 바텀시트 드래그와 충돌하지 않도록 처리
+            const swipers = element.querySelectorAll('.swiper, .swiper-container');
+            swipers.forEach(swiper => {
+                if (!swiper.hasAttribute('data-vaul-no-drag')) {
+                    swiper.setAttribute('data-vaul-no-drag', 'true');
+                }
+            });
+        };
+
+        // 초기 실행
+        preventDragOnSwiper();
+
+        // 동적 렌더링 감지 (Swiper 초기화 타이밍 대응)
+        const observer = new MutationObserver(() => preventDragOnSwiper());
+
+        if (internalRef.current) {
+            observer.observe(internalRef.current, {
+                childList: true,
+                subtree: true,
+            });
+        }
+
+        return () => observer.disconnect();
+    }, []);
+
+    return (
+        <Drawer.Content
+            ref={setRefs}
+            className={clsx(
+                s.content,
+                variant === 'floating' && s.floating,
+                className
+            )}
+            {...props}
+        >
+            <div className={s.wrapper}>
+                <div className={s.handle} />
+                <VisuallyHidden>
+                    <Drawer.Title>
+                        {props['aria-label'] || 'Bottom Sheet'}
+                    </Drawer.Title>
+                    <Drawer.Description>
+                        {props['aria-describedby'] || 'Bottom sheet description'}
+                    </Drawer.Description>
+                </VisuallyHidden>
+                {children}
+            </div>
+        </Drawer.Content>
+    );
+});
 BottomSheetContent.displayName = 'BottomSheetContent';
 
 // Header component

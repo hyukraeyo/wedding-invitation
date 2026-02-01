@@ -1,5 +1,5 @@
-import { Loader } from '@/components/ui';
+import { BananaLoader } from '@/components/ui/Loader';
 
 export default function Loading() {
-    return <Loader.Banana variant="full" />;
+    return <BananaLoader variant="full" />;
 }

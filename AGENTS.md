@@ -53,7 +53,17 @@ npm run clean              # Clean .next, out, dist directories
 - **No client fetches on load**: Prohibit `useEffect` + `fetch` on initial load
 - **Server Actions**: All mutations use `'use server'`
 - **Direct DB access**: Supabase service layer, no internal API routes
-- **App Router**: Next.js 16.1.1 patterns
+- **Cache Components (PPR)**: Use `use cache` for cacheable server components/functions, wrap dynamic UI in `Suspense`
+- **View Transitions**: Keep transitions compatible with navigation updates
+- **React Compiler**: Prefer compiler-driven memoization over manual `useMemo`/`React.memo`
+- **App Router**: Next.js 16.1.x patterns
+
+### Latest Platform Guidance (React 19.2 + Next 16)
+- **Target versions**: React/ReactDOM 19.2.x, Next.js 16.1.x (keep latest patch)
+- **React 19.2 APIs**: Prefer `<Activity />`, `useEffectEvent`, `cacheSignal` (RSC) when appropriate
+- **Caching APIs**: Use `revalidateTag`, `updateTag`, `refresh` for on-demand cache updates
+- **Turbopack dev**: Use `npm run dev` (Turbo) for fastest local iteration
+- **Webpack prod**: Keep `npm run build` with webpack for current production parity
 
 ## Code Style Guidelines
 
@@ -118,13 +128,14 @@ export default ComponentName;
 ## Project Architecture
 
 ### Technology Stack
-- **Framework**: Next.js 16.1.1 (App Router)
+- **Framework**: Next.js 16.1.x (App Router, Cache Components, View Transitions)
+- **Library**: React 19.2.x
 - **Language**: TypeScript 5 (strict mode)
 - **Styling**: SCSS Modules + Radix UI Primitives
 - **State**: Zustand (client), TanStack Query (server)
 - **Database**: Supabase (Remote CLI)
 - **UI**: Radix UI Primitives + TDS Style
-- **Build**: Webpack (production)
+- **Build**: Webpack (production), Turbopack (dev)
 
 ### Key Directories
 ```

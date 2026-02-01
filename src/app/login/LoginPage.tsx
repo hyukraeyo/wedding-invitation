@@ -4,7 +4,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Heading, Flex, Box, Loader } from '@/components/ui';
+import { Heading, Flex, Box } from '@/components/ui';
+import { BananaLoader } from '@/components/ui/Loader';
 import { signIn } from 'next-auth/react';
 import styles from './LoginPage.module.scss';
 import { useAuth } from '@/hooks/useAuth';
@@ -48,7 +49,7 @@ export default function LoginPage() {
 
     // 로딩 중일 때는 빈 화면 대신 로딩 표시
     if (authLoading) {
-        return <Loader.Banana />;
+        return <BananaLoader />;
     }
 
     // 이미 로그인하고 프로필도 완성했다면 리디렉션되므로 렌더링 안 함
@@ -79,7 +80,7 @@ export default function LoginPage() {
     return (
         <>
             {/* Full Screen Loading Animation */}
-            {loadingProvider ? <Loader.Banana /> : null}
+            {loadingProvider ? <BananaLoader /> : null}
 
             <Flex align="center" justify="center" className={styles.overlay}>
                 <Box className={styles.modal}>

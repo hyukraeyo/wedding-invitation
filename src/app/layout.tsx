@@ -90,14 +90,21 @@ export const metadata: Metadata = {
   },
 };
 
+async function SessionProviders({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const session = await auth();
+
+  return <ClientProviders session={session}>{children}</ClientProviders>;
+}
+
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const sessionPromise = auth();
-  const session = await sessionPromise;
-
   return (
     <html lang="ko" suppressHydrationWarning className={fontVariables}>
       <body suppressHydrationWarning>
@@ -164,17 +171,19 @@ export default async function RootLayout({
           }}
         />
         <SkipLink href="#main-content">본문 바로가기</SkipLink>
-        <ClientProviders session={session}>
-          <Flex direction="column" suppressHydrationWarning vaul-drawer-wrapper="" style={{ backgroundColor: "var(--background)", minHeight: "100dvh" }}>
-            <Suspense fallback={null}>
-              <CustomScrollbar />
-            </Suspense>
-            <Header />
-            <Box as="main" id="main-content" flexGrow={1}>
-              {children}
-            </Box>
-          </Flex>
-        </ClientProviders>
+        <Suspense fallback={null}>
+          <SessionProviders>
+            <Flex direction="column" suppressHydrationWarning vaul-drawer-wrapper="" style={{ backgroundColor: "var(--background)", minHeight: "100dvh" }}>
+              <Suspense fallback={null}>
+                <CustomScrollbar />
+              </Suspense>
+              <Header />
+              <Box as="main" id="main-content" flexGrow={1}>
+                {children}
+              </Box>
+            </Flex>
+          </SessionProviders>
+        </Suspense>
 
       </body>
     </html>

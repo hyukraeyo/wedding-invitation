@@ -8,6 +8,9 @@ const nextConfig: NextConfig = {
   // React Compiler - React 19 자동 메모이제이션 최적화
   reactCompiler: true,
 
+  // Cache Components / PPR
+  cacheComponents: true,
+
   // TypeScript 설정
   typescript: {
     ignoreBuildErrors: false,

@@ -9,7 +9,8 @@ import { useAuth } from '@/hooks/useAuth';
 import { invitationService } from '@/services/invitationService';
 import { useHeaderStore } from '@/store/useHeaderStore';
 import { useToast } from '@/hooks/use-toast';
-import { Loader, BottomSheet, Flex, Box } from '@/components/ui';
+import { BottomSheet, Flex, Box } from '@/components/ui';
+import { BananaLoader } from '@/components/ui/Loader';
 import styles from './BuilderPage.module.scss';
 import { MobileNav } from '@/components/common/MobileNav';
 import { clsx } from 'clsx';
@@ -181,7 +182,7 @@ export function BuilderClient() {
 
     return (
         <Flex direction="column" className={styles.container}>
-            {isSaving ? <Loader.Banana variant="fixed" /> : null}
+            {isSaving ? <BananaLoader variant="fixed" /> : null}
 
             <Flex as="main" className={styles.workspace}>
                 <Box as="section" className={styles.sidebar} id="sidebar-portal-root">
