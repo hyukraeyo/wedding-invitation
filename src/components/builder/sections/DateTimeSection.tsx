@@ -44,7 +44,6 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
             onToggle={props.onToggle}
         >
             <div className={styles.container}>
-                {/* Date & Time Picking */}
                 <div className={styles.optionItem}>
                     <FormField name="wedding-date">
                         <FormLabel htmlFor="wedding-date">
@@ -54,6 +53,9 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
                             <DatePicker
                                 id="wedding-date"
                                 value={date}
+                                variant="toss"
+                                radius="large"
+                                placeholder=""
                                 onChange={(value) => setDate(value)}
                             />
                         </FormControl>
@@ -68,6 +70,9 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
                             <TimePicker
                                 id="wedding-time"
                                 value={time}
+                                variant="toss"
+                                radius="large"
+                                placeholder=""
                                 onChange={(value) => setTime(value)}
                             />
                         </FormControl>
