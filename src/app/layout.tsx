@@ -4,13 +4,13 @@ import Script from "next/script";
 import ClientProviders from "./ClientProviders";
 import { fontVariables } from "@/lib/fonts";
 import Header from "@/components/common/Header";
-import { Flex, Box } from "@/components/ui";
 
 import { CustomScrollbar } from "@/components/common/CustomScrollbar";
 import { auth } from "@/auth";
 import { SkipLink } from "@/hooks/useAccessibility";
 import "./globals.scss";
 import "../styles/_accessibility.scss";
+import styles from "./layout.module.scss";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -173,15 +173,19 @@ export default async function RootLayout({
         <SkipLink href="#main-content">본문 바로가기</SkipLink>
         <Suspense fallback={null}>
           <SessionProviders>
-            <Flex direction="column" suppressHydrationWarning vaul-drawer-wrapper="" style={{ backgroundColor: "var(--background)", minHeight: "100dvh" }}>
+            <div
+              suppressHydrationWarning
+              vaul-drawer-wrapper=""
+              className={styles.appShell}
+            >
               <Suspense fallback={null}>
                 <CustomScrollbar />
               </Suspense>
               <Header />
-              <Box as="main" id="main-content" flexGrow={1}>
+              <div id="main-content" role="main" className={styles.mainContent}>
                 {children}
-              </Box>
-            </Flex>
+              </div>
+            </div>
           </SessionProviders>
         </Suspense>
 

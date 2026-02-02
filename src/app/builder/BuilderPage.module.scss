@@ -4,11 +4,10 @@
 .container {
     display: flex;
     flex-direction: column;
-    min-height: 100dvh;
+    height: calc(100dvh - 3.5rem);
     width: 100%;
     max-width: 100vw;
     overflow-x: hidden;
-    background-color: #eeeeee; // ?청: ??배경 #eee
     z-index: 10;
     @include m.header-offset;
 
@@ -18,11 +17,24 @@
 
     // Desktop: Keep fixed layout for app-like feeling
     @media (min-width: 1024px) {
-        position: fixed;
-        inset: 0;
-        height: 100dvh;
         overflow: hidden;
     }
+}
+
+.invitationCanvasLoading {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.previewHint {
+    text-align: center;
+    font-size: 0.875rem;
+    color: #666;
+    margin-bottom: 16px;
 }
 
 .workspace {
@@ -165,7 +177,7 @@
         align-items: center;
         justify-content: center;
         box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.15), 0 0.25rem 0.5rem rgba(v.$color-primary, 0.2);
-        z-index: 105;
+        z-index: 1000;
         border: none;
         transform: translateY(200%);
         opacity: 0;

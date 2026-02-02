@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { DatePicker } from '@/components/common/DatePicker';
 import { TimePicker } from '@/components/common/TimePicker';
 import { BottomCTA } from '@/components/ui/BottomCTA';
-import { Heading, Flex, Box, Form, FormField, FormLabel, FormControl, FormMessage, Card, Skeleton, VisuallyHidden } from '@/components/ui';
+import { Heading, Form, FormField, FormLabel, FormControl, FormMessage, Card, Skeleton, VisuallyHidden } from '@/components/ui';
 import { NameField } from '@/components/common/NameField';
 import { useToast } from '@/hooks/use-toast';
 import { parseKoreanName, cn, isValidKoreanNameValue } from '@/lib/utils';
@@ -117,19 +117,19 @@ const SetupForm = () => {
     // 초기화 완료 전에는 스켈레톤 표시
     if (!isHydrated) {
         return (
-            <Box className={styles.container}>
+            <div className={styles.container}>
                 <Card variant="ghost" className={styles.whiteBox}>
-                    <Box className={styles.headerContent}>
-                        <Skeleton width="60%" height="84px" style={{ borderRadius: '12px' }} />
-                    </Box>
-                    <div className={styles.formWindow} style={{ height: '112px' }}>
-                        <div className={styles.fieldContainer} style={{ opacity: 1 }}>
-                            <Skeleton width="80px" height="18px" style={{ marginBottom: '0.5rem' }} />
-                            <Skeleton width="100%" height="60px" style={{ borderRadius: '16px' }} />
+                    <div className={styles.headerContent}>
+                        <Skeleton className={styles.skeletonTitle} />
+                    </div>
+                    <div className={`${styles.formWindow} ${styles.skeletonWindow}`}>
+                        <div className={`${styles.fieldContainer} ${styles.skeletonField}`}>
+                            <Skeleton className={styles.skeletonLabel} />
+                            <Skeleton className={styles.skeletonInput} />
                         </div>
                     </div>
                 </Card>
-            </Box>
+            </div>
         );
     }
 
@@ -185,9 +185,9 @@ const SetupForm = () => {
 
 
     return (
-        <Box className={styles.container}>
+        <div className={styles.container}>
             <Card variant="ghost" className={styles.whiteBox}>
-                <Box className={styles.headerContent}>
+                <div className={styles.headerContent}>
                     {[...STEPS, { title: "모든 정보를 입력했어요!" }].map((step, index) => {
                         const isThisStepActive = index === STEPS.length ? isComplete : !isComplete && highestStepReached === index;
 
@@ -206,7 +206,7 @@ const SetupForm = () => {
                             </div>
                         );
                     })}
-                </Box>
+                </div>
 
                 <div
                     className={styles.formWindow}
@@ -381,7 +381,7 @@ const SetupForm = () => {
 
             {
                 (currentStep === 3 || isStepValid()) && (
-                    <Box className={styles.ctaWrapper}>
+                    <div className={styles.ctaWrapper}>
                         <BottomCTA.Single
                             fixed={true}
                             transparent
@@ -393,16 +393,16 @@ const SetupForm = () => {
                             {highestStepReached < 3 ? (
                                 <span>다음</span>
                             ) : (
-                                <Flex align="center" gap="1">
+                                <div className={styles.ctaLabel}>
                                     <Sparkles size={16} />
                                     <span>시작하기</span>
-                                </Flex>
+                                </div>
                             )}
                         </BottomCTA.Single>
-                    </Box>
+                    </div>
                 )
             }
-        </Box >
+        </div>
     );
 };
 

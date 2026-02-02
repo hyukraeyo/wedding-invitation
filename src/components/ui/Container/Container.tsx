@@ -1,10 +1,9 @@
 
 import React from 'react';
-import { Box, BoxProps } from '../Box';
 import { clsx } from 'clsx';
 import styles from './Container.module.scss';
 
-export interface ContainerProps extends BoxProps {
+export interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
     size?: '1' | '2' | '3' | '4';
     align?: 'left' | 'center' | 'right';
 }
@@ -18,7 +17,7 @@ const Container = React.forwardRef<HTMLDivElement, ContainerProps>(
             className
         );
 
-        return <Box ref={ref} className={containerClasses} {...props} />;
+        return <div ref={ref} className={containerClasses} {...props} />;
     }
 );
 

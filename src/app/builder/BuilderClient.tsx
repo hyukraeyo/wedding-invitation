@@ -9,7 +9,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { invitationService } from '@/services/invitationService';
 import { useHeaderStore } from '@/store/useHeaderStore';
 import { useToast } from '@/hooks/use-toast';
-import { BottomSheet, Flex, Box } from '@/components/ui';
+import { BottomSheet } from '@/components/ui';
 import { BananaLoader } from '@/components/ui/Loader';
 import styles from './BuilderPage.module.scss';
 import { MobileNav } from '@/components/common/MobileNav';
@@ -22,7 +22,7 @@ import { useScrollLock } from '@/hooks/use-scroll-lock';
 import { IPhoneFrame } from './IPhoneFrame';
 
 const invitationCanvasLoading = (
-    <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: 'rgba(0,0,0,0.05)' }} />
+    <div className={styles.invitationCanvasLoading} />
 );
 
 const InvitationCanvas = dynamic(
@@ -196,49 +196,48 @@ export function BuilderClient() {
     }, [isSaving, setIsLoading]);
 
     return (
-        <Flex direction="column" className={styles.container}>
+        <div className={styles.container}>
             {isSaving ? <BananaLoader variant="fixed" /> : null}
 
-            <Flex as="main" className={styles.workspace}>
-                <Box as="section" className={styles.sidebar} id="sidebar-portal-root">
-                    <Box className={styles.scrollArea} id="builder-sidebar-scroll">
+            <div className={styles.workspace}>
+                <div className={styles.sidebar} id="sidebar-portal-root">
+                    <div className={styles.scrollArea} id="builder-sidebar-scroll">
                         <EditorForm formId={editorFormId} onSubmit={stableSave} />
-                    </Box>
-                </Box>
+                    </div>
+                </div>
 
-                <Flex as="section" align="center" justify="center" className={styles.previewArea}>
-                    <Box className={styles.backgroundPattern} />
-                    <Flex direction="column" align="center" className={styles.previewContent}>
+                <div className={styles.previewArea}>
+                    <div className={styles.backgroundPattern} />
+                    <div className={styles.previewContent}>
                         <IPhoneFrame>
                             <InvitationCanvas key="desktop-preview" editingSection={editingSection} hideWatermark />
                         </IPhoneFrame>
 
                         <p className={styles.label}>MOBILE PREVIEW</p>
-                    </Flex>
-                </Flex>
-            </Flex>
+                    </div>
+                </div>
+            </div>
 
             <BottomSheet
                 open={isPreviewOpen}
                 onClose={() => setIsPreviewOpen(false)}
                 header="Mobile Preview"
             >
-                <Box style={{ textAlign: 'center', fontSize: '0.875rem', color: '#666', marginBottom: '16px' }}>
+                <div className={styles.previewHint}>
                     나만의 달콤한 바나나웨딩 청첩장 미리보기
-                </Box>
+                </div>
 
-                <Box className={styles.mobilePreview}>
+                <div className={styles.mobilePreview}>
                     <React.Activity mode={isPreviewOpen ? 'visible' : 'hidden'}>
                         <InvitationCanvas key="mobile-preview" isPreviewMode editingSection={editingSection} hideWatermark />
                     </React.Activity>
-                </Box>
+                </div>
 
                 {/* Preview Close FAB */}
                 <button
                     className={clsx(styles.floatingPreview, styles.fabVisible, styles.previewOpenFab)}
                     onClick={togglePreview}
                     aria-label="Close preview"
-                    style={{ zIndex: 1000 }} // Ensure it's above other elements
                 >
                     <X className={styles.icon} />
                 </button>
@@ -251,6 +250,6 @@ export function BuilderClient() {
                 onPreviewToggle={togglePreview}
                 isPreviewOpen={isPreviewOpen}
             />
-        </Flex>
+        </div>
     );
 }

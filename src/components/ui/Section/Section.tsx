@@ -1,10 +1,9 @@
 
 import React from 'react';
-import { Box, BoxProps } from '../Box';
 import { clsx } from 'clsx';
 import styles from './Section.module.scss';
 
-export interface SectionProps extends BoxProps {
+export interface SectionProps extends React.HTMLAttributes<HTMLDivElement> {
     size?: '1' | '2' | '3';
 }
 
@@ -16,7 +15,7 @@ const Section = React.forwardRef<HTMLDivElement, SectionProps>(
             className
         );
 
-        return <Box ref={ref} as="section" className={sectionClasses} {...props} />;
+        return <div ref={ref} className={sectionClasses} {...props} />;
     }
 );
 

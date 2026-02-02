@@ -1,10 +1,9 @@
 
 import React from 'react';
-import { Box, BoxProps } from '../Box';
 import { clsx } from 'clsx';
 import styles from './Grid.module.scss';
 
-export interface GridProps extends BoxProps {
+export interface GridProps extends React.HTMLAttributes<HTMLDivElement> {
     columns?: string;
     rows?: string;
     gap?: '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
@@ -29,12 +28,13 @@ const Grid = React.forwardRef<HTMLDivElement, GridProps>(
 
         const gridStyle: React.CSSProperties = {
             ...style,
+            display: 'grid',
             gridTemplateColumns: columns,
             gridTemplateRows: rows,
             gridTemplateAreas: areas,
         };
 
-        return <Box ref={ref} display="grid" className={gridClasses} style={gridStyle} {...props} />;
+        return <div ref={ref} className={gridClasses} style={gridStyle} {...props} />;
     }
 );
 

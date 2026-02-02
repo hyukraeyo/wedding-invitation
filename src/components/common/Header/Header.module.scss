@@ -80,7 +80,13 @@
 .actions {
   display: flex;
   align-items: center;
-  gap: 0.25rem; // gap-1
+  gap: 0.5rem;
+}
+
+.actionsRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .actionButton {
@@ -154,6 +160,7 @@
 
 .suspenseFallback {
   height: 8rem; // h-32
+  display: flex;
 }
 
 .actionPlaceholder {

@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Heading, Flex, Box } from '@/components/ui';
+import { Heading } from '@/components/ui';
 import { BananaLoader } from '@/components/ui/Loader';
 import { signIn } from 'next-auth/react';
 import styles from './LoginPage.module.scss';
@@ -82,19 +82,19 @@ export default function LoginPage() {
             {/* Full Screen Loading Animation */}
             {loadingProvider ? <BananaLoader /> : null}
 
-            <Flex align="center" justify="center" className={styles.overlay}>
-                <Box className={styles.modal}>
+            <div className={styles.overlay}>
+                <div className={styles.modal}>
                     {/* Header */}
-                    <Box className={styles.header}>
+                    <div className={styles.header}>
                         <Heading as="h1" size="7" weight="bold" className={styles.title}>
                             바나나웨딩 시작하기 🍌
                         </Heading>
                         <p className={styles.subtitle}>
                             유통기한 없는 우리만의 특별한 시작,<br />바나나웨딩과 함께 쉽고 빠르게 만들어보세요.
                         </p>
-                    </Box>
+                    </div>
 
-                    <Flex direction="column" gap="3" className={styles.socialButtons}>
+                    <div className={styles.socialButtons}>
                         <button
                             className={`${styles.socialButton} ${styles.kakao}`}
                             onClick={() => handleOAuthLogin('kakao')}
@@ -121,10 +121,10 @@ export default function LoginPage() {
                             </svg>
                             <span>네이버로 시작하기</span>
                         </button>
-                    </Flex>
+                    </div>
 
                     {/* Footer */}
-                    <Box className={styles.footer}>
+                    <div className={styles.footer}>
                         <p>
                             계속 진행함으로써 귀하는 당사의
                             <Link href="/privacy" target="_blank" className={styles.link}>
@@ -132,19 +132,19 @@ export default function LoginPage() {
                             </Link>
                             및<br />이용약관에 동의하게 됩니다.
                         </p>
-                    </Box>
+                    </div>
 
                     {/* Back to Home */}
-                    <Box className={styles.backToHomeWrapper}>
+                    <div className={styles.backToHomeWrapper}>
                         <Link
                             href="/"
                             className={styles.backToHomeLink}
                         >
                             ← 홈으로 돌아가기
                         </Link>
-                    </Box>
-                </Box>
-            </Flex>
+                    </div>
+                </div>
+            </div>
         </>
     );
 }

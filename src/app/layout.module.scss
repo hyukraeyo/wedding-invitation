@@ -1,0 +1,12 @@
+@use "../styles/variables" as v;
+
+.appShell {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--background);
+  min-height: 100dvh;
+}
+
+.mainContent {
+  flex-grow: 1;
+}
