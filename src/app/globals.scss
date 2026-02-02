@@ -72,14 +72,15 @@ html {
   // 배경색 설정 (모달 오버레이 뒤 영역용)
   background-color: var(--background);
 
-  // 🍌 커스텀 스크롤바 사용을 위해 기본 스크롤바 숨김
-  @include m.scrollbar-hide;
+  // 🍌 PC에서만 스크롤바 숨김 및 오버스크롤 제어
+  // 모바일에서는 Safari 주소창 축소/확대 기능을 위해 기본 동작 유지
+  @media (hover: hover) and (pointer: fine) {
+    @include m.scrollbar-hide;
+    overscroll-behavior-y: none;
+  }
 
   // 🍌 모달 오픈 시 레이아웃 점프 방지는 Radix UI/Vaul이 처리하므로 stable 제거 검토
   // scrollbar-gutter: stable;
-
-  // 🍌 바운스 효과 제어 (필요 시)
-  overscroll-behavior-y: none;
 }
 
 body {
