@@ -68,6 +68,36 @@
       animation: contentHideDesktop 0.25s v.$ease-ios;
     }
   }
+
+  &.fullPageRight {
+    bottom: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: none;
+    max-height: none;
+    height: 100dvh;
+    transform: none;
+    border-radius: 0;
+    z-index: v.$z-modal + 100;
+
+    &[data-state='open'] {
+      animation: slideInRight 0.4s v.$ease-ios;
+    }
+
+    &[data-state='closed'] {
+      animation: slideOutRight 0.3s v.$ease-ios;
+    }
+
+    @media (min-width: v.$mobile) {
+      left: auto;
+      top: 0;
+      bottom: 0;
+      width: 450px;
+      border-left: 1px solid v.$grey-200;
+    }
+  }
 }
 
 .header {
@@ -180,5 +210,23 @@
   to {
     opacity: 0;
     transform: translate(-50%, -48%) scale(0.96);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
   }
 }

@@ -9,7 +9,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { invitationService } from '@/services/invitationService';
 import { useHeaderStore } from '@/store/useHeaderStore';
 import { useToast } from '@/hooks/use-toast';
-import { BottomSheet } from '@/components/ui';
+import { BottomSheet, Dialog } from '@/components/ui';
 import { BananaLoader } from '@/components/ui/Loader';
 import styles from './BuilderPage.module.scss';
 import { MobileNav } from '@/components/common/MobileNav';
@@ -224,30 +224,36 @@ export function BuilderClient() {
                 </div>
             </div>
 
-            <BottomSheet
+            <Dialog
                 open={isPreviewOpen}
-                onClose={() => setIsPreviewOpen(false)}
-                header="Mobile Preview"
+                onOpenChange={setIsPreviewOpen}
+                fullScreen
             >
-                <div className={styles.previewHint}>
-                    나만의 달콤한 바나나웨딩 청첩장 미리보기
-                </div>
+                <Dialog.Content className={styles.fullPagePreview}>
+                    <Dialog.Header title="Mobile Preview" className={styles.previewHeader}>
+                        {/* Preview Close FAB in Header or Floating? User wants it to slide from right and be full page. */}
+                    </Dialog.Header>
 
-                <div className={styles.mobilePreview}>
-                    <React.Activity mode={isPreviewOpen ? 'visible' : 'hidden'}>
-                        <InvitationCanvas key="mobile-preview" isPreviewMode editingSection={editingSection} hideWatermark />
-                    </React.Activity>
-                </div>
+                    <div className={styles.previewHint}>
+                        나만의 달콤한 바나나웨딩 청첩장 미리보기
+                    </div>
 
-                {/* Preview Close FAB */}
-                <button
-                    className={clsx(styles.floatingPreview, styles.fabVisible, styles.previewOpenFab)}
-                    onClick={togglePreview}
-                    aria-label="Close preview"
-                >
-                    <X className={styles.icon} />
-                </button>
-            </BottomSheet>
+                    <div className={styles.mobilePreview}>
+                        <React.Activity mode={isPreviewOpen ? 'visible' : 'hidden'}>
+                            <InvitationCanvas key="mobile-preview" isPreviewMode editingSection={editingSection} hideWatermark />
+                        </React.Activity>
+                    </div>
+
+                    {/* Close FAB */}
+                    <button
+                        className={clsx(styles.floatingPreview, styles.fabVisible, styles.previewOpenFab)}
+                        onClick={togglePreview}
+                        aria-label="Close preview"
+                    >
+                        <X className={styles.icon} />
+                    </button>
+                </Dialog.Content>
+            </Dialog>
 
             {/* Mobile Navigation Bar */}
             <MobileNav

@@ -14,6 +14,9 @@ export function useViewportHeight() {
         const updateVH = () => {
             const vh = window.innerHeight * 0.01;
             document.documentElement.style.setProperty('--vh', `${vh}px`);
+            // 초기 상태에서 키보드 오프셋 0으로 설정
+            document.documentElement.style.setProperty('--keyboard-offset', '0px');
+            document.documentElement.setAttribute('data-keyboard-open', 'false');
         };
 
         // 초기 실행

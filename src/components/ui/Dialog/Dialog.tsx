@@ -10,18 +10,21 @@ import styles from './Dialog.module.scss';
 
 interface DialogContextValue {
     isBottomSheet: boolean;
+    fullScreen: boolean;
 }
 
-const DialogContext = React.createContext<DialogContextValue>({ isBottomSheet: false });
+const DialogContext = React.createContext<DialogContextValue>({ isBottomSheet: false, fullScreen: false });
 
 interface DialogProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Root>,
     Omit<React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>, 'asChild'> {
     mobileBottomSheet?: boolean | undefined;
+    fullScreen?: boolean | undefined;
 }
 
 const DialogRoot = ({
     children,
     mobileBottomSheet = false,
+    fullScreen = false,
     open,
     defaultOpen,
     onOpenChange,
@@ -29,9 +32,9 @@ const DialogRoot = ({
     ...contentProps
 }: DialogProps) => {
     const isMobile = useMediaQuery('(max-width: 768px)');
-    const isBottomSheet = mobileBottomSheet && isMobile;
+    const isBottomSheet = !fullScreen && mobileBottomSheet && isMobile;
 
-    const value = useMemo(() => ({ isBottomSheet }), [isBottomSheet]);
+    const value = useMemo(() => ({ isBottomSheet, fullScreen }), [isBottomSheet, fullScreen]);
 
     // exactOptionalPropertyTypes: true fix
     // We must not pass explicit undefined for optional props
@@ -133,7 +136,7 @@ const DialogContent = memo(React.forwardRef<
     React.ElementRef<typeof DialogPrimitive.Content>,
     React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, children, ...props }, ref) => {
-    const { isBottomSheet } = useContext(DialogContext);
+    const { isBottomSheet, fullScreen } = useContext(DialogContext);
     const internalRef = useRef<HTMLDivElement>(null);
 
     const setRefs = useCallback((node: HTMLDivElement | null) => {
@@ -167,7 +170,12 @@ const DialogContent = memo(React.forwardRef<
     ) : (
         <DialogPrimitive.Content
             ref={setRefs}
-            className={cn(styles.content, styles.dialogContent, className)}
+            className={cn(
+                styles.content,
+                styles.dialogContent,
+                fullScreen && styles.fullPageRight,
+                className
+            )}
             onOpenAutoFocus={handleOpenAutoFocus}
             {...props}
         >

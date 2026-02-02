@@ -17,24 +17,9 @@
     left: 0;
     right: 0;
     z-index: 1000;
-    will-change: bottom, padding-bottom;
-    // iOS 키보드 애니메이션에 맞춘 부드러운 전환
-    transition: bottom 300ms cubic-bezier(0.16, 1, 0.3, 1),
-                padding-bottom 300ms cubic-bezier(0.16, 1, 0.3, 1);
     
     // Support for safe area in mobile
     padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-
-    // 키보드 위에 고정하는 기능이 활성화된 경우
-    &.fixedAboveKeyboard {
-      bottom: var(--keyboard-offset, 0px);
-
-      // 키보드가 활성화되었을 때는 하단 여백 최적화
-      // html[data-keyboard-open="true"] 조건에서도 transition이 적용됨
-      @at-root :global(html[data-keyboard-open="true"]) & {
-        padding-bottom: 16px;
-      }
-    }
     
     // When inside a container with max-width
     max-width: v.$canvas-max-width;
@@ -43,6 +28,20 @@
     &.transparent {
       background-color: transparent;
       box-shadow: none;
+    }
+
+    // 키보드 위에 고정하는 기능이 활성화된 경우
+    &.fixedAboveKeyboard {
+      will-change: bottom, padding-bottom;
+      // iOS 키보드 애니메이션에 맞춘 부드러운 전환
+      transition: bottom 300ms cubic-bezier(0.16, 1, 0.3, 1),
+                  padding-bottom 300ms cubic-bezier(0.16, 1, 0.3, 1);
+      bottom: var(--keyboard-offset, 0px);
+
+      // 키보드가 활성화되었을 때는 하단 여백 최적화
+      @at-root :global(html[data-keyboard-open="true"]) & {
+        padding-bottom: 16px;
+      }
     }
   }
 
