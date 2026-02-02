@@ -33,12 +33,8 @@ const CustomMonthCaption = (props: { calendarMonth: { date: Date } }) => {
       </button>
 
       <div className={styles.captionTitleGroup}>
-        <span className={styles.captionYear}>
-          {format(props.calendarMonth.date, 'yyyy')}
-        </span>
-        <span className={styles.captionMonth}>
-          {format(props.calendarMonth.date, 'M월')}
-        </span>
+        <span className={styles.captionYear}>{format(props.calendarMonth.date, 'yyyy')}</span>
+        <span className={styles.captionMonth}>{format(props.calendarMonth.date, 'M월')}</span>
       </div>
 
       <button
@@ -71,9 +67,9 @@ const CustomDayButton = (dayButtonProps: DayButtonProps) => {
   return (
     <Button
       {...others}
-      variant={isSelected ? "solid" : "ghost"}
-      color={(isSelected ? "primary" : "grey") as "primary" | "grey"}
-      size="tiny"
+      variant={isSelected ? 'solid' : 'ghost'}
+      color={(isSelected ? 'primary' : 'grey') as 'primary' | 'grey'}
+      size="xs"
       radius="full"
       className={cn(
         styles.dayButtonBase,
@@ -118,16 +114,22 @@ function Calendar({
     [DayFlag.disabled]: styles.disabled,
     [DayFlag.hidden]: styles.hidden,
     ...classNames,
-  }).reduce((acc, [key, value]) => {
-    if (value) acc[key] = value;
-    return acc;
-  }, {} as Record<string, string>);
+  }).reduce(
+    (acc, [key, value]) => {
+      if (value) acc[key] = value;
+      return acc;
+    },
+    {} as Record<string, string>
+  );
 
   // 컴포넌트 레퍼런스 안정화
-  const components = React.useMemo(() => ({
-    MonthCaption: CustomMonthCaption,
-    DayButton: CustomDayButton,
-  }), []);
+  const components = React.useMemo(
+    () => ({
+      MonthCaption: CustomMonthCaption,
+      DayButton: CustomDayButton,
+    }),
+    []
+  );
 
   return (
     <DayPicker
@@ -145,6 +147,6 @@ function Calendar({
   );
 }
 
-Calendar.displayName = "Calendar";
+Calendar.displayName = 'Calendar';
 
 export { Calendar };

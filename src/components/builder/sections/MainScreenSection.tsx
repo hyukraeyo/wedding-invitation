@@ -4,7 +4,6 @@ import { Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { SampleList } from '@/components/common/SampleList';
 import { Button } from '@/components/ui/Button';
-import { BottomCTA } from '@/components/ui/BottomCTA';
 import { Dialog } from '@/components/ui/Dialog';
 
 import styles from './MainScreenSection.module.scss';

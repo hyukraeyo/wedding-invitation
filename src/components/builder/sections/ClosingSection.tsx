@@ -12,7 +12,6 @@ import { TextField } from '@/components/ui/TextField';
 import { ImageUploader } from '@/components/common/ImageUploader';
 import { SampleList } from '@/components/common/SampleList';
 import { Button } from '@/components/ui/Button';
-import { BottomCTA } from '@/components/ui/BottomCTA';
 import { Dialog } from '@/components/ui/Dialog';
 import { FormControl, FormField, FormLabel } from '@/components/ui/Form';
 
@@ -34,7 +33,7 @@ export default function ClosingSection(props: SectionProps) {
     updateClosing({
       subtitle: sample.subtitle || '',
       title: sample.title,
-      content: sample.content,
+      content: sample.content || '',
     });
     setIsSampleModalOpen(false);
   };

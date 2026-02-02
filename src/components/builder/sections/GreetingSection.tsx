@@ -26,7 +26,6 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { TextField } from '@/components/ui/TextField';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { Button } from '@/components/ui/Button';
-import { BottomCTA } from '@/components/ui/BottomCTA';
 import { ImageUploader } from '@/components/common/ImageUploader';
 import { FormControl, FormField, FormLabel } from '@/components/ui/Form';
 import styles from './GreetingSection.module.scss';
@@ -84,7 +83,7 @@ export default function GreetingSection(props: SectionProps) {
   const handleSelectSample = (sample: SamplePhraseItem) => {
     setGreetingSubtitle(sample.subtitle || '');
     setGreetingTitle(sample.title);
-    setMessage(sample.content);
+    setMessage(sample.content || '');
     setIsSampleModalOpen(false);
   };
 

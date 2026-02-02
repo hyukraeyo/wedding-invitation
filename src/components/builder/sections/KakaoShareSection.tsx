@@ -27,7 +27,7 @@ export default function KakaoShareSection(props: SectionProps) {
   const handleSelectSample = (sample: SamplePhraseItem) => {
     setKakao({
       title: sample.title,
-      description: sample.content, // Map content to description
+      description: sample.content || '', // Map content to description
     });
     setIsSampleModalOpen(false);
   };

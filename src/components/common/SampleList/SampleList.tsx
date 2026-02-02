@@ -3,10 +3,7 @@ import styles from './SampleList.module.scss';
 import type { SamplePhraseItem } from '@/types/builder';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/Badge';
-import { Spacing } from '@/components/ui/Spacing';
 import { Button } from '@/components/ui/Button';
-
-import { ChevronRight } from 'lucide-react';
 
 interface SampleListProps {
   items: SamplePhraseItem[];
@@ -27,7 +24,10 @@ export const SampleList = ({ items, onSelect, className }: SampleListProps) => {
             </div>
             <span className={styles.itemTitle}>{item.title}</span>
             {item.subtitle && <span className={styles.itemSubtitle}>{item.subtitle}</span>}
-            <div className={styles.itemBody} dangerouslySetInnerHTML={{ __html: item.content }} />
+            <div
+              className={styles.itemBody}
+              dangerouslySetInnerHTML={{ __html: item.content || '' }}
+            />
           </div>
         </Button>
       ))}
