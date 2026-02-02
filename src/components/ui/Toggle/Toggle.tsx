@@ -6,20 +6,19 @@ import { clsx } from 'clsx';
 import s from './Toggle.module.scss';
 
 export interface ToggleProps extends React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root> {
-    variant?: 'solid' | 'outline' | 'ghost' | 'toss';
-    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  variant?: 'solid' | 'outline' | 'ghost' | 'toss';
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 
-const Toggle = React.forwardRef<
-    React.ElementRef<typeof TogglePrimitive.Root>,
-    ToggleProps
->(({ className, variant = 'toss', size = 'lg', ...props }, ref) => (
+const Toggle = React.forwardRef<React.ElementRef<typeof TogglePrimitive.Root>, ToggleProps>(
+  ({ className, variant = 'toss', size = 'md', ...props }, ref) => (
     <TogglePrimitive.Root
-        ref={ref}
-        className={clsx(s.root, s[variant], s[size], className)}
-        {...props}
+      ref={ref}
+      className={clsx(s.root, s[variant], s[size], className)}
+      {...props}
     />
-));
+  )
+);
 
 Toggle.displayName = TogglePrimitive.Root.displayName;
 

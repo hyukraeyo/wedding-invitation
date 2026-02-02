@@ -205,6 +205,10 @@
   @include flex(space-between, center);
 }
 
+@mixin flex-center-y {
+  @include flex(flex-start, center);
+}
+
 // ============================================
 // Typography Utilities
 // ============================================

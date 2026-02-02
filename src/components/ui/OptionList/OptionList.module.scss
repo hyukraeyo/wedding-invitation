@@ -1,0 +1,38 @@
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 24px;
+}
+
+.item {
+  justify-content: space-between;
+  width: 100%;
+  text-align: left;
+  height: auto;
+  min-height: 52px;
+  padding: 16px 20px;
+
+  // Default state: not selected
+  background-color: transparent;
+  border: none;
+  color: v.$text-secondary;
+
+  &:hover {
+    background-color: v.$grey-50;
+  }
+
+  &.selected {
+    font-weight: 600;
+    color: v.$text-primary;
+    background-color: v.$grey-100;
+  }
+}
+
+.checkIcon {
+  color: v.$primary;
+  margin-left: 8px;
+}

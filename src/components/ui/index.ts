@@ -20,7 +20,7 @@ export * from './InfoMessage';
 export * from './EmptyState';
 export * from './RichTextEditor';
 export * from './InvitationCard';
-export * from './MenuSelect';
+
 export * from './Menu';
 export * from './ProgressBar';
 export * from './Label';
@@ -29,7 +29,7 @@ export * from './Switch';
 export * from './RadioGroup';
 export * from './Slider';
 export * from './Form';
-export * from './Select';
+
 export * from './Tooltip';
 export * from './DropdownMenu';
 export * from './Separator';
@@ -45,3 +45,4 @@ export * from './Spacing';
 export * from './Toast';
 export * from './Card';
 export * from './VisuallyHidden';
+export * from './OptionList';

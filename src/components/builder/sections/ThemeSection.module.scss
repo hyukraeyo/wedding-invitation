@@ -1,4 +1,5 @@
 @use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
 .container {
   display: flex;
@@ -71,3 +72,47 @@
 .switchSpacing {
   margin-top: 0.75rem;
 }
+
+// Dialog Trigger Pointer
+.cursorPointer {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+// .optionList { // This was removed as per instruction
+//   display: flex;
+//   flex-direction: column;
+//   gap: 4px;
+//   padding-bottom: 24px;
+// }
+
+// .optionItemButton { // This was removed as per instruction
+//   @include m.flex-center-y;
+//   justify-content: space-between;
+//   width: 100%;
+//   padding: 16px 20px;
+//   font-size: 16px;
+//   color: v.$text-secondary;
+//   background: transparent;
+//   border-radius: 16px;
+//   transition: background-color 0.2s v.$ease-standard;
+//   text-align: left;
+
+//   &:active {
+//     background-color: v.$grey-100;
+//     transform: scale(0.98);
+//   }
+
+//   &.selected {
+//     font-weight: 600;
+//     color: v.$text-primary;
+//     background-color: v.$grey-100;
+
+//     .checkIcon { // This was removed as per instruction
+//       color: v.$primary;
+//       filter: none;
+//     }
+//   }
+// }
