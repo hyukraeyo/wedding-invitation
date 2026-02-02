@@ -65,7 +65,6 @@ const SetupForm = () => {
         }
     }, [currentStep, groomFullName, brideFullName, date, time]);
 
-    const progress = Math.round(((currentStep + 1) / STEPS.length) * 100);
 
     const isInvalidNameMessage = useCallback((value: string) => {
         const trimmed = value.trim();
@@ -81,6 +80,7 @@ const SetupForm = () => {
     }, [groomFullName, brideFullName, date, time]);
 
     const isComplete = isHydrated && isAllStepsValid();
+    const progress = isComplete ? 100 : Math.round((currentStep / STEPS.length) * 100);
 
     const handleBack = useCallback(() => {
         if (currentStep > 0) {
