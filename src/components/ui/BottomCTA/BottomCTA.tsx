@@ -11,9 +11,10 @@ export interface FixedBottomCTAProps {
     className?: string | undefined;
     transparent?: boolean | undefined;
     animated?: boolean | undefined;
+    fixedAboveKeyboard?: boolean | undefined;
 }
 
-export const FixedBottomCTA = ({ children, fixed = true, className, transparent, animated }: FixedBottomCTAProps) => {
+export const FixedBottomCTA = ({ children, fixed = true, className, transparent, animated, fixedAboveKeyboard }: FixedBottomCTAProps) => {
     return (
         <div
             className={clsx(
@@ -21,6 +22,7 @@ export const FixedBottomCTA = ({ children, fixed = true, className, transparent,
                 !!fixed && s.fixed,
                 !!transparent && s.transparent,
                 !!animated && s.animated,
+                !!fixedAboveKeyboard && s.fixedAboveKeyboard,
                 className
             )}
         >
@@ -41,6 +43,7 @@ export interface BottomCTASingleProps {
     transparent?: boolean | undefined;
     animated?: boolean | undefined;
     buttonVariant?: 'solid' | 'soft' | 'outline' | 'ghost' | 'surface' | 'filled' | 'fill' | 'weak' | 'clear' | 'apple' | 'toss' | undefined;
+    fixedAboveKeyboard?: boolean | undefined;
 }
 
 const Single = ({
@@ -54,7 +57,8 @@ const Single = ({
     type = 'button',
     transparent,
     animated,
-    buttonVariant = 'fill'
+    buttonVariant = 'fill',
+    fixedAboveKeyboard = true
 }: BottomCTASingleProps) => {
     const button = (
         <Button
@@ -82,6 +86,7 @@ const Single = ({
             transparent={!!transparent}
             className={wrapperClassName}
             animated={animated}
+            fixedAboveKeyboard={fixedAboveKeyboard}
         >
             {button}
         </FixedBottomCTA>

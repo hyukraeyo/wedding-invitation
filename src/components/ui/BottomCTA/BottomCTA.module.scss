@@ -17,9 +17,20 @@
     left: 0;
     right: 0;
     z-index: 1000;
+    will-change: bottom;
     
     // Support for safe area in mobile
     padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+
+    // 키보드 위에 고정하는 기능이 활성화된 경우
+    &.fixedAboveKeyboard {
+      bottom: var(--keyboard-offset, 0px);
+
+      // 키보드가 활성화되었을 때는 하단 여백 최적화
+      @at-root :global(html[data-keyboard-open="true"]) & {
+        padding-bottom: 16px;
+      }
+    }
     
     // When inside a container with max-width
     max-width: v.$canvas-max-width;

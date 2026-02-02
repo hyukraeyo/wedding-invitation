@@ -19,21 +19,36 @@ export function useViewportHeight() {
         // 초기 실행
         updateVH();
 
-        // visualViewport 지원 시 더 정밀한 계산 가능 (키보드 대응 등)
         const viewport = window.visualViewport;
 
         const handleResize = () => {
             if (viewport) {
                 const vh = viewport.height * 0.01;
                 document.documentElement.style.setProperty('--vh', `${vh}px`);
+                
+                // 키보드 높이 계산 (Layout Viewport Height - Visual Viewport Height)
+                const keyboardOffset = window.innerHeight - viewport.height;
+                const cappedOffset = Math.max(0, keyboardOffset);
+                document.documentElement.style.setProperty('--keyboard-offset', `${cappedOffset}px`);
+                
+                // 키보드 오픈 여부 데이터 속성 추가 (스타일 제어용)
+                // 보통 모바일 주소창 높이 변화는 60px 이하이므로 그 이상일 때 키보드로 판단
+                if (cappedOffset > 60) {
+                    document.documentElement.setAttribute('data-keyboard-open', 'true');
+                } else {
+                    document.documentElement.setAttribute('data-keyboard-open', 'false');
+                }
             } else {
                 updateVH();
+                document.documentElement.setAttribute('data-keyboard-open', 'false');
             }
         };
 
         if (viewport) {
             viewport.addEventListener('resize', handleResize);
             viewport.addEventListener('scroll', handleResize);
+            // 초기 실행 시에도 visualViewport 기준 계산 수행
+            handleResize();
         } else {
             window.addEventListener('resize', updateVH);
         }
