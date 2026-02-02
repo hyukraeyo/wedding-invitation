@@ -13,6 +13,9 @@
 
     @include m.mobile {
         padding-top: 0;
+        height: auto; // 🍌 고정 높이 제거하여 바디 스크롤 허용
+        min-height: 100dvh;
+        overflow: visible; // 🍌 overflow hidden 제거
     }
 
     // Desktop: Keep fixed layout for app-like feeling
@@ -79,8 +82,9 @@
             overflow-x: hidden;
 
             @include m.mobile {
-                overflow-y: visible;
+                overflow-y: visible; // 🍌 내부 스크롤 비활성화
                 flex: none;
+                height: auto;
             }
 
             // Padding aligned with header being sticky (no longer covering content)

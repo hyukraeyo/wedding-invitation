@@ -15,9 +15,12 @@ import styles from "./layout.module.scss";
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 5,
-  userScalable: true,
+  // 🍌 Safari에서 인풋 포커스 시 줌 현상을 강제로 막기 위해 1로 설정 (접근성 고려 시 주의 필요)
+  maximumScale: 1, 
+  userScalable: false,
   themeColor: "#F9F8E6",
+  // 🍌 최신 모바일 브라우저 기법: 키보드가 올라올 때 뷰포트 높이를 조절하여 UI가 가려지거나 확대되는 현상 방지
+  interactiveWidget: "resizes-content",
 };
 
 export const metadata: Metadata = {

@@ -9,6 +9,7 @@
   transition: all 0.2s v.$ease-ios;
   box-sizing: border-box;
   background-clip: padding-box;
+  touch-action: manipulation; // 🍌 불필요한 제스처 줌 및 클릭 지연 방지
 
   // Sizes
   &.xs {
@@ -163,6 +164,15 @@
   padding: 0 var(--input-padding, 16px);
   font-family: inherit;
   font-size: inherit;
+
+  // 🍌 iOS Safari Auto-zoom 방지 최신 기법
+  // 16px 미만일 때 확대되는 특성을 이용해 16px로 강제하고
+  // 필요한 경우 시각적으로만 줄이는 것이 정석이지만 여기서는 16px를 유지함
+  @include m.mobile {
+    font-size: 16px !important;
+    line-height: normal; // 🍌 라인 높이로 인한 레이아웃 틀어짐 방지
+  }
+
   color: v.$grey-900;
   outline: none;
   font-weight: 500;
