@@ -73,7 +73,7 @@ export default function ClosingSection(props: SectionProps) {
 
                     <div className={styles.optionItem}>
                         <FormField name="closing-subtitle">
-                            <FormLabel className={styles.formLabel} htmlFor="closing-subtitle">
+                            <FormLabel htmlFor="closing-subtitle">
                                 소제목
                             </FormLabel>
                             <FormControl asChild>
@@ -88,7 +88,7 @@ export default function ClosingSection(props: SectionProps) {
                     </div>
                     <div className={styles.optionItem}>
                         <FormField name="closing-title">
-                            <FormLabel className={styles.formLabel} htmlFor="closing-title">
+                            <FormLabel htmlFor="closing-title">
                                 제목
                             </FormLabel>
                             <FormControl asChild>

@@ -27,13 +27,9 @@
   color: v.$grey-600;
 }
 
-.formLabel {
-  @include b.builder-label;
-}
+// .formLabel removed
 
-.formMessage {
-  @include b.builder-form-message;
-}
+// .formMessage removed
 
 .rowRight {
   display: flex;

@@ -124,7 +124,7 @@ export default function GreetingSection(props: SectionProps) {
 
                     <div className={styles.optionItem}>
                         <FormField name="greeting-subtitle">
-                            <FormLabel className={styles.formLabel} htmlFor="greeting-subtitle">
+                            <FormLabel htmlFor="greeting-subtitle">
                                 소제목
                             </FormLabel>
                             <FormControl asChild>
@@ -141,7 +141,7 @@ export default function GreetingSection(props: SectionProps) {
 
                     <div className={styles.optionItem}>
                         <FormField name="greeting-title">
-                            <FormLabel className={styles.formLabel} htmlFor="greeting-title">
+                            <FormLabel htmlFor="greeting-title">
                                 제목
                             </FormLabel>
                             <FormControl asChild>
@@ -202,7 +202,7 @@ export default function GreetingSection(props: SectionProps) {
                             {enableFreeformNames && (
                                 <div className={styles.nameForm}>
                                     <FormField name="groom-name-custom">
-                                        <FormLabel className={styles.formLabel} htmlFor="groom-name-custom">
+                                        <FormLabel htmlFor="groom-name-custom">
                                             신랑 측 표기
                                         </FormLabel>
                                         <FormControl asChild>
@@ -215,7 +215,7 @@ export default function GreetingSection(props: SectionProps) {
                                         </FormControl>
                                     </FormField>
                                     <FormField name="bride-name-custom">
-                                        <FormLabel className={styles.formLabel} htmlFor="bride-name-custom">
+                                        <FormLabel htmlFor="bride-name-custom">
                                             신부 측 표기
                                         </FormLabel>
                                         <FormControl asChild>

@@ -66,7 +66,7 @@ export default function MainScreenSectionContent() {
         <div className={styles.container}>
             <div className={styles.optionItem}>
                 <FormField name="main-image">
-                    <FormLabel className={styles.formLabel} htmlFor="main-image">
+                    <FormLabel htmlFor="main-image">
                         메인 사진
                     </FormLabel>
                     <div className={styles.optionWrapper}>
@@ -90,7 +90,7 @@ export default function MainScreenSectionContent() {
                             </VisuallyHidden>
                         </FormControl>
                     </div>
-                    <FormMessage className={styles.formMessage} match="valueMissing">
+                    <FormMessage match="valueMissing">
                         필수 항목이에요.
                     </FormMessage>
                 </FormField>
@@ -248,7 +248,7 @@ export default function MainScreenSectionContent() {
                     <div className={styles.optionItem}>
                         <div className={styles.optionWrapper}>
                             <FormField name="main-title">
-                                <FormLabel className={styles.formLabel} htmlFor="main-title">
+                                <FormLabel htmlFor="main-title">
                                     제목
                                 </FormLabel>
                                 <FormControl asChild>
@@ -261,7 +261,7 @@ export default function MainScreenSectionContent() {
                                 </FormControl>
                             </FormField>
                             <FormField name="main-subtitle">
-                                <FormLabel className={styles.formLabel} htmlFor="main-subtitle">
+                                <FormLabel htmlFor="main-subtitle">
                                     소제목
                                 </FormLabel>
                                 <FormControl asChild>

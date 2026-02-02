@@ -5,36 +5,34 @@
 
 .container {
 
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .optionItem {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 
-  &:has(.rowRight) {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
+    &:has(.rowRight) {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
 }
 
 .rowTitle {
-  font-size: v.$font-size-xs;
-  font-weight: 600;
-  color: v.$grey-600;
+    font-size: v.$font-size-xs;
+    font-weight: 600;
+    color: v.$grey-600;
 }
 
-.formLabel {
-  @include b.builder-label;
-}
+// .formLabel removed
 
 .rowRight {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 .counter {

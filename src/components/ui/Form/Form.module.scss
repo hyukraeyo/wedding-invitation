@@ -10,10 +10,13 @@
 
 .FormLabel {
   font-family: inherit;
-  font-size: v.$font-size-sm;
-  font-weight: 500;
-  color: v.$grey-700;
-  margin-bottom: 0.5rem;
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 600;
+  color: v.$grey-600;
+  margin-bottom: 6px;
+  padding-left: 2px;
+  letter-spacing: -0.01em;
   display: block;
 }
 
@@ -44,6 +47,19 @@
 .FormMessage {
   font-size: 13px;
   color: v.$red-500;
-  opacity: 0.8;
-  margin-top: 6px;
+  margin-top: 4px;
+  padding-left: 4px;
+  animation: form-message-enter 0.3s v.$ease-ios both;
+}
+
+@keyframes form-message-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

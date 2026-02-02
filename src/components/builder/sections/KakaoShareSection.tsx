@@ -83,7 +83,7 @@ export default function KakaoShareSection(props: SectionProps) {
 
                     <div className={styles.optionItem}>
                         <FormField name="kakao-title">
-                            <FormLabel className={styles.formLabel} htmlFor="kakao-title">
+                            <FormLabel htmlFor="kakao-title">
                                 제목
                             </FormLabel>
                             <FormControl asChild>
@@ -101,7 +101,7 @@ export default function KakaoShareSection(props: SectionProps) {
 
                     <div className={styles.optionItem}>
                         <FormField name="kakao-description">
-                            <FormLabel className={styles.formLabel} htmlFor="kakao-description">
+                            <FormLabel htmlFor="kakao-description">
                                 설명
                             </FormLabel>
                             <FormControl asChild>

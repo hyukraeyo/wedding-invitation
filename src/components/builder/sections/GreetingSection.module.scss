@@ -26,9 +26,7 @@
   color: v.$grey-600;
 }
 
-.formLabel {
-  @include b.builder-label;
-}
+// .formLabel removed
 
 .rowRight {
   display: flex;

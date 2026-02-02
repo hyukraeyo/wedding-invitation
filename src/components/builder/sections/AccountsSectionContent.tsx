@@ -114,7 +114,7 @@ export default function AccountsSectionContent() {
         <div className={styles.container}>
             <div className={styles.optionItem}>
                 <FormField name="accounts-subtitle">
-                    <FormLabel className={styles.formLabel} htmlFor="accounts-subtitle">
+                    <FormLabel htmlFor="accounts-subtitle">
                         소제목
                     </FormLabel>
                     <FormControl asChild>
@@ -129,7 +129,7 @@ export default function AccountsSectionContent() {
             </div>
             <div className={styles.optionItem}>
                 <FormField name="accounts-title">
-                    <FormLabel className={styles.formLabel} htmlFor="accounts-title">
+                    <FormLabel htmlFor="accounts-title">
                         제목
                     </FormLabel>
                     <FormControl asChild>
@@ -295,7 +295,7 @@ export default function AccountsSectionContent() {
             {/* Appearance Settings */}
             <div className={styles.optionItem}>
                 <FormField name="accounts-groom-title">
-                    <FormLabel className={styles.formLabel} htmlFor="accounts-groom-title">
+                    <FormLabel htmlFor="accounts-groom-title">
                         신랑측 그룹 제목
                     </FormLabel>
                     <FormControl asChild>
@@ -310,7 +310,7 @@ export default function AccountsSectionContent() {
             </div>
             <div className={styles.optionItem}>
                 <FormField name="accounts-bride-title">
-                    <FormLabel className={styles.formLabel} htmlFor="accounts-bride-title">
+                    <FormLabel htmlFor="accounts-bride-title">
                         신부측 그룹 제목
                     </FormLabel>
                     <FormControl asChild>

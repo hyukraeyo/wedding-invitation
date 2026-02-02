@@ -132,7 +132,7 @@ export default function LocationSectionContent() {
             <div className={styles.container}>
                 <div className={styles.optionItem}>
                     <FormField name="location-subtitle">
-                        <FormLabel className={styles.formLabel} htmlFor="location-subtitle">
+                        <FormLabel htmlFor="location-subtitle">
                             부제목
                         </FormLabel>
                         <FormControl asChild>
@@ -147,7 +147,7 @@ export default function LocationSectionContent() {
                 </div>
                 <div className={styles.optionItem}>
                     <FormField name="location-title">
-                        <FormLabel className={styles.formLabel} htmlFor="location-title">
+                        <FormLabel htmlFor="location-title">
                             제목
                         </FormLabel>
                         <FormControl asChild>
@@ -179,7 +179,7 @@ export default function LocationSectionContent() {
 
                 <div className={styles.optionItem}>
                     <FormField name="location-venue">
-                        <FormLabel className={styles.formLabel} htmlFor="location-venue">
+                        <FormLabel htmlFor="location-venue">
                             예식 장소명
                         </FormLabel>
                         <FormControl asChild>
@@ -196,7 +196,7 @@ export default function LocationSectionContent() {
 
                 <div className={styles.optionItem}>
                     <FormField name="location-floor">
-                        <FormLabel className={styles.formLabel} htmlFor="location-floor">
+                        <FormLabel htmlFor="location-floor">
                             층/호수
                         </FormLabel>
                         <FormControl asChild>

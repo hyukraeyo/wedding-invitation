@@ -148,19 +148,7 @@
     }
 }
 
-.label {
-    font-size: v.$font-size-sm;
-    font-weight: 600;
-    color: v.$grey-600;
-    margin-bottom: 0.75rem;
-    margin-left: 4px;
-    display: block;
-    letter-spacing: -0.01em;
-}
-
-.formMessage {
-    @include b.builder-form-message;
-}
+// .label and .formMessage methods removed as per global Form styles
 
 .whiteBox {
     padding: 2.5rem 1.5rem;

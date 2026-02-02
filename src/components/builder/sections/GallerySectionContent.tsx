@@ -251,7 +251,7 @@ export default React.memo(function GallerySectionContent() {
         <div className={styles.container}>
             <div className={styles.optionItem}>
                 <FormField name="gallery-subtitle">
-                    <FormLabel className={styles.formLabel} htmlFor="gallery-subtitle">
+                    <FormLabel htmlFor="gallery-subtitle">
                         소제목
                     </FormLabel>
                     <FormControl asChild>
@@ -267,7 +267,7 @@ export default React.memo(function GallerySectionContent() {
             </div>
             <div className={styles.optionItem}>
                 <FormField name="gallery-title">
-                    <FormLabel className={styles.formLabel} htmlFor="gallery-title">
+                    <FormLabel htmlFor="gallery-title">
                         제목
                     </FormLabel>
                     <FormControl asChild>

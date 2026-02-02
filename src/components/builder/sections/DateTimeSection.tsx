@@ -47,7 +47,7 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
                 {/* Date & Time Picking */}
                 <div className={styles.optionItem}>
                     <FormField name="wedding-date">
-                        <FormLabel className={styles.formLabel} htmlFor="wedding-date">
+                        <FormLabel htmlFor="wedding-date">
                             예식 날짜
                         </FormLabel>
                         <FormControl asChild>
@@ -61,7 +61,7 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
                 </div>
                 <div className={styles.optionItem}>
                     <FormField name="wedding-time">
-                        <FormLabel className={styles.formLabel} htmlFor="wedding-time">
+                        <FormLabel htmlFor="wedding-time">
                             예식 시간
                         </FormLabel>
                         <FormControl asChild>
@@ -99,7 +99,7 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
                     <div className={styles.optionItem}>
                         <div className={styles.ddayInputWrapper}>
                             <FormField name="dday-message">
-                                <FormLabel className={styles.formLabel} htmlFor="dday-message">
+                                <FormLabel htmlFor="dday-message">
                                     D-Day 메시지
                                 </FormLabel>
                                 <FormControl asChild>

@@ -25,15 +25,7 @@
   }
 }
 
-.label {
-  @include b.builder-label;
-}
-
-.message {
-  @include b.builder-form-message;
-  margin-top: -2px;
-  margin-bottom: 6px;
-}
+// .label and .message removed as they are now global Form styles
 
 .deceasedButton {
   width: 44px;

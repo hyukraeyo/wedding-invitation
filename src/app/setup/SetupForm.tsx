@@ -223,10 +223,7 @@ const SetupForm = () => {
                         {/* 4. 예식 시간 */}
                         <div className={cn(styles.fieldContainer, highestStepReached >= 3 && styles.visible)}>
                             <FormField name="wedding-time">
-                                <FormLabel className={styles.label} htmlFor="wedding-time">예식 시간</FormLabel>
-                                <FormMessage className={styles.formMessage} match="valueMissing">
-                                    예식 시간을 선택해주세요.
-                                </FormMessage>
+                                <FormLabel htmlFor="wedding-time">예식 시간</FormLabel>
                                 <FormControl asChild>
                                     <TimePicker
                                         id="wedding-time"
@@ -254,16 +251,16 @@ const SetupForm = () => {
                                         />
                                     </VisuallyHidden>
                                 </FormControl>
+                                <FormMessage match="valueMissing">
+                                    예식 시간을 선택해주세요.
+                                </FormMessage>
                             </FormField>
                         </div>
 
                         {/* 3. 예식 날짜 */}
                         <div className={cn(styles.fieldContainer, highestStepReached >= 2 && styles.visible)}>
                             <FormField name="wedding-date">
-                                <FormLabel className={styles.label} htmlFor="wedding-date">예식 날짜</FormLabel>
-                                <FormMessage className={styles.formMessage} match="valueMissing">
-                                    예식 날짜를 선택해주세요.
-                                </FormMessage>
+                                <FormLabel htmlFor="wedding-date">예식 날짜</FormLabel>
                                 <FormControl asChild>
                                     <DatePicker
                                         id="wedding-date"
@@ -298,13 +295,16 @@ const SetupForm = () => {
                                         />
                                     </VisuallyHidden>
                                 </FormControl>
+                                <FormMessage match="valueMissing">
+                                    예식 날짜를 선택해주세요.
+                                </FormMessage>
                             </FormField>
                         </div>
 
                         {/* 2. 신부 이름 */}
                         <div className={cn(styles.fieldContainer, highestStepReached >= 1 && styles.visible)}>
                             <FormField name="bride-name">
-                                <FormLabel className={styles.label} htmlFor="bride-name">신부 이름</FormLabel>
+                                <FormLabel htmlFor="bride-name">신부 이름</FormLabel>
                                 <FormControl asChild>
                                     <NameField
                                         id="bride-name"
@@ -329,7 +329,7 @@ const SetupForm = () => {
                                         required
                                     />
                                 </FormControl>
-                                <FormMessage className={styles.formMessage} match="valueMissing">
+                                <FormMessage match="valueMissing">
                                     신부 성함을 입력해주세요.
                                 </FormMessage>
                                 <FormMessage className={styles.formMessage} match={isInvalidNameMessage}>
@@ -341,7 +341,7 @@ const SetupForm = () => {
                         {/* 1. 신랑 이름 */}
                         <div className={cn(styles.fieldContainer, styles.visible)}>
                             <FormField name="groom-name">
-                                <FormLabel className={styles.label} htmlFor="groom-name">신랑 이름</FormLabel>
+                                <FormLabel htmlFor="groom-name">신랑 이름</FormLabel>
                                 <FormControl asChild>
                                     <NameField
                                         id="groom-name"
@@ -366,7 +366,7 @@ const SetupForm = () => {
                                         required
                                     />
                                 </FormControl>
-                                <FormMessage className={styles.formMessage} match="valueMissing">
+                                <FormMessage match="valueMissing">
                                     신랑 성함을 입력해주세요.
                                 </FormMessage>
                                 <FormMessage className={styles.formMessage} match={isInvalidNameMessage}>

@@ -36,12 +36,9 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
                 <div className={styles.formGroup}>
                     <div className={cn(styles.row, styles.full)}>
                         <FormField name="groom-name">
-                            <FormLabel className={styles.label} htmlFor="groom-name">
+                            <FormLabel htmlFor="groom-name">
                                 신랑
                             </FormLabel>
-                            <FormMessage className={styles.message} match="valueMissing">
-                                필수 항목이에요.
-                            </FormMessage>
                             <FormControl asChild>
                                 <NameField
                                     id="groom-name"
@@ -56,6 +53,9 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
                                     invalid={isInvalidName(groomFullName)}
                                 />
                             </FormControl>
+                            <FormMessage match="valueMissing">
+                                필수 항목이에요.
+                            </FormMessage>
                         </FormField>
                     </div>
 
@@ -123,12 +123,9 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
                 <div className={styles.formGroup}>
                     <div className={cn(styles.row, styles.full)}>
                         <FormField name="bride-name">
-                            <FormLabel className={styles.label} htmlFor="bride-name">
+                            <FormLabel htmlFor="bride-name">
                                 신부
                             </FormLabel>
-                            <FormMessage className={styles.message} match="valueMissing">
-                                필수 항목이에요.
-                            </FormMessage>
                             <FormControl asChild>
                                 <NameField
                                     id="bride-name"
@@ -143,6 +140,9 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
                                     invalid={isInvalidName(brideFullName)}
                                 />
                             </FormControl>
+                            <FormMessage match="valueMissing">
+                                필수 항목이에요.
+                            </FormMessage>
                         </FormField>
                     </div>
 
