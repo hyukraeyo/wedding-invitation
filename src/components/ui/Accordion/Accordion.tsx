@@ -67,7 +67,6 @@ const SectionAccordion = ({
   className,
   rightElement,
 }: SectionAccordionProps) => {
-  const activityMode = isOpen === false ? 'hidden' : 'visible';
 
   return (
     <Accordion
@@ -87,8 +86,8 @@ const SectionAccordion = ({
           </AccordionPrimitive.Header>
           {rightElement && <div className={s.SectionRightElement}>{rightElement}</div>}
         </div>
-        <AccordionContent className={s.SectionContent} forceMount>
-          <React.Activity mode={activityMode}>{children}</React.Activity>
+        <AccordionContent className={s.SectionContent}>
+          {children}
         </AccordionContent>
       </AccordionItem>
     </Accordion>

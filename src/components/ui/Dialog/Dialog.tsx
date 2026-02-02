@@ -135,7 +135,6 @@ const DialogContent = memo(React.forwardRef<
 >(({ className, children, ...props }, ref) => {
     const { isBottomSheet } = useContext(DialogContext);
     const internalRef = useRef<HTMLDivElement>(null);
-    const [isActive, setIsActive] = React.useState(true);
 
     const setRefs = useCallback((node: HTMLDivElement | null) => {
         (internalRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
@@ -146,21 +145,6 @@ const DialogContent = memo(React.forwardRef<
         }
     }, [ref]);
 
-    React.useEffect(() => {
-        const node = internalRef.current;
-        if (!node) return;
-
-        const updateState = () => {
-            const state = node.getAttribute('data-state');
-            setIsActive(state !== 'closed');
-        };
-
-        updateState();
-        const observer = new MutationObserver(updateState);
-        observer.observe(node, { attributes: true, attributeFilter: ['data-state'] });
-        return () => observer.disconnect();
-    }, []);
-
     const handleOpenAutoFocus = useCallback((event: Event) => {
         event.preventDefault();
         const focusableElements = internalRef.current?.querySelectorAll(
@@ -170,13 +154,6 @@ const DialogContent = memo(React.forwardRef<
             (focusableElements[0] as HTMLElement).focus();
         }
     }, []);
-
-    const activityContent = (
-        <React.Activity mode={isActive ? 'visible' : 'hidden'}>
-            {children}
-        </React.Activity>
-    );
-
     const content = isBottomSheet ? (
         <BottomSheet.Content
             ref={setRefs as React.Ref<HTMLDivElement>}
@@ -185,7 +162,7 @@ const DialogContent = memo(React.forwardRef<
             onOpenAutoFocus={handleOpenAutoFocus}
             {...props}
         >
-            {activityContent}
+            {children}
         </BottomSheet.Content>
     ) : (
         <DialogPrimitive.Content
@@ -207,7 +184,7 @@ const DialogContent = memo(React.forwardRef<
                     {props['aria-describedby'] || 'Dialog description'}
                 </DialogPrimitive.Description>
             </VisuallyHidden>
-            {activityContent}
+            {children}
         </DialogPrimitive.Content>
     );
 
