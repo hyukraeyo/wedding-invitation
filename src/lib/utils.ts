@@ -104,6 +104,8 @@ export function sanitizeKoreanName(
   const normalized = value.normalize('NFC');
   const allowedChars = [
     '가-힣',
+    '\u1100-\u11FF', // Hangul Jamo
+    '\u3130-\u318F', // Hangul Compatibility Jamo
     allowLatin ? 'A-Za-z' : '',
     allowSpace ? '\\s' : '',
     allowMiddleDot ? '·' : '',
