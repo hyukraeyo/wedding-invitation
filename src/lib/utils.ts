@@ -77,6 +77,49 @@ export function camelToKebab(str: string): string {
   return str.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
 }
 
+export interface KoreanNameSanitizeOptions {
+  allowSpace?: boolean;
+  allowMiddleDot?: boolean;
+  allowLatin?: boolean;
+  maxLength?: number | undefined;
+}
+
+export function isValidKoreanNameValue(value: string): boolean {
+  const trimmed = value.trim();
+  if (!trimmed) return false;
+  const hasInvalidJamo = /[\u1100-\u11FF\u3130-\u318F\uA960-\uA97F\uD7B0-\uD7FF]/.test(trimmed);
+  if (hasInvalidJamo) return false;
+  return /[가-힣A-Za-z]/.test(trimmed);
+}
+
+export function sanitizeKoreanName(
+  value: string,
+  {
+    allowSpace = false,
+    allowMiddleDot = true,
+    allowLatin = false,
+    maxLength,
+  }: KoreanNameSanitizeOptions = {}
+): string {
+  const normalized = value.normalize('NFC');
+  const allowedChars = [
+    '가-힣',
+    allowLatin ? 'A-Za-z' : '',
+    allowSpace ? '\\s' : '',
+    allowMiddleDot ? '·' : '',
+  ]
+    .filter(Boolean)
+    .join('');
+  const regex = new RegExp(`[${allowedChars}]`, 'g');
+  const filtered = (normalized.match(regex) ?? []).join('');
+  const collapsed = allowSpace ? filtered.replace(/\s+/g, ' ') : filtered;
+  const trimmed = allowSpace ? collapsed.replace(/^\s+/, '') : collapsed;
+  if (typeof maxLength === 'number' && maxLength >= 0) {
+    return trimmed.substring(0, maxLength);
+  }
+  return trimmed;
+}
+
 // Validation Utilities
 export function isValidEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

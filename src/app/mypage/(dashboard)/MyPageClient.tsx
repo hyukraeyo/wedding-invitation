@@ -17,6 +17,7 @@ import { parseRejection } from '@/lib/rejection-helpers';
 // import { signOut } from 'next-auth/react';
 
 import { useToast } from '@/hooks/use-toast';
+import { useRejectionReason } from '@/hooks/useRejectionReason';
 import {
     Banana,
     Plus,
@@ -43,8 +44,8 @@ const ProfileCompletionModal = dynamic(
 );
 import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
-const RejectionReasonModal = dynamic(
-    () => import('@/components/common/RejectionReasonModal'),
+const RichTextEditor = dynamic(
+    () => import('@/components/ui/RichTextEditor').then(mod => mod.RichTextEditor),
     { ssr: false }
 );
 const InvitationOnboardingModal = dynamic(
@@ -91,17 +92,12 @@ export default function MyPageClient({
     const [viewMode, setViewMode] = useState<'grid' | 'swiper'>('swiper');
     const [isViewModeReady, setIsViewModeReady] = useState(false);
 
-    // Persistence: Load view mode from localStorage on mount
     useEffect(() => {
-        const savedMode = localStorage.getItem('mypage-view-mode');
-        setViewMode(savedMode === 'grid' ? 'grid' : 'swiper');
         setIsViewModeReady(true);
     }, []);
 
-    // Persistence: Save view mode to localStorage when it changes
     const handleViewModeChange = useCallback((mode: 'grid' | 'swiper') => {
         setViewMode(mode);
-        localStorage.setItem('mypage-view-mode', mode);
     }, []);
 
     const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
@@ -131,6 +127,18 @@ export default function MyPageClient({
 
     const [onboardingModalOpen, setOnboardingModalOpen] = useState(false);
 
+    const handleRejectionSubmit = useCallback(() => {
+        // Not used in user view
+    }, []);
+
+    const rejectionReason = useRejectionReason({
+        onSubmit: handleRejectionSubmit,
+        onClose: () => {
+            setRejectionModalOpen(false);
+            setRejectionTarget(null);
+        },
+        loading: !!actionLoadingId,
+    });
 
     const reset = useInvitationStore(state => state.reset);
     const { toast } = useToast();
@@ -720,21 +728,48 @@ export default function MyPageClient({
             </Dialog>
 
             {rejectionTarget ? (
-                <RejectionReasonModal
-                    isOpen={rejectionModalOpen}
-                    onClose={() => {
-                        setRejectionModalOpen(false);
-                        setRejectionTarget(null);
+                <Dialog
+                    open={rejectionModalOpen}
+                    onOpenChange={(open) => {
+                        if (!open) rejectionReason.handleClose();
                     }}
-                    onSubmit={async () => {
-                        // Not used in user view
-                    }}
-                    loading={!!actionLoadingId}
-                    requesterName=""
-                    title="승인 취소"
-                    description={<></>}
-                    confirmText="승인 취소"
-                />
+                >
+                    <Dialog.Overlay />
+                    <Dialog.Content>
+                        <Dialog.Header title="승인 취소" />
+                        <Dialog.Body>
+                            <div className={styles.rejectionEditorWrapper}>
+                                <RichTextEditor
+                                    content={rejectionReason.reason}
+                                    onChange={rejectionReason.setReason}
+                                    placeholder="내용을 입력하세요…"
+                                    minHeight={180}
+                                />
+                            </div>
+                        </Dialog.Body>
+                        <Dialog.Footer className={styles.modalFooter}>
+                            <Button
+                                className={styles.flex1}
+                                variant="weak"
+                                size="lg"
+                                onClick={rejectionReason.handleClose}
+                                disabled={!!actionLoadingId}
+                            >
+                                취소
+                            </Button>
+                            <Button
+                                className={styles.flex1}
+                                variant="fill"
+                                size="lg"
+                                loading={!!actionLoadingId}
+                                disabled={rejectionReason.isSubmitDisabled}
+                                onClick={rejectionReason.handleSubmit}
+                            >
+                                승인 취소
+                            </Button>
+                        </Dialog.Footer>
+                    </Dialog.Content>
+                </Dialog>
             ) : null}
 
             {/* Auto-Notification Modal */}

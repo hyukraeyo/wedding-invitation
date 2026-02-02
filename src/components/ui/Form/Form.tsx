@@ -17,13 +17,17 @@ const Form = React.forwardRef<
 ));
 Form.displayName = FormPrimitive.Root.displayName;
 
+interface FormFieldProps extends React.ComponentPropsWithoutRef<typeof FormPrimitive.Field> {
+    floatingLabel?: boolean | undefined;
+}
+
 const FormField = React.forwardRef<
     React.ElementRef<typeof FormPrimitive.Field>,
-    React.ComponentPropsWithoutRef<typeof FormPrimitive.Field>
->(({ className, ...props }, ref) => (
+    FormFieldProps
+>(({ className, floatingLabel = true, ...props }, ref) => (
     <FormPrimitive.Field
         ref={ref}
-        className={clsx(s.FormField, className)}
+        className={clsx(s.FormField, floatingLabel && s.FloatingLabel, className)}
         {...props}
     />
 ));

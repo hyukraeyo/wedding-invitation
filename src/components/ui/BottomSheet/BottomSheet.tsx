@@ -64,6 +64,7 @@ const BottomSheetContent = React.forwardRef<
     BottomSheetContentProps & React.ComponentPropsWithoutRef<typeof Drawer.Content>
 >(({ className, variant = 'floating', children, ...props }, ref) => {
     const internalRef = React.useRef<HTMLDivElement>(null);
+    const [isActive, setIsActive] = React.useState(true);
 
     // Ref merging util
     const setRefs = React.useCallback((node: HTMLDivElement | null) => {
@@ -74,6 +75,21 @@ const BottomSheetContent = React.forwardRef<
             (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
         }
     }, [ref]);
+
+    React.useEffect(() => {
+        const node = internalRef.current;
+        if (!node) return;
+
+        const updateState = () => {
+            const state = node.getAttribute('data-state');
+            setIsActive(state !== 'closed');
+        };
+
+        updateState();
+        const observer = new MutationObserver(updateState);
+        observer.observe(node, { attributes: true, attributeFilter: ['data-state'] });
+        return () => observer.disconnect();
+    }, []);
 
     // 🍌 바텀시트 내부의 Swiper 등 제스처 충돌 요소에 대해 드래그 방지 속성 자동 부여
     React.useEffect(() => {
@@ -127,7 +143,9 @@ const BottomSheetContent = React.forwardRef<
                         {props['aria-describedby'] || 'Bottom sheet description'}
                     </Drawer.Description>
                 </VisuallyHidden>
-                {children}
+                <React.Activity mode={isActive ? 'visible' : 'hidden'}>
+                    {children}
+                </React.Activity>
             </div>
         </Drawer.Content>
     );
@@ -213,6 +231,8 @@ const BottomSheetLegacy = ({
     className,
     variant = 'floating'
 }: BottomSheetProps) => {
+    const activityMode = open === false ? 'hidden' : 'visible';
+
     return (
         <BottomSheetRoot open={open} onClose={onClose} onOpenChange={onOpenChange}>
             <BottomSheetPortal>
@@ -225,7 +245,9 @@ const BottomSheetLegacy = ({
                             <BottomSheetHeader>{header}</BottomSheetHeader>
                         )
                     )}
-                    {children}
+                    <React.Activity mode={activityMode}>
+                        {children}
+                    </React.Activity>
                     {cta && <BottomSheetFooter>{cta}</BottomSheetFooter>}
                 </BottomSheetContent>
             </BottomSheetPortal>

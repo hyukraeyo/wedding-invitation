@@ -1,4 +1,5 @@
 @use "../../styles/variables" as v;
+@use "../../styles/builder" as b;
 
 .container {
     display: flex;
@@ -6,8 +7,8 @@
     align-items: center;
     justify-content: flex-start;
     min-height: 100vh;
-    background-color: v.$grey-100;
-    padding-top: v.$header-height;
+    background-color: v.$grey-50; // Cleaner background
+    padding-top: calc(v.$header-height + 2rem);
 }
 
 .backButton {
@@ -46,8 +47,8 @@
     left: 0;
     width: 100%;
     opacity: 0;
-    transition: 
-        opacity 0.45s v.$ease-ios, 
+    transition:
+        opacity 0.45s v.$ease-ios,
         transform 0.5s v.$ease-ios;
     pointer-events: none;
     will-change: opacity;
@@ -64,54 +65,62 @@
 }
 
 .stepHeading {
+    font-size: v.$font-size-2xl;
     font-weight: 800;
-    line-height: 1.35;
+    line-height: 1.25;
     color: v.$grey-900;
     margin: 0;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.04em; // Tighter tracking for modern look
     word-break: keep-all;
 }
 
 // 전체 슬라이딩 창 (마스크 역할 제거하여 짤림 방지)
 .formWindow {
-    overflow: visible; // hidden에서 변경
+    overflow: visible;
     position: relative;
     width: 100%;
-    transition: height 1.5s v.$ease-ios;
+    transition: height 0.8s v.$ease-ios; // Faster transition
 }
 
 .form {
     display: flex;
     flex-direction: column;
-    transition: transform 1.5s v.$ease-ios;
+    transition: transform 0.8s v.$ease-ios; // Faster transition
     will-change: transform;
 }
 
-// 각 필드 컨테이너 (고정 높이 유지하여 잘림 방지)
+// 각 필드 컨테이너
 .fieldContainer {
-    height: 88px; // 78px (field) + 10px (extra space)
+    height: 112px; // Increased for better spacing
     opacity: 0;
-    transition: opacity 3s v.$ease-ios;
-    margin-bottom: 0px; // Transform으로 제어하므로 margin 제거
+    transition: opacity 0.8s v.$ease-ios, transform 0.8s v.$ease-ios;
+    transform: translateY(10px);
+    margin-bottom: 0px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
 
     &.visible {
         opacity: 1;
+        transform: translateY(0);
     }
 }
 
 .label {
     font-size: v.$font-size-sm;
-    font-weight: 500;
-    color: v.$grey-700;
-    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: v.$grey-600;
+    margin-bottom: 0.75rem;
+    margin-left: 4px;
     display: block;
+    letter-spacing: -0.01em;
+}
+
+.formMessage {
+    @include b.builder-form-message;
 }
 
 .whiteBox {
-    background-color: v.$white;
     padding: 2.5rem 1.5rem;
     width: 100%;
     max-width: v.$canvas-max-width;
@@ -134,8 +143,13 @@
 }
 
 @keyframes setupFadeInMobile {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .bottomCta {
@@ -158,4 +172,3 @@
     max-width: v.$canvas-max-width;
     z-index: 10;
 }
-

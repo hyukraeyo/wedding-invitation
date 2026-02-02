@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import { IconButton } from '@/components/ui/IconButton';
 import { isBlobUrl } from '@/lib/image';
 import { IMAGE_SIZES } from '@/constants/image';
+import { AspectRatio } from '@/components/ui/AspectRatio';
 import styles from './ImageUploader.module.scss';
 
 interface ImageUploaderProps {
@@ -119,21 +120,29 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                     {displayUrl ? (
                         <div className={cn(styles.previewWrapper, isAutoRatio ? styles.minHeight : styles.absoluteFull)}>
                             {!isAutoRatio ? (
-                                <div style={{ position: 'relative', width: '100%', aspectRatio: aspectRatio.replace('/', ' / ') }}>
-                                    <Image
-                                        src={displayUrl}
-                                        alt="Uploaded"
-                                        fill
-                                        className={cn(
-                                            styles.image,
-                                            isUploading && styles.uploading
-                                        )}
-                                        sizes={IMAGE_SIZES.builder}
-                                        priority
-                                        loading="eager"
-                                        unoptimized={shouldUnoptimize}
-                                    />
-                                </div>
+                                (() => {
+                                    const ratioParts = (aspectRatio || '16/9').split('/');
+                                    const w = Number(ratioParts[0]) || 16;
+                                    const h = Number(ratioParts[1]) || 9;
+                                    const r = w / h;
+                                    return (
+                                        <AspectRatio ratio={r} style={{ width: '100%' }}>
+                                            <Image
+                                                src={displayUrl}
+                                                alt="Uploaded"
+                                                fill
+                                                className={cn(
+                                                    styles.image,
+                                                    isUploading && styles.uploading
+                                                )}
+                                                sizes={IMAGE_SIZES.builder}
+                                                priority
+                                                loading="eager"
+                                                unoptimized={shouldUnoptimize}
+                                            />
+                                        </AspectRatio>
+                                    );
+                                })()
                             ) : (
                                 <Image
                                     src={displayUrl}

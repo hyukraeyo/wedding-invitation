@@ -1,0 +1,82 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+
+.root {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: v.$radius-md;
+    font-weight: 500;
+    transition: all 0.2s v.$ease-ios;
+    cursor: pointer;
+    user-select: none;
+    background: transparent;
+    border: 1px solid transparent;
+
+    &[data-state="on"] {
+        background-color: v.$banana-yellow;
+        color: v.$grey-900;
+
+        @include m.hover {
+            filter: brightness(0.95);
+        }
+    }
+
+    &[data-state="off"] {
+        background-color: v.$grey-50;
+        color: v.$grey-400;
+        border-color: v.$grey-100;
+
+        @include m.hover {
+            background-color: v.$grey-100;
+            color: v.$grey-500;
+        }
+    }
+
+    &:active {
+        transform: scale(0.96);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
+    // Variants
+    &.outline {
+        background-color: v.$white;
+        border: 1px solid v.$grey-200;
+
+        &[data-state="on"] {
+            border-color: v.$banana-yellow;
+            background-color: rgba(v.$banana-yellow, 0.1);
+            color: v.$yellow-900;
+        }
+    }
+
+    &.ghost {
+        &[data-state="off"] {
+            background-color: transparent;
+            border-color: transparent;
+        }
+    }
+
+    // Sizes
+    &.sm {
+        height: 32px;
+        padding: 0 10px;
+        font-size: v.$font-size-sm;
+    }
+
+    &.md {
+        height: 44px;
+        padding: 0 16px;
+        font-size: v.$font-size-md;
+    }
+
+    &.lg {
+        height: 52px;
+        padding: 0 20px;
+        font-size: v.$font-size-base;
+    }
+}

@@ -1,10 +1,12 @@
 import React, { useMemo, useCallback, useState, useRef } from 'react';
 import Image from 'next/image';
+import { AspectRatio } from '@/components/ui/AspectRatio';
 import { Plus, Trash2 } from 'lucide-react';
 import { InfoMessage } from '@/components/ui/InfoMessage';
 import { IconButton } from '@/components/ui/IconButton';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { TextField } from '@/components/ui/TextField';
+import { FormControl, FormField, FormLabel } from '@/components/ui/Form';
 import { Switch } from '@/components/ui/Switch';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { cn } from '@/lib/utils';
@@ -60,8 +62,9 @@ const SortableItem = React.memo(function SortableItem({ id, url, index, onRemove
     const isUploading = isBlobUrl(url);
 
     return (
-        <div
+        <AspectRatio
             ref={setNodeRef}
+            ratio={1 / 1}
             style={style}
             className={cn(
                 styles.sortableItem,
@@ -103,7 +106,7 @@ const SortableItem = React.memo(function SortableItem({ id, url, index, onRemove
             >
                 <Trash2 size={20} />
             </IconButton>
-        </div>
+        </AspectRatio>
     );
 });
 
@@ -247,24 +250,36 @@ export default React.memo(function GallerySectionContent() {
     return (
         <div className={styles.container}>
             <div className={styles.optionItem}>
-                <TextField
-
-                    label="소제목"
-                    type="text"
-                    value={gallerySubtitle}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGallerySubtitle(e.target.value)}
-                    placeholder="예: GALLERY"
-                />
+                <FormField name="gallery-subtitle">
+                    <FormLabel className={styles.formLabel} htmlFor="gallery-subtitle">
+                        소제목
+                    </FormLabel>
+                    <FormControl asChild>
+                        <TextField
+                            id="gallery-subtitle"
+                            type="text"
+                            value={gallerySubtitle}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGallerySubtitle(e.target.value)}
+                            placeholder="예: GALLERY"
+                        />
+                    </FormControl>
+                </FormField>
             </div>
             <div className={styles.optionItem}>
-                <TextField
-
-                    label="제목"
-                    type="text"
-                    value={galleryTitle}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGalleryTitle(e.target.value)}
-                    placeholder="예: 웨딩 갤러리"
-                />
+                <FormField name="gallery-title">
+                    <FormLabel className={styles.formLabel} htmlFor="gallery-title">
+                        제목
+                    </FormLabel>
+                    <FormControl asChild>
+                        <TextField
+                            id="gallery-title"
+                            type="text"
+                            value={galleryTitle}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGalleryTitle(e.target.value)}
+                            placeholder="예: 웨딩 갤러리"
+                        />
+                    </FormControl>
+                </FormField>
             </div>
 
             <div className={styles.optionItem}>
@@ -345,7 +360,7 @@ export default React.memo(function GallerySectionContent() {
                             })
                         }}>
                             {activeId && activeImage ? (
-                                <div className={styles.dragOverlayItem}>
+                                <AspectRatio ratio={1 / 1} className={styles.dragOverlayItem}>
                                     <Image
                                         src={activeImage.url}
                                         alt=""
@@ -353,7 +368,7 @@ export default React.memo(function GallerySectionContent() {
                                         unoptimized
                                         className={styles.image}
                                     />
-                                </div>
+                                </AspectRatio>
                             ) : null}
                         </DragOverlay>
                     </DndContext>

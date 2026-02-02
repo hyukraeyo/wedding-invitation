@@ -1,4 +1,5 @@
 @use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
 
 .drawerPadding {
     padding: 8px 0;
@@ -51,6 +52,10 @@
 
     &.navHidden {
         transform: translateY(100%);
+    }
+
+    @include m.desktop {
+        display: none;
     }
 }
 
@@ -176,6 +181,10 @@
 
     &:active {
         transform: scale(0.95);
+    }
+
+    @include m.desktop {
+        display: none;
     }
 }
 

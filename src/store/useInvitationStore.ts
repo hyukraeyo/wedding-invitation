@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
 
 // Selector helpers for optimized re-renders
 export const selectGroomInfo = (state: InvitationState) => ({
@@ -409,7 +408,7 @@ export const INITIAL_STATE = {
     hasNewRejection: false,
 };
 
-export const useInvitationStore = create<InvitationState>()(persist((set) => ({
+export const useInvitationStore = create<InvitationState>()((set) => ({
     ...INITIAL_STATE,
 
     setIsUploading: (uploading) => set({ isUploading: uploading }),
@@ -511,75 +510,4 @@ export const useInvitationStore = create<InvitationState>()(persist((set) => ({
     setIsRequestingApproval: (requesting) => set({ isRequestingApproval: requesting }),
     setHasNewRejection: (hasNewRejection) => set({ hasNewRejection }),
     reset: () => set(INITIAL_STATE),
-}), {
-    name: 'wedding-invitation-storage',
-    storage: createJSONStorage(() => ({
-        getItem: async (name: string): Promise<string | null> => {
-            const { get } = await import('idb-keyval');
-            return (await get(name)) || null;
-        },
-        setItem: async (name: string, value: string): Promise<void> => {
-            const { set } = await import('idb-keyval');
-            await set(name, value);
-        },
-        removeItem: async (name: string): Promise<void> => {
-            const { del } = await import('idb-keyval');
-            await del(name);
-        },
-    })),
-    // Merge function to handle new fields added to the store
-    merge: (persistedState, currentState) => {
-        const persisted = persistedState as Partial<InvitationState> & { _version?: number };
-        
-        // 버전이 다르면 저장된 상태를 무시하고 초기 상태 사용
-        // 버전을 올리면 모든 사용자의 저장된 데이터가 초기화됨
-        const CURRENT_VERSION = 3;
-        if (persisted._version !== CURRENT_VERSION) {
-            return currentState;
-        }
-        
-        return {
-            ...currentState,
-            ...persisted,
-            // Deep merge nested objects
-            mainScreen: {
-                ...currentState.mainScreen,
-                ...(persisted.mainScreen || {}),
-            },
-            theme: {
-                ...currentState.theme,
-                ...(persisted.theme || {}),
-            },
-            closing: {
-                ...currentState.closing,
-                ...(persisted.closing || {}),
-            },
-            kakaoShare: {
-                ...currentState.kakaoShare,
-                ...(persisted.kakaoShare || {}),
-            },
-            groom: {
-                ...currentState.groom,
-                ...(persisted.groom || {}),
-                parents: {
-                    ...currentState.groom.parents,
-                    ...(persisted.groom?.parents || {}),
-                },
-            },
-            bride: {
-                ...currentState.bride,
-                ...(persisted.bride || {}),
-                parents: {
-                    ...currentState.bride.parents,
-                    ...(persisted.bride?.parents || {}),
-                },
-            },
-        };
-    },
-    partialize: (state) => ({ 
-        ...state, 
-        _version: 3 
-    }),
-    // Removed partialize to allow gallery and images to be saved in IndexedDB
-    // IndexedDB has much higher limits than localStorage
 }));

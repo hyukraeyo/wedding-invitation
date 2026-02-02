@@ -25,14 +25,14 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
 
     return (
         <SectionAccordion
-            title="Theme & Color"
+            title="테마 및 색상"
             value="theme"
             isOpen={props.isOpen}
             onToggle={props.onToggle}
         >
             <div className={styles.container}>
                 <div className={styles.optionItem}>
-                    <div className={styles.rowTitle}>Accent color</div>
+                    <div className={styles.rowTitle}>강조색</div>
                     <div className={styles.optionWrapper}>
                         <div className={styles.colorPicker}>
                             {PRESET_COLORS.map((color) => (
@@ -57,46 +57,46 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
                 </div>
 
                 <div className={styles.optionItem}>
-                    <div className={styles.rowTitle}>Font</div>
+                    <div className={styles.rowTitle}>글꼴</div>
                     <MenuSelect
                         value={theme.font}
                         options={[
-                            { label: 'Gowun Dodum (Default)', value: 'gowun-dodum' as ThemeFont },
+                            { label: '고운돋움 (기본)', value: 'gowun-dodum' as ThemeFont },
                             { label: 'Pretendard', value: 'pretendard' as ThemeFont },
                             { label: 'Nanum Myeongjo', value: 'nanum-myeongjo' as ThemeFont },
-                            { label: 'Gowun Batang', value: 'gowun-batang' as ThemeFont },
-                            { label: 'Song Myung', value: 'song-myung' as ThemeFont },
-                            { label: 'Yeon Sung', value: 'yeon-sung' as ThemeFont },
-                            { label: 'Do Hyeon', value: 'do-hyeon' as ThemeFont },
-                            { label: 'Gmarket Sans', value: 'gmarket' as ThemeFont },
-                            { label: 'Serif', value: 'serif' as ThemeFont },
-                            { label: 'Sans', value: 'sans' as ThemeFont },
+                            { label: '고운바탕', value: 'gowun-batang' as ThemeFont },
+                            { label: '송명', value: 'song-myung' as ThemeFont },
+                            { label: '연성', value: 'yeon-sung' as ThemeFont },
+                            { label: '도현', value: 'do-hyeon' as ThemeFont },
+                            { label: '지마켓 산스', value: 'gmarket' as ThemeFont },
+                            { label: '세리프', value: 'serif' as ThemeFont },
+                            { label: '산세리프', value: 'sans' as ThemeFont },
                         ]}
                         onValueChange={(val: string) => setTheme({ font: val as ThemeFont })}
                     />
                 </div>
 
                 <div className={styles.optionItem}>
-                    <div className={styles.rowTitle}>Font scale</div>
+                    <div className={styles.rowTitle}>글자 크기</div>
                     <SegmentedControl
                         alignment="fluid"
                         value={String(theme.fontScale || '1')}
                         onChange={(val: string) => setTheme({ fontScale: Number(val) })}
                     >
                         <SegmentedControl.Item value="1">
-                            Default
+                            기본
                         </SegmentedControl.Item>
                         <SegmentedControl.Item value="1.1">
-                            Medium
+                            중간
                         </SegmentedControl.Item>
                         <SegmentedControl.Item value="1.2">
-                            Large
+                            크게
                         </SegmentedControl.Item>
                     </SegmentedControl>
                 </div>
 
                 <div className={styles.optionItem}>
-                    <div className={styles.rowTitle}>Allow guest font scaling</div>
+                    <div className={styles.rowTitle}>방문자 글자 크기 조절 허용</div>
                     <div className={styles.rowRight}>
                         <Switch
                             checked={theme.allowFontScale}
@@ -106,26 +106,26 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
                 </div>
 
                 <div className={styles.optionItem}>
-                    <div className={styles.rowTitle}>Background pattern</div>
+                    <div className={styles.rowTitle}>배경 패턴</div>
                     <SegmentedControl
                         alignment="fluid"
                         value={theme.pattern || 'none'}
                         onChange={(val: string) => setTheme({ pattern: val as 'none' | 'flower-sm' | 'flower-lg' })}
                     >
                         <SegmentedControl.Item value="none">
-                            None
+                            없음
                         </SegmentedControl.Item>
                         <SegmentedControl.Item value="flower-sm">
-                            Small floral
+                            작은 플라워
                         </SegmentedControl.Item>
                         <SegmentedControl.Item value="flower-lg">
-                            Large floral
+                            큰 플라워
                         </SegmentedControl.Item>
                     </SegmentedControl>
                 </div>
 
                 <div className={styles.optionItem}>
-                    <div className={styles.rowTitle}>Background color</div>
+                    <div className={styles.rowTitle}>배경색</div>
                     <div className={styles.optionWrapper}>
                         <div className={styles.colorPicker}>
                             {['#FFFFFF', '#FFECEF', '#F4F1EA', '#F2EBFA'].map((color) => (

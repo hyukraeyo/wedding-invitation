@@ -15,6 +15,7 @@ import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { Button } from '@/components/ui/Button';
 import { BottomCTA } from '@/components/ui/BottomCTA';
 import { ImageUploader } from '@/components/common/ImageUploader';
+import { FormControl, FormField, FormLabel } from '@/components/ui/Form';
 import styles from './GreetingSection.module.scss';
 import { useShallow } from 'zustand/react/shallow';
 import type { SectionProps, SamplePhraseItem } from '@/types/builder';
@@ -122,25 +123,37 @@ export default function GreetingSection(props: SectionProps) {
                     </div>
 
                     <div className={styles.optionItem}>
-                        <TextField
-
-                            label="소제목"
-                            type="text"
-                            value={greetingSubtitle}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGreetingSubtitle(e.target.value)}
-                            placeholder="예: INVITATION"
-                        />
+                        <FormField name="greeting-subtitle">
+                            <FormLabel className={styles.formLabel} htmlFor="greeting-subtitle">
+                                소제목
+                            </FormLabel>
+                            <FormControl asChild>
+                                <TextField
+                                    id="greeting-subtitle"
+                                    type="text"
+                                    value={greetingSubtitle}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGreetingSubtitle(e.target.value)}
+                                    placeholder="예: INVITATION"
+                                />
+                            </FormControl>
+                        </FormField>
                     </div>
 
                     <div className={styles.optionItem}>
-                        <TextField
-
-                            label="제목"
-                            type="text"
-                            value={greetingTitle}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGreetingTitle(e.target.value)}
-                            placeholder="예: 소중한 분들을 초대합니다"
-                        />
+                        <FormField name="greeting-title">
+                            <FormLabel className={styles.formLabel} htmlFor="greeting-title">
+                                제목
+                            </FormLabel>
+                            <FormControl asChild>
+                                <TextField
+                                    id="greeting-title"
+                                    type="text"
+                                    value={greetingTitle}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGreetingTitle(e.target.value)}
+                                    placeholder="예: 소중한 분들을 초대합니다"
+                                />
+                            </FormControl>
+                        </FormField>
                     </div>
 
                     <div className={styles.optionItem}>
@@ -188,20 +201,32 @@ export default function GreetingSection(props: SectionProps) {
 
                             {enableFreeformNames && (
                                 <div className={styles.nameForm}>
-                                    <TextField
-
-                                        label="신랑 측 표기"
-                                        value={groomNameCustom}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGroomNameCustom(e.target.value)}
-                                        placeholder="예: 아버지 홍길동 · 어머니 김철수 의 장남 길동"
-                                    />
-                                    <TextField
-
-                                        label="신부 측 표기"
-                                        value={brideNameCustom}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBrideNameCustom(e.target.value)}
-                                        placeholder="예: 아버지 임걱정 · 어머니 박순이 의 장녀 순희"
-                                    />
+                                    <FormField name="groom-name-custom">
+                                        <FormLabel className={styles.formLabel} htmlFor="groom-name-custom">
+                                            신랑 측 표기
+                                        </FormLabel>
+                                        <FormControl asChild>
+                                            <TextField
+                                                id="groom-name-custom"
+                                                value={groomNameCustom}
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGroomNameCustom(e.target.value)}
+                                                placeholder="예: 아버지 홍길동 · 어머니 김철수 의 장남 길동"
+                                            />
+                                        </FormControl>
+                                    </FormField>
+                                    <FormField name="bride-name-custom">
+                                        <FormLabel className={styles.formLabel} htmlFor="bride-name-custom">
+                                            신부 측 표기
+                                        </FormLabel>
+                                        <FormControl asChild>
+                                            <TextField
+                                                id="bride-name-custom"
+                                                value={brideNameCustom}
+                                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBrideNameCustom(e.target.value)}
+                                                placeholder="예: 아버지 임걱정 · 어머니 박순이 의 장녀 순희"
+                                            />
+                                        </FormControl>
+                                    </FormField>
                                     <InfoMessage>
                                         기본 이름 표기 대신 사용자가 직접 작성한 문구로 이름을 표시합니다.
                                     </InfoMessage>

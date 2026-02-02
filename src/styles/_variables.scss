@@ -461,6 +461,13 @@ $ease-in-out: ease-in-out;
 $ease-linear: linear;
 
 // ============================================
+// Motion Tokens
+// ============================================
+$motion-label-duration: 350ms;
+$motion-label-ease: $ease-ios;
+$motion-label-offset: 4px;
+
+// ============================================
 // Popup Animation Tokens
 // ============================================
 // Timing

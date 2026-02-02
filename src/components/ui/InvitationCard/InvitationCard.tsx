@@ -15,6 +15,7 @@ import { Dialog } from '@/components/ui/Dialog';
 import { useInvitationStatus } from '@/hooks/useInvitationStatus';
 import { InvitationActionMenu } from '@/components/common/InvitationActionMenu';
 import { clsx } from 'clsx';
+import { AspectRatio } from '@/components/ui/AspectRatio';
 
 interface InvitationCardProps {
     invitation: InvitationSummaryRecord;
@@ -74,7 +75,7 @@ const InvitationCard = React.memo(({
         <div className={styles.cardWrapper}>
             <div className={styles.cardItem}>
                 {imageUrl ? (
-                    <div className={styles.imageWrapper}>
+                    <AspectRatio ratio={3 / 4.5} className={styles.imageWrapper}>
                         <Image
                             src={imageUrl}
                             alt={title}
@@ -83,7 +84,7 @@ const InvitationCard = React.memo(({
                             priority={index !== undefined ? index < 2 : invitation.invitation_data?.isApproved}
                             style={{ objectFit: 'cover' }}
                         />
-                    </div>
+                    </AspectRatio>
                 ) : (
                     <div className={styles.fallbackWrapper}>
                         <Banana className={styles.bananaIcon} />

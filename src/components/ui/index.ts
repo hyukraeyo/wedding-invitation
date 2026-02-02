@@ -14,6 +14,7 @@ export * from './Textarea';
 export * from './IconButton';
 export * from './TextButton';
 export * from './Badge';
+export * from './Toggle';
 export * from './Dialog';
 export * from './AlertDialog';
 export * from './BottomSheet';

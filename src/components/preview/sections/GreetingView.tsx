@@ -8,6 +8,7 @@ import { clsx } from 'clsx';
 import styles from './GreetingView.module.scss';
 import { IMAGE_SIZES } from '@/constants/image';
 import { isBlobUrl } from '@/lib/image';
+import { AspectRatio } from '@/components/ui/AspectRatio';
 
 interface Person {
     lastName: string;
@@ -118,7 +119,7 @@ const GreetingView = memo(({
                 {greetingImage ? (
                     <div className={clsx(styles.imageContainer, styles[greetingRatio])}>
                         {greetingRatio === 'fixed' ? (
-                            <div style={{ position: 'relative', width: '100%', aspectRatio: '800 / 550' }}>
+                            <AspectRatio ratio={800 / 550}>
                                 <Image
                                     src={greetingImage}
                                     alt="인사말 이미지"
@@ -132,7 +133,7 @@ const GreetingView = memo(({
                                     loading="eager"
                                     unoptimized={isBlobUrl(greetingImage)}
                                 />
-                            </div>
+                            </AspectRatio>
                         ) : (
                             <Image
                                 src={greetingImage}

@@ -10,6 +10,35 @@
 
 .FormLabel {
   font-family: inherit;
+  font-size: v.$font-size-sm;
+  font-weight: 500;
+  color: v.$grey-700;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.FloatingLabel {
+  .FormLabel {
+    opacity: 0;
+    transform: translateY(v.$motion-label-offset);
+    transition: opacity v.$motion-label-duration v.$motion-label-ease,
+      transform v.$motion-label-duration v.$motion-label-ease;
+  }
+
+  &:has(input:not(:placeholder-shown)) .FormLabel,
+  &:has(button:not(.placeholder)) .FormLabel {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@supports not selector(:has(*)) {
+  .FloatingLabel {
+    .FormLabel {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }
 
 .FormMessage {

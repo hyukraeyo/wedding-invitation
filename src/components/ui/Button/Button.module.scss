@@ -10,49 +10,72 @@
   border: none;
   isolation: isolate;
   box-shadow: none; // 모든 버튼 쉐도우 제거
-  
+
   @include m.hover {
     box-shadow: none;
   }
-  
+
   // Sizes (Radix UI Themes Mapping: 1=xs, 2=sm/md, 3=lg, 4=xl)
-  &.xl, &.large_xl, &.size_4 {
+  &.xl,
+  &.large_xl,
+  &.size_4 {
     height: v.$control-height-xl;
     padding: 0 24px;
     font-size: v.$font-size-base;
   }
-  
-  &.lg, &.large, &.size_3 {
+
+  &.lg,
+  &.large,
+  &.size_3 {
     height: v.$control-height-lg;
     padding: 0 20px;
     font-size: v.$font-size-base;
   }
-  
-  &.md, &.medium, &.size_2 {
+
+  &.md,
+  &.medium,
+  &.size_2 {
     height: v.$control-height-md;
     padding: 0 16px;
     font-size: v.$font-size-md;
   }
-  
-  &.sm, &.small {
+
+  &.sm,
+  &.small {
     height: v.$control-height-sm;
     padding: 0 12px;
     font-size: v.$font-size-sm;
   }
-  
-  &.xs, &.tiny, &.size_1 {
+
+  &.xs,
+  &.tiny,
+  &.size_1 {
     height: v.$control-height-xs;
     padding: 0 8px;
     font-size: v.$font-size-xs;
   }
-  
+
   // Radius
-  &.radius_none { border-radius: 0; }
-  &.radius_small { border-radius: v.$radius-sm; }
-  &.radius_medium { border-radius: v.$radius-md; }
-  &.radius_large { border-radius: v.$radius-lg; }
-  &.radius_full { border-radius: v.$radius-full; }
-  
+  &.radius_none {
+    border-radius: 0;
+  }
+
+  &.radius_small {
+    border-radius: v.$radius-sm;
+  }
+
+  &.radius_medium {
+    border-radius: v.$radius-md;
+  }
+
+  &.radius_large {
+    border-radius: v.$radius-lg;
+  }
+
+  &.radius_full {
+    border-radius: v.$radius-full;
+  }
+
   // Default radius if not specified
   &:not([class*="radius_"]) {
     border-radius: v.$radius-md;
@@ -65,14 +88,14 @@
     --btn-weak-bg: #{rgba(v.$banana-yellow, 0.15)};
     --btn-weak-text: #{v.$yellow-900};
     --btn-outline: #{v.$banana-yellow};
-    
+
     &.highContrast {
       --btn-bg: #{v.$yellow-700};
       --btn-text: #{v.$white};
       --btn-weak-bg: #{rgba(v.$banana-yellow, 0.25)};
     }
   }
-  
+
   &.secondary {
     --btn-bg: #{v.$grey-100};
     --btn-text: #{v.$grey-800};
@@ -85,7 +108,7 @@
       --btn-text: #{v.$white};
     }
   }
-  
+
   &.danger {
     --btn-bg: #{v.$red-500};
     --btn-text: #{v.$white};
@@ -99,54 +122,97 @@
   }
 
   // Variants (Style)
-  &.filled, &.fill, &.solid {
+  &.filled,
+  &.fill,
+  &.solid {
     background-color: var(--btn-bg);
     color: var(--btn-text);
-    
+
     @include m.hover {
       filter: brightness(0.95);
     }
   }
-  
-  &.weak, &.soft {
+
+  &.weak,
+  &.soft {
     background-color: var(--btn-weak-bg);
     color: var(--btn-weak-text);
-    
+
     @include m.hover {
       background-color: color-mix(in srgb, var(--btn-weak-bg), black 5%);
     }
   }
-  
+
   &.outline {
     background-color: transparent;
     border: 1.5px solid var(--btn-outline);
     color: var(--btn-weak-text);
-    
+
     @include m.hover {
       background-color: rgba(0, 0, 0, 0.02);
     }
   }
-  
-  &.ghost, &.clear {
+
+  &.ghost,
+  &.clear {
     background-color: transparent;
     color: var(--btn-weak-text);
-    
+
     @include m.hover {
       background-color: rgba(0, 0, 0, 0.04);
     }
   }
-  
+
+  &.apple {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 100%), var(--btn-bg);
+    color: var(--btn-text);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.05),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+    @include m.hover {
+      filter: brightness(1.05);
+    }
+
+    &:active:not(:disabled) {
+      transform: scale(0.98);
+      filter: brightness(0.92);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+  }
+
+  &.toss {
+    background-color: var(--btn-bg);
+    color: var(--btn-text);
+    border-radius: 18px;
+    font-weight: 700;
+    height: 60px;
+    font-size: v.$font-size-base;
+    letter-spacing: -0.02em;
+
+    @include m.hover {
+      filter: brightness(1.03);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    &:active:not(:disabled) {
+      transform: scale(0.96);
+      filter: brightness(0.94);
+    }
+  }
+
   // Custom Styles
   &.fullWidth {
     width: 100%;
   }
-  
+
   // States
   &:active:not(:disabled) {
     transform: scale(0.96);
     box-shadow: none;
   }
-  
+
   &:disabled {
     opacity: 0.4;
     cursor: not-allowed;
@@ -156,7 +222,7 @@
   &.isLoading {
     color: transparent !important;
     pointer-events: none;
-    
+
     .spinner {
       position: absolute;
       top: 50%;
@@ -165,31 +231,32 @@
       display: flex;
       color: currentColor; // This will use the button's text color (when not transparent)
       // Actually we need the spinner to be visible while text is transparent
-      
+
       &::after {
         content: "";
         width: 1.2em;
         height: 1.2em;
-        border: 2px solid rgba(0,0,0,0.1);
+        border: 2px solid rgba(0, 0, 0, 0.1);
         border-top-color: var(--btn-text);
         border-radius: 50%;
         animation: spin 0.6s linear infinite;
       }
     }
-    
+
     &.weak {
       .spinner::after {
         border-top-color: var(--btn-weak-text);
       }
     }
 
-    &.outline, &.ghost {
-       .spinner::after {
+    &.outline,
+    &.ghost {
+      .spinner::after {
         border-top-color: var(--btn-weak-text);
       }
     }
   }
-  
+
   // Icon Support
   .icon {
     display: inline-flex;
@@ -200,5 +267,7 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }

@@ -1,16 +1,17 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { Sparkles } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useInvitationStore } from '@/store/useInvitationStore';
-import { useHeaderStore } from '@/store/useHeaderStore';
-import { TextField, Heading, Flex, Box, Form, FormField, FormLabel, FormControl, Card, Skeleton } from '@/components/ui';
 import { DatePicker } from '@/components/common/DatePicker';
 import { TimePicker } from '@/components/common/TimePicker';
-import { Sparkles } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
-import { parseKoreanName, cn } from '@/lib/utils';
 import { BottomCTA } from '@/components/ui/BottomCTA';
+import { Heading, Flex, Box, Form, FormField, FormLabel, FormControl, FormMessage, Card, Skeleton, VisuallyHidden } from '@/components/ui';
+import { NameField } from '@/components/common/NameField';
+import { useToast } from '@/hooks/use-toast';
+import { parseKoreanName, cn, isValidKoreanNameValue } from '@/lib/utils';
+import { useHeaderStore } from '@/store/useHeaderStore';
+import { useInvitationStore } from '@/store/useInvitationStore';
 import styles from './SetupForm.module.scss';
 
 const STEPS = [
@@ -42,19 +43,8 @@ const SetupForm = () => {
     const dateRef = useRef<HTMLButtonElement>(null);
     const timeRef = useRef<HTMLButtonElement>(null);
 
-    // 🍌 새로고침 시 데이터 초기화 및 로컬 상태 동기화
+    // 🍌 초기 진입 시 데이터 초기화 및 로컬 상태 동기화
     useEffect(() => {
-        // IndexedDB에서 저장된 데이터 직접 삭제
-        const clearPersistedData = async () => {
-            try {
-                const { del } = await import('idb-keyval');
-                await del('wedding-invitation-storage');
-            } catch (e) {
-                console.error('Failed to clear storage:', e);
-            }
-        };
-
-        clearPersistedData();
         reset();
         // reset 후 로컬 상태도 초기화
         setGroomFullName('');
@@ -67,8 +57,8 @@ const SetupForm = () => {
 
     const isStepValid = useCallback(() => {
         switch (currentStep) {
-            case 0: return groomFullName.trim().length > 0;
-            case 1: return brideFullName.trim().length > 0;
+            case 0: return isValidKoreanNameValue(groomFullName);
+            case 1: return isValidKoreanNameValue(brideFullName);
             case 2: return !!date;
             case 3: return !!time;
             default: return false;
@@ -76,6 +66,12 @@ const SetupForm = () => {
     }, [currentStep, groomFullName, brideFullName, date, time]);
 
     const progress = Math.round(((currentStep + 1) / STEPS.length) * 100);
+
+    const isInvalidNameMessage = useCallback((value: string) => {
+        const trimmed = value.trim();
+        if (!trimmed) return false;
+        return !isValidKoreanNameValue(trimmed);
+    }, []);
 
     const handleBack = useCallback(() => {
         if (currentStep > 0) {
@@ -99,8 +95,14 @@ const SetupForm = () => {
 
     useEffect(() => {
         if (!isHydrated) return;
-        if (currentStep === 0) groomNameRef.current?.focus();
-        else if (currentStep === 1) brideNameRef.current?.focus();
+
+        // 🍌 IME 입력을 마무리하고 포커스를 이동하기 위해 미세한 지연 시간 추가
+        const timer = setTimeout(() => {
+            if (currentStep === 0) groomNameRef.current?.focus();
+            else if (currentStep === 1) brideNameRef.current?.focus();
+        }, 30);
+
+        return () => clearTimeout(timer);
     }, [currentStep, isHydrated]);
 
     // 초기화 완료 전에는 스켈레톤 표시
@@ -111,10 +113,10 @@ const SetupForm = () => {
                     <Box className={styles.headerContent}>
                         <Skeleton width="60%" height="84px" style={{ borderRadius: '12px' }} />
                     </Box>
-                    <div className={styles.formWindow} style={{ height: '88px' }}>
+                    <div className={styles.formWindow} style={{ height: '112px' }}>
                         <div className={styles.fieldContainer} style={{ opacity: 1 }}>
                             <Skeleton width="80px" height="18px" style={{ marginBottom: '0.5rem' }} />
-                            <Skeleton width="100%" height="48px" style={{ borderRadius: '12px' }} />
+                            <Skeleton width="100%" height="60px" style={{ borderRadius: '16px' }} />
                         </div>
                     </div>
                 </Card>
@@ -124,7 +126,12 @@ const SetupForm = () => {
 
     const handleNext = (isAuto = false) => {
         if (!isStepValid()) {
-            if (!isAuto) toast({ variant: 'destructive', description: "정보를 입력해주세요." });
+            if (!isAuto) {
+                const description = (currentStep === 0 || currentStep === 1)
+                    ? "이름을 정확히 입력해주세요."
+                    : "정보를 입력해주세요.";
+                toast({ variant: 'destructive', description });
+            }
             return;
         }
 
@@ -167,6 +174,7 @@ const SetupForm = () => {
         handleNext();
     };
 
+
     return (
         <Box className={styles.container}>
             <Card variant="ghost" className={styles.whiteBox}>
@@ -194,20 +202,23 @@ const SetupForm = () => {
 
                 <div
                     className={styles.formWindow}
-                    style={{ height: `${(highestStepReached + 1) * 88}px` }}
+                    style={{ height: `${(highestStepReached + 1) * 112}px` }}
                 >
                     <Form
                         onSubmit={handleSubmit}
                         className={styles.form}
                         style={{
                             gap: 0,
-                            transform: `translateY(${(3 - highestStepReached) * -88}px)`
+                            transform: `translateY(${(3 - highestStepReached) * -112}px)`
                         }}
                     >
                         {/* 4. 예식 시간 */}
                         <div className={cn(styles.fieldContainer, highestStepReached >= 3 && styles.visible)}>
                             <FormField name="wedding-time">
                                 <FormLabel className={styles.label} htmlFor="wedding-time">예식 시간</FormLabel>
+                                <FormMessage className={styles.formMessage} match="valueMissing">
+                                    예식 시간을 선택해주세요.
+                                </FormMessage>
                                 <FormControl asChild>
                                     <TimePicker
                                         id="wedding-time"
@@ -215,7 +226,7 @@ const SetupForm = () => {
                                         value={time}
                                         open={isTimePickerOpen}
                                         onOpenChange={setIsTimePickerOpen}
-                                        variant="surface"
+                                        variant="toss"
                                         radius="large"
                                         placeholder="예식 시간을 선택해주세요"
                                         onChange={setTime}
@@ -225,6 +236,16 @@ const SetupForm = () => {
                                         }}
                                     />
                                 </FormControl>
+                                <FormControl asChild>
+                                    <VisuallyHidden asChild>
+                                        <input
+                                            required
+                                            readOnly
+                                            aria-label="예식 시간"
+                                            value={time || ''}
+                                        />
+                                    </VisuallyHidden>
+                                </FormControl>
                             </FormField>
                         </div>
 
@@ -232,6 +253,9 @@ const SetupForm = () => {
                         <div className={cn(styles.fieldContainer, highestStepReached >= 2 && styles.visible)}>
                             <FormField name="wedding-date">
                                 <FormLabel className={styles.label} htmlFor="wedding-date">예식 날짜</FormLabel>
+                                <FormMessage className={styles.formMessage} match="valueMissing">
+                                    예식 날짜를 선택해주세요.
+                                </FormMessage>
                                 <FormControl asChild>
                                     <DatePicker
                                         id="wedding-date"
@@ -239,7 +263,7 @@ const SetupForm = () => {
                                         value={date}
                                         open={isDatePickerOpen}
                                         onOpenChange={setIsDatePickerOpen}
-                                        variant="surface"
+                                        variant="toss"
                                         radius="large"
                                         placeholder="예식 날짜를 선택해주세요"
                                         onChange={(val) => {
@@ -256,6 +280,16 @@ const SetupForm = () => {
                                         disabled={false}
                                     />
                                 </FormControl>
+                                <FormControl asChild>
+                                    <VisuallyHidden asChild>
+                                        <input
+                                            required
+                                            readOnly
+                                            aria-label="예식 날짜"
+                                            value={date || ''}
+                                        />
+                                    </VisuallyHidden>
+                                </FormControl>
                             </FormField>
                         </div>
 
@@ -264,17 +298,21 @@ const SetupForm = () => {
                             <FormField name="bride-name">
                                 <FormLabel className={styles.label} htmlFor="bride-name">신부 이름</FormLabel>
                                 <FormControl asChild>
-                                    <TextField
+                                    <NameField
                                         id="bride-name"
                                         ref={brideNameRef}
-                                        value={brideFullName}
                                         readOnly={currentStep !== 1}
-                                        variant="surface"
+                                        variant="toss"
                                         radius="large"
                                         placeholder="신부 성함을 입력해주세요"
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBrideFullName(e.target.value)}
+                                        value={brideFullName}
+                                        onValueChange={setBrideFullName}
+                                        allowSpace
+                                        allowMiddleDot
+                                        allowLatin
+                                        invalid={brideFullName.trim().length > 0 && !isValidKoreanNameValue(brideFullName)}
                                         onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                                            if (e.key === 'Enter' && currentStep === 1 && brideFullName.trim()) {
+                                            if (e.key === 'Enter' && currentStep === 1 && isValidKoreanNameValue(brideFullName)) {
                                                 e.preventDefault();
                                                 handleNext();
                                             }
@@ -283,6 +321,12 @@ const SetupForm = () => {
                                         required
                                     />
                                 </FormControl>
+                                <FormMessage className={styles.formMessage} match="valueMissing">
+                                    신부 성함을 입력해주세요.
+                                </FormMessage>
+                                <FormMessage className={styles.formMessage} match={isInvalidNameMessage}>
+                                    이름을 정확히 입력해주세요.
+                                </FormMessage>
                             </FormField>
                         </div>
 
@@ -291,17 +335,21 @@ const SetupForm = () => {
                             <FormField name="groom-name">
                                 <FormLabel className={styles.label} htmlFor="groom-name">신랑 이름</FormLabel>
                                 <FormControl asChild>
-                                    <TextField
+                                    <NameField
                                         id="groom-name"
                                         ref={groomNameRef}
-                                        value={groomFullName}
                                         readOnly={currentStep !== 0}
-                                        variant="surface"
+                                        variant="toss"
                                         radius="large"
-                                        placeholder="신랑 성함을 입력해주세요"
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGroomFullName(e.target.value)}
+                                        placeholder="신랑 이름"
+                                        value={groomFullName}
+                                        onValueChange={setGroomFullName}
+                                        allowSpace
+                                        allowMiddleDot
+                                        allowLatin
+                                        invalid={groomFullName.trim().length > 0 && !isValidKoreanNameValue(groomFullName)}
                                         onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                                            if (e.key === 'Enter' && currentStep === 0 && groomFullName.trim()) {
+                                            if (e.key === 'Enter' && currentStep === 0 && isValidKoreanNameValue(groomFullName)) {
                                                 e.preventDefault();
                                                 handleNext();
                                             }
@@ -310,6 +358,12 @@ const SetupForm = () => {
                                         required
                                     />
                                 </FormControl>
+                                <FormMessage className={styles.formMessage} match="valueMissing">
+                                    신랑 성함을 입력해주세요.
+                                </FormMessage>
+                                <FormMessage className={styles.formMessage} match={isInvalidNameMessage}>
+                                    이름을 정확히 입력해주세요.
+                                </FormMessage>
                             </FormField>
                         </div>
                     </Form>
@@ -326,6 +380,7 @@ const SetupForm = () => {
                             wrapperClassName={styles.bottomCta}
                             onClick={() => handleNext()}
                             animated={true}
+                            buttonVariant="toss"
                         >
                             {highestStepReached < 3 ? (
                                 <span>다음</span>

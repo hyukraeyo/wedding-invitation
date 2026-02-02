@@ -374,6 +374,14 @@
     line-height: 1.6;
 }
 
+.rejectionEditorWrapper {
+    margin-top: 1rem;
+    width: 100%;
+    background-color: v.$white;
+    overflow: hidden;
+    transition: all v.$transition-200 v.$ease-standard;
+}
+
 .modalFooter {
     display: flex;
     gap: 8px;

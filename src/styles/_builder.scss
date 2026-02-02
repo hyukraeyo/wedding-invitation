@@ -121,6 +121,13 @@ $builder-font-xl: 17px;
   min-width: 3.5rem;
 }
 
+@mixin builder-form-message {
+  color: v.$red-500;
+  font-size: 12px;
+  line-height: 1.5;
+  margin-top: 6px;
+}
+
 @mixin builder-input-base {
   @include m.input-base;
 

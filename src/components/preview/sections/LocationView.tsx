@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/Button';
 import styles from './LocationView.module.scss';
 import { IMAGE_SIZES } from '@/constants/image';
 import { isBlobUrl } from '@/lib/image';
+import { AspectRatio } from '@/components/ui/AspectRatio';
 
 interface LocationViewProps {
     id?: string | undefined;
@@ -119,7 +120,7 @@ const LocationView = memo(({
 
             {showMap ? (
                 <div className={clsx(styles.mapContainer, mapHeight === 'expanded' && styles.expanded)}>
-                    <div style={{ position: 'relative', width: '100%', aspectRatio: mapHeight === 'expanded' ? 1.25 : 16 / 10 }}>
+                    <AspectRatio ratio={mapHeight === 'expanded' ? 1.25 : 16 / 10}>
                         {mapType === 'naver' ? (
                             <NaverMapContainer
                                 key={`naver-${lat}-${lng}`}
@@ -137,7 +138,7 @@ const LocationView = memo(({
                                 lockMap={lockMap}
                             />
                         )}
-                    </div>
+                    </AspectRatio>
                 </div>
             ) : null}
 
@@ -182,7 +183,7 @@ const LocationView = memo(({
             {sketchUrl ? (
                 <div className={clsx(styles.sketchContainer, styles[sketchRatio])}>
                     {sketchRatio === 'fixed' ? (
-                        <div style={{ position: 'relative', width: '100%', aspectRatio: '4/3' }}>
+                        <AspectRatio ratio={4 / 3}>
                             <Image
                                 src={sketchUrl}
                                 alt="약도"
@@ -194,7 +195,7 @@ const LocationView = memo(({
                                 }}
                                 unoptimized={isBlobUrl(sketchUrl)}
                             />
-                        </div>
+                        </AspectRatio>
                     ) : (
                         <Image
                             src={sketchUrl}

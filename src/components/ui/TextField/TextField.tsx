@@ -6,7 +6,7 @@ import s from './TextField.module.scss';
 
 // --- Context for sharing props between Root and Input/Slot ---
 type TextFieldSize = '1' | '2' | '3';
-type TextFieldVariant = 'surface' | 'classic' | 'soft';
+type TextFieldVariant = 'surface' | 'classic' | 'soft' | 'apple' | 'toss';
 type TextFieldRadius = 'none' | 'small' | 'medium' | 'large' | 'full';
 
 interface TextFieldContextValue {
@@ -26,11 +26,12 @@ export interface TextFieldRootProps extends React.HTMLAttributes<HTMLDivElement>
     radius?: TextFieldRadius | undefined;
     highContrast?: boolean | undefined;
     disabled?: boolean | undefined;
+    invalid?: boolean | undefined;
     className?: string | undefined;
 }
 
 const TextFieldRoot = React.forwardRef<HTMLDivElement, TextFieldRootProps>(
-    ({ className, size = '2', variant = 'surface', radius = 'medium', highContrast = false, disabled = false, ...props }, ref) => {
+    ({ className, size = '2', variant = 'surface', radius = 'medium', highContrast = false, disabled = false, invalid = false, ...props }, ref) => {
         return (
             <TextFieldContext.Provider value={{ size, variant, radius, disabled }}>
                 <div
@@ -41,6 +42,7 @@ const TextFieldRoot = React.forwardRef<HTMLDivElement, TextFieldRootProps>(
                         s[variant],
                         s[`radius_${radius}`],
                         highContrast && s.highContrast,
+                        invalid && s.invalid,
                         disabled && s.disabled,
                         className
                     )}
@@ -139,19 +141,20 @@ export interface TextFieldProps extends Omit<TextFieldInputProps, 'size'> {
     variant?: TextFieldVariant | undefined;
     size?: TextFieldSize | undefined;
     radius?: TextFieldRadius | undefined;
+    invalid?: boolean | undefined;
     leftSlot?: React.ReactNode | undefined;
     rightSlot?: React.ReactNode | undefined;
 }
 
 const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
-    ({ label, variant = 'surface', size = '2', radius = 'medium', leftSlot, rightSlot, className, id, ...props }, ref) => {
+    ({ label, variant = 'surface', size = '2', radius = 'medium', invalid = false, leftSlot, rightSlot, className, id, ...props }, ref) => {
         const generatedId = React.useId();
         const inputId = id || generatedId;
 
         const input = (
-            <TextFieldRoot variant={variant} size={size} radius={radius} className={className}>
+            <TextFieldRoot variant={variant} size={size} radius={radius} invalid={invalid} className={className}>
                 {leftSlot && <TextFieldSlot side="left">{leftSlot}</TextFieldSlot>}
-                <TextFieldInput ref={ref} id={inputId} {...props} />
+                <TextFieldInput ref={ref} id={inputId} aria-invalid={invalid || undefined} {...props} />
                 {rightSlot && <TextFieldSlot side="right">{rightSlot}</TextFieldSlot>}
             </TextFieldRoot>
         );

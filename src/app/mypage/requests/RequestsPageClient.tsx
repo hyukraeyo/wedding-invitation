@@ -1,6 +1,5 @@
 "use client";
 
-import { parseRejection } from '@/lib/rejection-helpers';
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/navigation';
@@ -9,6 +8,7 @@ import { approvalRequestService } from '@/services/approvalRequestService';
 import { invitationService } from '@/services/invitationService';
 import { MyPageContent } from '@/components/mypage/MyPageContent';
 import { useToast } from '@/hooks/use-toast';
+import { useRejectionReason } from '@/hooks/useRejectionReason';
 import {
     Clock,
     AlertCircle,
@@ -21,11 +21,11 @@ import { clsx } from 'clsx';
 import type { ApprovalRequestSummary } from '@/services/approvalRequestService';
 import type { InvitationSummaryRecord } from '@/lib/invitation-summary';
 import { EmptyState } from '@/components/ui/EmptyState';
-
+import { parseRejection } from '@/lib/rejection-helpers';
 import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
-const RejectionReasonModal = dynamic(
-    () => import('@/components/common/RejectionReasonModal'),
+const RichTextEditor = dynamic(
+    () => import('@/components/ui/RichTextEditor').then(mod => mod.RichTextEditor),
     { ssr: false }
 );
 
@@ -156,6 +156,18 @@ export default function RequestsPageClient({
         }
         setConfirmConfig(prev => ({ ...prev, isOpen: false }));
     }, [confirmConfig, approveMutation]);
+
+    const handleRejectionSubmit = useCallback((reason: string) => {
+        if (!rejectionTarget) return;
+        rejectMutation.mutate({ inv: rejectionTarget, reason });
+        setRejectionTarget(null);
+    }, [rejectionTarget, rejectMutation]);
+
+    const rejectionReason = useRejectionReason({
+        onSubmit: handleRejectionSubmit,
+        onClose: () => setRejectionTarget(null),
+        loading: rejectMutation.isPending,
+    });
 
     if (status === 'error') return <div className={styles.error}>데이터 로딩 중 오류가 발생했습니다.</div>;
 
@@ -301,23 +313,51 @@ export default function RequestsPageClient({
                 const requesterName = targetRequest?.requester_name || '';
 
                 return (
-                    <RejectionReasonModal
-                        isOpen={!!rejectionTarget}
-                        onClose={() => setRejectionTarget(null)}
-                        onSubmit={(reason) => {
-                            rejectMutation.mutate({ inv: rejectionTarget, reason });
-                            setRejectionTarget(null);
+                    <Dialog
+                        open={!!rejectionTarget}
+                        onOpenChange={(open) => {
+                            if (!open) rejectionReason.handleClose();
                         }}
-                        loading={rejectMutation.isPending}
-                        requesterName={requesterName}
-                        title={statusText}
-                        confirmText={statusText}
-                        description={
-                            <>
-                                <strong>{requesterName}</strong>님의 {isRevoked ? "승인을 취소" : "사용 신청을 거절"}합니다.
-                            </>
-                        }
-                    />
+                    >
+                        <Dialog.Overlay />
+                        <Dialog.Content>
+                            <Dialog.Header title={statusText} />
+                            <Dialog.Body>
+                                <div className={styles.rejectionDescription}>
+                                    <strong>{requesterName}</strong>님의 {isRevoked ? "승인을 취소" : "사용 신청을 거절"}합니다.
+                                </div>
+                                <div className={styles.rejectionEditorWrapper}>
+                                    <RichTextEditor
+                                        content={rejectionReason.reason}
+                                        onChange={rejectionReason.setReason}
+                                        placeholder="내용을 입력하세요…"
+                                        minHeight={180}
+                                    />
+                                </div>
+                            </Dialog.Body>
+                            <Dialog.Footer className={styles.modalFooter}>
+                                <Button
+                                    className={styles.flex1}
+                                    variant="weak"
+                                    size="lg"
+                                    onClick={rejectionReason.handleClose}
+                                    disabled={rejectMutation.isPending}
+                                >
+                                    취소
+                                </Button>
+                                <Button
+                                    className={styles.flex1}
+                                    variant="fill"
+                                    size="lg"
+                                    loading={rejectMutation.isPending}
+                                    disabled={rejectionReason.isSubmitDisabled}
+                                    onClick={rejectionReason.handleSubmit}
+                                >
+                                    {statusText}
+                                </Button>
+                            </Dialog.Footer>
+                        </Dialog.Content>
+                    </Dialog>
                 );
             })()}
 

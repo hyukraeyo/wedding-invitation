@@ -2,26 +2,44 @@
 
 import * as React from 'react';
 import { useToastStore } from '@/store/useToastStore';
-import { clsx } from 'clsx';
+import {
+    Toast,
+    ToastClose,
+    ToastDescription,
+    ToastProvider,
+    ToastTitle,
+    ToastViewport,
+} from './Toast';
 import s from './Toast.module.scss';
 
 export const Toaster = () => {
-    const toasts = useToastStore((state) => state.toasts);
+    const { toasts, removeToast } = useToastStore();
 
     return (
-        <div className={s.toaster}>
-            {toasts.map((toast) => (
-                <div
-                    key={toast.id}
-                    className={clsx(s.toast, toast.variant && s[toast.variant])}
+        <ToastProvider>
+            {toasts.map(({ id, title, message, variant, icon, duration, ...props }) => (
+                <Toast
+                    key={id}
+                    variant={variant}
+                    onOpenChange={(open: boolean) => {
+                        if (!open) removeToast(id);
+                    }}
+                    {...(duration !== undefined ? { duration } : {})}
+                    {...props}
                 >
-                    {toast.icon && <span className={s.icon}>{toast.icon}</span>}
-                    <div className={s.content}>
-                        {toast.title && <div className={s.title}>{toast.title}</div>}
-                        <div className={s.message}>{toast.message}</div>
+                    <div className={s.toastContent}>
+                        {icon && <div className={s.toastIcon}>{icon}</div>}
+                        <div className={s.grid}>
+                            {title && <ToastTitle>{title}</ToastTitle>}
+                            {message && (
+                                <ToastDescription>{message}</ToastDescription>
+                            )}
+                        </div>
                     </div>
-                </div>
+                    <ToastClose />
+                </Toast>
             ))}
-        </div>
+            <ToastViewport />
+        </ToastProvider>
     );
 };

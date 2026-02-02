@@ -11,6 +11,9 @@ import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { Button } from '@/components/ui/Button';
 import { ImageUploader } from '@/components/common/ImageUploader';
 import { Switch } from '@/components/ui/Switch';
+import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
+import { FormControl, FormField, FormLabel, FormMessage } from '@/components/ui/Form';
+import { isRequiredField } from '@/constants/requiredFields';
 import { cn } from '@/lib/utils';
 import styles from './MainScreenSection.module.scss';
 import { STYLE_PRESETS } from '@/constants/samples';
@@ -62,17 +65,35 @@ export default function MainScreenSectionContent() {
     return (
         <div className={styles.container}>
             <div className={styles.optionItem}>
-                <div className={styles.rowTitle}>메인 사진</div>
-                <div className={styles.optionWrapper}>
-                    <ImageUploader
-                        value={imageUrl}
-                        onChange={setImageUrl}
-                        placeholder="메인 이미지 추가"
-                        ratio={imageRatio}
-                        onRatioChange={(r) => setImageRatio(r as 'fixed' | 'auto')}
-                        aspectRatio="4/5"
-                    />
-                </div>
+                <FormField name="main-image">
+                    <FormLabel className={styles.formLabel} htmlFor="main-image">
+                        메인 사진
+                    </FormLabel>
+                    <div className={styles.optionWrapper}>
+                        <ImageUploader
+                            value={imageUrl}
+                            onChange={setImageUrl}
+                            placeholder="메인 이미지 추가"
+                            ratio={imageRatio}
+                            onRatioChange={(r) => setImageRatio(r as 'fixed' | 'auto')}
+                            aspectRatio="4/5"
+                        />
+                        <FormControl asChild>
+                            <VisuallyHidden asChild>
+                                <input
+                                    id="main-image"
+                                    aria-label="메인 사진"
+                                    required={isRequiredField('mainImage')}
+                                    readOnly
+                                    value={imageUrl || ''}
+                                />
+                            </VisuallyHidden>
+                        </FormControl>
+                    </div>
+                    <FormMessage className={styles.formMessage} match="valueMissing">
+                        필수 항목입니다.
+                    </FormMessage>
+                </FormField>
             </div>
 
             <div className={styles.optionItem}>
@@ -226,20 +247,32 @@ export default function MainScreenSectionContent() {
                 <>
                     <div className={styles.optionItem}>
                         <div className={styles.optionWrapper}>
-                            <TextField
-                                label="제목"
-
-                                placeholder="예: THE MARRIAGE"
-                                value={mainScreen.title}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateMain({ title: e.target.value })}
-                            />
-                            <TextField
-                                label="소제목"
-
-                                placeholder="예: 소중한 날에 초대합니다"
-                                value={mainScreen.subtitle}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateMain({ subtitle: e.target.value })}
-                            />
+                            <FormField name="main-title">
+                                <FormLabel className={styles.formLabel} htmlFor="main-title">
+                                    제목
+                                </FormLabel>
+                                <FormControl asChild>
+                                    <TextField
+                                        id="main-title"
+                                        placeholder="예: THE MARRIAGE"
+                                        value={mainScreen.title}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateMain({ title: e.target.value })}
+                                    />
+                                </FormControl>
+                            </FormField>
+                            <FormField name="main-subtitle">
+                                <FormLabel className={styles.formLabel} htmlFor="main-subtitle">
+                                    소제목
+                                </FormLabel>
+                                <FormControl asChild>
+                                    <TextField
+                                        id="main-subtitle"
+                                        placeholder="예: 소중한 날에 초대합니다"
+                                        value={mainScreen.subtitle}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateMain({ subtitle: e.target.value })}
+                                    />
+                                </FormControl>
+                            </FormField>
                         </div>
                     </div>
 

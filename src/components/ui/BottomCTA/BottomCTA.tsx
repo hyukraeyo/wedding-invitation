@@ -40,6 +40,7 @@ export interface BottomCTASingleProps {
     type?: 'button' | 'submit' | 'reset' | undefined;
     transparent?: boolean | undefined;
     animated?: boolean | undefined;
+    buttonVariant?: 'solid' | 'soft' | 'outline' | 'ghost' | 'surface' | 'filled' | 'fill' | 'weak' | 'clear' | 'apple' | 'toss' | undefined;
 }
 
 const Single = ({
@@ -52,14 +53,15 @@ const Single = ({
     wrapperClassName,
     type = 'button',
     transparent,
-    animated
+    animated,
+    buttonVariant = 'fill'
 }: BottomCTASingleProps) => {
     const button = (
         <Button
             size="3"
             fullWidth
             color="primary"
-            variant="fill"
+            variant={buttonVariant}
             onClick={onClick}
             loading={!!loading}
             disabled={!!disabled}
@@ -100,6 +102,8 @@ export interface BottomCTADoubleProps {
     wrapperClassName?: string | undefined;
     transparent?: boolean | undefined;
     animated?: boolean | undefined;
+    leftButtonVariant?: 'solid' | 'soft' | 'outline' | 'ghost' | 'surface' | 'filled' | 'fill' | 'weak' | 'clear' | 'apple' | 'toss' | undefined;
+    rightButtonVariant?: 'solid' | 'soft' | 'outline' | 'ghost' | 'surface' | 'filled' | 'fill' | 'weak' | 'clear' | 'apple' | 'toss' | undefined;
 }
 
 const Double = ({
@@ -115,7 +119,9 @@ const Double = ({
     className,
     wrapperClassName,
     transparent,
-    animated
+    animated,
+    leftButtonVariant = 'soft',
+    rightButtonVariant = 'fill'
 }: BottomCTADoubleProps) => {
     const content = (
         <div className={s.buttonGroup}>
@@ -123,7 +129,7 @@ const Double = ({
                 size="3"
                 fullWidth
                 color="grey"
-                variant="soft"
+                variant={leftButtonVariant}
                 onClick={onLeftClick}
                 loading={!!leftLoading}
                 disabled={!!leftDisabled}
@@ -134,7 +140,7 @@ const Double = ({
                 size="3"
                 fullWidth
                 color="primary"
-                variant="fill"
+                variant={rightButtonVariant}
                 onClick={onRightClick}
                 loading={!!rightLoading}
                 disabled={!!rightDisabled}

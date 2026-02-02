@@ -11,6 +11,7 @@ import { SampleList } from '@/components/common/SampleList';
 import { Button } from '@/components/ui/Button';
 import { BottomCTA } from '@/components/ui/BottomCTA';
 import { Dialog } from '@/components/ui/Dialog';
+import { FormControl, FormField, FormLabel } from '@/components/ui/Form';
 
 import styles from './ClosingSection.module.scss';
 
@@ -71,22 +72,34 @@ export default function ClosingSection(props: SectionProps) {
                     </div>
 
                     <div className={styles.optionItem}>
-                        <TextField
-
-                            label="소제목"
-                            placeholder="예: CLOSING"
-                            value={closing.subtitle}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateClosing({ subtitle: e.target.value })}
-                        />
+                        <FormField name="closing-subtitle">
+                            <FormLabel className={styles.formLabel} htmlFor="closing-subtitle">
+                                소제목
+                            </FormLabel>
+                            <FormControl asChild>
+                                <TextField
+                                    id="closing-subtitle"
+                                    placeholder="예: CLOSING"
+                                    value={closing.subtitle}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateClosing({ subtitle: e.target.value })}
+                                />
+                            </FormControl>
+                        </FormField>
                     </div>
                     <div className={styles.optionItem}>
-                        <TextField
-
-                            label="제목"
-                            placeholder="예: 저희의 시작을 함께해주셔서 감사합니다"
-                            value={closing.title}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateClosing({ title: e.target.value })}
-                        />
+                        <FormField name="closing-title">
+                            <FormLabel className={styles.formLabel} htmlFor="closing-title">
+                                제목
+                            </FormLabel>
+                            <FormControl asChild>
+                                <TextField
+                                    id="closing-title"
+                                    placeholder="예: 저희의 시작을 함께해주셔서 감사합니다"
+                                    value={closing.title}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateClosing({ title: e.target.value })}
+                                />
+                            </FormControl>
+                        </FormField>
                     </div>
 
                     <div className={styles.optionItem}>

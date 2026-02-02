@@ -1,10 +1,13 @@
 "use client";
 
-import React, { useState, useCallback, memo, useEffect } from 'react';
+import React, { useState, useCallback, memo, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
-import { useInvitationStore } from '@/store/useInvitationStore';
-import { Skeleton } from '@/components/ui/Skeleton';
 import { useShallow } from 'zustand/react/shallow';
+import { Button } from '@/components/ui/Button';
+import { Dialog } from '@/components/ui/Dialog';
+import { Form } from '@/components/ui/Form';
+import { Skeleton } from '@/components/ui/Skeleton';
+import { useInvitationStore } from '@/store/useInvitationStore';
 import styles from './EditorForm.module.scss';
 
 // Dynamic imports for optimized initial bundle
@@ -32,9 +35,16 @@ const SECTIONS = [
     { key: 'kakao', Component: KakaoShareSection },
 ] as const;
 
-const EditorForm = memo(function EditorForm() {
+interface EditorFormProps {
+    formId: string;
+    onSubmit?: () => void;
+}
+
+const EditorForm = memo(function EditorForm({ formId, onSubmit }: EditorFormProps) {
     const [openSections, setOpenSections] = useState<string[]>([]);
     const [isReady, setIsReady] = useState(false);
+    const [isValidationOpen, setIsValidationOpen] = useState(false);
+    const hasInvalidRef = useRef(false);
     const { editingSection, setEditingSection } = useInvitationStore(useShallow((state) => ({
         editingSection: state.editingSection,
         setEditingSection: state.setEditingSection,
@@ -72,6 +82,21 @@ const EditorForm = memo(function EditorForm() {
         handleValueChange(nextOpenSections);
     }, [openSections, handleValueChange]);
 
+    const handleSubmit = useCallback((event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        hasInvalidRef.current = false;
+        onSubmit?.();
+    }, [onSubmit]);
+
+    const handleInvalid = useCallback((event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        if (hasInvalidRef.current) {
+            return;
+        }
+        hasInvalidRef.current = true;
+        setIsValidationOpen(true);
+    }, []);
+
     if (!isReady) {
         return (
             <div className={styles.loadingContainer}>
@@ -92,18 +117,31 @@ const EditorForm = memo(function EditorForm() {
     }
 
     return (
-        <div className={styles.wrapper}>
-            <div className={styles.list}>
-                {SECTIONS.map(({ key, Component }) => (
-                    <Component
-                        key={key}
-                        value={key}
-                        isOpen={openSections.includes(key)}
-                        onToggle={(isOpen) => handleToggle(key, isOpen)}
-                    />
-                ))}
-            </div>
-        </div>
+        <>
+            <Form id={formId} onSubmit={handleSubmit} onInvalid={handleInvalid} className={styles.wrapper}>
+                <div className={styles.list}>
+                    {SECTIONS.map(({ key, Component }) => (
+                        <Component
+                            key={key}
+                            value={key}
+                            isOpen={openSections.includes(key)}
+                            onToggle={(isOpen) => handleToggle(key, isOpen)}
+                        />
+                    ))}
+                </div>
+            </Form>
+            <Dialog open={isValidationOpen} onOpenChange={setIsValidationOpen}>
+                <Dialog.Header title="입력 확인" />
+                <Dialog.Body>
+                    필수 항목을 확인해주세요.
+                </Dialog.Body>
+                <Dialog.Footer>
+                    <Button type="button" onClick={() => setIsValidationOpen(false)}>
+                        확인
+                    </Button>
+                </Dialog.Footer>
+            </Dialog>
+        </>
     );
 });
 

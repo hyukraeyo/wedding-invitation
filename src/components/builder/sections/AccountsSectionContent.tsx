@@ -4,6 +4,7 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { IconButton } from '@/components/ui/IconButton';
 import { Button as UIButton } from '@/components/ui/Button';
 import { TextField } from '@/components/ui/TextField';
+import { FormControl, FormField, FormLabel } from '@/components/ui/Form';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { MenuSelect } from '@/components/ui/MenuSelect';
 import styles from './AccountsSection.module.scss';
@@ -112,22 +113,34 @@ export default function AccountsSectionContent() {
     return (
         <div className={styles.container}>
             <div className={styles.optionItem}>
-                <TextField
-
-                    label="소제목"
-                    placeholder="예: GIFT"
-                    value={accountsSubtitle}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAccountsSubtitle(e.target.value)}
-                />
+                <FormField name="accounts-subtitle">
+                    <FormLabel className={styles.formLabel} htmlFor="accounts-subtitle">
+                        소제목
+                    </FormLabel>
+                    <FormControl asChild>
+                        <TextField
+                            id="accounts-subtitle"
+                            placeholder="예: GIFT"
+                            value={accountsSubtitle}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAccountsSubtitle(e.target.value)}
+                        />
+                    </FormControl>
+                </FormField>
             </div>
             <div className={styles.optionItem}>
-                <TextField
-
-                    label="제목"
-                    placeholder="예: 마음 전하실 곳"
-                    value={accountsTitle}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAccountsTitle(e.target.value)}
-                />
+                <FormField name="accounts-title">
+                    <FormLabel className={styles.formLabel} htmlFor="accounts-title">
+                        제목
+                    </FormLabel>
+                    <FormControl asChild>
+                        <TextField
+                            id="accounts-title"
+                            placeholder="예: 마음 전하실 곳"
+                            value={accountsTitle}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAccountsTitle(e.target.value)}
+                        />
+                    </FormControl>
+                </FormField>
             </div>
 
             <div className={styles.optionItem}>
@@ -281,22 +294,34 @@ export default function AccountsSectionContent() {
 
             {/* Appearance Settings */}
             <div className={styles.optionItem}>
-                <TextField
-
-                    label="신랑측 그룹 제목"
-                    placeholder="신랑 측 마음 전하실 곳"
-                    value={accountsGroomTitle}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAccountsGroomTitle(e.target.value)}
-                />
+                <FormField name="accounts-groom-title">
+                    <FormLabel className={styles.formLabel} htmlFor="accounts-groom-title">
+                        신랑측 그룹 제목
+                    </FormLabel>
+                    <FormControl asChild>
+                        <TextField
+                            id="accounts-groom-title"
+                            placeholder="신랑 측 마음 전하실 곳"
+                            value={accountsGroomTitle}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAccountsGroomTitle(e.target.value)}
+                        />
+                    </FormControl>
+                </FormField>
             </div>
             <div className={styles.optionItem}>
-                <TextField
-
-                    label="신부측 그룹 제목"
-                    placeholder="신부 측 마음 전하실 곳"
-                    value={accountsBrideTitle}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAccountsBrideTitle(e.target.value)}
-                />
+                <FormField name="accounts-bride-title">
+                    <FormLabel className={styles.formLabel} htmlFor="accounts-bride-title">
+                        신부측 그룹 제목
+                    </FormLabel>
+                    <FormControl asChild>
+                        <TextField
+                            id="accounts-bride-title"
+                            placeholder="신부 측 마음 전하실 곳"
+                            value={accountsBrideTitle}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAccountsBrideTitle(e.target.value)}
+                        />
+                    </FormControl>
+                </FormField>
             </div>
             <div className={styles.optionItem}>
                 <div className={styles.rowTitle}>색상 모드</div>

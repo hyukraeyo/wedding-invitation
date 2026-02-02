@@ -8,6 +8,7 @@ import { TextField } from '@/components/ui/TextField';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { Switch } from '@/components/ui/Switch';
 import { PhoneField } from '@/components/common/PhoneField';
+import { FormControl, FormField, FormLabel } from '@/components/ui/Form';
 import styles from './LocationSection.module.scss';
 import { cn } from '@/lib/utils';
 import { NaverIcon, KakaoIcon } from '@/components/common/Icons';
@@ -130,22 +131,34 @@ export default function LocationSectionContent() {
             <KakaoSdkLoader onReady={() => setIsKakaoReady(true)} />
             <div className={styles.container}>
                 <div className={styles.optionItem}>
-                    <TextField
-                        label="부제목"
-
-                        placeholder="예: LOCATION"
-                        value={locationSubtitle}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationSubtitle(e.target.value)}
-                    />
+                    <FormField name="location-subtitle">
+                        <FormLabel className={styles.formLabel} htmlFor="location-subtitle">
+                            부제목
+                        </FormLabel>
+                        <FormControl asChild>
+                            <TextField
+                                id="location-subtitle"
+                                placeholder="예: LOCATION"
+                                value={locationSubtitle}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationSubtitle(e.target.value)}
+                            />
+                        </FormControl>
+                    </FormField>
                 </div>
                 <div className={styles.optionItem}>
-                    <TextField
-                        label="제목"
-
-                        placeholder="예: 바나나홀"
-                        value={locationTitle}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationTitle(e.target.value)}
-                    />
+                    <FormField name="location-title">
+                        <FormLabel className={styles.formLabel} htmlFor="location-title">
+                            제목
+                        </FormLabel>
+                        <FormControl asChild>
+                            <TextField
+                                id="location-title"
+                                placeholder="예: 바나나홀"
+                                value={locationTitle}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationTitle(e.target.value)}
+                            />
+                        </FormControl>
+                    </FormField>
                 </div>
 
                 <div className={styles.optionItem}>
@@ -165,25 +178,37 @@ export default function LocationSectionContent() {
                 </div>
 
                 <div className={styles.optionItem}>
-                    <TextField
-                        label="예식 장소명"
-
-                        type="text"
-                        placeholder="예: 바나나 웨딩홀"
-                        value={location}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocation(e.target.value)}
-                    />
+                    <FormField name="location-venue">
+                        <FormLabel className={styles.formLabel} htmlFor="location-venue">
+                            예식 장소명
+                        </FormLabel>
+                        <FormControl asChild>
+                            <TextField
+                                id="location-venue"
+                                type="text"
+                                placeholder="예: 바나나 웨딩홀"
+                                value={location}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocation(e.target.value)}
+                            />
+                        </FormControl>
+                    </FormField>
                 </div>
 
                 <div className={styles.optionItem}>
-                    <TextField
-                        label="층/호수"
-
-                        type="text"
-                        placeholder="예: 3층 그랜드홀"
-                        value={detailAddress}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDetailAddress(e.target.value)}
-                    />
+                    <FormField name="location-floor">
+                        <FormLabel className={styles.formLabel} htmlFor="location-floor">
+                            층/호수
+                        </FormLabel>
+                        <FormControl asChild>
+                            <TextField
+                                id="location-floor"
+                                type="text"
+                                placeholder="예: 3층 그랜드홀"
+                                value={detailAddress}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDetailAddress(e.target.value)}
+                            />
+                        </FormControl>
+                    </FormField>
                 </div>
 
                 <div className={styles.optionItem}>
@@ -310,5 +335,4 @@ export default function LocationSectionContent() {
         </>
     );
 }
-
 

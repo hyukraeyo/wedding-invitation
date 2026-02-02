@@ -57,7 +57,9 @@ export default function ScrollReveal({ children, className = "", id, animateEntr
             ref={ref}
             className={clsx(className, styles.reveal, isVisible && styles.visible)}
         >
-            {children}
+            <React.Activity mode={isVisible ? 'visible' : 'hidden'}>
+                {children}
+            </React.Activity>
         </div>
     );
 }

@@ -2,13 +2,14 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useInvitationStore } from "@/store/useInvitationStore";
 import { useShallow } from "zustand/react/shallow";
-import { Dialog } from "@/components/ui/Dialog";
 import { Button } from "@/components/ui/Button";
+import { Dialog } from "@/components/ui/Dialog";
+import { NameField } from "@/components/common/NameField";
 import { Text } from "@/components/ui/Text";
 import { TextField } from "@/components/ui/TextField";
 import { parseKoreanName } from "@/lib/utils";
+import { useInvitationStore } from "@/store/useInvitationStore";
 import styles from "./InvitationOnboardingModal.module.scss";
 
 interface InvitationOnboardingModalProps {
@@ -81,25 +82,29 @@ export function InvitationOnboardingModal({ isOpen, onClose }: InvitationOnboard
                     <div className={styles.section}>
                         <div className={styles.row}>
                             <div className={styles.field}>
-                                <TextField
-
+                                <NameField
                                     label="Groom name"
                                     id="groomName"
                                     name="groomName"
                                     placeholder="John Kim"
                                     value={formData.groomName}
-                                    onChange={handleChange}
+                                    onValueChange={(nextValue) => setFormData((prev) => ({ ...prev, groomName: nextValue }))}
+                                    allowSpace
+                                    allowMiddleDot
+                                    allowLatin
                                 />
                             </div>
                             <div className={styles.field}>
-                                <TextField
-
+                                <NameField
                                     label="Bride name"
                                     id="brideName"
                                     name="brideName"
                                     placeholder="Emily Park"
                                     value={formData.brideName}
-                                    onChange={handleChange}
+                                    onValueChange={(nextValue) => setFormData((prev) => ({ ...prev, brideName: nextValue }))}
+                                    allowSpace
+                                    allowMiddleDot
+                                    allowLatin
                                 />
                             </div>
                         </div>

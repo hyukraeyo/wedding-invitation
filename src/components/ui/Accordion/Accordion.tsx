@@ -74,6 +74,8 @@ export interface SectionAccordionProps {
 }
 
 const SectionAccordion = ({ title, value, isOpen, onToggle, children, className }: SectionAccordionProps) => {
+    const activityMode = isOpen === false ? 'hidden' : 'visible';
+
     return (
         <Accordion
             type="single"
@@ -87,7 +89,9 @@ const SectionAccordion = ({ title, value, isOpen, onToggle, children, className 
                     {title}
                 </AccordionTrigger>
                 <AccordionContent className={s.SectionContent}>
-                    {children}
+                    <React.Activity mode={activityMode}>
+                        {children}
+                    </React.Activity>
                 </AccordionContent>
             </AccordionItem>
         </Accordion>

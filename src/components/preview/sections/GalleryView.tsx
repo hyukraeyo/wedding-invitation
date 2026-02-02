@@ -22,6 +22,7 @@ import { useScrollLock } from '@/hooks/use-scroll-lock';
 import { useFocusTrap } from '@/hooks/useAccessibility';
 import { MOTION_CLASSES } from '@/constants/motion';
 import { IMAGE_SIZES } from '@/constants/image';
+import { AspectRatio } from '@/components/ui/AspectRatio';
 
 interface GalleryItem {
     id: string;
@@ -270,7 +271,7 @@ const GalleryView = memo(({
                                 className={clsx(styles.gridItem, galleryPopup ? styles.cursorPointer : '') || ''}
                                 onClick={() => handleImageClick(i)}
                             >
-                                <div className={clsx(styles.fullSize) || ''} style={{ position: 'relative', width: '100%', aspectRatio: '1/1' }}>
+                                <AspectRatio ratio={1 / 1} className={clsx(styles.fullSize) || ''}>
                                     <Image
                                         src={img.url}
                                         alt=""
@@ -280,7 +281,7 @@ const GalleryView = memo(({
                                         sizes={IMAGE_SIZES.galleryGrid}
                                         quality={85}
                                     />
-                                </div>
+                                </AspectRatio>
                             </div>
                         ))}
                     </div>

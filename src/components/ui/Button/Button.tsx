@@ -16,7 +16,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
      * @default 'solid'
      * Radix UI Themes style variants (with TDS aliases)
      */
-    variant?: 'solid' | 'soft' | 'outline' | 'ghost' | 'surface' | 'filled' | 'fill' | 'weak' | 'clear' | undefined;
+    variant?: 'solid' | 'soft' | 'outline' | 'ghost' | 'surface' | 'filled' | 'fill' | 'weak' | 'clear' | 'apple' | 'toss' | undefined;
 
     /** 
      * @default '2'
@@ -72,7 +72,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             (variant === 'solid' || variant === 'filled' || variant === 'fill') && s.solid,
             (variant === 'soft' || variant === 'weak' || variant === 'surface') && s.soft,
             variant === 'outline' && s.outline,
-            (variant === 'ghost' || variant === 'clear') && s.ghost
+            (variant === 'ghost' || variant === 'clear') && s.ghost,
+            variant === 'apple' && s.apple,
+            variant === 'toss' && s.toss
         );
 
         // Mapping for size aliases

@@ -1,14 +1,13 @@
-
-import React from 'react';
+import * as React from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { useInvitationStore } from '@/store/useInvitationStore';
 import { SectionAccordion } from '@/components/ui/Accordion';
-import { TextField } from '@/components/ui/TextField';
-import { Button } from '@/components/ui/Button';
+import { FormControl, FormField, FormLabel, FormMessage } from '@/components/ui/Form';
+import { NameField } from '@/components/common/NameField';
+import { Toggle } from '@/components/ui/Toggle';
+import { isRequiredField } from '@/constants/requiredFields';
+import { cn, parseKoreanName, isValidKoreanNameValue } from '@/lib/utils';
+import { useInvitationStore } from '@/store/useInvitationStore';
 import styles from './BasicInfoSection.module.scss';
-import { cn } from '@/lib/utils';
-import { Eye, EyeOff } from 'lucide-react';
-import { parseKoreanName } from '@/lib/utils';
 import type { SectionProps } from '@/types/builder';
 
 const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(props) {
@@ -18,6 +17,12 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
     const setBride = useInvitationStore(state => state.setBride);
     const setGroomParents = useInvitationStore(state => state.setGroomParents);
     const setBrideParents = useInvitationStore(state => state.setBrideParents);
+
+
+    const groomFullName = `${groom.lastName}${groom.firstName}`;
+    const brideFullName = `${bride.lastName}${bride.firstName}`;
+
+    const isInvalidName = (value: string) => value.trim().length > 0 && !isValidKoreanNameValue(value);
 
     return (
         <SectionAccordion
@@ -30,73 +35,85 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
                 {/* Groom Section */}
                 <div className={styles.formGroup}>
                     <div className={cn(styles.row, styles.full)}>
-                        <TextField
-
-                            label="신랑"
-                            type="text"
-                            placeholder="신랑 이름"
-                            value={`${groom.lastName}${groom.firstName}`}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGroom(parseKoreanName(e.target.value))}
-                        />
+                        <FormField name="groom-name">
+                            <FormLabel className={styles.label} htmlFor="groom-name">
+                                신랑
+                            </FormLabel>
+                            <FormMessage className={styles.message} match="valueMissing">
+                                필수 항목입니다.
+                            </FormMessage>
+                            <FormControl asChild>
+                                <NameField
+                                    id="groom-name"
+                                    type="text"
+                                    placeholder="신랑 이름"
+                                    required={isRequiredField('groomName')}
+                                    value={groomFullName}
+                                    onValueChange={(val) => setGroom(parseKoreanName(val))}
+                                    allowSpace
+                                    allowMiddleDot
+                                    allowLatin
+                                    invalid={isInvalidName(groomFullName)}
+                                />
+                            </FormControl>
+                        </FormField>
                     </div>
 
                     {/* Groom Parents */}
                     <div className={cn(styles.row, styles.compact)}>
-                        <TextField
-
-                            type="text"
-                            placeholder="아버지 이름"
-                            value={groom.parents.father.name}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGroomParents('father', { name: e.target.value })}
-                            className={styles.parentInput}
-                        />
+                        <FormField name="groom-father-name">
+                            <FormControl asChild>
+                                <NameField
+                                    id="groom-father-name"
+                                    type="text"
+                                    placeholder="아버지 이름"
+                                    value={groom.parents.father.name}
+                                    onValueChange={(val) => setGroomParents('father', { name: val })}
+                                    allowSpace
+                                    allowMiddleDot
+                                    allowLatin
+                                    className={styles.parentInput}
+                                    invalid={isInvalidName(groom.parents.father.name)}
+                                    aria-label="신랑 아버지 이름"
+                                />
+                            </FormControl>
+                        </FormField>
                         <div className={styles.actionGroup}>
-                            <Button
-                                type="button"
-                                variant="weak"
-                                onClick={() => setGroomParents('father', { isHidden: !groom.parents.father.isHidden })}
-                                className={cn(styles.visibilityButton, !groom.parents.father.isHidden && styles.active)}
-                                title={groom.parents.father.isHidden ? '숨김 상태 (클릭하여 노출)' : '노출 상태 (클릭하여 숨김)'}
-                            >
-                                {groom.parents.father.isHidden ? <EyeOff size={16} /> : <Eye size={16} />}
-                            </Button>
-                            <Button
-                                type="button"
-                                variant={groom.parents.father.isDeceased ? 'fill' : 'weak'}
-                                onClick={() => setGroomParents('father', { isDeceased: !groom.parents.father.isDeceased })}
-                                className={cn(styles.deceasedButton, !groom.parents.father.isDeceased && styles.deceasedButtonInactive)}
+                            <Toggle
+                                pressed={groom.parents.father.isDeceased}
+                                onPressedChange={(pressed) => setGroomParents('father', { isDeceased: pressed })}
+                                className={styles.deceasedButton}
                             >
                                 故
-                            </Button>
+                            </Toggle>
                         </div>
                     </div>
                     <div className={cn(styles.row, styles.compact)}>
-                        <TextField
-
-                            type="text"
-                            placeholder="어머니 이름"
-                            value={groom.parents.mother.name}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGroomParents('mother', { name: e.target.value })}
-                            className={styles.parentInput}
-                        />
+                        <FormField name="groom-mother-name">
+                            <FormControl asChild>
+                                <NameField
+                                    id="groom-mother-name"
+                                    type="text"
+                                    placeholder="어머니 이름"
+                                    value={groom.parents.mother.name}
+                                    onValueChange={(val) => setGroomParents('mother', { name: val })}
+                                    allowSpace
+                                    allowMiddleDot
+                                    allowLatin
+                                    className={styles.parentInput}
+                                    invalid={isInvalidName(groom.parents.mother.name)}
+                                    aria-label="신랑 어머니 이름"
+                                />
+                            </FormControl>
+                        </FormField>
                         <div className={styles.actionGroup}>
-                            <Button
-                                type="button"
-                                variant="weak"
-                                onClick={() => setGroomParents('mother', { isHidden: !groom.parents.mother.isHidden })}
-                                className={cn(styles.visibilityButton, !groom.parents.mother.isHidden && styles.active)}
-                                title={groom.parents.mother.isHidden ? '숨김 상태 (클릭하여 노출)' : '노출 상태 (클릭하여 숨김)'}
-                            >
-                                {groom.parents.mother.isHidden ? <EyeOff size={16} /> : <Eye size={16} />}
-                            </Button>
-                            <Button
-                                type="button"
-                                variant={groom.parents.mother.isDeceased ? 'fill' : 'weak'}
-                                onClick={() => setGroomParents('mother', { isDeceased: !groom.parents.mother.isDeceased })}
-                                className={cn(styles.deceasedButton, !groom.parents.mother.isDeceased && styles.deceasedButtonInactive)}
+                            <Toggle
+                                pressed={groom.parents.mother.isDeceased}
+                                onPressedChange={(pressed) => setGroomParents('mother', { isDeceased: pressed })}
+                                className={styles.deceasedButton}
                             >
                                 故
-                            </Button>
+                            </Toggle>
                         </div>
                     </div>
                 </div>
@@ -105,73 +122,85 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
 
                 <div className={styles.formGroup}>
                     <div className={cn(styles.row, styles.full)}>
-                        <TextField
-
-                            label="신부"
-                            type="text"
-                            placeholder="신부 이름"
-                            value={`${bride.lastName}${bride.firstName}`}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBride(parseKoreanName(e.target.value))}
-                        />
+                        <FormField name="bride-name">
+                            <FormLabel className={styles.label} htmlFor="bride-name">
+                                신부
+                            </FormLabel>
+                            <FormMessage className={styles.message} match="valueMissing">
+                                필수 항목입니다.
+                            </FormMessage>
+                            <FormControl asChild>
+                                <NameField
+                                    id="bride-name"
+                                    type="text"
+                                    placeholder="신부 이름"
+                                    required={isRequiredField('brideName')}
+                                    value={brideFullName}
+                                    onValueChange={(val) => setBride(parseKoreanName(val))}
+                                    allowSpace
+                                    allowMiddleDot
+                                    allowLatin
+                                    invalid={isInvalidName(brideFullName)}
+                                />
+                            </FormControl>
+                        </FormField>
                     </div>
 
                     {/* Bride Parents */}
                     <div className={cn(styles.row, styles.compact)}>
-                        <TextField
-
-                            type="text"
-                            placeholder="아버지 이름"
-                            value={bride.parents.father.name}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBrideParents('father', { name: e.target.value })}
-                            className={styles.parentInput}
-                        />
+                        <FormField name="bride-father-name">
+                            <FormControl asChild>
+                                <NameField
+                                    id="bride-father-name"
+                                    type="text"
+                                    placeholder="아버지 이름"
+                                    value={bride.parents.father.name}
+                                    onValueChange={(val) => setBrideParents('father', { name: val })}
+                                    allowSpace
+                                    allowMiddleDot
+                                    allowLatin
+                                    className={styles.parentInput}
+                                    invalid={isInvalidName(bride.parents.father.name)}
+                                    aria-label="신부 아버지 이름"
+                                />
+                            </FormControl>
+                        </FormField>
                         <div className={styles.actionGroup}>
-                            <Button
-                                type="button"
-                                variant="weak"
-                                onClick={() => setBrideParents('father', { isHidden: !bride.parents.father.isHidden })}
-                                className={cn(styles.visibilityButton, !bride.parents.father.isHidden && styles.active)}
-                                title={bride.parents.father.isHidden ? '숨김 상태 (클릭하여 노출)' : '노출 상태 (클릭하여 숨김)'}
-                            >
-                                {bride.parents.father.isHidden ? <EyeOff size={16} /> : <Eye size={16} />}
-                            </Button>
-                            <Button
-                                type="button"
-                                variant={bride.parents.father.isDeceased ? 'fill' : 'weak'}
-                                onClick={() => setBrideParents('father', { isDeceased: !bride.parents.father.isDeceased })}
-                                className={cn(styles.deceasedButton, !bride.parents.father.isDeceased && styles.deceasedButtonInactive)}
+                            <Toggle
+                                pressed={bride.parents.father.isDeceased}
+                                onPressedChange={(pressed) => setBrideParents('father', { isDeceased: pressed })}
+                                className={styles.deceasedButton}
                             >
                                 故
-                            </Button>
+                            </Toggle>
                         </div>
                     </div>
                     <div className={cn(styles.row, styles.compact)}>
-                        <TextField
-
-                            type="text"
-                            placeholder="어머니 이름"
-                            value={bride.parents.mother.name}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setBrideParents('mother', { name: e.target.value })}
-                            className={styles.parentInput}
-                        />
+                        <FormField name="bride-mother-name">
+                            <FormControl asChild>
+                                <NameField
+                                    id="bride-mother-name"
+                                    type="text"
+                                    placeholder="어머니 이름"
+                                    value={bride.parents.mother.name}
+                                    onValueChange={(val) => setBrideParents('mother', { name: val })}
+                                    allowSpace
+                                    allowMiddleDot
+                                    allowLatin
+                                    className={styles.parentInput}
+                                    invalid={isInvalidName(bride.parents.mother.name)}
+                                    aria-label="신부 어머니 이름"
+                                />
+                            </FormControl>
+                        </FormField>
                         <div className={styles.actionGroup}>
-                            <Button
-                                type="button"
-                                variant="weak"
-                                onClick={() => setBrideParents('mother', { isHidden: !bride.parents.mother.isHidden })}
-                                className={cn(styles.visibilityButton, !bride.parents.mother.isHidden && styles.active)}
-                                title={bride.parents.mother.isHidden ? '숨김 상태 (클릭하여 노출)' : '노출 상태 (클릭하여 숨김)'}
-                            >
-                                {bride.parents.mother.isHidden ? <EyeOff size={16} /> : <Eye size={16} />}
-                            </Button>
-                            <Button
-                                type="button"
-                                variant={bride.parents.mother.isDeceased ? 'fill' : 'weak'}
-                                onClick={() => setBrideParents('mother', { isDeceased: !bride.parents.mother.isDeceased })}
-                                className={cn(styles.deceasedButton, !bride.parents.mother.isDeceased && styles.deceasedButtonInactive)}
+                            <Toggle
+                                pressed={bride.parents.mother.isDeceased}
+                                onPressedChange={(pressed) => setBrideParents('mother', { isDeceased: pressed })}
+                                className={styles.deceasedButton}
                             >
                                 故
-                            </Button>
+                            </Toggle>
                         </div>
                     </div>
                 </div>

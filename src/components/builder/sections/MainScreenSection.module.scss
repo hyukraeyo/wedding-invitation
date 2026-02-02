@@ -27,6 +27,14 @@
   color: v.$grey-600;
 }
 
+.formLabel {
+  @include b.builder-label;
+}
+
+.formMessage {
+  @include b.builder-form-message;
+}
+
 .rowRight {
   display: flex;
   align-items: center;

@@ -11,6 +11,7 @@ import { ImageUploader } from '@/components/common/ImageUploader';
 import { HeaderAction } from '@/components/common/HeaderAction';
 import { SampleList } from '@/components/common/SampleList';
 import { Button } from '@/components/ui/Button';
+import { FormControl, FormField, FormLabel } from '@/components/ui/Form';
 import { cn } from '@/lib/utils';
 import styles from './KakaoShareSection.module.scss';
 import { KAKAO_SHARE_SAMPLES } from '@/constants/samples';
@@ -81,27 +82,39 @@ export default function KakaoShareSection(props: SectionProps) {
                     </div>
 
                     <div className={styles.optionItem}>
-                        <TextField
-                            label="제목"
-
-                            type="text"
-                            placeholder="예: 우리 결혼합니다"
-                            value={kakao.title}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setKakao({ title: e.target.value })}
-                            maxLength={25}
-                        />
+                        <FormField name="kakao-title">
+                            <FormLabel className={styles.formLabel} htmlFor="kakao-title">
+                                제목
+                            </FormLabel>
+                            <FormControl asChild>
+                                <TextField
+                                    id="kakao-title"
+                                    type="text"
+                                    placeholder="예: 우리 결혼합니다"
+                                    value={kakao.title}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setKakao({ title: e.target.value })}
+                                    maxLength={25}
+                                />
+                            </FormControl>
+                        </FormField>
                     </div>
 
                     <div className={styles.optionItem}>
-                        <TextField
-                            label="설명"
-
-                            type="text"
-                            placeholder="예: 2024년 10월 12일"
-                            value={kakao.description}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setKakao({ description: e.target.value })}
-                            maxLength={35}
-                        />
+                        <FormField name="kakao-description">
+                            <FormLabel className={styles.formLabel} htmlFor="kakao-description">
+                                설명
+                            </FormLabel>
+                            <FormControl asChild>
+                                <TextField
+                                    id="kakao-description"
+                                    type="text"
+                                    placeholder="예: 2024년 10월 12일"
+                                    value={kakao.description}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setKakao({ description: e.target.value })}
+                                    maxLength={35}
+                                />
+                            </FormControl>
+                        </FormField>
                     </div>
 
                     <div className={styles.optionItem}>

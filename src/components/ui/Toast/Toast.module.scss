@@ -1,88 +1,192 @@
 @use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
 
-.toaster {
+.viewport {
   position: fixed;
-  top: 20px;
+  top: 0;
+  z-index: 11000;
+  display: flex;
+  max-height: 100vh;
+  width: 100%;
+  flex-direction: column-reverse;
+  padding: 16px;
+  pointer-events: none;
   left: 50%;
   transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  z-index: 11000;
-  width: auto;
-  min-width: 280px;
-  max-width: calc(100% - 40px);
-  pointer-events: none;
+  align-items: center;
+  gap: 8px;
+
+  @include m.mobile {
+    padding: 12px;
+    bottom: 0;
+    top: auto;
+    flex-direction: column;
+  }
 }
 
-.toast {
+.root {
   pointer-events: auto;
-  background-color: rgba(25, 31, 40, 0.9);
+  position: relative;
+  display: flex;
+  width: auto;
+  min-width: 280px;
+  max-width: calc(100vw - 32px);
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  overflow: hidden;
+  border-radius: 14px;
+  padding: 12px 16px;
+  background-color: rgba(25, 31, 40, 0.95);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   color: v.$white;
-  padding: 14px 20px;
-  border-radius: 14px;
-  font-size: 0.9375rem;
-  font-weight: 500;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08);
-  animation: slideIn 0.4s v.$ease-ios forwards;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  line-height: 1.4;
-  
-  .icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    
-    svg {
-      width: 18px;
-      height: 18px;
-    }
+  transition: all 0.2s v.$ease-ios;
+
+  &[data-state="open"] {
+    animation: slideIn 0.3s v.$ease-ios forwards;
   }
 
-  .content {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    gap: 2px;
+  &[data-state="closed"] {
+    animation: slideOut 0.2s v.$ease-ios forwards;
   }
 
-  .title {
-    font-weight: 700;
-    font-size: 0.9375rem;
+  &[data-swipe="move"] {
+    transform: translateX(var(--radix-toast-swipe-move-x));
   }
 
-  .message {
-    font-size: 0.875rem;
-    opacity: 0.95;
+  &[data-swipe="cancel"] {
+    transform: translateX(0);
+    transition: transform 200ms ease-out;
   }
-  
+
+  &[data-swipe="end"] {
+    animation: swipeOut 100ms ease-out forwards;
+  }
+
+  // Variants
   &.destructive {
-    background-color: rgba(v.$red-500, 0.95);
+    background-color: rgba(v.$red-500, 0.98);
   }
-  
+
   &.success {
-    background-color: rgba(v.$green-600, 0.95);
-    // 🍌 바나나웨딩 아이덴티티를 위해 성공 상태에 살짝 노란빛을 추가하거나
-    // 아이콘 색상으로 조절할 수 있습니다. 현재는 녹색 그대로 유지하되 디자인 품질 강조
+    background-color: rgba(v.$green-600, 0.98);
   }
 
   &.info {
-    background-color: rgba(v.$blue-500, 0.95);
+    background-color: rgba(v.$blue-500, 0.98);
+  }
+}
+
+.title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.description {
+  font-size: 0.875rem;
+  opacity: 0.95;
+  line-height: 1.4;
+}
+
+.toastContent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.toastIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.grid {
+  display: grid;
+  gap: 2px;
+}
+
+.action {
+  display: inline-flex;
+  height: 32px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: transparent;
+  padding: 0 12px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: v.$white;
+  transition: colors 0.2s;
+
+  @include m.hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.close {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  padding: 4px;
+  color: rgba(255, 255, 255, 0.5);
+  transition: color 0.2s;
+  opacity: 0;
+
+  .root:hover & {
+    opacity: 1;
+  }
+
+  @include m.hover {
+    color: v.$white;
   }
 }
 
 @keyframes slideIn {
   from {
     opacity: 0;
-    transform: translateY(-20px) scale(0.92);
+    transform: translateY(-20px) scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.98);
+  }
+}
+
+@keyframes swipeOut {
+  from {
+    transform: translateX(var(--radix-toast-swipe-end-x));
+  }
+
+  to {
+    transform: translateX(calc(100% + 16px));
   }
 }

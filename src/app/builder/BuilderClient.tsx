@@ -170,11 +170,26 @@ export function BuilderClient() {
 
     const { registerSaveAction, setIsLoading } = useHeaderStore();
 
+    const editorFormId = 'builder-editor-form';
+
+    const requestEditorFormSubmit = useCallback(() => {
+        const form = document.getElementById(editorFormId) as HTMLFormElement | null;
+        if (form?.requestSubmit) {
+            form.requestSubmit();
+            return;
+        }
+        if (form) {
+            form.submit();
+            return;
+        }
+        stableSave();
+    }, [editorFormId, stableSave]);
+
     useEffect(() => {
         // advanced-event-handler-refs: Ensure the header always has the latest handleSave
-        registerSaveAction(stableSave);
+        registerSaveAction(requestEditorFormSubmit);
         return () => registerSaveAction(null);
-    }, [registerSaveAction, stableSave]);
+    }, [registerSaveAction, requestEditorFormSubmit]);
 
     useEffect(() => {
         setIsLoading(isSaving);
@@ -187,7 +202,7 @@ export function BuilderClient() {
             <Flex as="main" className={styles.workspace}>
                 <Box as="section" className={styles.sidebar} id="sidebar-portal-root">
                     <Box className={styles.scrollArea} id="builder-sidebar-scroll">
-                        <EditorForm />
+                        <EditorForm formId={editorFormId} onSubmit={stableSave} />
                     </Box>
                 </Box>
 
@@ -213,7 +228,9 @@ export function BuilderClient() {
                 </Box>
 
                 <Box className={styles.mobilePreview}>
-                    <InvitationCanvas key="mobile-preview" isPreviewMode editingSection={editingSection} hideWatermark />
+                    <React.Activity mode={isPreviewOpen ? 'visible' : 'hidden'}>
+                        <InvitationCanvas key="mobile-preview" isPreviewMode editingSection={editingSection} hideWatermark />
+                    </React.Activity>
                 </Box>
 
                 {/* Preview Close FAB */}
