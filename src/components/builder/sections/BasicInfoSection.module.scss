@@ -9,7 +9,7 @@
 .formGroup {
   @include v.section-form-group;
   padding: 1.25rem;
-  background-color: v.$yellow-50;
+  border: 1px solid v.$yellow-300;
   border-radius: v.$radius-lg;
 }
 

@@ -6,107 +6,124 @@ import { clsx } from 'clsx';
 import s from './Button.module.scss';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    /** 
-     * @default 'primary'
-     * Radix UI Themes style color 
-     */
-    color?: 'primary' | 'secondary' | 'danger' | 'grey' | undefined;
+  /**
+   * @default 'primary'
+   * Radix UI Themes style color
+   */
+  color?: 'primary' | 'secondary' | 'danger' | 'grey' | undefined;
 
-    /** 
-     * @default 'solid'
-     * Radix UI Themes style variants (with TDS aliases)
-     */
-    variant?: 'solid' | 'soft' | 'outline' | 'ghost' | 'surface' | 'filled' | 'fill' | 'weak' | 'clear' | 'apple' | 'toss' | undefined;
+  /**
+   * @default 'solid'
+   * Radix UI Themes style variants (with TDS aliases)
+   */
+  variant?:
+    | 'solid'
+    | 'soft'
+    | 'outline'
+    | 'ghost'
+    | 'surface'
+    | 'filled'
+    | 'fill'
+    | 'weak'
+    | 'clear'
+    | 'apple'
+    | 'toss'
+    | undefined;
 
-    /** 
-     * @default 'md'
-     */
-    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | undefined;
+  /**
+   * @default 'md'
+   */
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | undefined;
 
-    /** 
-     * @default 'medium'
-     */
-    radius?: 'none' | 'small' | 'medium' | 'large' | 'full' | undefined;
+  /**
+   * @default 'medium'
+   */
+  radius?: 'none' | 'small' | 'medium' | 'large' | 'full' | undefined;
 
-    /** 
-     * Whether to use high contrast colors
-     */
-    highContrast?: boolean | undefined;
+  /**
+   * Whether to use high contrast colors
+   */
+  highContrast?: boolean | undefined;
 
-    /** 
-     * Show loading spinner and disable interaction
-     */
-    loading?: boolean | undefined;
+  /**
+   * Show loading spinner and disable interaction
+   */
+  loading?: boolean | undefined;
 
-    fullWidth?: boolean | undefined;
-    asChild?: boolean | undefined;
-    leftIcon?: React.ReactNode | undefined;
-    rightIcon?: React.ReactNode | undefined;
+  fullWidth?: boolean | undefined;
+  asChild?: boolean | undefined;
+  unstyled?: boolean | undefined;
+  leftIcon?: React.ReactNode | undefined;
+  rightIcon?: React.ReactNode | undefined;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-    (
-        {
-            className,
-            color = 'primary',
-            variant = 'toss',
-            size = 'lg',
-            radius,
-            highContrast = false,
-            loading = false,
-            fullWidth = false,
-            asChild = false,
-            leftIcon,
-            rightIcon,
-            children,
-            disabled,
-            ...props
-        },
-        ref
-    ) => {
-        const Comp = asChild ? Slot : 'button';
+  (
+    {
+      className,
+      color = 'primary',
+      variant = 'toss',
+      size = 'lg',
+      radius,
+      highContrast = false,
+      loading = false,
+      fullWidth = false,
+      asChild = false,
+      unstyled = false,
+      leftIcon,
+      rightIcon,
+      children,
+      disabled,
+      ...props
+    },
+    ref
+  ) => {
+    const Comp = asChild ? Slot : 'button';
 
-        // Mapping for variant aliases to internal SCSS classes
-        const variantClass = clsx(
-            (variant === 'solid' || variant === 'filled' || variant === 'fill') && s.solid,
-            (variant === 'soft' || variant === 'weak' || variant === 'surface') && s.soft,
-            variant === 'outline' && s.outline,
-            (variant === 'ghost' || variant === 'clear') && s.ghost,
-            variant === 'apple' && s.apple,
-            variant === 'toss' && s.toss
-        );
+    // Mapping for variant aliases to internal SCSS classes
+    const variantClass = !unstyled
+      ? clsx(
+          (variant === 'solid' || variant === 'filled' || variant === 'fill') && s.solid,
+          (variant === 'soft' || variant === 'weak' || variant === 'surface') && s.soft,
+          variant === 'outline' && s.outline,
+          (variant === 'ghost' || variant === 'clear') && s.ghost,
+          variant === 'apple' && s.apple,
+          variant === 'toss' && s.toss
+        )
+      : undefined;
 
-        // Mapping for size aliases
-        const sizeClass = s[size];
+    // Mapping for size aliases
+    const sizeClass = !unstyled ? s[size] : undefined;
 
-        return (
-            <Comp
-                className={clsx(
-                    s.button,
-                    s[color],
-                    variantClass,
-                    sizeClass,
-                    radius && s[`radius_${radius}`],
-                    highContrast && s.highContrast,
-                    loading && s.isLoading,
-                    fullWidth && s.fullWidth,
-                    className
-                )}
-                ref={ref}
-                disabled={disabled || loading}
-                {...props}
-            >
-                {loading && <span className={s.spinner} />}
+    return (
+      <Comp
+        className={clsx(
+          s.button,
+          !unstyled && s[color],
+          variantClass,
+          sizeClass,
+          !unstyled && radius && s[`radius_${radius}`],
+          !unstyled && highContrast && s.highContrast,
+          loading && s.isLoading,
+          fullWidth && s.fullWidth,
+          unstyled && s.unstyled,
+          className
+        )}
+        ref={ref}
+        disabled={disabled || loading}
+        {...props}
+      >
+        {loading && <span className={s.spinner} />}
 
-                {/* Render icons only when not loading or maintain layout if needed */}
-                {!loading && leftIcon && <span className={s.icon}>{leftIcon}</span>}
+        {/* Render icons only when not loading or maintain layout if needed */}
+        {!loading && leftIcon && <span className={s.icon}>{leftIcon}</span>}
 
-                {asChild ? children : <span>{children}</span>}
+        {asChild ? children : <span className={s.content}>{children}</span>}
 
-                {!loading && rightIcon && <span className={s.icon}>{rightIcon}</span>}
-            </Comp>
-        );
-    }
+        {!loading && rightIcon && <span className={s.icon}>{rightIcon}</span>}
+      </Comp>
+    );
+  }
 );
 
 Button.displayName = 'Button';

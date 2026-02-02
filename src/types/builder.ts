@@ -1,6 +1,6 @@
 /**
  * Builder Section 공통 타입 정의
- * 
+ *
  * 모든 빌더 섹션 컴포넌트에서 사용하는 공통 인터페이스입니다.
  */
 
@@ -10,9 +10,9 @@
  * @property isOpen - 현재 섹션이 열려있는지 여부
  */
 export interface SectionProps {
-    value: string;
-    isOpen: boolean;
-    onToggle: (isOpen: boolean) => void;
+  value: string;
+  isOpen: boolean;
+  onToggle: (isOpen: boolean) => void;
 }
 
 /**
@@ -20,9 +20,9 @@ export interface SectionProps {
  * ExampleSelectorModal의 ExampleItem과 호환됩니다.
  */
 export interface SamplePhraseItem {
-    subtitle?: string;
-    title: string;
-    content: string;
-    badge?: string;
-    [key: string]: unknown;
+  subtitle?: string;
+  title: string;
+  content?: string;
+  badge?: string;
+  [key: string]: unknown;
 }

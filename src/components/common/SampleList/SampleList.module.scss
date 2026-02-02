@@ -1,59 +1,85 @@
-@use "../../../styles/variables" as v;
+@use '../../../styles/variables' as v;
 
 .container {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  background-color: v.$white;
+  overflow: hidden;
 }
 
-.card {
-    border: 1px solid #e4e4e7; // v.$zinc-200
-    border-radius: 1rem; // v.$radius-md
-    padding: 1rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: left;
-    background: white;
-    width: 100%;
+.itemButton {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid v.$yellow-200;
+  border-radius: v.$radius-md;
+  cursor: pointer;
+  transition: all 0.2s v.$ease-ios;
 
-    @media (hover: hover) and (pointer: fine) {
-        &:hover {
-            border-color: #FBC02D; // v.$primary-500
-            background-color: #FEF3C7; // v.$primary-100
-        }
+  // 호버/액티브 상태
+  @media (hover: hover) {
+    &:hover {
+      background-color: v.$yellow-50;
+      border-color: v.$yellow-300;
     }
+  }
+
+  &:active {
+    background-color: v.$yellow-100;
+    transform: scale(0.98);
+  }
 }
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.5rem;
+.itemContent {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border-radius: v.$radius-md;
+  border: 1px solid v.$yellow-200;
 }
 
-.badge {
-    font-size: 11px;
-    font-weight: bold;
-    color: #B45309; // v.$primary-700
-    background-color: #FEF3C7; // v.$primary-100
-    padding: 0.125rem 0.5rem;
-    border-radius: 1rem; // v.$radius-md
+.itemHeader {
+  display: flex;
+  align-items: center;
+  gap: v.$builder-gap-sm;
+  margin-bottom: 8px;
 }
 
-.title {
-    font-size: 0.875rem; // v.$font-size-sm
-    font-weight: bold;
-    color: #18181b; // v.$zinc-900
+.itemTitle {
+  font-size: v.$font-size-md;
+  font-weight: 600;
+  color: v.$text-primary;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+  text-align: left;
 }
 
-.content {
-    font-size: 0.8125rem; // v.$font-size-2xs
-    color: #52525b; // v.$zinc-600
-    line-height: 1.6;
-    white-space: pre-wrap;
+.itemSubtitle {
+  font-size: v.$font-size-sm;
+  color: v.$text-tertiary;
+  line-height: 1.4;
+  margin-top: 2px;
+  text-align: left;
+}
 
-    p {
-        margin: 0;
-    }
+.itemBody {
+  font-size: v.$font-size-sm;
+  line-height: 1.6;
+  color: v.$text-secondary;
+  white-space: pre-wrap;
+  word-break: break-all;
+  letter-spacing: -0.01em;
+  text-align: left;
+
+  // dangerouslySetInnerHTML 로 주입되는 내용 스타일링
+  p {
+    margin: 0;
+  }
+
+  strong {
+    color: v.$text-primary;
+    font-weight: 600;
+  }
 }

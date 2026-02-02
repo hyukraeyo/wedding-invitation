@@ -63,8 +63,8 @@
 
   &.toss {
     @include m.toss-interactive;
-    background-color: v.$grey-50;
-    border: 1px solid v.$grey-100;
+    background-color: v.$white;
+    border: 1px solid v.$yellow-100;
     color: v.$grey-900;
     font-weight: 600;
 

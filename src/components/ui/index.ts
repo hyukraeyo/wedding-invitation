@@ -39,8 +39,6 @@ export * from './Skeleton';
 export * from './Loader';
 export * from './CTAButton';
 export * from './BottomCTA';
-export * from './List';
-export * from './ListRow';
 export * from './SegmentedControl';
 export * from './Tabs';
 export * from './Spacing';

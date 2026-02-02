@@ -1,8 +1,9 @@
-@use "../../../styles/variables" as v;
+@use '../../../styles/variables' as v;
 
 .Root {
-  border-radius: 6px;
+  border-radius: v.$radius-md;
   width: 100%;
+  overflow: hidden;
 }
 
 .Item {
@@ -72,12 +73,33 @@
 }
 
 .SectionTrigger {
-  height: 56px;
+  height: v.$control-height-lg;
   padding: 0 24px;
   font-size: v.$font-size-sm;
   background-color: v.$white;
   box-shadow: none;
   // border-bottom: 1px solid v.$grey-100;
+}
+
+.SectionHeaderContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: v.$white;
+  width: 100%;
+}
+
+.SectionTriggerHeader {
+  flex: 1;
+  display: flex;
+}
+
+.SectionRightElement {
+  position: absolute;
+  right: 56px; // Chevron 아이콘(24px padding + icon) 왼쪽으로 여유 있게 배치
+  z-index: 2;
+  display: flex;
+  align-items: center;
 }
 
 .SectionContent {
@@ -90,11 +112,14 @@
   color: v.$grey-800;
   background-color: v.$grey-50;
   will-change: height;
+  height: 0;
 
   &[data-state='open'] {
-    animation: slideDown 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    height: auto;
+    animation: slideDown 300ms cubic-bezier(0.16, 1, 0.3, 1);
   }
   &[data-state='closed'] {
+    height: 0;
     animation: slideUp 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
   }
 }

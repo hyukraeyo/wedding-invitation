@@ -1,4 +1,4 @@
-@use "../../../styles/variables" as v;
+@use '../../../styles/variables' as v;
 
 .wrapper {
   display: flex;
@@ -9,10 +9,7 @@
 .list {
   display: flex;
   flex-direction: column;
-  gap: 0; // Remove gaps for TDS BoardRow style list
-  background-color: v.$white;
-  // border-top: 1px solid v.$zinc-100;
-  // border-bottom: 1px solid v.$zinc-100;
+  gap: 1rem;
 }
 
 .loadingContainer {
@@ -79,4 +76,3 @@
     transform: translateY(0);
   }
 }
-

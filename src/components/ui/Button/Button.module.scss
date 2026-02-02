@@ -259,6 +259,36 @@
     justify-content: center;
     flex-shrink: 0;
   }
+
+  // Content Wrapper
+  .content {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+  }
+
+  // Unstyled mode
+  &.unstyled {
+    height: auto;
+    min-height: 0;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    font-weight: inherit;
+    letter-spacing: inherit;
+    transition: none;
+    transform: none !important;
+
+    &:active {
+      transform: none !important;
+    }
+
+    .content {
+      gap: 0;
+      width: 100%;
+    }
+  }
 }
 
 @keyframes spin {

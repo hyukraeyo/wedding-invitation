@@ -5,25 +5,25 @@ import styles from './LocationSection.module.scss';
 import type { SectionProps } from '@/types/builder';
 
 const LocationSectionContent = dynamic(() => import('./LocationSectionContent'), {
-    loading: () => (
-        <div className={styles.loadingContainer}>
-            <div className={styles.loadingSpinner} />
-        </div>
-    ),
-    ssr: false
+  loading: () => (
+    <div className={styles.loadingContainer}>
+      <div className={styles.loadingSpinner} />
+    </div>
+  ),
+  ssr: false,
 });
 
 const LocationSection = React.memo<SectionProps>(function LocationSection(props) {
-    return (
-        <SectionAccordion
-            title="예식 장소"
-            value="location"
-            isOpen={props.isOpen}
-            onToggle={props.onToggle}
-        >
-            {props.isOpen ? <LocationSectionContent /> : null}
-        </SectionAccordion>
-    );
+  return (
+    <SectionAccordion
+      title="예식 장소"
+      value="location"
+      isOpen={props.isOpen}
+      onToggle={props.onToggle}
+    >
+      <LocationSectionContent />
+    </SectionAccordion>
+  );
 });
 
 export default LocationSection;
