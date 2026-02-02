@@ -1,82 +1,118 @@
-@use "../../../styles/variables" as v;
-@use "../../../styles/mixins" as m;
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
 .root {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: v.$radius-md;
+  font-weight: 500;
+  transition: all 0.2s v.$ease-ios;
+  cursor: pointer;
+  user-select: none;
+  background: transparent;
+  border: 1px solid transparent;
+
+  &[data-state='on'] {
+    background-color: v.$banana-yellow;
+    color: v.$grey-900;
+
+    @include m.hover {
+      filter: brightness(0.95);
+    }
+  }
+
+  &[data-state='off'] {
+    background-color: v.$grey-50;
+    color: v.$grey-400;
+    border-color: v.$grey-100;
+
+    @include m.hover {
+      background-color: v.$grey-100;
+      color: v.$grey-500;
+    }
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  // Variants
+  &.outline {
+    background-color: v.$white;
+    border: 1px solid v.$grey-200;
+
+    &[data-state='on'] {
+      border-color: v.$banana-yellow;
+      background-color: rgba(v.$banana-yellow, 0.1);
+      color: v.$yellow-900;
+    }
+  }
+
+  &.ghost {
+    &[data-state='off'] {
+      background-color: transparent;
+      border-color: transparent;
+    }
+  }
+
+  &.toss {
+    @include m.toss-interactive;
+    background-color: v.$grey-50;
+    border: 1px solid v.$grey-100;
+    color: v.$grey-900;
+    font-weight: 600;
+
+    &[data-state='on'] {
+      background-color: v.$primary;
+      color: v.$white;
+      border-color: v.$primary;
+      box-shadow: 0 4px 12px rgba(v.$primary, 0.2);
+
+      @include m.hover {
+        background-color: color-mix(in srgb, v.$primary, black 5%);
+      }
+    }
+  }
+
+  // Sizes
+  &.xs {
+    height: v.$control-height-xs;
+    padding: 0 v.$control-padding-xs;
+    font-size: v.$control-font-size-xs;
+    border-radius: v.$radius-sm;
+  }
+
+  &.sm {
+    height: v.$control-height-sm;
+    padding: 0 v.$control-padding-sm;
+    font-size: v.$control-font-size-sm;
+    border-radius: v.$radius-sm;
+  }
+
+  &.md {
+    height: v.$control-height-md;
+    padding: 0 v.$control-padding-md;
+    font-size: v.$control-font-size-md;
     border-radius: v.$radius-md;
-    font-weight: 500;
-    transition: all 0.2s v.$ease-ios;
-    cursor: pointer;
-    user-select: none;
-    background: transparent;
-    border: 1px solid transparent;
+  }
 
-    &[data-state="on"] {
-        background-color: v.$banana-yellow;
-        color: v.$grey-900;
+  &.lg {
+    height: v.$control-height-lg;
+    padding: 0 v.$control-padding-lg;
+    font-size: v.$control-font-size-lg;
+    border-radius: v.$radius-lg;
+  }
 
-        @include m.hover {
-            filter: brightness(0.95);
-        }
-    }
-
-    &[data-state="off"] {
-        background-color: v.$grey-50;
-        color: v.$grey-400;
-        border-color: v.$grey-100;
-
-        @include m.hover {
-            background-color: v.$grey-100;
-            color: v.$grey-500;
-        }
-    }
-
-    &:active {
-        transform: scale(0.96);
-    }
-
-    &:disabled {
-        opacity: 0.5;
-        pointer-events: none;
-    }
-
-    // Variants
-    &.outline {
-        background-color: v.$white;
-        border: 1px solid v.$grey-200;
-
-        &[data-state="on"] {
-            border-color: v.$banana-yellow;
-            background-color: rgba(v.$banana-yellow, 0.1);
-            color: v.$yellow-900;
-        }
-    }
-
-    &.ghost {
-        &[data-state="off"] {
-            background-color: transparent;
-            border-color: transparent;
-        }
-    }
-
-    // Sizes
-    &.sm {
-        height: 32px;
-        padding: 0 10px;
-        font-size: v.$font-size-sm;
-    }
-
-    &.md {
-        height: 44px;
-        padding: 0 16px;
-        font-size: v.$font-size-md;
-    }
-
-    &.lg {
-        height: 52px;
-        padding: 0 20px;
-        font-size: v.$font-size-base;
-    }
+  &.xl {
+    height: v.$control-height-xl;
+    padding: 0 v.$control-padding-xl;
+    font-size: v.$control-font-size-xl;
+    border-radius: v.$radius-lg;
+  }
 }

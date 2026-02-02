@@ -249,7 +249,7 @@ export default function AccountsSectionContent() {
                                     ) : null}
 
                                     <div className={styles.fieldRow}>
-                                        <div className={styles.flex1}>
+                                        <div>
                                             <TextField
 
                                                 placeholder="예: 신한"
@@ -257,7 +257,7 @@ export default function AccountsSectionContent() {
                                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleUpdateAccount(acc.id, { bank: e.target.value })}
                                             />
                                         </div>
-                                        <div className={styles.flex1}>
+                                        <div>
                                             <TextField
 
                                                 placeholder="이름"

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, lazy, Suspense, useCallback } from 'react';
+import React, { useState, lazy, Suspense, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { LogIn, Save, Banana, Bell, ChevronLeft } from 'lucide-react';
@@ -126,8 +126,7 @@ export default function Header() {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    const isVisible = pathname !== '/' &&
-        !pathname.startsWith('/v/') &&
+    const isVisible = !pathname.startsWith('/v/') &&
         pathname !== '/preview' &&
         pathname !== '/builder/setup';
     const { user, loading: authLoading } = useAuth();
@@ -142,10 +141,6 @@ export default function Header() {
 
     const [showResetDialog, setShowResetDialog] = useState(false);
     const { toast } = useToast();
-
-    useEffect(() => {
-        router.prefetch('/login');
-    }, [router]);
 
     const confirmReset = useCallback(() => {
         reset();

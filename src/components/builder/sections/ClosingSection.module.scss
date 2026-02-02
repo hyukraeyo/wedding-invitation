@@ -1,8 +1,6 @@
-@use "../../../styles/variables" as v;
-@use "../../../styles/builder" as b;
+@use '../../../styles/variables' as v;
 
 .container {
-
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -71,7 +69,6 @@
       }
     }
   }
-
 }
 
 .sparkleIcon {

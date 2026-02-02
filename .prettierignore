@@ -1,0 +1,9 @@
+.next
+node_modules
+dist
+out
+public
+next-env.d.ts
+ts_errors.txt
+lint_log.txt
+package-lock.json

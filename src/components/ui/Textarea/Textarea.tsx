@@ -4,7 +4,7 @@ import * as React from 'react';
 import { clsx } from 'clsx';
 import s from './Textarea.module.scss';
 
-type TextareaVariant = 'surface' | 'classic' | 'soft';
+type TextareaVariant = 'surface' | 'classic' | 'soft' | 'toss';
 type TextareaRadius = 'none' | 'small' | 'medium' | 'large';
 
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {

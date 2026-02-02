@@ -19,10 +19,9 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
     variant?: 'solid' | 'soft' | 'outline' | 'ghost' | 'surface' | 'filled' | 'fill' | 'weak' | 'clear' | 'apple' | 'toss' | undefined;
 
     /** 
-     * @default '2'
-     * size 1 (xs) to 4 (xl) 
+     * @default 'md'
      */
-    size?: '1' | '2' | '3' | '4' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'tiny' | 'medium' | 'large' | 'large_xl' | undefined;
+    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | undefined;
 
     /** 
      * @default 'medium'
@@ -50,8 +49,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {
             className,
             color = 'primary',
-            variant = 'solid',
-            size = '2',
+            variant = 'toss',
+            size = 'lg',
             radius,
             highContrast = false,
             loading = false,
@@ -78,12 +77,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         );
 
         // Mapping for size aliases
-        const sizeClass = clsx(
-            (size === '1' || size === 'xs' || size === 'tiny') && s.size_1,
-            (size === '2' || size === 'sm' || size === 'md' || size === 'medium') && s.size_2,
-            (size === '3' || size === 'lg' || size === 'large') && s.size_3,
-            (size === '4' || size === 'xl' || size === 'large_xl') && s.size_4
-        );
+        const sizeClass = s[size];
 
         return (
             <Comp

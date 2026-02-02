@@ -222,7 +222,7 @@ const SetupForm = () => {
                     >
                         {/* 4. 예식 시간 */}
                         <div className={cn(styles.fieldContainer, highestStepReached >= 3 && styles.visible)}>
-                            <FormField name="wedding-time">
+                            <FormField name="wedding-time" floatingLabel>
                                 <FormLabel htmlFor="wedding-time">예식 시간</FormLabel>
                                 <FormControl asChild>
                                     <TimePicker
@@ -259,7 +259,7 @@ const SetupForm = () => {
 
                         {/* 3. 예식 날짜 */}
                         <div className={cn(styles.fieldContainer, highestStepReached >= 2 && styles.visible)}>
-                            <FormField name="wedding-date">
+                            <FormField name="wedding-date" floatingLabel>
                                 <FormLabel htmlFor="wedding-date">예식 날짜</FormLabel>
                                 <FormControl asChild>
                                     <DatePicker
@@ -303,7 +303,7 @@ const SetupForm = () => {
 
                         {/* 2. 신부 이름 */}
                         <div className={cn(styles.fieldContainer, highestStepReached >= 1 && styles.visible)}>
-                            <FormField name="bride-name">
+                            <FormField name="bride-name" floatingLabel>
                                 <FormLabel htmlFor="bride-name">신부 이름</FormLabel>
                                 <FormControl asChild>
                                     <NameField
@@ -340,7 +340,7 @@ const SetupForm = () => {
 
                         {/* 1. 신랑 이름 */}
                         <div className={cn(styles.fieldContainer, styles.visible)}>
-                            <FormField name="groom-name">
+                            <FormField name="groom-name" floatingLabel>
                                 <FormLabel htmlFor="groom-name">신랑 이름</FormLabel>
                                 <FormControl asChild>
                                     <NameField

@@ -2,6 +2,7 @@ import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 import tsParser from "@typescript-eslint/parser";
+import prettierConfig from "eslint-config-prettier";
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -31,7 +32,7 @@ const eslintConfig = defineConfig([
     "public/sw.js",
     "public/workbox-*.js",
   ]),
-
+  prettierConfig,
 ]);
 
 export default eslintConfig;

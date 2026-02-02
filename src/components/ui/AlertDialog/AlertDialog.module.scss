@@ -5,11 +5,11 @@
   position: fixed;
   inset: 0;
   z-index: v.$z-overlay;
-  
+
   &[data-state='open'] {
     animation: overlayShow v.$transition-normal v.$ease-ios;
   }
-  
+
   &[data-state='closed'] {
     animation: overlayHide v.$transition-normal v.$ease-ios;
   }
@@ -34,9 +34,14 @@
   &[data-state='open'] {
     animation: contentShow 0.35s v.$ease-ios;
   }
-  
+
   &[data-state='closed'] {
     animation: contentHide 0.2s v.$ease-ios;
+  }
+
+  // 흔들린 후 등, 이미 열려있는 상태에서는 등장 애니메이션 재실행 방지
+  &.stabilized[data-state='open'] {
+    animation: none;
   }
 
   &:focus {
@@ -71,13 +76,23 @@
 }
 
 @keyframes overlayShow {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes overlayHide {
-  from { opacity: 1; }
-  to { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
 }
 
 @keyframes contentShow {
@@ -85,6 +100,7 @@
     opacity: 0;
     transform: translate(-50%, -40%) scale(0.96);
   }
+
   to {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
@@ -96,8 +112,43 @@
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
   }
+
   to {
     opacity: 0;
     transform: translate(-50%, -48%) scale(0.96);
+  }
+}
+
+.shake {
+  animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both !important;
+}
+
+@keyframes shake {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  15% {
+    transform: translate(calc(-50% - 5px), -50%) scale(1);
+  }
+
+  30% {
+    transform: translate(calc(-50% + 5px), -50%) scale(1);
+  }
+
+  45% {
+    transform: translate(calc(-50% - 3px), -50%) scale(1);
+  }
+
+  60% {
+    transform: translate(calc(-50% + 3px), -50%) scale(1);
+  }
+
+  75% {
+    transform: translate(calc(-50% - 1px), -50%) scale(1);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1);
   }
 }

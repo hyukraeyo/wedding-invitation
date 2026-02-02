@@ -1,4 +1,4 @@
-@use "./variables" as *;
+@use './tokens' as *;
 
 // ============================================
 // Breakpoints
@@ -48,138 +48,140 @@
 // CSS Variables Export
 // ============================================
 @mixin export-css-vars {
+  @each $key,
+    $value
+      in (
+        'background': $color-bg-page,
+        'foreground': $color-foreground,
+        'primary': $color-primary,
+        'primary-dark': $color-primary-dark,
+        'border': $color-border,
+        'input': $color-input,
+        'muted': $color-muted,
+        'muted-foreground': $color-muted-foreground,
+        'text-field-line-border-color': $text-field-line-border-color,
+        'text-field-line-border-color-focused': $text-field-line-border-color-focused,
+        'text-field-line-border-color-error': $text-field-line-border-color-error,
 
-  @each $key, $value in ('background': $color-bg-page,
-    'foreground': $color-foreground,
-    'primary': $color-primary,
-    'primary-dark': $color-primary-dark,
-    'border': $color-border,
-    'input': $color-input,
-    'muted': $color-muted,
-    'muted-foreground': $color-muted-foreground,
-    'text-field-line-border-color': $text-field-line-border-color,
-    'text-field-line-border-color-focused': $text-field-line-border-color-focused,
-    'text-field-line-border-color-error': $text-field-line-border-color-error,
+        // TDS Adaptive Colors (Full Sync)
+        'adaptiveBackground': $adaptive-background,
+        'adaptiveBackgroundDimmed': $adaptive-background-dimmed,
+        'adaptiveBackgroundLevel01': $adaptive-background-level-01,
+        'adaptiveBackgroundLevel02': $adaptive-background-level-02,
+        'adaptiveBackgroundLevelB01': $adaptive-background-level-b01,
+        'adaptiveDimmedBackground': $adaptive-dimmed-background,
+        'adaptiveFloatBackground': $adaptive-float-background,
+        'adaptiveLayeredBackground': $adaptive-layered-background,
+        'adaptiveGreyBackground': $adaptive-grey-background,
+        'adaptiveHairlineBorder': $adaptive-hairline-border,
 
-    // TDS Adaptive Colors (Full Sync)
-    'adaptiveBackground': $adaptive-background,
-    'adaptiveBackgroundDimmed': $adaptive-background-dimmed,
-    'adaptiveBackgroundLevel01': $adaptive-background-level-01,
-    'adaptiveBackgroundLevel02': $adaptive-background-level-02,
-    'adaptiveBackgroundLevelB01': $adaptive-background-level-b01,
-    'adaptiveDimmedBackground': $adaptive-dimmed-background,
-    'adaptiveFloatBackground': $adaptive-float-background,
-    'adaptiveLayeredBackground': $adaptive-layered-background,
-    'adaptiveGreyBackground': $adaptive-grey-background,
-    'adaptiveHairlineBorder': $adaptive-hairline-border,
+        'adaptiveBlue50': $adaptive-blue-50,
+        'adaptiveBlue100': $adaptive-blue-100,
+        'adaptiveBlue200': $adaptive-blue-200,
+        'adaptiveBlue300': $adaptive-blue-300,
+        'adaptiveBlue400': $adaptive-blue-400,
+        'adaptiveBlue500': $adaptive-blue-500,
+        'adaptiveBlue600': $adaptive-blue-600,
+        'adaptiveBlue700': $adaptive-blue-700,
+        'adaptiveBlue800': $adaptive-blue-800,
+        'adaptiveBlue900': $adaptive-blue-900,
 
-    'adaptiveBlue50': $adaptive-blue-50,
-    'adaptiveBlue100': $adaptive-blue-100,
-    'adaptiveBlue200': $adaptive-blue-200,
-    'adaptiveBlue300': $adaptive-blue-300,
-    'adaptiveBlue400': $adaptive-blue-400,
-    'adaptiveBlue500': $adaptive-blue-500,
-    'adaptiveBlue600': $adaptive-blue-600,
-    'adaptiveBlue700': $adaptive-blue-700,
-    'adaptiveBlue800': $adaptive-blue-800,
-    'adaptiveBlue900': $adaptive-blue-900,
+        'adaptiveGreen50': $adaptive-green-50,
+        'adaptiveGreen100': $adaptive-green-100,
+        'adaptiveGreen200': $adaptive-green-200,
+        'adaptiveGreen300': $adaptive-green-300,
+        'adaptiveGreen400': $adaptive-green-400,
+        'adaptiveGreen500': $adaptive-green-500,
+        'adaptiveGreen600': $adaptive-green-600,
+        'adaptiveGreen700': $adaptive-green-700,
+        'adaptiveGreen800': $adaptive-green-800,
+        'adaptiveGreen900': $adaptive-green-900,
 
-    'adaptiveGreen50': $adaptive-green-50,
-    'adaptiveGreen100': $adaptive-green-100,
-    'adaptiveGreen200': $adaptive-green-200,
-    'adaptiveGreen300': $adaptive-green-300,
-    'adaptiveGreen400': $adaptive-green-400,
-    'adaptiveGreen500': $adaptive-green-500,
-    'adaptiveGreen600': $adaptive-green-600,
-    'adaptiveGreen700': $adaptive-green-700,
-    'adaptiveGreen800': $adaptive-green-800,
-    'adaptiveGreen900': $adaptive-green-900,
+        'adaptiveGrey50': $adaptive-grey-50,
+        'adaptiveGrey100': $adaptive-grey-100,
+        'adaptiveGrey200': $adaptive-grey-200,
+        'adaptiveGrey300': $adaptive-grey-300,
+        'adaptiveGrey400': $adaptive-grey-400,
+        'adaptiveGrey500': $adaptive-grey-500,
+        'adaptiveGrey600': $adaptive-grey-600,
+        'adaptiveGrey700': $adaptive-grey-700,
+        'adaptiveGrey800': $adaptive-grey-800,
+        'adaptiveGrey900': $adaptive-grey-900,
 
-    'adaptiveGrey50': $adaptive-grey-50,
-    'adaptiveGrey100': $adaptive-grey-100,
-    'adaptiveGrey200': $adaptive-grey-200,
-    'adaptiveGrey300': $adaptive-grey-300,
-    'adaptiveGrey400': $adaptive-grey-400,
-    'adaptiveGrey500': $adaptive-grey-500,
-    'adaptiveGrey600': $adaptive-grey-600,
-    'adaptiveGrey700': $adaptive-grey-700,
-    'adaptiveGrey800': $adaptive-grey-800,
-    'adaptiveGrey900': $adaptive-grey-900,
+        'adaptiveOrange50': $adaptive-orange-50,
+        'adaptiveOrange100': $adaptive-orange-100,
+        'adaptiveOrange200': $adaptive-orange-200,
+        'adaptiveOrange300': $adaptive-orange-300,
+        'adaptiveOrange400': $adaptive-orange-400,
+        'adaptiveOrange500': $adaptive-orange-500,
+        'adaptiveOrange600': $adaptive-orange-600,
+        'adaptiveOrange700': $adaptive-orange-700,
+        'adaptiveOrange800': $adaptive-orange-800,
+        'adaptiveOrange900': $adaptive-orange-900,
 
-    'adaptiveOrange50': $adaptive-orange-50,
-    'adaptiveOrange100': $adaptive-orange-100,
-    'adaptiveOrange200': $adaptive-orange-200,
-    'adaptiveOrange300': $adaptive-orange-300,
-    'adaptiveOrange400': $adaptive-orange-400,
-    'adaptiveOrange500': $adaptive-orange-500,
-    'adaptiveOrange600': $adaptive-orange-600,
-    'adaptiveOrange700': $adaptive-orange-700,
-    'adaptiveOrange800': $adaptive-orange-800,
-    'adaptiveOrange900': $adaptive-orange-900,
+        'adaptivePurple50': $adaptive-purple-50,
+        'adaptivePurple100': $adaptive-purple-100,
+        'adaptivePurple200': $adaptive-purple-200,
+        'adaptivePurple300': $adaptive-purple-300,
+        'adaptivePurple400': $adaptive-purple-400,
+        'adaptivePurple500': $adaptive-purple-500,
+        'adaptivePurple600': $adaptive-purple-600,
+        'adaptivePurple700': $adaptive-purple-700,
+        'adaptivePurple800': $adaptive-purple-800,
+        'adaptivePurple900': $adaptive-purple-900,
 
-    'adaptivePurple50': $adaptive-purple-50,
-    'adaptivePurple100': $adaptive-purple-100,
-    'adaptivePurple200': $adaptive-purple-200,
-    'adaptivePurple300': $adaptive-purple-300,
-    'adaptivePurple400': $adaptive-purple-400,
-    'adaptivePurple500': $adaptive-purple-500,
-    'adaptivePurple600': $adaptive-purple-600,
-    'adaptivePurple700': $adaptive-purple-700,
-    'adaptivePurple800': $adaptive-purple-800,
-    'adaptivePurple900': $adaptive-purple-900,
+        'adaptiveRed50': $adaptive-red-50,
+        'adaptiveRed100': $adaptive-red-100,
+        'adaptiveRed200': $adaptive-red-200,
+        'adaptiveRed300': $adaptive-red-300,
+        'adaptiveRed400': $adaptive-red-400,
+        'adaptiveRed500': $adaptive-red-500,
+        'adaptiveRed600': $adaptive-red-600,
+        'adaptiveRed700': $adaptive-red-700,
+        'adaptiveRed800': $adaptive-red-800,
+        'adaptiveRed900': $adaptive-red-900,
 
-    'adaptiveRed50': $adaptive-red-50,
-    'adaptiveRed100': $adaptive-red-100,
-    'adaptiveRed200': $adaptive-red-200,
-    'adaptiveRed300': $adaptive-red-300,
-    'adaptiveRed400': $adaptive-red-400,
-    'adaptiveRed500': $adaptive-red-500,
-    'adaptiveRed600': $adaptive-red-600,
-    'adaptiveRed700': $adaptive-red-700,
-    'adaptiveRed800': $adaptive-red-800,
-    'adaptiveRed900': $adaptive-red-900,
+        'adaptiveTeal50': $adaptive-teal-50,
+        'adaptiveTeal100': $adaptive-teal-100,
+        'adaptiveTeal200': $adaptive-teal-200,
+        'adaptiveTeal300': $adaptive-teal-300,
+        'adaptiveTeal400': $adaptive-teal-400,
+        'adaptiveTeal500': $adaptive-teal-500,
+        'adaptiveTeal600': $adaptive-teal-600,
+        'adaptiveTeal700': $adaptive-teal-700,
+        'adaptiveTeal800': $adaptive-teal-800,
+        'adaptiveTeal900': $adaptive-teal-900,
 
-    'adaptiveTeal50': $adaptive-teal-50,
-    'adaptiveTeal100': $adaptive-teal-100,
-    'adaptiveTeal200': $adaptive-teal-200,
-    'adaptiveTeal300': $adaptive-teal-300,
-    'adaptiveTeal400': $adaptive-teal-400,
-    'adaptiveTeal500': $adaptive-teal-500,
-    'adaptiveTeal600': $adaptive-teal-600,
-    'adaptiveTeal700': $adaptive-teal-700,
-    'adaptiveTeal800': $adaptive-teal-800,
-    'adaptiveTeal900': $adaptive-teal-900,
+        'adaptiveYellow50': $adaptive-yellow-50,
+        'adaptiveYellow100': $adaptive-yellow-100,
+        'adaptiveYellow200': $adaptive-yellow-200,
+        'adaptiveYellow300': $adaptive-yellow-300,
+        'adaptiveYellow400': $adaptive-yellow-400,
+        'adaptiveYellow500': $adaptive-yellow-500,
+        'adaptiveYellow600': $adaptive-yellow-600,
+        'adaptiveYellow700': $adaptive-yellow-700,
+        'adaptiveYellow800': $adaptive-yellow-800,
+        'adaptiveYellow900': $adaptive-yellow-900,
 
-    'adaptiveYellow50': $adaptive-yellow-50,
-    'adaptiveYellow100': $adaptive-yellow-100,
-    'adaptiveYellow200': $adaptive-yellow-200,
-    'adaptiveYellow300': $adaptive-yellow-300,
-    'adaptiveYellow400': $adaptive-yellow-400,
-    'adaptiveYellow500': $adaptive-yellow-500,
-    'adaptiveYellow600': $adaptive-yellow-600,
-    'adaptiveYellow700': $adaptive-yellow-700,
-    'adaptiveYellow800': $adaptive-yellow-800,
-    'adaptiveYellow900': $adaptive-yellow-900,
+        'adaptiveGreyOpacity50': $adaptive-grey-opacity-50,
+        'adaptiveGreyOpacity100': $adaptive-grey-opacity-100,
+        'adaptiveGreyOpacity200': $adaptive-grey-opacity-200,
+        'adaptiveGreyOpacity300': $adaptive-grey-opacity-300,
+        'adaptiveGreyOpacity400': $adaptive-grey-opacity-400,
+        'adaptiveGreyOpacity500': $adaptive-grey-opacity-500,
+        'adaptiveGreyOpacity600': $adaptive-grey-opacity-600,
+        'adaptiveGreyOpacity700': $adaptive-grey-opacity-700,
+        'adaptiveGreyOpacity800': $adaptive-grey-opacity-800,
+        'adaptiveGreyOpacity900': $adaptive-grey-opacity-900,
 
-    'adaptiveGreyOpacity50': $adaptive-grey-opacity-50,
-    'adaptiveGreyOpacity100': $adaptive-grey-opacity-100,
-    'adaptiveGreyOpacity200': $adaptive-grey-opacity-200,
-    'adaptiveGreyOpacity300': $adaptive-grey-opacity-300,
-    'adaptiveGreyOpacity400': $adaptive-grey-opacity-400,
-    'adaptiveGreyOpacity500': $adaptive-grey-opacity-500,
-    'adaptiveGreyOpacity600': $adaptive-grey-opacity-600,
-    'adaptiveGreyOpacity700': $adaptive-grey-opacity-700,
-    'adaptiveGreyOpacity800': $adaptive-grey-opacity-800,
-    'adaptiveGreyOpacity900': $adaptive-grey-opacity-900,
-
-    'adaptiveDisabledBlue500': $adaptive-disabled-blue-500,
-    'tRadioIndicatorBackgroundColor': $t-radio-indicator-background-color,
-    'tGradientToBottom': $t-gradient-to-bottom,
-  ) {
+        'adaptiveDisabledBlue500': $adaptive-disabled-blue-500,
+        'tRadioIndicatorBackgroundColor': $t-radio-indicator-background-color,
+        'tGradientToBottom': $t-gradient-to-bottom
+      )
+  {
     --#{$key}: #{$value};
   }
 }
-
 
 // ============================================
 // Flexbox Tools
@@ -264,11 +266,11 @@
     background: linear-gradient(to top, $bg-color, rgba($bg-color, 0));
   }
 
-  &[data-top-fade="true"]::before {
+  &[data-top-fade='true']::before {
     opacity: 1;
   }
 
-  &[data-bottom-fade="true"]::after {
+  &[data-bottom-fade='true']::after {
     opacity: 1;
   }
 }
@@ -276,7 +278,11 @@
 // ============================================
 // Custom Scrollbar
 // ============================================
-@mixin custom-scrollbar($width: $scrollbar-width-default, $thumb-color: $scrollbar-thumb-color, $track-color: $scrollbar-track-color) {
+@mixin custom-scrollbar(
+  $width: $scrollbar-width-default,
+  $thumb-color: $scrollbar-thumb-color,
+  $track-color: $scrollbar-track-color
+) {
   &::-webkit-scrollbar {
     width: $width;
     height: $width;
@@ -401,7 +407,11 @@
   border: 1px solid transparent;
   border-radius: $button-radius;
   cursor: pointer;
-  transition: background-color $transition-fast, border-color $transition-fast, box-shadow $transition-fast, transform $transition-fast;
+  transition:
+    background-color $transition-fast,
+    border-color $transition-fast,
+    box-shadow $transition-fast,
+    transform $transition-fast;
   text-decoration: none;
   user-select: none;
 }
@@ -508,6 +518,35 @@
 }
 
 // ============================================
+// Toss Style Intersections (Hover, Active, Focus)
+// ============================================
+@mixin toss-interactive {
+  transition: all 0.2s $ease-ios;
+
+  @include hover {
+    &:not(:disabled):not(:focus-within) {
+      background-color: $grey-100;
+      border-color: $grey-200;
+    }
+  }
+
+  &:active:not(:disabled):not([data-state='open']):not(:focus-within) {
+    transform: scale(0.96);
+    background-color: $grey-200;
+  }
+
+  &:focus-within,
+  &[data-state='open'] {
+    background-color: $white;
+    border-color: $primary;
+    box-shadow:
+      0 0 0 1px $primary,
+      $shadow-md;
+    transform: none !important;
+  }
+}
+
+// ============================================
 // Spin Animation Mixin (Centralized)
 // ============================================
 // 중복된 @keyframes spin을 한 곳에서 관리합니다.
@@ -515,4 +554,210 @@
 // 참조: _animations.scss에 @keyframes spin 정의됨
 @mixin spin-animation($duration: 1s) {
   animation: spin $duration linear infinite;
+}
+
+// ============================================
+// Builder Layout System Mixins
+// ============================================
+
+// Section container
+@mixin builder-section {
+  display: flex;
+  flex-direction: column;
+  gap: $builder-gap-xl;
+  padding: $builder-gap-xl $builder-gap-sm;
+}
+
+// Field group
+@mixin builder-field-group {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: $builder-gap-sm;
+}
+
+// Row layout
+@mixin builder-row($gap: $builder-gap-md) {
+  display: flex;
+  align-items: center;
+  gap: $gap;
+}
+
+// Grid layout
+@mixin builder-grid($cols: 2, $gap: $builder-gap-md) {
+  display: grid;
+  grid-template-columns: repeat($cols, 1fr);
+  gap: $gap;
+}
+
+// Stack layout
+@mixin builder-stack($gap: $builder-gap-md) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+// Card style
+@mixin builder-card {
+  border-radius: $builder-radius-md;
+  border: 1px solid $builder-border-light;
+  background: white;
+  padding: $builder-gap-md;
+  transition: all 150ms; // $transition-fast
+}
+
+// Subtle divider
+@mixin builder-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    $builder-border-light 20%,
+    $builder-border-light 80%,
+    transparent 100%
+  );
+  margin-block: $builder-gap-md;
+}
+
+// Label style
+@mixin builder-label {
+  font-size: 13px;
+  line-height: 1.5; // 19.5px
+  font-weight: 600; // semibold
+  color: #52525b; // $zinc-600
+  display: block;
+  margin-bottom: 6px;
+  padding-left: 2px;
+  letter-spacing: -0.01em;
+}
+
+// Sub-label (smaller, inline)
+@mixin builder-sub-label {
+  font-size: 12px;
+  line-height: 1.5; // 18px
+  font-weight: 500; // medium
+  color: $builder-text-secondary;
+  flex-shrink: 0;
+  min-width: 3.5rem;
+}
+
+@mixin builder-form-message {
+  color: $red-500;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+@mixin builder-input-base {
+  @include input-base;
+
+  &::placeholder {
+    color: #737373; // $color-muted-foreground
+  }
+
+  @include input-hover;
+  @include input-disabled;
+}
+
+@mixin builder-input-focus {
+  @include input-focus-style;
+}
+
+@mixin builder-button-base {
+  @include button-base;
+  @include button-hover;
+  @include button-active;
+  @include button-disabled;
+}
+
+// Active state for toggleable buttons
+@mixin builder-button-active {
+  color: #f9a825; // $primary-dark
+  background: #fffbea; // $ivory
+  border-color: #fbc02d; // $primary
+  font-weight: 700;
+}
+
+// Option wrapper - vertical stack with gap
+@mixin section-option-wrapper($gap: $builder-gap-lg) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+// Section divider - horizontal line between sections
+@mixin section-divider {
+  height: 1px;
+  background-color: $builder-border-light;
+  width: 100%;
+}
+
+// Form group - vertical stack for form elements
+@mixin section-form-group($gap: $builder-gap-md) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+// Form row - horizontal grid for inputs
+@mixin section-form-row {
+  display: grid;
+  gap: $builder-gap-sm;
+  align-items: center;
+  width: 100%;
+}
+
+// Color picker grid
+@mixin section-color-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $builder-gap-md;
+  padding: $builder-gap-xs;
+}
+
+// Color picker item
+@mixin section-color-item($size: 32px) {
+  position: relative;
+  width: $size;
+  height: $size;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  &.active {
+    border-color: #fbc02d; // $primary-500
+    transform: scale(1.1);
+  }
+}
+
+// Custom add button (circular dashed)
+@mixin section-add-button-circle($size: 32px) {
+  width: $size;
+  height: $size;
+  border-radius: 50%;
+  border: 1px dashed $builder-border-default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: white;
+  color: $builder-text-muted;
+  transition: all 0.2s ease;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      border-color: #fbc02d; // $primary-500
+      color: #fbc02d; // $primary-500
+      background-color: #fef3c7; // $primary-100
+    }
+  }
 }

@@ -227,7 +227,7 @@ export function MobileNav({
                                 곧 찾아올 할인 혜택에 기대해주세요. 😊
                             </p>
                         </Dialog.Body>
-                        <Dialog.Footer className={styles.modalFooter}>
+                        <Dialog.Footer>
                             <Button className={styles.fullWidth} variant="fill" size="lg" onClick={() => setIsEventModalOpen(false)}>
                                 확인
                             </Button>

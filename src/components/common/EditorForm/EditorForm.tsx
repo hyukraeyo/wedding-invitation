@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useState, useCallback, memo, useEffect, useRef } from 'react';
+import React, { useState, useCallback, memo, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { useShallow } from 'zustand/react/shallow';
 import { Button } from '@/components/ui/Button';
-import { Dialog } from '@/components/ui/Dialog';
+import { AlertDialog } from '@/components/ui/AlertDialog';
 import { Form } from '@/components/ui/Form';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { useInvitationStore } from '@/store/useInvitationStore';
+import { isRequiredField } from '@/constants/requiredFields';
 import styles from './EditorForm.module.scss';
 
 // Dynamic imports for optimized initial bundle
@@ -44,7 +45,6 @@ const EditorForm = memo(function EditorForm({ formId, onSubmit }: EditorFormProp
     const [openSections, setOpenSections] = useState<string[]>([]);
     const [isReady, setIsReady] = useState(false);
     const [isValidationOpen, setIsValidationOpen] = useState(false);
-    const hasInvalidRef = useRef(false);
     const { editingSection, setEditingSection } = useInvitationStore(useShallow((state) => ({
         editingSection: state.editingSection,
         setEditingSection: state.setEditingSection,
@@ -84,18 +84,38 @@ const EditorForm = memo(function EditorForm({ formId, onSubmit }: EditorFormProp
 
     const handleSubmit = useCallback((event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        hasInvalidRef.current = false;
-        onSubmit?.();
-    }, [onSubmit]);
+        const form = event.currentTarget;
 
-    const handleInvalid = useCallback((event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        if (hasInvalidRef.current) {
+        // 1. Manual Validation (Store-based)
+        // This is the single source of truth for validation, bypassing browser's
+        // "invalid form control is not focusable" issues with hidden accordion contents.
+        const state = useInvitationStore.getState();
+
+        // Check basic info
+        const isGroomEmpty = !state.groom.lastName && !state.groom.firstName;
+        const isBrideEmpty = !state.bride.lastName && !state.bride.firstName;
+
+        const isGroomRequired = isRequiredField('groomName');
+        const isBrideRequired = isRequiredField('brideName');
+
+        if ((isGroomRequired && isGroomEmpty) || (isBrideRequired && isBrideEmpty)) {
+            // Open Basic Info section if closed
+            if (!openSections.includes('basic')) {
+                handleToggle('basic', true);
+                // Wait for render to ensure inputs are mounted before validation
+                setTimeout(() => form.checkValidity(), 0);
+            } else {
+                // Trigger native invalid events so Radix FormMessage shows up
+                form.checkValidity();
+            }
+
+            // Show alert
+            setIsValidationOpen(true);
             return;
         }
-        hasInvalidRef.current = true;
-        setIsValidationOpen(true);
-    }, []);
+
+        onSubmit?.();
+    }, [onSubmit, openSections, handleToggle]);
 
     if (!isReady) {
         return (
@@ -118,7 +138,7 @@ const EditorForm = memo(function EditorForm({ formId, onSubmit }: EditorFormProp
 
     return (
         <>
-            <Form id={formId} onSubmit={handleSubmit} onInvalid={handleInvalid} className={styles.wrapper}>
+            <Form id={formId} onSubmit={handleSubmit} noValidate className={styles.wrapper}>
                 <div className={styles.list}>
                     {SECTIONS.map(({ key, Component }) => (
                         <Component
@@ -130,17 +150,32 @@ const EditorForm = memo(function EditorForm({ formId, onSubmit }: EditorFormProp
                     ))}
                 </div>
             </Form>
-            <Dialog open={isValidationOpen} onOpenChange={setIsValidationOpen}>
-                <Dialog.Header title="입력 확인" />
-                <Dialog.Body>
-                    필수 항목을 확인해주세요.
-                </Dialog.Body>
-                <Dialog.Footer>
-                    <Button type="button" onClick={() => setIsValidationOpen(false)}>
-                        확인
-                    </Button>
-                </Dialog.Footer>
-            </Dialog>
+            <AlertDialog open={isValidationOpen} onOpenChange={setIsValidationOpen}>
+                <AlertDialog.Content
+                    onCloseAutoFocus={(e) => {
+                        e.preventDefault();
+                        const form = document.getElementById(formId) as HTMLFormElement;
+                        if (form) {
+                            const firstInvalid = form.querySelector<HTMLElement>(':invalid, [aria-invalid="true"]');
+                            firstInvalid?.focus();
+                        }
+                    }}
+                >
+                    <AlertDialog.Header>
+                        <AlertDialog.Title>입력 확인</AlertDialog.Title>
+                        <AlertDialog.Description>
+                            필수 항목을 확인해주세요.
+                        </AlertDialog.Description>
+                    </AlertDialog.Header>
+                    <AlertDialog.Footer>
+                        <AlertDialog.Action asChild>
+                            <Button type="button" onClick={() => setIsValidationOpen(false)}>
+                                확인
+                            </Button>
+                        </AlertDialog.Action>
+                    </AlertDialog.Footer>
+                </AlertDialog.Content>
+            </AlertDialog>
         </>
     );
 });

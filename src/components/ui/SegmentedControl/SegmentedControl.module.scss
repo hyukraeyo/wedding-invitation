@@ -1,4 +1,4 @@
-@use "../../../styles/variables" as v;
+@use '../../../styles/variables' as v;
 
 .root {
   position: relative;
@@ -8,15 +8,40 @@
   border-radius: v.$radius-md; // 16px
   width: fit-content;
   overflow: hidden;
-  
+
   &.fluid {
     width: 100%;
   }
 
-  // Matching Button Heights
-  &.sm { height: v.$control-height-sm; } // 36px
-  &.md { height: v.$control-height-md; } // 48px
-  &.lg { height: v.$control-height-lg; } // 56px
+  // Sizes
+  &.xl {
+    height: v.$control-height-xl;
+    .item {
+      padding: 0 v.$control-padding-xl;
+      font-size: v.$control-font-size-xl;
+    }
+  }
+  &.lg {
+    height: v.$control-height-lg;
+    .item {
+      padding: 0 v.$control-padding-lg;
+      font-size: v.$control-font-size-lg;
+    }
+  }
+  &.md {
+    height: v.$control-height-md;
+    .item {
+      padding: 0 v.$control-padding-md;
+      font-size: v.$control-font-size-md;
+    }
+  }
+  &.sm {
+    height: v.$control-height-sm;
+    .item {
+      padding: 0 v.$control-padding-sm;
+      font-size: v.$control-font-size-sm;
+    }
+  }
 }
 
 .indicator {
@@ -26,7 +51,10 @@
   left: 0;
   background-color: v.$white;
   border-radius: calc(v.$radius-md - 2px); // 14px
-  transition: transform 0.3s v.$ease-ios, width 0.3s v.$ease-ios, opacity 0.2s;
+  transition:
+    transform 0.3s v.$ease-ios,
+    width 0.3s v.$ease-ios,
+    opacity 0.2s;
   pointer-events: none;
   z-index: 0;
 }
@@ -38,21 +66,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 12px; // Height is controlled by root parent flex
   border-radius: calc(v.$radius-md - 2px);
-  font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   color: v.$grey-600;
   cursor: pointer;
-  transition: color 0.2s v.$ease-ios;
+  transition: all 0.2s v.$ease-ios;
   border: none;
   background: transparent;
   white-space: nowrap;
-  
+
   &:hover {
     color: v.$grey-900;
+    background-color: v.$grey-opacity-50;
   }
-  
+
+  &:active {
+    transform: scale(0.97);
+  }
+
   &.active {
     color: v.$grey-900;
   }

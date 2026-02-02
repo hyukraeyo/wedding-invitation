@@ -44,6 +44,16 @@ const ProfileCompletionModal = dynamic(
 );
 import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
+import {
+    AlertDialog,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogFooter,
+    AlertDialogTitle,
+    AlertDialogDescription,
+    AlertDialogAction,
+    AlertDialogCancel,
+} from '@/components/ui/AlertDialog';
 const RichTextEditor = dynamic(
     () => import('@/components/ui/RichTextEditor').then(mod => mod.RichTextEditor),
     { ssr: false }
@@ -683,49 +693,51 @@ export default function MyPageClient({
             />
 
 
-            <Dialog
+            <AlertDialog
                 open={confirmConfig.isOpen}
                 onOpenChange={(open) => setConfirmConfig(prev => ({ ...prev, isOpen: open }))}
             >
-                <Dialog.Overlay />
-                <Dialog.Content>
-                    <Dialog.Header title={confirmConfig.title} />
-                    <Dialog.Body>
-                        <div className={styles.modalDescription}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>{confirmConfig.title}</AlertDialogTitle>
+                        <AlertDialogDescription className={styles.modalDescription}>
                             {confirmConfig.description}
-                        </div>
-                    </Dialog.Body>
-                    <Dialog.Footer className={styles.modalFooter}>
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
                         {confirmConfig.type !== 'INFO_ONLY' && (
-                            <Button
-                                className={styles.flex1}
-                                variant="weak"
-                                size="lg"
-                                onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
-                                disabled={!!actionLoadingId}
-                            >
-                                취소
-                            </Button>
+                            <AlertDialogCancel asChild>
+                                <Button
+                                    variant="weak"
+                                    size="lg"
+                                    onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
+                                    disabled={!!actionLoadingId}
+                                >
+                                    취소
+                                </Button>
+                            </AlertDialogCancel>
                         )}
-                        <Button
-                            className={styles.flex1}
-                            variant="fill"
-                            size="lg"
-                            loading={!!actionLoadingId}
-                            disabled={!!actionLoadingId}
-                            onClick={() => {
-                                if (confirmConfig.type !== 'INFO_ONLY') {
-                                    handleConfirmAction();
-                                } else {
-                                    setConfirmConfig(prev => ({ ...prev, isOpen: false }));
-                                }
-                            }}
-                        >
-                            확인
-                        </Button>
-                    </Dialog.Footer>
-                </Dialog.Content>
-            </Dialog>
+                        <AlertDialogAction asChild>
+                            <Button
+                                variant="fill"
+                                size="lg"
+                                loading={!!actionLoadingId}
+                                disabled={!!actionLoadingId}
+                                onClick={(e) => {
+                                    e.preventDefault(); // Prevent default since we handle async actions
+                                    if (confirmConfig.type !== 'INFO_ONLY') {
+                                        handleConfirmAction();
+                                    } else {
+                                        setConfirmConfig(prev => ({ ...prev, isOpen: false }));
+                                    }
+                                }}
+                            >
+                                확인
+                            </Button>
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
 
             {rejectionTarget ? (
                 <Dialog
@@ -747,9 +759,8 @@ export default function MyPageClient({
                                 />
                             </div>
                         </Dialog.Body>
-                        <Dialog.Footer className={styles.modalFooter}>
+                        <Dialog.Footer>
                             <Button
-                                className={styles.flex1}
                                 variant="weak"
                                 size="lg"
                                 onClick={rejectionReason.handleClose}
@@ -758,7 +769,6 @@ export default function MyPageClient({
                                 취소
                             </Button>
                             <Button
-                                className={styles.flex1}
                                 variant="fill"
                                 size="lg"
                                 loading={!!actionLoadingId}
@@ -774,32 +784,35 @@ export default function MyPageClient({
 
             {/* Auto-Notification Modal */}
             {autoNotificationTarget && (
-                <Dialog
+                <AlertDialog
                     open={!!autoNotificationTarget}
                     onOpenChange={(open) => {
                         if (!open) handleCloseAutoNotification();
                     }}
                 >
-                    <Dialog.Overlay />
-                    <Dialog.Content>
-                        <Dialog.Header title={autoNotificationTarget.isApproval ? '승인 완료' : parseRejection(autoNotificationTarget.rejection).title} />
-                        <Dialog.Body>
-                            <div
-                                className={`${styles.rejectionMessageBox} ${autoNotificationTarget.isApproval ? styles.success : ''}`}
-                                dangerouslySetInnerHTML={{
-                                    __html: autoNotificationTarget.isApproval
-                                        ? `<strong>${autoNotificationTarget.invitation.invitation_data.mainScreen.title}</strong> 청첩장 승인이 완료되었어요!<br/>이제 자유롭게 공유할 수 있어요.`
-                                        : parseRejection(autoNotificationTarget.rejection).displayReason || '내용이 없어요.'
-                                }}
-                            />
-                        </Dialog.Body>
-                        <Dialog.Footer className={styles.modalFooter}>
-                            <Button className={styles.flex1} variant="fill" size="lg" onClick={handleCloseAutoNotification}>
-                                확인
-                            </Button>
-                        </Dialog.Footer>
-                    </Dialog.Content>
-                </Dialog>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>{autoNotificationTarget.isApproval ? '승인 완료' : parseRejection(autoNotificationTarget.rejection).title}</AlertDialogTitle>
+                            <AlertDialogDescription asChild>
+                                <div
+                                    className={`${styles.rejectionMessageBox} ${autoNotificationTarget.isApproval ? styles.success : ''}`}
+                                    dangerouslySetInnerHTML={{
+                                        __html: autoNotificationTarget.isApproval
+                                            ? `<strong>${autoNotificationTarget.invitation.invitation_data.mainScreen.title}</strong> 청첩장 승인이 완료되었어요!<br/>이제 자유롭게 공유할 수 있어요.`
+                                            : parseRejection(autoNotificationTarget.rejection).displayReason || '내용이 없어요.'
+                                    }}
+                                />
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogAction asChild>
+                                <Button variant="fill" size="lg" onClick={handleCloseAutoNotification}>
+                                    확인
+                                </Button>
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             )}
         </MyPageContent >
     );

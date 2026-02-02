@@ -1,8 +1,6 @@
-@use "../../../styles/variables" as v;
-@use "../../../styles/builder" as b;
+@use '../../../styles/variables' as v;
 
 .container {
-
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -65,7 +63,6 @@
       background-color: v.$zinc-200;
     }
   }
-
 
   &:active {
     scale: 0.95;
@@ -212,7 +209,7 @@
 
 .cardBtn {
   flex: 1;
-  background-color: #F6F6F6;
+  background-color: #f6f6f6;
   border-radius: v.$radius-md;
   padding: 0.5rem;
   text-align: center;
@@ -237,7 +234,6 @@
   gap: 0.5rem;
   font-weight: 700;
 }
-
 
 .paddedFooter {
   padding: 0 24px 24px;

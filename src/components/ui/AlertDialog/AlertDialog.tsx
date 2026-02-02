@@ -24,19 +24,57 @@ AlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName;
 
 const AlertDialogContent = React.forwardRef<
     React.ElementRef<typeof AlertDialogPrimitive.Content>,
-    React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
-    <AlertDialogPortal>
-        <AlertDialogOverlay />
-        <AlertDialogPrimitive.Content
-            ref={ref}
-            className={cn(styles.content, className)}
-            {...props}
-        >
-            {children}
-        </AlertDialogPrimitive.Content>
-    </AlertDialogPortal>
-));
+    React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content> & {
+        onPointerDownOutside?: (event: CustomEvent<{ originalEvent: PointerEvent }>) => void;
+        onEscapeKeyDown?: (event: KeyboardEvent) => void;
+    }
+>(({ className, children, onPointerDownOutside, onEscapeKeyDown, ...props }, ref) => {
+    const [isShaking, setIsShaking] = React.useState(false);
+    const [isStabilized, setIsStabilized] = React.useState(false);
+    const shakeTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+
+    const handleInvalidInteraction = (event: Event | React.SyntheticEvent) => {
+        event.preventDefault();
+
+        // 애니메이션 재실행을 위한 로직
+        setIsShaking(false);
+        if (shakeTimeoutRef.current) {
+            clearTimeout(shakeTimeoutRef.current);
+        }
+
+        // 다음 프레임에 애니메이션 실행
+        requestAnimationFrame(() => {
+            setIsShaking(true);
+            setIsStabilized(true); // 흔들림이 시작되면 안정화 모드 진입 (이후 등장 애니메이션 차단)
+            shakeTimeoutRef.current = setTimeout(() => {
+                setIsShaking(false);
+            }, 400);
+        });
+    };
+
+    return (
+        <AlertDialogPortal>
+            <AlertDialogOverlay onClick={(e) => handleInvalidInteraction(e)} />
+            <AlertDialogPrimitive.Content
+                ref={ref}
+                className={cn(
+                    styles.content,
+                    isShaking && styles.shake,
+                    isStabilized && styles.stabilized,
+                    className
+                )}
+                // @ts-ignore
+                onPointerDownOutside={(e) => {
+                    handleInvalidInteraction(e);
+                    onPointerDownOutside?.(e);
+                }}
+                {...props}
+            >
+                {children}
+            </AlertDialogPrimitive.Content>
+        </AlertDialogPortal>
+    );
+});
 AlertDialogContent.displayName = AlertDialogPrimitive.Content.displayName;
 
 const AlertDialogHeader = ({

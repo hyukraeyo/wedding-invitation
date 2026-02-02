@@ -238,7 +238,7 @@ export const InvitationActionMenu: React.FC<InvitationActionMenuProps> = ({
                         </div>
                     </Dialog.Body>
                     <Dialog.Footer className={styles.footer}>
-                        <Button className={styles.flex1} variant="fill" size="lg" onClick={() => setShowRejectionModal(false)}>
+                        <Button variant="fill" size="lg" onClick={() => setShowRejectionModal(false)}>
                             확인
                         </Button>
                     </Dialog.Footer>
@@ -260,10 +260,10 @@ export const InvitationActionMenu: React.FC<InvitationActionMenuProps> = ({
                         수정 모드로 전환 시 <strong>다시 승인 신청</strong>을 해야 공유가 가능해요. 수정할까요?
                     </Dialog.Body>
                     <Dialog.Footer className={styles.footer}>
-                        <Button className={styles.flex1} variant="weak" size="lg" onClick={() => setShowEditConfirmModal(false)}>
+                        <Button variant="weak" size="lg" onClick={() => setShowEditConfirmModal(false)}>
                             취소
                         </Button>
-                        <Button className={styles.flex1} variant="fill" size="lg" onClick={handleConfirmEdit}>
+                        <Button variant="fill" size="lg" onClick={handleConfirmEdit}>
                             수정하기
                         </Button>
                     </Dialog.Footer>

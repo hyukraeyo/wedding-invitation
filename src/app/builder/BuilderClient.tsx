@@ -40,7 +40,7 @@ const generateSlug = (name: string): string => {
 };
 
 // Module-level lock for absolute safety across any React re-renders or stale closures.
-let GLOBAL_SAVE_LOCK = false;
+
 
 export function BuilderClient() {
     const [isSaving, setIsSaving] = useState(false);
@@ -57,6 +57,9 @@ export function BuilderClient() {
     const isEditMode = searchParams.get('mode') === 'edit';
     const profileLockRef = useRef(false);
     const initRef = useRef(false);
+
+    // Use ref for save lock to strictly bind it to component lifecycle
+    const saveLockRef = useRef(false);
     const getLoginUrl = useCallback(() => {
         const search = searchParams.toString();
         const returnTo = `${pathname}${search ? `?${search}` : ''}`;
@@ -70,11 +73,11 @@ export function BuilderClient() {
         const isOnboarding = searchParams.get('onboarding') === 'true';
 
         if (isEditMode) {
-            // Re-mount lock reset
-            GLOBAL_SAVE_LOCK = false;
+            // Reset lock on mount/remount logic
+            saveLockRef.current = false;
         } else if (isOnboarding) {
             sessionStorage.removeItem('builder-draft-slug');
-            GLOBAL_SAVE_LOCK = false;
+            saveLockRef.current = false;
         } else {
             // Check if essential info exists (User might have refreshed or navigated back)
             const state = useInvitationStore.getState();
@@ -87,7 +90,7 @@ export function BuilderClient() {
             }
 
             sessionStorage.removeItem('builder-draft-slug');
-            GLOBAL_SAVE_LOCK = false;
+            saveLockRef.current = false;
         }
         // Set ready in next frame to avoid cascading renders
         requestAnimationFrame(() => setIsReady(true));
@@ -121,11 +124,11 @@ export function BuilderClient() {
             return;
         }
 
-        if (!isReady || isSaving || GLOBAL_SAVE_LOCK) {
+        if (!isReady || isSaving || saveLockRef.current) {
             return;
         }
 
-        GLOBAL_SAVE_LOCK = true;
+        saveLockRef.current = true;
         setIsSaving(true);
         try {
             const currentStoreState = useInvitationStore.getState();
@@ -148,6 +151,9 @@ export function BuilderClient() {
 
             if (!isAdmin && (currentStoreState.isRequestingApproval || currentStoreState.isApproved)) {
                 toast({ variant: 'destructive', description: '승인 신청 중이거나 승인된 청첩장은 수정할 수 없어요.' });
+                // Reset locks if early return
+                setIsSaving(false);
+                saveLockRef.current = false;
                 return;
             }
 
@@ -160,7 +166,7 @@ export function BuilderClient() {
             console.error('Save error:', error);
             toast({ variant: 'destructive', description: '저장 중 오류가 발생했어요. 다시 시도해주세요.' });
             setIsSaving(false);
-            GLOBAL_SAVE_LOCK = false;
+            saveLockRef.current = false;
         }
     }, [user, handleLogin, isReady, router, isAdmin, isSaving, toast]);
 

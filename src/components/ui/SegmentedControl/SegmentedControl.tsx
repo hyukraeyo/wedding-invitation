@@ -10,7 +10,7 @@ export interface SegmentedControlProps {
     onChange?: ((value: string) => void) | undefined;
     children: React.ReactNode;
     alignment?: 'auto' | 'fluid' | undefined;
-    size?: 'sm' | 'md' | 'lg' | undefined;
+    size?: 'sm' | 'md' | 'lg' | 'xl' | undefined;
     className?: string | undefined;
 }
 

@@ -95,13 +95,13 @@ const InvitationCard = React.memo(({
                     <div className={styles.overlayTop}>
                         <div className={styles.statusRow}>
                             {isRejected ? (
-                                <Badge color="red" variant="soft" size="1">{REJECTION_BADGE}</Badge>
+                                <Badge color="red" variant="soft" size="sm">{REJECTION_BADGE}</Badge>
                             ) : isApproved ? (
-                                <Badge color="green" variant="soft" size="1">승인 완료</Badge>
+                                <Badge color="green" variant="soft" size="sm">승인 완료</Badge>
                             ) : isRequesting ? (
-                                <Badge color="secondary" variant="soft" size="1">승인 대기</Badge>
+                                <Badge color="secondary" variant="soft" size="sm">승인 대기</Badge>
                             ) : (
-                                <Badge color="primary" variant="soft" size="1">샘플 이용중</Badge>
+                                <Badge color="primary" variant="soft" size="sm">샘플 이용중</Badge>
                             )}
 
                             <InvitationActionMenu
@@ -201,11 +201,11 @@ const InvitationCard = React.memo(({
                                 dangerouslySetInnerHTML={{ __html: displayReason || '내용이 없어요.' }}
                             />
                         </Dialog.Body>
-                        <Dialog.Footer className={styles.modalFooter}>
-                            <Button className={styles.flex1} variant="weak" size="lg" onClick={() => setShowRejectionModal(false)}>
+                        <Dialog.Footer>
+                            <Button variant="weak" size="lg" onClick={() => setShowRejectionModal(false)}>
                                 닫기
                             </Button>
-                            <Button className={styles.flex1} variant="fill" size="lg" onClick={() => {
+                            <Button variant="fill" size="lg" onClick={() => {
                                 setShowRejectionModal(false);
                                 onRequestApproval(invitation);
                             }}>

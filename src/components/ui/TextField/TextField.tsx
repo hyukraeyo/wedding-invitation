@@ -5,7 +5,7 @@ import { clsx } from 'clsx';
 import s from './TextField.module.scss';
 
 // --- Context for sharing props between Root and Input/Slot ---
-type TextFieldSize = '1' | '2' | '3';
+type TextFieldSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 type TextFieldVariant = 'surface' | 'classic' | 'soft' | 'apple' | 'toss';
 type TextFieldRadius = 'none' | 'small' | 'medium' | 'large' | 'full';
 
@@ -31,14 +31,14 @@ export interface TextFieldRootProps extends React.HTMLAttributes<HTMLDivElement>
 }
 
 const TextFieldRoot = React.forwardRef<HTMLDivElement, TextFieldRootProps>(
-    ({ className, size = '2', variant = 'surface', radius = 'medium', highContrast = false, disabled = false, invalid = false, ...props }, ref) => {
+    ({ className, size = 'lg', variant = 'toss', radius = 'medium', highContrast = false, disabled = false, invalid = false, ...props }, ref) => {
         return (
             <TextFieldContext.Provider value={{ size, variant, radius, disabled }}>
                 <div
                     ref={ref}
                     className={clsx(
                         s.root,
-                        s[`size_${size}`],
+                        s[size],
                         s[variant],
                         s[`radius_${radius}`],
                         highContrast && s.highContrast,
@@ -100,7 +100,7 @@ export interface TextFieldButtonProps extends React.ButtonHTMLAttributes<HTMLBut
 }
 
 const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps>(
-    ({ className, children, label, variant = 'surface', size = '2', radius = 'medium', id, ...props }, ref) => {
+    ({ className, children, label, variant = 'toss', size = 'lg', radius = 'medium', id, ...props }, ref) => {
         const generatedId = React.useId();
         const inputId = id || generatedId;
 
@@ -147,7 +147,7 @@ export interface TextFieldProps extends Omit<TextFieldInputProps, 'size'> {
 }
 
 const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
-    ({ label, variant = 'surface', size = '2', radius = 'medium', invalid = false, leftSlot, rightSlot, className, id, ...props }, ref) => {
+    ({ label, variant = 'toss', size = 'lg', radius = 'medium', invalid = false, leftSlot, rightSlot, className, id, ...props }, ref) => {
         const generatedId = React.useId();
         const inputId = id || generatedId;
 

@@ -1,8 +1,6 @@
-@use "../../../styles/variables" as v;
-@use "../../../styles/builder" as b;
+@use '../../../styles/variables' as v;
 
 .container {
-
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -32,15 +30,15 @@
 }
 
 .optionWrapper {
-  @include b.section-option-wrapper(b.$builder-gap-xl);
+  @include v.section-option-wrapper(v.$builder-gap-xl);
 }
 
 .colorPicker {
-  @include b.section-color-picker;
+  @include v.section-color-picker;
 }
 
 .colorItem {
-  @include b.section-color-item;
+  @include v.section-color-item;
   // box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
   /* Visible border for white/light colors */
 
@@ -67,7 +65,7 @@
 }
 
 .customColorBtn {
-  @include b.section-add-button-circle;
+  @include v.section-add-button-circle;
 }
 
 .switchSpacing {

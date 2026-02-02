@@ -1,9 +1,7 @@
-@use "../../../styles/variables" as v;
-@use "../../../styles/builder" as b;
-@use "../../../styles/animations";
+@use '../../../styles/variables' as v;
+@use '../../../styles/animations';
 
 .container {
-
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -29,23 +27,22 @@
 
 // .formLabel removed
 
-
 .rowRight {
   display: flex;
   align-items: center;
 }
 
 .optionWrapper {
-  @include b.builder-field-group;
+  @include v.builder-field-group;
 }
 
 .accountList {
-  @include b.builder-stack($gap: 0.75rem);
+  @include v.builder-stack($gap: 0.75rem);
   margin-top: 0.5rem;
 }
 
 .accountItem {
-  @include b.builder-card;
+  @include v.builder-card;
   padding: 0; // Padding handled by children
   overflow: hidden;
   border-radius: 1rem; // v.$radius-md
@@ -86,7 +83,7 @@
 
   &.groom {
     background-color: rgba(251, 192, 45, 0.1); // v.$primary
-    color: #F9A825; // v.$primary-dark
+    color: #f9a825; // v.$primary-dark
   }
 
   &.bride {
@@ -103,7 +100,7 @@
 
 .accountBody {
   padding: 1rem;
-  @include b.builder-stack($gap: 0.875rem);
+  @include v.builder-stack($gap: 0.875rem);
 }
 
 .fieldRow {
@@ -117,10 +114,6 @@
 
 .flex2 {
   flex: 2;
-}
-
-.flex1 {
-  flex: 1;
 }
 
 .chevron {
@@ -148,7 +141,7 @@
   font-size: 1rem; // v.$font-size-base
   font-weight: 500;
   border-radius: 1rem; // v.$radius-md
-  border: 2px dashed #E5E5E5; // v.$color-border
+  border: 2px dashed #e5e5e5; // v.$color-border
   background-color: transparent;
   color: #52525b; // v.$zinc-600
   cursor: pointer;
@@ -157,8 +150,8 @@
   &:hover {
     border-style: solid;
     background-color: #fafafa; // v.$zinc-50
-    color: #FBC02D; // v.$primary
-    border-color: #FBC02D; // v.$primary
+    color: #fbc02d; // v.$primary
+    border-color: #fbc02d; // v.$primary
   }
 
   &:active {
@@ -170,7 +163,7 @@
   color: #a1a1aa; // v.$zinc-400
 
   &:hover {
-    color: #DC2626; // v.$red-600
+    color: #dc2626; // v.$red-600
     background-color: #fff1f2; // v.$rose-50
   }
 }
@@ -185,7 +178,7 @@
   width: 1.5rem;
   height: 1.5rem;
   border: 2px solid rgba(251, 192, 45, 0.2); // v.$primary-500
-  border-top-color: #FBC02D; // v.$primary-500
+  border-top-color: #fbc02d; // v.$primary-500
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }

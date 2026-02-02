@@ -24,7 +24,7 @@ interface FormFieldProps extends React.ComponentPropsWithoutRef<typeof FormPrimi
 const FormField = React.forwardRef<
     React.ElementRef<typeof FormPrimitive.Field>,
     FormFieldProps
->(({ className, floatingLabel = true, ...props }, ref) => (
+>(({ className, floatingLabel = false, ...props }, ref) => (
     <FormPrimitive.Field
         ref={ref}
         className={clsx(s.FormField, floatingLabel && s.FloatingLabel, className)}

@@ -184,10 +184,10 @@ export function MyPageSidebar({
                         </div>
                     </Dialog.Body>
                     <Dialog.Footer className={styles.footer}>
-                        <Button className={styles.flex1} variant="weak" size="lg" onClick={() => setIsCustomerServiceModalOpen(false)}>
+                        <Button variant="weak" size="lg" onClick={() => setIsCustomerServiceModalOpen(false)}>
                             닫기
                         </Button>
-                        <Button className={styles.flex1} variant="fill" size="lg" onClick={handleCustomerServiceConfirm}>
+                        <Button variant="fill" size="lg" onClick={handleCustomerServiceConfirm}>
                             확인
                         </Button>
                     </Dialog.Footer>

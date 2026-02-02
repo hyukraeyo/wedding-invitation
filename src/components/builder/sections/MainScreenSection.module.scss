@@ -1,9 +1,7 @@
-﻿@use "../../../styles/variables" as v;
-@use "../../../styles/builder" as b;
-@use "../../../styles/animations";
+﻿@use '../../../styles/variables' as v;
+@use '../../../styles/animations';
 
 .container {
-
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -45,11 +43,11 @@
 }
 
 .optionWrapper {
-  @include b.builder-field-group;
+  @include v.builder-field-group;
 }
 
 .switchGroup {
-  @include b.builder-grid(2);
+  @include v.builder-grid(2);
   padding: 0 0.25rem;
 }
 
@@ -127,12 +125,29 @@
   // Dynamic Masking logic
   &.start {
     mask-image: linear-gradient(to right, black 0%, black calc(100% - 24px), transparent 100%);
-    -webkit-mask-image: linear-gradient(to right, black 0%, black calc(100% - 24px), transparent 100%);
+    -webkit-mask-image: linear-gradient(
+      to right,
+      black 0%,
+      black calc(100% - 24px),
+      transparent 100%
+    );
   }
 
   &.middle {
-    mask-image: linear-gradient(to right, transparent 0%, black 24px, black calc(100% - 24px), transparent 100%);
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, black 24px, black calc(100% - 24px), transparent 100%);
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 24px,
+      black calc(100% - 24px),
+      transparent 100%
+    );
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 24px,
+      black calc(100% - 24px),
+      transparent 100%
+    );
   }
 
   &.end {
@@ -165,7 +180,6 @@
       border-color: v.$zinc-300;
     }
   }
-
 
   &.selected .presetThumbnail {
     border-color: var(--accent-color, #fbc02d);
@@ -415,7 +429,7 @@
   padding: 0;
 
   &:hover {
-    color: #F9A825; // v.$primary-dark
+    color: #f9a825; // v.$primary-dark
   }
 }
 
@@ -429,7 +443,7 @@
   width: 1.5rem;
   height: 1.5rem;
   border: 2px solid rgba(251, 192, 45, 0.2); // v.$primary-500
-  border-top-color: #FBC02D; // v.$primary-500
+  border-top-color: #fbc02d; // v.$primary-500
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }

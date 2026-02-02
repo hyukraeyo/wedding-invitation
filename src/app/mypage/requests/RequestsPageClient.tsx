@@ -280,10 +280,9 @@ export default function RequestsPageClient({
                     <Dialog.Body className={styles.centerBody}>
                         {confirmConfig.description}
                     </Dialog.Body>
-                    <Dialog.Footer className={styles.modalFooter}>
+                    <Dialog.Footer>
                         {confirmConfig.type !== 'INFO_ONLY' && (
                             <Button
-                                className={styles.flex1}
                                 variant="weak"
                                 size="lg"
                                 onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
@@ -293,7 +292,6 @@ export default function RequestsPageClient({
                             </Button>
                         )}
                         <Button
-                            className={styles.flex1}
                             variant="fill"
                             size="lg"
                             loading={approveMutation.isPending}
@@ -335,9 +333,8 @@ export default function RequestsPageClient({
                                     />
                                 </div>
                             </Dialog.Body>
-                            <Dialog.Footer className={styles.modalFooter}>
+                            <Dialog.Footer>
                                 <Button
-                                    className={styles.flex1}
                                     variant="weak"
                                     size="lg"
                                     onClick={rejectionReason.handleClose}
@@ -346,7 +343,6 @@ export default function RequestsPageClient({
                                     취소
                                 </Button>
                                 <Button
-                                    className={styles.flex1}
                                     variant="fill"
                                     size="lg"
                                     loading={rejectMutation.isPending}
@@ -372,8 +368,8 @@ export default function RequestsPageClient({
                                 dangerouslySetInnerHTML={{ __html: parseRejection(viewRejectionData).displayReason || '내용이 없습니다.' }}
                             />
                         </Dialog.Body>
-                        <Dialog.Footer className={styles.modalFooter}>
-                            <Button className={styles.flex1} variant="fill" size="lg" onClick={() => setViewRejectionData(null)}>
+                        <Dialog.Footer>
+                            <Button variant="fill" size="lg" onClick={() => setViewRejectionData(null)}>
                                 확인
                             </Button>
                         </Dialog.Footer>

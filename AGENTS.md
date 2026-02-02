@@ -27,6 +27,7 @@ npm run clean              # Clean .next, out, dist directories
 - **SCSS Modules mandatory**: All components use `.module.scss` files
 - **Tailwind CSS prohibited**: Maintains design consistency
 - **Radix UI First**: Use **Radix UI Primitives** for all UI components
+- **No direct UI style edits**: Do not modify UI component styles directly; keep consistency via shared tokens/variants or new components
 - **Design tokens**: Use `@use "@/styles/variables" as v;` and `@use "@/styles/mixins" as m;`
 - **Primary color**: Banana yellow `#FBC02D`
 

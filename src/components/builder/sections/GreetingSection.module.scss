@@ -1,8 +1,6 @@
-@use "../../../styles/variables" as v;
-@use "../../../styles/builder" as b;
+@use '../../../styles/variables' as v;
 
 .container {
-
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -62,7 +60,6 @@
       }
     }
   }
-
 }
 
 .sparkleIcon {
@@ -70,7 +67,7 @@
 }
 
 .optionWrapper {
-  @include b.section-option-wrapper;
+  @include v.section-option-wrapper;
 }
 
 .checkboxGroup {
