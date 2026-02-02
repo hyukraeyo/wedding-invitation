@@ -35,7 +35,7 @@ export default function KakaoMapContainer({ lat, lng, mapZoom, lockMap }: KakaoM
     if (error) {
         return (
             <div className={styles.errorState}>
-                카카오 지도를 불러올 수 없습니다. (인증 오류)
+                카카오 지도를 불러올 수 없어요. (인증 오류)
             </div>
         );
     }

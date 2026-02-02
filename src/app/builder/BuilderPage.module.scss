@@ -13,7 +13,7 @@
     @include m.header-offset;
 
     @include m.mobile {
-        padding-top: v.$header-height;
+        padding-top: 0;
     }
 
     // Desktop: Keep fixed layout for app-like feeling

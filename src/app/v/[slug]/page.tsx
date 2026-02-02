@@ -14,14 +14,14 @@ const getInvitation = cache(async (slug: string) => {
 
     // Prepare all possible slug variations upfront
     const possibleSlugs = new Set<string>([slug]);
-    
+
     try {
         const decodedSlug = decodeURIComponent(slug);
         if (decodedSlug !== slug) possibleSlugs.add(decodedSlug);
-        
+
         const nfcSlug = decodedSlug.normalize('NFC');
         if (nfcSlug !== decodedSlug) possibleSlugs.add(nfcSlug);
-        
+
         const nfdSlug = decodedSlug.normalize('NFD');
         if (nfdSlug !== decodedSlug && nfdSlug !== nfcSlug) {
             possibleSlugs.add(nfdSlug);
@@ -32,9 +32,9 @@ const getInvitation = cache(async (slug: string) => {
 
     // Try all variations in a single batch query for better performance
     const invitations = await invitationService.getInvitationsBySlugs(Array.from(possibleSlugs), supabase);
-    
+
     if (invitations.length === 0) return null;
-    
+
     // If multiple matches found (rare case of slug collisions across encodings), 
     // prioritize exact match or first one found
     const exactMatch = invitations.find(inv => inv.slug === slug);
@@ -52,8 +52,8 @@ export async function generateMetadata({ params }: Props) {
     const brideName = `${data.bride.lastName}${data.bride.firstName}`;
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://wedding-invitation-zeta-one.vercel.app';
-    const ogTitle = data.kakaoShare?.title || `${groomName} ♥ ${brideName} 결혼식에 초대합니다`;
-    const ogDescription = data.kakaoShare?.description || data.greetingTitle || '소중한 분들을 초대합니다.';
+    const ogTitle = data.kakaoShare?.title || `${groomName} ♥ ${brideName} 결혼식에 초대해요`;
+    const ogDescription = data.kakaoShare?.description || data.greetingTitle || '소중한 분들을 초대해요.';
     let ogImage = data.kakaoShare?.imageUrl || data.imageUrl || '/logo.png';
 
     if (ogImage.startsWith('/')) {
@@ -61,8 +61,8 @@ export async function generateMetadata({ params }: Props) {
     }
 
     return {
-        title: `${groomName} ♥ ${brideName} 결혼식에 초대합니다`,
-        description: data.greetingTitle || '소중한 분들을 초대합니다.',
+        title: `${groomName} ♥ ${brideName} 결혼식에 초대해요`,
+        description: data.greetingTitle || '소중한 분들을 초대해요.',
         openGraph: {
             title: ogTitle,
             description: ogDescription,
@@ -116,7 +116,7 @@ export default async function InvitationViewPage({ params }: Props) {
             }
         },
         "image": data.imageUrl ? [data.imageUrl] : undefined,
-        "description": data.greetingTitle || '결혼식에 초대합니다.',
+        "description": data.greetingTitle || '결혼식에 초대해요.',
         "performer": [
             { "@type": "Person", "name": `${data.groom.lastName}${data.groom.firstName}`, "honorificSuffix": "신랑" },
             { "@type": "Person", "name": `${data.bride.lastName}${data.bride.firstName}`, "honorificSuffix": "신부" }

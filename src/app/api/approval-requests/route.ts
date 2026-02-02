@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     const userId = session?.user?.id;
     if (!userId) {
       return NextResponse.json(
-        { error: '로그인이 필요합니다.' },
+        { error: '로그인이 필요해요.' },
         { status: 401 }
       );
     }
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
     if (error) {
       console.error('Error creating approval request:', error);
       return NextResponse.json(
-        { error: '승인 신청 저장에 실패했습니다.', details: error.message },
+        { error: '승인 신청 저장에 실패했어요.', details: error.message },
         { status: 500 }
       );
     }
@@ -85,14 +85,14 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: '입력 데이터가 올바르지 않습니다.', details: error.issues },
+        { error: '입력 데이터가 올바르지 않아요.', details: error.issues },
         { status: 400 }
       );
     }
 
     console.error('Unexpected error in POST /api/approval-requests:', error);
     return NextResponse.json(
-      { error: '서버 오류가 발생했습니다.' },
+      { error: '서버 오류가 발생했어요.' },
       { status: 500 }
     );
   }
@@ -104,7 +104,7 @@ export async function GET(request: NextRequest) {
     const user = session?.user ?? null;
     if (!user) {
       return NextResponse.json(
-        { error: '로그인이 필요합니다.' },
+        { error: '로그인이 필요해요.' },
         { status: 401 }
       );
     }
@@ -139,7 +139,7 @@ export async function GET(request: NextRequest) {
       if (error) {
         console.error('Error fetching user approval requests:', error);
         return NextResponse.json(
-          { error: '승인 요청 목록을 불러오는데 실패했습니다.', details: error.message },
+          { error: '승인 요청 목록을 불러오는데 실패했어요.', details: error.message },
           { status: 500 }
         );
       }
@@ -153,7 +153,7 @@ export async function GET(request: NextRequest) {
     // Admin fetching all requests (pending, rejected, approved)
     if (!isAdmin) {
       return NextResponse.json(
-        { error: '접근 권한이 없습니다.' },
+        { error: '접근 권한이 없어요.' },
         { status: 403 }
       );
     }
@@ -171,7 +171,7 @@ export async function GET(request: NextRequest) {
     if (error) {
       console.error('Error fetching approval requests:', error);
       return NextResponse.json(
-        { error: '승인 요청 목록을 불러오는데 실패했습니다.', details: error.message },
+        { error: '승인 요청 목록을 불러오는데 실패했어요.', details: error.message },
         { status: 500 }
       );
     }
@@ -183,7 +183,7 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error('Unexpected error in GET /api/approval-requests:', error);
     return NextResponse.json(
-      { error: '서버 오류가 발생했습니다.' },
+      { error: '서버 오류가 발생했어요.' },
       { status: 500 }
     );
   }
@@ -199,7 +199,7 @@ export async function PUT(request: NextRequest) {
 
     if (!userId) {
       return NextResponse.json(
-        { error: '로그인이 필요합니다.' },
+        { error: '로그인이 필요해요.' },
         { status: 401 }
       );
     }
@@ -219,7 +219,7 @@ export async function PUT(request: NextRequest) {
 
     if (!isAdmin) {
       return NextResponse.json(
-        { error: '접근 권한이 없습니다.' },
+        { error: '접근 권한이 없어요.' },
         { status: 403 }
       );
     }
@@ -236,7 +236,7 @@ export async function PUT(request: NextRequest) {
 
     if (!currentRequest) {
       return NextResponse.json(
-        { error: '처리할 승인 요청 내역을 찾을 수 없습니다.' },
+        { error: '처리할 승인 요청 내역을 찾을 수 없어요.' },
         { status: 404 }
       );
     }
@@ -266,7 +266,7 @@ export async function PUT(request: NextRequest) {
     if (deleteResult.error) {
       console.error('Error rejecting approval request:', deleteResult.error);
       return NextResponse.json(
-        { error: '거절 처리에 실패했습니다.' },
+        { error: '거절 처리에 실패했어요.' },
         { status: 500 }
       );
     }
@@ -290,14 +290,14 @@ export async function PUT(request: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: '입력 데이터가 올바르지 않습니다.', details: error.issues },
+        { error: '입력 데이터가 올바르지 않아요.', details: error.issues },
         { status: 400 }
       );
     }
 
     console.error('Unexpected error in PUT /api/approval-requests:', error);
     return NextResponse.json(
-      { error: '서버 오류가 발생했습니다.' },
+      { error: '서버 오류가 발생했어요.' },
       { status: 500 }
     );
   }
@@ -319,7 +319,7 @@ export async function DELETE(request: NextRequest) {
     const userId = session?.user?.id;
     if (!userId) {
       return NextResponse.json(
-        { error: '로그인이 필요합니다.' },
+        { error: '로그인이 필요해요.' },
         { status: 401 }
       );
     }
@@ -343,7 +343,7 @@ export async function DELETE(request: NextRequest) {
     if (deleteResult.error) {
       console.error('Error deleting approval request:', deleteResult.error);
       return NextResponse.json(
-        { error: '신청 취소에 실패했습니다.' },
+        { error: '신청 취소에 실패했어요.' },
         { status: 500 }
       );
     }
@@ -362,7 +362,7 @@ export async function DELETE(request: NextRequest) {
   } catch (error) {
     console.error('Unexpected error in DELETE /api/approval-requests:', error);
     return NextResponse.json(
-      { error: '서버 오류가 발생했습니다.' },
+      { error: '서버 오류가 발생했어요.' },
       { status: 500 }
     );
   }
@@ -378,7 +378,7 @@ export async function PATCH(request: NextRequest) {
 
     if (!userId) {
       return NextResponse.json(
-        { error: '로그인이 필요합니다.' },
+        { error: '로그인이 필요해요.' },
         { status: 401 }
       );
     }
@@ -399,7 +399,7 @@ export async function PATCH(request: NextRequest) {
 
     if (!isAdmin) {
       return NextResponse.json(
-        { error: '관리자만 사용할 수 있습니다.' },
+        { error: '관리자만 사용할 수 있어요.' },
         { status: 403 }
       );
     }
@@ -427,7 +427,7 @@ export async function PATCH(request: NextRequest) {
     if (updateResult.error) {
       console.error('Error approving request:', updateResult.error);
       return NextResponse.json(
-        { error: '승인 처리에 실패했습니다.' },
+        { error: '승인 처리에 실패했어요.' },
         { status: 500 }
       );
     }
@@ -461,14 +461,14 @@ export async function PATCH(request: NextRequest) {
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
-        { error: '입력 데이터가 올바르지 않습니다.', details: error.issues },
+        { error: '입력 데이터가 올바르지 않아요.', details: error.issues },
         { status: 400 }
       );
     }
 
     console.error('Unexpected error in PATCH /api/approval-requests:', error);
     return NextResponse.json(
-      { error: '서버 오류가 발생했습니다.' },
+      { error: '서버 오류가 발생했어요.' },
       { status: 500 }
     );
   }

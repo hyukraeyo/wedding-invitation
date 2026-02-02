@@ -15,10 +15,10 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import styles from './SetupForm.module.scss';
 
 const STEPS = [
-    { title: "신랑님의 성함을\n알려주세요", field: "groom" },
-    { title: "신부님의 성함을\n알려주세요", field: "bride" },
-    { title: "예식일은\n언제인가요?", field: "date" },
-    { title: "예식 시간은\n언제인가요?", field: "time" }
+    { title: "신랑님의 성함을 알려주세요", field: "groom" },
+    { title: "신부님의 성함을 알려주세요", field: "bride" },
+    { title: "예식일은 언제인가요?", field: "date" },
+    { title: "예식 시간은 언제인가요?", field: "time" }
 ];
 
 const SetupForm = () => {
@@ -72,6 +72,15 @@ const SetupForm = () => {
         if (!trimmed) return false;
         return !isValidKoreanNameValue(trimmed);
     }, []);
+
+    const isAllStepsValid = useCallback(() => {
+        return isValidKoreanNameValue(groomFullName) &&
+            isValidKoreanNameValue(brideFullName) &&
+            !!date &&
+            !!time;
+    }, [groomFullName, brideFullName, date, time]);
+
+    const isComplete = isHydrated && isAllStepsValid();
 
     const handleBack = useCallback(() => {
         if (currentStep > 0) {
@@ -179,25 +188,24 @@ const SetupForm = () => {
         <Box className={styles.container}>
             <Card variant="ghost" className={styles.whiteBox}>
                 <Box className={styles.headerContent}>
-                    {STEPS.map((step, index) => (
-                        <div
-                            key={index}
-                            className={cn(
-                                styles.titleWrapper,
-                                highestStepReached === index ? styles.active : styles.inactive
-                            )}
-                            aria-hidden={highestStepReached !== index}
-                        >
-                            <Heading as="h1" size="6" weight="bold" className={styles.stepHeading}>
-                                {step.title.split('\n').map((line, i) => (
-                                    <React.Fragment key={i}>
-                                        {line}
-                                        {i !== step.title.split('\n').length - 1 && <br />}
-                                    </React.Fragment>
-                                ))}
-                            </Heading>
-                        </div>
-                    ))}
+                    {[...STEPS, { title: "모든 정보를 입력했어요!" }].map((step, index) => {
+                        const isThisStepActive = index === STEPS.length ? isComplete : !isComplete && highestStepReached === index;
+
+                        return (
+                            <div
+                                key={index}
+                                className={cn(
+                                    styles.titleWrapper,
+                                    isThisStepActive ? styles.active : styles.inactive
+                                )}
+                                aria-hidden={!isThisStepActive}
+                            >
+                                <Heading as="h1" size="6" weight="bold" className={styles.stepHeading}>
+                                    {step.title}
+                                </Heading>
+                            </div>
+                        );
+                    })}
                 </Box>
 
                 <div

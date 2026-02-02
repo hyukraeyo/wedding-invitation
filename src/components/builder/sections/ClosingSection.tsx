@@ -94,7 +94,7 @@ export default function ClosingSection(props: SectionProps) {
                             <FormControl asChild>
                                 <TextField
                                     id="closing-title"
-                                    placeholder="예: 저희의 시작을 함께해주셔서 감사합니다"
+                                    placeholder="예: 저희의 시작을 함께해주셔서 감사해요"
                                     value={closing.title}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateClosing({ title: e.target.value })}
                                 />

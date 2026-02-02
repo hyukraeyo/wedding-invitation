@@ -3,10 +3,5 @@
 
 .fallback {
   min-height: 100dvh;
-  padding-top: v.$header-height;
   background-color: #f8f9fa;
-
-  @include m.mobile {
-    padding-top: 0;
-  }
 }

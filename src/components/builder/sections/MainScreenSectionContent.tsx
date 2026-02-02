@@ -91,7 +91,7 @@ export default function MainScreenSectionContent() {
                         </FormControl>
                     </div>
                     <FormMessage className={styles.formMessage} match="valueMissing">
-                        필수 항목입니다.
+                        필수 항목이에요.
                     </FormMessage>
                 </FormField>
             </div>
@@ -165,11 +165,11 @@ export default function MainScreenSectionContent() {
                                             <>
                                                 <div className={styles.thumbnailContent}>
                                                     <span className={styles.thumbTitle}>THE MARRIAGE</span>
-                                                    <span className={styles.thumbMarriage}>신랑, 신부 결혼합니다.</span>
+                                                    <span className={styles.thumbMarriage}>신랑, 신부 결혼해요.</span>
                                                 </div>
                                                 <div className={styles.thumbnailImage} />
                                                 <div className={styles.thumbnailFooter}>
-                                                    <span>초대합니다</span>
+                                                    <span>초대해요</span>
                                                     <span>2026년 4월 29일 수요일 오후 12시 </span>
                                                     <span>더 컨벤션 신사 3층 그랜드홀</span>
                                                 </div>
@@ -267,7 +267,7 @@ export default function MainScreenSectionContent() {
                                 <FormControl asChild>
                                     <TextField
                                         id="main-subtitle"
-                                        placeholder="예: 소중한 날에 초대합니다"
+                                        placeholder="예: 소중한 날에 초대해요"
                                         value={mainScreen.subtitle}
                                         onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateMain({ subtitle: e.target.value })}
                                     />

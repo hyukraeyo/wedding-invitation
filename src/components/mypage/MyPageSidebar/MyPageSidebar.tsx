@@ -180,7 +180,7 @@ export function MyPageSidebar({
                     <Dialog.Header title={MENU_TITLES.CUSTOMER_SERVICE} />
                     <Dialog.Body>
                         <div className={styles.description}>
-                            카카오톡 채널로 연결됩니다. 문의사항을 남겨주시면 빠르게 답변 드리겠습니다.
+                            카카오톡 채널로 연결돼요. 문의사항을 남겨주시면 빠르게 답변 드릴게요.
                         </div>
                     </Dialog.Body>
                     <Dialog.Footer className={styles.footer}>

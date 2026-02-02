@@ -40,7 +40,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
                                 신랑
                             </FormLabel>
                             <FormMessage className={styles.message} match="valueMissing">
-                                필수 항목입니다.
+                                필수 항목이에요.
                             </FormMessage>
                             <FormControl asChild>
                                 <NameField
@@ -127,7 +127,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
                                 신부
                             </FormLabel>
                             <FormMessage className={styles.message} match="valueMissing">
-                                필수 항목입니다.
+                                필수 항목이에요.
                             </FormMessage>
                             <FormControl asChild>
                                 <NameField

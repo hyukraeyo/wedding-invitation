@@ -114,7 +114,7 @@ export default function NotificationsClient({ userId, notifications }: Notificat
                                         </div>
                                         <div className={styles.itemInfo}>
                                             <div className={styles.itemTitle}>
-                                                <strong>{notif.badge}</strong> 소식이 도착했습니다.
+                                                <strong>{notif.badge}</strong> 소식이 도착했어요.
                                             </div>
                                             <div className={styles.itemDate}>
                                                 {notif.formattedDate}
@@ -135,7 +135,7 @@ export default function NotificationsClient({ userId, notifications }: Notificat
                                                 <div className={styles.reasonTitle}>{notif.title}</div>
                                                 <div
                                                     className={styles.reasonContent}
-                                                    dangerouslySetInnerHTML={{ __html: notif.displayReason || '상세 사유가 없습니다.' }}
+                                                    dangerouslySetInnerHTML={{ __html: notif.displayReason || '상세 사유가 없어요.' }}
                                                 />
                                             </div>
                                         </div>

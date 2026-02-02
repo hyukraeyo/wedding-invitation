@@ -26,10 +26,10 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
 }) => {
     const handleClick = () => {
         const origin = window.location.origin;
-        
+
         // Default values for robustness
-        const shareTitle = (invitationTitle || '결혼식에 초대합니다').trim();
-        const shareDesc = (invitationDescription || '소중한 날에 초대합니다').trim();
+        const shareTitle = (invitationTitle || '결혼식에 초대해요').trim();
+        const shareDesc = (invitationDescription || '소중한 날에 초대해요').trim();
         const shareImageUrl = invitationImageUrl || `${origin}/logo.png`;
 
         sendKakaoShare({
@@ -41,8 +41,8 @@ export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
                 buttonType: 'location',
             },
             slug,
-            onSuccess: onSuccess || (() => {}),
-            onError: onError || (() => {}),
+            onSuccess: onSuccess || (() => { }),
+            onError: onError || (() => { }),
         });
     };
 

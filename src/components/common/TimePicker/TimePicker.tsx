@@ -137,9 +137,13 @@ const TimePickerRaw = ({
         if (!value) return '';
         const [hStr, mStr] = value.split(':');
         const hInt = parseInt(hStr || '13', 10);
-        const period: Period = hInt >= 12 ? 'PM' : 'AM';
-        const displayH = hInt > 12 ? hInt - 12 : (hInt === 0 ? 12 : hInt);
-        return `${period === 'AM' ? '오전' : '오후'} ${displayH}시 ${mStr || '00'}분`;
+
+        // 🍌 Custom logic: 12:00 is AM 12
+        const isAM = hInt <= 12;
+        const periodLabel = isAM ? '오전' : '오후';
+        const displayH = isAM ? (hInt === 0 ? 12 : hInt) : (hInt - 12);
+
+        return `${periodLabel} ${displayH}시 ${mStr || '00'}분`;
     }, [value]);
 
     // Parse tempValue for wheel state
@@ -148,8 +152,10 @@ const TimePickerRaw = ({
         const effectiveValue = tempValue || defaultValue;
         const [tHStr, tMStr] = effectiveValue.split(':');
         const tHInt = parseInt(tHStr || '12', 10);
-        const tp: Period = tHInt >= 12 ? 'PM' : 'AM';
-        const tdh = String(tHInt > 12 ? tHInt - 12 : (tHInt === 0 ? 12 : tHInt));
+
+        // 🍌 Custom logic: 12:00 is AM
+        const tp: Period = tHInt <= 12 ? 'AM' : 'PM';
+        const tdh = String(tHInt <= 12 ? (tHInt === 0 ? 12 : tHInt) : (tHInt - 12));
 
         return {
             currentTM: tMStr || '00',
@@ -158,12 +164,17 @@ const TimePickerRaw = ({
         };
     }, [tempValue, defaultValue]);
 
-    const hourOptions = useMemo(() =>
-        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(h => ({
+    const hourOptions = useMemo(() => {
+        // 🍌 오전 8~12시, 오후 1~10시 제한
+        const hours = tPeriod === 'AM'
+            ? [8, 9, 10, 11, 12]
+            : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+        return hours.map(h => ({
             label: `${h}시`,
             value: String(h)
-        })), []
-    );
+        }));
+    }, [tPeriod]);
 
     const minuteOptions = useMemo(() => {
         const minutes = Array.from(
@@ -178,16 +189,31 @@ const TimePickerRaw = ({
         const effectiveTempValue = tempValue || defaultValue;
         const [hStr, mStr] = effectiveTempValue.split(':');
         const h = parseInt(hStr || '12', 10);
-        const currentPeriod: Period = h >= 12 ? 'PM' : 'AM';
-        const currentDisplayH = h > 12 ? h - 12 : (h === 0 ? 12 : h);
+
+        // Custom logic: 12:00 is AM
+        const currentPeriod: Period = h <= 12 ? 'AM' : 'PM';
+        const currentDisplayH = h <= 12 ? (h === 0 ? 12 : h) : (h - 12);
 
         const p = updates.period ?? currentPeriod;
-        const dh = updates.hour ?? String(currentDisplayH);
+        let dh = updates.hour ?? String(currentDisplayH);
         const min = updates.minute ?? (mStr || '00');
 
+        // Validation for the new ranges when period changes
+        if (updates.period && !updates.hour) {
+            const validHours = p === 'AM' ? [8, 9, 10, 11, 12] : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+            if (!validHours.includes(parseInt(dh, 10))) {
+                dh = String(validHours[0]);
+            }
+        }
+
         let newH = parseInt(dh, 10);
-        if (p === 'PM' && newH !== 12) newH += 12;
-        else if (p === 'AM' && newH === 12) newH = 0;
+        if (p === 'PM') {
+            newH += 12;
+        } else if (p === 'AM' && newH === 12) {
+            newH = 12; // In our custom logic AM 12 is 12:00
+        } else if (p === 'AM' && newH === 0) {
+            newH = 0; // Midnight (though restricted from UI)
+        }
 
         return `${String(newH).padStart(2, '0')}:${min}`;
     }, [tempValue, defaultValue]);

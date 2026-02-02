@@ -279,7 +279,7 @@ export type InvitationStateType = InvitationState;
 
 export const INITIAL_STATE = {
     kakaoShare: {
-        title: '소중한 분들을 초대합니다',
+        title: '소중한 분들을 초대해요',
         description: '귀한 걸음 하시어 축복해 주세요.',
         imageUrl: null,
         imageRatio: 'portrait' as const,
@@ -327,9 +327,9 @@ export const INITIAL_STATE = {
     sketchRatio: 'fixed' as const,
 
     coordinates: { lat: 37.5665, lng: 126.9780 }, // Default: Seoul City Hall
-    greetingTitle: '저희 두 사람 결혼합니다',
+    greetingTitle: '저희 두 사람 결혼해요',
     greetingSubtitle: 'INVITATION',
-    message: '<p style="text-align: center">곁에 있을 때 가장 나다운 모습이 되게 하는 사람<br>꿈을 꾸게 하고 그 꿈을 함께 나누는 사람<br>그런 사람을 만나 이제 하나가 되려 합니다.<br><br>저희의 뜻깊은 시작을 함께 나누어 주시고<br>따뜻한 마음으로 축복해 주시면 감사하겠습니다.</p>',
+    message: '<p style="text-align: center">곁에 있을 때 가장 나다운 모습이 되게 하는 사람<br>꿈을 꾸게 하고 그 꿈을 함께 나누는 사람<br>그런 사람을 만나 이제 하나가 되려고 해요.<br><br>저희의 뜻깊은 시작을 함께 나누어 주시고<br>따뜻한 마음으로 축복해 주시면 감사하겠어요.</p>',
     showNamesAtBottom: true,
     enableFreeformNames: false,
     groomNameCustom: '',
@@ -347,12 +347,12 @@ export const INITIAL_STATE = {
         effect: 'none' as const,
         imageShape: 'rect' as const,
         title: 'THE MARRIAGE',
-        subtitle: '소중한 날에 초대합니다',
+        subtitle: '소중한 날에 초대해요',
         customDatePlace: '',
         groomName: '',
         brideName: '',
         andText: '그리고',
-        suffixText: '결혼합니다.',
+        suffixText: '결혼해요.',
         showTitle: true,
         showGroomBride: true,
         showSubtitle: true,
@@ -361,7 +361,7 @@ export const INITIAL_STATE = {
 
     showCalendar: true,
     showDday: true,
-    ddayMessage: '(신랑), (신부)의 결혼식이 (D-Day) 남았습니다',
+    ddayMessage: '(신랑), (신부)의 결혼식이 (D-Day) 남았어요',
 
     theme: {
         font: 'gowun-dodum' as const,
@@ -388,7 +388,7 @@ export const INITIAL_STATE = {
     galleryAutoplay: true,
     accountsTitle: '축하의 마음 전하실 곳',
     accountsSubtitle: 'GIFT',
-    accountsDescription: '축하의 마음을 담아 축의금을 전달하고자 하시는 분들을 위해\n계좌번호를 안내해 드립니다.',
+    accountsDescription: '축하의 마음을 담아 축의금을 전달하고자 하시는 분들을 위해\n계좌번호를 안내해 드려요.',
     accountsGroomTitle: '신랑 측 마음 전하실 곳',
     accountsBrideTitle: '신부 측 마음 전하실 곳',
     accountsColorMode: 'subtle' as const,
@@ -400,7 +400,7 @@ export const INITIAL_STATE = {
         subtitle: 'CLOSING',
         imageUrl: null,
         ratio: 'fixed' as const,
-        content: '<p style="text-align: center">서로가 마주보며 다져온 사랑을<br>이제 함께 한 곳을 바라보며 걸어가려 합니다.<br>저희의 새 출발을 축복해 주세요.</p>',
+        content: '<p style="text-align: center">서로가 마주보며 다져온 사랑을<br>이제 함께 한 곳을 바라보며 걸어가려고 해요.<br>저희의 새 출발을 축복해 주세요.</p>',
     },
     isApproved: false,
     isRequestingApproval: false,

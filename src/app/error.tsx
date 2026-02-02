@@ -120,7 +120,7 @@ export default function Error({ error, reset }: ErrorProps) {
         </div>
 
         <div>
-          <h1 style={titleStyle}>문제가 발생했습니다</h1>
+          <h1 style={titleStyle}>문제가 발생했어요</h1>
           <p style={descStyle}>잠시 후 다시 시도해 주세요.</p>
         </div>
 

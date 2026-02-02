@@ -54,7 +54,7 @@ const DEFAULT_MAIN_SCREEN = {
     andText: '그리고',
     suffixText: '',
     showSubtitle: true,
-    subtitle: '소중한 날에 초대합니다',
+    subtitle: '소중한 날에 초대해요',
     showDatePlace: true,
     customDatePlace: '',
     showBorder: false,
@@ -390,7 +390,7 @@ const MainScreenView = memo(({
                     ) : null}
 
                     {(() => {
-                        const displaySubtitle = mainScreen.subtitle || '소중한 날에 초대합니다';
+                        const displaySubtitle = mainScreen.subtitle || '소중한 날에 초대해요';
                         if (!displaySubtitle) return null;
                         return (
                             <div className={clsx(styles.subtitle, isFillLayout ? styles.textWhite : styles.textGray) || ''} style={{ fontSize: 'calc(24px * var(--font-scale))' }}>

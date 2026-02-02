@@ -78,7 +78,7 @@ export default function KakaoShareSection(props: SectionProps) {
                                 가로형
                             </SegmentedControl.Item>
                         </SegmentedControl>
-                        <InfoMessage>카카오톡 공유 메시지에서 보여질 사진의 비율입니다.</InfoMessage>
+                        <InfoMessage>카카오톡 공유 메시지에서 보여질 사진의 비율이에요.</InfoMessage>
                     </div>
 
                     <div className={styles.optionItem}>
@@ -90,7 +90,7 @@ export default function KakaoShareSection(props: SectionProps) {
                                 <TextField
                                     id="kakao-title"
                                     type="text"
-                                    placeholder="예: 우리 결혼합니다"
+                                    placeholder="예: 우리 결혼해요"
                                     value={kakao.title}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setKakao({ title: e.target.value })}
                                     maxLength={25}
@@ -177,10 +177,10 @@ export default function KakaoShareSection(props: SectionProps) {
                                         )}
                                         <div className={styles.cardContent}>
                                             <h4 className={styles.cardTitle}>
-                                                {kakao.title || '우리 결혼합니다'}
+                                                {kakao.title || '우리 결혼해요'}
                                             </h4>
                                             <p className={styles.cardDescription}>
-                                                {kakao.description || '초대장을 보내드립니다.'}
+                                                {kakao.description || '초대장을 보내드려요.'}
                                             </p>
                                         </div>
                                         <div className={styles.btnGroup}>

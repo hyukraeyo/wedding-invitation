@@ -91,7 +91,7 @@ const LocationView = memo(({
     const handleCopyAddress = () => {
         navigator.clipboard.writeText(address).then(() => {
             toast({
-                description: '주소가 복사되었습니다.',
+                description: '주소가 복사되었어요.',
             });
         });
     };

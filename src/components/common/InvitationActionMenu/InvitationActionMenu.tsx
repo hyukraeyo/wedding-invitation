@@ -229,12 +229,12 @@ export const InvitationActionMenu: React.FC<InvitationActionMenuProps> = ({
                     <Dialog.Header>
                         <div className={styles.centerHeader}>
                             <Text typography="t4" fontWeight="bold">{REJECTION_LABEL}</Text>
-                            <Text typography="t6" color="#666">관리자가 작성한 거절 사유입니다</Text>
+                            <Text typography="t6" color="#666">관리자가 작성한 거절 사유예요</Text>
                         </div>
                     </Dialog.Header>
                     <Dialog.Body>
                         <div className={styles.rejectionBox}>
-                            {rejectionData?.rejection_reason || '거절 사유가 없습니다.'}
+                            {rejectionData?.rejection_reason || '거절 사유가 없어요.'}
                         </div>
                     </Dialog.Body>
                     <Dialog.Footer className={styles.footer}>
@@ -252,12 +252,12 @@ export const InvitationActionMenu: React.FC<InvitationActionMenuProps> = ({
                     <Dialog.Header>
                         <div className={styles.centerHeader}>
                             <Text typography="t4" fontWeight="bold">수정 확인</Text>
-                            <Text typography="t6" color="#666">이미 승인이 완료된 청첩장입니다</Text>
+                            <Text typography="t6" color="#666">이미 승인이 완료된 청첩장이에요</Text>
                         </div>
                     </Dialog.Header>
                     <Dialog.Body className={styles.centerBody}>
-                        이미 승인이 완료된 청첩장입니다.<br />
-                        수정 모드로 전환 시 <strong>다시 승인 신청</strong>을 해야 공유가 가능합니다. 수정하시겠습니까?
+                        이미 승인이 완료된 청첩장이에요.<br />
+                        수정 모드로 전환 시 <strong>다시 승인 신청</strong>을 해야 공유가 가능해요. 수정할까요?
                     </Dialog.Body>
                     <Dialog.Footer className={styles.footer}>
                         <Button className={styles.flex1} variant="weak" size="lg" onClick={() => setShowEditConfirmModal(false)}>

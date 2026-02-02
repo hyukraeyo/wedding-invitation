@@ -198,7 +198,7 @@ const InvitationCard = React.memo(({
                         <Dialog.Body>
                             <div
                                 className={styles.rejectionMessage}
-                                dangerouslySetInnerHTML={{ __html: displayReason || '내용이 없습니다.' }}
+                                dangerouslySetInnerHTML={{ __html: displayReason || '내용이 없어요.' }}
                             />
                         </Dialog.Body>
                         <Dialog.Footer className={styles.modalFooter}>

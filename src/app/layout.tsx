@@ -133,7 +133,7 @@ export default async function RootLayout({
                 name: "바나나웨딩",
                 alternateName: "Banana Wedding",
                 url: "https://wedding-invitation-zeta-one.vercel.app",
-                description: "쉽고 빠르게 모바일 청첩장을 만들 수 있는 서비스입니다.",
+                description: "쉽고 빠르게 모바일 청첩장을 만들 수 있는 서비스예요.",
                 inLanguage: "ko-KR",
                 publisher: {
                   "@type": "Person",
@@ -143,7 +143,7 @@ export default async function RootLayout({
                 potentialAction: {
                   "@type": "CreateAction",
                   target: "https://wedding-invitation-zeta-one.vercel.app/builder",
-                  description: "나만의 모바일 청첩장을 제작합니다.",
+                  description: "나만의 모바일 청첩장을 제작해요.",
                 },
               },
               {

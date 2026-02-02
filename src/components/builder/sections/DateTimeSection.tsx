@@ -97,25 +97,25 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
 
                 {showDday && (
                     <div className={styles.optionItem}>
-                    <div className={styles.ddayInputWrapper}>
-                        <FormField name="dday-message">
-                            <FormLabel className={styles.formLabel} htmlFor="dday-message">
-                                D-Day 메시지
-                            </FormLabel>
-                            <FormControl asChild>
-                                <TextField
-                                    id="dday-message"
-                                    variant="surface"
-                                    placeholder="예: (신랑), (신부)의 결혼식이 (D-Day) 남았습니다"
-                                    value={ddayMessage}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDdayMessage(e.target.value)}
-                                />
-                            </FormControl>
-                        </FormField>
-                        <InfoMessage>
-                            (신랑), (신부), (D-Day)는 실제 이름과 날짜로 자동 치환됩니다.
-                        </InfoMessage>
-                    </div>
+                        <div className={styles.ddayInputWrapper}>
+                            <FormField name="dday-message">
+                                <FormLabel className={styles.formLabel} htmlFor="dday-message">
+                                    D-Day 메시지
+                                </FormLabel>
+                                <FormControl asChild>
+                                    <TextField
+                                        id="dday-message"
+                                        variant="surface"
+                                        placeholder="예: (신랑), (신부)의 결혼식이 (D-Day) 남았어요"
+                                        value={ddayMessage}
+                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDdayMessage(e.target.value)}
+                                    />
+                                </FormControl>
+                            </FormField>
+                            <InfoMessage>
+                                (신랑), (신부), (D-Day)는 실제 이름과 날짜로 자동 치환됩니다.
+                            </InfoMessage>
+                        </div>
                     </div>
                 )}
             </div>

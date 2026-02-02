@@ -221,7 +221,7 @@ export function MobileNav({
                             <p className={styles.eventTitle}>
                                 다양한 혜택을 준비한 이벤트가
                                 <br />
-                                준비중입니다
+                                준비 중이에요
                             </p>
                             <p className={styles.eventDesc}>
                                 곧 찾아올 할인 혜택에 기대해주세요. 😊

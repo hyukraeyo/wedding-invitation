@@ -62,6 +62,7 @@ const CustomDayButton = (dayButtonProps: DayButtonProps) => {
   const isSelected = !!modifiers.selected;
   const isToday = !!modifiers.today;
   const isOutside = !!modifiers.outside;
+  const isDisabled = !!modifiers.disabled;
 
   const dayOfWeek = day.date.getDay();
   const isSunday = dayOfWeek === 0;
@@ -79,8 +80,9 @@ const CustomDayButton = (dayButtonProps: DayButtonProps) => {
         isSelected && styles.daySelected,
         isToday && styles.dayToday,
         isOutside && styles.dayOutside,
-        isSunday && !isSelected && !isOutside && styles.sunday,
-        isSaturday && !isSelected && !isOutside && styles.saturday,
+        isDisabled && styles.disabled,
+        isSunday && !isSelected && !isOutside && !isDisabled && styles.sunday,
+        isSaturday && !isSelected && !isOutside && !isDisabled && styles.saturday,
         rdpClassName
       )}
     >

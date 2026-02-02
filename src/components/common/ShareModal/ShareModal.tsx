@@ -35,7 +35,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     const handleLinkShare = () => {
         navigator.clipboard.writeText(invitationUrl);
         toast({
-            description: '청첩장 주소가 복사되었습니다.',
+            description: '청첩장 주소가 복사되었어요.',
         });
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);

@@ -43,7 +43,7 @@ export function parseRejection(request: ApprovalRequestSummary | null | undefine
         // UI 텍스트 상수를 여기서 통합 관리
         label: isApproved ? '승인 메시지' : (isRevoked ? '취소 사유' : '거절 사유'),
         badge: isApproved ? '승인 완료' : (isRevoked ? '승인 취소' : '승인 거절'),
-        title: isApproved ? '승인이 완료되었습니다' : (isRevoked ? '승인 취소 사유' : '승인 거절 사유'),
+        title: isApproved ? '승인이 완료되었어요' : (isRevoked ? '승인 취소 사유' : '승인 거절 사유'),
         description: '',
     };
 }

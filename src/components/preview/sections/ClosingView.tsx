@@ -62,7 +62,7 @@ const ClosingView = memo(({
         const url = window.location.href;
         navigator.clipboard.writeText(url);
         toast({
-            description: '청첩장 주소가 복사되었습니다.',
+            description: '청첩장 주소가 복사되었어요.',
         });
     };
 
@@ -71,7 +71,7 @@ const ClosingView = memo(({
         const groomName = `${groom.lastName}${groom.firstName}`;
         const brideName = `${bride.lastName}${bride.firstName}`;
 
-        const shareTitle = kakaoShare?.title || `${groomName} ♥ ${brideName} 결혼식에 초대합니다`;
+        const shareTitle = kakaoShare?.title || `${groomName} ♥ ${brideName} 결혼식에 초대해요`;
         const shareDesc = kakaoShare?.description || `${date} ${time}`;
         const shareImageUrl = kakaoShare?.imageUrl || mainImageUrl || `${baseUrl}/logo.png`;
         const buttonType = kakaoShare?.buttonType ?? 'location';
@@ -90,11 +90,11 @@ const ClosingView = memo(({
                 },
                 slug,
                 onError: () => {
-                    toast({ description: '공유 중 오류가 발생했습니다.', variant: 'destructive' });
+                    toast({ description: '공유 중 오류가 발생했어요.', variant: 'destructive' });
                 },
             });
         }).catch(() => {
-            toast({ description: '카카오 SDK 로딩 중입니다. 잠시 후 다시 시도해 주세요.', variant: 'destructive' });
+            toast({ description: '카카오 SDK 로딩 중이에요. 잠시 후 다시 시도해 주세요.', variant: 'destructive' });
         });
     };
 
@@ -149,7 +149,7 @@ const ClosingView = memo(({
                 <div
                     className={clsx(styles.message, "rich-text-content", !imageUrl && styles.noImage) || ''}
                     dangerouslySetInnerHTML={{
-                        __html: closingMessage || "<p>서로가 마주보며 다져온 사랑을<br>이제 함께 한 곳을 바라보며 걸어가려 합니다.<br>저희의 새 출발을 축복해 주세요.</p>"
+                        __html: closingMessage || "<p>서로가 마주보며 다져온 사랑을<br>이제 함께 한 곳을 바라보며 걸어가려고 해요.<br>저희의 새 출발을 축복해 주세요.</p>"
                     }}
                 />
 

@@ -55,7 +55,7 @@ const AccountsView = memo(({
         const onlyNumbers = text.replace(/[^0-9]/g, '');
         navigator.clipboard.writeText(onlyNumbers);
         toast({
-            description: '계좌번호가 복사되었습니다.',
+            description: '계좌번호가 복사되었어요.',
         });
     };
 

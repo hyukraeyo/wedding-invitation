@@ -336,7 +336,7 @@ export default React.memo(function GallerySectionContent() {
                             <Dialog.Header title="알림" />
                             <Dialog.Body className={styles.centerBody}>
                                 <p style={{ fontSize: '1rem', color: '#666' }}>
-                                    사진은 최대 10장까지 등록 가능합니다.
+                                    사진은 최대 10장까지 등록 가능해요.
                                 </p>
                             </Dialog.Body>
                             <Dialog.Footer className={styles.paddedFooter}>
@@ -374,7 +374,7 @@ export default React.memo(function GallerySectionContent() {
                     </DndContext>
 
                     <InfoMessage>
-                        사진을 길게 눌러 순서를 변경할 수 있습니다. (첫 번째 사진이 대표 사진)
+                        사진을 길게 눌러 순서를 변경할 수 있어요. (첫 번째 사진이 대표 사진이에요)
                     </InfoMessage>
                 </div>
             </div>

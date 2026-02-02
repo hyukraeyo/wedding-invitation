@@ -14,7 +14,7 @@ import { headers } from 'next/headers';
 
 export const metadata = {
     title: '신청 관리 | 바나나웨딩',
-    description: '접수된 청첩장 신청 목록을 관리합니다.',
+    description: '접수된 청첩장 신청 목록을 관리해요.',
 };
 
 /**

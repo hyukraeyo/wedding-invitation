@@ -150,7 +150,7 @@ export default function GreetingSection(props: SectionProps) {
                                     type="text"
                                     value={greetingTitle}
                                     onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGreetingTitle(e.target.value)}
-                                    placeholder="예: 소중한 분들을 초대합니다"
+                                    placeholder="예: 소중한 분들을 초대해요"
                                 />
                             </FormControl>
                         </FormField>
@@ -228,7 +228,7 @@ export default function GreetingSection(props: SectionProps) {
                                         </FormControl>
                                     </FormField>
                                     <InfoMessage>
-                                        기본 이름 표기 대신 사용자가 직접 작성한 문구로 이름을 표시합니다.
+                                        기본 이름 표기 대신 사용자가 직접 작성한 문구로 이름을 표시해요.
                                     </InfoMessage>
                                 </div>
                             )}

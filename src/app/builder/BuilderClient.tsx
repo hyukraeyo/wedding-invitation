@@ -147,18 +147,18 @@ export function BuilderClient() {
             }
 
             if (!isAdmin && (currentStoreState.isRequestingApproval || currentStoreState.isApproved)) {
-                toast({ variant: 'destructive', description: '승인 신청 중이거나 승인된 청첩장은 수정할 수 없습니다.' });
+                toast({ variant: 'destructive', description: '승인 신청 중이거나 승인된 청첩장은 수정할 수 없어요.' });
                 return;
             }
 
             await invitationService.saveInvitation(currentSlug, cleanData, user.id);
-            toast({ description: '청첩장이 저장되었습니다! 🎉' });
+            toast({ description: '청첩장이 저장되었어요! 🎉' });
             router.push('/mypage');
             // Note: Don't set isSaving(false) here because we're navigating away.
             // Keeping it true (and keeping GLOBAL_SAVE_LOCK) prevents any further clicks during the transition.
         } catch (error) {
             console.error('Save error:', error);
-            toast({ variant: 'destructive', description: '저장 중 오류가 발생했습니다. 다시 시도해주세요.' });
+            toast({ variant: 'destructive', description: '저장 중 오류가 발생했어요. 다시 시도해주세요.' });
             setIsSaving(false);
             GLOBAL_SAVE_LOCK = false;
         }

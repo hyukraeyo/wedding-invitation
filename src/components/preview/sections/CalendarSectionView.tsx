@@ -84,7 +84,7 @@ const CalendarSectionView = memo(({
     date,
     time = '12:00',
     accentColor,
-    ddayMessage = '(신랑), (신부)의 결혼식이 (D-Day) 남았습니다',
+    ddayMessage = '(신랑), (신부)의 결혼식이 (D-Day) 남았어요',
     groom,
     bride,
     showCalendar = true,
@@ -108,14 +108,14 @@ const CalendarSectionView = memo(({
 
     // Parse D-Day Message
     const parsedDdayMessage = useMemo(() => {
-        if (!ddayMessage) return { prefix: '결혼식까지 남음', suffix: '남았습니다' };
+        if (!ddayMessage) return { prefix: '결혼식까지 남음', suffix: '남았어요' };
 
         const parts = ddayMessage.split('(D-Day)');
         const prefix = parts[0] || '';
         let suffix = parts.slice(1).join('(D-Day)') || '';
 
         // d_day_display가 이미 "일"로 끝나므로 suffix 시작 부분의 중복 "일"을 제거
-        // "(D-Day) 일 남았습니다" → "102일 일 남았습니다" 방지
+        // "(D-Day) 일 남았어요" → "102일 일 남았어요" 방지
         suffix = suffix.replace(/^[\s]*일[\s]?/, ' ');
 
         const replaceTokens = (text: string) => {

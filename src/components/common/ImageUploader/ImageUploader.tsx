@@ -66,7 +66,7 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                 toast({
                     variant: "destructive",
                     title: "업로드 실패",
-                    description: "이미지 업로드에 실패했습니다. 다시 시도해주세요."
+                    description: "이미지 업로드에 실패했어요. 다시 시도해주세요."
                 });
                 // Revert to original value on failure
                 setPreviewUrl(value);

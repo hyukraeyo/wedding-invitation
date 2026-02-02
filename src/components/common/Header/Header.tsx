@@ -229,9 +229,9 @@ export default function Header() {
                 <Dialog.Content>
                     <Dialog.Header title="새 청첩장 만들기" />
                     <Dialog.Body className={styles.centerBody}>
-                        작성 중인 내용이 있습니다. 정말 새 청첩장을 만드시겠습니까?
+                        작성 중인 내용이 있어요. 정말 새 청첩장을 만들까요?
                         <br />
-                        (작성된 내용은 초기화됩니다.)
+                        (작성된 내용은 초기화돼요.)
                     </Dialog.Body>
                     <Dialog.Footer>
                         <Suspense fallback={<Flex className={styles.suspenseFallback} />}>

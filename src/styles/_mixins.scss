@@ -19,11 +19,8 @@
 // Header Offset (Shared Layout)
 // ============================================
 @mixin header-offset {
-  padding-top: $header-height;
-
-  @include mobile {
-    padding-top: 0;
-  }
+  // 헤더가 sticky로 변경되어 수동 패딩이 필요하지 않습니다.
+  padding-top: 0;
 }
 
 // ============================================

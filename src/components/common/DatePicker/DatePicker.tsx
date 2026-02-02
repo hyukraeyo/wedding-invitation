@@ -2,9 +2,9 @@
 
 import React, { useState } from 'react';
 import { Calendar } from '@/components/ui/Calendar';
-import { format, parse } from 'date-fns';
+import { format, parse, startOfToday } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { SelectSingleEventHandler } from 'react-day-picker';
+import { SelectSingleEventHandler, Matcher } from 'react-day-picker';
 import { Dialog } from '@/components/ui/Dialog';
 import { TextField } from '@/components/ui/TextField';
 import styles from './DatePicker.module.scss';
@@ -21,6 +21,7 @@ interface DatePickerProps {
     variant?: React.ComponentProps<typeof TextField.Button>['variant'];
     radius?: React.ComponentProps<typeof TextField.Button>['radius'];
     disabled?: boolean | undefined;
+    calendarDisabled?: Matcher | Matcher[] | undefined;
     id?: string | undefined;
     ref?: React.Ref<HTMLButtonElement> | undefined;
 }
@@ -37,6 +38,7 @@ export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>((
     variant = "soft",
     radius = "large",
     disabled,
+    calendarDisabled = { before: startOfToday() },
     id,
     ...props
 }, ref) => {
@@ -84,8 +86,9 @@ export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>((
                     <Calendar
                         mode="single"
                         selected={dateValue}
-                        defaultMonth={new Date()}
+                        defaultMonth={dateValue || new Date()}
                         onSelect={handleSelect}
+                        disabled={calendarDisabled}
                         className={styles.calendar || ""}
                         hideTodayIndicator={!dateValue}
                         showOutsideDays={false}

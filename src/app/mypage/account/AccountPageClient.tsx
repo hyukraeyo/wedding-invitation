@@ -45,11 +45,11 @@ export default function AccountPageClient({
             await profileService.updateProfile(profile.id, {
                 phone: formData.phone,
             });
-            toast({ description: '휴대폰 번호가 변경되었습니다.' });
+            toast({ description: '휴대폰 번호가 변경되었어요.' });
             setIsEditingPhone(false);
             router.refresh();
         } catch {
-            toast({ variant: 'destructive', description: '저장에 실패했습니다.' });
+            toast({ variant: 'destructive', description: '저장에 실패했어요.' });
         }
     };
 

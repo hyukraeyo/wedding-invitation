@@ -54,7 +54,7 @@ export default function GlobalError({
                 color: '#666',
                 margin: 0,
                 lineHeight: '1.5'
-              }}>앱을 로드하는 중 심각한 문제가 발생했습니다.</p>
+              }}>앱을 로드하는 중 심각한 문제가 발생했어요.</p>
             </div>
 
             <div style={{

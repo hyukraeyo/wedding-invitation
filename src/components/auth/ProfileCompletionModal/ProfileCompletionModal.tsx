@@ -38,7 +38,7 @@ export function ProfileCompletionModal({
 
         const sanitizedPhone = phone.replace(/[^0-9+]/g, '');
         if (!isValidPhone(sanitizedPhone)) {
-            toast({ variant: 'destructive', description: '전화번호 형식이 올바르지 않습니다.' });
+            toast({ variant: 'destructive', description: '전화번호 형식이 올바르지 않아요.' });
             return;
         }
 
@@ -49,12 +49,12 @@ export function ProfileCompletionModal({
                 phone: sanitizedPhone,
             });
 
-            toast({ description: '프로필이 업데이트되었습니다.' });
+            toast({ description: '프로필이 업데이트되었어요.' });
             onComplete();
         } catch {
             toast({
                 variant: 'destructive',
-                description: '프로필 업데이트 중 오류가 발생했습니다.',
+                description: '프로필 업데이트 중 오류가 발생했어요.',
             });
         } finally {
             setLoading(false);
@@ -108,7 +108,7 @@ export function ProfileCompletionModal({
                     <p>
                         입력하신 정보는 청첩장 승인 요청 시 본인 확인용으로만 사용되며,
                         <br />
-                        타인에게 공개되거나 광고 목적 등으로 사용되지 않습니다.
+                        타인에게 공개되거나 광고 목적 등으로 사용되지 않아요.
                     </p>
                 </div>
             </Dialog.Body>
