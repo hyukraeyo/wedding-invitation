@@ -9,6 +9,8 @@ type TextFieldSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 type TextFieldVariant = 'surface' | 'classic' | 'soft' | 'apple' | 'toss';
 type TextFieldRadius = 'none' | 'small' | 'medium' | 'large' | 'full';
 
+export type TextFieldEnterKeyHint = React.InputHTMLAttributes<HTMLInputElement>['enterKeyHint'];
+
 interface TextFieldContextValue {
   size?: TextFieldSize | undefined;
   variant?: TextFieldVariant | undefined;
@@ -67,12 +69,20 @@ const TextFieldRoot = React.forwardRef<HTMLDivElement, TextFieldRootProps>(
 TextFieldRoot.displayName = 'TextField.Root';
 
 // --- TextField.Input ---
-export type TextFieldInputProps = React.InputHTMLAttributes<HTMLInputElement>;
+export interface TextFieldInputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
 const TextFieldInput = React.forwardRef<HTMLInputElement, TextFieldInputProps>(
-  ({ className, ...props }, ref) => {
+  ({ className, enterKeyHint, ...props }, ref) => {
     const { disabled } = React.useContext(TextFieldContext);
-    return <input ref={ref} disabled={disabled} className={clsx(s.input, className)} {...props} />;
+    return (
+      <input
+        ref={ref}
+        disabled={disabled}
+        enterKeyHint={enterKeyHint}
+        className={clsx(s.input, className)}
+        {...props}
+      />
+    );
   }
 );
 TextFieldInput.displayName = 'TextField.Input';

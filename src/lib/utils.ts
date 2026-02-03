@@ -1,9 +1,25 @@
-// Utility Functions
 import { type ClassValue, clsx } from "clsx"
 
-// Class Name Utility (SCSS module compatible)
 export function cn(...inputs: ClassValue[]) {
   return clsx(inputs)
+}
+
+/**
+ * 모바일기기에서 인풋 포커스 시 키패드가 강제로 서게 하는 유틸리티
+ */
+export function focusMobileInput(el: HTMLInputElement | HTMLTextAreaElement | null) {
+  if (!el) return;
+  // iOS Safari 등에서 readOnly가 true인 상태로 포커스되면 키패드가 안 나올 수 있음
+  // React re-render 전에 직접 DOM 속성을 조작하여 키패드 유도
+  const originalReadOnly = el.readOnly;
+  el.readOnly = false;
+  el.focus({ preventScroll: true });
+  // 즉시 복구하면 키패드가 다시 닫힐 수 있으므로 미세한 지연 후 복구 (선택적)
+  if (originalReadOnly) {
+    setTimeout(() => {
+      if (el) el.readOnly = true;
+    }, 50);
+  }
 }
 
 // Date Utilities

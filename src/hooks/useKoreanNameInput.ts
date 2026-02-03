@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { sanitizeKoreanName } from '@/lib/utils';
 
+import { TextFieldEnterKeyHint } from '@/components/ui/TextField';
+
 interface UseKoreanNameInputOptions {
   value: string;
   onValueChange: (nextValue: string) => void;
@@ -8,6 +10,7 @@ interface UseKoreanNameInputOptions {
   allowMiddleDot?: boolean;
   allowLatin?: boolean;
   maxLength?: number | undefined;
+  enterKeyHint?: TextFieldEnterKeyHint;
 }
 
 export function useKoreanNameInput({
@@ -17,6 +20,7 @@ export function useKoreanNameInput({
   allowMiddleDot = true,
   allowLatin = false,
   maxLength,
+  enterKeyHint = 'next',
 }: UseKoreanNameInputOptions) {
   const isComposingRef = React.useRef(false);
 
@@ -71,5 +75,6 @@ export function useKoreanNameInput({
     inputMode: 'text' as const,
     autoComplete: 'name' as const,
     spellCheck: false,
+    enterKeyHint,
   };
 }

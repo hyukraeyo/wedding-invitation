@@ -9,7 +9,7 @@ import { BottomCTA } from '@/components/ui/BottomCTA';
 import { Heading, Form, FormField, FormLabel, FormControl, FormMessage, Card, Skeleton, VisuallyHidden } from '@/components/ui';
 import { NameField } from '@/components/common/NameField';
 import { useToast } from '@/hooks/use-toast';
-import { parseKoreanName, cn, isValidKoreanNameValue } from '@/lib/utils';
+import { parseKoreanName, cn, isValidKoreanNameValue, focusMobileInput } from '@/lib/utils';
 import { useHeaderStore } from '@/store/useHeaderStore';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import styles from './SetupForm.module.scss';
@@ -102,16 +102,28 @@ const SetupForm = () => {
         return () => resetHeader();
     }, [progress, handleBack, setHeader, resetHeader]);
 
+    // 🍌 모바일 키패드 대응을 위한 포커스 헬퍼
+    const focusField = (ref: React.RefObject<HTMLInputElement | null>) => {
+        focusMobileInput(ref.current);
+    };
+
+    // 🍌 단계 변경 시 포커스 관리 로직
+    // 기본적으로 handleNext와 handleFieldClick에서 동기적으로 처리하지만,
+    // 초기 진입이나 예기치 못한 상태 변경을 위해 useEffect 보완
     useEffect(() => {
         if (!isHydrated) return;
 
-        // 🍌 IME 입력을 마무리하고 포커스를 이동하기 위해 미세한 지연 시간 추가
-        const timer = setTimeout(() => {
-            if (currentStep === 0) groomNameRef.current?.focus();
-            else if (currentStep === 1) brideNameRef.current?.focus();
-        }, 30);
+        // 🍌 초기 진입 시에만 동작하거나, 현재 포커스가 없을 때만 보조적으로 동작
+        const activeElement = document.activeElement;
+        const isInputFocused = activeElement?.tagName === 'INPUT' || activeElement?.tagName === 'TEXTAREA';
 
-        return () => clearTimeout(timer);
+        if (!isInputFocused) {
+            const timer = setTimeout(() => {
+                if (currentStep === 0) focusField(groomNameRef);
+                else if (currentStep === 1) focusField(brideNameRef);
+            }, 100);
+            return () => clearTimeout(timer);
+        }
     }, [currentStep, isHydrated]);
 
     // 초기화 완료 전에는 스켈레톤 표시
@@ -157,11 +169,14 @@ const SetupForm = () => {
             setCurrentStep(nextStep);
             setHighestStepReached(prev => Math.max(prev, nextStep));
 
-            // 🍌 자동 모달 열기
-            if (nextStep === 2) {
-                setTimeout(() => setIsDatePickerOpen(true), 100);
+            // 🍌 다음 필드로 즉시 포커스 이동 (모바일 키패드 유지)
+            if (nextStep === 0) focusField(groomNameRef);
+            else if (nextStep === 1) focusField(brideNameRef);
+            else if (nextStep === 2) {
+                // 🍌 날짜/시간 선택기는 모달이므로 약간의 지연 후 열기
+                setTimeout(() => setIsDatePickerOpen(true), 150);
             } else if (nextStep === 3) {
-                setTimeout(() => setIsTimePickerOpen(true), 100);
+                setTimeout(() => setIsTimePickerOpen(true), 150);
             }
         } else {
             const slug = `${groomFullName.trim()}-${Math.random().toString(36).substring(2, 6)}`;
@@ -173,8 +188,16 @@ const SetupForm = () => {
     const handleFieldClick = (step: number) => {
         if (step <= highestStepReached) {
             setCurrentStep(step);
-            if (step === 2) setIsDatePickerOpen(true);
-            if (step === 3) setIsTimePickerOpen(true);
+            // 🍌 클릭 시 즉시 포커스 (동기적 호출이 모바일에서 키패드를 깨움)
+            if (step === 0) {
+                focusField(groomNameRef);
+            } else if (step === 1) {
+                focusField(brideNameRef);
+            } else if (step === 2) {
+                setIsDatePickerOpen(true);
+            } else if (step === 3) {
+                setIsTimePickerOpen(true);
+            }
         }
     };
 
@@ -322,6 +345,7 @@ const SetupForm = () => {
                                                 handleNext();
                                             }
                                         }}
+                                        enterKeyHint="next"
                                         onClick={() => handleFieldClick(1)}
                                         required
                                     />
@@ -359,6 +383,7 @@ const SetupForm = () => {
                                                 handleNext();
                                             }
                                         }}
+                                        enterKeyHint="next"
                                         onClick={() => handleFieldClick(0)}
                                         required
                                     />
