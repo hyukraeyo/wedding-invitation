@@ -44,12 +44,5 @@
 .content {
   width: 100%;
   max-width: 520px; // Slightly wider for premium feel
-  display: flex;
-  flex-direction: column;
-  gap: 2.5rem;
   z-index: 1;
-
-  @media (max-width: 768px) {
-    gap: 0;
-  }
 }

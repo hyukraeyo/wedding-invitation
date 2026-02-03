@@ -120,19 +120,20 @@
 .skeletonInput {
   width: 100%;
   height: 60px;
-  border-radius: 16px;
+  border-bottom: 2px solid v.$grey-100;
+  background-color: transparent;
 }
 
 .form {
   display: flex;
   flex-direction: column;
+  gap: 2rem;
   transition: transform 0.8s v.$ease-ios; // Faster transition
   will-change: transform;
 }
 
 // 각 필드 컨테이너
 .fieldContainer {
-  height: 112px; // Increased for better spacing
   opacity: 0;
   transition:
     opacity 0.8s v.$ease-ios,
@@ -156,7 +157,6 @@
   width: 100%;
   max-width: v.$canvas-max-width;
   box-sizing: border-box;
-  margin-top: 1rem;
   border-radius: v.$radius-2xl;
   animation: setupFadeInMobile 0.8s v.$ease-ios both;
   overflow: visible; // hidden에서 변경

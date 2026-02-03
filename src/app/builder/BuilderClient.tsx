@@ -9,7 +9,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { invitationService } from '@/services/invitationService';
 import { useHeaderStore } from '@/store/useHeaderStore';
 import { useToast } from '@/hooks/use-toast';
-import { BottomSheet, Dialog } from '@/components/ui';
+import { Dialog } from '@/components/ui';
 import { BananaLoader } from '@/components/ui/Loader';
 import styles from './BuilderPage.module.scss';
 import { MobileNav } from '@/components/common/MobileNav';

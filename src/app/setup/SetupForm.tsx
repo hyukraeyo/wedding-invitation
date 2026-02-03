@@ -216,7 +216,6 @@ const SetupForm = () => {
                         onSubmit={handleSubmit}
                         className={styles.form}
                         style={{
-                            gap: 0,
                             transform: `translateY(${(3 - highestStepReached) * -112}px)`
                         }}
                     >
@@ -231,8 +230,7 @@ const SetupForm = () => {
                                         value={time}
                                         open={isTimePickerOpen}
                                         onOpenChange={setIsTimePickerOpen}
-                                        variant="toss"
-                                        radius="large"
+                                        variant="classic"
                                         placeholder="예식 시간을 선택해주세요"
                                         onChange={setTime}
                                         disabled={false}
@@ -268,8 +266,7 @@ const SetupForm = () => {
                                         value={date}
                                         open={isDatePickerOpen}
                                         onOpenChange={setIsDatePickerOpen}
-                                        variant="toss"
-                                        radius="large"
+                                        variant="classic"
                                         placeholder="예식 날짜를 선택해주세요"
                                         onChange={(val) => {
                                             setDate(val);
@@ -310,8 +307,8 @@ const SetupForm = () => {
                                         id="bride-name"
                                         ref={brideNameRef}
                                         readOnly={currentStep !== 1}
-                                        variant="toss"
-                                        radius="large"
+                                        variant="classic"
+                                        size="lg"
                                         placeholder="신부 성함을 입력해주세요"
                                         value={brideFullName}
                                         onValueChange={setBrideFullName}
@@ -347,8 +344,8 @@ const SetupForm = () => {
                                         id="groom-name"
                                         ref={groomNameRef}
                                         readOnly={currentStep !== 0}
-                                        variant="toss"
-                                        radius="large"
+                                        variant="classic"
+                                        size="lg"
                                         placeholder="신랑 이름"
                                         value={groomFullName}
                                         onValueChange={setGroomFullName}
