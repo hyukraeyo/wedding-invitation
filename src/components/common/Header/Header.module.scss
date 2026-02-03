@@ -173,6 +173,7 @@
   display: flex;
   align-items: center;
   min-width: 44px;
+  gap: 0.25rem;
 }
 
 .right {
@@ -187,6 +188,7 @@
   align-items: center;
   justify-content: center;
   width: auto;
+  max-width: calc(100% - 200px); // 좌우 버튼 공간 확보 (약 100px씩)
   pointer-events: none;
 }
 
@@ -196,6 +198,9 @@
   color: v.$grey-800;
   letter-spacing: -0.01em;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 }
 
 .actionSpacer {

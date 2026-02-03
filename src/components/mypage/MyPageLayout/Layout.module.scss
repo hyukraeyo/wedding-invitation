@@ -12,14 +12,13 @@
 
 .layout {
     display: flex;
-    min-height: calc(100dvh - v.$header-height);
+    min-height: calc(100dvh - #{v.$header-height});
 
-    @include m.mobile {
+    @media (max-width: 767px) {
         flex-direction: column;
         min-height: 100dvh;
     }
 }
-
 
 // ============================================
 // Main Content Area (Unified Style)
@@ -30,7 +29,7 @@
     max-width: 100%;
     position: relative;
 
-    @include m.desktop {
+    @media (min-width: 768px) {
         max-width: calc(100% - 280px);
         padding: 2rem;
     }

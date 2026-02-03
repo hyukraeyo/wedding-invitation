@@ -1,4 +1,4 @@
-@use "variables" as v;
+@use "interact" as i;
 
 /* Animations from globals.css */
 @keyframes fall {
@@ -385,31 +385,31 @@
 
 @keyframes popup-in {
   from {
-    opacity: v.$popup-opacity-start;
-    transform: translate3d(0, v.$popup-translate-y, 0) scale(v.$popup-scale-start);
+    opacity: i.$popup-opacity-start;
+    transform: translate3d(0, i.$popup-translate-y, 0) scale(i.$popup-scale-start);
   }
 
   to {
-    opacity: v.$popup-opacity-end;
-    transform: translate3d(0, 0, 0) scale(v.$popup-scale-end);
+    opacity: i.$popup-opacity-end;
+    transform: translate3d(0, 0, 0) scale(i.$popup-scale-end);
   }
 }
 
 @keyframes popup-out {
   from {
-    opacity: v.$popup-opacity-end;
-    transform: translate3d(0, 0, 0) scale(v.$popup-scale-end);
+    opacity: i.$popup-opacity-end;
+    transform: translate3d(0, 0, 0) scale(i.$popup-scale-end);
   }
 
   to {
-    opacity: v.$popup-opacity-start;
-    transform: translate3d(0, v.$popup-translate-y, 0) scale(v.$popup-scale-start);
+    opacity: i.$popup-opacity-start;
+    transform: translate3d(0, i.$popup-translate-y, 0) scale(i.$popup-scale-start);
   }
 }
 
 // Mixin for popup animation
 @mixin popup-animation {
-  animation: popup-in v.$popup-duration v.$popup-easing both;
+  animation: popup-in i.$popup-duration i.$popup-easing both;
   transform-origin: var(--radix-dropdown-menu-content-transform-origin, var(--radix-popover-content-transform-origin, top));
   will-change: transform, opacity;
 

@@ -1,5 +1,6 @@
 @use '../../../styles/variables' as v;
 @use '../../../styles/mixins' as m;
+@use '../../../styles/semantic' as s;
 
 .root {
   display: flex;
@@ -13,39 +14,39 @@
 
   // Sizes
   &.xs {
-    height: v.$control-height-xs;
-    font-size: v.$control-font-size-xs;
-    --slot-padding: #{v.$control-slot-padding-xs};
-    --input-padding: #{v.$control-padding-xs};
+    height: s.$control-height-xs;
+    font-size: s.$control-font-size-xs;
+    --slot-padding: #{s.$control-slot-padding-xs};
+    --input-padding: #{s.$control-padding-xs};
   }
 
   &.sm {
-    height: v.$control-height-sm;
-    font-size: v.$control-font-size-sm;
-    --slot-padding: #{v.$control-slot-padding-sm};
-    --input-padding: #{v.$control-padding-sm};
+    height: s.$control-height-sm;
+    font-size: s.$control-font-size-sm;
+    --slot-padding: #{s.$control-slot-padding-sm};
+    --input-padding: #{s.$control-padding-sm};
   }
 
   &.md {
-    height: v.$control-height-md;
-    font-size: v.$control-font-size-md;
-    --slot-padding: #{v.$control-slot-padding-md};
-    --input-padding: #{v.$control-padding-md};
+    height: s.$control-height-md;
+    font-size: s.$control-font-size-md;
+    --slot-padding: #{s.$control-slot-padding-md};
+    --input-padding: #{s.$control-padding-md};
   }
 
   &.lg {
-    height: v.$control-height-lg;
-    font-size: v.$control-font-size-lg;
-    --slot-padding: #{v.$control-slot-padding-lg};
-    --input-padding: #{v.$control-padding-lg};
+    height: s.$control-height-lg;
+    font-size: s.$control-font-size-lg;
+    --slot-padding: #{s.$control-slot-padding-lg};
+    --input-padding: #{s.$control-padding-lg};
     border-radius: v.$radius-lg;
   }
 
   &.xl {
-    height: v.$control-height-xl;
-    font-size: v.$control-font-size-xl;
-    --slot-padding: #{v.$control-slot-padding-xl};
-    --input-padding: #{v.$control-padding-xl};
+    height: s.$control-height-xl;
+    font-size: s.$control-font-size-xl;
+    --slot-padding: #{s.$control-slot-padding-xl};
+    --input-padding: #{s.$control-padding-xl};
     border-radius: v.$radius-xl;
   }
 
@@ -225,6 +226,7 @@
   flex-shrink: 0;
   padding: 0 var(--slot-padding);
   color: v.$grey-500;
+  transition: color 0.2s v.$ease-ios;
 
   &.side_left {
     padding-right: 0;
@@ -233,19 +235,44 @@
   &.side_right {
     padding-left: 0;
   }
+
+  &:has(.clearButton) {
+    padding-left: 4px;
+    padding-right: 8px;
+  }
 }
 
-// Support for existing code that expects a label or line variant
-.container {
+.clearButton {
+  @include m.flex-center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: v.$grey-400;
+  background-color: v.$grey-100;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s v.$ease-ios;
+  padding: 0;
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  @include m.hover {
+    background-color: v.$grey-200;
+    color: v.$grey-600;
+  }
+
+  &:active {
+    transform: scale(0.92);
+  }
+}
+
+// 🍌 Field UI integration (Compatibility)
+.field {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   width: 100%;
-}
-
-.label {
-  font-size: v.$font-size-xs;
-  font-weight: 500;
-  color: v.$grey-700;
-  margin-left: 4px;
 }

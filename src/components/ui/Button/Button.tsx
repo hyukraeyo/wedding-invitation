@@ -3,73 +3,36 @@
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { clsx } from 'clsx';
+import { Loader2 } from 'lucide-react';
 import s from './Button.module.scss';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /**
-   * @default 'primary'
-   * Radix UI Themes style color
-   */
-  color?: 'primary' | 'secondary' | 'danger' | 'grey' | undefined;
-
-  /**
-   * @default 'solid'
-   * Radix UI Themes style variants (with TDS aliases)
-   */
-  variant?:
-    | 'solid'
-    | 'soft'
-    | 'outline'
-    | 'ghost'
-    | 'surface'
-    | 'filled'
-    | 'fill'
-    | 'weak'
-    | 'clear'
-    | 'apple'
-    | 'toss'
-    | undefined;
-
-  /**
-   * @default 'md'
-   */
-  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | undefined;
-
-  /**
-   * @default 'medium'
-   */
-  radius?: 'none' | 'small' | 'medium' | 'large' | 'full' | undefined;
-
-  /**
-   * Whether to use high contrast colors
-   */
-  highContrast?: boolean | undefined;
-
-  /**
-   * Show loading spinner and disable interaction
-   */
-  loading?: boolean | undefined;
-
-  fullWidth?: boolean | undefined;
-  asChild?: boolean | undefined;
-  unstyled?: boolean | undefined;
-  leftIcon?: React.ReactNode | undefined;
-  rightIcon?: React.ReactNode | undefined;
+  variant?: 'primary' | 'secondary' | 'ghost' | 'weak' | 'fill' | 'solid' | 'unstyled' | 'soft' | 'outline' | 'surface' | 'filled' | 'clear' | 'apple' | 'toss';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
+  isLoading?: boolean;
+  loading?: boolean;
+  asChild?: boolean;
+  fluid?: boolean;
+  fullWidth?: boolean;
+  unstyled?: boolean;
+  radius?: 'none' | 'small' | 'medium' | 'large' | 'full' | string;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
       className,
-      color = 'primary',
-      variant = 'toss',
+      variant = 'primary',
       size = 'lg',
-      radius,
-      highContrast = false,
+      isLoading: isLoadingProp = false,
       loading = false,
-      fullWidth = false,
       asChild = false,
+      fluid: fluidProp = false,
+      fullWidth = false,
       unstyled = false,
+      radius,
       leftIcon,
       rightIcon,
       children,
@@ -80,47 +43,52 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const Comp = asChild ? Slot : 'button';
 
-    // Mapping for variant aliases to internal SCSS classes
-    const variantClass = !unstyled
-      ? clsx(
-          (variant === 'solid' || variant === 'filled' || variant === 'fill') && s.solid,
-          (variant === 'soft' || variant === 'weak' || variant === 'surface') && s.soft,
-          variant === 'outline' && s.outline,
-          (variant === 'ghost' || variant === 'clear') && s.ghost,
-          variant === 'apple' && s.apple,
-          variant === 'toss' && s.toss
-        )
-      : undefined;
-
-    // Mapping for size aliases
-    const sizeClass = !unstyled ? s[size] : undefined;
+    const isLoading = isLoadingProp || loading;
+    const fluid = fluidProp || fullWidth;
 
     return (
       <Comp
+        ref={ref}
+        disabled={disabled || isLoading}
         className={clsx(
-          s.button,
-          !unstyled && s[color],
-          variantClass,
-          sizeClass,
-          !unstyled && radius && s[`radius_${radius}`],
-          !unstyled && highContrast && s.highContrast,
-          loading && s.isLoading,
-          fullWidth && s.fullWidth,
+          !unstyled && s.button,
+          !unstyled &&
+            s[
+              variant === 'weak' ||
+              variant === 'soft' ||
+              variant === 'outline' ||
+              variant === 'surface' ||
+              variant === 'secondary' ||
+              variant === 'toss'
+                ? 'secondary'
+                : variant === 'ghost' || variant === 'clear'
+                  ? 'ghost'
+                  : variant === 'fill' || variant === 'solid' || variant === 'filled' || variant === 'apple' || variant === 'primary'
+                    ? 'primary'
+                    : variant
+            ],
+          !unstyled && s[size],
+          fluid && s.fluid,
           unstyled && s.unstyled,
+          radius === 'full' && s.radius_full,
+          radius === 'none' && s.radius_none,
+          radius === 'small' && s.radius_sm,
+          radius === 'medium' && s.radius_md,
+          radius === 'large' && s.radius_lg,
           className
         )}
-        ref={ref}
-        disabled={disabled || loading}
         {...props}
       >
-        {loading && <span className={s.spinner} />}
-
-        {/* Render icons only when not loading or maintain layout if needed */}
-        {!loading && leftIcon && <span className={s.icon}>{leftIcon}</span>}
-
-        {asChild ? children : <span className={s.content}>{children}</span>}
-
-        {!loading && rightIcon && <span className={s.icon}>{rightIcon}</span>}
+        {isLoading && !unstyled && (
+          <div className={s.loader}>
+            <Loader2 className={s.spinner} size={18} />
+          </div>
+        )}
+        <div className={clsx(s.content, isLoading && s.hidden, unstyled && s.unstyledContent)}>
+          {leftIcon && <span className={s.icon}>{leftIcon}</span>}
+          {children}
+          {rightIcon && <span className={s.icon}>{rightIcon}</span>}
+        </div>
       </Comp>
     );
   }

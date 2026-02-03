@@ -1,0 +1,43 @@
+// ============================================
+// 🍌 3. Interaction: The "Feel" of Apple/Toss
+// Smooth curves, subtle shadows, haptic motion
+// ============================================
+
+// Standard Radius
+$radius-sm: 8px;
+$radius-md: 12px;
+$radius-lg: 16px;
+$radius-xl: 24px;
+$radius-2xl: 32px;
+$radius-full: 9999px;
+
+// Apple-style Shadows
+$shadow-subtle: 0 4px 12px rgba(0, 0, 0, 0.05);
+$shadow-base:   0 8px 24px rgba(0, 0, 0, 0.08);
+$shadow-strong: 0 12px 32px rgba(0, 0, 0, 0.12);
+$shadow-card:   $shadow-base;
+
+// iOS Bezier & Transitions
+$ease-ios: cubic-bezier(0.16, 1, 0.3, 1);
+$duration-fast: 150ms;
+$duration-base: 250ms;
+$duration-slow: 400ms;
+
+$transition-smooth: $duration-base $ease-ios;
+
+// Press/Haptic Scale
+$scale-press-sm: 0.94;
+$scale-press-md: 0.96;
+$scale-press-lg: 0.98;
+
+// Popup / Dropdown Motion
+$popup-duration: 240ms;
+$popup-easing:   cubic-bezier(0.16, 1, 0.3, 1);
+$popup-scale-start: 0.96;
+$popup-scale-end:   1;
+$popup-translate-y: -20px;
+$popup-opacity-start: 0;
+$popup-opacity-end:   1;
+
+// Breakpoints
+$mobile: 768px;

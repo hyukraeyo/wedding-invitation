@@ -2,19 +2,20 @@
 
 import * as React from 'react';
 import { clsx } from 'clsx';
+import { X } from 'lucide-react';
 import s from './TextField.module.scss';
+import { Field } from '../Field';
 
 // --- Context for sharing props between Root and Input/Slot ---
-type TextFieldSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-type TextFieldVariant = 'surface' | 'classic' | 'soft' | 'apple' | 'toss';
-type TextFieldRadius = 'none' | 'small' | 'medium' | 'large' | 'full';
+export type TextFieldSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+export type TextFieldVariant = 'surface' | 'classic' | 'soft' | 'apple' | 'toss';
+export type TextFieldRadius = 'none' | 'small' | 'medium' | 'large' | 'full';
 
 export type TextFieldEnterKeyHint = React.InputHTMLAttributes<HTMLInputElement>['enterKeyHint'];
 
 interface TextFieldContextValue {
   size?: TextFieldSize | undefined;
   variant?: TextFieldVariant | undefined;
-  color?: string | undefined;
   radius?: TextFieldRadius | undefined;
   disabled?: boolean | undefined;
 }
@@ -29,7 +30,6 @@ export interface TextFieldRootProps extends React.HTMLAttributes<HTMLDivElement>
   highContrast?: boolean | undefined;
   disabled?: boolean | undefined;
   invalid?: boolean | undefined;
-  className?: string | undefined;
 }
 
 const TextFieldRoot = React.forwardRef<HTMLDivElement, TextFieldRootProps>(
@@ -69,7 +69,7 @@ const TextFieldRoot = React.forwardRef<HTMLDivElement, TextFieldRootProps>(
 TextFieldRoot.displayName = 'TextField.Root';
 
 // --- TextField.Input ---
-export interface TextFieldInputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
+export type TextFieldInputProps = React.InputHTMLAttributes<HTMLInputElement>;
 
 const TextFieldInput = React.forwardRef<HTMLInputElement, TextFieldInputProps>(
   ({ className, enterKeyHint, ...props }, ref) => {
@@ -106,20 +106,38 @@ export interface TextFieldButtonProps extends React.ButtonHTMLAttributes<HTMLBut
   size?: TextFieldSize | undefined;
   radius?: TextFieldRadius | undefined;
   placeholder?: string | undefined;
+  error?: string | boolean | undefined;
+  helperText?: string | undefined;
 }
 
 const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps>(
   (
-    { className, children, label, variant = 'toss', size = 'md', radius = 'medium', id, ...props },
+    {
+      className,
+      children,
+      label,
+      variant = 'toss',
+      size = 'md',
+      radius = 'medium',
+      error,
+      helperText,
+      id,
+      ...props
+    },
     ref
   ) => {
     const generatedId = React.useId();
     const inputId = id || generatedId;
-
     const isPlaceholder = !props.value && !!props.placeholder;
 
     const button = (
-      <TextFieldRoot variant={variant} size={size} radius={radius} className={className}>
+      <TextFieldRoot
+        variant={variant}
+        size={size}
+        radius={radius}
+        invalid={!!error}
+        className={className}
+      >
         <button
           ref={ref}
           id={inputId}
@@ -132,12 +150,15 @@ const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps
       </TextFieldRoot>
     );
 
-    if (label) {
+    if (label || helperText || error) {
       return (
-        <label htmlFor={inputId} className={s.container}>
-          <span className={s.label}>{label}</span>
+        <Field.Root error={error} disabled={props.disabled}>
+          {label && <Field.Label htmlFor={inputId}>{label}</Field.Label>}
           {button}
-        </label>
+          {(helperText || typeof error === 'string') && (
+            <Field.HelperText error={!!error}>{typeof error === 'string' ? error : helperText}</Field.HelperText>
+          )}
+        </Field.Root>
       );
     }
 
@@ -146,16 +167,22 @@ const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps
 );
 TextFieldButton.displayName = 'TextField.Button';
 
-// --- Combined / Compatibility Export ---
-// --- Combined / Compatibility Export ---
-export interface TextFieldProps extends Omit<TextFieldInputProps, 'size'> {
+// --- Main TextField Component ---
+export interface TextFieldProps extends Omit<TextFieldInputProps, 'size' | 'prefix'> {
   label?: string | undefined;
   variant?: TextFieldVariant | undefined;
   size?: TextFieldSize | undefined;
   radius?: TextFieldRadius | undefined;
-  invalid?: boolean | undefined;
+  invalid?: boolean | undefined; // Backward compatibility
+  error?: string | boolean | undefined;
+  helperText?: string | undefined;
   leftSlot?: React.ReactNode | undefined;
   rightSlot?: React.ReactNode | undefined;
+  prefix?: React.ReactNode | undefined;
+  suffix?: React.ReactNode | undefined;
+  clearable?: boolean | undefined;
+  onClear?: (() => void) | undefined;
+  showCount?: boolean | undefined;
 }
 
 const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
@@ -165,38 +192,108 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
       variant = 'toss',
       size = 'md',
       radius = 'medium',
-      invalid = false,
+      invalid,
+      error,
+      helperText,
       leftSlot,
       rightSlot,
+      prefix,
+      suffix,
+      clearable,
+      onClear,
+      showCount,
       className,
       id,
+      maxLength,
+      value,
+      onChange,
       ...props
     },
     ref
   ) => {
     const generatedId = React.useId();
     const inputId = id || generatedId;
+    const isError = !!error || !!invalid;
+    const errorMsg = typeof error === 'string' ? error : undefined;
+
+    const lSlot = prefix || leftSlot;
+    const rSlot = suffix || rightSlot;
+
+    const [internalValue, setInternalValue] = React.useState(props.defaultValue || '');
+    const currentValue = value !== undefined ? value : internalValue;
+
+    const handleClear = () => {
+      if (onClear) {
+        onClear();
+      }
+      if (value === undefined) {
+        setInternalValue('');
+      } else {
+        // If controlled, we can't clear it ourselves, but we should trigger onChange
+      }
+      // Trigger onChange if possible
+      const event = {
+        target: { value: '' },
+        currentTarget: { value: '' },
+      } as React.ChangeEvent<HTMLInputElement>;
+      onChange?.(event);
+    };
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (value === undefined) {
+        setInternalValue(e.target.value);
+      }
+      onChange?.(e);
+    };
 
     const input = (
       <TextFieldRoot
         variant={variant}
         size={size}
         radius={radius}
-        invalid={invalid}
+        invalid={isError}
         className={className}
       >
-        {leftSlot && <TextFieldSlot side="left">{leftSlot}</TextFieldSlot>}
-        <TextFieldInput ref={ref} id={inputId} aria-invalid={invalid || undefined} {...props} />
-        {rightSlot && <TextFieldSlot side="right">{rightSlot}</TextFieldSlot>}
+        {lSlot && <TextFieldSlot side="left">{lSlot}</TextFieldSlot>}
+        <TextFieldInput
+          ref={ref}
+          id={inputId}
+          aria-invalid={isError || undefined}
+          value={currentValue}
+          onChange={handleChange}
+          maxLength={maxLength}
+          {...props}
+        />
+        {(clearable && currentValue) && (
+          <TextFieldSlot side="right">
+            <button
+              type="button"
+              className={s.clearButton}
+              onClick={handleClear}
+              aria-label="Clear"
+            >
+              <X />
+            </button>
+          </TextFieldSlot>
+        )}
+        {rSlot && <TextFieldSlot side="right">{rSlot}</TextFieldSlot>}
       </TextFieldRoot>
     );
 
-    if (label) {
+    if (label || helperText || error || (showCount && maxLength)) {
       return (
-        <label htmlFor={inputId} className={s.container}>
-          <span className={s.label}>{label}</span>
+        <Field.Root error={isError} disabled={props.disabled}>
+          {label && <Field.Label htmlFor={inputId}>{label}</Field.Label>}
           {input}
-        </label>
+          <Field.Footer>
+            {(helperText || errorMsg) ? (
+              <Field.HelperText error={isError}>{errorMsg || helperText}</Field.HelperText>
+            ) : <div />}
+            {(showCount && maxLength) && (
+              <Field.Counter current={String(currentValue).length} max={maxLength} />
+            )}
+          </Field.Footer>
+        </Field.Root>
       );
     }
 

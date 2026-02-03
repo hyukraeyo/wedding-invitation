@@ -4,21 +4,28 @@ export function cn(...inputs: ClassValue[]) {
   return clsx(inputs)
 }
 
-/**
- * 모바일기기에서 인풋 포커스 시 키패드가 강제로 서게 하는 유틸리티
- */
-export function focusMobileInput(el: HTMLInputElement | HTMLTextAreaElement | null) {
+export function focusMobileInput(el: HTMLInputElement | HTMLTextAreaElement | null, skipRestore = false) {
   if (!el) return;
   // iOS Safari 등에서 readOnly가 true인 상태로 포커스되면 키패드가 안 나올 수 있음
   // React re-render 전에 직접 DOM 속성을 조작하여 키패드 유도
   const originalReadOnly = el.readOnly;
+  
+  // 이미 editable 상태라면 focus만 수행
+  if (!originalReadOnly) {
+    el.focus({ preventScroll: true });
+    return;
+  }
+
   el.readOnly = false;
   el.focus({ preventScroll: true });
-  // 즉시 복구하면 키패드가 다시 닫힐 수 있으므로 미세한 지연 후 복구 (선택적)
-  if (originalReadOnly) {
+  
+  // skipRestore가 true거나 React가 즉시 re-render하여 readOnly를 false로 바꿀 것이 예상되는 경우
+  // 복구 로직을 건너뜁니다. (React가 prop에 따라 다음 렌더 시점에 관리하게 됨)
+  if (!skipRestore) {
+    // 즉시 복구하면 키패드가 다시 닫힐 수 있으므로 미세한 지연 후 복구
     setTimeout(() => {
       if (el) el.readOnly = true;
-    }, 50);
+    }, 100);
   }
 }
 

@@ -1,4 +1,4 @@
-@use "../../../styles/variables" as *;
+@use "../../../styles/variables" as v;
 @use "../../../styles/mixins" as m;
 
 .description {
@@ -18,7 +18,7 @@
 
 .accountCard {
     padding: 0.5rem 0.25rem;
-    transition: all $transition-fast;
+    transition: all v.$transition-fast;
     border-bottom: 1px solid #f8f9fa;
 
     &:last-child {
@@ -53,7 +53,7 @@
             border: 1px solid #f1f3f5;
             background-color: #f8f9fa;
             color: #868e96;
-            transition: all $transition-fast;
+            transition: all v.$transition-fast;
             cursor: pointer;
 
             @media (hover: hover) and (pointer: fine) {

@@ -1,6 +1,170 @@
 // ============================================
-// Unified Variables & Mixins Entry Point
+// 🍌 Banana Wedding - Unified Design System
+// Core entry point for all SCSS variables
 // ============================================
 
-@forward './tokens';
-@forward './mixins';
+@forward "colors";
+@forward "typography";
+@forward "interact";
+@forward "semantic";
+@forward "mixins";
+
+// 🍌 Legacy/Refactored Support Aliases
+// These ensure existing components continue to work during transition
+@use "colors" as c;
+@use "interact" as i;
+@use "semantic" as s;
+@use "typography" as t;
+
+$color-foreground: c.$grey-900;
+
+$primary:        c.$primary-500;
+$primary-dark:   c.$primary-700;
+$white:          c.$white;
+$grey-100:       c.$grey-100;
+$grey-200:       c.$grey-200;
+$grey-300:       c.$grey-300;
+$grey-400:       c.$grey-400;
+$grey-500:       c.$grey-500;
+$grey-600:       c.$grey-600;
+$grey-700:       c.$grey-700;
+$grey-800:       c.$grey-800;
+$grey-900:       c.$grey-900;
+
+$radius-md:      i.$radius-md;
+$radius-toss:    i.$radius-md;
+$radius-apple:   i.$radius-lg;
+$radius-lg:      i.$radius-lg;
+$radius-xl:      i.$radius-xl;
+$radius-2xl:     i.$radius-2xl;
+$radius-sm:      i.$radius-sm;
+
+$ease-ios:       i.$ease-ios;
+$transition-base: i.$transition-smooth;
+$transition-smooth: i.$transition-smooth;
+
+$text-main:      s.$text-primary;
+$text-sub:       s.$text-secondary;
+
+// 🍌 Zinc & Color Aliases (Compatibility)
+$zinc-50:        c.$grey-50;
+$zinc-100:       c.$grey-100;
+$zinc-200:       c.$grey-200;
+$zinc-300:       c.$grey-300;
+$zinc-400:       c.$grey-400;
+$zinc-500:       c.$grey-500;
+$zinc-600:       c.$grey-600;
+$zinc-700:       c.$grey-700;
+$zinc-800:       c.$grey-800;
+$zinc-900:       c.$grey-900;
+
+// 🍌 Compatibility Aliases (Important for existing components)
+$banana-yellow:        c.$primary-500;
+$banana-yellow-hover:  c.$primary-600;
+$banana-yellow-active: c.$primary-700;
+$grey-opacity-20:      rgba(c.$grey-500, 0.2);
+$grey-opacity-200:     rgba(c.$grey-500, 0.2); // Compat alias
+$grey-opacity-50:      rgba(c.$grey-500, 0.08); 
+$grey-opacity-100:     rgba(c.$grey-100, 0.08); // Compat alias
+$shadow-sm:            0 2px 8px rgba(0, 0, 0, 0.04);
+$shadow-md:            0 4px 12px rgba(0, 0, 0, 0.08);
+$shadow-lg:            0 8px 24px rgba(0, 0, 0, 0.12);
+$shadow-xl:            0 10px 40px rgba(0, 0, 0, 0.12);
+$canvas-max-width:     500px;
+$max-mobile:           480px;
+$color-muted:          c.$grey-100;
+$color-muted-foreground: c.$grey-500;
+$adaptive-background-dimmed: rgba(0, 0, 0, 0.4);
+$z-overlay:             9990;
+$z-modal:               10000;
+$motion-label-offset:  -24px;
+$motion-label-duration: 0.2s;
+$motion-label-ease:     cubic-bezier(0.16, 1, 0.3, 1);
+
+$color-primary:            c.$primary-500;
+$color-primary-dark:       c.$primary-700;
+$color-primary-foreground: $white;
+$color-success:            c.$green-500;
+$color-error:              c.$red-500;
+$color-warning:            c.$amber-500;
+$color-info:               c.$blue-500;
+$color-primary-hover:      c.$primary-600;
+$color-border:             c.$grey-200;
+$color-background:         c.$white;
+$color-bg-page:            c.$grey-100;
+
+// Controls
+$control-height-xs:        s.$control-height-xs;
+$control-height-sm:        s.$control-height-sm;
+$control-height-md:        s.$control-height-md;
+$control-height-lg:        s.$control-height-lg;
+$control-height-xl:        s.$control-height-xl;
+
+$control-padding-xs:       s.$control-padding-xs;
+$control-padding-sm:       s.$control-padding-sm;
+$control-padding-md:       s.$control-padding-md;
+$control-padding-lg:       s.$control-padding-lg;
+$control-padding-xl:       s.$control-padding-xl;
+
+$control-font-size-xs:     s.$control-font-size-xs;
+$control-font-size-sm:     s.$control-font-size-sm;
+$control-font-size-md:     s.$control-font-size-md;
+$control-font-size-lg:     s.$control-font-size-lg;
+$control-font-size-xl:     s.$control-font-size-xl;
+
+$control-slot-padding-xs:  s.$control-slot-padding-xs;
+$control-slot-padding-sm:  s.$control-slot-padding-sm;
+$control-slot-padding-md:  s.$control-slot-padding-md;
+$control-slot-padding-lg:  s.$control-slot-padding-lg;
+$control-slot-padding-xl:  s.$control-slot-padding-xl;
+
+// Layout
+$header-height:            56px;
+
+// Extended Tokens
+$control-hover-bg:         rgba(c.$grey-500, 0.08); // Similar to muted/50
+$control-hover-bg-strong:  c.$grey-200;
+$bg-muted:                 c.$grey-100;
+$shadow-hover-primary-strong: 0 4px 12px rgba(c.$primary-500, 0.4);
+$scale-press-xs:           0.94;
+
+// Individual tints for direct access (Compatibility)
+$blue-50:   c.$blue-50;
+$blue-100:  c.$blue-100;
+$blue-200:  c.$blue-200;
+$blue-600:  c.$blue-600;
+$blue-700:  c.$blue-700;
+$red-500:   c.$red-500;
+$red-600:   c.$red-600;
+$primary-50: c.$primary-50;
+$primary-100: c.$primary-100;
+$yellow-900: c.$yellow-900;
+
+$ease-standard:      ease;
+$transition-200:     200ms ease;
+$transition-300:     300ms ease;
+$transition-400:     400ms ease;
+$transition-fast:    150ms ease;
+$transition-normal:  250ms ease;
+
+// Typo Compatibility
+$font-size-2xl:      t.$font-size-xxl;
+$font-pretendard:    t.$font-pretendard;
+$font-family-base:   t.$font-main;
+$font-gmarket-sans:  t.$font-gmarket-sans;
+$font-sans:          t.$font-sans;
+$font-serif:         t.$font-serif;
+$font-gowun-batang:  t.$font-gowun-batang;
+$font-gowun-dodum:   t.$font-gowun-dodum;
+$font-nanum-myeongjo: t.$font-nanum-myeongjo;
+$font-yeon-sung:     t.$font-yeon-sung;
+$font-do-hyeon:      t.$font-do-hyeon;
+$font-song-myung:    t.$font-song-myung;
+$font-script:        t.$font-script;
+
+// Builder Layout Tokens
+$builder-gap-sm:     8px;
+$builder-gap-md:     16px;
+$builder-gap-lg:     24px;
+$builder-gap-xl:     32px;
+// touch

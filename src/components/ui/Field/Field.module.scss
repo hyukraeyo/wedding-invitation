@@ -1,0 +1,66 @@
+@use "../../../styles/variables" as v;
+@use "../../../styles/mixins" as m;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  position: relative;
+
+  &.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 2px;
+  color: v.$grey-700;
+  font-weight: 600;
+  font-size: v.$font-size-xs;
+  line-height: 1.5;
+  transition: all 0.2s v.$ease-ios;
+
+  &:has(+ :focus-within) {
+    color: v.$primary;
+    transform: translateY(-1px);
+  }
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 0 4px;
+}
+
+.helperText {
+  font-size: 12px;
+  line-height: 1.5;
+  color: v.$grey-500;
+  margin: 0;
+  flex: 1;
+
+  &.error {
+    color: v.$color-error;
+  }
+}
+
+.counter {
+  font-size: 11px;
+  color: v.$grey-400;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  margin-top: 2px;
+}
+
+.hasError {
+  .label {
+    color: v.$color-error !important;
+  }
+}

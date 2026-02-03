@@ -127,8 +127,7 @@ export default function Header() {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const isVisible = !pathname.startsWith('/v/') &&
-        pathname !== '/preview' &&
-        pathname !== '/builder/setup';
+        pathname !== '/preview';
     const { user, loading: authLoading } = useAuth();
 
     // Store states
@@ -172,45 +171,20 @@ export default function Header() {
         <>
             <header className={cn(styles.header, "view-transition-header")}>
                 <div className={styles.left}>
-                    {showBack ? (
-                        <IconButton
-                            onClick={() => onBack?.() || router.back()}
-                            variant="clear"
-                            aria-label="뒤로가기"
-                            name=""
-                            iconSize={24}
-                            className={styles.backButton}
-                        >
-                            <ChevronLeft size={24} />
-                        </IconButton>
-                    ) : (
-                        <div className={styles.logoWrapper}>
-                            <Logo />
-                        </div>
-                    )}
+                    <Logo />
                 </div>
 
-                {title && (
-                    <div className={styles.titleWrapper}>
-                        <span className={styles.headerTitle}>{title}</span>
-                    </div>
-                )}
-
                 <div className={styles.right}>
-                    {!title ? (
-                        <HeaderActions
-                            user={user}
-                            authLoading={authLoading}
-                            isLoading={isLoading}
-                            isUploading={isUploading}
-                            notificationCount={notificationCount}
-                            onLogin={handleLogin}
-                            onSaveAction={handleSaveAction}
-                            showSave={!!onSave || pathname.startsWith('/builder')}
-                        />
-                    ) : (
-                        <div className={styles.actionSpacer} />
-                    )}
+                    <HeaderActions
+                        user={user}
+                        authLoading={authLoading}
+                        isLoading={isLoading}
+                        isUploading={isUploading}
+                        notificationCount={notificationCount}
+                        onLogin={handleLogin}
+                        onSaveAction={handleSaveAction}
+                        showSave={!!onSave || pathname.startsWith('/builder')}
+                    />
                 </div>
 
                 {progress !== null && (

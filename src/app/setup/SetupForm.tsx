@@ -94,17 +94,17 @@ const SetupForm = () => {
 
     useEffect(() => {
         setHeader({
-            title: "청첩장 시작하기",
+            title: isComplete ? "정보 입력 완료" : STEPS[currentStep]?.title || "정보 입력",
             showBack: true,
             onBack: handleBack,
             progress: progress
         });
         return () => resetHeader();
-    }, [progress, handleBack, setHeader, resetHeader]);
+    }, [progress, handleBack, setHeader, resetHeader, currentStep, isComplete]);
 
     // 🍌 모바일 키패드 대응을 위한 포커스 헬퍼
     const focusField = (ref: React.RefObject<HTMLInputElement | null>) => {
-        focusMobileInput(ref.current);
+        focusMobileInput(ref.current, true);
     };
 
     // 🍌 단계 변경 시 포커스 관리 로직
@@ -117,13 +117,18 @@ const SetupForm = () => {
         const activeElement = document.activeElement;
         const isInputFocused = activeElement?.tagName === 'INPUT' || activeElement?.tagName === 'TEXTAREA';
 
+        let timer: NodeJS.Timeout | null = null;
+
         if (!isInputFocused) {
-            const timer = setTimeout(() => {
+            timer = setTimeout(() => {
                 if (currentStep === 0) focusField(groomNameRef);
                 else if (currentStep === 1) focusField(brideNameRef);
             }, 100);
-            return () => clearTimeout(timer);
         }
+
+        return () => {
+            if (timer) clearTimeout(timer);
+        };
     }, [currentStep, isHydrated]);
 
     // 초기화 완료 전에는 스켈레톤 표시
@@ -131,9 +136,7 @@ const SetupForm = () => {
         return (
             <div className={styles.container}>
                 <Card variant="ghost" className={styles.whiteBox}>
-                    <div className={styles.headerContent}>
-                        <Skeleton className={styles.skeletonTitle} />
-                    </div>
+
                     <div className={`${styles.formWindow} ${styles.skeletonWindow}`}>
                         <div className={`${styles.fieldContainer} ${styles.skeletonField}`}>
                             <Skeleton className={styles.skeletonLabel} />
@@ -210,26 +213,7 @@ const SetupForm = () => {
     return (
         <div className={styles.container}>
             <Card variant="ghost" className={styles.whiteBox}>
-                <div className={styles.headerContent}>
-                    {[...STEPS, { title: "모든 정보를 입력했어요!" }].map((step, index) => {
-                        const isThisStepActive = index === STEPS.length ? isComplete : !isComplete && highestStepReached === index;
 
-                        return (
-                            <div
-                                key={index}
-                                className={cn(
-                                    styles.titleWrapper,
-                                    isThisStepActive ? styles.active : styles.inactive
-                                )}
-                                aria-hidden={!isThisStepActive}
-                            >
-                                <Heading as="h1" size="6" weight="bold" className={styles.stepHeading}>
-                                    {step.title}
-                                </Heading>
-                            </div>
-                        );
-                    })}
-                </div>
 
                 <div
                     className={styles.formWindow}

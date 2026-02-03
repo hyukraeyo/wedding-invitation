@@ -7,7 +7,7 @@ import { MyPageHeader } from '@/components/mypage/MyPageHeader';
 import { useHeaderStore } from '@/store/useHeaderStore';
 import { usePathname } from 'next/navigation';
 import { MENU_TITLES } from '@/constants/navigation';
-import styles from './MyPageLayout.module.scss';
+import styles from './Layout.module.scss';
 
 interface ProfileSummary {
     full_name: string | null;

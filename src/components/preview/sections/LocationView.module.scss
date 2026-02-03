@@ -1,4 +1,4 @@
-@use "../../../styles/variables" as *;
+@use "../../../styles/variables" as v;
 @use "../../../styles/mixins" as m;
 @use "../../../styles/animations";
 
@@ -38,7 +38,7 @@
         color: #868e96;
         font-family: var(--font-pretendard);
         text-decoration: none;
-        transition: opacity $transition-fast;
+        transition: opacity v.$transition-fast;
 
         svg {
             color: #adb5bd;
@@ -53,7 +53,7 @@
 .mapContainer {
     width: 100%;
     aspect-ratio: 16 / 10;
-    border-radius: $radius-md; // 16px
+    border-radius: v.$radius-md; // 16px
     overflow: hidden;
     margin-bottom: 1.25rem;
     background-color: #f8f9fa;
@@ -89,9 +89,9 @@
         gap: 0.5rem;
         background-color: #ffffff;
         padding-block: 1rem;
-        border-radius: $radius-md; // 16px
+        border-radius: v.$radius-md; // 16px
         border: 1px solid #f1f3f5;
-        transition: all $transition-fast;
+        transition: all v.$transition-fast;
         text-decoration: none;
         cursor: pointer;
 
@@ -112,7 +112,7 @@
             width: 2rem;
             height: 2rem;
             @include m.flex-center;
-            border-radius: $radius-md; // 16px
+            border-radius: v.$radius-md; // 16px
             background-color: #f8f9fa;
         }
 
@@ -127,7 +127,7 @@
 
 .sketchContainer {
     width: 100%;
-    border-radius: $radius-md; // 16px
+    border-radius: v.$radius-md; // 16px
     overflow: hidden;
     background-color: #f8f9fa;
     border: 1px solid #f1f3f5;
@@ -185,8 +185,6 @@
     }
 }
 
-// @keyframes spin?� @use "../../../styles/animations"?�서 가?�옵?�다.
-
 .mapLoading {
     position: relative;
     width: 100%;
@@ -212,6 +210,6 @@
 .spinner {
     width: 2.5rem;
     height: 2.5rem;
-    color: $color-primary;
+    color: v.$color-primary;
     animation: spin 1s linear infinite;
 }

@@ -14,68 +14,7 @@
   letter-spacing: -0.01em;
 }
 
-.headerSpacer {
-  width: 44px;
-}
 
-.headerContent {
-  margin-bottom: 2rem;
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: 1fr;
-  align-items: flex-end;
-}
-
-.titleWrapper {
-  grid-area: 1 / 1;
-  width: 100%;
-  opacity: 0;
-  transform: translateY(8px);
-  visibility: hidden;
-  transition:
-    opacity 0.4s v.$ease-ios,
-    transform 0.5s v.$ease-ios,
-    visibility 0s 0.5s; // 나갈 때는 0.5초 뒤에 hidden 처리
-  pointer-events: none;
-  will-change: opacity, transform;
-  display: flex;
-  align-items: flex-end;
-
-  &.active {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-    transition:
-      opacity 0.4s v.$ease-ios,
-      transform 0.5s v.$ease-ios,
-      visibility 0s; // 들어올 때는 즉시 visible
-    pointer-events: auto;
-    z-index: 10;
-  }
-
-  &.inactive {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-}
-
-.stepHeading {
-  font-size: v.$font-size-2xl;
-  font-weight: 800;
-  line-height: 1.25;
-  color: v.$grey-900;
-  margin: 0;
-  letter-spacing: -0.04em;
-  word-break: keep-all;
-  white-space: pre-wrap;
-}
-
-.mobileOnlyBr {
-  @media (min-width: 769px) {
-    display: none;
-  }
-}
 
 @keyframes completionFadeIn {
   from {
@@ -105,11 +44,7 @@
   opacity: 1;
 }
 
-.skeletonTitle {
-  width: 60%;
-  height: 84px;
-  border-radius: 12px;
-}
+
 
 .skeletonLabel {
   width: 80px;

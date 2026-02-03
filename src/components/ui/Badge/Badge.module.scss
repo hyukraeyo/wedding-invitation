@@ -1,112 +1,60 @@
 @use '../../../styles/variables' as v;
 @use '../../../styles/mixins' as m;
 
+// ============================================
+// 🍌 Badge Module - Re-applied with Semantic Colors
+// ============================================
+
 .badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1;
   white-space: nowrap;
   vertical-align: middle;
-  transition: all 0.2s v.$ease-ios;
+  @include m.smooth-all;
   user-select: none;
-  border-radius: v.$radius-sm; // Default matches Radix/TDS small badges
+  border-radius: v.$radius-toss;
 
   // Sizes
-  &.xs {
-    height: v.$badge-height-xs;
-    padding: 0 4px;
-    font-size: 9px;
-    gap: 2px;
-  }
+  &.xs { height: 20px; padding: 0 4px; font-size: 10px; }
+  &.sm { height: 24px; padding: 0 6px; font-size: 11px; }
+  &.md { height: 28px; padding: 0 8px; font-size: 12px; }
+  &.lg { height: 32px; padding: 0 10px; font-size: 13px; }
 
-  &.sm {
-    height: v.$badge-height-sm;
-    padding: 0 4px;
-    font-size: 10px;
-    gap: 2px;
-  }
+  // Radius aliases
+  &.radius_full { border-radius: 9999px; }
 
-  &.md {
-    height: v.$badge-height-md;
-    padding: 0 8px;
-    font-size: 12px;
-    gap: 4px;
-  }
-
-  &.lg {
-    height: v.$badge-height-lg;
-    padding: 0 10px;
-    font-size: 13px;
-    gap: 6px;
-  }
-
-  &.xl {
-    height: v.$badge-height-xl;
-    padding: 0 12px;
-    font-size: 14px;
-    gap: 8px;
-  }
-
-  // Radius
-  &.radius_none {
-    border-radius: 0;
-  }
-  &.radius_small {
-    border-radius: 2px;
-  }
-  &.radius_medium {
-    border-radius: 4px;
-  }
-  &.radius_large {
-    border-radius: 8px;
-  }
-  &.radius_full {
-    border-radius: 9999px;
-  }
-
-  // Colors
+  // Semantic Colors
   &.primary {
-    --bg: #{v.$banana-yellow};
-    --text: #{v.$grey-900};
-    --soft-bg: #{rgba(v.$banana-yellow, 0.15)};
-    --soft-text: #{v.$yellow-900};
-    --outline: #{v.$banana-yellow};
+    --bg: #{v.$action-primary};
+    --text: #{v.$text-main};
+    --soft: #{rgba(v.$action-primary, 0.15)};
   }
 
-  &.secondary,
-  &.grey {
-    --bg: #{v.$grey-600};
-    --text: #{v.$white};
-    --soft-bg: #{v.$grey-100};
-    --soft-text: #{v.$grey-700};
-    --outline: #{v.$grey-400};
-  }
-
-  &.danger,
-  &.red {
-    --bg: #{v.$red-500};
-    --text: #{v.$white};
-    --soft-bg: #{v.$red-50};
-    --soft-text: #{v.$red-600};
-    --outline: #{v.$red-500};
+  &.secondary {
+    --bg: #{v.$action-secondary-hover};
+    --text: #{v.$text-main};
+    --soft: #{v.$action-secondary};
   }
 
   &.blue {
-    --bg: #{v.$blue-500};
-    --text: #{v.$white};
-    --soft-bg: #{v.$blue-50};
-    --soft-text: #{v.$blue-600};
-    --outline: #{v.$blue-500};
+    --bg: #{v.$status-info};
+    --text: #ffffff;
+    --soft: #{rgba(v.$status-info, 0.1)};
+  }
+
+  &.red, &.danger {
+    --bg: #{v.$status-error};
+    --text: #ffffff;
+    --soft: #{rgba(v.$status-error, 0.1)};
   }
 
   &.green {
-    --bg: #{v.$green-500};
-    --text: #{v.$white};
-    --soft-bg: #{v.$green-50};
-    --soft-text: #{v.$green-600};
-    --outline: #{v.$green-500};
+    --bg: #{v.$status-success};
+    --text: #ffffff;
+    --soft: #{rgba(v.$status-success, 0.1)};
   }
 
   // Variants
@@ -116,29 +64,22 @@
   }
 
   &.soft {
-    background-color: var(--soft-bg);
-    color: var(--soft-text);
-  }
-
-  &.surface {
-    background-color: var(--soft-bg);
-    color: var(--soft-text);
-    box-shadow: inset 0 0 0 1px var(--outline);
+    background-color: var(--soft);
+    color: var(--bg);
+    
+    // Apple-style contrast improvement for soft badges
+    &.blue, &.red, &.green {
+      color: var(--bg);
+    }
+    
+    &.secondary {
+      color: v.$text-sub;
+    }
   }
 
   &.outline {
     background-color: transparent;
-    box-shadow: inset 0 0 0 1px var(--outline);
-    color: var(--soft-text);
-  }
-
-  // High Contrast
-  &.highContrast {
-    &.soft,
-    &.surface,
-    &.outline {
-      color: v.$black;
-      --outline: #{v.$black};
-    }
+    border: 1px solid var(--bg);
+    color: var(--bg);
   }
 }

@@ -1,0 +1,76 @@
+@use "colors" as c;
+@use "typography" as t;
+@use "interact" as i;
+
+// ============================================
+// 🍌 4. Semantic: Meaning-based Variables
+// The bridge between tokens and components
+// ============================================
+
+// Backgrounds
+$bg-page:       c.$grey-100;
+$bg-surface:    c.$white;
+$bg-elevated:   c.$white;
+$bg-glass:      rgba(c.$white, 0.8);
+
+// Text
+$text-primary:   c.$grey-800;
+$text-secondary: c.$grey-600;
+$text-tertiary:  c.$grey-400;
+$text-inverse:   c.$white;
+$text-link:      c.$blue-500;
+$text-error:     c.$red-500;
+
+// Border
+$border-light:   c.$grey-200;
+$border-default: c.$grey-300;
+$border-active:  c.$primary-500;
+
+// Buttons & Actions
+$action-primary:        c.$primary-500;
+$action-primary-hover:  c.$primary-600;
+$action-primary-active: c.$primary-700;
+
+$action-secondary:       c.$grey-100;
+$action-secondary-hover: c.$grey-200;
+
+// Components Defaults
+$input-bg:       c.$grey-50;
+$input-height:   56px;
+$button-height:  56px;
+
+// Status
+$status-error:   c.$red-500;
+$status-success: c.$green-500;
+$status-info:    c.$blue-500;
+$status-warning: c.$amber-500;
+
+// Controls (TextField, Select, etc.)
+// --------------------------------------------
+// Sizes
+$control-height-xs:   28px;
+$control-height-sm:   36px;
+$control-height-md:   48px;
+$control-height-lg:   56px;
+$control-height-xl:   64px;
+
+// Font Sizes
+$control-font-size-xs: t.$font-size-xs;
+$control-font-size-sm: t.$font-size-sm;
+$control-font-size-md: t.$font-size-base;
+$control-font-size-lg: t.$font-size-lg;
+$control-font-size-xl: t.$font-size-xl;
+
+// Paddings
+$control-padding-xs:  8px;
+$control-padding-sm:  12px;
+$control-padding-md:  14px;
+$control-padding-lg:  16px;
+$control-padding-xl:  20px;
+
+// Slot Paddings (Icon areas)
+$control-slot-padding-xs: 6px;
+$control-slot-padding-sm: 8px;
+$control-slot-padding-md: 10px;
+$control-slot-padding-lg: 12px;
+$control-slot-padding-xl: 14px;
