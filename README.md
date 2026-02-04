@@ -1,378 +1,74 @@
-# ?Œ ë°”ë‚˜?˜ì›¨??(Banana Wedding) ?’
+# ğŸŒ ë°”ë‚˜ë‚˜ì›¨ë”© (Banana Wedding)
 
-![Next.js](https://img.shields.io/badge/Next.js-16.1.x-black?style=flat-square&logo=next.js)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue?style=flat-square&logo=typescript)
-![SCSS](https://img.shields.io/badge/Sass-1.69+-CC6699?style=flat-square&logo=sass)
-![Radix UI](https://img.shields.io/badge/Radix%20UI-Primitives-black?style=flat-square&logo=radix-ui)
-![Vercel](https://img.shields.io/badge/Vercel-Deployed-black?style=flat-square&logo=vercel)
-
-? í†µê¸°í•œ ?†ëŠ” ?¬ì½¤???œì‘, ë°”ë‚˜?˜ì›¨?©ì…?ˆë‹¤. Next.js 16??ìµœì‹  ê¸°ëŠ¥???œìš©?˜ì—¬ ìµœê³ ???±ëŠ¥ê³?ê°ê°?ì¸ ?¬ìš©??ê²½í—˜???œê³µ?˜ëŠ” ëª¨ë°”??ì²?²©???œì‘ ?Œë«?¼ì…?ˆë‹¤.
-
-## Latest Platform Guidance (React 19.2 + Next 16)
-- **Target versions**: React/ReactDOM 19.2.x, Next.js 16.1.x (keep latest patch)
-- **React 19.2 APIs**: Prefer <Activity />, useEffectEvent, cacheSignal (RSC) when appropriate
-- **Caching APIs**: Use revalidateTag, updateTag, refresh for on-demand cache updates
-- **Turbopack dev**: Use npm run dev (Turbo) for fastest local iteration
-- **Webpack prod**: Keep npm run build with webpack for current production parity
-
-## ??ì£¼ìš” ?¹ì§•
-
-### ?¨ ?”ì??ë°??¬ìš©??ê²½í—˜
-
-- ?? **Next.js 16 App Router** - ?œë²„ ì»´í¬?ŒíŠ¸ ?°ì„  ?„í‚¤?ì²˜ë¡?ìµœê³ ???±ëŠ¥
-- ?“± **ëª¨ë°”???¼ìŠ¤???”ì??* - iPhone 15 Pro ëª©ì—…?¼ë¡œ ?¤ì‹œê°?ë¯¸ë¦¬ë³´ê¸°
-- ?¨ **?¤ì‹œê°?ì»¤ìŠ¤?°ë§ˆ?´ì§•** - ì§ê??ì¸ UIë¡?ì¦‰ì‹œ ?”ì??ë³€ê²?ê°€??
-- ?”„ **?„ë²½??ë°˜ì‘??* - ?°ìŠ¤?¬í†±, ?œë¸”ë¦? ëª¨ë°”??ëª¨ë‘ ìµœì ??
-- ?­ **ê³„ì ˆë³??Œë§ˆ ?¨ê³¼** - ë²šê½ƒ, ?? ?ì‚¬ê·€, ê°œë‚˜ë¦????¤ì´?˜ë? ? ë‹ˆë©”ì´??
-
-### ?› ï¸?ê¸°ëŠ¥ ë°?ê¸°ìˆ 
-
-- ?—ºï¸?**?€??ì§€???œìŠ¤??* - ì¹´ì¹´?¤ë§µê³??¤ì´ë²?ì§€???™ì‹œ ì§€??
-- ?“¸ **?¤ì¤‘ ê°¤ëŸ¬ë¦?ë·?* - ?¤ì??´í”„, ?¸ë„¤?? ê·¸ë¦¬??ë·?? ì—°??? íƒ
-- ?’° **?¤ë§ˆ??ê³„ì¢Œ ê´€ë¦?* - ? ë‘/? ë? ì¸?ê³„ì¢Œë²ˆí˜¸ ì²´ê³„??ë¶„ë¥˜
-- ?“¤ **?Œì…œ ê³µìœ  ìµœì ??* - ì¹´ì¹´?¤í†¡ ê³µìœ  ?¸ë„¤??ë°?ë©”ì‹œì§€ ì»¤ìŠ¤?°ë§ˆ?´ì§•
-- ?¯ **SEO ìµœì ??* - ë©”í? ?œê·¸, JSON-LD, ?¬ì´?¸ë§µ ?ë™ ?ì„±
-
-### ???±ëŠ¥ ë°??ˆì§ˆ
-
-- ?ƒ?â™‚ï¸?**ì´ˆê³ ??ë¡œë”©** - ?œë²„ ?¬ì´???Œë”ë§ê³¼ ìµœì ?”ëœ ë²ˆë“¤
-- ?”’ **TypeScript ?„ê²© ëª¨ë“œ** - ?„ë²½???€???ˆì „?±ê³¼ ê°œë°œ ê²½í—˜
-- ?“Š **?±ëŠ¥ ëª¨ë‹ˆ?°ë§** - Core Web Vitals ê¸°ë°˜ ìµœì ??
-- ?¯ **?‘ê·¼??ì¤€??* - WCAG 2.1 ê°€?´ë“œ?¼ì¸ ì¤€??
+> **íŠ¹ë³„í•œ ìˆœê°„ì„ ìœ„í•œ ê°€ì¥ ë‹¬ì½¤í•œ ëª¨ë°”ì¼ ì²­ì²©ì¥**
+> í”„ë¦¬ë¯¸ì—„ ë””ìì¸ê³¼ ìµœìƒì˜ ì‚¬ìš©ì ê²½í—˜ì„ ì œê³µí•˜ëŠ” ëª¨ë°”ì¼ ì²­ì²©ì¥ ì œì‘ í”Œë«í¼ì…ë‹ˆë‹¤.
 
 ---
 
-# ?Œ ë°”ë‚˜?˜ì›¨??(Banana Wedding)
-### "? í†µê¸°í•œ ?†ëŠ” ?¬ì½¤???°ë¦¬???œì‘"
+## ğŸš€ ì£¼ìš” ê¸°ìˆ  ìŠ¤íƒ
 
-?¸ìƒ?ì„œ ê°€???¬ì½¤?˜ê³  ë¶€?œëŸ¬??ëª¨ë°”??ì²?²©???œì‘ ?Œë«?? **ë°”ë‚˜?˜ì›¨??*?…ë‹ˆ??
-
-> **CRITICAL: SYNC MANDATE**
-> ëª¨ë“  ?¤ì • ë°?ê°€?´ë“œ ë¬¸ì„œ(`.agent`, `.codex`, `.cursor`, `.opencode`, `.cursorrules`, `AGENTS.md`, `README.md`, `ARCHITECTURE.md`)????ƒ ?™ì¼??ê¸°ì???? ì??˜ë„ë¡??¨ê»˜ ?…ë°?´íŠ¸?˜ì–´???©ë‹ˆ?? ??ê³³ì˜ ê·œì¹™??ë³€ê²½ë˜ë©??¸ê¸‰??ëª¨ë“  ?Œì¼???´ë‹¹ ë³€ê²??¬í•­??ëª…ì‹œ?˜ê³  ?™ê¸°?”í•˜??‹œ??
-
----
-
-## ?? ì£¼ìš” ê¸°ìˆ  ?¤íƒ
-
+### **Core**
 - **Framework**: Next.js 16.1.x (App Router, Cache Components, View Transitions)
 - **Library**: React 19.2.x
 - **Language**: TypeScript 5 (Strict Mode)
-- **Styling**: SCSS Modules (Strict) + Radix UI Primitives (TDS Style)
-- **State Management**: Zustand (Client), Tanstack Query (Server)
-- **Database/Auth**: Supabase
-- **Icons**: Lucide React
 
-## ?¨ ?µì‹¬ ê°œë°œ ?ì¹™
+### **Styling & UI**
+- **Styling**: SCSS Modules (Primary) + Tailwind CSS (Secondary)
+- **UI Components**: Radix UI Primitives + Toss Design System (TDS) ê¸°ë°˜ ë””ìì¸
+- **Animations**: iOS ìŠ¤íƒ€ì¼ íŠ¸ëœì§€ì…˜ (`cubic-bezier(0.16, 1, 0.3, 1)`)
 
-1.  **Radix UI First (Gradual Migration)**: UI ì»´í¬?ŒíŠ¸???ì§„?ìœ¼ë¡?**Radix UI Primitives** ê¸°ë°˜?¼ë¡œ ?„í™˜?˜ë©°, ê¸°ì¡´ TDS ì»´í¬?ŒíŠ¸ë¥??€ì²´í•©?ˆë‹¤. ?¤í??¼ì? TDS??ë¯¸í•™???°ë¥´??ë¡œì§?€ Radix UIë¥??¬ìš©?©ë‹ˆ??
-2.  **Strict Styling**: ëª¨ë“  ì»´í¬?ŒíŠ¸??**SCSS Modules**ë¡??‘ì„±?©ë‹ˆ?? Tailwind CSS??ì»´í¬?ŒíŠ¸ ?´ë??ì„œ ?¬ìš©?˜ì? ?ŠìŠµ?ˆë‹¤.
-3.  **No direct UI style edits**: Do not modify UI component styles directly; keep consistency via shared tokens/variants or new components
-4.  **PascalCase Convention**: ëª¨ë“  ì»´í¬?ŒíŠ¸ ?´ë”?€ ?Œì¼ëª…ì? **PascalCase**ë¥??¬ìš©?©ë‹ˆ??
-5.  **Hybrid Component Pattern**: `ComponentName/ComponentName.tsx` + `ComponentName.module.scss` + `index.ts` êµ¬ì¡°ë¥??°ë¦…?ˆë‹¤.
-6.  **Server Components First**: ëª¨ë“  ?°ì´???˜ì¹­?€ ?œë²„ ì»´í¬?ŒíŠ¸?ì„œ ?˜í–‰?˜ë©°, ?´ë¼?´ì–¸???¬ì´???˜ì¹­?€ ì§€?‘í•©?ˆë‹¤.
-7.  **Mobile First**: ëª¨ë“  ?”ì?¸ê³¼ ?¸í„°?™ì…˜?€ ëª¨ë°”???˜ê²½(Portrait)??ìµœì ?”í•©?ˆë‹¤.
-
-## ?› ï¸??œì‘?˜ê¸°
-
-```bash
-# ?˜ì¡´???¤ì¹˜
-npm install
-
-# ê°œë°œ ?œë²„ ?¤í–‰
-npm run dev
-```
-
-## ?“ ì£¼ìš” ?„í‚¤?ì²˜
-?ì„¸ ?´ìš©?€ [ARCHITECTURE.md](./ARCHITECTURE.md)ë¥?ì°¸ì¡°?˜ì‹­?œì˜¤.
+### **Infrastructure & Backend**
+- **Database/Auth**: Supabase (Remote CLI)
+- **Deployment**: Vercel
+- **State Management**: Zustand (Client), TanStack Query (Server)
 
 ---
-Â© 2026 ANTIGRAVITY. All rights reserved.
 
-#### 2. ?˜ì¡´???¤ì¹˜
+## ğŸ›  í•„ìˆ˜ ê°œë°œ ê·œì¹™
 
-```bash
-# npm ?¬ìš© (ê¶Œì¥)
-npm install
+ì´ í”„ë¡œì íŠ¸ì˜ ëª¨ë“  ì½”ë“œëŠ” ìµœìƒì˜ í’ˆì§ˆê³¼ ì¼ê´€ì„±ì„ ìœ„í•´ ì•„ë˜ ê·œì¹™ì„ ì¤€ìˆ˜í•´ì•¼ í•©ë‹ˆë‹¤.
 
-# ?ëŠ” yarn ?¬ìš©
-yarn install
+1. **ëª¨ë°”ì¼ í¼ìŠ¤íŠ¸**: ì „ ë””ìì¸ì€ ëª¨ë°”ì¼ í™˜ê²½ì„ ìµœìš°ì„ ìœ¼ë¡œ ì„¤ê³„í•©ë‹ˆë‹¤.
+2. **SCSS Modules í•„ìˆ˜**: UI ì»´í¬ë„ŒíŠ¸ ìŠ¤íƒ€ì¼ë§ ì‹œ Tailwind ëŒ€ì‹  SCSS Modulesë¥¼ ì‚¬ìš©í•©ë‹ˆë‹¤.
+3. **ë””ìì¸ í† í° í™œìš©**: í•˜ë“œì½”ë”©ëœ ìƒ‰ìƒ ëŒ€ì‹  `@/styles/_variables.scss`ì˜ ë³€ìˆ˜ë¥¼ ì‚¬ìš©í•©ë‹ˆë‹¤.
+4. **í•œê¸€ ì»¤ë°‹ ë©”ì‹œì§€**: Git ì»¤ë°‹ ì‹œ ë°˜ë“œì‹œ í•œê¸€ì„ ì‚¬ìš©í•˜ë©° Conventional Commits í˜•ì‹ì„ ë”°ë¦„ë‹ˆë‹¤.
+5. **Radix UI í™œìš©**: ì›¹ ì ‘ê·¼ì„±ê³¼ ìœ ì—°ì„±ì„ ìœ„í•´ Radix UI Primitivesë¥¼ ê¸°ë³¸ìœ¼ë¡œ ì‚¬ìš©í•©ë‹ˆë‹¤.
 
-# ?ëŠ” pnpm ?¬ìš©
-pnpm install
+---
 
-# ?ëŠ” bun ?¬ìš© (ìµœì‹ )
-bun install
-```
+## ğŸ“‚ í”„ë¡œì íŠ¸ êµ¬ì¡°
 
-#### 3. ?˜ê²½ ë³€???¤ì • (? íƒ?¬í•­)
-
-```bash
-# .env.local ?Œì¼ ?ì„± (ì§€??API ????
-cp .env.example .env.local
-```
-
-### ?ƒ?â™‚ï¸?ê°œë°œ ?œë²„ ?¤í–‰
-
-```bash
-# npm ?¬ìš©
-npm run dev
-
-# yarn ?¬ìš©
-yarn dev
-
-# pnpm ?¬ìš©
-pnpm dev
-
-# bun ?¬ìš©
-bun run dev
-```
-
-?œë²„ê°€ ?œì‘?˜ë©´ ë¸Œë¼?°ì??ì„œ [http://localhost:3000](http://localhost:3000)???´ì–´ ?•ì¸?˜ì„¸??
-
-### ?—ï¸?ë¹Œë“œ ë°?ë°°í¬
-
-#### ?„ë¡œ?•ì…˜ ë¹Œë“œ
-
-```bash
-# ?€??ê²€??ë°?ë¹Œë“œ
-npm run build
-
-# ë¹Œë“œ ê²°ê³¼ ?•ì¸
-npm run start
-```
-
-#### ë°°í¬ ì¤€ë¹??•ì¸
-
-```bash
-# ëª¨ë“  ?ŒìŠ¤???µê³¼ ?•ì¸
-npm run lint
-npm run build
-
-# ë²ˆë“¤ ?¬ê¸° ë¶„ì„ (? íƒ)
-npm run analyze
-```
-
-### ?—„ï¸?Supabase ?ê²© ë§ˆì´ê·¸ë ˆ?´ì…˜
-
-ë¡œì»¬ Docker ?†ì´ **?ê²© Supabase ?„ë¡œ?íŠ¸??ì§ì ‘** ë§ˆì´ê·¸ë ˆ?´ì…˜???ìš©?©ë‹ˆ??
-
-#### 1) ?¸ì¦ ? í° ì¤€ë¹?
-
-- Supabase Access Token??ë°œê¸‰?????˜ê²½ ë³€?˜ë¡œ ?¤ì •?©ë‹ˆ??
-- ë¹??¸í„°?™í‹°ë¸??˜ê²½?ì„œ??`npx supabase login` ?€??? í°???¬ìš©?˜ì„¸??
-
-```bash
-export SUPABASE_ACCESS_TOKEN=...
-export SUPABASE_DB_PASSWORD=...
-```
-
-#### 2) ?„ë¡œ?íŠ¸ ?°ê²° ë°?ë§ˆì´ê·¸ë ˆ?´ì…˜ ?ìš©
-
-```bash
-npx supabase link --project-ref <project-ref>
-npx supabase db push
-```
-
-#### 3) ?°ì´?°ë² ?´ìŠ¤ ?„ì²´ ?? œ (?°ì´??ì´ˆê¸°??
-
-ê¸°ì¡´ ?°ì´?°ë? ëª¨ë‘ ?? œ?˜ê³  ?¶ì„ ???¬ìš©?©ë‹ˆ?? ëª¨ë“  ?¬ìš©?ì? ì²?²©???°ì´?°ê? ?êµ¬ ?? œ?©ë‹ˆ??
-
-```bash
-npx supabase db push
-```
-
-??ëª…ë ¹?´ëŠ” `supabase/migrations/` ?”ë ‰? ë¦¬??ë§ˆì´ê·¸ë ˆ?´ì…˜ ?Œì¼ ì¤? ëª¨ë“  ?°ì´?°ë? ?? œ?˜ëŠ” ë§ˆì´ê·¸ë ˆ?´ì…˜???¬í•¨?©ë‹ˆ??
-
-#### ì°¸ê³ 
-
-- `supabase/migrations`??SQL???ê²© DB???ìš©?©ë‹ˆ??
-- ?„ë¡œ?íŠ¸ ref??Supabase ?€?œë³´???ëŠ” `supabase/.temp/project-ref`?ì„œ ?•ì¸?©ë‹ˆ??
-
-## ?“ ?„ë¡œ?íŠ¸ êµ¬ì¡°
-
-```
+```text
 src/
-?œâ??€ app/                          # Next.js App Router
-??  ?œâ??€ api/                      # API ?¼ìš°??(ë¯¸ë˜ ?•ì¥??
-??  ?œâ??€ builder/                  # ì²?²©??ë¹Œë” ?˜ì´ì§€
-??  ??  ?”â??€ page.tsx
-??  ?œâ??€ globals.css               # ê¸€ë¡œë²Œ ?¤í???
-??  ?œâ??€ layout.tsx                # ë£¨íŠ¸ ?ˆì´?„ì›ƒ
-??  ?œâ??€ page.tsx                  # ???˜ì´ì§€
-??  ?œâ??€ privacy/                  # ê°œì¸?•ë³´ ì²˜ë¦¬ë°©ì¹¨
-??  ?œâ??€ robots.ts                 # ê²€???”ì§„ ?¬ë¡¤ë§??¤ì •
-??  ?”â??€ sitemap.ts                # ?¬ì´?¸ë§µ ?ì„±
-?œâ??€ components/                   # ?¬ì‚¬??ì»´í¬?ŒíŠ¸
-??  ?œâ??€ auth/                     # ?¸ì¦ ì»´í¬?ŒíŠ¸
-??  ?œâ??€ builder/                  # ë¹Œë” ê´€??ì»´í¬?ŒíŠ¸
-??  ??  ?œâ??€ sections/            # ?¤ì • ?¹ì…˜??
-??  ??  ?”â??€ EditorForm.tsx       # ë©”ì¸ ?ë””????
-??  ?œâ??€ common/                   # ê³µí†µ ì»´í¬?ŒíŠ¸
-??  ?”â??€ preview/                  # ë¯¸ë¦¬ë³´ê¸° ì»´í¬?ŒíŠ¸
-??      ?œâ??€ sections/            # ë¯¸ë¦¬ë³´ê¸° ?¹ì…˜??
-??      ?”â??€ InvitationCanvas.tsx # ë©”ì¸ ìº”ë²„??
-?œâ??€ lib/                         # ? í‹¸ë¦¬í‹° ?¨ìˆ˜ (ë¯¸ë˜ ?•ì¥)
-?œâ??€ store/                       # Zustand ?íƒœ ê´€ë¦?
-??  ?”â??€ useInvitationStore.ts    # ë©”ì¸ ?íƒœ ?¤í† ??
-?œâ??€ types/                       # TypeScript ?€???•ì˜
-??  ?œâ??€ kakao.d.ts              # ì¹´ì¹´??API ?€??
-??  ?”â??€ naver.d.ts              # ?¤ì´ë²?API ?€??
-?”â??€ constants/                  # ?ìˆ˜ ?•ì˜ (ë¯¸ë˜ ?•ì¥)
+â”œâ”€â”€ app/              # Next.js App Router (Pages & API)
+â”œâ”€â”€ components/       # UI ë° ë¹„ì¦ˆë‹ˆìŠ¤ í”„ë¡œì íŠ¸ ì»´í¬ë„ŒíŠ¸
+â”‚   â”œâ”€â”€ ui/           # ê³µìš© UI ì»´í¬ë„ŒíŠ¸ (Radix ê¸°ë°˜)
+â”‚   â”œâ”€â”€ common/       # ì „ì—­ ê³µìš© ì»´í¬ë„ŒíŠ¸
+â”‚   â””â”€â”€ builder/      # ì²­ì²©ì¥ ë¹Œë” í•µì‹¬ ë¡œì§
+â”œâ”€â”€ services/         # ì„œë²„ ì¸¡ ë°ì´í„° ì„œë¹„ìŠ¤ ë ˆì´ì–´
+â”œâ”€â”€ store/            # ì „ì—­ ìƒíƒœ ê´€ë¦¬ (Zustand)
+â”œâ”€â”€ styles/           # ì „ì—­ ìŠ¤íƒ€ì¼ ë° ë””ìì¸ í† í°
+â””â”€â”€ types/            # TypeScript íƒ€ì… ì •ì˜
 ```
-
-## ???±ëŠ¥ ìµœì ???„ëµ (Next.js 16 + React 19.2.x)
-
-### ?? App Router ?„í‚¤?ì²˜ ìµœì ??
-
-#### ?œë²„ ì»´í¬?ŒíŠ¸ ?°ì„  ?„ëµ (Strict Mode)
-- **Direct DB Access**: API Route ?†ì´ ?œë²„ ì»´í¬?ŒíŠ¸?ì„œ DB ì§ì ‘ ì¡°íšŒ
-- **Server Actions**: ?°ì´??ë³€??Mutation)ë¥??„í•œ ?œë²„ ?¡ì…˜ ?ê·¹ ?œìš©
-- **Zero Client Fetching**: ì´ˆê¸° ?°ì´??ë¡œë”© ???´ë¼?´ì–¸???¬ì´???˜ì¹­ ê¸ˆì?
-- **?¤íŠ¸ë¦¬ë° UI**: `loading.tsx`?€ `Suspense`ë¡??ì§„??ì½˜í…ì¸?ë¡œë”©
-
-#### ìºì‹± ë°??Œë”ë§??„ëµ
-
-```typescript
-// ISR (?ì§„???•ì  ?¬ìƒ??
-export const revalidate = 3600; // 1?œê°„ë§ˆë‹¤ ?¬ìƒ??
-
-// SSR (?œë²„ ?¬ì´???Œë”ë§?
-export const dynamic = "force-dynamic";
-
-// SSG (?•ì  ?ì„±)
-export const dynamic = "force-static";
-```
-
-### ?–¼ï¸??´ë?ì§€ ë°?ë¯¸ë””??ìµœì ??
-
-#### Next.js Image ì»´í¬?ŒíŠ¸ ?œìš©
-
-- **?ë™ ?¬ë§· ë³€??*: WebP/AVIF ì§€?ìœ¼ë¡??Œì¼ ?¬ê¸° 30% ê°ì†Œ
-- **ë°˜ì‘???´ë?ì§€**: ?”ë°”?´ìŠ¤ ?½ì? ë¹„ìœ¨???°ë¥¸ ?ë™ ?¬ê¸° ì¡°ì •
-- **Lazy Loading**: Intersection Observer ê¸°ë°˜ ì§€??ë¡œë”©
-- **Priority Loading**: LCP ?´ë?ì§€ ?°ì„  ë¡œë”©
-
-#### ê³ ê¸‰ ?´ë?ì§€ ìµœì ??
-
-```typescript
-<Image
-  src="/hero.jpg"
-  alt="?¨ë”© ?ˆì–´ë¡??´ë?ì§€"
-  priority // LCP ìµœì ??
-  placeholder="blur" // ë¸”ëŸ¬ ?Œë ˆ?´ìŠ¤?€??
-  quality={90} // ?ˆì§ˆ ì¡°ì •
-/>
-```
-
-### ?“¦ ë²ˆë“¤ ë°?ì½”ë“œ ìµœì ??
-
-#### ì½”ë“œ ë¶„í•  ?„ëµ
-
-- **?™ì  ?„í¬??*: `React.lazy()`?€ `next/dynamic` ?œìš©
-- **?¼ìš°??ê¸°ë°˜ ë¶„í• **: ?˜ì´ì§€ë³??ë™ ì½”ë“œ ë¶„í• 
-- **ì»´í¬?ŒíŠ¸ ?ˆë²¨ ë¶„í• **: ë¬´ê±°??ì»´í¬?ŒíŠ¸ ì§€??ë¡œë”©
-
-#### ë²ˆë“¤ ë¶„ì„ ë°?ìµœì ??
-
-```bash
-# ë²ˆë“¤ ?¬ê¸° ë¶„ì„
-npm run build --analyze
-
-# Webpack Bundle Analyzer
-ANALYZE=true npm run build
-```
-
-#### ë©”ëª¨?´ì œ?´ì…˜ ?„ëµ
-
-- **React.memo**: props ë³€ê²??œì—ë§?ë¦¬ë Œ?”ë§
-- **useMemo**: ê³„ì‚° ë¹„ìš©????ê°?ìºì‹±
-- **useCallback**: ?´ë²¤???¸ë“¤???¨ìˆ˜ ìºì‹±
-
-## ?”§ ê°œë°œ ëª…ë ¹??
-
-```bash
-# ê°œë°œ ?œë²„
-npm run dev
-
-# ?„ë¡œ?•ì…˜ ë¹Œë“œ
-npm run build
-
-# ë¹Œë“œ?????¤í–‰
-npm run start
-
-# ë¦°íŠ¸ ê²€??
-npm run lint
-
-# ?€??ê²€??(ë¹Œë“œ ???ë™ ?˜í–‰)
-npm run type-check
-```
-
-## ?Œ ë°°í¬
-
-### Vercel (ê¶Œì¥)
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/hyukraeyo/wedding-invitation)
-
-1. **Vercel ê³„ì • ?ì„±**
-2. **?„ë¡œ?íŠ¸ ?„í¬??*
-3. **?˜ê²½ ë³€???¤ì •** (?„ìš”??
-4. **ë°°í¬ ?„ë£Œ**
-
-### ?˜ë™ ë°°í¬
-
-```bash
-# ë¹Œë“œ
-npm run build
-
-# ?•ì  ?Œì¼ ë°°í¬
-# dist ?´ë”ë¥????œë²„???…ë¡œ??
-```
-
-## ?¤ ê¸°ì—¬?˜ê¸°
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## ?“ ì»¤ë°‹ ì»¨ë²¤??
-
-ì»¤ë°‹ ë©”ì‹œì§€ ?ì„± ??ë°˜ë“œ??**?œê?**???¬ìš©?˜ë©°, [Conventional Commits](https://www.conventionalcommits.org/) ?•ì‹???°ë¦…?ˆë‹¤.
-
-```
-feat: ?ˆë¡œ??ê¸°ëŠ¥ ì¶”ê?
-fix: ë²„ê·¸ ?˜ì •
-docs: ë¬¸ì„œ ?˜ì •
-style: ì½”ë“œ ?¤í???ë³€ê²?(?¬ë§·????
-refactor: ì½”ë“œ ë¦¬íŒ©? ë§
-
-chore: ë¹Œë“œ/?„êµ¬ ?¤ì • ë³€ê²?
-```
-
-## ?“„ ?¼ì´? ìŠ¤
-
-???„ë¡œ?íŠ¸??MIT ?¼ì´? ìŠ¤ë¡?ë°°í¬?©ë‹ˆ??
-
-## ?‘¥ ê°œë°œ??
-
-- **Hyuk Rae Yoon** - [GitHub](https://github.com/hyukraeyo)
-
-## ?™ ê°ì‚¬ ?¸ì‚¬
-
-- [Next.js](https://nextjs.org/) ?€
-- [Vercel](https://vercel.com/) ?Œë«??
-- [Radix UI](https://www.radix-ui.com/) ?€
-- ëª¨ë“  ?¤í”ˆ?ŒìŠ¤ ê¸°ì—¬?ë“¤
 
 ---
 
-<div align="center">
-  <p>?Œ ë°”ë‚˜?˜ì›¨?©ê³¼ ?¨ê»˜ ?‰ë³µ???œì‘??ï¿?/p>
-  <p>Made with ?¤ï¸ using Next.js 16</p>
-</div>
+## ğŸ ì‹œì‘í•˜ê¸°
 
+### **ì„¤ì¹˜ ë° ì‹¤í–‰**
+```bash
+# ì˜ì¡´ì„± ì„¤ì¹˜
+npm install
 
+# ë¡œì»¬ ê°œë°œ ì„œë²„ ì‹¤í–‰ (Turbopack)
+npm run dev
+```
 
+### **í™˜ê²½ ë³€ìˆ˜ ì„¤ì •**
+`.env.local` íŒŒì¼ì„ ìƒì„±í•˜ê³  í•„ìš”í•œ Supabase ë° Kakao API í‚¤ë¥¼ ì„¤ì •í•˜ì‹­ì‹œì˜¤.
 
+---
 
+## ğŸ“„ ë¼ì´ì„ ìŠ¤
+
+Â© 2024 Banana Wedding. All rights reserved.

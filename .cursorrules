@@ -1,71 +1,60 @@
-# Cursor Rules for Wedding Invitation Project
-# Next.js 16+ �?React 19.2 최적??/ SCSS Modules 기반 ?�스 ?��????�로?�트
+# 🍌 바나나웨딩 (Banana Wedding) 개발 규칙
 
 > **CRITICAL: SYNC MANDATE**
-> 모든 ?�정 �?가?�드 문서(`.agent`, `.codex`, `.cursor`, `.opencode`, `.cursorrules`, `AGENTS.md`, `README.md`, `ARCHITECTURE.md`)????�� ?�일??기�????��??�도�??�께 ?�데?�트?�어???�니?? ??곳의 규칙??변경되�??�급??모든 ?�일???�당 변�??�항??명시?�고 ?�기?�하??��??
+> 모든 설정 및 가이드 문서(`.agent`, `.codex`, `.cursor`, `.opencode`, `.cursorrules`, `AGENTS.md`, `README.md`, `ARCHITECTURE.md`)는 항상 동일한 기준을 유지하도록 함께 업데이트되어야 합니다. 한 곳의 규칙이 변경되면 언급된 모든 파일에 해당 변경 사항을 명시하고 동기화하십시오.
+
+## 1. 핵심 철학: "성능, 미학, 그리고 발견 가능성"
+- **타협 없음 (Zero Compromise)**: 고성능(LCP 2.5s 미만, CLS 0.1 미만)과 프리미엄 디자인("WOW" 팩터)을 동시에 만족해야 함.
+- **모바일 퍼스트 (Mobile First)**: 모든 모든 디자인과 기능은 모바일 환경(최소 44px 터치 영역)을 최우선으로 고려함.
+- **재사용 우선 (Reuse First)**: 새로운 컴포넌트를 만들기 전에 반드시 기존 UI 컴포넌트 라이브러리에서 재사용 가능성을 검토함.
+- **사용자 경험 우선 (User Experience First)**: 로딩, 에러, 빈 상태 등의 트랜지션 상태를 가장 먼저 설계함.
+- **SEO 필수 (SEO Mandatory)**: 모든 공개 페이지에는 적절한 메타데이터, OpenGraph 태그, 구조화 데이터(JSON-LD) 및 시맨틱 HTML이 필수적으로 포함되어야 함.
+
+## 2. 기술 표준 (Technical Standards)
+- **프레임워크**: Next.js 16+ (App Router) 및 React 19의 최신 기능을 활용하며, Server Components를 기본으로 함.
+- **데이터 흐름**: 
+  - 데이터 페칭은 Top-Level Container에서 관리, 자식은 Props로 전달 (Container/Presentational 패턴).
+  - 서버 컴포넌트에서 Service 계층 직접 호출 (내부 API Route 호출 금지).
+  - 데이터 변이는 Server Actions 사용.
+- **상태 관리**: Zustand 단일 스토어(`useInvitationStore`) 사용. 셀렉터로 필요한 상태만 구독.
+- **스타일링**: **SCSS Modules 필수 사용**. Radix UI의 스타일링은 SCSS Modules를 통해 직접 제어함.
+  - Tailwind CSS는 보조적으로만 사용하며, 복잡한 컴포넌트 스타일링은 반드시 SCSS Modules를 사용함.
+- **공통 컴포넌트**: 
+  - Radix UI Primitives 기반으로 점진적 전환.
+  - 모달은 반드시 `ResponsiveModal`(Desktop: Dialog / Mobile: Drawer) 사용.
+
+## 3. 디자인 시스템 및 스타일 규칙 (Strict)
+- **Primary 컬러**: 바나나 옐로우 `#FBC02D` (`v.$primary`).
+- **하드코딩된 색상 값 절대 금지**: 모든 색상은 `src/styles/_variables.scss`에 정의된 변수를 사용함.
+  ```scss
+  @use "@/styles/variables" as v;
+  color: v.$primary;
+  background: v.$white;
+  ```
+- **애니메이션**: iOS 느낌의 부드러운 트랜지션 (`cubic-bezier(0.16, 1, 0.3, 1)`) 적용.
+- **아이콘**: `lucide-react` 사용. 활성 상태는 노란색 텍스트(배경 없음)로 통일.
+
+## 4. UI 컴포넌트 아키텍처 (Hybrid Component Pattern)
+- **폴더 구조 준수**:
+  ```
+  src/components/ui/ComponentName/
+  ├── ComponentName.tsx        # 컴포넌트 로직 (PascalCase)
+  ├── ComponentName.module.scss # 스타일
+  └── index.ts                 # Re-export (export * from './ComponentName')
+  ```
+- **필수 사항**: Named Export 사용, `displayName` 설정, SCSS 변수 활용.
+
+## 5. 운영 및 협업 규칙
+- **커밋 메시지**: 반드시 **한글**로 작성하며 Conventional Commits 형식을 따름.
+  - 예: `feat: 새로운 기능 추가`, `fix: 버그 수정`, `refactor: 코드 리팩토링`
+- **타입스크립트**: Strict Mode 준수, `any` 사용 엄격히 금지.
+- **빌드 및 린트**: 코드 작성 후 반드시 빌드 에러 및 린트 오류 확인 (Pre-Push 체크).
+- **에러 처리**: 도구 실행 실패 시 즉시 자가 수정(Self-Correction).
+
+## 6. 특수 가이드 (Specialized Guides)
+- **Vercel Best Practices**: `.codex/skills/vercel-react-best-practices/SKILL.md`를 우선 참조.
+- **모달/드로어 접근성**: `aria-hidden` 충돌 방지를 위해 `onOpenAutoFocus` 필수 적용 (공통 컴포넌트에서 이미 처리됨).
+- **한국어 입력**: 모바일 환경에서의 한국어 입력 문제를 고려하여 `useKoreanNameInput` 등 최적화된 훅 사용.
 
 ---
-
-## ??Vercel React Best Practices (최상???�선?�위)
-- **최우???�칙**: React/Next.js 관??모든 ?�업?� Vercel Best Practices�?최우?�으�?준?�합?�다.
-- **참조 문서**: `.codex/skills/vercel-react-best-practices/SKILL.md` �??�위 `rules/*` 문서�?기�??�로 결정?�니??
-
-## ?�� ?��??�링 (Strict Rule)
-- **SCSS Modules ?�수**: 모든 컴포?�트 ?��??�링?� 반드??SCSS Modules�??�용?�니??
-- **Tailwind 금�?**: 컴포?�트 ?�위?�서 Tailwind CSS ?�틸리티 ?�래???�용???�격??금�??�니?? (?��????��????��? 목적)
-- **Radix UI First**: UI 개발 ??**Radix UI Primitives**�?최우?�으�??�용?�니?? ?��??�링?� TDS(Toss Design System)??미학??계승?�되, 컴포?�트 로직?� Radix UI�?기반?�로 구현?�니?? (기존 TDS 컴포?�트???�진?�으�??�체됨)
-- **No direct UI style edits**: Do not modify UI component styles directly; keep consistency via shared tokens/variants or new components
-- **?�자???�큰**: `src/styles/_variables.scss` �?`_mixins.scss`???�의???�큰??`@use`?�여 ?�용?�니??
-- **Primary Color**: 바나???�로??`#FBC02D`�?주력?�로 ?�용?�니??
-
-## ?�� 모바??최적??�?UX
-- **모바???�스??*: 모든 UI??모바???�경(?�트?�이??모드)?�서??경험??최우?�으�??�계?�니??
-- **?�리미엄 미학**: iOS ?��??�의 부?�러???�니메이??`cubic-bezier(0.16, 1, 0.3, 1)`)�?글?�스모피즘을 ?�극 ?�용?�니??
-- **반응??모달**: Desktop(Dialog) ??Mobile(Drawer) 변???�턴(`ResponsiveModal`)???�수 ?�용?�니??
-
-## ?�� ?�더 구조 �??�이�?컨벤??(PascalCase)
-- **컴포?�트 ?�더/?�일�?*: 반드??**PascalCase**�??�용?�니??
-  - ??`src/components/ui/Button/Button.tsx`
-  - ??`src/components/ui/button/button.tsx`
-- **?�이브리??컴포?�트 ?�턴**: 명확???�일�??�별�?깔끔??import�??�해 ?�음 구조�??�수?�니??
-  ```
-  ComponentName/
-  ?��??� ComponentName.tsx        # 컴포?�트 로직
-  ?��??� ComponentName.module.scss # ?��???
-  ?��??� index.ts                # Re-export (export * from './ComponentName')
-  ```
-- **기�? ?�이�?*: 
-  - ?�수/변?? `camelCase`
-  - ?�수: `UPPER_SNAKE_CASE`
-  - ?�???�터?�이?? `PascalCase`
-
-## ?? Next.js 16+ App Router ?�턴
-- **?�버 컴포?�트 기본**: ?�이???�칭?� ?�버 컴포?�트?�서 직접 ?�행?�니??
-- **Client Fetch 금�?**: ?�이지 초기 진입 ??`useEffect`??`fetch`�??�한 ?�라?�언???�이??로딩??금�??�니??
-- **?�버 ?�션**: 모든 ?�이??변�?Mutation)?� `'use server'` ?�션???�해 처리?�니??
-- **직접 DB ?�근**: ?�버 컴포?�트?�서??API Route�?거치지 ?�고 Supabase Service 계층??직접 ?�출?�니??- **Cache Components (PPR)**: Use `use cache` for cacheable server components/functions, wrap dynamic UI in `Suspense`
-- **View Transitions**: Keep transitions compatible with navigation updates
-- **React Compiler**: Prefer compiler-driven memoization over manual `useMemo`/`React.memo`
-## Latest Platform Guidance (React 19.2 + Next 16)
-- **Target versions**: React/ReactDOM 19.2.x, Next.js 16.1.x (keep latest patch)
-- **React 19.2 APIs**: Prefer <Activity />, useEffectEvent, cacheSignal (RSC) when appropriate
-- **Caching APIs**: Use revalidateTag, updateTag, refresh for on-demand cache updates
-- **Turbopack dev**: Use npm run dev (Turbo) for fastest local iteration
-- **Webpack prod**: Keep npm run build with webpack for current production parity
-
-## ?�� 기술 ?�택 �??�정
-- **Framework**: Next.js 16.1.x (App Router, Cache Components, View Transitions)
-- **Language**: TypeScript 5 (Strict Mode ?�수)
-- **State**: Zustand (`useInvitationStore` ?�일 ?�토???�용)
-- **Data**: Supabase (Remote CLI ?�용, Local Docker 미사??
-
-## ?�� Git & Commit Convention (Strict)
-- **?��? ?�용 ?�수**: 커밋 메시지 ?�성(Generation) ??반드??**?��?**???�용?�니??
-- **컨벤??*: [Conventional Commits](https://www.conventionalcommits.org/) ?�식???�릅?�다.
-  - ?? `feat: ?�로??기능 추�?`, `fix: 버그 ?�정`, `refactor: 코드 리팩?�링`
-
----
-*??문서???�로?�트???�법�?같으�? ?�공지???�이?�트??모든 ?�업 ?�행 ????규칙??최우?�으�?준?�해???�니??*
-
-
-
+*이 문서는 바나나웨딩 프로젝트의 최고 수준의 코드 품질과 일관된 사용자 경험을 보장하기 위한 약속입니다.*

@@ -16,9 +16,6 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: false,
   },
 
-  // 트랜스파일 패키지
-  transpilePackages: ['@toss/tds-mobile'],
-
   // 성능 및 보안 설정
   poweredByHeader: false, // X-Powered-By 헤더 제거
   generateEtags: false, // 정적 파일 ETag 생성 비활성화
@@ -167,14 +164,6 @@ const nextConfig: NextConfig = {
               name: 'react-core',
               chunks: 'all',
               priority: 40,
-              enforce: true,
-            },
-            // UI libraries
-            ui: {
-              test: /[\\/]node_modules[\\/](@radix-ui|lucide-react|@toss)[\\/]/,
-              name: 'ui',
-              chunks: 'all',
-              priority: 30,
               enforce: true,
             },
             // Data fetching & state
