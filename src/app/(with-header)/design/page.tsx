@@ -1,8 +1,19 @@
 'use client';
 
 import * as React from 'react';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/Accordion';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogTrigger } from '@/components/ui/AlertDialog';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/Accordion';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogTrigger,
+} from '@/components/ui/AlertDialog';
 import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
 import { BottomCTA } from '@/components/ui/BottomCTA';
@@ -38,7 +49,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { TextButton } from '@/components/ui/TextButton';
 import { TextField } from '@/components/ui/TextField';
 import { Textarea } from '@/components/ui/Textarea';
-import { Toast, ToastDescription, ToastProvider, ToastTitle, ToastViewport } from '@/components/ui/Toast';
+import {
+  Toast,
+  ToastDescription,
+  ToastProvider,
+  ToastTitle,
+  ToastViewport,
+} from '@/components/ui/Toast';
 import { Toggle } from '@/components/ui/Toggle';
 import { CTAButton } from '@/components/ui/CTAButton';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/Tooltip';
@@ -58,8 +75,14 @@ const optionListItems = [
 ];
 
 const accordionItems = [
-  { title: 'Builder meta', content: 'Touch targets, spacing, and token pairing for mobile-first flows.' },
-  { title: 'Motion cues', content: 'iOS-style cubic-bezier curves keep each transition buttery smooth.' },
+  {
+    title: 'Builder meta',
+    content: 'Touch targets, spacing, and token pairing for mobile-first flows.',
+  },
+  {
+    title: 'Motion cues',
+    content: 'iOS-style cubic-bezier curves keep each transition buttery smooth.',
+  },
 ];
 
 const statuses = [
@@ -93,8 +116,8 @@ export default function DesignPage() {
         </div>
         <h1>All UI components in one page</h1>
         <p className={s.heroDescription}>
-          Experience Toss and Apple-inspired interactions for buttons, inputs, selectors, overlays, and
-          asynchronous feedback without leaving the design preview.
+          Experience Toss and Apple-inspired interactions for buttons, inputs, selectors, overlays,
+          and asynchronous feedback without leaving the design preview.
         </p>
       </header>
 
@@ -127,8 +150,16 @@ export default function DesignPage() {
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" rightIcon={<ChevronDown size={16} />} className={s.menuTrigger}>
-                {menuChoice === 'duplicate' ? 'Duplicate' : menuChoice === 'export' ? 'Export' : 'Preview'}
+              <Button
+                variant="ghost"
+                rightIcon={<ChevronDown size={16} />}
+                className={s.menuTrigger}
+              >
+                {menuChoice === 'duplicate'
+                  ? 'Duplicate'
+                  : menuChoice === 'export'
+                    ? 'Export'
+                    : 'Preview'}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -170,14 +201,24 @@ export default function DesignPage() {
             className={s.fieldControl}
           />
           <Input label="Nickname" placeholder="Banana" className={s.fieldControl} />
-          <Textarea label="Message" placeholder="Add a short celebratory note." showCount maxLength={160} className={s.fieldControl} />
+          <Textarea
+            label="Message"
+            placeholder="Add a short celebratory note."
+            showCount
+            maxLength={160}
+            className={s.fieldControl}
+          />
           <Field.Root className={s.fieldWrapper}>
             <Field.Label htmlFor="custom-input">Custom field</Field.Label>
             <Input id="custom-input" placeholder="Add context for this flow." />
             <Field.HelperText>Field helper text keeps the label grounded.</Field.HelperText>
           </Field.Root>
           <Card className={s.richEditorCard}>
-            <RichTextEditor content={richText} placeholder="Share a celebratory story." onChange={setRichText} />
+            <RichTextEditor
+              content={richText}
+              placeholder="Share a celebratory story."
+              onChange={setRichText}
+            />
           </Card>
           <div className={s.optionListWrapper}>
             <OptionList options={optionListItems} value={optionValue} onSelect={setOptionValue} />
@@ -216,7 +257,12 @@ export default function DesignPage() {
             </RadioGroup>
             <div className={s.sliderRow}>
               <span>Timeline weight</span>
-              <Slider value={[sliderValue]} min={0} max={100} onValueChange={(value) => setSliderValue(value[0] ?? 0)} />
+              <Slider
+                value={[sliderValue]}
+                min={0}
+                max={100}
+                onValueChange={(value) => setSliderValue(value[0] ?? 0)}
+              />
             </div>
           </Card>
           <Card className={s.selectorCard}>
@@ -226,7 +272,9 @@ export default function DesignPage() {
                 <TabsTrigger value="details">Details</TabsTrigger>
               </TabsList>
               <TabsContent value="summary">
-                <p className={s.tabCopy}>React 19.2 + Next.js 16 view transitions stay silky smooth.</p>
+                <p className={s.tabCopy}>
+                  React 19.2 + Next.js 16 view transitions stay silky smooth.
+                </p>
               </TabsContent>
               <TabsContent value="details">
                 <p className={s.tabCopy}>Suspense-friendly caching keeps the UI responsive.</p>
@@ -340,7 +388,12 @@ export default function DesignPage() {
                 </AlertDialogContent>
               </AlertDialog>
             </div>
-            <BottomSheet open={sheetOpen} onOpenChange={setSheetOpen} header="Quick actions" cta={<Button>Save draft</Button>}>
+            <BottomSheet
+              open={sheetOpen}
+              onOpenChange={setSheetOpen}
+              header="Quick actions"
+              cta={<Button>Save draft</Button>}
+            >
               <p>The builder action sheet rises from the bottom on mobile.</p>
             </BottomSheet>
             <Button variant="ghost" onClick={() => setSheetOpen(true)}>
@@ -358,11 +411,79 @@ export default function DesignPage() {
               <ToastViewport />
             </ToastProvider>
             <div className={s.bottomCTAWrapper}>
-              <BottomCTA.Single>
-                Bottom CTA
-              </BottomCTA.Single>
+              <BottomCTA.Single>Bottom CTA</BottomCTA.Single>
             </div>
           </Card>
+        </div>
+      </section>
+
+      <section className={s.section}>
+        <div className={s.sectionHeader}>
+          <h2>TextField Variants</h2>
+          <span className={s.sectionHint}>Toss, Apple, Surface, Classic, Soft</span>
+        </div>
+        <div className={s.variantGrid}>
+          {['toss', 'apple', 'surface', 'classic', 'soft'].map((v) => (
+            <TextField
+              key={v}
+              variant={v as any}
+              label={`Variant: ${v}`}
+              placeholder={`Enter text in ${v} style`}
+              className={s.fieldControl}
+              clearable
+            />
+          ))}
+        </div>
+      </section>
+
+      <section className={s.section}>
+        <div className={s.sectionHeader}>
+          <h2>TextField Sizes</h2>
+          <span className={s.sectionHint}>XS, SM, MD, LG, XL</span>
+        </div>
+        <div className={s.variantGrid}>
+          {['xs', 'sm', 'md', 'lg', 'xl'].map((sz) => (
+            <TextField
+              key={sz}
+              size={sz as any}
+              label={`Size: ${sz}`}
+              placeholder={`Size ${sz} input`}
+              className={s.fieldControl}
+              clearable
+            />
+          ))}
+        </div>
+      </section>
+
+      <section className={s.section}>
+        <div className={s.sectionHeader}>
+          <h2>TextField Radii</h2>
+          <span className={s.sectionHint}>None, Small, Medium, Large, Full</span>
+        </div>
+        <div className={s.variantGrid}>
+          {['none', 'small', 'medium', 'large', 'full'].map((r) => (
+            <TextField
+              key={r}
+              radius={r as any}
+              label={`Radius: ${r}`}
+              placeholder={`${r} corner radius`}
+              className={s.fieldControl}
+              clearable
+            />
+          ))}
+        </div>
+      </section>
+      <section className={s.section}>
+        <div className={s.sectionHeader}>
+          <h2>TextField.Button</h2>
+          <span className={s.sectionHint}>Interactive slots used in builders</span>
+        </div>
+        <div className={s.variantGrid}>
+          <TextField.Button label="Date selector" placeholder="Select date" />
+          <TextField.Button label="Time selector" value="09:00 PM" variant="apple" />
+          <TextField.Button label="Soft variant" placeholder="Soft button" variant="soft" />
+          <TextField.Button label="Small size" placeholder="Small" size="sm" />
+          <TextField.Button label="Error state" placeholder="Has error" error="Mandatory field" />
         </div>
       </section>
     </div>

@@ -1,5 +1,5 @@
-@use "@/styles/variables" as v;
-@use "@/styles/mixins" as m;
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
 
 .root {
   min-height: 100vh;
@@ -97,6 +97,12 @@
 
 .fieldControl {
   min-width: 0;
+}
+
+.variantGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
 }
 
 .fieldWrapper {
