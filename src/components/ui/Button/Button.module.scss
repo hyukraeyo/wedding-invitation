@@ -162,10 +162,8 @@
 .spinner {
   width: 20px;
   height: 20px;
-  border: 2px solid currentColor;
-  border-bottom-color: transparent;
-  border-radius: 50%;
-  animation: rotate 0.8s linear infinite;
+  color: currentColor;
+  animation: rotate 1s linear infinite;
 }
 
 @keyframes rotate {

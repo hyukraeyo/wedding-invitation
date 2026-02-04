@@ -3,13 +3,13 @@
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { clsx } from 'clsx';
 import { invitationService } from '@/services/invitationService';
 import { approvalRequestService } from '@/services/approvalRequestService';
 import type { ApprovalRequestSummary } from '@/services/approvalRequestService';
 import type { InvitationSummaryRecord } from '@/lib/invitation-summary';
-import { useInvitationStore } from '@/store/useInvitationStore';
+import { useInvitationStore, INITIAL_STATE } from '@/store/useInvitationStore';
 import type { InvitationData } from '@/store/useInvitationStore';
 import { MyPageContent } from '@/components/mypage/MyPageContent';
 import { MyPageLayout } from '@/components/mypage/MyPageLayout';
@@ -97,6 +97,15 @@ export default function MyPageClient({
     initialRejectedRequests = [],
 }: MyPageClientProps) {
     const router = useRouter();
+    const pathname = usePathname();
+
+    const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
+
+    // 🍌 페이지 이동 시 로딩 상태 초기화
+    useEffect(() => {
+        setActionLoadingId(null);
+    }, [pathname]);
+
     const [invitations, setInvitations] = useState<InvitationSummaryRecord[]>(initialInvitations);
     const [rejectedRequests] = useState<ApprovalRequestSummary[]>(initialRejectedRequests);
     const [viewMode, setViewMode] = useState<'grid' | 'swiper'>('swiper');
@@ -109,8 +118,6 @@ export default function MyPageClient({
     const handleViewModeChange = useCallback((mode: 'grid' | 'swiper') => {
         setViewMode(mode);
     }, []);
-
-    const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
 
     // Profile Completion Modal State
     const [profileModalOpen, setProfileModalOpen] = useState(false);
@@ -212,18 +219,38 @@ export default function MyPageClient({
     }, []);
 
     const handleEdit = useCallback(async (inv: InvitationSummaryRecord) => {
+        if (actionLoadingId === inv.id) return;
+        
+        setActionLoadingId(inv.id);
         try {
             const fullData = await fetchFullInvitationData(inv.slug);
-            useInvitationStore.setState(fullData);
-            useInvitationStore.getState().setSlug(inv.slug);
+            
+            // 🍌 안전한 상태 업데이트: DB의 데이터가 일부 누락되었더라도 초기값(INITIAL_STATE)을 유지하도록 딥 병합함
+            useInvitationStore.setState(() => ({
+                ...INITIAL_STATE,
+                ...fullData,
+                groom: { ...INITIAL_STATE.groom, ...fullData.groom },
+                bride: { ...INITIAL_STATE.bride, ...fullData.bride },
+                theme: { ...INITIAL_STATE.theme, ...fullData.theme },
+                mainScreen: { ...INITIAL_STATE.mainScreen, ...fullData.mainScreen },
+                kakaoShare: { ...INITIAL_STATE.kakaoShare, ...fullData.kakaoShare },
+                closing: { ...INITIAL_STATE.closing, ...fullData.closing },
+                slug: inv.slug,
+            }));
+
             router.push('/builder?mode=edit');
-        } catch {
+        } catch (error) {
+            console.error('Fetch error:', error);
             toast({
                 variant: 'destructive',
                 description: '청첩장 데이터를 불러오지 못했어요.',
             });
+        } finally {
+            // 🍌 페이지 이동이 시작될 시간을 준 뒤 로딩 상태 해제 (이동이 느릴 경우 대비)
+            // 이동 후 다시 이 페이지로 돌아왔을 때 버튼이 계속 돌고 있는 현상 방지
+            setTimeout(() => setActionLoadingId(null), 1000);
         }
-    }, [fetchFullInvitationData, router, toast]);
+    }, [fetchFullInvitationData, router, toast, actionLoadingId]);
 
     // --- Action Executors ---
 
@@ -612,6 +639,7 @@ export default function MyPageClient({
                                         onCancelRequest={handleCancelRequestClick}
                                         onRevokeApproval={handleAdminRevokeClick}
                                         onRevertToDraft={executeRevertToDraft}
+                                        isLoading={actionLoadingId === inv.id}
                                         layout="grid"
                                     />
                                 );
@@ -665,6 +693,7 @@ export default function MyPageClient({
                                                     onCancelRequest={handleCancelRequestClick}
                                                     onRevokeApproval={handleAdminRevokeClick}
                                                     onRevertToDraft={executeRevertToDraft}
+                                                    isLoading={actionLoadingId === inv.id}
                                                     layout="swiper"
                                                 />
                                             </div>

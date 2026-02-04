@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { DatePicker } from '@/components/common/DatePicker';
 import { TimePicker } from '@/components/common/TimePicker';
 import { BottomCTA } from '@/components/ui/BottomCTA';
-import { Heading, Form, FormField, FormLabel, FormControl, FormMessage, Card, Skeleton, VisuallyHidden } from '@/components/ui';
+import { Form, FormField, FormLabel, FormControl, FormMessage, Card, Skeleton, VisuallyHidden } from '@/components/ui';
 import { NameField } from '@/components/common/NameField';
 import { useToast } from '@/hooks/use-toast';
 import { parseKoreanName, cn, isValidKoreanNameValue, focusMobileInput } from '@/lib/utils';

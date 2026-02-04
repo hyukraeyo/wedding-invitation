@@ -218,10 +218,8 @@
 .spinner {
   width: 1.5rem;
   height: 1.5rem;
-  border: 2px solid rgba(251, 192, 45, 0.2); // v.$primary-500 rgba
-  border-top-color: #fbc02d; // v.$primary-500
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+  color: #fbc02d; // v.$primary-500
+  animation: spin 1s linear infinite;
 }
 
 // from animations

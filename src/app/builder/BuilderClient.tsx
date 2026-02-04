@@ -93,7 +93,10 @@ export function BuilderClient() {
             saveLockRef.current = false;
         }
         // Set ready in next frame to avoid cascading renders
-        requestAnimationFrame(() => setIsReady(true));
+        requestAnimationFrame(() => {
+            setIsReady(true);
+            if (isEditMode) setIsSaving(false);
+        });
     }, [isEditMode, router, searchParams]);
 
     const togglePreview = useCallback(() => {
@@ -159,9 +162,12 @@ export function BuilderClient() {
 
             await invitationService.saveInvitation(currentSlug, cleanData, user.id);
             toast({ description: '청첩장이 저장되었어요! 🎉' });
+            
+            // 🍌 리디렉션 전에 로딩 상태 해제 (Next.js 캐시로 인해 컴포넌트가 재사용될 경우 대비)
+            setIsSaving(false);
+            saveLockRef.current = false;
+            
             router.push('/mypage');
-            // Note: Don't set isSaving(false) here because we're navigating away.
-            // Keeping it true (and keeping GLOBAL_SAVE_LOCK) prevents any further clicks during the transition.
         } catch (error) {
             console.error('Save error:', error);
             toast({ variant: 'destructive', description: '저장 중 오류가 발생했어요. 다시 시도해주세요.' });

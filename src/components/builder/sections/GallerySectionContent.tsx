@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback, useState, useRef } from 'react';
 import Image from 'next/image';
 import { AspectRatio } from '@/components/ui/AspectRatio';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, Banana } from 'lucide-react';
 import { InfoMessage } from '@/components/ui/InfoMessage';
 import { IconButton } from '@/components/ui/IconButton';
 import { useInvitationStore } from '@/store/useInvitationStore';
@@ -88,7 +88,7 @@ const SortableItem = React.memo(function SortableItem({ id, url, index, onRemove
 
             {isUploading ? (
                 <div className={styles.uploadingOverlay}>
-                    <div className={styles.spinner} />
+                    <Banana className={styles.spinner} size={20} />
                 </div>
             ) : null}
 

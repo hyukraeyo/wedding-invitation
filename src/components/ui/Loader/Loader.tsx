@@ -12,13 +12,14 @@ export interface LoaderProps extends React.HTMLAttributes<HTMLDivElement> {
 
 const LoaderBase = React.forwardRef<HTMLDivElement, LoaderProps>(
     ({ className, size = 'md', ...props }, ref) => {
+        const iconSize = size === 'sm' ? 14 : size === 'md' ? 24 : size === 'lg' ? 48 : 64;
         return (
             <div
                 ref={ref}
                 className={clsx(s.loader, s[`size_${size}`], className)}
                 {...props}
             >
-                <div className={s.spinner} />
+                <Banana className={s.spinnerIcon} size={iconSize} />
             </div>
         );
     }

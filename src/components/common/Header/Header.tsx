@@ -3,7 +3,7 @@
 import React, { useState, lazy, Suspense, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { LogIn, Save, Banana, Bell, ChevronLeft } from 'lucide-react';
+import { LogIn, Save, Banana, Bell } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
@@ -134,7 +134,7 @@ const HeaderContent = React.memo(() => {
         isUploading: state.isUploading,
     })));
 
-    const { onSave, isLoading, notificationCount, title, showBack, onBack, progress } = useHeaderStore();
+    const { onSave, isLoading, notificationCount, progress } = useHeaderStore();
 
     const [showResetDialog, setShowResetDialog] = useState(false);
     const { toast } = useToast();

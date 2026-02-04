@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { Slot } from '@radix-ui/react-slot';
 import { clsx } from 'clsx';
-import { Loader2 } from 'lucide-react';
+import { Banana } from 'lucide-react';
 import s from './Button.module.scss';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -83,7 +83,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       >
         {isLoading && !unstyled && (
           <div className={s.loader}>
-            <Loader2 className={s.spinner} size={18} />
+            <Banana className={s.spinner} size={18} />
           </div>
         )}
         <div className={clsx(s.content, isLoading && s.hidden, unstyled && s.unstyledContent)}>

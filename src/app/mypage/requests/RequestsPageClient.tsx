@@ -14,7 +14,7 @@ import {
     AlertCircle,
     CheckCircle,
     Inbox,
-    Loader2
+    Banana
 } from 'lucide-react';
 import styles from './RequestsPage.module.scss';
 import { clsx } from 'clsx';
@@ -241,7 +241,7 @@ export default function RequestsPageClient({
                                                     className={styles.approveButton}
                                                     disabled={approveMutation.isPending || rejectMutation.isPending}
                                                 >
-                                                    {approveMutation.isPending && approveMutation.variables?.id === targetInv.id ? <Loader2 className={styles.spin} size={14} /> : '승인'}
+                                                    {approveMutation.isPending && approveMutation.variables?.id === targetInv.id ? <Banana className={styles.spin} size={14} /> : '승인'}
                                                 </button>
                                             </>
                                         )}
@@ -258,7 +258,7 @@ export default function RequestsPageClient({
                                 disabled={isFetchingNextPage}
                                 className={styles.loadMoreButton}
                             >
-                                {isFetchingNextPage ? <Loader2 className={styles.spin} /> : '더 보기'}
+                                {isFetchingNextPage ? <Banana className={styles.spin} /> : '더 보기'}
                             </button>
                         </div>
                     )}
