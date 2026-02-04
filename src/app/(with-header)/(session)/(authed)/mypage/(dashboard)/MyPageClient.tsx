@@ -1,8 +1,7 @@
-"use client";
+﻿"use client";
 
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { clsx } from 'clsx';
 import { invitationService } from '@/services/invitationService';
@@ -13,6 +12,7 @@ import { useInvitationStore, INITIAL_STATE } from '@/store/useInvitationStore';
 import type { InvitationData } from '@/store/useInvitationStore';
 import { MyPageContent } from '@/components/mypage/MyPageContent';
 import { MyPageLayout } from '@/components/mypage/MyPageLayout';
+import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
 import { parseRejection } from '@/lib/rejection-helpers';
 // import { signOut } from 'next-auth/react';
 
@@ -101,7 +101,7 @@ export default function MyPageClient({
 
     const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
 
-    // 🍌 페이지 이동 시 로딩 상태 초기화
+    // ?뜉 ?섏씠吏 ?대룞 ??濡쒕뵫 ?곹깭 珥덇린??
     useEffect(() => {
         setActionLoadingId(null);
     }, [pathname]);
@@ -225,7 +225,7 @@ export default function MyPageClient({
         try {
             const fullData = await fetchFullInvitationData(inv.slug);
             
-            // 🍌 안전한 상태 업데이트: DB의 데이터가 일부 누락되었더라도 초기값(INITIAL_STATE)을 유지하도록 딥 병합함
+            // ?뜉 ?덉쟾???곹깭 ?낅뜲?댄듃: DB???곗씠?곌? ?쇰? ?꾨씫?섏뿀?붾씪??珥덇린媛?INITIAL_STATE)???좎??섎룄濡???蹂묓빀??
             useInvitationStore.setState(() => ({
                 ...INITIAL_STATE,
                 ...fullData,
@@ -243,11 +243,11 @@ export default function MyPageClient({
             console.error('Fetch error:', error);
             toast({
                 variant: 'destructive',
-                description: '청첩장 데이터를 불러오지 못했어요.',
+                description: '泥?꺽???곗씠?곕? 遺덈윭?ㅼ? 紐삵뻽?댁슂.',
             });
         } finally {
-            // 🍌 페이지 이동이 시작될 시간을 준 뒤 로딩 상태 해제 (이동이 느릴 경우 대비)
-            // 이동 후 다시 이 페이지로 돌아왔을 때 버튼이 계속 돌고 있는 현상 방지
+            // ?뜉 ?섏씠吏 ?대룞???쒖옉???쒓컙??以 ??濡쒕뵫 ?곹깭 ?댁젣 (?대룞???먮┫ 寃쎌슦 ?鍮?
+            // ?대룞 ???ㅼ떆 ???섏씠吏濡??뚯븘?붿쓣 ??踰꾪듉??怨꾩냽 ?뚭퀬 ?덈뒗 ?꾩긽 諛⑹?
             setTimeout(() => setActionLoadingId(null), 1000);
         }
     }, [fetchFullInvitationData, router, toast, actionLoadingId]);
@@ -266,7 +266,7 @@ export default function MyPageClient({
         } catch {
             toast({
                 variant: 'destructive',
-                description: '삭제 중 오류가 발생했어요.',
+                description: '??젣 以??ㅻ쪟媛 諛쒖깮?덉뼱??',
             });
         } finally {
             setActionLoadingId(null);
@@ -281,11 +281,11 @@ export default function MyPageClient({
             // Parallelize re-fetch
             const newInvitations = await invitationService.getUserInvitations(userId!);
             setInvitations(newInvitations);
-            toast({ description: '신청이 취소되었어요.' });
+            toast({ description: '?좎껌??痍⑥냼?섏뿀?댁슂.' });
             // Sync sidebar counts
             router.refresh();
         } catch {
-            toast({ variant: 'destructive', description: '취소 처리에 실패했어요.' });
+            toast({ variant: 'destructive', description: '痍⑥냼 泥섎━???ㅽ뙣?덉뼱??' });
         } finally {
             setActionLoadingId(null);
             setConfirmConfig(prev => ({ ...prev, isOpen: false }));
@@ -299,33 +299,33 @@ export default function MyPageClient({
         const rejection = rejectedRequests.find(req => req.invitation_id === inv.id);
         const { isRejected, isRevoked } = parseRejection(rejection);
 
-        // 승인 대기 중인 경우 삭제 불가 (신청 취소 유도)
+        // ?뱀씤 ?湲?以묒씤 寃쎌슦 ??젣 遺덇? (?좎껌 痍⑥냼 ?좊룄)
         if (inv.invitation_data?.isRequestingApproval && !isRejected && !isRevoked) {
             setConfirmConfig({
                 isOpen: true,
                 type: 'INFO_ONLY',
-                title: '삭제할 수 없어요',
+                title: 'Cannot delete now',
                 description: <>
-                    승인 신청 중인 청첩장은 삭제할 수 없어요.<br /><br />
-                    하단의 <strong>[신청취소]</strong> 버튼을 눌러 상태를 변경한 뒤 다시 시도해 주세요.
+                    ?뱀씤 ?좎껌 以묒씤 泥?꺽?μ? ??젣?????놁뼱??<br /><br />
+                    ?섎떒??<strong>[?좎껌痍⑥냼]</strong> 踰꾪듉???뚮윭 ?곹깭瑜?蹂寃쏀븳 ???ㅼ떆 ?쒕룄??二쇱꽭??
                 </>,
                 targetId: null,
             });
             return;
         }
 
-        // 승인 완료된 경우 (강력한 경고와 함께 삭제 허용)
+        // ?뱀씤 ?꾨즺??寃쎌슦 (媛뺣젰??寃쎄퀬? ?④퍡 ??젣 ?덉슜)
         if (inv.invitation_data?.isApproved && !isRejected && !isRevoked) {
             setConfirmConfig({
                 isOpen: true,
                 type: 'DELETE',
-                title: '청첩장 삭제',
+                title: '泥?꺽????젣',
                 description: (
                     <>
-                        정말로 이 청첩장을 삭제할까요?<br />
-                        <span className={styles.deleteWarning}>주의: 승인 완료된 청첩장을 삭제하면 공유된 링크로 더 이상 접속할 수 없어요.</span>
+                        ?뺣쭚濡???泥?꺽?μ쓣 ??젣?좉퉴??<br />
+                        <span className={styles.deleteWarning}>二쇱쓽: ?뱀씤 ?꾨즺??泥?꺽?μ쓣 ??젣?섎㈃ 怨듭쑀??留곹겕濡????댁긽 ?묒냽?????놁뼱??</span>
                         <br />
-                        삭제된 데이터는 복구할 수 없어요.
+                        ??젣???곗씠?곕뒗 蹂듦뎄?????놁뼱??
                     </>
                 ),
                 targetId: inv.id,
@@ -333,18 +333,18 @@ export default function MyPageClient({
             return;
         }
 
-        // 거절 또는 취소된 경우
+        // 嫄곗젅 ?먮뒗 痍⑥냼??寃쎌슦
         if (isRejected || isRevoked) {
-            const statusText = isRevoked ? '승인 취소' : '승인 거절';
+            const statusText = isRevoked ? '?뱀씤 痍⑥냼' : '?뱀씤 嫄곗젅';
             setConfirmConfig({
                 isOpen: true,
                 type: 'DELETE',
-                title: '청첩장 삭제',
+                title: '泥?꺽????젣',
                 description: (
                     <>
-                        정말로 이 청첩장을 삭제할까요?<br />
-                        현재 이 청첩장은 <strong>{statusText}</strong> 상태예요.<br /><br />
-                        삭제된 데이터는 복구할 수 없어요.
+                        ?뺣쭚濡???泥?꺽?μ쓣 ??젣?좉퉴??<br />
+                        ?꾩옱 ??泥?꺽?μ? <strong>{statusText}</strong> ?곹깭?덉슂.<br /><br />
+                        ??젣???곗씠?곕뒗 蹂듦뎄?????놁뼱??
                     </>
                 ),
                 targetId: inv.id,
@@ -352,12 +352,12 @@ export default function MyPageClient({
             return;
         }
 
-        // 일반 상태 (작성 중)
+        // ?쇰컲 ?곹깭 (?묒꽦 以?
         setConfirmConfig({
             isOpen: true,
             type: 'DELETE',
-            title: '청첩장 삭제',
-            description: '정말로 이 청첩장을 삭제할까요? 삭제된 데이터는 복구할 수 없어요.',
+            title: '泥?꺽????젣',
+            description: '?뺣쭚濡???泥?꺽?μ쓣 ??젣?좉퉴?? ??젣???곗씠?곕뒗 蹂듦뎄?????놁뼱??',
             targetId: inv.id,
         });
     }, [rejectedRequests]);
@@ -366,8 +366,8 @@ export default function MyPageClient({
         setConfirmConfig({
             isOpen: true,
             type: 'CANCEL_REQUEST',
-            title: '승인 신청 취소',
-            description: '승인 신청을 취소할까요?',
+            title: '?뱀씤 ?좎껌 痍⑥냼',
+            description: '?뱀씤 ?좎껌??痍⑥냼?좉퉴??',
             targetId: inv.id,
         });
     }, []);
@@ -378,7 +378,7 @@ export default function MyPageClient({
 
     const handleRequestApprovalClick = useCallback((inv: InvitationSummaryRecord) => {
         if (inv.invitation_data.isRequestingApproval) {
-            toast({ description: '이미 승인 신청된 청첩장이에요.' });
+            toast({ description: '?대? ?뱀씤 ?좎껌??泥?꺽?μ씠?먯슂.' });
             return;
         }
 
@@ -386,11 +386,11 @@ export default function MyPageClient({
             setConfirmConfig({
                 isOpen: true,
                 type: 'REQUEST_APPROVAL',
-                title: '승인 신청',
+                title: '?뱀씤 ?좎껌',
                 description: (
                     <>
-                        <strong>{profile?.full_name}</strong>({profile?.phone}) 님으로 신청해요.<br />
-                        신청 후 관리자 확인 절차가 진행됩니다.
+                        <strong>{profile?.full_name}</strong>({profile?.phone}) ?섏쑝濡??좎껌?댁슂.<br />
+                        ?좎껌 ??愿由ъ옄 ?뺤씤 ?덉감媛 吏꾪뻾?⑸땲??
                     </>
                 ),
                 targetId: inv.id,
@@ -432,14 +432,14 @@ export default function MyPageClient({
             ]);
 
             toast({
-                description: '사용 신청이 완료되었어요. 관리자 확인 후 처리돼요.',
+                description: '?ъ슜 ?좎껌???꾨즺?섏뿀?댁슂. 愿由ъ옄 ?뺤씤 ??泥섎━?쇱슂.',
             });
             // Sync sidebar counts
             router.refresh();
         } catch {
             toast({
                 variant: 'destructive',
-                description: '신청 처리 중 오류가 발생했어요.',
+                description: '?좎껌 泥섎━ 以??ㅻ쪟媛 諛쒖깮?덉뼱??',
             });
         } finally {
             setActionLoadingId(null);
@@ -464,11 +464,11 @@ export default function MyPageClient({
             const newInvitations = await invitationService.getUserInvitations(userId);
             setInvitations(newInvitations);
 
-            toast({ description: '수정 모드로 전환되었어요. 수정 후 다시 승인 신청을 해주세요.' });
+            toast({ description: '?섏젙 紐⑤뱶濡??꾪솚?섏뿀?댁슂. ?섏젙 ???ㅼ떆 ?뱀씤 ?좎껌???댁＜?몄슂.' });
             router.refresh();
         } catch (error) {
             console.error('Failed to revert to draft:', error);
-            toast({ variant: 'destructive', description: '수정 모드 전환에 실패했어요.' });
+            toast({ variant: 'destructive', description: '?섏젙 紐⑤뱶 ?꾪솚???ㅽ뙣?덉뼱??' });
         } finally {
             setActionLoadingId(null);
         }
@@ -493,7 +493,7 @@ export default function MyPageClient({
     const handleProfileComplete = useCallback(async () => {
         setProfileModalOpen(false);
         router.refresh();
-        toast({ description: '프로필이 저장되었어요. 다시 사용 신청을 진행해주세요.' });
+        toast({ description: '?꾨줈?꾩씠 ??λ릺?덉뼱?? ?ㅼ떆 ?ъ슜 ?좎껌??吏꾪뻾?댁＜?몄슂.' });
     }, [router, toast]);
 
     const handleCreateNew = useCallback(() => {
@@ -513,11 +513,11 @@ export default function MyPageClient({
                     <div className={styles.authIcon}>
                         <Banana size={32} />
                     </div>
-                    <h2 className={styles.authTitle}>로그인이 필요해요</h2>
-                    <p className={styles.authDescription}>저장된 청첩장을 보려면 먼저 로그인을 해주세요.</p>
-                    <Link href="/login?returnTo=/mypage" className={styles.authButton}>
-                        로그인하기
-                    </Link>
+                    <h2 className={styles.authTitle}>濡쒓렇?몄씠 ?꾩슂?댁슂</h2>
+                    <p className={styles.authDescription}>??λ맂 泥?꺽?μ쓣 蹂대젮硫?癒쇱? 濡쒓렇?몄쓣 ?댁＜?몄슂.</p>
+                    <ViewTransitionLink href="/login?returnTo=/mypage" className={styles.authButton}>
+                        濡쒓렇?명븯湲?
+                    </ViewTransitionLink>
                 </div>
             </MyPageLayout>
         );
@@ -530,10 +530,10 @@ export default function MyPageClient({
                 <EmptyState
                     icon={<Banana />}
                     variant="banana"
-                    title="아직 만든 청첩장이 없어요"
-                    description={<>세상에서 가장 행복한 시작을 위해,<br />나만의 특별한 모바일 청첩장을 지금 바로 만들어보세요.</>}
+                    title="No invitations yet"
+                    description={<>Create your first invitation to get started.</>}
                     action={{
-                        label: '첫 청첩장 만들기',
+                        label: 'Create invitation',
                         href: '/builder',
                         icon: <Plus size={20} />,
                         onClick: (e) => {
@@ -552,7 +552,7 @@ export default function MyPageClient({
                                 variant="clear"
                                 iconSize={20}
                                 className={styles.viewToggleButton}
-                                aria-label={viewMode === 'grid' ? '슬라이드 보기' : '그리드 보기'}
+                                aria-label={viewMode === 'grid' ? '?щ씪?대뱶 蹂닿린' : '洹몃━??蹂닿린'}
                                 name=""
                             >
                                 {viewMode === 'grid' ? <GalleryHorizontal size={20} /> : <LayoutGrid size={20} />}
@@ -608,7 +608,7 @@ export default function MyPageClient({
                         <div className={styles.cardGrid}>
                             {/* Create New Card */}
                             <div className={styles.createCardWrapper}>
-                                <Link
+                                <ViewTransitionLink
                                     href="/builder"
                                     className={styles.createCard}
                                     onClick={(e) => {
@@ -619,8 +619,8 @@ export default function MyPageClient({
                                     <div className={styles.createIcon}>
                                         <Plus size={28} />
                                     </div>
-                                    <span className={styles.createText}>새 청첩장 만들기</span>
-                                </Link>
+                                    <span className={styles.createText}>Create invitation</span>
+                                </ViewTransitionLink>
                             </div>
 
                             {/* Invitation Cards */}
@@ -660,7 +660,7 @@ export default function MyPageClient({
                                 <SwiperSlide className={styles.autoWidthSlide}>
                                     <div className={styles.swiperCardWrapper}>
                                         <div className={styles.createCardWrapper}>
-                                            <Link
+                                            <ViewTransitionLink
                                                 href="/builder"
                                                 className={styles.createCard}
                                                 onClick={(e) => {
@@ -671,8 +671,8 @@ export default function MyPageClient({
                                                 <div className={styles.createIcon}>
                                                     <Plus size={32} />
                                                 </div>
-                                                <span className={styles.createText}>새 청첩장</span>
-                                            </Link>
+                                                <span className={styles.createText}>Create invitation</span>
+                                            </ViewTransitionLink>
                                         </div>
                                     </div>
                                 </SwiperSlide>
@@ -742,7 +742,7 @@ export default function MyPageClient({
                                     onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
                                     disabled={!!actionLoadingId}
                                 >
-                                    취소
+                                    痍⑥냼
                                 </Button>
                             </AlertDialogCancel>
                         )}
@@ -761,7 +761,7 @@ export default function MyPageClient({
                                     }
                                 }}
                             >
-                                확인
+                                ?뺤씤
                             </Button>
                         </AlertDialogAction>
                     </AlertDialogFooter>
@@ -777,13 +777,13 @@ export default function MyPageClient({
                 >
                     <Dialog.Overlay />
                     <Dialog.Content>
-                        <Dialog.Header title="승인 취소" />
+                        <Dialog.Header title="?뱀씤 痍⑥냼" />
                         <Dialog.Body>
                             <div className={styles.rejectionEditorWrapper}>
                                 <RichTextEditor
                                     content={rejectionReason.reason}
                                     onChange={rejectionReason.setReason}
-                                    placeholder="내용을 입력하세요…"
+                                    placeholder="Enter reason"
                                     minHeight={180}
                                 />
                             </div>
@@ -795,7 +795,7 @@ export default function MyPageClient({
                                 onClick={rejectionReason.handleClose}
                                 disabled={!!actionLoadingId}
                             >
-                                취소
+                                痍⑥냼
                             </Button>
                             <Button
                                 variant="fill"
@@ -804,7 +804,7 @@ export default function MyPageClient({
                                 disabled={rejectionReason.isSubmitDisabled}
                                 onClick={rejectionReason.handleSubmit}
                             >
-                                승인 취소
+                                ?뱀씤 痍⑥냼
                             </Button>
                         </Dialog.Footer>
                     </Dialog.Content>
@@ -821,14 +821,14 @@ export default function MyPageClient({
                 >
                     <AlertDialogContent>
                         <AlertDialogHeader>
-                            <AlertDialogTitle>{autoNotificationTarget.isApproval ? '승인 완료' : parseRejection(autoNotificationTarget.rejection).title}</AlertDialogTitle>
+                            <AlertDialogTitle>{autoNotificationTarget.isApproval ? '?뱀씤 ?꾨즺' : parseRejection(autoNotificationTarget.rejection).title}</AlertDialogTitle>
                             <AlertDialogDescription asChild>
                                 <div
                                     className={`${styles.rejectionMessageBox} ${autoNotificationTarget.isApproval ? styles.success : ''}`}
                                     dangerouslySetInnerHTML={{
                                         __html: autoNotificationTarget.isApproval
-                                            ? `<strong>${autoNotificationTarget.invitation.invitation_data.mainScreen.title}</strong> 청첩장 승인이 완료되었어요!<br/>이제 자유롭게 공유할 수 있어요.`
-                                            : parseRejection(autoNotificationTarget.rejection).displayReason || '내용이 없어요.'
+                                            ? `<strong>${autoNotificationTarget.invitation.invitation_data.mainScreen.title}</strong> 泥?꺽???뱀씤???꾨즺?섏뿀?댁슂!<br/>?댁젣 ?먯쑀濡?쾶 怨듭쑀?????덉뼱??`
+                                            : parseRejection(autoNotificationTarget.rejection).displayReason || '?댁슜???놁뼱??'
                                     }}
                                 />
                             </AlertDialogDescription>
@@ -836,7 +836,7 @@ export default function MyPageClient({
                         <AlertDialogFooter>
                             <AlertDialogAction asChild>
                                 <Button variant="fill" size="lg" onClick={handleCloseAutoNotification}>
-                                    확인
+                                    ?뺤씤
                                 </Button>
                             </AlertDialogAction>
                         </AlertDialogFooter>
@@ -846,3 +846,5 @@ export default function MyPageClient({
         </MyPageContent >
     );
 }
+
+

@@ -1,12 +1,12 @@
 ﻿"use client";
 
 import React, { Suspense, useCallback } from 'react';
-import Link from 'next/link';
 import Image from 'next/image';
 import { LogIn, Save, Banana, Bell } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useRouter } from 'next/navigation';
 import type { User } from 'next-auth';
+import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
 import { IconButton, ProgressBar } from '@/components/ui';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
@@ -18,7 +18,7 @@ import { useHeaderData } from './HeaderDataProvider';
 
 const Logo = React.memo(() => (
     <div className={styles.logoWrapper}>
-        <Link href="/" className={styles.logoLink}>
+        <ViewTransitionLink href="/" className={styles.logoLink}>
             <Image
                 src="/logo.png"
                 alt="Logo"
@@ -28,7 +28,7 @@ const Logo = React.memo(() => (
                 quality={100}
                 priority
             />
-        </Link>
+        </ViewTransitionLink>
     </div>
 ));
 Logo.displayName = 'Logo';
@@ -75,7 +75,7 @@ const HeaderActions = React.memo(({
 
                 {user ? (
                     <div className={styles.actionsRow}>
-                        <Link href="/mypage/notifications" className={styles.notificationLink}>
+                        <ViewTransitionLink href="/mypage/notifications" className={styles.notificationLink}>
                             <IconButton
                                 iconSize={20}
                                 variant="clear"
@@ -88,8 +88,8 @@ const HeaderActions = React.memo(({
                                     <span className={styles.notificationBadge} />
                                 )}
                             </IconButton>
-                        </Link>
-                        <Link href="/mypage" className={styles.profileLink}>
+                        </ViewTransitionLink>
+                        <ViewTransitionLink href="/mypage" className={styles.profileLink}>
                             <IconButton
                                 iconSize={20}
                                 variant="fill"
@@ -99,7 +99,7 @@ const HeaderActions = React.memo(({
                             >
                                 <Banana size={20} strokeWidth={2.5} />
                             </IconButton>
-                        </Link>
+                        </ViewTransitionLink>
                     </div>
                 ) : (
                     <IconButton

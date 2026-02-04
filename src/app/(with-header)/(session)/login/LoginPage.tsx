@@ -2,15 +2,16 @@
 
 import React, { useMemo, useState, useEffect, useCallback, useRef } from 'react';
 
-import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Heading } from '@/components/ui';
-import { BananaLoader } from '@/components/ui/Loader';
 import { signIn, signOut } from 'next-auth/react';
 import type { User } from 'next-auth';
-import styles from './LoginPage.module.scss';
+
+import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
+import { Heading } from '@/components/ui';
+import { BananaLoader } from '@/components/ui/Loader';
 import { useToast } from '@/hooks/use-toast';
-import dynamic from 'next/dynamic';
+import styles from './LoginPage.module.scss';
 import { getProfileForSession, type ProfileState, type ProfileSummary } from './actions';
 
 const ProfileCompletionModal = dynamic(
@@ -156,21 +157,21 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
                     <div className={styles.footer}>
                         <p>
                             怨꾩냽 吏꾪뻾?⑥쑝濡쒖뜥 洹?섎뒗 ?뱀궗??
-                            <Link href="/privacy" target="_blank" className={styles.link}>
+                            <ViewTransitionLink href="/privacy" target="_blank" className={styles.link}>
                                 媛쒖씤?뺣낫 泥섎━諛⑹묠
-                            </Link>
+                            </ViewTransitionLink>
                             諛<br />?댁슜?쎄????숈쓽?섍쾶 ?⑸땲??
                         </p>
                     </div>
 
                     {/* Back to Home */}
                     <div className={styles.backToHomeWrapper}>
-                        <Link
+                        <ViewTransitionLink
                             href="/"
                             className={styles.backToHomeLink}
                         >
                             ???덉쑝濡??뚯븘媛湲?
-                        </Link>
+                        </ViewTransitionLink>
                     </div>
                 </div>
             </div>

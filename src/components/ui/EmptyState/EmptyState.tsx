@@ -1,8 +1,10 @@
 "use client";
 
-import React from 'react';
-import Link from 'next/link';
+import * as React from 'react';
+
 import { clsx } from 'clsx';
+
+import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
 import { Button } from '@/components/ui/Button';
 import styles from './EmptyState.module.scss';
 
@@ -33,14 +35,14 @@ export function EmptyState({
 
         if (action.href) {
             return (
-                <Link
+                <ViewTransitionLink
                     href={action.href}
                     className={styles.actionButton}
                     onClick={action.onClick as React.MouseEventHandler<HTMLAnchorElement>}
                 >
                     {action.icon}
                     {action.label}
-                </Link>
+                </ViewTransitionLink>
             );
         }
 
@@ -72,4 +74,4 @@ export function EmptyState({
     );
 }
 
-EmptyState.displayName = "EmptyState";
+EmptyState.displayName = 'EmptyState';
