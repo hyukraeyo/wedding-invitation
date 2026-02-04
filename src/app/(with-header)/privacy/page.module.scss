@@ -1,0 +1,63 @@
+﻿@use "@/styles/variables" as v;
+
+.container {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+.lead {
+  color: v.$zinc-600;
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+
+.sectionTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 2rem 0 1rem;
+}
+
+.list {
+  list-style: disc;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+
+.noteBox {
+  background-color: v.$zinc-50;
+  padding: 1rem;
+  border-radius: v.$radius-md;
+  margin: 1rem 0;
+  border: 1px solid v.$zinc-200;
+  color: v.$zinc-900;
+}
+
+.smallNote {
+  font-size: v.$font-size-sm;
+  color: v.$zinc-500;
+}
+
+.footerNote {
+  font-size: v.$font-size-sm;
+  color: v.$zinc-400;
+}
+
+.divider {
+  margin: 3rem 0;
+  border: 0;
+  border-top: 1px solid v.$zinc-200;
+}
+
+.emailNote {
+  margin-top: 0.25rem;
+}
+

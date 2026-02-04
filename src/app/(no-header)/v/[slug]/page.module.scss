@@ -1,0 +1,6 @@
+@use "@/styles/variables" as v;
+
+.page {
+  min-height: 100dvh;
+  background-color: v.$white;
+}

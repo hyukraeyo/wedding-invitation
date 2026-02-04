@@ -3,18 +3,18 @@
 // Core entry point for all SCSS variables
 // ============================================
 
-@forward "colors";
-@forward "typography";
-@forward "interact";
-@forward "semantic";
-@forward "mixins";
+@forward "@/styles/colors";
+@forward "@/styles/typography";
+@forward "@/styles/interact";
+@forward "@/styles/semantic";
+@forward "@/styles/mixins";
 
 // 🍌 Legacy/Refactored Support Aliases
 // These ensure existing components continue to work during transition
-@use "colors" as c;
-@use "interact" as i;
-@use "semantic" as s;
-@use "typography" as t;
+@use "@/styles/colors" as c;
+@use "@/styles/interact" as i;
+@use "@/styles/semantic" as s;
+@use "@/styles/typography" as t;
 
 $color-foreground: c.$grey-900;
 

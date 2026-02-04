@@ -1,7 +1,7 @@
-@use "colors" as c;
-@use "interact" as i;
-@use "semantic" as s;
-@use "typography" as t;
+@use "@/styles/colors" as c;
+@use "@/styles/interact" as i;
+@use "@/styles/semantic" as s;
+@use "@/styles/typography" as t;
 
 // ============================================
 // 🍌 Interactive & Layout Mixins

@@ -1,0 +1,146 @@
+@use "@/styles/variables" as v;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.mainTitle {
+  font-size: v.$font-size-md;
+  font-weight: 700;
+  color: v.$grey-800;
+  letter-spacing: -0.01em;
+}
+
+
+
+@keyframes completionFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// 전체 슬라이딩 창 (마스크 역할 제거하여 짤림 방지)
+.formWindow {
+  overflow: visible;
+  position: relative;
+  width: 100%;
+  transition: height 0.8s v.$ease-ios; // Faster transition
+}
+
+.skeletonWindow {
+  height: 112px;
+}
+
+.skeletonField {
+  opacity: 1;
+}
+
+
+
+.skeletonLabel {
+  width: 80px;
+  height: 18px;
+  margin-bottom: 0.5rem;
+}
+
+.skeletonInput {
+  width: 100%;
+  height: 60px;
+  border-bottom: 2px solid v.$grey-100;
+  background-color: transparent;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  transition: transform 0.8s v.$ease-ios; // Faster transition
+  will-change: transform;
+}
+
+// 각 필드 컨테이너
+.fieldContainer {
+  opacity: 0;
+  transition:
+    opacity 0.8s v.$ease-ios,
+    transform 0.8s v.$ease-ios;
+  transform: translateY(10px);
+  margin-bottom: 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// .label and .formMessage methods removed as per global Form styles
+
+.whiteBox {
+  padding: 2.5rem 1.5rem;
+  width: 100%;
+  max-width: v.$canvas-max-width;
+  box-sizing: border-box;
+  border-radius: v.$radius-2xl;
+  animation: setupFadeInMobile 0.8s v.$ease-ios both;
+  overflow: visible; // hidden에서 변경
+
+  @media (max-width: 768px) {
+    padding: 1.5rem 1.25rem;
+    padding-top: 2rem;
+    padding-bottom: 100px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: transparent;
+    overflow: visible;
+  }
+}
+
+@keyframes setupFadeInMobile {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.bottomCta {
+  @media (min-width: 769px) {
+    position: relative !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: none !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+  }
+}
+
+.ctaWrapper {
+  margin-top: 1.5rem;
+  width: 100%;
+  max-width: v.$canvas-max-width;
+  z-index: 10;
+}
+
+.ctaLabel {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

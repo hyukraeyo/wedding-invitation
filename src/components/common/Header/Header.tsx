@@ -1,23 +1,20 @@
-"use client";
+﻿"use client";
 
-import React, { useState, lazy, Suspense, useCallback, useMemo } from 'react';
+import React, { Suspense, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { LogIn, Save, Banana, Bell } from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import type { User } from 'next-auth';
-import { IconButton, Dialog, ProgressBar } from '@/components/ui';
+import { IconButton, ProgressBar } from '@/components/ui';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { useShallow } from 'zustand/react/shallow';
 import styles from './Header.module.scss';
 
 import { useHeaderStore } from '@/store/useHeaderStore';
-
-// Lazy load Button to avoid preload warning
-const Button = lazy(() => import('@/components/ui/Button').then(mod => ({ default: mod.Button })));
+import { useHeaderData } from './HeaderDataProvider';
 
 const Logo = React.memo(() => (
     <div className={styles.logoWrapper}>
@@ -124,26 +121,21 @@ HeaderActions.displayName = 'HeaderActions';
 
 const HeaderContent = React.memo(() => {
     const router = useRouter();
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
-    const { user, loading: authLoading } = useAuth();
+    const { user, notificationCount, authLoading } = useHeaderData();
 
-    // Store states
-    const { reset, isUploading } = useInvitationStore(useShallow((state) => ({
-        reset: state.reset,
+    const { isUploading } = useInvitationStore(useShallow((state) => ({
         isUploading: state.isUploading,
     })));
 
-    const { onSave, isLoading, notificationCount, progress } = useHeaderStore();
+    const { onSave, isLoading, progress } = useHeaderStore(
+        useShallow((state) => ({
+            onSave: state.onSave,
+            isLoading: state.isLoading,
+            progress: state.progress,
+        }))
+    );
 
-    const [showResetDialog, setShowResetDialog] = useState(false);
     const { toast } = useToast();
-
-    const confirmReset = useCallback(() => {
-        reset();
-        router.push('/builder');
-        setShowResetDialog(false);
-    }, [reset, router]);
 
     const handleSaveAction = useCallback(() => {
         if (isUploading) {
@@ -158,10 +150,10 @@ const HeaderContent = React.memo(() => {
     }, [isUploading, onSave, toast]);
 
     const handleLogin = useCallback(() => {
-        const search = searchParams.toString();
-        const returnTo = `${pathname}${search ? `?${search}` : ''}`;
+        if (typeof window === 'undefined') return;
+        const returnTo = `${window.location.pathname}${window.location.search}`;
         router.push(`/login?returnTo=${encodeURIComponent(returnTo)}`);
-    }, [router, pathname, searchParams]);
+    }, [router]);
 
     return (
         <>
@@ -179,7 +171,7 @@ const HeaderContent = React.memo(() => {
                         notificationCount={notificationCount}
                         onLogin={handleLogin}
                         onSaveAction={handleSaveAction}
-                        showSave={!!onSave || pathname.startsWith('/builder')}
+                        showSave={!!onSave}
                     />
                 </div>
 
@@ -189,51 +181,12 @@ const HeaderContent = React.memo(() => {
                     </div>
                 )}
             </header>
-            <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
-                <Dialog.Overlay />
-                <Dialog.Content>
-                    <Dialog.Header title="새 청첩장 만들기" />
-                    <Dialog.Body className={styles.centerBody}>
-                        작성 중인 내용이 있어요. 정말 새 청첩장을 만들까요?
-                        <br />
-                        (작성된 내용은 초기화돼요.)
-                    </Dialog.Body>
-                    <Dialog.Footer>
-                        <Suspense fallback={<div className={styles.suspenseFallback} />}>
-                            <div className={styles.resetDialogContent}>
-                                <Button
-                                    color="danger"
-                                    variant="fill"
-                                    className={styles.confirmButton}
-                                    onClick={confirmReset}
-                                >
-                                    초기화 및 만들기
-                                </Button>
-                                <Button
-                                    variant="weak"
-                                    className={styles.cancelButton}
-                                    onClick={() => setShowResetDialog(false)}
-                                >
-                                    취소
-                                </Button>
-                            </div>
-                        </Suspense>
-                    </Dialog.Footer>
-                </Dialog.Content>
-            </Dialog>
         </>
     );
 });
 HeaderContent.displayName = 'HeaderContent';
 
 export default function Header() {
-    const pathname = usePathname();
-    const isVisible = useMemo(() => {
-        return !pathname.startsWith('/v/') && pathname !== '/preview';
-    }, [pathname]);
-
-    if (!isVisible) return null;
-
     return (
         <Suspense fallback={
             <header className={cn(styles.header, "view-transition-header")}>

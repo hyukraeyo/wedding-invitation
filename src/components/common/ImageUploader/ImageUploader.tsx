@@ -55,7 +55,6 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
 
             try {
                 // 2. Background Upload
-                // Dynamically import to avoid server-side issues
                 const { uploadImage } = await import('@/utils/upload');
                 const publicUrl = await uploadImage(file, 'images', uploadFolder);
 
@@ -98,109 +97,107 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
         '--aspect-ratio': aspectRatio.replace('/', ' / '),
     } as React.CSSProperties;
 
-    // Use previewUrl for display if available (covers both existing value and optimistic update)
     const displayUrl = previewUrl || value;
     const shouldUnoptimize = isBlobUrl(displayUrl);
     const isAutoRatio = props.ratio === 'auto';
 
     return (
-        <div className={styles.container}>
-            <div className={cn(styles.wrapper, className)} style={cssVars}>
-                {label ? <div className={styles.label}>{label}</div> : null}
+        <div className={cn(styles.container, className)} style={cssVars}>
+            {label && <div className={styles.label}>{label}</div>}
 
-                <div
-                    className={cn(
-                        styles.uploadBox,
-                        !displayUrl && styles.empty,
-                        displayUrl && styles.filled
-                    )}
-                    onClick={() => inputRef.current?.click()}
-                    style={!isAutoRatio ? { aspectRatio: aspectRatio.replace('/', '/') } : {}}
-                >
-                    {displayUrl ? (
-                        <div className={cn(styles.previewWrapper, isAutoRatio ? styles.minHeight : styles.absoluteFull)}>
-                            {!isAutoRatio ? (
-                                (() => {
-                                    const ratioParts = (aspectRatio || '16/9').split('/');
-                                    const w = Number(ratioParts[0]) || 16;
-                                    const h = Number(ratioParts[1]) || 9;
-                                    const r = w / h;
-                                    return (
-                                        <AspectRatio ratio={r} style={{ width: '100%' }}>
-                                            <Image
-                                                src={displayUrl}
-                                                alt="Uploaded"
-                                                fill
-                                                className={cn(
-                                                    styles.image,
-                                                    isUploading && styles.uploading
-                                                )}
-                                                sizes={IMAGE_SIZES.builder}
-                                                priority
-                                                loading="eager"
-                                                unoptimized={shouldUnoptimize}
-                                            />
-                                        </AspectRatio>
-                                    );
-                                })()
-                            ) : (
-                                <Image
-                                    src={displayUrl}
-                                    alt="Uploaded"
-                                    width={800}
-                                    height={600}
-                                    className={cn(
-                                        styles.image,
-                                        isUploading && styles.uploading
-                                    )}
-                                    sizes={IMAGE_SIZES.builder}
-                                    priority
-                                    loading="eager"
-                                    unoptimized={shouldUnoptimize}
-                                />
-                            )}
-                            {isUploading ? (
-                                <div className={styles.overlay}>
-                                    <Banana className={styles.spinner} />
-                                </div>
-                            ) : null}
-                            {allowDelete && (
-                                <IconButton
-                                    type="button"
-                                    onClick={handleRemove}
-                                    variant="clear"
-                                    iconSize={20}
-                                    className={styles.removeButton}
-                                    disabled={isUploading}
-                                    name=""
-                                    aria-label="삭제"
-                                >
-                                    <Trash2 size={20} />
-                                </IconButton>
-                            )}
-                        </div>
-                    ) : (
-                        <div className={styles.emptyState}>
-                            <div className={styles.iconCircle}>
-                                <UploadCloud size={24} className={styles.uploadIcon} />
+            <div
+                className={cn(
+                    styles.uploadBox,
+                    !displayUrl && styles.empty,
+                    displayUrl && styles.filled
+                )}
+                onClick={() => inputRef.current?.click()}
+                style={!isAutoRatio ? { aspectRatio: aspectRatio.replace('/', ' / ') } : {}}
+            >
+                {displayUrl ? (
+                    <div className={cn(styles.previewWrapper, isAutoRatio ? styles.minHeight : styles.absoluteFull)}>
+                        {!isAutoRatio ? (
+                            (() => {
+                                const ratioParts = (aspectRatio || '16/9').split('/');
+                                const w = Number(ratioParts[0]) || 16;
+                                const h = Number(ratioParts[1]) || 9;
+                                const r = w / h;
+                                return (
+                                    <AspectRatio ratio={r} style={{ width: '100%' }}>
+                                        <Image
+                                            src={displayUrl}
+                                            alt="Uploaded"
+                                            fill
+                                            className={cn(
+                                                styles.image,
+                                                isUploading && styles.uploading
+                                            )}
+                                            sizes={IMAGE_SIZES.builder}
+                                            priority
+                                            loading="eager"
+                                            unoptimized={shouldUnoptimize}
+                                        />
+                                    </AspectRatio>
+                                );
+                            })()
+                        ) : (
+                            <Image
+                                src={displayUrl}
+                                alt="Uploaded"
+                                width={800}
+                                height={600}
+                                className={cn(
+                                    styles.image,
+                                    isUploading && styles.uploading
+                                )}
+                                sizes={IMAGE_SIZES.builder}
+                                priority
+                                loading="eager"
+                                unoptimized={shouldUnoptimize}
+                            />
+                        )}
+
+                        {isUploading && (
+                            <div className={styles.overlay}>
+                                <Banana className={styles.spinner} />
                             </div>
-                            <p className={styles.emptyTitle}>{placeholder}</p>
-                            <p className={styles.emptyDesc}>클릭하여 이미지를 선택하세요</p>
-                        </div>
-                    )}
+                        )}
 
-                    <input
-                        ref={inputRef}
-                        id={props.id}
-                        type="file"
-                        accept="image/*"
-                        onChange={handleUpload}
-                        className={styles.hiddenInput}
-                    />
-                </div>
+                        {allowDelete && !isUploading && (
+                            <IconButton
+                                type="button"
+                                onClick={handleRemove}
+                                variant="clear"
+                                iconSize={20}
+                                className={styles.removeButton}
+                                name=""
+                                aria-label="삭제"
+                            >
+                                <Trash2 size={20} />
+                            </IconButton>
+                        )}
+                    </div>
+                ) : (
+                    <div className={styles.emptyState}>
+                        <div className={styles.iconCircle}>
+                            <UploadCloud size={24} />
+                        </div>
+                        <p className={styles.emptyTitle}>{placeholder}</p>
+                        <p className={styles.emptyDesc}>클릭하여 이미지를 선택하세요</p>
+                    </div>
+                )}
+
+                <input
+                    ref={inputRef}
+                    id={props.id}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleUpload}
+                    className={styles.hiddenInput}
+                />
             </div>
 
-            {props.ratio && props.onRatioChange ? (
+            {props.ratio && props.onRatioChange && (
                 <div className={styles.ratioControl}>
                     <SegmentedControl
                         alignment="fluid"
@@ -211,11 +208,12 @@ export function ImageUploader({ value, onChange, label, placeholder = '사진을
                             고정 (기본)
                         </SegmentedControl.Item>
                         <SegmentedControl.Item value="auto">
-                            자동 (원본 비율)
+                            원본 비율
                         </SegmentedControl.Item>
                     </SegmentedControl>
                 </div>
-            ) : null}
+            )}
         </div>
     );
 }
+

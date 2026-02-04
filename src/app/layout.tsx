@@ -3,10 +3,6 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import ClientProviders from "./ClientProviders";
 import { fontVariables } from "@/lib/fonts";
-import Header from "@/components/common/Header";
-
-import { CustomScrollbar } from "@/components/common/CustomScrollbar";
-import { auth } from "@/auth";
 import { SkipLink } from "@/hooks/useAccessibility";
 import "./globals.scss";
 import "../styles/_accessibility.scss";
@@ -93,16 +89,6 @@ export const metadata: Metadata = {
   },
 };
 
-async function SessionProviders({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const session = await auth();
-
-  return <ClientProviders session={session}>{children}</ClientProviders>;
-}
-
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -175,21 +161,17 @@ export default async function RootLayout({
         />
         <SkipLink href="#main-content">본문 바로가기</SkipLink>
         <Suspense fallback={null}>
-          <SessionProviders>
+          <ClientProviders>
             <div
               suppressHydrationWarning
               vaul-drawer-wrapper=""
               className={styles.appShell}
             >
-              <Suspense fallback={null}>
-                <CustomScrollbar />
-              </Suspense>
-              <Header />
               <div id="main-content" role="main" className={styles.mainContent}>
                 {children}
               </div>
             </div>
-          </SessionProviders>
+          </ClientProviders>
         </Suspense>
 
       </body>

@@ -4,7 +4,6 @@ import React from 'react';
 import { MyPageSidebar } from '@/components/mypage/MyPageSidebar';
 import { MobileNav } from '@/components/common/MobileNav';
 import { MyPageHeader } from '@/components/mypage/MyPageHeader';
-import { useHeaderStore } from '@/store/useHeaderStore';
 import { usePathname } from 'next/navigation';
 import { MENU_TITLES } from '@/constants/navigation';
 import styles from './Layout.module.scss';
@@ -43,16 +42,10 @@ export function MyPageLayout({
     notificationCount = 0,
 }: MyPageLayoutProps) {
     const pathname = usePathname();
-    const setNotificationCount = useHeaderStore(state => state.setNotificationCount);
-
     // 현재 경로에 맞는 타이틀 가져오기 (기본값은 빈 문자열)
     const currentTitle = ROUTE_TITLES[pathname] || '';
 
     // Sync notification count with global header store
-    React.useEffect(() => {
-        setNotificationCount(notificationCount);
-    }, [notificationCount, setNotificationCount]);
-
     return (
         <div className={styles.pageContainer}>
             <div className={styles.layout}>
