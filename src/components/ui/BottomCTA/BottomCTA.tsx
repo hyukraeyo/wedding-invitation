@@ -44,6 +44,7 @@ export interface BottomCTASingleProps {
     animated?: boolean | undefined;
     buttonVariant?: 'solid' | 'soft' | 'outline' | 'ghost' | 'surface' | 'filled' | 'fill' | 'weak' | 'clear' | 'apple' | 'toss' | undefined;
     fixedAboveKeyboard?: boolean | undefined;
+    asChild?: boolean | undefined;
 }
 
 const Single = ({
@@ -58,7 +59,8 @@ const Single = ({
     transparent,
     animated,
     buttonVariant = 'fill',
-    fixedAboveKeyboard = true
+    fixedAboveKeyboard = true,
+    asChild = false
 }: BottomCTASingleProps) => {
     const button = (
         <Button
@@ -71,6 +73,7 @@ const Single = ({
             disabled={!!disabled}
             className={className}
             type={type}
+            asChild={asChild}
         >
             {children}
         </Button>
@@ -109,6 +112,8 @@ export interface BottomCTADoubleProps {
     animated?: boolean | undefined;
     leftButtonVariant?: 'solid' | 'soft' | 'outline' | 'ghost' | 'surface' | 'filled' | 'fill' | 'weak' | 'clear' | 'apple' | 'toss' | undefined;
     rightButtonVariant?: 'solid' | 'soft' | 'outline' | 'ghost' | 'surface' | 'filled' | 'fill' | 'weak' | 'clear' | 'apple' | 'toss' | undefined;
+    leftAsChild?: boolean | undefined;
+    rightAsChild?: boolean | undefined;
 }
 
 const Double = ({
@@ -126,7 +131,9 @@ const Double = ({
     transparent,
     animated,
     leftButtonVariant = 'soft',
-    rightButtonVariant = 'fill'
+    rightButtonVariant = 'fill',
+    leftAsChild = false,
+    rightAsChild = false
 }: BottomCTADoubleProps) => {
     const content = (
         <div className={s.buttonGroup}>
@@ -138,6 +145,7 @@ const Double = ({
                 onClick={onLeftClick}
                 loading={!!leftLoading}
                 disabled={!!leftDisabled}
+                asChild={leftAsChild}
             >
                 {leftChildren}
             </Button>
@@ -149,6 +157,7 @@ const Double = ({
                 onClick={onRightClick}
                 loading={!!rightLoading}
                 disabled={!!rightDisabled}
+                asChild={rightAsChild}
             >
                 {rightChildren}
             </Button>

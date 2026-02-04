@@ -19,7 +19,7 @@ interface EmptyStateProps {
         icon?: React.ReactNode;
     };
     variant?: 'default' | 'banana';
-    className?: string;
+    className?: string | undefined;
 }
 
 export function EmptyState({
