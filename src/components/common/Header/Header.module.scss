@@ -1,5 +1,5 @@
-@use "../../../styles/variables" as v;
-@use "../../../styles/mixins" as m;
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
 .header {
   position: sticky;
@@ -9,8 +9,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid v.$color-border;
-  background-color: v.$color-background;
+  // background-color: v.$color-background;
   padding: 0 1rem; // px-4
   z-index: 50;
   transition: transform v.$transition-400 cubic-bezier(0.16, 1, 0.3, 1); // ease-ios
@@ -19,7 +18,7 @@
     // display: none; // 모바일에서도 공통 헤더 노출을 위해 주석 처리하거나 제거
     padding: 0 1rem;
     height: v.$header-height;
-    border-bottom: 1px solid v.$color-border;
+    // border-bottom: 1px solid v.$color-border;
   }
 
   @include m.desktop {
@@ -143,7 +142,6 @@
 }
 
 // Removed old saveButton class as it's replaced by actionButton
-
 
 .confirmButton {
   width: 100%;

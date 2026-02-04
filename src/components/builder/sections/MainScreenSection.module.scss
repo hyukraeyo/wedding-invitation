@@ -396,18 +396,18 @@
   align-items: center;
 
   &:has(.sentenceInput) {
-    flex: 1.4; // ?깊븿 移몃룄 ?ъ쑀 ?뺣낫
+    flex: 1.4; // 포함 칸도 여유 정보
   }
 
   &:has(.sentenceConnectorInput) {
-    flex: 1.2; // 20px ?뺣룄 ???뺣낫
+    flex: 1.2; // 20px 정도의 여유 정보
   }
 
   &:has(.sentenceSuffixInput) {
-    flex: 2.2; // ??移몃쑑??怨듦컙???묐낫
+    flex: 2.2; // 뒤 칸은 공간의 정보
   }
 
-  // ??移몄씠 ?⑥? 怨듦컙??苑?梨꾩슦?꾨줉 ?ㅼ젙
+  // 뒤 칸이 남은 공간을 꽉 채우도록 설정
 }
 
 .sentenceInput,
@@ -417,7 +417,7 @@
   min-width: 0;
 
   input {
-    height: 48px; // ?꾩껜 ?명뭼 ?믪씤 h-12? 留욎땄 (48px)
+    height: 48px; // 전체 인풋 높이 h-12와 맞춤 (48px)
     padding: 0 0.5rem;
     text-align: center;
   }
