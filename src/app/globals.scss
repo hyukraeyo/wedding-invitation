@@ -72,10 +72,12 @@ html {
   // 배경색 설정 (모달 오버레이 뒤 영역용)
   background-color: var(--background);
 
-  // 🍌 PC에서만 스크롤바 숨김 및 오버스크롤 제어
-  // 모바일에서는 Safari 주소창 축소/확대 기능을 위해 기본 동작 유지
+  // 🍌 스크롤바 숨김 및 오버스크롤 제어
+  // 모든 기기에서 스크롤바를 시각적으로 숨겨 프리미엄한 디자인 유지
+  @include m.scrollbar-hide;
+
+  // 🍌 PC에서만 오버스크롤 제어 (모바일은 Safari 주소창 기능을 위해 기본 동작 유지)
   @media (hover: hover) and (pointer: fine) {
-    @include m.scrollbar-hide;
     overscroll-behavior-y: none;
   }
 

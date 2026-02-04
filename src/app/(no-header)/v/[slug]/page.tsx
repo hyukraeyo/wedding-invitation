@@ -129,7 +129,7 @@ export default async function InvitationViewPage({ params }: Props) {
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
             />
-            <InvitationCanvas data={invitation.invitation_data} />
+            <InvitationCanvas data={invitation.invitation_data} disableInternalScroll />
         </div>
     );
 }

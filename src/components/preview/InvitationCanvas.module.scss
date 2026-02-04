@@ -13,6 +13,11 @@
         max-width: v.$max-mobile;
         margin-inline: auto;
     }
+
+    &.fullHeight {
+        height: auto;
+        min-height: 100%;
+    }
 }
 
 .scrollArea {
@@ -25,6 +30,12 @@
     @include m.scrollbar-hide;
     transition: background-color 0.5s ease, opacity 0.2s ease;
     padding-top: 0;
+
+    &.disableScroll {
+        height: auto;
+        overflow-y: visible;
+        overflow-x: visible;
+    }
 
     &.hasNotice {
         padding-top: 36px;

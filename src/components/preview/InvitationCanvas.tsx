@@ -31,6 +31,7 @@ interface InvitationCanvasProps {
   isPreviewMode?: boolean;
   editingSection?: string | null;
   hideWatermark?: boolean;
+  disableInternalScroll?: boolean;
   data?: InvitationData; // Allow passing raw data to bypass global store
 }
 
@@ -155,6 +156,7 @@ const InvitationCanvasContent = memo(({
   isPreviewMode = false,
   editingSection,
   hideWatermark = false,
+  disableInternalScroll = false,
   data,
 }: InvitationCanvasContentProps) => {
   const [isReady, setIsReady] = React.useState(!isPreviewMode);
@@ -310,13 +312,14 @@ const InvitationCanvasContent = memo(({
 
   return (
     <div
-      className={styles.canvasWrapper}
+      className={clsx(styles.canvasWrapper, disableInternalScroll && styles.fullHeight)}
       style={canvasStyle as React.CSSProperties}
     >
       <div
         ref={scrollContainerRef}
         className={clsx(
           styles.scrollArea,
+          disableInternalScroll && styles.disableScroll,
           !isReady && styles.hidden,
           !isApproved && !isPreviewMode && !hideWatermark && styles.hasNotice,
           theme.pattern === 'flower-sm' ? 'pattern-flower-sm' :

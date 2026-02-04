@@ -27,6 +27,29 @@ const AlertDialogContent = React.forwardRef<
   const [isShaking, setIsShaking] = React.useState(false);
   const [isStabilized, setIsStabilized] = React.useState(false);
   const shakeTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+  const contentRef = React.useRef<HTMLDivElement>(null);
+
+  const setRefs = React.useCallback(
+    (node: HTMLDivElement | null) => {
+      (contentRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+      }
+    },
+    [ref]
+  );
+
+  const handleOpenAutoFocus = React.useCallback((event: Event) => {
+    event.preventDefault();
+    const focusableElements = contentRef.current?.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    if (focusableElements?.length) {
+      (focusableElements[0] as HTMLElement).focus();
+    }
+  }, []);
 
   const handleInvalidInteraction = (event: Event | React.SyntheticEvent) => {
     event.preventDefault();
@@ -51,7 +74,8 @@ const AlertDialogContent = React.forwardRef<
     <AlertDialogPortal>
       <AlertDialogOverlay onClick={(e) => handleInvalidInteraction(e)} />
       <AlertDialogPrimitive.Content
-        ref={ref}
+        ref={setRefs}
+        onOpenAutoFocus={handleOpenAutoFocus}
         className={cn(
           styles.content,
           isShaking && styles.shake,

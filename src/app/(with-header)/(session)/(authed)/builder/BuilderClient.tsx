@@ -245,7 +245,7 @@ export function BuilderClient() {
                     </div>
 
                     <div className={styles.mobilePreview}>
-                        <InvitationCanvas key="mobile-preview" isPreviewMode editingSection={editingSection} hideWatermark />
+                        <InvitationCanvas key="mobile-preview" isPreviewMode editingSection={editingSection} hideWatermark disableInternalScroll />
                     </div>
 
                     {/* Close FAB */}
