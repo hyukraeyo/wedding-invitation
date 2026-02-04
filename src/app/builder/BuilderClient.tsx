@@ -239,9 +239,7 @@ export function BuilderClient() {
                     </div>
 
                     <div className={styles.mobilePreview}>
-                        <React.Activity mode={isPreviewOpen ? 'visible' : 'hidden'}>
-                            <InvitationCanvas key="mobile-preview" isPreviewMode editingSection={editingSection} hideWatermark />
-                        </React.Activity>
+                        <InvitationCanvas key="mobile-preview" isPreviewMode editingSection={editingSection} hideWatermark />
                     </div>
 
                     {/* Close FAB */}

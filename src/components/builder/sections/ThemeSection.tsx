@@ -54,6 +54,7 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
                     height: '32px',
                     width: '32px',
                   }}
+                  type="button"
                   onClick={() => setTheme({ accentColor: color })}
                 >
                   {theme.accentColor === color ? (
@@ -171,6 +172,7 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
                     height: '32px',
                     width: '32px',
                   }}
+                  type="button"
                   onClick={() => setTheme({ backgroundColor: color })}
                 >
                   {theme.backgroundColor === color ? (

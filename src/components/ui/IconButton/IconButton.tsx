@@ -16,13 +16,14 @@ export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEl
 
 const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    ({ className, variant = 'clear', size = 'md', children, iconSize, name, asChild = false, ...props }, ref) => {
+    ({ className, variant = 'clear', size = 'md', children, iconSize, name, asChild = false, type = 'button', ...props }, ref) => {
         const Comp = asChild ? Slot : 'button';
 
         return (
             <Comp
                 ref={ref}
                 className={clsx(s.iconButton, s[variant], s[size], className)}
+                type={type}
                 {...props}
             >
                 {children}

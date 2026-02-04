@@ -15,7 +15,7 @@ export const SampleList = ({ items, onSelect, className }: SampleListProps) => {
   return (
     <div className={cn(styles.container, className)}>
       {items.map((item, idx) => (
-        <Button key={idx} unstyled className={styles.itemButton} onClick={() => onSelect(item)}>
+        <Button key={idx} type="button" unstyled className={styles.itemButton} onClick={() => onSelect(item)}>
           <div className={styles.itemContent}>
             <div className={styles.itemHeader}>
               <Badge size="sm" variant="soft" color="primary">

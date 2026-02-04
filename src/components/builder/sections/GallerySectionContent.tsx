@@ -341,6 +341,7 @@ export default React.memo(function GallerySectionContent() {
                             </Dialog.Body>
                             <Dialog.Footer className={styles.paddedFooter}>
                                 <Button
+                                    type="button"
                                     variant="fill"
                                     color="primary"
                                     size="lg"

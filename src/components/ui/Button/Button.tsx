@@ -37,6 +37,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       rightIcon,
       children,
       disabled,
+      type = 'button',
       ...props
     },
     ref
@@ -77,6 +78,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           radius === 'large' && s.radius_lg,
           className
         )}
+        type={type}
         {...props}
       >
         {isLoading && !unstyled && (

@@ -68,9 +68,7 @@ const TabsContent = React.forwardRef<
             className={clsx(s.content, className)}
             {...props}
         >
-            <React.Activity mode={isActive ? 'visible' : 'hidden'}>
-                {children}
-            </React.Activity>
+            {children}
         </TabsPrimitive.Content>
     );
 });
