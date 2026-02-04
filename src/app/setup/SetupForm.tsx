@@ -385,29 +385,25 @@ const SetupForm = () => {
 
             </Card>
 
-            {
-                (currentStep === 3 || isStepValid()) && (
-                    <div className={styles.ctaWrapper}>
-                        <BottomCTA.Single
-                            fixed={true}
-                            transparent
-                            wrapperClassName={styles.bottomCta}
-                            onClick={() => handleNext()}
-                            animated={true}
-                            buttonVariant="toss"
-                        >
-                            {highestStepReached < 3 ? (
-                                <span>다음</span>
-                            ) : (
-                                <div className={styles.ctaLabel}>
-                                    <Sparkles size={16} />
-                                    <span>시작하기</span>
-                                </div>
-                            )}
-                        </BottomCTA.Single>
-                    </div>
-                )
-            }
+            <div className={styles.ctaWrapper}>
+                <BottomCTA.Single
+                    fixed={true}
+                    transparent
+                    wrapperClassName={styles.bottomCta}
+                    onClick={() => handleNext()}
+                    animated={true}
+                    disabled={!isStepValid()}
+                >
+                    {highestStepReached < 3 ? (
+                        <span>다음</span>
+                    ) : (
+                        <div className={styles.ctaLabel}>
+                            <Sparkles size={16} />
+                            <span>시작하기</span>
+                        </div>
+                    )}
+                </BottomCTA.Single>
+            </div>
         </div>
     );
 };

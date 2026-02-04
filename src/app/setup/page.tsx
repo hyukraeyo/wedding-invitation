@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { Suspense } from 'react';
 import { SetupClient } from './SetupClient';
 
 export const metadata: Metadata = {
@@ -7,5 +8,9 @@ export const metadata: Metadata = {
 };
 
 export default function SetupPage() {
-    return <SetupClient />;
+    return (
+        <Suspense fallback={null}>
+            <SetupClient />
+        </Suspense>
+    );
 }

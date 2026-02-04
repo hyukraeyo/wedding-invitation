@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, lazy, Suspense, useCallback } from 'react';
+import React, { useState, lazy, Suspense, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { LogIn, Save, Banana, Bell, ChevronLeft } from 'lucide-react';
@@ -122,12 +122,10 @@ const HeaderActions = React.memo(({
 ));
 HeaderActions.displayName = 'HeaderActions';
 
-export default function Header() {
+const HeaderContent = React.memo(() => {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
-    const isVisible = !pathname.startsWith('/v/') &&
-        pathname !== '/preview';
     const { user, loading: authLoading } = useAuth();
 
     // Store states
@@ -164,8 +162,6 @@ export default function Header() {
         const returnTo = `${pathname}${search ? `?${search}` : ''}`;
         router.push(`/login?returnTo=${encodeURIComponent(returnTo)}`);
     }, [router, pathname, searchParams]);
-
-    if (!isVisible) return null;
 
     return (
         <>
@@ -226,5 +222,26 @@ export default function Header() {
                 </Dialog.Content>
             </Dialog>
         </>
+    );
+});
+HeaderContent.displayName = 'HeaderContent';
+
+export default function Header() {
+    const pathname = usePathname();
+    const isVisible = useMemo(() => {
+        return !pathname.startsWith('/v/') && pathname !== '/preview';
+    }, [pathname]);
+
+    if (!isVisible) return null;
+
+    return (
+        <Suspense fallback={
+            <header className={cn(styles.header, "view-transition-header")}>
+                <div className={styles.left}><Logo /></div>
+                <div className={styles.right}><div className={styles.actionPlaceholder} /></div>
+            </header>
+        }>
+            <HeaderContent />
+        </Suspense>
     );
 }
