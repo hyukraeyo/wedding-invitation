@@ -8,7 +8,25 @@ import { TextField } from '@/components/ui/TextField';
 import { Button } from '@/components/ui/Button';
 import styles from './AddressPicker.module.scss';
 
-const DaumPostcodeEmbed = dynamic(() => import('react-daum-postcode'), { ssr: false });
+const DaumPostcodeEmbed = dynamic(
+  () => import('react-daum-postcode').then((mod) => mod.DaumPostcodeEmbed),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        style={{
+          height: '560px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: '#666',
+        }}
+      >
+        주소 검색창을 불러오고 있습니다...
+      </div>
+    ),
+  }
+);
 
 interface AddressPickerProps {
   value: string;
@@ -104,13 +122,12 @@ const AddressPickerRaw = (
       />
       <Dialog open={isOpen} onOpenChange={setIsOpen} mobileBottomSheet>
         <Dialog.Header title="주소 검색" />
-        <Dialog.Body style={{ height: '560px', minHeight: '560px' }} padding={false}>
+        <Dialog.Body className={styles.body} padding={false}>
           {isOpen && (
-            <div style={{ height: '100%', width: '100%', minHeight: '560px' }}>
+            <div className={styles.embedWrapper}>
               <DaumPostcodeEmbed
-                scriptUrl="https://t1.kakaocdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
                 onComplete={handleAddressComplete}
-                style={{ height: '100%', minHeight: '560px' }}
+                style={{ height: '100%' }}
                 autoClose={false}
               />
             </div>
