@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
@@ -790,7 +790,6 @@ export default function MyPageClient({
             )}
             <AlertDialogAction asChild>
               <Button
-                variant="primary"
                 size="lg"
                 loading={!!actionLoadingId}
                 disabled={!!actionLoadingId}
@@ -840,7 +839,6 @@ export default function MyPageClient({
                 취소
               </Button>
               <Button
-                variant="primary"
                 size="lg"
                 loading={!!actionLoadingId}
                 disabled={rejectionReason.isSubmitDisabled}
@@ -882,7 +880,7 @@ export default function MyPageClient({
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogAction asChild>
-                <Button variant="primary" size="lg" onClick={handleCloseAutoNotification}>
+                <Button size="lg" onClick={handleCloseAutoNotification}>
                   확인
                 </Button>
               </AlertDialogAction>

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { Suspense, useCallback } from 'react';
 import Image from 'next/image';
@@ -91,7 +91,6 @@ const HeaderActions = React.memo(
               <ViewTransitionLink href="/mypage" className={styles.profileLink}>
                 <IconButton
                   iconSize={20}
-                  variant="primary"
                   className={styles.profileButton}
                   aria-label="마이페이지"
                   name=""

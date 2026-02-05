@@ -115,7 +115,7 @@ export default function AccountPageClient({ profile, userEmail }: AccountPageCli
                 >
                   취소
                 </Button>
-                <Button variant="primary" size="sm" onClick={handleSavePhone}>
+                <Button size="sm" onClick={handleSavePhone}>
                   저장
                 </Button>
               </div>

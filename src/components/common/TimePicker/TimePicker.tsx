@@ -299,9 +299,7 @@ const TimePickerRaw = (
           </div>
         </Dialog.Body>
         <Dialog.Footer className={styles.footer}>
-          <Button variant="primary" onClick={handleConfirm}>
-            확인
-          </Button>
+          <Button onClick={handleConfirm}>확인</Button>
         </Dialog.Footer>
       </Dialog>
     </>

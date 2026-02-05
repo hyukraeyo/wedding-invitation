@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
 import dynamic from 'next/dynamic';
@@ -9,13 +9,7 @@ import { invitationService } from '@/services/invitationService';
 import { MyPageContent } from '@/components/mypage/MyPageContent';
 import { useToast } from '@/hooks/use-toast';
 import { useRejectionReason } from '@/hooks/useRejectionReason';
-import {
-    Clock,
-    AlertCircle,
-    CheckCircle,
-    Inbox,
-    Banana
-} from 'lucide-react';
+import { Clock, AlertCircle, CheckCircle, Inbox, Banana } from 'lucide-react';
 import styles from './RequestsPage.module.scss';
 import { clsx } from 'clsx';
 import type { ApprovalRequestSummary } from '@/services/approvalRequestService';
@@ -25,357 +19,377 @@ import { parseRejection } from '@/lib/rejection-helpers';
 import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
 const RichTextEditor = dynamic(
-    () => import('@/components/ui/RichTextEditor').then(mod => mod.RichTextEditor),
-    { ssr: false }
+  () => import('@/components/ui/RichTextEditor').then((mod) => mod.RichTextEditor),
+  { ssr: false }
 );
 
 interface ProfileSummary {
-    full_name: string | null;
-    phone: string | null;
+  full_name: string | null;
+  phone: string | null;
 }
 
 interface RequestsPageClientProps {
-    userId: string;
-    profile: ProfileSummary | null;
-    initialLimit: number;
+  userId: string;
+  profile: ProfileSummary | null;
+  initialLimit: number;
 }
 
 type ConfirmActionType = 'APPROVE' | 'REVOKE_APPROVAL' | 'INFO_ONLY';
 
 interface ConfirmConfig {
-    isOpen: boolean;
-    type: ConfirmActionType;
-    title: string;
-    description: React.ReactNode;
-    targetId: string | null;
-    targetRecord?: InvitationSummaryRecord | null;
+  isOpen: boolean;
+  type: ConfirmActionType;
+  title: string;
+  description: React.ReactNode;
+  targetId: string | null;
+  targetRecord?: InvitationSummaryRecord | null;
 }
 
 /**
  * 🍌 신청 관리 클라이언트 (최적화 버전)
  * TanStack Query의 useInfiniteQuery를 사용하여 고성능 무한 스크롤 및 캐싱을 구현했습니다.
  */
-export default function RequestsPageClient({
-    initialLimit,
-}: RequestsPageClientProps) {
-    const queryClient = useQueryClient();
-    const router = useRouter();
-    const { toast } = useToast();
+export default function RequestsPageClient({ initialLimit }: RequestsPageClientProps) {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+  const { toast } = useToast();
 
-    // 1. 초대장 정보 캐시 (매번 fetch하지 않도록)
-    const [invitationCache, setInvitationCache] = useState<Record<string, InvitationSummaryRecord>>({});
+  // 1. 초대장 정보 캐시 (매번 fetch하지 않도록)
+  const [invitationCache, setInvitationCache] = useState<Record<string, InvitationSummaryRecord>>(
+    {}
+  );
 
-    // 2. 무한 스크롤 쿼리
-    const {
-        data,
-        fetchNextPage,
-        hasNextPage,
-        isFetchingNextPage,
-        status,
-    } = useInfiniteQuery({
-        queryKey: ['approval-requests'],
-        queryFn: async ({ pageParam = 0 }) => {
-            return await approvalRequestService.getAllRequests(initialLimit, pageParam);
-        },
-        initialPageParam: 0,
-        getNextPageParam: (lastPage, allPages) => {
-            return lastPage.length === initialLimit ? allPages.flat().length : undefined;
-        },
-    });
+  // 2. 무한 스크롤 쿼리
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useInfiniteQuery({
+    queryKey: ['approval-requests'],
+    queryFn: async ({ pageParam = 0 }) => {
+      return await approvalRequestService.getAllRequests(initialLimit, pageParam);
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.length === initialLimit ? allPages.flat().length : undefined;
+    },
+  });
 
-    const allRequests = useMemo(() => data?.pages.flat() ?? [], [data]);
+  const allRequests = useMemo(() => data?.pages.flat() ?? [], [data]);
 
-    // 2-1. Hydration 및 무한 스크롤 시 초대장 정보 보완
-    useEffect(() => {
-        const missingIds = allRequests
-            .map(r => r.invitation_id)
-            .filter(id => !invitationCache[id]);
+  // 2-1. Hydration 및 무한 스크롤 시 초대장 정보 보완
+  useEffect(() => {
+    const missingIds = allRequests.map((r) => r.invitation_id).filter((id) => !invitationCache[id]);
 
-        if (missingIds.length > 0) {
-            invitationService.getInvitationsByIds(missingIds).then(newInvs => {
-                if (newInvs.length === 0) return;
-                setInvitationCache(prev => {
-                    const next = { ...prev };
-                    newInvs.forEach(inv => {
-                        next[inv.id] = inv;
-                    });
-                    return next;
-                });
-            });
-        }
-    }, [allRequests]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (missingIds.length > 0) {
+      invitationService.getInvitationsByIds(missingIds).then((newInvs) => {
+        if (newInvs.length === 0) return;
+        setInvitationCache((prev) => {
+          const next = { ...prev };
+          newInvs.forEach((inv) => {
+            next[inv.id] = inv;
+          });
+          return next;
+        });
+      });
+    }
+  }, [allRequests]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    // 3. 승인/거절 뮤테이션
-    const approveMutation = useMutation({
-        mutationFn: async (inv: InvitationSummaryRecord) => {
-            await approvalRequestService.approveRequest(inv.id);
-            const fullInv = await invitationService.getInvitation(inv.slug);
-            if (!fullInv) throw new Error('Invitation not found');
+  // 3. 승인/거절 뮤테이션
+  const approveMutation = useMutation({
+    mutationFn: async (inv: InvitationSummaryRecord) => {
+      await approvalRequestService.approveRequest(inv.id);
+      const fullInv = await invitationService.getInvitation(inv.slug);
+      if (!fullInv) throw new Error('Invitation not found');
 
-            const updatedData = {
-                ...fullInv.invitation_data,
-                isApproved: true,
-                isRequestingApproval: false
-            };
-            return await invitationService.saveInvitation(inv.slug, updatedData, inv.user_id);
-        },
-        onSuccess: () => {
-            toast({ description: '사용 승인이 완료되었습니다.' });
-            queryClient.invalidateQueries({ queryKey: ['approval-requests'] });
-            router.refresh();
-        },
-        onError: () => toast({ variant: 'destructive', description: '승인 처리 중 오류 발생' }),
-    });
+      const updatedData = {
+        ...fullInv.invitation_data,
+        isApproved: true,
+        isRequestingApproval: false,
+      };
+      return await invitationService.saveInvitation(inv.slug, updatedData, inv.user_id);
+    },
+    onSuccess: () => {
+      toast({ description: '사용 승인이 완료되었습니다.' });
+      queryClient.invalidateQueries({ queryKey: ['approval-requests'] });
+      router.refresh();
+    },
+    onError: () => toast({ variant: 'destructive', description: '승인 처리 중 오류 발생' }),
+  });
 
-    const rejectMutation = useMutation({
-        mutationFn: async ({ inv, reason }: { inv: InvitationSummaryRecord, reason: string }) => {
-            return await approvalRequestService.rejectRequest(inv.id, reason);
-        },
-        onSuccess: () => {
-            toast({ description: '신청이 거절되었습니다.' });
-            queryClient.invalidateQueries({ queryKey: ['approval-requests'] });
-            router.refresh();
-        },
-        onError: () => toast({ variant: 'destructive', description: '거절 처리 중 오류 발생' }),
-    });
+  const rejectMutation = useMutation({
+    mutationFn: async ({ inv, reason }: { inv: InvitationSummaryRecord; reason: string }) => {
+      return await approvalRequestService.rejectRequest(inv.id, reason);
+    },
+    onSuccess: () => {
+      toast({ description: '신청이 거절되었습니다.' });
+      queryClient.invalidateQueries({ queryKey: ['approval-requests'] });
+      router.refresh();
+    },
+    onError: () => toast({ variant: 'destructive', description: '거절 처리 중 오류 발생' }),
+  });
 
-    // --- UI State ---
-    const [rejectionTarget, setRejectionTarget] = useState<InvitationSummaryRecord | null>(null);
-    const [viewRejectionData, setViewRejectionData] = useState<ApprovalRequestSummary | null>(null);
-    const [confirmConfig, setConfirmConfig] = useState<ConfirmConfig>({
-        isOpen: false,
-        type: 'INFO_ONLY',
-        title: '',
-        description: '',
-        targetId: null,
-    });
+  // --- UI State ---
+  const [rejectionTarget, setRejectionTarget] = useState<InvitationSummaryRecord | null>(null);
+  const [viewRejectionData, setViewRejectionData] = useState<ApprovalRequestSummary | null>(null);
+  const [confirmConfig, setConfirmConfig] = useState<ConfirmConfig>({
+    isOpen: false,
+    type: 'INFO_ONLY',
+    title: '',
+    description: '',
+    targetId: null,
+  });
 
-    const handleConfirmAction = useCallback(() => {
-        if (confirmConfig.type === 'APPROVE' && confirmConfig.targetRecord) {
-            approveMutation.mutate(confirmConfig.targetRecord);
-        }
-        setConfirmConfig(prev => ({ ...prev, isOpen: false }));
-    }, [confirmConfig, approveMutation]);
+  const handleConfirmAction = useCallback(() => {
+    if (confirmConfig.type === 'APPROVE' && confirmConfig.targetRecord) {
+      approveMutation.mutate(confirmConfig.targetRecord);
+    }
+    setConfirmConfig((prev) => ({ ...prev, isOpen: false }));
+  }, [confirmConfig, approveMutation]);
 
-    const handleRejectionSubmit = useCallback((reason: string) => {
-        if (!rejectionTarget) return;
-        rejectMutation.mutate({ inv: rejectionTarget, reason });
-        setRejectionTarget(null);
-    }, [rejectionTarget, rejectMutation]);
+  const handleRejectionSubmit = useCallback(
+    (reason: string) => {
+      if (!rejectionTarget) return;
+      rejectMutation.mutate({ inv: rejectionTarget, reason });
+      setRejectionTarget(null);
+    },
+    [rejectionTarget, rejectMutation]
+  );
 
-    const rejectionReason = useRejectionReason({
-        onSubmit: handleRejectionSubmit,
-        onClose: () => setRejectionTarget(null),
-        loading: rejectMutation.isPending,
-    });
+  const rejectionReason = useRejectionReason({
+    onSubmit: handleRejectionSubmit,
+    onClose: () => setRejectionTarget(null),
+    loading: rejectMutation.isPending,
+  });
 
-    if (status === 'error') return <div className={styles.error}>데이터 로딩 중 오류가 발생했습니다.</div>;
+  if (status === 'error')
+    return <div className={styles.error}>데이터 로딩 중 오류가 발생했습니다.</div>;
 
-    return (
-        <MyPageContent className={styles.container}>
+  return (
+    <MyPageContent className={styles.container}>
+      {allRequests.length > 0 ? (
+        <div className={styles.requestList}>
+          {allRequests.map((request) => {
+            const targetInv = invitationCache[request.invitation_id];
+            const date = new Date(request.created_at);
+            const formattedDate = `${date.getFullYear()}. ${String(date.getMonth() + 1).padStart(2, '0')}. ${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+            const { isRevoked, isRejected: isPureRejected } = parseRejection(request);
+            const isRejected = isRevoked || isPureRejected;
+            const isApproved = request.status === 'approved';
 
-            {allRequests.length > 0 ? (
-                <div className={styles.requestList}>
-                    {allRequests.map(request => {
-                        const targetInv = invitationCache[request.invitation_id];
-                        const date = new Date(request.created_at);
-                        const formattedDate = `${date.getFullYear()}. ${String(date.getMonth() + 1).padStart(2, '0')}. ${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
-                        const { isRevoked, isRejected: isPureRejected } = parseRejection(request);
-                        const isRejected = isRevoked || isPureRejected;
-                        const isApproved = request.status === 'approved';
-
-                        return (
-                            <div key={request.id} className={clsx(
-                                styles.requestItem,
-                                isRejected && styles.rejectedItem,
-                                isApproved && styles.approvedItem
-                            )}>
-                                <div className={styles.requestInfo}>
-                                    <div className={styles.requester}>
-                                        {isRejected ? <AlertCircle size={14} color="#DC2626" style={{ marginRight: '0.25rem' }} /> : null}
-                                        {isApproved ? <CheckCircle size={14} color="#10B981" style={{ marginRight: '0.25rem' }} /> : null}
-                                        <strong>{request.requester_name}</strong>
-                                        <span className={styles.phone}>({request.requester_phone})</span>
-                                    </div>
-                                    <div className={styles.requestTime}>
-                                        <Clock size={12} />
-                                        <span>{formattedDate}</span>
-                                    </div>
-                                </div>
-
-                                {targetInv && (
-                                    <div className={styles.adminButtonGroup}>
-                                        <button onClick={() => window.open(`/v/${targetInv.slug}`, '_blank')} className={styles.previewButton}>
-                                            미리보기
-                                        </button>
-                                        {isRejected ? (
-                                            <button onClick={() => setViewRejectionData(request)} className={styles.viewReasonButton}>
-                                                이유 확인
-                                            </button>
-                                        ) : isApproved ? (
-                                            <button
-                                                onClick={() => { setRejectionTarget(targetInv); }}
-                                                className={styles.revokeButton}
-                                                disabled={approveMutation.isPending || rejectMutation.isPending}
-                                            >
-                                                승인 취소
-                                            </button>
-                                        ) : (
-                                            <>
-                                                <button
-                                                    onClick={() => setRejectionTarget(targetInv)}
-                                                    className={styles.rejectButton}
-                                                    disabled={approveMutation.isPending || rejectMutation.isPending}
-                                                >
-                                                    거절
-                                                </button>
-                                                <button
-                                                    onClick={() => setConfirmConfig({
-                                                        isOpen: true,
-                                                        type: 'APPROVE',
-                                                        title: '청첩장 승인',
-                                                        description: '승인하시겠습니까?',
-                                                        targetId: targetInv.id,
-                                                        targetRecord: targetInv
-                                                    })}
-                                                    className={styles.approveButton}
-                                                    disabled={approveMutation.isPending || rejectMutation.isPending}
-                                                >
-                                                    {approveMutation.isPending && approveMutation.variables?.id === targetInv.id ? <Banana className={styles.spin} size={14} /> : '승인'}
-                                                </button>
-                                            </>
-                                        )}
-                                    </div>
-                                )}
-                            </div>
-                        );
-                    })}
-
-                    {hasNextPage && (
-                        <div className={styles.loadMoreWrapper}>
-                            <button
-                                onClick={() => fetchNextPage()}
-                                disabled={isFetchingNextPage}
-                                className={styles.loadMoreButton}
-                            >
-                                {isFetchingNextPage ? <Banana className={styles.spin} /> : '더 보기'}
-                            </button>
-                        </div>
-                    )}
+            return (
+              <div
+                key={request.id}
+                className={clsx(
+                  styles.requestItem,
+                  isRejected && styles.rejectedItem,
+                  isApproved && styles.approvedItem
+                )}
+              >
+                <div className={styles.requestInfo}>
+                  <div className={styles.requester}>
+                    {isRejected ? (
+                      <AlertCircle size={14} color="#DC2626" style={{ marginRight: '0.25rem' }} />
+                    ) : null}
+                    {isApproved ? (
+                      <CheckCircle size={14} color="#10B981" style={{ marginRight: '0.25rem' }} />
+                    ) : null}
+                    <strong>{request.requester_name}</strong>
+                    <span className={styles.phone}>({request.requester_phone})</span>
+                  </div>
+                  <div className={styles.requestTime}>
+                    <Clock size={12} />
+                    <span>{formattedDate}</span>
+                  </div>
                 </div>
-            ) : status !== 'pending' ? (
-                <EmptyState
-                    icon={<Inbox size={48} strokeWidth={1} />}
-                    title="대기 중인 신청이 없습니다"
-                    description="중요한 업데이트나 신청 결과가 있을 때 이곳에서 알려드릴게요."
-                />
-            ) : null}
 
-            {/* Modals... */}
-            {/* Modals... */}
-            <Dialog open={confirmConfig.isOpen} onOpenChange={(o) => setConfirmConfig(p => ({ ...p, isOpen: o }))}>
-                <Dialog.Overlay />
-                <Dialog.Content>
-                    <Dialog.Header title={confirmConfig.title} />
-                    <Dialog.Body className={styles.centerBody}>
-                        {confirmConfig.description}
-                    </Dialog.Body>
-                    <Dialog.Footer>
-                        {confirmConfig.type !== 'INFO_ONLY' && (
-                            <Button
-                                variant="ghost"
-                                size="lg"
-                                onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
-                                disabled={approveMutation.isPending}
-                            >
-                                취소
-                            </Button>
-                        )}
-                        <Button
-                            variant="primary"
-                            size="lg"
-                            loading={approveMutation.isPending}
-                            disabled={approveMutation.isPending}
-                            onClick={handleConfirmAction}
-                        >
-                            승인
-                        </Button>
-                    </Dialog.Footer>
-                </Dialog.Content>
-            </Dialog>
-
-            {rejectionTarget && (() => {
-                const targetRequest = allRequests.find(r => r.invitation_id === rejectionTarget.id);
-                const isRevoked = targetRequest?.status === 'approved';
-                const statusText = isRevoked ? "승인 취소" : "승인 거절";
-                const requesterName = targetRequest?.requester_name || '';
-
-                return (
-                    <Dialog
-                        open={!!rejectionTarget}
-                        onOpenChange={(open) => {
-                            if (!open) rejectionReason.handleClose();
-                        }}
+                {targetInv && (
+                  <div className={styles.adminButtonGroup}>
+                    <button
+                      onClick={() => window.open(`/v/${targetInv.slug}`, '_blank')}
+                      className={styles.previewButton}
                     >
-                        <Dialog.Overlay />
-                        <Dialog.Content>
-                            <Dialog.Header title={statusText} />
-                            <Dialog.Body>
-                                <div className={styles.rejectionDescription}>
-                                    <strong>{requesterName}</strong>님의 {isRevoked ? "승인을 취소" : "사용 신청을 거절"}합니다.
-                                </div>
-                                <div className={styles.rejectionEditorWrapper}>
-                                    <RichTextEditor
-                                        content={rejectionReason.reason}
-                                        onChange={rejectionReason.setReason}
-                                        placeholder="내용을 입력하세요…"
-                                        minHeight={180}
-                                    />
-                                </div>
-                            </Dialog.Body>
-                            <Dialog.Footer>
-                                <Button
-                                    variant="ghost"
-                                    size="lg"
-                                    onClick={rejectionReason.handleClose}
-                                    disabled={rejectMutation.isPending}
-                                >
-                                    취소
-                                </Button>
-                                <Button
-                                    variant="primary"
-                                    size="lg"
-                                    loading={rejectMutation.isPending}
-                                    disabled={rejectionReason.isSubmitDisabled}
-                                    onClick={rejectionReason.handleSubmit}
-                                >
-                                    {statusText}
-                                </Button>
-                            </Dialog.Footer>
-                        </Dialog.Content>
-                    </Dialog>
-                );
-            })()}
+                      미리보기
+                    </button>
+                    {isRejected ? (
+                      <button
+                        onClick={() => setViewRejectionData(request)}
+                        className={styles.viewReasonButton}
+                      >
+                        이유 확인
+                      </button>
+                    ) : isApproved ? (
+                      <button
+                        onClick={() => {
+                          setRejectionTarget(targetInv);
+                        }}
+                        className={styles.revokeButton}
+                        disabled={approveMutation.isPending || rejectMutation.isPending}
+                      >
+                        승인 취소
+                      </button>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => setRejectionTarget(targetInv)}
+                          className={styles.rejectButton}
+                          disabled={approveMutation.isPending || rejectMutation.isPending}
+                        >
+                          거절
+                        </button>
+                        <button
+                          onClick={() =>
+                            setConfirmConfig({
+                              isOpen: true,
+                              type: 'APPROVE',
+                              title: '청첩장 승인',
+                              description: '승인하시겠습니까?',
+                              targetId: targetInv.id,
+                              targetRecord: targetInv,
+                            })
+                          }
+                          className={styles.approveButton}
+                          disabled={approveMutation.isPending || rejectMutation.isPending}
+                        >
+                          {approveMutation.isPending &&
+                          approveMutation.variables?.id === targetInv.id ? (
+                            <Banana className={styles.spin} size={14} />
+                          ) : (
+                            '승인'
+                          )}
+                        </button>
+                      </>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
 
-            {viewRejectionData && (
-                <Dialog open={!!viewRejectionData} onOpenChange={() => setViewRejectionData(null)}>
-                    <Dialog.Overlay />
-                    <Dialog.Content>
-                        <Dialog.Header title="거절/취소 사유" />
-                        <Dialog.Body>
-                            <div
-                                className={styles.rejectionReasonBox}
-                                dangerouslySetInnerHTML={{ __html: parseRejection(viewRejectionData).displayReason || '내용이 없습니다.' }}
-                            />
-                        </Dialog.Body>
-                        <Dialog.Footer>
-                            <Button variant="primary" size="lg" onClick={() => setViewRejectionData(null)}>
-                                확인
-                            </Button>
-                        </Dialog.Footer>
-                    </Dialog.Content>
-                </Dialog>
+          {hasNextPage && (
+            <div className={styles.loadMoreWrapper}>
+              <button
+                onClick={() => fetchNextPage()}
+                disabled={isFetchingNextPage}
+                className={styles.loadMoreButton}
+              >
+                {isFetchingNextPage ? <Banana className={styles.spin} /> : '더 보기'}
+              </button>
+            </div>
+          )}
+        </div>
+      ) : status !== 'pending' ? (
+        <EmptyState
+          icon={<Inbox size={48} strokeWidth={1} />}
+          title="대기 중인 신청이 없습니다"
+          description="중요한 업데이트나 신청 결과가 있을 때 이곳에서 알려드릴게요."
+        />
+      ) : null}
+
+      {/* Modals... */}
+      {/* Modals... */}
+      <Dialog
+        open={confirmConfig.isOpen}
+        onOpenChange={(o) => setConfirmConfig((p) => ({ ...p, isOpen: o }))}
+      >
+        <Dialog.Overlay />
+        <Dialog.Content>
+          <Dialog.Header title={confirmConfig.title} />
+          <Dialog.Body className={styles.centerBody}>{confirmConfig.description}</Dialog.Body>
+          <Dialog.Footer>
+            {confirmConfig.type !== 'INFO_ONLY' && (
+              <Button
+                variant="ghost"
+                size="lg"
+                onClick={() => setConfirmConfig((prev) => ({ ...prev, isOpen: false }))}
+                disabled={approveMutation.isPending}
+              >
+                취소
+              </Button>
             )}
-        </MyPageContent>
-    );
+            <Button
+              size="lg"
+              loading={approveMutation.isPending}
+              disabled={approveMutation.isPending}
+              onClick={handleConfirmAction}
+            >
+              승인
+            </Button>
+          </Dialog.Footer>
+        </Dialog.Content>
+      </Dialog>
+
+      {rejectionTarget &&
+        (() => {
+          const targetRequest = allRequests.find((r) => r.invitation_id === rejectionTarget.id);
+          const isRevoked = targetRequest?.status === 'approved';
+          const statusText = isRevoked ? '승인 취소' : '승인 거절';
+          const requesterName = targetRequest?.requester_name || '';
+
+          return (
+            <Dialog
+              open={!!rejectionTarget}
+              onOpenChange={(open) => {
+                if (!open) rejectionReason.handleClose();
+              }}
+            >
+              <Dialog.Overlay />
+              <Dialog.Content>
+                <Dialog.Header title={statusText} />
+                <Dialog.Body>
+                  <div className={styles.rejectionDescription}>
+                    <strong>{requesterName}</strong>님의{' '}
+                    {isRevoked ? '승인을 취소' : '사용 신청을 거절'}합니다.
+                  </div>
+                  <div className={styles.rejectionEditorWrapper}>
+                    <RichTextEditor
+                      content={rejectionReason.reason}
+                      onChange={rejectionReason.setReason}
+                      placeholder="내용을 입력하세요…"
+                      minHeight={180}
+                    />
+                  </div>
+                </Dialog.Body>
+                <Dialog.Footer>
+                  <Button
+                    variant="ghost"
+                    size="lg"
+                    onClick={rejectionReason.handleClose}
+                    disabled={rejectMutation.isPending}
+                  >
+                    취소
+                  </Button>
+                  <Button
+                    size="lg"
+                    loading={rejectMutation.isPending}
+                    disabled={rejectionReason.isSubmitDisabled}
+                    onClick={rejectionReason.handleSubmit}
+                  >
+                    {statusText}
+                  </Button>
+                </Dialog.Footer>
+              </Dialog.Content>
+            </Dialog>
+          );
+        })()}
+
+      {viewRejectionData && (
+        <Dialog open={!!viewRejectionData} onOpenChange={() => setViewRejectionData(null)}>
+          <Dialog.Overlay />
+          <Dialog.Content>
+            <Dialog.Header title="거절/취소 사유" />
+            <Dialog.Body>
+              <div
+                className={styles.rejectionReasonBox}
+                dangerouslySetInnerHTML={{
+                  __html: parseRejection(viewRejectionData).displayReason || '내용이 없습니다.',
+                }}
+              />
+            </Dialog.Body>
+            <Dialog.Footer>
+              <Button size="lg" onClick={() => setViewRejectionData(null)}>
+                확인
+              </Button>
+            </Dialog.Footer>
+          </Dialog.Content>
+        </Dialog>
+      )}
+    </MyPageContent>
+  );
 }

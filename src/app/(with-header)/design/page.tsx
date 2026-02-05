@@ -252,7 +252,7 @@ export default function DesignPage() {
                     <Button variant="ghost">취소</Button>
                   </Dialog.Close>
                   <Dialog.Close asChild>
-                    <Button variant="primary">확인</Button>
+                    <Button>확인</Button>
                   </Dialog.Close>
                 </Dialog.Footer>
               </Dialog.Content>
@@ -524,7 +524,7 @@ export default function DesignPage() {
                     <Dialog.Close asChild>
                       <Button variant="ghost">Close</Button>
                     </Dialog.Close>
-                    <Button variant="primary">Action</Button>
+                    <Button>Action</Button>
                   </Dialog.Footer>
                 </Dialog.Content>
               </Dialog>

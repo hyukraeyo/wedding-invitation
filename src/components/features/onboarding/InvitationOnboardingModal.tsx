@@ -165,13 +165,7 @@ export function InvitationOnboardingModal({ isOpen, onClose }: InvitationOnboard
         <Button className={styles.button} variant="ghost" size="lg" onClick={onClose}>
           Cancel
         </Button>
-        <Button
-          className={styles.button}
-          variant="primary"
-          size="lg"
-          loading={loading}
-          onClick={handleSubmit}
-        >
+        <Button className={styles.button} size="lg" loading={loading} onClick={handleSubmit}>
           Start
         </Button>
       </Dialog.Footer>

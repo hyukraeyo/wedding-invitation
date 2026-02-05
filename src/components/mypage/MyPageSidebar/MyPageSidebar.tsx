@@ -194,7 +194,6 @@ export function MyPageSidebar({
           <Dialog.Footer className={styles.footer}>
             <Button
               className={styles.fullWidth}
-              variant="primary"
               size="lg"
               onClick={() => setIsEventModalOpen(false)}
             >
@@ -217,7 +216,7 @@ export function MyPageSidebar({
             <Button variant="ghost" size="lg" onClick={() => setIsCustomerServiceModalOpen(false)}>
               닫기
             </Button>
-            <Button variant="primary" size="lg" onClick={handleCustomerServiceConfirm}>
+            <Button size="lg" onClick={handleCustomerServiceConfirm}>
               확인
             </Button>
           </Dialog.Footer>

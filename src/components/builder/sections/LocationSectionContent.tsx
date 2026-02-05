@@ -312,7 +312,7 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
         </div>
 
         <div style={{ marginTop: '12px' }}>
-          <BottomCTA.Single fixed={false} onClick={onComplete} variant="primary">
+          <BottomCTA.Single fixed={false} onClick={onComplete}>
             확인
           </BottomCTA.Single>
         </div>
