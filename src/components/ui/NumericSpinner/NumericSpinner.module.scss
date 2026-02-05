@@ -3,88 +3,66 @@
 .container {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-
-  // Disable selection
   user-select: none;
   -webkit-user-select: none;
+  background-color: v.$grey-50;
+  border-radius: v.$radius-md;
+  padding: 4px;
+  box-sizing: border-box;
+  width: fit-content;
 
-  // Sizes logic can be on container OR children.
-  // Putting it on container allows gap control.
+  // Sizes
   &.tiny {
-    gap: 4px;
+    height: v.$control-height-xs;
     .value {
       font-size: v.$font-size-xs;
-      min-width: 20px;
-    }
-    .button {
-      width: 20px;
-      height: 20px;
-      border-radius: 6px;
-    }
-    .icon {
-      width: 10px;
-      height: 10px;
+      min-width: 32px;
     }
   }
 
   &.small {
-    gap: 6px;
+    height: v.$control-height-sm;
     .value {
       font-size: v.$font-size-sm;
-      min-width: 24px;
-    }
-    .button {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
-    }
-    .icon {
-      width: 14px;
-      height: 14px;
+      min-width: 44px;
     }
   }
 
   &.medium {
-    gap: 8px;
+    height: v.$control-height-md;
     .value {
       font-size: v.$font-size-base;
-      min-width: 32px;
-    }
-    .button {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-    }
-    .icon {
-      width: 20px;
-      height: 20px;
+      min-width: 56px;
     }
   }
 
   &.large {
-    gap: 12px;
+    height: v.$control-height-lg;
     .value {
       font-size: v.$font-size-xl;
-      min-width: 40px;
+      min-width: 64px;
     }
-    .button {
-      width: 48px;
-      height: 48px;
-      border-radius: 14px;
-    }
-    .icon {
-      width: 24px;
-      height: 24px;
-    }
+  }
+
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
   }
 }
 
 .value {
-  text-align: center;
-  font-weight: 600; // Usually bold/semibold
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  background-color: v.$white;
+  border-radius: calc(v.$radius-md - 2px); // Slightly smaller than container
+  box-shadow: v.$shadow-sm;
   color: v.$text-main;
-  font-feature-settings: 'tnum'; // Tabular nums for stable width mostly
+  font-weight: 600;
+  text-align: center;
+  margin: 0 4px;
+  font-feature-settings: 'tnum';
   font-variant-numeric: tabular-nums;
 }
 
@@ -92,39 +70,60 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  height: 100%;
+  aspect-ratio: 1;
   padding: 0;
   border: none;
-  background-color: v.$grey-100; // Default accessible background
-  color: v.$text-sub; // Icon color
+  background-color: transparent;
+  color: v.$text-sub;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); // iOS ease
+  border-radius: calc(v.$radius-md - 2px);
+  transition: all v.$transition-base;
 
   // Touch target
   touch-action: manipulation;
 
   &:active:not(:disabled) {
     transform: scale(0.92);
-    background-color: v.$grey-200;
+    background-color: v.$grey-100;
   }
 
   &:disabled {
-    opacity: 0.4;
+    opacity: 0.3;
     cursor: not-allowed;
-    background-color: v.$grey-50;
-    color: v.$grey-300;
   }
 
   // Hover for desktop niceness
   @media (hover: hover) {
     &:hover:not(:disabled) {
-      background-color: v.$grey-200;
+      background-color: v.$grey-100;
       color: v.$text-main;
     }
   }
 }
 
 .icon {
-  fill: currentColor;
+  width: 20px;
+  height: 20px;
+  fill: none;
   stroke: currentColor;
-  stroke-width: 2; // Make icons slightly thicker
+  stroke-width: 2;
+}
+
+// Adjust icon sizes based on container size
+.tiny .icon {
+  width: 14px;
+  height: 14px;
+}
+.small .icon {
+  width: 16px;
+  height: 16px;
+}
+.medium .icon {
+  width: 20px;
+  height: 20px;
+}
+.large .icon {
+  width: 24px;
+  height: 24px;
 }

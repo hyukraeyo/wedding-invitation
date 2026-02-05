@@ -296,33 +296,30 @@ export default function DesignPage() {
               </FormControl>
             </FormField>
 
-            <TextField
-              label="어머니"
-              placeholder=""
-              className={s.grow}
-              onChange={handleGroomNameChange}
-              rightSlot={
-                <Button
-                  unstyled
-                  type="button"
-                  onClick={() => setIsMotherDeceased(!isMotherDeceased)}
-                  style={{
-                    border: 'none',
-                    background: 'none',
-                    padding: '4px',
-                    cursor: 'pointer',
-                    opacity: isMotherDeceased ? 1 : 0.2,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    transition: 'opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-                  }}
-                  aria-label="고인 여부 토글"
-                >
-                  <ChrysanthemumSVG size={18} />
-                </Button>
-              }
-            />
+            <FormField name="groomMotherName">
+              <FormHeader>
+                <FormLabel>어머니</FormLabel>
+              </FormHeader>
+              <FormControl asChild>
+                <TextField
+                  placeholder=""
+                  className={s.grow}
+                  onChange={handleGroomNameChange}
+                  rightSlot={
+                    <Toggle
+                      size="sm"
+                      variant="ghost"
+                      accentColorOnly
+                      pressed={isMotherDeceased}
+                      onPressedChange={setIsMotherDeceased}
+                      aria-label="고인 여부 토글"
+                    >
+                      <ChrysanthemumSVG size={18} />
+                    </Toggle>
+                  }
+                />
+              </FormControl>
+            </FormField>
             <FormField name="brideName">
               <FormHeader>
                 <FormLabel>신부 이름</FormLabel>
@@ -356,105 +353,136 @@ export default function DesignPage() {
               </FormControl>
             </FormField>
 
-            {/* 예식 정보 */}
-            <DatePicker
-              label="예식 날짜"
-              placeholder="날짜를 선택하세요"
-              value={weddingDate}
-              onChange={setWeddingDate}
-            />
-            <TimePicker
-              label="예식 시간"
-              placeholder="시간을 선택하세요"
-              value={weddingTime}
-              onChange={setWeddingTime}
-            />
-            <TextField label="예식장 이름" placeholder="그랜드 컨벤션 센터" clearable />
-            <AddressPicker
-              label="예식장 주소"
-              placeholder="클릭하여 주소를 검색하세요"
-              value={address}
-              onChange={setAddress}
-              helperText="도로명 주소를 입력해주세요"
-            />
-
-            <Dialog>
-              <Dialog.Trigger asChild>
-                <TextField.Button
-                  label="신랑과의 관계"
-                  placeholder="관계를 선택하세요"
-                  value="친구"
+            <FormField name="weddingDate">
+              <FormHeader>
+                <FormLabel>예식 날짜</FormLabel>
+              </FormHeader>
+              <FormControl asChild>
+                <DatePicker
+                  placeholder="날짜를 선택하세요"
+                  value={weddingDate}
+                  onChange={setWeddingDate}
                 />
-              </Dialog.Trigger>
-              <Dialog.Content>
-                <Dialog.Header title="신랑과의 관계" />
-                <Dialog.Body>
-                  <RadioGroup value={radioValue} onValueChange={setRadioValue}>
-                    <RadioGroupItem value="family">가족</RadioGroupItem>
-                    <RadioGroupItem value="friend">친구</RadioGroupItem>
-                    <RadioGroupItem value="colleague">직장동료</RadioGroupItem>
-                    <RadioGroupItem value="etc">기타</RadioGroupItem>
-                  </RadioGroup>
-                </Dialog.Body>
-                <Dialog.Footer>
-                  <Dialog.Close asChild>
-                    <Button variant="ghost">취소</Button>
-                  </Dialog.Close>
-                  <Dialog.Close asChild>
-                    <Button>확인</Button>
-                  </Dialog.Close>
-                </Dialog.Footer>
-              </Dialog.Content>
-            </Dialog>
+              </FormControl>
+            </FormField>
 
-            <SegmentedControl value={segmentValue} alignment="fluid" onChange={setSegmentValue}>
-              <SegmentedControl.Item value="attend">참석</SegmentedControl.Item>
-              <SegmentedControl.Item value="absent">불참</SegmentedControl.Item>
-              <SegmentedControl.Item value="pending">미정</SegmentedControl.Item>
-            </SegmentedControl>
+            <FormField name="weddingTime">
+              <FormHeader>
+                <FormLabel>예식 시간</FormLabel>
+              </FormHeader>
+              <FormControl asChild>
+                <TimePicker
+                  placeholder="시간을 선택하세요"
+                  value={weddingTime}
+                  onChange={setWeddingTime}
+                />
+              </FormControl>
+            </FormField>
 
-            <RichTextEditor
-              content={richText}
-              placeholder="따뜻한 축하 메시지를 남겨주세요"
-              onChange={setRichText}
-            />
+            <FormField name="venueName">
+              <FormHeader>
+                <FormLabel>예식장 이름</FormLabel>
+              </FormHeader>
+              <FormControl asChild>
+                <TextField placeholder="그랜드 컨벤션 센터" clearable />
+              </FormControl>
+            </FormField>
 
-            <RadioGroup value={radioValue} onValueChange={setRadioValue}>
-              <RadioGroupItem value="yes">식사 하겠습니다</RadioGroupItem>
-              <RadioGroupItem value="no">식사 안 하겠습니다</RadioGroupItem>
-            </RadioGroup>
+            <FormField name="venueAddress">
+              <FormHeader>
+                <FormLabel>예식장 주소</FormLabel>
+              </FormHeader>
+              <FormControl asChild>
+                <AddressPicker
+                  placeholder="클릭하여 주소를 검색하세요"
+                  value={address}
+                  onChange={setAddress}
+                  helperText="도로명 주소를 입력해주세요"
+                />
+              </FormControl>
+            </FormField>
 
-            <div>
-              <label
-                style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 500 }}
+            <FormField name="attendance">
+              <FormHeader>
+                <FormLabel>참석 여부</FormLabel>
+              </FormHeader>
+              <FormControl asChild>
+                <SegmentedControl value={segmentValue} alignment="fluid" onChange={setSegmentValue}>
+                  <SegmentedControl.Item value="attend">참석</SegmentedControl.Item>
+                  <SegmentedControl.Item value="absent">불참</SegmentedControl.Item>
+                  <SegmentedControl.Item value="pending">미정</SegmentedControl.Item>
+                </SegmentedControl>
+              </FormControl>
+            </FormField>
+
+            <FormField name="message">
+              <FormHeader>
+                <FormLabel>축하 메시지</FormLabel>
+              </FormHeader>
+              <FormControl asChild>
+                <RichTextEditor
+                  content={richText}
+                  placeholder="따뜻한 축하 메시지를 남겨주세요"
+                  onChange={setRichText}
+                />
+              </FormControl>
+            </FormField>
+
+            <FormField name="mealSelection">
+              <div className={s.toggleRow}>
+                <FormLabel>식사 여부</FormLabel>
+                <FormControl asChild>
+                  <Switch
+                    checked={radioValue === 'yes'}
+                    onCheckedChange={(checked) => setRadioValue(checked ? 'yes' : 'no')}
+                  />
+                </FormControl>
+              </div>
+            </FormField>
+
+            <FormField name="guestCount">
+              <FormHeader>
+                <FormLabel>동반 인원 수</FormLabel>
+              </FormHeader>
+              <FormControl asChild>
+                <NumericSpinner
+                  number={guestCount}
+                  onNumberChange={setGuestCount}
+                  min={0}
+                  max={10}
+                  size="large"
+                  decreaseAriaLabel="동반 인원 줄이기"
+                  increaseAriaLabel="동반 인원 늘리기"
+                />
+              </FormControl>
+              <p
+                style={{
+                  marginTop: '6px',
+                  fontSize: '13px',
+                  color: 'var(--grey-500, #6b7280)',
+                }}
               >
-                동반 인원 수
-              </label>
-              <NumericSpinner
-                number={guestCount}
-                onNumberChange={setGuestCount}
-                min={0}
-                max={10}
-                size="large"
-                decreaseAriaLabel="동반 인원 줄이기"
-                increaseAriaLabel="동반 인원 늘리기"
-              />
-              <p style={{ marginTop: '6px', fontSize: '13px', color: '#6b7280' }}>
                 본인 포함 총 인원을 입력해주세요
               </p>
-            </div>
+            </FormField>
 
-            {/* Toggle Options */}
-            <div className={s.photoSection}>
+            <FormField name="showCalendar">
               <div className={s.toggleRow}>
-                <span>달력 노출</span>
-                <Switch checked={showCalendar} onCheckedChange={setShowCalendar} />
+                <FormLabel>달력 노출</FormLabel>
+                <FormControl asChild>
+                  <Switch checked={showCalendar} onCheckedChange={setShowCalendar} />
+                </FormControl>
               </div>
+            </FormField>
+
+            <FormField name="showDday">
               <div className={s.toggleRow}>
-                <span>D-Day 노출</span>
-                <Switch checked={showDday} onCheckedChange={setShowDday} />
+                <FormLabel>D-Day 노출</FormLabel>
+                <FormControl asChild>
+                  <Switch checked={showDday} onCheckedChange={setShowDday} />
+                </FormControl>
               </div>
-            </div>
+            </FormField>
 
             {/* Photo Gallery */}
             <div className={s.photoSection}>

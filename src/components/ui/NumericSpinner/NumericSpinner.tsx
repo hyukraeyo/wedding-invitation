@@ -4,13 +4,25 @@ import styles from './NumericSpinner.module.scss';
 
 // SVG Icons
 const MinusIcon = ({ className }: { className?: string | undefined }) => (
-  <svg viewBox="0 0 24 24" className={className} xmlns="http://www.w3.org/2000/svg">
+  <svg
+    viewBox="0 0 24 24"
+    className={className}
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    stroke="currentColor"
+  >
     <path d="M5 12H19" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
 const PlusIcon = ({ className }: { className?: string | undefined }) => (
-  <svg viewBox="0 0 24 24" className={className} xmlns="http://www.w3.org/2000/svg">
+  <svg
+    viewBox="0 0 24 24"
+    className={className}
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    stroke="currentColor"
+  >
     <path d="M12 5V19" strokeLinecap="round" strokeLinejoin="round" />
     <path d="M5 12H19" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
@@ -154,7 +166,7 @@ export const NumericSpinner = ({
   return (
     <div
       id={id}
-      className={cn(styles.container, styles[size], className)}
+      className={cn(styles.container, styles[size], disabled && styles.disabled, className)}
       role="group"
       aria-disabled={disabled}
     >

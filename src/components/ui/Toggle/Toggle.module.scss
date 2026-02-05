@@ -115,4 +115,27 @@
     font-size: v.$control-font-size-xl;
     border-radius: v.$radius-lg;
   }
+
+  // Option: Only change text/icon color without background filling
+  &.accentColorOnly {
+    &[data-state='on'] {
+      background-color: transparent;
+      color: v.$primary;
+      box-shadow: none;
+
+      @include m.hover {
+        background-color: v.$grey-50;
+      }
+    }
+
+    &[data-state='off'] {
+      background-color: transparent;
+      color: v.$grey-300;
+      border-color: transparent;
+
+      @include m.hover {
+        background-color: v.$grey-50;
+      }
+    }
+  }
 }

@@ -8,13 +8,14 @@ import s from './Toggle.module.scss';
 export interface ToggleProps extends React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root> {
   variant?: 'solid' | 'outline' | 'ghost' | 'primary';
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  accentColorOnly?: boolean;
 }
 
 const Toggle = React.forwardRef<React.ElementRef<typeof TogglePrimitive.Root>, ToggleProps>(
-  ({ className, variant = 'primary', size = 'md', ...props }, ref) => (
+  ({ className, variant = 'primary', size = 'md', accentColorOnly, ...props }, ref) => (
     <TogglePrimitive.Root
       ref={ref}
-      className={clsx(s.root, s[variant], s[size], className)}
+      className={clsx(s.root, s[variant], s[size], accentColorOnly && s.accentColorOnly, className)}
       {...props}
     />
   )
