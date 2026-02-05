@@ -322,7 +322,7 @@ const SetupForm = () => {
         )}
       </div>
 
-      <button className={styles.parentsButton} type="button">
+      <Button unstyled className={styles.parentsButton} type="button">
         <div className={styles.parentsLeft}>
           <div className={styles.iconWrapper}>
             <User size={20} />
@@ -333,7 +333,7 @@ const SetupForm = () => {
           </div>
         </div>
         <Plus size={20} className={styles.plusIcon} />
-      </button>
+      </Button>
     </div>
   );
 };

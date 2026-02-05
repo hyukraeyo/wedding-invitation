@@ -18,8 +18,6 @@ export * from './AlertDialog';
 export * from './BottomSheet';
 export * from './InfoMessage';
 export * from './EmptyState';
-export * from './RichTextEditor';
-export * from './InvitationCard';
 
 export * from './Menu';
 export * from './ProgressBar';
@@ -46,3 +44,4 @@ export * from './Toast';
 export * from './VisuallyHidden';
 export * from './OptionList';
 export * from './Field';
+export * from './NumericSpinner';

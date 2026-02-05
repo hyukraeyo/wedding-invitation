@@ -1,0 +1,130 @@
+@use '../../../styles/variables' as v;
+
+.container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  // Disable selection
+  user-select: none;
+  -webkit-user-select: none;
+
+  // Sizes logic can be on container OR children.
+  // Putting it on container allows gap control.
+  &.tiny {
+    gap: 4px;
+    .value {
+      font-size: v.$font-size-xs;
+      min-width: 20px;
+    }
+    .button {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+    }
+    .icon {
+      width: 10px;
+      height: 10px;
+    }
+  }
+
+  &.small {
+    gap: 6px;
+    .value {
+      font-size: v.$font-size-sm;
+      min-width: 24px;
+    }
+    .button {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+    }
+    .icon {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  &.medium {
+    gap: 8px;
+    .value {
+      font-size: v.$font-size-base;
+      min-width: 32px;
+    }
+    .button {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+    }
+    .icon {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  &.large {
+    gap: 12px;
+    .value {
+      font-size: v.$font-size-xl;
+      min-width: 40px;
+    }
+    .button {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+    }
+    .icon {
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+.value {
+  text-align: center;
+  font-weight: 600; // Usually bold/semibold
+  color: v.$text-main;
+  font-feature-settings: 'tnum'; // Tabular nums for stable width mostly
+  font-variant-numeric: tabular-nums;
+}
+
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background-color: v.$grey-100; // Default accessible background
+  color: v.$text-sub; // Icon color
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); // iOS ease
+
+  // Touch target
+  touch-action: manipulation;
+
+  &:active:not(:disabled) {
+    transform: scale(0.92);
+    background-color: v.$grey-200;
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background-color: v.$grey-50;
+    color: v.$grey-300;
+  }
+
+  // Hover for desktop niceness
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      background-color: v.$grey-200;
+      color: v.$text-main;
+    }
+  }
+}
+
+.icon {
+  fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 2; // Make icons slightly thicker
+}

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { Calendar as CalendarIcon } from 'lucide-react';
 import { Calendar } from '@/components/ui/Calendar';
 import { format, parse, startOfToday } from 'date-fns';
 import { ko } from 'date-fns/locale';
@@ -80,6 +81,7 @@ export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
           value={dateValue ? format(dateValue, 'PPP', { locale: ko }) : ''}
           onClick={() => !disabled && setIsOpen(true)}
           className={className}
+          rightSlot={<CalendarIcon size={18} />}
           {...props}
         />
         <Dialog open={isOpen} onOpenChange={setIsOpen} mobileBottomSheet>

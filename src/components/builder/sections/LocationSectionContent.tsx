@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
-import { Search } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { TextField } from '@/components/ui/TextField';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
@@ -10,14 +9,12 @@ import { Switch } from '@/components/ui/Switch';
 import { FormControl, FormField, FormLabel } from '@/components/ui/Form';
 import { formatPhoneNumber } from '@/lib/utils';
 import styles from './LocationSection.module.scss';
-import { cn } from '@/lib/utils';
 import { NaverIcon, KakaoIcon } from '@/components/common/Icons';
 import { useShallow } from 'zustand/react/shallow';
 import { BottomCTA } from '@/components/ui/BottomCTA';
 
-const DaumPostcodeEmbed = dynamic(() => import('react-daum-postcode'), { ssr: false });
+import { AddressPicker } from '@/components/common/AddressPicker';
 const KakaoSdkLoader = dynamic(() => import('./KakaoSdkLoader'), { ssr: false });
-import { Dialog } from '@/components/ui/Dialog';
 
 interface LocationSectionContentProps {
   onComplete?: () => void;
@@ -82,7 +79,6 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
     }))
   );
 
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isKakaoReady, setIsKakaoReady] = useState(false);
   const coordinateLat = coordinates?.lat ?? 0;
   const coordinateLng = coordinates?.lng ?? 0;
@@ -105,33 +101,6 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
       });
     }
   }, [address, coordinateLat, coordinateLng, isKakaoReady, setCoordinates]);
-
-  const handleAddressSearch = useCallback(() => {
-    setIsSearchOpen(true);
-  }, []);
-
-  const handleComplete = (data: {
-    address: string;
-    addressType: 'R' | 'J';
-    bname: string;
-    buildingName: string;
-  }) => {
-    let fullAddress = data.address;
-    let extraAddress = '';
-
-    if (data.addressType === 'R') {
-      if (data.bname !== '') {
-        extraAddress += data.bname;
-      }
-      if (data.buildingName !== '') {
-        extraAddress += extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName;
-      }
-      fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
-    }
-
-    setAddress(fullAddress);
-    setIsSearchOpen(false);
-  };
 
   // 전화번호 입력 핸들러
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -175,18 +144,12 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
         </div>
 
         <div className={styles.optionItem}>
-          <div className={styles.rowTitle}>주소</div>
-          <div onClick={handleAddressSearch} className={styles.addressButton}>
-            <span
-              className={cn(
-                styles.addressText,
-                address ? styles.addressTextFilled : styles.addressTextPlaceholder
-              )}
-            >
-              {address || '주소를 검색해 주세요'}
-            </span>
-            <Search size={18} className={styles.searchIcon} />
-          </div>
+          <AddressPicker
+            label="주소"
+            placeholder="주소를 검색해 주세요"
+            value={address}
+            onChange={setAddress}
+          />
         </div>
 
         <div className={styles.optionItem}>
@@ -317,24 +280,6 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
           </BottomCTA.Single>
         </div>
       </div>
-
-      <Dialog open={isSearchOpen} onOpenChange={setIsSearchOpen}>
-        <Dialog.Overlay />
-        <Dialog.Content>
-          <Dialog.Header title="주소 검색" />
-          <Dialog.Body className={styles.postcodeBody}>
-            <div className={styles.postcodeWrapper}>
-              {isSearchOpen && (
-                <DaumPostcodeEmbed
-                  onComplete={handleComplete}
-                  style={{ height: '100%' }}
-                  autoClose={true}
-                />
-              )}
-            </div>
-          </Dialog.Body>
-        </Dialog.Content>
-      </Dialog>
     </>
   );
 }

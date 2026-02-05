@@ -1,0 +1,1 @@
+export { SortablePhoto } from './SortablePhoto';

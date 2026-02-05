@@ -3,7 +3,7 @@ import { Sparkles } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
 const RichTextEditor = dynamic(
-  () => import('@/components/ui/RichTextEditor').then((mod) => mod.RichTextEditor),
+  () => import('@/components/common/RichTextEditor').then((mod) => mod.RichTextEditor),
   {
     ssr: false,
     loading: () => (

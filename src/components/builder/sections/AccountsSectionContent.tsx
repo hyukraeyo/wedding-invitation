@@ -13,7 +13,7 @@ import dynamic from 'next/dynamic';
 import { useShallow } from 'zustand/react/shallow';
 
 const RichTextEditor = dynamic(
-  () => import('@/components/ui/RichTextEditor').then((mod) => mod.RichTextEditor),
+  () => import('@/components/common/RichTextEditor').then((mod) => mod.RichTextEditor),
   { ssr: false }
 );
 

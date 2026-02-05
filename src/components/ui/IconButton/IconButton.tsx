@@ -15,14 +15,15 @@ export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEl
 }
 
 const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   (
     {
       className,
       variant = 'ghost',
       size = 'md',
       children,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       iconSize,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       name,
       asChild = false,
       type = 'button',

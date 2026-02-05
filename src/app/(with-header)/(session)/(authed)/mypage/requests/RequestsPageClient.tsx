@@ -19,7 +19,8 @@ import { parseRejection } from '@/lib/rejection-helpers';
 import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
 const RichTextEditor = dynamic(
-  () => import('@/components/ui/RichTextEditor').then((mod) => mod.RichTextEditor),
+  () =>
+    import('@/components/common/RichTextEditor/RichTextEditor').then((mod) => mod.RichTextEditor),
   { ssr: false }
 );
 

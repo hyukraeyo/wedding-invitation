@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import { Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
@@ -264,6 +265,7 @@ const TimePickerRaw = (
         value={displayValue}
         onClick={handleOpenModal}
         className={className}
+        rightSlot={<Clock size={18} />}
         {...props}
       />
       <Dialog open={isOpen} onOpenChange={setIsOpen} mobileBottomSheet>

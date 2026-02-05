@@ -107,7 +107,8 @@ const CustomDayButton = (dayButtonProps: DayButtonProps) => {
 function Calendar({
   className,
   classNames,
-  showOutsideDays = true,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  showOutsideDays,
   hideTodayIndicator = false,
   ...props
 }: CalendarProps) {

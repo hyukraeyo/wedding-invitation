@@ -20,7 +20,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useRejectionReason } from '@/hooks/useRejectionReason';
 import { Banana, Plus, LayoutGrid, GalleryHorizontal } from 'lucide-react';
 import styles from './MyPage.module.scss';
-import { InvitationCard } from '@/components/ui/InvitationCard';
+import { InvitationCard } from '@/components/common/InvitationCard';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation } from 'swiper/modules';
@@ -51,7 +51,7 @@ import {
   AlertDialogCancel,
 } from '@/components/ui/AlertDialog';
 const RichTextEditor = dynamic(
-  () => import('@/components/ui/RichTextEditor').then((mod) => mod.RichTextEditor),
+  () => import('@/components/common/RichTextEditor').then((mod) => mod.RichTextEditor),
   { ssr: false }
 );
 const InvitationOnboardingModal = dynamic(

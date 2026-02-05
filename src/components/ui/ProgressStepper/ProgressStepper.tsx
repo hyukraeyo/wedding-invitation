@@ -91,7 +91,8 @@ const ProgressStepper = ({
   variant = 'compact',
   activeStepIndex = 0,
   paddingTop = 'default',
-  checkForFinish = false,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  checkForFinish,
   children,
   className,
 }: ProgressStepperProps) => {

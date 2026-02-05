@@ -32,20 +32,19 @@ import {
 } from '@/components/ui/DropdownMenu';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { Field } from '@/components/ui/Field';
-import { IconButton } from '@/components/ui/IconButton';
+import { NumericSpinner } from '@/components/ui/NumericSpinner';
 import { InfoMessage } from '@/components/ui/InfoMessage';
 import { Input } from '@/components/ui/Input';
 import { Loader } from '@/components/ui/Loader';
 import { OptionList } from '@/components/ui/OptionList';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/RadioGroup';
-import { RichTextEditor } from '@/components/ui/RichTextEditor';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
+import { RichTextEditor } from '@/components/common/RichTextEditor';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { Slider } from '@/components/ui/Slider';
 import { Switch } from '@/components/ui/Switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
-import { TextButton } from '@/components/ui/TextButton';
 import { TextField } from '@/components/ui/TextField';
 import { Textarea } from '@/components/ui/Textarea';
 import {
@@ -56,7 +55,6 @@ import {
   ToastViewport,
 } from '@/components/ui/Toast';
 import { Toggle } from '@/components/ui/Toggle';
-import { CTAButton } from '@/components/ui/CTAButton';
 import {
   Form,
   FormField,
@@ -64,13 +62,31 @@ import {
   FormControl,
   FormMessage,
   FormHeader,
-  FormSubmit,
 } from '@/components/ui/Form';
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/Tooltip';
 import { DatePicker } from '@/components/common/DatePicker/DatePicker';
 import { TimePicker } from '@/components/common/TimePicker/TimePicker';
-import { Mail, Lock, Send, ChevronDown, Sparkles } from 'lucide-react';
+import { AddressPicker } from '@/components/common/AddressPicker';
+import { ChrysanthemumSVG } from '@/components/common/Icons';
+import { useNameInput, usePhoneInput } from '@/hooks/useFormInput';
+import { useImageUpload } from '@/hooks/useImageUpload';
+import { isValidKoreanNameValue, isValidPhone } from '@/lib/utils';
+import { Mail, Lock, ChevronDown, Sparkles, Plus, CloudUpload, Check, Search } from 'lucide-react';
 import s from './DesignPage.module.scss';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from '@dnd-kit/core';
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  rectSortingStrategy,
+} from '@dnd-kit/sortable';
+import { SortablePhoto } from '@/components/common/SortablePhoto';
 
 const dropdownItems = [
   { label: 'Duplicate invite', value: 'duplicate' },
@@ -114,8 +130,85 @@ export default function DesignPage() {
   const [menuChoice, setMenuChoice] = React.useState(dropdownItems[0]!.value);
   const [menuChecked, setMenuChecked] = React.useState(true);
   const [richText, setRichText] = React.useState('<p>Leave a warm welcome note here.</p>');
-  const [weddingDate, setWeddingDate] = React.useState('2026-06-14');
-  const [weddingTime, setWeddingTime] = React.useState('14:30');
+  const [weddingDate, setWeddingDate] = React.useState('');
+  const [weddingTime, setWeddingTime] = React.useState('');
+
+  // Form hooks state
+  const [groomName, setGroomName] = React.useState('');
+  const [brideName, setBrideName] = React.useState('');
+  const [groomContact, setGroomContact] = React.useState('');
+
+  const handleGroomNameChange = useNameInput(setGroomName);
+  const handleBrideNameChange = useNameInput(setBrideName);
+  const handleGroomContactChange = usePhoneInput(setGroomContact);
+
+  // Address search state
+  const [address, setAddress] = React.useState('');
+
+  // Guest count state
+  const [guestCount, setGuestCount] = React.useState(0);
+
+  // New UI states
+  const [showCalendar, setShowCalendar] = React.useState(true);
+  const [showDday, setShowDday] = React.useState(true);
+  const [photoRatio, setPhotoRatio] = React.useState('fixed');
+
+  // Customization states
+  const [selectedStyle, setSelectedStyle] = React.useState('classic');
+  const [selectedColor, setSelectedColor] = React.useState('#C69C6D'); // Beige
+  const [isMotherDeceased, setIsMotherDeceased] = React.useState(false);
+
+  // Photos hooks
+  const {
+    images: galleryPhotos,
+    handleUpload: handleGalleryUpload,
+    removeImage: removeGalleryPhoto,
+    moveImage: moveGalleryPhoto,
+    count: galleryCount,
+    isFull: isGalleryFull,
+  } = useImageUpload({
+    mode: 'multiple',
+    maxCount: 10,
+    maxSizeMB: 5,
+    onError: (msg) => alert(msg),
+  });
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      const oldIndex = galleryPhotos.indexOf(active.id as string);
+      const newIndex = galleryPhotos.indexOf(over.id as string);
+      moveGalleryPhoto(oldIndex, newIndex);
+    }
+  };
+
+  const { images: mainPhotos, handleUpload: handleMainPhotoUpload } = useImageUpload({
+    mode: 'single',
+    maxSizeMB: 5,
+    onError: (msg) => alert(msg),
+  });
+
+  const mainPhoto = mainPhotos[0] || null;
+
+  const galleryInputRef = React.useRef<HTMLInputElement>(null);
+  const mainPhotoInputRef = React.useRef<HTMLInputElement>(null);
+
+  const colors = [
+    { value: '#C69C6D', label: 'Beige' },
+    { value: '#4B4B4B', label: 'Dark' },
+    { value: '#FFB7B2', label: 'Pink' },
+    { value: '#D4A5D4', label: 'Purple' },
+  ];
+
+  const validateKoreanName = (value: string): boolean => {
+    if (!value.trim()) return false;
+    return !isValidKoreanNameValue(value);
+  };
 
   return (
     <div className={s.root}>
@@ -185,26 +278,85 @@ export default function DesignPage() {
         </div>
         <div className={s.formComposition}>
           {/* 신랑/신부 정보 */}
-          <div className={s.formGroup}>
+          <Form className={s.formGroup} onSubmit={(e) => e.preventDefault()}>
             <h3 className={s.formGroupTitle}>신랑/신부 정보</h3>
-            <TextField
-              label="신랑 이름"
-              placeholder="홍길동"
-              helperText="실명을 입력해주세요"
-              clearable
-            />
-            <TextField label="신부 이름" placeholder="김영희" clearable />
-            <TextField
-              label="연락처"
-              type="tel"
-              placeholder="010-1234-5678"
-              helperText="'-' 없이 입력하시면 자동으로 포맷됩니다"
-            />
-          </div>
+            <FormField name="groomName">
+              <FormHeader>
+                <FormLabel>신랑 이름</FormLabel>
+                <FormMessage match={validateKoreanName}>올바른 이름을 입력해주세요</FormMessage>
+              </FormHeader>
+              <FormControl asChild>
+                <TextField
+                  placeholder="홍길동"
+                  helperText="실명을 입력해주세요"
+                  value={groomName}
+                  onChange={handleGroomNameChange}
+                  clearable
+                />
+              </FormControl>
+            </FormField>
 
-          {/* 예식 정보 */}
-          <div className={s.formGroup}>
-            <h3 className={s.formGroupTitle}>예식 정보</h3>
+            <TextField
+              label="어머니"
+              placeholder=""
+              className={s.grow}
+              onChange={handleGroomNameChange}
+              rightSlot={
+                <Button
+                  unstyled
+                  type="button"
+                  onClick={() => setIsMotherDeceased(!isMotherDeceased)}
+                  style={{
+                    border: 'none',
+                    background: 'none',
+                    padding: '4px',
+                    cursor: 'pointer',
+                    opacity: isMotherDeceased ? 1 : 0.2,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    transition: 'opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                  }}
+                  aria-label="고인 여부 토글"
+                >
+                  <ChrysanthemumSVG size={18} />
+                </Button>
+              }
+            />
+            <FormField name="brideName">
+              <FormHeader>
+                <FormLabel>신부 이름</FormLabel>
+                <FormMessage match={validateKoreanName}>올바른 이름을 입력해주세요</FormMessage>
+              </FormHeader>
+              <FormControl asChild>
+                <TextField
+                  placeholder="김영희"
+                  value={brideName}
+                  onChange={handleBrideNameChange}
+                  clearable
+                />
+              </FormControl>
+            </FormField>
+
+            <FormField name="groomPhone">
+              <FormHeader>
+                <FormLabel>연락처</FormLabel>
+                <FormMessage match={(value) => !!value && !isValidPhone(value)}>
+                  올바른 전화번호를 입력해주세요
+                </FormMessage>
+              </FormHeader>
+              <FormControl asChild>
+                <TextField
+                  type="tel"
+                  placeholder="010-1234-5678"
+                  helperText="'-' 없이 입력하시면 자동으로 포맷됩니다"
+                  value={groomContact}
+                  onChange={handleGroomContactChange}
+                />
+              </FormControl>
+            </FormField>
+
+            {/* 예식 정보 */}
             <DatePicker
               label="예식 날짜"
               placeholder="날짜를 선택하세요"
@@ -218,17 +370,14 @@ export default function DesignPage() {
               onChange={setWeddingTime}
             />
             <TextField label="예식장 이름" placeholder="그랜드 컨벤션 센터" clearable />
-            <TextField
+            <AddressPicker
               label="예식장 주소"
-              placeholder="서울시 강남구 테헤란로 123"
+              placeholder="클릭하여 주소를 검색하세요"
+              value={address}
+              onChange={setAddress}
               helperText="도로명 주소를 입력해주세요"
-              clearable
             />
-          </div>
 
-          {/* 관계 선택 (Dialog Select) */}
-          <div className={s.formGroup}>
-            <h3 className={s.formGroupTitle}>관계 선택</h3>
             <Dialog>
               <Dialog.Trigger asChild>
                 <TextField.Button
@@ -257,47 +406,213 @@ export default function DesignPage() {
                 </Dialog.Footer>
               </Dialog.Content>
             </Dialog>
-          </div>
 
-          {/* 참석 여부 (SegmentedControl) */}
-          <div className={s.formGroup}>
-            <h3 className={s.formGroupTitle}>참석 여부</h3>
             <SegmentedControl value={segmentValue} alignment="fluid" onChange={setSegmentValue}>
               <SegmentedControl.Item value="attend">참석</SegmentedControl.Item>
               <SegmentedControl.Item value="absent">불참</SegmentedControl.Item>
               <SegmentedControl.Item value="pending">미정</SegmentedControl.Item>
             </SegmentedControl>
-          </div>
 
-          {/* 축하 메시지 (RichTextEditor) */}
-          <div className={s.formGroup}>
-            <h3 className={s.formGroupTitle}>축하 메시지</h3>
             <RichTextEditor
               content={richText}
               placeholder="따뜻한 축하 메시지를 남겨주세요"
               onChange={setRichText}
             />
-          </div>
 
-          {/* 식사 여부 (RadioGroup) */}
-          <div className={s.formGroup}>
-            <h3 className={s.formGroupTitle}>식사 여부</h3>
             <RadioGroup value={radioValue} onValueChange={setRadioValue}>
               <RadioGroupItem value="yes">식사 하겠습니다</RadioGroupItem>
               <RadioGroupItem value="no">식사 안 하겠습니다</RadioGroupItem>
             </RadioGroup>
-          </div>
 
-          {/* 동반 인원 (Input) */}
-          <div className={s.formGroup}>
-            <h3 className={s.formGroupTitle}>동반 인원</h3>
-            <Input
-              type="number"
-              label="동반 인원 수"
-              placeholder="0"
-              helperText="본인 포함 총 인원을 입력해주세요"
-            />
-          </div>
+            <div>
+              <label
+                style={{ display: 'block', marginBottom: '8px', fontSize: '14px', fontWeight: 500 }}
+              >
+                동반 인원 수
+              </label>
+              <NumericSpinner
+                number={guestCount}
+                onNumberChange={setGuestCount}
+                min={0}
+                max={10}
+                size="large"
+                decreaseAriaLabel="동반 인원 줄이기"
+                increaseAriaLabel="동반 인원 늘리기"
+              />
+              <p style={{ marginTop: '6px', fontSize: '13px', color: '#6b7280' }}>
+                본인 포함 총 인원을 입력해주세요
+              </p>
+            </div>
+
+            {/* Toggle Options */}
+            <div className={s.photoSection}>
+              <div className={s.toggleRow}>
+                <span>달력 노출</span>
+                <Switch checked={showCalendar} onCheckedChange={setShowCalendar} />
+              </div>
+              <div className={s.toggleRow}>
+                <span>D-Day 노출</span>
+                <Switch checked={showDday} onCheckedChange={setShowDday} />
+              </div>
+            </div>
+
+            {/* Photo Gallery */}
+            <div className={s.photoSection}>
+              <div className={s.sectionTitle}>
+                <span>사진 관리</span>
+                <span className={s.count}>
+                  현재 등록된 사진 <strong style={{ color: '#FBC02D' }}>{galleryCount}</strong> / 10
+                </span>
+              </div>
+              <div className={s.photoGrid}>
+                <DndContext
+                  sensors={sensors}
+                  collisionDetection={closestCenter}
+                  onDragEnd={handleDragEnd}
+                >
+                  <SortableContext items={galleryPhotos} strategy={rectSortingStrategy}>
+                    {galleryPhotos.map((photo, index) => (
+                      <SortablePhoto
+                        key={photo}
+                        id={photo}
+                        url={photo}
+                        onRemove={() => removeGalleryPhoto(index)}
+                      />
+                    ))}
+                  </SortableContext>
+                </DndContext>
+                {!isGalleryFull && (
+                  <Button
+                    unstyled
+                    className={s.addPhotoButton}
+                    type="button"
+                    onClick={() => galleryInputRef.current?.click()}
+                  >
+                    <Plus size={24} />
+                    <span>추가</span>
+                  </Button>
+                )}
+                <input
+                  type="file"
+                  ref={galleryInputRef}
+                  onChange={handleGalleryUpload}
+                  accept="image/*"
+                  multiple
+                  style={{ display: 'none' }}
+                />
+              </div>
+            </div>
+
+            {/* Main Greeting Photo */}
+            <div className={s.photoSection}>
+              <div className={s.sectionTitle}>
+                <span>사진</span>
+              </div>
+              <div
+                className={s.mainPhotoUploader}
+                onClick={() => mainPhotoInputRef.current?.click()}
+              >
+                {mainPhoto ? (
+                  <div className={s.mainPhotoPreview}>
+                    <img src={mainPhoto} alt="Main Greeting" />
+                  </div>
+                ) : (
+                  <>
+                    <div className={s.iconCircle}>
+                      <CloudUpload size={24} />
+                    </div>
+                    <div className={s.uploadText}>인사말 사진 추가</div>
+                    <div className={s.uploadSubtext}>클릭하여 이미지를 선택하세요</div>
+                  </>
+                )}
+                <input
+                  type="file"
+                  ref={mainPhotoInputRef}
+                  onChange={handleMainPhotoUpload}
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                />
+              </div>
+              <SegmentedControl value={photoRatio} onChange={setPhotoRatio} alignment="fluid">
+                <SegmentedControl.Item value="fixed">고정 (기본)</SegmentedControl.Item>
+                <SegmentedControl.Item value="original">원본 비율</SegmentedControl.Item>
+              </SegmentedControl>
+            </div>
+
+            {/* Style Selection */}
+            <div className={s.selectionSection}>
+              <div className={s.sectionTitle}>
+                <span>스타일</span>
+              </div>
+              <div className={s.styleGrid}>
+                <div className={s.styleItem} onClick={() => setSelectedStyle('classic')}>
+                  <div
+                    className={`${s.styleCard} ${selectedStyle === 'classic' ? s.selected : ''}`}
+                  >
+                    <div className={s.previewMockup}>
+                      <div className={s.mockTitle}>The Marriage</div>
+                      <div className={s.mockNames}>신랑, 신부 결혼해요.</div>
+                      <div
+                        style={{
+                          height: '20px',
+                          background: '#fcefa3',
+                          margin: '8px auto',
+                          width: '80%',
+                          opacity: 0.3,
+                          borderRadius: '4px',
+                        }}
+                      ></div>
+                      <div className={s.mockDate}>2026년 4월 29일</div>
+                    </div>
+                  </div>
+                  <span className={s.styleName}>클래식</span>
+                </div>
+
+                <div className={`${s.styleItem} ${s.placeholder}`}>
+                  <div className={s.styleCard}>
+                    <Plus size={24} />
+                  </div>
+                  <span className={s.styleName}>추가 예정</span>
+                </div>
+
+                <div className={`${s.styleItem} ${s.placeholder}`}>
+                  <div className={s.styleCard}>
+                    <Plus size={24} />
+                  </div>
+                  <span className={s.styleName}>추가 예정</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Color Selection */}
+            <div className={s.selectionSection}>
+              <div className={s.sectionTitle}>
+                <span>강조색</span>
+              </div>
+              <div className={s.colorContainer}>
+                {colors.map((color) => (
+                  <div
+                    key={color.value}
+                    className={s.colorSwatch}
+                    style={{ backgroundColor: color.value }}
+                    onClick={() => setSelectedColor(color.value)}
+                  >
+                    {selectedColor === color.value && <Check size={20} />}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Font Selection */}
+            <div className={s.selectionSection}>
+              <div className={s.sectionTitle}>
+                <span>글꼴</span>
+              </div>
+              <div className={s.fontSelector}>
+                <span>고운돋움 (기본)</span>
+              </div>
+            </div>
+          </Form>
 
           {/* 제출 버튼 */}
           <BottomCTA.Single onClick={() => setToastOpen(true)}>참석 의사 전달하기</BottomCTA.Single>
@@ -419,6 +734,18 @@ export default function DesignPage() {
                 min={0}
                 max={100}
                 onValueChange={(value) => setSliderValue(value[0] ?? 0)}
+              />
+            </div>
+            <div className={s.selectorRow}>
+              <span>Guest count</span>
+              <NumericSpinner
+                number={guestCount}
+                onNumberChange={setGuestCount}
+                min={0}
+                max={10}
+                size="medium"
+                decreaseAriaLabel="Decrease"
+                increaseAriaLabel="Increase"
               />
             </div>
           </div>
@@ -643,46 +970,6 @@ export default function DesignPage() {
           <TextField.Button label="Ghost variant" placeholder="Ghost button" variant="ghost" />
           <TextField.Button label="Small size" placeholder="Small" size="sm" />
           <TextField.Button label="Error state" placeholder="Has error" error="Mandatory field" />
-        </div>
-      </section>
-
-      <section className={s.section}>
-        <div className={s.sectionHeader}>
-          <h2>Form & Validation</h2>
-          <span className={s.sectionHint}>Radix Form Primitive integration</span>
-        </div>
-        <div className={s.variantGrid}>
-          <Form
-            onSubmit={(event) => {
-              event.preventDefault();
-              setToastOpen(true);
-            }}
-          >
-            <FormField name="email">
-              <FormHeader>
-                <FormLabel>Email</FormLabel>
-                <FormMessage match="valueMissing">Please enter your email</FormMessage>
-                <FormMessage match="typeMismatch">Please enter a valid email</FormMessage>
-              </FormHeader>
-              <FormControl asChild>
-                <TextField type="email" required placeholder="banana@toss.work" />
-              </FormControl>
-            </FormField>
-
-            <FormField name="details">
-              <FormHeader>
-                <FormLabel>Details</FormLabel>
-                <FormMessage match="valueMissing">Please enter details</FormMessage>
-              </FormHeader>
-              <FormControl asChild>
-                <Textarea required placeholder="How does this work?" />
-              </FormControl>
-            </FormField>
-
-            <FormSubmit asChild>
-              <Button style={{ marginTop: 10 }}>Submit Form</Button>
-            </FormSubmit>
-          </Form>
         </div>
       </section>
     </div>

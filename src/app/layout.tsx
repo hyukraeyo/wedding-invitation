@@ -7,7 +7,6 @@ import { SkipLink } from '@/hooks/useAccessibility';
 import './globals.scss';
 import '../styles/_accessibility.scss';
 import styles from './layout.module.scss';
-import Link from 'next/link';
 
 export const viewport: Viewport = {
   width: 'device-width',

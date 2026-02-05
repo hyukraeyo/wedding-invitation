@@ -108,6 +108,8 @@ export interface TextFieldButtonProps extends React.ButtonHTMLAttributes<HTMLBut
   placeholder?: string | undefined;
   error?: string | boolean | undefined;
   helperText?: string | undefined;
+  leftSlot?: React.ReactNode | undefined;
+  rightSlot?: React.ReactNode | undefined;
 }
 
 const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps>(
@@ -121,6 +123,8 @@ const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps
       radius = 'md',
       error,
       helperText,
+      leftSlot,
+      rightSlot,
       id,
       ...props
     },
@@ -138,6 +142,7 @@ const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps
         invalid={!!error}
         className={className}
       >
+        {leftSlot && <TextFieldSlot side="left">{leftSlot}</TextFieldSlot>}
         <button
           ref={ref}
           id={inputId}
@@ -147,6 +152,7 @@ const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps
         >
           {props.value || props.placeholder || children}
         </button>
+        {rightSlot && <TextFieldSlot side="right">{rightSlot}</TextFieldSlot>}
       </TextFieldRoot>
     );
 
@@ -208,6 +214,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
       id,
       maxLength,
       value,
+      defaultValue,
       onChange,
       ...props
     },
@@ -221,7 +228,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
     const lSlot = prefix || leftSlot;
     const rSlot = suffix || rightSlot;
 
-    const [internalValue, setInternalValue] = React.useState(props.defaultValue || '');
+    const [internalValue, setInternalValue] = React.useState(defaultValue || '');
     const currentValue = value !== undefined ? value : internalValue;
 
     const handleClear = () => {
@@ -287,16 +294,16 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
         <Field.Root error={isError} disabled={props.disabled}>
           {label && <Field.Label htmlFor={inputId}>{label}</Field.Label>}
           {input}
-          <Field.Footer>
-            {helperText || errorMsg ? (
-              <Field.HelperText error={isError}>{errorMsg || helperText}</Field.HelperText>
-            ) : (
-              <div />
-            )}
-            {showCount && maxLength && (
-              <Field.Counter current={String(currentValue).length} max={maxLength} />
-            )}
-          </Field.Footer>
+          {(helperText || errorMsg || (showCount && maxLength)) && (
+            <Field.Footer>
+              {(helperText || errorMsg) && (
+                <Field.HelperText error={isError}>{errorMsg || helperText}</Field.HelperText>
+              )}
+              {showCount && maxLength && (
+                <Field.Counter current={String(currentValue).length} max={maxLength} />
+              )}
+            </Field.Footer>
+          )}
         </Field.Root>
       );
     }
