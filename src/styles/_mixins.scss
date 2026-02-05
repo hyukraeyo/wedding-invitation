@@ -197,55 +197,9 @@
   }
 }
 
-@mixin builder-card {
-  border-radius: i.$radius-md;
-  border: 1px solid s.$border-light;
-  background: s.$bg-elevated;
-  padding: 12px;
-  transition: i.$transition-smooth;
-}
-
-@mixin builder-field-group {
+@mixin ui-stack($gap: 12px) {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-}
-
-@mixin builder-stack($gap: 12px) {
-  display: flex;
-  flex-direction: column;
-  gap: $gap;
-}
-
-@mixin builder-input-base {
-  width: 100%;
-  height: 56px;
-  padding: 0 16px;
-  background-color: s.$action-secondary; // Use semantic var directly or falback to hex if issue persists
-  border-radius: i.$radius-md;
-  font-size: t.$font-size-base;
-  color: s.$text-primary;
-  border: 1px solid transparent;
-
-  &:hover:not(:disabled) {
-    background-color: s.$action-secondary-hover;
-  }
-
-  &:focus {
-    @include builder-input-focus;
-  }
-}
-
-@mixin builder-input-focus {
-  background-color: s.$bg-elevated;
-  border-color: s.$action-primary;
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(s.$action-primary, 0.3);
-}
-
-@mixin builder-grid($cols: 2, $gap: 8px) {
-  display: grid;
-  grid-template-columns: repeat($cols, 1fr);
   gap: $gap;
 }
 

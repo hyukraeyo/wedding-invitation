@@ -38,15 +38,6 @@
   margin-bottom: 24px;
 }
 
-.addressButton {
-  @include m.builder-input-base;
-  display: flex;
-  align-items: center;
-  position: relative;
-  cursor: pointer;
-  padding-right: 2.5rem; // Make space for the icon
-}
-
 .postcodeBody {
   padding: 0 !important;
 }
@@ -84,16 +75,11 @@
 }
 
 .mapOptions {
-  @include m.builder-field-group;
   padding: 0 0.25rem;
 }
 
 .mapIcon {
   flex-shrink: 0;
-}
-
-.sketchWrapper {
-  @include m.builder-field-group;
 }
 
 .addressText {

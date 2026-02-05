@@ -1,8 +1,8 @@
 ﻿@use '../../../styles/variables' as v;
 @use '../../../styles/mixins' as m;
+@use '../../../styles/semantic' as s;
 
 .editorContainer {
-  @include m.builder-input-base;
   height: auto;
   min-height: 120px;
   padding: 0;
@@ -10,8 +10,23 @@
   display: flex;
   flex-direction: column;
 
+  // 🍌 TextField 'outline' variant style application
+  background-color: v.$white;
+  border: 1px solid v.$grey-200;
+  border-radius: v.$radius-md;
+  transition: all 0.2s v.$ease-ios;
+
+  // Layout & Mobile optimization
+  box-sizing: border-box;
+  background-clip: padding-box;
+  touch-action: manipulation;
+
+  &:hover:not(:focus-within) {
+    border-color: v.$grey-300;
+  }
+
   &:focus-within {
-    @include m.builder-input-focus;
+    border-color: s.$border-active;
   }
 }
 
@@ -21,8 +36,10 @@
   align-items: center;
   gap: 0.375rem;
   padding: 0.5rem 0.75rem;
-  border-bottom: 1px solid v.$zinc-100;
-  background-color: v.$zinc-50;
+  border-bottom: 1px solid v.$grey-200;
+  // ✨ Toolbar follows container background
+  background-color: transparent;
+  transition: all 0.2s v.$ease-ios;
 }
 
 .toolbarGroup {
@@ -35,7 +52,7 @@
   height: 1.25rem;
   margin: 0 10px;
   width: 1px;
-  background-color: v.$zinc-200;
+  background-color: v.$grey-200;
 }
 
 .toggleButton {
@@ -47,9 +64,9 @@
   height: 2rem;
   padding: 0;
   border: 1px solid transparent;
-  border-radius: v.$radius-md;
+  border-radius: v.$radius-sm;
   background: transparent;
-  color: v.$zinc-500;
+  color: v.$grey-500;
   cursor: pointer;
   transition: all 0.15s v.$ease-standard;
 
@@ -61,8 +78,8 @@
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {
-      background-color: v.$zinc-100;
-      color: v.$zinc-700;
+      background-color: v.$grey-100;
+      color: v.$grey-700;
     }
   }
 
@@ -93,12 +110,12 @@
   :global(.ProseMirror) {
     width: 100%;
     min-height: var(--editor-min-height, 120px);
-    padding: 1rem;
+    padding: 1.25rem 1rem;
     outline: none;
-    font-size: v.$font-size-sm;
+    font-size: v.$font-size-base;
     font-family: v.$font-family-base;
     font-weight: 500;
-    color: v.$zinc-900;
+    color: v.$grey-900;
     line-height: 1.6;
 
     p {
@@ -107,7 +124,7 @@
     }
 
     p.is-editor-empty:first-child::before {
-      color: v.$zinc-400;
+      color: v.$grey-400;
       content: attr(data-placeholder);
       float: left;
       height: 0;

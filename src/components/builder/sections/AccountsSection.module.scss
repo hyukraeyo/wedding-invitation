@@ -33,17 +33,12 @@
   align-items: center;
 }
 
-.optionWrapper {
-  @include v.builder-field-group;
-}
-
 .accountList {
-  @include v.builder-stack($gap: 0.75rem);
+  @include v.ui-stack($gap: 0.75rem);
   margin-top: 0.5rem;
 }
 
 .accountItem {
-  @include v.builder-card;
   padding: 0; // Padding handled by children
   overflow: hidden;
   border-radius: 1rem; // v.$radius-md
@@ -101,7 +96,7 @@
 
 .accountBody {
   padding: 1rem;
-  @include v.builder-stack($gap: 0.875rem);
+  @include v.ui-stack($gap: 0.875rem);
 }
 
 .fieldRow {

@@ -5,6 +5,7 @@ import { clsx } from 'clsx';
 import { X } from 'lucide-react';
 import s from './TextField.module.scss';
 import { Field } from '../Field';
+import { Button } from '../Button';
 
 // --- Context for sharing props between Root and Input/Slot ---
 export type TextFieldSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
@@ -143,7 +144,8 @@ const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps
         className={className}
       >
         {leftSlot && <TextFieldSlot side="left">{leftSlot}</TextFieldSlot>}
-        <button
+        <Button
+          unstyled
           ref={ref}
           id={inputId}
           type="button"
@@ -151,7 +153,7 @@ const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps
           {...props}
         >
           {props.value || props.placeholder || children}
-        </button>
+        </Button>
         {rightSlot && <TextFieldSlot side="right">{rightSlot}</TextFieldSlot>}
       </TextFieldRoot>
     );
@@ -275,14 +277,15 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
         />
         {clearable && currentValue && (
           <TextFieldSlot side="right">
-            <button
+            <Button
+              unstyled
               type="button"
               className={s.clearButton}
               onClick={handleClear}
               aria-label="Clear"
             >
               <X />
-            </button>
+            </Button>
           </TextFieldSlot>
         )}
         {rSlot && <TextFieldSlot side="right">{rSlot}</TextFieldSlot>}

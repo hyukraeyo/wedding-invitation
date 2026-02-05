@@ -42,15 +42,6 @@
   margin-bottom: -4px;
 }
 
-.optionWrapper {
-  @include v.builder-field-group;
-}
-
-.switchGroup {
-  @include v.builder-grid(2);
-  padding: 0 0.25rem;
-}
-
 .andTextWrapper {
   display: flex;
   align-items: center;

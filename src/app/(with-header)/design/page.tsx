@@ -228,58 +228,12 @@ export default function DesignPage() {
 
       <section className={s.section}>
         <div className={s.sectionHeader}>
-          <h2>Buttons & Actions</h2>
-          <span className={s.sectionHint}>Supported variants and special actions</span>
-        </div>
-        <div className={s.buttonGrid}>
-          {(['primary', 'blue', 'secondary', 'outline', 'ghost'] as const).map((v) => (
-            <div key={v} className={s.buttonItem}>
-              <span className={s.variantLabel}>{v}</span>
-              <Button variant={v}>{v.charAt(0).toUpperCase() + v.slice(1)}</Button>
-            </div>
-          ))}
-        </div>
-        <div
-          style={{
-            marginTop: '32px',
-            position: 'relative',
-            height: '380px',
-            border: '1px solid #e2e8f0',
-            borderRadius: '32px',
-            overflow: 'hidden',
-            backgroundColor: '#f8fafc',
-            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-            padding: '12px',
-          }}
-        >
-          <div
-            style={{
-              position: 'relative',
-              height: '100%',
-              border: '2px dashed #cbd5e1',
-              borderRadius: '24px',
-              backgroundColor: 'white',
-              display: 'flex',
-              alignItems: 'flex-end',
-              padding: '16px',
-            }}
-          >
-            <BottomCTA.Single fixed={false} variant="blue" onClick={() => setToastOpen(true)}>
-              CTA Button
-            </BottomCTA.Single>
-          </div>
-        </div>
-      </section>
-
-      <section className={s.section}>
-        <div className={s.sectionHeader}>
           <h2>실전 폼 조합</h2>
           <span className={s.sectionHint}>실제 프로젝트에서 사용하는 컴포넌트 조합</span>
         </div>
         <div className={s.formComposition}>
           {/* 신랑/신부 정보 */}
-          <Form className={s.formGroup} onSubmit={(e) => e.preventDefault()}>
-            <h3 className={s.formGroupTitle}>신랑/신부 정보</h3>
+          <Form onSubmit={(e) => e.preventDefault()}>
             <FormField name="groomName">
               <FormHeader>
                 <FormLabel>신랑 이름</FormLabel>
@@ -649,211 +603,45 @@ export default function DesignPage() {
 
       <section className={s.section}>
         <div className={s.sectionHeader}>
-          <h2>Fields & Notes</h2>
-          <span className={s.sectionHint}>Inputs, TextField, Textarea, Rich Text</span>
+          <h2>Buttons & Actions</h2>
+          <span className={s.sectionHint}>Supported variants and special actions</span>
         </div>
-        <div className={s.fieldGrid}>
-          <TextField
-            label="Recipient email"
-            placeholder="banana@toss.work"
-            helperText="We use this for status updates only."
-            leftSlot={<Mail size={18} />}
-            clearable
-            className={s.fieldControl}
-          />
-          <TextField
-            label="Password"
-            type="password"
-            placeholder="••••••••"
-            error="Use at least 8 characters."
-            leftSlot={<Lock size={18} />}
-            className={s.fieldControl}
-          />
-          <Input label="Nickname" placeholder="Banana" className={s.fieldControl} />
-          <Textarea
-            label="Message"
-            placeholder="Add a short celebratory note."
-            showCount
-            maxLength={160}
-            className={s.fieldControl}
-          />
-          <Field.Root className={s.fieldWrapper}>
-            <Field.Label htmlFor="custom-input">Custom field</Field.Label>
-            <Input id="custom-input" placeholder="Add context for this flow." />
-            <Field.HelperText>Field helper text keeps the label grounded.</Field.HelperText>
-          </Field.Root>
-          <div className={s.richEditorCard}>
-            <RichTextEditor
-              content={richText}
-              placeholder="Share a celebratory story."
-              onChange={setRichText}
-            />
-          </div>
-          <div className={s.optionListWrapper}>
-            <OptionList options={optionListItems} value={optionValue} onSelect={setOptionValue} />
-          </div>
+        <div className={s.buttonGrid}>
+          {(['primary', 'blue', 'secondary', 'outline', 'ghost'] as const).map((v) => (
+            <div key={v} className={s.buttonItem}>
+              <span className={s.variantLabel}>{v}</span>
+              <Button variant={v}>{v.charAt(0).toUpperCase() + v.slice(1)}</Button>
+            </div>
+          ))}
         </div>
-      </section>
-
-      <section className={s.section}>
-        <div className={s.sectionHeader}>
-          <h2>Selectors</h2>
-          <span className={s.sectionHint}>Switches, toggles, segmented controls, and sliders</span>
-        </div>
-        <div className={s.selectorGrid}>
-          <div className={s.selectorCard}>
-            <div className={s.selectorRow}>
-              <span>Notifications</span>
-              <Switch defaultChecked />
-            </div>
-            <div className={s.selectorRow}>
-              <span>Dark mode</span>
-              <Toggle defaultPressed />
-            </div>
-            <div className={s.selectorRow}>
-              <span>Agree to terms</span>
-              <Checkbox defaultChecked label="Agree" />
-            </div>
-            <div className={s.selectorRow}>
-              <span>Quick tools</span>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    rightIcon={<ChevronDown size={14} />}
-                    className={s.menuTrigger}
-                  >
-                    {menuChoice === 'duplicate'
-                      ? 'Duplicate'
-                      : menuChoice === 'export'
-                        ? 'Export'
-                        : 'Preview'}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuLabel>Quick tools</DropdownMenuLabel>
-                  {dropdownItems.map((item) => (
-                    <DropdownMenuItem key={item.value} onSelect={() => setMenuChoice(item.value)}>
-                      {item.label}
-                    </DropdownMenuItem>
-                  ))}
-                  <DropdownMenuSeparator />
-                  <DropdownMenuCheckboxItem checked={menuChecked} onCheckedChange={setMenuChecked}>
-                    Auto sync tokens
-                  </DropdownMenuCheckboxItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-            <SegmentedControl value={segmentValue} alignment="fluid" onChange={setSegmentValue}>
-              <SegmentedControl.Item value="daily">Daily</SegmentedControl.Item>
-              <SegmentedControl.Item value="weekly">Weekly</SegmentedControl.Item>
-              <SegmentedControl.Item value="monthly">Monthly</SegmentedControl.Item>
-            </SegmentedControl>
-            <RadioGroup value={radioValue} onValueChange={setRadioValue} className={s.radioGroup}>
-              <RadioGroupItem value="toss">Toss</RadioGroupItem>
-              <RadioGroupItem value="apple">Apple</RadioGroupItem>
-              <RadioGroupItem value="banana">Banana</RadioGroupItem>
-            </RadioGroup>
-            <div className={s.sliderRow}>
-              <span>Timeline weight</span>
-              <Slider
-                value={[sliderValue]}
-                min={0}
-                max={100}
-                onValueChange={(value) => setSliderValue(value[0] ?? 0)}
-              />
-            </div>
-            <div className={s.selectorRow}>
-              <span>Guest count</span>
-              <NumericSpinner
-                number={guestCount}
-                onNumberChange={setGuestCount}
-                min={0}
-                max={10}
-                size="medium"
-                decreaseAriaLabel="Decrease"
-                increaseAriaLabel="Increase"
-              />
-            </div>
-          </div>
-          <div className={s.selectorCard}>
-            <Tabs defaultValue="summary">
-              <TabsList className={s.tabList}>
-                <TabsTrigger value="summary">Summary</TabsTrigger>
-                <TabsTrigger value="details">Details</TabsTrigger>
-              </TabsList>
-              <TabsContent value="summary">
-                <p className={s.tabCopy}>
-                  React 19.2 + Next.js 16 view transitions stay silky smooth.
-                </p>
-              </TabsContent>
-              <TabsContent value="details">
-                <p className={s.tabCopy}>Suspense-friendly caching keeps the UI responsive.</p>
-              </TabsContent>
-            </Tabs>
-            <SegmentedControl value={detailMode} alignment="fluid" onChange={setDetailMode}>
-              <SegmentedControl.Item value="plan">Plan</SegmentedControl.Item>
-              <SegmentedControl.Item value="compose">Compose</SegmentedControl.Item>
-            </SegmentedControl>
-          </div>
-        </div>
-      </section>
-
-      <section className={s.section}>
-        <div className={s.sectionHeader}>
-          <h2>Cards & Feedback</h2>
-          <span className={s.sectionHint}>Avatar, badge, info, empty state, loader, skeleton</span>
-        </div>
-        <div className={s.cardGrid}>
-          <div>
-            <div className={s.statusRow}>
-              <Avatar>
-                <Avatar.Fallback delayMs={600}>BR</Avatar.Fallback>
-              </Avatar>
-              <div>
-                <p className={s.statusLabel}>Banana RSVP</p>
-                <p className={s.statusValue}>Ready to launch</p>
-              </div>
-              <Badge size="sm" color="green">
-                Live
-              </Badge>
-            </div>
-            <div className={s.badgeRow}>
-              {statuses.map((status) => (
-                <div key={status.label} className={s.statusStack}>
-                  <span>{status.label}</span>
-                  <strong>{status.value}</strong>
-                </div>
-              ))}
-            </div>
-            <ProgressBar value={34} />
-            <div className={s.loaderRow}>
-              <Loader size="sm" />
-              <Skeleton circle width={24} height={24} />
-              <Skeleton width={80} height={32} />
-            </div>
-          </div>
-          <div>
-            <InfoMessage>The next sync propagates builder milestones instantly.</InfoMessage>
-            <EmptyState
-              icon={<Sparkles size={32} />}
-              title="Empty preview"
-              description="Pick a theme so the invitation card renders here."
-              action={{ label: 'Pick theme', onClick: () => setToastOpen(true) }}
-              className={s.emptyState}
-              variant="banana"
-            />
-          </div>
-          <div>
-            <Accordion type="multiple" defaultValue={['Builder meta']}>
-              {accordionItems.map((item) => (
-                <AccordionItem key={item.title} value={item.title}>
-                  <AccordionTrigger>{item.title}</AccordionTrigger>
-                  <AccordionContent>{item.content}</AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
+        <div
+          style={{
+            marginTop: '32px',
+            position: 'relative',
+            height: '380px',
+            border: '1px solid #e2e8f0',
+            borderRadius: '32px',
+            overflow: 'hidden',
+            backgroundColor: '#f8fafc',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+            padding: '12px',
+          }}
+        >
+          <div
+            style={{
+              position: 'relative',
+              height: '100%',
+              border: '2px dashed #cbd5e1',
+              borderRadius: '24px',
+              backgroundColor: 'white',
+              display: 'flex',
+              alignItems: 'flex-end',
+              padding: '16px',
+            }}
+          >
+            <BottomCTA.Single fixed={false} variant="blue" onClick={() => setToastOpen(true)}>
+              CTA Button
+            </BottomCTA.Single>
           </div>
         </div>
       </section>
@@ -923,81 +711,6 @@ export default function DesignPage() {
               <ToastViewport />
             </ToastProvider>
           </div>
-        </div>
-      </section>
-
-      <section className={s.section}>
-        <div className={s.sectionHeader}>
-          <h2>TextField Variants</h2>
-          <span className={s.sectionHint}>Primary, Secondary, Outline, Ghost, Classic</span>
-        </div>
-        <div className={s.variantGrid}>
-          {(['primary', 'secondary', 'outline', 'ghost', 'classic'] as const).map((v) => (
-            <TextField
-              key={v}
-              variant={v}
-              label={`Variant: ${v}`}
-              placeholder={`Enter text in ${v} style`}
-              className={s.fieldControl}
-              clearable
-            />
-          ))}
-        </div>
-      </section>
-
-      <section className={s.section}>
-        <div className={s.sectionHeader}>
-          <h2>TextField Sizes</h2>
-          <span className={s.sectionHint}>XS, SM, MD, LG, XL</span>
-        </div>
-        <div className={s.variantGrid}>
-          {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((sz) => (
-            <TextField
-              key={sz}
-              size={sz}
-              label={`Size: ${sz}`}
-              placeholder={`Size ${sz} input`}
-              className={s.fieldControl}
-              clearable
-            />
-          ))}
-        </div>
-      </section>
-
-      <section className={s.section}>
-        <div className={s.sectionHeader}>
-          <h2>TextField Radii</h2>
-          <span className={s.sectionHint}>None, Small, Medium, Large, Full</span>
-        </div>
-        <div className={s.variantGrid}>
-          {(['none', 'sm', 'md', 'lg', 'full'] as const).map((r) => (
-            <TextField
-              key={r}
-              radius={r}
-              label={`Radius: ${r}`}
-              placeholder={`${r} corner radius`}
-              className={s.fieldControl}
-              clearable
-            />
-          ))}
-        </div>
-      </section>
-      <section className={s.section}>
-        <div className={s.sectionHeader}>
-          <h2>TextField.Button</h2>
-          <span className={s.sectionHint}>Interactive slots used in builders</span>
-        </div>
-        <div className={s.variantGrid}>
-          <TextField.Button label="Date selector" placeholder="Select date" />
-          <TextField.Button label="Time selector" value="09:00 PM" variant="outline" />
-          <TextField.Button
-            label="Secondary variant"
-            placeholder="Secondary button"
-            variant="secondary"
-          />
-          <TextField.Button label="Ghost variant" placeholder="Ghost button" variant="ghost" />
-          <TextField.Button label="Small size" placeholder="Small" size="sm" />
-          <TextField.Button label="Error state" placeholder="Has error" error="Mandatory field" />
         </div>
       </section>
     </div>
