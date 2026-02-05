@@ -19,7 +19,6 @@ import { Badge } from '@/components/ui/Badge';
 import { BottomCTA } from '@/components/ui/BottomCTA';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
 import { Checkbox } from '@/components/ui/Checkbox';
 import { Dialog } from '@/components/ui/Dialog';
 import {
@@ -116,65 +115,67 @@ export default function DesignPage() {
         </div>
         <h1>All UI components in one page</h1>
         <p className={s.heroDescription}>
-          Experience Toss and Apple-inspired interactions for buttons, inputs, selectors, overlays,
-          and asynchronous feedback without leaving the design preview.
+          Experience Apple-inspired and Banana-themed interactions for buttons, inputs, selectors,
+          overlays, and asynchronous feedback without leaving the design preview.
         </p>
       </header>
 
       <section className={s.section}>
         <div className={s.sectionHeader}>
           <h2>Buttons & Actions</h2>
-          <span className={s.sectionHint}>Primary, CTA, Text, and Tooltip combos</span>
+          <span className={s.sectionHint}>Supported variants and special actions</span>
+        </div>
+        <div className={s.buttonGrid}>
+          {['primary', 'blue', 'secondary', 'outline', 'ghost'].map((v) => (
+            <div key={v} className={s.buttonItem}>
+              <span className={s.variantLabel}>{v}</span>
+              <Button variant={v as any}>{v.charAt(0).toUpperCase() + v.slice(1)}</Button>
+            </div>
+          ))}
         </div>
         <div className={s.buttonMatrix}>
-          <Button leftIcon={<Send size={16} />}>Primary</Button>
-          <Button variant="secondary">Secondary</Button>
-          <Button variant="ghost">Ghost</Button>
-          <Button variant="fill" size="md">
-            Fill
-          </Button>
-          <TextButton underline>Text button</TextButton>
           <CTAButton>CTA Button</CTAButton>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <IconButton variant="clear" size="lg" aria-label="Spark">
+                <IconButton variant="ghost" size="lg" aria-label="Spark">
                   <Sparkles size={18} />
                 </IconButton>
               </TooltipTrigger>
               <TooltipContent>Tooltip + icon action</TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <Button variant="toss" size="sm">
-            Toss accent
-          </Button>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                rightIcon={<ChevronDown size={16} />}
-                className={s.menuTrigger}
-              >
-                {menuChoice === 'duplicate'
-                  ? 'Duplicate'
-                  : menuChoice === 'export'
-                    ? 'Export'
-                    : 'Preview'}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Quick tools</DropdownMenuLabel>
-              {dropdownItems.map((item) => (
-                <DropdownMenuItem key={item.value} onSelect={() => setMenuChoice(item.value)}>
-                  {item.label}
-                </DropdownMenuItem>
-              ))}
-              <DropdownMenuSeparator />
-              <DropdownMenuCheckboxItem checked={menuChecked} onCheckedChange={setMenuChecked}>
-                Auto sync tokens
-              </DropdownMenuCheckboxItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+        </div>
+
+        <div
+          style={{
+            marginTop: '32px',
+            position: 'relative',
+            height: '380px',
+            border: '1px solid #e2e8f0',
+            borderRadius: '32px',
+            overflow: 'hidden',
+            backgroundColor: '#f8fafc',
+            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+            padding: '12px',
+          }}
+        >
+          <div
+            style={{
+              position: 'relative',
+              height: '100%',
+              border: '2px dashed #cbd5e1',
+              borderRadius: '24px',
+              backgroundColor: 'white',
+              display: 'flex',
+              alignItems: 'flex-end',
+              padding: '16px',
+            }}
+          >
+            <BottomCTA.Single fixed={false} buttonVariant="blue" onClick={() => setToastOpen(true)}>
+              확인!!
+            </BottomCTA.Single>
+          </div>
         </div>
       </section>
 
@@ -213,13 +214,13 @@ export default function DesignPage() {
             <Input id="custom-input" placeholder="Add context for this flow." />
             <Field.HelperText>Field helper text keeps the label grounded.</Field.HelperText>
           </Field.Root>
-          <Card className={s.richEditorCard}>
+          <div className={s.richEditorCard}>
             <RichTextEditor
               content={richText}
               placeholder="Share a celebratory story."
               onChange={setRichText}
             />
-          </Card>
+          </div>
           <div className={s.optionListWrapper}>
             <OptionList options={optionListItems} value={optionValue} onSelect={setOptionValue} />
           </div>
@@ -232,7 +233,7 @@ export default function DesignPage() {
           <span className={s.sectionHint}>Switches, toggles, segmented controls, and sliders</span>
         </div>
         <div className={s.selectorGrid}>
-          <Card className={s.selectorCard}>
+          <div className={s.selectorCard}>
             <div className={s.selectorRow}>
               <span>Notifications</span>
               <Switch defaultChecked />
@@ -244,6 +245,37 @@ export default function DesignPage() {
             <div className={s.selectorRow}>
               <span>Agree to terms</span>
               <Checkbox defaultChecked label="Agree" />
+            </div>
+            <div className={s.selectorRow}>
+              <span>Quick tools</span>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    rightIcon={<ChevronDown size={14} />}
+                    className={s.menuTrigger}
+                  >
+                    {menuChoice === 'duplicate'
+                      ? 'Duplicate'
+                      : menuChoice === 'export'
+                        ? 'Export'
+                        : 'Preview'}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>Quick tools</DropdownMenuLabel>
+                  {dropdownItems.map((item) => (
+                    <DropdownMenuItem key={item.value} onSelect={() => setMenuChoice(item.value)}>
+                      {item.label}
+                    </DropdownMenuItem>
+                  ))}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuCheckboxItem checked={menuChecked} onCheckedChange={setMenuChecked}>
+                    Auto sync tokens
+                  </DropdownMenuCheckboxItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
             <SegmentedControl value={segmentValue} alignment="fluid" onChange={setSegmentValue}>
               <SegmentedControl.Item value="daily">Daily</SegmentedControl.Item>
@@ -264,8 +296,8 @@ export default function DesignPage() {
                 onValueChange={(value) => setSliderValue(value[0] ?? 0)}
               />
             </div>
-          </Card>
-          <Card className={s.selectorCard}>
+          </div>
+          <div className={s.selectorCard}>
             <Tabs defaultValue="summary">
               <TabsList className={s.tabList}>
                 <TabsTrigger value="summary">Summary</TabsTrigger>
@@ -284,7 +316,7 @@ export default function DesignPage() {
               <SegmentedControl.Item value="plan">Plan</SegmentedControl.Item>
               <SegmentedControl.Item value="compose">Compose</SegmentedControl.Item>
             </SegmentedControl>
-          </Card>
+          </div>
         </div>
       </section>
 
@@ -294,7 +326,7 @@ export default function DesignPage() {
           <span className={s.sectionHint}>Avatar, badge, info, empty state, loader, skeleton</span>
         </div>
         <div className={s.cardGrid}>
-          <Card>
+          <div>
             <div className={s.statusRow}>
               <Avatar>
                 <Avatar.Fallback delayMs={600}>BR</Avatar.Fallback>
@@ -321,8 +353,8 @@ export default function DesignPage() {
               <Skeleton circle width={24} height={24} />
               <Skeleton width={80} height={32} />
             </div>
-          </Card>
-          <Card>
+          </div>
+          <div>
             <InfoMessage>The next sync propagates builder milestones instantly.</InfoMessage>
             <EmptyState
               icon={<Sparkles size={32} />}
@@ -332,8 +364,8 @@ export default function DesignPage() {
               className={s.emptyState}
               variant="banana"
             />
-          </Card>
-          <Card>
+          </div>
+          <div>
             <Accordion type="multiple" defaultValue={['Builder meta']}>
               {accordionItems.map((item) => (
                 <AccordionItem key={item.title} value={item.title}>
@@ -342,7 +374,7 @@ export default function DesignPage() {
                 </AccordionItem>
               ))}
             </Accordion>
-          </Card>
+          </div>
         </div>
       </section>
 
@@ -352,7 +384,7 @@ export default function DesignPage() {
           <span className={s.sectionHint}>Dialog, AlertDialog, BottomSheet, Toast, BottomCTA</span>
         </div>
         <div className={s.overlayGrid}>
-          <Card className={s.overlayCard}>
+          <div className={s.overlayCard}>
             <div className={s.overlayActions}>
               <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                 <Dialog.Trigger asChild>
@@ -367,7 +399,7 @@ export default function DesignPage() {
                     <Dialog.Close asChild>
                       <Button variant="ghost">Close</Button>
                     </Dialog.Close>
-                    <Button variant="fill">Action</Button>
+                    <Button variant="primary">Action</Button>
                   </Dialog.Footer>
                 </Dialog.Content>
               </Dialog>
@@ -399,8 +431,8 @@ export default function DesignPage() {
             <Button variant="ghost" onClick={() => setSheetOpen(true)}>
               BottomSheet
             </Button>
-          </Card>
-          <Card className={s.overlayCard}>
+          </div>
+          <div className={s.overlayCard}>
             <h3>Toast demo</h3>
             <ToastProvider swipeDirection="right">
               <Button onClick={() => setToastOpen(true)}>Show toast</Button>
@@ -410,20 +442,17 @@ export default function DesignPage() {
               </Toast>
               <ToastViewport />
             </ToastProvider>
-            <div className={s.bottomCTAWrapper}>
-              <BottomCTA.Single>Bottom CTA</BottomCTA.Single>
-            </div>
-          </Card>
+          </div>
         </div>
       </section>
 
       <section className={s.section}>
         <div className={s.sectionHeader}>
           <h2>TextField Variants</h2>
-          <span className={s.sectionHint}>Toss, Apple, Surface, Classic, Soft</span>
+          <span className={s.sectionHint}>Primary, Secondary, Outline, Ghost, Classic</span>
         </div>
         <div className={s.variantGrid}>
-          {['toss', 'apple', 'surface', 'classic', 'soft'].map((v) => (
+          {['primary', 'secondary', 'outline', 'ghost', 'classic'].map((v) => (
             <TextField
               key={v}
               variant={v as any}
@@ -480,8 +509,13 @@ export default function DesignPage() {
         </div>
         <div className={s.variantGrid}>
           <TextField.Button label="Date selector" placeholder="Select date" />
-          <TextField.Button label="Time selector" value="09:00 PM" variant="apple" />
-          <TextField.Button label="Soft variant" placeholder="Soft button" variant="soft" />
+          <TextField.Button label="Time selector" value="09:00 PM" variant="outline" />
+          <TextField.Button
+            label="Secondary variant"
+            placeholder="Secondary button"
+            variant="secondary"
+          />
+          <TextField.Button label="Ghost variant" placeholder="Ghost button" variant="ghost" />
           <TextField.Button label="Small size" placeholder="Small" size="sm" />
           <TextField.Button label="Error state" placeholder="Has error" error="Mandatory field" />
         </div>

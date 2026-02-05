@@ -5,7 +5,7 @@ import { clsx } from 'clsx';
 import s from './Textarea.module.scss';
 import { Field } from '../Field';
 
-export type TextareaVariant = 'surface' | 'classic' | 'soft' | 'toss';
+export type TextareaVariant = 'outline' | 'classic' | 'secondary' | 'primary';
 export type TextareaRadius = 'none' | 'small' | 'medium' | 'large';
 
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -22,7 +22,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   (
     {
       label,
-      variant = 'toss',
+      variant = 'outline',
       radius = 'medium',
       highContrast = false,
       error,
@@ -84,10 +84,12 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           {label && <Field.Label htmlFor={textareaId}>{label}</Field.Label>}
           {textarea}
           <Field.Footer>
-            {(helperText || errorMsg) ? (
+            {helperText || errorMsg ? (
               <Field.HelperText error={isError}>{errorMsg || helperText}</Field.HelperText>
-            ) : <div />}
-            {(showCount && maxLength) && (
+            ) : (
+              <div />
+            )}
+            {showCount && maxLength && (
               <Field.Counter current={String(currentValue).length} max={maxLength} />
             )}
           </Field.Footer>

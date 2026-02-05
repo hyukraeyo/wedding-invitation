@@ -61,8 +61,8 @@
     }
   }
 
-  &.toss {
-    @include m.toss-interactive;
+  &.primary {
+    @include m.control-interactive;
     background-color: v.$white;
     border: 1px solid v.$yellow-100;
     color: v.$grey-900;

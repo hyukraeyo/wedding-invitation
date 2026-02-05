@@ -1,13 +1,11 @@
 // ============================================
 // 🍌 1. Colors: Foundation Palette
-// Purely functional colors (Toss & Apple inspired)
 // ============================================
 
 $white: #ffffff;
 $black: #020202;
 
-// Grey: Toss Design System Style
-$grey-50:  #f9fafb;
+$grey-50: #f9fafb;
 $grey-100: #f2f4f6;
 $grey-200: #e5e8eb;
 $grey-300: #d1d6db;
@@ -18,32 +16,31 @@ $grey-700: #4e5968;
 $grey-800: #333d4b;
 $grey-900: #191f28;
 
-$primary-50:  #fffbea;
+$primary-50: #fffbea;
 $primary-100: #fff9c4;
 $primary-200: #fff59d;
 $primary-500: #fbc02d;
 $primary-600: #f9a825;
 $primary-700: #f57f17;
 
-// Accents: Apple & Toss Blue
 $blue-500: #3182f6;
 $blue-600: #1b64da;
 
 // Status
-$red-400:   #f66570;
-$red-500:   #f04452;
-$red-600:   #e42939;
-$red-700:   #d22030;
-$red-800:   #bc1b2a;
-$red-900:   #a51926;
+$red-400: #f66570;
+$red-500: #f04452;
+$red-600: #e42939;
+$red-700: #d22030;
+$red-800: #bc1b2a;
+$red-900: #a51926;
 
 // Semantic Feedback
-$color-danger-bg:     #fff1f2;
+$color-danger-bg: #fff1f2;
 $color-danger-border: #ffe4e6;
-$color-success-bg:    #f0fdf4;
+$color-success-bg: #f0fdf4;
 $color-success-border: #dcfce7;
 
-$green-50:  #f0faf6;
+$green-50: #f0faf6;
 $green-100: #aeefd5;
 $green-500: #34c759;
 $green-600: #02a262;
@@ -51,7 +48,7 @@ $green-700: #029359;
 $green-800: #028450;
 $green-900: #027648;
 
-$amber-50:  #fffbeb;
+$amber-50: #fffbeb;
 $amber-100: #fef3c7;
 $amber-200: #fde68a;
 $amber-300: #ffdd78;
@@ -59,18 +56,18 @@ $amber-500: #ffcc00;
 $amber-600: #e6b800;
 $amber-900: #78350f;
 
-$yellow-50:  $amber-50;
+$yellow-50: $amber-50;
 $yellow-100: $amber-100;
 $yellow-200: $amber-200;
 $yellow-300: $amber-300;
 $yellow-900: $amber-900;
 
-$blue-50:   #e8f3ff;
-$blue-100:  #c9e2ff;
-$blue-200:  #90c2ff;
-$blue-400:  #4593fc;
-$blue-500:  #3182f6;
-$blue-600:  #2272eb;
-$blue-700:  #1b64da;
-$blue-800:  #1957c2;
-$blue-900:  #194aa6;
+$blue-50: #e8f3ff;
+$blue-100: #c9e2ff;
+$blue-200: #90c2ff;
+$blue-400: #4593fc;
+$blue-500: #3182f6;
+$blue-600: #2272eb;
+$blue-700: #1b64da;
+$blue-800: #1957c2;
+$blue-900: #194aa6;

@@ -5,6 +5,7 @@
 ## 1. 전역 상태 관리 (Zustand)
 
 ### **useInvitationStore**
+
 - 청첩장 데이터의 모든 상태를 관리하는 단일 소스입니다.
 - **수정 모드**: `/builder?mode=edit` 진입 시 기존 데이터를 스토어에 로드합니다.
 - **생성 모드**: `/builder` 진입 시 스토어를 초기화합니다.
@@ -20,10 +21,8 @@ const { invitation, updateInvitation } = useInvitationStore(
 
 ## 2. 공통 UI 패턴
 
-### **ResponsiveModal**
-- 데스크톱에서는 `Dialog`(중앙 팝업), 모바일에서는 `Drawer`(바텀 시트)로 동작하는 하이브리드 모달입니다.
-
 ### **ConfirmDialog**
+
 - 사용자 확인이 필요한 액션(삭제, 변경 취소 등)에 사용합니다.
 
 ## 3. 데이터 패칭 (Data Fetching)
@@ -35,6 +34,7 @@ const { invitation, updateInvitation } = useInvitationStore(
 ## 4. 스타일링 시스템
 
 - **디자인 토큰**: `src/styles/_variables.scss`에 모든 색상, 간격, 타이포그래피 상수를 정의합니다.
+- **Strict Rule**: 모든 스타일링 값(색상, 패딩, 폰트 사이즈, 마진 등)은 하드코딩하지 않고 반드시 디자인 토큰을 검색하여 사용합니다.
 - **믹스인**: `src/styles/_mixins.scss`에서 공통 레이아웃(Flex, Grid) 및 미디어 쿼리를 관리합니다.
 
 ## 5. 접근성 (Accessibility)

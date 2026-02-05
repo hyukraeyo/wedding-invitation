@@ -12,120 +12,115 @@ import styles from './DateTimeSection.module.scss';
 import type { SectionProps } from '@/types/builder';
 
 const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props) {
-    const {
-        date,
-        setDate,
-        time,
-        setTime,
-        showCalendar,
-        setShowCalendar,
-        showDday,
-        setShowDday,
-        ddayMessage,
-        setDdayMessage
-    } = useInvitationStore(useShallow((state) => ({
-        date: state.date,
-        setDate: state.setDate,
-        time: state.time,
-        setTime: state.setTime,
-        showCalendar: state.showCalendar,
-        setShowCalendar: state.setShowCalendar,
-        showDday: state.showDday,
-        setShowDday: state.setShowDday,
-        ddayMessage: state.ddayMessage,
-        setDdayMessage: state.setDdayMessage,
-    })));
+  const {
+    date,
+    setDate,
+    time,
+    setTime,
+    showCalendar,
+    setShowCalendar,
+    showDday,
+    setShowDday,
+    ddayMessage,
+    setDdayMessage,
+  } = useInvitationStore(
+    useShallow((state) => ({
+      date: state.date,
+      setDate: state.setDate,
+      time: state.time,
+      setTime: state.setTime,
+      showCalendar: state.showCalendar,
+      setShowCalendar: state.setShowCalendar,
+      showDday: state.showDday,
+      setShowDday: state.setShowDday,
+      ddayMessage: state.ddayMessage,
+      setDdayMessage: state.setDdayMessage,
+    }))
+  );
 
-    return (
-        <SectionAccordion
-            title="예식 일시"
-            value="date-time"
-            isOpen={props.isOpen}
-            onToggle={props.onToggle}
-        >
-            <div className={styles.container}>
-                <div className={styles.optionItem}>
-                    <FormField name="wedding-date">
-                        <FormLabel htmlFor="wedding-date">
-                            예식 날짜
-                        </FormLabel>
-                        <FormControl asChild>
-                            <DatePicker
-                                id="wedding-date"
-                                value={date}
-                                variant="toss"
-                                radius="large"
-                                placeholder=""
-                                onChange={(value) => setDate(value)}
-                            />
-                        </FormControl>
-                    </FormField>
-                </div>
-                <div className={styles.optionItem}>
-                    <FormField name="wedding-time">
-                        <FormLabel htmlFor="wedding-time">
-                            예식 시간
-                        </FormLabel>
-                        <FormControl asChild>
-                            <TimePicker
-                                id="wedding-time"
-                                value={time}
-                                variant="toss"
-                                radius="large"
-                                placeholder=""
-                                onChange={(value) => setTime(value)}
-                            />
-                        </FormControl>
-                    </FormField>
-                </div>
+  return (
+    <SectionAccordion
+      title="예식 일시"
+      value="date-time"
+      isOpen={props.isOpen}
+      onToggle={props.onToggle}
+    >
+      <div className={styles.container}>
+        <div className={styles.optionItem}>
+          <FormField name="wedding-date">
+            <FormLabel htmlFor="wedding-date">예식 날짜</FormLabel>
+            <FormControl asChild>
+              <DatePicker
+                id="wedding-date"
+                value={date}
+                variant="primary"
+                radius="large"
+                placeholder=""
+                onChange={(value) => setDate(value)}
+              />
+            </FormControl>
+          </FormField>
+        </div>
+        <div className={styles.optionItem}>
+          <FormField name="wedding-time">
+            <FormLabel htmlFor="wedding-time">예식 시간</FormLabel>
+            <FormControl asChild>
+              <TimePicker
+                id="wedding-time"
+                value={time}
+                variant="primary"
+                radius="large"
+                placeholder=""
+                onChange={(value) => setTime(value)}
+              />
+            </FormControl>
+          </FormField>
+        </div>
 
-                {/* Additional Options */}
-                <div className={styles.optionItem}>
-                    <div className={styles.rowTitle}>달력 노출</div>
-                    <div className={styles.rowRight}>
-                        <Switch
-                            checked={showCalendar}
-                            onCheckedChange={(checked) => setShowCalendar(checked)}
-                        />
-                    </div>
-                </div>
+        {/* Additional Options */}
+        <div className={styles.optionItem}>
+          <div className={styles.rowTitle}>달력 노출</div>
+          <div className={styles.rowRight}>
+            <Switch
+              checked={showCalendar}
+              onCheckedChange={(checked) => setShowCalendar(checked)}
+            />
+          </div>
+        </div>
 
-                <div className={styles.optionItem}>
-                    <div className={styles.rowTitle}>D-Day 노출</div>
-                    <div className={styles.rowRight}>
-                        <Switch
-                            checked={showDday}
-                            onCheckedChange={(checked) => setShowDday(checked)}
-                        />
-                    </div>
-                </div>
+        <div className={styles.optionItem}>
+          <div className={styles.rowTitle}>D-Day 노출</div>
+          <div className={styles.rowRight}>
+            <Switch checked={showDday} onCheckedChange={(checked) => setShowDday(checked)} />
+          </div>
+        </div>
 
-                {showDday && (
-                    <div className={styles.optionItem}>
-                        <div className={styles.ddayInputWrapper}>
-                            <FormField name="dday-message">
-                                <FormLabel htmlFor="dday-message">
-                                    D-Day 메시지
-                                </FormLabel>
-                                <FormControl asChild>
-                                    <TextField
-                                        id="dday-message"
-                                        variant="surface"
-                                        placeholder="예: (신랑), (신부)의 결혼식이 (D-Day) 남았어요"
-                                        value={ddayMessage}
-                                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDdayMessage(e.target.value)}
-                                    />
-                                </FormControl>
-                            </FormField>
-                            <InfoMessage>
-                                (신랑), (신부), (D-Day)는 실제 이름과 날짜로 자동 치환됩니다.
-                            </InfoMessage>
-                        </div>
-                    </div>
-                )}
+        {showDday && (
+          <div className={styles.optionItem}>
+            <div className={styles.ddayInputWrapper}>
+              <FormField name="dday-message">
+                <FormLabel htmlFor="dday-message">D-Day 메시지</FormLabel>
+                <FormControl asChild>
+                  <TextField
+                    id="dday-message"
+                    variant="outline"
+                    placeholder="예: (신랑), (신부)의 결혼식이 (D-Day) 남았어요"
+                    value={ddayMessage}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setDdayMessage(e.target.value)
+                    }
+                  />
+                </FormControl>
+              </FormField>
+              <InfoMessage>
+                (신랑), (신부), (D-Day)는 실제 이름과 날짜로 자동 치환됩니다.
+              </InfoMessage>
             </div>
-        </SectionAccordion>
-    );
+          </div>
+        )}
+      </div>
+    </SectionAccordion>
+  );
 });
 
 export default DateTimeSection;

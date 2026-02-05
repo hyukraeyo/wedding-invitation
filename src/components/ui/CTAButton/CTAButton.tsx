@@ -6,7 +6,7 @@ import { Button, ButtonProps } from '../Button';
 export type CTAButtonProps = ButtonProps;
 
 const CTAButton = React.forwardRef<HTMLButtonElement, CTAButtonProps>((props, ref) => {
-  return <Button size="lg" fullWidth color="primary" variant="fill" {...props} ref={ref} />;
+  return <Button size="lg" fullWidth color="primary" variant="primary" {...props} ref={ref} />;
 });
 
 CTAButton.displayName = 'CTAButton';

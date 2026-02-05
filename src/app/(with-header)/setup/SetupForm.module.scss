@@ -1,146 +1,231 @@
-@use "@/styles/variables" as v;
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
 
 .container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.mainTitle {
-  font-size: v.$font-size-md;
-  font-weight: 700;
-  color: v.$grey-800;
-  letter-spacing: -0.01em;
-}
-
-
-
-@keyframes completionFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(5px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-// 전체 슬라이딩 창 (마스크 역할 제거하여 짤림 방지)
-.formWindow {
-  overflow: visible;
-  position: relative;
   width: 100%;
-  transition: height 0.8s v.$ease-ios; // Faster transition
+  max-width: 540px;
+  gap: 32px;
 }
 
-.skeletonWindow {
-  height: 112px;
-}
-
-.skeletonField {
-  opacity: 1;
-}
-
-
-
-.skeletonLabel {
-  width: 80px;
-  height: 18px;
-  margin-bottom: 0.5rem;
-}
-
-.skeletonInput {
+.stepperContainer {
   width: 100%;
-  height: 60px;
-  border-bottom: 2px solid v.$grey-100;
-  background-color: transparent;
+  margin-bottom: 8px;
 }
 
-.form {
+.mainCard {
+  background-color: v.$white;
+  border-radius: 32px;
+  padding: 40px 32px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  transition: transform 0.8s v.$ease-ios; // Faster transition
-  will-change: transform;
-}
-
-// 각 필드 컨테이너
-.fieldContainer {
-  opacity: 0;
-  transition:
-    opacity 0.8s v.$ease-ios,
-    transform 0.8s v.$ease-ios;
-  transform: translateY(10px);
-  margin-bottom: 0px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-
-  &.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-// .label and .formMessage methods removed as per global Form styles
-
-.whiteBox {
-  padding: 2.5rem 1.5rem;
+  gap: 32px;
   width: 100%;
-  max-width: v.$canvas-max-width;
   box-sizing: border-box;
-  border-radius: v.$radius-2xl;
-  animation: setupFadeInMobile 0.8s v.$ease-ios both;
-  overflow: visible; // hidden에서 변경
 
-  @media (max-width: 768px) {
-    padding: 1.5rem 1.25rem;
-    padding-top: 2rem;
-    padding-bottom: 100px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background-color: transparent;
-    overflow: visible;
+  @include m.mobile {
+    padding: 24px 20px;
+    border-radius: 24px;
+    box-shadow: none;
+    border: 1px solid v.$grey-50;
   }
 }
 
-@keyframes setupFadeInMobile {
-  from {
-    opacity: 0;
+.titleSection {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: v.$grey-900;
+    margin: 0;
   }
 
-  to {
-    opacity: 1;
-  }
-}
-
-.bottomCta {
-  @media (min-width: 769px) {
-    position: relative !important;
-    bottom: auto !important;
-    left: auto !important;
-    right: auto !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    max-width: none !important;
-    box-shadow: none !important;
-    background-color: transparent !important;
+  p {
+    font-size: 16px;
+    color: v.$grey-400;
+    margin: 0;
   }
 }
 
-.ctaWrapper {
-  margin-top: 1.5rem;
-  width: 100%;
-  max-width: v.$canvas-max-width;
-  z-index: 10;
+.formSection {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
 }
 
-.ctaLabel {
+.personSection {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sectionHeader {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 12px;
+  margin-bottom: 4px;
+
+  .iconWrapper {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &.groom {
+      background-color: #eff6ff;
+      color: #3b82f6;
+    }
+
+    &.bride {
+      background-color: #fff1f2;
+      color: #f43f5e;
+    }
+  }
+
+  .label {
+    font-size: 18px;
+    font-weight: 700;
+    color: v.$grey-800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    span {
+      color: v.$grey-300;
+      font-weight: 400;
+      font-size: 15px;
+    }
+  }
+}
+
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.fieldRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+
+  @include m.mobile {
+    grid-template-columns: 1fr;
+  }
+}
+
+.fieldLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: v.$grey-400;
+  margin-bottom: 8px;
+  margin-left: 2px;
+}
+
+.nextButton {
+  margin-top: 8px;
+  height: 56px !important;
+  border-radius: 20px !important;
+  font-size: 17px !important;
+  font-weight: 600 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  background-color: #3b82f6 !important;
+  color: v.$white !important;
+  border: none !important;
+  width: 100% !important;
+  cursor: pointer;
+  transition: all 0.2s v.$ease-ios;
+
+  &:hover {
+    background-color: #2563eb !important;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    opacity: 0.9;
+  }
+
+  &:disabled {
+    background-color: v.$grey-200 !important;
+    color: v.$grey-400 !important;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.parentsButton {
+  background-color: v.$white;
+  border: 1px solid v.$grey-50;
+  border-radius: 20px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.2s v.$ease-ios;
+
+  &:hover {
+    background-color: v.$grey-50;
+  }
+
+  .parentsLeft {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    .iconWrapper {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background-color: v.$grey-100;
+      color: v.$grey-600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+
+      .title {
+        font-size: 16px;
+        font-weight: 700;
+        color: v.$grey-800;
+      }
+
+      .subtitle {
+        font-size: 13px;
+        color: v.$grey-400;
+      }
+    }
+  }
+
+  .plusIcon {
+    color: v.$grey-400;
+  }
+}
+
+.datePickerWrapper,
+.timePickerWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 12px 0;
 }

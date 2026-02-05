@@ -21,9 +21,9 @@
   - Tailwind CSS는 보조적으로만 사용하며, 복잡한 컴포넌트 스타일링은 반드시 SCSS Modules를 사용함.
 - **공통 컴포넌트**: 
   - Radix UI Primitives 기반으로 점진적 전환.
-  - 모달은 반드시 `ResponsiveModal`(Desktop: Dialog / Mobile: Drawer) 사용.
 
 ## 3. 디자인 시스템 및 스타일 규칙 (Strict)
+- **전용 스타일링 값 검색 필수 (Strict Style Rule)**: 모든 색상값, 패딩, 폰트 사이즈, 마진 등 모든 스타일 값은 하드코딩하지 말고 반드시 `src/styles` 내의 변수나 토큰을 검색하여 사용하십시오. 관련 변수가 없다면 새로 정의하거나 사용자에게 확인하십시오.
 - **Primary 컬러**: 바나나 옐로우 `#FBC02D` (`v.$primary`).
 - **하드코딩된 색상 값 절대 금지**: 모든 색상은 `src/styles/_variables.scss`에 정의된 변수를 사용함.
   ```scss

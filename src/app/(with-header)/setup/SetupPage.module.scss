@@ -1,48 +1,31 @@
-﻿@use "@/styles/variables" as v;
-@use "@/styles/mixins" as m;
+﻿@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
 
 .container {
   display: flex;
   flex-direction: column;
-  // background-color: v.$color-bg-page;
-  padding: 0;
+  background-color: #f7f9fb; // Clean light background
+  min-height: calc(100vh - 56px); // Account for header if any
   position: relative;
   overflow-y: auto;
   overflow-x: hidden;
+  padding: 40px 16px;
 
-
-  // Background decoration
-  &::before {
-    content: '';
-    position: absolute;
-    top: -10%;
-    right: -10%;
-    width: 40%;
-    height: 40%;
-    background: radial-gradient(circle, rgba(v.$primary, 0.08) 0%, transparent 70%);
-    z-index: 0;
-    pointer-events: none;
-  }
-
-  @media (max-width: 768px) {
-    background-color: v.$color-background;
-    padding: 0;
-    overflow-x: hidden;
-
-    &::before {
-      display: none;
-    }
-  }
-
-  @media (min-width: 768px) {
-    padding: 3rem 1.5rem;
-    align-items: center;
-    justify-content: center;
+  @include m.mobile {
+    padding: 24px 0;
+    background-color: v.$white;
+    min-height: 100vh;
   }
 }
 
 .content {
   width: 100%;
-  max-width: 520px; // Slightly wider for premium feel
+  max-width: 520px;
+  margin: 0 auto;
   z-index: 1;
+
+  @include m.mobile {
+    max-width: none;
+    padding: 0 16px;
+  }
 }

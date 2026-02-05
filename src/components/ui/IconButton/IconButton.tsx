@@ -6,30 +6,43 @@ import { clsx } from 'clsx';
 import s from './IconButton.module.scss';
 
 export interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    variant?: 'clear' | 'fill' | 'primary';
-    size?: 'xl' | 'lg' | 'md' | 'sm' | 'xs';
-    iconSize?: number;
-    // TDS compatibility props
-    name?: string;
-    asChild?: boolean;
+  variant?: 'ghost' | 'secondary' | 'primary';
+  size?: 'xl' | 'lg' | 'md' | 'sm' | 'xs';
+  iconSize?: number;
+  // TDS compatibility props
+  name?: string;
+  asChild?: boolean;
 }
 
 const IconButton = React.forwardRef<HTMLButtonElement, IconButtonProps>(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    ({ className, variant = 'clear', size = 'md', children, iconSize, name, asChild = false, type = 'button', ...props }, ref) => {
-        const Comp = asChild ? Slot : 'button';
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  (
+    {
+      className,
+      variant = 'ghost',
+      size = 'md',
+      children,
+      iconSize,
+      name,
+      asChild = false,
+      type = 'button',
+      ...props
+    },
+    ref
+  ) => {
+    const Comp = asChild ? Slot : 'button';
 
-        return (
-            <Comp
-                ref={ref}
-                className={clsx(s.iconButton, s[variant], s[size], className)}
-                type={type}
-                {...props}
-            >
-                {children}
-            </Comp>
-        );
-    }
+    return (
+      <Comp
+        ref={ref}
+        className={clsx(s.iconButton, s[variant], s[size], className)}
+        type={type}
+        {...props}
+      >
+        {children}
+      </Comp>
+    );
+  }
 );
 
 IconButton.displayName = 'IconButton';

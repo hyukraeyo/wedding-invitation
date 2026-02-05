@@ -1,0 +1,73 @@
+@use '../../../styles/variables' as v;
+
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: v.$white;
+  padding: 8px 16px;
+  border-radius: v.$radius-full;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: v.$grey-300;
+  font-size: v.$font-size-xs;
+  font-weight: 500;
+  transition: all 0.3s v.$ease-ios;
+
+  &.active {
+    color: v.$white;
+
+    .number {
+      background-color: #3b82f6; // Blue from image
+      color: v.$white;
+    }
+
+    .label {
+      color: v.$grey-400;
+      font-weight: 600;
+      display: inline-block;
+    }
+  }
+
+  &.completed {
+    color: v.$grey-900;
+  }
+}
+
+.number {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: v.$grey-100;
+  color: v.$grey-400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+.label {
+  display: none;
+
+  @media (min-width: 480px) {
+    display: inline-block;
+  }
+}
+
+.active .label {
+  display: inline-block;
+}
+
+.separator {
+  width: 12px;
+  height: 1px;
+  background-color: v.$grey-200;
+}

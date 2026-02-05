@@ -1,5 +1,5 @@
-@use "../../../styles/variables" as v;
-@use "../../../styles/mixins" as m;
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
 .iconButton {
   @include m.button-base;
@@ -13,37 +13,58 @@
   background: transparent;
   width: 44px;
   height: 44px;
-  
+
   // Sizes
-  &.xl { width: 56px; height: 56px; }
-  &.lg { width: 48px; height: 48px; }
-  &.md { width: 44px; height: 44px; }
-  &.sm { width: 36px; height: 36px; }
-  &.xs { width: 28px; height: 28px; }
-  
+  &.xl {
+    width: 56px;
+    height: 56px;
+  }
+  &.lg {
+    width: 48px;
+    height: 48px;
+  }
+  &.md {
+    width: 44px;
+    height: 44px;
+  }
+  &.sm {
+    width: 36px;
+    height: 36px;
+  }
+  &.xs {
+    width: 28px;
+    height: 28px;
+  }
+
   // Variants
-  &.clear {
+  &.ghost {
     background: transparent;
     color: v.$grey-700;
-    @include m.hover { background: v.$grey-opacity-100; }
+    @include m.hover {
+      background: v.$grey-opacity-100;
+    }
   }
-  
-  &.fill {
+
+  &.secondary {
     background: v.$grey-100;
     color: v.$grey-800;
-    @include m.hover { background: v.$grey-200; }
+    @include m.hover {
+      background: v.$grey-200;
+    }
   }
-  
+
   &.primary {
     background: v.$banana-yellow;
     color: v.$grey-900;
-    @include m.hover { filter: brightness(0.95); }
+    @include m.hover {
+      filter: brightness(0.95);
+    }
   }
 
   &:active {
     transform: scale(0.92);
   }
-  
+
   &:disabled {
     opacity: 0.3;
     cursor: not-allowed;

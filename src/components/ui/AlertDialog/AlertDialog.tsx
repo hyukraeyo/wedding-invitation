@@ -173,7 +173,7 @@ const ConfirmDialog = ({
         {description && <AlertDialogDescription>{description}</AlertDialogDescription>}
         <AlertDialogFooter>
           <AlertDialogCancel asChild>
-            <Button variant="weak" onClick={onCancel}>
+            <Button variant="secondary" onClick={onCancel}>
               {cancelText}
             </Button>
           </AlertDialogCancel>

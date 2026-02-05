@@ -1,5 +1,5 @@
-@use "../../../styles/variables" as v;
-@use "../../../styles/mixins" as m;
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
 // ============================================
 // 🍌 Button Module - Apple & Toss Aesthetic
@@ -17,9 +17,9 @@
   cursor: pointer;
   white-space: nowrap;
   user-select: none;
-  
+
   // Apple Style Transition
-  transition: 
+  transition:
     background-color 0.5s v.$ease-ios,
     color 0.5s v.$ease-ios,
     opacity 0.5s v.$ease-ios,
@@ -44,7 +44,7 @@
 // 1. Primary Variant (Banana Identity)
 .primary {
   background-color: v.$action-primary;
-  color: v.$text-main;
+  color: v.$white;
 
   &:disabled {
     background-color: v.$grey-200;
@@ -61,7 +61,27 @@
   }
 }
 
-// 2. Secondary Variant (Toss Neutral Style)
+// 1.5 Blue Variant (Action Blue)
+.blue {
+  background-color: v.$action-blue;
+  color: v.$white;
+
+  &:disabled {
+    background-color: v.$grey-200;
+    color: v.$grey-400;
+    opacity: 1;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: v.$action-blue-hover;
+  }
+
+  &:active:not(:disabled) {
+    background-color: v.$action-blue-active;
+  }
+}
+
+// 2. Secondary Variant
 .secondary {
   background-color: v.$action-secondary;
   color: v.$text-main;
@@ -77,7 +97,18 @@
   }
 }
 
-// 3. Ghost Variant (Minimal Style)
+// 3. Outline Variant
+.outline {
+  background-color: transparent;
+  border: 1px solid v.$grey-200;
+  color: v.$text-main;
+
+  &:hover:not(:disabled) {
+    background-color: v.$grey-50;
+  }
+}
+
+// 4. Ghost Variant (Minimal Style)
 .ghost {
   background-color: transparent;
   color: v.$text-sub;
@@ -126,14 +157,14 @@
   height: 48px;
   padding: 0 20px;
   font-size: 15px;
-  border-radius: v.$radius-toss;
+  border-radius: v.$radius-lg;
 }
 
 .lg {
   height: 56px;
   padding: 0 24px;
   font-size: 17px;
-  border-radius: v.$radius-apple;
+  border-radius: v.$radius-xl;
 }
 
 // Elements
@@ -142,7 +173,7 @@
   align-items: center;
   gap: 8px;
   transition: opacity 0.3s v.$ease-ios;
-  
+
   &.hidden {
     opacity: 0;
   }
@@ -155,8 +186,12 @@
 }
 
 @keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .spinner {
@@ -167,12 +202,26 @@
 }
 
 @keyframes rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.radius_full { border-radius: v.$radius-full !important; }
-.radius_none { border-radius: 0 !important; }
-.radius_sm { border-radius: v.$radius-sm !important; }
-.radius_md { border-radius: v.$radius-md !important; }
-.radius_lg { border-radius: v.$radius-lg !important; }
+.radius_full {
+  border-radius: v.$radius-full !important;
+}
+.radius_none {
+  border-radius: 0 !important;
+}
+.radius_sm {
+  border-radius: v.$radius-sm !important;
+}
+.radius_md {
+  border-radius: v.$radius-md !important;
+}
+.radius_lg {
+  border-radius: v.$radius-lg !important;
+}

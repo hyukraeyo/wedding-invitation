@@ -21,7 +21,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection(props)
       isOpen={props.isOpen}
       onToggle={props.onToggle}
     >
-      <LocationSectionContent />
+      <LocationSectionContent onComplete={() => props.onToggle?.(false)} />
     </SectionAccordion>
   );
 });

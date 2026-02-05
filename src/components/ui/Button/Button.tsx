@@ -7,7 +7,7 @@ import { Banana } from 'lucide-react';
 import s from './Button.module.scss';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'weak' | 'fill' | 'solid' | 'unstyled' | 'soft' | 'outline' | 'surface' | 'filled' | 'clear' | 'apple' | 'toss';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'outline' | 'blue' | 'unstyled';
   size?: 'xs' | 'sm' | 'md' | 'lg';
   isLoading?: boolean;
   loading?: boolean;
@@ -53,21 +53,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={disabled || isLoading}
         className={clsx(
           !unstyled && s.button,
-          !unstyled &&
-            s[
-              variant === 'weak' ||
-              variant === 'soft' ||
-              variant === 'outline' ||
-              variant === 'surface' ||
-              variant === 'secondary' ||
-              variant === 'toss'
-                ? 'secondary'
-                : variant === 'ghost' || variant === 'clear'
-                  ? 'ghost'
-                  : variant === 'fill' || variant === 'solid' || variant === 'filled' || variant === 'apple' || variant === 'primary'
-                    ? 'primary'
-                    : variant
-            ],
+          !unstyled && s[variant],
           !unstyled && s[size],
           fluid && s.fluid,
           unstyled && s.unstyled,

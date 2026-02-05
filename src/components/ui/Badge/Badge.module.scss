@@ -15,16 +15,34 @@
   vertical-align: middle;
   @include m.smooth-all;
   user-select: none;
-  border-radius: v.$radius-toss;
+  border-radius: v.$radius-lg;
 
   // Sizes
-  &.xs { height: 20px; padding: 0 4px; font-size: 10px; }
-  &.sm { height: 24px; padding: 0 6px; font-size: 11px; }
-  &.md { height: 28px; padding: 0 8px; font-size: 12px; }
-  &.lg { height: 32px; padding: 0 10px; font-size: 13px; }
+  &.xs {
+    height: 20px;
+    padding: 0 4px;
+    font-size: 10px;
+  }
+  &.sm {
+    height: 24px;
+    padding: 0 6px;
+    font-size: 11px;
+  }
+  &.md {
+    height: 28px;
+    padding: 0 8px;
+    font-size: 12px;
+  }
+  &.lg {
+    height: 32px;
+    padding: 0 10px;
+    font-size: 13px;
+  }
 
   // Radius aliases
-  &.radius_full { border-radius: 9999px; }
+  &.radius_full {
+    border-radius: 9999px;
+  }
 
   // Semantic Colors
   &.primary {
@@ -45,7 +63,8 @@
     --soft: #{rgba(v.$status-info, 0.1)};
   }
 
-  &.red, &.danger {
+  &.red,
+  &.danger {
     --bg: #{v.$status-error};
     --text: #ffffff;
     --soft: #{rgba(v.$status-error, 0.1)};
@@ -66,12 +85,14 @@
   &.soft {
     background-color: var(--soft);
     color: var(--bg);
-    
+
     // Apple-style contrast improvement for soft badges
-    &.blue, &.red, &.green {
+    &.blue,
+    &.red,
+    &.green {
       color: var(--bg);
     }
-    
+
     &.secondary {
       color: v.$text-sub;
     }

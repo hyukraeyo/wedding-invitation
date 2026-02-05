@@ -1,7 +1,7 @@
-@use "@/styles/colors" as c;
-@use "@/styles/interact" as i;
-@use "@/styles/semantic" as s;
-@use "@/styles/typography" as t;
+@use '@/styles/colors' as c;
+@use '@/styles/interact' as i;
+@use '@/styles/semantic' as s;
+@use '@/styles/typography' as t;
 
 // ============================================
 // 🍌 Interactive & Layout Mixins
@@ -26,7 +26,7 @@
   color: inherit;
   outline: none;
   -webkit-tap-highlight-color: transparent;
-  
+
   &:disabled {
     cursor: default;
   }
@@ -90,7 +90,7 @@
   }
 }
 
-@mixin toss-interactive {
+@mixin control-interactive {
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   &:active {
@@ -171,7 +171,7 @@
   align-items: center;
   justify-content: center;
   transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  
+
   &:active {
     transform: scale(0.9);
   }
@@ -225,8 +225,8 @@
   border-radius: i.$radius-md;
   font-size: t.$font-size-base;
   color: s.$text-primary;
-  border: 1px solid transparent; 
-  
+  border: 1px solid transparent;
+
   &:hover:not(:disabled) {
     background-color: s.$action-secondary-hover;
   }
@@ -284,8 +284,8 @@
     --text-main: #{s.$text-primary};
     --text-sub: #{s.$text-secondary};
     --action-primary: #{s.$action-primary};
-    --radius-apple: #{i.$radius-lg};
-    --radius-toss: #{i.$radius-md};
+    --radius-lg: #{i.$radius-lg};
+    --radius-md: #{i.$radius-md};
     --primary: #{s.$action-primary};
     --background: #{s.$bg-page};
     --foreground: #{s.$text-primary};

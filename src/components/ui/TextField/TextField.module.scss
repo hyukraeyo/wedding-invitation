@@ -51,7 +51,7 @@
   }
 
   // Variants
-  &.surface {
+  &.outline {
     background-color: v.$white;
     border: 1px solid v.$grey-200;
 
@@ -60,58 +60,14 @@
     }
 
     &:focus-within {
-      border-color: v.$primary;
+      border-color: s.$border-active;
     }
   }
 
-  &.classic {
-    background-color: transparent;
-    border: none;
-    border-bottom: 2px solid v.$grey-200;
-    border-radius: 0 !important;
-    --input-padding: 2px;
-    --slot-padding: 2px;
-
-    &:focus-within {
-      border-bottom-color: v.$primary;
-    }
-
-    &.invalid {
-      border-bottom-color: v.$color-error;
-    }
-  }
-
-  &.soft {
-    background-color: v.$grey-100;
-    border: 1px solid transparent; // Maintain size parity
-
-    &:focus-within {
-      background-color: v.$white;
-      border-color: v.$primary;
-    }
-  }
-
-  &.apple {
-    background-color: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    box-shadow:
-      inset 0 1px 2px rgba(0, 0, 0, 0.02),
-      0 1px 0 rgba(255, 255, 255, 0.5);
-
-    &:focus-within {
-      background-color: v.$white;
-      border-color: rgba(0, 0, 0, 0.1);
-      box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.05),
-        0 0 0 3px rgba(v.$primary, 0.1);
-    }
-  }
-
-  &.toss {
-    @include m.toss-interactive;
+  &.primary {
+    @include m.control-interactive;
     background-color: v.$white;
-    border: 1px solid v.$yellow-100;
+    border: 1px solid v.$action-primary;
 
     .input {
       font-weight: 600;
@@ -122,6 +78,44 @@
       &:active {
         transform: none;
       }
+    }
+  }
+
+  &.secondary {
+    background-color: v.$grey-100;
+    border: 1px solid transparent;
+
+    &:focus-within {
+      background-color: v.$white;
+      border-color: s.$border-active;
+    }
+  }
+
+  &.ghost {
+    background-color: transparent;
+    border: 1px solid transparent;
+
+    &:focus-within {
+      background-color: v.$white;
+      border-color: s.$border-active;
+    }
+  }
+
+  &.classic {
+    background-image: none;
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid v.$grey-200;
+    border-radius: 0 !important;
+    --input-padding: 2px;
+    --slot-padding: 2px;
+
+    &:focus-within {
+      border-bottom-color: s.$border-active;
+    }
+
+    &.invalid {
+      border-bottom-color: v.$color-error;
     }
   }
 

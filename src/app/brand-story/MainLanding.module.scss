@@ -1,0 +1,551 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+// -----------------------------------------------------------------------------
+// Layout & Global
+// -----------------------------------------------------------------------------
+.page {
+  @include m.flex-col;
+  width: 100%;
+  min-height: 100vh;
+  background-color: v.$white;
+  color: v.$text-main;
+  font-family: v.$font-pretendard; // Explicitly use Pretendard
+}
+
+.main {
+  width: 100%;
+  max-width: 1280px; // max-w-7xl relative to desktop, but design is mobile first
+  margin: 0 auto;
+  overflow-x: hidden;
+}
+
+// -----------------------------------------------------------------------------
+// Top Navigation (App Bar style)
+// -----------------------------------------------------------------------------
+.header {
+  position: sticky;
+  top: 0;
+  z-index: v.$z-overlay;
+  width: 100%;
+  height: 60px;
+  background-color: rgba(v.$white, 0.8);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid v.$grey-100;
+
+  &Inner {
+    @include m.flex-center-y;
+    justify-content: space-between;
+    max-width: 1280px;
+    margin: 0 auto;
+    height: 100%;
+    padding: 0 20px;
+  }
+}
+
+.logo {
+  @include m.flex-center-y;
+  gap: 8px;
+  text-decoration: none;
+
+  &Icon {
+    @include m.flex-center;
+    width: 32px;
+    height: 32px;
+    background-color: rgba(v.$primary-500, 0.1); // Yellow tint
+    border-radius: v.$radius-full;
+    color: v.$primary-500;
+  }
+
+  &Text {
+    font-size: v.$font-size-lg;
+    font-weight: 800; // ExtraBold
+    color: v.$grey-900;
+    letter-spacing: -0.02em;
+  }
+}
+
+.navActions {
+  @include m.flex-center-y;
+  gap: 12px;
+}
+
+.startButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  background-color: v.$blue-500;
+  color: v.$white;
+  font-size: v.$font-size-xs;
+  font-weight: v.$font-weight-bold;
+  border-radius: v.$radius-full;
+  border: none;
+  cursor: pointer;
+  transition: opacity v.$transition-fast;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Hero Section
+// -----------------------------------------------------------------------------
+.hero {
+  padding: 48px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+
+  @include m.desktop {
+    flex-direction: row;
+    align-items: center;
+    padding: 96px 24px;
+    gap: 64px;
+  }
+
+  &Content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+  }
+
+  &Badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    background-color: rgba(v.$primary-500, 0.1);
+    color: v.$primary-500;
+    border-radius: v.$radius-full;
+    width: fit-content;
+
+    span {
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+  }
+
+  &Title {
+    font-size: 42px; // Mobile Large
+    font-weight: 900;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: v.$grey-900;
+
+    @include m.desktop {
+      font-size: 64px;
+    }
+  }
+
+  &Desc {
+    font-size: v.$font-size-base;
+    font-weight: 400;
+    line-height: 1.6;
+    color: v.$grey-600;
+    max-width: 480px;
+
+    @include m.desktop {
+      font-size: v.$font-size-lg;
+    }
+  }
+
+  &ActionGroup {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  &PrimaryBtn {
+    flex: 1;
+    height: 56px;
+    @include m.flex-center;
+    background-color: v.$blue-500; // Primary Action Blue
+    color: v.$white;
+    font-size: v.$font-size-base;
+    font-weight: v.$font-weight-bold;
+    border-radius: v.$radius-full;
+    border: none;
+    cursor: pointer;
+    box-shadow: v.$shadow-lg; // Add depth
+    transition: transform v.$transition-fast;
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    @include m.desktop {
+      max-width: 200px;
+    }
+  }
+
+  &SecondaryBtn {
+    flex: 1;
+    height: 56px;
+    @include m.flex-center;
+    background-color: v.$grey-100;
+    color: v.$grey-900;
+    font-size: v.$font-size-base;
+    font-weight: v.$font-weight-bold;
+    border-radius: v.$radius-full;
+    border: none;
+    cursor: pointer;
+    transition: background-color v.$transition-fast;
+
+    &:hover {
+      background-color: v.$grey-200;
+    }
+
+    @include m.desktop {
+      max-width: 200px;
+    }
+  }
+
+  &Visual {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 4/5;
+    border-radius: v.$radius-xl; // 3rem
+    overflow: hidden;
+    box-shadow: v.$shadow-xl;
+    border: 1px solid v.$grey-200;
+    flex: 1;
+    background-color: v.$grey-50;
+
+    &Image {
+      width: 100%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
+    }
+
+    &Overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent);
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Trust Section
+// -----------------------------------------------------------------------------
+.trust {
+  padding: 32px 0;
+  text-align: center;
+
+  &Label {
+    display: block;
+    color: v.$grey-500;
+    font-size: v.$font-size-sm;
+    font-weight: v.$font-weight-bold;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  &Icons {
+    @include m.flex-center;
+    gap: 32px;
+    opacity: 0.4;
+    filter: grayscale(100%);
+
+    span {
+      font-size: 32px;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Features (Bento Grid)
+// -----------------------------------------------------------------------------
+.features {
+  padding: 48px 20px;
+  background-color: v.$grey-50;
+  border-top-left-radius: 48px;
+  border-top-right-radius: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+
+  &Header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &Title {
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -0.02em;
+    color: v.$grey-900;
+    line-height: 1.2;
+  }
+
+  &Subtitle {
+    font-size: v.$font-size-base;
+    color: v.$grey-500;
+    font-weight: 400;
+  }
+
+  &Grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+
+    @include m.desktop {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+}
+
+.bentoCard {
+  background-color: v.$white;
+  padding: 24px;
+  border: 1px solid v.$grey-200;
+  border-radius: v.$radius-xl; // 24px+
+  box-shadow: v.$shadow-sm;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  &Large {
+    @extend .bentoCard;
+    grid-column: span 1;
+    @include m.desktop {
+      grid-column: span 2;
+    }
+  }
+
+  &Image {
+    width: 100%;
+    height: 192px;
+    border-radius: v.$radius-lg;
+    background-size: cover;
+    background-position: center;
+  }
+
+  &Content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &Header {
+    @include m.flex-center-y;
+    gap: 8px;
+
+    span {
+      color: v.$blue-500;
+    }
+  }
+
+  &Title {
+    font-size: v.$font-size-lg;
+    font-weight: v.$font-weight-bold;
+    color: v.$grey-900;
+  }
+
+  &Desc {
+    font-size: v.$font-size-sm;
+    color: v.$grey-500;
+  }
+
+  &IconBox {
+    width: 40px;
+    height: 40px;
+    border-radius: v.$radius-full;
+    @include m.flex-center;
+
+    &.yellow {
+      background-color: rgba(v.$primary-500, 0.1);
+      color: v.$primary-500;
+    }
+
+    &.blue {
+      background-color: rgba(v.$blue-500, 0.1);
+      color: v.$blue-500;
+    }
+  }
+}
+
+.rowGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  @include m.desktop {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Service List
+// -----------------------------------------------------------------------------
+.services {
+  padding: 64px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  &Title {
+    text-align: center;
+    font-size: v.$font-size-xl;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: v.$grey-900;
+  }
+}
+
+.serviceItem {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background-color: v.$white;
+  border: 1px solid v.$grey-200;
+  border-radius: v.$radius-lg;
+
+  &Icon {
+    padding: 12px;
+    border-radius: v.$radius-full;
+    background-color: v.$grey-50;
+
+    &.blue {
+      color: v.$blue-500;
+    }
+    &.yellow {
+      color: v.$primary-500;
+    }
+  }
+
+  &Content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &Name {
+    font-size: v.$font-size-base;
+    font-weight: v.$font-weight-bold;
+    letter-spacing: -0.02em;
+    color: v.$grey-900;
+  }
+
+  &Desc {
+    font-size: v.$font-size-sm;
+    font-weight: 400;
+    color: v.$grey-500;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// CTA Footer
+// -----------------------------------------------------------------------------
+.ctaSection {
+  padding: 80px 20px;
+  background-color: v.$grey-900; // #111418
+  border-top-left-radius: v.$radius-xl;
+  border-top-right-radius: v.$radius-xl;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+
+  &Title {
+    font-size: 30px;
+    font-weight: 900;
+    color: v.$white;
+    letter-spacing: -0.02em;
+
+    span {
+      color: v.$primary-500;
+    }
+  }
+
+  &Desc {
+    color: v.$grey-400;
+    font-size: v.$font-size-base;
+    line-height: 1.6;
+  }
+
+  &Button {
+    @include m.flex-center;
+    gap: 8px;
+    height: 56px;
+    background-color: v.$white;
+    color: v.$grey-900;
+    padding: 0 32px;
+    border-radius: v.$radius-full;
+    font-size: v.$font-size-lg;
+    font-weight: 800;
+    border: none;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: transform v.$transition-fast;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Main Footer
+// -----------------------------------------------------------------------------
+.mainFooter {
+  padding: 32px;
+  background-color: v.$white;
+  border-top: 1px solid v.$grey-100;
+  text-align: center;
+}
+
+.footerLinks {
+  @include m.flex-center;
+  gap: 16px;
+  margin-bottom: 16px;
+
+  span {
+    font-size: v.$font-size-sm;
+    color: v.$grey-600;
+    font-weight: v.$font-weight-bold;
+    cursor: pointer;
+  }
+}
+
+.footerCopy {
+  font-size: v.$font-size-xs;
+  color: v.$grey-500;
+}
+
+// -----------------------------------------------------------------------------
+// FAB (Floating Action Button)
+// -----------------------------------------------------------------------------
+.fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: v.$z-overlay;
+
+  &Button {
+    width: 56px;
+    height: 56px;
+    border-radius: v.$radius-full;
+    background-color: v.$blue-500;
+    color: v.$white;
+    border: none;
+    @include m.flex-center;
+    box-shadow: v.$shadow-xl;
+    cursor: pointer;
+    transition: transform v.$transition-fast;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+}

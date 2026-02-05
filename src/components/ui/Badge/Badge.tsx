@@ -7,7 +7,7 @@ import s from './Badge.module.scss';
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-  variant?: 'solid' | 'soft' | 'surface' | 'outline';
+  variant?: 'solid' | 'soft' | 'outline';
   color?: 'primary' | 'secondary' | 'danger' | 'grey' | 'blue' | 'green' | 'red';
   radius?: 'none' | 'small' | 'medium' | 'large' | 'full';
   highContrast?: boolean;

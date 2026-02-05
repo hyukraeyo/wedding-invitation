@@ -1,0 +1,303 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.page {
+  @include m.flex-col;
+  width: 100%;
+  min-height: 100vh;
+  background-color: v.$white;
+  color: v.$text-main;
+  font-family: v.$font-family-base;
+}
+
+// -----------------------------------------------------------------------------
+// Header
+// -----------------------------------------------------------------------------
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: v.$z-overlay;
+  height: v.$header-height;
+  border-bottom: 1px solid v.$grey-100;
+  background-color: rgba(v.$white, 0.8);
+  backdrop-filter: blur(12px);
+
+  &Inner {
+    @include m.flex-center;
+    justify-content: space-between;
+    height: 100%;
+    padding: 0 16px;
+    max-width: v.$max-mobile;
+    margin: 0 auto;
+  }
+}
+
+.backButton {
+  @include m.flex-center;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  color: v.$text-main;
+}
+
+.title {
+  font-size: v.$font-size-lg;
+  font-weight: v.$font-weight-bold;
+  flex: 1;
+  text-align: center;
+  padding-right: 40px; // Balance back button
+  color: v.$text-main;
+}
+
+// -----------------------------------------------------------------------------
+// Main Content
+// -----------------------------------------------------------------------------
+.main {
+  width: 100%;
+  max-width: v.$max-mobile;
+  margin: 0 auto;
+  padding-top: v.$header-height;
+  padding-bottom: 130px; // Space for fixed CTA
+}
+
+// 1. Hero Section
+.hero {
+  padding: 64px 24px;
+  text-align: center;
+
+  &IconWrapper {
+    @include m.flex-center;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 32px;
+    background-color: v.$primary;
+    border-radius: v.$radius-xl;
+    box-shadow: 0 10px 30px rgba(v.$primary, 0.3);
+  }
+
+  &Icon {
+    font-size: 36px;
+    color: v.$white;
+  }
+
+  &Title {
+    font-size: v.$font-size-xxl;
+    font-weight: 800;
+    margin-bottom: 16px;
+    line-height: 1.2;
+    color: v.$text-main;
+  }
+
+  &Desc {
+    font-size: v.$font-size-lg;
+    font-weight: v.$font-weight-medium;
+    color: v.$text-sub;
+    line-height: 1.6;
+    max-width: 320px;
+    margin: 0 auto;
+  }
+}
+
+// 2. Visual Section
+.visual {
+  padding: 0 16px;
+  margin-bottom: 64px;
+
+  &Image {
+    width: 100%;
+    height: 256px;
+    border-radius: v.$radius-xl;
+    background-size: cover;
+    background-position: center;
+    box-shadow: v.$shadow-xl;
+    overflow: hidden;
+    position: relative;
+
+    // Overlay
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+// 3. Philosophy Section
+.philosophy {
+  padding: 0 24px;
+  margin-bottom: 64px;
+
+  &Header {
+    margin-bottom: 32px;
+  }
+
+  &Label {
+    display: block;
+    font-size: v.$font-size-xs;
+    font-weight: 800;
+    color: v.$primary;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  &Title {
+    font-size: v.$font-size-xl;
+    font-weight: v.$font-weight-bold;
+    color: v.$text-main;
+  }
+
+  &Grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+.card {
+  padding: 24px;
+  background-color: v.$white;
+  border: 1px solid v.$grey-100;
+  border-radius: v.$radius-xl;
+  box-shadow: v.$shadow-sm;
+  transition: transform v.$transition-smooth;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: v.$shadow-md;
+  }
+
+  &IconBox {
+    @include m.flex-center;
+    width: 48px;
+    height: 48px;
+    background-color: v.$primary-50;
+    border-radius: v.$radius-lg;
+    margin-bottom: 16px;
+    color: v.$primary;
+  }
+
+  &Title {
+    font-size: v.$font-size-xl;
+    font-weight: v.$font-weight-bold;
+    margin-bottom: 8px;
+    color: v.$text-main;
+  }
+
+  &Desc {
+    font-size: v.$font-size-md;
+    font-weight: v.$font-weight-medium;
+    color: v.$text-sub;
+    line-height: 1.5;
+  }
+}
+
+// 4. Our Story Section
+.ourStory {
+  padding: 0 24px;
+  margin-bottom: 80px;
+
+  &Label {
+    display: block;
+    font-size: v.$font-size-xs;
+    font-weight: 800;
+    color: v.$primary;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  &Title {
+    font-size: v.$font-size-xl;
+    font-weight: v.$font-weight-bold;
+    margin-bottom: 24px;
+    color: v.$text-main;
+  }
+
+  &Content {
+    font-size: v.$font-size-lg;
+    font-weight: v.$font-weight-medium;
+    color: v.$text-main;
+    line-height: 1.6;
+
+    p + p {
+      margin-top: 24px;
+    }
+  }
+}
+
+// 5. Footer
+.footer {
+  padding: 48px 24px;
+  border-top: 1px solid v.$grey-200;
+  text-align: center;
+  background-color: v.$grey-50;
+
+  &Socials {
+    @include m.flex-center;
+    gap: 24px;
+    margin-bottom: 32px;
+    color: v.$grey-400;
+
+    span {
+      cursor: pointer;
+      transition: color v.$transition-fast;
+
+      &:hover {
+        color: v.$primary;
+      }
+    }
+  }
+
+  &Copy {
+    font-size: v.$font-size-sm;
+    font-weight: v.$font-weight-medium;
+    color: v.$text-sub;
+    margin-bottom: 8px;
+  }
+
+  &Slogan {
+    font-size: v.$font-size-xs;
+    font-weight: v.$font-weight-regular;
+    color: v.$grey-400;
+  }
+}
+
+// 6. Fixed CTA
+.fixedCta {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px;
+  background: linear-gradient(to top, v.$white 80%, rgba(v.$white, 0) 100%);
+  z-index: v.$z-overlay;
+
+  &Inner {
+    max-width: v.$max-mobile;
+    margin: 0 auto;
+  }
+}
+
+.ctaButton {
+  @include m.flex-center;
+  gap: 8px;
+  width: 100%;
+  height: 56px;
+  background-color: v.$primary;
+  color: v.$text-main;
+  border-radius: v.$radius-xl;
+  font-weight: 700;
+  font-size: 18px;
+  box-shadow: 0 8px 24px rgba(v.$primary, 0.25);
+  transition:
+    transform v.$transition-fast,
+    box-shadow v.$transition-fast;
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
