@@ -116,7 +116,7 @@ export default function GreetingSection(props: SectionProps) {
         rightElement={
           <Button
             type="button"
-            variant="weak"
+            variant="ghost"
             size="xs"
             onClick={(e) => {
               e.stopPropagation();

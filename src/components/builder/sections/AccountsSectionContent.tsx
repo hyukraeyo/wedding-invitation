@@ -183,7 +183,7 @@ export default function AccountsSectionContent() {
                 <div className={styles.headerActions}>
                   <IconButton
                     iconSize={20}
-                    variant="clear"
+                    variant="ghost"
                     className={styles.deleteButton}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -321,7 +321,7 @@ export default function AccountsSectionContent() {
             </div>
           ))}
 
-          <UIButton variant="weak" className={styles.addAccountBtn} onClick={handleAddAccount}>
+          <UIButton variant="ghost" className={styles.addAccountBtn} onClick={handleAddAccount}>
             <Plus size={18} />
             <span>계좌 추가하기</span>
           </UIButton>

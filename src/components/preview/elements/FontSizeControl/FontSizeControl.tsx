@@ -40,7 +40,7 @@ export function FontSizeControl({ value, onChange }: FontSizeControlProps) {
                 aria-label={`글자 크기 설정 (현재: ${currentLabel})`}
                 name="font-size"
                 iconSize={20}
-                variant="clear"
+                variant="ghost"
             >
                 <div className={cn(
                     styles.iconWrapper,

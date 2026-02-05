@@ -42,7 +42,7 @@ export default function KakaoShareSection(props: SectionProps) {
         rightElement={
           <Button
             type="button"
-            variant="weak"
+            variant="ghost"
             size="xs"
             onClick={(e) => {
               e.stopPropagation();
@@ -133,7 +133,7 @@ export default function KakaoShareSection(props: SectionProps) {
           <div className={styles.bottomActions}>
             <Button
               type="button"
-              variant="weak"
+              variant="ghost"
               className={styles.fullPreviewBtn}
               onClick={() => setPreviewOpen(true)}
             >
@@ -195,7 +195,7 @@ export default function KakaoShareSection(props: SectionProps) {
                 </Dialog.Body>
                 <Dialog.Footer className={styles.paddedFooter}>
                   <Button
-                    variant="weak"
+                    variant="ghost"
                     onClick={() => setPreviewOpen(false)}
                     className={styles.fullWidth}
                   >

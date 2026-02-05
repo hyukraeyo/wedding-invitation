@@ -115,7 +115,7 @@ const TimePickerRaw = (
     defaultValue = '11:00',
     minuteStep = 10,
     variant = 'outline',
-    radius = 'lg',
+    radius = 'md',
     id,
     disabled,
     ...props

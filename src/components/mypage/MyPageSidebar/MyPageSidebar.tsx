@@ -130,7 +130,7 @@ export function MyPageSidebar({
           </ViewTransitionLink>
 
           <Button
-            variant="weak"
+            variant="ghost"
             className={styles.menuItem}
             onClick={() => setIsEventModalOpen(true)}
             style={{ justifyContent: 'flex-start', height: 'auto', padding: '0.75rem 1rem' }}
@@ -149,7 +149,7 @@ export function MyPageSidebar({
           </Button>
 
           <Button
-            variant="weak"
+            variant="ghost"
             className={styles.menuItem}
             onClick={() => setIsCustomerServiceModalOpen(true)}
             style={{ justifyContent: 'flex-start', height: 'auto', padding: '0.75rem 1rem' }}
@@ -159,7 +159,7 @@ export function MyPageSidebar({
           </Button>
 
           <Button
-            variant="weak"
+            variant="ghost"
             className={styles.menuItem}
             onClick={handleLogout}
             style={{ justifyContent: 'flex-start', height: 'auto', padding: '0.75rem 1rem' }}
@@ -194,7 +194,7 @@ export function MyPageSidebar({
           <Dialog.Footer className={styles.footer}>
             <Button
               className={styles.fullWidth}
-              variant="fill"
+              variant="primary"
               size="lg"
               onClick={() => setIsEventModalOpen(false)}
             >
@@ -214,10 +214,10 @@ export function MyPageSidebar({
             </div>
           </Dialog.Body>
           <Dialog.Footer className={styles.footer}>
-            <Button variant="weak" size="lg" onClick={() => setIsCustomerServiceModalOpen(false)}>
+            <Button variant="ghost" size="lg" onClick={() => setIsCustomerServiceModalOpen(false)}>
               닫기
             </Button>
-            <Button variant="fill" size="lg" onClick={handleCustomerServiceConfirm}>
+            <Button variant="primary" size="lg" onClick={handleCustomerServiceConfirm}>
               확인
             </Button>
           </Dialog.Footer>

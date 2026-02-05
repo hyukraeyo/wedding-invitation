@@ -57,7 +57,18 @@ import {
 } from '@/components/ui/Toast';
 import { Toggle } from '@/components/ui/Toggle';
 import { CTAButton } from '@/components/ui/CTAButton';
+import {
+  Form,
+  FormField,
+  FormLabel,
+  FormControl,
+  FormMessage,
+  FormHeader,
+  FormSubmit,
+} from '@/components/ui/Form';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/Tooltip';
+import { DatePicker } from '@/components/common/DatePicker/DatePicker';
+import { TimePicker } from '@/components/common/TimePicker/TimePicker';
 import { Mail, Lock, Send, ChevronDown, Sparkles } from 'lucide-react';
 import s from './DesignPage.module.scss';
 
@@ -103,6 +114,8 @@ export default function DesignPage() {
   const [menuChoice, setMenuChoice] = React.useState(dropdownItems[0]!.value);
   const [menuChecked, setMenuChecked] = React.useState(true);
   const [richText, setRichText] = React.useState('<p>Leave a warm welcome note here.</p>');
+  const [weddingDate, setWeddingDate] = React.useState('2026-06-14');
+  const [weddingTime, setWeddingTime] = React.useState('14:30');
 
   return (
     <div className={s.root}>
@@ -126,27 +139,13 @@ export default function DesignPage() {
           <span className={s.sectionHint}>Supported variants and special actions</span>
         </div>
         <div className={s.buttonGrid}>
-          {['primary', 'blue', 'secondary', 'outline', 'ghost'].map((v) => (
+          {(['primary', 'blue', 'secondary', 'outline', 'ghost'] as const).map((v) => (
             <div key={v} className={s.buttonItem}>
               <span className={s.variantLabel}>{v}</span>
-              <Button variant={v as any}>{v.charAt(0).toUpperCase() + v.slice(1)}</Button>
+              <Button variant={v}>{v.charAt(0).toUpperCase() + v.slice(1)}</Button>
             </div>
           ))}
         </div>
-        <div className={s.buttonMatrix}>
-          <CTAButton>CTA Button</CTAButton>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <IconButton variant="ghost" size="lg" aria-label="Spark">
-                  <Sparkles size={18} />
-                </IconButton>
-              </TooltipTrigger>
-              <TooltipContent>Tooltip + icon action</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-
         <div
           style={{
             marginTop: '32px',
@@ -172,10 +171,136 @@ export default function DesignPage() {
               padding: '16px',
             }}
           >
-            <BottomCTA.Single fixed={false} buttonVariant="blue" onClick={() => setToastOpen(true)}>
-              확인!!
+            <BottomCTA.Single fixed={false} variant="blue" onClick={() => setToastOpen(true)}>
+              CTA Button
             </BottomCTA.Single>
           </div>
+        </div>
+      </section>
+
+      <section className={s.section}>
+        <div className={s.sectionHeader}>
+          <h2>실전 폼 조합</h2>
+          <span className={s.sectionHint}>실제 프로젝트에서 사용하는 컴포넌트 조합</span>
+        </div>
+        <div className={s.formComposition}>
+          {/* 신랑/신부 정보 */}
+          <div className={s.formGroup}>
+            <h3 className={s.formGroupTitle}>신랑/신부 정보</h3>
+            <TextField
+              label="신랑 이름"
+              placeholder="홍길동"
+              helperText="실명을 입력해주세요"
+              clearable
+            />
+            <TextField label="신부 이름" placeholder="김영희" clearable />
+            <TextField
+              label="연락처"
+              type="tel"
+              placeholder="010-1234-5678"
+              helperText="'-' 없이 입력하시면 자동으로 포맷됩니다"
+            />
+          </div>
+
+          {/* 예식 정보 */}
+          <div className={s.formGroup}>
+            <h3 className={s.formGroupTitle}>예식 정보</h3>
+            <DatePicker
+              label="예식 날짜"
+              placeholder="날짜를 선택하세요"
+              value={weddingDate}
+              onChange={setWeddingDate}
+            />
+            <TimePicker
+              label="예식 시간"
+              placeholder="시간을 선택하세요"
+              value={weddingTime}
+              onChange={setWeddingTime}
+            />
+            <TextField label="예식장 이름" placeholder="그랜드 컨벤션 센터" clearable />
+            <TextField
+              label="예식장 주소"
+              placeholder="서울시 강남구 테헤란로 123"
+              helperText="도로명 주소를 입력해주세요"
+              clearable
+            />
+          </div>
+
+          {/* 관계 선택 (Dialog Select) */}
+          <div className={s.formGroup}>
+            <h3 className={s.formGroupTitle}>관계 선택</h3>
+            <Dialog>
+              <Dialog.Trigger asChild>
+                <TextField.Button
+                  label="신랑과의 관계"
+                  placeholder="관계를 선택하세요"
+                  value="친구"
+                />
+              </Dialog.Trigger>
+              <Dialog.Content>
+                <Dialog.Header title="신랑과의 관계" />
+                <Dialog.Body>
+                  <RadioGroup value={radioValue} onValueChange={setRadioValue}>
+                    <RadioGroupItem value="family">가족</RadioGroupItem>
+                    <RadioGroupItem value="friend">친구</RadioGroupItem>
+                    <RadioGroupItem value="colleague">직장동료</RadioGroupItem>
+                    <RadioGroupItem value="etc">기타</RadioGroupItem>
+                  </RadioGroup>
+                </Dialog.Body>
+                <Dialog.Footer>
+                  <Dialog.Close asChild>
+                    <Button variant="ghost">취소</Button>
+                  </Dialog.Close>
+                  <Dialog.Close asChild>
+                    <Button variant="primary">확인</Button>
+                  </Dialog.Close>
+                </Dialog.Footer>
+              </Dialog.Content>
+            </Dialog>
+          </div>
+
+          {/* 참석 여부 (SegmentedControl) */}
+          <div className={s.formGroup}>
+            <h3 className={s.formGroupTitle}>참석 여부</h3>
+            <SegmentedControl value={segmentValue} alignment="fluid" onChange={setSegmentValue}>
+              <SegmentedControl.Item value="attend">참석</SegmentedControl.Item>
+              <SegmentedControl.Item value="absent">불참</SegmentedControl.Item>
+              <SegmentedControl.Item value="pending">미정</SegmentedControl.Item>
+            </SegmentedControl>
+          </div>
+
+          {/* 축하 메시지 (RichTextEditor) */}
+          <div className={s.formGroup}>
+            <h3 className={s.formGroupTitle}>축하 메시지</h3>
+            <RichTextEditor
+              content={richText}
+              placeholder="따뜻한 축하 메시지를 남겨주세요"
+              onChange={setRichText}
+            />
+          </div>
+
+          {/* 식사 여부 (RadioGroup) */}
+          <div className={s.formGroup}>
+            <h3 className={s.formGroupTitle}>식사 여부</h3>
+            <RadioGroup value={radioValue} onValueChange={setRadioValue}>
+              <RadioGroupItem value="yes">식사 하겠습니다</RadioGroupItem>
+              <RadioGroupItem value="no">식사 안 하겠습니다</RadioGroupItem>
+            </RadioGroup>
+          </div>
+
+          {/* 동반 인원 (Input) */}
+          <div className={s.formGroup}>
+            <h3 className={s.formGroupTitle}>동반 인원</h3>
+            <Input
+              type="number"
+              label="동반 인원 수"
+              placeholder="0"
+              helperText="본인 포함 총 인원을 입력해주세요"
+            />
+          </div>
+
+          {/* 제출 버튼 */}
+          <BottomCTA.Single onClick={() => setToastOpen(true)}>참석 의사 전달하기</BottomCTA.Single>
         </div>
       </section>
 
@@ -452,10 +577,10 @@ export default function DesignPage() {
           <span className={s.sectionHint}>Primary, Secondary, Outline, Ghost, Classic</span>
         </div>
         <div className={s.variantGrid}>
-          {['primary', 'secondary', 'outline', 'ghost', 'classic'].map((v) => (
+          {(['primary', 'secondary', 'outline', 'ghost', 'classic'] as const).map((v) => (
             <TextField
               key={v}
-              variant={v as any}
+              variant={v}
               label={`Variant: ${v}`}
               placeholder={`Enter text in ${v} style`}
               className={s.fieldControl}
@@ -471,10 +596,10 @@ export default function DesignPage() {
           <span className={s.sectionHint}>XS, SM, MD, LG, XL</span>
         </div>
         <div className={s.variantGrid}>
-          {['xs', 'sm', 'md', 'lg', 'xl'].map((sz) => (
+          {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((sz) => (
             <TextField
               key={sz}
-              size={sz as any}
+              size={sz}
               label={`Size: ${sz}`}
               placeholder={`Size ${sz} input`}
               className={s.fieldControl}
@@ -490,10 +615,10 @@ export default function DesignPage() {
           <span className={s.sectionHint}>None, Small, Medium, Large, Full</span>
         </div>
         <div className={s.variantGrid}>
-          {['none', 'small', 'medium', 'large', 'full'].map((r) => (
+          {(['none', 'sm', 'md', 'lg', 'full'] as const).map((r) => (
             <TextField
               key={r}
-              radius={r as any}
+              radius={r}
               label={`Radius: ${r}`}
               placeholder={`${r} corner radius`}
               className={s.fieldControl}
@@ -518,6 +643,46 @@ export default function DesignPage() {
           <TextField.Button label="Ghost variant" placeholder="Ghost button" variant="ghost" />
           <TextField.Button label="Small size" placeholder="Small" size="sm" />
           <TextField.Button label="Error state" placeholder="Has error" error="Mandatory field" />
+        </div>
+      </section>
+
+      <section className={s.section}>
+        <div className={s.sectionHeader}>
+          <h2>Form & Validation</h2>
+          <span className={s.sectionHint}>Radix Form Primitive integration</span>
+        </div>
+        <div className={s.variantGrid}>
+          <Form
+            onSubmit={(event) => {
+              event.preventDefault();
+              setToastOpen(true);
+            }}
+          >
+            <FormField name="email">
+              <FormHeader>
+                <FormLabel>Email</FormLabel>
+                <FormMessage match="valueMissing">Please enter your email</FormMessage>
+                <FormMessage match="typeMismatch">Please enter a valid email</FormMessage>
+              </FormHeader>
+              <FormControl asChild>
+                <TextField type="email" required placeholder="banana@toss.work" />
+              </FormControl>
+            </FormField>
+
+            <FormField name="details">
+              <FormHeader>
+                <FormLabel>Details</FormLabel>
+                <FormMessage match="valueMissing">Please enter details</FormMessage>
+              </FormHeader>
+              <FormControl asChild>
+                <Textarea required placeholder="How does this work?" />
+              </FormControl>
+            </FormField>
+
+            <FormSubmit asChild>
+              <Button style={{ marginTop: 10 }}>Submit Form</Button>
+            </FormSubmit>
+          </Form>
         </div>
       </section>
     </div>

@@ -2,13 +2,29 @@ import * as React from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { SectionAccordion } from '@/components/ui/Accordion';
 import { FormControl, FormField, FormLabel, FormMessage } from '@/components/ui/Form';
-import { NameField } from '@/components/common/NameField';
+import { TextField } from '@/components/ui';
 import { Toggle } from '@/components/ui/Toggle';
 import { isRequiredField } from '@/constants/requiredFields';
 import { cn, parseKoreanName, isValidKoreanNameValue } from '@/lib/utils';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import styles from './BasicInfoSection.module.scss';
 import type { SectionProps } from '@/types/builder';
+
+/**
+ * 한글 이름 입력 정제 함수
+ * 한글(완성형+자모), 영문, 공백, 가운뎃점 허용
+ */
+const sanitizeNameInput = (value: string): string => {
+  return value.replace(/[^가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z\s·]/g, '');
+};
+
+/**
+ * 커스텀 유효성 검사 함수 (Radix Form match용)
+ */
+const validateKoreanName = (value: string): boolean => {
+  if (!value.trim()) return false; // 빈 값은 valueMissing으로 처리
+  return !isValidKoreanNameValue(value); // true면 에러 표시
+};
 
 const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(props) {
   const groom = useInvitationStore(useShallow((state) => state.groom));
@@ -21,8 +37,36 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
   const groomFullName = `${groom.lastName}${groom.firstName}`;
   const brideFullName = `${bride.lastName}${bride.firstName}`;
 
-  const isInvalidName = (value: string) =>
-    value.trim().length > 0 && !isValidKoreanNameValue(value);
+  // 이름 입력 핸들러
+  const handleGroomNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const sanitized = sanitizeNameInput(e.target.value);
+    setGroom(parseKoreanName(sanitized));
+  };
+
+  const handleBrideNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const sanitized = sanitizeNameInput(e.target.value);
+    setBride(parseKoreanName(sanitized));
+  };
+
+  const handleGroomFatherNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const sanitized = sanitizeNameInput(e.target.value);
+    setGroomParents('father', { name: sanitized });
+  };
+
+  const handleGroomMotherNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const sanitized = sanitizeNameInput(e.target.value);
+    setGroomParents('mother', { name: sanitized });
+  };
+
+  const handleBrideFatherNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const sanitized = sanitizeNameInput(e.target.value);
+    setBrideParents('father', { name: sanitized });
+  };
+
+  const handleBrideMotherNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const sanitized = sanitizeNameInput(e.target.value);
+    setBrideParents('mother', { name: sanitized });
+  };
 
   return (
     <SectionAccordion
@@ -38,20 +82,20 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
             <FormField name="groom-name">
               <FormLabel htmlFor="groom-name">신랑</FormLabel>
               <FormControl asChild>
-                <NameField
+                <TextField
                   id="groom-name"
                   type="text"
                   placeholder=""
                   required={isRequiredField('groomName')}
                   value={groomFullName}
-                  onValueChange={(val) => setGroom(parseKoreanName(val))}
-                  allowSpace
-                  allowMiddleDot
-                  allowLatin
-                  invalid={isInvalidName(groomFullName)}
+                  onChange={handleGroomNameChange}
+                  autoComplete="name"
+                  autoCorrect="off"
+                  spellCheck={false}
                 />
               </FormControl>
               <FormMessage match="valueMissing">필수 항목이에요.</FormMessage>
+              <FormMessage match={validateKoreanName}>올바른 이름을 입력해주세요</FormMessage>
             </FormField>
           </div>
 
@@ -61,16 +105,15 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
               <FormLabel htmlFor="groom-father-name">아버지</FormLabel>
               <div className={styles.fieldWrapper}>
                 <FormControl asChild>
-                  <NameField
+                  <TextField
                     id="groom-father-name"
                     type="text"
                     placeholder=""
                     value={groom.parents.father.name}
-                    onValueChange={(val) => setGroomParents('father', { name: val })}
-                    allowSpace
-                    allowMiddleDot
-                    allowLatin
-                    invalid={isInvalidName(groom.parents.father.name)}
+                    onChange={handleGroomFatherNameChange}
+                    autoComplete="name"
+                    autoCorrect="off"
+                    spellCheck={false}
                     aria-label="신랑 아버지 이름"
                   />
                 </FormControl>
@@ -86,6 +129,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
                   </Toggle>
                 </div>
               </div>
+              <FormMessage match={validateKoreanName}>올바른 이름을 입력해주세요</FormMessage>
             </FormField>
           </div>
           <div className={cn(styles.row, styles.compact)}>
@@ -93,16 +137,15 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
               <FormLabel htmlFor="groom-mother-name">어머니</FormLabel>
               <div className={styles.fieldWrapper}>
                 <FormControl asChild>
-                  <NameField
+                  <TextField
                     id="groom-mother-name"
                     type="text"
                     placeholder=""
                     value={groom.parents.mother.name}
-                    onValueChange={(val) => setGroomParents('mother', { name: val })}
-                    allowSpace
-                    allowMiddleDot
-                    allowLatin
-                    invalid={isInvalidName(groom.parents.mother.name)}
+                    onChange={handleGroomMotherNameChange}
+                    autoComplete="name"
+                    autoCorrect="off"
+                    spellCheck={false}
                     aria-label="신랑 어머니 이름"
                   />
                 </FormControl>
@@ -118,6 +161,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
                   </Toggle>
                 </div>
               </div>
+              <FormMessage match={validateKoreanName}>올바른 이름을 입력해주세요</FormMessage>
             </FormField>
           </div>
         </div>
@@ -126,20 +170,20 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
             <FormField name="bride-name">
               <FormLabel htmlFor="bride-name">신부</FormLabel>
               <FormControl asChild>
-                <NameField
+                <TextField
                   id="bride-name"
                   type="text"
                   placeholder=""
                   required={isRequiredField('brideName')}
                   value={brideFullName}
-                  onValueChange={(val) => setBride(parseKoreanName(val))}
-                  allowSpace
-                  allowMiddleDot
-                  allowLatin
-                  invalid={isInvalidName(brideFullName)}
+                  onChange={handleBrideNameChange}
+                  autoComplete="name"
+                  autoCorrect="off"
+                  spellCheck={false}
                 />
               </FormControl>
               <FormMessage match="valueMissing">필수 항목이에요.</FormMessage>
+              <FormMessage match={validateKoreanName}>올바른 이름을 입력해주세요</FormMessage>
             </FormField>
           </div>
 
@@ -149,16 +193,15 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
               <FormLabel htmlFor="bride-father-name">아버지</FormLabel>
               <div className={styles.fieldWrapper}>
                 <FormControl asChild>
-                  <NameField
+                  <TextField
                     id="bride-father-name"
                     type="text"
                     placeholder=""
                     value={bride.parents.father.name}
-                    onValueChange={(val) => setBrideParents('father', { name: val })}
-                    allowSpace
-                    allowMiddleDot
-                    allowLatin
-                    invalid={isInvalidName(bride.parents.father.name)}
+                    onChange={handleBrideFatherNameChange}
+                    autoComplete="name"
+                    autoCorrect="off"
+                    spellCheck={false}
                     aria-label="신부 아버지 이름"
                   />
                 </FormControl>
@@ -174,6 +217,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
                   </Toggle>
                 </div>
               </div>
+              <FormMessage match={validateKoreanName}>올바른 이름을 입력해주세요</FormMessage>
             </FormField>
           </div>
           <div className={cn(styles.row, styles.compact)}>
@@ -181,16 +225,15 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
               <FormLabel htmlFor="bride-mother-name">어머니</FormLabel>
               <div className={styles.fieldWrapper}>
                 <FormControl asChild>
-                  <NameField
+                  <TextField
                     id="bride-mother-name"
                     type="text"
                     placeholder=""
                     value={bride.parents.mother.name}
-                    onValueChange={(val) => setBrideParents('mother', { name: val })}
-                    allowSpace
-                    allowMiddleDot
-                    allowLatin
-                    invalid={isInvalidName(bride.parents.mother.name)}
+                    onChange={handleBrideMotherNameChange}
+                    autoComplete="name"
+                    autoCorrect="off"
+                    spellCheck={false}
                     aria-label="신부 어머니 이름"
                   />
                 </FormControl>
@@ -206,6 +249,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
                   </Toggle>
                 </div>
               </div>
+              <FormMessage match={validateKoreanName}>올바른 이름을 입력해주세요</FormMessage>
             </FormField>
           </div>
         </div>

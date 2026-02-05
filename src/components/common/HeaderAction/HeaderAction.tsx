@@ -15,7 +15,7 @@ export const HeaderAction = React.memo(({ icon: Icon, label, onClick, className 
     return (
         <Button
             type="button"
-            variant="weak"
+            variant="ghost"
             size="sm"
             onPointerDown={(e: React.PointerEvent) => {
                 // Stop propagation to prevent Radix Accordion from toggling

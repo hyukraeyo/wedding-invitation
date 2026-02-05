@@ -100,7 +100,7 @@ const SortableItem = React.memo(function SortableItem({ id, url, index, onRemove
                     onRemove(id);
                 }}
                 onPointerDown={(e) => e.stopPropagation()}
-                variant="clear"
+                variant="ghost"
                 name=""
                 aria-label="삭제"
             >
@@ -342,7 +342,7 @@ export default React.memo(function GallerySectionContent() {
                             <Dialog.Footer className={styles.paddedFooter}>
                                 <Button
                                     type="button"
-                                    variant="fill"
+                                    variant="primary"
                                     color="primary"
                                     size="lg"
                                     style={{ width: '100%' }}

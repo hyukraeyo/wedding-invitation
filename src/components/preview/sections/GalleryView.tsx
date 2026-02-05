@@ -324,7 +324,7 @@ const GalleryView = memo(({
                         </span>
                         <IconButton
                             ref={closeBtnRef}
-                            variant="clear"
+                            variant="ghost"
                             onClick={() => setPopupIndex(null)}
                             className={clsx(styles.closeBtn) || ''}
                             aria-label="창 닫기"

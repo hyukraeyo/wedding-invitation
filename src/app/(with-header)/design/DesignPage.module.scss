@@ -311,3 +311,31 @@
     justify-content: center;
   }
 }
+
+// 실전 폼 조합 스타일
+.formComposition {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  background: v.$grey-50;
+  border-radius: v.$radius-lg;
+  border: 1px solid v.$grey-200;
+}
+
+.formGroupTitle {
+  font-size: 16px;
+  font-weight: 700;
+  color: v.$grey-800;
+  margin: 0 0 8px 0;
+  padding-bottom: 12px;
+  border-bottom: 2px solid v.$primary;
+}

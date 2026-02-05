@@ -168,7 +168,7 @@ const MenuBtn = ({
         aria-label={title}
         name={title}
         iconSize={16}
-        variant="clear"
+        variant="ghost"
         data-state={isActive ? 'on' : 'off'}
     >
         <Icon size={16} />

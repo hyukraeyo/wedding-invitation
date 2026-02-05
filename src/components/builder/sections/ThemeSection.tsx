@@ -41,7 +41,7 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
               {PRESET_COLORS.map((color) => (
                 <Button
                   key={color}
-                  variant="weak"
+                  variant="ghost"
                   className={cn(
                     styles.colorItem,
                     styles.colorItemInteractive,
@@ -158,7 +158,7 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
               {['#FFFFFF', '#FFECEF', '#F4F1EA', '#F2EBFA'].map((color) => (
                 <Button
                   key={color}
-                  variant="weak"
+                  variant="ghost"
                   className={cn(
                     styles.colorItem,
                     styles.lightColorItem,

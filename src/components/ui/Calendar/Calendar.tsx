@@ -6,6 +6,7 @@ import { DayPicker, useNavigation, UI, DayFlag, type DayButtonProps } from 'reac
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
+import { isHoliday } from '@/lib/korean-holidays';
 import { Button } from '@/components/ui/Button';
 
 import styles from './Calendar.module.scss';
@@ -22,30 +23,36 @@ const CustomMonthCaption = (props: { calendarMonth: { date: Date } }) => {
 
   return (
     <div className={styles.customCaption}>
-      <button
+      <Button
         type="button"
+        variant="ghost"
+        size="sm"
+        radius="full"
         className={styles.navButtonSmall}
         disabled={!previousMonth}
         onClick={() => previousMonth && goToMonth(previousMonth)}
         aria-label="이전 달"
       >
         <ChevronLeftIcon />
-      </button>
+      </Button>
 
       <div className={styles.captionTitleGroup}>
         <span className={styles.captionYear}>{format(props.calendarMonth.date, 'yyyy')}</span>
         <span className={styles.captionMonth}>{format(props.calendarMonth.date, 'M월')}</span>
       </div>
 
-      <button
+      <Button
         type="button"
+        variant="ghost"
+        size="sm"
+        radius="full"
         className={styles.navButtonSmall}
         disabled={!nextMonth}
         onClick={() => nextMonth && goToMonth(nextMonth)}
         aria-label="다음 달"
       >
         <ChevronRightIcon />
-      </button>
+      </Button>
     </div>
   );
 };
@@ -64,10 +71,16 @@ const CustomDayButton = (dayButtonProps: DayButtonProps) => {
   const isSunday = dayOfWeek === 0;
   const isSaturday = dayOfWeek === 6;
 
+  // 공휴일 확인
+  const isHolidayDate = isHoliday(day.date);
+
+  // 일요일 또는 공휴일이면 빨간색
+  const isRedDay = isSunday || isHolidayDate;
+
   return (
     <Button
       {...others}
-      variant={isSelected ? 'solid' : 'ghost'}
+      variant={isSelected ? 'primary' : 'ghost'}
       color={(isSelected ? 'primary' : 'grey') as 'primary' | 'grey'}
       size="xs"
       radius="full"
@@ -77,8 +90,8 @@ const CustomDayButton = (dayButtonProps: DayButtonProps) => {
         isToday && styles.dayToday,
         isOutside && styles.dayOutside,
         isDisabled && styles.disabled,
-        isSunday && !isSelected && !isOutside && !isDisabled && styles.sunday,
-        isSaturday && !isSelected && !isOutside && !isDisabled && styles.saturday,
+        isRedDay && !isDisabled && styles.sunday,
+        isSaturday && !isRedDay && !isDisabled && styles.saturday,
         rdpClassName
       )}
     >
@@ -133,16 +146,20 @@ function Calendar({
 
   return (
     <DayPicker
-      showOutsideDays={showOutsideDays}
+      {...props}
+      // 그리드 레이아웃을 위해 showOutsideDays는 항상 true로 설정
+      // 외부 날짜는 CSS로 숨김 처리
+      showOutsideDays={true}
       className={cn(styles.root, className)}
       classNames={defaultClassNames}
       locale={ko}
+      // 일요일부터 시작 (헤더: 일-월-화-수-목-금-토)
+      weekStartsOn={0}
       hideNavigation
       modifiers={{
         today: hideTodayIndicator ? [] : [new Date()],
       }}
       components={components}
-      {...props}
     />
   );
 }

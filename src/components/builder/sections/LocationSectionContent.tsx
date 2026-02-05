@@ -7,8 +7,8 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { TextField } from '@/components/ui/TextField';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { Switch } from '@/components/ui/Switch';
-import { PhoneField } from '@/components/common/PhoneField';
 import { FormControl, FormField, FormLabel } from '@/components/ui/Form';
+import { formatPhoneNumber } from '@/lib/utils';
 import styles from './LocationSection.module.scss';
 import { cn } from '@/lib/utils';
 import { NaverIcon, KakaoIcon } from '@/components/common/Icons';
@@ -133,6 +133,12 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
     setIsSearchOpen(false);
   };
 
+  // 전화번호 입력 핸들러
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatPhoneNumber(e.target.value);
+    setLocationContact(formatted);
+  };
+
   return (
     <>
       <KakaoSdkLoader onReady={() => setIsKakaoReady(true)} />
@@ -217,12 +223,12 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
 
         <div className={styles.optionItem}>
           <div className={styles.rowTitle}>연락처</div>
-          <PhoneField
+          <TextField
+            type="tel"
+            inputMode="numeric"
             placeholder="예: 02-000-0000"
             value={locationContact}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setLocationContact(e.target.value)
-            }
+            onChange={handlePhoneChange}
           />
         </div>
 
@@ -306,7 +312,7 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
         </div>
 
         <div style={{ marginTop: '12px' }}>
-          <BottomCTA.Single fixed={false} onClick={onComplete} buttonVariant="fill">
+          <BottomCTA.Single fixed={false} onClick={onComplete} variant="primary">
             확인
           </BottomCTA.Single>
         </div>

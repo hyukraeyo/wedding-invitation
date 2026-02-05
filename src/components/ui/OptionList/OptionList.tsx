@@ -36,7 +36,7 @@ export function OptionList<T = string>({
             className={cn(styles.item, isSelected && styles.selected)}
             onClick={() => !option.disabled && onSelect(option.value)}
             disabled={option.disabled}
-            radius="large"
+            radius="lg"
             fullWidth
             rightIcon={isSelected ? <Check size={20} className={styles.checkIcon} /> : undefined}
           >

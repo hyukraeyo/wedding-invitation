@@ -15,7 +15,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
   fluid?: boolean;
   fullWidth?: boolean;
   unstyled?: boolean;
-  radius?: 'none' | 'small' | 'medium' | 'large' | 'full' | string;
+  radius?: 'none' | 'sm' | 'md' | 'lg' | 'full' | string;
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
 }
@@ -59,9 +59,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           unstyled && s.unstyled,
           radius === 'full' && s.radius_full,
           radius === 'none' && s.radius_none,
-          radius === 'small' && s.radius_sm,
-          radius === 'medium' && s.radius_md,
-          radius === 'large' && s.radius_lg,
+          (radius === 'sm' || radius === 'small') && s.radius_sm,
+          (radius === 'md' || radius === 'medium') && s.radius_md,
+          (radius === 'lg' || radius === 'large') && s.radius_lg,
           className
         )}
         type={type}

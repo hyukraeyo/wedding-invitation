@@ -64,7 +64,7 @@ export function ProfileCompletionModal({
     const logoutButton = onLogout ? (
         <Button
             type="button"
-            variant="weak"
+            variant="ghost"
             onClick={onLogout}
             className={styles.logoutButton}
         >
@@ -116,7 +116,7 @@ export function ProfileCompletionModal({
             <Dialog.Footer className={styles.footer}>
                 <Button
                     className={styles.fullWidth}
-                    variant="fill"
+                    variant="primary"
                     size="lg"
                     loading={loading}
                     disabled={loading || !name.trim() || !phone.trim()}

@@ -52,7 +52,7 @@ export default function PreviewAccordion({
             } as React.CSSProperties}
         >
             <Button
-                variant="weak"
+                variant="ghost"
                 className={styles.groupHeader}
                 onClick={() => setIsOpen(!isOpen)}
                 aria-expanded={isOpen}

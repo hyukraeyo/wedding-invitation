@@ -1,5 +1,5 @@
-@use "../../../styles/variables" as v;
-@use "../../../styles/mixins" as m;
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
 .header {
   text-align: center;
@@ -8,7 +8,6 @@
 }
 
 .calendar {
-  width: auto;
   margin: 0 auto;
 }
 
@@ -17,8 +16,6 @@
   justify-content: center;
   padding: 8px 16px 24px;
 }
-
-
 
 .fullWidth {
   width: 100%;

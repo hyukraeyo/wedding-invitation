@@ -1,49 +1,60 @@
-@use "../../../styles/variables" as v;
-@use "../../../styles/mixins" as m;
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
+// 캘린더 최상위 컨테이너
 .root {
   position: relative;
-  padding: 1.5rem 0.5rem; // 패딩 축소 (1rem -> 0.5rem)
+  padding: 1.5rem 0.5rem;
   background-color: transparent;
   width: 100%;
-  max-width: 360px;
+  max-width: 100%;
   margin: 0 auto;
-  display: block;
+  display: block; // table 태그가 아닌 div로 사용
   user-select: none;
-  overflow: hidden; // 넘침 방지
+  overflow: hidden;
 }
 
 .months {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+  .root & {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
 }
 
 .month {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  position: relative;
+  .root & {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    position: relative;
+  }
 }
 
+// 상단 네비게이션 및 캡션 영역
 .customCaption {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-  width: 100%;
-  padding: 0 0.25rem;
+  .root & {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    width: 100%;
+    padding: 0 0.25rem;
+  }
 }
 
+// 연도/월 텍스트 그룹
 .captionTitleGroup {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.125rem;
-  font-variant-numeric: tabular-nums;
-  cursor: default;
-  user-select: none;
-  animation: captionIn 0.4s v.$ease-ios;
+  .root & {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    font-variant-numeric: tabular-nums;
+    cursor: default;
+    user-select: none;
+    animation: captionIn 0.5s v.$ease-ios;
+  }
 }
 
 @keyframes captionIn {
@@ -58,179 +69,215 @@
 }
 
 .captionYear {
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: v.$grey-500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  .root & {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: v.$grey-600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-family: v.$font-gmarket-sans;
+  }
 }
 
 .captionMonth {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: v.$grey-900;
-  font-family: v.$font-gmarket-sans;
-  letter-spacing: -0.03em;
-}
-
-.navButtonSmall {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 50%;
-  color: v.$grey-500;
-  background: v.$grey-50;
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: all v.$transition-smooth v.$ease-ios;
-  
-  &:hover:not(:disabled) {
-    background-color: v.$grey-100;
+  .root & {
+    font-size: 1.5rem;
+    font-weight: 700;
     color: v.$grey-900;
-    border-color: v.$grey-200;
-  }
-  
-  &:active:not(:disabled) {
-    transform: scale(0.88);
-    background-color: v.$grey-200;
-  }
-  
-  &:disabled {
-    opacity: 0.15;
-    cursor: default;
-  }
-
-  svg {
-    width: 1.25rem;
-    height: 1.25rem;
+    font-family: v.$font-gmarket-sans;
+    letter-spacing: -0.03em;
   }
 }
 
+// 네비게이션 버튼 (Button 컴포넌트에 적용)
+.navButtonSmall {
+  .root & {
+    // Button 컴포넌트 기본 스타일 Overriding
+    width: 2.75rem;
+    height: 2.75rem;
+
+    // Ghost variant 조정
+    &:hover:not(:disabled) {
+      background-color: v.$grey-100;
+    }
+
+    &:disabled {
+      opacity: 0.2;
+    }
+  }
+}
+
+// --- 테이블 구조 (Grid Layout 변환) ---
+// DayPicker의 table 태그를 Grid로 변환
 .table {
-  display: grid !important;
-  grid-template-columns: repeat(7, 1fr);
-  width: 100% !important;
-  gap: 2px; // 간격 축소 (4px -> 2px)
-  margin: 0;
-  padding: 0;
+  .root & {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    width: 100%;
+    gap: 2px;
+    margin: 0;
+    padding: 0;
 
-  & > thead {
-    display: contents !important;
+    // table 내부 요소는 grid layout 방해하지 않게 처리
+    & > thead,
+    & > tbody {
+      display: contents;
+    }
   }
 }
 
-.weekdays {
-  display: contents !important;
-}
-
-.weekday {
-  display: flex !important;
-  height: 2.5rem;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  font-weight: 500; // 더 얇게
-  color: v.$grey-400;
-  letter-spacing: 0.05em;
-
-  &:first-child {
-    color: rgba(v.$red-400, 0.8);
-  }
-
-  &:last-child {
-      color: rgba(v.$blue-400, 0.8);
-  }
-}
-
-.weeks {
-  display: contents !important;
-}
-
+// tr 요소들
+.weekdays,
+.weeks,
 .week {
-  display: contents !important;
-}
-
-.day {
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  min-height: 3.25rem; // 높이 약간 증가
-}
-
-.dayButtonBase {
-  width: 2.5rem !important; // 크기 약간 축소 (2.75rem -> 2.5rem)
-  height: 2.5rem !important;
-  max-width: 100%;
-  padding: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  font-size: 0.9375rem !important;
-  font-weight: 500 !important;
-  transition: all v.$transition-smooth v.$ease-ios !important;
-  color: v.$grey-800 !important;
-  border: none !important;
-  border-radius: 50% !important;
-  
-  &:hover:not(:disabled):not(.daySelected) {
-    background-color: rgba(v.$grey-200, 0.5) !important;
-    backdrop-filter: blur(4px);
+  .root & {
+    display: contents;
   }
 }
 
-.daySelected {
-    font-weight: 700 !important;
-    background-color: v.$primary !important;
-    color: v.$grey-900 !important;
-    box-shadow: 0 12px 24px rgba(251, 192, 45, 0.45) !important;
-    transform: scale(1.08); // 좀 더 강조
-    z-index: 10;
+// th 요소 (요일)
+.weekday {
+  .root & {
+    display: flex;
+    height: 2.5rem;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: v.$grey-400;
+    letter-spacing: 0.05em;
+
+    // 일요일 (첫 번째 열)
+    &:first-child {
+      color: rgba(v.$red-400, 0.8);
+    }
+
+    // 토요일 (마지막 열)
+    &:last-child {
+      color: rgba(v.$blue-400, 0.8);
+    }
+  }
 }
 
-.dayToday {
+// td 요소
+.day {
+  .root & {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
-    
-    &:not(.daySelected) {
-      color: v.$primary !important;
-      font-weight: 700 !important;
-      
-      &::after {
-          content: "";
-          position: absolute;
-          bottom: 4px; // 위치 조정
-          left: 50%;
-          transform: translateX(-50%);
-          width: 4px;
-          height: 4px;
-          border-radius: 50%;
-          background-color: v.$primary;
-          box-shadow: 0 0 8px v.$primary; // 오늘 날짜에도 미세한 발광 효과
+    min-height: 3.25rem;
+  }
+}
+
+// --- 날짜 버튼 스타일 ---
+.dayButtonBase {
+  .root & {
+    // !important 제거 및 명시도 향상
+    width: 2.5rem;
+    height: 2.5rem;
+    max-width: 100%;
+    padding: 0;
+
+    // Flex 정렬 (td 안에서 중앙 정렬)
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    // 폰트 및 컬러
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: v.$grey-800;
+
+    // 모양
+    border: none;
+    border-radius: 50%;
+    background-color: transparent;
+    transition: all v.$transition-smooth v.$ease-ios;
+
+    // Hover 효과 (선택 안 된 상태만)
+    &:hover:not(:disabled):not([class*='daySelected']) {
+      background-color: rgba(v.$grey-200, 0.5);
+      backdrop-filter: blur(4px);
+    }
+
+    // 일요일 날짜 색상
+    &.sunday {
+      color: v.$red-500;
+    }
+
+    // 토요일 날짜 색상
+    &.saturday {
+      color: v.$blue-500;
+    }
+
+    // 선택된 날짜 (.daySelected)
+    &.daySelected {
+      font-weight: 700;
+      background-color: v.$primary;
+      color: v.$white;
+      box-shadow: 0 12px 24px rgba(251, 192, 45, 0.45);
+      transform: scale(1.08); // 강조 확대
+      z-index: 10;
+
+      // 선택된 상태에서는 요일 색상 무시하고 흰색으로
+      &.sunday,
+      &.saturday {
+        color: v.$white;
+      }
+
+      &:hover {
+        background-color: v.$primary;
       }
     }
+
+    // 오늘 날짜 (.dayToday)
+    &.dayToday:not(.daySelected) {
+      color: v.$primary;
+      font-weight: 700;
+
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 4px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background-color: v.$primary;
+        box-shadow: 0 0 8px v.$primary;
+      }
+    }
+  }
 }
 
-.sunday {
-  color: v.$red-500 !important;
-}
-
-.saturday {
-  color: v.$blue-500 !important;
-}
-
+// --- 유틸리티 및 상태 ---
+// 외부 날짜 숨김
 .dayOutside {
-  opacity: 0.2;
+  .root & {
+    visibility: hidden;
+    pointer-events: none;
+  }
 }
 
+// 비활성화 날짜
 .disabled {
-  color: v.$grey-200;
-  cursor: not-allowed;
-  opacity: 0.3;
+  .root & {
+    color: v.$grey-200;
+    cursor: not-allowed;
+    opacity: 0.3;
+  }
 }
 
+// 숨김 처리
 .hidden {
-  display: none !important;
+  .root & {
+    display: none;
+  }
 }
 
+// 클래스 객체 참조를 위해 껍데기만 남겨둘 필요가 있음?
+// 아니다. SCSS Module은 최상위에 정의 선언이 있으면 export된다.
+// .root & { ... } 구문은 .root .className 으로 컴파일되지만,
+// className 식별자는 유지되므로 js에서 import styles from ... 할 때 styles.className으로 접근 가능함.

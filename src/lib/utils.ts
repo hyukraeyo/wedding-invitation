@@ -1,15 +1,18 @@
-import { type ClassValue, clsx } from "clsx"
+import { type ClassValue, clsx } from 'clsx';
 
 export function cn(...inputs: ClassValue[]) {
-  return clsx(inputs)
+  return clsx(inputs);
 }
 
-export function focusMobileInput(el: HTMLInputElement | HTMLTextAreaElement | null, skipRestore = false) {
+export function focusMobileInput(
+  el: HTMLInputElement | HTMLTextAreaElement | null,
+  skipRestore = false
+) {
   if (!el) return;
   // iOS Safari 등에서 readOnly가 true인 상태로 포커스되면 키패드가 안 나올 수 있음
   // React re-render 전에 직접 DOM 속성을 조작하여 키패드 유도
   const originalReadOnly = el.readOnly;
-  
+
   // 이미 editable 상태라면 focus만 수행
   if (!originalReadOnly) {
     el.focus({ preventScroll: true });
@@ -18,7 +21,7 @@ export function focusMobileInput(el: HTMLInputElement | HTMLTextAreaElement | nu
 
   el.readOnly = false;
   el.focus({ preventScroll: true });
-  
+
   // skipRestore가 true거나 React가 즉시 re-render하여 readOnly를 false로 바꿀 것이 예상되는 경우
   // 복구 로직을 건너뜁니다. (React가 prop에 따라 다음 렌더 시점에 관리하게 됨)
   if (!skipRestore) {
@@ -71,10 +74,10 @@ export function capitalizeFirst(str: string): string {
  */
 export function parseKoreanName(fullName: string): { lastName: string; firstName: string } {
   const trimmed = fullName.trim();
-  if (trimmed.length <= 1) return { lastName: trimmed, firstName: "" };
+  if (trimmed.length <= 1) return { lastName: trimmed, firstName: '' };
 
   // Double-character surnames (복성) list
-  const doubleSurnames = ["남궁", "황보", "제갈", "사공", "선우", "독고", "동고", "망절"];
+  const doubleSurnames = ['남궁', '황보', '제갈', '사공', '선우', '독고', '동고', '망절'];
 
   for (const surname of doubleSurnames) {
     if (trimmed.startsWith(surname)) {
@@ -152,8 +155,9 @@ export function isValidEmail(email: string): boolean {
 }
 
 export function isValidPhone(phone: string): boolean {
+  const clean = phone.replace(/-/g, '').replace(/\s/g, '');
   const phoneRegex = /^(\+82|0)[0-9]{8,11}$/;
-  return phoneRegex.test(phone);
+  return phoneRegex.test(clean);
 }
 
 // Phone Number Formatting Utility (Korean styles)
@@ -193,14 +197,17 @@ export function groupBy<T, K extends PropertyKey>(
   array: T[],
   keyFn: (item: T) => K
 ): Record<K, T[]> {
-  return array.reduce((groups, item) => {
-    const key = keyFn(item);
-    if (!groups[key]) {
-      groups[key] = [];
-    }
-    groups[key].push(item);
-    return groups;
-  }, {} as Record<K, T[]>);
+  return array.reduce(
+    (groups, item) => {
+      const key = keyFn(item);
+      if (!groups[key]) {
+        groups[key] = [];
+      }
+      groups[key].push(item);
+      return groups;
+    },
+    {} as Record<K, T[]>
+  );
 }
 
 export function sortBy<T>(
@@ -219,9 +226,12 @@ export function sortBy<T>(
 }
 
 // Object Utilities
-export function pick<T extends Record<string, unknown>, K extends keyof T>(obj: T, keys: K[]): Pick<T, K> {
+export function pick<T extends Record<string, unknown>, K extends keyof T>(
+  obj: T,
+  keys: K[]
+): Pick<T, K> {
   const result = {} as Pick<T, K>;
-  keys.forEach(key => {
+  keys.forEach((key) => {
     if (key in obj) {
       result[key] = obj[key];
     }
@@ -229,9 +239,12 @@ export function pick<T extends Record<string, unknown>, K extends keyof T>(obj: 
   return result;
 }
 
-export function omit<T extends Record<string, unknown>, K extends keyof T>(obj: T, keys: K[]): Omit<T, K> {
+export function omit<T extends Record<string, unknown>, K extends keyof T>(
+  obj: T,
+  keys: K[]
+): Omit<T, K> {
   const result = { ...obj };
-  keys.forEach(key => delete result[key]);
+  keys.forEach((key) => delete result[key]);
   return result;
 }
 
@@ -244,7 +257,7 @@ export function isEmpty(obj: unknown): boolean {
 
 // Async Utilities
 export function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export async function retry<T>(
@@ -328,10 +341,15 @@ export function hexToRgb(hex: string): { r: number; g: number; b: number } | nul
 }
 
 export function rgbToHex(r: number, g: number, b: number): string {
-  return '#' + [r, g, b].map(x => {
-    const hex = x.toString(16);
-    return hex.length === 1 ? '0' + hex : hex;
-  }).join('');
+  return (
+    '#' +
+    [r, g, b]
+      .map((x) => {
+        const hex = x.toString(16);
+        return hex.length === 1 ? '0' + hex : hex;
+      })
+      .join('')
+  );
 }
 
 // Local Storage Utilities

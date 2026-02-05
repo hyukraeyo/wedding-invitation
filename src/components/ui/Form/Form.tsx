@@ -6,66 +6,53 @@ import { clsx } from 'clsx';
 import s from './Form.module.scss';
 
 const Form = React.forwardRef<
-    React.ElementRef<typeof FormPrimitive.Root>,
-    React.ComponentPropsWithoutRef<typeof FormPrimitive.Root>
+  React.ElementRef<typeof FormPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof FormPrimitive.Root>
 >(({ className, ...props }, ref) => (
-    <FormPrimitive.Root
-        ref={ref}
-        className={clsx(s.FormRoot, className)}
-        {...props}
-    />
+  <FormPrimitive.Root ref={ref} className={clsx(s.FormRoot, className)} {...props} />
 ));
 Form.displayName = FormPrimitive.Root.displayName;
 
 interface FormFieldProps extends React.ComponentPropsWithoutRef<typeof FormPrimitive.Field> {
-    floatingLabel?: boolean | undefined;
+  floatingLabel?: boolean | undefined;
 }
 
-const FormField = React.forwardRef<
-    React.ElementRef<typeof FormPrimitive.Field>,
-    FormFieldProps
->(({ className, floatingLabel = false, ...props }, ref) => (
+const FormField = React.forwardRef<React.ElementRef<typeof FormPrimitive.Field>, FormFieldProps>(
+  ({ className, floatingLabel = false, ...props }, ref) => (
     <FormPrimitive.Field
-        ref={ref}
-        className={clsx(s.FormField, floatingLabel && s.FloatingLabel, className)}
-        {...props}
+      ref={ref}
+      className={clsx(s.FormField, floatingLabel && s.FloatingLabel, className)}
+      {...props}
     />
-));
+  )
+);
 FormField.displayName = FormPrimitive.Field.displayName;
 
 const FormLabel = React.forwardRef<
-    React.ElementRef<typeof FormPrimitive.Label>,
-    React.ComponentPropsWithoutRef<typeof FormPrimitive.Label>
+  React.ElementRef<typeof FormPrimitive.Label>,
+  React.ComponentPropsWithoutRef<typeof FormPrimitive.Label>
 >(({ className, ...props }, ref) => (
-    <FormPrimitive.Label
-        ref={ref}
-        className={clsx(s.FormLabel, className)}
-        {...props}
-    />
+  <FormPrimitive.Label ref={ref} className={clsx(s.FormLabel, className)} {...props} />
 ));
 FormLabel.displayName = FormPrimitive.Label.displayName;
 
 const FormControl = FormPrimitive.Control;
 
 const FormMessage = React.forwardRef<
-    React.ElementRef<typeof FormPrimitive.Message>,
-    React.ComponentPropsWithoutRef<typeof FormPrimitive.Message>
+  React.ElementRef<typeof FormPrimitive.Message>,
+  React.ComponentPropsWithoutRef<typeof FormPrimitive.Message>
 >(({ className, ...props }, ref) => (
-    <FormPrimitive.Message
-        ref={ref}
-        className={clsx(s.FormMessage, className)}
-        {...props}
-    />
+  <FormPrimitive.Message ref={ref} className={clsx(s.FormMessage, className)} {...props} />
 ));
 FormMessage.displayName = FormPrimitive.Message.displayName;
 
+const FormHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <div ref={ref} className={clsx(s.FormHeader, className)} {...props} />
+  )
+);
+FormHeader.displayName = 'FormHeader';
+
 const FormSubmit = FormPrimitive.Submit;
 
-export {
-    Form,
-    FormField,
-    FormLabel,
-    FormControl,
-    FormMessage,
-    FormSubmit,
-};
+export { Form, FormField, FormLabel, FormControl, FormMessage, FormHeader, FormSubmit };

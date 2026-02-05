@@ -56,7 +56,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                             onClick={handleLinkShare}
                             className={styles.shareButton}
                             aria-label="링크 복사"
-                            variant="clear"
+                            variant="ghost"
                             name=""
                         >
                             {copied ? <Check size={20} /> : <Copy size={20} />}
@@ -76,7 +76,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                             <IconButton
                                 className={styles.shareButton}
                                 aria-label="카카오톡 공유"
-                                variant="clear"
+                                variant="ghost"
                                 name=""
                             >
                                 <Share2 size={20} />
@@ -88,7 +88,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
             </Dialog.Body>
             <Dialog.Footer>
                 <Button
-                    variant="weak"
+                    variant="ghost"
                     onClick={() => onOpenChange(false)}
                     size="lg"
                 >

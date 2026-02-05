@@ -65,7 +65,7 @@ const HeaderActions = React.memo(
               onClick={onSaveAction}
               disabled={isLoading || isUploading}
               iconSize={20}
-              variant="clear"
+              variant="ghost"
               className={styles.actionButton}
               aria-label="저장하기"
               name=""
@@ -79,7 +79,7 @@ const HeaderActions = React.memo(
               <ViewTransitionLink href="/mypage/notifications" className={styles.notificationLink}>
                 <IconButton
                   iconSize={20}
-                  variant="clear"
+                  variant="ghost"
                   className={styles.actionButton}
                   aria-label="알림"
                   name=""
@@ -91,7 +91,7 @@ const HeaderActions = React.memo(
               <ViewTransitionLink href="/mypage" className={styles.profileLink}>
                 <IconButton
                   iconSize={20}
-                  variant="fill"
+                  variant="primary"
                   className={styles.profileButton}
                   aria-label="마이페이지"
                   name=""
@@ -103,7 +103,7 @@ const HeaderActions = React.memo(
           ) : (
             <IconButton
               iconSize={20}
-              variant="clear"
+              variant="ghost"
               onClick={onLogin}
               className={styles.actionButton}
               aria-label="로그인"

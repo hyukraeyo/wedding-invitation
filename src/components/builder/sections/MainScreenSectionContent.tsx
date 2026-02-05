@@ -141,7 +141,7 @@ export default function MainScreenSectionContent() {
               <SwiperSlide key={preset.id} className={styles.stylePresetSlide}>
                 <Button
                   type="button"
-                  variant="weak"
+                  variant="ghost"
                   className={cn(
                     styles.stylePresetCard,
                     mainScreen.layout === preset.layout ? styles.selected : '',

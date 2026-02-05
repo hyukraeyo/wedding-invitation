@@ -283,7 +283,7 @@ export default function RequestsPageClient({
                     <Dialog.Footer>
                         {confirmConfig.type !== 'INFO_ONLY' && (
                             <Button
-                                variant="weak"
+                                variant="ghost"
                                 size="lg"
                                 onClick={() => setConfirmConfig(prev => ({ ...prev, isOpen: false }))}
                                 disabled={approveMutation.isPending}
@@ -292,7 +292,7 @@ export default function RequestsPageClient({
                             </Button>
                         )}
                         <Button
-                            variant="fill"
+                            variant="primary"
                             size="lg"
                             loading={approveMutation.isPending}
                             disabled={approveMutation.isPending}
@@ -335,7 +335,7 @@ export default function RequestsPageClient({
                             </Dialog.Body>
                             <Dialog.Footer>
                                 <Button
-                                    variant="weak"
+                                    variant="ghost"
                                     size="lg"
                                     onClick={rejectionReason.handleClose}
                                     disabled={rejectMutation.isPending}
@@ -343,7 +343,7 @@ export default function RequestsPageClient({
                                     취소
                                 </Button>
                                 <Button
-                                    variant="fill"
+                                    variant="primary"
                                     size="lg"
                                     loading={rejectMutation.isPending}
                                     disabled={rejectionReason.isSubmitDisabled}
@@ -369,7 +369,7 @@ export default function RequestsPageClient({
                             />
                         </Dialog.Body>
                         <Dialog.Footer>
-                            <Button variant="fill" size="lg" onClick={() => setViewRejectionData(null)}>
+                            <Button variant="primary" size="lg" onClick={() => setViewRejectionData(null)}>
                                 확인
                             </Button>
                         </Dialog.Footer>

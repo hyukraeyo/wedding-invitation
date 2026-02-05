@@ -1,21 +1,23 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Heart, User, ChevronRight, Plus, Check, ChevronDown } from 'lucide-react';
+import { useRef, useEffect, useCallback, useState } from 'react';
+import { Heart, User, Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { DatePicker } from '@/components/common/DatePicker';
 import { TimePicker } from '@/components/common/TimePicker';
-import { TextField, Button, Dialog, Skeleton } from '@/components/ui';
-import { NameField } from '@/components/common/NameField';
-import { PhoneField } from '@/components/common/PhoneField/PhoneField';
-import { useToast } from '@/hooks/use-toast';
+import { TextField, Button, Skeleton } from '@/components/ui';
 import {
-  parseKoreanName,
-  cn,
-  isValidKoreanNameValue,
-  focusMobileInput,
-  formatPhoneNumber,
-} from '@/lib/utils';
+  Form,
+  FormField,
+  FormHeader,
+  FormLabel,
+  FormControl,
+  FormMessage,
+  FormSubmit,
+} from '@/components/ui/Form';
+import { useToast } from '@/hooks/use-toast';
+import { useNameInput, usePhoneInput } from '@/hooks/useFormInput';
+import { parseKoreanName, cn, isValidKoreanNameValue, isValidPhone } from '@/lib/utils';
 import { useHeaderStore } from '@/store/useHeaderStore';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { Stepper } from '@/components/ui/Stepper';
@@ -23,25 +25,28 @@ import styles from './SetupForm.module.scss';
 
 const STEPS = [{ label: 'Info' }, { label: 'Date' }, { label: 'Done' }];
 
+/**
+ * 커스텀 유효성 검사 함수 (Radix Form match용)
+ * 완성되지 않은 자음/모음만 있는 경우 invalid 처리
+ */
+const validateKoreanName = (value: string): boolean => {
+  if (!value.trim()) return false; // 빈 값은 valueMissing으로 처리
+  return !isValidKoreanNameValue(value); // true면 에러 표시
+};
+
 const SetupForm = () => {
   const router = useRouter();
   const { toast } = useToast();
-  const { groom, bride, date, time, setGroom, setBride, setDate, setTime, setSlug, reset } =
-    useInvitationStore();
+  const { date, time, setGroom, setBride, setDate, setTime, setSlug, reset } = useInvitationStore();
   const { resetHeader } = useHeaderStore();
 
   const [currentStep, setCurrentStep] = useState(0);
   const [isHydrated, setIsHydrated] = useState(false);
 
-  // Form State
+  // Form State - controlled inputs
   const [groomFullName, setGroomFullName] = useState('');
-  const [groomRelation, setGroomRelation] = useState('아들');
-  const [groomCustomRelation, setGroomCustomRelation] = useState('');
   const [groomPhone, setGroomPhone] = useState('');
-
   const [brideFullName, setBrideFullName] = useState('');
-  const [brideRelation, setBrideRelation] = useState('딸');
-  const [brideCustomRelation, setBrideCustomRelation] = useState('');
   const [bridePhone, setBridePhone] = useState('');
 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
@@ -49,26 +54,30 @@ const SetupForm = () => {
 
   const groomNameRef = useRef<HTMLInputElement>(null);
 
+  // 커스텀 훅으로 핸들러 생성
+  const handleGroomNameChange = useNameInput(setGroomFullName);
+  const handleBrideNameChange = useNameInput(setBrideFullName);
+  const handleGroomPhoneChange = usePhoneInput(setGroomPhone);
+  const handleBridePhoneChange = usePhoneInput(setBridePhone);
+
   useEffect(() => {
     reset();
-    setIsHydrated(true);
-    return () => resetHeader();
+    const timer = setTimeout(() => setIsHydrated(true), 0);
+    return () => {
+      clearTimeout(timer);
+      resetHeader();
+    };
   }, [reset, resetHeader]);
 
   const isStepValid = useCallback(() => {
     if (currentStep === 0) {
-      return (
-        isValidKoreanNameValue(groomFullName) &&
-        isValidKoreanNameValue(brideFullName) &&
-        !!groomRelation &&
-        !!brideRelation
-      );
+      return isValidKoreanNameValue(groomFullName) && isValidKoreanNameValue(brideFullName);
     }
     if (currentStep === 1) {
       return !!date && !!time;
     }
     return false;
-  }, [currentStep, groomFullName, brideFullName, groomRelation, brideRelation, date, time]);
+  }, [currentStep, groomFullName, brideFullName, date, time]);
 
   const handleNext = () => {
     if (!isStepValid()) {
@@ -86,12 +95,12 @@ const SetupForm = () => {
       setGroom({
         lastName: groomNames.lastName,
         firstName: groomNames.firstName,
-        relation: groomRelation === 'custom' ? groomCustomRelation : groomRelation,
+        relation: '아들',
       });
       setBride({
         lastName: brideNames.lastName,
         firstName: brideNames.firstName,
-        relation: brideRelation === 'custom' ? brideCustomRelation : brideRelation,
+        relation: '딸',
       });
 
       setCurrentStep(1);
@@ -124,7 +133,7 @@ const SetupForm = () => {
               <p>신랑, 신부님의 정보를 입력해주세요.</p>
             </div>
 
-            <form
+            <Form
               className={styles.formSection}
               onSubmit={(e) => {
                 e.preventDefault();
@@ -140,33 +149,50 @@ const SetupForm = () => {
                   <div className={styles.label}>신랑</div>
                 </div>
 
-                <div className={styles.fieldGroup}>
-                  <div>
-                    <div className={styles.fieldLabel}>성함</div>
-                    <NameField
+                <FormField name="groomName">
+                  <FormHeader>
+                    <FormLabel>성함</FormLabel>
+                    <FormMessage match="valueMissing">이름을 입력해주세요</FormMessage>
+                    <FormMessage match={validateKoreanName}>올바른 이름을 입력해주세요</FormMessage>
+                  </FormHeader>
+                  <FormControl asChild>
+                    <TextField
                       ref={groomNameRef}
+                      type="text"
                       variant="outline"
-                      radius="full"
+                      radius="lg"
                       size="lg"
                       placeholder="Ex. 김토스"
                       value={groomFullName}
-                      onValueChange={setGroomFullName}
+                      onChange={handleGroomNameChange}
+                      required
+                      autoComplete="name"
+                      autoCorrect="off"
+                      spellCheck={false}
                     />
-                  </div>
-                  <div className={styles.fieldRow}>
-                    <div>
-                      <div className={styles.fieldLabel}>연락처</div>
-                      <PhoneField
-                        variant="outline"
-                        radius="full"
-                        size="lg"
-                        placeholder="010-1234-5678"
-                        value={groomPhone}
-                        onChange={(e) => setGroomPhone(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                </div>
+                  </FormControl>
+                </FormField>
+
+                <FormField name="groomPhone">
+                  <FormHeader>
+                    <FormLabel>연락처</FormLabel>
+                    <FormMessage match={(value) => !!value && !isValidPhone(value)}>
+                      올바른 전화번호를 입력해주세요
+                    </FormMessage>
+                  </FormHeader>
+                  <FormControl asChild>
+                    <TextField
+                      type="tel"
+                      inputMode="numeric"
+                      variant="outline"
+                      radius="lg"
+                      size="lg"
+                      placeholder="010-1234-5678"
+                      value={groomPhone}
+                      onChange={handleGroomPhoneChange}
+                    />
+                  </FormControl>
+                </FormField>
               </div>
 
               {/* Bride Section */}
@@ -178,39 +204,57 @@ const SetupForm = () => {
                   <div className={styles.label}>신부</div>
                 </div>
 
-                <div className={styles.fieldGroup}>
-                  <div>
-                    <div className={styles.fieldLabel}>성함</div>
-                    <NameField
+                <FormField name="brideName">
+                  <FormHeader>
+                    <FormLabel>성함</FormLabel>
+                    <FormMessage match="valueMissing">이름을 입력해주세요</FormMessage>
+                    <FormMessage match={validateKoreanName}>올바른 이름을 입력해주세요</FormMessage>
+                  </FormHeader>
+                  <FormControl asChild>
+                    <TextField
+                      type="text"
                       variant="outline"
-                      radius="full"
+                      radius="lg"
                       size="lg"
                       placeholder="Ex. 이토스"
                       value={brideFullName}
-                      onValueChange={setBrideFullName}
+                      onChange={handleBrideNameChange}
+                      required
+                      autoComplete="name"
+                      autoCorrect="off"
+                      spellCheck={false}
                     />
-                  </div>
-                  <div className={styles.fieldRow}>
-                    <div>
-                      <div className={styles.fieldLabel}>연락처</div>
-                      <PhoneField
-                        variant="outline"
-                        radius="full"
-                        size="lg"
-                        placeholder="010-9876-5432"
-                        value={bridePhone}
-                        onChange={(e) => setBridePhone(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                </div>
+                  </FormControl>
+                </FormField>
+
+                <FormField name="bridePhone">
+                  <FormHeader>
+                    <FormLabel>연락처</FormLabel>
+                    <FormMessage match={(value) => !!value && !isValidPhone(value)}>
+                      올바른 전화번호를 입력해주세요
+                    </FormMessage>
+                  </FormHeader>
+                  <FormControl asChild>
+                    <TextField
+                      type="tel"
+                      inputMode="numeric"
+                      variant="outline"
+                      radius="lg"
+                      size="lg"
+                      placeholder="010-9876-5432"
+                      value={bridePhone}
+                      onChange={handleBridePhoneChange}
+                    />
+                  </FormControl>
+                </FormField>
               </div>
 
-              <Button className={styles.nextButton} type="submit" disabled={!isStepValid()}>
-                <span>Next</span>
-                <ChevronRight size={20} />
-              </Button>
-            </form>
+              <FormSubmit asChild>
+                <Button className={styles.nextButton} disabled={!isStepValid()} radius="lg">
+                  다음
+                </Button>
+              </FormSubmit>
+            </Form>
           </>
         ) : (
           <>
@@ -219,43 +263,51 @@ const SetupForm = () => {
               <p>예식 날짜와 시간을 선택해주세요.</p>
             </div>
 
-            <form
+            <Form
               className={styles.formSection}
               onSubmit={(e) => {
                 e.preventDefault();
                 handleNext();
               }}
             >
-              <div className={styles.datePickerWrapper}>
-                <div className={styles.fieldLabel}>결혼식 날짜</div>
+              <FormField name="weddingDate">
+                <FormHeader>
+                  <FormLabel>결혼식 날짜</FormLabel>
+                  <FormMessage match="valueMissing">날짜를 선택해주세요</FormMessage>
+                </FormHeader>
                 <DatePicker
                   value={date}
                   onChange={setDate}
                   open={isDatePickerOpen}
                   onOpenChange={setIsDatePickerOpen}
                   variant="outline"
-                  radius="full"
+                  radius="lg"
                   placeholder="Select Date"
                 />
-              </div>
+              </FormField>
 
-              <div className={styles.timePickerWrapper}>
-                <div className={styles.fieldLabel}>예식 시간</div>
+              <FormField name="weddingTime">
+                <FormHeader>
+                  <FormLabel>예식 시간</FormLabel>
+                  <FormMessage match="valueMissing">시간을 선택해주세요</FormMessage>
+                </FormHeader>
                 <TimePicker
                   value={time}
                   onChange={setTime}
                   open={isTimePickerOpen}
                   onOpenChange={setIsTimePickerOpen}
                   variant="outline"
-                  radius="full"
+                  radius="lg"
                   placeholder="Select Time"
                 />
-              </div>
+              </FormField>
 
-              <Button className={styles.nextButton} type="submit" disabled={!isStepValid()}>
-                <span>Let's Start</span>
-                <Heart size={20} fill="currentColor" />
-              </Button>
+              <FormSubmit asChild>
+                <Button className={styles.nextButton} disabled={!isStepValid()}>
+                  <span>Let&apos;s Start</span>
+                  <Heart size={20} fill="currentColor" />
+                </Button>
+              </FormSubmit>
 
               <Button
                 variant="ghost"
@@ -265,7 +317,7 @@ const SetupForm = () => {
               >
                 Back to Information
               </Button>
-            </form>
+            </Form>
           </>
         )}
       </div>

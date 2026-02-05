@@ -130,7 +130,7 @@ const InvitationCard = React.memo(({
                             {(!isRequesting && !isApproved) ? (
                                 <>
                                     <Button
-                                        variant="weak"
+                                        variant="ghost"
                                         className={clsx(styles.footerButton, styles.secondary, 'swiper-no-swiping')}
                                         loading={isLoading}
                                         disabled={isLoading}
@@ -144,7 +144,7 @@ const InvitationCard = React.memo(({
                                     </Button>
                                     <Button
                                         className={clsx(styles.footerButton, styles.primary, 'swiper-no-swiping')}
-                                        variant="fill"
+                                        variant="primary"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             handlePrimaryAction(e);
@@ -157,7 +157,7 @@ const InvitationCard = React.memo(({
                             ) : (
                                 <>
                                     <Button
-                                        variant="weak"
+                                        variant="ghost"
                                         className={clsx(styles.footerButton, styles.secondary, 'swiper-no-swiping')}
                                         onClick={(e) => {
                                             e.stopPropagation();
@@ -173,7 +173,7 @@ const InvitationCard = React.memo(({
                                             isApproved ? styles.share : styles.pending,
                                             'swiper-no-swiping'
                                         )}
-                                        variant="fill"
+                                        variant="primary"
                                         onClick={(e) => {
                                             e.stopPropagation();
                                             if (isApproved) {
@@ -206,10 +206,10 @@ const InvitationCard = React.memo(({
                             />
                         </Dialog.Body>
                         <Dialog.Footer>
-                            <Button variant="weak" size="lg" onClick={() => setShowRejectionModal(false)}>
+                            <Button variant="ghost" size="lg" onClick={() => setShowRejectionModal(false)}>
                                 닫기
                             </Button>
-                            <Button variant="fill" size="lg" onClick={() => {
+                            <Button variant="primary" size="lg" onClick={() => {
                                 setShowRejectionModal(false);
                                 onRequestApproval(invitation);
                             }}>

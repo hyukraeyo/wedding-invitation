@@ -145,7 +145,7 @@ const LocationView = memo(({
             {showNavigation ? (
                 <div className={styles.navLinks}>
                     <Button
-                        variant="weak"
+                        variant="ghost"
                         onClick={() => handleNavClick('kakao')}
                         className={styles.navButton}
                         style={{ display: 'flex', flexDirection: 'column', height: 'auto', padding: '12px 0', flex: 1, gap: '8px' }}
@@ -156,7 +156,7 @@ const LocationView = memo(({
                         <span className={styles.navLabel}>카카오맵</span>
                     </Button>
                     <Button
-                        variant="weak"
+                        variant="ghost"
                         onClick={() => handleNavClick('naver')}
                         className={styles.navButton}
                         style={{ display: 'flex', flexDirection: 'column', height: 'auto', padding: '12px 0', flex: 1, gap: '8px' }}
@@ -167,7 +167,7 @@ const LocationView = memo(({
                         <span className={styles.navLabel}>네이버지도</span>
                     </Button>
                     <Button
-                        variant="weak"
+                        variant="ghost"
                         onClick={handleCopyAddress}
                         className={styles.navButton}
                         style={{ display: 'flex', flexDirection: 'column', height: 'auto', padding: '12px 0', flex: 1, gap: '8px' }}

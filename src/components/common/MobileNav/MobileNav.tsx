@@ -159,7 +159,7 @@ export function MobileNav({
                     onClick={onPreviewToggle}
                     aria-label="Open preview"
                     iconSize={24}
-                    variant="fill"
+                    variant="primary"
                     name="floating-preview"
                 >
                     <Eye className={styles.icon} />
@@ -183,7 +183,7 @@ export function MobileNav({
                                     <span>계정</span>
                                 </ViewTransitionLink>
                                 <Button
-                                    variant="weak"
+                                    variant="ghost"
                                     className={styles.drawerItem}
                                     onClick={handleEventClick}
                                 >
@@ -191,7 +191,7 @@ export function MobileNav({
                                     <span>{MENU_TITLES.EVENTS}</span>
                                 </Button>
                                 <Button
-                                    variant="weak"
+                                    variant="ghost"
                                     className={styles.drawerItem}
                                     onClick={handleCustomerService}
                                 >
@@ -199,7 +199,7 @@ export function MobileNav({
                                     <span>{MENU_TITLES.CUSTOMER_SERVICE}</span>
                                 </Button>
                                 <Button
-                                    variant="weak"
+                                    variant="ghost"
                                     className={clsx(styles.drawerItem, styles.logoutButton)}
                                     onClick={handleLogout}
                                 >
@@ -228,7 +228,7 @@ export function MobileNav({
                             </p>
                         </Dialog.Body>
                         <Dialog.Footer>
-                            <Button className={styles.fullWidth} variant="fill" size="lg" onClick={() => setIsEventModalOpen(false)}>
+                            <Button className={styles.fullWidth} variant="primary" size="lg" onClick={() => setIsEventModalOpen(false)}>
                                 확인
                             </Button>
                         </Dialog.Footer>

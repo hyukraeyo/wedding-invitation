@@ -38,7 +38,7 @@ export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
       label,
       placeholder = '날짜 선택',
       variant = 'outline',
-      radius = 'lg',
+      radius = 'md',
       disabled,
       calendarDisabled = { before: startOfToday() },
       id,

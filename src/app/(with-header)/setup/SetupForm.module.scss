@@ -106,65 +106,6 @@
   }
 }
 
-.fieldGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.fieldRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-
-  @include m.mobile {
-    grid-template-columns: 1fr;
-  }
-}
-
-.fieldLabel {
-  font-size: 14px;
-  font-weight: 600;
-  color: v.$grey-400;
-  margin-bottom: 8px;
-  margin-left: 2px;
-}
-
-.nextButton {
-  margin-top: 8px;
-  height: 56px !important;
-  border-radius: 20px !important;
-  font-size: 17px !important;
-  font-weight: 600 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 8px !important;
-  background-color: #3b82f6 !important;
-  color: v.$white !important;
-  border: none !important;
-  width: 100% !important;
-  cursor: pointer;
-  transition: all 0.2s v.$ease-ios;
-
-  &:hover {
-    background-color: #2563eb !important;
-    transform: translateY(-1px);
-  }
-
-  &:active {
-    transform: translateY(0);
-    opacity: 0.9;
-  }
-
-  &:disabled {
-    background-color: v.$grey-200 !important;
-    color: v.$grey-400 !important;
-    cursor: not-allowed;
-    transform: none;
-  }
-}
-
 .parentsButton {
   background-color: v.$white;
   border: 1px solid v.$grey-50;
@@ -219,13 +160,4 @@
   .plusIcon {
     color: v.$grey-400;
   }
-}
-
-.datePickerWrapper,
-.timePickerWrapper {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  padding: 12px 0;
 }
