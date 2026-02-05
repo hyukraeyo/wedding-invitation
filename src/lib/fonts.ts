@@ -140,10 +140,8 @@ export const doHyeon = Do_Hyeon({
  */
 export const songMyung = Song_Myung({
   weight: '400',
-  subsets: ['latin'],
   variable: '--font-song-myung',
   display: 'swap',
-  preload: false,
 });
 
 /**

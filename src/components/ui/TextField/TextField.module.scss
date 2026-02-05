@@ -116,6 +116,13 @@
     .input {
       font-weight: 600;
     }
+
+    &.isTextInput {
+      cursor: text;
+      &:active {
+        transform: none;
+      }
+    }
   }
 
   &.invalid {

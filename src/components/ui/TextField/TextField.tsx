@@ -156,7 +156,9 @@ const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps
           {label && <Field.Label htmlFor={inputId}>{label}</Field.Label>}
           {button}
           {(helperText || typeof error === 'string') && (
-            <Field.HelperText error={!!error}>{typeof error === 'string' ? error : helperText}</Field.HelperText>
+            <Field.HelperText error={!!error}>
+              {typeof error === 'string' ? error : helperText}
+            </Field.HelperText>
           )}
         </Field.Root>
       );
@@ -252,7 +254,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
         size={size}
         radius={radius}
         invalid={isError}
-        className={className}
+        className={clsx(s.isTextInput, className)}
       >
         {lSlot && <TextFieldSlot side="left">{lSlot}</TextFieldSlot>}
         <TextFieldInput
@@ -264,7 +266,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           maxLength={maxLength}
           {...props}
         />
-        {(clearable && currentValue) && (
+        {clearable && currentValue && (
           <TextFieldSlot side="right">
             <button
               type="button"
@@ -286,10 +288,12 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           {label && <Field.Label htmlFor={inputId}>{label}</Field.Label>}
           {input}
           <Field.Footer>
-            {(helperText || errorMsg) ? (
+            {helperText || errorMsg ? (
               <Field.HelperText error={isError}>{errorMsg || helperText}</Field.HelperText>
-            ) : <div />}
-            {(showCount && maxLength) && (
+            ) : (
+              <div />
+            )}
+            {showCount && maxLength && (
               <Field.Counter current={String(currentValue).length} max={maxLength} />
             )}
           </Field.Footer>
