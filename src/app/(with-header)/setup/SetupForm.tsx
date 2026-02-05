@@ -5,30 +5,23 @@ import { Heart, User, ChevronRight, Plus, Check, ChevronDown } from 'lucide-reac
 import { useRouter } from 'next/navigation';
 import { DatePicker } from '@/components/common/DatePicker';
 import { TimePicker } from '@/components/common/TimePicker';
-import { TextField, Button as UIButton, Dialog, Skeleton } from '@/components/ui';
+import { TextField, Button, Dialog, Skeleton } from '@/components/ui';
 import { NameField } from '@/components/common/NameField';
+import { PhoneField } from '@/components/common/PhoneField/PhoneField';
 import { useToast } from '@/hooks/use-toast';
-import { parseKoreanName, cn, isValidKoreanNameValue, focusMobileInput } from '@/lib/utils';
+import {
+  parseKoreanName,
+  cn,
+  isValidKoreanNameValue,
+  focusMobileInput,
+  formatPhoneNumber,
+} from '@/lib/utils';
 import { useHeaderStore } from '@/store/useHeaderStore';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { Stepper } from '@/components/ui/Stepper';
 import styles from './SetupForm.module.scss';
 
 const STEPS = [{ label: 'Info' }, { label: 'Date' }, { label: 'Done' }];
-
-const RELATION_OPTIONS = [
-  { label: '아들', value: '아들' },
-  { label: '장남', value: '장남' },
-  { label: '차남', value: '차남' },
-  { label: '삼남', value: '삼남' },
-  { label: '막내 아들', value: '막내 아들' },
-  { label: '딸', value: '딸' },
-  { label: '장녀', value: '장녀' },
-  { label: '차녀', value: '차녀' },
-  { label: '삼녀', value: '삼녀' },
-  { label: '막내 딸', value: '막내 딸' },
-  { label: '직접 입력', value: 'custom' },
-];
 
 const SetupForm = () => {
   const router = useRouter();
@@ -127,111 +120,50 @@ const SetupForm = () => {
         {currentStep === 0 ? (
           <>
             <div className={styles.titleSection}>
-              <h1>Who is getting married?</h1>
-              <p>Please enter the groom and bride's details.</p>
+              <h1>누구의 결혼식인가요?</h1>
+              <p>신랑, 신부님의 정보를 입력해주세요.</p>
             </div>
 
-            <div className={styles.formSection}>
+            <form
+              className={styles.formSection}
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleNext();
+              }}
+            >
               {/* Groom Section */}
               <div className={styles.personSection}>
                 <div className={styles.sectionHeader}>
                   <div className={cn(styles.iconWrapper, styles.groom)}>
                     <User size={20} fill="currentColor" />
                   </div>
-                  <div className={styles.label}>
-                    Groom <span>(신랑)</span>
-                  </div>
+                  <div className={styles.label}>신랑</div>
                 </div>
 
                 <div className={styles.fieldGroup}>
                   <div>
-                    <div className={styles.fieldLabel}>Full Name</div>
+                    <div className={styles.fieldLabel}>성함</div>
                     <NameField
                       ref={groomNameRef}
-                      variant="secondary"
+                      variant="outline"
                       radius="full"
                       size="lg"
-                      placeholder="Ex. Kim Toss"
+                      placeholder="Ex. 김토스"
                       value={groomFullName}
                       onValueChange={setGroomFullName}
                     />
                   </div>
                   <div className={styles.fieldRow}>
                     <div>
-                      <div className={styles.fieldLabel}>Phone Number</div>
-                      <TextField
-                        variant="secondary"
+                      <div className={styles.fieldLabel}>연락처</div>
+                      <PhoneField
+                        variant="outline"
                         radius="full"
                         size="lg"
                         placeholder="010-1234-5678"
                         value={groomPhone}
                         onChange={(e) => setGroomPhone(e.target.value)}
                       />
-                    </div>
-                    <div>
-                      <div className={styles.fieldLabel}>Relation</div>
-                      <Dialog mobileBottomSheet>
-                        <Dialog.Trigger asChild>
-                          <div style={{ cursor: 'pointer' }}>
-                            <TextField.Button
-                              variant="secondary"
-                              radius="full"
-                              size="lg"
-                              placeholder="관계 선택"
-                            >
-                              <div
-                                style={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'space-between',
-                                  width: '100%',
-                                }}
-                              >
-                                <span>
-                                  {groomRelation === 'custom'
-                                    ? groomCustomRelation || '직접 입력'
-                                    : groomRelation}
-                                </span>
-                                <ChevronDown size={18} />
-                              </div>
-                            </TextField.Button>
-                          </div>
-                        </Dialog.Trigger>
-                        <Dialog.Content>
-                          <Dialog.Header title="관계 선택" />
-                          <Dialog.Body>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                              {RELATION_OPTIONS.filter(
-                                (opt) =>
-                                  !['딸', '장녀', '차녀', '삼녀', '막내 딸'].includes(opt.label)
-                              ).map((opt) => (
-                                <Dialog.Close key={opt.value} asChild>
-                                  <UIButton
-                                    variant="ghost"
-                                    style={{ justifyContent: 'space-between', padding: '16px' }}
-                                    onClick={() => setGroomRelation(opt.value)}
-                                  >
-                                    <span>{opt.label}</span>
-                                    {groomRelation === opt.value && (
-                                      <Check size={20} color="#3b82f6" />
-                                    )}
-                                  </UIButton>
-                                </Dialog.Close>
-                              ))}
-                            </div>
-                            {groomRelation === 'custom' && (
-                              <div style={{ padding: '16px' }}>
-                                <TextField
-                                  placeholder="직접 입력 (예: 조카)"
-                                  value={groomCustomRelation}
-                                  onChange={(e) => setGroomCustomRelation(e.target.value)}
-                                  autoFocus
-                                />
-                              </div>
-                            )}
-                          </Dialog.Body>
-                        </Dialog.Content>
-                      </Dialog>
                     </div>
                   </div>
                 </div>
@@ -243,28 +175,26 @@ const SetupForm = () => {
                   <div className={cn(styles.iconWrapper, styles.bride)}>
                     <User size={20} fill="currentColor" />
                   </div>
-                  <div className={styles.label}>
-                    Bride <span>(신부)</span>
-                  </div>
+                  <div className={styles.label}>신부</div>
                 </div>
 
                 <div className={styles.fieldGroup}>
                   <div>
-                    <div className={styles.fieldLabel}>Full Name</div>
+                    <div className={styles.fieldLabel}>성함</div>
                     <NameField
-                      variant="secondary"
+                      variant="outline"
                       radius="full"
                       size="lg"
-                      placeholder="Ex. Lee Apple"
+                      placeholder="Ex. 이토스"
                       value={brideFullName}
                       onValueChange={setBrideFullName}
                     />
                   </div>
                   <div className={styles.fieldRow}>
                     <div>
-                      <div className={styles.fieldLabel}>Phone Number</div>
-                      <TextField
-                        variant="secondary"
+                      <div className={styles.fieldLabel}>연락처</div>
+                      <PhoneField
+                        variant="outline"
                         radius="full"
                         size="lg"
                         placeholder="010-9876-5432"
@@ -272,136 +202,70 @@ const SetupForm = () => {
                         onChange={(e) => setBridePhone(e.target.value)}
                       />
                     </div>
-                    <div>
-                      <div className={styles.fieldLabel}>Relation</div>
-                      <Dialog mobileBottomSheet>
-                        <Dialog.Trigger asChild>
-                          <div style={{ cursor: 'pointer' }}>
-                            <TextField.Button
-                              variant="secondary"
-                              radius="full"
-                              size="lg"
-                              placeholder="관계 선택"
-                            >
-                              <div
-                                style={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  justifyContent: 'space-between',
-                                  width: '100%',
-                                }}
-                              >
-                                <span>
-                                  {brideRelation === 'custom'
-                                    ? brideCustomRelation || '직접 입력'
-                                    : brideRelation}
-                                </span>
-                                <ChevronDown size={18} />
-                              </div>
-                            </TextField.Button>
-                          </div>
-                        </Dialog.Trigger>
-                        <Dialog.Content>
-                          <Dialog.Header title="관계 선택" />
-                          <Dialog.Body>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                              {RELATION_OPTIONS.filter(
-                                (opt) =>
-                                  !['아들', '장남', '차남', '삼남', '막내 아들'].includes(opt.label)
-                              ).map((opt) => (
-                                <Dialog.Close key={opt.value} asChild>
-                                  <UIButton
-                                    variant="ghost"
-                                    style={{ justifyContent: 'space-between', padding: '16px' }}
-                                    onClick={() => setBrideRelation(opt.value)}
-                                  >
-                                    <span>{opt.label}</span>
-                                    {brideRelation === opt.value && (
-                                      <Check size={20} color="#f43f5e" />
-                                    )}
-                                  </UIButton>
-                                </Dialog.Close>
-                              ))}
-                            </div>
-                            {brideRelation === 'custom' && (
-                              <div style={{ padding: '16px' }}>
-                                <TextField
-                                  placeholder="직접 입력 (예: 조카)"
-                                  value={brideCustomRelation}
-                                  onChange={(e) => setBrideCustomRelation(e.target.value)}
-                                  autoFocus
-                                />
-                              </div>
-                            )}
-                          </Dialog.Body>
-                        </Dialog.Content>
-                      </Dialog>
-                    </div>
                   </div>
                 </div>
               </div>
 
-              <UIButton
-                className={styles.nextButton}
-                onClick={handleNext}
-                disabled={!isStepValid()}
-              >
+              <Button className={styles.nextButton} type="submit" disabled={!isStepValid()}>
                 <span>Next</span>
                 <ChevronRight size={20} />
-              </UIButton>
-            </div>
+              </Button>
+            </form>
           </>
         ) : (
           <>
             <div className={styles.titleSection}>
-              <h1>When is the wedding?</h1>
-              <p>Please select the date and time of your ceremony.</p>
+              <h1>언제 결혼식을 하나요?</h1>
+              <p>예식 날짜와 시간을 선택해주세요.</p>
             </div>
 
-            <div className={styles.formSection}>
+            <form
+              className={styles.formSection}
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleNext();
+              }}
+            >
               <div className={styles.datePickerWrapper}>
-                <div className={styles.fieldLabel}>Wedding Date</div>
+                <div className={styles.fieldLabel}>결혼식 날짜</div>
                 <DatePicker
                   value={date}
                   onChange={setDate}
                   open={isDatePickerOpen}
                   onOpenChange={setIsDatePickerOpen}
-                  variant="secondary"
+                  variant="outline"
                   radius="full"
                   placeholder="Select Date"
                 />
               </div>
 
               <div className={styles.timePickerWrapper}>
-                <div className={styles.fieldLabel}>Wedding Time</div>
+                <div className={styles.fieldLabel}>예식 시간</div>
                 <TimePicker
                   value={time}
                   onChange={setTime}
                   open={isTimePickerOpen}
                   onOpenChange={setIsTimePickerOpen}
-                  variant="secondary"
+                  variant="outline"
                   radius="full"
                   placeholder="Select Time"
                 />
               </div>
 
-              <UIButton
-                className={styles.nextButton}
-                onClick={handleNext}
-                disabled={!isStepValid()}
-              >
+              <Button className={styles.nextButton} type="submit" disabled={!isStepValid()}>
                 <span>Let's Start</span>
                 <Heart size={20} fill="currentColor" />
-              </UIButton>
+              </Button>
 
-              <UIButton
+              <Button
                 variant="ghost"
+                type="button"
                 onClick={() => setCurrentStep(0)}
                 style={{ color: '#94a3b8' }}
               >
                 Back to Information
-              </UIButton>
-            </div>
+              </Button>
+            </form>
           </>
         )}
       </div>

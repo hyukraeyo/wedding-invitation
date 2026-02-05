@@ -54,7 +54,7 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
                 id="wedding-date"
                 value={date}
                 variant="primary"
-                radius="large"
+                radius="lg"
                 placeholder=""
                 onChange={(value) => setDate(value)}
               />
@@ -69,7 +69,7 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
                 id="wedding-time"
                 value={time}
                 variant="primary"
-                radius="large"
+                radius="lg"
                 placeholder=""
                 onChange={(value) => setTime(value)}
               />

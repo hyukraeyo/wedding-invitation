@@ -9,7 +9,7 @@ import { Field } from '../Field';
 // --- Context for sharing props between Root and Input/Slot ---
 export type TextFieldSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 export type TextFieldVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'classic';
-export type TextFieldRadius = 'none' | 'small' | 'medium' | 'large' | 'full';
+export type TextFieldRadius = 'none' | 'sm' | 'md' | 'lg' | 'full';
 
 export type TextFieldEnterKeyHint = React.InputHTMLAttributes<HTMLInputElement>['enterKeyHint'];
 
@@ -38,7 +38,7 @@ const TextFieldRoot = React.forwardRef<HTMLDivElement, TextFieldRootProps>(
       className,
       size = 'md',
       variant = 'outline',
-      radius = 'medium',
+      radius = 'md',
       highContrast = false,
       disabled = false,
       invalid = false,
@@ -118,7 +118,7 @@ const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps
       label,
       variant = 'outline',
       size = 'md',
-      radius = 'medium',
+      radius = 'md',
       error,
       helperText,
       id,
@@ -193,7 +193,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
       label,
       variant = 'outline',
       size = 'md',
-      radius = 'medium',
+      radius = 'md',
       invalid,
       error,
       helperText,

@@ -106,7 +106,7 @@ export default function MyPageClient({
 
   const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
 
-  // ?뜉 ?섏씠吏 ?대룞 ??濡쒕뵫 ?곹깭 珥덇린??
+  // 탭/페이지 이동 시 로딩 상태 초기화
   useEffect(() => {
     setActionLoadingId(null);
   }, [pathname]);

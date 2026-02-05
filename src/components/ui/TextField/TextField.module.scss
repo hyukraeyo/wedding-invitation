@@ -132,15 +132,15 @@
     border-radius: 0;
   }
 
-  &.radius_small {
+  &.radius_sm {
     border-radius: v.$radius-sm;
   }
 
-  &.radius_medium {
+  &.radius_md {
     border-radius: v.$radius-md;
   }
 
-  &.radius_large {
+  &.radius_lg {
     border-radius: v.$radius-lg;
   }
 

@@ -98,7 +98,7 @@
                 padding-bottom: 6rem; // Slightly more padding to clear MobileNav
             }
 
-            background-color: transparent; // ?이?바 배경(#eee)??보이?록 ?명 처리
+            background-color: transparent; // 사이드바 배경(#eee)이 보이도록 투명 처리
 
             // Hide scrollbar completely (cross-platform)
             // Width is still usable for scrolling, just invisible
@@ -409,7 +409,7 @@
     overscroll-behavior: contain; // Prevent scroll chaining to parent
     background-color: white;
     position: relative;
-    z-index: 1; // ??? z-index??기 버튼(z-index: 99999)???에 ?라?????도?
+    z-index: 1; // 높은 z-index 닫기 버튼(z-index: 99999) 아래에 배치되도록
 }
 
 .sheetContent {

@@ -119,12 +119,12 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
           {/* Header */}
           <div className={styles.header}>
             <Heading as="h1" size="7" weight="bold" className={styles.title}>
-              諛붾굹?섏썾???쒖옉?섍린 ?뜉
+              바나나웨딩 시작하기
             </Heading>
             <p className={styles.subtitle}>
-              ?좏넻湲고븳 ?녿뒗 ?곕━留뚯쓽 ?밸퀎???쒖옉,
+              유통기한 없는 우리만의 특별한 시작,
               <br />
-              諛붾굹?섏썾?⑷낵 ?④퍡 ?쎄퀬 鍮좊Ⅴ寃?留뚮뱾?대낫?몄슂.
+              바나나웨딩과 함께 쉽고 빠르게 만들어보세요.
             </p>
           </div>
 
@@ -153,7 +153,7 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
               <svg viewBox="0 0 24 24" className={styles.icon} fill="currentColor">
                 <path d="M16.273 12.845L7.376 0H0v24h7.726V11.156L16.624 24H24V0h-7.727v12.845z" />
               </svg>
-              <span>?ㅼ씠踰꾨줈 ?쒖옉?섍린</span>
+              <span>네이버로 시작하기</span>
             </button>
           </div>
 
@@ -162,10 +162,10 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
             <p>
               怨꾩냽 吏꾪뻾?⑥쑝濡쒖뜥 洹?섎뒗 ?뱀궗??
               <ViewTransitionLink href="/privacy" target="_blank" className={styles.link}>
-                媛쒖씤?뺣낫 泥섎━諛⑹묠
+                개인정보 처리방침
               </ViewTransitionLink>
-              諛<br />
-              ?댁슜?쎄????숈쓽?섍쾶 ?⑸땲??
+              및<br />
+              이용약관에 동의하게 됩니다.
             </p>
           </div>
 

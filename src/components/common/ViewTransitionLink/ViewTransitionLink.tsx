@@ -18,8 +18,8 @@ interface ViewTransitionLinkProps {
 }
 
 /**
- * 釉뚮씪?곗???View Transition API瑜??쒖슜?섏뿬 遺?쒕윭???섏씠吏 ?꾪솚??吏?먰븯??留곹겕 而댄룷?뚰듃?낅땲??
- * 理쒖떊 Next.js 諛?React 19??Concurrent Rendering(useTransition)怨?寃고빀?섏뼱 理쒖쟻???깅뒫???쒓났?⑸땲??
+ * 브라우저의 View Transition API를 사용하여 부드러운 페이지 전환을 지원하는 링크 컴포넌트입니다.
+ * 최신 Next.js 및 React 19의 Concurrent Rendering(useTransition)과 결합되어 최적의 성능을 제공합니다.
  */
 export function ViewTransitionLink({
   href,
@@ -70,12 +70,12 @@ export function ViewTransitionLink({
       window.dispatchEvent(new Event('routeChangeStart'));
 
       const navigate = () => {
-        // router.push瑜?吏곸젒 ?몄텧?섏뿬 利됯컖?곸씤 ?묐떟?깆쓣 ?뺣낫?⑸땲??
-        // (useTransition???ъ슜?섎㈃ ?쒕쾭 ?묐떟??湲곕떎由щ뒓??0.5珥?吏?곗씠 諛쒖깮?⑸땲??)
+        // router.push를 직접 호출하여 즉각적인 응답성을 확보합니다.
+        // (useTransition을 사용하면 서버 응답을 기다리느라 0.5초 지연이 발생합니다.)
         router.push(href.toString());
       };
 
-      // View Transition API 吏???щ? ?뺤씤
+      // View Transition API 지원 여부 확인
       const vtDocument = document as unknown as { startViewTransition?: (cb: () => void) => void };
       if (typeof vtDocument.startViewTransition === 'function') {
         vtDocument.startViewTransition(() => {

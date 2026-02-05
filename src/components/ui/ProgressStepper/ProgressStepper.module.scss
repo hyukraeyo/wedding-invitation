@@ -1,0 +1,180 @@
+@use '../../../styles/variables' as v;
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  position: relative;
+
+  &.paddingTop_wide {
+    padding-top: 16px; // wide padding approximation
+  }
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  flex: 1;
+
+  &:first-child {
+    align-items: flex-start;
+
+    .circle {
+      margin-left: 2px; // Visual correction
+    }
+
+    .label {
+      text-align: left;
+    }
+  }
+
+  &:last-child {
+    align-items: flex-end;
+
+    .circle {
+      margin-right: 2px; // Visual correction
+    }
+
+    .label {
+      text-align: right;
+    }
+  }
+}
+
+.iconModeStep {
+  // Logic for icon variant might differ in alignment
+}
+
+.circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: v.$grey-100;
+  color: v.$grey-500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-family: v.$font-family-base;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  margin-bottom: 6px; // Gap between circle and text
+
+  &.active {
+    background-color: v.$primary;
+    color: v.$white;
+  }
+
+  &.completed {
+    // If checkForFinish is true, styling handled there
+    // Typically TDS keeps completed as primary or dark gray?
+    // We'll mimic active or checked
+  }
+}
+
+.label {
+  font-size: 12px;
+  color: v.$grey-500;
+  font-weight: 400;
+  transition: color 0.2s ease;
+  white-space: nowrap;
+
+  &.active {
+    color: v.$text-primary; // Black/Dark
+    font-weight: 600;
+  }
+}
+
+.line {
+  flex: 1;
+  height: 1px;
+  background-color: v.$grey-200;
+  margin: 0 8px;
+  margin-bottom: 20px; // Align with center of circle (approx) - need better positioning
+}
+
+// Better approach for lines:
+// The container is a flex row of steps.
+// Lines are separate elements or pseudo elements.
+// Implementation:
+// <Step />
+// <Line />
+// <Step />
+
+.connector {
+  flex: 1;
+  height: 1px;
+  background-color: v.$grey-200;
+  margin-bottom: 18px; // Push down to align with circle center (assuming text is below)
+  // If text is below (vertical layout for step), circle is at top.
+  // 24px height circle -> center is at 12px.
+  // 12px from top.
+  margin-left: 4px;
+  margin-right: 4px;
+
+  &.active {
+    background-color: v.$primary;
+  }
+}
+
+// Compact Variant - Horizontal Layout (Inline)
+// "1 Info --- 2 Date --- 3 Done"
+// The screenshot provided shows horizontal alignment: Circle + Text + Line.
+// This is different from "Step vertical stacked".
+
+.compactContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.compactStep {
+  display: flex;
+  align-items: center;
+}
+
+.compactCircle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: v.$grey-200;
+  color: v.$grey-600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  margin-right: 6px;
+
+  &.active {
+    background-color: v.$primary;
+    color: v.$white;
+  }
+
+  &.completed {
+    // optional styling
+  }
+}
+
+.compactLabel {
+  font-size: 14px;
+  color: v.$grey-500;
+  font-weight: 500;
+
+  &.active {
+    color: v.$text-primary;
+    font-weight: 700;
+  }
+}
+
+.compactConnector {
+  width: 16px; // Fixed width or flexible? Screenshot shows short lines.
+  height: 1px;
+  background-color: v.$grey-300;
+  margin: 0 8px;
+}
