@@ -1,47 +1,10 @@
 @use '../../../styles/variables' as v;
 @use '../../../styles/animations';
 
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.optionItem {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-
-  &:has(.rowRight) {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
-}
-
-.rowTitle {
-  font-size: v.$font-size-xs;
-  font-weight: 600;
-  color: v.$grey-600;
-}
-
-// .formLabel removed
-
-.rowRight {
-  display: flex;
-  align-items: center;
-}
-
 .counter {
   display: flex;
   align-items: center;
   gap: 6px;
-}
-
-.labelText {
-  font-size: v.$font-size-sm;
-  font-weight: 600;
-  color: v.$zinc-700;
 }
 
 .countText {
@@ -162,66 +125,6 @@
   }
 }
 
-.uploadItem {
-  aspect-ratio: 1 / 1;
-  border: 1px dashed v.$zinc-300;
-  background-color: v.$zinc-50;
-  border-radius: v.$radius-md; // 16px
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  color: v.$zinc-400;
-  gap: 4px;
-
-  @media (hover: hover) and (pointer: fine) {
-    &:hover {
-      border-color: #fbc02d; // v.$primary-500
-      background-color: rgba(251, 192, 45, 0.05); // v.$primary-500 rgba
-      color: #d97706; // v.$primary-600
-
-      .uploadIcon {
-        transform: scale(1.1);
-      }
-    }
-  }
-
-  &:active {
-    transform: scale(0.96);
-    background-color: v.$zinc-100;
-  }
-}
-
-.uploadIcon {
-  transition: transform 0.2s ease;
-}
-
-.uploadText {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
-
-.uploadingOverlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(2px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 20;
-}
-
-.spinner {
-  width: 1.5rem;
-  height: 1.5rem;
-  color: #fbc02d; // v.$primary-500
-  animation: spin 1s linear infinite;
-}
-
 // from animations
 .dragOverlayItem {
   @extend .sortableItem;
@@ -234,14 +137,22 @@
   }
 }
 
-.hiddenInput {
-  display: none;
+.uploadingOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(v.$white, 0.8);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
 }
 
-.optionGroup {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+.spinner {
+  width: 1.5rem;
+  height: 1.5rem;
+  color: v.$primary;
+  animation: spin 1s linear infinite;
 }
 
 .galleryManager {

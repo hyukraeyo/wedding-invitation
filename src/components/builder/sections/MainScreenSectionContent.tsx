@@ -62,7 +62,7 @@ export default function MainScreenSectionContent() {
           placeholder="메인 이미지 추가"
           ratio={imageRatio}
           onRatioChange={(r) => setImageRatio(r as 'fixed' | 'auto')}
-          aspectRatio="4/5"
+          aspectRatio="2/1"
         />
         <FormControl asChild>
           <VisuallyHidden asChild>

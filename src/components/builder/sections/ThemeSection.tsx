@@ -8,7 +8,7 @@ import { FormControl, FormField, FormHeader, FormLabel } from '@/components/ui/F
 import { ColorPicker, type ColorOption } from '@/components/common/ColorPicker';
 import { FontPicker } from '@/components/common/FontPicker';
 import styles from './ThemeSection.module.scss';
-import type { ThemeFont } from '@/lib/utils/font';
+import { getFontVar, type ThemeFont } from '@/lib/utils/font';
 import type { SectionProps } from '@/types/builder';
 
 const PRESET_ACCENT_COLORS: ColorOption[] = [
@@ -24,6 +24,22 @@ const PRESET_BG_COLORS: ColorOption[] = [
   { value: '#F4F1EA', label: 'Soft Beige' },
   { value: '#F2EBFA', label: 'Soft Purple' },
 ];
+
+const PRESET_FONT_OPTIONS = [
+  { label: '고운돋움 (기본)', value: 'gowun-dodum' },
+  { label: 'Pretendard', value: 'pretendard' },
+  { label: 'Nanum Myeongjo', value: 'nanum-myeongjo' },
+  { label: '고운바탕', value: 'gowun-batang' },
+  { label: '송명', value: 'song-myung' },
+  { label: '연성', value: 'yeon-sung' },
+  { label: '도현', value: 'do-hyeon' },
+  { label: '지마켓 산스', value: 'gmarket' },
+  { label: '세리프', value: 'serif' },
+  { label: '산세리프', value: 'sans' },
+].map((opt) => ({
+  ...opt,
+  style: { fontFamily: `var(${getFontVar(opt.value as ThemeFont)})` },
+}));
 
 const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
   const theme = useInvitationStore(useShallow((state) => state.theme));
@@ -54,22 +70,14 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
           <FormHeader>
             <FormLabel>글꼴</FormLabel>
           </FormHeader>
-          <FontPicker
-            value={theme.font}
-            onChange={(val) => setTheme({ font: val as ThemeFont })}
-            options={[
-              { label: '고운돋움 (기본)', value: 'gowun-dodum' },
-              { label: 'Pretendard', value: 'pretendard' },
-              { label: 'Nanum Myeongjo', value: 'nanum-myeongjo' },
-              { label: '고운바탕', value: 'gowun-batang' },
-              { label: '송명', value: 'song-myung' },
-              { label: '연성', value: 'yeon-sung' },
-              { label: '도현', value: 'do-hyeon' },
-              { label: '지마켓 산스', value: 'gmarket' },
-              { label: '세리프', value: 'serif' },
-              { label: '산세리프', value: 'sans' },
-            ]}
-          />
+
+          <FormControl asChild>
+            <FontPicker
+              value={theme.font}
+              onChange={(val) => setTheme({ font: val as ThemeFont })}
+              options={PRESET_FONT_OPTIONS}
+            />
+          </FormControl>
         </FormField>
 
         <FormField name="fontScale">

@@ -21,7 +21,18 @@ export interface FontOption {
   style?: React.CSSProperties;
 }
 
-// ... (existing code)
+interface FontPickerProps {
+  value: string;
+  onChange: (value: string) => void;
+  options: FontOption[];
+  className?: string;
+  label?: string;
+  placeholder?: string;
+  variant?: React.ComponentProps<typeof TextField.Button>['variant'];
+  radius?: React.ComponentProps<typeof TextField.Button>['radius'];
+  id?: string;
+  disabled?: boolean;
+}
 
 const WheelColumn = ({
   options,

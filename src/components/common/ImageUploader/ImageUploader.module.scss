@@ -1,25 +1,11 @@
-@use "../../../styles/variables" as v;
-@use "../../../styles/animations";
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
 .container {
   display: flex;
   flex-direction: column;
   gap: v.$builder-gap-sm;
   width: 100%;
-}
-
-.wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  width: 100%;
-}
-
-.label {
-  font-size: v.$control-font-size-sm;
-  font-weight: 600;
-  color: v.$text-main;
-  margin-bottom: 2px;
 }
 
 .uploadBox {
@@ -32,7 +18,7 @@
   cursor: pointer;
   border: 1.5px dashed v.$grey-200;
 
-  &:hover {
+  @include m.hover {
     border-color: v.$primary;
     background-color: v.$white;
     box-shadow: v.$shadow-sm;
@@ -42,9 +28,49 @@
     border-style: solid;
     border-color: v.$grey-100;
     background-color: v.$white;
-    
-    &:hover {
+
+    @include m.hover {
       border-color: v.$grey-200;
+    }
+  }
+
+  &.compact {
+    aspect-ratio: 1 / 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 0;
+
+    .emptyState {
+      padding: 0;
+      min-height: auto;
+      gap: 2px;
+    }
+
+    .iconCircle {
+      width: 32px;
+      height: 32px;
+      margin-bottom: 0;
+      box-shadow: none;
+      background: transparent;
+    }
+
+    .emptyTitle {
+      font-size: 11px;
+      font-weight: 600;
+      color: v.$grey-400;
+    }
+
+    @include m.hover {
+      .iconCircle {
+        color: v.$primary;
+        transform: scale(1.1);
+      }
+      .emptyTitle {
+        color: v.$primary-dark;
+      }
     }
   }
 }
@@ -73,7 +99,7 @@
   color: v.$grey-400;
   transition: all v.$transition-smooth;
 
-  .uploadBox:hover & {
+  .uploadBox:not(.compact):hover & {
     color: v.$primary;
     transform: translateY(-2px);
   }
@@ -112,7 +138,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.5s v.$ease-ios;
+  transition: transform 0.5s v.$ease-standard;
 
   &.uploading {
     opacity: 0.5;
@@ -143,8 +169,12 @@
 }
 
 @keyframes banana-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .removeButton {
