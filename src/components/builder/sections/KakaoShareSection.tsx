@@ -63,20 +63,16 @@ export default function KakaoShareSection(props: SectionProps) {
               onChange={(url) => setKakao({ imageUrl: url })}
               aspectRatio={kakao.imageRatio === 'portrait' ? '3/4' : '16/9'}
               placeholder="썸네일 추가"
+              ratio={kakao.imageRatio || 'landscape'}
+              onRatioChange={(val) => setKakao({ imageRatio: val as 'portrait' | 'landscape' })}
+              ratioOptions={[
+                { label: '세로형', value: 'portrait' },
+                { label: '가로형', value: 'landscape' },
+              ]}
             />
-          </div>
-
-          <div className={styles.optionItem}>
-            <div className={styles.rowTitle}>사진 비율</div>
-            <SegmentedControl
-              alignment="fluid"
-              value={kakao.imageRatio || 'landscape'}
-              onChange={(val: string) => setKakao({ imageRatio: val as 'portrait' | 'landscape' })}
-            >
-              <SegmentedControl.Item value="portrait">세로형</SegmentedControl.Item>
-              <SegmentedControl.Item value="landscape">가로형</SegmentedControl.Item>
-            </SegmentedControl>
-            <InfoMessage>카카오톡 공유 메시지에서 보여질 사진의 비율이에요.</InfoMessage>
+            <div className="mt-3">
+              <InfoMessage>카카오톡 공유 메시지에서 보여질 사진의 비율이에요.</InfoMessage>
+            </div>
           </div>
 
           <div className={styles.optionItem}>

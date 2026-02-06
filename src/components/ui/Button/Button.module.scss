@@ -140,30 +140,30 @@
 
 // Sizes
 .xs {
-  height: 28px;
-  padding: 0 12px;
-  font-size: 11px;
+  height: v.$control-height-xs;
+  padding: 0 v.$control-padding-xs;
+  font-size: v.$control-font-size-xs;
   border-radius: v.$radius-sm;
 }
 
 .sm {
-  height: 36px;
-  padding: 0 16px;
-  font-size: 13px;
+  height: v.$control-height-sm;
+  padding: 0 v.$control-padding-sm;
+  font-size: v.$control-font-size-sm;
   border-radius: v.$radius-sm;
 }
 
 .md {
-  height: 48px;
-  padding: 0 20px;
-  font-size: 15px;
+  height: v.$control-height-md;
+  padding: 0 v.$control-padding-md;
+  font-size: v.$control-font-size-md;
   border-radius: v.$radius-lg;
 }
 
 .lg {
-  height: 56px;
-  padding: 0 24px;
-  font-size: 17px;
+  height: v.$control-height-lg;
+  padding: 0 v.$control-padding-lg;
+  font-size: v.$control-font-size-lg;
   border-radius: v.$radius-xl;
 }
 

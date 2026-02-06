@@ -1,5 +1,5 @@
 import React from 'react';
-import { InfoMessage } from '@/components/ui/InfoMessage';
+
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useShallow } from 'zustand/react/shallow';
 import { SectionAccordion } from '@/components/ui/Accordion';
@@ -105,12 +105,10 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                       setDdayMessage(e.target.value)
                     }
+                    helperText="(신랑), (신부), (D-Day)는 실제 이름과 날짜로 자동 치환됩니다."
                   />
                 </FormControl>
               </FormField>
-              <InfoMessage>
-                (신랑), (신부), (D-Day)는 실제 이름과 날짜로 자동 치환됩니다.
-              </InfoMessage>
             </div>
           </div>
         )}

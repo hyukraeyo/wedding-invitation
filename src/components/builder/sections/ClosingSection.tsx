@@ -115,7 +115,7 @@ export default function ClosingSection(props: SectionProps) {
                 onChange={(url) => updateClosing({ imageUrl: url })}
                 placeholder="마무리 사진 추가"
                 ratio={closing.ratio}
-                onRatioChange={(val) => updateClosing({ ratio: val })}
+                onRatioChange={(val) => updateClosing({ ratio: val as 'fixed' | 'auto' })}
               />
             </div>
           </div>

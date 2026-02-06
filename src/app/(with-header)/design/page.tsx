@@ -42,6 +42,7 @@ import { PhotoGallery } from '@/components/common/PhotoGallery';
 import { ChrysanthemumSVG } from '@/components/common/Icons';
 import { StylePicker } from '@/components/common/StylePicker';
 import { ColorPicker } from '@/components/common/ColorPicker';
+import { FontPicker } from '@/components/common/FontPicker';
 import { useNameInput, usePhoneInput } from '@/hooks/useFormInput';
 import { useImageUpload } from '@/hooks/useImageUpload';
 import { isInvalidKoreanName, isInvalidPhone } from '@/lib/utils';
@@ -82,6 +83,7 @@ export default function DesignPage() {
   // Customization states
   const [selectedStyle, setSelectedStyle] = React.useState('classic1');
   const [selectedColor, setSelectedColor] = React.useState('#C69C6D'); // Beige
+  const [selectedFont, setSelectedFont] = React.useState('gowun-dodum');
   const [isMotherDeceased, setIsMotherDeceased] = React.useState(false);
 
   // Photos hooks
@@ -388,9 +390,22 @@ export default function DesignPage() {
                 <FormLabel>글꼴</FormLabel>
               </FormHeader>
               <FormControl asChild>
-                <div className={s.fontSelector}>
-                  <span>고운돋움 (기본)</span>
-                </div>
+                <FontPicker
+                  value={selectedFont}
+                  onChange={setSelectedFont}
+                  options={[
+                    { label: '고운돋움 (기본)', value: 'gowun-dodum' },
+                    { label: 'Pretendard', value: 'pretendard' },
+                    { label: 'Nanum Myeongjo', value: 'nanum-myeongjo' },
+                    { label: '고운바탕', value: 'gowun-batang' },
+                    { label: '송명', value: 'song-myung' },
+                    { label: '연성', value: 'yeon-sung' },
+                    { label: '도현', value: 'do-hyeon' },
+                    { label: '지마켓 산스', value: 'gmarket' },
+                    { label: '세리프', value: 'serif' },
+                    { label: '산세리프', value: 'sans' },
+                  ]}
+                />
               </FormControl>
             </FormField>
           </Form>

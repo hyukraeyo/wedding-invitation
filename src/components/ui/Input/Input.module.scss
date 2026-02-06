@@ -1,5 +1,5 @@
-@use "../../../styles/variables" as v;
-@use "../../../styles/mixins" as m;
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
 // ============================================
 // 🍌 Input Module - Apple & Toss Aesthetic
@@ -27,9 +27,9 @@
 
 .input {
   width: 100%;
-  height: 56px;
-  padding: 0 16px;
-  font-size: 16px; // Prevent iOS zoom
+  height: v.$control-height-lg;
+  padding: 0 v.$control-padding-lg;
+  font-size: v.$control-font-size-md; // 16px safe for iOS
   font-family: inherit;
   color: v.$text-main;
   background-color: v.$action-secondary; // Light grey background
@@ -61,7 +61,8 @@
   }
 }
 
-.iconLeft, .iconRight {
+.iconLeft,
+.iconRight {
   position: absolute;
   @include m.flex-center;
   width: 48px;

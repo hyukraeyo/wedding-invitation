@@ -180,7 +180,7 @@ export default function GreetingSection(props: SectionProps) {
                 onChange={setGreetingImage}
                 placeholder="인사말 사진 추가"
                 ratio={greetingRatio}
-                onRatioChange={(val) => setGreetingRatio(val)}
+                onRatioChange={(val) => setGreetingRatio(val as 'fixed' | 'auto')}
               />
             </div>
           </div>
