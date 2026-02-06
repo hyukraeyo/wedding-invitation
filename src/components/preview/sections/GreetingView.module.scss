@@ -14,7 +14,7 @@
         width: 100%;
         word-break: keep-all;
         margin-bottom: 0.5rem;
-        font-family: var(--font-pretendard);
+        font-family: inherit;
         font-weight: 400;
 
         p {
@@ -81,7 +81,7 @@
         width: 100%;
         max-width: 420px;
         margin-inline: auto;
-        font-family: var(--font-gowun-batang), serif;
+        font-family: inherit;
 
         .parentsNames {
             font-size: calc(1.05rem * var(--font-scale));
@@ -136,7 +136,7 @@
     line-height: 2.2;
     color: #343a40;
     word-break: keep-all;
-    font-family: var(--font-gowun-batang), serif;
+    font-family: inherit;
 
     p {
         margin-bottom: 0.5rem;

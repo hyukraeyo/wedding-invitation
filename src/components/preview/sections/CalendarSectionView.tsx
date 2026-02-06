@@ -244,7 +244,7 @@ const CalendarSectionView = ({
                 className={styles.highlight}
                 style={{ color: accentColor, backgroundColor: `${accentColor}26` }}
               >
-                {` ${d_day_display} `}
+                {`${d_day_display}`}
               </span>
               {parsedDdayMessage.suffix}
             </p>

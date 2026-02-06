@@ -16,7 +16,7 @@
 
     .title {
         font-size: calc(1.25rem * var(--font-scale));
-        font-family: v.$font-serif;
+        font-family: inherit;
         color: #1f2937;
         margin-top: 0;
         font-weight: 500;

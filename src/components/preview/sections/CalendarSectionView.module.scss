@@ -22,7 +22,7 @@
             font-weight: 500;
             color: #212529;
             letter-spacing: 0.1em;
-            font-family: var(--font-pretendard);
+            font-family: inherit;
 
             @container calendar-section (max-width: 300px) {
                 font-size: calc(1rem * var(--font-scale));
@@ -52,7 +52,7 @@
             border-radius: v.$radius-full;
             position: relative;
             z-index: 1;
-            font-family: var(--font-pretendard);
+            font-family: inherit;
             font-weight: 400;
 
             &.otherMonth {
@@ -117,7 +117,7 @@
                 font-size: calc(1.35rem * var(--font-scale));
                 font-weight: 500;
                 color: #343a40;
-                font-family: var(--font-pretendard);
+                font-family: inherit;
             }
         }
 
@@ -141,7 +141,7 @@
         line-height: 1.8;
         color: #495057;
         word-break: keep-all;
-        font-family: var(--font-pretendard);
+        font-family: inherit;
 
         .highlight {
             font-weight: 600;

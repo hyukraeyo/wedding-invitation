@@ -7,7 +7,7 @@
     color: #868e96;
     margin-bottom: 2.5rem;
     line-height: 1.7;
-    font-family: var(--font-pretendard);
+    font-family: inherit;
 }
 
 .accountList {
@@ -83,7 +83,7 @@
             font-size: calc(1rem * var(--font-scale));
             font-weight: 500;
             color: #343a40;
-            font-family: var(--font-pretendard);
+            font-family: inherit;
             letter-spacing: 0.02em;
         }
     }
