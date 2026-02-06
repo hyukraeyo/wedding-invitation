@@ -4,7 +4,7 @@ import * as React from 'react';
 import type { Swiper as SwiperInstance } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Mousewheel } from 'swiper/modules';
-import { Plus } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import s from './StylePicker.module.scss';
 import { cn } from '@/lib/utils';
 
@@ -67,7 +67,14 @@ export const StylePicker = ({
   );
 
   return (
-    <div className={cn(s.root, showLeftFade && s.showLeftFade, showRightFade && s.showRightFade, className)}>
+    <div
+      className={cn(
+        s.root,
+        showLeftFade && s.showLeftFade,
+        showRightFade && s.showRightFade,
+        className
+      )}
+    >
       <Swiper
         modules={[FreeMode, Mousewheel]}
         slidesPerView="auto"
@@ -116,7 +123,7 @@ export const StylePicker = ({
             >
               <div className={s.styleCard}>
                 {option.isComingSoon ? (
-                  <Plus size={24} />
+                  <Sparkles size={24} strokeWidth={1.5} />
                 ) : (
                   <div className={cn(s.mockupContainer, s[`mockup${option.type}`])}>
                     {option.type === 'classic1' && (

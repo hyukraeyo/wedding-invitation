@@ -1,34 +1,9 @@
 @use '../../../styles/variables' as v;
 @use '../../../styles/mixins' as m;
 
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.optionItem {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-
-  &:has(.rowRight) {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
-}
-
 .rowBetween {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-}
-
-.cursorPointer {
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
 }
