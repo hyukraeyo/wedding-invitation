@@ -34,8 +34,8 @@ import {
   FormMessage,
   FormHeader,
 } from '@/components/ui/Form';
-import { DatePicker } from '@/components/common/DatePicker/DatePicker';
-import { TimePicker } from '@/components/common/TimePicker/TimePicker';
+import { DatePicker } from '@/components/common/DatePicker';
+import { TimePicker } from '@/components/common/TimePicker';
 import { AddressPicker } from '@/components/common/AddressPicker';
 import { PhotoRatioInput } from '@/components/common/PhotoRatioInput';
 import { PhotoGallery } from '@/components/common/PhotoGallery';
@@ -44,26 +44,9 @@ import { StylePicker } from '@/components/common/StylePicker';
 import { ColorPicker } from '@/components/common/ColorPicker';
 import { useNameInput, usePhoneInput } from '@/hooks/useFormInput';
 import { useImageUpload } from '@/hooks/useImageUpload';
-import {
-  isValidKoreanNameValue,
-  isValidPhone,
-  isInvalidKoreanName,
-  isInvalidPhone,
-} from '@/lib/utils';
+import { isInvalidKoreanName, isInvalidPhone } from '@/lib/utils';
 import s from './DesignPage.module.scss';
 import { DragEndEvent } from '@dnd-kit/core';
-
-const dropdownItems = [
-  { label: 'Duplicate invite', value: 'duplicate' },
-  { label: 'Export guest list', value: 'export' },
-  { label: 'Send preview', value: 'preview' },
-];
-
-const optionListItems = [
-  { label: 'Ceremony suite', value: 'ceremony' },
-  { label: 'Reception suite', value: 'reception' },
-  { label: 'After party', value: 'after' },
-];
 
 export default function DesignPage() {
   const [dialogOpen, setDialogOpen] = React.useState(false);
@@ -71,23 +54,18 @@ export default function DesignPage() {
   const [sheetOpen, setSheetOpen] = React.useState(false);
   const [toastOpen, setToastOpen] = React.useState(false);
   const [segmentValue, setSegmentValue] = React.useState('weekly');
-  const [detailMode, setDetailMode] = React.useState('plan');
   const [radioValue, setRadioValue] = React.useState('toss');
-  const [sliderValue, setSliderValue] = React.useState(58);
-  const [optionValue, setOptionValue] = React.useState(optionListItems[0]!.value);
-  const [menuChoice, setMenuChoice] = React.useState(dropdownItems[0]!.value);
-  const [menuChecked, setMenuChecked] = React.useState(true);
   const [richText, setRichText] = React.useState('<p>Leave a warm welcome note here.</p>');
   const [weddingDate, setWeddingDate] = React.useState('');
   const [weddingTime, setWeddingTime] = React.useState('');
 
   // Form hooks state
   const [groomName, setGroomName] = React.useState('');
-  const [brideName, setBrideName] = React.useState('');
+  // const [brideName, setBrideName] = React.useState('');
   const [groomContact, setGroomContact] = React.useState('');
 
   const handleGroomNameChange = useNameInput(setGroomName);
-  const handleBrideNameChange = useNameInput(setBrideName);
+  // const handleBrideNameChange = useNameInput(setBrideName);
   const handleGroomContactChange = usePhoneInput(setGroomContact);
 
   // Address search state
@@ -113,7 +91,6 @@ export default function DesignPage() {
     removeImage: removeGalleryPhoto,
     moveImage: moveGalleryPhoto,
     count: galleryCount,
-    isFull: isGalleryFull,
   } = useImageUpload({
     mode: 'multiple',
     maxCount: 10,
@@ -190,7 +167,7 @@ export default function DesignPage() {
                   rightSlot={
                     <Toggle
                       size="sm"
-                      variant="ghost"
+                      variant="unstyled"
                       accentColorOnly
                       pressed={isMotherDeceased}
                       onPressedChange={setIsMotherDeceased}
@@ -199,20 +176,6 @@ export default function DesignPage() {
                       <ChrysanthemumSVG size={18} />
                     </Toggle>
                   }
-                />
-              </FormControl>
-            </FormField>
-            <FormField name="brideName">
-              <FormHeader>
-                <FormLabel>신부 이름</FormLabel>
-                <FormMessage match={isInvalidKoreanName}>올바른 이름을 입력해주세요</FormMessage>
-              </FormHeader>
-              <FormControl asChild>
-                <TextField
-                  placeholder="김영희"
-                  value={brideName}
-                  onChange={handleBrideNameChange}
-                  clearable
                 />
               </FormControl>
             </FormField>
@@ -308,16 +271,14 @@ export default function DesignPage() {
               </FormControl>
             </FormField>
 
-            <FormField name="mealSelection">
-              <div className={s.toggleRow}>
-                <FormLabel>식사 여부</FormLabel>
-                <FormControl asChild>
-                  <Switch
-                    checked={radioValue === 'yes'}
-                    onCheckedChange={(checked) => setRadioValue(checked ? 'yes' : 'no')}
-                  />
-                </FormControl>
-              </div>
+            <FormField name="mealSelection" className={s.toggleRow}>
+              <FormLabel>식사 여부</FormLabel>
+              <FormControl asChild>
+                <Switch
+                  checked={radioValue === 'yes'}
+                  onCheckedChange={(checked) => setRadioValue(checked ? 'yes' : 'no')}
+                />
+              </FormControl>
             </FormField>
 
             <FormField name="guestCount">
@@ -365,7 +326,7 @@ export default function DesignPage() {
                 <PhotoGallery
                   images={galleryPhotos}
                   onUpload={handleGalleryUpload}
-                  onRemove={(index) => removeGalleryPhoto(index)}
+                  onRemove={(index: number) => removeGalleryPhoto(index)}
                   onDragEnd={handleDragEnd}
                   helperText={
                     <span>
@@ -408,7 +369,16 @@ export default function DesignPage() {
                 <FormLabel>강조색</FormLabel>
               </FormHeader>
               <FormControl asChild>
-                <ColorPicker value={selectedColor} onChange={setSelectedColor} />
+                <ColorPicker
+                  value={selectedColor}
+                  onChange={setSelectedColor}
+                  colors={[
+                    { value: '#C69C6D', label: 'Beige' },
+                    { value: '#4B4B4B', label: 'Dark' },
+                    { value: '#FFB7B2', label: 'Pink' },
+                    { value: '#D4A5D4', label: 'Purple' },
+                  ]}
+                />
               </FormControl>
             </FormField>
 

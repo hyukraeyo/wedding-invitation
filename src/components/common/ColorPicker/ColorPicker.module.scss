@@ -1,14 +1,11 @@
-@use '@/styles/variables' as v;
-@use '@/styles/mixins' as m;
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
 .container {
   display: flex;
-  gap: 16px;
-  padding: 24px;
-  background: v.$white;
-  border-radius: v.$radius-lg;
-  border: 1px solid v.$grey-200;
+  gap: 12px;
   align-items: center;
+  padding: 4px 2px;
 }
 
 .swatch {
@@ -20,10 +17,22 @@
   align-items: center;
   justify-content: center;
   color: v.$white;
-  transition: transform 0.1s;
+  transition: all 0.2s v.$transition-bezier;
   position: relative;
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.05);
 
   &:active {
-    transform: scale(0.95);
+    transform: scale(0.9);
   }
+
+  &.active {
+    box-shadow:
+      0 0 0 2px v.$white,
+      0 0 0 4px v.$primary;
+  }
+}
+
+.checkIcon {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
 }

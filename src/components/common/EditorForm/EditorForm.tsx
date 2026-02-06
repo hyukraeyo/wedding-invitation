@@ -8,13 +8,12 @@ import { AlertDialog } from '@/components/ui/AlertDialog';
 import { Form } from '@/components/ui/Form';
 import { Skeleton } from '@/components/ui/Skeleton';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { isRequiredField } from '@/constants/requiredFields';
 import { clsx } from 'clsx';
 import styles from './EditorForm.module.scss';
 
 // Dynamic imports for optimized initial bundle
-const ThemeSection = dynamic(() => import('@/components/builder/sections/ThemeSection'));
 const MainScreenSection = dynamic(() => import('@/components/builder/sections/MainScreenSection'));
+const ThemeSection = dynamic(() => import('@/components/builder/sections/ThemeSection'));
 const BasicInfoSection = dynamic(() => import('@/components/builder/sections/BasicInfoSection'));
 const DateTimeSection = dynamic(() => import('@/components/builder/sections/DateTimeSection'));
 const LocationSection = dynamic(() => import('@/components/builder/sections/LocationSection'));

@@ -34,6 +34,7 @@ export function SortablePhoto({ id, url, onRemove, style, ...props }: SortablePh
       {...listeners}
       {...props}
     >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={url} alt="Gallery item" />
       <Button
         unstyled

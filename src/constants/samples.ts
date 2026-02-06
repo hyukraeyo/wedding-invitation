@@ -233,13 +233,6 @@ export const STYLE_PRESETS = [
     isComingSoon: false,
   },
   {
-    id: 'full',
-    label: '추가 예정',
-    layout: 'full',
-    imageShape: 'rect',
-    isComingSoon: true,
-  },
-  {
     id: 'modern',
     label: '추가 예정',
     layout: 'modern',

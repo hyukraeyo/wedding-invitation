@@ -1,27 +1,18 @@
-import React, { useRef } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { FreeMode } from 'swiper/modules';
-import type { Swiper as SwiperType } from 'swiper';
-import 'swiper/css';
-import 'swiper/css/free-mode';
+import React from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { TextField } from '@/components/ui/TextField';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
-import { Button } from '@/components/ui/Button';
 import { ImageUploader } from '@/components/common/ImageUploader';
+import { StylePicker, type StyleOption } from '@/components/common/StylePicker';
 import { Switch } from '@/components/ui/Switch';
 import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
 import { FormControl, FormField, FormLabel, FormMessage } from '@/components/ui/Form';
 import { isRequiredField } from '@/constants/requiredFields';
-import { cn } from '@/lib/utils';
 import styles from './MainScreenSection.module.scss';
 import { STYLE_PRESETS } from '@/constants/samples';
 
 export default function MainScreenSectionContent() {
-  const swiperRef = useRef<SwiperType | null>(null);
-  const [swiperProgress, setSwiperProgress] = React.useState<'start' | 'middle' | 'end'>('start');
-
   const {
     mainScreen,
     setMainScreen,
@@ -50,148 +41,74 @@ export default function MainScreenSectionContent() {
 
   const updateMain = (data: Partial<typeof mainScreen>) => setMainScreen(data);
 
-  const handleSelectPreset = (preset: (typeof STYLE_PRESETS)[0], index: number) => {
-    setMainScreen({
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      layout: preset.layout as any,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      imageShape: preset.imageShape as any,
-    });
-    if (swiperRef.current) {
-      swiperRef.current.slideTo(index);
-    }
-  };
-
-  const selectedPresetIndex = STYLE_PRESETS.findIndex((p) => p.layout === mainScreen.layout);
+  const styleOptions = React.useMemo<StyleOption[]>(
+    () =>
+      STYLE_PRESETS.map((preset) => ({
+        id: preset.layout,
+        label: preset.label,
+        type: preset.layout === 'classic' ? 'classic1' : 'placeholder',
+        isComingSoon: preset.isComingSoon,
+      })),
+    []
+  );
 
   return (
     <div className={styles.container}>
-      <div className={styles.optionItem}>
-        <FormField name="main-image">
-          <FormLabel htmlFor="main-image">메인 사진</FormLabel>
-          <div className={styles.optionWrapper}>
-            <ImageUploader
-              value={imageUrl}
-              onChange={setImageUrl}
-              placeholder="메인 이미지 추가"
-              ratio={imageRatio}
-              onRatioChange={(r) => setImageRatio(r as 'fixed' | 'auto')}
-              aspectRatio="4/5"
+      <FormField name="main-image">
+        <FormLabel htmlFor="main-image">메인 사진</FormLabel>
+        <ImageUploader
+          value={imageUrl}
+          onChange={setImageUrl}
+          placeholder="메인 이미지 추가"
+          ratio={imageRatio}
+          onRatioChange={(r) => setImageRatio(r as 'fixed' | 'auto')}
+          aspectRatio="4/5"
+        />
+        <FormControl asChild>
+          <VisuallyHidden asChild>
+            <input
+              id="main-image"
+              aria-label="메인 사진"
+              required={isRequiredField('mainImage')}
+              readOnly
+              value={imageUrl || ''}
             />
-            <FormControl asChild>
-              <VisuallyHidden asChild>
-                <input
-                  id="main-image"
-                  aria-label="메인 사진"
-                  required={isRequiredField('mainImage')}
-                  readOnly
-                  value={imageUrl || ''}
-                />
-              </VisuallyHidden>
-            </FormControl>
-          </div>
-          <FormMessage match="valueMissing">필수 항목이에요.</FormMessage>
-        </FormField>
-      </div>
+          </VisuallyHidden>
+        </FormControl>
+        <FormMessage match="valueMissing">필수 항목이에요.</FormMessage>
+      </FormField>
 
-      <div className={styles.optionItem}>
-        <div className={styles.rowTitle}>사진 꽉 차게</div>
-        <div className={styles.rowRight}>
+      <FormField name="expand-photo" className={styles.rowLayout}>
+        <FormLabel>사진 꽉 차게</FormLabel>
+        <FormControl asChild>
           <Switch
             checked={mainScreen.expandPhoto}
             onCheckedChange={(checked) => updateMain({ expandPhoto: checked })}
           />
-        </div>
-      </div>
+        </FormControl>
+      </FormField>
 
-      <div className={styles.optionItem}>
-        <div className={styles.rowTitle}>스타일</div>
-        <div className={styles.swiperWrapper}>
-          <Swiper
-            modules={[FreeMode]}
-            freeMode={{
-              enabled: true,
-              momentum: true,
-              momentumRatio: 1,
-              momentumBounce: true,
-              momentumBounceRatio: 1,
-              momentumVelocityRatio: 1,
-            }}
-            slidesPerView="auto"
-            spaceBetween={12}
-            grabCursor={true}
-            initialSlide={selectedPresetIndex >= 0 ? selectedPresetIndex : 0}
-            centeredSlides={false}
-            onSwiper={(swiper) => {
-              swiperRef.current = swiper;
-              setSwiperProgress(swiper.isBeginning ? 'start' : swiper.isEnd ? 'end' : 'middle');
-            }}
-            onSlideChange={(swiper) => {
-              setSwiperProgress(swiper.isBeginning ? 'start' : swiper.isEnd ? 'end' : 'middle');
-            }}
-            className={cn(styles.stylePresetSwiper, styles[swiperProgress])}
-            onReachBeginning={() => setSwiperProgress('start')}
-            onReachEnd={() => setSwiperProgress('end')}
-            onFromEdge={() => setSwiperProgress('middle')}
-            onTransitionEnd={(swiper) => {
-              setSwiperProgress(swiper.isBeginning ? 'start' : swiper.isEnd ? 'end' : 'middle');
-            }}
-          >
-            {STYLE_PRESETS.map((preset, index) => (
-              <SwiperSlide key={preset.id} className={styles.stylePresetSlide}>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className={cn(
-                    styles.stylePresetCard,
-                    mainScreen.layout === preset.layout ? styles.selected : '',
-                    preset.isComingSoon && styles.comingSoon
-                  )}
-                  onClick={() => !preset.isComingSoon && handleSelectPreset(preset, index)}
-                  disabled={preset.isComingSoon || false}
-                  style={{ height: 'auto', padding: 0 }}
-                >
-                  <div className={styles.presetContentWrapper}>
-                    <div
-                      className={cn(
-                        styles.presetThumbnail,
-                        !preset.isComingSoon && preset.layout === 'classic' && styles.classicLayout
-                      )}
-                    >
-                      {preset.isComingSoon ? (
-                        <div className={styles.thumbnailPlaceholder}>
-                          <div className={styles.placeholderIcon} />
-                        </div>
-                      ) : (
-                        <>
-                          <div className={styles.thumbnailContent}>
-                            <span className={styles.thumbTitle}>THE MARRIAGE</span>
-                            <span className={styles.thumbMarriage}>신랑, 신부 결혼해요.</span>
-                          </div>
-                          <div className={styles.thumbnailImage} />
-                          <div className={styles.thumbnailFooter}>
-                            <span>초대해요</span>
-                            <span>2026년 4월 29일 수요일 오후 12시 </span>
-                            <span>더 컨벤션 신사 3층 그랜드홀</span>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                    <span
-                      className={preset.isComingSoon ? styles.comingSoonLabel : styles.presetLabel}
-                    >
-                      {preset.label}
-                    </span>
-                  </div>
-                </Button>
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-      </div>
+      <FormField name="style-picker">
+        <FormLabel>스타일</FormLabel>
+        <StylePicker
+          value={mainScreen.layout}
+          options={styleOptions}
+          onChange={(selectedLayout) => {
+            const selectedPreset = STYLE_PRESETS.find((preset) => preset.layout === selectedLayout);
+            if (!selectedPreset || selectedPreset.isComingSoon) {
+              return;
+            }
 
-      <div className={styles.optionItem}>
-        <div className={styles.rowTitle}>흩날림 효과</div>
+            updateMain({
+              layout: selectedPreset.layout as typeof mainScreen.layout,
+              imageShape: selectedPreset.imageShape as typeof mainScreen.imageShape,
+            });
+          }}
+        />
+      </FormField>
+
+      <FormField name="theme-effect">
+        <FormLabel>흩날림 효과</FormLabel>
         <SegmentedControl
           alignment="fluid"
           value={theme.effect}
@@ -203,11 +120,11 @@ export default function MainScreenSectionContent() {
           <SegmentedControl.Item value="cherry-blossom">벚꽃</SegmentedControl.Item>
           <SegmentedControl.Item value="snow">눈내림</SegmentedControl.Item>
         </SegmentedControl>
-      </div>
+      </FormField>
 
       {mainScreen.layout === 'classic' && (
-        <div className={styles.optionItem}>
-          <div className={styles.rowTitle}>사진 형태</div>
+        <FormField name="image-shape">
+          <FormLabel>사진 형태</FormLabel>
           <SegmentedControl
             alignment="fluid"
             value={mainScreen.imageShape || 'rect'}
@@ -217,11 +134,11 @@ export default function MainScreenSectionContent() {
             <SegmentedControl.Item value="arch">아치</SegmentedControl.Item>
             <SegmentedControl.Item value="oval">타원</SegmentedControl.Item>
           </SegmentedControl>
-        </div>
+        </FormField>
       )}
 
-      <div className={styles.optionItem}>
-        <div className={styles.rowTitle}>사진 효과</div>
+      <FormField name="main-effect">
+        <FormLabel>사진 효과</FormLabel>
         <SegmentedControl
           alignment="fluid"
           value={mainScreen.effect}
@@ -231,44 +148,41 @@ export default function MainScreenSectionContent() {
           <SegmentedControl.Item value="mist">안개</SegmentedControl.Item>
           <SegmentedControl.Item value="ripple">물결</SegmentedControl.Item>
         </SegmentedControl>
-      </div>
+      </FormField>
 
       {mainScreen.layout === 'classic' ? (
         <>
-          <div className={styles.optionItem}>
-            <div className={styles.optionWrapper}>
-              <FormField name="main-title">
-                <FormLabel htmlFor="main-title">제목</FormLabel>
-                <FormControl asChild>
-                  <TextField
-                    id="main-title"
-                    placeholder="예: THE MARRIAGE"
-                    value={mainScreen.title}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      updateMain({ title: e.target.value })
-                    }
-                  />
-                </FormControl>
-              </FormField>
-              <FormField name="main-subtitle">
-                <FormLabel htmlFor="main-subtitle">소제목</FormLabel>
-                <FormControl asChild>
-                  <TextField
-                    id="main-subtitle"
-                    placeholder="예: 소중한 날에 초대해요"
-                    value={mainScreen.subtitle}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      updateMain({ subtitle: e.target.value })
-                    }
-                  />
-                </FormControl>
-              </FormField>
-            </div>
-          </div>
+          <FormField name="main-title">
+            <FormLabel htmlFor="main-title">제목</FormLabel>
+            <FormControl asChild>
+              <TextField
+                id="main-title"
+                placeholder="예: THE MARRIAGE"
+                value={mainScreen.title}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  updateMain({ title: e.target.value })
+                }
+              />
+            </FormControl>
+          </FormField>
+          <FormField name="main-subtitle">
+            <FormLabel htmlFor="main-subtitle">소제목</FormLabel>
+            <FormControl asChild>
+              <TextField
+                id="main-subtitle"
+                placeholder="예: 소중한 날에 초대해요"
+                value={mainScreen.subtitle}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  updateMain({ subtitle: e.target.value })
+                }
+              />
+            </FormControl>
+          </FormField>
 
-          <div className={styles.optionItem}>
-            <div className={styles.sentenceWrapper}>
-              <div className={styles.sentenceItem}>
+          <FormField name="main-names">
+            <FormLabel>표기 성함</FormLabel>
+            <div className={styles.rowLayout}>
+              <FormControl asChild>
                 <TextField
                   placeholder={
                     groom.lastName || groom.firstName
@@ -280,8 +194,8 @@ export default function MainScreenSectionContent() {
                     updateMain({ groomName: e.target.value })
                   }
                 />
-              </div>
-              <div className={styles.sentenceItem}>
+              </FormControl>
+              <FormControl asChild>
                 <TextField
                   placeholder="그리고"
                   value={mainScreen.andText}
@@ -289,8 +203,8 @@ export default function MainScreenSectionContent() {
                     updateMain({ andText: e.target.value })
                   }
                 />
-              </div>
-              <div className={styles.sentenceItem}>
+              </FormControl>
+              <FormControl asChild>
                 <TextField
                   placeholder={
                     bride.lastName || bride.firstName
@@ -302,9 +216,9 @@ export default function MainScreenSectionContent() {
                     updateMain({ brideName: e.target.value })
                   }
                 />
-              </div>
+              </FormControl>
             </div>
-          </div>
+          </FormField>
         </>
       ) : null}
     </div>

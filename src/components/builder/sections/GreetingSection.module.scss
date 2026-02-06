@@ -29,10 +29,6 @@
   align-items: center;
 }
 
-.optionWrapper {
-  @include v.section-option-wrapper;
-}
-
 .checkboxGroup {
   display: flex;
   flex-wrap: wrap;

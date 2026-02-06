@@ -144,16 +144,6 @@
   width: 100%;
 }
 
-@mixin section-option-wrapper($gap: 16px) {
-  display: flex;
-  flex-direction: column;
-  gap: $gap;
-  background-color: s.$bg-elevated;
-  padding: 16px;
-  border-radius: i.$radius-md;
-  border: 1px solid s.$border-light;
-}
-
 @mixin section-color-picker {
   display: flex;
   flex-wrap: wrap;

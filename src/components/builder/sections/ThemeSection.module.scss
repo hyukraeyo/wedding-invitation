@@ -19,100 +19,16 @@
   }
 }
 
-.rowTitle {
-  font-size: v.$font-size-xs;
-  font-weight: 600;
-  color: v.$grey-600;
-}
-
-.rowRight {
+.rowBetween {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
-.optionWrapper {
-  @include v.section-option-wrapper(v.$builder-gap-xl);
-}
-
-.colorPicker {
-  @include v.section-color-picker;
-}
-
-.colorItem {
-  @include v.section-color-item;
-  // box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1);
-  /* Visible border for white/light colors */
-
-  &.lightColorItem {
-    .checkIcon {
-      color: rgba(0, 0, 0, 0.4);
-      /* Dark check for light backgrounds */
-      filter: none;
-    }
-  }
-}
-
-.colorItemInteractive {
-  transition: transform 0.2s ease;
-
-  &:active {
-    transform: scale(0.9);
-  }
-}
-
-.checkIcon {
-  color: white;
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
-}
-
-.customColorBtn {
-  @include v.section-add-button-circle;
-}
-
-.switchSpacing {
-  margin-top: 0.75rem;
-}
-
-// Dialog Trigger Pointer
 .cursorPointer {
   cursor: pointer;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
-
-// .optionList { // This was removed as per instruction
-//   display: flex;
-//   flex-direction: column;
-//   gap: 4px;
-//   padding-bottom: 24px;
-// }
-
-// .optionItemButton { // This was removed as per instruction
-//   @include m.flex-center-y;
-//   justify-content: space-between;
-//   width: 100%;
-//   padding: 16px 20px;
-//   font-size: 16px;
-//   color: v.$text-secondary;
-//   background: transparent;
-//   border-radius: 16px;
-//   transition: background-color 0.2s v.$ease-standard;
-//   text-align: left;
-
-//   &:active {
-//     background-color: v.$grey-100;
-//     transform: scale(0.98);
-//   }
-
-//   &.selected {
-//     font-weight: 600;
-//     color: v.$text-primary;
-//     background-color: v.$grey-100;
-
-//     .checkIcon { // This was removed as per instruction
-//       color: v.$primary;
-//       filter: none;
-//     }
-//   }
-// }

@@ -21,7 +21,7 @@ import {
   parseKoreanName,
   cn,
   isValidKoreanNameValue,
-  isValidPhone,
+  // isValidPhone,
   isInvalidKoreanName,
   isInvalidPhone,
 } from '@/lib/utils';

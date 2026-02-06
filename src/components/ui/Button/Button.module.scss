@@ -171,6 +171,7 @@
 .content {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   transition: opacity 0.3s v.$ease-ios;
 

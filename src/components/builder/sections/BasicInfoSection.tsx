@@ -6,10 +6,9 @@ import { TextField } from '@/components/ui/TextField';
 import { Toggle } from '@/components/ui/Toggle';
 import { ChrysanthemumSVG } from '@/components/common/Icons';
 import { isRequiredField } from '@/constants/requiredFields';
-import { cn, parseKoreanName, isValidKoreanNameValue, isInvalidKoreanName } from '@/lib/utils';
+import { parseKoreanName, isInvalidKoreanName } from '@/lib/utils';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { sanitizeNameInput } from '@/hooks/useFormInput';
-import styles from './BasicInfoSection.module.scss';
 import type { SectionProps } from '@/types/builder';
 
 const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(props) {

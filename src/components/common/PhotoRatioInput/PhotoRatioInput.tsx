@@ -41,6 +41,7 @@ export const PhotoRatioInput = React.forwardRef<HTMLDivElement, PhotoRatioInputP
         <div className={s.uploader} onClick={handleClick}>
           {image ? (
             <div className={s.preview}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={image} alt="Uploaded" />
             </div>
           ) : (
