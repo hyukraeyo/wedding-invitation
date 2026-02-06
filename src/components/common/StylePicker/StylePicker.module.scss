@@ -1,0 +1,175 @@
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
+
+.styleGrid {
+  display: flex;
+  overflow-x: auto;
+  gap: 12px;
+  padding: 4px 4px 16px; // Extra bottom padding for shadow/interaction
+  margin: 0 -4px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @include m.mobile {
+    gap: 12px;
+  }
+}
+
+.styleItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  flex: 0 0 auto;
+  min-width: 130px;
+  scroll-snap-align: start;
+
+  .styleCard {
+    width: 100%;
+    aspect-ratio: 1/1.4;
+    border: 1px solid v.$grey-200;
+    border-radius: v.$radius-lg;
+    overflow: hidden;
+    position: relative;
+    transition: all 0.2s;
+    background: v.$white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+
+    &.selected {
+      border: 2px solid v.$primary;
+      box-shadow: 0 0 0 2px rgba(251, 192, 45, 0.1);
+    }
+  }
+
+  .styleName {
+    font-size: 14px;
+    font-weight: 500;
+    color: v.$grey-600;
+  }
+
+  &.placeholder {
+    .styleCard {
+      border: 1px dashed v.$grey-300;
+      background: v.$grey-50;
+      color: v.$grey-300;
+    }
+    .styleName {
+      color: v.$grey-400;
+    }
+  }
+}
+
+// Abstract UI Mockups (Box only, no text)
+.mockupContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.box {
+  background-color: v.$grey-100;
+  border-radius: 2px;
+  width: 100%;
+}
+
+.boxPrimary {
+  background-color: v.$primary-100;
+}
+
+// Classic 1 Layout
+.mockupClassic1 {
+  .titleBox {
+    width: 40%;
+    height: 6px;
+    margin-bottom: 8px;
+  }
+  .nameBox {
+    width: 70%;
+    height: 8px;
+    background-color: v.$grey-200;
+  }
+  .separatorBox {
+    width: 20%;
+    height: 1px;
+    margin: 12px 0;
+    background-color: v.$primary;
+  }
+  .dateBox {
+    width: 50%;
+    height: 6px;
+  }
+}
+
+// Classic 2 Layout (Center Block)
+.mockupClassic2 {
+  align-items: flex-start;
+  padding: 0 12px;
+
+  .heroBox {
+    width: 100%;
+    height: 40%;
+    background-color: v.$grey-100;
+    margin-bottom: 12px;
+    border-radius: 4px;
+  }
+  .lineBox {
+    width: 80%;
+    height: 6px;
+    margin-bottom: 4px;
+  }
+  .shortBox {
+    width: 40%;
+    height: 6px;
+  }
+}
+
+// Classic 3 Layout (Bordered)
+.mockupClassic3 {
+  border: 1px solid v.$grey-200;
+  padding: 8px;
+  height: 90%;
+  width: 90%;
+  justify-content: space-between;
+
+  .topGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+  }
+
+  .bottomGroup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+  }
+
+  .logoBox {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: v.$primary-100;
+  }
+
+  .textBox {
+    height: 4px;
+    background-color: v.$grey-200;
+    width: 60%;
+  }
+}

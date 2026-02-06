@@ -108,7 +108,7 @@ export interface TextFieldButtonProps extends React.ButtonHTMLAttributes<HTMLBut
   radius?: TextFieldRadius | undefined;
   placeholder?: string | undefined;
   error?: string | boolean | undefined;
-  helperText?: string | undefined;
+  helperText?: React.ReactNode | undefined;
   leftSlot?: React.ReactNode | undefined;
   rightSlot?: React.ReactNode | undefined;
 }
@@ -185,7 +185,7 @@ export interface TextFieldProps extends Omit<TextFieldInputProps, 'size' | 'pref
   radius?: TextFieldRadius | undefined;
   invalid?: boolean | undefined; // Backward compatibility
   error?: string | boolean | undefined;
-  helperText?: string | undefined;
+  helperText?: React.ReactNode | undefined;
   leftSlot?: React.ReactNode | undefined;
   rightSlot?: React.ReactNode | undefined;
   prefix?: React.ReactNode | undefined;

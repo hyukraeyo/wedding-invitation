@@ -1,0 +1,39 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.photoGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+
+  @include m.mobile {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.addPhotoButton {
+  width: 100%;
+  aspect-ratio: 1;
+  border: 1px dashed v.$grey-300;
+  border-radius: v.$radius-md;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  background: v.$white;
+  color: v.$grey-400;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: v.$primary;
+    color: v.$primary;
+    background: v.$grey-50;
+  }
+
+  span {
+    font-size: 12px;
+    font-weight: 500;
+  }
+}

@@ -371,114 +371,6 @@
   gap: 16px;
 }
 
-.styleGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-
-  @include m.mobile {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-.styleItem {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-
-  .styleCard {
-    width: 100%;
-    aspect-ratio: 1/1.4;
-    border: 1px solid v.$grey-200;
-    border-radius: v.$radius-lg;
-    overflow: hidden;
-    position: relative;
-    transition: all 0.2s;
-    background: v.$white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 12px;
-
-    &.selected {
-      border: 2px solid v.$primary;
-      box-shadow: 0 0 0 2px rgba(251, 192, 45, 0.1);
-    }
-  }
-
-  .styleName {
-    font-size: 14px;
-    font-weight: 500;
-    color: v.$grey-600;
-  }
-
-  &.placeholder {
-    .styleCard {
-      border: 1px dashed v.$grey-300;
-      background: v.$grey-50;
-      color: v.$grey-300;
-    }
-    .styleName {
-      color: v.$grey-400;
-    }
-  }
-}
-
-.previewMockup {
-  text-align: center;
-  font-size: 8px;
-  color: v.$grey-500;
-
-  .mockTitle {
-    font-size: 6px;
-    color: v.$primary;
-    margin-bottom: 4px;
-    text-transform: uppercase;
-  }
-
-  .mockNames {
-    font-weight: 700;
-    margin-bottom: 12px;
-    color: v.$grey-900;
-  }
-
-  .mockDate {
-    margin-top: 20px;
-    color: v.$grey-400;
-    font-size: 6px;
-  }
-}
-
-.colorContainer {
-  display: flex;
-  gap: 16px;
-  padding: 24px;
-  background: v.$white;
-  border-radius: v.$radius-lg;
-  border: 1px solid v.$grey-200;
-  align-items: center;
-}
-
-.colorSwatch {
-  width: 44px;
-  height: 44px;
-  border-radius: 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: v.$white;
-  transition: transform 0.1s;
-  position: relative;
-
-  &:active {
-    transform: scale(0.95);
-  }
-}
-
 .fontSelector {
   width: 100%;
   padding: 16px 20px;
@@ -531,54 +423,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  .count {
-    font-size: 14px;
-    font-weight: 400;
-    color: v.$grey-500;
-
-    strong {
-      color: v.$primary-dark; // Using darker primary for text readability if available, else standard text
-      font-weight: 600;
-    }
-  }
-}
-
-.photoGrid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-
-  @include m.mobile {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-.addPhotoButton {
-  width: 100%;
-  aspect-ratio: 1;
-  border: 1px dashed v.$grey-300;
-  border-radius: v.$radius-md;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  background: v.$white;
-  color: v.$grey-400;
-  cursor: pointer;
-  transition: all 0.2s;
-
-  &:hover {
-    border-color: v.$primary;
-    color: v.$primary;
-    background: v.$grey-50;
-  }
-
-  span {
-    font-size: 12px;
-    font-weight: 500;
-  }
 }
 
 .photoItem {
@@ -679,4 +523,34 @@
 .formComposition {
   max-width: 500px;
   margin: 0 auto;
+}
+
+.highlight {
+  color: v.$primary;
+}
+
+// Demo container styles
+.demoContainer {
+  margin-top: 32px;
+  position: relative;
+  height: 380px;
+  border: 1px solid v.$grey-200;
+  border-radius: 32px;
+  overflow: hidden;
+  background-color: v.$grey-50;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.05),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  padding: 12px;
+}
+
+.demoContent {
+  position: relative;
+  height: 100%;
+  border: 2px dashed v.$grey-300;
+  border-radius: 24px;
+  background-color: v.$white;
+  display: flex;
+  align-items: flex-end;
+  padding: 16px;
 }

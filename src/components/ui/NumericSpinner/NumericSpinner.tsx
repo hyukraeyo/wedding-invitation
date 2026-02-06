@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import styles from './NumericSpinner.module.scss';
+import { Field } from '../Field';
 
 // SVG Icons
 const MinusIcon = ({ className }: { className?: string | undefined }) => (
@@ -80,6 +81,9 @@ export interface NumericSpinnerProps {
   increaseAriaLabel?: string;
   className?: string;
   id?: string;
+  helperText?: React.ReactNode;
+  label?: string;
+  error?: string | boolean;
 }
 
 export const NumericSpinner = ({
@@ -96,8 +100,13 @@ export const NumericSpinner = ({
   increaseAriaLabel = 'Increase value',
   className,
   id,
+  helperText,
+  label,
+  error,
 }: NumericSpinnerProps) => {
   const disabled = _disabled || _disable || false;
+  const generatedId = React.useId();
+  const inputId = id || generatedId;
 
   // Internal state for uncontrolled mode
   const [internalValue, setInternalValue] = useState(defaultNumber);
@@ -163,9 +172,9 @@ export const NumericSpinner = ({
   const isMin = currentValue <= min;
   const isMax = currentValue >= max;
 
-  return (
+  const spinner = (
     <div
-      id={id}
+      id={inputId}
       className={cn(styles.container, styles[size], disabled && styles.disabled, className)}
       role="group"
       aria-disabled={disabled}
@@ -215,6 +224,24 @@ export const NumericSpinner = ({
       </button>
     </div>
   );
+
+  if (label || helperText || error) {
+    return (
+      <Field.Root error={!!error} disabled={disabled}>
+        {label && <Field.Label htmlFor={inputId}>{label}</Field.Label>}
+        {spinner}
+        {(helperText || typeof error === 'string') && (
+          <Field.Footer>
+            <Field.HelperText error={!!error}>
+              {typeof error === 'string' ? error : helperText}
+            </Field.HelperText>
+          </Field.Footer>
+        )}
+      </Field.Root>
+    );
+  }
+
+  return spinner;
 };
 
 NumericSpinner.displayName = 'NumericSpinner';

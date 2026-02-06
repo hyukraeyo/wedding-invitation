@@ -1,0 +1,29 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.container {
+  display: flex;
+  gap: 16px;
+  padding: 24px;
+  background: v.$white;
+  border-radius: v.$radius-lg;
+  border: 1px solid v.$grey-200;
+  align-items: center;
+}
+
+.swatch {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: v.$white;
+  transition: transform 0.1s;
+  position: relative;
+
+  &:active {
+    transform: scale(0.95);
+  }
+}

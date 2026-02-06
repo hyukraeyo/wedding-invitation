@@ -1,0 +1,63 @@
+@use '../../../styles/variables' as v;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.uploader {
+  width: 100%;
+  height: 240px;
+  border: 1px dashed v.$grey-300;
+  border-radius: v.$radius-lg;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  background: v.$grey-50;
+  cursor: pointer;
+  transition: all 0.2s;
+  overflow: hidden;
+  position: relative;
+
+  &:hover {
+    border-color: v.$primary;
+    background: v.$white;
+  }
+}
+
+.iconCircle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: v.$white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: v.$grey-400;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.uploadText {
+  font-size: 16px;
+  font-weight: 700;
+  color: v.$grey-800;
+}
+
+.uploadSubtext {
+  font-size: 14px;
+  color: v.$grey-500;
+}
+
+.preview {
+  width: 100%;
+  height: 100%;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}

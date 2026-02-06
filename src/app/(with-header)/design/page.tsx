@@ -2,51 +2,22 @@
 
 import * as React from 'react';
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/Accordion';
-import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogTrigger,
 } from '@/components/ui/AlertDialog';
-import { Avatar } from '@/components/ui/Avatar';
 import { Badge } from '@/components/ui/Badge';
 import { BottomCTA } from '@/components/ui/BottomCTA';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { Button } from '@/components/ui/Button';
-import { Checkbox } from '@/components/ui/Checkbox';
 import { Dialog } from '@/components/ui/Dialog';
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/DropdownMenu';
-import { EmptyState } from '@/components/ui/EmptyState';
-import { Field } from '@/components/ui/Field';
 import { NumericSpinner } from '@/components/ui/NumericSpinner';
-import { InfoMessage } from '@/components/ui/InfoMessage';
-import { Input } from '@/components/ui/Input';
-import { Loader } from '@/components/ui/Loader';
-import { OptionList } from '@/components/ui/OptionList';
-import { ProgressBar } from '@/components/ui/ProgressBar';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/RadioGroup';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { RichTextEditor } from '@/components/common/RichTextEditor';
-import { Skeleton } from '@/components/ui/Skeleton';
-import { Slider } from '@/components/ui/Slider';
 import { Switch } from '@/components/ui/Switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/Tabs';
 import { TextField } from '@/components/ui/TextField';
-import { Textarea } from '@/components/ui/Textarea';
 import {
   Toast,
   ToastDescription,
@@ -66,27 +37,16 @@ import {
 import { DatePicker } from '@/components/common/DatePicker/DatePicker';
 import { TimePicker } from '@/components/common/TimePicker/TimePicker';
 import { AddressPicker } from '@/components/common/AddressPicker';
+import { PhotoRatioInput } from '@/components/common/PhotoRatioInput';
+import { PhotoGallery } from '@/components/common/PhotoGallery';
 import { ChrysanthemumSVG } from '@/components/common/Icons';
+import { StylePicker } from '@/components/common/StylePicker';
+import { ColorPicker } from '@/components/common/ColorPicker';
 import { useNameInput, usePhoneInput } from '@/hooks/useFormInput';
 import { useImageUpload } from '@/hooks/useImageUpload';
 import { isValidKoreanNameValue, isValidPhone } from '@/lib/utils';
-import { Mail, Lock, ChevronDown, Sparkles, Plus, CloudUpload, Check, Search } from 'lucide-react';
 import s from './DesignPage.module.scss';
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-  DragEndEvent,
-} from '@dnd-kit/core';
-import {
-  SortableContext,
-  sortableKeyboardCoordinates,
-  rectSortingStrategy,
-} from '@dnd-kit/sortable';
-import { SortablePhoto } from '@/components/common/SortablePhoto';
+import { DragEndEvent } from '@dnd-kit/core';
 
 const dropdownItems = [
   { label: 'Duplicate invite', value: 'duplicate' },
@@ -98,23 +58,6 @@ const optionListItems = [
   { label: 'Ceremony suite', value: 'ceremony' },
   { label: 'Reception suite', value: 'reception' },
   { label: 'After party', value: 'after' },
-];
-
-const accordionItems = [
-  {
-    title: 'Builder meta',
-    content: 'Touch targets, spacing, and token pairing for mobile-first flows.',
-  },
-  {
-    title: 'Motion cues',
-    content: 'iOS-style cubic-bezier curves keep each transition buttery smooth.',
-  },
-];
-
-const statuses = [
-  { label: 'Invites', value: '542 sent' },
-  { label: 'Guests', value: '1,380 confirmed' },
-  { label: 'RSVP', value: '34% RSVPd' },
 ];
 
 export default function DesignPage() {
@@ -154,7 +97,7 @@ export default function DesignPage() {
   const [photoRatio, setPhotoRatio] = React.useState('fixed');
 
   // Customization states
-  const [selectedStyle, setSelectedStyle] = React.useState('classic');
+  const [selectedStyle, setSelectedStyle] = React.useState('classic1');
   const [selectedColor, setSelectedColor] = React.useState('#C69C6D'); // Beige
   const [isMotherDeceased, setIsMotherDeceased] = React.useState(false);
 
@@ -173,11 +116,6 @@ export default function DesignPage() {
     onError: (msg) => alert(msg),
   });
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
-  );
-
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
     if (over && active.id !== over.id) {
@@ -194,16 +132,6 @@ export default function DesignPage() {
   });
 
   const mainPhoto = mainPhotos[0] || null;
-
-  const galleryInputRef = React.useRef<HTMLInputElement>(null);
-  const mainPhotoInputRef = React.useRef<HTMLInputElement>(null);
-
-  const colors = [
-    { value: '#C69C6D', label: 'Beige' },
-    { value: '#4B4B4B', label: 'Dark' },
-    { value: '#FFB7B2', label: 'Pink' },
-    { value: '#D4A5D4', label: 'Purple' },
-  ];
 
   const validateKoreanName = (value: string): boolean => {
     if (!value.trim()) return false;
@@ -407,17 +335,9 @@ export default function DesignPage() {
                   size="large"
                   decreaseAriaLabel="동반 인원 줄이기"
                   increaseAriaLabel="동반 인원 늘리기"
+                  helperText="본인 포함 총 인원을 입력해주세요"
                 />
               </FormControl>
-              <p
-                style={{
-                  marginTop: '6px',
-                  fontSize: '13px',
-                  color: 'var(--grey-500, #6b7280)',
-                }}
-              >
-                본인 포함 총 인원을 입력해주세요
-              </p>
             </FormField>
 
             <FormField name="showCalendar">
@@ -439,161 +359,72 @@ export default function DesignPage() {
             </FormField>
 
             {/* Photo Gallery */}
-            <div className={s.photoSection}>
-              <div className={s.sectionTitle}>
-                <span>사진 관리</span>
-                <span className={s.count}>
-                  현재 등록된 사진 <strong style={{ color: '#FBC02D' }}>{galleryCount}</strong> / 10
-                </span>
-              </div>
-              <div className={s.photoGrid}>
-                <DndContext
-                  sensors={sensors}
-                  collisionDetection={closestCenter}
+            <FormField name="gallery">
+              <FormHeader>
+                <FormLabel>사진 관리</FormLabel>
+              </FormHeader>
+              <FormControl asChild>
+                <PhotoGallery
+                  images={galleryPhotos}
+                  onUpload={handleGalleryUpload}
+                  onRemove={(index) => removeGalleryPhoto(index)}
                   onDragEnd={handleDragEnd}
-                >
-                  <SortableContext items={galleryPhotos} strategy={rectSortingStrategy}>
-                    {galleryPhotos.map((photo, index) => (
-                      <SortablePhoto
-                        key={photo}
-                        id={photo}
-                        url={photo}
-                        onRemove={() => removeGalleryPhoto(index)}
-                      />
-                    ))}
-                  </SortableContext>
-                </DndContext>
-                {!isGalleryFull && (
-                  <Button
-                    unstyled
-                    className={s.addPhotoButton}
-                    type="button"
-                    onClick={() => galleryInputRef.current?.click()}
-                  >
-                    <Plus size={24} />
-                    <span>추가</span>
-                  </Button>
-                )}
-                <input
-                  type="file"
-                  ref={galleryInputRef}
-                  onChange={handleGalleryUpload}
-                  accept="image/*"
-                  multiple
-                  style={{ display: 'none' }}
+                  helperText={
+                    <span>
+                      현재 등록된 사진 <strong className={s.highlight}>{galleryCount}</strong> / 10
+                    </span>
+                  }
                 />
-              </div>
-            </div>
+              </FormControl>
+            </FormField>
 
             {/* Main Greeting Photo */}
-            <div className={s.photoSection}>
-              <div className={s.sectionTitle}>
-                <span>사진</span>
-              </div>
-              <div
-                className={s.mainPhotoUploader}
-                onClick={() => mainPhotoInputRef.current?.click()}
-              >
-                {mainPhoto ? (
-                  <div className={s.mainPhotoPreview}>
-                    <img src={mainPhoto} alt="Main Greeting" />
-                  </div>
-                ) : (
-                  <>
-                    <div className={s.iconCircle}>
-                      <CloudUpload size={24} />
-                    </div>
-                    <div className={s.uploadText}>인사말 사진 추가</div>
-                    <div className={s.uploadSubtext}>클릭하여 이미지를 선택하세요</div>
-                  </>
-                )}
-                <input
-                  type="file"
-                  ref={mainPhotoInputRef}
-                  onChange={handleMainPhotoUpload}
-                  accept="image/*"
-                  style={{ display: 'none' }}
+            {/* Main Greeting Photo */}
+            <FormField name="mainGreeting">
+              <FormHeader>
+                <FormLabel>사진</FormLabel>
+              </FormHeader>
+              <FormControl asChild>
+                <PhotoRatioInput
+                  image={mainPhoto}
+                  onUpload={handleMainPhotoUpload}
+                  ratio={photoRatio}
+                  onRatioChange={setPhotoRatio}
+                  placeholder="인사말 사진 추가"
                 />
-              </div>
-              <SegmentedControl value={photoRatio} onChange={setPhotoRatio} alignment="fluid">
-                <SegmentedControl.Item value="fixed">고정 (기본)</SegmentedControl.Item>
-                <SegmentedControl.Item value="original">원본 비율</SegmentedControl.Item>
-              </SegmentedControl>
-            </div>
+              </FormControl>
+            </FormField>
 
-            {/* Style Selection */}
-            <div className={s.selectionSection}>
-              <div className={s.sectionTitle}>
-                <span>스타일</span>
-              </div>
-              <div className={s.styleGrid}>
-                <div className={s.styleItem} onClick={() => setSelectedStyle('classic')}>
-                  <div
-                    className={`${s.styleCard} ${selectedStyle === 'classic' ? s.selected : ''}`}
-                  >
-                    <div className={s.previewMockup}>
-                      <div className={s.mockTitle}>The Marriage</div>
-                      <div className={s.mockNames}>신랑, 신부 결혼해요.</div>
-                      <div
-                        style={{
-                          height: '20px',
-                          background: '#fcefa3',
-                          margin: '8px auto',
-                          width: '80%',
-                          opacity: 0.3,
-                          borderRadius: '4px',
-                        }}
-                      ></div>
-                      <div className={s.mockDate}>2026년 4월 29일</div>
-                    </div>
-                  </div>
-                  <span className={s.styleName}>클래식</span>
-                </div>
-
-                <div className={`${s.styleItem} ${s.placeholder}`}>
-                  <div className={s.styleCard}>
-                    <Plus size={24} />
-                  </div>
-                  <span className={s.styleName}>추가 예정</span>
-                </div>
-
-                <div className={`${s.styleItem} ${s.placeholder}`}>
-                  <div className={s.styleCard}>
-                    <Plus size={24} />
-                  </div>
-                  <span className={s.styleName}>추가 예정</span>
-                </div>
-              </div>
-            </div>
+            <FormField name="style">
+              <FormHeader>
+                <FormLabel>스타일</FormLabel>
+              </FormHeader>
+              <FormControl asChild>
+                <StylePicker value={selectedStyle} onChange={setSelectedStyle} />
+              </FormControl>
+            </FormField>
 
             {/* Color Selection */}
-            <div className={s.selectionSection}>
-              <div className={s.sectionTitle}>
-                <span>강조색</span>
-              </div>
-              <div className={s.colorContainer}>
-                {colors.map((color) => (
-                  <div
-                    key={color.value}
-                    className={s.colorSwatch}
-                    style={{ backgroundColor: color.value }}
-                    onClick={() => setSelectedColor(color.value)}
-                  >
-                    {selectedColor === color.value && <Check size={20} />}
-                  </div>
-                ))}
-              </div>
-            </div>
+            <FormField name="accentColor">
+              <FormHeader>
+                <FormLabel>강조색</FormLabel>
+              </FormHeader>
+              <FormControl asChild>
+                <ColorPicker value={selectedColor} onChange={setSelectedColor} />
+              </FormControl>
+            </FormField>
 
             {/* Font Selection */}
-            <div className={s.selectionSection}>
-              <div className={s.sectionTitle}>
-                <span>글꼴</span>
-              </div>
-              <div className={s.fontSelector}>
-                <span>고운돋움 (기본)</span>
-              </div>
-            </div>
+            <FormField name="font">
+              <FormHeader>
+                <FormLabel>글꼴</FormLabel>
+              </FormHeader>
+              <FormControl asChild>
+                <div className={s.fontSelector}>
+                  <span>고운돋움 (기본)</span>
+                </div>
+              </FormControl>
+            </FormField>
           </Form>
 
           {/* 제출 버튼 */}
@@ -614,31 +445,8 @@ export default function DesignPage() {
             </div>
           ))}
         </div>
-        <div
-          style={{
-            marginTop: '32px',
-            position: 'relative',
-            height: '380px',
-            border: '1px solid #e2e8f0',
-            borderRadius: '32px',
-            overflow: 'hidden',
-            backgroundColor: '#f8fafc',
-            boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-            padding: '12px',
-          }}
-        >
-          <div
-            style={{
-              position: 'relative',
-              height: '100%',
-              border: '2px dashed #cbd5e1',
-              borderRadius: '24px',
-              backgroundColor: 'white',
-              display: 'flex',
-              alignItems: 'flex-end',
-              padding: '16px',
-            }}
-          >
+        <div className={s.demoContainer}>
+          <div className={s.demoContent}>
             <BottomCTA.Single fixed={false} variant="blue" onClick={() => setToastOpen(true)}>
               CTA Button
             </BottomCTA.Single>
