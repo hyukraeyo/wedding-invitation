@@ -27,10 +27,10 @@ import { Field } from '@/components/ui/Field';
 import { FormControl, FormField, FormHeader, FormLabel } from '@/components/ui/Form';
 import { ImagePreview } from '@/components/ui/ImagePreview';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
-import { Switch } from '@/components/ui/Switch';
+import { SwitchRow } from '@/components/ui/SwitchRow';
 import { TextField } from '@/components/ui/TextField';
-import { cn } from '@/lib/utils';
 import { isBlobUrl } from '@/lib/image';
+import { cn } from '@/lib/utils';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import styles from './GallerySection.module.scss';
 
@@ -140,16 +140,17 @@ export default React.memo(function GallerySectionContent() {
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event;
-
-      if (over && active.id !== over.id) {
-        setGallery((prev: { id: string; url: string }[]) => {
-          const oldIndex = prev.findIndex((item) => item.id === active.id);
-          const newIndex = prev.findIndex((item) => item.id === over.id);
-          if (oldIndex < 0 || newIndex < 0) return prev;
-          return arrayMove(prev, oldIndex, newIndex);
-        });
+      if (!over || active.id === over.id) {
+        setActiveId(null);
+        return;
       }
 
+      setGallery((prev: { id: string; url: string }[]) => {
+        const oldIndex = prev.findIndex((item) => item.id === active.id);
+        const newIndex = prev.findIndex((item) => item.id === over.id);
+        if (oldIndex < 0 || newIndex < 0) return prev;
+        return arrayMove(prev, oldIndex, newIndex);
+      });
       setActiveId(null);
     },
     [setGallery]
@@ -287,9 +288,7 @@ export default React.memo(function GallerySectionContent() {
           <SegmentedControl
             alignment="fluid"
             value={galleryType}
-            onChange={(value: string) =>
-              setGalleryType(value as 'swiper' | 'grid' | 'thumbnail')
-            }
+            onChange={(value: string) => setGalleryType(value as 'swiper' | 'grid' | 'thumbnail')}
           >
             <SegmentedControl.Item value="swiper">스와이퍼</SegmentedControl.Item>
             <SegmentedControl.Item value="grid">그리드</SegmentedControl.Item>
@@ -299,25 +298,28 @@ export default React.memo(function GallerySectionContent() {
       </FormField>
 
       <FormField name="gallery-popup">
-        <FormLabel>확대 보기 (팝업)</FormLabel>
-        <FormControl asChild>
-          <Switch checked={galleryPopup} onCheckedChange={setGalleryPopup} />
-        </FormControl>
+        <SwitchRow
+          label="확대 보기 (팝업)"
+          checked={galleryPopup}
+          onCheckedChange={setGalleryPopup}
+        />
       </FormField>
 
       {galleryType === 'swiper' ? (
         <>
           <FormField name="gallery-autoplay">
-            <FormLabel>자동 재생</FormLabel>
-            <FormControl asChild>
-              <Switch checked={galleryAutoplay} onCheckedChange={setGalleryAutoplay} />
-            </FormControl>
+            <SwitchRow
+              label="자동 재생"
+              checked={galleryAutoplay}
+              onCheckedChange={setGalleryAutoplay}
+            />
           </FormField>
           <FormField name="gallery-fade">
-            <FormLabel>페이드 효과</FormLabel>
-            <FormControl asChild>
-              <Switch checked={galleryFade} onCheckedChange={setGalleryFade} />
-            </FormControl>
+            <SwitchRow
+              label="페이드 효과"
+              checked={galleryFade}
+              onCheckedChange={setGalleryFade}
+            />
           </FormField>
         </>
       ) : null}

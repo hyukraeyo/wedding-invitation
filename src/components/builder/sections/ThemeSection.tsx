@@ -1,15 +1,15 @@
 import React from 'react';
 import { useShallow } from 'zustand/react/shallow';
-import { useInvitationStore } from '@/store/useInvitationStore';
-import { SectionAccordion } from '@/components/ui/Accordion';
-import { SegmentedControl } from '@/components/ui/SegmentedControl';
-import { Switch } from '@/components/ui/Switch';
-import { FormControl, FormField, FormHeader, FormLabel } from '@/components/ui/Form';
 import { ColorPicker, type ColorOption } from '@/components/common/ColorPicker';
 import { FontPicker } from '@/components/common/FontPicker';
-import styles from './ThemeSection.module.scss';
+import { SectionAccordion } from '@/components/ui/Accordion';
+import { FormControl, FormField, FormHeader, FormLabel } from '@/components/ui/Form';
+import { SegmentedControl } from '@/components/ui/SegmentedControl';
+import { SwitchRow } from '@/components/ui/SwitchRow';
+import { useInvitationStore } from '@/store/useInvitationStore';
 import { getFontVar, type ThemeFont } from '@/lib/utils/font';
 import type { SectionProps } from '@/types/builder';
+import styles from './ThemeSection.module.scss';
 
 const PRESET_ACCENT_COLORS: ColorOption[] = [
   { value: '#C19A6D', label: 'Soft Brown' },
@@ -36,9 +36,9 @@ const PRESET_FONT_OPTIONS = [
   { label: '지마켓 산스', value: 'gmarket' },
   { label: '세리프', value: 'serif' },
   { label: '산세리프', value: 'sans' },
-].map((opt) => ({
-  ...opt,
-  style: { fontFamily: `var(${getFontVar(opt.value as ThemeFont)})` },
+].map((option) => ({
+  ...option,
+  style: { fontFamily: `var(${getFontVar(option.value as ThemeFont)})` },
 }));
 
 const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
@@ -70,11 +70,10 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
           <FormHeader>
             <FormLabel>글꼴</FormLabel>
           </FormHeader>
-
           <FormControl asChild>
             <FontPicker
               value={theme.font}
-              onChange={(val) => setTheme({ font: val as ThemeFont })}
+              onChange={(value) => setTheme({ font: value as ThemeFont })}
               options={PRESET_FONT_OPTIONS}
             />
           </FormControl>
@@ -88,7 +87,7 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
             <SegmentedControl
               alignment="fluid"
               value={String(theme.fontScale || '1')}
-              onChange={(val: string) => setTheme({ fontScale: Number(val) })}
+              onChange={(value: string) => setTheme({ fontScale: Number(value) })}
             >
               <SegmentedControl.Item value="1">기본</SegmentedControl.Item>
               <SegmentedControl.Item value="1.1">중간</SegmentedControl.Item>
@@ -98,15 +97,11 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
         </FormField>
 
         <FormField name="allowFontScale">
-          <div className={styles.rowBetween}>
-            <FormLabel>글자 크기 조절 허용</FormLabel>
-            <FormControl asChild>
-              <Switch
-                checked={theme.allowFontScale}
-                onCheckedChange={(checked) => setTheme({ allowFontScale: checked })}
-              />
-            </FormControl>
-          </div>
+          <SwitchRow
+            label="글자 크기 조절 허용"
+            checked={theme.allowFontScale}
+            onCheckedChange={(checked) => setTheme({ allowFontScale: checked })}
+          />
         </FormField>
 
         <FormField name="pattern">
@@ -117,8 +112,8 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
             <SegmentedControl
               alignment="fluid"
               value={theme.pattern || 'none'}
-              onChange={(val: string) =>
-                setTheme({ pattern: val as 'none' | 'flower-sm' | 'flower-lg' })
+              onChange={(value: string) =>
+                setTheme({ pattern: value as 'none' | 'flower-sm' | 'flower-lg' })
               }
             >
               <SegmentedControl.Item value="none">없음</SegmentedControl.Item>

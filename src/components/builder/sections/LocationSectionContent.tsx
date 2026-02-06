@@ -2,18 +2,18 @@
 
 import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
-import { useInvitationStore } from '@/store/useInvitationStore';
-import { TextField } from '@/components/ui/TextField';
-import { SegmentedControl } from '@/components/ui/SegmentedControl';
-import { Switch } from '@/components/ui/Switch';
-import { FormControl, FormField, FormLabel } from '@/components/ui/Form';
-import { formatPhoneNumber } from '@/lib/utils';
-import styles from './LocationSection.module.scss';
-import { NaverIcon, KakaoIcon } from '@/components/common/Icons';
 import { useShallow } from 'zustand/react/shallow';
-import { BottomCTA } from '@/components/ui/BottomCTA';
-
 import { AddressPicker } from '@/components/common/AddressPicker';
+import { KakaoIcon, NaverIcon } from '@/components/common/Icons';
+import { BottomCTA } from '@/components/ui/BottomCTA';
+import { FormControl, FormField, FormLabel } from '@/components/ui/Form';
+import { SegmentedControl } from '@/components/ui/SegmentedControl';
+import { SwitchRow } from '@/components/ui/SwitchRow';
+import { TextField } from '@/components/ui/TextField';
+import { formatPhoneNumber } from '@/lib/utils';
+import { useInvitationStore } from '@/store/useInvitationStore';
+import styles from './LocationSection.module.scss';
+
 const KakaoSdkLoader = dynamic(() => import('./KakaoSdkLoader'), { ssr: false });
 
 interface LocationSectionContentProps {
@@ -85,27 +85,24 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
 
   React.useEffect(() => {
     if (!isKakaoReady) return;
-    if (address && typeof window !== 'undefined' && window.kakao?.maps?.services) {
-      const geocoder = new window.kakao.maps.services.Geocoder();
-      geocoder.addressSearch(address, (result, status) => {
-        if (status === window.kakao.maps.services.Status.OK && result.length > 0) {
-          const firstResult = result[0];
-          if (!firstResult) return;
+    if (!address || typeof window === 'undefined' || !window.kakao?.maps?.services) return;
 
-          const lat = parseFloat(firstResult.y);
-          const lng = parseFloat(firstResult.x);
-          if (Math.abs(coordinateLat - lat) > 0.0001 || Math.abs(coordinateLng - lng) > 0.0001) {
-            setCoordinates(lat, lng);
-          }
-        }
-      });
-    }
+    const geocoder = new window.kakao.maps.services.Geocoder();
+    geocoder.addressSearch(address, (result, status) => {
+      if (status !== window.kakao.maps.services.Status.OK || result.length === 0) return;
+      const firstResult = result[0];
+      if (!firstResult) return;
+
+      const lat = parseFloat(firstResult.y);
+      const lng = parseFloat(firstResult.x);
+      if (Math.abs(coordinateLat - lat) > 0.0001 || Math.abs(coordinateLng - lng) > 0.0001) {
+        setCoordinates(lat, lng);
+      }
+    });
   }, [address, coordinateLat, coordinateLng, isKakaoReady, setCoordinates]);
 
-  // 전화번호 입력 핸들러
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatPhoneNumber(e.target.value);
-    setLocationContact(formatted);
+    setLocationContact(formatPhoneNumber(e.target.value));
   };
 
   return (
@@ -120,13 +117,12 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
                 id="location-subtitle"
                 placeholder="예: LOCATION"
                 value={locationSubtitle}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setLocationSubtitle(e.target.value)
-                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationSubtitle(e.target.value)}
               />
             </FormControl>
           </FormField>
         </div>
+
         <div className={styles.optionItem}>
           <FormField name="location-title">
             <FormLabel htmlFor="location-title">제목</FormLabel>
@@ -135,9 +131,7 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
                 id="location-title"
                 placeholder="예: 바나나홀"
                 value={locationTitle}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setLocationTitle(e.target.value)
-                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationTitle(e.target.value)}
               />
             </FormControl>
           </FormField>
@@ -159,7 +153,7 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
               <TextField
                 id="location-venue"
                 type="text"
-                placeholder="예: 바나나 웨딩홀"
+                placeholder="예: 바나나웨딩홀"
                 value={location}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocation(e.target.value)}
               />
@@ -176,9 +170,7 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
                 type="text"
                 placeholder="예: 3층 그랜드홀"
                 value={detailAddress}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setDetailAddress(e.target.value)
-                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDetailAddress(e.target.value)}
               />
             </FormControl>
           </FormField>
@@ -200,22 +192,16 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
           <SegmentedControl
             alignment="fluid"
             value={mapType}
-            onChange={(val: string) => setMapType(val as 'naver' | 'kakao')}
+            onChange={(value: string) => setMapType(value as 'naver' | 'kakao')}
           >
             <SegmentedControl.Item value="naver">
-              <span
-                className={styles.itemContent}
-                style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
-              >
+              <span className={styles.itemContent} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <NaverIcon size={18} />
                 <span>네이버</span>
               </span>
             </SegmentedControl.Item>
             <SegmentedControl.Item value="kakao">
-              <span
-                className={styles.itemContent}
-                style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
-              >
+              <span className={styles.itemContent} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <KakaoIcon size={18} />
                 <span>카카오</span>
               </span>
@@ -224,27 +210,15 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
         </div>
 
         <div className={styles.optionItem}>
-          <div className={styles.rowTitle}>지도 표시</div>
-          <div className={styles.rowRight}>
-            <Switch checked={showMap} onCheckedChange={(checked) => setShowMap(checked)} />
-          </div>
+          <SwitchRow label="지도 표시" checked={showMap} onCheckedChange={setShowMap} />
         </div>
 
         <div className={styles.optionItem}>
-          <div className={styles.rowTitle}>지도 고정</div>
-          <div className={styles.rowRight}>
-            <Switch checked={lockMap} onCheckedChange={(checked) => setLockMap(checked)} />
-          </div>
+          <SwitchRow label="지도 고정" checked={lockMap} onCheckedChange={setLockMap} />
         </div>
 
         <div className={styles.optionItem}>
-          <div className={styles.rowTitle}>네비게이션 표시</div>
-          <div className={styles.rowRight}>
-            <Switch
-              checked={showNavigation}
-              onCheckedChange={(checked) => setShowNavigation(checked)}
-            />
-          </div>
+          <SwitchRow label="내비게이션 표시" checked={showNavigation} onCheckedChange={setShowNavigation} />
         </div>
 
         <div className={styles.optionItem}>
@@ -252,7 +226,7 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
           <SegmentedControl
             alignment="fluid"
             value={mapHeight}
-            onChange={(val: string) => setMapHeight(val as 'default' | 'expanded')}
+            onChange={(value: string) => setMapHeight(value as 'default' | 'expanded')}
           >
             <SegmentedControl.Item value="default">기본</SegmentedControl.Item>
             <SegmentedControl.Item value="expanded">확장</SegmentedControl.Item>
@@ -264,7 +238,7 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
           <SegmentedControl
             alignment="fluid"
             value={String(mapZoom)}
-            onChange={(val: string) => setMapZoom(Number(val))}
+            onChange={(value: string) => setMapZoom(Number(value))}
           >
             <SegmentedControl.Item value="15">15</SegmentedControl.Item>
             <SegmentedControl.Item value="16">16</SegmentedControl.Item>
