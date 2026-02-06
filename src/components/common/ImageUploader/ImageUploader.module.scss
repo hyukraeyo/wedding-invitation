@@ -140,65 +140,8 @@
   object-fit: cover;
   transition: transform 0.5s v.$ease-standard;
 
-  &.uploading {
-    opacity: 0.5;
-    filter: blur(4px);
-  }
-
   .uploadBox:hover & {
     transform: scale(1.05);
-  }
-}
-
-.overlay {
-  position: absolute;
-  inset: 0;
-  background-color: rgba(v.$white, 0.7);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 5;
-}
-
-.spinner {
-  color: v.$primary;
-  width: 32px;
-  height: 32px;
-  animation: banana-spin v.$transition-smooth infinite;
-}
-
-@keyframes banana-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.removeButton {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 10;
-  background-color: rgba(v.$grey-900, 0.6) !important;
-  backdrop-filter: blur(8px);
-  color: v.$white !important;
-  border-radius: 50%;
-  width: 36px !important;
-  height: 36px !important;
-  opacity: 0;
-  transform: scale(0.8);
-  transition: all v.$transition-smooth;
-
-  .uploadBox:hover & {
-    opacity: 1;
-    transform: scale(1);
-  }
-
-  &:hover {
-    background-color: v.$color-error !important;
   }
 }
 

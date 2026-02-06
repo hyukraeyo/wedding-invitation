@@ -1,15 +1,10 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
 import { SectionAccordion } from '@/components/ui/Accordion';
-import styles from './GallerySection.module.scss';
 import type { SectionProps } from '@/types/builder';
 
 const GallerySectionContent = dynamic(() => import('./GallerySectionContent'), {
-  loading: () => (
-    <div className={styles.loadingContainer}>
-      <div className={styles.loadingSpinner} />
-    </div>
-  ),
+  loading: () => <div>로딩</div>,
   ssr: false,
 });
 

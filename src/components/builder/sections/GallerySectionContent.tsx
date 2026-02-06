@@ -1,42 +1,38 @@
-import React, { useMemo, useCallback, useState } from 'react';
-import Image from 'next/image';
-import { AspectRatio } from '@/components/ui/AspectRatio';
-import { Trash2, Banana } from 'lucide-react';
-import { IconButton } from '@/components/ui/IconButton';
-import { useInvitationStore } from '@/store/useInvitationStore';
-import { TextField } from '@/components/ui/TextField';
-import { FormControl, FormField, FormLabel, FormHeader } from '@/components/ui/Form';
-import { Field } from '@/components/ui/Field';
-import { Switch } from '@/components/ui/Switch';
-import { SegmentedControl } from '@/components/ui/SegmentedControl';
-import { cn } from '@/lib/utils';
-import { isBlobUrl } from '@/lib/image';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensors,
-  useSensor,
   DragEndEvent,
   DragOverlay,
   DragStartEvent,
+  KeyboardSensor,
+  PointerSensor,
+  closestCenter,
   defaultDropAnimationSideEffects,
+  useSensor,
+  useSensors,
 } from '@dnd-kit/core';
-import { ImageUploader } from '@/components/common/ImageUploader';
 import {
-  arrayMove,
   SortableContext,
-  sortableKeyboardCoordinates,
+  arrayMove,
   rectSortingStrategy,
+  sortableKeyboardCoordinates,
   useSortable,
 } from '@dnd-kit/sortable';
-
 import { CSS } from '@dnd-kit/utilities';
-import styles from './GallerySection.module.scss';
 import { useShallow } from 'zustand/react/shallow';
-import { Dialog } from '@/components/ui/Dialog';
+import { ImageUploader } from '@/components/common/ImageUploader';
 import { Button } from '@/components/ui/Button';
+import { Dialog } from '@/components/ui/Dialog';
+import { Field } from '@/components/ui/Field';
+import { FormControl, FormField, FormHeader, FormLabel } from '@/components/ui/Form';
+import { ImagePreview } from '@/components/ui/ImagePreview';
+import { SegmentedControl } from '@/components/ui/SegmentedControl';
+import { Switch } from '@/components/ui/Switch';
+import { TextField } from '@/components/ui/TextField';
+import { cn } from '@/lib/utils';
+import { isBlobUrl } from '@/lib/image';
+import { useInvitationStore } from '@/store/useInvitationStore';
+import styles from './GallerySection.module.scss';
 
 interface SortableItemProps {
   id: string;
@@ -54,55 +50,26 @@ const SortableItem = React.memo(function SortableItem({
   isDragging,
 }: SortableItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
-
-  const style = {
-    transform: CSS.Translate.toString(transform),
-    transition,
-  };
-
   const isUploading = isBlobUrl(url);
 
   return (
-    <AspectRatio
+    <ImagePreview
       ref={setNodeRef}
-      ratio={1 / 1}
-      style={style}
+      src={url}
+      ratio={1}
+      isUploading={isUploading}
+      onRemove={() => onRemove(id)}
+      isDragging={Boolean(isDragging)}
+      style={{
+        transform: CSS.Translate.toString(transform),
+        transition,
+      }}
       className={cn(styles.sortableItem, isDragging && styles.dragging)}
       {...attributes}
       {...listeners}
     >
-      <Image
-        src={url}
-        alt={`Gallery image ${index + 1}`}
-        fill
-        unoptimized
-        className={cn(styles.image, isUploading && styles.imageUploading)}
-        draggable={false}
-      />
-
-      {index === 0 && !isUploading && <div className={styles.mainTag}>대표</div>}
-
-      {isUploading ? (
-        <div className={styles.uploadingOverlay}>
-          <Banana className={styles.spinner} size={20} />
-        </div>
-      ) : null}
-
-      <IconButton
-        iconSize={20}
-        className={styles.removeButton}
-        onClick={(e) => {
-          e.stopPropagation();
-          onRemove(id);
-        }}
-        onPointerDown={(e) => e.stopPropagation()}
-        variant="ghost"
-        name=""
-        aria-label="삭제"
-      >
-        <Trash2 size={20} />
-      </IconButton>
-    </AspectRatio>
+      {index === 0 && !isUploading ? <div className={styles.mainTag}>대표</div> : null}
+    </ImagePreview>
   );
 });
 
@@ -147,19 +114,13 @@ export default React.memo(function GallerySectionContent() {
   const [isLimitModalOpen, setIsLimitModalOpen] = useState(false);
 
   const sensors = useSensors(
-    useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 8,
-      },
-    }),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    })
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
   const handleUploadComplete = (urls: string[]) => {
     const newItems = urls.map((url) => ({
-      id: `img-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `img-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
       url,
     }));
     setGallery([...gallery, ...newItems]);
@@ -179,14 +140,16 @@ export default React.memo(function GallerySectionContent() {
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event;
+
       if (over && active.id !== over.id) {
         setGallery((prev: { id: string; url: string }[]) => {
           const oldIndex = prev.findIndex((item) => item.id === active.id);
           const newIndex = prev.findIndex((item) => item.id === over.id);
-          if (oldIndex === -1 || newIndex === -1) return prev;
+          if (oldIndex < 0 || newIndex < 0) return prev;
           return arrayMove(prev, oldIndex, newIndex);
         });
       }
+
       setActiveId(null);
     },
     [setGallery]
@@ -198,7 +161,7 @@ export default React.memo(function GallerySectionContent() {
   );
 
   return (
-    <div className={styles.container}>
+    <div>
       <FormField name="gallery-subtitle">
         <FormHeader>
           <FormLabel htmlFor="gallery-subtitle">소제목</FormLabel>
@@ -208,13 +171,12 @@ export default React.memo(function GallerySectionContent() {
             id="gallery-subtitle"
             type="text"
             value={gallerySubtitle}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setGallerySubtitle(e.target.value)
-            }
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGallerySubtitle(e.target.value)}
             placeholder="예: GALLERY"
           />
         </FormControl>
       </FormField>
+
       <FormField name="gallery-title">
         <FormHeader>
           <FormLabel htmlFor="gallery-title">제목</FormLabel>
@@ -248,7 +210,7 @@ export default React.memo(function GallerySectionContent() {
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
           >
-            <SortableContext items={gallery.map((g) => g.id)} strategy={rectSortingStrategy}>
+            <SortableContext items={gallery.map((item) => item.id)} strategy={rectSortingStrategy}>
               <div className={styles.grid}>
                 {gallery.map((item, index) => (
                   <SortableItem
@@ -259,56 +221,55 @@ export default React.memo(function GallerySectionContent() {
                     onRemove={handleRemove}
                   />
                 ))}
-                {gallery.length < 10 && (
+                {gallery.length < 10 ? (
                   <ImageUploader
                     multiple
-                    variant="compact"
+                    gallery
                     placeholder="추가"
                     currentCount={gallery.length}
                     maxCount={10}
                     onUploadComplete={handleUploadComplete}
                     uploadFolder="gallery"
                   />
-                )}
+                ) : null}
               </div>
             </SortableContext>
-
-            <Dialog open={isLimitModalOpen} onOpenChange={setIsLimitModalOpen}>
-              <Dialog.Header title="알림" />
-              <Dialog.Body className={styles.centerBody}>
-                <p style={{ fontSize: '1rem', color: '#666' }}>
-                  사진은 최대 10장까지 등록 가능해요.
-                </p>
-              </Dialog.Body>
-              <Dialog.Footer className={styles.paddedFooter}>
-                <Button
-                  type="button"
-                  color="primary"
-                  size="lg"
-                  style={{ width: '100%' }}
-                  onClick={() => setIsLimitModalOpen(false)}
-                >
-                  확인
-                </Button>
-              </Dialog.Footer>
-            </Dialog>
 
             <DragOverlay
               dropAnimation={{
                 sideEffects: defaultDropAnimationSideEffects({
-                  styles: {
-                    active: { opacity: '0.4' },
-                  },
+                  styles: { active: { opacity: '0.4' } },
                 }),
               }}
             >
               {activeId && activeImage ? (
-                <AspectRatio ratio={1 / 1} className={styles.dragOverlayItem}>
-                  <Image src={activeImage.url} alt="" fill unoptimized className={styles.image} />
-                </AspectRatio>
+                <ImagePreview
+                  src={activeImage.url}
+                  ratio={1}
+                  className={styles.dragOverlayItem ?? ''}
+                  unoptimized
+                />
               ) : null}
             </DragOverlay>
           </DndContext>
+
+          <Dialog open={isLimitModalOpen} onOpenChange={setIsLimitModalOpen}>
+            <Dialog.Header title="알림" />
+            <Dialog.Body className={styles.centerBody}>
+              <p style={{ fontSize: '1rem', color: '#666' }}>사진은 최대 10장까지 등록 가능해요.</p>
+            </Dialog.Body>
+            <Dialog.Footer className={styles.paddedFooter}>
+              <Button
+                type="button"
+                color="primary"
+                size="lg"
+                style={{ width: '100%' }}
+                onClick={() => setIsLimitModalOpen(false)}
+              >
+                확인
+              </Button>
+            </Dialog.Footer>
+          </Dialog>
 
           <Field.Footer>
             <Field.HelperText>
@@ -326,7 +287,9 @@ export default React.memo(function GallerySectionContent() {
           <SegmentedControl
             alignment="fluid"
             value={galleryType}
-            onChange={(val: string) => setGalleryType(val as 'swiper' | 'grid' | 'thumbnail')}
+            onChange={(value: string) =>
+              setGalleryType(value as 'swiper' | 'grid' | 'thumbnail')
+            }
           >
             <SegmentedControl.Item value="swiper">스와이퍼</SegmentedControl.Item>
             <SegmentedControl.Item value="grid">그리드</SegmentedControl.Item>
@@ -335,31 +298,25 @@ export default React.memo(function GallerySectionContent() {
         </FormControl>
       </FormField>
 
-      <FormField name="gallery-popup" className={styles.toggleRow}>
+      <FormField name="gallery-popup">
         <FormLabel>확대 보기 (팝업)</FormLabel>
         <FormControl asChild>
-          <Switch checked={galleryPopup} onCheckedChange={(checked) => setGalleryPopup(checked)} />
+          <Switch checked={galleryPopup} onCheckedChange={setGalleryPopup} />
         </FormControl>
       </FormField>
 
       {galleryType === 'swiper' ? (
         <>
-          <FormField name="gallery-autoplay" className={styles.toggleRow}>
+          <FormField name="gallery-autoplay">
             <FormLabel>자동 재생</FormLabel>
             <FormControl asChild>
-              <Switch
-                checked={galleryAutoplay}
-                onCheckedChange={(checked) => setGalleryAutoplay(checked)}
-              />
+              <Switch checked={galleryAutoplay} onCheckedChange={setGalleryAutoplay} />
             </FormControl>
           </FormField>
-          <FormField name="gallery-fade" className={styles.toggleRow}>
+          <FormField name="gallery-fade">
             <FormLabel>페이드 효과</FormLabel>
             <FormControl asChild>
-              <Switch
-                checked={galleryFade}
-                onCheckedChange={(checked) => setGalleryFade(checked)}
-              />
+              <Switch checked={galleryFade} onCheckedChange={setGalleryFade} />
             </FormControl>
           </FormField>
         </>

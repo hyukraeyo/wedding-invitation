@@ -30,11 +30,6 @@
 }
 
 .sortableItem {
-  position: relative;
-  aspect-ratio: 1 / 1;
-  border-radius: v.$radius-md; // 16px
-  overflow: hidden;
-  background-color: v.$zinc-100;
   cursor: grab;
   touch-action: none;
   transform-origin: center;
@@ -43,19 +38,8 @@
     box-shadow 0.2s;
   isolation: isolate;
 
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: v.$radius-md; // 16px
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    pointer-events: none;
-    z-index: 2;
-  }
-
   &.dragging {
     z-index: 50;
-    // box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
     cursor: grabbing;
     opacity: 0.9;
   }
@@ -66,63 +50,18 @@
   }
 }
 
-.image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  pointer-events: none;
-  transition: opacity 0.2s;
-}
-
 .mainTag {
   position: absolute;
   top: 6px;
   left: 6px;
   background-color: #fbc02d; // v.$primary-500
-  color: v.$color-primary-foreground;
+  color: v.$white;
   font-size: 10px;
   font-weight: 700;
   padding: 3px 6px;
-  border-radius: v.$radius-md; // 16px
+  border-radius: v.$radius-md;
   z-index: 10;
-  // box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   letter-spacing: -0.02em;
-}
-
-.removeButton {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  z-index: 10;
-  width: 26px;
-  height: 26px;
-  border-radius: 50%;
-  background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255, 255, 255, 0.9);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  padding: 0;
-
-  &:hover {
-    background-color: v.$red-500;
-    transform: scale(1.1);
-    color: white;
-  }
-
-  &:active {
-    transform: scale(0.9);
-  }
-
-  svg {
-    width: 14px;
-    height: 14px;
-  }
 }
 
 // from animations
@@ -130,29 +69,6 @@
   @extend .sortableItem;
   cursor: grabbing;
   opacity: 0.9;
-  // box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-
-  .image {
-    border-radius: v.$radius-md; // 16px
-  }
-}
-
-.uploadingOverlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(v.$white, 0.8);
-  backdrop-filter: blur(2px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-.spinner {
-  width: 1.5rem;
-  height: 1.5rem;
-  color: v.$primary;
-  animation: spin 1s linear infinite;
 }
 
 .galleryManager {
