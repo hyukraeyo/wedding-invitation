@@ -1,13 +1,13 @@
-import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Clock } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useWheelSwiper } from '@/hooks/useWheelSwiper';
 import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
 import { TextField } from '@/components/ui/TextField';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FreeMode, Mousewheel } from 'swiper/modules';
-import type { Swiper as SwiperClass } from 'swiper';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -45,25 +45,11 @@ const WheelColumn = ({
   onChange: (val: string) => void;
   hasValue: boolean;
 }) => {
-  const swiperRef = useRef<SwiperClass | null>(null);
-  const isInternalUpdateRef = useRef(false);
-
-  const initialIndex = useMemo(() => {
-    const index = options.findIndex((opt) => opt.value === value);
-    return index !== -1 ? index : 0;
-  }, [options, value]);
-
-  // External value change -> Swiper sync
-  useEffect(() => {
-    if (swiperRef.current && !isInternalUpdateRef.current) {
-      const index = options.findIndex((opt) => opt.value === value);
-      if (index !== -1 && index !== swiperRef.current.activeIndex) {
-        swiperRef.current.slideTo(index);
-      }
-    }
-    // Always reset the flag in the next frame or after the potential sync
-    isInternalUpdateRef.current = false;
-  }, [value, options]);
+  const { initialIndex, onSwiper, onSlideChange } = useWheelSwiper({
+    options,
+    value,
+    onChange,
+  });
 
   return (
     <div className={styles.column}>
@@ -74,16 +60,8 @@ const WheelColumn = ({
         centeredSlides={true}
         mousewheel={true}
         initialSlide={initialIndex}
-        onSwiper={(swiper) => {
-          swiperRef.current = swiper;
-        }}
-        onSlideChange={(swiper) => {
-          const index = swiper.activeIndex;
-          if (options[index] && options[index].value !== value) {
-            isInternalUpdateRef.current = true;
-            onChange(options[index].value);
-          }
-        }}
+        onSwiper={onSwiper}
+        onSlideChange={onSlideChange}
         className={styles.swiperContainer}
         slideToClickedSlide={true}
         grabCursor={true}

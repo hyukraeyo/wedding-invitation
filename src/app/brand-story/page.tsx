@@ -4,6 +4,21 @@ import * as React from 'react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import styles from './MainLanding.module.scss';
+import {
+  Banana,
+  Heart,
+  Sparkles,
+  Award,
+  PartyPopper,
+  Images,
+  Type,
+  ClipboardCheck,
+  Smartphone,
+  Palette,
+  Map as MapIcon,
+  ArrowRight,
+  MessageCircle,
+} from 'lucide-react';
 
 // -----------------------------------------------------------------------------
 // Constants
@@ -24,7 +39,7 @@ export default function BrandStoryPage() {
         <div className={styles.headerInner}>
           <Link href="/" className={styles.logo}>
             <div className={styles.logoIcon}>
-              <span className="material-symbols-outlined">bakery_dining</span>
+              <Banana size={24} />
             </div>
             <span className={styles.logoText}>바나나 웨딩</span>
           </Link>
@@ -73,10 +88,10 @@ export default function BrandStoryPage() {
         <section className={styles.trust}>
           <span className={styles.trustLabel}>10,000+ 커플이 선택한 이유</span>
           <div className={styles.trustIcons}>
-            <span className="material-symbols-outlined">favorite</span>
-            <span className="material-symbols-outlined">auto_awesome</span>
-            <span className="material-symbols-outlined">loyalty</span>
-            <span className="material-symbols-outlined">celebration</span>
+            <Heart size={24} />
+            <Sparkles size={24} />
+            <Award size={24} />
+            <PartyPopper size={24} />
           </div>
         </section>
 
@@ -98,7 +113,7 @@ export default function BrandStoryPage() {
               />
               <div className={styles.bentoCardContent}>
                 <div className={styles.bentoCardHeader}>
-                  <span className="material-symbols-outlined">photo_library</span>
+                  <Images size={24} />
                   <h3 className={styles.bentoCardTitle}>고해상도 갤러리</h3>
                 </div>
                 <p className={styles.bentoCardDesc}>원본 그대로의 감동을 전달하는 선명한 화질</p>
@@ -110,7 +125,7 @@ export default function BrandStoryPage() {
               {/* Card 1 */}
               <div className={styles.bentoCard}>
                 <div className={cn(styles.bentoCardIconBox, styles.yellow)}>
-                  <span className="material-symbols-outlined">format_size</span>
+                  <Type size={24} />
                 </div>
                 <div>
                   <h3 className={styles.bentoCardTitle}>감성 폰트</h3>
@@ -121,7 +136,7 @@ export default function BrandStoryPage() {
               {/* Card 2 */}
               <div className={styles.bentoCard}>
                 <div className={cn(styles.bentoCardIconBox, styles.blue)}>
-                  <span className="material-symbols-outlined">edit_notifications</span>
+                  <ClipboardCheck size={24} />
                 </div>
                 <div>
                   <h3 className={styles.bentoCardTitle}>실시간 RSVP</h3>
@@ -138,7 +153,7 @@ export default function BrandStoryPage() {
           <div className="flex flex-col gap-3">
             <div className={styles.serviceItem}>
               <div className={cn(styles.serviceItemIcon, styles.blue)}>
-                <span className="material-symbols-outlined">smartphone</span>
+                <Smartphone size={24} />
               </div>
               <div className={styles.serviceItemContent}>
                 <h3 className={styles.serviceItemName}>모바일 최적화</h3>
@@ -148,7 +163,7 @@ export default function BrandStoryPage() {
 
             <div className={styles.serviceItem}>
               <div className={cn(styles.serviceItemIcon, styles.yellow)}>
-                <span className="material-symbols-outlined">palette</span>
+                <Palette size={24} />
               </div>
               <div className={styles.serviceItemContent}>
                 <h3 className={styles.serviceItemName}>커스텀 디자인</h3>
@@ -158,7 +173,7 @@ export default function BrandStoryPage() {
 
             <div className={styles.serviceItem}>
               <div className={cn(styles.serviceItemIcon, styles.blue)}>
-                <span className="material-symbols-outlined">map</span>
+                <MapIcon size={24} />
               </div>
               <div className={styles.serviceItemContent}>
                 <h3 className={styles.serviceItemName}>스마트 지도</h3>
@@ -182,7 +197,7 @@ export default function BrandStoryPage() {
           </p>
           <button className={styles.ctaSectionButton}>
             무료로 시작하기
-            <span className="material-symbols-outlined">arrow_forward</span>
+            <ArrowRight size={20} />
           </button>
         </section>
 
@@ -200,7 +215,7 @@ export default function BrandStoryPage() {
       {/* FAB */}
       <div className={styles.fab}>
         <button className={styles.fabButton}>
-          <span className="material-symbols-outlined">chat_bubble</span>
+          <MessageCircle size={24} />
         </button>
       </div>
     </div>

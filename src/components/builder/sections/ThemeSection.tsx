@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { SectionAccordion } from '@/components/ui/Accordion';
@@ -6,9 +6,9 @@ import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { Dialog } from '@/components/ui/Dialog';
 import { TextField } from '@/components/ui/TextField';
 import { Switch } from '@/components/ui/Switch';
-import { OptionList } from '@/components/ui/OptionList';
 import { FormControl, FormField, FormHeader, FormLabel } from '@/components/ui/Form';
 import { ColorPicker, type ColorOption } from '@/components/common/ColorPicker';
+import { FontPicker } from '@/components/common/FontPicker';
 import styles from './ThemeSection.module.scss';
 import type { ThemeFont } from '@/lib/utils/font';
 import type { SectionProps } from '@/types/builder';
@@ -30,7 +30,6 @@ const PRESET_BG_COLORS: ColorOption[] = [
 const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
   const theme = useInvitationStore(useShallow((state) => state.theme));
   const setTheme = useInvitationStore((state) => state.setTheme);
-  const [isFontOpen, setIsFontOpen] = useState(false);
 
   return (
     <SectionAccordion
@@ -55,53 +54,24 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
 
         <FormField name="font">
           <FormHeader>
-            <FormLabel onClick={() => setIsFontOpen(true)}>글꼴</FormLabel>
+            <FormLabel>글꼴</FormLabel>
           </FormHeader>
-          <div className={styles.cursorPointer} onClick={() => setIsFontOpen(true)}>
-            <FormControl asChild>
-              <TextField.Button
-                value={
-                  [
-                    { label: '고운돋움 (기본)', value: 'gowun-dodum' },
-                    { label: 'Pretendard', value: 'pretendard' },
-                    { label: 'Nanum Myeongjo', value: 'nanum-myeongjo' },
-                    { label: '고운바탕', value: 'gowun-batang' },
-                    { label: '송명', value: 'song-myung' },
-                    { label: '연성', value: 'yeon-sung' },
-                    { label: '도현', value: 'do-hyeon' },
-                    { label: '지마켓 산스', value: 'gmarket' },
-                    { label: '세리프', value: 'serif' },
-                    { label: '산세리프', value: 'sans' },
-                  ].find((opt) => opt.value === theme.font)?.label || theme.font
-                }
-                placeholder="글꼴 선택"
-              />
-            </FormControl>
-          </div>
-          <Dialog open={isFontOpen} onOpenChange={setIsFontOpen} mobileBottomSheet>
-            <Dialog.Header title="글꼴 선택" visuallyHidden />
-            <Dialog.Body>
-              <OptionList
-                value={theme.font}
-                onSelect={(val) => {
-                  setTheme({ font: val as ThemeFont });
-                  setIsFontOpen(false);
-                }}
-                options={[
-                  { label: '고운돋움 (기본)', value: 'gowun-dodum' },
-                  { label: 'Pretendard', value: 'pretendard' },
-                  { label: 'Nanum Myeongjo', value: 'nanum-myeongjo' },
-                  { label: '고운바탕', value: 'gowun-batang' },
-                  { label: '송명', value: 'song-myung' },
-                  { label: '연성', value: 'yeon-sung' },
-                  { label: '도현', value: 'do-hyeon' },
-                  { label: '지마켓 산스', value: 'gmarket' },
-                  { label: '세리프', value: 'serif' },
-                  { label: '산세리프', value: 'sans' },
-                ]}
-              />
-            </Dialog.Body>
-          </Dialog>
+          <FontPicker
+            value={theme.font}
+            onChange={(val) => setTheme({ font: val as ThemeFont })}
+            options={[
+              { label: '고운돋움 (기본)', value: 'gowun-dodum' },
+              { label: 'Pretendard', value: 'pretendard' },
+              { label: 'Nanum Myeongjo', value: 'nanum-myeongjo' },
+              { label: '고운바탕', value: 'gowun-batang' },
+              { label: '송명', value: 'song-myung' },
+              { label: '연성', value: 'yeon-sung' },
+              { label: '도현', value: 'do-hyeon' },
+              { label: '지마켓 산스', value: 'gmarket' },
+              { label: '세리프', value: 'serif' },
+              { label: '산세리프', value: 'sans' },
+            ]}
+          />
         </FormField>
 
         <FormField name="fontScale">

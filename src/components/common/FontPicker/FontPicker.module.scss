@@ -1,0 +1,97 @@
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
+
+.modalBody {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.pickerGrid {
+  position: relative;
+  display: flex;
+  height: 220px;
+  background-color: v.$white;
+  margin: 24px 0;
+  overflow: hidden;
+
+  // Faded Edges Mask
+  .mask {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 10;
+    background: linear-gradient(
+      to bottom,
+      v.$white 0%,
+      rgba(v.$white, 0) 30%,
+      rgba(v.$white, 0) 70%,
+      v.$white 100%
+    );
+  }
+
+  .highlightLine {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    right: 16px;
+    height: 44px;
+    transform: translateY(-50%);
+    background-color: v.$grey-50;
+    border: 1px solid v.$grey-100;
+    border-radius: 12px;
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+.column {
+  flex: 1;
+  height: 100%;
+  position: relative;
+  z-index: 5;
+}
+
+.swiperContainer {
+  height: 100%;
+  width: 100%;
+}
+
+.swiperSlide {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 44px !important;
+}
+
+.optionItem {
+  height: 44px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.125rem;
+  color: v.$grey-400;
+  border: none;
+  background: transparent;
+  width: 100% !important;
+  transition: all 0.25s v.$ease-ios;
+  cursor: pointer;
+  user-select: none;
+
+  &.active {
+    color: v.$grey-900;
+    font-weight: 700;
+    font-size: 1.25rem;
+  }
+
+  &:active {
+    opacity: 0.6;
+  }
+}
+
+.footer {
+  padding: 16px 24px 24px;
+}
