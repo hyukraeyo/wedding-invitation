@@ -17,20 +17,11 @@ import styles from './FontPicker.module.scss';
 export interface FontOption {
   label: string;
   value: string;
+  className?: string;
+  style?: React.CSSProperties;
 }
 
-interface FontPickerProps {
-  value: string;
-  onChange: (value: string) => void;
-  options: FontOption[];
-  className?: string;
-  label?: string;
-  placeholder?: string;
-  variant?: React.ComponentProps<typeof TextField.Button>['variant'];
-  radius?: React.ComponentProps<typeof TextField.Button>['radius'];
-  id?: string;
-  disabled?: boolean;
-}
+// ... (existing code)
 
 const WheelColumn = ({
   options,
@@ -68,7 +59,14 @@ const WheelColumn = ({
         {options.map((opt) => (
           <SwiperSlide key={opt.value} className={styles.swiperSlide}>
             {({ isActive }) => (
-              <div className={cn(styles.optionItem, isActive && hasValue && styles.active)}>
+              <div
+                className={cn(
+                  styles.optionItem,
+                  isActive && hasValue && styles.active,
+                  opt.className
+                )}
+                style={opt.style}
+              >
                 {opt.label}
               </div>
             )}
