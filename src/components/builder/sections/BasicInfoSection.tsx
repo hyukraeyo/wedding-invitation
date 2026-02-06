@@ -100,7 +100,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
             rightSlot={
               <Toggle
                 size="sm"
-                variant="ghost"
+                variant="unstyled"
                 accentColorOnly
                 pressed={groom.parents.father.isDeceased}
                 onPressedChange={(pressed) => setGroomParents('father', { isDeceased: pressed })}
@@ -132,7 +132,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
             rightSlot={
               <Toggle
                 size="sm"
-                variant="ghost"
+                variant="unstyled"
                 accentColorOnly
                 pressed={groom.parents.mother.isDeceased}
                 onPressedChange={(pressed) => setGroomParents('mother', { isDeceased: pressed })}
@@ -183,7 +183,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
             rightSlot={
               <Toggle
                 size="sm"
-                variant="ghost"
+                variant="unstyled"
                 accentColorOnly
                 pressed={bride.parents.father.isDeceased}
                 onPressedChange={(pressed) => setBrideParents('father', { isDeceased: pressed })}
@@ -214,7 +214,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
             rightSlot={
               <Toggle
                 size="sm"
-                variant="ghost"
+                variant="unstyled"
                 accentColorOnly
                 pressed={bride.parents.mother.isDeceased}
                 onPressedChange={(pressed) => setBrideParents('mother', { isDeceased: pressed })}

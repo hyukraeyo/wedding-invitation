@@ -67,7 +67,6 @@ const SectionAccordion = ({
   className,
   rightElement,
 }: SectionAccordionProps) => {
-
   return (
     <Accordion
       type="single"
@@ -86,7 +85,7 @@ const SectionAccordion = ({
           </AccordionPrimitive.Header>
           {rightElement && <div className={s.SectionRightElement}>{rightElement}</div>}
         </div>
-        <AccordionContent className={s.SectionContent}>
+        <AccordionContent className={s.SectionContent} forceMount>
           {children}
         </AccordionContent>
       </AccordionItem>
