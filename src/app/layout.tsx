@@ -95,12 +95,7 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="ko" suppressHydrationWarning className={fontVariables}>
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+      <head />
       <body suppressHydrationWarning>
         <Script
           src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.0/kakao.min.js"

@@ -3,8 +3,6 @@ import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { SectionAccordion } from '@/components/ui/Accordion';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
-import { Dialog } from '@/components/ui/Dialog';
-import { TextField } from '@/components/ui/TextField';
 import { Switch } from '@/components/ui/Switch';
 import { FormControl, FormField, FormHeader, FormLabel } from '@/components/ui/Form';
 import { ColorPicker, type ColorOption } from '@/components/common/ColorPicker';
