@@ -118,6 +118,15 @@ export function isValidKoreanNameValue(value: string): boolean {
   return /[가-힣A-Za-z]/.test(trimmed);
 }
 
+/**
+ * Form field validator: returns true if value exists but is invalid
+ * Used for displaying error messages only when user has entered partial invalid input
+ */
+export function isInvalidKoreanName(value: string): boolean {
+  if (!value.trim()) return false; // Allow empty (handled by required check)
+  return !isValidKoreanNameValue(value);
+}
+
 export function sanitizeKoreanName(
   value: string,
   {
@@ -158,6 +167,11 @@ export function isValidPhone(phone: string): boolean {
   const clean = phone.replace(/-/g, '').replace(/\s/g, '');
   const phoneRegex = /^(\+82|0)[0-9]{8,11}$/;
   return phoneRegex.test(clean);
+}
+
+export function isInvalidPhone(value: string): boolean {
+  if (!value) return false;
+  return !isValidPhone(value);
 }
 
 // Phone Number Formatting Utility (Korean styles)

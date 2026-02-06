@@ -17,7 +17,14 @@ import {
 } from '@/components/ui/Form';
 import { useToast } from '@/hooks/use-toast';
 import { useNameInput, usePhoneInput } from '@/hooks/useFormInput';
-import { parseKoreanName, cn, isValidKoreanNameValue, isValidPhone } from '@/lib/utils';
+import {
+  parseKoreanName,
+  cn,
+  isValidKoreanNameValue,
+  isValidPhone,
+  isInvalidKoreanName,
+  isInvalidPhone,
+} from '@/lib/utils';
 import { useHeaderStore } from '@/store/useHeaderStore';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { Stepper } from '@/components/ui/Stepper';
@@ -29,10 +36,6 @@ const STEPS = [{ label: 'Info' }, { label: 'Date' }, { label: 'Done' }];
  * 커스텀 유효성 검사 함수 (Radix Form match용)
  * 완성되지 않은 자음/모음만 있는 경우 invalid 처리
  */
-const validateKoreanName = (value: string): boolean => {
-  if (!value.trim()) return false; // 빈 값은 valueMissing으로 처리
-  return !isValidKoreanNameValue(value); // true면 에러 표시
-};
 
 const SetupForm = () => {
   const router = useRouter();
@@ -153,7 +156,9 @@ const SetupForm = () => {
                   <FormHeader>
                     <FormLabel>성함</FormLabel>
                     <FormMessage match="valueMissing">이름을 입력해주세요</FormMessage>
-                    <FormMessage match={validateKoreanName}>올바른 이름을 입력해주세요</FormMessage>
+                    <FormMessage match={isInvalidKoreanName}>
+                      올바른 이름을 입력해주세요
+                    </FormMessage>
                   </FormHeader>
                   <FormControl asChild>
                     <TextField
@@ -176,9 +181,7 @@ const SetupForm = () => {
                 <FormField name="groomPhone">
                   <FormHeader>
                     <FormLabel>연락처</FormLabel>
-                    <FormMessage match={(value) => !!value && !isValidPhone(value)}>
-                      올바른 전화번호를 입력해주세요
-                    </FormMessage>
+                    <FormMessage match={isInvalidPhone}>올바른 전화번호를 입력해주세요</FormMessage>
                   </FormHeader>
                   <FormControl asChild>
                     <TextField
@@ -208,7 +211,9 @@ const SetupForm = () => {
                   <FormHeader>
                     <FormLabel>성함</FormLabel>
                     <FormMessage match="valueMissing">이름을 입력해주세요</FormMessage>
-                    <FormMessage match={validateKoreanName}>올바른 이름을 입력해주세요</FormMessage>
+                    <FormMessage match={isInvalidKoreanName}>
+                      올바른 이름을 입력해주세요
+                    </FormMessage>
                   </FormHeader>
                   <FormControl asChild>
                     <TextField
@@ -230,9 +235,7 @@ const SetupForm = () => {
                 <FormField name="bridePhone">
                   <FormHeader>
                     <FormLabel>연락처</FormLabel>
-                    <FormMessage match={(value) => !!value && !isValidPhone(value)}>
-                      올바른 전화번호를 입력해주세요
-                    </FormMessage>
+                    <FormMessage match={isInvalidPhone}>올바른 전화번호를 입력해주세요</FormMessage>
                   </FormHeader>
                   <FormControl asChild>
                     <TextField

@@ -44,7 +44,12 @@ import { StylePicker } from '@/components/common/StylePicker';
 import { ColorPicker } from '@/components/common/ColorPicker';
 import { useNameInput, usePhoneInput } from '@/hooks/useFormInput';
 import { useImageUpload } from '@/hooks/useImageUpload';
-import { isValidKoreanNameValue, isValidPhone } from '@/lib/utils';
+import {
+  isValidKoreanNameValue,
+  isValidPhone,
+  isInvalidKoreanName,
+  isInvalidPhone,
+} from '@/lib/utils';
 import s from './DesignPage.module.scss';
 import { DragEndEvent } from '@dnd-kit/core';
 
@@ -133,11 +138,6 @@ export default function DesignPage() {
 
   const mainPhoto = mainPhotos[0] || null;
 
-  const validateKoreanName = (value: string): boolean => {
-    if (!value.trim()) return false;
-    return !isValidKoreanNameValue(value);
-  };
-
   return (
     <div className={s.root}>
       <header className={s.hero}>
@@ -165,7 +165,7 @@ export default function DesignPage() {
             <FormField name="groomName">
               <FormHeader>
                 <FormLabel>신랑 이름</FormLabel>
-                <FormMessage match={validateKoreanName}>올바른 이름을 입력해주세요</FormMessage>
+                <FormMessage match={isInvalidKoreanName}>올바른 이름을 입력해주세요</FormMessage>
               </FormHeader>
               <FormControl asChild>
                 <TextField
@@ -205,7 +205,7 @@ export default function DesignPage() {
             <FormField name="brideName">
               <FormHeader>
                 <FormLabel>신부 이름</FormLabel>
-                <FormMessage match={validateKoreanName}>올바른 이름을 입력해주세요</FormMessage>
+                <FormMessage match={isInvalidKoreanName}>올바른 이름을 입력해주세요</FormMessage>
               </FormHeader>
               <FormControl asChild>
                 <TextField
@@ -220,9 +220,7 @@ export default function DesignPage() {
             <FormField name="groomPhone">
               <FormHeader>
                 <FormLabel>연락처</FormLabel>
-                <FormMessage match={(value) => !!value && !isValidPhone(value)}>
-                  올바른 전화번호를 입력해주세요
-                </FormMessage>
+                <FormMessage match={isInvalidPhone}>올바른 전화번호를 입력해주세요</FormMessage>
               </FormHeader>
               <FormControl asChild>
                 <TextField

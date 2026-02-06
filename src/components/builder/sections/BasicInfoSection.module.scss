@@ -6,41 +6,6 @@
   gap: 1rem;
 }
 
-.formGroup {
-  @include v.section-form-group;
-  padding: 1.25rem;
-  border: 1px solid v.$yellow-300;
-  border-radius: v.$radius-lg;
-}
-
 .divider {
   @include v.section-divider;
-}
-
-.row {
-  @include v.section-form-row;
-
-  // 신랑/신부 이름 (1컬럼)
-  &.full {
-    grid-template-columns: 1fr;
-  }
-
-  // 혼주 성함 + 故 토글
-  &.compact {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-}
-
-.fieldWrapper {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-}
-
-.deceasedButton {
-  width: 52px;
-  flex-shrink: 0;
-  font-weight: 700;
 }
