@@ -94,6 +94,8 @@ export default function MainScreenSectionContent() {
           value={mainScreen.layout}
           options={styleOptions}
           onChange={(selectedLayout) => {
+            if (selectedLayout === mainScreen.layout) return;
+
             const selectedPreset = STYLE_PRESETS.find((preset) => preset.layout === selectedLayout);
             if (!selectedPreset || selectedPreset.isComingSoon) {
               return;

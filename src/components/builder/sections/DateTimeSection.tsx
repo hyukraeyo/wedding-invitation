@@ -3,7 +3,7 @@ import React from 'react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useShallow } from 'zustand/react/shallow';
 import { SectionAccordion } from '@/components/ui/Accordion';
-import { TextField } from '@/components/ui/TextField';
+
 import { Switch } from '@/components/ui/Switch';
 import { TimePicker } from '@/components/common/TimePicker';
 import { DatePicker } from '@/components/common/DatePicker';
@@ -12,31 +12,19 @@ import styles from './DateTimeSection.module.scss';
 import type { SectionProps } from '@/types/builder';
 
 const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props) {
-  const {
-    date,
-    setDate,
-    time,
-    setTime,
-    showCalendar,
-    setShowCalendar,
-    showDday,
-    setShowDday,
-    ddayMessage,
-    setDdayMessage,
-  } = useInvitationStore(
-    useShallow((state) => ({
-      date: state.date,
-      setDate: state.setDate,
-      time: state.time,
-      setTime: state.setTime,
-      showCalendar: state.showCalendar,
-      setShowCalendar: state.setShowCalendar,
-      showDday: state.showDday,
-      setShowDday: state.setShowDday,
-      ddayMessage: state.ddayMessage,
-      setDdayMessage: state.setDdayMessage,
-    }))
-  );
+  const { date, setDate, time, setTime, showCalendar, setShowCalendar, showDday, setShowDday } =
+    useInvitationStore(
+      useShallow((state) => ({
+        date: state.date,
+        setDate: state.setDate,
+        time: state.time,
+        setTime: state.setTime,
+        showCalendar: state.showCalendar,
+        setShowCalendar: state.setShowCalendar,
+        showDday: state.showDday,
+        setShowDday: state.setShowDday,
+      }))
+    );
 
   return (
     <SectionAccordion
@@ -90,28 +78,6 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
             <Switch checked={showDday} onCheckedChange={(checked) => setShowDday(checked)} />
           </div>
         </div>
-
-        {showDday && (
-          <div className={styles.optionItem}>
-            <div className={styles.ddayInputWrapper}>
-              <FormField name="dday-message">
-                <FormLabel htmlFor="dday-message">D-Day 메시지</FormLabel>
-                <FormControl asChild>
-                  <TextField
-                    id="dday-message"
-                    variant="outline"
-                    placeholder="예: (신랑), (신부)의 결혼식이 (D-Day) 남았어요"
-                    value={ddayMessage}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setDdayMessage(e.target.value)
-                    }
-                    helperText="(신랑), (신부), (D-Day)는 실제 이름과 날짜로 자동 치환됩니다."
-                  />
-                </FormControl>
-              </FormField>
-            </div>
-          </div>
-        )}
       </div>
     </SectionAccordion>
   );

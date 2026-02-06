@@ -85,4 +85,8 @@
     color: v.$grey-900;
     transform: scale(0.97);
   }
+
+  &.active {
+    color: v.$grey-900;
+  }
 }
