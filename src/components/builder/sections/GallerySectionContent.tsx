@@ -27,7 +27,7 @@ import { Field } from '@/components/ui/Field';
 import { FormControl, FormField, FormHeader, FormLabel } from '@/components/ui/Form';
 import { ImagePreview } from '@/components/ui/ImagePreview';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
-import { SwitchRow } from '@/components/ui/SwitchRow';
+import { SwitchRow } from '@/components/common/SwitchRow';
 import { TextField } from '@/components/ui/TextField';
 import { isBlobUrl } from '@/lib/image';
 import { cn } from '@/lib/utils';

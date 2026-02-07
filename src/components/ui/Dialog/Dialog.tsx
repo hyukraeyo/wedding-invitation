@@ -134,8 +134,10 @@ DialogPortal.displayName = 'DialogPortal';
 
 const DialogContent = memo(React.forwardRef<
     React.ElementRef<typeof DialogPrimitive.Content>,
-    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => {
+    React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
+        surface?: 'default' | 'muted' | undefined;
+    }
+>(({ className, children, surface = 'default', ...props }, ref) => {
     const { isBottomSheet, fullScreen } = useContext(DialogContext);
     const internalRef = useRef<HTMLDivElement>(null);
 
@@ -174,6 +176,7 @@ const DialogContent = memo(React.forwardRef<
                 styles.content,
                 styles.dialogContent,
                 fullScreen && styles.fullPageRight,
+                surface === 'muted' && styles.surfaceMuted,
                 className
             )}
             onOpenAutoFocus={handleOpenAutoFocus}
@@ -209,8 +212,15 @@ const DialogHeader = memo(({
     title,
     children,
     visuallyHidden,
+    divider = false,
+    padding = 'default',
     ...props
-}: React.HTMLAttributes<HTMLDivElement> & { title?: string | undefined; visuallyHidden?: boolean | undefined }) => {
+}: React.HTMLAttributes<HTMLDivElement> & {
+    title?: string | undefined;
+    visuallyHidden?: boolean | undefined;
+    divider?: boolean | undefined;
+    padding?: 'default' | 'compact' | undefined;
+}) => {
     const { isBottomSheet } = useContext(DialogContext);
 
     if (isBottomSheet) {
@@ -231,7 +241,12 @@ const DialogHeader = memo(({
 
     const headerContent = (
         <div
-            className={cn(styles.header, className)}
+            className={cn(
+                styles.header,
+                divider && styles.headerWithDivider,
+                padding === 'compact' && styles.headerCompact,
+                className
+            )}
             {...props}
         >
             {title ? (
@@ -312,8 +327,12 @@ const DialogBody = memo(({
     className,
     children,
     padding = true,
+    align = 'left',
     ...props
-}: React.HTMLAttributes<HTMLDivElement> & { padding?: boolean | undefined }) => {
+}: React.HTMLAttributes<HTMLDivElement> & {
+    padding?: boolean | undefined;
+    align?: 'left' | 'center' | 'right' | undefined;
+}) => {
     const { isBottomSheet } = useContext(DialogContext);
 
     if (isBottomSheet) {
@@ -322,7 +341,13 @@ const DialogBody = memo(({
 
     return (
         <div
-            className={cn(styles.body, !padding && styles.noPadding, className)}
+            className={cn(
+                styles.body,
+                !padding && styles.noPadding,
+                align === 'center' && styles.bodyCenter,
+                align === 'right' && styles.bodyRight,
+                className
+            )}
             {...props}
         >
             {children}

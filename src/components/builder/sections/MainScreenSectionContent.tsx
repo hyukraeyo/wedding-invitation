@@ -6,7 +6,7 @@ import { STYLE_PRESETS } from '@/constants/samples';
 import { isRequiredField } from '@/constants/requiredFields';
 import { FormControl, FormField, FormLabel, FormMessage } from '@/components/ui/Form';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
-import { SwitchRow } from '@/components/ui/SwitchRow';
+import { SwitchRow } from '@/components/common/SwitchRow';
 import { TextField } from '@/components/ui/TextField';
 import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
 import { useInvitationStore } from '@/store/useInvitationStore';

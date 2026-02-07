@@ -21,7 +21,7 @@ import { useRejectionReason } from '@/hooks/useRejectionReason';
 import { Banana, Plus, LayoutGrid, GalleryHorizontal } from 'lucide-react';
 import styles from './MyPage.module.scss';
 import { InvitationCard } from '@/components/common/InvitationCard';
-import { EmptyState } from '@/components/ui/EmptyState';
+import { EmptyState } from '@/components/common/EmptyState';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation } from 'swiper/modules';
 import { MyPageHeader } from '@/components/mypage/MyPageHeader';
@@ -592,7 +592,6 @@ export default function MyPageClient({
                 onClick={() => handleViewModeChange(viewMode === 'grid' ? 'swiper' : 'grid')}
                 variant="ghost"
                 iconSize={20}
-                className={styles.viewToggleButton}
                 aria-label={viewMode === 'grid' ? '슬라이드 보기' : '그리드 보기'}
                 name=""
               >
@@ -771,7 +770,7 @@ export default function MyPageClient({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>{confirmConfig.title}</AlertDialogTitle>
-            <AlertDialogDescription className={styles.modalDescription}>
+            <AlertDialogDescription align="center">
               {confirmConfig.description}
             </AlertDialogDescription>
           </AlertDialogHeader>

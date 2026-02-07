@@ -116,11 +116,18 @@ AlertDialogTitle.displayName = AlertDialogPrimitive.Title.displayName;
 
 const AlertDialogDescription = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Description>,
-  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description>
->(({ className, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Description> & {
+    align?: 'left' | 'center' | 'right' | undefined;
+  }
+>(({ className, align = 'center', ...props }, ref) => (
   <AlertDialogPrimitive.Description
     ref={ref}
-    className={cn(styles.description, className)}
+    className={cn(
+      styles.description,
+      align === 'left' && styles.descriptionLeft,
+      align === 'right' && styles.descriptionRight,
+      className
+    )}
     {...props}
   />
 ));

@@ -17,7 +17,6 @@ export * from './Dialog';
 export * from './AlertDialog';
 export * from './BottomSheet';
 export * from './InfoMessage';
-export * from './EmptyState';
 
 export * from './Menu';
 export * from './ProgressBar';
@@ -35,8 +34,6 @@ export * from './Avatar';
 export * from './Accordion';
 export * from './Skeleton';
 export * from './Loader';
-export * from './CTAButton';
-export * from './BottomCTA';
 export * from './SegmentedControl';
 export * from './Tabs';
 export * from './Spacing';

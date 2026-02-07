@@ -14,7 +14,7 @@ import styles from './RequestsPage.module.scss';
 import { clsx } from 'clsx';
 import type { ApprovalRequestSummary } from '@/services/approvalRequestService';
 import type { InvitationSummaryRecord } from '@/lib/invitation-summary';
-import { EmptyState } from '@/components/ui/EmptyState';
+import { EmptyState } from '@/components/common/EmptyState';
 import { parseRejection } from '@/lib/rejection-helpers';
 import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
@@ -292,7 +292,7 @@ export default function RequestsPageClient({ initialLimit }: RequestsPageClientP
         <Dialog.Overlay />
         <Dialog.Content>
           <Dialog.Header title={confirmConfig.title} />
-          <Dialog.Body className={styles.centerBody}>{confirmConfig.description}</Dialog.Body>
+          <Dialog.Body align="center">{confirmConfig.description}</Dialog.Body>
           <Dialog.Footer>
             {confirmConfig.type !== 'INFO_ONLY' && (
               <Button

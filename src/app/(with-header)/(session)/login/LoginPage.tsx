@@ -8,7 +8,7 @@ import { signIn, signOut } from 'next-auth/react';
 import type { User } from 'next-auth';
 
 import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
-import { Heading, Button } from '@/components/ui';
+import { Heading } from '@/components/ui';
 import { BananaLoader } from '@/components/ui/Loader';
 import { useToast } from '@/hooks/use-toast';
 import styles from './LoginPage.module.scss';
@@ -118,7 +118,7 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
         <div className={styles.modal}>
           {/* Header */}
           <div className={styles.header}>
-            <Heading as="h1" size="7" weight="bold" className={styles.title}>
+            <Heading as="h1" size="7" weight="bold">
               바나나웨딩 시작하기
             </Heading>
             <p className={styles.subtitle}>
@@ -129,8 +129,7 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
           </div>
 
           <div className={styles.socialButtons}>
-            <Button
-              unstyled
+            <button
               className={`${styles.socialButton} ${styles.kakao}`}
               onClick={() => handleOAuthLogin('kakao')}
               disabled={!!loadingProvider}
@@ -143,10 +142,9 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
                 />
               </svg>
               <span>카카오로 시작하기</span>
-            </Button>
+            </button>
 
-            <Button
-              unstyled
+            <button
               className={`${styles.socialButton} ${styles.naver}`}
               onClick={() => handleOAuthLogin('naver')}
               disabled={!!loadingProvider}
@@ -156,7 +154,7 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
                 <path d="M16.273 12.845L7.376 0H0v24h7.726V11.156L16.624 24H24V0h-7.727v12.845z" />
               </svg>
               <span>네이버로 시작하기</span>
-            </Button>
+            </button>
           </div>
 
           {/* Footer */}

@@ -96,14 +96,15 @@ export default function AccountPageClient({ profile, userEmail }: AccountPageCli
         <div className={styles.itemContent}>
           {isEditingPhone ? (
             <div className={styles.editWrapper}>
-              <TextField
-                value={formData.phone || ''}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setFormData({ ...formData, phone: e.target.value })
-                }
-                placeholder="010-0000-0000"
-                className={styles.phoneInput || ''}
-              />
+              <div className={styles.phoneInput}>
+                <TextField
+                  value={formData.phone || ''}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setFormData({ ...formData, phone: e.target.value })
+                  }
+                  placeholder="010-0000-0000"
+                />
+              </div>
               <div className={styles.editActions}>
                 <Button
                   variant="ghost"

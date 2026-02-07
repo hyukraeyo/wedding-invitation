@@ -32,6 +32,10 @@
   }
 }
 
+.surfaceMuted {
+  background-color: v.$grey-50;
+}
+
 // Standard Dialog (centered) behavior
 .dialogContent {
   position: fixed;
@@ -114,6 +118,14 @@
   }
 }
 
+.headerWithDivider {
+  border-bottom: 1px solid v.$grey-200;
+}
+
+.headerCompact {
+  padding: 16px 24px;
+}
+
 .body {
   flex: 1;
   overflow-y: auto;
@@ -123,6 +135,14 @@
   &.noPadding {
     padding: 0;
   }
+}
+
+.bodyCenter {
+  text-align: center;
+}
+
+.bodyRight {
+  text-align: right;
 }
 
 .footer {

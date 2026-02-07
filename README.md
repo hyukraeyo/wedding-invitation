@@ -17,6 +17,7 @@
 
 - **Styling**: SCSS Modules (Primary) + Tailwind CSS (Secondary)
 - **UI Components**: Radix UI Primitives + Toss Design System (TDS) 기반 디자인
+- **UI Layer Rule**: `src/components/ui`에는 기초(primitive) 컴포넌트만 두고, 조합형/도메인형 컴포넌트는 `src/components/common`에 둡니다.
 - **Animations**: iOS 스타일 트랜지션 (`cubic-bezier(0.16, 1, 0.3, 1)`)
 
 ### **Infrastructure & Backend**
@@ -45,8 +46,8 @@
 src/
 ├── app/              # Next.js App Router (Pages & API)
 ├── components/       # UI 및 비즈니스 프로젝트 컴포넌트
-│   ├── ui/           # 공용 UI 컴포넌트 (Radix 기반)
-│   ├── common/       # 전역 공용 컴포넌트
+│   ├── ui/           # 기초 UI 컴포넌트 (primitive, Radix 기반)
+│   ├── common/       # 조합형/비즈니스 공용 컴포넌트
 │   └── builder/      # 청첩장 빌더 핵심 로직
 ├── services/         # 서버 측 데이터 서비스 레이어
 ├── store/            # 전역 상태 관리 (Zustand)

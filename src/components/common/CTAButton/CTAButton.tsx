@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Button, ButtonProps } from '../Button';
+import { Button, ButtonProps } from '@/components/ui/Button';
 
 export type CTAButtonProps = Omit<ButtonProps, 'size' | 'fullWidth'>;
 

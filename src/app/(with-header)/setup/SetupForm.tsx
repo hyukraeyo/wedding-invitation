@@ -117,7 +117,9 @@ const SetupForm = () => {
   if (!isHydrated) {
     return (
       <div className={styles.container}>
-        <Skeleton className={styles.mainCard} style={{ height: '400px' }} />
+        <div className={styles.mainCard}>
+          <Skeleton height="100%" />
+        </div>
       </div>
     );
   }
@@ -253,7 +255,7 @@ const SetupForm = () => {
               </div>
 
               <FormSubmit asChild>
-                <Button className={styles.nextButton} disabled={!isStepValid()} radius="lg">
+                <Button fullWidth disabled={!isStepValid()} radius="lg">
                   다음
                 </Button>
               </FormSubmit>
@@ -306,7 +308,7 @@ const SetupForm = () => {
               </FormField>
 
               <FormSubmit asChild>
-                <Button className={styles.nextButton} disabled={!isStepValid()}>
+                <Button fullWidth disabled={!isStepValid()}>
                   <span>Let&apos;s Start</span>
                   <Heart size={20} fill="currentColor" />
                 </Button>
@@ -316,7 +318,6 @@ const SetupForm = () => {
                 variant="ghost"
                 type="button"
                 onClick={() => setCurrentStep(0)}
-                style={{ color: '#94a3b8' }}
               >
                 Back to Information
               </Button>
@@ -325,7 +326,7 @@ const SetupForm = () => {
         )}
       </div>
 
-      <Button unstyled className={styles.parentsButton} type="button">
+      <button className={styles.parentsButton} type="button">
         <div className={styles.parentsLeft}>
           <div className={styles.iconWrapper}>
             <User size={20} />
@@ -336,7 +337,7 @@ const SetupForm = () => {
           </div>
         </div>
         <Plus size={20} className={styles.plusIcon} />
-      </Button>
+      </button>
     </div>
   );
 };

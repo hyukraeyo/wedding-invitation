@@ -29,8 +29,8 @@ export function HomeClient() {
             <br />
             감각적인 디자인과 편리한 기능을 담았습니다.
           </p>
-          <Button onClick={handleStart} className={styles.ctaButton}>
-            무료로 만들기 <ArrowRight className="w-5 h-5 ml-2" />
+          <Button onClick={handleStart} variant="hero" size="lg" radius="full">
+            무료로 만들기 <ArrowRight size={20} />
           </Button>
         </div>
 

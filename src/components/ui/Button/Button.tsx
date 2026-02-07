@@ -7,7 +7,7 @@ import { Banana } from 'lucide-react';
 import s from './Button.module.scss';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'outline' | 'blue' | 'unstyled';
+  variant?: 'primary' | 'secondary' | 'ghost' | 'outline' | 'blue' | 'hero' | 'unstyled';
   size?: 'xs' | 'sm' | 'md' | 'lg';
   isLoading?: boolean;
   loading?: boolean;

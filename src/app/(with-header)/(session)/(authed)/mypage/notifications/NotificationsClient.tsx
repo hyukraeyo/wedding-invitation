@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import { clsx } from 'clsx';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
-import { EmptyState } from '@/components/ui/EmptyState';
+import { EmptyState } from '@/components/common/EmptyState';
 
 interface ProfileData {
     full_name: string | null;

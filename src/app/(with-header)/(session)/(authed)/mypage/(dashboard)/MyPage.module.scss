@@ -29,17 +29,6 @@
     width: 100%;
 }
 
-.viewToggleButton {
-    color: v.$zinc-400 !important;
-    transition: all 0.2s ease;
-
-    &:hover {
-        color: v.$color-primary !important;
-        background-color: #FFFBEA !important; // v.$primary-50
-    }
-}
-
-
 .swiperView {
     width: calc(100% + 2.5rem); // parent padding (1.25rem) * 2
     margin: 0 -1.25rem;
@@ -366,12 +355,6 @@
 .modalHeader {
     text-align: center;
     margin-bottom: 24px;
-}
-
-.modalDescription {
-    text-align: center;
-    word-break: keep-all;
-    line-height: 1.6;
 }
 
 .rejectionEditorWrapper {

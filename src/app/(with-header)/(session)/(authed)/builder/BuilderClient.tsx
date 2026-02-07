@@ -235,8 +235,8 @@ export function BuilderClient() {
                 onOpenChange={setIsPreviewOpen}
                 fullScreen
             >
-                <Dialog.Content className={styles.fullPagePreview}>
-                    <Dialog.Header title="Mobile Preview" className={styles.previewHeader}>
+                <Dialog.Content surface="muted">
+                    <Dialog.Header title="Mobile Preview" divider padding="compact">
                         {/* Preview Close FAB in Header or Floating? User wants it to slide from right and be full page. */}
                     </Dialog.Header>
 

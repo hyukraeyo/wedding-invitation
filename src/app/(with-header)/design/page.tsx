@@ -9,7 +9,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/AlertDialog';
 import { Badge } from '@/components/ui/Badge';
-import { BottomCTA } from '@/components/ui/BottomCTA';
+import { BottomCTA } from '@/components/common/BottomCTA';
 import { BottomSheet } from '@/components/ui/BottomSheet';
 import { Button } from '@/components/ui/Button';
 import { Dialog } from '@/components/ui/Dialog';

@@ -81,6 +81,24 @@
   }
 }
 
+.hero {
+  background-color: v.$primary;
+  color: v.$text-primary;
+  box-shadow: 0 4px 12px rgba(v.$primary, 0.4);
+
+  &:disabled {
+    background-color: v.$grey-200;
+    color: v.$grey-400;
+    opacity: 1;
+    box-shadow: none;
+  }
+
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(v.$primary, 0.5);
+  }
+}
+
 // 2. Secondary Variant
 .secondary {
   background-color: v.$action-secondary;

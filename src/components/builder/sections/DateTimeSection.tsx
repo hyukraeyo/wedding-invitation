@@ -4,7 +4,7 @@ import { DatePicker } from '@/components/common/DatePicker';
 import { TimePicker } from '@/components/common/TimePicker';
 import { SectionAccordion } from '@/components/ui/Accordion';
 import { FormControl, FormField, FormLabel } from '@/components/ui/Form';
-import { SwitchRow } from '@/components/ui/SwitchRow';
+import { SwitchRow } from '@/components/common/SwitchRow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import type { SectionProps } from '@/types/builder';
 import styles from './DateTimeSection.module.scss';

@@ -5,7 +5,7 @@ import { FontPicker } from '@/components/common/FontPicker';
 import { SectionAccordion } from '@/components/ui/Accordion';
 import { FormControl, FormField, FormHeader, FormLabel } from '@/components/ui/Form';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
-import { SwitchRow } from '@/components/ui/SwitchRow';
+import { SwitchRow } from '@/components/common/SwitchRow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { getFontVar, type ThemeFont } from '@/lib/utils/font';
 import type { SectionProps } from '@/types/builder';

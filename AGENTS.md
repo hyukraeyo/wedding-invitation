@@ -28,6 +28,7 @@ npm run clean              # Clean .next, out, dist directories
 - **SCSS Modules mandatory**: All components use `.module.scss` files
 - **Tailwind CSS prohibited**: Maintains design consistency
 - **Radix UI First**: Use **Radix UI Primitives** for all UI components
+- **UI Layering**: Keep `src/components/ui` for primitive components only; place composed/business UI in `src/components/common`
 - **No direct UI style edits**: Do not modify UI component styles directly; keep consistency via shared tokens/variants or new components
 - **Design tokens**: Use `@use "@/styles/variables" as v;` and `@use "@/styles/mixins" as m;`. 모든 스타일 값(색상, 패딩, 폰트 사이즈, 마진 등)은 하드코딩 금지, 검색 필수.
 - **Primary color**: Banana yellow `#FBC02D`
@@ -153,8 +154,8 @@ export default ComponentName;
 ```
 src/
 ├── components/
-│   ├── ui/           # Reusable UI components (Radix-based)
-│   ├── common/       # Shared business components
+│   ├── ui/           # Primitive UI components (Radix-based)
+│   ├── common/       # Composed/shared business components
 │   ├── auth/         # Authentication components
 │   ├── builder/      # Invitation builder components
 │   ├── mypage/       # User dashboard components
