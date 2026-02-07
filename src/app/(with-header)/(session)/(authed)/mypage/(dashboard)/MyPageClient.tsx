@@ -261,8 +261,8 @@ export default function MyPageClient({
           description: '청첩장 데이터를 불러오지 못했어요.',
         });
       } finally {
-        // ?뜉 ?섏씠吏 ?대룞???쒖옉???쒓컙??以 ??濡쒕뵫 ?곹깭 ?댁젣 (?대룞???먮┫ 寃쎌슦 ?鍮?
-        // ?대룞 ???ㅼ떆 ???섏씠吏濡??뚯븘?붿쓣 ??踰꾪듉??怨꾩냽 ?뚭퀬 ?덈뒗 ?꾩긽 諛⑹?
+        // 편집 페이지 이동이 시작될 시간을 주고 버튼 로딩 상태 해제 (이동 중 깜빡임 방지)
+        // 이동 후 다시 이 페이지로 돌아왔을 때 버튼이 계속 눌려 있는 현상 방지
         setTimeout(() => setActionLoadingId(null), 1000);
       }
     },
@@ -323,7 +323,7 @@ export default function MyPageClient({
       const rejection = rejectedRequests.find((req) => req.invitation_id === inv.id);
       const { isRejected, isRevoked } = parseRejection(rejection);
 
-      // ?뱀씤 ?湲?以묒씤 寃쎌슦 ??젣 遺덇? (?좎껌 痍⑥냼 ?좊룄)
+      // 승인 대기 중인 경우 삭제 불가 (요청 취소 유도)
       if (inv.invitation_data?.isRequestingApproval && !isRejected && !isRevoked) {
         setConfirmConfig({
           isOpen: true,
@@ -331,11 +331,11 @@ export default function MyPageClient({
           title: 'Cannot delete now',
           description: (
             <>
-              ?뱀씤 ?좎껌 以묒씤 泥?꺽?μ? ??젣?????놁뼱??
+              승인 요청 중인 청첩장은 삭제할 수 없어요.
               <br />
               <br />
-              ?섎떒??<strong>[?좎껌痍⑥냼]</strong> 踰꾪듉???뚮윭 ?곹깭瑜?蹂寃쏀븳 ???ㅼ떆
-              ?쒕룄??二쇱꽭??
+              하단의 <strong>[요청 취소]</strong> 버튼을 눌러 상태를 변경한 후 다시
+              시도해 주세요.
             </>
           ),
           targetId: null,
@@ -343,7 +343,7 @@ export default function MyPageClient({
         return;
       }
 
-      // ?뱀씤 ?꾨즺??寃쎌슦 (媛뺣젰??寃쎄퀬? ?④퍡 ??젣 ?덉슜)
+      // 승인 완료된 경우 (강력한 경고와 함께 삭제 허용)
       if (inv.invitation_data?.isApproved && !isRejected && !isRevoked) {
         setConfirmConfig({
           isOpen: true,
@@ -351,13 +351,14 @@ export default function MyPageClient({
           title: '청첩장 삭제',
           description: (
             <>
-              ?뺣쭚濡???泥?꺽?μ쓣 ??젣?좉퉴??
+              정말로 이 청첩장을 삭제할까요?
               <br />
               <span className={styles.deleteWarning}>
-                二쇱쓽: ?뱀씤 ?꾨즺??泥?꺽?μ쓣 ??젣?섎㈃ 怨듭쑀??留곹겕濡????댁긽 ?묒냽?????놁뼱??
+                주의: 승인 완료된 청첩장을 삭제하면 공유 링크로 더 이상 접속할 수
+                없어요.
               </span>
               <br />
-              ??젣???곗씠?곕뒗 蹂듦뎄?????놁뼱??
+              삭제된 데이터는 복구할 수 없어요.
             </>
           ),
           targetId: inv.id,
@@ -387,7 +388,7 @@ export default function MyPageClient({
         return;
       }
 
-      // ?쇰컲 ?곹깭 (?묒꽦 以?
+      // 일반 상태 (작성 중)
       setConfirmConfig({
         isOpen: true,
         type: 'DELETE',
@@ -427,9 +428,9 @@ export default function MyPageClient({
           title: '승인 신청',
           description: (
             <>
-              <strong>{profile?.full_name}</strong>({profile?.phone}) ?섏쑝濡??좎껌?댁슂.
+              <strong>{profile?.full_name}</strong>({profile?.phone})으로 요청할게요.
               <br />
-              ?좎껌 ??愿由ъ옄 ?뺤씤 ?덉감媛 吏꾪뻾?⑸땲??
+              요청 후 관리자 확인 및 심사가 진행됩니다.
             </>
           ),
           targetId: inv.id,

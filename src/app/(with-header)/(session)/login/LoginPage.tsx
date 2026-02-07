@@ -21,7 +21,7 @@ const ProfileCompletionModal = dynamic(
 );
 
 /**
- * LoginPage: ?뚯뀥 濡쒓렇???꾩슜 ?섏씠吏
+ * LoginPage: 소셜 로그인 전용 페이지
  */
 interface LoginPageProps {
   initialProfileState?: ProfileState | null;
@@ -160,7 +160,7 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
           {/* Footer */}
           <div className={styles.footer}>
             <p>
-              怨꾩냽 吏꾪뻾?⑥쑝濡쒖뜥 洹?섎뒗 ?뱀궗??
+              계속 진행함으로써 귀하께서는
               <ViewTransitionLink href="/privacy" target="_blank" className={styles.link}>
                 개인정보 처리방침
               </ViewTransitionLink>
@@ -172,7 +172,7 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
           {/* Back to Home */}
           <div className={styles.backToHomeWrapper}>
             <ViewTransitionLink href="/" className={styles.backToHomeLink}>
-              ???덉쑝濡??뚯븘媛湲?
+              홈으로 돌아가기
             </ViewTransitionLink>
           </div>
         </div>

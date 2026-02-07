@@ -74,13 +74,20 @@ const SetupForm = () => {
 
   const isStepValid = useCallback(() => {
     if (currentStep === 0) {
-      return isValidKoreanNameValue(groomFullName) && isValidKoreanNameValue(brideFullName);
+      return (
+        isValidKoreanNameValue(groomFullName) &&
+        isValidKoreanNameValue(brideFullName) &&
+        !!groomPhone &&
+        !!bridePhone &&
+        !isInvalidPhone(groomPhone) &&
+        !isInvalidPhone(bridePhone)
+      );
     }
     if (currentStep === 1) {
       return !!date && !!time;
     }
     return false;
-  }, [currentStep, groomFullName, brideFullName, date, time]);
+  }, [currentStep, groomFullName, brideFullName, groomPhone, bridePhone, date, time]);
 
   const handleNext = () => {
     if (!isStepValid()) {
@@ -195,6 +202,7 @@ const SetupForm = () => {
                       placeholder="010-1234-5678"
                       value={groomPhone}
                       onChange={handleGroomPhoneChange}
+                      required
                     />
                   </FormControl>
                 </FormField>
@@ -249,6 +257,7 @@ const SetupForm = () => {
                       placeholder="010-9876-5432"
                       value={bridePhone}
                       onChange={handleBridePhoneChange}
+                      required
                     />
                   </FormControl>
                 </FormField>

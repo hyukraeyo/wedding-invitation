@@ -92,10 +92,21 @@ const HeaderActions = React.memo(
                 <IconButton
                   iconSize={20}
                   className={styles.profileButton}
+                  variant="primary"
                   aria-label="마이페이지"
                   name=""
                 >
-                  <Banana size={20} strokeWidth={2.5} />
+                  {user.image ? (
+                    <Image
+                      src={user.image}
+                      alt={user.name || 'Profile'}
+                      width={44}
+                      height={44}
+                      className={styles.profileImage}
+                    />
+                  ) : (
+                    <Banana size={20} strokeWidth={2.5} />
+                  )}
                 </IconButton>
               </ViewTransitionLink>
             </div>

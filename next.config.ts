@@ -26,6 +26,7 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'source.unsplash.com' },
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: 'k.kakaocdn.net' },
+      { protocol: 'https', hostname: 'phinf.pstatic.net' },
       { protocol: 'https', hostname: 'naver.com' },
       { protocol: 'https', hostname: 'dapi.kakao.com' },
       { protocol: 'https', hostname: '*.supabase.co' },

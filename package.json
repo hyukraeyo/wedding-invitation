@@ -26,6 +26,7 @@
     "start": "next start",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
+    "check:encoding": "node scripts/check-encoding-corruption.mjs",
     "format": "prettier --write .",
     "analyze": "cross-env ANALYZE=true next build --webpack",
     "type-check": "tsc --noEmit",

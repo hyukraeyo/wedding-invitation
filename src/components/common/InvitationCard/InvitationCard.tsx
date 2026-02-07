@@ -40,7 +40,6 @@ const InvitationCard = React.memo(
     onRevertToDraft,
     index,
     rejectionData = null,
-    layout = 'swiper',
     onRevokeApproval,
     isLoading = false,
   }: InvitationCardProps) => {
@@ -50,7 +49,6 @@ const InvitationCard = React.memo(
     });
 
     const [showRejectionModal, setShowRejectionModal] = useState(false);
-    const isGridMode = layout === 'grid';
 
     const handlePreview = () => {
       window.open(`/v/${slug}`, '_blank');
@@ -133,8 +131,7 @@ const InvitationCard = React.memo(
               <h3 className={styles.overlayTitle}>{title}</h3>
             </div>
 
-            {!isGridMode && (
-              <div className={styles.footer}>
+            <div className={styles.footer}>
                 {!isRequesting && !isApproved ? (
                   <>
                     <Button
@@ -194,8 +191,7 @@ const InvitationCard = React.memo(
                     </Button>
                   </>
                 )}
-              </div>
-            )}
+            </div>
           </div>
         </div>
 
