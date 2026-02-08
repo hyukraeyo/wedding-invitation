@@ -19,8 +19,10 @@ import type { SectionProps, SamplePhraseItem } from '@/types/builder';
 import { Dialog } from '@/components/ui/Dialog';
 
 export default function KakaoShareSection(props: SectionProps) {
-  const kakao = useInvitationStore(useShallow((state) => state.kakaoShare));
+  const kakao = useInvitationStore((state) => state.kakaoShare);
+  const validationErrors = useInvitationStore((state) => state.validationErrors);
   const setKakao = useInvitationStore((state) => state.setKakao);
+  const isInvalid = validationErrors.includes(props.value);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
 
@@ -36,9 +38,10 @@ export default function KakaoShareSection(props: SectionProps) {
     <>
       <SectionAccordion
         title="카카오 초대장 썸네일"
-        value="kakao-share"
+        value={props.value}
         isOpen={props.isOpen}
         onToggle={props.onToggle}
+        isInvalid={isInvalid}
         rightElement={
           <Button
             type="button"

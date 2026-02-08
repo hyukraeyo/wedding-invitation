@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { SectionAccordion } from '@/components/ui/Accordion';
+import { RequiredSectionTitle } from '@/components/common/RequiredSectionTitle';
 import { FormControl, FormField, FormHeader, FormLabel, FormMessage } from '@/components/ui/Form';
 import { TextField } from '@/components/ui/TextField';
 import { Toggle } from '@/components/ui/Toggle';
@@ -12,15 +13,18 @@ import { sanitizeNameInput } from '@/hooks/useFormInput';
 import type { SectionProps } from '@/types/builder';
 
 const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(props) {
-  const groom = useInvitationStore(useShallow((state) => state.groom));
+  const groom = useInvitationStore((state) => state.groom);
+  const bride = useInvitationStore((state) => state.bride);
+  const validationErrors = useInvitationStore((state) => state.validationErrors);
   const setGroom = useInvitationStore((state) => state.setGroom);
-  const bride = useInvitationStore(useShallow((state) => state.bride));
   const setBride = useInvitationStore((state) => state.setBride);
   const setGroomParents = useInvitationStore((state) => state.setGroomParents);
   const setBrideParents = useInvitationStore((state) => state.setBrideParents);
 
   const groomFullName = `${groom.lastName}${groom.firstName}`;
   const brideFullName = `${bride.lastName}${bride.firstName}`;
+  const isComplete = Boolean(groomFullName.trim() && brideFullName.trim());
+  const isInvalid = validationErrors.includes(props.value);
 
   // 이름 입력 핸들러
   const handleGroomNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,10 +59,11 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
 
   return (
     <SectionAccordion
-      title="기본 정보"
-      value="basic-info"
+      title={<RequiredSectionTitle title="기본 정보" isComplete={isComplete} />}
+      value={props.value}
       isOpen={props.isOpen}
       onToggle={props.onToggle}
+      isInvalid={isInvalid}
     >
       <FormField name="groom-name">
         <FormHeader>

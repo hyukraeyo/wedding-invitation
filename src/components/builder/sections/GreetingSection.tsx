@@ -1,6 +1,26 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Sparkles } from 'lucide-react';
 import dynamic from 'next/dynamic';
+import { useShallow } from 'zustand/react/shallow';
+
+import { isRequiredField } from '@/constants/requiredFields';
+import { GREETING_SAMPLES } from '@/constants/samples';
+import { htmlToPlainText } from '@/lib/richText';
+import { useInvitationStore } from '@/store/useInvitationStore';
+import type { SectionProps, SamplePhraseItem } from '@/types/builder';
+
+import { ImageUploader } from '@/components/common/ImageUploader';
+import { RequiredSectionTitle } from '@/components/common/RequiredSectionTitle';
+import { SampleList } from '@/components/common/SampleList';
+import { SectionAccordion } from '@/components/ui/Accordion';
+import { Button } from '@/components/ui/Button';
+import { Dialog } from '@/components/ui/Dialog';
+import { FormControl, FormField, FormHeader, FormLabel, FormMessage } from '@/components/ui/Form';
+import { InfoMessage } from '@/components/ui/InfoMessage';
+import { SegmentedControl } from '@/components/ui/SegmentedControl';
+import { TextField } from '@/components/ui/TextField';
+import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
+import styles from './GreetingSection.module.scss';
 
 const RichTextEditor = dynamic(
   () => import('@/components/common/RichTextEditor').then((mod) => mod.RichTextEditor),
@@ -20,21 +40,6 @@ const RichTextEditor = dynamic(
   }
 );
 
-import { InfoMessage } from '@/components/ui/InfoMessage';
-import { SampleList } from '@/components/common/SampleList';
-import { useInvitationStore } from '@/store/useInvitationStore';
-import { TextField } from '@/components/ui/TextField';
-import { SegmentedControl } from '@/components/ui/SegmentedControl';
-import { Button } from '@/components/ui/Button';
-import { ImageUploader } from '@/components/common/ImageUploader';
-import { FormControl, FormField, FormLabel } from '@/components/ui/Form';
-import styles from './GreetingSection.module.scss';
-import { useShallow } from 'zustand/react/shallow';
-import type { SectionProps, SamplePhraseItem } from '@/types/builder';
-import { GREETING_SAMPLES } from '@/constants/samples';
-import { SectionAccordion } from '@/components/ui/Accordion';
-import { Dialog } from '@/components/ui/Dialog';
-
 export default function GreetingSection(props: SectionProps) {
   const {
     message,
@@ -51,10 +56,10 @@ export default function GreetingSection(props: SectionProps) {
     setShowNamesAtBottom,
     enableFreeformNames,
     setEnableFreeformNames,
-    groomNameCustom,
     setGroomNameCustom,
     brideNameCustom,
     setBrideNameCustom,
+    validationErrors,
   } = useInvitationStore(
     useShallow((state) => ({
       message: state.message,
@@ -75,10 +80,13 @@ export default function GreetingSection(props: SectionProps) {
       setGroomNameCustom: state.setGroomNameCustom,
       brideNameCustom: state.brideNameCustom,
       setBrideNameCustom: state.setBrideNameCustom,
+      validationErrors: state.validationErrors,
     }))
   );
 
   const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
+  const isComplete = Boolean(greetingTitle.trim() && htmlToPlainText(message));
+  const isInvalid = validationErrors.includes(props.value);
 
   const handleSelectSample = (sample: SamplePhraseItem) => {
     setGreetingSubtitle(sample.subtitle || '');
@@ -89,30 +97,31 @@ export default function GreetingSection(props: SectionProps) {
 
   const nameOptionValue = enableFreeformNames ? 'custom' : showNamesAtBottom ? 'bottom' : 'none';
 
-  const handleNameOptionChange = (val: string) => {
-    if (val === 'custom') {
+  const handleNameOptionChange = (value: string) => {
+    if (value === 'custom') {
       setEnableFreeformNames(true);
       setShowNamesAtBottom(false);
-    } else if (val === 'bottom') {
+      return;
+    }
+
+    if (value === 'bottom') {
       setEnableFreeformNames(false);
       setShowNamesAtBottom(true);
-    } else {
-      setEnableFreeformNames(false);
-      setShowNamesAtBottom(false);
+      return;
     }
-  };
 
-  const renderSampleList = () => (
-    <SampleList items={GREETING_SAMPLES} onSelect={handleSelectSample} />
-  );
+    setEnableFreeformNames(false);
+    setShowNamesAtBottom(false);
+  };
 
   return (
     <>
       <SectionAccordion
-        title="인사말"
-        value="greeting"
+        title={<RequiredSectionTitle title="인사말" isComplete={isComplete} />}
+        value={props.value}
         isOpen={props.isOpen}
         onToggle={props.onToggle}
+        isInvalid={isInvalid}
         rightElement={
           <Button
             type="button"
@@ -148,11 +157,15 @@ export default function GreetingSection(props: SectionProps) {
 
           <div className={styles.optionItem}>
             <FormField name="greeting-title">
-              <FormLabel htmlFor="greeting-title">제목</FormLabel>
+              <FormHeader>
+                <FormLabel htmlFor="greeting-title">제목</FormLabel>
+                <FormMessage match="valueMissing">필수 항목이에요.</FormMessage>
+              </FormHeader>
               <FormControl asChild>
                 <TextField
                   id="greeting-title"
                   type="text"
+                  required={isRequiredField('greetingTitle')}
                   value={greetingTitle}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     setGreetingTitle(e.target.value)
@@ -164,12 +177,28 @@ export default function GreetingSection(props: SectionProps) {
           </div>
 
           <div className={styles.optionItem}>
-            <div className={styles.rowTitle}>내용</div>
-            <RichTextEditor
-              content={message}
-              onChange={setMessage}
-              placeholder="축하해주시는 분들께 전할 소중한 메시지를 입력하세요."
-            />
+            <FormField name="greeting-message">
+              <FormHeader>
+                <FormLabel>내용</FormLabel>
+                <FormMessage match="valueMissing">필수 항목이에요.</FormMessage>
+              </FormHeader>
+              <RichTextEditor
+                content={message}
+                onChange={setMessage}
+                placeholder="축하해주시는 분들께 전할 메시지를 입력해 주세요"
+              />
+              <FormControl asChild>
+                <VisuallyHidden asChild>
+                  <input
+                    id="greeting-message-required"
+                    aria-label="인사말 내용"
+                    required={isRequiredField('greetingMessage')}
+                    readOnly
+                    value={htmlToPlainText(message)}
+                  />
+                </VisuallyHidden>
+              </FormControl>
+            </FormField>
           </div>
 
           <div className={styles.optionItem}>
@@ -180,7 +209,7 @@ export default function GreetingSection(props: SectionProps) {
                 onChange={setGreetingImage}
                 placeholder="인사말 사진 추가"
                 ratio={greetingRatio}
-                onRatioChange={(val) => setGreetingRatio(val as 'fixed' | 'auto')}
+                onRatioChange={(value) => setGreetingRatio(value as 'fixed' | 'auto')}
               />
             </div>
           </div>
@@ -191,14 +220,14 @@ export default function GreetingSection(props: SectionProps) {
               <SegmentedControl
                 alignment="fluid"
                 value={nameOptionValue}
-                onChange={(val: string) => handleNameOptionChange(val)}
+                onChange={handleNameOptionChange}
               >
                 <SegmentedControl.Item value="bottom">하단 표기</SegmentedControl.Item>
                 <SegmentedControl.Item value="custom">직접 입력</SegmentedControl.Item>
-                <SegmentedControl.Item value="none">표시 안 함</SegmentedControl.Item>
+                <SegmentedControl.Item value="none">표시 안함</SegmentedControl.Item>
               </SegmentedControl>
 
-              {enableFreeformNames && (
+              {enableFreeformNames ? (
                 <div className={styles.nameForm}>
                   <FormField name="groom-name-custom">
                     <FormLabel htmlFor="groom-name-custom">신랑 측 표기</FormLabel>
@@ -209,7 +238,7 @@ export default function GreetingSection(props: SectionProps) {
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                           setGroomNameCustom(e.target.value)
                         }
-                        placeholder="예: 아버지 홍길동 · 어머니 김철수 의 장남 길동"
+                        placeholder="예: 신랑 아버지 홍길동 · 어머니 김영희 · 아들 홍민수"
                       />
                     </FormControl>
                   </FormField>
@@ -222,15 +251,15 @@ export default function GreetingSection(props: SectionProps) {
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                           setBrideNameCustom(e.target.value)
                         }
-                        placeholder="예: 아버지 임걱정 · 어머니 박순이 의 장녀 순희"
+                        placeholder="예: 신부 아버지 박정호 · 어머니 최은영 · 딸 박서윤"
                       />
                     </FormControl>
                   </FormField>
                   <InfoMessage>
-                    기본 이름 표기 대신 사용자가 직접 작성한 문구로 이름을 표시해요.
+                    기본 이름 표기 대신 직접 작성한 문구로 이름을 표시할 수 있어요.
                   </InfoMessage>
                 </div>
-              )}
+              ) : null}
             </div>
           </div>
         </div>
@@ -238,7 +267,9 @@ export default function GreetingSection(props: SectionProps) {
 
       <Dialog open={isSampleModalOpen} onOpenChange={setIsSampleModalOpen} mobileBottomSheet>
         <Dialog.Header title="추천 문구" />
-        <Dialog.Body>{renderSampleList()}</Dialog.Body>
+        <Dialog.Body>
+          <SampleList items={GREETING_SAMPLES} onSelect={handleSelectSample} />
+        </Dialog.Body>
       </Dialog>
     </>
   );

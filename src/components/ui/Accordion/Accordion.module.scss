@@ -131,10 +131,6 @@
   padding: 16px 24px;
 }
 
-.ErrorDot {
-  display: none;
-}
-
 // Show error pulse when:
 // 1. The section is not open (or even if open, as a redundant cue)
 // 2. AND there's an invalid element inside
@@ -148,6 +144,17 @@
       .Chevron {
         color: v.$color-error;
       }
+    }
+  }
+}
+
+.Invalid {
+  .SectionTrigger {
+    animation: pulseError 2s infinite ease-in-out !important;
+    color: v.$color-error !important;
+
+    .Chevron {
+      color: v.$color-error !important;
     }
   }
 }

@@ -1,9 +1,7 @@
-export const REQUIRED_FIELD_MAP = {
-    groomName: true,
-    brideName: true,
-    mainImage: true,
-} as const;
+import { REQUIRED_FIELD_KEYS, type RequiredFieldKey } from '@/lib/builderValidation';
 
-export type RequiredFieldKey = keyof typeof REQUIRED_FIELD_MAP;
+const REQUIRED_FIELD_SET = new Set<RequiredFieldKey>(REQUIRED_FIELD_KEYS);
 
-export const isRequiredField = (key: RequiredFieldKey): boolean => REQUIRED_FIELD_MAP[key];
+export const isRequiredField = (key: RequiredFieldKey): boolean => REQUIRED_FIELD_SET.has(key);
+
+export type { RequiredFieldKey };

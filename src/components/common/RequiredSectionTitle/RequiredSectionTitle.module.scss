@@ -1,0 +1,7 @@
+@use '@/styles/variables' as v;
+
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: v.$builder-gap-sm;
+}

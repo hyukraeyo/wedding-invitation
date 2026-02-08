@@ -44,13 +44,16 @@ const PRESET_FONT_OPTIONS = [
 const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
   const theme = useInvitationStore(useShallow((state) => state.theme));
   const setTheme = useInvitationStore((state) => state.setTheme);
+  const validationErrors = useInvitationStore((state) => state.validationErrors);
+  const isInvalid = validationErrors.includes(props.value);
 
   return (
     <SectionAccordion
       title="테마 및 색상"
-      value="theme"
+      value={props.value}
       isOpen={props.isOpen}
       onToggle={props.onToggle}
+      isInvalid={isInvalid}
     >
       <div className={styles.container}>
         <FormField name="accentColor">

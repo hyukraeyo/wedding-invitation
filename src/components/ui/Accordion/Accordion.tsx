@@ -56,6 +56,7 @@ export interface SectionAccordionProps {
   children?: React.ReactNode;
   className?: string;
   rightElement?: React.ReactNode;
+  isInvalid?: boolean;
 }
 
 const SectionAccordion = ({
@@ -66,6 +67,7 @@ const SectionAccordion = ({
   children,
   className,
   rightElement,
+  isInvalid,
 }: SectionAccordionProps) => {
   return (
     <Accordion
@@ -75,7 +77,7 @@ const SectionAccordion = ({
       onValueChange={(v) => onToggle?.(v === value)}
       className={className}
     >
-      <AccordionItem value={value} className={s.SectionItem}>
+      <AccordionItem value={value} className={clsx(s.SectionItem, isInvalid && s.Invalid)}>
         <div className={s.SectionHeaderContainer}>
           <AccordionPrimitive.Header className={clsx(s.Header, s.SectionTriggerHeader)}>
             <AccordionPrimitive.Trigger className={clsx(s.Trigger, s.SectionTrigger)}>

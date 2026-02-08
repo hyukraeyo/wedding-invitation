@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { Sparkles } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { SampleList } from '@/components/common/SampleList';
+import { RequiredSectionTitle } from '@/components/common/RequiredSectionTitle';
 import { Button } from '@/components/ui/Button';
 import { Dialog } from '@/components/ui/Dialog';
 
@@ -22,8 +23,12 @@ const MainScreenSectionContent = dynamic(() => import('./MainScreenSectionConten
 });
 
 export default function MainScreenSection(props: SectionProps) {
+  const imageUrl = useInvitationStore((state) => state.imageUrl);
+  const validationErrors = useInvitationStore((state) => state.validationErrors);
   const setMainScreen = useInvitationStore((state) => state.setMainScreen);
   const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
+  const isComplete = Boolean(imageUrl);
+  const isInvalid = validationErrors.includes(props.value);
 
   const handleSelectSample = (sample: SamplePhraseItem) => {
     setMainScreen({
@@ -40,10 +45,11 @@ export default function MainScreenSection(props: SectionProps) {
   return (
     <>
       <SectionAccordion
-        title="메인 화면"
-        value="main"
+        title={<RequiredSectionTitle title="메인 화면" isComplete={isComplete} />}
+        value={props.value}
         isOpen={props.isOpen}
         onToggle={props.onToggle}
+        isInvalid={isInvalid}
         rightElement={
           <Button
             type="button"

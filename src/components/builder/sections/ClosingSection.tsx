@@ -22,9 +22,14 @@ import { CLOSING_SAMPLES } from '@/constants/samples';
 import { SectionAccordion } from '@/components/ui/Accordion';
 
 export default function ClosingSection(props: SectionProps) {
-  const closing = useInvitationStore(useShallow((state) => state.closing));
+  const { closing, validationErrors } = useInvitationStore(
+    useShallow((state) => ({
+      closing: state.closing,
+      validationErrors: state.validationErrors,
+    }))
+  );
   const setClosing = useInvitationStore((state) => state.setClosing);
-
+  const isInvalid = validationErrors.includes(props.value);
   const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
 
   const updateClosing = (data: Partial<typeof closing>) => setClosing(data);
@@ -46,9 +51,10 @@ export default function ClosingSection(props: SectionProps) {
     <>
       <SectionAccordion
         title="마무리"
-        value="closing"
+        value={props.value}
         isOpen={props.isOpen}
         onToggle={props.onToggle}
+        isInvalid={isInvalid}
         rightElement={
           <Button
             type="button"

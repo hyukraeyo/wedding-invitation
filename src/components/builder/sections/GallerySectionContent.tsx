@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+﻿import React, { useCallback, useMemo, useState } from 'react';
 import {
   DndContext,
   DragEndEvent,
@@ -24,11 +24,13 @@ import { ImageUploader } from '@/components/common/ImageUploader';
 import { Button } from '@/components/ui/Button';
 import { Dialog } from '@/components/ui/Dialog';
 import { Field } from '@/components/ui/Field';
-import { FormControl, FormField, FormHeader, FormLabel } from '@/components/ui/Form';
+import { FormControl, FormField, FormHeader, FormLabel, FormMessage } from '@/components/ui/Form';
 import { ImagePreview } from '@/components/ui/ImagePreview';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { SwitchRow } from '@/components/common/SwitchRow';
 import { TextField } from '@/components/ui/TextField';
+import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
+import { isRequiredField } from '@/constants/requiredFields';
 import { isBlobUrl } from '@/lib/image';
 import { cn } from '@/lib/utils';
 import { useInvitationStore } from '@/store/useInvitationStore';
@@ -196,6 +198,7 @@ export default React.memo(function GallerySectionContent() {
       <FormField name="gallery">
         <FormHeader>
           <FormLabel>사진 관리</FormLabel>
+          <FormMessage match="valueMissing">필수 항목이에요.</FormMessage>
           <div className={styles.counter}>
             <span className={styles.countText}>
               <strong style={{ color: accentColor }}>{gallery.length}</strong>
@@ -277,6 +280,17 @@ export default React.memo(function GallerySectionContent() {
               사진을 길게 눌러 순서를 변경할 수 있어요. (첫 번째 사진이 대표 사진이에요)
             </Field.HelperText>
           </Field.Footer>
+          <FormControl asChild>
+            <VisuallyHidden asChild>
+              <input
+                id="gallery-images-required"
+                aria-label="갤러리 이미지"
+                required={isRequiredField('galleryImages')}
+                readOnly
+                value={gallery.length > 0 ? 'has-images' : ''}
+              />
+            </VisuallyHidden>
+          </FormControl>
         </div>
       </FormField>
 

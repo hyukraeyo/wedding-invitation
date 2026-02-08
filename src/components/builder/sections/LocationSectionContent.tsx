@@ -6,10 +6,12 @@ import { useShallow } from 'zustand/react/shallow';
 import { AddressPicker } from '@/components/common/AddressPicker';
 import { KakaoIcon, NaverIcon } from '@/components/common/Icons';
 import { BottomCTA } from '@/components/common/BottomCTA';
-import { FormControl, FormField, FormLabel } from '@/components/ui/Form';
+import { FormControl, FormField, FormHeader, FormLabel, FormMessage } from '@/components/ui/Form';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { SwitchRow } from '@/components/common/SwitchRow';
 import { TextField } from '@/components/ui/TextField';
+import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
+import { isRequiredField } from '@/constants/requiredFields';
 import { formatPhoneNumber } from '@/lib/utils';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import styles from './LocationSection.module.scss';
@@ -129,7 +131,7 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
             <FormControl asChild>
               <TextField
                 id="location-title"
-                placeholder="예: 바나나홀"
+                placeholder="예: 오시는 길"
                 value={locationTitle}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationTitle(e.target.value)}
               />
@@ -138,22 +140,43 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
         </div>
 
         <div className={styles.optionItem}>
-          <AddressPicker
-            label="주소"
-            placeholder="주소를 검색해 주세요"
-            value={address}
-            onChange={setAddress}
-          />
+          <FormField name="location-address">
+            <FormHeader>
+              <FormLabel htmlFor="location-address">주소</FormLabel>
+              <FormMessage match="valueMissing">필수 항목이에요.</FormMessage>
+            </FormHeader>
+            <AddressPicker
+              id="location-address"
+              placeholder="주소를 검색해 주세요"
+              value={address}
+              onChange={setAddress}
+            />
+            <FormControl asChild>
+              <VisuallyHidden asChild>
+                <input
+                  id="location-address-required"
+                  aria-label="예식 주소"
+                  required={isRequiredField('locationAddress')}
+                  readOnly
+                  value={address || ''}
+                />
+              </VisuallyHidden>
+            </FormControl>
+          </FormField>
         </div>
 
         <div className={styles.optionItem}>
           <FormField name="location-venue">
-            <FormLabel htmlFor="location-venue">예식 장소명</FormLabel>
+            <FormHeader>
+              <FormLabel htmlFor="location-venue">예식 장소명</FormLabel>
+              <FormMessage match="valueMissing">필수 항목이에요.</FormMessage>
+            </FormHeader>
             <FormControl asChild>
               <TextField
                 id="location-venue"
                 type="text"
                 placeholder="예: 바나나웨딩홀"
+                required={isRequiredField('locationVenue')}
                 value={location}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocation(e.target.value)}
               />
@@ -163,7 +186,7 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
 
         <div className={styles.optionItem}>
           <FormField name="location-floor">
-            <FormLabel htmlFor="location-floor">층/호수</FormLabel>
+            <FormLabel htmlFor="location-floor">층/홀 정보</FormLabel>
             <FormControl asChild>
               <TextField
                 id="location-floor"
