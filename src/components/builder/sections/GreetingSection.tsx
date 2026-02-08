@@ -6,7 +6,9 @@ import { useShallow } from 'zustand/react/shallow';
 import { isRequiredField } from '@/constants/requiredFields';
 import { GREETING_SAMPLES } from '@/constants/samples';
 import { htmlToPlainText } from '@/lib/richText';
+import { isBlank } from '@/lib/utils';
 import { useInvitationStore } from '@/store/useInvitationStore';
+import { useBuilderSection, useBuilderField } from '@/hooks/useBuilder';
 import type { SectionProps, SamplePhraseItem } from '@/types/builder';
 
 import { ImageUploader } from '@/components/common/ImageUploader';
@@ -60,7 +62,6 @@ const GreetingSection = React.memo<SectionProps>(function GreetingSection(props)
     setGroomNameCustom,
     brideNameCustom,
     setBrideNameCustom,
-    validationErrors,
   } = useInvitationStore(
     useShallow((state) => ({
       message: state.message,
@@ -81,13 +82,33 @@ const GreetingSection = React.memo<SectionProps>(function GreetingSection(props)
       setGroomNameCustom: state.setGroomNameCustom,
       brideNameCustom: state.brideNameCustom,
       setBrideNameCustom: state.setBrideNameCustom,
-      validationErrors: state.validationErrors,
     }))
   );
 
+  const { isInvalid: isSectionInvalid } = useBuilderSection(props.value);
+
+  const {
+    value: titleValue,
+    onChange: handleTitleChange,
+    isInvalid: isTitleInvalid,
+  } = useBuilderField({
+    value: greetingTitle,
+    onChange: setGreetingTitle,
+    fieldName: 'greeting-title',
+  });
+
+  const {
+    value: messageValue,
+    onValueChange: handleMessageChange,
+    isInvalid: isMessageInvalid,
+  } = useBuilderField({
+    value: message,
+    onChange: setMessage,
+    fieldName: 'greeting-message',
+  });
+
   const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
   const isComplete = Boolean(greetingTitle.trim() && htmlToPlainText(message));
-  const isInvalid = validationErrors.includes(props.value);
 
   const handleSelectSample = (sample: SamplePhraseItem) => {
     setGreetingSubtitle(sample.subtitle || '');
@@ -122,7 +143,7 @@ const GreetingSection = React.memo<SectionProps>(function GreetingSection(props)
         value={props.value}
         isOpen={props.isOpen}
         onToggle={props.onToggle}
-        isInvalid={isInvalid}
+        isInvalid={isSectionInvalid}
         rightElement={
           <Button
             type="button"
@@ -160,18 +181,19 @@ const GreetingSection = React.memo<SectionProps>(function GreetingSection(props)
             <FormField name="greeting-title">
               <FormHeader>
                 <FormLabel htmlFor="greeting-title">제목</FormLabel>
-                <FormMessage match="valueMissing">필수 항목이에요.</FormMessage>
+                <FormMessage forceMatch={isTitleInvalid && isBlank(titleValue)}>
+                  필수 항목이에요.
+                </FormMessage>
               </FormHeader>
               <FormControl asChild>
                 <TextField
                   id="greeting-title"
                   type="text"
                   required={isRequiredField('greetingTitle')}
-                  value={greetingTitle}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setGreetingTitle(e.target.value)
-                  }
+                  value={titleValue}
+                  onChange={handleTitleChange}
                   placeholder="예: 소중한 분들을 초대해요"
+                  invalid={isTitleInvalid}
                 />
               </FormControl>
             </FormField>
@@ -181,11 +203,15 @@ const GreetingSection = React.memo<SectionProps>(function GreetingSection(props)
             <FormField name="greeting-message">
               <FormHeader>
                 <FormLabel>내용</FormLabel>
-                <FormMessage match="valueMissing">필수 항목이에요.</FormMessage>
+                <FormMessage
+                  forceMatch={isMessageInvalid && isBlank(htmlToPlainText(messageValue))}
+                >
+                  필수 항목이에요.
+                </FormMessage>
               </FormHeader>
               <RichTextEditor
-                content={message}
-                onChange={setMessage}
+                content={messageValue}
+                onChange={handleMessageChange}
                 placeholder="축하해주시는 분들께 전할 메시지를 입력해 주세요"
               />
               <FormControl asChild>
@@ -195,7 +221,7 @@ const GreetingSection = React.memo<SectionProps>(function GreetingSection(props)
                     aria-label="인사말 내용"
                     required={isRequiredField('greetingMessage')}
                     readOnly
-                    value={htmlToPlainText(message)}
+                    value={htmlToPlainText(messageValue)}
                   />
                 </VisuallyHidden>
               </FormControl>

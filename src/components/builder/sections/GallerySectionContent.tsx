@@ -33,7 +33,7 @@ import { Text } from '@/components/ui/Text';
 import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
 import { isRequiredField } from '@/constants/requiredFields';
 import { isBlobUrl } from '@/lib/image';
-import { cn } from '@/lib/utils';
+import { cn, isBlank } from '@/lib/utils';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import styles from './GallerySection.module.scss';
 
@@ -93,6 +93,8 @@ export default React.memo(function GallerySectionContent() {
     galleryAutoplay,
     setGalleryAutoplay,
     accentColor,
+    validationErrors,
+    removeValidationError,
   } = useInvitationStore(
     useShallow((state) => ({
       gallery: state.gallery,
@@ -110,6 +112,8 @@ export default React.memo(function GallerySectionContent() {
       galleryAutoplay: state.galleryAutoplay,
       setGalleryAutoplay: state.setGalleryAutoplay,
       accentColor: state.theme.accentColor,
+      validationErrors: state.validationErrors,
+      removeValidationError: state.removeValidationError,
     }))
   );
 
@@ -127,6 +131,7 @@ export default React.memo(function GallerySectionContent() {
       url,
     }));
     setGallery([...gallery, ...newItems]);
+    removeValidationError('gallery-images-required');
   };
 
   const handleRemove = useCallback(
@@ -201,7 +206,13 @@ export default React.memo(function GallerySectionContent() {
       <FormField name="gallery">
         <FormHeader>
           <FormLabel>사진 관리</FormLabel>
-          <FormMessage match="valueMissing">필수 항목이에요.</FormMessage>
+          <FormMessage
+            forceMatch={
+              validationErrors.includes('gallery-images-required') && gallery.length === 0
+            }
+          >
+            필수 항목이에요.
+          </FormMessage>
           <div className={styles.counter}>
             <span className={styles.countText}>
               <strong style={{ color: accentColor }}>{gallery.length}</strong>
@@ -230,6 +241,7 @@ export default React.memo(function GallerySectionContent() {
                 ))}
                 {gallery.length < 10 ? (
                   <ImageUploader
+                    id="gallery-images-required"
                     multiple
                     gallery
                     placeholder="추가"
@@ -237,6 +249,7 @@ export default React.memo(function GallerySectionContent() {
                     maxCount={10}
                     onUploadComplete={handleUploadComplete}
                     uploadFolder="gallery"
+                    invalid={validationErrors.includes('gallery-images-required')}
                   />
                 ) : null}
               </div>

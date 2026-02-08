@@ -58,6 +58,17 @@ export function calculateDday(targetDate: Date): number {
   return diffDays;
 }
 
+export function isBlank(value: string | null | undefined): boolean {
+  return !value || !value.trim();
+}
+
+export function isValidName(name: string | null | undefined): boolean {
+  if (isBlank(name)) return false;
+  // 한글(완성형), 영어(대소문자)만 허용하는 정규식. 자음/모음만 있는 경우(ㄱㄴㄷ)는 제외.
+  const nameRegex = /^[가-힣a-zA-Z\s]+$/;
+  return nameRegex.test(name!.trim());
+}
+
 // Text Utilities
 export function truncateText(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;

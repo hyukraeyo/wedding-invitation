@@ -120,10 +120,11 @@
   }
 
   &.invalid {
-    border-color: v.$color-error;
+    border-color: v.$red-500;
+    animation: borderPulse 2s infinite ease-in-out;
 
     &:focus-within {
-      border-color: v.$color-error;
+      border-color: v.$red-500;
     }
   }
 
@@ -276,4 +277,15 @@
   flex-direction: column;
   gap: 6px;
   width: 100%;
+}
+@keyframes borderPulse {
+  0% {
+    border-color: v.$red-500;
+  }
+  50% {
+    border-color: rgba(v.$red-500, 0.2);
+  }
+  100% {
+    border-color: v.$red-500;
+  }
 }

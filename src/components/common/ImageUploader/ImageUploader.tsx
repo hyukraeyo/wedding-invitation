@@ -29,6 +29,7 @@ export interface ImageUploaderProps {
   allowDelete?: boolean;
   gallery?: boolean;
   id?: string;
+  invalid?: boolean;
 }
 
 export const ImageUploader = React.forwardRef<HTMLInputElement, ImageUploaderProps>(
@@ -51,6 +52,7 @@ export const ImageUploader = React.forwardRef<HTMLInputElement, ImageUploaderPro
       uploadFolder = 'uploads',
       allowDelete = true,
       gallery = false,
+      invalid: invalidProp,
       ...props
     },
     ref
@@ -59,6 +61,7 @@ export const ImageUploader = React.forwardRef<HTMLInputElement, ImageUploaderPro
     const inputRef = (ref as React.RefObject<HTMLInputElement>) || internalRef;
     const accentColor = useInvitationStore((state) => state.theme.accentColor);
     const setIsGlobalUploading = useInvitationStore((state) => state.setIsUploading);
+    const validationErrors = useInvitationStore((state) => state.validationErrors);
     const { toast } = useToast();
 
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -174,7 +177,8 @@ export const ImageUploader = React.forwardRef<HTMLInputElement, ImageUploaderPro
             styles.uploadBox,
             gallery && styles.compact,
             !displayUrl && styles.empty,
-            displayUrl && styles.filled
+            displayUrl && styles.filled,
+            (invalidProp || (props.id && validationErrors.includes(props.id))) && styles.invalid
           )}
           onClick={() => inputRef.current?.click()}
           style={!gallery ? { aspectRatio: aspectRatio.replace('/', ' / ') } : undefined}

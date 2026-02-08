@@ -4,7 +4,7 @@ import { ImageUploader } from '@/components/common/ImageUploader';
 import { StylePicker, type StyleOption } from '@/components/common/StylePicker';
 import { STYLE_PRESETS } from '@/constants/samples';
 import { isRequiredField } from '@/constants/requiredFields';
-import { FormControl, FormField, FormLabel, FormMessage } from '@/components/ui/Form';
+import { FormControl, FormField, FormHeader, FormLabel, FormMessage } from '@/components/ui/Form';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { SwitchRow } from '@/components/common/SwitchRow';
 import { TextField } from '@/components/ui/TextField';
@@ -24,6 +24,8 @@ export default function MainScreenSectionContent() {
     setImageUrl,
     imageRatio,
     setImageRatio,
+    validationErrors,
+    removeValidationError,
   } = useInvitationStore(
     useShallow((state) => ({
       mainScreen: state.mainScreen,
@@ -36,6 +38,8 @@ export default function MainScreenSectionContent() {
       setImageUrl: state.setImageUrl,
       imageRatio: state.imageRatio,
       setImageRatio: state.setImageRatio,
+      validationErrors: state.validationErrors,
+      removeValidationError: state.removeValidationError,
     }))
   );
 
@@ -55,14 +59,24 @@ export default function MainScreenSectionContent() {
   return (
     <div className={styles.container}>
       <FormField name="main-image">
-        <FormLabel htmlFor="main-image">메인 사진</FormLabel>
+        <FormHeader>
+          <FormLabel htmlFor="main-image">메인 사진</FormLabel>
+          <FormMessage forceMatch={validationErrors.includes('main-image') && !imageUrl}>
+            필수 항목이에요.
+          </FormMessage>
+        </FormHeader>
         <ImageUploader
+          id="main-image"
           value={imageUrl}
-          onChange={setImageUrl}
+          onChange={(val) => {
+            setImageUrl(val);
+            removeValidationError('main-image');
+          }}
           placeholder="메인 이미지를 추가하세요"
           ratio={imageRatio}
           onRatioChange={(value) => setImageRatio(value as 'fixed' | 'auto')}
           aspectRatio="2/1"
+          invalid={validationErrors.includes('main-image')}
         />
         <FormControl asChild>
           <VisuallyHidden asChild>
@@ -75,7 +89,6 @@ export default function MainScreenSectionContent() {
             />
           </VisuallyHidden>
         </FormControl>
-        <FormMessage match="valueMissing">필수 항목입니다.</FormMessage>
       </FormField>
 
       <SwitchRow
@@ -124,7 +137,9 @@ export default function MainScreenSectionContent() {
           <SegmentedControl
             alignment="fluid"
             value={mainScreen.imageShape || 'rect'}
-            onChange={(value: string) => updateMain({ imageShape: value as 'rect' | 'arch' | 'oval' })}
+            onChange={(value: string) =>
+              updateMain({ imageShape: value as 'rect' | 'arch' | 'oval' })
+            }
           >
             <SegmentedControl.Item value="rect">기본</SegmentedControl.Item>
             <SegmentedControl.Item value="arch">아치</SegmentedControl.Item>
@@ -155,7 +170,9 @@ export default function MainScreenSectionContent() {
                 id="main-title"
                 placeholder="예: THE MARRIAGE"
                 value={mainScreen.title}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => updateMain({ title: e.target.value })}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  updateMain({ title: e.target.value })
+                }
               />
             </FormControl>
           </FormField>
@@ -179,7 +196,11 @@ export default function MainScreenSectionContent() {
             <div className={styles.rowLayout}>
               <FormControl asChild>
                 <TextField
-                  placeholder={groom.lastName || groom.firstName ? `${groom.lastName}${groom.firstName}` : '신랑'}
+                  placeholder={
+                    groom.lastName || groom.firstName
+                      ? `${groom.lastName}${groom.firstName}`
+                      : '신랑'
+                  }
                   value={mainScreen.groomName}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     updateMain({ groomName: e.target.value })
@@ -197,7 +218,11 @@ export default function MainScreenSectionContent() {
               </FormControl>
               <FormControl asChild>
                 <TextField
-                  placeholder={bride.lastName || bride.firstName ? `${bride.lastName}${bride.firstName}` : '신부'}
+                  placeholder={
+                    bride.lastName || bride.firstName
+                      ? `${bride.lastName}${bride.firstName}`
+                      : '신부'
+                  }
                   value={mainScreen.brideName}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     updateMain({ brideName: e.target.value })

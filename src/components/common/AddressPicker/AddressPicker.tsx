@@ -31,6 +31,7 @@ interface AddressPickerProps {
   radius?: React.ComponentProps<typeof TextField.Button>['radius'];
   disabled?: boolean | undefined;
   id?: string | undefined;
+  error?: string | boolean | undefined;
 }
 
 const AddressPickerRaw = (
@@ -48,6 +49,7 @@ const AddressPickerRaw = (
     radius = 'md',
     disabled,
     id,
+    error,
     ...props
   }: AddressPickerProps,
   ref: React.Ref<HTMLButtonElement>
@@ -106,6 +108,7 @@ const AddressPickerRaw = (
         className={className}
         rightSlot={<Search size={18} />}
         disabled={disabled}
+        error={error}
         {...props}
       />
       <Dialog open={isOpen} onOpenChange={setIsOpen} mobileBottomSheet>

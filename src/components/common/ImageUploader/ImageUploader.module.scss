@@ -24,6 +24,12 @@
     box-shadow: v.$shadow-sm;
   }
 
+  &.invalid {
+    border-color: v.$red-500;
+    border-style: solid;
+    animation: borderPulse 2s infinite ease-in-out;
+  }
+
   &.filled {
     border-style: solid;
     border-color: v.$grey-100;
@@ -151,4 +157,15 @@
 
 .hiddenInput {
   display: none;
+}
+@keyframes borderPulse {
+  0% {
+    border-color: v.$red-500;
+  }
+  50% {
+    border-color: rgba(v.$red-500, 0.2);
+  }
+  100% {
+    border-color: v.$red-500;
+  }
 }

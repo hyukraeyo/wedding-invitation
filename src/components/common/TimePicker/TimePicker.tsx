@@ -29,6 +29,7 @@ interface TimePickerProps {
   variant?: React.ComponentProps<typeof TextField.Button>['variant'];
   radius?: React.ComponentProps<typeof TextField.Button>['radius'];
   id?: string | undefined;
+  error?: string | boolean | undefined;
   disabled?: boolean | undefined;
 }
 
@@ -96,6 +97,7 @@ const TimePickerRaw = (
     variant = 'outline',
     radius = 'md',
     id,
+    error,
     disabled,
     ...props
   }: TimePickerProps,
@@ -244,6 +246,7 @@ const TimePickerRaw = (
         onClick={handleOpenModal}
         className={className}
         rightSlot={<Clock size={18} />}
+        error={error}
         {...props}
       />
       <Dialog open={isOpen} onOpenChange={setIsOpen} mobileBottomSheet>

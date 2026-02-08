@@ -304,6 +304,7 @@ export interface InvitationState {
   // Validation Results
   validationErrors: string[]; // Section keys with errors
   setValidationErrors: (errors: string[]) => void;
+  removeValidationError: (id: string) => void;
 
   // Actions
   reset: () => void;
@@ -562,5 +563,9 @@ export const useInvitationStore = create<InvitationState>()((set) => ({
   setIsRequestingApproval: (requesting) => set({ isRequestingApproval: requesting }),
   setHasNewRejection: (hasNewRejection) => set({ hasNewRejection }),
   setValidationErrors: (validationErrors) => set({ validationErrors }),
+  removeValidationError: (id) =>
+    set((state) => ({
+      validationErrors: state.validationErrors.filter((errorId) => errorId !== id),
+    })),
   reset: () => set(INITIAL_STATE),
 }));

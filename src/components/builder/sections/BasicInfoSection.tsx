@@ -2,44 +2,50 @@ import React from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { RequiredSectionTitle } from '@/components/common/RequiredSectionTitle';
 import { SectionAccordion } from '@/components/ui/Accordion';
-import { FormControl, FormField, FormHeader, FormLabel } from '@/components/ui/Form';
+import { FormControl, FormField, FormHeader, FormLabel, FormMessage } from '@/components/ui/Form';
 import { TextField } from '@/components/ui/TextField';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { isRequiredField } from '@/constants/requiredFields';
-import { parseKoreanName } from '@/lib/utils';
+import { parseKoreanName, isValidName, isBlank } from '@/lib/utils';
 import { sanitizeNameInput } from '@/hooks/useFormInput';
+import { useBuilderSection, useBuilderField } from '@/hooks/useBuilder';
 import type { SectionProps } from '@/types/builder';
 
 const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(props) {
-  const { groom, bride, validationErrors, setGroom, setBride, setGroomParents, setBrideParents } =
-    useInvitationStore(
-      useShallow((state) => ({
-        groom: state.groom,
-        bride: state.bride,
-        validationErrors: state.validationErrors,
-        setGroom: state.setGroom,
-        setBride: state.setBride,
-        setGroomParents: state.setGroomParents,
-        setBrideParents: state.setBrideParents,
-      }))
-    );
+  const { groom, bride, setGroom, setBride, setGroomParents, setBrideParents } = useInvitationStore(
+    useShallow((state) => ({
+      groom: state.groom,
+      bride: state.bride,
+      setGroom: state.setGroom,
+      setBride: state.setBride,
+      setGroomParents: state.setGroomParents,
+      setBrideParents: state.setBrideParents,
+    }))
+  );
 
   const groomFullName = `${groom.lastName}${groom.firstName}`;
   const brideFullName = `${bride.lastName}${bride.firstName}`;
   const isComplete = Boolean(groomFullName.trim() && brideFullName.trim());
-  const isInvalid = validationErrors.includes(props.value);
 
-  // 이름 입력 핸들러
-  const handleGroomNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const sanitized = sanitizeNameInput(e.target.value);
-    setGroom(parseKoreanName(sanitized));
-  };
+  const { isInvalid: isSectionInvalid } = useBuilderSection(props.value);
 
-  const handleBrideNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const sanitized = sanitizeNameInput(e.target.value);
-    setBride(parseKoreanName(sanitized));
-  };
+  // 신랑 이름 필드
+  const { onChange: handleGroomNameChange, isInvalid: isGroomNameInvalid } = useBuilderField({
+    value: groom, // 값은 실제로 사용되지 않음 (groomFullName 사용)
+    onChange: setGroom,
+    fieldName: 'groom-name',
+    transform: (val) => parseKoreanName(sanitizeNameInput(val)),
+  });
 
+  // 신부 이름 필드
+  const { onChange: handleBrideNameChange, isInvalid: isBrideNameInvalid } = useBuilderField({
+    value: bride,
+    onChange: setBride,
+    fieldName: 'bride-name',
+    transform: (val) => parseKoreanName(sanitizeNameInput(val)),
+  });
+
+  // 부모님 이름 핸들러 (Validation 불필요로 훅 미사용)
   const handleGroomFatherNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const sanitized = sanitizeNameInput(e.target.value);
     setGroomParents('father', { name: sanitized });
@@ -66,11 +72,14 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
       value={props.value}
       isOpen={props.isOpen}
       onToggle={props.onToggle}
-      isInvalid={isInvalid}
+      isInvalid={isSectionInvalid}
     >
       <FormField name="groom-name">
         <FormHeader>
           <FormLabel htmlFor="groom-name">신랑</FormLabel>
+          <FormMessage forceMatch={isGroomNameInvalid && !isValidName(groomFullName)}>
+            {isBlank(groomFullName) ? '필수 항목이에요.' : '올바른 형식으로 입력해주세요.'}
+          </FormMessage>
         </FormHeader>
         <FormControl asChild>
           <TextField
@@ -79,6 +88,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
             required={isRequiredField('groomName')}
             value={groomFullName}
             onChange={handleGroomNameChange}
+            invalid={isGroomNameInvalid && !isValidName(groomFullName)}
           />
         </FormControl>
       </FormField>
@@ -86,6 +96,9 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
       <FormField name="bride-name">
         <FormHeader>
           <FormLabel htmlFor="bride-name">신부</FormLabel>
+          <FormMessage forceMatch={isBrideNameInvalid && !isValidName(brideFullName)}>
+            {isBlank(brideFullName) ? '필수 항목이에요.' : '올바른 형식으로 입력해주세요.'}
+          </FormMessage>
         </FormHeader>
         <FormControl asChild>
           <TextField
@@ -94,6 +107,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
             required={isRequiredField('brideName')}
             value={brideFullName}
             onChange={handleBrideNameChange}
+            invalid={isBrideNameInvalid && !isValidName(brideFullName)}
           />
         </FormControl>
       </FormField>

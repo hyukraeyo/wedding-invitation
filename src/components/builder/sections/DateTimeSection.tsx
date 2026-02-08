@@ -9,35 +9,49 @@ import { SwitchRow } from '@/components/common/SwitchRow';
 import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
 import { isRequiredField } from '@/constants/requiredFields';
 import { useInvitationStore } from '@/store/useInvitationStore';
+import { isBlank } from '@/lib/utils';
+import { useBuilderSection, useBuilderField } from '@/hooks/useBuilder';
 import type { SectionProps } from '@/types/builder';
 import styles from './DateTimeSection.module.scss';
 
 const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props) {
+  const { date, setDate, time, setTime, showCalendar, setShowCalendar, showDday, setShowDday } =
+    useInvitationStore(
+      useShallow((state) => ({
+        date: state.date,
+        setDate: state.setDate,
+        time: state.time,
+        setTime: state.setTime,
+        showCalendar: state.showCalendar,
+        setShowCalendar: state.setShowCalendar,
+        showDday: state.showDday,
+        setShowDday: state.setShowDday,
+      }))
+    );
+
+  const { isInvalid: isSectionInvalid } = useBuilderSection(props.value);
+
   const {
-    date,
-    setDate,
-    time,
-    setTime,
-    showCalendar,
-    setShowCalendar,
-    showDday,
-    setShowDday,
-    validationErrors,
-  } = useInvitationStore(
-    useShallow((state) => ({
-      date: state.date,
-      setDate: state.setDate,
-      time: state.time,
-      setTime: state.setTime,
-      showCalendar: state.showCalendar,
-      setShowCalendar: state.setShowCalendar,
-      showDday: state.showDday,
-      setShowDday: state.setShowDday,
-      validationErrors: state.validationErrors,
-    }))
-  );
+    value: dateValue,
+    onValueChange: handleDateChange,
+    isInvalid: isDateInvalid,
+  } = useBuilderField({
+    value: date,
+    onChange: setDate,
+    fieldName: 'wedding-date',
+  });
+
+  const {
+    value: timeValue,
+    onValueChange: handleTimeChange,
+    isInvalid: isTimeInvalid,
+  } = useBuilderField({
+    value: time,
+    onChange: setTime,
+    fieldName: 'wedding-time',
+  });
+
   const isComplete = Boolean(date && time);
-  const isInvalid = validationErrors.includes(props.value);
 
   return (
     <SectionAccordion
@@ -45,16 +59,24 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
       value={props.value}
       isOpen={props.isOpen}
       onToggle={props.onToggle}
-      isInvalid={isInvalid}
+      isInvalid={isSectionInvalid}
     >
       <div className={styles.container}>
         <div className={styles.optionItem}>
           <FormField name="wedding-date">
             <FormHeader>
               <FormLabel htmlFor="wedding-date">예식 날짜</FormLabel>
-              <FormMessage match="valueMissing">필수 항목이에요.</FormMessage>
+              <FormMessage forceMatch={isDateInvalid && isBlank(dateValue)}>
+                필수 항목이에요.
+              </FormMessage>
             </FormHeader>
-            <DatePicker id="wedding-date" value={date} placeholder="" onChange={setDate} />
+            <DatePicker
+              id="wedding-date"
+              value={dateValue}
+              placeholder=""
+              onChange={handleDateChange}
+              error={isDateInvalid}
+            />
             <FormControl asChild>
               <VisuallyHidden asChild>
                 <input
@@ -62,7 +84,7 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
                   aria-label="예식 날짜"
                   required={isRequiredField('weddingDate')}
                   readOnly
-                  value={date || ''}
+                  value={dateValue || ''}
                 />
               </VisuallyHidden>
             </FormControl>
@@ -73,9 +95,17 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
           <FormField name="wedding-time">
             <FormHeader>
               <FormLabel htmlFor="wedding-time">예식 시간</FormLabel>
-              <FormMessage match="valueMissing">필수 항목이에요.</FormMessage>
+              <FormMessage forceMatch={isTimeInvalid && isBlank(timeValue)}>
+                필수 항목이에요.
+              </FormMessage>
             </FormHeader>
-            <TimePicker id="wedding-time" value={time} placeholder="" onChange={setTime} />
+            <TimePicker
+              id="wedding-time"
+              value={timeValue}
+              placeholder=""
+              onChange={handleTimeChange}
+              error={isTimeInvalid}
+            />
             <FormControl asChild>
               <VisuallyHidden asChild>
                 <input
@@ -83,7 +113,7 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
                   aria-label="예식 시간"
                   required={isRequiredField('weddingTime')}
                   readOnly
-                  value={time || ''}
+                  value={timeValue || ''}
                 />
               </VisuallyHidden>
             </FormControl>

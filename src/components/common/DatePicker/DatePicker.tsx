@@ -24,6 +24,7 @@ interface DatePickerProps {
   disabled?: boolean | undefined;
   calendarDisabled?: Matcher | Matcher[] | undefined;
   id?: string | undefined;
+  error?: string | boolean | undefined;
   ref?: React.Ref<HTMLButtonElement> | undefined;
 }
 
@@ -43,6 +44,7 @@ export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
       disabled,
       calendarDisabled = { before: startOfToday() },
       id,
+      error,
       ...props
     },
     ref
@@ -82,6 +84,7 @@ export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
           onClick={() => !disabled && setIsOpen(true)}
           className={className}
           rightSlot={<CalendarIcon size={18} />}
+          error={error}
           {...props}
         />
         <Dialog open={isOpen} onOpenChange={setIsOpen} mobileBottomSheet>

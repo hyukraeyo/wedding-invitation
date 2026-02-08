@@ -12,7 +12,7 @@ import { SwitchRow } from '@/components/common/SwitchRow';
 import { TextField } from '@/components/ui/TextField';
 import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
 import { isRequiredField } from '@/constants/requiredFields';
-import { formatPhoneNumber } from '@/lib/utils';
+import { formatPhoneNumber, isBlank } from '@/lib/utils';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import styles from './LocationSection.module.scss';
 
@@ -50,6 +50,8 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
     setMapType,
     coordinates,
     setCoordinates,
+    validationErrors,
+    removeValidationError,
   } = useInvitationStore(
     useShallow((state) => ({
       location: state.location,
@@ -78,6 +80,8 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
       setMapType: state.setMapType,
       coordinates: state.coordinates,
       setCoordinates: state.setCoordinates,
+      validationErrors: state.validationErrors,
+      removeValidationError: state.removeValidationError,
     }))
   );
 
@@ -119,7 +123,9 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
                 id="location-subtitle"
                 placeholder="예: LOCATION"
                 value={locationSubtitle}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationSubtitle(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setLocationSubtitle(e.target.value)
+                }
               />
             </FormControl>
           </FormField>
@@ -133,7 +139,9 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
                 id="location-title"
                 placeholder="예: 오시는 길"
                 value={locationTitle}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationTitle(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setLocationTitle(e.target.value)
+                }
               />
             </FormControl>
           </FormField>
@@ -143,13 +151,21 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
           <FormField name="location-address">
             <FormHeader>
               <FormLabel htmlFor="location-address">주소</FormLabel>
-              <FormMessage match="valueMissing">필수 항목이에요.</FormMessage>
+              <FormMessage
+                forceMatch={validationErrors.includes('location-address') && isBlank(address)}
+              >
+                필수 항목이에요.
+              </FormMessage>
             </FormHeader>
             <AddressPicker
               id="location-address"
               placeholder="주소를 검색해 주세요"
               value={address}
-              onChange={setAddress}
+              onChange={(val) => {
+                setAddress(val);
+                removeValidationError('location-address');
+              }}
+              error={validationErrors.includes('location-address')}
             />
             <FormControl asChild>
               <VisuallyHidden asChild>
@@ -169,7 +185,11 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
           <FormField name="location-venue">
             <FormHeader>
               <FormLabel htmlFor="location-venue">예식 장소명</FormLabel>
-              <FormMessage match="valueMissing">필수 항목이에요.</FormMessage>
+              <FormMessage
+                forceMatch={validationErrors.includes('location-venue') && isBlank(location)}
+              >
+                필수 항목이에요.
+              </FormMessage>
             </FormHeader>
             <FormControl asChild>
               <TextField
@@ -178,7 +198,11 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
                 placeholder="예: 바나나웨딩홀"
                 required={isRequiredField('locationVenue')}
                 value={location}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocation(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setLocation(e.target.value);
+                  removeValidationError('location-venue');
+                }}
+                invalid={validationErrors.includes('location-venue')}
               />
             </FormControl>
           </FormField>
@@ -193,7 +217,9 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
                 type="text"
                 placeholder="예: 3층 그랜드홀"
                 value={detailAddress}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDetailAddress(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setDetailAddress(e.target.value)
+                }
               />
             </FormControl>
           </FormField>
@@ -218,13 +244,19 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
             onChange={(value: string) => setMapType(value as 'naver' | 'kakao')}
           >
             <SegmentedControl.Item value="naver">
-              <span className={styles.itemContent} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span
+                className={styles.itemContent}
+                style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+              >
                 <NaverIcon size={18} />
                 <span>네이버</span>
               </span>
             </SegmentedControl.Item>
             <SegmentedControl.Item value="kakao">
-              <span className={styles.itemContent} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span
+                className={styles.itemContent}
+                style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+              >
                 <KakaoIcon size={18} />
                 <span>카카오</span>
               </span>
@@ -241,7 +273,11 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
         </div>
 
         <div className={styles.optionItem}>
-          <SwitchRow label="내비게이션 표시" checked={showNavigation} onCheckedChange={setShowNavigation} />
+          <SwitchRow
+            label="내비게이션 표시"
+            checked={showNavigation}
+            onCheckedChange={setShowNavigation}
+          />
         </div>
 
         <div className={styles.optionItem}>

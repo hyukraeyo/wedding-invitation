@@ -54,9 +54,15 @@
 
 .SectionItem {
   margin-top: 0;
-  border-radius: v.$radius-md; // Root와 동일한 라운드 부여
+  margin-bottom: 12px; // 아이템 간 간격 추가로 테두리 뭉침 방지
+  border-radius: v.$radius-md;
   background-color: v.$white;
   transition: transform v.$transition-base;
+  overflow: hidden; // 테두리 영역 내부 요소 침범 방지
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .SectionTrigger {
@@ -116,18 +122,19 @@
   padding: 16px 24px;
 }
 
-// Refined error states with elegant border pulse (Border only)
+// Refined error states for a clean, premium look
 .Invalid {
+  border: 1px solid v.$red-500;
+  border-radius: v.$radius-md !important;
+  background-color: v.$white;
   position: relative;
   z-index: 10;
-  border-radius: v.$radius-md;
-  box-shadow: 0 0 0 1px v.$color-error;
-  overflow: clip;
   animation: borderPulse 2s infinite ease-in-out;
 
   .SectionTrigger {
-    background-color: v.$white;
-    // color inherited from original style
+    background-color: v.$white !important;
+    // color는 원래 색상을 유지하여 가독성 확보
+    border-radius: v.$radius-md v.$radius-md 0 0;
   }
 }
 
@@ -142,15 +149,13 @@
 :global {
   @keyframes borderPulse {
     0% {
-      box-shadow: 0 0 0 1px v.$color-error;
+      border-color: v.$red-500;
     }
     50% {
-      box-shadow:
-        0 0 0 1px v.$color-error,
-        0 0 12px rgba(v.$color-error, 0.4);
+      border-color: rgba(v.$red-500, 0.2);
     }
     100% {
-      box-shadow: 0 0 0 1px v.$color-error;
+      border-color: v.$red-500;
     }
   }
 
