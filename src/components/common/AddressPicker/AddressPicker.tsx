@@ -3,6 +3,7 @@
 import React, { useState, useCallback } from 'react';
 import { Search } from 'lucide-react';
 import dynamic from 'next/dynamic';
+import type { Address } from 'react-daum-postcode';
 import { Dialog } from '@/components/ui/Dialog';
 import { TextField } from '@/components/ui/TextField';
 import { Button } from '@/components/ui/Button';
@@ -12,19 +13,7 @@ const DaumPostcodeEmbed = dynamic(
   () => import('react-daum-postcode').then((mod) => mod.DaumPostcodeEmbed),
   {
     ssr: false,
-    loading: () => (
-      <div
-        style={{
-          height: '560px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: '#666',
-        }}
-      >
-        주소 검색창을 불러오고 있습니다...
-      </div>
-    ),
+    loading: () => <div className={styles.loading}>주소 검색창을 불러오고 있습니다...</div>,
   }
 );
 
@@ -77,8 +66,7 @@ const AddressPickerRaw = (
     [setExternalOpen]
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleAddressComplete = (data: any) => {
+  const handleAddressComplete = (data: Address) => {
     let fullAddress = data.address;
     let extraAddress = '';
 

@@ -29,6 +29,7 @@ import { ImagePreview } from '@/components/ui/ImagePreview';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { SwitchRow } from '@/components/common/SwitchRow';
 import { TextField } from '@/components/ui/TextField';
+import { Text } from '@/components/ui/Text';
 import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
 import { isRequiredField } from '@/constants/requiredFields';
 import { isBlobUrl } from '@/lib/image';
@@ -174,7 +175,9 @@ export default React.memo(function GallerySectionContent() {
             id="gallery-subtitle"
             type="text"
             value={gallerySubtitle}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGallerySubtitle(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setGallerySubtitle(e.target.value)
+            }
             placeholder="예: GALLERY"
           />
         </FormControl>
@@ -260,7 +263,7 @@ export default React.memo(function GallerySectionContent() {
           <Dialog open={isLimitModalOpen} onOpenChange={setIsLimitModalOpen}>
             <Dialog.Header title="알림" />
             <Dialog.Body className={styles.centerBody}>
-              <p style={{ fontSize: '1rem', color: '#666' }}>사진은 최대 10장까지 등록 가능해요.</p>
+              <Text color="secondary">사진은 최대 10장까지 등록 가능해요.</Text>
             </Dialog.Body>
             <Dialog.Footer className={styles.paddedFooter}>
               <Button
@@ -329,11 +332,7 @@ export default React.memo(function GallerySectionContent() {
             />
           </FormField>
           <FormField name="gallery-fade">
-            <SwitchRow
-              label="페이드 효과"
-              checked={galleryFade}
-              onCheckedChange={setGalleryFade}
-            />
+            <SwitchRow label="페이드 효과" checked={galleryFade} onCheckedChange={setGalleryFade} />
           </FormField>
         </>
       ) : null}

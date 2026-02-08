@@ -17,3 +17,12 @@
   padding: 16px;
   border-top: 1px solid v.$grey-100;
 }
+
+.loading {
+  height: 560px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: v.$text-sub;
+  font-size: v.$font-size-base;
+}

@@ -233,5 +233,14 @@
     --primary: #{s.$action-primary};
     --background: #{s.$bg-page};
     --foreground: #{s.$text-primary};
+
+    // Semantic colors for JS usage
+    --color-primary: #{s.$action-primary};
+    --color-error: #{c.$red-500};
+    --color-success: #{c.$green-500};
+    --color-warning: #{c.$amber-500};
+    --color-grey-100: #{c.$grey-100};
+    --color-grey-400: #{c.$grey-400};
+    --color-grey-600: #{c.$grey-600};
   }
 }

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { MessageCircle, ChevronRight, Sparkles } from 'lucide-react';
 import { SectionAccordion } from '@/components/ui/Accordion';

@@ -174,14 +174,16 @@ export const InvitationActionMenu: React.FC<InvitationActionMenuProps> = ({
                   setIsMenuOpen(false);
                   setTimeout(() => onDelete(invitation), 0);
                 }}
-                style={{ color: '#EF4444' }}
+                variant="danger"
                 left={<Trash2 size={16} />}
               >
                 삭제하기
               </DropdownItem>
             )}
             <DropdownItem disabled left={<Calendar size={14} />}>
-              <span style={{ fontSize: '12px', color: '#999' }}>생성일 {formattedDate}</span>
+              <Text size="1" color="tertiary">
+                생성일 {formattedDate}
+              </Text>
             </DropdownItem>
           </Menu.Dropdown>
         }
@@ -221,7 +223,7 @@ export const InvitationActionMenu: React.FC<InvitationActionMenuProps> = ({
               <Text typography="t4" fontWeight="bold">
                 {REJECTION_LABEL}
               </Text>
-              <Text typography="t6" color="#666">
+              <Text typography="t6" color="secondary">
                 관리자가 작성한 거절 사유예요
               </Text>
             </div>
@@ -248,7 +250,7 @@ export const InvitationActionMenu: React.FC<InvitationActionMenuProps> = ({
               <Text typography="t4" fontWeight="bold">
                 수정 확인
               </Text>
-              <Text typography="t6" color="#666">
+              <Text typography="t6" color="secondary">
                 이미 승인이 완료된 청첩장이에요
               </Text>
             </div>
