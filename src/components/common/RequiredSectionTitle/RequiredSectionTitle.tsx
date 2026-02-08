@@ -11,11 +11,7 @@ export default function RequiredSectionTitle({ title, isComplete }: RequiredSect
   return (
     <span className={styles.wrapper}>
       <span className={styles.RequiredTitle}>{title}</span>
-      {!isComplete ? (
-        <Badge size="xs" variant="soft" color="red">
-          필수
-        </Badge>
-      ) : null}
+      {/* 뱃지 제거 */}
     </span>
   );
 }

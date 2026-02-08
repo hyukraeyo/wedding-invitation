@@ -16,6 +16,9 @@ import {
   getInvalidElementSectionKey,
   type InvalidFieldSummary,
 } from '@/lib/builderFormValidation';
+import { validateBeforeBuilderSave } from '@/lib/builderBusinessValidation';
+import { toInvitationData } from '@/lib/builderSave';
+import { EDITOR_SECTION_LABEL } from '@/lib/builderValidation';
 import { useInvitationStore } from '@/store/useInvitationStore';
 
 import styles from './EditorForm.module.scss';
@@ -56,10 +59,11 @@ const EditorForm = memo(function EditorForm({ formId, onSubmit }: EditorFormProp
   const [invalidSummaries, setInvalidSummaries] = useState<InvalidFieldSummary[]>([]);
   const [wasSubmitted, setWasSubmitted] = useState(false);
 
-  const { editingSection, setEditingSection } = useInvitationStore(
+  const { editingSection, setEditingSection, setValidationErrors } = useInvitationStore(
     useShallow((state) => ({
       editingSection: state.editingSection,
       setEditingSection: state.setEditingSection,
+      setValidationErrors: state.setValidationErrors,
     }))
   );
 
@@ -125,18 +129,54 @@ const EditorForm = memo(function EditorForm({ formId, onSubmit }: EditorFormProp
       const form = event.currentTarget;
       setWasSubmitted(true);
 
-      const isValid = form.checkValidity();
-      if (!isValid) {
-        setInvalidSummaries(collectInvalidFieldSummaries(form));
+      // 1. HTML5 유효성 검사 (필수 입력값 등)
+      const isHtmlValid = form.checkValidity();
+      const htmlSummaries = isHtmlValid ? [] : collectInvalidFieldSummaries(form);
+      const htmlInvalidSectionKeys = Array.from(new Set(htmlSummaries.map((s) => s.sectionKey)));
+
+      // 2. 비즈니스 로직 유효성 검사 (이미지 누락, 계좌 정보 등)
+      const currentStoreState = useInvitationStore.getState();
+      const cleanData = toInvitationData(currentStoreState);
+      const bizValidation = validateBeforeBuilderSave(cleanData);
+
+      // 3. 모든 오류 섹션 키 결합
+      const allInvalidSectionKeys = Array.from(
+        new Set([...htmlInvalidSectionKeys, ...bizValidation.invalidSectionKeys])
+      );
+
+      // 4. 스토어에 모든 오류 섹션 저장 (빨간색 테두리 표시용)
+      setValidationErrors(allInvalidSectionKeys);
+
+      if (allInvalidSectionKeys.length > 0) {
+        // 다이얼로그에 표시할 요약 정보 생성
+        const bizSummaries: InvalidFieldSummary[] = bizValidation.issues.map((issue) => ({
+          sectionKey: issue.sectionKey,
+          sectionLabel: EDITOR_SECTION_LABEL[issue.sectionKey],
+          fieldLabel: issue.fieldLabel,
+        }));
+
+        // 중복 제거 (HTML5와 비즈니스 로직에서 동일한 필드가 걸릴 수 있음)
+        const combinedSummaries = [...htmlSummaries];
+        bizSummaries.forEach((biz) => {
+          if (
+            !combinedSummaries.find(
+              (s) => s.sectionKey === biz.sectionKey && s.fieldLabel === biz.fieldLabel
+            )
+          ) {
+            combinedSummaries.push(biz);
+          }
+        });
+
+        setInvalidSummaries(combinedSummaries);
         focusInvalidField(form);
         setIsValidationOpen(true);
         return;
       }
-      setInvalidSummaries([]);
 
+      setInvalidSummaries([]);
       onSubmit?.();
     },
-    [focusInvalidField, onSubmit]
+    [focusInvalidField, onSubmit, setValidationErrors]
   );
 
   const handleInvalidSummaryClick = useCallback(
@@ -220,9 +260,7 @@ const EditorForm = memo(function EditorForm({ formId, onSubmit }: EditorFormProp
         >
           <AlertDialog.Header>
             <AlertDialog.Title>입력 확인</AlertDialog.Title>
-            <AlertDialog.Description>
-              필수 항목을 확인해주세요.
-            </AlertDialog.Description>
+            <AlertDialog.Description>필수 항목을 확인해주세요.</AlertDialog.Description>
             {invalidSummaries.length > 0 ? (
               <div className={styles.invalidSummaryList}>
                 {invalidSummaries.map((summary) => (
