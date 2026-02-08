@@ -1,0 +1,148 @@
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  background-color: v.$white;
+  border: 1px solid v.$grey-200;
+  border-radius: v.$radius-lg;
+  overflow: hidden;
+  box-shadow: v.$shadow-lg;
+
+  @include m.desktop {
+    flex-direction: row;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+}
+
+.calendarSection {
+  flex: 1;
+  padding: 1.5rem;
+  border-bottom: 1px solid v.$grey-200;
+
+  @include m.desktop {
+    border-bottom: none;
+    border-right: 1px solid v.$grey-200;
+  }
+}
+
+.timeSection {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  min-width: 280px;
+  background-color: v.$grey-50;
+
+  @include m.desktop {
+    max-height: 460px; // Match likely calendar height
+  }
+}
+
+.header {
+  font-size: v.$font-size-base;
+  font-weight: 600;
+  color: v.$grey-900;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dateTitle {
+  font-size: v.$font-size-sm;
+  color: v.$grey-600;
+  margin-bottom: 1rem;
+}
+
+.scrollArea {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+
+  // Custom scrollbar
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: v.$grey-300;
+    border-radius: 3px;
+
+    &:hover {
+      background-color: v.$grey-400;
+    }
+  }
+}
+
+.timeGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+.timeButton {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid v.$grey-300;
+  border-radius: v.$radius-md;
+  background-color: v.$white;
+  color: v.$grey-900;
+  font-size: v.$font-size-sm;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &:hover:not(:disabled) {
+    border-color: v.$primary;
+    color: v.$primary;
+    background-color: rgba(v.$primary, 0.05);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: v.$grey-100;
+    color: v.$grey-400;
+    border-color: v.$grey-200;
+  }
+
+  &.selected {
+    background-color: v.$grey-900; // Cal.com style often uses black for selected time
+    border-color: v.$grey-900;
+    color: v.$white;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    // Check if we should use primary color instead based on project rules
+    // Project rule: Primary is Banana Yellow.
+    // Usually standard selected state is Primary.
+    // However, for time selection, strong contrast is good.
+    // Let's stick to Primary to match the Calendar date selection style.
+    background-color: v.$primary; // Yellow
+    border-color: v.$primary;
+    color: v.$white; // or v.$grey-900 if yellow is too bright? Yellow #FBC02D text implies black text usually.
+    // But button text color rule says: Icons active yellow text.
+    // Calendar selected date is primary bg, white text.
+    // Let's use primary key with appropriate text color.
+    // #FBC02D is light, so usually takes black text for accessibility.
+    // But Calendar.module.scss uses: color: v.$white; for .daySelected.
+    // I will use White text for consistency with Calendar module. (If it's readable)
+  }
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: v.$grey-500;
+  font-size: v.$font-size-sm;
+  text-align: center;
+  padding: 2rem 0;
+}
