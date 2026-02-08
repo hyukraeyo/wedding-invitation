@@ -85,7 +85,8 @@ const GreetingSection = React.memo<SectionProps>(function GreetingSection(props)
     }))
   );
 
-  const { isInvalid: isSectionInvalid } = useBuilderSection(props.value);
+  const isComplete = Boolean(greetingTitle.trim() && htmlToPlainText(message));
+  const { isInvalid: isSectionInvalid } = useBuilderSection(props.value, isComplete);
 
   const {
     value: titleValue,
@@ -108,7 +109,6 @@ const GreetingSection = React.memo<SectionProps>(function GreetingSection(props)
   });
 
   const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
-  const isComplete = Boolean(greetingTitle.trim() && htmlToPlainText(message));
 
   const handleSelectSample = (sample: SamplePhraseItem) => {
     setGreetingSubtitle(sample.subtitle || '');

@@ -73,6 +73,8 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           value={currentValue}
           onChange={handleChange}
           maxLength={maxLength}
+          aria-invalid={isError || undefined}
+          data-invalid={isError ? 'true' : undefined}
           {...props}
         />
       </div>

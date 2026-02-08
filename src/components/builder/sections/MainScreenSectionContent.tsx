@@ -61,9 +61,9 @@ export default function MainScreenSectionContent() {
       <FormField name="main-image">
         <FormHeader>
           <FormLabel htmlFor="main-image">메인 사진</FormLabel>
-          <FormMessage forceMatch={validationErrors.includes('main-image') && !imageUrl}>
-            필수 항목이에요.
-          </FormMessage>
+          {!imageUrl && validationErrors.includes('main-image') && (
+            <FormMessage forceMatch>필수 항목이에요.</FormMessage>
+          )}
         </FormHeader>
         <ImageUploader
           id="main-image"

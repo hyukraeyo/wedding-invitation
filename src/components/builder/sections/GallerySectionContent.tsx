@@ -21,19 +21,16 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { useShallow } from 'zustand/react/shallow';
 import { ImageUploader } from '@/components/common/ImageUploader';
-import { Button } from '@/components/ui/Button';
-import { Dialog } from '@/components/ui/Dialog';
 import { Field } from '@/components/ui/Field';
 import { FormControl, FormField, FormHeader, FormLabel, FormMessage } from '@/components/ui/Form';
 import { ImagePreview } from '@/components/ui/ImagePreview';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { SwitchRow } from '@/components/common/SwitchRow';
 import { TextField } from '@/components/ui/TextField';
-import { Text } from '@/components/ui/Text';
 import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
 import { isRequiredField } from '@/constants/requiredFields';
 import { isBlobUrl } from '@/lib/image';
-import { cn, isBlank } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import styles from './GallerySection.module.scss';
 
@@ -118,21 +115,23 @@ export default React.memo(function GallerySectionContent() {
   );
 
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [isLimitModalOpen, setIsLimitModalOpen] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
-  const handleUploadComplete = (urls: string[]) => {
-    const newItems = urls.map((url) => ({
-      id: `img-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
-      url,
-    }));
-    setGallery([...gallery, ...newItems]);
-    removeValidationError('gallery-images-required');
-  };
+  const handleUploadComplete = useCallback(
+    (urls: string[]) => {
+      const newItems = urls.map((url) => ({
+        id: `img-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
+        url,
+      }));
+      setGallery((prev: { id: string; url: string }[]) => [...prev, ...newItems]);
+      removeValidationError('gallery-images-required');
+    },
+    [removeValidationError, setGallery]
+  );
 
   const handleRemove = useCallback(
     (id: string) => {
@@ -213,12 +212,6 @@ export default React.memo(function GallerySectionContent() {
           >
             필수 항목이에요.
           </FormMessage>
-          <div className={styles.counter}>
-            <span className={styles.countText}>
-              <strong style={{ color: accentColor }}>{gallery.length}</strong>
-              <span className={styles.countTotal}> / 10</span>
-            </span>
-          </div>
         </FormHeader>
 
         <div className={styles.galleryManager}>
@@ -273,24 +266,12 @@ export default React.memo(function GallerySectionContent() {
             </DragOverlay>
           </DndContext>
 
-          <Dialog open={isLimitModalOpen} onOpenChange={setIsLimitModalOpen}>
-            <Dialog.Header title="알림" />
-            <Dialog.Body className={styles.centerBody}>
-              <Text color="secondary">사진은 최대 10장까지 등록 가능해요.</Text>
-            </Dialog.Body>
-            <Dialog.Footer className={styles.paddedFooter}>
-              <Button
-                type="button"
-                color="primary"
-                size="lg"
-                style={{ width: '100%' }}
-                onClick={() => setIsLimitModalOpen(false)}
-              >
-                확인
-              </Button>
-            </Dialog.Footer>
-          </Dialog>
-
+          <div className={styles.counter}>
+            <span className={styles.countText}>
+              <strong style={{ color: accentColor }}>{gallery.length}</strong>
+              <span className={styles.countTotal}> / 10</span>
+            </span>
+          </div>
           <Field.Footer>
             <Field.HelperText>
               사진을 길게 눌러 순서를 변경할 수 있어요. (첫 번째 사진이 대표 사진이에요)

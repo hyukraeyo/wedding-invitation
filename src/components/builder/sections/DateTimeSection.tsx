@@ -29,7 +29,9 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
       }))
     );
 
-  const { isInvalid: isSectionInvalid } = useBuilderSection(props.value);
+  const isComplete = Boolean(date && time);
+
+  const { isInvalid: isSectionInvalid } = useBuilderSection(props.value, isComplete);
 
   const {
     value: dateValue,
@@ -50,8 +52,6 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
     onChange: setTime,
     fieldName: 'wedding-time',
   });
-
-  const isComplete = Boolean(date && time);
 
   return (
     <SectionAccordion

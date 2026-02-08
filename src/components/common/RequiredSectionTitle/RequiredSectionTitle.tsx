@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Badge } from '@/components/ui/Badge';
 import styles from './RequiredSectionTitle.module.scss';
 
 interface RequiredSectionTitleProps {
@@ -8,6 +7,8 @@ interface RequiredSectionTitleProps {
 }
 
 export default function RequiredSectionTitle({ title, isComplete }: RequiredSectionTitleProps) {
+  void isComplete;
+
   return (
     <span className={styles.wrapper}>
       <span className={styles.RequiredTitle}>{title}</span>

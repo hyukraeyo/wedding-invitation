@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 
@@ -6,16 +6,30 @@ import { useInvitationStore } from '@/store/useInvitationStore';
  * 섹션 전체의 유효성 검사 상태를 관리하는 훅
  * @param sectionValue 섹션의 고유 식별자 (예: 'greeting', 'basic')
  */
-export function useBuilderSection(sectionValue: string) {
-  const { validationErrors } = useInvitationStore(
+export function useBuilderSection(sectionValue: string, isComplete?: boolean) {
+  const { validationErrors, removeValidationError } = useInvitationStore(
     useShallow((state) => ({
       validationErrors: state.validationErrors,
+      removeValidationError: state.removeValidationError,
     }))
   );
 
   const isInvalid = validationErrors.includes(sectionValue);
 
-  return { isInvalid };
+  const clearError = useCallback(() => {
+    if (isInvalid) {
+      removeValidationError(sectionValue);
+    }
+  }, [isInvalid, removeValidationError, sectionValue]);
+
+  // isComplete가 true이고 섹션이 유효하지 않은 경우 자동으로 에러 제거
+  useEffect(() => {
+    if (isInvalid && isComplete) {
+      clearError();
+    }
+  }, [isInvalid, isComplete, clearError]);
+
+  return { isInvalid, clearError };
 }
 
 interface UseBuilderFieldProps<T> {

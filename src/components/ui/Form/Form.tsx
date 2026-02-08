@@ -38,13 +38,48 @@ FormLabel.displayName = FormPrimitive.Label.displayName;
 
 const FormControl = FormPrimitive.Control;
 
-const FormMessage = React.forwardRef<
-  React.ElementRef<typeof FormPrimitive.Message>,
-  React.ComponentPropsWithoutRef<typeof FormPrimitive.Message>
->(({ className, ...props }, ref) => (
-  <FormPrimitive.Message ref={ref} className={clsx(s.FormMessage, className)} {...props} />
-));
-FormMessage.displayName = FormPrimitive.Message.displayName;
+/**
+ * FormMessage - 폼 유효성 검사 메시지 컴포넌트
+ *
+ * @note forceMatch prop은 Radix UI Form에서 DOM으로 leak되는 버그가 있어,
+ * 조건부 렌더링 방식으로 처리합니다.
+ * - forceMatch=true: Radix Message를 사용하지 않고 직접 span으로 렌더링
+ * - forceMatch=false 또는 undefined: Radix Message 사용 (match 기반 표시)
+ */
+interface FormMessageProps extends Omit<
+  React.ComponentPropsWithoutRef<typeof FormPrimitive.Message>,
+  'forceMatch'
+> {
+  forceMatch?: boolean;
+}
+
+const FormMessage = React.forwardRef<HTMLSpanElement, FormMessageProps>(
+  ({ className, forceMatch, match, name, children, ...props }, ref) => {
+    // forceMatch가 boolean 타입으로 제공된 경우, 그 값에 따라 렌더링 여부 결정
+    if (typeof forceMatch === 'boolean') {
+      return forceMatch ? (
+        <span ref={ref} className={clsx(s.FormMessage, className)} {...props}>
+          {children}
+        </span>
+      ) : null;
+    }
+
+    // 그렇지 않으면 Radix Form.Message 사용 (match 기반 조건부 표시)
+    // exactOptionalPropertyTypes 호환: match가 undefined일 때 prop 전달 방지
+    return (
+      <FormPrimitive.Message
+        ref={ref}
+        className={clsx(s.FormMessage, className)}
+        {...(match !== undefined && { match })}
+        {...(name !== undefined && { name })}
+        {...props}
+      >
+        {children}
+      </FormPrimitive.Message>
+    );
+  }
+);
+FormMessage.displayName = 'FormMessage';
 
 const FormHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => (

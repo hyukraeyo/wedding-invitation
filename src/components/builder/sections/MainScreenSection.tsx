@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Sparkles } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
+import { useBuilderSection } from '@/hooks/useBuilder';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { SampleList } from '@/components/common/SampleList';
 import { RequiredSectionTitle } from '@/components/common/RequiredSectionTitle';
@@ -24,16 +25,16 @@ const MainScreenSectionContent = dynamic(() => import('./MainScreenSectionConten
 });
 
 const MainScreenSection = React.memo<SectionProps>(function MainScreenSection(props) {
-  const { imageUrl, validationErrors, setMainScreen } = useInvitationStore(
+  const { imageUrl, setMainScreen } = useInvitationStore(
     useShallow((state) => ({
       imageUrl: state.imageUrl,
-      validationErrors: state.validationErrors,
       setMainScreen: state.setMainScreen,
     }))
   );
   const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
+
   const isComplete = Boolean(imageUrl);
-  const isInvalid = validationErrors.includes(props.value);
+  const { isInvalid } = useBuilderSection(props.value, isComplete);
 
   const handleSelectSample = (sample: SamplePhraseItem) => {
     setMainScreen({

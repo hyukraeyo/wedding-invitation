@@ -146,15 +146,10 @@ const EditorForm = memo(function EditorForm({ formId, onSubmit }: EditorFormProp
 
       // 3-1. 개별 필드 ID 수집 (입력창/이미지업로더 테두리 표시용)
       const bizFieldIds = bizValidation.issues.map((issue) => issue.fieldId);
-      const htmlFieldIds = htmlSummaries
-        .map((s) => {
-          // HTML5 검사로 잡힌 요소들의 ID 수집
-          const elements = form.querySelectorAll(':invalid');
-          return Array.from(elements)
-            .map((el) => el.getAttribute('id'))
-            .filter((id): id is string => Boolean(id));
-        })
-        .flat();
+      // HTML5 검사로 잡힌 요소들의 ID 수집
+      const htmlFieldIds = Array.from(form.querySelectorAll(':invalid'))
+        .map((el) => el.getAttribute('id'))
+        .filter((id): id is string => Boolean(id));
 
       // 4. 스토어에 섹션 키 + 필드 ID 모두 저장
       const allInvalidKeys = Array.from(

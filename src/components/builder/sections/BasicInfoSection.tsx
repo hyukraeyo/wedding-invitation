@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { RequiredSectionTitle } from '@/components/common/RequiredSectionTitle';
 import { SectionAccordion } from '@/components/ui/Accordion';
@@ -6,7 +6,7 @@ import { FormControl, FormField, FormHeader, FormLabel, FormMessage } from '@/co
 import { TextField } from '@/components/ui/TextField';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { isRequiredField } from '@/constants/requiredFields';
-import { parseKoreanName, isValidName, isBlank } from '@/lib/utils';
+import { parseKoreanName, isBlank, isInvalidKoreanName, isValidName } from '@/lib/utils';
 import { sanitizeNameInput } from '@/hooks/useFormInput';
 import { useBuilderSection, useBuilderField } from '@/hooks/useBuilder';
 import type { SectionProps } from '@/types/builder';
@@ -27,7 +27,20 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
   const brideFullName = `${bride.lastName}${bride.firstName}`;
   const isComplete = Boolean(groomFullName.trim() && brideFullName.trim());
 
-  const { isInvalid: isSectionInvalid } = useBuilderSection(props.value);
+  const { isInvalid: isSectionInvalid, clearError: clearSectionError } = useBuilderSection(
+    props.value
+  );
+
+  useEffect(() => {
+    if (isSectionInvalid) {
+      const isGroomValid = isValidName(groomFullName);
+      const isBrideValid = isValidName(brideFullName);
+
+      if (isGroomValid && isBrideValid) {
+        clearSectionError();
+      }
+    }
+  }, [isSectionInvalid, groomFullName, brideFullName, clearSectionError]);
 
   // 신랑 이름 필드
   const { onChange: handleGroomNameChange, isInvalid: isGroomNameInvalid } = useBuilderField({
@@ -77,9 +90,11 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
       <FormField name="groom-name">
         <FormHeader>
           <FormLabel htmlFor="groom-name">신랑</FormLabel>
-          <FormMessage forceMatch={isGroomNameInvalid && !isValidName(groomFullName)}>
-            {isBlank(groomFullName) ? '필수 항목이에요.' : '올바른 형식으로 입력해주세요.'}
-          </FormMessage>
+          {(isGroomNameInvalid || isInvalidKoreanName(groomFullName)) && (
+            <FormMessage forceMatch>
+              {isBlank(groomFullName) ? '필수 항목이에요.' : '올바른 형식으로 입력해주세요.'}
+            </FormMessage>
+          )}
         </FormHeader>
         <FormControl asChild>
           <TextField
@@ -88,7 +103,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
             required={isRequiredField('groomName')}
             value={groomFullName}
             onChange={handleGroomNameChange}
-            invalid={isGroomNameInvalid && !isValidName(groomFullName)}
+            invalid={isGroomNameInvalid || isInvalidKoreanName(groomFullName)}
           />
         </FormControl>
       </FormField>
@@ -96,9 +111,11 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
       <FormField name="bride-name">
         <FormHeader>
           <FormLabel htmlFor="bride-name">신부</FormLabel>
-          <FormMessage forceMatch={isBrideNameInvalid && !isValidName(brideFullName)}>
-            {isBlank(brideFullName) ? '필수 항목이에요.' : '올바른 형식으로 입력해주세요.'}
-          </FormMessage>
+          {(isBrideNameInvalid || isInvalidKoreanName(brideFullName)) && (
+            <FormMessage forceMatch>
+              {isBlank(brideFullName) ? '필수 항목이에요.' : '올바른 형식으로 입력해주세요.'}
+            </FormMessage>
+          )}
         </FormHeader>
         <FormControl asChild>
           <TextField
@@ -107,7 +124,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
             required={isRequiredField('brideName')}
             value={brideFullName}
             onChange={handleBrideNameChange}
-            invalid={isBrideNameInvalid && !isValidName(brideFullName)}
+            invalid={isBrideNameInvalid || isInvalidKoreanName(brideFullName)}
           />
         </FormControl>
       </FormField>

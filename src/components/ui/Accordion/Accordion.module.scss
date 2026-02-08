@@ -15,6 +15,7 @@
 
 .Header {
   display: flex;
+  margin: 0; // h3 기본 마진 제거
 }
 
 .Trigger {
@@ -28,10 +29,11 @@
   align-items: center;
   justify-content: space-between;
   font-size: 15px;
-  line-height: 1;
+  line-height: normal; // 1 -> normal로 변경하여 텍스트 컷팅 방지
   color: v.$grey-900;
   box-shadow: 0 1px 0 v.$grey-200;
   cursor: pointer;
+  box-sizing: border-box; // all: unset 대응
 
   &:hover {
     background-color: v.$grey-50;
@@ -45,6 +47,9 @@
 .TriggerContent {
   flex: 1;
   font-weight: 700;
+  display: flex; // 추가
+  align-items: center; // 추가
+  height: 100%; // 추가
 }
 
 .Chevron {
@@ -81,12 +86,14 @@
   background-color: v.$white;
   width: 100%;
   border-radius: v.$radius-md;
+  box-sizing: border-box;
 }
 
 .SectionTriggerHeader {
   flex: 1;
   display: flex;
   border-radius: v.$radius-md;
+  margin: 0;
 }
 
 .SectionRightElement {
@@ -134,6 +141,14 @@
   .SectionTrigger {
     background-color: v.$white !important;
     // color는 원래 색상을 유지하여 가독성 확보
+  }
+
+  // 닫혀있을 때는 전체 라운드 유지, 열려있을 때만 하단 라운드 제거
+  &[data-state='closed'] .SectionTrigger {
+    border-radius: v.$radius-md;
+  }
+
+  &[data-state='open'] .SectionTrigger {
     border-radius: v.$radius-md v.$radius-md 0 0;
   }
 }

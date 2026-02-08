@@ -4,6 +4,7 @@ import { useShallow } from 'zustand/react/shallow';
 
 import { RequiredSectionTitle } from '@/components/common/RequiredSectionTitle';
 import { SectionAccordion } from '@/components/ui/Accordion';
+import { useBuilderSection } from '@/hooks/useBuilder';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import type { SectionProps } from '@/types/builder';
 
@@ -19,15 +20,15 @@ const LocationSectionContent = dynamic(() => import('./LocationSectionContent'),
 });
 
 const LocationSection = React.memo<SectionProps>(function LocationSection(props) {
-  const { location, address, validationErrors } = useInvitationStore(
+  const { location, address } = useInvitationStore(
     useShallow((state) => ({
       location: state.location,
       address: state.address,
-      validationErrors: state.validationErrors,
     }))
   );
+
   const isComplete = Boolean(location && address);
-  const isInvalid = validationErrors.includes(props.value);
+  const { isInvalid } = useBuilderSection(props.value, isComplete);
 
   return (
     <SectionAccordion

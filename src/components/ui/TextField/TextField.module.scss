@@ -209,6 +209,15 @@
     }
   }
 
+  .buttonText {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+    text-align: left;
+  }
+
   // Handle browser autofill styling
   &:-webkit-autofill,
   &:-webkit-autofill:hover,

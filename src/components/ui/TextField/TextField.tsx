@@ -61,6 +61,7 @@ const TextFieldRoot = React.forwardRef<HTMLDivElement, TextFieldRootProps>(
             disabled && s.disabled,
             className
           )}
+          data-invalid={invalid ? 'true' : undefined}
           {...props}
         />
       </TextFieldContext.Provider>
@@ -152,7 +153,7 @@ const TextFieldButton = React.forwardRef<HTMLButtonElement, TextFieldButtonProps
           className={clsx(s.input, s.button, isPlaceholder && s.placeholder, className)}
           {...props}
         >
-          {props.value || props.placeholder || children}
+          <span className={s.buttonText}>{props.value || props.placeholder || children}</span>
         </Button>
         {rightSlot && <TextFieldSlot side="right">{rightSlot}</TextFieldSlot>}
       </TextFieldRoot>
@@ -270,6 +271,7 @@ const TextField = React.forwardRef<HTMLInputElement, TextFieldProps>(
           ref={ref}
           id={inputId}
           aria-invalid={isError || undefined}
+          data-invalid={isError ? 'true' : undefined}
           value={currentValue}
           onChange={handleChange}
           maxLength={maxLength}
