@@ -10,7 +10,7 @@ interface RequiredSectionTitleProps {
 export default function RequiredSectionTitle({ title, isComplete }: RequiredSectionTitleProps) {
   return (
     <span className={styles.wrapper}>
-      <span>{title}</span>
+      <span className={styles.RequiredTitle}>{title}</span>
       {!isComplete ? (
         <Badge size="xs" variant="soft" color="red">
           필수

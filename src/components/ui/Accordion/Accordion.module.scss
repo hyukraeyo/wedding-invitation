@@ -3,11 +3,9 @@
 .Root {
   border-radius: v.$radius-md;
   width: 100%;
-  overflow: hidden;
 }
 
 .Item {
-  overflow: hidden;
   margin-top: 1px;
 
   &:first-child {
@@ -131,30 +129,41 @@
   padding: 16px 24px;
 }
 
-// Show error pulse when:
-// 1. The section is not open (or even if open, as a redundant cue)
-// 2. AND there's an invalid element inside
-// 3. AND the form was submitted
+// Show error pulse when manual .Invalid class is present
+.Invalid {
+  border: 2px solid v.$color-error !important;
+  border-radius: v.$radius-md;
+
+  .SectionTrigger {
+    background-color: rgba(255, 77, 79, 0.08) !important;
+    animation: pulseError 2s infinite ease-in-out !important;
+    color: v.$color-error !important;
+
+    .Chevron {
+      color: v.$color-error !important;
+    }
+  }
+
+  // Ensure title text inside RequiredSectionTitle also turns red
+  :global(.RequiredTitle) {
+    color: v.$color-error !important;
+  }
+}
+
+// Automatic error pulse for native validation
 :global(.was-submitted) {
   .SectionItem:has([data-invalid='true']) {
+    border: 1px solid v.$color-error;
+    border-radius: v.$radius-md;
+
     .SectionTrigger {
+      background-color: rgba(255, 77, 79, 0.03);
       animation: pulseError 2s infinite ease-in-out;
       color: v.$color-error;
 
       .Chevron {
         color: v.$color-error;
       }
-    }
-  }
-}
-
-.Invalid {
-  .SectionTrigger {
-    animation: pulseError 2s infinite ease-in-out !important;
-    color: v.$color-error !important;
-
-    .Chevron {
-      color: v.$color-error !important;
     }
   }
 }

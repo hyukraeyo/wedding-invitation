@@ -148,7 +148,8 @@ export const getBuilderValidationIssues = (data: InvitationData): BuilderValidat
     });
   }
 
-  if (isBlank(htmlToPlainText(data.message))) {
+  const messageText = htmlToPlainText(data.message);
+  if (isBlank(messageText)) {
     issues.push({
       sectionKey: 'message',
       fieldLabel: '내용',

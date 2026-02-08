@@ -1,5 +1,6 @@
 ﻿import React from 'react';
 import dynamic from 'next/dynamic';
+import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { RequiredSectionTitle } from '@/components/common/RequiredSectionTitle';
 import { SectionAccordion } from '@/components/ui/Accordion';
@@ -11,8 +12,12 @@ const GallerySectionContent = dynamic(() => import('./GallerySectionContent'), {
 });
 
 const GallerySection = React.memo<SectionProps>(function GallerySection(props) {
-  const galleryLength = useInvitationStore((state) => state.gallery.length);
-  const validationErrors = useInvitationStore((state) => state.validationErrors);
+  const { galleryLength, validationErrors } = useInvitationStore(
+    useShallow((state) => ({
+      galleryLength: state.gallery.length,
+      validationErrors: state.validationErrors,
+    }))
+  );
   const isComplete = galleryLength > 0;
   const isInvalid = validationErrors.includes(props.value);
 
@@ -28,5 +33,7 @@ const GallerySection = React.memo<SectionProps>(function GallerySection(props) {
     </SectionAccordion>
   );
 });
+
+GallerySection.displayName = 'GallerySection';
 
 export default GallerySection;

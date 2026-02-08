@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Sparkles } from 'lucide-react';
+import { useShallow } from 'zustand/react/shallow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { SampleList } from '@/components/common/SampleList';
 import { RequiredSectionTitle } from '@/components/common/RequiredSectionTitle';
@@ -22,10 +23,14 @@ const MainScreenSectionContent = dynamic(() => import('./MainScreenSectionConten
   ssr: false,
 });
 
-export default function MainScreenSection(props: SectionProps) {
-  const imageUrl = useInvitationStore((state) => state.imageUrl);
-  const validationErrors = useInvitationStore((state) => state.validationErrors);
-  const setMainScreen = useInvitationStore((state) => state.setMainScreen);
+const MainScreenSection = React.memo<SectionProps>(function MainScreenSection(props) {
+  const { imageUrl, validationErrors, setMainScreen } = useInvitationStore(
+    useShallow((state) => ({
+      imageUrl: state.imageUrl,
+      validationErrors: state.validationErrors,
+      setMainScreen: state.setMainScreen,
+    }))
+  );
   const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
   const isComplete = Boolean(imageUrl);
   const isInvalid = validationErrors.includes(props.value);
@@ -76,4 +81,8 @@ export default function MainScreenSection(props: SectionProps) {
       </Dialog>
     </>
   );
-}
+});
+
+MainScreenSection.displayName = 'MainScreenSection';
+
+export default MainScreenSection;

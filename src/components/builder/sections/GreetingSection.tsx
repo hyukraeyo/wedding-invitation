@@ -40,7 +40,7 @@ const RichTextEditor = dynamic(
   }
 );
 
-export default function GreetingSection(props: SectionProps) {
+const GreetingSection = React.memo<SectionProps>(function GreetingSection(props) {
   const {
     message,
     setMessage,
@@ -56,6 +56,7 @@ export default function GreetingSection(props: SectionProps) {
     setShowNamesAtBottom,
     enableFreeformNames,
     setEnableFreeformNames,
+    groomNameCustom,
     setGroomNameCustom,
     brideNameCustom,
     setBrideNameCustom,
@@ -273,4 +274,8 @@ export default function GreetingSection(props: SectionProps) {
       </Dialog>
     </>
   );
-}
+});
+
+GreetingSection.displayName = 'GreetingSection';
+
+export default GreetingSection;
