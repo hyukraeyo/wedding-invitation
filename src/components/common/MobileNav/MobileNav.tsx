@@ -49,7 +49,6 @@ export function MobileNav({
 }: MobileNavProps) {
   const pathname = usePathname();
   const [isMoreOpen, setIsMoreOpen] = useState(false);
-  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
   const canUseDOM = useCanUseDom();
   const { isVisible } = useScrollDirection();
 
@@ -60,11 +59,6 @@ export function MobileNav({
   const handleCustomerService = () => {
     window.open('http://pf.kakao.com/_KaiAX/chat', '_blank', 'noopener,noreferrer');
     setIsMoreOpen(false);
-  };
-
-  const handleEventClick = () => {
-    setIsMoreOpen(false);
-    setIsEventModalOpen(true);
   };
 
   const handleDrawerNavClick = () => {
@@ -136,15 +130,80 @@ export function MobileNav({
               </span>
             </IconButton>
           ) : (
-            <IconButton
-              className={clsx(styles.navItem, isMoreOpen && styles.active)}
-              onClick={() => setIsMoreOpen(true)}
-              aria-label="메뉴 열기"
-              iconSize={24}
-              name="menu"
-            >
-              <Menu className={styles.icon} />
-            </IconButton>
+            <Dialog open={isMoreOpen} onOpenChange={setIsMoreOpen}>
+              <Dialog.Trigger asChild>
+                <IconButton
+                  className={clsx(styles.navItem, isMoreOpen && styles.active)}
+                  aria-label="메뉴 열기"
+                  iconSize={24}
+                  name="menu"
+                >
+                  <Menu className={styles.icon} />
+                </IconButton>
+              </Dialog.Trigger>
+              <Dialog.Content>
+                <Dialog.Header title="전체 메뉴" />
+                <Dialog.Body className={styles.drawerPadding}>
+                  <div className={styles.drawerMenu}>
+                    <ViewTransitionLink
+                      href="/mypage/account"
+                      className={styles.drawerItem}
+                      onClick={handleDrawerNavClick}
+                    >
+                      <User size={20} className={styles.drawerIcon} />
+                      <span>계정</span>
+                    </ViewTransitionLink>
+                    <Dialog>
+                      <Dialog.Trigger asChild>
+                        <Button variant="ghost" className={styles.drawerItem}>
+                          <Sparkles size={20} className={styles.drawerIcon} />
+                          <span>{MENU_TITLES.EVENTS}</span>
+                        </Button>
+                      </Dialog.Trigger>
+                      <Dialog.Content>
+                        <Dialog.Header title="설날 이벤트 준비중" />
+                        <Dialog.Body className={styles.centerBody}>
+                          <div className={styles.eventIcon}>🎁</div>
+                          <p className={styles.eventTitle}>
+                            다양한 혜택을 준비한 이벤트가
+                            <br />
+                            준비 중이에요
+                          </p>
+                          <p className={styles.eventDesc}>곧 찾아올 할인 혜택에 기대해주세요. 😊</p>
+                        </Dialog.Body>
+                        <Dialog.Footer>
+                          <Dialog.Close asChild>
+                            <Button
+                              className={styles.fullWidth}
+                              size="lg"
+                              onClick={() => setIsMoreOpen(false)}
+                            >
+                              확인
+                            </Button>
+                          </Dialog.Close>
+                        </Dialog.Footer>
+                      </Dialog.Content>
+                    </Dialog>
+                    <Button
+                      variant="ghost"
+                      className={styles.drawerItem}
+                      onClick={handleCustomerService}
+                    >
+                      <HelpCircle size={20} className={styles.drawerIcon} />
+                      <span>{MENU_TITLES.CUSTOMER_SERVICE}</span>
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className={clsx(styles.drawerItem, styles.logoutButton)}
+                      onClick={handleLogout}
+                    >
+                      <LogOut size={20} className={styles.drawerIcon} />
+                      <span>{MENU_TITLES.LOGOUT}</span>
+                    </Button>
+                  </div>
+                </Dialog.Body>
+              </Dialog.Content>
+            </Dialog>
           )}
         </nav>
       )}
@@ -164,67 +223,6 @@ export function MobileNav({
         </IconButton>
       )}
 
-      {!onPreviewToggle && (
-        <>
-          <Dialog open={isMoreOpen} onOpenChange={setIsMoreOpen}>
-            <Dialog.Header title="전체 메뉴" />
-            <Dialog.Body className={styles.drawerPadding}>
-              <div className={styles.drawerMenu}>
-                <ViewTransitionLink
-                  href="/mypage/account"
-                  className={styles.drawerItem}
-                  onClick={handleDrawerNavClick}
-                >
-                  <User size={20} className={styles.drawerIcon} />
-                  <span>계정</span>
-                </ViewTransitionLink>
-                <Button variant="ghost" className={styles.drawerItem} onClick={handleEventClick}>
-                  <Sparkles size={20} className={styles.drawerIcon} />
-                  <span>{MENU_TITLES.EVENTS}</span>
-                </Button>
-                <Button
-                  variant="ghost"
-                  className={styles.drawerItem}
-                  onClick={handleCustomerService}
-                >
-                  <HelpCircle size={20} className={styles.drawerIcon} />
-                  <span>{MENU_TITLES.CUSTOMER_SERVICE}</span>
-                </Button>
-                <Button
-                  variant="ghost"
-                  className={clsx(styles.drawerItem, styles.logoutButton)}
-                  onClick={handleLogout}
-                >
-                  <LogOut size={20} className={styles.drawerIcon} />
-                  <span>{MENU_TITLES.LOGOUT}</span>
-                </Button>
-              </div>
-            </Dialog.Body>
-          </Dialog>
-
-          <Dialog open={isEventModalOpen} onOpenChange={setIsEventModalOpen}>
-            <Dialog.Header title="설날 이벤트 준비중" />
-            <Dialog.Body className={styles.centerBody}>
-              <div className={styles.eventIcon}>🎁</div>
-              <p className={styles.eventTitle}>
-                다양한 혜택을 준비한 이벤트가
-                <br />
-                준비 중이에요
-              </p>
-              <p className={styles.eventDesc}>곧 찾아올 할인 혜택에 기대해주세요. 😊</p>
-            </Dialog.Body>
-            <Dialog.Footer>
-              <Button
-                className={styles.fullWidth}
-                size="lg"
-                onClick={() => setIsEventModalOpen(false)}
-              >
-                확인
-              </Button>
-            </Dialog.Footer>
-          </Dialog>
-        </>
-      )}
     </>
   );
 

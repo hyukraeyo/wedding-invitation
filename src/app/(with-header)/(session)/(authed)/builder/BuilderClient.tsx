@@ -86,10 +86,6 @@ export function BuilderClient() {
     });
   }, [isEditMode, router, searchParams]);
 
-  const togglePreview = useCallback(() => {
-    setIsPreviewOpen((prev) => !prev);
-  }, []);
-
   useEffect(() => {
     if (user && !profileLoading && !isProfileComplete && !profileLockRef.current) {
       router.replace(getLoginUrl());
@@ -217,36 +213,40 @@ export function BuilderClient() {
         </div>
       </div>
 
-      <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen} fullScreen surface="muted">
-        <div className={styles.mobilePreview}>
-          <InvitationCanvas
-            key="mobile-preview"
-            isPreviewMode
-            editingSection={editingSection}
-            hideWatermark
-          />
-        </div>
+      <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen} fullScreen>
+        {!isPreviewOpen ? (
+          <Dialog.Trigger asChild>
+            <button
+              type="button"
+              className={clsx(styles.floatingPreview, styles.fabVisible)}
+              aria-label="Open preview"
+            >
+              <Eye className={styles.icon} />
+            </button>
+          </Dialog.Trigger>
+        ) : null}
 
-        <button
-          type="button"
-          className={clsx(styles.floatingPreview, styles.fabVisible, styles.previewOpenFab)}
-          onClick={togglePreview}
-          aria-label="Close preview"
-        >
-          <X className={styles.icon} />
-        </button>
+        <Dialog.Content surface="muted">
+          <div className={styles.mobilePreview}>
+            <InvitationCanvas
+              key="mobile-preview"
+              isPreviewMode
+              editingSection={editingSection}
+              hideWatermark
+            />
+          </div>
+
+          <Dialog.Close asChild>
+            <button
+              type="button"
+              className={clsx(styles.floatingPreview, styles.fabVisible, styles.previewOpenFab)}
+              aria-label="Close preview"
+            >
+              <X className={styles.icon} />
+            </button>
+          </Dialog.Close>
+        </Dialog.Content>
       </Dialog>
-
-      {!isPreviewOpen ? (
-        <button
-          type="button"
-          className={clsx(styles.floatingPreview, styles.fabVisible)}
-          onClick={togglePreview}
-          aria-label="Open preview"
-        >
-          <Eye className={styles.icon} />
-        </button>
-      ) : null}
 
     </div>
   );

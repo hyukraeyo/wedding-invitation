@@ -125,29 +125,33 @@ const FontPickerRaw = (
     [onChange, tempValue, setIsOpen]
   );
 
-  const handleOpenModal = useCallback(() => {
-    if (!disabled) {
-      setTempValue(value);
-      setIsOpen(true);
+  const handleTriggerClick = useCallback(() => {
+    if (disabled) {
+      return;
     }
+
+    setTempValue(value);
   }, [disabled, value]);
 
   return (
-    <>
-      <TextField.Button
-        ref={ref}
-        id={id}
-        variant={variant}
-        radius={radius}
-        label={label}
-        placeholder={placeholder}
-        value={displayValue}
-        onClick={handleOpenModal}
-        className={className}
-        rightSlot={<Type size={18} />}
-        {...props}
-      />
-      <Dialog open={isOpen} onOpenChange={setIsOpen} mobileBottomSheet>
+    <Dialog open={isOpen} onOpenChange={setIsOpen} mobileBottomSheet>
+      <Dialog.Trigger asChild>
+        <TextField.Button
+          ref={ref}
+          id={id}
+          variant={variant}
+          radius={radius}
+          label={label}
+          placeholder={placeholder}
+          value={displayValue}
+          onClick={handleTriggerClick}
+          className={className}
+          rightSlot={<Type size={18} />}
+          disabled={disabled}
+          {...props}
+        />
+      </Dialog.Trigger>
+      <Dialog.Content>
         <Dialog.Header title="글꼴 선택" visuallyHidden />
         <Dialog.Body className={styles.modalBody} padding={false}>
           <div className={styles.pickerGrid} data-vaul-no-drag>
@@ -164,8 +168,8 @@ const FontPickerRaw = (
         <Dialog.Footer className={styles.footer}>
           <Button onClick={handleConfirm}>확인</Button>
         </Dialog.Footer>
-      </Dialog>
-    </>
+      </Dialog.Content>
+    </Dialog>
   );
 };
 

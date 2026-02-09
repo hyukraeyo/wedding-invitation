@@ -33,13 +33,15 @@ const BottomSheetRoot = ({
     onOpenChange,
     children,
 }: BottomSheetRootProps) => {
+    const handleOpenChange = (val: boolean) => {
+        onOpenChange?.(val);
+        if (!val) onClose?.();
+    };
+
     return (
         <Drawer.Root
-            open={!!open}
-            onOpenChange={(val) => {
-                onOpenChange?.(val);
-                if (!val) onClose?.();
-            }}
+            {...(open !== undefined ? { open } : {})}
+            onOpenChange={handleOpenChange}
         >
             {children}
         </Drawer.Root>

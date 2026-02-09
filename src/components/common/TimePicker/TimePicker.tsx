@@ -226,30 +226,34 @@ const TimePickerRaw = (
     [onChange, tempValue, defaultValue, onComplete, setIsOpen]
   );
 
-  const handleOpenModal = useCallback(() => {
-    if (!disabled) {
-      setTempValue(value || '');
-      setIsOpen(true);
+  const handleTriggerClick = useCallback(() => {
+    if (disabled) {
+      return;
     }
-  }, [disabled, value, setIsOpen]);
+
+    setTempValue(value || '');
+  }, [disabled, value]);
 
   return (
-    <>
-      <TextField.Button
-        ref={ref}
-        id={id}
-        variant={variant}
-        radius={radius}
-        label={label}
-        placeholder={placeholder}
-        value={displayValue}
-        onClick={handleOpenModal}
-        className={className}
-        rightSlot={<Clock size={18} />}
-        error={error}
-        {...props}
-      />
-      <Dialog open={isOpen} onOpenChange={setIsOpen} mobileBottomSheet>
+    <Dialog open={isOpen} onOpenChange={setIsOpen} mobileBottomSheet>
+      <Dialog.Trigger asChild>
+        <TextField.Button
+          ref={ref}
+          id={id}
+          variant={variant}
+          radius={radius}
+          label={label}
+          placeholder={placeholder}
+          value={displayValue}
+          onClick={handleTriggerClick}
+          className={className}
+          rightSlot={<Clock size={18} />}
+          error={error}
+          disabled={disabled}
+          {...props}
+        />
+      </Dialog.Trigger>
+      <Dialog.Content>
         <Dialog.Header title="예식 시간 선택" visuallyHidden />
         <Dialog.Body className={styles.modalBody} padding={false}>
           <div className={styles.periodContainer}>
@@ -284,8 +288,8 @@ const TimePickerRaw = (
         <Dialog.Footer className={styles.footer}>
           <Button onClick={handleConfirm}>확인</Button>
         </Dialog.Footer>
-      </Dialog>
-    </>
+      </Dialog.Content>
+    </Dialog>
   );
 };
 

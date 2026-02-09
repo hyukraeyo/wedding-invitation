@@ -49,38 +49,39 @@ const MainScreenSection = React.memo<SectionProps>(function MainScreenSection(pr
   );
 
   return (
-    <>
-      <SectionAccordion
-        title={<RequiredSectionTitle title="메인 화면" isComplete={isComplete} />}
-        value={props.value}
-        isOpen={props.isOpen}
-        onToggle={props.onToggle}
-        isInvalid={isInvalid}
-        rightElement={
-          <Button
-            type="button"
-            variant="ghost"
-            size="xs"
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsSampleModalOpen(true);
-            }}
-          >
-            <Sparkles size={14} />
-            추천문구
-          </Button>
-        }
-      >
-        <div style={{ paddingBottom: '16px' }}>
-          <MainScreenSectionContent />
-        </div>
-      </SectionAccordion>
+    <SectionAccordion
+      title={<RequiredSectionTitle title="메인 화면" isComplete={isComplete} />}
+      value={props.value}
+      isOpen={props.isOpen}
+      onToggle={props.onToggle}
+      isInvalid={isInvalid}
+      rightElement={
+        <Dialog open={isSampleModalOpen} onOpenChange={setIsSampleModalOpen} mobileBottomSheet>
+          <Dialog.Trigger asChild>
+            <Button
+              type="button"
+              variant="ghost"
+              size="xs"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              <Sparkles size={14} />
+              추천문구
+            </Button>
+          </Dialog.Trigger>
 
-      <Dialog open={isSampleModalOpen} onOpenChange={setIsSampleModalOpen} mobileBottomSheet>
-        <Dialog.Header title="추천 문구" />
-        <Dialog.Body>{renderSampleList()}</Dialog.Body>
-      </Dialog>
-    </>
+          <Dialog.Content>
+            <Dialog.Header title="추천 문구" />
+            <Dialog.Body>{renderSampleList()}</Dialog.Body>
+          </Dialog.Content>
+        </Dialog>
+      }
+    >
+      <div style={{ paddingBottom: '16px' }}>
+        <MainScreenSectionContent />
+      </div>
+    </SectionAccordion>
   );
 });
 

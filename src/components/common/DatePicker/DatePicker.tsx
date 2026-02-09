@@ -72,22 +72,24 @@ export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
     };
 
     return (
-      <>
-        <TextField.Button
-          ref={ref}
-          id={id}
-          variant={variant}
-          radius={radius}
-          label={label}
-          placeholder={placeholder}
-          value={dateValue ? format(dateValue, 'PPP', { locale: ko }) : ''}
-          onClick={() => !disabled && setIsOpen(true)}
-          className={className}
-          rightSlot={<CalendarIcon size={18} />}
-          error={error}
-          {...props}
-        />
-        <Dialog open={isOpen} onOpenChange={setIsOpen} mobileBottomSheet>
+      <Dialog open={isOpen} onOpenChange={setIsOpen} mobileBottomSheet>
+        <Dialog.Trigger asChild>
+          <TextField.Button
+            ref={ref}
+            id={id}
+            variant={variant}
+            radius={radius}
+            label={label}
+            placeholder={placeholder}
+            value={dateValue ? format(dateValue, 'PPP', { locale: ko }) : ''}
+            className={className}
+            rightSlot={<CalendarIcon size={18} />}
+            error={error}
+            disabled={disabled}
+            {...props}
+          />
+        </Dialog.Trigger>
+        <Dialog.Content>
           <Dialog.Header title="날짜를 선택하세요" visuallyHidden />
           <Dialog.Body className={styles.calendarBody}>
             <Calendar
@@ -101,8 +103,8 @@ export const DatePicker = React.forwardRef<HTMLButtonElement, DatePickerProps>(
               showOutsideDays={false}
             />
           </Dialog.Body>
-        </Dialog>
-      </>
+        </Dialog.Content>
+      </Dialog>
     );
   }
 );

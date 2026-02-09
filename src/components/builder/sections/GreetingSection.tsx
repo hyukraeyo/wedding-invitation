@@ -137,29 +137,37 @@ const GreetingSection = React.memo<SectionProps>(function GreetingSection(props)
   };
 
   return (
-    <>
-      <SectionAccordion
-        title={<RequiredSectionTitle title="인사말" isComplete={isComplete} />}
-        value={props.value}
-        isOpen={props.isOpen}
-        onToggle={props.onToggle}
-        isInvalid={isSectionInvalid}
-        rightElement={
-          <Button
-            type="button"
-            variant="ghost"
-            size="xs"
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsSampleModalOpen(true);
-            }}
-          >
-            <Sparkles size={14} />
-            추천 문구
-          </Button>
-        }
-      >
-        <div className={styles.container}>
+    <SectionAccordion
+      title={<RequiredSectionTitle title="인사말" isComplete={isComplete} />}
+      value={props.value}
+      isOpen={props.isOpen}
+      onToggle={props.onToggle}
+      isInvalid={isSectionInvalid}
+      rightElement={
+        <Dialog open={isSampleModalOpen} onOpenChange={setIsSampleModalOpen} mobileBottomSheet>
+          <Dialog.Trigger asChild>
+            <Button
+              type="button"
+              variant="ghost"
+              size="xs"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              <Sparkles size={14} />
+              추천 문구
+            </Button>
+          </Dialog.Trigger>
+          <Dialog.Content>
+            <Dialog.Header title="추천 문구" />
+            <Dialog.Body>
+              <SampleList items={GREETING_SAMPLES} onSelect={handleSelectSample} />
+            </Dialog.Body>
+          </Dialog.Content>
+        </Dialog>
+      }
+    >
+      <div className={styles.container}>
           <div className={styles.optionItem}>
             <FormField name="greeting-subtitle">
               <FormLabel htmlFor="greeting-subtitle">소제목</FormLabel>
@@ -289,16 +297,8 @@ const GreetingSection = React.memo<SectionProps>(function GreetingSection(props)
               ) : null}
             </div>
           </div>
-        </div>
-      </SectionAccordion>
-
-      <Dialog open={isSampleModalOpen} onOpenChange={setIsSampleModalOpen} mobileBottomSheet>
-        <Dialog.Header title="추천 문구" />
-        <Dialog.Body>
-          <SampleList items={GREETING_SAMPLES} onSelect={handleSelectSample} />
-        </Dialog.Body>
-      </Dialog>
-    </>
+      </div>
+    </SectionAccordion>
   );
 });
 

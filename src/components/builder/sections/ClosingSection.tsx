@@ -48,29 +48,35 @@ export default function ClosingSection(props: SectionProps) {
   );
 
   return (
-    <>
-      <SectionAccordion
-        title="마무리"
-        value={props.value}
-        isOpen={props.isOpen}
-        onToggle={props.onToggle}
-        isInvalid={isInvalid}
-        rightElement={
-          <Button
-            type="button"
-            variant="ghost"
-            size="xs"
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsSampleModalOpen(true);
-            }}
-          >
-            <Sparkles size={14} />
-            추천 문구
-          </Button>
-        }
-      >
-        <div className={styles.container}>
+    <SectionAccordion
+      title="마무리"
+      value={props.value}
+      isOpen={props.isOpen}
+      onToggle={props.onToggle}
+      isInvalid={isInvalid}
+      rightElement={
+        <Dialog open={isSampleModalOpen} onOpenChange={setIsSampleModalOpen} mobileBottomSheet>
+          <Dialog.Trigger asChild>
+            <Button
+              type="button"
+              variant="ghost"
+              size="xs"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              <Sparkles size={14} />
+              추천 문구
+            </Button>
+          </Dialog.Trigger>
+          <Dialog.Content>
+            <Dialog.Header title="추천 문구" />
+            <Dialog.Body>{renderSampleList()}</Dialog.Body>
+          </Dialog.Content>
+        </Dialog>
+      }
+    >
+      <div className={styles.container}>
           <div className={styles.optionItem}>
             <FormField name="closing-subtitle">
               <FormLabel htmlFor="closing-subtitle">소제목</FormLabel>
@@ -125,13 +131,7 @@ export default function ClosingSection(props: SectionProps) {
               />
             </div>
           </div>
-        </div>
-      </SectionAccordion>
-
-      <Dialog open={isSampleModalOpen} onOpenChange={setIsSampleModalOpen} mobileBottomSheet>
-        <Dialog.Header title="추천 문구" />
-        <Dialog.Body>{renderSampleList()}</Dialog.Body>
-      </Dialog>
-    </>
+      </div>
+    </SectionAccordion>
   );
 }

@@ -6,6 +6,8 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/AlertDialog';
 import { Badge } from '@/components/ui/Badge';
@@ -16,7 +18,7 @@ import { Dialog } from '@/components/ui/Dialog';
 import { NumericSpinner } from '@/components/ui/NumericSpinner';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { RichTextEditor } from '@/components/common/RichTextEditor';
-import { Switch } from '@/components/ui/Switch';
+import { SwitchRow } from '@/components/common/SwitchRow';
 import { TextField } from '@/components/ui/TextField';
 import {
   Toast,
@@ -274,10 +276,10 @@ export default function DesignPage() {
               </FormControl>
             </FormField>
 
-            <FormField name="mealSelection" className={s.toggleRow}>
-              <FormLabel>식사 여부</FormLabel>
+            <FormField name="mealSelection">
               <FormControl asChild>
-                <Switch
+                <SwitchRow
+                  label="식사 여부"
                   checked={radioValue === 'yes'}
                   onCheckedChange={(checked) => setRadioValue(checked ? 'yes' : 'no')}
                 />
@@ -303,21 +305,19 @@ export default function DesignPage() {
             </FormField>
 
             <FormField name="showCalendar">
-              <div className={s.toggleRow}>
-                <FormLabel>달력 노출</FormLabel>
-                <FormControl asChild>
-                  <Switch checked={showCalendar} onCheckedChange={setShowCalendar} />
-                </FormControl>
-              </div>
+              <FormControl asChild>
+                <SwitchRow
+                  label="달력 노출"
+                  checked={showCalendar}
+                  onCheckedChange={setShowCalendar}
+                />
+              </FormControl>
             </FormField>
 
             <FormField name="showDday">
-              <div className={s.toggleRow}>
-                <FormLabel>D-Day 노출</FormLabel>
-                <FormControl asChild>
-                  <Switch checked={showDday} onCheckedChange={setShowDday} />
-                </FormControl>
-              </div>
+              <FormControl asChild>
+                <SwitchRow label="D-Day 노출" checked={showDday} onCheckedChange={setShowDday} />
+              </FormControl>
             </FormField>
 
             {/* Photo Gallery */}
@@ -440,7 +440,7 @@ export default function DesignPage() {
 
       <section className={s.section}>
         <div className={s.sectionHeader}>
-          <h2>오버레이 및 토스트</h2>
+          <h2>다이얼로그 및 토스트</h2>
           <span className={s.sectionHint}>다이얼로그, 얼럿 다이얼로그, 바텀시트, 토스트</span>
         </div>
         <div className={s.overlayGrid}>
@@ -448,66 +448,65 @@ export default function DesignPage() {
             <div className={s.overlayActions}>
               <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                 <Dialog.Trigger asChild>
-                  <Button variant="secondary">Dialog</Button>
+                  <Button variant="blue">다이얼로그</Button>
                 </Dialog.Trigger>
                 <Dialog.Content>
-                  <Dialog.Header title="Dialog preview" />
+                  <Dialog.Header title="다이얼로그 미리보기" />
                   <Dialog.Body>
-                    <p>Cache-friendly data and tokens are previewed here.</p>
+                    <p>
+                      애플 감성의 부드러운 애니메이션과 함께 디자인 시스템 토큰이 적용된
+                      다이얼로그입니다.
+                    </p>
                   </Dialog.Body>
                   <Dialog.Footer>
                     <Dialog.Close asChild>
-                      <Button variant="ghost">Close</Button>
+                      <Button variant="ghost">닫기</Button>
                     </Dialog.Close>
-                    <Button>Action</Button>
+                    <Button onClick={() => setDialogOpen(false)}>확인</Button>
                   </Dialog.Footer>
                 </Dialog.Content>
               </Dialog>
 
               <AlertDialog open={alertOpen} onOpenChange={setAlertOpen}>
                 <AlertDialogTrigger asChild>
-                  <Button variant="secondary">Alert</Button>
+                  <Button>얼럿 다이얼로그</Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
-                  <p>Warning: this action immediately syncs the live builder.</p>
+                  <AlertDialogTitle>정말 삭제하시겠습니까?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    이 작업은 되돌릴 수 없으며, 모든 데이터가 즉시 동기화됩니다.
+                  </AlertDialogDescription>
                   <div className={s.alertActions}>
                     <AlertDialogCancel asChild>
-                      <Button variant="ghost">Cancel</Button>
+                      <Button variant="ghost">취소</Button>
                     </AlertDialogCancel>
                     <AlertDialogAction asChild>
-                      <Button color="red">Confirm</Button>
+                      <Button color="red">삭제</Button>
                     </AlertDialogAction>
                   </div>
                 </AlertDialogContent>
               </AlertDialog>
 
+              <Button onClick={() => setSheetOpen(true)}>바텀시트</Button>
               <BottomSheet
                 open={sheetOpen}
                 onOpenChange={setSheetOpen}
-                header="Quick actions"
-                cta={<Button>Save draft</Button>}
+                header="빠른 액션"
+                cta={<Button onClick={() => setSheetOpen(false)}>내용 저장하기</Button>}
               >
                 <div style={{ padding: '0 24px 24px' }}>
-                  <p>The builder action sheet rises from the bottom on mobile.</p>
+                  <p>모바일 환경에서는 하단에서 부드럽게 올라오는 바텀시트가 제공됩니다.</p>
                 </div>
               </BottomSheet>
-              <Button variant="secondary" onClick={() => setSheetOpen(true)}>
-                BottomSheet
-              </Button>
+              <ToastProvider swipeDirection="right">
+                <Button onClick={() => setToastOpen(true)}>토스트 실행</Button>
+                <Toast open={toastOpen} onOpenChange={setToastOpen}>
+                  <ToastTitle>저장 완료</ToastTitle>
+                  <ToastDescription>선택하신 설정이 프리뷰에 즉시 반영되었습니다.</ToastDescription>
+                </Toast>
+                <ToastViewport />
+              </ToastProvider>
             </div>
-          </div>
-          <div className={s.overlayCard}>
-            <h3>Toast demo</h3>
-            <ToastProvider swipeDirection="right">
-              <Button variant="primary" onClick={() => setToastOpen(true)}>
-                Show toast
-              </Button>
-              <Toast open={toastOpen} onOpenChange={setToastOpen}>
-                <ToastTitle>Saved</ToastTitle>
-                <ToastDescription>Color tokens are synced to the live preview.</ToastDescription>
-              </Toast>
-              <ToastViewport />
-            </ToastProvider>
           </div>
         </div>
       </section>

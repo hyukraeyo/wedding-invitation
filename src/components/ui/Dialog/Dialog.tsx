@@ -22,6 +22,20 @@ interface DialogProps extends React.ComponentPropsWithoutRef<typeof DialogPrimit
     surface?: 'default' | 'muted' | undefined;
 }
 
+const hasDialogTrigger = (children: React.ReactNode): boolean => {
+    return React.Children.toArray(children).some((child) => {
+        if (!React.isValidElement(child)) return false;
+
+        const childType = child.type as { displayName?: string; name?: string };
+        const childName = childType.displayName ?? childType.name;
+        if (childName === 'DialogTrigger') {
+            return true;
+        }
+
+        return hasDialogTrigger((child.props as { children?: React.ReactNode }).children);
+    });
+};
+
 const DialogRoot = ({
     children,
     mobileBottomSheet = false,
@@ -37,6 +51,14 @@ const DialogRoot = ({
     const isBottomSheet = !fullScreen && mobileBottomSheet && isMobile;
 
     const value = useMemo(() => ({ isBottomSheet, fullScreen }), [isBottomSheet, fullScreen]);
+    const useComposedPattern = hasDialogTrigger(children);
+    const dialogChildren = useComposedPattern ? (
+        children
+    ) : (
+        <DialogContent surface={surface} {...contentProps}>
+            {children}
+        </DialogContent>
+    );
 
     // exactOptionalPropertyTypes: true fix
     // We must not pass explicit undefined for optional props
@@ -51,9 +73,7 @@ const DialogRoot = ({
         return (
             <DialogContext.Provider value={value}>
                 <BottomSheet.Root {...rootProps}>
-                    <DialogContent surface={surface} {...contentProps}>
-                        {children}
-                    </DialogContent>
+                    {dialogChildren}
                 </BottomSheet.Root>
             </DialogContext.Provider>
         );
@@ -62,9 +82,7 @@ const DialogRoot = ({
     return (
         <DialogContext.Provider value={value}>
             <DialogPrimitive.Root {...rootProps}>
-                <DialogContent surface={surface} {...contentProps}>
-                    {children}
-                </DialogContent>
+                {dialogChildren}
             </DialogPrimitive.Root>
         </DialogContext.Provider>
     );

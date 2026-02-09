@@ -87,31 +87,26 @@ const AddressPickerRaw = (
     onComplete?.();
   };
 
-  const handleOpenModal = () => {
-    if (!disabled) {
-      setIsOpen(true);
-    }
-  };
-
   return (
-    <>
-      <TextField.Button
-        ref={ref}
-        id={id}
-        variant={variant}
-        radius={radius}
-        label={label}
-        placeholder={placeholder}
-        helperText={helperText}
-        value={value}
-        onClick={handleOpenModal}
-        className={className}
-        rightSlot={<Search size={18} />}
-        disabled={disabled}
-        error={error}
-        {...props}
-      />
-      <Dialog open={isOpen} onOpenChange={setIsOpen} mobileBottomSheet>
+    <Dialog open={isOpen} onOpenChange={setIsOpen} mobileBottomSheet>
+      <Dialog.Trigger asChild>
+        <TextField.Button
+          ref={ref}
+          id={id}
+          variant={variant}
+          radius={radius}
+          label={label}
+          placeholder={placeholder}
+          helperText={helperText}
+          value={value}
+          className={className}
+          rightSlot={<Search size={18} />}
+          disabled={disabled}
+          error={error}
+          {...props}
+        />
+      </Dialog.Trigger>
+      <Dialog.Content>
         <Dialog.Header title="주소 검색" />
         <Dialog.Body className={styles.body} padding={false}>
           {isOpen && (
@@ -129,8 +124,8 @@ const AddressPickerRaw = (
             <Button variant="ghost">닫기</Button>
           </Dialog.Close>
         </Dialog.Footer>
-      </Dialog>
-    </>
+      </Dialog.Content>
+    </Dialog>
   );
 };
 

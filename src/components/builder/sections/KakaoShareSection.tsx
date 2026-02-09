@@ -22,7 +22,6 @@ export default function KakaoShareSection(props: SectionProps) {
   const validationErrors = useInvitationStore((state) => state.validationErrors);
   const setKakao = useInvitationStore((state) => state.setKakao);
   const isInvalid = validationErrors.includes(props.value);
-  const [previewOpen, setPreviewOpen] = useState(false);
   const [isSampleModalOpen, setIsSampleModalOpen] = useState(false);
 
   const handleSelectSample = (sample: SamplePhraseItem) => {
@@ -34,29 +33,37 @@ export default function KakaoShareSection(props: SectionProps) {
   };
 
   return (
-    <>
-      <SectionAccordion
-        title="카카오 초대장 썸네일"
-        value={props.value}
-        isOpen={props.isOpen}
-        onToggle={props.onToggle}
-        isInvalid={isInvalid}
-        rightElement={
-          <Button
-            type="button"
-            variant="ghost"
-            size="xs"
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsSampleModalOpen(true);
-            }}
-          >
-            <Sparkles size={14} />
-            추천 문구
-          </Button>
-        }
-      >
-        <div className={styles.container}>
+    <SectionAccordion
+      title="카카오 초대장 썸네일"
+      value={props.value}
+      isOpen={props.isOpen}
+      onToggle={props.onToggle}
+      isInvalid={isInvalid}
+      rightElement={
+        <Dialog open={isSampleModalOpen} onOpenChange={setIsSampleModalOpen} mobileBottomSheet>
+          <Dialog.Trigger asChild>
+            <Button
+              type="button"
+              variant="ghost"
+              size="xs"
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
+              <Sparkles size={14} />
+              추천 문구
+            </Button>
+          </Dialog.Trigger>
+          <Dialog.Content>
+            <Dialog.Header title="추천 문구" />
+            <Dialog.Body>
+              <SampleList items={KAKAO_SHARE_SAMPLES} onSelect={handleSelectSample} />
+            </Dialog.Body>
+          </Dialog.Content>
+        </Dialog>
+      }
+    >
+      <div className={styles.container}>
           {/* Photo Upload */}
           <div className={styles.optionItem}>
             <div className={styles.rowTitle}>사진</div>
@@ -129,17 +136,13 @@ export default function KakaoShareSection(props: SectionProps) {
           </div>
 
           <div className={styles.bottomActions}>
-            <Button
-              type="button"
-              variant="ghost"
-              className={styles.fullPreviewBtn}
-              onClick={() => setPreviewOpen(true)}
-            >
-              <MessageCircle size={16} />
-              미리보기
-            </Button>
-            <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
-              <Dialog.Overlay />
+            <Dialog>
+              <Dialog.Trigger asChild>
+                <Button type="button" variant="ghost" className={styles.fullPreviewBtn}>
+                  <MessageCircle size={16} />
+                  미리보기
+                </Button>
+              </Dialog.Trigger>
               <Dialog.Content>
                 <Dialog.Header title="카카오톡 공유 미리보기" />
                 <Dialog.Body className={styles.modalBody}>
@@ -192,30 +195,16 @@ export default function KakaoShareSection(props: SectionProps) {
                   </div>
                 </Dialog.Body>
                 <Dialog.Footer className={styles.paddedFooter}>
-                  <Button
-                    variant="ghost"
-                    onClick={() => setPreviewOpen(false)}
-                    className={styles.fullWidth}
-                  >
-                    닫기
-                  </Button>
+                  <Dialog.Close asChild>
+                    <Button variant="ghost" className={styles.fullWidth}>
+                      닫기
+                    </Button>
+                  </Dialog.Close>
                 </Dialog.Footer>
               </Dialog.Content>
             </Dialog>
           </div>
-        </div>
-      </SectionAccordion>
-
-      {/* Sample Phrases Modal */}
-      <Dialog open={isSampleModalOpen} onOpenChange={setIsSampleModalOpen}>
-        <Dialog.Overlay />
-        <Dialog.Content>
-          <Dialog.Header title="추천 문구" />
-          <Dialog.Body>
-            <SampleList items={KAKAO_SHARE_SAMPLES} onSelect={handleSelectSample} />
-          </Dialog.Body>
-        </Dialog.Content>
-      </Dialog>
-    </>
+      </div>
+    </SectionAccordion>
   );
 }
