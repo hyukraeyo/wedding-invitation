@@ -22,11 +22,11 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import styles from './BuilderPage.module.scss';
 import { IPhoneFrame } from './IPhoneFrame';
 
-const invitationCanvasLoading = <div className={styles.invitationCanvasLoading} />;
+import { SectionLoader } from '@/components/ui/SectionLoader';
 
 const InvitationCanvas = dynamic(() => import('@/components/preview/InvitationCanvas'), {
   ssr: false,
-  loading: () => invitationCanvasLoading,
+  loading: () => <SectionLoader height="100%" message="초대장을 구성하고 있어요" />,
 });
 
 export function BuilderClient() {

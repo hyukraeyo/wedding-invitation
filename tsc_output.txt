@@ -1,0 +1,16 @@
+[96msrc/app/(with-header)/(session)/(authed)/mypage/requests/RequestsPageClient.tsx[0m:[93m303[0m:[93m11[0m - [91merror[0m[90m TS2367: [0mThis comparison appears to be unintentional because the types '"success"' and '"pending"' have no overlap.
+
+[7m303[0m       ) : status !== 'pending' ? (
+[7m   [0m [91m          ~~~~~~~~~~~~~~~~~~~~[0m
+
+[96msrc/components/preview/InvitationCanvas.tsx[0m:[93m476[0m:[93m22[0m - [91merror[0m[90m TS2304: [0mCannot find name 'Banana'.
+
+[7m476[0m                     <Banana size={16} strokeWidth={2.5} />
+[7m   [0m [91m                     ~~~~~~[0m
+
+
+Found 2 errors in 2 files.
+
+Errors  Files
+     1  src/app/(with-header)/(session)/(authed)/mypage/requests/RequestsPageClient.tsx[90m:303[0m
+     1  src/components/preview/InvitationCanvas.tsx[90m:476[0m

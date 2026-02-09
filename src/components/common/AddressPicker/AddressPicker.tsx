@@ -7,13 +7,14 @@ import type { Address } from 'react-daum-postcode';
 import { Dialog } from '@/components/ui/Dialog';
 import { TextField } from '@/components/ui/TextField';
 import { Button } from '@/components/ui/Button';
+import { SectionLoader } from '@/components/ui/SectionLoader';
 import styles from './AddressPicker.module.scss';
 
 const DaumPostcodeEmbed = dynamic(
   () => import('react-daum-postcode').then((mod) => mod.DaumPostcodeEmbed),
   {
     ssr: false,
-    loading: () => <div className={styles.loading}>주소 검색창을 불러오고 있습니다...</div>,
+    loading: () => <SectionLoader height={460} message="주소 검색창을 불러오고 있어요" />,
   }
 );
 

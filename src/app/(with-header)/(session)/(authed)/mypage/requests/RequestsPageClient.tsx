@@ -46,6 +46,9 @@ interface ConfirmConfig {
   targetRecord?: InvitationSummaryRecord | null;
 }
 
+import { SectionLoader } from '@/components/ui/SectionLoader';
+import { SectionError } from '@/components/ui/SectionError';
+
 /**
  * 🍌 신청 관리 클라이언트 (최적화 버전)
  * TanStack Query의 useInfiniteQuery를 사용하여 고성능 무한 스크롤 및 캐싱을 구현했습니다.
@@ -61,16 +64,17 @@ export default function RequestsPageClient({ initialLimit }: RequestsPageClientP
   );
 
   // 2. 무한 스크롤 쿼리
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useInfiniteQuery({
-    queryKey: ['approval-requests'],
-    queryFn: async ({ pageParam = 0 }) => {
-      return await approvalRequestService.getAllRequests(initialLimit, pageParam);
-    },
-    initialPageParam: 0,
-    getNextPageParam: (lastPage, allPages) => {
-      return lastPage.length === initialLimit ? allPages.flat().length : undefined;
-    },
-  });
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status, refetch } =
+    useInfiniteQuery({
+      queryKey: ['approval-requests'],
+      queryFn: async ({ pageParam = 0 }) => {
+        return await approvalRequestService.getAllRequests(initialLimit, pageParam);
+      },
+      initialPageParam: 0,
+      getNextPageParam: (lastPage, allPages) => {
+        return lastPage.length === initialLimit ? allPages.flat().length : undefined;
+      },
+    });
 
   const allRequests = useMemo(() => data?.pages.flat() ?? [], [data]);
 
@@ -159,8 +163,21 @@ export default function RequestsPageClient({ initialLimit }: RequestsPageClientP
     loading: rejectMutation.isPending,
   });
 
-  if (status === 'error')
-    return <div className={styles.error}>데이터 로딩 중 오류가 발생했습니다.</div>;
+  if (status === 'pending') {
+    return (
+      <MyPageContent className={styles.container}>
+        <SectionLoader height={300} message="신청 내역을 불러오고 있어요" />
+      </MyPageContent>
+    );
+  }
+
+  if (status === 'error') {
+    return (
+      <MyPageContent className={styles.container}>
+        <SectionError height={300} onRetry={() => refetch()} />
+      </MyPageContent>
+    );
+  }
 
   return (
     <MyPageContent className={styles.container}>
@@ -283,13 +300,13 @@ export default function RequestsPageClient({ initialLimit }: RequestsPageClientP
             </div>
           )}
         </div>
-      ) : status !== 'pending' ? (
+      ) : (
         <EmptyState
           icon={<Inbox size={48} strokeWidth={1} />}
           title="대기 중인 신청이 없습니다"
           description="중요한 업데이트나 신청 결과가 있을 때 이곳에서 알려드릴게요."
         />
-      ) : null}
+      )}
 
       {/* Modals... */}
       {/* Modals... */}
