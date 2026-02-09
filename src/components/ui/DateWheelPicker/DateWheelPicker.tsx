@@ -360,7 +360,7 @@ const DateWheelPicker = React.forwardRef<HTMLDivElement, DateWheelPickerProps>(
           year: now.getFullYear(),
         });
       }
-    }, []);
+    }, [value]);
 
     const isInternalChange = React.useRef(false);
 
