@@ -53,7 +53,7 @@ interface WheelItemProps {
   visibleItems: number;
   centerOffset: number;
   isSelected: boolean;
-  disabled?: boolean;
+  disabled?: boolean | undefined;
   onClick: () => void;
 }
 
@@ -112,8 +112,8 @@ interface WheelColumnProps {
   onChange: (index: number) => void;
   itemHeight: number;
   visibleItems: number;
-  disabled?: boolean;
-  className?: string; // Expects SCSS class for width
+  disabled?: boolean | undefined;
+  className?: string | undefined; // Expects SCSS class for width
   ariaLabel: string;
 }
 
@@ -128,6 +128,7 @@ function WheelColumn({
   ariaLabel,
 }: WheelColumnProps) {
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const accumulatorRef = React.useRef(0);
   const y = useMotionValue(-value * itemHeight);
   const centerOffset = Math.floor(visibleItems / 2) * itemHeight;
 
@@ -171,19 +172,28 @@ function WheelColumn({
     if (!container || disabled) return;
 
     const handleWheel = (e: WheelEvent) => {
-      // Prevent default page scroll only if we are scrolling inside the component boundaries
-      // and actually changing values.
-      // But typically wheel pickers capture scroll.
       e.preventDefault();
-      // e.stopPropagation(); // Optional, depending on if you want parent to scroll when boundary hit
 
-      const direction = e.deltaY > 0 ? 1 : -1;
-      const currentValue = valueRef.current;
-      const maxIndex = itemsLengthRef.current - 1;
-      const newIndex = Math.max(0, Math.min(maxIndex, currentValue + direction));
+      // Accumulate scroll delta
+      accumulatorRef.current += e.deltaY;
 
-      if (newIndex !== currentValue) {
-        onChangeRef.current(newIndex);
+      const threshold = itemHeight;
+
+      if (Math.abs(accumulatorRef.current) >= threshold) {
+        const steps =
+          Math.floor(Math.abs(accumulatorRef.current) / threshold) *
+          Math.sign(accumulatorRef.current);
+
+        // Consume the accumulated delta
+        accumulatorRef.current -= steps * threshold;
+
+        const currentValue = valueRef.current;
+        const maxIndex = itemsLengthRef.current - 1;
+        const newIndex = Math.max(0, Math.min(maxIndex, currentValue + steps));
+
+        if (newIndex !== currentValue) {
+          onChangeRef.current(newIndex);
+        }
       }
     };
 
@@ -191,8 +201,9 @@ function WheelColumn({
 
     return () => {
       container.removeEventListener('wheel', handleWheel);
+      accumulatorRef.current = 0;
     };
-  }, [disabled]);
+  }, [disabled, itemHeight]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (disabled) return;
@@ -332,13 +343,24 @@ const DateWheelPicker = React.forwardRef<HTMLDivElement, DateWheelPickerProps>(
     }, [minYear, maxYear]);
 
     const [dateState, setDateState] = React.useState(() => {
-      const currentDate = value || new Date();
+      const currentDate = value || new Date(2000, 0, 1);
       return {
         day: currentDate.getDate(),
         month: currentDate.getMonth(),
         year: currentDate.getFullYear(),
       };
     });
+
+    React.useEffect(() => {
+      if (!value) {
+        const now = new Date();
+        setDateState({
+          day: now.getDate(),
+          month: now.getMonth(),
+          year: now.getFullYear(),
+        });
+      }
+    }, []);
 
     const isInternalChange = React.useRef(false);
 
