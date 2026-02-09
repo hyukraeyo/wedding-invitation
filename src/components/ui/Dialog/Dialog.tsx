@@ -131,6 +131,14 @@ const DialogPortal = memo(({ children, ...props }: React.ComponentPropsWithoutRe
 });
 DialogPortal.displayName = 'DialogPortal';
 
+const FOCUSABLE_SELECTOR = [
+    'button:not([disabled])',
+    '[href]:not([aria-disabled="true"])',
+    'input:not([disabled]):not([type="hidden"])',
+    'select:not([disabled])',
+    'textarea:not([disabled])',
+    '[tabindex]:not([tabindex="-1"]):not([disabled])',
+].join(', ');
 
 const DialogContent = memo(React.forwardRef<
     React.ElementRef<typeof DialogPrimitive.Content>,
@@ -152,12 +160,27 @@ const DialogContent = memo(React.forwardRef<
 
     const handleOpenAutoFocus = useCallback((event: Event) => {
         event.preventDefault();
-        const focusableElements = internalRef.current?.querySelectorAll(
-            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-        );
-        if (focusableElements?.length) {
-            (focusableElements[0] as HTMLElement).focus();
+        const contentElement = internalRef.current;
+        if (!contentElement) return;
+
+        const firstFocusableElement = Array.from(
+            contentElement.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
+        ).find((element) => {
+            if (element.getAttribute('aria-hidden') === 'true') return false;
+            if (element.closest('[aria-hidden="true"]')) return false;
+            if (element.closest('[inert]')) return false;
+            return true;
+        });
+
+        if (firstFocusableElement) {
+            firstFocusableElement.focus({ preventScroll: true });
+            return;
         }
+
+        if (!contentElement.hasAttribute('tabindex')) {
+            contentElement.setAttribute('tabindex', '-1');
+        }
+        contentElement.focus({ preventScroll: true });
     }, []);
     const content = isBottomSheet ? (
         <BottomSheet.Content
