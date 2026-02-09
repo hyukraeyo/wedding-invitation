@@ -1,5 +1,4 @@
-// ============================================
-// 🍌 Banana Wedding - Unified Design System
+// 🍌 Banana Wedding - Unified Design System (Stitch MCP Upgrade)
 // Core entry point for all SCSS variables
 // ============================================
 
@@ -9,8 +8,6 @@
 @forward '@/styles/semantic';
 @forward '@/styles/mixins';
 
-// 🍌 Legacy/Refactored Support Aliases
-// These ensure existing components continue to work during transition
 @use '@/styles/colors' as c;
 @use '@/styles/interact' as i;
 @use '@/styles/semantic' as s;
@@ -18,114 +15,136 @@
 
 $color-foreground: c.$grey-900;
 
-$primary: c.$primary-500;
-$primary-dark: c.$primary-700;
+// ✨ Stitch Premium Colors
+$primary: c.$yellow-400; // Softer, more premium yellow
+$primary-dark: c.$yellow-500;
+$primary-action: c.$yellow-500;
+
 $white: c.$white;
-$grey-100: c.$grey-100;
-$grey-200: c.$grey-200;
-$grey-300: c.$grey-300;
-$grey-400: c.$grey-400;
-$grey-500: c.$grey-500;
-$grey-600: c.$grey-600;
-$grey-700: c.$grey-700;
-$grey-800: c.$grey-800;
-$grey-900: c.$grey-900;
+$grey-50: #fafafa; // Warmer white
+$grey-100: #f4f4f5;
+$grey-200: #e4e4e7;
+$grey-300: #d4d4d8;
+$grey-400: #a1a1aa;
+$grey-500: #71717a;
+$grey-600: #52525b;
+$grey-700: #3f3f46;
+$grey-800: #27272a;
+$grey-900: #18191b;
 
-$radius-md: i.$radius-md;
-$radius-lg: i.$radius-lg;
-$radius-xl: i.$radius-xl;
-$radius-2xl: i.$radius-2xl;
-$radius-sm: i.$radius-sm;
+// ✨ Stitch Radius (More rounded, friendly)
+$radius-sm: 6px;
+$radius-md: 12px;
+$radius-lg: 16px;
+$radius-xl: 24px;
+$radius-2xl: 32px;
+$radius-full: 9999px;
 
-$ease-ios: i.$ease-ios;
+// ✨ Stitch Animation
+$ease-ios: cubic-bezier(0.32, 0.72, 0, 1);
+$ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
 $transition-base: i.$transition-smooth;
 $transition-smooth: i.$transition-smooth;
-$transition-bezier: i.$ease-ios;
+$transition-bezier: $ease-ios;
 
-$text-main: s.$text-primary;
-$text-sub: s.$text-secondary;
+$text-main: $grey-900;
+$text-sub: $grey-500;
 
 // 🍌 Zinc & Color Aliases (Compatibility)
-$zinc-50: c.$grey-50;
-$zinc-100: c.$grey-100;
-$zinc-200: c.$grey-200;
-$zinc-300: c.$grey-300;
-$zinc-400: c.$grey-400;
-$zinc-500: c.$grey-500;
-$zinc-600: c.$grey-600;
-$zinc-700: c.$grey-700;
-$zinc-800: c.$grey-800;
-$zinc-900: c.$grey-900;
+$zinc-50: $grey-50;
+$zinc-100: $grey-100;
+$zinc-200: $grey-200;
+$zinc-300: $grey-300;
+$zinc-400: $grey-400;
+$zinc-500: $grey-500;
+$zinc-600: $grey-600;
+$zinc-700: $grey-700;
+$zinc-800: $grey-800;
+$zinc-900: $grey-900;
 
-// 🍌 Compatibility Aliases (Important for existing components)
-$banana-yellow: c.$primary-600;
-$banana-yellow-hover: c.$primary-600;
-$banana-yellow-active: c.$primary-700;
-$grey-opacity-20: rgba(c.$grey-500, 0.2);
-$grey-opacity-200: rgba(c.$grey-500, 0.2); // Compat alias
-$grey-opacity-50: rgba(c.$grey-500, 0.08);
-$grey-opacity-100: rgba(c.$grey-100, 0.08); // Compat alias
-$shadow-sm: 0 2px 8px rgba(c.$black, 0.04);
-$shadow-md: 0 4px 12px rgba(c.$black, 0.08);
-$shadow-lg: 0 8px 24px rgba(c.$black, 0.12);
-$shadow-xl: 0 10px 40px rgba(c.$black, 0.12);
+// 🍌 Compatibility Aliases
+$banana-yellow: $primary;
+$banana-yellow-hover: $primary-dark;
+$banana-yellow-active: c.$yellow-600;
+
+$grey-opacity-20: rgba($grey-500, 0.2);
+$grey-opacity-200: rgba($grey-500, 0.2);
+$grey-opacity-50: rgba($grey-500, 0.05);
+$grey-opacity-100: rgba($grey-100, 0.08);
+
+// ✨ Stitch Premium Shadows (Softer, multi-layered)
+$shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+$shadow-md:
+  0 4px 6px -1px rgba(0, 0, 0, 0.05),
+  0 2px 4px -1px rgba(0, 0, 0, 0.03);
+$shadow-lg:
+  0 10px 15px -3px rgba(0, 0, 0, 0.05),
+  0 4px 6px -2px rgba(0, 0, 0, 0.025);
+$shadow-xl:
+  0 20px 25px -5px rgba(0, 0, 0, 0.05),
+  0 10px 10px -5px rgba(0, 0, 0, 0.02);
+$shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+
 $canvas-max-width: 500px;
 $max-mobile: 480px;
-$color-muted: c.$grey-100;
-$color-muted-foreground: c.$grey-500;
-$adaptive-background-dimmed: rgba(c.$black, 0.4);
+
+$color-muted: $grey-100;
+$color-muted-foreground: $grey-500;
+$adaptive-background-dimmed: rgba(0, 0, 0, 0.4);
+
 $z-overlay: 9990;
 $z-modal: 10000;
+
 $motion-label-offset: -24px;
 $motion-label-duration: 0.2s;
-$motion-label-ease: cubic-bezier(0.16, 1, 0.3, 1);
+$motion-label-ease: $ease-ios;
 
-$color-primary: c.$primary-600;
-$color-primary-dark: c.$primary-700;
-$color-primary-foreground: $white;
+$color-primary: $primary;
+$color-primary-dark: $primary-dark;
+$color-primary-foreground: $grey-900; // Dark text on yellow for legibility
 $color-success: c.$green-500;
 $color-error: c.$red-500;
 $color-warning: c.$amber-500;
 $color-info: c.$blue-500;
-$color-primary-hover: c.$primary-600;
-$color-border: c.$grey-200;
-$color-background: c.$white;
-$color-bg-page: c.$grey-100;
+$color-primary-hover: $primary-dark;
+$color-border: $grey-200;
+$color-background: $white;
+$color-bg-page: $grey-50;
 
 // Controls
-$control-height-xs: s.$control-height-xs;
-$control-height-sm: s.$control-height-sm;
-$control-height-md: s.$control-height-md;
-$control-height-lg: s.$control-height-lg;
-$control-height-xl: s.$control-height-xl;
+$control-height-xs: 28px;
+$control-height-sm: 36px;
+$control-height-md: 44px; // Hit target optimized
+$control-height-lg: 52px;
+$control-height-xl: 60px;
 
-$control-padding-xs: s.$control-padding-xs;
-$control-padding-sm: s.$control-padding-sm;
-$control-padding-md: s.$control-padding-md;
-$control-padding-lg: s.$control-padding-lg;
-$control-padding-xl: s.$control-padding-xl;
+$control-padding-xs: 8px;
+$control-padding-sm: 12px;
+$control-padding-md: 16px;
+$control-padding-lg: 20px;
+$control-padding-xl: 24px;
 
-$control-font-size-xs: s.$control-font-size-xs;
-$control-font-size-sm: s.$control-font-size-sm;
-$control-font-size-md: s.$control-font-size-md;
-$control-font-size-lg: s.$control-font-size-lg;
-$control-font-size-xl: s.$control-font-size-xl;
+$control-font-size-xs: 12px;
+$control-font-size-sm: 14px;
+$control-font-size-md: 15px; // Slightly larger for readability
+$control-font-size-lg: 17px;
+$control-font-size-xl: 19px;
 
-$control-slot-padding-xs: s.$control-slot-padding-xs;
-$control-slot-padding-sm: s.$control-slot-padding-sm;
-$control-slot-padding-md: s.$control-slot-padding-md;
-$control-slot-padding-lg: s.$control-slot-padding-lg;
-$control-slot-padding-xl: s.$control-slot-padding-xl;
+$control-slot-padding-xs: 6px;
+$control-slot-padding-sm: 8px;
+$control-slot-padding-md: 10px;
+$control-slot-padding-lg: 12px;
+$control-slot-padding-xl: 14px;
 
 // Layout
 $header-height: 56px;
 
 // Extended Tokens
-$control-hover-bg: rgba(c.$grey-500, 0.08); // Similar to muted/50
-$control-hover-bg-strong: c.$grey-200;
-$bg-muted: c.$grey-100;
-$shadow-hover-primary-strong: 0 4px 12px rgba(c.$primary-500, 0.4);
-$scale-press-xs: 0.94;
+$control-hover-bg: rgba($grey-500, 0.05);
+$control-hover-bg-strong: $grey-100;
+$bg-muted: $grey-50;
+$shadow-hover-primary-strong: 0 4px 12px rgba($primary, 0.3);
+$scale-press-xs: 0.96;
 
 // Individual tints for direct access (Compatibility)
 $blue-50: c.$blue-50;
@@ -135,8 +154,8 @@ $blue-600: c.$blue-600;
 $blue-700: c.$blue-700;
 $red-500: c.$red-500;
 $red-600: c.$red-600;
-$primary-50: c.$primary-50;
-$primary-100: c.$primary-100;
+$primary-50: c.$yellow-50;
+$primary-100: c.$yellow-100;
 $yellow-900: c.$yellow-900;
 
 $ease-standard: ease;

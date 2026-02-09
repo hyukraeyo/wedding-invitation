@@ -2,6 +2,11 @@
 @use '../../../styles/mixins' as m;
 @use '../../../styles/semantic' as s;
 
+// ============================================
+// 🍌 TextField Module - Stitch Premium Aesthetic
+// Clean, Readable, Interactive
+// ============================================
+
 .root {
   display: flex;
   align-items: center;
@@ -10,65 +15,72 @@
   transition: all 0.2s v.$ease-ios;
   box-sizing: border-box;
   background-clip: padding-box;
-  touch-action: manipulation; // 🍌 불필요한 제스처 줌 및 클릭 지연 방지
-  overflow: hidden; // 🍌 내부 요소의 넘침을 확실하게 방지 (Safety Guard)
+  touch-action: manipulation;
+  overflow: hidden;
+
+  // Stitch Defaults
+  border-radius: v.$radius-md; // consistent rounded corners
+  font-family: v.$font-pretendard;
 
   // Sizes
   &.xs {
-    height: s.$control-height-xs;
-    font-size: s.$control-font-size-xs;
-    --slot-padding: #{s.$control-slot-padding-xs};
-    --input-padding: #{s.$control-padding-xs};
+    height: v.$control-height-xs;
+    font-size: v.$control-font-size-xs;
+    --slot-padding: #{v.$control-slot-padding-xs};
+    --input-padding: #{v.$control-padding-xs};
   }
 
   &.sm {
-    height: s.$control-height-sm;
-    font-size: s.$control-font-size-sm;
-    --slot-padding: #{s.$control-slot-padding-sm};
-    --input-padding: #{s.$control-padding-sm};
+    height: v.$control-height-sm;
+    font-size: v.$control-font-size-sm;
+    --slot-padding: #{v.$control-slot-padding-sm};
+    --input-padding: #{v.$control-padding-sm};
   }
 
   &.md {
-    height: s.$control-height-md;
-    font-size: s.$control-font-size-md;
-    --slot-padding: #{s.$control-slot-padding-md};
-    --input-padding: #{s.$control-padding-md};
+    height: v.$control-height-md;
+    font-size: v.$control-font-size-md;
+    --slot-padding: #{v.$control-slot-padding-md};
+    --input-padding: #{v.$control-padding-md};
   }
 
   &.lg {
-    height: s.$control-height-lg;
-    font-size: s.$control-font-size-lg;
-    --slot-padding: #{s.$control-slot-padding-lg};
-    --input-padding: #{s.$control-padding-lg};
-    border-radius: v.$radius-lg;
+    height: v.$control-height-lg;
+    font-size: v.$control-font-size-lg;
+    --slot-padding: #{v.$control-slot-padding-lg};
+    --input-padding: #{v.$control-padding-lg};
   }
 
   &.xl {
-    height: s.$control-height-xl;
-    font-size: s.$control-font-size-xl;
-    --slot-padding: #{s.$control-slot-padding-xl};
-    --input-padding: #{s.$control-padding-xl};
-    border-radius: v.$radius-xl;
+    height: v.$control-height-xl;
+    font-size: v.$control-font-size-xl;
+    --slot-padding: #{v.$control-slot-padding-xl};
+    --input-padding: #{v.$control-padding-xl};
   }
 
   // Variants
   &.outline {
     background-color: v.$white;
-    border: 1px solid v.$grey-200;
+    border: 1px solid v.$grey-300;
+    box-shadow: v.$shadow-sm; // Subtle depth
 
     &:hover:not(:focus-within) {
-      border-color: v.$grey-300;
+      border-color: v.$grey-400;
+      background-color: v.$grey-50;
     }
 
     &:focus-within {
-      border-color: s.$border-active;
+      border-color: v.$primary;
+      box-shadow: 0 0 0 3px rgba(v.$primary, 0.2); // Focus ring
+      z-index: 1;
     }
   }
 
   &.primary {
     @include m.control-interactive;
     background-color: v.$white;
-    border: 1px solid v.$action-primary;
+    border: 1px solid v.$primary;
+    box-shadow: 0 0 0 1px v.$primary;
 
     .input {
       font-weight: 600;
@@ -86,9 +98,14 @@
     background-color: v.$grey-100;
     border: 1px solid transparent;
 
+    &:hover:not(:focus-within) {
+      background-color: v.$grey-200;
+    }
+
     &:focus-within {
       background-color: v.$white;
-      border-color: s.$border-active;
+      border-color: v.$primary;
+      box-shadow: 0 0 0 3px rgba(v.$primary, 0.15);
     }
   }
 
@@ -96,9 +113,14 @@
     background-color: transparent;
     border: 1px solid transparent;
 
+    &:hover:not(:focus-within) {
+      background-color: v.$grey-50;
+    }
+
     &:focus-within {
       background-color: v.$white;
-      border-color: s.$border-active;
+      border-color: v.$primary;
+      box-shadow: v.$shadow-sm;
     }
   }
 
@@ -108,11 +130,12 @@
     border: none;
     border-bottom: 2px solid v.$grey-200;
     border-radius: 0 !important;
-    --input-padding: 2px;
-    --slot-padding: 2px;
+    --input-padding: 0;
+    --slot-padding: 0;
+    padding-left: 0; // Align left
 
     &:focus-within {
-      border-bottom-color: s.$border-active;
+      border-bottom-color: v.$primary;
     }
 
     &.invalid {
@@ -126,26 +149,23 @@
 
     &:focus-within {
       border-color: v.$red-500;
+      box-shadow: 0 0 0 3px rgba(v.$red-500, 0.1);
     }
   }
 
-  // Radius
+  // Radius overrides
   &.radius_none {
     border-radius: 0;
   }
-
   &.radius_sm {
     border-radius: v.$radius-sm;
   }
-
   &.radius_md {
     border-radius: v.$radius-md;
   }
-
   &.radius_lg {
     border-radius: v.$radius-lg;
   }
-
   &.radius_full {
     border-radius: v.$radius-full;
   }
@@ -160,30 +180,29 @@
   }
 
   &.disabled {
-    opacity: 0.5;
+    opacity: 0.6;
     cursor: not-allowed;
-    background-color: v.$grey-100;
+    background-color: v.$grey-50;
+    border-color: v.$grey-200;
   }
 }
 
 .input {
   flex: 1;
-  width: 100%; // 🍌 Flex 내에서도 너비 제약 부여
-  min-width: 0; // 🍌 Ellipsis 지원을 위해 필수
+  width: 100%;
+  min-width: 0;
   height: 100%;
-  overflow: hidden; // 🍌 내부 요소의 넘침 방지 및 ellipsis 지원
+  overflow: hidden;
   border: none;
   background: transparent;
   padding: 0 var(--input-padding, 16px);
   font-family: inherit;
   font-size: inherit;
 
-  // 🍌 iOS Safari Auto-zoom 방지 최신 기법
-  // 16px 미만일 때 확대되는 특성을 이용해 16px로 강제하고
-  // 필요한 경우 시각적으로만 줄이는 것이 정석이지만 여기서는 16px를 유지함
+  // iOS Safari Auto-zoom prevention
   @include m.mobile {
     font-size: 16px !important;
-    line-height: normal; // 🍌 라인 높이로 인한 레이아웃 틀어짐 방지
+    line-height: normal;
   }
 
   color: v.$grey-900;
@@ -192,7 +211,7 @@
   transition: all 0.2s v.$ease-ios;
   appearance: none;
   -webkit-appearance: none;
-  border-radius: inherit; // Inherit radius for autofill background
+  border-radius: inherit;
 
   &::placeholder {
     color: v.$grey-400;
@@ -211,12 +230,12 @@
       font-weight: 400;
     }
   }
+
   // Handle browser autofill styling
   &:-webkit-autofill,
   &:-webkit-autofill:hover,
   &:-webkit-autofill:focus,
   &:-webkit-autofill:active {
-    //-webkit-box-shadow: 0 0 0 1000px v.$white inset !important;
     -webkit-text-fill-color: v.$grey-900 !important;
     caret-color: v.$grey-900;
     transition: background-color 5000s ease-in-out 0s;
@@ -228,7 +247,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  min-width: 0; // 🍌 Ellipsis 처리를 위한 핵심
+  min-width: 0;
   text-align: left;
 }
 
@@ -257,28 +276,28 @@
 
 .clearButton {
   @include m.flex-center;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   color: v.$grey-400;
-  background-color: v.$grey-100;
+  background-color: v.$grey-200; // Distinct background
   border: none;
   cursor: pointer;
   transition: all 0.2s v.$ease-ios;
   padding: 0;
 
   svg {
-    width: 14px;
-    height: 14px;
+    width: 12px;
+    height: 12px;
   }
 
   @include m.hover {
-    background-color: v.$grey-200;
+    background-color: v.$grey-300;
     color: v.$grey-600;
   }
 
   &:active {
-    transform: scale(0.92);
+    transform: scale(0.9);
   }
 }
 

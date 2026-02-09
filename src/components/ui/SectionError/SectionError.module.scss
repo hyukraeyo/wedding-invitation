@@ -1,32 +1,61 @@
 @use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 16px;
   width: 100%;
-  padding: 24px;
+  padding: 32px;
   text-align: center;
+  background-color: v.$grey-50;
+  border-radius: v.$radius-lg;
+  border: 1px dashed v.$grey-200;
+  transition: all 0.2s v.$ease-ios;
+
+  &:hover {
+    background-color: v.$grey-100;
+    border-color: v.$grey-300;
+  }
+}
+
+.iconWrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: rgba(v.$color-error, 0.1);
+  @include m.flex-center;
+  margin-bottom: 4px;
 }
 
 .icon {
   color: v.$color-error;
+  width: 24px;
+  height: 24px;
 }
 
 .message {
   margin: 0;
   font-size: v.$font-size-sm;
-  color: v.$text-secondary;
+  color: v.$grey-600;
+  font-weight: 500;
   line-height: 1.5;
+  max-width: 280px;
 }
 
 .retryButton {
-  margin-top: 4px;
-  gap: 6px;
+  margin-top: 8px;
+  gap: 8px;
 }
 
 .retryIcon {
-  // 회전 애니메이션 등 추가 가능
+  width: 16px;
+  height: 16px;
+  transition: transform 0.4s v.$ease-ios;
+
+  .retryButton:hover & {
+    transform: rotate(180deg);
+  }
 }

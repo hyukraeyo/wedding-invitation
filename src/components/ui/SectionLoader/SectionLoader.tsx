@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { clsx } from 'clsx';
 import styles from './SectionLoader.module.scss';
 
 export interface SectionLoaderProps {
@@ -8,6 +9,8 @@ export interface SectionLoaderProps {
   message?: string;
   /** 컴포넌트 높이 (기본: 200px) */
   height?: number | string;
+  /** 추가 클래스명 */
+  className?: string;
 }
 
 /**
@@ -18,10 +21,11 @@ export interface SectionLoaderProps {
 export const SectionLoader = React.memo(function SectionLoader({
   message,
   height = 200,
+  className,
 }: SectionLoaderProps) {
   return (
     <div
-      className={styles.container}
+      className={clsx(styles.container, className)}
       style={{ height: typeof height === 'number' ? `${height}px` : height }}
     >
       <div className={styles.spinner} />

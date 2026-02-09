@@ -1,32 +1,52 @@
 @use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 16px;
   width: 100%;
-  min-height: 120px;
+  min-height: 160px;
+  padding: 24px;
+  // Optional: subtle background to indicate loading area
+  // background-color: rgba(v.$grey-50, 0.5);
+  border-radius: v.$radius-lg;
 }
 
 .spinner {
-  width: 32px;
-  height: 32px;
-  border: 3px solid v.$grey-200;
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(v.$primary, 0.2); // Softer track
   border-top-color: v.$primary;
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+  animation: spin 0.8s cubic-bezier(0.55, 0.055, 0.675, 0.19) infinite; // improved easing
 }
 
 .message {
   margin: 0;
   font-size: v.$font-size-sm;
-  color: v.$text-tertiary;
+  color: v.$grey-500;
+  font-weight: 500;
+  animation: pulse 1.5s ease-in-out infinite;
 }
 
 @keyframes spin {
-  to {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
   }
 }

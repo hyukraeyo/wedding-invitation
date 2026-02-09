@@ -2,8 +2,8 @@
 @use '../../../styles/mixins' as m;
 
 // ============================================
-// 🍌 Button Module - Apple & Toss Aesthetic
-// Self-contained semantic styling
+// 🍌 Button Module - Stitch Premium Aesthetic
+// Tactile, Friendly, Minimal
 // ============================================
 
 .button {
@@ -17,22 +17,28 @@
   cursor: pointer;
   white-space: nowrap;
   user-select: none;
+  -webkit-tap-highlight-color: transparent;
 
-  // Apple Style Transition
+  // Stitch Animation
   transition:
-    background-color 0.5s v.$ease-ios,
-    color 0.5s v.$ease-ios,
-    opacity 0.5s v.$ease-ios,
-    transform 0.2s v.$ease-ios,
-    box-shadow 0.3s v.$ease-ios,
-    filter 0.5s v.$ease-ios;
+    background-color 0.2s v.$ease-ios,
+    color 0.2s v.$ease-ios,
+    opacity 0.2s v.$ease-ios,
+    transform 0.1s v.$ease-ios,
+    box-shadow 0.2s v.$ease-ios,
+    filter 0.2s v.$ease-ios;
 
-  @include m.haptic-active(0.96);
   @include m.focus-subtle;
+
+  // Tactile Feedback
+  &:active:not(:disabled) {
+    transform: scale(0.96);
+  }
 
   &:disabled {
     cursor: not-allowed;
-    opacity: 0.4;
+    opacity: 0.5;
+    filter: grayscale(0.5);
   }
 
   &.fluid {
@@ -43,28 +49,34 @@
 
 // 1. Primary Variant (Banana Identity)
 .primary {
-  background-color: v.$action-primary;
-  color: v.$white;
+  background-color: v.$primary;
+  color: v.$grey-900; // Contrast for Banana Yellow
+  box-shadow: v.$shadow-sm;
 
   &:disabled {
     background-color: v.$grey-200;
     color: v.$grey-400;
+    box-shadow: none;
     opacity: 1;
   }
 
   &:hover:not(:disabled) {
-    background-color: v.$action-primary-hover;
+    background-color: v.$primary-dark;
+    box-shadow: v.$shadow-md;
+    transform: translateY(-1px);
   }
 
   &:active:not(:disabled) {
-    background-color: v.$action-primary-active;
+    transform: translateY(0) scale(0.96);
+    box-shadow: v.$shadow-sm;
   }
 }
 
 // 1.5 Blue Variant (Action Blue)
 .blue {
-  background-color: v.$action-blue;
+  background-color: v.$blue-600;
   color: v.$white;
+  box-shadow: v.$shadow-sm;
 
   &:disabled {
     background-color: v.$grey-200;
@@ -73,18 +85,16 @@
   }
 
   &:hover:not(:disabled) {
-    background-color: v.$action-blue-hover;
-  }
-
-  &:active:not(:disabled) {
-    background-color: v.$action-blue-active;
+    background-color: v.$blue-700;
+    box-shadow: v.$shadow-md;
   }
 }
 
 .hero {
   background-color: v.$primary;
-  color: v.$text-primary;
-  box-shadow: 0 4px 12px rgba(v.$primary, 0.4);
+  color: v.$grey-900;
+  box-shadow: 0 4px 14px rgba(v.$primary, 0.4);
+  font-weight: 700;
 
   &:disabled {
     background-color: v.$grey-200;
@@ -97,12 +107,18 @@
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(v.$primary, 0.5);
   }
+
+  &:active:not(:disabled) {
+    transform: translateY(0) scale(0.96);
+  }
 }
 
 // 2. Secondary Variant
 .secondary {
-  background-color: v.$action-secondary;
-  color: v.$text-main;
+  background-color: v.$white;
+  color: v.$grey-900;
+  border: 1px solid v.$grey-200;
+  box-shadow: v.$shadow-sm;
 
   &:disabled {
     background-color: v.$grey-100;
@@ -111,29 +127,33 @@
   }
 
   &:hover:not(:disabled) {
-    background-color: v.$action-secondary-hover;
+    background-color: v.$grey-50;
+    border-color: v.$grey-300;
+    box-shadow: v.$shadow-md;
   }
 }
 
 // 3. Outline Variant
 .outline {
   background-color: transparent;
-  border: 1px solid v.$grey-200;
-  color: v.$text-main;
+  border: 1px solid v.$grey-300;
+  color: v.$grey-700;
 
   &:hover:not(:disabled) {
+    border-color: v.$grey-400;
     background-color: v.$grey-50;
+    color: v.$grey-900;
   }
 }
 
 // 4. Ghost Variant (Minimal Style)
 .ghost {
   background-color: transparent;
-  color: v.$text-sub;
+  color: v.$grey-600;
 
   &:hover:not(:disabled) {
-    background-color: v.$action-secondary;
-    color: v.$text-main;
+    background-color: v.$grey-100;
+    color: v.$grey-900;
   }
 }
 
@@ -146,7 +166,7 @@
   font-size: inherit;
   color: inherit;
   cursor: pointer;
-  min-width: 0; // 🍌 Flex 환경에서 overflow 방지
+  min-width: 0;
   text-align: inherit;
   outline: none;
   display: block;
@@ -162,28 +182,28 @@
   height: v.$control-height-xs;
   padding: 0 v.$control-padding-xs;
   font-size: v.$control-font-size-xs;
-  border-radius: v.$radius-sm;
+  border-radius: v.$radius-md; // Slightly more rounded
 }
 
 .sm {
   height: v.$control-height-sm;
   padding: 0 v.$control-padding-sm;
   font-size: v.$control-font-size-sm;
-  border-radius: v.$radius-sm;
+  border-radius: v.$radius-lg;
 }
 
 .md {
   height: v.$control-height-md;
   padding: 0 v.$control-padding-md;
   font-size: v.$control-font-size-md;
-  border-radius: v.$radius-lg;
+  border-radius: v.$radius-xl;
 }
 
 .lg {
   height: v.$control-height-lg;
   padding: 0 v.$control-padding-lg;
   font-size: v.$control-font-size-lg;
-  border-radius: v.$radius-xl;
+  border-radius: v.$radius-2xl;
 }
 
 // Elements
@@ -191,8 +211,8 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  min-width: 0; // 🍌 하위 요소의 ellipsis 처리를 위해 필수
-  transition: opacity 0.3s v.$ease-ios;
+  min-width: 0;
+  transition: opacity 0.2s v.$ease-ios;
 
   &.hidden {
     opacity: 0;
@@ -202,7 +222,7 @@
 .loader {
   position: absolute;
   @include m.flex-center;
-  animation: fade-in 0.3s v.$ease-ios;
+  animation: fade-in 0.2s v.$ease-ios;
 }
 
 @keyframes fade-in {
@@ -215,8 +235,8 @@
 }
 
 .spinner {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   color: currentColor;
   animation: rotate 1s linear infinite;
 }

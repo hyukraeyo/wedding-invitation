@@ -3,6 +3,7 @@
 import React from 'react';
 import { AlertCircle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { clsx } from 'clsx';
 import styles from './SectionError.module.scss';
 
 export interface SectionErrorProps {
@@ -12,6 +13,8 @@ export interface SectionErrorProps {
   onRetry?: () => void;
   /** 컴포넌트 높이 */
   height?: number | string;
+  /** 추가 클래스명 */
+  className?: string;
 }
 
 /**
@@ -21,10 +24,11 @@ export const SectionError = React.memo(function SectionError({
   message = '데이터를 불러오는 중 오류가 발생했습니다.',
   onRetry,
   height = 200,
+  className,
 }: SectionErrorProps) {
   return (
     <div
-      className={styles.container}
+      className={clsx(styles.container, className)}
       style={{ height: typeof height === 'number' ? `${height}px` : height }}
     >
       <AlertCircle className={styles.icon} size={32} />
