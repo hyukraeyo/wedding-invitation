@@ -165,6 +165,7 @@ const EditorForm = memo(function EditorForm({ formId, onSubmit }: EditorFormProp
           sectionKey: issue.sectionKey,
           sectionLabel: EDITOR_SECTION_LABEL[issue.sectionKey],
           fieldLabel: issue.fieldLabel,
+          fieldId: issue.fieldId,
         }));
 
         // 중복 제거 (HTML5와 비즈니스 로직에서 동일한 필드가 걸릴 수 있음)
@@ -198,8 +199,15 @@ const EditorForm = memo(function EditorForm({ formId, onSubmit }: EditorFormProp
         return;
       }
 
-      const target =
-        findInvalidElementInSection(form, summary.sectionKey) ?? findFirstInvalidElement(form);
+      let target: HTMLElement | null = null;
+      if (summary.fieldId) {
+        target = document.getElementById(summary.fieldId);
+      }
+
+      if (!target) {
+        target =
+          findInvalidElementInSection(form, summary.sectionKey) ?? findFirstInvalidElement(form);
+      }
 
       if (!target) {
         return;

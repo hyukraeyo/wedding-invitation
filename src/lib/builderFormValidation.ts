@@ -13,6 +13,7 @@ export interface InvalidFieldSummary {
   sectionKey: EditorSectionKey;
   sectionLabel: string;
   fieldLabel: string;
+  fieldId?: string | undefined;
 }
 
 export const findFirstInvalidElement = (form: HTMLFormElement): HTMLElement | null =>
@@ -86,7 +87,8 @@ export const collectInvalidFieldSummaries = (form: HTMLFormElement): InvalidFiel
     }
 
     dedupe.add(dedupeKey);
-    summaries.push({ sectionKey, sectionLabel, fieldLabel });
+    const fieldId = invalidElement.getAttribute('id') || undefined;
+    summaries.push({ sectionKey, sectionLabel, fieldLabel, fieldId });
   }
 
   return summaries;
