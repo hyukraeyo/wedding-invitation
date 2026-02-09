@@ -1,0 +1,115 @@
+@use '@/styles/variables' as v;
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+  user-select: none;
+  touch-action: none;
+
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  &.sm {
+    font-size: v.$font-size-sm;
+    gap: v.$builder-gap-sm;
+  }
+
+  &.md {
+    font-size: v.$font-size-md;
+    gap: v.$builder-gap-md;
+  }
+
+  &.lg {
+    font-size: v.$font-size-lg;
+    gap: v.$builder-gap-lg;
+  }
+}
+
+.column {
+  position: relative;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: pan-x; // Allow vertical drag, but maybe better 'none' for the wheel itself if it handles all events
+
+  &:active {
+    cursor: grabbing;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.gradientTop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  pointer-events: none;
+  background: linear-gradient(to bottom, v.$white 10%, rgba(v.$white, 0) 100%);
+}
+
+.gradientBottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  pointer-events: none;
+  background: linear-gradient(to top, v.$white 10%, rgba(v.$white, 0) 100%);
+}
+
+.highlight {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  pointer-events: none;
+  border-top: 1px solid v.$grey-200;
+  border-bottom: 1px solid v.$grey-200;
+  background: v.$grey-50;
+  opacity: 0.5;
+}
+
+.wheelContent {
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.wheelItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  /* transform-style: preserve-3d is set inline in JS */
+}
+
+.text {
+  transition: color 0.2s ease;
+  color: v.$text-sub;
+  font-weight: 400;
+
+  &.selected {
+    color: v.$text-main;
+    font-weight: 600;
+  }
+}
+
+// Fixed widths for columns to prevent jitter
+.dayColumn {
+  width: 64px;
+}
+.monthColumn {
+  width: 100px;
+} // Month names can be long
+.yearColumn {
+  width: 80px;
+}

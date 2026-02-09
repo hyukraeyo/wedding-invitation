@@ -2,12 +2,11 @@
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
-import { X } from 'lucide-react';
+import { Eye, X } from 'lucide-react';
 import { clsx } from 'clsx';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useShallow } from 'zustand/react/shallow';
 
-import { MobileNav } from '@/components/common/MobileNav';
 import EditorForm from '@/components/common/EditorForm';
 import { Dialog } from '@/components/ui';
 import { BananaLoader } from '@/components/ui/Loader';
@@ -18,7 +17,6 @@ import { invitationService } from '@/services/invitationService';
 import { useHeaderStore } from '@/store/useHeaderStore';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useToast } from '@/hooks/use-toast';
-import { useScrollLock } from '@/hooks/use-scroll-lock';
 
 import styles from './BuilderPage.module.scss';
 import { IPhoneFrame } from './IPhoneFrame';
@@ -91,8 +89,6 @@ export function BuilderClient() {
   const togglePreview = useCallback(() => {
     setIsPreviewOpen((prev) => !prev);
   }, []);
-
-  useScrollLock(isPreviewOpen);
 
   useEffect(() => {
     if (user && !profileLoading && !isProfileComplete && !profileLockRef.current) {
@@ -217,46 +213,41 @@ export function BuilderClient() {
                 hideWatermark
               />
             </IPhoneFrame>
-
-            <p className={styles.label}>MOBILE PREVIEW</p>
           </div>
         </div>
       </div>
 
-      <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen} fullScreen>
-        <Dialog.Content surface="muted">
-          <Dialog.Header title="Mobile Preview" divider padding="compact" />
+      <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen} fullScreen surface="muted">
+        <div className={styles.mobilePreview}>
+          <InvitationCanvas
+            key="mobile-preview"
+            isPreviewMode
+            editingSection={editingSection}
+            hideWatermark
+          />
+        </div>
 
-          <div className={styles.previewHint}>
-            화면을 아래로 스크롤해서 청첩장 미리보기를 확인해 주세요.
-          </div>
-
-          <div className={styles.mobilePreview}>
-            <InvitationCanvas
-              key="mobile-preview"
-              isPreviewMode
-              editingSection={editingSection}
-              hideWatermark
-              disableInternalScroll
-            />
-          </div>
-
-          <button
-            className={clsx(styles.floatingPreview, styles.fabVisible, styles.previewOpenFab)}
-            onClick={togglePreview}
-            aria-label="Close preview"
-          >
-            <X className={styles.icon} />
-          </button>
-        </Dialog.Content>
+        <button
+          type="button"
+          className={clsx(styles.floatingPreview, styles.fabVisible, styles.previewOpenFab)}
+          onClick={togglePreview}
+          aria-label="Close preview"
+        >
+          <X className={styles.icon} />
+        </button>
       </Dialog>
 
-      <MobileNav
-        onSave={stableSave}
-        isSaving={isSaving}
-        onPreviewToggle={togglePreview}
-        isPreviewOpen={isPreviewOpen}
-      />
+      {!isPreviewOpen ? (
+        <button
+          type="button"
+          className={clsx(styles.floatingPreview, styles.fabVisible)}
+          onClick={togglePreview}
+          aria-label="Open preview"
+        >
+          <Eye className={styles.icon} />
+        </button>
+      ) : null}
+
     </div>
   );
 }

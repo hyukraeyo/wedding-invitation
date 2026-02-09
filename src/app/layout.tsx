@@ -17,6 +17,7 @@ export const viewport: Viewport = {
   themeColor: '#F9F8E6',
   // 🍌 최신 모바일 브라우저 기법: 키보드가 올라올 때 뷰포트 높이를 조절하여 UI가 가려지거나 확대되는 현상 방지
   interactiveWidget: 'resizes-content',
+  viewportFit: 'cover',
 };
 
 export const metadata: Metadata = {
@@ -163,9 +164,9 @@ export default async function RootLayout({
         <Suspense fallback={null}>
           <ClientProviders>
             <div suppressHydrationWarning vaul-drawer-wrapper="" className={styles.appShell}>
-              <div id="main-content" role="main" className={styles.mainContent}>
+              <main id="main-content" className={styles.mainContent}>
                 {children}
-              </div>
+              </main>
             </div>
           </ClientProviders>
         </Suspense>

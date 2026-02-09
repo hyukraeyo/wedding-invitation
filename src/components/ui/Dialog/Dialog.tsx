@@ -19,12 +19,14 @@ interface DialogProps extends React.ComponentPropsWithoutRef<typeof DialogPrimit
     Omit<React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>, 'asChild'> {
     mobileBottomSheet?: boolean | undefined;
     fullScreen?: boolean | undefined;
+    surface?: 'default' | 'muted' | undefined;
 }
 
 const DialogRoot = ({
     children,
     mobileBottomSheet = false,
     fullScreen = false,
+    surface = 'default',
     open,
     defaultOpen,
     onOpenChange,
@@ -49,7 +51,7 @@ const DialogRoot = ({
         return (
             <DialogContext.Provider value={value}>
                 <BottomSheet.Root {...rootProps}>
-                    <DialogContent {...contentProps}>
+                    <DialogContent surface={surface} {...contentProps}>
                         {children}
                     </DialogContent>
                 </BottomSheet.Root>
@@ -60,7 +62,7 @@ const DialogRoot = ({
     return (
         <DialogContext.Provider value={value}>
             <DialogPrimitive.Root {...rootProps}>
-                <DialogContent {...contentProps}>
+                <DialogContent surface={surface} {...contentProps}>
                     {children}
                 </DialogContent>
             </DialogPrimitive.Root>

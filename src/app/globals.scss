@@ -1,12 +1,13 @@
-@use "../styles/variables" as *;
-@use "../styles/mixins" as m;
-@use "../styles/reset";
-@use "../styles/animations";
-@use "../styles/common";
+@use '../styles/variables' as *;
+@use '../styles/mixins' as m;
+@use '../styles/reset';
+@use '../styles/animations';
+@use '../styles/common';
 
 @font-face {
   font-family: 'GmarketSansMedium';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff')
+    format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -16,17 +17,21 @@
   @include m.export-css-vars;
 
   /* Font Families */
-  --font-pretendard: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
-  --font-gmarket-sans: "GmarketSansMedium", sans-serif;
-  --font-sans: "Inter", "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", sans-serif;
-  --font-serif: "Playfair Display", "Nanum Myeongjo", "Times New Roman", serif;
-  --font-gowun-batang: "Gowun Batang", "Nanum Myeongjo", serif;
-  --font-gowun-dodum: "Gowun Dodum", "Pretendard", sans-serif;
-  --font-nanum-myeongjo: "Nanum Myeongjo", "Times New Roman", serif;
-  --font-yeon-sung: "Yeon Sung", "Pretendard", cursive;
-  --font-do-hyeon: "Do Hyeon", "Pretendard", sans-serif;
-  --font-song-myung: "Song Myung", "Nanum Myeongjo", serif;
-  --font-script: "Great Vibes", "Times New Roman", cursive;
+  --font-pretendard:
+    'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue',
+    'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  --font-gmarket-sans: 'GmarketSansMedium', sans-serif;
+  --font-sans:
+    'Inter', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue',
+    'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+  --font-serif: 'Playfair Display', 'Nanum Myeongjo', 'Times New Roman', serif;
+  --font-gowun-batang: 'Gowun Batang', 'Nanum Myeongjo', serif;
+  --font-gowun-dodum: 'Gowun Dodum', 'Pretendard', sans-serif;
+  --font-nanum-myeongjo: 'Nanum Myeongjo', 'Times New Roman', serif;
+  --font-yeon-sung: 'Yeon Sung', 'Pretendard', cursive;
+  --font-do-hyeon: 'Do Hyeon', 'Pretendard', sans-serif;
+  --font-song-myung: 'Song Myung', 'Nanum Myeongjo', serif;
+  --font-script: 'Great Vibes', 'Times New Roman', cursive;
 
   /* Custom Transitions (App-like feel) */
   --ease-ios: cubic-bezier(0.16, 1, 0.3, 1);
@@ -51,9 +56,9 @@
   --radius-full: 9999px;
 
   /* TDS Buttons & Tokens */
-  --button-background-color: #FBC02D;
+  --button-background-color: #fbc02d;
   --button-color: #000000;
-  --button-pressed-background-color: #F9A825;
+  --button-pressed-background-color: #f9a825;
 }
 
 * {
@@ -65,7 +70,7 @@
 html {
   -webkit-tap-highlight-color: transparent;
   /* 🍌 바텀시트/모달 닫기 시 스크롤 위치 복원 시 애니메이션 충돌(위에서 내려오는 현상) 방지를 위해 전역 smooth 삭제 */
-  // scroll-behavior: smooth; 
+  // scroll-behavior: smooth;
 
   /* 1. html, body 높이 보장 */
   height: 100%;
@@ -130,13 +135,13 @@ button {
 }
 
 /* App-like Motion Overrides */
-[data-state="open"] {
+[data-state='open'] {
   &.animate-in {
     animation-timing-function: var(--ease-ios) !important;
   }
 }
 
-[data-state="closed"] {
+[data-state='closed'] {
   &.animate-out {
     animation-timing-function: var(--ease-ios) !important;
   }
@@ -146,7 +151,7 @@ button {
   backdrop-filter: blur(var(--motion-overlay-blur));
   animation: motion-overlay-in var(--motion-duration-base) var(--ease-ios) both;
 
-  &[data-state="closed"] {
+  &[data-state='closed'] {
     animation: motion-overlay-out var(--motion-duration-fast) var(--ease-ios) both;
   }
 }
@@ -155,31 +160,31 @@ button {
   will-change: transform, opacity;
   animation: motion-sheet-in-bottom var(--motion-duration-slow) var(--ease-sheet) both;
 
-  &[data-state="closed"] {
+  &[data-state='closed'] {
     animation: motion-sheet-out-bottom var(--motion-duration-base) var(--ease-sheet) both;
   }
 
-  &[data-side="right"] {
+  &[data-side='right'] {
     animation: motion-sheet-in-right var(--motion-duration-slow) var(--ease-sheet) both;
   }
 
-  &[data-side="right"][data-state="closed"] {
+  &[data-side='right'][data-state='closed'] {
     animation: motion-sheet-out-right var(--motion-duration-slow) var(--ease-sheet) both;
   }
 
-  &[data-side="left"] {
+  &[data-side='left'] {
     animation: motion-sheet-in-left var(--motion-duration-slow) var(--ease-ios) both;
   }
 
-  &[data-side="left"][data-state="closed"] {
+  &[data-side='left'][data-state='closed'] {
     animation: motion-sheet-out-left var(--motion-duration-slow) var(--ease-ios) both;
   }
 
-  &[data-side="top"] {
+  &[data-side='top'] {
     animation: motion-sheet-in-top var(--motion-duration-slow) var(--ease-ios) both;
   }
 
-  &[data-side="top"][data-state="closed"] {
+  &[data-side='top'][data-state='closed'] {
     animation: motion-sheet-out-top var(--motion-duration-fast) var(--ease-ios) both;
   }
 }
@@ -188,13 +193,12 @@ button {
   will-change: transform, opacity;
   animation: motion-dialog-in var(--motion-duration-base) var(--ease-ios) both;
 
-  &[data-state="closed"] {
+  &[data-state='closed'] {
     animation: motion-dialog-out var(--motion-duration-fast) var(--ease-ios) both;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-
   .motion-overlay,
   .motion-sheet,
   .motion-dialog {
@@ -232,8 +236,6 @@ button {
   }
 }
 
-
-
 @keyframes page-fade-out {
   from {
     opacity: 1;
@@ -260,7 +262,6 @@ button {
 
 @media (prefers-reduced-motion: reduce) {
   @supports (view-transition-name: none) {
-
     ::view-transition-group(page-content),
     ::view-transition-old(page-content),
     ::view-transition-new(page-content) {
@@ -272,6 +273,11 @@ button {
 // Global utility for view transitions to ensure correct naming
 .view-transition-content {
   view-transition-name: page-content;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
 }
 
 .view-transition-header {
@@ -281,5 +287,3 @@ button {
 .view-transition-sidebar {
   view-transition-name: page-sidebar;
 }
-
-

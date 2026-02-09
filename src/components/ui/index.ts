@@ -42,3 +42,4 @@ export * from './VisuallyHidden';
 export * from './OptionList';
 export * from './Field';
 export * from './NumericSpinner';
+export * from './DateWheelPicker';

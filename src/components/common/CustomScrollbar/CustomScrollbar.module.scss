@@ -1,10 +1,10 @@
-@use "../../../styles/variables" as v;
-@use "../../../styles/mixins" as m;
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
 .wrapper {
   position: fixed;
   right: 2px;
-  top: 0;
+  top: v.$header-height;
   bottom: 0;
   width: 8px;
   z-index: 9999;
@@ -14,6 +14,10 @@
 
   &.visible {
     opacity: 1;
+  }
+
+  @include m.mobile {
+    display: none;
   }
 }
 
@@ -25,10 +29,14 @@
   border-radius: 10px;
   pointer-events: auto;
   cursor: grab;
-  transition: width 0.2s v.$ease-ios, background 0.2s v.$ease-ios, opacity 0.2s v.$ease-ios;
+  transition:
+    width 0.2s v.$ease-ios,
+    background 0.2s v.$ease-ios,
+    opacity 0.2s v.$ease-ios;
   will-change: transform, height;
 
-  &:hover, &.dragging {
+  &:hover,
+  &.dragging {
     width: 6px;
     right: 1px;
     background: rgba(0, 0, 0, 0.45);
@@ -39,25 +47,13 @@
   }
 }
 
-// 🍌 모바일 기기(터치 위주)에서는 호버 효과 제거 및 항상 얇게 유지
-@include m.mobile {
-  .thumb {
-    width: 4px;
-    right: 2px;
-
-    &:hover, &.dragging {
-      width: 4px;
-      right: 2px;
-    }
-  }
-}
-
 // 다크모드 대응
 :global(.dark) {
   .thumb {
     background: rgba(255, 255, 255, 0.35);
-    
-    &:hover, &.dragging {
+
+    &:hover,
+    &.dragging {
       background: rgba(255, 255, 255, 0.55);
     }
   }

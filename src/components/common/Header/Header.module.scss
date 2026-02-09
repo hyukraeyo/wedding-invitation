@@ -9,9 +9,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  // background-color: v.$color-background;
+  background-color: v.$white;
   padding: 0 1rem; // px-4
   z-index: 50;
+  border-bottom: 1px solid v.$grey-200;
   transition: transform v.$transition-400 cubic-bezier(0.16, 1, 0.3, 1); // ease-ios
 
   @include m.mobile {
@@ -144,9 +145,9 @@
   right: 4px;
   width: 8px;
   height: 8px;
-  background-color: #f43f5e; // v.$color-danger
+  background-color: v.$color-error;
   border-radius: 50%;
-  border: 1.5px solid white;
+  border: 1.5px solid v.$white;
   z-index: 10;
 }
 
