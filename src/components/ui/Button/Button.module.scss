@@ -146,14 +146,15 @@
   font-size: inherit;
   color: inherit;
   cursor: pointer;
-  width: 100%;
+  min-width: 0; // 🍌 Flex 환경에서 overflow 방지
   text-align: inherit;
   outline: none;
   display: block;
 }
 
 .unstyledContent {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
 }
 
 // Sizes
@@ -190,6 +191,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 0; // 🍌 하위 요소의 ellipsis 처리를 위해 필수
   transition: opacity 0.3s v.$ease-ios;
 
   &.hidden {

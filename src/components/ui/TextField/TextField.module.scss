@@ -11,6 +11,7 @@
   box-sizing: border-box;
   background-clip: padding-box;
   touch-action: manipulation; // 🍌 불필요한 제스처 줌 및 클릭 지연 방지
+  overflow: hidden; // 🍌 내부 요소의 넘침을 확실하게 방지 (Safety Guard)
 
   // Sizes
   &.xs {
@@ -167,8 +168,10 @@
 
 .input {
   flex: 1;
-  width: 100%;
+  width: 100%; // 🍌 Flex 내에서도 너비 제약 부여
+  min-width: 0; // 🍌 Ellipsis 지원을 위해 필수
   height: 100%;
+  overflow: hidden; // 🍌 내부 요소의 넘침 방지 및 ellipsis 지원
   border: none;
   background: transparent;
   padding: 0 var(--input-padding, 16px);
@@ -208,16 +211,6 @@
       font-weight: 400;
     }
   }
-
-  .buttonText {
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    min-width: 0;
-    text-align: left;
-  }
-
   // Handle browser autofill styling
   &:-webkit-autofill,
   &:-webkit-autofill:hover,
@@ -228,6 +221,15 @@
     caret-color: v.$grey-900;
     transition: background-color 5000s ease-in-out 0s;
   }
+}
+
+.buttonText {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0; // 🍌 Ellipsis 처리를 위한 핵심
+  text-align: left;
 }
 
 .slot {

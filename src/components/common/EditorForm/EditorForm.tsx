@@ -59,6 +59,8 @@ const EditorForm = memo(function EditorForm({ formId, onSubmit }: EditorFormProp
   const [invalidSummaries, setInvalidSummaries] = useState<InvalidFieldSummary[]>([]);
   const [wasSubmitted, setWasSubmitted] = useState(false);
 
+  const explicitFocusTargetRef = React.useRef<HTMLElement | null>(null);
+
   const { editingSection, setEditingSection, setValidationErrors } = useInvitationStore(
     useShallow((state) => ({
       editingSection: state.editingSection,
@@ -196,25 +198,28 @@ const EditorForm = memo(function EditorForm({ formId, onSubmit }: EditorFormProp
         return;
       }
 
-      const focusTarget = () => {
-        const target =
-          findInvalidElementInSection(form, summary.sectionKey) ?? findFirstInvalidElement(form);
-        if (!target) {
-          return;
-        }
+      const target =
+        findInvalidElementInSection(form, summary.sectionKey) ?? findFirstInvalidElement(form);
 
-        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        target.focus();
-      };
+      if (!target) {
+        return;
+      }
+
+      explicitFocusTargetRef.current = target;
 
       if (!openSections.includes(summary.sectionKey)) {
         handleToggle(summary.sectionKey, true);
-        setTimeout(focusTarget, 350);
-      } else {
-        focusTarget();
       }
 
       setIsValidationOpen(false);
+
+      setTimeout(() => {
+        if (explicitFocusTargetRef.current) {
+          explicitFocusTargetRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          explicitFocusTargetRef.current.focus();
+          explicitFocusTargetRef.current = null;
+        }
+      }, 350);
     },
     [formId, handleToggle, openSections]
   );
@@ -262,6 +267,12 @@ const EditorForm = memo(function EditorForm({ formId, onSubmit }: EditorFormProp
         <AlertDialog.Content
           onCloseAutoFocus={(event) => {
             event.preventDefault();
+
+            // 🍌 명시적인 포커스 타겟이 있으면 기본 동작(첫 번째 에러 포커스) 방지
+            if (explicitFocusTargetRef.current) {
+              return;
+            }
+
             const form = document.getElementById(formId) as HTMLFormElement;
             if (form) {
               findFirstInvalidElement(form)?.focus();

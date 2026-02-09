@@ -1,0 +1,66 @@
+{
+  "$schema": "https://raw.githubusercontent.com/code-yeongyu/oh-my-opencode/master/assets/oh-my-opencode.schema.json",
+
+  "models": {
+    "default": "opencode/kimi-k2.5-free",
+
+    "categories": {
+      "visual-engineering": "opencode/kimi-k2.5-free",
+      "ultrabrain": "opencode/kimi-k2.5-free",
+      "deep": "opencode/kimi-k2.5-free",
+      "quick": "opencode/kimi-k2.5-free",
+      "artistry": "opencode/kimi-k2.5-free",
+      "unspecified-low": "opencode/kimi-k2.5-free",
+      "unspecified-high": "opencode/kimi-k2.5-free",
+      "writing": "opencode/kimi-k2.5-free"
+    }
+  },
+
+  "agents": {
+    "sisyphus": {
+      "model": "opencode/kimi-k2.5-free"
+    },
+    "explore": {
+      "model": "opencode/kimi-k2.5-free"
+    },
+    "librarian": {
+      "model": "opencode/kimi-k2.5-free"
+    },
+    "oracle": {
+      "model": "opencode/kimi-k2.5-free"
+    },
+    "prometheus": {
+      "model": "opencode/kimi-k2.5-free"
+    },
+    "sisyphus-junior": {
+      "model": "opencode/kimi-k2.5-free"
+    },
+    "momus": {
+      "model": "opencode/kimi-k2.5-free"
+    },
+    "metis": {
+      "model": "opencode/kimi-k2.5-free"
+    },
+    "atlas": {
+      "model": "opencode/kimi-k2.5-free"
+    },
+    "hephaestus": {
+      "model": "opencode/kimi-k2.5-free"
+    },
+    "frontend-ui-ux": {
+      "model": "opencode/kimi-k2.5-free"
+    },
+    "git-master": {
+      "model": "opencode/kimi-k2.5-free"
+    },
+    "dev-browser": {
+      "model": "opencode/kimi-k2.5-free"
+    },
+    "playwright": {
+      "model": "opencode/kimi-k2.5-free"
+    },
+    "multimodal-looker": {
+      "model": "opencode/kimi-k2.5-free"
+    }
+  }
+}

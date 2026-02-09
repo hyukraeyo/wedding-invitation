@@ -64,8 +64,8 @@ export function isBlank(value: string | null | undefined): boolean {
 
 export function isValidName(name: string | null | undefined): boolean {
   if (isBlank(name)) return false;
-  // 한글(완성형+자모), 영어(대소문자), 공백, 가운뎃점 허용 (sanitizeNameInput과 일치)
-  const nameRegex = /^[가-힣ㄱ-ㅎㅏ-ㅣa-zA-Z\s·]+$/;
+  // 한글(완성형), 영어(대소문자), 공백, 가운뎃점 허용 (자모 제외)
+  const nameRegex = /^[가-힣a-zA-Z\s·]+$/;
   return nameRegex.test(name!.trim());
 }
 

@@ -18,19 +18,27 @@ export interface InvalidFieldSummary {
 export const findFirstInvalidElement = (form: HTMLFormElement): HTMLElement | null =>
   form.querySelector<HTMLElement>(INVALID_FIELD_SELECTOR);
 
-export const mapSectionValueToEditorKey = (sectionValue: string | null): EditorSectionKey | null => {
+export const mapSectionValueToEditorKey = (
+  sectionValue: string | null
+): EditorSectionKey | null => {
   if (!sectionValue) {
     return null;
   }
 
-  return SECTION_VALUE_TO_EDITOR_KEY[sectionValue as keyof typeof SECTION_VALUE_TO_EDITOR_KEY] ?? null;
+  return (
+    SECTION_VALUE_TO_EDITOR_KEY[sectionValue as keyof typeof SECTION_VALUE_TO_EDITOR_KEY] ?? null
+  );
 };
 
 export const mapEditorKeyToSectionValue = (sectionKey: EditorSectionKey): string =>
   EDITOR_KEY_TO_SECTION_VALUE[sectionKey];
 
-export const getInvalidElementSectionKey = (invalidElement: HTMLElement): EditorSectionKey | null => {
-  const sectionItem = invalidElement.closest('[data-radix-collection-item]');
+export const getInvalidElementSectionKey = (
+  invalidElement: HTMLElement
+): EditorSectionKey | null => {
+  const sectionItem =
+    invalidElement.closest('[data-radix-collection-item]') ??
+    invalidElement.closest('[data-state][data-value]'); // Radix Accordion Item fallback
   const sectionValue = sectionItem?.getAttribute('data-value') ?? null;
   return mapSectionValueToEditorKey(sectionValue);
 };

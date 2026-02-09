@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   // React 19 Strict Mode 활성화
@@ -116,7 +116,9 @@ const nextConfig: NextConfig = {
       base-uri 'self';
       form-action 'self' https://sharer.kakao.com;
       frame-ancestors 'none';
-    `.replace(/\s{2,}/g, ' ').trim();
+    `
+      .replace(/\s{2,}/g, ' ')
+      .trim();
 
     return [
       {
@@ -127,7 +129,10 @@ const nextConfig: NextConfig = {
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'X-DNS-Prefetch-Control', value: 'on' },
-          { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains; preload' },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=31536000; includeSubDomains; preload',
+          },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(self)' },
         ],
       },
@@ -198,9 +203,9 @@ const nextConfig: NextConfig = {
               enforce: true,
               reuseExistingChunk: true,
             },
-          }
-        }
-      }
+          },
+        },
+      };
     }
 
     return config;
@@ -208,13 +213,14 @@ const nextConfig: NextConfig = {
 };
 
 // 개발 환경이 아닐 때만 PWA 설정을 입힙니다.
-const config = process.env.NODE_ENV === 'production'
-  ? require('next-pwa')({
-    dest: 'public',
-    register: true,
-    skipWaiting: true,
-    buildExcludes: [/middleware-manifest\.json$/],
-  })(nextConfig)
-  : nextConfig;
+const config =
+  process.env.NODE_ENV === 'production'
+    ? require('next-pwa')({
+        dest: 'public',
+        register: true,
+        skipWaiting: true,
+        buildExcludes: [/middleware-manifest\.json$/],
+      })(nextConfig)
+    : nextConfig;
 
 export default config;

@@ -61,8 +61,11 @@
   margin-top: 0;
   margin-bottom: 12px; // 아이템 간 간격 추가로 테두리 뭉침 방지
   border-radius: v.$radius-md;
+  border: 1px solid transparent; // 🍌 레이아웃 시프트 방지를 위해 기본적으로 투명 보더 추가
   background-color: v.$white;
-  transition: transform v.$transition-base;
+  transition:
+    transform v.$transition-base,
+    border-color v.$transition-base;
   overflow: hidden; // 테두리 영역 내부 요소 침범 방지
 
   &:last-child {
@@ -71,7 +74,7 @@
 }
 
 .SectionTrigger {
-  height: v.$control-height-lg;
+  height: calc(v.$control-height-lg - 2px); // 🍌 보더 2px만큼 제외하여 높이 유지
   padding: 0 24px;
   font-size: v.$font-size-md; // 한 단계 상향 (14px -> 15px)
   background-color: v.$white;
@@ -131,7 +134,7 @@
 
 // Refined error states for a clean, premium look
 .Invalid {
-  border: 1px solid v.$red-500;
+  border-color: v.$red-500; // 🍌 보더 스타일 대신 색상만 변경
   border-radius: v.$radius-md !important;
   background-color: v.$white;
   position: relative;
