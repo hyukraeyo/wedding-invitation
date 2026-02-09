@@ -1,25 +1,14 @@
 import React from 'react';
-import dynamic from 'next/dynamic';
 import { useShallow } from 'zustand/react/shallow';
 import { useBuilderSection } from '@/hooks/useBuilder';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { RequiredSectionTitle } from '@/components/common/RequiredSectionTitle';
 import { SectionSampleDialogAction } from '@/components/common/SectionSampleDialogAction';
-
-import styles from './MainScreenSection.module.scss';
-
-import type { SectionProps, SamplePhraseItem } from '@/types/builder';
-import { MAIN_TITLE_SAMPLES } from '@/constants/samples';
 import { EditorSection } from '@/components/ui/EditorSection';
+import { MAIN_TITLE_SAMPLES } from '@/constants/samples';
+import type { SectionProps, SamplePhraseItem } from '@/types/builder';
 
-const MainScreenSectionContent = dynamic(() => import('./MainScreenSectionContent'), {
-  loading: () => (
-    <div className={styles.loadingContainer}>
-      <div className={styles.loadingSpinner} />
-    </div>
-  ),
-  ssr: false,
-});
+import MainScreenSectionContent from './MainScreenSectionContent';
 
 const MainScreenSection = React.memo<SectionProps>(function MainScreenSection(props) {
   const { imageUrl, setMainScreen } = useInvitationStore(

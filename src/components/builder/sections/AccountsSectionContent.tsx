@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Plus, Trash2, ChevronDown, Check } from 'lucide-react';
+import { useShallow } from 'zustand/react/shallow';
+
+import { RichTextEditor } from '@/components/common/RichTextEditor';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { IconButton } from '@/components/ui/IconButton';
 import { Button as UIButton } from '@/components/ui/Button';
@@ -7,15 +10,8 @@ import { TextField } from '@/components/ui/TextField';
 import { FormControl, FormField, FormLabel } from '@/components/ui/Form';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { Dialog } from '@/components/ui/Dialog';
-import styles from './AccountsSection.module.scss';
 import { cn } from '@/lib/utils';
-import dynamic from 'next/dynamic';
-import { useShallow } from 'zustand/react/shallow';
-
-const RichTextEditor = dynamic(
-  () => import('@/components/common/RichTextEditor').then((mod) => mod.RichTextEditor),
-  { ssr: false }
-);
+import styles from './AccountsSection.module.scss';
 
 export default function AccountsSectionContent() {
   const {

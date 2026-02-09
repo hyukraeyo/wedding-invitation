@@ -1,5 +1,4 @@
 ﻿import React from 'react';
-import dynamic from 'next/dynamic';
 import { useShallow } from 'zustand/react/shallow';
 
 import { RequiredSectionTitle } from '@/components/common/RequiredSectionTitle';
@@ -8,10 +7,7 @@ import { useBuilderSection } from '@/hooks/useBuilder';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import type { SectionProps } from '@/types/builder';
 
-const GallerySectionContent = dynamic(() => import('./GallerySectionContent'), {
-  loading: () => <div>로딩</div>,
-  ssr: false,
-});
+import GallerySectionContent from './GallerySectionContent';
 
 const GallerySection = React.memo<SectionProps>(function GallerySection(props) {
   const { galleryLength } = useInvitationStore(

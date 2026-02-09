@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import dynamic from 'next/dynamic';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   Calendar,
@@ -24,6 +23,16 @@ import { Button } from '@/components/ui/Button';
 import { Form } from '@/components/ui/Form';
 import { IconButton } from '@/components/ui/IconButton';
 import { Skeleton } from '@/components/ui/Skeleton';
+import AccountsSection from '@/components/builder/sections/AccountsSection';
+import BasicInfoSection from '@/components/builder/sections/BasicInfoSection';
+import ClosingSection from '@/components/builder/sections/ClosingSection';
+import DateTimeSection from '@/components/builder/sections/DateTimeSection';
+import GallerySection from '@/components/builder/sections/GallerySection';
+import GreetingSection from '@/components/builder/sections/GreetingSection';
+import KakaoShareSection from '@/components/builder/sections/KakaoShareSection';
+import LocationSection from '@/components/builder/sections/LocationSection';
+import MainScreenSection from '@/components/builder/sections/MainScreenSection';
+import ThemeSection from '@/components/builder/sections/ThemeSection';
 import {
   EDITOR_SECTION_KEYS,
   EDITOR_SECTION_LABEL,
@@ -45,37 +54,6 @@ import type { SectionProps } from '@/types/builder';
 import styles from './EditorForm.module.scss';
 
 type BuilderSectionComponent = React.ComponentType<SectionProps>;
-
-const MainScreenSection = dynamic(
-  () => import('@/components/builder/sections/MainScreenSection')
-) as BuilderSectionComponent;
-const ThemeSection = dynamic(
-  () => import('@/components/builder/sections/ThemeSection')
-) as BuilderSectionComponent;
-const BasicInfoSection = dynamic(
-  () => import('@/components/builder/sections/BasicInfoSection')
-) as BuilderSectionComponent;
-const DateTimeSection = dynamic(
-  () => import('@/components/builder/sections/DateTimeSection')
-) as BuilderSectionComponent;
-const LocationSection = dynamic(
-  () => import('@/components/builder/sections/LocationSection')
-) as BuilderSectionComponent;
-const GreetingSection = dynamic(
-  () => import('@/components/builder/sections/GreetingSection')
-) as BuilderSectionComponent;
-const GallerySection = dynamic(
-  () => import('@/components/builder/sections/GallerySection')
-) as BuilderSectionComponent;
-const AccountsSection = dynamic(
-  () => import('@/components/builder/sections/AccountsSection')
-) as BuilderSectionComponent;
-const KakaoShareSection = dynamic(
-  () => import('@/components/builder/sections/KakaoShareSection')
-) as BuilderSectionComponent;
-const ClosingSection = dynamic(
-  () => import('@/components/builder/sections/ClosingSection')
-) as BuilderSectionComponent;
 
 const SECTION_COMPONENTS: Record<EditorSectionKey, BuilderSectionComponent> = {
   basic: BasicInfoSection,
@@ -189,7 +167,9 @@ const EditorForm = React.memo(function EditorForm({ formId, onSubmit }: EditorFo
 
       const isHtmlValid = form.checkValidity();
       const htmlSummaries = isHtmlValid ? [] : collectInvalidFieldSummaries(form);
-      const htmlInvalidSectionKeys = Array.from(new Set(htmlSummaries.map((summary) => summary.sectionKey)));
+      const htmlInvalidSectionKeys = Array.from(
+        new Set(htmlSummaries.map((summary) => summary.sectionKey))
+      );
 
       const currentStoreState = useInvitationStore.getState();
       const cleanData = toInvitationData(currentStoreState);
@@ -220,7 +200,8 @@ const EditorForm = React.memo(function EditorForm({ formId, onSubmit }: EditorFo
         const combinedSummaries = [...htmlSummaries];
         bizSummaries.forEach((summary) => {
           const duplicatedSummary = combinedSummaries.find(
-            (item) => item.sectionKey === summary.sectionKey && item.fieldLabel === summary.fieldLabel
+            (item) =>
+              item.sectionKey === summary.sectionKey && item.fieldLabel === summary.fieldLabel
           );
 
           if (!duplicatedSummary) {
@@ -247,9 +228,12 @@ const EditorForm = React.memo(function EditorForm({ formId, onSubmit }: EditorFo
         return;
       }
 
-      let target: HTMLElement | null = summary.fieldId ? document.getElementById(summary.fieldId) : null;
+      let target: HTMLElement | null = summary.fieldId
+        ? document.getElementById(summary.fieldId)
+        : null;
       if (!target) {
-        target = findInvalidElementInSection(form, summary.sectionKey) ?? findFirstInvalidElement(form);
+        target =
+          findInvalidElementInSection(form, summary.sectionKey) ?? findFirstInvalidElement(form);
       }
       if (!target) {
         return;

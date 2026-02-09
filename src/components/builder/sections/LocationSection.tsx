@@ -1,5 +1,4 @@
 ﻿import React from 'react';
-import dynamic from 'next/dynamic';
 import { useShallow } from 'zustand/react/shallow';
 
 import { RequiredSectionTitle } from '@/components/common/RequiredSectionTitle';
@@ -8,16 +7,7 @@ import { useBuilderSection } from '@/hooks/useBuilder';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import type { SectionProps } from '@/types/builder';
 
-import styles from './LocationSection.module.scss';
-
-const LocationSectionContent = dynamic(() => import('./LocationSectionContent'), {
-  loading: () => (
-    <div className={styles.loadingContainer}>
-      <div className={styles.loadingSpinner} />
-    </div>
-  ),
-  ssr: false,
-});
+import LocationSectionContent from './LocationSectionContent';
 
 const LocationSection = React.memo<SectionProps>(function LocationSection(props) {
   const { location, address } = useInvitationStore(

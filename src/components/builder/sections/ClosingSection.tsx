@@ -1,11 +1,7 @@
 import React from 'react';
-import dynamic from 'next/dynamic';
-
-const RichTextEditor = dynamic(
-  () => import('@/components/common/RichTextEditor').then((mod) => mod.RichTextEditor),
-  { ssr: false }
-);
 import { useShallow } from 'zustand/react/shallow';
+
+import { RichTextEditor } from '@/components/common/RichTextEditor';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useBuilderSection } from '@/hooks/useBuilder';
 import { TextField } from '@/components/ui/TextField';

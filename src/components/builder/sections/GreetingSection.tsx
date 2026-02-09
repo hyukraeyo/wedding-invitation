@@ -1,5 +1,4 @@
 import React from 'react';
-import dynamic from 'next/dynamic';
 import { useShallow } from 'zustand/react/shallow';
 
 import { isRequiredField } from '@/constants/requiredFields';
@@ -12,6 +11,7 @@ import type { SectionProps, SamplePhraseItem } from '@/types/builder';
 
 import { ImageUploader } from '@/components/common/ImageUploader';
 import { RequiredSectionTitle } from '@/components/common/RequiredSectionTitle';
+import { RichTextEditor } from '@/components/common/RichTextEditor';
 import { SectionSampleDialogAction } from '@/components/common/SectionSampleDialogAction';
 import { EditorSection } from '@/components/ui/EditorSection';
 import { FormControl, FormField, FormHeader, FormLabel, FormMessage } from '@/components/ui/Form';
@@ -20,24 +20,6 @@ import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { TextField } from '@/components/ui/TextField';
 import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
 import styles from './GreetingSection.module.scss';
-
-const RichTextEditor = dynamic(
-  () => import('@/components/common/RichTextEditor').then((mod) => mod.RichTextEditor),
-  {
-    ssr: false,
-    loading: () => (
-      <div
-        style={{
-          height: '160px',
-          width: '100%',
-          backgroundColor: 'var(--color-grey-100)',
-          borderRadius: '8px',
-          animation: 'pulse 2s infinite',
-        }}
-      />
-    ),
-  }
-);
 
 const GreetingSection = React.memo<SectionProps>(function GreetingSection(props) {
   const {
