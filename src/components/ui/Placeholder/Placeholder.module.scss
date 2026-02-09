@@ -13,7 +13,7 @@
   background-color: v.$grey-100;
   color: v.$grey-400;
   border: 1px dashed v.$grey-300;
-  border-radius: inherit;
+  border-radius: v.$radius-lg;
   transition: v.$transition-smooth;
 
   &.aspectRatio {

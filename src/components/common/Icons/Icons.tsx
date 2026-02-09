@@ -99,11 +99,17 @@ export const NaverIcon = ({ size = 24, className }: IconProps) => (
     xmlns="http://www.w3.org/2000/svg"
     className={className}
   >
+    <defs>
+      <linearGradient id="naver_map_grad" x1="0.5" y1="0" x2="0.5" y2="1">
+        <stop offset="0" stopColor="#1585F6" />
+        <stop offset="1" stopColor="#00C73C" />
+      </linearGradient>
+    </defs>
     <path
-      d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0 0 114.6 0 256s114.6 256 256 256z"
-      fill={PALETTE.NAVER_GREEN}
+      d="M256 20C145.5 20 56 109.5 56 220C56 345 256 492 256 492C256 492 456 345 456 220C456 109.5 366.5 20 256 20Z"
+      fill="url(#naver_map_grad)"
     />
-    <path d="M175 310V130H223L289 233.5V130H337V310H289L223 206.5V310H175Z" fill={PALETTE.WHITE} />
+    <path d="M175 310V130H223L289 233.5V130H337V310H289L223 206.5V310H175Z" fill="white" />
   </svg>
 );
 
@@ -111,14 +117,15 @@ export const KakaoIcon = ({ size = 24, className }: IconProps) => (
   <svg
     width={size}
     height={size}
-    viewBox="0 0 24 24"
+    viewBox="0 0 1024 1024"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     className={className}
   >
+    <rect width="1024" height="1024" rx="200" fill={PALETTE.KAKAO_YELLOW_BRAND} />
     <path
-      d="M12 3C6.47715 3 2 6.47715 2 10.75c0 2.822 1.944 5.289 4.8456 6.575L5.804 20.372c-.114.417.348.749.697.514l4.636-3.13c.284.029.573.044.863.044 5.5228 0 10-3.4772 10-7.75C22 6.47715 17.5228 3 12 3z"
-      fill={PALETTE.KAKAO_YELLOW_BRAND}
+      d="M512 880c0 0-300-300-300-470a300 300 0 1 1 600 0c0 170-300 470-300 470z M512 310a100 100 0 1 0 0 200 100 100 0 1 0 0 -200z"
+      fill="#1585F6"
     />
   </svg>
 );

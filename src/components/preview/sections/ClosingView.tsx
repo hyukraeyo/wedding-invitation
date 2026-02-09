@@ -151,7 +151,7 @@ const ClosingView = memo(
               </div>
             </div>
           ) : (
-            <Placeholder className={styles.imagePlaceholder} />
+            <Placeholder />
           )}
 
           <div

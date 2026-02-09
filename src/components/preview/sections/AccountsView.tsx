@@ -106,13 +106,7 @@ const AccountsView = memo(
           </>
         ) : null}
 
-        {!hasAccounts ? (
-          <Placeholder
-            className={styles.accountPlaceholder}
-            text="계좌 정보를 등록해 주세요"
-            icon={Wallet}
-          />
-        ) : null}
+        {!hasAccounts ? <Placeholder text="계좌 정보를 등록해 주세요" icon={Wallet} /> : null}
 
         {groomAccounts.length > 0 ? (
           <PreviewAccordion

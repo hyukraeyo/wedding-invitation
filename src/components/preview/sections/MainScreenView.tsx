@@ -117,6 +117,33 @@ const formatDatePlaceArea = (
   return [location, detailAddress].filter(Boolean).join(' ') || '';
 };
 
+const getBorderRadius = (
+  layout: string,
+  imageShape: string | undefined,
+  expandPhoto: boolean,
+  effect: string
+) => {
+  const isMist = effect === 'mist';
+  const defaultBottom = isMist ? '0px 0px' : '20px 20px';
+  const frameBottom = isMist ? '0px 0px' : '4px 4px';
+
+  if (layout === 'arch') return `170px 170px ${defaultBottom}`;
+  if (layout === 'oval') return '170px';
+
+  if (layout === 'classic') {
+    if (imageShape === 'arch') return `170px 170px ${defaultBottom}`;
+    if (imageShape === 'oval') return '170px';
+  }
+
+  if (expandPhoto) return '0px';
+
+  if (layout === 'basic') return `20px 20px ${defaultBottom}`;
+  if (layout === 'frame') return `4px 4px ${frameBottom}`;
+  if (layout === 'fill') return '0px';
+
+  return `20px 20px ${defaultBottom}`;
+};
+
 /**
  * Presentational Component for the Main Screen.
  */
@@ -375,24 +402,12 @@ const MainScreenView = memo(
               borderColor: 'transparent',
               borderWidth: '0px',
               borderStyle: 'none',
-              borderRadius:
-                mainScreen.layout === 'arch'
-                  ? `170px 170px ${mainScreen.effect === 'mist' ? '0px 0px' : '20px 20px'}`
-                  : mainScreen.layout === 'oval'
-                    ? '170px'
-                    : mainScreen.layout === 'classic' && mainScreen.imageShape === 'arch'
-                      ? `170px 170px ${mainScreen.effect === 'mist' ? '0px 0px' : '20px 20px'}`
-                      : mainScreen.layout === 'classic' && mainScreen.imageShape === 'oval'
-                        ? '170px'
-                        : mainScreen.expandPhoto
-                          ? '0px'
-                          : mainScreen.layout === 'basic'
-                            ? `20px 20px ${mainScreen.effect === 'mist' ? '0px 0px' : '20px 20px'}`
-                            : mainScreen.layout === 'frame'
-                              ? `4px 4px ${mainScreen.effect === 'mist' ? '0px 0px' : '4px 4px'}`
-                              : mainScreen.layout === 'fill'
-                                ? '0px'
-                                : `20px 20px ${mainScreen.effect === 'mist' ? '0px 0px' : '20px 20px'}`,
+              borderRadius: getBorderRadius(
+                mainScreen.layout,
+                mainScreen.imageShape,
+                mainScreen.expandPhoto,
+                mainScreen.effect
+              ),
             }}
           >
             {imageUrl ? (
@@ -437,7 +452,16 @@ const MainScreenView = memo(
                 />
               )
             ) : (
-              <Placeholder />
+              <Placeholder
+                style={{
+                  borderRadius: getBorderRadius(
+                    mainScreen.layout,
+                    mainScreen.imageShape,
+                    mainScreen.expandPhoto,
+                    mainScreen.effect
+                  ),
+                }}
+              />
             )}
 
             {mainScreen.layout === 'frame' ? (
