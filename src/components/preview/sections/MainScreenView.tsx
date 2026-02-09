@@ -2,7 +2,6 @@
 
 import React, { memo } from 'react';
 import Image from 'next/image';
-import { Heart } from 'lucide-react';
 import { AmpersandSVG, HeartSVG, RingIcon } from '../../common/Icons';
 import { Heading } from '@/components/ui/Heading';
 import styles from './MainScreenView.module.scss';
@@ -10,6 +9,7 @@ import { clsx } from 'clsx';
 import { IMAGE_SIZES } from '@/constants/image';
 import { isBlobUrl } from '@/lib/image';
 import { AspectRatio } from '@/components/ui/AspectRatio';
+import { Placeholder } from '@/components/ui/Placeholder';
 
 interface Person {
   lastName: string;
@@ -437,12 +437,7 @@ const MainScreenView = memo(
                 />
               )
             ) : (
-              <div className={clsx(styles.emptyPlaceholder) || ''}>
-                <Heart size={48} strokeWidth={1} />
-                <span style={{ fontSize: 'calc(10px * var(--font-scale))' }}>
-                  No Image Selected
-                </span>
-              </div>
+              <Placeholder />
             )}
 
             {mainScreen.layout === 'frame' ? (

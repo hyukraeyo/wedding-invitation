@@ -2,6 +2,8 @@
 
 import React, { memo } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { Wallet } from 'lucide-react';
+import { Placeholder } from '@/components/ui/Placeholder';
 import SectionContainer from '../SectionContainer';
 import SectionHeader from '../SectionHeader';
 import PreviewAccordion from '../PreviewAccordion';
@@ -9,32 +11,33 @@ import { Button } from '@/components/ui/Button';
 import styles from './AccountsView.module.scss';
 
 interface Account {
-    id: string;
-    type: 'groom' | 'bride';
-    relation: '본인' | '아버지' | '어머니';
-    bank: string;
-    accountNumber: string;
-    holder: string;
+  id: string;
+  type: 'groom' | 'bride';
+  relation: '본인' | '아버지' | '어머니';
+  bank: string;
+  accountNumber: string;
+  holder: string;
 }
 
 interface AccountsViewProps {
-    id?: string | undefined;
-    accounts: Account[];
-    title: string;
-    subtitle: string;
-    description: string;
-    groomTitle: string;
-    brideTitle: string;
-    colorMode: 'accent' | 'subtle' | 'white';
-    accentColor: string;
-    animateEntrance?: boolean;
+  id?: string | undefined;
+  accounts: Account[];
+  title: string;
+  subtitle: string;
+  description: string;
+  groomTitle: string;
+  brideTitle: string;
+  colorMode: 'accent' | 'subtle' | 'white';
+  accentColor: string;
+  animateEntrance?: boolean;
 }
 
 /**
  * Presentational Component for the Accounts section.
  * Refactored to use common PreviewAccordion with customization support.
  */
-const AccountsView = memo(({
+const AccountsView = memo(
+  ({
     id,
     accounts,
     title,
@@ -44,83 +47,96 @@ const AccountsView = memo(({
     brideTitle,
     colorMode,
     accentColor,
-    animateEntrance
-}: AccountsViewProps) => {
+    animateEntrance,
+  }: AccountsViewProps) => {
     const { toast } = useToast();
 
-    const groomAccounts = (accounts || []).filter(a => a.type === 'groom');
-    const brideAccounts = (accounts || []).filter(a => a.type === 'bride');
+    const groomAccounts = (accounts || []).filter((a) => a.type === 'groom');
+    const brideAccounts = (accounts || []).filter((a) => a.type === 'bride');
+    const hasAccounts = groomAccounts.length > 0 || brideAccounts.length > 0;
 
     const handleCopy = (text: string) => {
-        const onlyNumbers = text.replace(/[^0-9]/g, '');
-        navigator.clipboard.writeText(onlyNumbers);
-        toast({
-            description: '계좌번호가 복사되었어요.',
-        });
+      const onlyNumbers = text.replace(/[^0-9]/g, '');
+      navigator.clipboard.writeText(onlyNumbers);
+      toast({
+        description: '계좌번호가 복사되었어요.',
+      });
     };
 
     const renderAccountList = (list: Account[]) => (
-        <div className={styles.accountList}>
-            {list.map(acc => (
-                <div key={acc.id} className={styles.accountCard}>
-                    <div className={styles.accountHeader}>
-                        <span className={styles.relationLabel}>{acc.relation}</span>
-                        <Button variant="ghost" size="sm" className={styles.copyButton} onClick={() => handleCopy(acc.accountNumber)}>복사하기</Button>
-                    </div>
-                    <div className={styles.accountInfo}>
-                        <div className={styles.bankAndHolder}>
-                            {acc.bank}
-                            <span className={styles.bankDivider} />
-                            {acc.holder}
-                        </div>
-                        <div className={styles.accountDetails}>{acc.accountNumber}</div>
-                    </div>
-                </div>
-            ))}
-        </div>
+      <div className={styles.accountList}>
+        {list.map((acc) => (
+          <div key={acc.id} className={styles.accountCard}>
+            <div className={styles.accountHeader}>
+              <span className={styles.relationLabel}>{acc.relation}</span>
+              <Button
+                variant="ghost"
+                size="sm"
+                className={styles.copyButton}
+                onClick={() => handleCopy(acc.accountNumber)}
+              >
+                복사하기
+              </Button>
+            </div>
+            <div className={styles.accountInfo}>
+              <div className={styles.bankAndHolder}>
+                {acc.bank}
+                <span className={styles.bankDivider} />
+                {acc.holder}
+              </div>
+              <div className={styles.accountDetails}>{acc.accountNumber}</div>
+            </div>
+          </div>
+        ))}
+      </div>
     );
 
     return (
-        <SectionContainer id={id} animateEntrance={animateEntrance}>
-            {title || description ? (
-                <>
-                    <SectionHeader
-                        title={title}
-                        subtitle={subtitle}
-                        accentColor={accentColor}
-                    />
+      <SectionContainer id={id} animateEntrance={animateEntrance}>
+        {title || description ? (
+          <>
+            <SectionHeader title={title} subtitle={subtitle} accentColor={accentColor} />
 
-                    {description ? (
-                        <div
-                            className={styles.description}
-                            dangerouslySetInnerHTML={{ __html: description }}
-                        />
-                    ) : null}
-                </>
+            {description ? (
+              <div
+                className={styles.description}
+                dangerouslySetInnerHTML={{ __html: description }}
+              />
             ) : null}
+          </>
+        ) : null}
 
-            {groomAccounts.length > 0 ? (
-                <PreviewAccordion
-                    title={groomTitle || "신랑 측 마음 전하실 곳"}
-                    mode={colorMode}
-                    accentColor={accentColor}
-                >
-                    {renderAccountList(groomAccounts)}
-                </PreviewAccordion>
-            ) : null}
+        {!hasAccounts ? (
+          <Placeholder
+            className={styles.accountPlaceholder}
+            text="계좌 정보를 등록해 주세요"
+            icon={Wallet}
+          />
+        ) : null}
 
-            {brideAccounts.length > 0 ? (
-                <PreviewAccordion
-                    title={brideTitle || "신부 측 마음 전하실 곳"}
-                    mode={colorMode}
-                    accentColor={accentColor}
-                >
-                    {renderAccountList(brideAccounts)}
-                </PreviewAccordion>
-            ) : null}
-        </SectionContainer>
+        {groomAccounts.length > 0 ? (
+          <PreviewAccordion
+            title={groomTitle || '신랑 측 마음 전하실 곳'}
+            mode={colorMode}
+            accentColor={accentColor}
+          >
+            {renderAccountList(groomAccounts)}
+          </PreviewAccordion>
+        ) : null}
+
+        {brideAccounts.length > 0 ? (
+          <PreviewAccordion
+            title={brideTitle || '신부 측 마음 전하실 곳'}
+            mode={colorMode}
+            accentColor={accentColor}
+          >
+            {renderAccountList(brideAccounts)}
+          </PreviewAccordion>
+        ) : null}
+      </SectionContainer>
     );
-});
+  }
+);
 
 AccountsView.displayName = 'AccountsView';
 

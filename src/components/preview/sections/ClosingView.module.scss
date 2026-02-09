@@ -1,101 +1,106 @@
-@use "../../../styles/variables" as v;
-@use "../../../styles/mixins" as m;
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
 .footer {
+  @include m.flex-col;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  padding-top: 0;
+  padding-bottom: 5rem;
+
+  .imageSection {
+    width: 100%;
+    margin-bottom: 3rem;
+
+    &.fixed {
+      .imageContainer {
+        aspect-ratio: 16 / 9;
+      }
+    }
+
+    &.auto {
+      .imageContainer {
+        height: auto;
+        aspect-ratio: auto;
+      }
+    }
+
+    .imageContainer {
+      width: 100%;
+      border-radius: v.$radius-md; // 16px
+      overflow: hidden;
+      background-color: v.$grey-50;
+      position: relative;
+
+      .endingImage {
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+    }
+  }
+
+  .message {
+    font-size: calc(0.9375rem * var(--font-scale));
+    line-height: 2;
+    color: v.$grey-600;
+    font-family: inherit;
+    margin-bottom: 3rem;
+    word-break: keep-all;
+
+    p {
+      margin: 0;
+
+      &:not(:last-child) {
+        margin-bottom: 0.75rem;
+      }
+    }
+
+    &.noImage {
+      margin-top: 1rem;
+    }
+  }
+
+  .shareContainer {
     @include m.flex-col;
     align-items: center;
-    text-align: center;
+    gap: 1rem;
     width: 100%;
-    padding-top: 0;
-    padding-bottom: 5rem;
 
-    .imageSection {
-        width: 100%;
-        margin-bottom: 3rem;
+    .shareButton {
+      width: 100%;
+      max-width: 240px;
+      @include m.flex-center;
+      gap: 0.75rem;
+      padding: 0.875rem;
+      border-radius: v.$radius-full;
+      font-size: calc(0.875rem * var(--font-scale));
+      font-weight: 600;
+      cursor: pointer;
+      transition: v.$transition-fast;
 
-        &.fixed {
-            .imageContainer {
-                aspect-ratio: 16 / 9;
-            }
-        }
+      &.kakaoShare {
+        background-color: v.$kakao-yellow;
+        color: v.$kakao-brown;
+        border: none;
+      }
 
-        &.auto {
-            .imageContainer {
-                height: auto;
-                aspect-ratio: auto;
-            }
-        }
-
-        .imageContainer {
-            width: 100%;
-            border-radius: v.$radius-md; // 16px
-            overflow: hidden;
-            background-color: v.$grey-50;
-            position: relative;
-
-            .endingImage {
-                width: 100%;
-                height: 100%;
-                display: block;
-            }
-        }
-    }
-
-    .message {
-        font-size: calc(0.9375rem * var(--font-scale));
-        line-height: 2;
+      &.linkShare {
+        background-color: v.$white;
         color: v.$grey-600;
-        font-family: inherit;
-        margin-bottom: 3rem;
-        word-break: keep-all;
+        border: 1px solid v.$grey-200;
+      }
 
-        p {
-            margin: 0;
-
-            &:not(:last-child) {
-                margin-bottom: 0.75rem;
-            }
-        }
-
-        &.noImage {
-            margin-top: 1rem;
-        }
+      &:active {
+        transform: scale(0.98);
+        opacity: 0.9;
+      }
     }
+  }
+}
 
-    .shareContainer {
-        @include m.flex-col;
-        align-items: center;
-        gap: 1rem;
-        width: 100%;
-
-        .shareButton {
-            width: 100%;
-            max-width: 240px;
-            @include m.flex-center;
-            gap: 0.75rem;
-            padding: 0.875rem;
-            border-radius: v.$radius-full;
-            font-size: calc(0.875rem * var(--font-scale));
-            font-weight: 600;
-            cursor: pointer;
-            transition: v.$transition-fast;
-
-            &.kakaoShare {
-                background-color: v.$kakao-yellow;
-                color: v.$kakao-brown;
-                border: none;
-            }
-
-            &.linkShare {
-                background-color: v.$white;
-                color: v.$grey-600;
-                border: 1px solid v.$grey-200;
-            }
-
-            &:active {
-                transform: scale(0.98);
-                opacity: 0.9;
-            }
-        }
-    }
+.imagePlaceholder {
+  margin-bottom: 2rem;
+  border-radius: v.$radius-md;
 }

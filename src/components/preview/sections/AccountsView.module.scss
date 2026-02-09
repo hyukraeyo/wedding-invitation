@@ -10,6 +10,11 @@
     font-family: inherit;
 }
 
+.accountPlaceholder {
+    margin-top: 0.75rem;
+    border-radius: v.$radius-lg;
+}
+
 .accountList {
     display: flex;
     flex-direction: column;

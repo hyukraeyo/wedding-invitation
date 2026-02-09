@@ -1,0 +1,48 @@
+﻿@use '@/styles/variables' as v;
+
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 180px;
+  position: relative;
+  overflow: hidden;
+  background-color: v.$grey-100;
+  color: v.$grey-400;
+  border: 1px dashed v.$grey-300;
+  border-radius: inherit;
+  transition: v.$transition-smooth;
+
+  &.aspectRatio {
+    position: absolute;
+    inset: 0;
+  }
+
+  .icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.25rem;
+    color: v.$grey-300;
+
+    svg {
+      width: 3.5rem;
+      height: 3.5rem;
+      stroke-width: 0.8;
+      opacity: 0.6;
+    }
+  }
+
+  .text {
+    padding-inline: 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    text-align: center;
+    color: v.$grey-400;
+    opacity: 0.7;
+  }
+}
