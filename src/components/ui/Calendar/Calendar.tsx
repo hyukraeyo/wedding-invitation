@@ -147,6 +147,7 @@ function Calendar({
 
   return (
     <DayPicker
+      startMonth={new Date()}
       {...props}
       // 그리드 레이아웃을 위해 showOutsideDays는 항상 true로 설정
       // 외부 날짜는 CSS로 숨김 처리

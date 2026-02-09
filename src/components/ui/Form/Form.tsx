@@ -28,13 +28,12 @@ const FormField = React.forwardRef<React.ElementRef<typeof FormPrimitive.Field>,
 );
 FormField.displayName = FormPrimitive.Field.displayName;
 
-const FormLabel = React.forwardRef<
-  React.ElementRef<typeof FormPrimitive.Label>,
-  React.ComponentPropsWithoutRef<typeof FormPrimitive.Label>
->(({ className, ...props }, ref) => (
-  <FormPrimitive.Label ref={ref} className={clsx(s.FormLabel, className)} {...props} />
-));
-FormLabel.displayName = FormPrimitive.Label.displayName;
+const FormLabel = React.forwardRef<HTMLLabelElement, React.LabelHTMLAttributes<HTMLLabelElement>>(
+  ({ className, ...props }, ref) => (
+    <label ref={ref} className={clsx(s.FormLabel, className)} {...props} />
+  )
+);
+FormLabel.displayName = 'FormLabel';
 
 const FormControl = FormPrimitive.Control;
 

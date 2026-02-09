@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
   DndContext,
   DragEndEvent,
@@ -204,7 +204,7 @@ export default React.memo(function GallerySectionContent() {
 
       <FormField name="gallery">
         <FormHeader>
-          <FormLabel>사진 관리</FormLabel>
+          <FormLabel htmlFor="gallery-images-required">사진 관리</FormLabel>
           <FormMessage
             forceMatch={
               validationErrors.includes('gallery-images-required') && gallery.length === 0
@@ -234,7 +234,7 @@ export default React.memo(function GallerySectionContent() {
                 ))}
                 {gallery.length < 10 ? (
                   <ImageUploader
-                    id="gallery-images-required"
+                    id="gallery-images-uploader"
                     multiple
                     gallery
                     placeholder="추가"

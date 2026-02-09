@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Sparkles } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { useShallow } from 'zustand/react/shallow';
@@ -202,7 +202,7 @@ const GreetingSection = React.memo<SectionProps>(function GreetingSection(props)
           <div className={styles.optionItem}>
             <FormField name="greeting-message">
               <FormHeader>
-                <FormLabel>내용</FormLabel>
+                <FormLabel htmlFor="greeting-message-required">내용</FormLabel>
                 <FormMessage
                   forceMatch={isMessageInvalid && isBlank(htmlToPlainText(messageValue))}
                 >

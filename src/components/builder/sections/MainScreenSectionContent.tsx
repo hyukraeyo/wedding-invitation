@@ -60,13 +60,13 @@ export default function MainScreenSectionContent() {
     <div className={styles.container}>
       <FormField name="main-image">
         <FormHeader>
-          <FormLabel htmlFor="main-image">메인 사진</FormLabel>
+          <FormLabel htmlFor="main-image-uploader">메인 사진</FormLabel>
           {!imageUrl && validationErrors.includes('main-image') && (
             <FormMessage forceMatch>필수 항목이에요.</FormMessage>
           )}
         </FormHeader>
         <ImageUploader
-          id="main-image"
+          id="main-image-uploader"
           value={imageUrl}
           onChange={(val) => {
             setImageUrl(val);
@@ -81,7 +81,7 @@ export default function MainScreenSectionContent() {
         <FormControl asChild>
           <VisuallyHidden asChild>
             <input
-              id="main-image"
+              id="main-image-required"
               aria-label="메인 사진"
               required={isRequiredField('mainImage')}
               readOnly
@@ -196,6 +196,7 @@ export default function MainScreenSectionContent() {
             <div className={styles.rowLayout}>
               <FormControl asChild>
                 <TextField
+                  id="main-groom-name"
                   placeholder={
                     groom.lastName || groom.firstName
                       ? `${groom.lastName}${groom.firstName}`
@@ -209,6 +210,7 @@ export default function MainScreenSectionContent() {
               </FormControl>
               <FormControl asChild>
                 <TextField
+                  id="main-and-text"
                   placeholder="그리고"
                   value={mainScreen.andText}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -218,6 +220,7 @@ export default function MainScreenSectionContent() {
               </FormControl>
               <FormControl asChild>
                 <TextField
+                  id="main-bride-name"
                   placeholder={
                     bride.lastName || bride.firstName
                       ? `${bride.lastName}${bride.firstName}`

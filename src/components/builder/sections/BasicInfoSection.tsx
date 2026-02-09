@@ -138,6 +138,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
         <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
           <FormControl asChild>
             <TextField
+              id="groom-father-name"
               placeholder="아버지 이름"
               value={groom.parents.father.name}
               onChange={handleGroomFatherNameChange}
@@ -145,6 +146,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
           </FormControl>
           <FormControl asChild>
             <TextField
+              id="groom-mother-name"
               placeholder="어머니 이름"
               value={groom.parents.mother.name}
               onChange={handleGroomMotherNameChange}
@@ -160,6 +162,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
         <div style={{ display: 'flex', gap: '8px' }}>
           <FormControl asChild>
             <TextField
+              id="bride-father-name"
               placeholder="아버지 이름"
               value={bride.parents.father.name}
               onChange={handleBrideFatherNameChange}
@@ -167,6 +170,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
           </FormControl>
           <FormControl asChild>
             <TextField
+              id="bride-mother-name"
               placeholder="어머니 이름"
               value={bride.parents.mother.name}
               onChange={handleBrideMotherNameChange}

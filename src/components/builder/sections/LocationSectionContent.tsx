@@ -226,14 +226,19 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
         </div>
 
         <div className={styles.optionItem}>
-          <div className={styles.rowTitle}>연락처</div>
-          <TextField
-            type="tel"
-            inputMode="numeric"
-            placeholder="예: 02-000-0000"
-            value={locationContact}
-            onChange={handlePhoneChange}
-          />
+          <FormField name="location-contact">
+            <FormLabel htmlFor="location-contact">연락처</FormLabel>
+            <FormControl asChild>
+              <TextField
+                id="location-contact"
+                type="tel"
+                inputMode="numeric"
+                placeholder="예: 02-000-0000"
+                value={locationContact}
+                onChange={handlePhoneChange}
+              />
+            </FormControl>
+          </FormField>
         </div>
 
         <div className={styles.optionItem}>
