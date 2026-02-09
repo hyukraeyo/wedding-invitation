@@ -44,7 +44,7 @@
   border-radius: 1rem; // v.$radius-md
 
   &:hover {
-    border-color: #a1a1aa; // v.$zinc-400
+    border-color: v.$grey-400; // v.$zinc-400
   }
 }
 
@@ -53,7 +53,7 @@
   justify-content: space-between;
   align-items: center;
   padding: 0.75rem 1rem;
-  border-bottom: 1px solid #f4f4f5; // v.$zinc-100
+  border-bottom: 1px solid v.$grey-100; // v.$zinc-100
   cursor: pointer;
 }
 
@@ -74,24 +74,24 @@
   font-weight: bold;
   padding: 0.125rem 0.375rem;
   border-radius: 1rem; // v.$radius-md
-  background-color: #f4f4f5; // v.$zinc-100
-  color: #52525b; // v.$zinc-600
+  background-color: v.$grey-100; // v.$zinc-100
+  color: v.$grey-600; // v.$zinc-600
 
   &.groom {
-    background-color: rgba(251, 192, 45, 0.1); // v.$primary
-    color: #f9a825; // v.$primary-dark
+    background-color: rgba(v.$primary-500, 0.1); // v.$primary
+    color: v.$primary-600; // v.$primary-dark
   }
 
   &.bride {
-    background-color: rgba(#ff8a8a, 0.1); // Coral pink light
-    color: #d85c5c;
+    background-color: rgba(v.$rose-400, 0.1);
+    color: v.$rose-600;
   }
 }
 
 .name {
   font-size: 0.875rem; // v.$font-size-sm
   font-weight: bold;
-  color: #18181b; // v.$zinc-900
+  color: v.$grey-900; // v.$zinc-900
 }
 
 .accountBody {
@@ -114,7 +114,7 @@
 
 .chevron {
   transition: transform 0.2s ease;
-  color: #a1a1aa; // v.$zinc-400
+  color: v.$grey-400; // v.$zinc-400
 
   &.expanded {
     transform: rotate(180deg);
@@ -137,17 +137,17 @@
   font-size: 1rem; // v.$font-size-base
   font-weight: 500;
   border-radius: 1rem; // v.$radius-md
-  border: 2px dashed #e5e5e5; // v.$color-border
+  border: 2px dashed v.$grey-200;
   background-color: transparent;
-  color: #52525b; // v.$zinc-600
+  color: v.$grey-600; // v.$zinc-600
   cursor: pointer;
   transition: all 0.2s ease;
 
   &:hover {
     border-style: solid;
-    background-color: #fafafa; // v.$zinc-50
-    color: #fbc02d; // v.$primary
-    border-color: #fbc02d; // v.$primary
+    background-color: v.$grey-50; // v.$zinc-50
+    color: v.$primary-500; // v.$primary
+    border-color: v.$primary-500; // v.$primary
   }
 
   &:active {
@@ -156,11 +156,11 @@
 }
 
 .deleteButton {
-  color: #a1a1aa; // v.$zinc-400
+  color: v.$grey-400; // v.$zinc-400
 
   &:hover {
-    color: #dc2626; // v.$red-600
-    background-color: #fff1f2; // v.$rose-50
+    color: v.$red-600; // v.$red-600
+    background-color: v.$color-danger-bg; // v.$rose-50
   }
 }
 
@@ -173,8 +173,8 @@
 .loadingSpinner {
   width: 1.5rem;
   height: 1.5rem;
-  border: 2px solid rgba(251, 192, 45, 0.2); // v.$primary-500
-  border-top-color: #fbc02d; // v.$primary-500
+  border: 2px solid rgba(v.$primary-500, 0.2); // v.$primary-500
+  border-top-color: v.$primary-500; // v.$primary-500
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }

@@ -6,10 +6,10 @@
   align-items: flex-start; // Align to top for multiline text
   gap: 0.75rem;
   padding: 1rem;
-  background-color: #FFFBEA; // v.$primary-50
-  border: 1px solid #FDE68A; // v.$primary-200
+  background-color: v.$primary-50; // v.$primary-50
+  border: 1px solid v.$primary-200; // v.$primary-200
   border-radius: 1rem; // v.$radius-lg
-  color: #3f3f46; // v.$zinc-700
+  color: v.$grey-700;
   font-size: 0.875rem; // v.$font-size-sm
   line-height: 1.5;
 }
@@ -18,7 +18,7 @@
   flex-shrink: 0;
   width: 1.25rem;
   height: 1.25rem;
-  color: #3f3f46; // v.$zinc-700
+  color: v.$grey-700;
   margin-top: 0.125rem; // Optical alignment with text
 }
 

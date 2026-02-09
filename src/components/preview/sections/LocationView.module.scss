@@ -9,7 +9,7 @@
     .placeName {
         font-size: calc(1.15rem * var(--font-scale));
         font-weight: 600;
-        color: #212529;
+        color: v.$grey-900;
         margin-bottom: 0.625rem;
         letter-spacing: -0.01em;
         font-family: inherit;
@@ -17,13 +17,13 @@
 
     .address {
         font-size: calc(0.95rem * var(--font-scale));
-        color: #868e96;
+        color: v.$grey-400;
         line-height: 1.7;
         font-family: inherit;
 
         .detailAddress {
             margin-top: 0.25rem;
-            color: #adb5bd;
+            color: v.$grey-400;
             font-size: calc(0.85rem * var(--font-scale));
         }
     }
@@ -35,13 +35,13 @@
         justify-content: center;
         gap: 0.375rem;
         font-size: calc(0.85rem * var(--font-scale));
-        color: #868e96;
+        color: v.$grey-400;
         font-family: inherit;
         text-decoration: none;
         transition: opacity v.$transition-fast;
 
         svg {
-            color: #adb5bd;
+            color: v.$grey-400;
         }
 
         &:active {
@@ -56,10 +56,10 @@
     border-radius: v.$radius-md; // 16px
     overflow: hidden;
     margin-bottom: 1.25rem;
-    background-color: #f8f9fa;
-    border: 1px solid #f1f3f5;
+    background-color: v.$grey-50;
+    border: 1px solid v.$grey-100;
     position: relative;
-    // box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    // box-shadow: 0 4px 20px rgba(v.$black, 0.03);
 
     &.expanded {
         width: calc(100% + var(--section-padding-x, 2rem) * 2);
@@ -72,8 +72,8 @@
 .mapPlaceholder {
     @include m.absolute-full;
     @include m.flex-center;
-    background-color: #f8f9fa;
-    color: #adb5bd;
+    background-color: v.$grey-50;
+    color: v.$grey-400;
     font-size: 0.85rem;
 }
 
@@ -87,24 +87,24 @@
         @include m.flex-col;
         @include m.flex-center;
         gap: 0.5rem;
-        background-color: #ffffff;
+        background-color: v.$white;
         padding-block: 1rem;
         border-radius: v.$radius-md; // 16px
-        border: 1px solid #f1f3f5;
+        border: 1px solid v.$grey-100;
         transition: all v.$transition-fast;
         text-decoration: none;
         cursor: pointer;
 
         @media (hover: hover) and (pointer: fine) {
             &:hover {
-                border-color: #e9ecef;
-                background-color: #fbfcfd;
+                border-color: v.$grey-200;
+                background-color: v.$grey-50;
             }
         }
 
 
         &:active {
-            background-color: #f1f3f5;
+            background-color: v.$grey-100;
             transform: scale(0.97);
         }
 
@@ -113,12 +113,12 @@
             height: 2rem;
             @include m.flex-center;
             border-radius: v.$radius-md; // 16px
-            background-color: #f8f9fa;
+            background-color: v.$grey-50;
         }
 
         .navLabel {
             font-size: calc(0.725rem * var(--font-scale));
-            color: #495057;
+            color: v.$grey-600;
             font-weight: 500;
             letter-spacing: -0.01em;
         }
@@ -129,8 +129,8 @@
     width: 100%;
     border-radius: v.$radius-md; // 16px
     overflow: hidden;
-    background-color: #f8f9fa;
-    border: 1px solid #f1f3f5;
+    background-color: v.$grey-50;
+    border: 1px solid v.$grey-100;
     margin-top: 1rem;
 
     &.fixed {
@@ -161,7 +161,7 @@
         .trafficType {
             font-size: calc(0.75rem * var(--font-scale));
             font-weight: 600;
-            color: #212529;
+            color: v.$grey-900;
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -170,13 +170,13 @@
             svg {
                 width: 0.85rem;
                 height: 0.85rem;
-                color: #adb5bd;
+                color: v.$grey-400;
             }
         }
 
         .trafficContent {
             font-size: calc(0.9rem * var(--font-scale));
-            color: #495057;
+            color: v.$grey-600;
             line-height: 1.8;
             white-space: pre-wrap;
             padding-left: 1.35rem;

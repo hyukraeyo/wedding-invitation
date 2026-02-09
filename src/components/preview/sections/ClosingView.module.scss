@@ -30,7 +30,7 @@
             width: 100%;
             border-radius: v.$radius-md; // 16px
             overflow: hidden;
-            background-color: #f8f9fa;
+            background-color: v.$grey-50;
             position: relative;
 
             .endingImage {
@@ -44,7 +44,7 @@
     .message {
         font-size: calc(0.9375rem * var(--font-scale));
         line-height: 2;
-        color: #4b5563;
+        color: v.$grey-600;
         font-family: inherit;
         margin-bottom: 3rem;
         word-break: keep-all;
@@ -81,15 +81,15 @@
             transition: v.$transition-fast;
 
             &.kakaoShare {
-                background-color: #FEE500;
-                color: #3C1E1E;
+                background-color: v.$kakao-yellow;
+                color: v.$kakao-brown;
                 border: none;
             }
 
             &.linkShare {
-                background-color: white;
-                color: #4b5563;
-                border: 1px solid #e5e7eb;
+                background-color: v.$white;
+                color: v.$grey-600;
+                border: 1px solid v.$grey-200;
             }
 
             &:active {

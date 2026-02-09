@@ -8,9 +8,9 @@
     justify-content: center;
     padding: 6rem 2rem;
     text-align: center;
-    background: #FFFFFF; // v.$white
+    background: v.$white; // v.$white
     border-radius: 1rem; // v.$radius-lg
-    border: 1px solid #f4f4f5; // v.$zinc-100
+    border: 1px solid v.$grey-100; // v.$zinc-100
     width: 100%;
 }
 
@@ -18,12 +18,12 @@
     width: 100px;
     height: 100px;
     border-radius: 2.5rem; // v.$radius-3xl
-    background: linear-gradient(135deg, #fafafa 0%, #f4f4f5 100%); // v.$zinc-50 v.$zinc-100
+    background: linear-gradient(135deg, v.$grey-50 0%, v.$grey-100 100%); // v.$zinc-50 v.$zinc-100
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 2rem;
-    color: #d4d4d8; // v.$zinc-300
+    color: v.$grey-300; // v.$zinc-300
 
     // Default animation
     animation: floating 3s ease-in-out infinite;
@@ -34,8 +34,8 @@
     }
 
     &.banana {
-        background: linear-gradient(135deg, #FFFBEA 0%, #FEF3C7 100%); // v.$primary-50 v.$primary-100
-        color: #FBC02D; // v.$color-primary
+        background: linear-gradient(135deg, v.$primary-50 0%, v.$primary-100 100%); // v.$primary-50 v.$primary-100
+        color: v.$primary-500; // v.$color-primary
     }
 }
 
@@ -54,14 +54,14 @@
 .title {
     font-size: 1.5rem; // v.$font-size-2xl
     font-weight: 800;
-    color: #18181b; // v.$zinc-900
+    color: v.$grey-900; // v.$zinc-900
     margin-bottom: 0.75rem;
     letter-spacing: -0.02em;
 }
 
 .description {
     font-size: 1rem; // v.$font-size-base
-    color: #71717a; // v.$zinc-500
+    color: v.$grey-500; // v.$zinc-500
     line-height: 1.7;
     word-break: keep-all;
     max-width: 400px;
@@ -72,8 +72,8 @@
     display: inline-flex;
     align-items: center;
     padding: 1rem 2.5rem;
-    background-color: #FBC02D; // v.$color-primary
-    color: #FFFFFF; // v.$white
+    background-color: v.$primary-500; // v.$color-primary
+    color: v.$white; // v.$white
     border: none;
     border-radius: 9999px; // v.$radius-full
     font-size: 1rem; // v.$font-size-base
@@ -83,7 +83,7 @@
     text-decoration: none;
 
     &:hover {
-        background-color: #F9A825; // v.$color-primary-dark
+        background-color: v.$primary-600; // v.$color-primary-dark
     }
 
     &:active {

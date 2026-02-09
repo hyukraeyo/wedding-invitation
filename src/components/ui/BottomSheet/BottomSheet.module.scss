@@ -1,9 +1,9 @@
-@use "../../../styles/variables" as v;
+@use '../../../styles/variables' as v;
 
 .overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: v.$adaptive-background-dimmed;
   z-index: 10000;
 }
 
@@ -19,7 +19,7 @@
   outline: none;
   z-index: 10001;
   background-color: transparent; // vaul 하단 확장을 방지하기 위해 투명 처리
-  
+
   // Max width for desktop/tablet mockup
   max-width: v.$canvas-max-width;
   margin: 0 auto;

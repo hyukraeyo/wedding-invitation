@@ -1,4 +1,4 @@
-@use "../../../styles/variables" as v;
+@use '../../../styles/variables' as v;
 
 .overlay {
   background-color: v.$adaptive-background-dimmed;
@@ -7,11 +7,11 @@
   z-index: v.$z-overlay;
 
   &[data-state='open'] {
-    animation: overlayShow v.$transition-normal v.$ease-ios;
+    animation: overlayShow v.$duration-slow v.$ease-ios;
   }
 
   &[data-state='closed'] {
-    animation: overlayHide v.$transition-normal v.$ease-ios;
+    animation: overlayHide v.$duration-normal v.$ease-ios;
   }
 }
 
@@ -32,11 +32,11 @@
   padding: 24px;
 
   &[data-state='open'] {
-    animation: contentShow 0.35s v.$ease-ios;
+    animation: contentShow v.$duration-slow v.$ease-ios;
   }
 
   &[data-state='closed'] {
-    animation: contentHide 0.2s v.$ease-ios;
+    animation: contentHide v.$duration-normal v.$ease-ios;
   }
 
   // 흔들린 후 등, 이미 열려있는 상태에서는 등장 애니메이션 재실행 방지
@@ -98,7 +98,7 @@
 @keyframes contentShow {
   from {
     opacity: 0;
-    transform: translate(-50%, -40%) scale(0.96);
+    transform: translate(-50%, -32%) scale(0.98);
   }
 
   to {
@@ -115,7 +115,7 @@
 
   to {
     opacity: 0;
-    transform: translate(-50%, -48%) scale(0.96);
+    transform: translate(-50%, -45%) scale(0.98);
   }
 }
 

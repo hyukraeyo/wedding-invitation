@@ -4,7 +4,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  background-color: #f7f9fb; // Clean light background
+  background-color: v.$grey-100; // Clean light background
   min-height: calc(100vh - 56px); // Account for header if any
   position: relative;
   overflow-y: auto;

@@ -216,7 +216,7 @@
       font-weight: 700;
       background-color: v.$primary;
       color: v.$white;
-      box-shadow: 0 12px 24px rgba(251, 192, 45, 0.45);
+      box-shadow: 0 12px 24px rgba(v.$primary-500, 0.45);
       transform: scale(1.08); // 강조 확대
       z-index: 10;
 

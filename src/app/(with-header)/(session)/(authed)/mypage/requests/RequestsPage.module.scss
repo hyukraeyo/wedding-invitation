@@ -14,7 +14,7 @@
 }
 
 .requestItem {
-    background: white;
+    background: v.$white;
     border: 1px solid v.$zinc-200;
     border-radius: v.$radius-md;
     padding: 1.25rem;
@@ -30,13 +30,13 @@
     }
 
     &.rejectedItem {
-        background-color: #fff1f2; // v.$rose-50
-        border-color: #ffe4e6; // v.$rose-100
+        background-color: v.$color-danger-bg; // v.$rose-50
+        border-color: v.$color-danger-border; // v.$rose-100
     }
 
     &.approvedItem {
-        background-color: #f0fdf4; // v.$green-50
-        border-color: #dcfce7; // v.$green-100
+        background-color: v.$color-success-bg; // v.$green-50
+        border-color: v.$color-success-border; // v.$green-100
     }
 }
 
@@ -96,7 +96,7 @@
 
 .previewButton {
     border: 1px solid v.$zinc-200;
-    background: white;
+    background: v.$white;
     color: v.$zinc-700;
 
     &:hover:not(:disabled) {
@@ -106,18 +106,18 @@
 }
 
 .rejectButton {
-    background: #fff1f2; // v.$rose-50
+    background: v.$color-danger-bg; // v.$rose-50
     color: v.$red-600;
-    border: 1px solid #fecdd3; // v.$rose-200
+    border: 1px solid v.$rose-200;
 
     &:hover:not(:disabled) {
-        background: #ffe4e6; // v.$rose-100
+        background: v.$color-danger-border; // v.$rose-100
     }
 }
 
 .approveButton {
     background: v.$zinc-900;
-    color: white;
+    color: v.$white;
     border: none;
     min-width: 80px;
 
@@ -127,17 +127,17 @@
 }
 
 .revokeButton {
-    background: #ffe4e6; // v.$rose-100
+    background: v.$color-danger-border; // v.$rose-100
     color: v.$red-600;
-    border: 1px solid #fecdd3; // v.$rose-200
+    border: 1px solid v.$rose-200;
 
     &:hover:not(:disabled) {
-        background: #fecdd3; // v.$rose-200
+        background: v.$rose-200;
     }
 }
 
 .viewReasonButton {
-    background: white;
+    background: v.$white;
     color: v.$zinc-600;
     border: 1px solid v.$zinc-300;
 
@@ -170,7 +170,7 @@
     height: 40px;
     padding: 0 1.5rem;
     border-radius: 20px;
-    background: white;
+    background: v.$white;
     border: 1px solid v.$zinc-200;
     color: v.$zinc-600;
     font-size: 0.875rem;
@@ -195,24 +195,24 @@
     padding: 2rem;
     text-align: center;
     color: v.$red-500;
-    background: #fff1f2; // v.$rose-50
+    background: v.$color-danger-bg; // v.$rose-50
     border-radius: v.$radius-md;
 }
 
 .rejectionReasonBox {
     margin-top: 1rem;
     padding: 1rem;
-    background-color: #FEF2F2;
+    background-color: v.$color-danger-bg;
     border-radius: v.$radius-md;
-    border: 1px solid #FEE2E2;
+    border: 1px solid v.$color-danger-border;
     font-size: v.$font-size-md;
-    color: #374151;
+    color: v.$grey-700;
     line-height: 1.6;
 }
 
 .rejectionDescription {
     text-align: center;
-    color: #4E5968;
+    color: v.$grey-700;
     margin-bottom: 1.5rem;
     word-break: keep-all;
     line-height: 1.6;
@@ -230,4 +230,3 @@
     text-align: center;
     margin-bottom: 24px;
 }
-

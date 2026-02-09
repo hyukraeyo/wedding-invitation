@@ -48,7 +48,7 @@
   background: s.$bg-surface;
   backdrop-filter: blur($blur);
   -webkit-backdrop-filter: blur($blur);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(c.$white, 0.1);
 }
 
 // 3. Layout Utilities

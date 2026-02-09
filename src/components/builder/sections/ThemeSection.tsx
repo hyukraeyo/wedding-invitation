@@ -8,21 +8,22 @@ import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { SwitchRow } from '@/components/common/SwitchRow';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { getFontVar, type ThemeFont } from '@/lib/utils/font';
+import { PALETTE } from '@/constants/palette';
 import type { SectionProps } from '@/types/builder';
 import styles from './ThemeSection.module.scss';
 
 const PRESET_ACCENT_COLORS: ColorOption[] = [
-  { value: '#C19A6D', label: 'Soft Brown' },
-  { value: '#545454', label: 'Dark Gray' },
-  { value: '#FFB7B2', label: 'Soft Pink' },
-  { value: '#D7A7BE', label: 'Soft Mauve' },
+  { value: PALETTE.PRIMARY_600, label: 'Banana' },
+  { value: PALETTE.STONE_700, label: 'Warm Dark' },
+  { value: PALETTE.ROSE_400, label: 'Soft Rose' },
+  { value: PALETTE.ACCENT_700, label: 'Forest Green' },
 ];
 
 const PRESET_BG_COLORS: ColorOption[] = [
-  { value: '#FFFFFF', label: 'Basic White' },
-  { value: '#FFECEF', label: 'Soft Pink' },
-  { value: '#F4F1EA', label: 'Soft Beige' },
-  { value: '#F2EBFA', label: 'Soft Purple' },
+  { value: PALETTE.WHITE, label: 'Pure White' },
+  { value: PALETTE.PRIMARY_50, label: 'Cream' },
+  { value: PALETTE.STONE_100, label: 'Warm Stone' },
+  { value: PALETTE.ROSE_50, label: 'Soft Rose' },
 ];
 
 const PRESET_FONT_OPTIONS = [

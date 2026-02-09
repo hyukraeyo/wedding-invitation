@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { PALETTE } from '@/constants/palette';
 import styles from './PreviewAccordion.module.scss';
 import { clsx } from 'clsx';
 
@@ -36,7 +37,7 @@ export default function PreviewAccordion({
         const g = parseInt(cleanHex.slice(2, 4), 16);
         const b = parseInt(cleanHex.slice(4, 6), 16);
         const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
-        return (yiq >= 128) ? '#000000' : '#ffffff';
+        return yiq >= 128 ? PALETTE.BLACK : PALETTE.WHITE;
     };
 
     const textColor = mode === 'accent' ? getContrastColor(accentColor) : 'inherit';

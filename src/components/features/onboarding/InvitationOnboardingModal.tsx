@@ -82,7 +82,7 @@ export function InvitationOnboardingModal({ isOpen, onClose }: InvitationOnboard
           <Text typography="t4" fontWeight="bold">
             Invitation basics
           </Text>
-          <Text typography="t6" color="#666">
+          <Text typography="t6" color="var(--color-grey-600)">
             Enter the essentials now. You can edit everything later.
           </Text>
         </div>

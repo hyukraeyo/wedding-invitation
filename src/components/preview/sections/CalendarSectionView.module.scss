@@ -20,7 +20,7 @@
         .monthYear {
             font-size: calc(1.15rem * var(--font-scale));
             font-weight: 500;
-            color: #212529;
+            color: v.$grey-900;
             letter-spacing: 0.1em;
             font-family: inherit;
 
@@ -39,7 +39,7 @@
         .weekday {
             font-size: calc(0.7rem * var(--font-scale));
             font-weight: 500;
-            color: #adb5bd;
+            color: v.$grey-400;
             padding-bottom: 1rem;
             letter-spacing: 0.05em;
         }
@@ -48,7 +48,7 @@
             aspect-ratio: 1;
             @include m.flex-center;
             font-size: calc(0.95rem * var(--font-scale));
-            color: #495057;
+            color: v.$grey-600;
             border-radius: v.$radius-full;
             position: relative;
             z-index: 1;
@@ -56,15 +56,15 @@
             font-weight: 400;
 
             &.otherMonth {
-                color: #e9ecef;
+                color: v.$grey-200;
             }
 
             &.sunday {
-                color: #ff8787;
+                color: v.$red-400;
             }
 
             &.selectedDay {
-                color: white !important;
+                color: v.$white !important;
                 font-weight: 600;
 
                 .dayMarker {
@@ -108,7 +108,7 @@
 
             .label {
                 font-size: calc(0.6rem * var(--font-scale));
-                color: #adb5bd;
+                color: v.$grey-400;
                 letter-spacing: 0.05em;
                 font-weight: 500;
             }
@@ -116,13 +116,13 @@
             .value {
                 font-size: calc(1.35rem * var(--font-scale));
                 font-weight: 500;
-                color: #343a40;
+                color: v.$grey-700;
                 font-family: inherit;
             }
         }
 
         .divider {
-            color: #e9ecef;
+            color: v.$grey-200;
             font-size: v.$font-size-base;
             font-weight: 300;
             margin-top: 0.8rem;
@@ -139,7 +139,7 @@
     .sentence {
         font-size: calc(0.95rem * var(--font-scale));
         line-height: 1.8;
-        color: #495057;
+        color: v.$grey-600;
         word-break: keep-all;
         font-family: inherit;
 

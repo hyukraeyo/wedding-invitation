@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import { PALETTE } from '@/constants/palette';
 
 // --- Brand & Decorative Icons ---
 
@@ -106,16 +107,16 @@ export const NaverIcon = ({ size = 24, className }: IconProps) => (
         y2="492"
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset="0" stopColor="#2db400">
+        <stop offset="0" stopColor={PALETTE.NAVER_GREEN_DARK}>
           <animate
             attributeName="stop-color"
-            values="#1585F6; #00C73C"
+            values={`${PALETTE.NAVER_BLUE}; ${PALETTE.NAVER_GREEN}`}
             dur="1s"
             repeatCount="indefinite"
           />
         </stop>
-        <stop offset="0" stopColor="#1585F6" />
-        <stop offset="1" stopColor="#00C73C" />
+        <stop offset="0" stopColor={PALETTE.NAVER_BLUE} />
+        <stop offset="1" stopColor={PALETTE.NAVER_GREEN} />
       </linearGradient>
       <radialGradient
         id="highlight_glow_comp"
@@ -125,15 +126,18 @@ export const NaverIcon = ({ size = 24, className }: IconProps) => (
         gradientUnits="userSpaceOnUse"
         gradientTransform="translate(256 120) rotate(90) scale(100 180)"
       >
-        <stop stopColor="white" stopOpacity="0.3" />
-        <stop offset="1" stopColor="white" stopOpacity="0" />
+        <stop stopColor={PALETTE.WHITE} stopOpacity="0.3" />
+        <stop offset="1" stopColor={PALETTE.WHITE} stopOpacity="0" />
       </radialGradient>
     </defs>
     <path
       d="M256 20C145.5 20 56 109.5 56 220C56 345 256 492 256 492C256 492 456 345 456 220C456 109.5 366.5 20 256 20Z"
       fill="url(#naver_map_grad_comp)"
     />
-    <path d="M175 310V130H223L289 233.5V130H337V310H289L223 206.5V310H175Z" fill="white" />
+    <path
+      d="M175 310V130H223L289 233.5V130H337V310H289L223 206.5V310H175Z"
+      fill={PALETTE.WHITE}
+    />
   </svg>
 );
 
@@ -146,10 +150,12 @@ export const KakaoIcon = ({ size = 24, showBackground = true, className }: Kakao
     xmlns="http://www.w3.org/2000/svg"
     className={className}
   >
-    {showBackground ? <rect width="1024" height="1024" rx="160" fill="#FAE100" /> : null}
+    {showBackground ? (
+      <rect width="1024" height="1024" rx="160" fill={PALETTE.KAKAO_YELLOW_BRAND} />
+    ) : null}
     <path
       d="M512 880c0 0-300-300-300-470a300 300 0 1 1 600 0c0 170-300 470-300 470z M512 310a100 100 0 1 0 0 200 100 100 0 1 0 0 -200z"
-      fill="#1585F6"
+      fill={PALETTE.NAVER_BLUE}
     />
   </svg>
 );

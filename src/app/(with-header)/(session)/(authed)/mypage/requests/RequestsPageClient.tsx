@@ -186,10 +186,18 @@ export default function RequestsPageClient({ initialLimit }: RequestsPageClientP
                 <div className={styles.requestInfo}>
                   <div className={styles.requester}>
                     {isRejected ? (
-                      <AlertCircle size={14} color="#DC2626" style={{ marginRight: '0.25rem' }} />
+                      <AlertCircle
+                        size={14}
+                        color="var(--color-error)"
+                        style={{ marginRight: '0.25rem' }}
+                      />
                     ) : null}
                     {isApproved ? (
-                      <CheckCircle size={14} color="#10B981" style={{ marginRight: '0.25rem' }} />
+                      <CheckCircle
+                        size={14}
+                        color="var(--color-success)"
+                        style={{ marginRight: '0.25rem' }}
+                      />
                     ) : null}
                     <strong>{request.requester_name}</strong>
                     <span className={styles.phone}>({request.requester_phone})</span>

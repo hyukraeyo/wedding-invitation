@@ -45,7 +45,11 @@ export const ShareModal: React.FC<ShareModalProps> = ({
         <Dialog open={open} onOpenChange={onOpenChange}>
 
             <Dialog.Header title="청첩장 공유하기">
-                <Text typography="t6" color="#666" style={{ textAlign: 'center', marginTop: '4px', display: 'block' }}>
+                <Text
+                  typography="t6"
+                  color="var(--color-grey-600)"
+                  style={{ textAlign: 'center', marginTop: '4px', display: 'block' }}
+                >
                     원하는 방법으로 청첩장을 공유해보세요
                 </Text>
             </Dialog.Header>

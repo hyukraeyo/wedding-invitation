@@ -70,7 +70,7 @@ const AccountsView = memo(({
                     <div className={styles.accountInfo}>
                         <div className={styles.bankAndHolder}>
                             {acc.bank}
-                            <span style={{ width: '1px', height: '10px', background: '#dee2e6' }} />
+                            <span className={styles.bankDivider} />
                             {acc.holder}
                         </div>
                         <div className={styles.accountDetails}>{acc.accountNumber}</div>

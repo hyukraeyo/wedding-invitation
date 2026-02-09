@@ -46,6 +46,7 @@ import { FontPicker } from '@/components/common/FontPicker';
 import { useNameInput, usePhoneInput } from '@/hooks/useFormInput';
 import { useImageUpload } from '@/hooks/useImageUpload';
 import { isInvalidKoreanName, isInvalidPhone } from '@/lib/utils';
+import { PALETTE } from '@/constants/palette';
 import s from './DesignPage.module.scss';
 import { DragEndEvent } from '@dnd-kit/core';
 
@@ -82,7 +83,7 @@ export default function DesignPage() {
 
   // Customization states
   const [selectedStyle, setSelectedStyle] = React.useState('classic1');
-  const [selectedColor, setSelectedColor] = React.useState('#C69C6D'); // Beige
+  const [selectedColor, setSelectedColor] = React.useState<string>(PALETTE.PRIMARY_600);
   const [selectedFont, setSelectedFont] = React.useState('gowun-dodum');
   const [isMotherDeceased, setIsMotherDeceased] = React.useState(false);
 
@@ -375,10 +376,10 @@ export default function DesignPage() {
                   value={selectedColor}
                   onChange={setSelectedColor}
                   colors={[
-                    { value: '#C69C6D', label: 'Beige' },
-                    { value: '#4B4B4B', label: 'Dark' },
-                    { value: '#FFB7B2', label: 'Pink' },
-                    { value: '#D4A5D4', label: 'Purple' },
+                    { value: PALETTE.PRIMARY_600, label: 'Banana' },
+                    { value: PALETTE.STONE_700, label: 'Warm Dark' },
+                    { value: PALETTE.ROSE_400, label: 'Soft Rose' },
+                    { value: PALETTE.ACCENT_700, label: 'Forest Green' },
                   ]}
                 />
               </FormControl>
@@ -417,8 +418,8 @@ export default function DesignPage() {
 
       <section className={s.section}>
         <div className={s.sectionHeader}>
-          <h2>Buttons & Actions</h2>
-          <span className={s.sectionHint}>Supported variants and special actions</span>
+          <h2>버튼 및 액션</h2>
+          <span className={s.sectionHint}>다양한 버튼 스타일 및 하단 고정 버튼(CTA)</span>
         </div>
         <div className={s.buttonGrid}>
           {(['primary', 'blue', 'secondary', 'outline', 'ghost'] as const).map((v) => (
@@ -439,15 +440,15 @@ export default function DesignPage() {
 
       <section className={s.section}>
         <div className={s.sectionHeader}>
-          <h2>Overlays & Toasts</h2>
-          <span className={s.sectionHint}>Dialog, AlertDialog, BottomSheet, Toast, BottomCTA</span>
+          <h2>오버레이 및 토스트</h2>
+          <span className={s.sectionHint}>다이얼로그, 얼럿 다이얼로그, 바텀시트, 토스트</span>
         </div>
         <div className={s.overlayGrid}>
           <div className={s.overlayCard}>
             <div className={s.overlayActions}>
               <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                 <Dialog.Trigger asChild>
-                  <Button variant="ghost">Dialog</Button>
+                  <Button variant="secondary">Dialog</Button>
                 </Dialog.Trigger>
                 <Dialog.Content>
                   <Dialog.Header title="Dialog preview" />
@@ -462,6 +463,7 @@ export default function DesignPage() {
                   </Dialog.Footer>
                 </Dialog.Content>
               </Dialog>
+
               <AlertDialog open={alertOpen} onOpenChange={setAlertOpen}>
                 <AlertDialogTrigger asChild>
                   <Button variant="secondary">Alert</Button>
@@ -478,23 +480,28 @@ export default function DesignPage() {
                   </div>
                 </AlertDialogContent>
               </AlertDialog>
+
+              <BottomSheet
+                open={sheetOpen}
+                onOpenChange={setSheetOpen}
+                header="Quick actions"
+                cta={<Button>Save draft</Button>}
+              >
+                <div style={{ padding: '0 24px 24px' }}>
+                  <p>The builder action sheet rises from the bottom on mobile.</p>
+                </div>
+              </BottomSheet>
+              <Button variant="secondary" onClick={() => setSheetOpen(true)}>
+                BottomSheet
+              </Button>
             </div>
-            <BottomSheet
-              open={sheetOpen}
-              onOpenChange={setSheetOpen}
-              header="Quick actions"
-              cta={<Button>Save draft</Button>}
-            >
-              <p>The builder action sheet rises from the bottom on mobile.</p>
-            </BottomSheet>
-            <Button variant="ghost" onClick={() => setSheetOpen(true)}>
-              BottomSheet
-            </Button>
           </div>
           <div className={s.overlayCard}>
             <h3>Toast demo</h3>
             <ToastProvider swipeDirection="right">
-              <Button onClick={() => setToastOpen(true)}>Show toast</Button>
+              <Button variant="primary" onClick={() => setToastOpen(true)}>
+                Show toast
+              </Button>
               <Toast open={toastOpen} onOpenChange={setToastOpen}>
                 <ToastTitle>Saved</ToastTitle>
                 <ToastDescription>Color tokens are synced to the live preview.</ToastDescription>

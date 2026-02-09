@@ -24,7 +24,7 @@
 .hero {
   @extend .section;
   padding-top: v.$builder-gap-xl * 3;
-  background: radial-gradient(circle at 50% 30%, #fffde7 0%, #fff9c4 100%);
+  background: radial-gradient(circle at 50% 30%, v.$primary-50 0%, v.$primary-100 100%);
   position: relative;
   overflow: hidden;
 
@@ -99,7 +99,7 @@
   .mockup {
     background: v.$white;
     border-radius: 2rem;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 20px 40px rgba(v.$black, 0.15);
     border: 8px solid v.$white;
     overflow: hidden;
     aspect-ratio: 9/16;
@@ -119,7 +119,7 @@
 
       .mockupHeader {
         height: 60%;
-        background-color: #f7f7f7;
+        background-color: v.$grey-100;
         display: flex;
         align-items: center; // Center vertically
         justify-content: center; // Center horizontally
@@ -281,12 +281,12 @@
     background: v.$white;
     border-radius: 1rem;
     overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 20px rgba(v.$black, 0.05);
     transition: all 0.3s ease;
 
     &:hover {
       transform: translateY(-5px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 10px 30px rgba(v.$black, 0.1);
     }
 
     .placeholder {
@@ -320,7 +320,7 @@
 }
 
 .cta {
-  background: radial-gradient(circle at 50% 50%, #fff9c4 0%, #fffde7 100%);
+  background: radial-gradient(circle at 50% 50%, v.$primary-100 0%, v.$primary-50 100%);
   padding: 6rem 1.5rem;
 
   h2 {

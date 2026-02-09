@@ -1,17 +1,17 @@
-@use "../../../styles/variables" as v;
+@use '../../../styles/variables' as v;
 
 .overlay {
   background-color: v.$adaptive-background-dimmed;
   position: fixed;
   inset: 0;
   z-index: v.$z-overlay;
-  
+
   &[data-state='open'] {
-    animation: overlayShow v.$transition-normal v.$ease-ios;
+    animation: overlayShow v.$duration-slow v.$ease-ios;
   }
-  
+
   &[data-state='closed'] {
-    animation: overlayHide v.$transition-normal v.$ease-ios;
+    animation: overlayHide v.$duration-normal v.$ease-ios;
   }
 
   &.bottomSheetOverlay {
@@ -46,14 +46,14 @@
   max-width: v.$canvas-max-width;
   max-height: 90vh;
   border-radius: v.$radius-xl v.$radius-xl 0 0;
-  
+
   &[data-state='open'] {
-    // 260ms -> 300ms 정도로 약간 더 부드럽게 (스~윽 느낌)
-    animation: contentShow 0.3s v.$ease-ios;
+    // 0.3s -> 0.5s 정도로 더 부드럽게 (스~윽 느낌)
+    animation: contentShow v.$duration-gentle v.$ease-ios;
   }
-  
+
   &[data-state='closed'] {
-    animation: contentHide 0.25s v.$ease-ios;
+    animation: contentHide v.$duration-normal v.$ease-ios;
   }
 
   @media (min-width: v.$mobile) {
@@ -63,13 +63,14 @@
     border-radius: v.$radius-xl;
     width: 90vw;
     max-width: 480px;
-    
+
     &[data-state='open'] {
-      animation: contentShowDesktop 0.35s v.$ease-ios;
+      // 데스크탑에서도 스~윽 올라오도록 0.45s 적용
+      animation: contentShowDesktop v.$duration-slow v.$ease-ios;
     }
-    
+
     &[data-state='closed'] {
-      animation: contentHideDesktop 0.25s v.$ease-ios;
+      animation: contentHideDesktop v.$duration-normal v.$ease-ios;
     }
   }
 
@@ -87,11 +88,11 @@
     z-index: v.$z-modal + 100;
 
     &[data-state='open'] {
-      animation: slideInRight 0.4s v.$ease-ios;
+      animation: slideInRight v.$duration-slow v.$ease-ios;
     }
 
     &[data-state='closed'] {
-      animation: slideOutRight 0.3s v.$ease-ios;
+      animation: slideOutRight v.$duration-normal v.$ease-ios;
     }
 
     @media (min-width: v.$mobile) {
@@ -179,13 +180,21 @@
 }
 
 @keyframes overlayShow {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes overlayHide {
-  from { opacity: 1; }
-  to { opacity: 0; }
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 
 @keyframes contentShow {
@@ -213,8 +222,8 @@
 @keyframes contentShowDesktop {
   from {
     opacity: 0;
-    // 아래에서 위로 '스~윽' 올라오는 느낌을 위해 translateY 값을 더 크게 설정
-    transform: translate(-50%, -40%) scale(0.96);
+    // 아래에서 위로 '스~윽' 올라오는 느낌을 위해 시작 위치를 더 낮춤
+    transform: translate(-50%, -32%) scale(0.98);
   }
   to {
     opacity: 1;
@@ -229,7 +238,8 @@
   }
   to {
     opacity: 0;
-    transform: translate(-50%, -48%) scale(0.96);
+    // 닫힐 때도 약간 아래로 내려가며 사라짐
+    transform: translate(-50%, -45%) scale(0.98);
   }
 }
 

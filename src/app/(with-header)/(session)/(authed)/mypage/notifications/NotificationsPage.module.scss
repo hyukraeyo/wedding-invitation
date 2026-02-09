@@ -26,7 +26,7 @@
     transition: all 0.4s v.$ease-ios;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 4px 12px rgba(v.$black, 0.03);
 
     &::after {
         content: '';
@@ -40,19 +40,19 @@
     }
 
     &:hover {
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+        box-shadow: 0 6px 16px rgba(v.$black, 0.06);
         border-color: v.$zinc-200;
     }
 
     &.expanded {
         background-color: v.$white;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 10px 30px rgba(v.$black, 0.08);
         border-color: v.$zinc-200;
     }
 
     // Status-specific borders
     &.approvedItem::after {
-        background-color: #4ade80; // v.$green-400
+        background-color: v.$accent-500; // v.$green-400
     }
 
     &.rejectedItem::after {
@@ -60,7 +60,7 @@
     }
 
     &.revokedItem::after {
-        background-color: #fb7185; // v.$rose-400
+        background-color: v.$rose-400;
     }
 }
 
@@ -86,18 +86,18 @@
 }
 
 .iconApproved {
-    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); // v.$green-50, v.$green-100
-    color: #16a34a; // v.$green-600
+    background: linear-gradient(135deg, v.$color-success-bg 0%, v.$color-success-border 100%); // v.$green-50, v.$green-100
+    color: v.$green-600; // v.$green-600
 }
 
 .iconRejected {
-    background: linear-gradient(135deg, #FFFBEA 0%, #FEF3C7 100%); // v.$primary-50, v.$primary-100
-    color: #F9A825; // v.$color-primary-dark
+    background: linear-gradient(135deg, v.$primary-50 0%, v.$primary-100 100%); // v.$primary-50, v.$primary-100
+    color: v.$primary-600; // v.$color-primary-dark
 }
 
 .iconRevoked {
-    background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%); // v.$rose-50, v.$rose-100
-    color: #e11d48; // v.$rose-600
+    background: linear-gradient(135deg, v.$color-danger-bg 0%, v.$color-danger-border 100%); // v.$rose-50, v.$rose-100
+    color: v.$rose-600;
 }
 
 .itemInfo {
@@ -117,7 +117,7 @@
     letter-spacing: -0.01em;
 
     strong {
-        color: #09090b; // v.$zinc-950
+        color: v.$black; // v.$zinc-950
         font-weight: 800;
     }
 }
@@ -177,7 +177,7 @@
     border: 1px solid v.$zinc-200;
     border-radius: v.$radius-sm;
     padding: 1rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 2px 8px rgba(v.$black, 0.02);
 }
 
 .reasonTitle {
@@ -220,7 +220,7 @@
     display: flex;
     align-items: center;
     gap: 1.25rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 4px 12px rgba(v.$black, 0.02);
 }
 
 .skeletonIcon {

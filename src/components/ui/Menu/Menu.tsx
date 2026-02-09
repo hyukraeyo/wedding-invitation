@@ -58,7 +58,7 @@ export const MenuDropdownItem = ({
   style,
   variant = 'default',
 }: MenuDropdownItemProps) => {
-  const variantStyle = variant === 'danger' ? { color: 'var(--color-error, #f04452)' } : {};
+  const variantStyle = variant === 'danger' ? { color: 'var(--color-error)' } : {};
   return (
     <DropdownMenuItem
       onClick={onClick}

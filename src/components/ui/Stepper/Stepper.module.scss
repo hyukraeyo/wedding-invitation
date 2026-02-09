@@ -8,7 +8,7 @@
   background-color: v.$white;
   padding: 8px 16px;
   border-radius: v.$radius-full;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 8px rgba(v.$black, 0.04);
   width: fit-content;
   margin: 0 auto;
 }
@@ -26,7 +26,7 @@
     color: v.$white;
 
     .number {
-      background-color: #3b82f6; // Blue from image
+      background-color: v.$blue-500; // Blue from image
       color: v.$white;
     }
 

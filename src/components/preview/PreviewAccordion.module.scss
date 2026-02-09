@@ -8,22 +8,22 @@
     overflow: hidden;
 
     &.subtle {
-        background-color: #f8f9fa;
-        border: 1px solid #f1f3f5;
+        background-color: v.$grey-50;
+        border: 1px solid v.$grey-100;
         
         .groupTitle { 
-            color: #212529; 
+            color: v.$grey-900; 
             font-weight: 600;
         }
         
         .icon { 
-            color: #adb5bd; 
+            color: v.$grey-400; 
         }
 
         @media (hover: hover) and (pointer: fine) {
             &:hover {
-                background-color: #f1f3f5;
-                border-color: #e9ecef;
+                background-color: v.$grey-100;
+                border-color: v.$grey-200;
             }
         }
 
@@ -36,12 +36,12 @@
     }
 
     &.white {
-        background-color: #ffffff;
-        border: 1px solid #e9ecef;
-        // box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        background-color: v.$white;
+        border: 1px solid v.$grey-200;
+        // box-shadow: 0 2px 8px rgba(v.$black, 0.04);
         
-        .groupTitle { color: #212529; }
-        .icon { color: #adb5bd; }
+        .groupTitle { color: v.$grey-900; }
+        .icon { color: v.$grey-400; }
     }
 
     &:last-child {

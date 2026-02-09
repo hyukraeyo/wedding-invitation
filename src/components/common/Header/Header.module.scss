@@ -107,7 +107,7 @@
 
 .profileButton {
   margin-left: 0.25rem;
-  box-shadow: 0 2px 8px rgba(251, 192, 45, 0.25);
+  box-shadow: 0 2px 8px rgba(v.$primary-500, 0.25);
   transition: all v.$transition-200 v.$ease-standard;
   overflow: hidden; // For profile image
   background-color: v.$primary !important;

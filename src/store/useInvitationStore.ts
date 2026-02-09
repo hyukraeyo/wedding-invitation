@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { PALETTE } from '@/constants/palette';
 
 // Selector helpers for optimized re-renders
 export const selectGroomInfo = (state: InvitationState) => ({
@@ -407,8 +408,8 @@ export const INITIAL_STATE = {
 
   theme: {
     font: 'gowun-dodum' as const,
-    backgroundColor: '#FFFFFF', // White
-    accentColor: '#C19A6D', // Soft Brown
+    backgroundColor: PALETTE.WHITE,
+    accentColor: PALETTE.PRIMARY_600,
     fontScale: 1,
     allowFontScale: false,
     pattern: 'none' as const,

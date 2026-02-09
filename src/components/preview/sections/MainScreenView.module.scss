@@ -64,13 +64,13 @@
         font-weight: 900;
         margin-bottom: 0.75rem;
         text-transform: uppercase;
-        color: #111827; // gray-900
+        color: v.$grey-900; // gray-900
     }
 
     .dateText {
         font-family: inherit;
         font-weight: 300;
-        color: #374151; // gray-700
+        color: v.$grey-700; // gray-700
         letter-spacing: -0.05em;
         margin-bottom: 1.25rem;
         font-variant-numeric: tabular-nums;
@@ -78,7 +78,7 @@
 
     // Classic Style
     .classicMarriage {
-        color: #374151;
+        color: v.$grey-700;
         margin-bottom: 1.5rem;
         font-weight: 400;
     }
@@ -92,7 +92,7 @@
 
     .minimalDateBox {
         padding: 0.5rem 0.75rem;
-        background: rgba(0, 0, 0, 0.03);
+        background: rgba(v.$black, 0.03);
         border-radius: v.$radius-md; // 16px
         font-family: inherit;
         font-weight: 300;
@@ -101,20 +101,20 @@
 
     .weekdayText {
         letter-spacing: 0.25em;
-        color: #6b7280;
+        color: v.$grey-600;
         margin-bottom: 1.25rem;
         font-weight: 500;
     }
 
     // Korean Style
     .koreanTitle {
-        color: #374151;
+        color: v.$grey-700;
         margin-bottom: 0.25rem;
         font-weight: 400;
     }
 
     .koreanSubtitle {
-        color: #111827;
+        color: v.$grey-900;
         margin-bottom: 1.25rem;
         font-weight: 600;
     }
@@ -125,7 +125,7 @@
         align-items: center;
         gap: 0.75rem;
         font-family: inherit;
-        color: #1f2937;
+        color: v.$grey-800;
         margin-bottom: 1rem;
     }
 
@@ -135,7 +135,7 @@
 
     // English Style
     .englishSubtitle {
-        color: #6b7280;
+        color: v.$grey-600;
         font-style: italic;
         letter-spacing: 0.02em;
     }
@@ -143,7 +143,7 @@
 
 .namesWrapper {
     font-family: inherit;
-    color: #1f2937; // gray-800
+    color: v.$grey-800; // gray-800
     font-weight: 500;
     letter-spacing: -0.025em;
     display: flex;
@@ -187,7 +187,7 @@
     }
 
     .suffix {
-        color: #4b5563; // gray-600
+        color: v.$grey-600; // gray-600
         font-weight: 500;
         flex-shrink: 0;
 
@@ -208,7 +208,7 @@
     overflow: hidden;
 
     &.bgGray {
-        background-color: #f9fafb;
+        background-color: v.$grey-50;
     }
 
     &.imageStandard {
@@ -241,8 +241,16 @@
         &.mistEffect {
             box-shadow: none;
             background-color: transparent;
-            -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
-            mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+            -webkit-mask-image: linear-gradient(
+                to bottom,
+                rgba(v.$black, 1) 50%,
+                transparent 100%
+            );
+            mask-image: linear-gradient(
+                to bottom,
+                rgba(v.$black, 1) 50%,
+                transparent 100%
+            );
         }
 
 
@@ -266,8 +274,8 @@
         justify-content: center;
         height: 100%;
         opacity: 0.2;
-        color: #d1d5db; // gray-300
-        background-color: rgba(249, 250, 251, 0.5); // gray-50/50
+        color: v.$grey-300; // gray-300
+        background-color: rgba(v.$grey-50, 0.5);
 
         span {
             margin-top: 1rem;
@@ -289,7 +297,7 @@
     .gradientOverlay {
         position: absolute;
         inset: 0;
-        background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent, rgba(0, 0, 0, 0.1));
+        background: linear-gradient(to top, rgba(v.$black, 0.6), transparent, rgba(v.$black, 0.1));
         z-index: 10;
         pointer-events: none;
     }
@@ -302,10 +310,10 @@
 
         &.mist {
             background: linear-gradient(to top,
-                    rgba(255, 255, 255, 1) 0%,
-                    rgba(255, 255, 255, 0.9) 15%,
-                    rgba(255, 255, 255, 0.6) 30%,
-                    rgba(255, 255, 255, 0) 60%);
+                    rgba(v.$white, 1) 0%,
+                    rgba(v.$white, 0.9) 15%,
+                    rgba(v.$white, 0.6) 30%,
+                    rgba(v.$white, 0) 60%);
         }
 
     }
@@ -373,8 +381,8 @@
         bottom: 3rem;
         left: 0;
         right: 0;
-        color: white;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        color: v.$white;
+        text-shadow: 0 2px 4px rgba(v.$black, 0.3);
     }
 
     .bottomTitle {
@@ -404,7 +412,7 @@
 
         &.normal {
             font-weight: 400;
-            color: #1f2937;
+            color: v.$grey-800;
         }
 
         .connector {
@@ -441,11 +449,11 @@
             }
 
             &.textWhite {
-                color: rgba(255, 255, 255, 0.9);
+                color: rgba(v.$white, 0.9);
             }
 
             &.textGray {
-                color: #4b5563;
+                color: v.$grey-600;
             }
         }
     }
@@ -459,11 +467,11 @@
         font-weight: 400;
 
         &.textWhite {
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(v.$white, 0.9);
         }
 
         &.textGray {
-            color: #6b7280;
+            color: v.$grey-600;
         }
     }
 
@@ -477,7 +485,7 @@
         }
 
         &.textGray {
-            color: #6b7280;
+            color: v.$grey-600;
             font-weight: 500;
             font-family: inherit;
         }

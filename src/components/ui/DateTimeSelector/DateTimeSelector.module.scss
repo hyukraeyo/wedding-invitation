@@ -116,7 +116,7 @@
     border-color: v.$grey-900;
     color: v.$white;
     font-weight: 600;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(v.$black, 0.1);
 
     // Check if we should use primary color instead based on project rules
     // Project rule: Primary is Banana Yellow.
@@ -125,11 +125,11 @@
     // Let's stick to Primary to match the Calendar date selection style.
     background-color: v.$primary; // Yellow
     border-color: v.$primary;
-    color: v.$white; // or v.$grey-900 if yellow is too bright? Yellow #FBC02D text implies black text usually.
+    color: v.$white; // or v.$grey-900 if yellow is too bright? Yellow v.$primary-500 text implies black text usually.
     // But button text color rule says: Icons active yellow text.
     // Calendar selected date is primary bg, white text.
     // Let's use primary key with appropriate text color.
-    // #FBC02D is light, so usually takes black text for accessibility.
+    // v.$primary-500 is light, so usually takes black text for accessibility.
     // But Calendar.module.scss uses: color: v.$white; for .daySelected.
     // I will use White text for consistency with Calendar module. (If it's readable)
   }

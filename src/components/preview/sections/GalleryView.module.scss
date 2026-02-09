@@ -87,7 +87,7 @@
     aspect-ratio: 1 / 1;
     border-radius: v.$radius-md; // 16px
     overflow: hidden;
-    // box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    // box-shadow: 0 1px 2px 0 rgba(v.$black, 0.05);
 
     &.cursorPointer {
         cursor: pointer;
@@ -99,9 +99,9 @@
 }
 
 .counter {
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(v.$black, 0.4);
     backdrop-filter: blur(8px);
-    color: white;
+    color: v.$white;
     padding: 0.25rem 0.75rem;
     border-radius: v.$radius-full;
     position: absolute;
@@ -118,7 +118,7 @@
     position: fixed;
     inset: 0;
     z-index: 10000;
-    background-color: rgba(0, 0, 0, 0.9); // Slightly more transparent
+    background-color: rgba(v.$black, 0.9); // Slightly more transparent
     backdrop-filter: blur(20px); // Heavier blur for premium feel
     display: flex;
     flex-direction: column;
@@ -134,7 +134,7 @@
     z-index: 10001;
     
     .count {
-        color: rgba(255, 255, 255, 0.6);
+        color: rgba(v.$white, 0.6);
         font-size: 0.625rem;
         letter-spacing: 0.1em;
         padding-left: 0.5rem;
@@ -142,7 +142,7 @@
     
     .closeBtn {
         padding: 0.5rem;
-        color: rgba(255, 255, 255, 0.5);
+        color: rgba(v.$white, 0.5);
         transition: color 0.2s;
         background: none;
         border: none;
@@ -150,7 +150,7 @@
         
         @media (hover: hover) and (pointer: fine) {
             &:hover {
-                color: white;
+                color: v.$white;
             }
         }
 
@@ -197,9 +197,9 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.03);
+    background-color: rgba(v.$black, 0.03);
     border-radius: v.$radius-md;
-    color: rgba(0, 0, 0, 0.4);
+    color: rgba(v.$black, 0.4);
     gap: 0.5rem;
     font-size: v.$font-size-sm;
 

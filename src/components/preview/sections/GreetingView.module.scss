@@ -10,7 +10,7 @@
         text-align: center;
         line-height: 2.2;
         font-size: calc(0.9375rem * var(--font-scale));
-        color: #495057;
+        color: v.$grey-600;
         width: 100%;
         word-break: keep-all;
         margin-bottom: 0.5rem;
@@ -31,10 +31,10 @@
         margin-bottom: 1rem;
         border-radius: v.$radius-md; // 16px
         overflow: hidden;
-        // box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
-        background-color: #f8f9fa;
+        // box-shadow: 0 8px 30px rgba(v.$black, 0.04);
+        background-color: v.$grey-50;
         position: relative;
-        border: 1px solid #f1f3f5;
+        border: 1px solid v.$grey-100;
 
         &.fixed {
             aspect-ratio: 16 / 11;
@@ -63,7 +63,7 @@
 .relationArea {
     margin-top: 1rem;
     padding-top: 1.25rem;
-    border-top: 1px solid #f1f3f5;
+    border-top: 1px solid v.$grey-100;
     width: 100%;
     @include m.flex-col;
     align-items: center;
@@ -85,7 +85,7 @@
 
         .parentsNames {
             font-size: calc(1.05rem * var(--font-scale));
-            color: #343a40;
+            color: v.$grey-700;
             font-weight: 500;
             letter-spacing: -0.01em;
 
@@ -107,19 +107,19 @@
         .relationSeparator {
             width: 1px;
             height: 1rem;
-            background-color: #e9ecef;
+            background-color: v.$grey-200;
             margin-inline: 0.25rem;
         }
 
         .relationLabel {
             font-size: calc(0.85rem * var(--font-scale));
-            color: #868e96;
+            color: v.$grey-400;
             font-weight: 400;
         }
 
         .childName {
             font-size: calc(1.1rem * var(--font-scale));
-            color: #212529;
+            color: v.$grey-900;
             font-weight: 600;
             letter-spacing: 0.01em;
         }
@@ -129,12 +129,12 @@
 .freeformArea {
     margin-top: 1rem;
     padding-top: 1.25rem;
-    border-top: 1px solid #f1f3f5;
+    border-top: 1px solid v.$grey-100;
     width: 100%;
     text-align: center;
     font-size: calc(1.05rem * var(--font-scale));
     line-height: 2.2;
-    color: #343a40;
+    color: v.$grey-700;
     word-break: keep-all;
     font-family: inherit;
 

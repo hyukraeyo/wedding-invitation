@@ -18,7 +18,7 @@
   background-color: v.$white;
   border-radius: 32px;
   padding: 40px 32px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 4px 20px rgba(v.$black, 0.02);
   display: flex;
   flex-direction: column;
   gap: 32px;
@@ -80,13 +80,13 @@
     justify-content: center;
 
     &.groom {
-      background-color: #eff6ff;
-      color: #3b82f6;
+      background-color: v.$blue-50;
+      color: v.$blue-500;
     }
 
     &.bride {
-      background-color: #fff1f2;
-      color: #f43f5e;
+      background-color: v.$color-danger-bg;
+      color: v.$red-500;
     }
   }
 

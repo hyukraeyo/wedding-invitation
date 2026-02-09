@@ -87,7 +87,7 @@
   &.selected {
     .styleCard {
       border: 2px solid v.$primary;
-      box-shadow: 0 4px 12px rgba(251, 192, 45, 0.15);
+      box-shadow: 0 4px 12px rgba(v.$primary-500, 0.15);
     }
     .styleName {
       color: v.$text-primary;

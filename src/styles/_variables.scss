@@ -65,15 +65,15 @@ $grey-opacity-20: rgba(c.$grey-500, 0.2);
 $grey-opacity-200: rgba(c.$grey-500, 0.2); // Compat alias
 $grey-opacity-50: rgba(c.$grey-500, 0.08);
 $grey-opacity-100: rgba(c.$grey-100, 0.08); // Compat alias
-$shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
-$shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-$shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
-$shadow-xl: 0 10px 40px rgba(0, 0, 0, 0.12);
+$shadow-sm: 0 2px 8px rgba(c.$black, 0.04);
+$shadow-md: 0 4px 12px rgba(c.$black, 0.08);
+$shadow-lg: 0 8px 24px rgba(c.$black, 0.12);
+$shadow-xl: 0 10px 40px rgba(c.$black, 0.12);
 $canvas-max-width: 500px;
 $max-mobile: 480px;
 $color-muted: c.$grey-100;
 $color-muted-foreground: c.$grey-500;
-$adaptive-background-dimmed: rgba(0, 0, 0, 0.4);
+$adaptive-background-dimmed: rgba(c.$black, 0.4);
 $z-overlay: 9990;
 $z-modal: 10000;
 $motion-label-offset: -24px;

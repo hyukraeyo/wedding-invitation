@@ -1,3 +1,5 @@
+@use '@/styles/colors' as c;
+
 // Standard Radius
 $radius-sm: 8px;
 $radius-md: 12px;
@@ -7,16 +9,19 @@ $radius-2xl: 32px;
 $radius-full: 9999px;
 
 // Apple-style Shadows
-$shadow-subtle: 0 4px 12px rgba(0, 0, 0, 0.05);
-$shadow-base: 0 8px 24px rgba(0, 0, 0, 0.08);
-$shadow-strong: 0 12px 32px rgba(0, 0, 0, 0.12);
+$shadow-subtle: 0 4px 12px rgba(c.$black, 0.05);
+$shadow-base: 0 8px 24px rgba(c.$black, 0.08);
+$shadow-strong: 0 12px 32px rgba(c.$black, 0.12);
 $shadow-card: $shadow-base;
 
 // iOS Bezier & Transitions
 $ease-ios: cubic-bezier(0.16, 1, 0.3, 1);
 $duration-fast: 150ms;
 $duration-base: 250ms;
+$duration-normal: 300ms;
+$duration-moderate: 350ms;
 $duration-slow: 400ms;
+$duration-gentle: 500ms;
 
 $transition-smooth: $duration-base $ease-ios;
 

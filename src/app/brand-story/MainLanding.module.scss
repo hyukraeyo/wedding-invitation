@@ -226,7 +226,7 @@
     &Overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent);
+      background: linear-gradient(to top, rgba(v.$black, 0.2), transparent);
     }
   }
 }
@@ -448,7 +448,7 @@
 // -----------------------------------------------------------------------------
 .ctaSection {
   padding: 80px 20px;
-  background-color: v.$grey-900; // #111418
+  background-color: v.$grey-900;
   border-top-left-radius: v.$radius-xl;
   border-top-right-radius: v.$radius-xl;
   text-align: center;

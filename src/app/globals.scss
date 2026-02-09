@@ -56,9 +56,9 @@
   --radius-full: 9999px;
 
   /* TDS Buttons & Tokens */
-  --button-background-color: #fbc02d;
-  --button-color: #000000;
-  --button-pressed-background-color: #f9a825;
+  --button-background-color: #{$primary-500};
+  --button-color: #{$on-primary};
+  --button-pressed-background-color: #{$primary-600};
 }
 
 * {

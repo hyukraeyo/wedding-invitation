@@ -33,7 +33,7 @@ const RichTextEditor = dynamic(
         style={{
           height: '160px',
           width: '100%',
-          backgroundColor: 'rgba(0,0,0,0.03)',
+          backgroundColor: 'var(--color-grey-100)',
           borderRadius: '8px',
           animation: 'pulse 2s infinite',
         }}

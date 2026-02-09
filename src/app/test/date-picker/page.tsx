@@ -16,17 +16,17 @@ export default function DatePickerTestPage() {
         gap: '30px',
         minHeight: '100vh',
         justifyContent: 'center',
-        background: '#f5f5f5',
+        background: 'var(--color-grey-100)',
       }}
     >
       <h1>Date Wheel Picker Test</h1>
 
       <div
         style={{
-          background: 'white',
+          background: 'var(--background)',
           padding: '20px',
           borderRadius: '16px',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+          boxShadow: '0 4px 12px color-mix(in srgb, var(--foreground) 10%, transparent)',
         }}
       >
         <DateWheelPicker value={date} onChange={setDate} minYear={2020} maxYear={2030} size="lg" />

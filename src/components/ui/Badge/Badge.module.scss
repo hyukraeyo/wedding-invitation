@@ -59,20 +59,20 @@
 
   &.blue {
     --bg: #{v.$status-info};
-    --text: #ffffff;
+    --text: v.$white;
     --soft: #{rgba(v.$status-info, 0.1)};
   }
 
   &.red,
   &.danger {
     --bg: #{v.$status-error};
-    --text: #ffffff;
+    --text: v.$white;
     --soft: #{rgba(v.$status-error, 0.1)};
   }
 
   &.green {
     --bg: #{v.$status-success};
-    --text: #ffffff;
+    --text: v.$white;
     --soft: #{rgba(v.$status-success, 0.1)};
   }
 

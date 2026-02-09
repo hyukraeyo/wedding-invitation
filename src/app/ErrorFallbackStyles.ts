@@ -1,4 +1,5 @@
 import type { CSSProperties } from 'react';
+import { PALETTE } from '@/constants/palette';
 
 const buttonBase: CSSProperties = {
   border: 'none',
@@ -44,7 +45,7 @@ export const errorFallbackStyles = {
     justifyContent: 'center',
     padding: '24px',
     borderRadius: '9999px',
-    backgroundColor: '#fff1f2',
+    backgroundColor: PALETTE.ROSE_50,
   } satisfies CSSProperties,
   title: {
     margin: 0,
@@ -85,11 +86,11 @@ export const errorFallbackStyles = {
   primaryButton: {
     ...buttonBase,
     backgroundColor: 'var(--primary)',
-    color: '#020202',
+    color: PALETTE.ON_PRIMARY,
   } satisfies CSSProperties,
   outlineButton: {
     ...buttonBase,
-    backgroundColor: '#ffffff',
+    backgroundColor: PALETTE.WHITE,
     border: '1px solid var(--color-grey-100)',
     color: 'var(--foreground)',
   } satisfies CSSProperties,

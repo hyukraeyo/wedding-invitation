@@ -51,7 +51,7 @@
   background: v.$white;
   border-radius: v.$radius-xl;
   padding: 32px;
-  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 20px 45px rgba(v.$black, 0.08);
 
   @include m.mobile {
     padding: 24px;
@@ -411,7 +411,7 @@
   aspect-ratio: 1;
   border-radius: v.$radius-md;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 8px rgba(v.$black, 0.05);
 
   img {
     width: 100%;
@@ -427,7 +427,7 @@
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(v.$black, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -438,7 +438,7 @@
   transition: all 0.2s;
 
   &:hover {
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(v.$black, 0.7);
     transform: scale(1.1);
   }
 }
@@ -474,7 +474,7 @@
     align-items: center;
     justify-content: center;
     color: v.$grey-400;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 12px rgba(v.$black, 0.04);
   }
 
   .uploadText {
@@ -519,8 +519,8 @@
   overflow: hidden;
   background-color: v.$grey-50;
   box-shadow:
-    0 10px 15px -3px rgba(0, 0, 0, 0.05),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    0 10px 15px -3px rgba(v.$black, 0.05),
+    0 4px 6px -2px rgba(v.$black, 0.05);
   padding: 12px;
 }
 

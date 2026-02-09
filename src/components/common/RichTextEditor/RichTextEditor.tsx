@@ -18,6 +18,7 @@ import {
 import { useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { IconButton } from '@/components/ui/IconButton';
+import { PALETTE } from '@/constants/palette';
 import styles from './RichTextEditor.module.scss';
 
 interface RichTextEditorProps {
@@ -36,8 +37,8 @@ export function RichTextEditor({
     minHeight = 120
 }: RichTextEditorProps) {
 
-    const BRAND_COLOR = '#8B5E3C';
-    const HIGHLIGHT_COLOR = '#FFECD1';
+    const BRAND_COLOR = PALETTE.ON_PRIMARY;
+    const HIGHLIGHT_COLOR = PALETTE.PRIMARY_100;
 
     const editor = useEditor({
         extensions: [

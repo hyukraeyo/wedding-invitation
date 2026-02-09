@@ -4,6 +4,7 @@ import Script from 'next/script';
 import ClientProviders from './ClientProviders';
 import { fontVariables } from '@/lib/fonts';
 import { SkipLink } from '@/hooks/useAccessibility';
+import { PALETTE } from '@/constants/palette';
 import './globals.scss';
 import '../styles/_accessibility.scss';
 import styles from './layout.module.scss';
@@ -14,7 +15,7 @@ export const viewport: Viewport = {
   // 🍌 Safari에서 인풋 포커스 시 줌 현상을 강제로 막기 위해 1로 설정 (접근성 고려 시 주의 필요)
   maximumScale: 1,
   userScalable: false,
-  themeColor: '#F9F8E6',
+  themeColor: PALETTE.PRIMARY_50,
   // 🍌 최신 모바일 브라우저 기법: 키보드가 올라올 때 뷰포트 높이를 조절하여 UI가 가려지거나 확대되는 현상 방지
   interactiveWidget: 'resizes-content',
   viewportFit: 'cover',
