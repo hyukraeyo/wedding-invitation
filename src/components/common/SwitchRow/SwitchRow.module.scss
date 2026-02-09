@@ -1,13 +1,14 @@
 @use '../../../styles/variables' as v;
 
-.row {
+.container {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: v.$builder-gap-sm;
   width: 100%;
-}
+  min-height: 44px; // Touch target size optimization
 
-.label {
-  margin: 0;
+  label {
+    cursor: pointer;
+    flex: 1; // Allow label to take available space
+  }
 }

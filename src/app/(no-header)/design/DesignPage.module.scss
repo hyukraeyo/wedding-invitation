@@ -516,3 +516,8 @@
   align-items: flex-end;
   padding: 16px;
 }
+
+.grow {
+  flex: 1;
+  min-width: 0;
+}

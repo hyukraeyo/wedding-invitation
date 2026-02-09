@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+
 import {
   AlertDialog,
   AlertDialogAction,
@@ -45,11 +46,13 @@ import { ChrysanthemumSVG } from '@/components/common/Icons';
 import { StylePicker } from '@/components/common/StylePicker';
 import { ColorPicker } from '@/components/common/ColorPicker';
 import { FontPicker } from '@/components/common/FontPicker';
+import { SequentialDateTimePicker } from '@/components/common/SequentialDateTimePicker';
 import { useNameInput, usePhoneInput } from '@/hooks/useFormInput';
 import { useImageUpload } from '@/hooks/useImageUpload';
 import { isInvalidKoreanName, isInvalidPhone } from '@/lib/utils';
 import { PALETTE } from '@/constants/palette';
 import s from './DesignPage.module.scss';
+import { DateWheelPicker } from '@/components/ui/DateWheelPicker';
 import { DragEndEvent } from '@dnd-kit/core';
 
 export default function DesignPage() {
@@ -62,6 +65,10 @@ export default function DesignPage() {
   const [richText, setRichText] = React.useState('<p>Leave a warm welcome note here.</p>');
   const [weddingDate, setWeddingDate] = React.useState('');
   const [weddingTime, setWeddingTime] = React.useState('');
+
+  // Sequential Picker State
+  const [seqDate, setSeqDate] = React.useState('');
+  const [seqTime, setSeqTime] = React.useState('');
 
   // Form hooks state
   const [groomName, setGroomName] = React.useState('');
@@ -223,6 +230,21 @@ export default function DesignPage() {
                   placeholder="시간을 선택하세요"
                   value={weddingTime}
                   onChange={setWeddingTime}
+                />
+              </FormControl>
+            </FormField>
+
+            <FormField name="seqCombined">
+              <FormHeader>
+                <FormLabel>예식 일시</FormLabel>
+              </FormHeader>
+              <FormControl asChild>
+                <SequentialDateTimePicker
+                  date={seqDate}
+                  time={seqTime}
+                  onDateChange={setSeqDate}
+                  onTimeChange={setSeqTime}
+                  className={s.grow || ''}
                 />
               </FormControl>
             </FormField>
@@ -413,6 +435,43 @@ export default function DesignPage() {
 
           {/* 제출 버튼 */}
           <BottomCTA.Single onClick={() => setToastOpen(true)}>참석 의사 전달하기</BottomCTA.Single>
+        </div>
+      </section>
+
+      <section className={s.section}>
+        <div className={s.sectionHeader}>
+          <h2>Wheel Picker</h2>
+          <span className={s.sectionHint}>모바일 친화적인 휠 피커 컴포넌트</span>
+        </div>
+        <div className={s.demoContainer}>
+          <div
+            className={s.demoContent}
+            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px' }}
+          >
+            <div
+              style={{
+                background: 'var(--white)',
+                padding: '20px',
+                borderRadius: '16px',
+                border: '1px solid var(--grey-200)',
+              }}
+            >
+              <DateWheelPicker
+                value={weddingDate ? new Date(weddingDate) : new Date()}
+                onChange={(d: Date) => {
+                  const year = d.getFullYear();
+                  const month = String(d.getMonth() + 1).padStart(2, '0');
+                  const day = String(d.getDate()).padStart(2, '0');
+                  setWeddingDate(`${year}-${month}-${day}`);
+                }}
+                minYear={2020}
+                maxYear={2030}
+              />
+            </div>
+            <p style={{ color: 'var(--text-secondary)' }}>
+              선택된 날짜: {weddingDate || '날짜를 선택하세요'}
+            </p>
+          </div>
         </div>
       </section>
 

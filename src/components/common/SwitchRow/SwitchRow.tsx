@@ -2,36 +2,40 @@
 
 import * as React from 'react';
 import { Switch } from '@/components/ui/Switch';
-import { cn } from '@/lib/utils';
+import { FormLabel } from '@/components/ui/Form';
+import { clsx } from 'clsx';
 import styles from './SwitchRow.module.scss';
 
-interface SwitchRowProps
-  extends Omit<React.ComponentPropsWithoutRef<typeof Switch>, 'checked' | 'onCheckedChange'> {
+interface SwitchRowProps extends Omit<
+  React.ComponentPropsWithoutRef<typeof Switch>,
+  'checked' | 'onCheckedChange'
+> {
   label: React.ReactNode;
   checked: boolean;
   onCheckedChange: (checked: boolean) => void;
   className?: string;
-  labelClassName?: string;
 }
 
-export default function SwitchRow({
-  label,
-  checked,
-  onCheckedChange,
-  className,
-  labelClassName,
-  id,
-  ...props
-}: SwitchRowProps) {
-  const generatedId = React.useId();
-  const switchId = id ?? generatedId;
+const SwitchRow = React.forwardRef<React.ElementRef<typeof Switch>, SwitchRowProps>(
+  ({ label, checked, onCheckedChange, className, id, ...props }, ref) => {
+    const generatedId = React.useId();
+    const switchId = id ?? generatedId;
 
-  return (
-    <div className={cn(styles.row, className)}>
-      <label htmlFor={switchId} className={cn(styles.label, labelClassName)}>
-        {label}
-      </label>
-      <Switch id={switchId} checked={checked} onCheckedChange={onCheckedChange} {...props} />
-    </div>
-  );
-}
+    return (
+      <div className={clsx(styles.container, className)}>
+        <FormLabel htmlFor={switchId}>{label}</FormLabel>
+        <Switch
+          id={switchId}
+          ref={ref}
+          checked={checked}
+          onCheckedChange={onCheckedChange}
+          {...props}
+        />
+      </div>
+    );
+  }
+);
+SwitchRow.displayName = 'SwitchRow';
+
+export { SwitchRow };
+export default SwitchRow;
