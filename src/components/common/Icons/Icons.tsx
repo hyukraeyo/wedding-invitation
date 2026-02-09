@@ -12,20 +12,25 @@ export const AmpersandSVG = ({
   style?: React.CSSProperties;
 }) => (
   <svg
-    viewBox="0 0 36 24"
+    viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     className={className}
     style={{
-      width: '1.5em',
+      width: '1em',
       height: '1em',
       display: 'inline-block',
       verticalAlign: 'middle',
       ...style,
     }}
   >
-    <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.5" />
-    <circle cx="24" cy="12" r="9" stroke="currentColor" strokeWidth="1.5" />
+    <path
+      d="M17 18.5c-1.5 1.5-3.5 1.5-5 0-2.5-2.5 1-4.5 2-5.5s1-3-1-3-3 2-3 4-1 2-2 3"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
   </svg>
 );
 
@@ -98,64 +103,26 @@ export const NaverIcon = ({ size = 24, className }: IconProps) => (
     xmlns="http://www.w3.org/2000/svg"
     className={className}
   >
-    <defs>
-      <linearGradient
-        id="naver_map_grad_comp"
-        x1="256"
-        y1="20"
-        x2="256"
-        y2="492"
-        gradientUnits="userSpaceOnUse"
-      >
-        <stop offset="0" stopColor={PALETTE.NAVER_GREEN_DARK}>
-          <animate
-            attributeName="stop-color"
-            values={`${PALETTE.NAVER_BLUE}; ${PALETTE.NAVER_GREEN}`}
-            dur="1s"
-            repeatCount="indefinite"
-          />
-        </stop>
-        <stop offset="0" stopColor={PALETTE.NAVER_BLUE} />
-        <stop offset="1" stopColor={PALETTE.NAVER_GREEN} />
-      </linearGradient>
-      <radialGradient
-        id="highlight_glow_comp"
-        cx="0"
-        cy="0"
-        r="1"
-        gradientUnits="userSpaceOnUse"
-        gradientTransform="translate(256 120) rotate(90) scale(100 180)"
-      >
-        <stop stopColor={PALETTE.WHITE} stopOpacity="0.3" />
-        <stop offset="1" stopColor={PALETTE.WHITE} stopOpacity="0" />
-      </radialGradient>
-    </defs>
     <path
-      d="M256 20C145.5 20 56 109.5 56 220C56 345 256 492 256 492C256 492 456 345 456 220C456 109.5 366.5 20 256 20Z"
-      fill="url(#naver_map_grad_comp)"
+      d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0 0 114.6 0 256s114.6 256 256 256z"
+      fill={PALETTE.NAVER_GREEN}
     />
-    <path
-      d="M175 310V130H223L289 233.5V130H337V310H289L223 206.5V310H175Z"
-      fill={PALETTE.WHITE}
-    />
+    <path d="M175 310V130H223L289 233.5V130H337V310H289L223 206.5V310H175Z" fill={PALETTE.WHITE} />
   </svg>
 );
 
-export const KakaoIcon = ({ size = 24, showBackground = true, className }: KakaoIconProps) => (
+export const KakaoIcon = ({ size = 24, className }: IconProps) => (
   <svg
     width={size}
     height={size}
-    viewBox="0 0 1024 1024"
+    viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     className={className}
   >
-    {showBackground ? (
-      <rect width="1024" height="1024" rx="160" fill={PALETTE.KAKAO_YELLOW_BRAND} />
-    ) : null}
     <path
-      d="M512 880c0 0-300-300-300-470a300 300 0 1 1 600 0c0 170-300 470-300 470z M512 310a100 100 0 1 0 0 200 100 100 0 1 0 0 -200z"
-      fill={PALETTE.NAVER_BLUE}
+      d="M12 3C6.47715 3 2 6.47715 2 10.75c0 2.822 1.944 5.289 4.8456 6.575L5.804 20.372c-.114.417.348.749.697.514l4.636-3.13c.284.029.573.044.863.044 5.5228 0 10-3.4772 10-7.75C22 6.47715 17.5228 3 12 3z"
+      fill={PALETTE.KAKAO_YELLOW_BRAND}
     />
   </svg>
 );

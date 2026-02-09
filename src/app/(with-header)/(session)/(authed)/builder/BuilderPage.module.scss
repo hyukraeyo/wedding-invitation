@@ -237,14 +237,14 @@
     height: 852px;
     width: 393px;
     background-color: v.$black;
-    border-radius: 55px;
+    border-radius: 64px;
   }
 
   .bezel {
     position: absolute;
     inset: 3px;
     background-color: v.$black;
-    border-radius: 50px;
+    border-radius: 60px;
     overflow: hidden;
   }
 
@@ -264,7 +264,7 @@
       height: 35px;
       width: 120px;
       background-color: v.$black;
-      border-radius: v.$radius-md;
+      border-radius: 20px;
       display: flex;
       align-items: center;
       justify-content: center;

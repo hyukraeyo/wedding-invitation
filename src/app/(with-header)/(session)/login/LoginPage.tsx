@@ -32,7 +32,7 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
   const router = useRouter();
   const searchParams = useSearchParams();
   const callbackUrl = useMemo(() => {
-    return searchParams.get('callbackUrl') || searchParams.get('returnTo') || '/builder';
+    return searchParams.get('callbackUrl') || searchParams.get('returnTo') || '/';
   }, [searchParams]);
   const user = initialUser;
   const userId = user?.id;

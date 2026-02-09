@@ -1,12 +1,11 @@
-@use "../../../styles/variables" as v;
-@use "../../../styles/mixins" as m;
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
 .footer {
   display: flex;
   gap: 8px;
   padding: 0 24px 24px;
 }
-
 
 .fullWidth {
   width: 100%;
@@ -31,52 +30,9 @@
   position: sticky;
   top: v.$header-height;
 
-
   @include m.mobile {
     display: none;
   }
-}
-
-.profileSection {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 2.5rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid v.$grey-200;
-}
-
-.avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background-color: v.$color-primary;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: v.$white;
-  font-size: v.$font-size-xl;
-  flex-shrink: 0;
-}
-
-.userInfo {
-  flex: 1;
-  min-width: 0;
-}
-
-.userName {
-  font-weight: 600;
-  font-size: 1.1rem;
-  color: v.$black;
-  margin-bottom: 0.25rem;
-}
-
-.userEmail {
-  font-size: v.$font-size-sm;
-  color: v.$grey-400;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .menuList {
@@ -125,8 +81,6 @@
   transition: color 0.2s ease;
 }
 
-
-
 // Event Modal Styles
 .eventModalContent {
   display: flex;
@@ -149,7 +103,6 @@
 }
 
 @keyframes bounce {
-
   0%,
   100% {
     transform: translateY(0);

@@ -4,7 +4,6 @@ import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
 import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
 import { Badge } from '@/components/ui/Badge';
-import React from 'react';
 import { usePathname } from 'next/navigation';
 import { FileText, ClipboardList, HelpCircle, User, LogOut, Banana, Bell } from 'lucide-react';
 import { signOut } from 'next-auth/react';
@@ -48,15 +47,6 @@ export function MyPageSidebar({
 
   return (
     <aside className={clsx(styles.sidebar, 'view-transition-sidebar')}>
-      <div className={styles.profileSection}>
-        <div className={styles.avatar}>
-          <Banana size={24} />
-        </div>
-        <div className={styles.userInfo}>
-          <div className={styles.userName}>{profile?.full_name || '이름 없음'}</div>
-        </div>
-      </div>
-
       <nav className={styles.menuList}>
         <ViewTransitionLink
           href="/mypage"

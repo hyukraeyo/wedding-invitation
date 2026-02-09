@@ -1,6 +1,7 @@
-@use "../../../styles/variables" as v;
+@use '../../../styles/variables' as v;
 
 .Root {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -10,7 +11,9 @@
   width: 40px;
   height: 40px;
   border-radius: 100%;
-  background-color: v.$grey-100;
+  background-color: v.$grey-50;
+  border: 1px solid v.$grey-100;
+  flex-shrink: 0;
 }
 
 .Image {
@@ -26,9 +29,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: v.$white;
-  color: v.$banana-yellow;
-  font-size: 15px;
+  background-color: v.$grey-50;
+  color: v.$grey-400;
+  font-size: 14px;
   line-height: 1;
-  font-weight: 500;
+  font-weight: 600;
+  text-transform: uppercase;
+
+  svg {
+    width: 60%;
+    height: 60%;
+    color: v.$grey-300;
+  }
 }

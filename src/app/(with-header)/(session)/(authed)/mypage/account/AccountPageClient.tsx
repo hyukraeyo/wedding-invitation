@@ -5,7 +5,8 @@ import { MyPageContent } from '@/components/mypage/MyPageContent';
 import { TextField } from '@/components/ui/TextField';
 import { Button } from '@/components/ui/Button';
 import styles from './AccountPage.module.scss';
-import { Banana, User, Mail, Phone } from 'lucide-react';
+import { User, Mail, Phone } from 'lucide-react';
+import { Avatar } from '@/components/ui/Avatar';
 import { clsx } from 'clsx';
 import { profileService } from '@/services/profileService';
 import { useToast } from '@/hooks/use-toast';
@@ -54,9 +55,9 @@ export default function AccountPageClient({ profile, userEmail }: AccountPageCli
     <MyPageContent className={styles.accountList}>
       <div className={styles.profileHeader}>
         <div className={styles.avatarWrapper}>
-          <div className={styles.avatar}>
-            <Banana size={40} strokeWidth={1.5} />
-          </div>
+          <Avatar className={styles.avatar}>
+            <Avatar.Fallback>{profile.full_name?.[0]}</Avatar.Fallback>
+          </Avatar>
         </div>
         <div className={styles.headerInfo}>
           <h2 className={styles.headerName}>{profile.full_name || '이름 없음'}</h2>
