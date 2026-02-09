@@ -63,6 +63,7 @@
 
   .styleCard {
     width: 100%;
+    max-width: 100px;
     aspect-ratio: 1 / 1.4;
     border: 1px solid v.$grey-200;
     border-radius: v.$radius-lg;

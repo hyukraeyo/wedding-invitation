@@ -30,8 +30,8 @@ const DEFAULT_OPTIONS: StyleOption[] = [
   { id: 'classic1', label: '클래식 1', type: 'classic1' },
   { id: 'classic2', label: '클래식 2', type: 'classic2' },
   { id: 'classic3', label: '클래식 3', type: 'classic3' },
-  { id: 'classic4', label: '클래식 4', type: 'classic4' },
-  { id: 'classic5', label: '클래식 5', type: 'classic5' },
+  { id: 'classic4', label: '클래식 4', type: 'classic4', isComingSoon: true },
+  { id: 'classic5', label: '클래식 5', type: 'classic5', isComingSoon: true },
   { id: 'placeholder1', label: '추가 예정', type: 'placeholder', isComingSoon: true },
 ];
 

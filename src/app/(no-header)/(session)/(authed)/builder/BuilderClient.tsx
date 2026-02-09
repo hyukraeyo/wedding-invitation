@@ -2,21 +2,22 @@
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
-import { Eye, X } from 'lucide-react';
+import { ArrowLeft, Eye, Save, X } from 'lucide-react';
 import { clsx } from 'clsx';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useShallow } from 'zustand/react/shallow';
 
 import EditorForm from '@/components/common/EditorForm';
-import { Dialog } from '@/components/ui';
+import { Button } from '@/components/ui/Button';
+import { Dialog } from '@/components/ui/Dialog';
 import { BananaLoader } from '@/components/ui/Loader';
 import { useAuth } from '@/hooks/useAuth';
+import { useToast } from '@/hooks/use-toast';
 import { validateBeforeBuilderSave } from '@/lib/builderBusinessValidation';
 import { ensureBuilderSlug, toInvitationData } from '@/lib/builderSave';
 import { invitationService } from '@/services/invitationService';
 import { useHeaderStore } from '@/store/useHeaderStore';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { useToast } from '@/hooks/use-toast';
 
 import styles from './BuilderPage.module.scss';
 import { IPhoneFrame } from './IPhoneFrame';
@@ -33,11 +34,13 @@ export function BuilderClient() {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const { toast } = useToast();
+  const toastRef = useRef(toast);
   const { user, isProfileComplete, profileLoading, isAdmin } = useAuth();
-  const { editingSection, setValidationErrors } = useInvitationStore(
+  const { editingSection, setValidationErrors, isUploading } = useInvitationStore(
     useShallow((state) => ({
       editingSection: state.editingSection,
       setValidationErrors: state.setValidationErrors,
+      isUploading: state.isUploading,
     }))
   );
 
@@ -49,6 +52,10 @@ export function BuilderClient() {
   const profileLockRef = useRef(false);
   const initRef = useRef(false);
   const saveLockRef = useRef(false);
+
+  useEffect(() => {
+    toastRef.current = toast;
+  }, [toast]);
 
   const getLoginUrl = useCallback(() => {
     const search = searchParams.toString();
@@ -160,10 +167,20 @@ export function BuilderClient() {
     handleSaveRef.current = handleSave;
   }, [handleSave]);
 
-  const { registerSaveAction, setIsLoading } = useHeaderStore();
+  const registerSaveAction = useHeaderStore((state) => state.registerSaveAction);
+  const setIsLoading = useHeaderStore((state) => state.setIsLoading);
   const editorFormId = 'builder-editor-form';
 
   const requestEditorFormSubmit = useCallback(() => {
+    if (isUploading) {
+      toastRef.current({
+        variant: 'destructive',
+        title: '이미지 업로드 중',
+        description: '이미지가 완전히 업로드될 때까지 잠시만 기다려주세요.',
+      });
+      return;
+    }
+
     const form = document.getElementById(editorFormId) as HTMLFormElement | null;
 
     if (form?.requestSubmit) {
@@ -177,7 +194,20 @@ export function BuilderClient() {
     }
 
     stableSave();
-  }, [editorFormId, stableSave]);
+  }, [editorFormId, isUploading, stableSave]);
+
+  const handleBack = useCallback(() => {
+    if (isSaving) {
+      return;
+    }
+
+    if (window.history.length > 1) {
+      router.back();
+      return;
+    }
+
+    router.push('/mypage');
+  }, [isSaving, router]);
 
   useEffect(() => {
     registerSaveAction(requestEditorFormSubmit);
@@ -188,9 +218,45 @@ export function BuilderClient() {
     setIsLoading(isSaving);
   }, [isSaving, setIsLoading]);
 
+  const topActions = [
+    {
+      key: 'back',
+      variant: 'secondary' as const,
+      icon: <ArrowLeft size={14} />,
+      label: '뒤로가기',
+      onClick: handleBack,
+      disabled: isSaving,
+    },
+    {
+      key: 'save',
+      variant: 'primary' as const,
+      icon: <Save size={14} />,
+      label: '저장',
+      onClick: requestEditorFormSubmit,
+      disabled: isSaving || isUploading || !isReady,
+    },
+  ];
+
   return (
     <div className={styles.container}>
       {isSaving ? <BananaLoader variant="fixed" /> : null}
+
+      <div className={styles.floatingTopActions}>
+        {topActions.map((action) => (
+          <div key={action.key} className={styles.topActionButton}>
+            <Button
+              type="button"
+              variant={action.variant}
+              size="sm"
+              leftIcon={action.icon}
+              onClick={action.onClick}
+              disabled={action.disabled}
+            >
+              {action.label}
+            </Button>
+          </div>
+        ))}
+      </div>
 
       <div className={styles.workspace}>
         <div className={styles.sidebar} id="sidebar-portal-root">
@@ -247,7 +313,6 @@ export function BuilderClient() {
           </Dialog.Close>
         </Dialog.Content>
       </Dialog>
-
     </div>
   );
 }

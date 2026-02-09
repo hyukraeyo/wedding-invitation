@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
 import { Badge } from '@/components/ui/Badge';
 import { usePathname } from 'next/navigation';
-import { FileText, ClipboardList, HelpCircle, User, LogOut, Banana, Bell } from 'lucide-react';
+import { FileText, ClipboardList, HelpCircle, User, LogOut, Bell } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 import { MENU_TITLES } from '@/constants/navigation';
 import styles from './MyPageSidebar.module.scss';
@@ -27,13 +27,14 @@ interface MyPageSidebarProps {
 }
 
 export function MyPageSidebar({
-  profile,
+  profile: _profile,
   isAdmin,
   invitationCount = 0,
   requestCount = 0,
   notificationCount = 0,
   // userEmail,
 }: MyPageSidebarProps) {
+  void _profile;
   const pathname = usePathname();
 
   const handleLogout = async () => {

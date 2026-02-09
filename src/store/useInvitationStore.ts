@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import type { EditorSectionKey } from '@/constants/editorSections';
 import { PALETTE } from '@/constants/palette';
 
 // Selector helpers for optimized re-renders
@@ -260,8 +261,8 @@ export interface InvitationState {
   setDdayMessage: (message: string) => void;
 
   // UI State
-  editingSection: string | null;
-  setEditingSection: (section: string | null) => void;
+  editingSection: EditorSectionKey | null;
+  setEditingSection: (section: EditorSectionKey | null) => void;
 
   // Kakao Share State
   kakaoShare: {
@@ -438,7 +439,7 @@ export const INITIAL_STATE = {
   accountsColorMode: 'subtle' as const,
   accounts: [],
   slug: '',
-  editingSection: null,
+  editingSection: 'mainScreen' as EditorSectionKey,
   closing: {
     title: '',
     subtitle: 'CLOSING',

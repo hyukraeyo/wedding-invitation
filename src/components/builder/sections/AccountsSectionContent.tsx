@@ -244,8 +244,8 @@ export default function AccountsSectionContent() {
                                   { label: '직접 입력', value: 'custom' },
                                 ].map((option) => (
                                   <Dialog.Close key={option.value} asChild>
-                                    <button
-                                      type="button"
+                                    <UIButton
+                                      variant="unstyled"
                                       className={cn(
                                         styles.optionItemButton,
                                         (['본인', '아버지', '어머니'].includes(acc.relation)
@@ -266,7 +266,7 @@ export default function AccountsSectionContent() {
                                         : 'custom') === option.value && (
                                         <Check size={20} className={styles.checkIcon} />
                                       )}
-                                    </button>
+                                    </UIButton>
                                   </Dialog.Close>
                                 ))}
                               </div>

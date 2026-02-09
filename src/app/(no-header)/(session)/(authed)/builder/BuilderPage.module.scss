@@ -49,7 +49,7 @@
 
   .sidebar {
     width: 100%;
-    height: calc(100vh - v.$header-height); // Rigid height constraint
+    height: calc(100vh);
     min-height: 0;
     border-right: none;
     z-index: 20;
@@ -67,28 +67,14 @@
     .scrollArea {
       flex: 1;
       min-height: 0;
-      overflow-y: auto;
-      overflow-x: hidden;
-      -webkit-overflow-scrolling: touch;
-      overscroll-behavior: contain;
+      overflow: hidden; // Let EditorForm handle scrolling internally
+      display: flex;
+      flex-direction: column;
 
-      // Mobile keeps tighter bottom spacing now that bottom nav is removed.
-      padding: 1.5rem 1rem calc(v.$builder-gap-xl + env(safe-area-inset-bottom)) 1rem;
+      // Remove padding so the sidebar can flush with edges
+      padding: 0;
 
-      @media (min-width: 1024px) {
-        padding: 1.5rem 1rem 5rem 1rem; // Bottom padding aligned
-      }
-
-      background-color: transparent; // 사이드바 배경이 보이도록 투명 처리
-
-      // Hide scrollbar completely (cross-platform)
-      // Width is still usable for scrolling, just invisible
-      -ms-overflow-style: none; // IE and Edge
-      scrollbar-width: none; // Firefox
-
-      &::-webkit-scrollbar {
-        display: none; // Chrome, Safari, Opera
-      }
+      background-color: transparent;
     }
   }
 
@@ -101,6 +87,7 @@
     padding: 2rem;
     position: relative;
     overflow: hidden;
+    background-color: v.$grey-50;
     z-index: 1;
 
     @media (min-width: 1024px) {
@@ -138,6 +125,28 @@
       }
     }
   }
+}
+
+.floatingTopActions {
+  position: fixed;
+  top: calc(v.$builder-gap-md + env(safe-area-inset-top));
+  right: v.$builder-gap-md;
+  display: flex;
+  align-items: center;
+  gap: v.$builder-gap-sm;
+  padding: v.$builder-gap-sm;
+  border-radius: v.$radius-full;
+  background-color: rgba(v.$white, 0.92);
+  border: 1px solid v.$grey-200;
+  box-shadow: v.$shadow-md;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 900;
+}
+
+.topActionButton {
+  min-width: fit-content;
+  white-space: nowrap;
 }
 
 .floatingPreview {

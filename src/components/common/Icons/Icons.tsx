@@ -90,10 +90,6 @@ interface IconProps {
   className?: string;
 }
 
-interface KakaoIconProps extends IconProps {
-  showBackground?: boolean;
-}
-
 export const NaverIcon = ({ size = 24, className }: IconProps) => (
   <svg
     width={size}

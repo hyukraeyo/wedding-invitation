@@ -171,25 +171,26 @@ export default function DesignPage() {
               <FormHeader>
                 <FormLabel>어머니</FormLabel>
               </FormHeader>
-              <FormControl asChild>
-                <TextField
-                  placeholder=""
-                  className={s.grow}
-                  onChange={handleGroomNameChange}
-                  rightSlot={
-                    <Toggle
-                      size="sm"
-                      variant="unstyled"
-                      accentColorOnly
-                      pressed={isMotherDeceased}
-                      onPressedChange={setIsMotherDeceased}
-                      aria-label="고인 여부 토글"
-                    >
-                      <ChrysanthemumSVG size={18} />
-                    </Toggle>
-                  }
-                />
-              </FormControl>
+              <div className={s.grow}>
+                <FormControl asChild>
+                  <TextField
+                    placeholder=""
+                    onChange={handleGroomNameChange}
+                    rightSlot={
+                      <Toggle
+                        size="sm"
+                        variant="unstyled"
+                        accentColorOnly
+                        pressed={isMotherDeceased}
+                        onPressedChange={setIsMotherDeceased}
+                        aria-label="고인 여부 토글"
+                      >
+                        <ChrysanthemumSVG size={18} />
+                      </Toggle>
+                    }
+                  />
+                </FormControl>
+              </div>
             </FormField>
 
             <FormField name="groomPhone">

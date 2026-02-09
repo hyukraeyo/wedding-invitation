@@ -2,10 +2,11 @@ import React from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { ColorPicker, type ColorOption } from '@/components/common/ColorPicker';
 import { FontPicker } from '@/components/common/FontPicker';
-import { SectionAccordion } from '@/components/ui/Accordion';
+import { EditorSection } from '@/components/ui/EditorSection';
 import { FormControl, FormField, FormHeader, FormLabel } from '@/components/ui/Form';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { SwitchRow } from '@/components/common/SwitchRow';
+import { useBuilderSection } from '@/hooks/useBuilder';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { getFontVar, type ThemeFont } from '@/lib/utils/font';
 import { PALETTE } from '@/constants/palette';
@@ -45,17 +46,10 @@ const PRESET_FONT_OPTIONS = [
 const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
   const theme = useInvitationStore(useShallow((state) => state.theme));
   const setTheme = useInvitationStore((state) => state.setTheme);
-  const validationErrors = useInvitationStore((state) => state.validationErrors);
-  const isInvalid = validationErrors.includes(props.value);
+  const { isInvalid } = useBuilderSection(props.value);
 
   return (
-    <SectionAccordion
-      title="테마 및 색상"
-      value={props.value}
-      isOpen={props.isOpen}
-      onToggle={props.onToggle}
-      isInvalid={isInvalid}
-    >
+    <EditorSection title="테마 및 색상" isInvalid={isInvalid}>
       <div className={styles.container}>
         <FormField name="accentColor">
           <FormHeader>
@@ -140,7 +134,7 @@ const ThemeSection = React.memo<SectionProps>(function ThemeSection(props) {
           </FormControl>
         </FormField>
       </div>
-    </SectionAccordion>
+    </EditorSection>
   );
 });
 

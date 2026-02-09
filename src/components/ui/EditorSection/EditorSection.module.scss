@@ -1,0 +1,36 @@
+@use '../../../styles/variables' as v;
+
+.Root {
+  width: 100%;
+  background-color: v.$white;
+  overflow: hidden;
+  transition: border-color v.$transition-base;
+}
+
+.Header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: v.$control-height-lg;
+  border-bottom: 1px solid v.$grey-50;
+}
+
+.Title {
+  flex: 1;
+  font-weight: 700;
+  font-size: v.$font-size-md;
+  color: v.$grey-900;
+  display: flex;
+  align-items: center;
+}
+
+.RightElement {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.Content {
+  padding: 16px 24px 32px; // Adjusted padding for the new layout
+}

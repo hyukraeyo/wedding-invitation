@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { RequiredSectionTitle } from '@/components/common/RequiredSectionTitle';
-import { SectionAccordion } from '@/components/ui/Accordion';
+import { EditorSection } from '@/components/ui/EditorSection';
 import { FormControl, FormField, FormHeader, FormLabel, FormMessage } from '@/components/ui/Form';
 import { TextField } from '@/components/ui/TextField';
 import { useInvitationStore } from '@/store/useInvitationStore';
@@ -80,11 +80,8 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
   };
 
   return (
-    <SectionAccordion
+    <EditorSection
       title={<RequiredSectionTitle title="기본 정보" isComplete={isComplete} />}
-      value={props.value}
-      isOpen={props.isOpen}
-      onToggle={props.onToggle}
       isInvalid={isSectionInvalid}
     >
       <FormField name="groom-name">
@@ -178,7 +175,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
           </FormControl>
         </div>
       </FormField>
-    </SectionAccordion>
+    </EditorSection>
   );
 });
 

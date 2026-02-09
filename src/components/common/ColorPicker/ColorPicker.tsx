@@ -3,6 +3,7 @@ import { Check } from 'lucide-react';
 import s from './ColorPicker.module.scss';
 
 import { cn } from '@/lib/utils';
+import { IconButton } from '@/components/ui/IconButton';
 
 export interface ColorOption {
   value: string;
@@ -20,9 +21,9 @@ export const ColorPicker = ({ value, onChange, colors, className }: ColorPickerP
   return (
     <div className={cn(s.container, className)}>
       {colors.map((color) => (
-        <button
+        <IconButton
           key={color.value}
-          type="button"
+          unstyled
           className={cn(s.swatch, value === color.value && s.active)}
           style={{ backgroundColor: color.value } as React.CSSProperties}
           onClick={() => onChange(color.value)}
@@ -30,7 +31,7 @@ export const ColorPicker = ({ value, onChange, colors, className }: ColorPickerP
           aria-pressed={value === color.value}
         >
           {value === color.value && <Check size={20} className={s.checkIcon} />}
-        </button>
+        </IconButton>
       ))}
     </div>
   );

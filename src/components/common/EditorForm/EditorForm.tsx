@@ -1,108 +1,165 @@
-﻿'use client';
+'use client';
 
-import React, { useState, useCallback, memo, useEffect } from 'react';
+import * as React from 'react';
 import dynamic from 'next/dynamic';
-import { useShallow } from 'zustand/react/shallow';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  Calendar,
+  CreditCard,
+  Images,
+  Info,
+  Layout,
+  MapPin,
+  MessageCircle,
+  Palette,
+  Share2,
+  User,
+  type LucideIcon,
+} from 'lucide-react';
 import { clsx } from 'clsx';
+import { useShallow } from 'zustand/react/shallow';
 
-import { Button } from '@/components/ui/Button';
 import { AlertDialog } from '@/components/ui/AlertDialog';
+import { Button } from '@/components/ui/Button';
 import { Form } from '@/components/ui/Form';
+import { IconButton } from '@/components/ui/IconButton';
 import { Skeleton } from '@/components/ui/Skeleton';
 import {
+  EDITOR_SECTION_KEYS,
+  EDITOR_SECTION_LABEL,
+  EDITOR_SECTION_NAV_LABEL,
+  type EditorSectionKey,
+} from '@/constants/editorSections';
+import { validateBeforeBuilderSave } from '@/lib/builderBusinessValidation';
+import {
   collectInvalidFieldSummaries,
-  findInvalidElementInSection,
   findFirstInvalidElement,
+  findInvalidElementInSection,
   getInvalidElementSectionKey,
   type InvalidFieldSummary,
 } from '@/lib/builderFormValidation';
-import { validateBeforeBuilderSave } from '@/lib/builderBusinessValidation';
 import { toInvitationData } from '@/lib/builderSave';
-import { EDITOR_SECTION_LABEL } from '@/lib/builderValidation';
 import { useInvitationStore } from '@/store/useInvitationStore';
+import type { SectionProps } from '@/types/builder';
 
 import styles from './EditorForm.module.scss';
 
-const MainScreenSection = dynamic(() => import('@/components/builder/sections/MainScreenSection'));
-const ThemeSection = dynamic(() => import('@/components/builder/sections/ThemeSection'));
-const BasicInfoSection = dynamic(() => import('@/components/builder/sections/BasicInfoSection'));
-const DateTimeSection = dynamic(() => import('@/components/builder/sections/DateTimeSection'));
-const LocationSection = dynamic(() => import('@/components/builder/sections/LocationSection'));
-const GreetingSection = dynamic(() => import('@/components/builder/sections/GreetingSection'));
-const GallerySection = dynamic(() => import('@/components/builder/sections/GallerySection'));
-const AccountsSection = dynamic(() => import('@/components/builder/sections/AccountsSection'));
-const KakaoShareSection = dynamic(() => import('@/components/builder/sections/KakaoShareSection'));
-const ClosingSection = dynamic(() => import('@/components/builder/sections/ClosingSection'));
+type BuilderSectionComponent = React.ComponentType<SectionProps>;
 
-const SECTIONS = [
-  { key: 'basic', Component: BasicInfoSection },
-  { key: 'theme', Component: ThemeSection },
-  { key: 'mainScreen', Component: MainScreenSection },
-  { key: 'message', Component: GreetingSection },
-  { key: 'gallery', Component: GallerySection },
-  { key: 'date', Component: DateTimeSection },
-  { key: 'location', Component: LocationSection },
-  { key: 'account', Component: AccountsSection },
-  { key: 'closing', Component: ClosingSection },
-  { key: 'kakao', Component: KakaoShareSection },
-] as const;
+const MainScreenSection = dynamic(
+  () => import('@/components/builder/sections/MainScreenSection')
+) as BuilderSectionComponent;
+const ThemeSection = dynamic(
+  () => import('@/components/builder/sections/ThemeSection')
+) as BuilderSectionComponent;
+const BasicInfoSection = dynamic(
+  () => import('@/components/builder/sections/BasicInfoSection')
+) as BuilderSectionComponent;
+const DateTimeSection = dynamic(
+  () => import('@/components/builder/sections/DateTimeSection')
+) as BuilderSectionComponent;
+const LocationSection = dynamic(
+  () => import('@/components/builder/sections/LocationSection')
+) as BuilderSectionComponent;
+const GreetingSection = dynamic(
+  () => import('@/components/builder/sections/GreetingSection')
+) as BuilderSectionComponent;
+const GallerySection = dynamic(
+  () => import('@/components/builder/sections/GallerySection')
+) as BuilderSectionComponent;
+const AccountsSection = dynamic(
+  () => import('@/components/builder/sections/AccountsSection')
+) as BuilderSectionComponent;
+const KakaoShareSection = dynamic(
+  () => import('@/components/builder/sections/KakaoShareSection')
+) as BuilderSectionComponent;
+const ClosingSection = dynamic(
+  () => import('@/components/builder/sections/ClosingSection')
+) as BuilderSectionComponent;
+
+const SECTION_COMPONENTS: Record<EditorSectionKey, BuilderSectionComponent> = {
+  basic: BasicInfoSection,
+  theme: ThemeSection,
+  mainScreen: MainScreenSection,
+  message: GreetingSection,
+  gallery: GallerySection,
+  date: DateTimeSection,
+  location: LocationSection,
+  account: AccountsSection,
+  closing: ClosingSection,
+  kakao: KakaoShareSection,
+};
+
+const SECTION_ICONS: Record<EditorSectionKey, LucideIcon> = {
+  basic: User,
+  theme: Palette,
+  mainScreen: Layout,
+  message: MessageCircle,
+  gallery: Images,
+  date: Calendar,
+  location: MapPin,
+  account: CreditCard,
+  closing: Info,
+  kakao: Share2,
+};
+
+const SECTIONS = EDITOR_SECTION_KEYS.map((key) => ({
+  key,
+  label: EDITOR_SECTION_NAV_LABEL[key],
+  icon: SECTION_ICONS[key],
+  Component: SECTION_COMPONENTS[key],
+}));
+
+const DEFAULT_ACTIVE_SECTION: EditorSectionKey = 'mainScreen';
+const NAV_INDICATOR_OFFSET = 12;
+const NAV_ITEM_STRIDE = 72;
 
 interface EditorFormProps {
   formId: string;
   onSubmit?: () => void;
 }
 
-const EditorForm = memo(function EditorForm({ formId, onSubmit }: EditorFormProps) {
-  const [openSections, setOpenSections] = useState<string[]>([]);
-  const [isReady, setIsReady] = useState(false);
-  const [isValidationOpen, setIsValidationOpen] = useState(false);
-  const [invalidSummaries, setInvalidSummaries] = useState<InvalidFieldSummary[]>([]);
-  const [wasSubmitted, setWasSubmitted] = useState(false);
+const EditorForm = React.memo(function EditorForm({ formId, onSubmit }: EditorFormProps) {
+  const [isReady, setIsReady] = React.useState(false);
+  const [isValidationOpen, setIsValidationOpen] = React.useState(false);
+  const [invalidSummaries, setInvalidSummaries] = React.useState<InvalidFieldSummary[]>([]);
+  const [wasSubmitted, setWasSubmitted] = React.useState(false);
 
+  const contentAreaRef = React.useRef<HTMLFormElement | null>(null);
   const explicitFocusTargetRef = React.useRef<HTMLElement | null>(null);
 
-  const { editingSection, setEditingSection, setValidationErrors } = useInvitationStore(
-    useShallow((state) => ({
-      editingSection: state.editingSection,
-      setEditingSection: state.setEditingSection,
-      setValidationErrors: state.setValidationErrors,
-    }))
-  );
+  const { editingSection, setEditingSection, validationErrors, setValidationErrors } =
+    useInvitationStore(
+      useShallow((state) => ({
+        editingSection: state.editingSection,
+        setEditingSection: state.setEditingSection,
+        validationErrors: state.validationErrors,
+        setValidationErrors: state.setValidationErrors,
+      }))
+    );
 
-  const handleValueChange = useCallback(
-    (value: string[]) => {
-      const added = value.find((section) => !openSections.includes(section));
+  const activeSection = editingSection ?? DEFAULT_ACTIVE_SECTION;
+  const activeSectionIndex = SECTIONS.findIndex((section) => section.key === activeSection);
 
-      if (added) {
-        setEditingSection(added);
-      } else if (value.length === 0) {
-        setEditingSection(null);
-      } else if (editingSection && !value.includes(editingSection)) {
-        setEditingSection(value[value.length - 1] ?? null);
-      }
-
-      setOpenSections(value);
-    },
-    [editingSection, openSections, setEditingSection]
-  );
-
-  useEffect(() => {
+  React.useEffect(() => {
     const timer = requestAnimationFrame(() => setIsReady(true));
     return () => cancelAnimationFrame(timer);
   }, []);
 
-  const handleToggle = useCallback(
-    (key: string, isOpen: boolean) => {
-      const nextOpenSections = isOpen
-        ? [...openSections, key]
-        : openSections.filter((section) => section !== key);
+  const handleSectionChange = React.useCallback(
+    (key: EditorSectionKey) => {
+      if (editingSection !== key) {
+        setEditingSection(key);
+      }
 
-      handleValueChange(nextOpenSections);
+      if (contentAreaRef.current) {
+        contentAreaRef.current.scrollTop = 0;
+      }
     },
-    [handleValueChange, openSections]
+    [editingSection, setEditingSection]
   );
 
-  const focusInvalidField = useCallback(
+  const focusInvalidField = React.useCallback(
     (form: HTMLFormElement) => {
       const firstInvalid = findFirstInvalidElement(form);
       if (!firstInvalid) {
@@ -110,57 +167,49 @@ const EditorForm = memo(function EditorForm({ formId, onSubmit }: EditorFormProp
       }
 
       const sectionKey = getInvalidElementSectionKey(firstInvalid);
-      if (sectionKey && !openSections.includes(sectionKey)) {
-        handleToggle(sectionKey, true);
-
+      if (sectionKey && sectionKey !== activeSection) {
+        handleSectionChange(sectionKey);
         setTimeout(() => {
           firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
           firstInvalid.focus();
-        }, 350);
+        }, 150);
         return;
       }
 
       firstInvalid.focus();
     },
-    [handleToggle, openSections]
+    [activeSection, handleSectionChange]
   );
 
-  const handleSubmit = useCallback(
+  const handleSubmit = React.useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       const form = event.currentTarget;
       setWasSubmitted(true);
 
-      // 1. HTML5 유효성 검사 (필수 입력값 등)
       const isHtmlValid = form.checkValidity();
       const htmlSummaries = isHtmlValid ? [] : collectInvalidFieldSummaries(form);
-      const htmlInvalidSectionKeys = Array.from(new Set(htmlSummaries.map((s) => s.sectionKey)));
+      const htmlInvalidSectionKeys = Array.from(new Set(htmlSummaries.map((summary) => summary.sectionKey)));
 
-      // 2. 비즈니스 로직 유효성 검사 (이미지 누락, 계좌 정보 등)
       const currentStoreState = useInvitationStore.getState();
       const cleanData = toInvitationData(currentStoreState);
       const bizValidation = validateBeforeBuilderSave(cleanData);
 
-      // 3. 모든 오류 섹션 키 결합
       const allInvalidSectionKeys = Array.from(
         new Set([...htmlInvalidSectionKeys, ...bizValidation.invalidSectionKeys])
       );
 
-      // 3-1. 개별 필드 ID 수집 (입력창/이미지업로더 테두리 표시용)
       const bizFieldIds = bizValidation.issues.map((issue) => issue.fieldId);
-      // HTML5 검사로 잡힌 요소들의 ID 수집
       const htmlFieldIds = Array.from(form.querySelectorAll(':invalid'))
-        .map((el) => el.getAttribute('id'))
+        .map((element) => element.getAttribute('id'))
         .filter((id): id is string => Boolean(id));
 
-      // 4. 스토어에 섹션 키 + 필드 ID 모두 저장
       const allInvalidKeys = Array.from(
         new Set([...allInvalidSectionKeys, ...bizFieldIds, ...htmlFieldIds])
       );
       setValidationErrors(allInvalidKeys);
 
       if (allInvalidSectionKeys.length > 0) {
-        // 다이얼로그에 표시할 요약 정보 생성
         const bizSummaries: InvalidFieldSummary[] = bizValidation.issues.map((issue) => ({
           sectionKey: issue.sectionKey,
           sectionLabel: EDITOR_SECTION_LABEL[issue.sectionKey],
@@ -168,15 +217,14 @@ const EditorForm = memo(function EditorForm({ formId, onSubmit }: EditorFormProp
           fieldId: issue.fieldId,
         }));
 
-        // 중복 제거 (HTML5와 비즈니스 로직에서 동일한 필드가 걸릴 수 있음)
         const combinedSummaries = [...htmlSummaries];
-        bizSummaries.forEach((biz) => {
-          if (
-            !combinedSummaries.find(
-              (s) => s.sectionKey === biz.sectionKey && s.fieldLabel === biz.fieldLabel
-            )
-          ) {
-            combinedSummaries.push(biz);
+        bizSummaries.forEach((summary) => {
+          const duplicatedSummary = combinedSummaries.find(
+            (item) => item.sectionKey === summary.sectionKey && item.fieldLabel === summary.fieldLabel
+          );
+
+          if (!duplicatedSummary) {
+            combinedSummaries.push(summary);
           }
         });
 
@@ -192,50 +240,45 @@ const EditorForm = memo(function EditorForm({ formId, onSubmit }: EditorFormProp
     [focusInvalidField, onSubmit, setValidationErrors]
   );
 
-  const handleInvalidSummaryClick = useCallback(
+  const handleInvalidSummaryClick = React.useCallback(
     (summary: InvalidFieldSummary) => {
       const form = document.getElementById(formId) as HTMLFormElement | null;
       if (!form) {
         return;
       }
 
-      let target: HTMLElement | null = null;
-      if (summary.fieldId) {
-        target = document.getElementById(summary.fieldId);
-      }
-
+      let target: HTMLElement | null = summary.fieldId ? document.getElementById(summary.fieldId) : null;
       if (!target) {
-        target =
-          findInvalidElementInSection(form, summary.sectionKey) ?? findFirstInvalidElement(form);
+        target = findInvalidElementInSection(form, summary.sectionKey) ?? findFirstInvalidElement(form);
       }
-
       if (!target) {
         return;
       }
 
       explicitFocusTargetRef.current = target;
-
-      if (!openSections.includes(summary.sectionKey)) {
-        handleToggle(summary.sectionKey, true);
+      if (activeSection !== summary.sectionKey) {
+        handleSectionChange(summary.sectionKey);
       }
 
       setIsValidationOpen(false);
 
       setTimeout(() => {
-        if (explicitFocusTargetRef.current) {
-          explicitFocusTargetRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          explicitFocusTargetRef.current.focus();
-          explicitFocusTargetRef.current = null;
+        if (!explicitFocusTargetRef.current) {
+          return;
         }
-      }, 350);
+
+        explicitFocusTargetRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        explicitFocusTargetRef.current.focus();
+        explicitFocusTargetRef.current = null;
+      }, 150);
     },
-    [formId, handleToggle, openSections]
+    [activeSection, formId, handleSectionChange]
   );
 
   if (!isReady) {
     return (
       <div className={styles.loadingContainer}>
-        {Array.from({ length: 10 }).map((_, index) => (
+        {Array.from({ length: 6 }).map((_, index) => (
           <div key={index} className={styles.skeletonItem}>
             <div className={styles.skeletonLeft}>
               <Skeleton className={styles.skeletonIcon ?? ''} />
@@ -244,7 +287,6 @@ const EditorForm = memo(function EditorForm({ formId, onSubmit }: EditorFormProp
                 <Skeleton className={styles.skeletonSubtitle ?? ''} />
               </div>
             </div>
-            <Skeleton className={styles.skeletonChevron ?? ''} />
           </div>
         ))}
       </div>
@@ -253,35 +295,78 @@ const EditorForm = memo(function EditorForm({ formId, onSubmit }: EditorFormProp
 
   return (
     <>
-      <Form
-        id={formId}
-        onSubmit={handleSubmit}
-        noValidate
-        className={clsx(styles.wrapper, wasSubmitted && 'was-submitted')}
-      >
-        <div className={styles.list}>
-          {SECTIONS.map(({ key, Component }) => (
-            <Component
-              key={key}
-              value={key}
-              isOpen={openSections.includes(key)}
-              onToggle={(isOpen) => handleToggle(key, isOpen)}
-            />
-          ))}
-        </div>
-      </Form>
+      <div className={styles.wrapper}>
+        <nav className={styles.navRail}>
+          <div
+            className={styles.activeIndicator}
+            style={{
+              transform: `translateY(${NAV_INDICATOR_OFFSET + Math.max(activeSectionIndex, 0) * NAV_ITEM_STRIDE}px)`,
+            }}
+          />
+          {SECTIONS.map(({ key, label, icon: Icon }) => {
+            const isInvalid = validationErrors.includes(key);
+            const isActive = activeSection === key;
+
+            return (
+              <IconButton
+                key={key}
+                unstyled
+                className={clsx(
+                  styles.navItem,
+                  styles.navItemLayer,
+                  isActive && styles.active,
+                  isInvalid && styles.invalid
+                )}
+                onClick={() => handleSectionChange(key)}
+                aria-label={`${label} 섹션으로 이동`}
+                aria-current={isActive ? 'page' : undefined}
+              >
+                <Icon className={styles.navIcon} strokeWidth={isActive ? 2.5 : 2} />
+                <span className={styles.navLabel}>{label}</span>
+              </IconButton>
+            );
+          })}
+        </nav>
+
+        <Form
+          ref={contentAreaRef}
+          id={formId}
+          onSubmit={handleSubmit}
+          noValidate
+          className={clsx(styles.contentArea, wasSubmitted && 'was-submitted')}
+        >
+          <AnimatePresence mode="wait" initial={false}>
+            {SECTIONS.map(({ key, Component }) => {
+              if (activeSection !== key) {
+                return null;
+              }
+
+              return (
+                <motion.div
+                  key={key}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                  style={{ height: '100%' }}
+                >
+                  <Component value={key} isOpen />
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
+        </Form>
+      </div>
 
       <AlertDialog open={isValidationOpen} onOpenChange={setIsValidationOpen}>
         <AlertDialog.Content
           onCloseAutoFocus={(event) => {
             event.preventDefault();
-
-            // 🍌 명시적인 포커스 타겟이 있으면 기본 동작(첫 번째 에러 포커스) 방지
             if (explicitFocusTargetRef.current) {
               return;
             }
 
-            const form = document.getElementById(formId) as HTMLFormElement;
+            const form = document.getElementById(formId) as HTMLFormElement | null;
             if (form) {
               findFirstInvalidElement(form)?.focus();
             }
@@ -293,14 +378,14 @@ const EditorForm = memo(function EditorForm({ formId, onSubmit }: EditorFormProp
             {invalidSummaries.length > 0 ? (
               <div className={styles.invalidSummaryList}>
                 {invalidSummaries.map((summary) => (
-                  <button
+                  <Button
                     key={`${summary.sectionKey}-${summary.fieldLabel}`}
-                    type="button"
+                    variant="unstyled"
                     className={styles.invalidSummaryItem}
                     onClick={() => handleInvalidSummaryClick(summary)}
                   >
                     {summary.sectionLabel} - {summary.fieldLabel}
-                  </button>
+                  </Button>
                 ))}
               </div>
             ) : null}

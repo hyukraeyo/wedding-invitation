@@ -1,48 +1,14 @@
-import type { InvitationData } from '@/store/useInvitationStore';
 import { htmlToPlainText } from '@/lib/richText';
 import { isBlank, isValidName } from '@/lib/utils';
+import type { InvitationData } from '@/store/useInvitationStore';
+import type { EditorSectionKey } from '@/constants/editorSections';
 
-export const SECTION_VALUE_TO_EDITOR_KEY = {
-  'basic-info': 'basic',
-  theme: 'theme',
-  main: 'mainScreen',
-  greeting: 'message',
-  gallery: 'gallery',
-  'date-time': 'date',
-  location: 'location',
-  accounts: 'account',
-  closing: 'closing',
-  'kakao-share': 'kakao',
-} as const;
-
-export type EditorSectionKey =
-  (typeof SECTION_VALUE_TO_EDITOR_KEY)[keyof typeof SECTION_VALUE_TO_EDITOR_KEY];
-
-export const EDITOR_KEY_TO_SECTION_VALUE: Record<EditorSectionKey, string> = {
-  basic: 'basic-info',
-  theme: 'theme',
-  mainScreen: 'main',
-  message: 'greeting',
-  gallery: 'gallery',
-  date: 'date-time',
-  location: 'location',
-  account: 'accounts',
-  closing: 'closing',
-  kakao: 'kakao-share',
-};
-
-export const EDITOR_SECTION_LABEL: Record<EditorSectionKey, string> = {
-  basic: '기본 정보',
-  theme: '테마',
-  mainScreen: '메인 화면',
-  message: '인사말',
-  gallery: '웨딩 갤러리',
-  date: '예식 일시',
-  location: '예식 장소',
-  account: '계좌 정보',
-  closing: '마무리',
-  kakao: '카카오 공유',
-};
+export {
+  EDITOR_KEY_TO_SECTION_VALUE,
+  EDITOR_SECTION_LABEL,
+  SECTION_VALUE_TO_EDITOR_KEY,
+} from '@/constants/editorSections';
+export type { EditorSectionKey } from '@/constants/editorSections';
 
 export interface BuilderValidationIssue {
   sectionKey: EditorSectionKey;

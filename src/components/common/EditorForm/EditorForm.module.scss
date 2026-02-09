@@ -1,21 +1,140 @@
 @use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
 .wrapper {
   display: flex;
-  flex-direction: column;
+  flex-direction: row; // Split layout
+  width: 100%;
+  height: 100%;
+  overflow: hidden; // Parent manages layout, children scroll
+
+  // Add fade in for the whole component
   animation: fadeIn 0.4s ease-out;
 }
 
-.list {
+.navRail {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  width: 80px; // Fixed width sidebar
+  height: 100%;
+  background-color: v.$white;
+  border-right: 1px solid v.$grey-200;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 12px 8px;
+  gap: 8px;
+  flex-shrink: 0;
+  z-index: 10;
+  position: relative; // Context for .activeIndicator
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.navItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  padding: 4px;
+  border: none;
+  background-color: transparent;
+  border-radius: 16px; // Rounded shape as per design
+  cursor: pointer;
+  transition: all 0.2s v.$ease-ios;
+  color: v.$grey-800;
+  gap: 4px;
+
+  &:not(.active):hover {
+    background-color: v.$grey-50;
+    color: v.$grey-800;
+  }
+
+  &.active {
+    color: v.$grey-900;
+    // background-color is now handled by .activeIndicator
+  }
+
+  &.invalid {
+    animation: pulseError 2s infinite ease-in-out;
+  }
+}
+
+.navItemLayer {
+  position: relative;
+  z-index: 1;
+}
+
+.activeIndicator {
+  position: absolute;
+  left: 8px; // Matches parent padding-left
+  top: 0; // Base position, will be transformed
+  width: 64px;
+  height: 64px;
+  background-color: v.$primary-200; // was v.$primary-200
+  border-radius: 16px;
+  z-index: 0;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.navIcon {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 2px;
+}
+
+.navLabel {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.contentArea {
+  flex: 1;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+
+  // Apply constraints directly to the form (which has this class)
+  // But since it's a form element, we want to center its content perhaps?
+  // If we set max-width on the form element + margin: 0 auto,
+  // the scrollbar will be on the form element itself if we set overflow-y on it.
+
+  // Actually, we set overflow-y on .contentArea.
+  // If .contentArea IS the form, then scrollbar is on the form.
+  // If we set max-width: 600px on the form, the form will be narrow.
+  // The scrollbar will be on the narrow form.
+  // This looks weird (scrollbar in middle of screen).
+
+  // Better: Make form full width, and constrain children?
+  // But children are injected via SECTIONS.map.
+  // We can't easily constrain children without a wrapper.
+
+  // Alternative: Don't constrain width, just use full width.
+  // Mobile first design usually is full width.
+  // On Desktop, maybe pass max-width via a wrapper inside EditorForm?
+  // Current design is 480px sidebar.
+  // 64px nav + 416px content.
+  // 416px is narrow enough. No need for max-width limitation.
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .loadingContainer {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  padding: 20px;
 }
 
 .invalidSummaryList {
@@ -48,7 +167,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  // border: 1px solid v.$color-border;
 }
 
 .skeletonLeft {
@@ -60,7 +178,7 @@
 .skeletonIcon {
   width: 2.5rem;
   height: 2.5rem;
-  border-radius: v.$radius-md; // 16px
+  border-radius: v.$radius-md;
 }
 
 .skeletonText {
@@ -92,10 +210,20 @@
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+  }
+}
+
+@keyframes pulseError {
+  0% {
+    border: 1px solid v.$red-50;
+  }
+  50% {
+    border: 1px solid v.$red-400; // More visible pulse
+  }
+  100% {
+    border: 1px solid v.$red-50;
   }
 }

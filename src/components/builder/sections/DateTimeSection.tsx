@@ -3,7 +3,7 @@ import { useShallow } from 'zustand/react/shallow';
 import { DatePicker } from '@/components/common/DatePicker';
 import { TimePicker } from '@/components/common/TimePicker';
 import { RequiredSectionTitle } from '@/components/common/RequiredSectionTitle';
-import { SectionAccordion } from '@/components/ui/Accordion';
+import { EditorSection } from '@/components/ui/EditorSection';
 import { FormControl, FormField, FormHeader, FormLabel, FormMessage } from '@/components/ui/Form';
 import { SwitchRow } from '@/components/common/SwitchRow';
 import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
@@ -54,11 +54,8 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
   });
 
   return (
-    <SectionAccordion
+    <EditorSection
       title={<RequiredSectionTitle title="예식 일시" isComplete={isComplete} />}
-      value={props.value}
-      isOpen={props.isOpen}
-      onToggle={props.onToggle}
       isInvalid={isSectionInvalid}
     >
       <div className={styles.container}>
@@ -128,7 +125,7 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
           <SwitchRow label="D-Day 노출" checked={showDday} onCheckedChange={setShowDday} />
         </div>
       </div>
-    </SectionAccordion>
+    </EditorSection>
   );
 });
 

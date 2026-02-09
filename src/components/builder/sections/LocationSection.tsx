@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import { useShallow } from 'zustand/react/shallow';
 
 import { RequiredSectionTitle } from '@/components/common/RequiredSectionTitle';
-import { SectionAccordion } from '@/components/ui/Accordion';
+import { EditorSection } from '@/components/ui/EditorSection';
 import { useBuilderSection } from '@/hooks/useBuilder';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import type { SectionProps } from '@/types/builder';
@@ -31,15 +31,12 @@ const LocationSection = React.memo<SectionProps>(function LocationSection(props)
   const { isInvalid } = useBuilderSection(props.value, isComplete);
 
   return (
-    <SectionAccordion
+    <EditorSection
       title={<RequiredSectionTitle title="예식 장소" isComplete={isComplete} />}
-      value={props.value}
-      isOpen={props.isOpen}
-      onToggle={props.onToggle}
       isInvalid={isInvalid}
     >
       <LocationSectionContent onComplete={() => props.onToggle?.(false)} />
-    </SectionAccordion>
+    </EditorSection>
   );
 });
 

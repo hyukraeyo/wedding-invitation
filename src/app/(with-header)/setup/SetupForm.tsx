@@ -174,9 +174,6 @@ const SetupForm = () => {
                       ref={groomNameRef}
                       type="text"
                       variant="outline"
-                      radius="lg"
-                      size="lg"
-                      placeholder="Ex. 김토스"
                       value={groomFullName}
                       onChange={handleGroomNameChange}
                       required
@@ -197,9 +194,6 @@ const SetupForm = () => {
                       type="tel"
                       inputMode="numeric"
                       variant="outline"
-                      radius="lg"
-                      size="lg"
-                      placeholder="010-1234-5678"
                       value={groomPhone}
                       onChange={handleGroomPhoneChange}
                       required
@@ -229,9 +223,6 @@ const SetupForm = () => {
                     <TextField
                       type="text"
                       variant="outline"
-                      radius="lg"
-                      size="lg"
-                      placeholder="Ex. 이토스"
                       value={brideFullName}
                       onChange={handleBrideNameChange}
                       required
@@ -252,9 +243,6 @@ const SetupForm = () => {
                       type="tel"
                       inputMode="numeric"
                       variant="outline"
-                      radius="lg"
-                      size="lg"
-                      placeholder="010-9876-5432"
                       value={bridePhone}
                       onChange={handleBridePhoneChange}
                       required
@@ -295,7 +283,6 @@ const SetupForm = () => {
                   open={isDatePickerOpen}
                   onOpenChange={setIsDatePickerOpen}
                   variant="outline"
-                  radius="lg"
                   placeholder="Select Date"
                 />
               </FormField>
@@ -311,7 +298,6 @@ const SetupForm = () => {
                   open={isTimePickerOpen}
                   onOpenChange={setIsTimePickerOpen}
                   variant="outline"
-                  radius="lg"
                   placeholder="Select Time"
                 />
               </FormField>
@@ -323,11 +309,7 @@ const SetupForm = () => {
                 </Button>
               </FormSubmit>
 
-              <Button
-                variant="ghost"
-                type="button"
-                onClick={() => setCurrentStep(0)}
-              >
+              <Button variant="ghost" type="button" onClick={() => setCurrentStep(0)}>
                 Back to Information
               </Button>
             </Form>

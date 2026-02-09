@@ -1,3 +1,5 @@
+import type { EditorSectionKey } from '@/constants/editorSections';
+
 /**
  * Builder Section 공통 타입 정의
  *
@@ -10,9 +12,9 @@
  * @property isOpen - 현재 섹션이 열려있는지 여부
  */
 export interface SectionProps {
-  value: string;
-  isOpen: boolean;
-  onToggle: (isOpen: boolean) => void;
+  value: EditorSectionKey;
+  isOpen?: boolean;
+  onToggle?: (isOpen: boolean) => void;
 }
 
 /**
