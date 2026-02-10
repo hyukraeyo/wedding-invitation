@@ -32,5 +32,5 @@
 
 ## Hardening
 
-- [ ] Resolve existing 8 lint warnings.
+- [x] Resolve existing 8 lint warnings.
 - [ ] Add CI checks for `type-check`, `build`, and `check:launch`.
