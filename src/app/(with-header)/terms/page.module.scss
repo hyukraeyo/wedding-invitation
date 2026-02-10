@@ -1,0 +1,46 @@
+@use '@/styles/variables' as v;
+
+.container {
+  max-width: v.$canvas-max-width;
+  margin: 0 auto;
+  padding: v.$builder-gap-xl v.$builder-gap-md;
+}
+
+.title {
+  font-size: v.$font-size-2xl;
+  font-weight: v.$font-weight-bold;
+  margin-bottom: v.$builder-gap-lg;
+  color: v.$text-main;
+}
+
+.lead {
+  color: v.$zinc-600;
+  margin-bottom: v.$builder-gap-lg;
+  line-height: v.$line-height-relaxed;
+}
+
+.sectionTitle {
+  font-size: v.$font-size-xl;
+  font-weight: v.$font-weight-bold;
+  margin: v.$builder-gap-lg 0 v.$builder-gap-sm;
+  color: v.$text-main;
+}
+
+.list {
+  list-style: disc;
+  padding-left: v.$builder-gap-md;
+  display: grid;
+  gap: v.$builder-gap-sm;
+  margin: v.$builder-gap-sm 0;
+}
+
+.divider {
+  margin: v.$builder-gap-xl 0;
+  border: 0;
+  border-top: 1px solid v.$zinc-200;
+}
+
+.footerNote {
+  font-size: v.$font-size-sm;
+  color: v.$zinc-500;
+}

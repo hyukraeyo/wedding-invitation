@@ -164,8 +164,11 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
               <ViewTransitionLink href="/privacy" target="_blank" className={styles.link}>
                 개인정보 처리방침
               </ViewTransitionLink>
-              및<br />
-              이용약관에 동의하게 됩니다.
+              및{' '}
+              <ViewTransitionLink href="/terms" target="_blank" className={styles.link}>
+                이용약관
+              </ViewTransitionLink>
+              에 동의하게 됩니다.
             </p>
           </div>
 

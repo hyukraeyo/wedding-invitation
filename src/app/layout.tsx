@@ -9,6 +9,11 @@ import './globals.scss';
 import '../styles/_accessibility.scss';
 import styles from './layout.module.scss';
 
+const SITE_URL =
+  process.env.NEXT_PUBLIC_BASE_URL || 'https://wedding-invitation-zeta-one.vercel.app';
+const GOOGLE_SITE_VERIFICATION = process.env.GOOGLE_SITE_VERIFICATION;
+const NAVER_SITE_VERIFICATION = process.env.NAVER_SITE_VERIFICATION;
+
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
@@ -48,14 +53,22 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://wedding-invitation-zeta-one.vercel.app'),
+  metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: '/',
+  },
+  verification: {
+    google: GOOGLE_SITE_VERIFICATION || undefined,
+    other: NAVER_SITE_VERIFICATION
+      ? {
+          'naver-site-verification': NAVER_SITE_VERIFICATION,
+        }
+      : undefined,
   },
   openGraph: {
     title: '바나나웨딩 - 쉽고 빠른 모바일 청첩장',
     description: '복잡한 과정 없이 나만의 모바일 청첩장을 쉽게 만들고 공유하세요.',
-    url: 'https://wedding-invitation-zeta-one.vercel.app',
+    url: SITE_URL,
     siteName: '바나나웨딩(Banana Wedding)',
     type: 'website',
     locale: 'ko_KR',
@@ -123,7 +136,7 @@ export default async function RootLayout({
                 '@type': 'WebSite',
                 name: '바나나웨딩',
                 alternateName: 'Banana Wedding',
-                url: 'https://wedding-invitation-zeta-one.vercel.app',
+                url: SITE_URL,
                 description: '쉽고 빠르게 모바일 청첩장을 만들 수 있는 서비스예요.',
                 inLanguage: 'ko-KR',
                 publisher: {
@@ -133,7 +146,7 @@ export default async function RootLayout({
                 },
                 potentialAction: {
                   '@type': 'CreateAction',
-                  target: 'https://wedding-invitation-zeta-one.vercel.app/builder',
+                  target: `${SITE_URL}/builder`,
                   description: '나만의 모바일 청첩장을 제작해요.',
                 },
               },
@@ -142,7 +155,7 @@ export default async function RootLayout({
                 '@type': 'SoftwareApplication',
                 name: 'Wedding Invitation Studio',
                 description: '모바일 청첩장 제작 웹 애플리케이션',
-                url: 'https://wedding-invitation-zeta-one.vercel.app',
+                url: SITE_URL,
                 applicationCategory: 'WebApplication',
                 operatingSystem: 'Web Browser',
                 offers: {

@@ -204,9 +204,9 @@ export default function BrandStoryPage() {
         {/* 7. Footer */}
         <footer className={styles.mainFooter}>
           <div className={styles.footerLinks}>
-            <span>이용약관</span>
-            <span>개인정보처리방침</span>
-            <span>문의하기</span>
+            <Link href="/terms">이용약관</Link>
+            <Link href="/privacy">개인정보처리방침</Link>
+            <Link href="mailto:cs@bananawedding.com">문의하기</Link>
           </div>
           <p className={styles.footerCopy}>© 2024 Banana Wedding. All rights reserved.</p>
         </footer>

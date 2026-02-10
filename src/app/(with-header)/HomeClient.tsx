@@ -1,25 +1,38 @@
 'use client';
 
-import React from 'react';
+import { ArrowRight, CheckCircle2, Images, Share2 } from 'lucide-react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui';
-import { Images, CheckCircle2, Share2, ArrowRight } from 'lucide-react';
 import styles from './Home.module.scss';
-import Link from 'next/link';
+
+const FEATURE_ITEMS = [
+  {
+    title: '3분 완성 제작',
+    description: '복잡한 설정 없이 핵심 정보만 입력하면 모바일 청첩장을 빠르게 완성할 수 있습니다.',
+    icon: <CheckCircle2 size={30} aria-hidden="true" />,
+  },
+  {
+    title: '감각적인 이미지 구성',
+    description: '사진, 문구, 순서를 자유롭게 배치해 두 사람만의 분위기를 자연스럽게 담아냅니다.',
+    icon: <Images size={30} aria-hidden="true" />,
+  },
+  {
+    title: '간편한 공유',
+    description:
+      '완성된 링크를 카카오톡과 메신저에 바로 공유해 하객에게 빠르게 전달할 수 있습니다.',
+    icon: <Share2 size={30} aria-hidden="true" />,
+  },
+] as const;
 
 export function HomeClient() {
   const router = useRouter();
 
-  const handleStart = () => {
-    router.push('/setup');
-  };
-
   return (
     <div className={styles.container}>
-      {/* Hero Section */}
-      <section className={styles.hero}>
+      <section className={styles.hero} aria-labelledby="home-hero-title">
         <div className={styles.heroContent}>
-          <h1>
+          <h1 id="home-hero-title">
             가장 완벽한 시작을 위하여,
             <br />
             <span>바나나웨딩</span>
@@ -29,137 +42,87 @@ export function HomeClient() {
             <br />
             감각적인 디자인과 편리한 기능을 담았습니다.
           </p>
-          <Button onClick={handleStart} variant="hero" size="lg" radius="full">
-            무료로 만들기 <ArrowRight size={20} />
+          <Button
+            variant="hero"
+            size="lg"
+            radius="full"
+            aria-label="모바일 청첩장 제작 시작하기"
+            onClick={() => router.push('/setup')}
+          >
+            무료로 만들기 <ArrowRight size={20} aria-hidden="true" />
           </Button>
         </div>
 
-        <div className={styles.mockupWrapper}>
+        <div className={styles.mockupWrapper} aria-hidden="true">
           <div className={styles.mockup}>
             <div className={styles.mockupScreen}>
               <div className={styles.mockupHeader}>
                 <div className={styles.mockupTitle}>
-                  <h3>Wedding Invitation</h3>
-                  <p>Minji & Junho</p>
+                  <h3>
+                    Wedding
+                    <br />
+                    Invitation
+                  </h3>
+                  <p>Hyun & Jiwoo</p>
                 </div>
               </div>
               <div className={styles.mockupBody}>
                 <div className={`${styles.line} ${styles.long}`} />
-                <div className={`${styles.line} ${styles.long}`} />
                 <div className={`${styles.line} ${styles.short}`} />
-                <br />
-                <div className={`${styles.line} ${styles.long}`} />
-                <div className={`${styles.line} ${styles.short}`} />
+                <div
+                  className={`${styles.line} ${styles.long}`}
+                  style={{ marginTop: '1rem', opacity: 0.5 }}
+                />
+                <div className={`${styles.line} ${styles.short}`} style={{ opacity: 0.5 }} />
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className={styles.features}>
-        <h2>완벽한 초대장을 위한 기능</h2>
-        <p className={styles.subtitle}>필요한 모든 기능을 가장 심플하게 담았습니다.</p>
-
-        <div className={styles.grid}>
-          <div className={styles.featureCard}>
-            <div className={styles.iconWrapper}>
-              <Images />
-            </div>
-            <h3>고화질 갤러리</h3>
-            <p>
-              소중한 순간을 생생하게.
-              <br />
-              용량 제한 없이 고화질 사진을 담아보세요.
-            </p>
-          </div>
-
-          <div className={styles.featureCard}>
-            <div className={styles.iconWrapper}>
-              <CheckCircle2 />
-            </div>
-            <h3>참석 여부 관리</h3>
-            <p>
-              실시간으로 확인하는 RSVP.
-              <br />
-              식사 여부와 동행 인원까지 한눈에.
-            </p>
-          </div>
-
-          <div className={styles.featureCard}>
-            <div className={styles.iconWrapper}>
-              <Share2 />
-            </div>
-            <h3>카카오톡 공유 최적화</h3>
-            <p>
-              썸네일부터 남다르게.
-              <br />
-              클릭을 부르는 아름다운 미리보기를 제공합니다.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Themes Section */}
-      <section className={styles.themes}>
-        <h2>취향에 맞는 테마</h2>
-
-        <div className={styles.grid}>
-          <div className={styles.themeCard}>
-            <div className={styles.placeholder}>Modern Clean Preview</div>
-            <div className={styles.themeInfo}>
-              <h3>Modern Clean</h3>
-              <p>군더더기 없는 깔끔함</p>
-            </div>
-          </div>
-
-          <div className={styles.themeCard}>
-            <div className={styles.placeholder}>Warm Classic Preview</div>
-            <div className={styles.themeInfo}>
-              <h3>Warm Classic</h3>
-              <p>따뜻하고 우아한 감성</p>
-            </div>
-          </div>
-
-          <div className={styles.themeCard}>
-            <div className={styles.placeholder}>Pure White Preview</div>
-            <div className={styles.themeInfo}>
-              <h3>Pure White</h3>
-              <p>순백의 아름다움</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className={styles.cta}>
-        <h2>
-          평생 잊지 못할 시작,
-          <br />
-          지금 바로 만들어보세요.
-        </h2>
-        <p>
-          회원가입 없이도 디자인을 미리 만들어볼 수 있습니다.
-          <br />
-          마음에 들면 그때 결정하세요.
+      <section
+        className={`${styles.section} ${styles.features}`}
+        aria-labelledby="home-features-title"
+      >
+        <h2 id="home-features-title">모바일 청첩장 제작을 더 쉽게</h2>
+        <p className={styles.subtitle}>
+          결혼식 준비에 집중할 수 있도록 제작부터 공유까지 필요한 기능을 간결하게 제공합니다.
         </p>
+        <div className={styles.grid}>
+          {FEATURE_ITEMS.map((item) => (
+            <article key={item.title} className={styles.featureCard}>
+              <div className={styles.iconWrapper} aria-hidden="true">
+                {item.icon}
+              </div>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className={`${styles.section} ${styles.cta}`} aria-labelledby="home-cta-title">
+        <h2 id="home-cta-title">지금 바로 우리만의 청첩장을 시작하세요</h2>
+        <p>회원가입 후 바로 제작을 시작하고, 링크 하나로 하객에게 전달할 수 있습니다.</p>
         <div className={styles.buttonGroup}>
-          <Button onClick={handleStart} size="lg">
-            지금 바로 시작하기
+          <Button size="lg" radius="full" onClick={() => router.push('/setup')}>
+            청첩장 만들기
+          </Button>
+          <Button variant="outline" size="lg" radius="full" onClick={() => router.push('/privacy')}>
+            개인정보 처리방침
           </Button>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className={styles.footer}>
-        <div className={styles.links}>
-          <Link href="#">소개</Link>
-          <Link href="#">이용요금</Link>
-          <Link href="#">자주 묻는 질문</Link>
-          <Link href="#">고객센터</Link>
-          <Link href="#">Instagram</Link>
-        </div>
-        <p className={styles.copyright}>© 2026 Banana Wedding. All rights reserved.</p>
+      <footer className={styles.footer} aria-label="바나나웨딩 안내">
+        <nav className={styles.links} aria-label="주요 페이지 링크">
+          <Link href="/setup">청첩장 시작하기</Link>
+          <Link href="/login">로그인</Link>
+          <Link href="/privacy">개인정보 처리방침</Link>
+        </nav>
+        <p className={styles.copyright}>
+          © {new Date().getFullYear()} Banana Wedding. All rights reserved.
+        </p>
       </footer>
     </div>
   );

@@ -510,11 +510,16 @@
   gap: 16px;
   margin-bottom: 16px;
 
-  span {
+  a {
     font-size: v.$font-size-sm;
     color: v.$grey-600;
     font-weight: v.$font-weight-bold;
     cursor: pointer;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
