@@ -441,7 +441,7 @@ export const INITIAL_STATE = {
   slug: '',
   editingSection: 'mainScreen' as EditorSectionKey,
   closing: {
-    title: '',
+    title: '저희의 시작을 함께해주셔서 감사해요',
     subtitle: 'CLOSING',
     imageUrl: null,
     ratio: 'fixed' as const,

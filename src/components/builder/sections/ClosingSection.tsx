@@ -43,62 +43,55 @@ export default function ClosingSection(props: SectionProps) {
         <SectionSampleDialogAction items={CLOSING_SAMPLES} onSelect={handleSelectSample} />
       }
     >
-      <div className={styles.container}>
-        <div className={styles.optionItem}>
-          <FormField name="closing-subtitle">
-            <FormLabel htmlFor="closing-subtitle">소제목</FormLabel>
-            <FormControl asChild>
-              <TextField
-                id="closing-subtitle"
-                placeholder="예: CLOSING"
-                value={closing.subtitle}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  updateClosing({ subtitle: e.target.value })
-                }
-              />
-            </FormControl>
-          </FormField>
-        </div>
-        <div className={styles.optionItem}>
-          <FormField name="closing-title">
-            <FormLabel htmlFor="closing-title">제목</FormLabel>
-            <FormControl asChild>
-              <TextField
-                id="closing-title"
-                placeholder="예: 저희의 시작을 함께해주셔서 감사해요"
-                value={closing.title}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  updateClosing({ title: e.target.value })
-                }
-              />
-            </FormControl>
-          </FormField>
-        </div>
+      <FormField name="closing-subtitle">
+        <FormLabel htmlFor="closing-subtitle">소제목</FormLabel>
+        <FormControl asChild>
+          <TextField
+            id="closing-subtitle"
+            placeholder="예: CLOSING"
+            value={closing.subtitle}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              updateClosing({ subtitle: e.target.value })
+            }
+          />
+        </FormControl>
+      </FormField>
+      <FormField name="closing-title">
+        <FormLabel htmlFor="closing-title">제목</FormLabel>
+        <FormControl asChild>
+          <TextField
+            id="closing-title"
+            placeholder="예: 저희의 시작을 함께해주셔서 감사해요"
+            value={closing.title}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              updateClosing({ title: e.target.value })
+            }
+          />
+        </FormControl>
+      </FormField>
 
-        <div className={styles.optionItem}>
-          <div className={styles.rowTitle}>내용</div>
-          {isOpen ? (
-            <RichTextEditor
-              content={closing.content}
-              onChange={(val: string) => updateClosing({ content: val })}
-              placeholder="감사의 마음을 담은 짧은 인사말"
-            />
-          ) : null}
-        </div>
+      <FormField name="closing-content">
+        <FormLabel htmlFor="closing-content">내용</FormLabel>
+        {isOpen ? (
+          <RichTextEditor
+            content={closing.content}
+            onChange={(val: string) => updateClosing({ content: val })}
+            placeholder="감사의 마음을 담은 짧은 인사말"
+          />
+        ) : null}
+      </FormField>
 
-        <div className={styles.optionItem}>
-          <div className={styles.rowTitle}>사진</div>
-          <div className={styles.optionWrapper}>
-            <ImageUploader
-              value={closing.imageUrl}
-              onChange={(url) => updateClosing({ imageUrl: url })}
-              placeholder="마무리 사진 추가"
-              ratio={closing.ratio}
-              onRatioChange={(val) => updateClosing({ ratio: val as 'fixed' | 'auto' })}
-            />
-          </div>
-        </div>
-      </div>
+      <FormField name="closing-image">
+        <FormLabel htmlFor="closing-image">사진</FormLabel>
+        <ImageUploader
+          id="closing-image"
+          value={closing.imageUrl}
+          onChange={(url) => updateClosing({ imageUrl: url })}
+          placeholder="마무리 사진 추가"
+          ratio={closing.ratio}
+          onRatioChange={(val) => updateClosing({ ratio: val as 'fixed' | 'auto' })}
+        />
+      </FormField>
     </EditorSection>
   );
 }

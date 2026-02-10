@@ -40,9 +40,11 @@ export default function KakaoShareSection(props: SectionProps) {
     >
       <div className={styles.container}>
         {/* Photo Upload */}
-        <div className={styles.optionItem}>
-          <div className={styles.rowTitle}>사진</div>
+        {/* Photo Upload */}
+        <FormField name="kakao-image">
+          <FormLabel htmlFor="kakao-image">사진</FormLabel>
           <ImageUploader
+            id="kakao-image"
             value={kakao.imageUrl}
             onChange={(url) => setKakao({ imageUrl: url })}
             aspectRatio={kakao.imageRatio === 'portrait' ? '3/4' : '16/9'}
@@ -57,46 +59,42 @@ export default function KakaoShareSection(props: SectionProps) {
           <div className="mt-3">
             <InfoMessage>카카오톡 공유 메시지에서 보여질 사진의 비율이에요.</InfoMessage>
           </div>
-        </div>
+        </FormField>
 
-        <div className={styles.optionItem}>
-          <FormField name="kakao-title">
-            <FormLabel htmlFor="kakao-title">제목</FormLabel>
-            <FormControl asChild>
-              <TextField
-                id="kakao-title"
-                type="text"
-                placeholder="예: 우리 결혼해요"
-                value={kakao.title}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setKakao({ title: e.target.value })
-                }
-                maxLength={25}
-              />
-            </FormControl>
-          </FormField>
-        </div>
+        <FormField name="kakao-title">
+          <FormLabel htmlFor="kakao-title">제목</FormLabel>
+          <FormControl asChild>
+            <TextField
+              id="kakao-title"
+              type="text"
+              placeholder="예: 우리 결혼해요"
+              value={kakao.title}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setKakao({ title: e.target.value })
+              }
+              maxLength={25}
+            />
+          </FormControl>
+        </FormField>
 
-        <div className={styles.optionItem}>
-          <FormField name="kakao-description">
-            <FormLabel htmlFor="kakao-description">설명</FormLabel>
-            <FormControl asChild>
-              <TextField
-                id="kakao-description"
-                type="text"
-                placeholder="예: 2024년 10월 12일"
-                value={kakao.description}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setKakao({ description: e.target.value })
-                }
-                maxLength={35}
-              />
-            </FormControl>
-          </FormField>
-        </div>
+        <FormField name="kakao-description">
+          <FormLabel htmlFor="kakao-description">설명</FormLabel>
+          <FormControl asChild>
+            <TextField
+              id="kakao-description"
+              type="text"
+              placeholder="예: 2024년 10월 12일"
+              value={kakao.description}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setKakao({ description: e.target.value })
+              }
+              maxLength={35}
+            />
+          </FormControl>
+        </FormField>
 
-        <div className={styles.optionItem}>
-          <div className={styles.rowTitle}>버튼 스타일</div>
+        <FormField name="kakao-button-type">
+          <FormLabel>버튼 스타일</FormLabel>
           <SegmentedControl
             alignment="fluid"
             value={kakao.buttonType || 'location'}
@@ -108,7 +106,7 @@ export default function KakaoShareSection(props: SectionProps) {
             <SegmentedControl.Item value="rsvp">참석 여부</SegmentedControl.Item>
             <SegmentedControl.Item value="none">사용 안함</SegmentedControl.Item>
           </SegmentedControl>
-        </div>
+        </FormField>
 
         <div className={styles.bottomActions}>
           <Dialog>

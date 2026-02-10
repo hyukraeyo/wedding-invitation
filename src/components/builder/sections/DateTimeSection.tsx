@@ -58,73 +58,67 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
       title={<RequiredSectionTitle title="예식 일시" isComplete={isComplete} />}
       isInvalid={isSectionInvalid}
     >
-      <div className={styles.container}>
-        <div className={styles.optionItem}>
-          <FormField name="wedding-date">
-            <FormHeader>
-              <FormLabel htmlFor="wedding-date">예식 날짜</FormLabel>
-              <FormMessage forceMatch={isDateInvalid && isBlank(dateValue)}>
-                필수 항목이에요.
-              </FormMessage>
-            </FormHeader>
-            <DatePicker
-              id="wedding-date"
-              value={dateValue}
-              placeholder=""
-              onChange={handleDateChange}
-              error={isDateInvalid}
+      <FormField name="wedding-date">
+        <FormHeader>
+          <FormLabel htmlFor="wedding-date">예식 날짜</FormLabel>
+          <FormMessage forceMatch={isDateInvalid && isBlank(dateValue)}>
+            필수 항목이에요.
+          </FormMessage>
+        </FormHeader>
+        <DatePicker
+          id="wedding-date"
+          value={dateValue}
+          placeholder=""
+          onChange={handleDateChange}
+          error={isDateInvalid}
+        />
+        <FormControl asChild>
+          <VisuallyHidden asChild>
+            <input
+              id="wedding-date-required"
+              aria-label="예식 날짜"
+              required={isRequiredField('weddingDate')}
+              readOnly
+              value={dateValue || ''}
             />
-            <FormControl asChild>
-              <VisuallyHidden asChild>
-                <input
-                  id="wedding-date-required"
-                  aria-label="예식 날짜"
-                  required={isRequiredField('weddingDate')}
-                  readOnly
-                  value={dateValue || ''}
-                />
-              </VisuallyHidden>
-            </FormControl>
-          </FormField>
-        </div>
+          </VisuallyHidden>
+        </FormControl>
+      </FormField>
 
-        <div className={styles.optionItem}>
-          <FormField name="wedding-time">
-            <FormHeader>
-              <FormLabel htmlFor="wedding-time">예식 시간</FormLabel>
-              <FormMessage forceMatch={isTimeInvalid && isBlank(timeValue)}>
-                필수 항목이에요.
-              </FormMessage>
-            </FormHeader>
-            <TimePicker
-              id="wedding-time"
-              value={timeValue}
-              placeholder=""
-              onChange={handleTimeChange}
-              error={isTimeInvalid}
+      <FormField name="wedding-time">
+        <FormHeader>
+          <FormLabel htmlFor="wedding-time">예식 시간</FormLabel>
+          <FormMessage forceMatch={isTimeInvalid && isBlank(timeValue)}>
+            필수 항목이에요.
+          </FormMessage>
+        </FormHeader>
+        <TimePicker
+          id="wedding-time"
+          value={timeValue}
+          placeholder=""
+          onChange={handleTimeChange}
+          error={isTimeInvalid}
+        />
+        <FormControl asChild>
+          <VisuallyHidden asChild>
+            <input
+              id="wedding-time-required"
+              aria-label="예식 시간"
+              required={isRequiredField('weddingTime')}
+              readOnly
+              value={timeValue || ''}
             />
-            <FormControl asChild>
-              <VisuallyHidden asChild>
-                <input
-                  id="wedding-time-required"
-                  aria-label="예식 시간"
-                  required={isRequiredField('weddingTime')}
-                  readOnly
-                  value={timeValue || ''}
-                />
-              </VisuallyHidden>
-            </FormControl>
-          </FormField>
-        </div>
+          </VisuallyHidden>
+        </FormControl>
+      </FormField>
 
-        <div className={styles.optionItem}>
-          <SwitchRow label="달력 노출" checked={showCalendar} onCheckedChange={setShowCalendar} />
-        </div>
+      <FormField name="show-calendar">
+        <SwitchRow label="달력 노출" checked={showCalendar} onCheckedChange={setShowCalendar} />
+      </FormField>
 
-        <div className={styles.optionItem}>
-          <SwitchRow label="D-Day 노출" checked={showDday} onCheckedChange={setShowDday} />
-        </div>
-      </div>
+      <FormField name="show-dday">
+        <SwitchRow label="D-Day 노출" checked={showDday} onCheckedChange={setShowDday} />
+      </FormField>
     </EditorSection>
   );
 });

@@ -110,204 +110,186 @@ export default function LocationSectionContent() {
   return (
     <>
       <KakaoSdkLoader onReady={() => setIsKakaoReady(true)} />
-      <div className={styles.container}>
-        <div className={styles.optionItem}>
-          <FormField name="location-subtitle">
-            <FormLabel htmlFor="location-subtitle">부제목</FormLabel>
-            <FormControl asChild>
-              <TextField
-                id="location-subtitle"
-                placeholder="예: LOCATION"
-                value={locationSubtitle}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setLocationSubtitle(e.target.value)
-                }
-              />
-            </FormControl>
-          </FormField>
-        </div>
-
-        <div className={styles.optionItem}>
-          <FormField name="location-title">
-            <FormLabel htmlFor="location-title">제목</FormLabel>
-            <FormControl asChild>
-              <TextField
-                id="location-title"
-                placeholder="예: 오시는 길"
-                value={locationTitle}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setLocationTitle(e.target.value)
-                }
-              />
-            </FormControl>
-          </FormField>
-        </div>
-
-        <div className={styles.optionItem}>
-          <FormField name="location-address">
-            <FormHeader>
-              <FormLabel htmlFor="location-address">주소</FormLabel>
-              <FormMessage
-                forceMatch={validationErrors.includes('location-address') && isBlank(address)}
-              >
-                필수 항목이에요.
-              </FormMessage>
-            </FormHeader>
-            <AddressPicker
-              id="location-address"
-              placeholder="주소를 검색해 주세요"
-              value={address}
-              onChange={(val) => {
-                setAddress(val);
-                removeValidationError('location-address');
-              }}
-              error={validationErrors.includes('location-address')}
-            />
-            <FormControl asChild>
-              <VisuallyHidden asChild>
-                <input
-                  id="location-address-required"
-                  aria-label="예식 주소"
-                  required={isRequiredField('locationAddress')}
-                  readOnly
-                  value={address || ''}
-                />
-              </VisuallyHidden>
-            </FormControl>
-          </FormField>
-        </div>
-
-        <div className={styles.optionItem}>
-          <FormField name="location-venue">
-            <FormHeader>
-              <FormLabel htmlFor="location-venue">예식 장소명</FormLabel>
-              <FormMessage
-                forceMatch={validationErrors.includes('location-venue') && isBlank(location)}
-              >
-                필수 항목이에요.
-              </FormMessage>
-            </FormHeader>
-            <FormControl asChild>
-              <TextField
-                id="location-venue"
-                type="text"
-                placeholder="예: 바나나웨딩홀"
-                required={isRequiredField('locationVenue')}
-                value={location}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setLocation(e.target.value);
-                  removeValidationError('location-venue');
-                }}
-                invalid={validationErrors.includes('location-venue')}
-              />
-            </FormControl>
-          </FormField>
-        </div>
-
-        <div className={styles.optionItem}>
-          <FormField name="location-floor">
-            <FormLabel htmlFor="location-floor">층/홀 정보</FormLabel>
-            <FormControl asChild>
-              <TextField
-                id="location-floor"
-                type="text"
-                placeholder="예: 3층 그랜드홀"
-                value={detailAddress}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setDetailAddress(e.target.value)
-                }
-              />
-            </FormControl>
-          </FormField>
-        </div>
-
-        <div className={styles.optionItem}>
-          <FormField name="location-contact">
-            <FormLabel htmlFor="location-contact">연락처</FormLabel>
-            <FormControl asChild>
-              <TextField
-                id="location-contact"
-                type="tel"
-                inputMode="numeric"
-                placeholder="예: 02-000-0000"
-                value={locationContact}
-                onChange={handlePhoneChange}
-              />
-            </FormControl>
-          </FormField>
-        </div>
-
-        <div className={styles.optionItem}>
-          <div className={styles.rowTitle}>지도 종류</div>
-          <SegmentedControl
-            alignment="fluid"
-            value={mapType}
-            onChange={(value: string) => setMapType(value as 'naver' | 'kakao')}
-          >
-            <SegmentedControl.Item value="naver">
-              <span
-                className={styles.itemContent}
-                style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
-              >
-                <NaverIcon size={18} />
-                <span>네이버</span>
-              </span>
-            </SegmentedControl.Item>
-            <SegmentedControl.Item value="kakao">
-              <span
-                className={styles.itemContent}
-                style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
-              >
-                <KakaoIcon size={18} />
-                <span>카카오</span>
-              </span>
-            </SegmentedControl.Item>
-          </SegmentedControl>
-        </div>
-
-        <div className={styles.optionItem}>
-          <SwitchRow label="지도 표시" checked={showMap} onCheckedChange={setShowMap} />
-        </div>
-
-        <div className={styles.optionItem}>
-          <SwitchRow label="지도 고정" checked={lockMap} onCheckedChange={setLockMap} />
-        </div>
-
-        <div className={styles.optionItem}>
-          <SwitchRow
-            label="내비게이션 표시"
-            checked={showNavigation}
-            onCheckedChange={setShowNavigation}
+      <FormField name="location-subtitle">
+        <FormLabel htmlFor="location-subtitle">부제목</FormLabel>
+        <FormControl asChild>
+          <TextField
+            id="location-subtitle"
+            placeholder="예: LOCATION"
+            value={locationSubtitle}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setLocationSubtitle(e.target.value)
+            }
           />
-        </div>
+        </FormControl>
+      </FormField>
 
-        <div className={styles.optionItem}>
-          <div className={styles.rowTitle}>지도 높이</div>
-          <SegmentedControl
-            alignment="fluid"
-            value={mapHeight}
-            onChange={(value: string) => setMapHeight(value as 'default' | 'expanded')}
-          >
-            <SegmentedControl.Item value="default">기본</SegmentedControl.Item>
-            <SegmentedControl.Item value="expanded">확장</SegmentedControl.Item>
-          </SegmentedControl>
-        </div>
+      <FormField name="location-title">
+        <FormLabel htmlFor="location-title">제목</FormLabel>
+        <FormControl asChild>
+          <TextField
+            id="location-title"
+            placeholder="예: 오시는 길"
+            value={locationTitle}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationTitle(e.target.value)}
+          />
+        </FormControl>
+      </FormField>
 
-        <div className={styles.optionItem}>
-          <div className={styles.rowTitle}>줌 레벨</div>
-          <SegmentedControl
-            alignment="fluid"
-            value={String(mapZoom)}
-            onChange={(value: string) => setMapZoom(Number(value))}
+      <FormField name="location-address">
+        <FormHeader>
+          <FormLabel htmlFor="location-address">주소</FormLabel>
+          <FormMessage
+            forceMatch={validationErrors.includes('location-address') && isBlank(address)}
           >
-            <SegmentedControl.Item value="15">15</SegmentedControl.Item>
-            <SegmentedControl.Item value="16">16</SegmentedControl.Item>
-            <SegmentedControl.Item value="17">17</SegmentedControl.Item>
-            <SegmentedControl.Item value="18">18</SegmentedControl.Item>
-            <SegmentedControl.Item value="19">19</SegmentedControl.Item>
-          </SegmentedControl>
-        </div>
-      </div>
+            필수 항목이에요.
+          </FormMessage>
+        </FormHeader>
+        <AddressPicker
+          id="location-address"
+          placeholder="주소를 검색해 주세요"
+          value={address}
+          onChange={(val) => {
+            setAddress(val);
+            removeValidationError('location-address');
+          }}
+          error={validationErrors.includes('location-address')}
+        />
+        <FormControl asChild>
+          <VisuallyHidden asChild>
+            <input
+              id="location-address-required"
+              aria-label="예식 주소"
+              required={isRequiredField('locationAddress')}
+              readOnly
+              value={address || ''}
+            />
+          </VisuallyHidden>
+        </FormControl>
+      </FormField>
+
+      <FormField name="location-venue">
+        <FormHeader>
+          <FormLabel htmlFor="location-venue">예식 장소명</FormLabel>
+          <FormMessage
+            forceMatch={validationErrors.includes('location-venue') && isBlank(location)}
+          >
+            필수 항목이에요.
+          </FormMessage>
+        </FormHeader>
+        <FormControl asChild>
+          <TextField
+            id="location-venue"
+            type="text"
+            placeholder="예: 바나나웨딩홀"
+            required={isRequiredField('locationVenue')}
+            value={location}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setLocation(e.target.value);
+              removeValidationError('location-venue');
+            }}
+            invalid={validationErrors.includes('location-venue')}
+          />
+        </FormControl>
+      </FormField>
+
+      <FormField name="location-floor">
+        <FormLabel htmlFor="location-floor">층/홀 정보</FormLabel>
+        <FormControl asChild>
+          <TextField
+            id="location-floor"
+            type="text"
+            placeholder="예: 3층 그랜드홀"
+            value={detailAddress}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setDetailAddress(e.target.value)}
+          />
+        </FormControl>
+      </FormField>
+
+      <FormField name="location-contact">
+        <FormLabel htmlFor="location-contact">연락처</FormLabel>
+        <FormControl asChild>
+          <TextField
+            id="location-contact"
+            type="tel"
+            inputMode="numeric"
+            placeholder="예: 02-000-0000"
+            value={locationContact}
+            onChange={handlePhoneChange}
+          />
+        </FormControl>
+      </FormField>
+
+      <FormField name="map-type">
+        <FormLabel>지도 종류</FormLabel>
+        <SegmentedControl
+          alignment="fluid"
+          value={mapType}
+          onChange={(value: string) => setMapType(value as 'naver' | 'kakao')}
+        >
+          <SegmentedControl.Item value="naver">
+            <span
+              className={styles.itemContent}
+              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
+              <NaverIcon size={18} />
+              <span>네이버</span>
+            </span>
+          </SegmentedControl.Item>
+          <SegmentedControl.Item value="kakao">
+            <span
+              className={styles.itemContent}
+              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+            >
+              <KakaoIcon size={18} />
+              <span>카카오</span>
+            </span>
+          </SegmentedControl.Item>
+        </SegmentedControl>
+      </FormField>
+
+      <FormField name="location-show-map">
+        <SwitchRow label="지도 표시" checked={showMap} onCheckedChange={setShowMap} />
+      </FormField>
+
+      <FormField name="location-lock-map">
+        <SwitchRow label="지도 고정" checked={lockMap} onCheckedChange={setLockMap} />
+      </FormField>
+
+      <FormField name="location-show-nav">
+        <SwitchRow
+          label="내비게이션 표시"
+          checked={showNavigation}
+          onCheckedChange={setShowNavigation}
+        />
+      </FormField>
+
+      <FormField name="map-height">
+        <FormLabel>지도 높이</FormLabel>
+        <SegmentedControl
+          alignment="fluid"
+          value={mapHeight}
+          onChange={(value: string) => setMapHeight(value as 'default' | 'expanded')}
+        >
+          <SegmentedControl.Item value="default">기본</SegmentedControl.Item>
+          <SegmentedControl.Item value="expanded">확장</SegmentedControl.Item>
+        </SegmentedControl>
+      </FormField>
+
+      <FormField name="map-zoom">
+        <FormLabel>줌 레벨</FormLabel>
+        <SegmentedControl
+          alignment="fluid"
+          value={String(mapZoom)}
+          onChange={(value: string) => setMapZoom(Number(value))}
+        >
+          <SegmentedControl.Item value="15">15</SegmentedControl.Item>
+          <SegmentedControl.Item value="16">16</SegmentedControl.Item>
+          <SegmentedControl.Item value="17">17</SegmentedControl.Item>
+          <SegmentedControl.Item value="18">18</SegmentedControl.Item>
+          <SegmentedControl.Item value="19">19</SegmentedControl.Item>
+        </SegmentedControl>
+      </FormField>
     </>
   );
 }
