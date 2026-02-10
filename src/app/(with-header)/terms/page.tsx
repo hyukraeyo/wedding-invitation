@@ -17,10 +17,34 @@ export const metadata: Metadata = {
   },
 };
 
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: '홈',
+      item: absoluteUrl('/'),
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: '이용약관',
+      item: absoluteUrl('/terms'),
+    },
+  ],
+};
+
 export default function TermsPage() {
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>이용약관</h1>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <div className={styles.container}>
+        <h1 className={styles.title}>이용약관</h1>
 
       <p className={styles.lead}>
         본 약관은 바나나웨딩(이하 &apos;서비스&apos;)이 제공하는 모바일 청첩장 제작 및 관련
@@ -101,8 +125,9 @@ export default function TermsPage() {
         법원을 관할 법원으로 합니다.
       </p>
 
-      <hr className={styles.divider} />
-      <p className={styles.footerNote}>시행일자: 2026년 2월 10일</p>
-    </div>
+        <hr className={styles.divider} />
+        <p className={styles.footerNote}>시행일자: 2026년 2월 10일</p>
+      </div>
+    </>
   );
 }

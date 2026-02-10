@@ -5,13 +5,15 @@ import ClientProviders from './ClientProviders';
 import { fontVariables } from '@/lib/fonts';
 import { SkipLink } from '@/hooks/useAccessibility';
 import { PALETTE } from '@/constants/palette';
-import { SITE_DESCRIPTION, SITE_NAME, SITE_NAME_EN, SITE_URL } from '@/lib/site';
+import { SITE_DESCRIPTION, SITE_NAME, SITE_NAME_EN, SITE_URL, absoluteUrl } from '@/lib/site';
 import './globals.scss';
 import '../styles/_accessibility.scss';
 import styles from './layout.module.scss';
 
 const GOOGLE_SITE_VERIFICATION = process.env.GOOGLE_SITE_VERIFICATION;
 const NAVER_SITE_VERIFICATION = process.env.NAVER_SITE_VERIFICATION;
+const SUPPORT_EMAIL = 'cs@bananawedding.com';
+const KAKAO_CHANNEL_URL = 'https://pf.kakao.com/_KaiAX';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -51,7 +53,9 @@ export const metadata: Metadata = {
     telephone: false,
   },
   alternates: {
-    canonical: '/',
+    types: {
+      'application/rss+xml': absoluteUrl('/rss.xml'),
+    },
   },
   verification: {
     google: GOOGLE_SITE_VERIFICATION || undefined,
@@ -165,6 +169,21 @@ export default async function RootLayout({
                   '지도 연동',
                   '갤러리 기능',
                   '계좌번호 관리',
+                ],
+              },
+              {
+                '@context': 'https://schema.org',
+                '@type': 'Organization',
+                name: SITE_NAME,
+                url: SITE_URL,
+                sameAs: [KAKAO_CHANNEL_URL],
+                contactPoint: [
+                  {
+                    '@type': 'ContactPoint',
+                    contactType: 'customer support',
+                    email: SUPPORT_EMAIL,
+                    availableLanguage: ['ko', 'en'],
+                  },
                 ],
               },
             ]),

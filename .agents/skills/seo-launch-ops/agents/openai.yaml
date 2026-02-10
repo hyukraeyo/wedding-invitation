@@ -1,0 +1,4 @@
+interface:
+  display_name: "SEO Launch Ops"
+  short_description: "Google/Naver SEO 등록·점검 운영 가이드"
+  default_prompt: "Use $seo-launch-ops to audit metadata, robots, sitemap, rss, and indexing readiness for Banana Wedding."

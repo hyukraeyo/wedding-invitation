@@ -3,14 +3,14 @@
 ## Launch Blocking
 
 - [ ] Add Vercel environment variables.
-- [ ] Set `GOOGLE_SITE_VERIFICATION`.
-- [ ] Set `NAVER_SITE_VERIFICATION`.
+- [x] Set `GOOGLE_SITE_VERIFICATION`.
+- [x] Set `NAVER_SITE_VERIFICATION`.
 - [ ] Apply values to both Production and Preview.
 - [ ] Trigger redeploy.
 
 ## Post-Deploy Verification
 
-- [ ] Confirm site verification meta tags are rendered in page source.
+- [x] Confirm site verification meta tags are rendered in page source.
 - [x] Verify `https://banana-wedding.vercel.app/robots.txt`.
 - [x] Verify `https://banana-wedding.vercel.app/sitemap.xml`.
 
@@ -25,9 +25,9 @@
 
 ## Search Engine Submission
 
-- [ ] Complete Google Search Console site verification.
-- [ ] Complete Naver Search Advisor site verification.
-- [ ] Submit sitemap to Google Search Console.
+- [x] Complete Google Search Console site verification.
+- [x] Complete Naver Search Advisor site verification.
+- [x] Submit sitemap to Google Search Console.
 - [ ] Submit sitemap to Naver Search Advisor.
 
 ## Hardening

@@ -48,58 +48,82 @@ export const metadata: Metadata = {
   },
 };
 
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: '홈',
+      item: absoluteUrl('/'),
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: '브랜드 스토리',
+      item: absoluteUrl('/brand-story'),
+    },
+  ],
+};
+
 export default function BrandStoryPage() {
   return (
-    <div className={styles.page}>
-      <header className={styles.header}>
-        <div className={styles.headerInner}>
-          <Link href="/" className={styles.logo}>
-            <div className={styles.logoIcon} aria-hidden="true">
-              <Banana size={24} />
-            </div>
-            <span className={styles.logoText}>{SITE_NAME}</span>
-          </Link>
-
-          <div className={styles.navActions}>
-            <Link href="/setup" className={styles.startButton}>
-              시작하기
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <div className={styles.page}>
+        <header className={styles.header}>
+          <div className={styles.headerInner}>
+            <Link href="/" className={styles.logo}>
+              <div className={styles.logoIcon} aria-hidden="true">
+                <Banana size={24} />
+              </div>
+              <span className={styles.logoText}>{SITE_NAME}</span>
             </Link>
-          </div>
-        </div>
-      </header>
 
-      <main className={styles.main}>
-        <section className={styles.hero}>
-          <div className={styles.heroContent}>
-            <div className={styles.heroBadge}>
-              <span>New Standard</span>
-            </div>
-            <h1 className={styles.heroTitle}>
-              완벽한 시작을 <br />
-              위하여
-            </h1>
-            <p className={styles.heroDesc}>
-              토스처럼 간편하고 애플처럼 세련된 모바일 청첩장. 이제 바나나 웨딩에서 가장 아름다운
-              시작을 준비하세요.
-            </p>
-            <div className={styles.heroActionGroup}>
-              <Link href="/setup" className={styles.heroPrimaryBtn}>
-                지금 만들기
+            <div className={styles.navActions}>
+              <Link href="/setup" className={styles.startButton}>
+                시작하기
               </Link>
-              <a href="#brand-story-features" className={styles.heroSecondaryBtn}>
-                기능 보기
-              </a>
             </div>
           </div>
+        </header>
 
-          <div className={styles.heroVisual} aria-hidden="true">
-            <div
-              className={styles.heroVisualImage}
-              style={{ backgroundImage: `url(${HERO_IMG})` }}
-            />
-            <div className={styles.heroVisualOverlay} />
-          </div>
-        </section>
+        <main className={styles.main}>
+          <section className={styles.hero}>
+            <div className={styles.heroContent}>
+              <div className={styles.heroBadge}>
+                <span>New Standard</span>
+              </div>
+              <h1 className={styles.heroTitle}>
+                완벽한 시작을 <br />
+                위하여
+              </h1>
+              <p className={styles.heroDesc}>
+                토스처럼 간편하고 애플처럼 세련된 모바일 청첩장. 이제 바나나 웨딩에서 가장 아름다운
+                시작을 준비하세요.
+              </p>
+              <div className={styles.heroActionGroup}>
+                <Link href="/setup" className={styles.heroPrimaryBtn}>
+                  지금 만들기
+                </Link>
+                <a href="#brand-story-features" className={styles.heroSecondaryBtn}>
+                  기능 보기
+                </a>
+              </div>
+            </div>
+
+            <div className={styles.heroVisual} aria-hidden="true">
+              <div
+                className={styles.heroVisualImage}
+                style={{ backgroundImage: `url(${HERO_IMG})` }}
+              />
+              <div className={styles.heroVisualOverlay} />
+            </div>
+          </section>
 
         <section className={styles.trust}>
           <span className={styles.trustLabel}>10,000+ 커플이 선택한 이유</span>
@@ -218,13 +242,14 @@ export default function BrandStoryPage() {
           </div>
           <p className={styles.footerCopy}>© 2026 Banana Wedding. All rights reserved.</p>
         </footer>
-      </main>
+        </main>
 
-      <div className={styles.fab}>
-        <a href="mailto:cs@bananawedding.com" className={styles.fabButton} aria-label="문의하기">
-          <MessageCircle size={24} aria-hidden="true" />
-        </a>
+        <div className={styles.fab}>
+          <a href="mailto:cs@bananawedding.com" className={styles.fabButton} aria-label="문의하기">
+            <MessageCircle size={24} aria-hidden="true" />
+          </a>
+        </div>
       </div>
-    </div>
+    </>
   );
 }

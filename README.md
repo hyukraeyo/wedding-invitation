@@ -1,80 +1,65 @@
 # 🍌 바나나웨딩 (Banana Wedding)
 
-> **특별한 순간을 위한 가장 달콤한 모바일 청첩장**
-> 프리미엄 디자인과 최상의 사용자 경험을 제공하는 모바일 청첩장 제작 플랫폼입니다.
+> 특별한 순간을 위한 가장 달콤한 모바일 청첩장 제작 플랫폼
 
----
+## 문서 동기화 규칙
+- 규칙/가이드 변경 시 `README.md`, `AGENTS.md`, `.cursorrules`를 반드시 함께 업데이트합니다.
 
-## 🚀 주요 기술 스택
+## 기술 스택
+- Framework: Next.js 16.1.x (App Router, Cache Components, View Transitions)
+- Library: React 19.2.x
+- Language: TypeScript 5 (strict)
+- Styling: SCSS Modules (필수), Radix UI Primitives
+- State: Zustand (client), TanStack Query (server)
+- Backend: Supabase
+- Deploy: Vercel
 
-### **Core**
-
-- **Framework**: Next.js 16.1.x (App Router, Cache Components, View Transitions)
-- **Library**: React 19.2.x
-- **Language**: TypeScript 5 (Strict Mode)
-
-### **Styling & UI**
-
-- **Styling**: SCSS Modules (Primary) + Tailwind CSS (Secondary)
-- **UI Components**: Radix UI Primitives + Toss Design System (TDS) 기반 디자인
-- **UI Layer Rule**: `src/components/ui`에는 기초(primitive) 컴포넌트만 두고, 조합형/도메인형 컴포넌트는 `src/components/common`에 둡니다.
-- **Animations**: iOS 스타일 트랜지션 (`cubic-bezier(0.16, 1, 0.3, 1)`)
-
-### **Infrastructure & Backend**
-
-- **Database/Auth**: Supabase (Remote CLI)
-- **Deployment**: Vercel
-- **State Management**: Zustand (Client), TanStack Query (Server)
-
----
-
-## 🛠 필수 개발 규칙
-
-이 프로젝트의 모든 코드는 최상의 품질과 일관성을 위해 아래 규칙을 준수해야 합니다.
-
-1. **모바일 퍼스트**: 전 디자인은 모바일 환경을 최우선으로 설계합니다.
-2. **SCSS Modules 필수**: UI 컴포넌트 스타일링 시 Tailwind 대신 SCSS Modules를 사용합니다.
-3. **디자인 토큰 활용**: 하드코딩된 모든 스타일 값(색상, 패딩, 폰트 사이즈, 마진 등) 대신 `@/styles/_variables.scss` 및 관련 토큰을 반드시 검색하여 사용합니다.
-4. **한글 커밋 메시지**: Git 커밋 시 반드시 한글을 사용하며 Conventional Commits 형식을 따름니다.
-5. **Radix UI 활용**: 웹 접근성과 유연성을 위해 Radix UI Primitives를 기본으로 사용합니다.
-
----
-
-## 📂 프로젝트 구조
-
-```text
-src/
-├── app/              # Next.js App Router (Pages & API)
-├── components/       # UI 및 비즈니스 프로젝트 컴포넌트
-│   ├── ui/           # 기초 UI 컴포넌트 (primitive, Radix 기반)
-│   ├── common/       # 조합형/비즈니스 공용 컴포넌트
-│   └── builder/      # 청첩장 빌더 핵심 로직
-├── services/         # 서버 측 데이터 서비스 레이어
-├── store/            # 전역 상태 관리 (Zustand)
-├── styles/           # 전역 스타일 및 디자인 토큰
-└── types/            # TypeScript 타입 정의
-```
-
----
-
-## 🏁 시작하기
-
-### **설치 및 실행**
-
+## 개발 명령어
 ```bash
-# 의존성 설치
-npm install
-
-# 로컬 개발 서버 실행 (Turbopack)
 npm run dev
+npm run build
+npm run start
+npm run lint
+npm run lint:fix
+npm run type-check
+npm run analyze
+npm run clean
+npm run check:launch
 ```
 
-### **환경 변수 설정**
+## 핵심 개발 규칙
+- 모바일 퍼스트를 기본으로 설계합니다.
+- 스타일은 SCSS Modules만 사용합니다. (Tailwind CSS 금지)
+- UI primitive는 `src/components/ui`, 조합형 UI는 `src/components/common`에 둡니다.
+- 스타일 값(색상/간격/폰트)은 `src/styles` 토큰을 검색해 사용하고 하드코딩하지 않습니다.
+- 커밋 메시지는 한글 Conventional Commits 형식을 사용합니다.
 
-`.env.local` 파일을 생성하고 필요한 Supabase 및 Kakao API 키를 설정하십시오.
+## SEO/검색 등록 운영 규칙 (2026-02)
+- 공개 페이지는 `title`, `description`, `canonical`, `openGraph`, `twitter`, `robots` 메타를 정의합니다.
+- 사이트 인증 토큰은 `GOOGLE_SITE_VERIFICATION`, `NAVER_SITE_VERIFICATION` 환경 변수로 관리합니다.
+- 검색 리소스 경로를 유지합니다.
+  - `/robots.txt` (`src/app/robots.ts`)
+  - `/sitemap.xml` (`src/app/sitemap.ts`)
+  - `/rss.xml` (`src/app/rss.xml/route.ts`)
+- 인덱싱 제외 페이지는 `noindex`를 적용합니다. (예: 로그인/빌더/마이페이지 등 비공개 흐름)
+- 구조화 데이터(JSON-LD)를 유지합니다.
+  - 전역: `WebSite`, `SoftwareApplication`, `Organization`
+  - 홈: `WebPage`, `FAQPage`
+  - 문서 페이지: `BreadcrumbList` (`/brand-story`, `/privacy`, `/terms`)
+- 배포 후 체크 순서를 고정합니다.
+  1. Vercel 환경 변수(Production/Preview) 확인
+  2. 재배포
+  3. 메타 태그/robots/sitemap/rss 실서버 확인
+  4. Google Search Console/Naver Search Advisor에 사이트맵 제출 및 수집 요청
 
----
+## 보안 규칙
+- `.env.local` 및 비밀키는 커밋/공유하지 않습니다.
+- 비밀값이 외부에 노출되면 즉시 해당 키를 폐기하고 재발급합니다.
 
-## 📄 라이선스
+## 프로젝트 스킬
+- `design-md`: Stitch 프로젝트 디자인 시스템 문서화
+- `vercel-react-best-practices`: React/Next 성능 최적화 가이드
+- `seo-launch-ops`: 검색 등록/색인/메타/사이트맵 점검 및 운영 절차 (신규)
 
-© 2024 Banana Wedding. All rights reserved.
+## 라이선스
+© 2026 Banana Wedding. All rights reserved.

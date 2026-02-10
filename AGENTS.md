@@ -177,3 +177,32 @@ src/
 4. **Git Commits**: Always in **Korean** following Conventional Commits
    - Format: `type: message in Korean` (e.g., `feat: 로그인 기능 추가`)
 5. **Strict Styling**: 모든 스타일링 수치(Padding, Margin, Font-size, Color 등)는 하드코딩하지 말고 반드시 `styles/` 폴더 내 토큰 검색 후 사용.
+
+## SEO / Search Indexing Rules (2026-02)
+
+- **Public metadata required**: 공개 페이지에는 `title`, `description`, `canonical`, `openGraph`, `twitter`, `robots`를 정의한다.
+- **Verification env required**: 사이트 인증 토큰은 `GOOGLE_SITE_VERIFICATION`, `NAVER_SITE_VERIFICATION` 환경 변수로 관리한다.
+- **Search endpoints fixed**: 아래 경로를 항상 유지한다.
+  - `/robots.txt` (`src/app/robots.ts`)
+  - `/sitemap.xml` (`src/app/sitemap.ts`)
+  - `/rss.xml` (`src/app/rss.xml/route.ts`)
+- **Noindex for private flows**: 로그인/빌더/마이페이지/프리뷰 등 비공개 흐름에는 `noindex`를 적용한다.
+- **Structured data required**:
+  - 전역: `WebSite`, `SoftwareApplication`, `Organization`
+  - 홈: `WebPage`, `FAQPage`
+  - 문서형 페이지: `BreadcrumbList` (`/brand-story`, `/privacy`, `/terms`)
+- **Post-deploy sequence**:
+  1. Vercel 환경 변수(Production/Preview) 확인
+  2. 재배포
+  3. 메타 태그/robots/sitemap/rss 실서버 확인
+  4. Google Search Console/Naver Search Advisor 사이트맵 제출 및 수집 요청
+
+## Security Rules
+
+- `.env.local` 및 모든 비밀키는 커밋/공유 금지.
+- 비밀값 노출 시 즉시 키 폐기 및 재발급.
+
+## Specialized Guides
+
+- `Vercel Best Practices`: `.codex/skills/vercel-react-best-practices/SKILL.md`
+- `SEO Launch Ops Skill`: `.agents/skills/seo-launch-ops/SKILL.md`

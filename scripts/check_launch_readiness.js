@@ -182,6 +182,7 @@ function main() {
   console.log('\n--- 3) Search engine URLs ---');
   console.log(`robots.txt: ${baseUrl}/robots.txt`);
   console.log(`sitemap.xml: ${baseUrl}/sitemap.xml`);
+  console.log(`rss.xml: ${baseUrl}/rss.xml`);
 
   console.log('\n--- 4) Site verification meta values ---');
   const missingVerification = [];

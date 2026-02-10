@@ -1,31 +1,31 @@
 import type { MetadataRoute } from 'next';
 import { absoluteUrl } from '@/lib/site';
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date();
+const LAST_MODIFIED = new Date('2026-02-10T00:00:00.000Z');
 
+export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
       url: absoluteUrl('/'),
-      lastModified,
+      lastModified: LAST_MODIFIED,
       changeFrequency: 'weekly',
       priority: 1,
     },
     {
       url: absoluteUrl('/brand-story'),
-      lastModified,
+      lastModified: LAST_MODIFIED,
       changeFrequency: 'weekly',
       priority: 0.8,
     },
     {
       url: absoluteUrl('/privacy'),
-      lastModified,
+      lastModified: LAST_MODIFIED,
       changeFrequency: 'yearly',
       priority: 0.4,
     },
     {
       url: absoluteUrl('/terms'),
-      lastModified,
+      lastModified: LAST_MODIFIED,
       changeFrequency: 'yearly',
       priority: 0.4,
     },

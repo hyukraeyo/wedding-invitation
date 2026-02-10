@@ -17,10 +17,34 @@ export const metadata: Metadata = {
     },
 };
 
+const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+        {
+            '@type': 'ListItem',
+            position: 1,
+            name: '홈',
+            item: absoluteUrl('/'),
+        },
+        {
+            '@type': 'ListItem',
+            position: 2,
+            name: '개인정보 처리방침',
+            item: absoluteUrl('/privacy'),
+        },
+    ],
+};
+
 export default function PrivacyPage() {
     return (
-        <div className={styles.container}>
-            <h1 className={styles.title}>개인정보 처리방침</h1>
+        <>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+            />
+            <div className={styles.container}>
+                <h1 className={styles.title}>개인정보 처리방침</h1>
 
             <p className={styles.lead}>
                 &apos;바나나웨딩&apos;(이하 &apos;서비스&apos;)은 정보주체의 자유와 권리 보호를 위해 「개인정보 보호법」 및 관계 법령이 정한 바를 준수하며,
@@ -77,8 +101,9 @@ export default function PrivacyPage() {
                 <p className={styles.emailNote}>이메일: cs@bananawedding.com</p>
             </div>
 
-            <hr className={styles.divider} />
-            <p className={styles.footerNote}>시행일자: 2024년 1월 1일</p>
-        </div>
+                <hr className={styles.divider} />
+                <p className={styles.footerNote}>시행일자: 2024년 1월 1일</p>
+            </div>
+        </>
     );
 }
