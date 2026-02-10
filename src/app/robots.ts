@@ -1,18 +1,25 @@
 import type { MetadataRoute } from 'next';
+import { SITE_URL } from '@/lib/site';
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_BASE_URL || 'https://wedding-invitation-zeta-one.vercel.app';
-
   return {
     rules: [
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/api/', '/builder/', '/mypage/', '/private/', '/v/'],
+        disallow: [
+          '/api',
+          '/builder',
+          '/mypage',
+          '/private',
+          '/v',
+          '/preview',
+          '/design',
+          '/cal-ui-test',
+        ],
       },
     ],
-    host: baseUrl,
-    sitemap: `${baseUrl}/sitemap.xml`,
+    host: SITE_URL,
+    sitemap: `${SITE_URL}/sitemap.xml`,
   };
 }

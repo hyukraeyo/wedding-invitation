@@ -46,11 +46,38 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const isLoading = isLoadingProp || loading;
     const fluid = fluidProp || fullWidth;
+    const isDisabled = disabled || isLoading;
+
+    if (asChild) {
+      return (
+        <Comp
+          ref={ref}
+          className={clsx(
+            !unstyled && s.button,
+            !unstyled && s[variant],
+            !unstyled && s[size],
+            fluid && s.fluid,
+            unstyled && s.unstyled,
+            radius === 'full' && s.radius_full,
+            radius === 'none' && s.radius_none,
+            radius === 'sm' && s.radius_sm,
+            radius === 'md' && s.radius_md,
+            radius === 'lg' && s.radius_lg,
+            className
+          )}
+          aria-disabled={isDisabled || undefined}
+          data-disabled={isDisabled ? '' : undefined}
+          {...props}
+        >
+          {children}
+        </Comp>
+      );
+    }
 
     return (
       <Comp
         ref={ref}
-        disabled={disabled || isLoading}
+        disabled={isDisabled}
         className={clsx(
           !unstyled && s.button,
           !unstyled && s[variant],

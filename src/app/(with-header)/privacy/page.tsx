@@ -1,4 +1,21 @@
+import type { Metadata } from 'next';
+import { SITE_NAME, absoluteUrl } from '@/lib/site';
 import styles from './page.module.scss';
+
+export const metadata: Metadata = {
+    title: `개인정보 처리방침 | ${SITE_NAME}`,
+    description: `${SITE_NAME} 개인정보 처리방침 안내 페이지입니다.`,
+    alternates: {
+        canonical: '/privacy',
+    },
+    openGraph: {
+        title: `개인정보 처리방침 | ${SITE_NAME}`,
+        description: `${SITE_NAME} 개인정보 처리방침 안내 페이지입니다.`,
+        url: absoluteUrl('/privacy'),
+        type: 'article',
+        locale: 'ko_KR',
+    },
+};
 
 export default function PrivacyPage() {
     return (

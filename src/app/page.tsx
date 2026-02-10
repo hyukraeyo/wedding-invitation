@@ -1,11 +1,10 @@
 import type { Metadata } from 'next';
 import { HomeClient } from './(with-header)/HomeClient';
+import { SITE_NAME, SITE_NAME_EN, SITE_URL, absoluteUrl } from '@/lib/site';
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL || 'https://wedding-invitation-zeta-one.vercel.app';
-const HOME_TITLE = '바나나웨딩 | 나만의 모바일 청첩장';
+const HOME_TITLE = `${SITE_NAME} | 나만의 모바일 청첩장`;
 const HOME_DESCRIPTION =
-  '유통기한 없는 우리만의 달콤한 이야기, 바나나웨딩에서 3분 만에 모바일 청첩장을 제작하고 공유하세요.';
+  `유통기한 없는 우리만의 달콤한 이야기, ${SITE_NAME}에서 3분 만에 모바일 청첩장을 제작하고 공유하세요.`;
 const OG_IMAGE_PATH = '/assets/icons/logo-banana-heart.png';
 
 const webPageJsonLd = {
@@ -17,7 +16,7 @@ const webPageJsonLd = {
   inLanguage: 'ko-KR',
   isPartOf: {
     '@type': 'WebSite',
-    name: '바나나웨딩',
+    name: SITE_NAME,
     url: SITE_URL,
   },
   about: ['모바일 청첩장', '결혼식 초대장', '웨딩 웹 초대장'],
@@ -58,13 +57,13 @@ export const metadata: Metadata = {
     '바나나웨딩',
   ],
   alternates: {
-    canonical: SITE_URL,
+    canonical: '/',
   },
   openGraph: {
     title: HOME_TITLE,
     description: HOME_DESCRIPTION,
-    url: SITE_URL,
-    siteName: '바나나웨딩(Banana Wedding)',
+    url: absoluteUrl('/'),
+    siteName: `${SITE_NAME}(${SITE_NAME_EN})`,
     type: 'website',
     locale: 'ko_KR',
     images: [

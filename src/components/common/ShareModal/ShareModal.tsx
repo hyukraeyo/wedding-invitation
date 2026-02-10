@@ -20,7 +20,7 @@ interface ShareModalProps {
     slug: string;
 }
 
-export const ShareModal: React.FC<ShareModalProps> = ({
+export function ShareModal({
     open,
     onOpenChange,
     invitationUrl,
@@ -28,7 +28,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({
     invitationDescription,
     invitationImageUrl,
     slug,
-}) => {
+}: ShareModalProps) {
     const { toast } = useToast();
     const [copied, setCopied] = useState(false);
 
@@ -76,15 +76,10 @@ export const ShareModal: React.FC<ShareModalProps> = ({
                             invitationImageUrl={invitationImageUrl || ''}
                             slug={slug}
                             onSuccess={() => onOpenChange(false)}
+                            className={styles.shareButton}
+                            aria-label="카카오톡 공유"
                         >
-                            <IconButton
-                                className={styles.shareButton}
-                                aria-label="카카오톡 공유"
-                                variant="ghost"
-                                name=""
-                            >
-                                <Share2 size={20} />
-                            </IconButton>
+                            <Share2 size={20} />
                         </KakaoShareButton>
                         <span className={styles.shareLabel}>카카오톡</span>
                     </div>
@@ -102,4 +97,4 @@ export const ShareModal: React.FC<ShareModalProps> = ({
 
         </Dialog>
     );
-};
+}

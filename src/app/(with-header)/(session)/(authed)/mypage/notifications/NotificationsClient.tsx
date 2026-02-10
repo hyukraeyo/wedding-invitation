@@ -11,6 +11,7 @@ import { clsx } from 'clsx';
 import { format } from 'date-fns';
 import { ko } from 'date-fns/locale';
 import { EmptyState } from '@/components/common/EmptyState';
+import { NotificationToggleButton } from '@/components/common/NotificationToggleButton';
 
 interface ProfileData {
     full_name: string | null;
@@ -101,32 +102,39 @@ export default function NotificationsClient({ userId, notifications }: Notificat
                                         notif.isRejected && styles.rejectedItem,
                                         notif.isRevoked && styles.revokedItem
                                     )}
-                                    onClick={() => handleToggle(notif.id)}
                                 >
-                                    <div className={styles.itemHeader}>
-                                        <div className={clsx(
-                                            styles.iconWrapper,
-                                            notif.isApproved && styles.iconApproved,
-                                            notif.isRejected && styles.iconRejected,
-                                            notif.isRevoked && styles.iconRevoked
-                                        )}>
-                                            <StatusIcon size={20} />
-                                        </div>
-                                        <div className={styles.itemInfo}>
-                                            <div className={styles.itemTitle}>
-                                                <strong>{notif.badge}</strong> 소식이 도착했어요.
+                                    <NotificationToggleButton
+                                        className={styles.itemButton}
+                                        onClick={() => handleToggle(notif.id)}
+                                        aria-expanded={isExpanded}
+                                        aria-controls={`notification-body-${notif.id}`}
+                                        aria-label={`${notif.badge} 알림 상세 보기`}
+                                    >
+                                        <div className={styles.itemHeader}>
+                                            <div className={clsx(
+                                                styles.iconWrapper,
+                                                notif.isApproved && styles.iconApproved,
+                                                notif.isRejected && styles.iconRejected,
+                                                notif.isRevoked && styles.iconRevoked
+                                            )}>
+                                                <StatusIcon size={20} />
                                             </div>
-                                            <div className={styles.itemDate}>
-                                                {notif.formattedDate}
+                                            <div className={styles.itemInfo}>
+                                                <div className={styles.itemTitle}>
+                                                    <strong>{notif.badge}</strong> 소식이 도착했어요.
+                                                </div>
+                                                <div className={styles.itemDate}>
+                                                    {notif.formattedDate}
+                                                </div>
+                                            </div>
+                                            <div className={clsx(styles.chevronWrapper, isExpanded && styles.expandedChevron)}>
+                                                <ChevronRight size={18} />
                                             </div>
                                         </div>
-                                        <div className={clsx(styles.chevronWrapper, isExpanded && styles.expandedChevron)}>
-                                            <ChevronRight size={18} />
-                                        </div>
-                                    </div>
+                                    </NotificationToggleButton>
 
                                     {isExpanded && (
-                                        <div className={styles.itemBody}>
+                                        <div id={`notification-body-${notif.id}`} className={styles.itemBody}>
                                             <div className={styles.invitationInfo}>
                                                 <Mail size={14} className={styles.invitationIcon} />
                                                 청첩장: <strong>{notif.invitation_slug}</strong>

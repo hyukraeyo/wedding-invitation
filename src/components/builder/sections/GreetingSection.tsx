@@ -1,10 +1,8 @@
 import React from 'react';
 import { useShallow } from 'zustand/react/shallow';
 
-import { isRequiredField } from '@/constants/requiredFields';
 import { GREETING_SAMPLES } from '@/constants/samples';
 import { htmlToPlainText } from '@/lib/richText';
-import { isBlank } from '@/lib/utils';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useBuilderSection, useBuilderField } from '@/hooks/useBuilder';
 import type { SectionProps, SamplePhraseItem } from '@/types/builder';
@@ -87,7 +85,6 @@ const GreetingSection = React.memo<SectionProps>(function GreetingSection(props)
   const {
     value: messageValue,
     onValueChange: handleMessageChange,
-    isInvalid: isMessageInvalid,
   } = useBuilderField({
     value: message,
     onChange: setMessage,
@@ -96,8 +93,6 @@ const GreetingSection = React.memo<SectionProps>(function GreetingSection(props)
 
   // useMemo removed - simplified with inline props in SectionHeadingFields
   const plainMessageValue = React.useMemo(() => htmlToPlainText(messageValue), [messageValue]);
-  const isSubtitleBlank = isBlank(subtitleValue);
-  const isMessageBlank = isBlank(plainMessageValue);
   const isComplete = Boolean(subtitleValue.trim() && titleValue.trim() && plainMessageValue);
   const { isInvalid: isSectionInvalid } = useBuilderSection(props.value, isComplete);
 
@@ -138,11 +133,13 @@ const GreetingSection = React.memo<SectionProps>(function GreetingSection(props)
         prefix="greeting"
         subtitle={{
           value: subtitleValue,
-          onValueChange: setGreetingSubtitle,
+          onChange: handleSubtitleChange,
+          invalid: isSubtitleInvalid,
         }}
         title={{
           value: titleValue,
-          onValueChange: setGreetingTitle,
+          onChange: handleTitleChange,
+          invalid: isTitleInvalid,
         }}
         contentField={{
           control: <RichTextEditor content={messageValue} onChange={handleMessageChange} />,

@@ -1,9 +1,20 @@
 import type { Metadata } from 'next';
+import { SITE_NAME, absoluteUrl } from '@/lib/site';
 import styles from './page.module.scss';
 
 export const metadata: Metadata = {
-  title: '이용약관',
-  description: '바나나웨딩 서비스 이용약관 안내 페이지입니다.',
+  title: `이용약관 | ${SITE_NAME}`,
+  description: `${SITE_NAME} 서비스 이용약관 안내 페이지입니다.`,
+  alternates: {
+    canonical: '/terms',
+  },
+  openGraph: {
+    title: `이용약관 | ${SITE_NAME}`,
+    description: `${SITE_NAME} 서비스 이용약관 안내 페이지입니다.`,
+    url: absoluteUrl('/terms'),
+    type: 'article',
+    locale: 'ko_KR',
+  },
 };
 
 export default function TermsPage() {

@@ -3,6 +3,7 @@ import InvitationCanvas from '@/components/preview/InvitationCanvas';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
+import { SITE_NAME, absoluteUrl } from '@/lib/site';
 import styles from './page.module.scss';
 
 interface Props {
@@ -56,15 +57,14 @@ export async function generateMetadata({ params }: Props) {
   const groomName = `${data.groom.lastName}${data.groom.firstName}`;
   const brideName = `${data.bride.lastName}${data.bride.firstName}`;
 
-  const baseUrl =
-    process.env.NEXT_PUBLIC_BASE_URL || 'https://wedding-invitation-zeta-one.vercel.app';
+  const pageUrl = absoluteUrl(`/v/${slug}`);
   const ogTitle = data.kakaoShare?.title || `${groomName} ♥ ${brideName} 결혼식에 초대해요`;
   const ogDescription =
     data.kakaoShare?.description || data.greetingTitle || '소중한 분들을 초대해요.';
   let ogImage = data.kakaoShare?.imageUrl || data.imageUrl || '/logo.png';
 
   if (ogImage.startsWith('/')) {
-    ogImage = `${baseUrl}${ogImage}`;
+    ogImage = absoluteUrl(ogImage);
   }
 
   return {
@@ -77,13 +77,16 @@ export async function generateMetadata({ params }: Props) {
         follow: false,
       },
     },
-    title: `${groomName} ♥ ${brideName} 결혼식에 초대해요`,
+    title: `${groomName} ♥ ${brideName} 결혼식에 초대해요 | ${SITE_NAME}`,
     description: data.greetingTitle || '소중한 분들을 초대해요.',
+    alternates: {
+      canonical: pageUrl,
+    },
     openGraph: {
       title: ogTitle,
       description: ogDescription,
-      url: `${baseUrl}/v/${slug}`,
-      siteName: 'Wedding Invitation Studio',
+      url: pageUrl,
+      siteName: SITE_NAME,
       images: [
         {
           url: ogImage,

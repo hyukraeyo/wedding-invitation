@@ -82,10 +82,16 @@
   border-radius: v.$radius-full;
   border: none;
   cursor: pointer;
+  text-decoration: none;
   transition: opacity v.$transition-fast;
 
   &:hover {
     opacity: 0.9;
+  }
+
+  &:focus-visible {
+    outline: 2px solid v.$blue-500;
+    outline-offset: 2px;
   }
 }
 
@@ -171,6 +177,7 @@
     border-radius: v.$radius-full;
     border: none;
     cursor: pointer;
+    text-decoration: none;
     box-shadow: v.$shadow-lg; // Add depth
     transition: transform v.$transition-fast;
 
@@ -194,6 +201,7 @@
     border-radius: v.$radius-full;
     border: none;
     cursor: pointer;
+    text-decoration: none;
     transition: background-color v.$transition-fast;
 
     &:hover {
@@ -229,6 +237,12 @@
       background: linear-gradient(to top, rgba(v.$black, 0.2), transparent);
     }
   }
+}
+
+.serviceList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 // -----------------------------------------------------------------------------
@@ -485,6 +499,7 @@
     font-size: v.$font-size-lg;
     font-weight: 800;
     border: none;
+    text-decoration: none;
     cursor: pointer;
     margin-top: 16px;
     transition: transform v.$transition-fast;
@@ -547,6 +562,7 @@
     @include m.flex-center;
     box-shadow: v.$shadow-xl;
     cursor: pointer;
+    text-decoration: none;
     transition: transform v.$transition-fast;
 
     &:hover {

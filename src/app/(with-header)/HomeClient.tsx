@@ -2,7 +2,6 @@
 
 import { ArrowRight, CheckCircle2, Images, Share2 } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui';
 import styles from './Home.module.scss';
 
@@ -26,8 +25,6 @@ const FEATURE_ITEMS = [
 ] as const;
 
 export function HomeClient() {
-  const router = useRouter();
-
   return (
     <div className={styles.container}>
       <section className={styles.hero} aria-labelledby="home-hero-title">
@@ -43,13 +40,14 @@ export function HomeClient() {
             감각적인 디자인과 편리한 기능을 담았습니다.
           </p>
           <Button
+            asChild
             variant="hero"
             size="lg"
             radius="full"
-            aria-label="모바일 청첩장 제작 시작하기"
-            onClick={() => router.push('/setup')}
           >
-            무료로 만들기 <ArrowRight size={20} aria-hidden="true" />
+            <Link href="/setup" aria-label="모바일 청첩장 제작 시작하기">
+              무료로 만들기 <ArrowRight size={20} aria-hidden="true" />
+            </Link>
           </Button>
         </div>
 
@@ -105,11 +103,11 @@ export function HomeClient() {
         <h2 id="home-cta-title">지금 바로 우리만의 청첩장을 시작하세요</h2>
         <p>회원가입 후 바로 제작을 시작하고, 링크 하나로 하객에게 전달할 수 있습니다.</p>
         <div className={styles.buttonGroup}>
-          <Button size="lg" radius="full" onClick={() => router.push('/setup')}>
-            청첩장 만들기
+          <Button asChild size="lg" radius="full">
+            <Link href="/setup">청첩장 만들기</Link>
           </Button>
-          <Button variant="outline" size="lg" radius="full" onClick={() => router.push('/privacy')}>
-            개인정보 처리방침
+          <Button asChild variant="outline" size="lg" radius="full">
+            <Link href="/privacy">개인정보 처리방침</Link>
           </Button>
         </div>
       </section>

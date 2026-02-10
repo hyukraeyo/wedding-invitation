@@ -1,54 +1,61 @@
 'use client';
 
-import React from 'react';
-import { sendKakaoShare, normalizeImageUrl } from '@/lib/kakao-share';
+import * as React from 'react';
+import { normalizeImageUrl, sendKakaoShare } from '@/lib/kakao-share';
 
-interface KakaoShareButtonProps {
-    children: React.ReactNode;
-    invitationUrl: string;
-    invitationTitle?: string;
-    invitationDescription?: string;
-    invitationImageUrl?: string;
-    slug: string;
-    onSuccess?: () => void;
-    onError?: (error: unknown) => void;
+interface KakaoShareButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  invitationUrl: string;
+  invitationTitle?: string;
+  invitationDescription?: string;
+  invitationImageUrl?: string;
+  slug: string;
+  onSuccess?: () => void;
+  onError?: (error: unknown) => void;
 }
 
-export const KakaoShareButton: React.FC<KakaoShareButtonProps> = ({
-    children,
+export function KakaoShareButton({
+  invitationUrl,
+  invitationTitle = '',
+  invitationDescription = '',
+  invitationImageUrl = '',
+  slug,
+  onSuccess,
+  onError,
+  children,
+  type = 'button',
+  ...buttonProps
+}: KakaoShareButtonProps) {
+  const handleClick = React.useCallback(() => {
+    const origin = window.location.origin;
+    const shareTitle = (invitationTitle || '결혼식에 초대해요').trim();
+    const shareDesc = (invitationDescription || '소중한 날에 초대해요').trim();
+    const shareImageUrl = invitationImageUrl || `${origin}/logo.png`;
+
+    sendKakaoShare({
+      invitationUrl,
+      options: {
+        title: shareTitle,
+        description: shareDesc,
+        imageUrl: normalizeImageUrl(shareImageUrl, origin),
+        buttonType: 'location',
+      },
+      slug,
+      onSuccess: onSuccess || (() => undefined),
+      onError: onError || (() => undefined),
+    });
+  }, [
+    invitationDescription,
+    invitationImageUrl,
+    invitationTitle,
     invitationUrl,
-    invitationTitle = '',
-    invitationDescription = '',
-    invitationImageUrl = '',
-    slug,
-    onSuccess,
     onError,
-}) => {
-    const handleClick = () => {
-        const origin = window.location.origin;
+    onSuccess,
+    slug,
+  ]);
 
-        // Default values for robustness
-        const shareTitle = (invitationTitle || '결혼식에 초대해요').trim();
-        const shareDesc = (invitationDescription || '소중한 날에 초대해요').trim();
-        const shareImageUrl = invitationImageUrl || `${origin}/logo.png`;
-
-        sendKakaoShare({
-            invitationUrl,
-            options: {
-                title: shareTitle,
-                description: shareDesc,
-                imageUrl: normalizeImageUrl(shareImageUrl, origin),
-                buttonType: 'location',
-            },
-            slug,
-            onSuccess: onSuccess || (() => { }),
-            onError: onError || (() => { }),
-        });
-    };
-
-    return (
-        <div onClick={handleClick}>
-            {children}
-        </div>
-    );
-};
+  return (
+    <button type={type} onClick={handleClick} {...buttonProps}>
+      {children}
+    </button>
+  );
+}

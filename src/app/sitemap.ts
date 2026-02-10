@@ -1,37 +1,30 @@
 import type { MetadataRoute } from 'next';
+import { absoluteUrl } from '@/lib/site';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl =
-    process.env.NEXT_PUBLIC_BASE_URL || 'https://wedding-invitation-zeta-one.vercel.app';
   const lastModified = new Date();
 
   return [
     {
-      url: baseUrl,
+      url: absoluteUrl('/'),
       lastModified,
       changeFrequency: 'weekly',
       priority: 1,
     },
     {
-      url: `${baseUrl}/setup`,
+      url: absoluteUrl('/brand-story'),
       lastModified,
       changeFrequency: 'weekly',
-      priority: 0.9,
+      priority: 0.8,
     },
     {
-      url: `${baseUrl}/brand-story`,
-      lastModified,
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/privacy`,
+      url: absoluteUrl('/privacy'),
       lastModified,
       changeFrequency: 'yearly',
       priority: 0.4,
     },
     {
-      url: `${baseUrl}/terms`,
+      url: absoluteUrl('/terms'),
       lastModified,
       changeFrequency: 'yearly',
       priority: 0.4,

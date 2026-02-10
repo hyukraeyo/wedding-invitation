@@ -1,59 +1,74 @@
-'use client';
-
-import * as React from 'react';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { SITE_NAME, SITE_NAME_EN, absoluteUrl } from '@/lib/site';
 import styles from './MainLanding.module.scss';
 import {
-  Banana,
-  Heart,
-  Sparkles,
-  Award,
-  PartyPopper,
-  Images,
-  Type,
-  ClipboardCheck,
-  Smartphone,
-  Palette,
-  Map as MapIcon,
   ArrowRight,
+  Award,
+  Banana,
+  ClipboardCheck,
+  Heart,
+  Images,
+  Map as MapIcon,
   MessageCircle,
+  Palette,
+  PartyPopper,
+  Smartphone,
+  Sparkles,
+  Type,
 } from 'lucide-react';
 
-// -----------------------------------------------------------------------------
-// Constants
-// -----------------------------------------------------------------------------
 const HERO_IMG =
   'https://lh3.googleusercontent.com/aida-public/AB6AXuDSeuogdGG71tlsk3wSWH6uT3KuSxaXiF9YMswcJ2V2roREZy-Z3MJ3ADVTDR8ZF6y6yzZ-8maS6RCCAlTW6SqwU1SCU2HGDOWRdN7sY81hWQY8L22Gol5SJFffEUary8L4iL3QJBy4L2XVrwVf-I3rjCB_tOZ4reIz2iwyOskVgrVlyAeHGiBVGjlyzd9ThbtAj8xigOR7NvMl7hByRevQNrRQM6bLl_VEsAyzI82LU0T6DpVN5FPNX3oaGFy0JCeReIxU8HYPwigu';
 const GALLERY_IMG =
   'https://lh3.googleusercontent.com/aida-public/AB6AXuA6Xv4j1T1By57Iyn4U4K6mjapz1zsIoLTSyKROc-XF1uGwHySZOXkwkE1-hHGBj-_bm6RxlLqi8AhNdC2S-TsFDjxCJgCY0YI0Mh3LMguEbfNGT9lDb3pb74D_hEhbOWZYR7MOCAoFUjPr_oeLYYIuvS2Xry33nSo7MFQvZgpGeiX_xPg6nWgIADyQSDXhsyYXYG8ZoILDTACWUc3E3CCTGblzi5Gl7SfTtagy5KF-3gTm9XsEy1iOAwwzvM80Xh9ZiafV3WGj8mri';
 
-// -----------------------------------------------------------------------------
-// Component
-// -----------------------------------------------------------------------------
+export const metadata: Metadata = {
+  title: `브랜드 스토리 | ${SITE_NAME}`,
+  description: `${SITE_NAME}의 철학과 모바일 청첩장 제작 경험을 소개합니다.`,
+  alternates: {
+    canonical: '/brand-story',
+  },
+  openGraph: {
+    title: `브랜드 스토리 | ${SITE_NAME}`,
+    description: `${SITE_NAME}의 철학과 모바일 청첩장 제작 경험을 소개합니다.`,
+    url: absoluteUrl('/brand-story'),
+    siteName: `${SITE_NAME}(${SITE_NAME_EN})`,
+    type: 'website',
+    locale: 'ko_KR',
+    images: [
+      {
+        url: '/assets/icons/logo-banana-heart.png',
+        width: 800,
+        height: 800,
+        alt: `${SITE_NAME} 브랜드 스토리`,
+      },
+    ],
+  },
+};
+
 export default function BrandStoryPage() {
   return (
     <div className={styles.page}>
-      {/* 1. Header (App Bar) */}
       <header className={styles.header}>
         <div className={styles.headerInner}>
           <Link href="/" className={styles.logo}>
-            <div className={styles.logoIcon}>
+            <div className={styles.logoIcon} aria-hidden="true">
               <Banana size={24} />
             </div>
-            <span className={styles.logoText}>바나나 웨딩</span>
+            <span className={styles.logoText}>{SITE_NAME}</span>
           </Link>
 
           <div className={styles.navActions}>
-            <Link href="/builder">
-              <button className={styles.startButton}>시작하기</button>
+            <Link href="/setup" className={styles.startButton}>
+              시작하기
             </Link>
           </div>
         </div>
       </header>
 
       <main className={styles.main}>
-        {/* 2. Hero Section */}
         <section className={styles.hero}>
           <div className={styles.heroContent}>
             <div className={styles.heroBadge}>
@@ -68,14 +83,16 @@ export default function BrandStoryPage() {
               시작을 준비하세요.
             </p>
             <div className={styles.heroActionGroup}>
-              <Link href="/builder">
-                <button className={styles.heroPrimaryBtn}>지금 만들기</button>
+              <Link href="/setup" className={styles.heroPrimaryBtn}>
+                지금 만들기
               </Link>
-              <button className={styles.heroSecondaryBtn}>샘플 보기</button>
+              <a href="#brand-story-features" className={styles.heroSecondaryBtn}>
+                기능 보기
+              </a>
             </div>
           </div>
 
-          <div className={styles.heroVisual}>
+          <div className={styles.heroVisual} aria-hidden="true">
             <div
               className={styles.heroVisualImage}
               style={{ backgroundImage: `url(${HERO_IMG})` }}
@@ -84,19 +101,17 @@ export default function BrandStoryPage() {
           </div>
         </section>
 
-        {/* 3. Social Proof */}
         <section className={styles.trust}>
           <span className={styles.trustLabel}>10,000+ 커플이 선택한 이유</span>
           <div className={styles.trustIcons}>
-            <Heart size={24} />
-            <Sparkles size={24} />
-            <Award size={24} />
-            <PartyPopper size={24} />
+            <Heart size={24} aria-hidden="true" />
+            <Sparkles size={24} aria-hidden="true" />
+            <Award size={24} aria-hidden="true" />
+            <PartyPopper size={24} aria-hidden="true" />
           </div>
         </section>
 
-        {/* 4. Features (Bento Grid) */}
-        <section className={styles.features}>
+        <section id="brand-story-features" className={styles.features}>
           <div className={styles.featuresHeader}>
             <h2 className={styles.featuresTitle}>고급스러운 디테일</h2>
             <p className={styles.featuresSubtitle}>
@@ -105,7 +120,6 @@ export default function BrandStoryPage() {
           </div>
 
           <div className={styles.featuresGrid}>
-            {/* Big Card */}
             <div className={styles.bentoCardLarge}>
               <div
                 className={styles.bentoCardImage}
@@ -113,19 +127,17 @@ export default function BrandStoryPage() {
               />
               <div className={styles.bentoCardContent}>
                 <div className={styles.bentoCardHeader}>
-                  <Images size={24} />
+                  <Images size={24} aria-hidden="true" />
                   <h3 className={styles.bentoCardTitle}>고해상도 갤러리</h3>
                 </div>
                 <p className={styles.bentoCardDesc}>원본 그대로의 감동을 전달하는 선명한 화질</p>
               </div>
             </div>
 
-            {/* Small Cards Row */}
             <div className={styles.rowGrid}>
-              {/* Card 1 */}
               <div className={styles.bentoCard}>
                 <div className={cn(styles.bentoCardIconBox, styles.yellow)}>
-                  <Type size={24} />
+                  <Type size={24} aria-hidden="true" />
                 </div>
                 <div>
                   <h3 className={styles.bentoCardTitle}>감성 폰트</h3>
@@ -133,10 +145,9 @@ export default function BrandStoryPage() {
                 </div>
               </div>
 
-              {/* Card 2 */}
               <div className={styles.bentoCard}>
                 <div className={cn(styles.bentoCardIconBox, styles.blue)}>
-                  <ClipboardCheck size={24} />
+                  <ClipboardCheck size={24} aria-hidden="true" />
                 </div>
                 <div>
                   <h3 className={styles.bentoCardTitle}>실시간 RSVP</h3>
@@ -147,13 +158,12 @@ export default function BrandStoryPage() {
           </div>
         </section>
 
-        {/* 5. Service List */}
         <section className={styles.services}>
           <h2 className={styles.servicesTitle}>모든 것을 하나로</h2>
-          <div className="flex flex-col gap-3">
+          <div className={styles.serviceList}>
             <div className={styles.serviceItem}>
               <div className={cn(styles.serviceItemIcon, styles.blue)}>
-                <Smartphone size={24} />
+                <Smartphone size={24} aria-hidden="true" />
               </div>
               <div className={styles.serviceItemContent}>
                 <h3 className={styles.serviceItemName}>모바일 최적화</h3>
@@ -163,7 +173,7 @@ export default function BrandStoryPage() {
 
             <div className={styles.serviceItem}>
               <div className={cn(styles.serviceItemIcon, styles.yellow)}>
-                <Palette size={24} />
+                <Palette size={24} aria-hidden="true" />
               </div>
               <div className={styles.serviceItemContent}>
                 <h3 className={styles.serviceItemName}>커스텀 디자인</h3>
@@ -173,7 +183,7 @@ export default function BrandStoryPage() {
 
             <div className={styles.serviceItem}>
               <div className={cn(styles.serviceItemIcon, styles.blue)}>
-                <MapIcon size={24} />
+                <MapIcon size={24} aria-hidden="true" />
               </div>
               <div className={styles.serviceItemContent}>
                 <h3 className={styles.serviceItemName}>스마트 지도</h3>
@@ -183,7 +193,6 @@ export default function BrandStoryPage() {
           </div>
         </section>
 
-        {/* 6. CTA Footer */}
         <section className={styles.ctaSection}>
           <h2 className={styles.ctaSectionTitle}>
             당신의 소중한 순간,
@@ -195,28 +204,26 @@ export default function BrandStoryPage() {
             <br />
             지금 바로 무료로 시작해보세요.
           </p>
-          <button className={styles.ctaSectionButton}>
+          <Link href="/setup" className={styles.ctaSectionButton}>
             무료로 시작하기
-            <ArrowRight size={20} />
-          </button>
+            <ArrowRight size={20} aria-hidden="true" />
+          </Link>
         </section>
 
-        {/* 7. Footer */}
         <footer className={styles.mainFooter}>
           <div className={styles.footerLinks}>
             <Link href="/terms">이용약관</Link>
             <Link href="/privacy">개인정보처리방침</Link>
-            <Link href="mailto:cs@bananawedding.com">문의하기</Link>
+            <a href="mailto:cs@bananawedding.com">문의하기</a>
           </div>
-          <p className={styles.footerCopy}>© 2024 Banana Wedding. All rights reserved.</p>
+          <p className={styles.footerCopy}>© 2026 Banana Wedding. All rights reserved.</p>
         </footer>
       </main>
 
-      {/* FAB */}
       <div className={styles.fab}>
-        <button className={styles.fabButton}>
-          <MessageCircle size={24} />
-        </button>
+        <a href="mailto:cs@bananawedding.com" className={styles.fabButton} aria-label="문의하기">
+          <MessageCircle size={24} aria-hidden="true" />
+        </a>
       </div>
     </div>
   );

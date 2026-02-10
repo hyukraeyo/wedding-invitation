@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { CloudUpload } from 'lucide-react';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
+import { IconButton } from '@/components/ui/IconButton';
 import { cn } from '@/lib/utils';
 import s from './PhotoRatioInput.module.scss';
 
@@ -38,11 +39,17 @@ export const PhotoRatioInput = React.forwardRef<HTMLDivElement, PhotoRatioInputP
 
     return (
       <div ref={ref} className={cn(s.container, className)} {...props}>
-        <div className={s.uploader} onClick={handleClick}>
+        <IconButton
+          variant="unstyled"
+          className={s.uploader}
+          onClick={handleClick}
+          aria-label={image ? '업로드된 사진 변경하기' : '사진 업로드하기'}
+          name=""
+        >
           {image ? (
             <div className={s.preview}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={image} alt="Uploaded" />
+              <img src={image} alt="업로드된 사진 미리보기" />
             </div>
           ) : (
             <>
@@ -53,14 +60,14 @@ export const PhotoRatioInput = React.forwardRef<HTMLDivElement, PhotoRatioInputP
               <div className={s.uploadSubtext}>{helperText}</div>
             </>
           )}
-          <input
-            type="file"
-            ref={inputRef}
-            onChange={onUpload}
-            accept="image/*"
-            style={{ display: 'none' }}
-          />
-        </div>
+        </IconButton>
+        <input
+          type="file"
+          ref={inputRef}
+          onChange={onUpload}
+          accept="image/*"
+          className={s.fileInput}
+        />
         <SegmentedControl value={ratio} onChange={onRatioChange} alignment="fluid">
           <SegmentedControl.Item value="fixed">고정 (기본)</SegmentedControl.Item>
           <SegmentedControl.Item value="original">원본 비율</SegmentedControl.Item>

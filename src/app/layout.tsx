@@ -5,34 +5,30 @@ import ClientProviders from './ClientProviders';
 import { fontVariables } from '@/lib/fonts';
 import { SkipLink } from '@/hooks/useAccessibility';
 import { PALETTE } from '@/constants/palette';
+import { SITE_DESCRIPTION, SITE_NAME, SITE_NAME_EN, SITE_URL } from '@/lib/site';
 import './globals.scss';
 import '../styles/_accessibility.scss';
 import styles from './layout.module.scss';
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL || 'https://wedding-invitation-zeta-one.vercel.app';
 const GOOGLE_SITE_VERIFICATION = process.env.GOOGLE_SITE_VERIFICATION;
 const NAVER_SITE_VERIFICATION = process.env.NAVER_SITE_VERIFICATION;
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  // 🍌 Safari에서 인풋 포커스 시 줌 현상을 강제로 막기 위해 1로 설정 (접근성 고려 시 주의 필요)
-  maximumScale: 1,
-  userScalable: false,
   themeColor: PALETTE.PRIMARY_50,
-  // 🍌 최신 모바일 브라우저 기법: 키보드가 올라올 때 뷰포트 높이를 조절하여 UI가 가려지거나 확대되는 현상 방지
   interactiveWidget: 'resizes-content',
   viewportFit: 'cover',
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  applicationName: SITE_NAME,
   title: {
-    default: '쉽고 빠른 모바일 청첩장 | 바나나웨딩',
-    template: '%s | 바나나웨딩',
+    default: `쉽고 빠른 모바일 청첩장 | ${SITE_NAME}`,
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    '복잡한 과정 없이 바로 시작하는 모바일 청첩장 제작, 바나나웨딩에서 지금 만들어보세요.',
+  description: SITE_DESCRIPTION,
   keywords: [
     '모바일 청첩장',
     '결혼식 초대장',
@@ -47,13 +43,13 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'Hyuk Rae Yoon' }],
   creator: 'Hyuk Rae Yoon',
-  publisher: '바나나웨딩(Banana Wedding)',
+  publisher: `${SITE_NAME}(${SITE_NAME_EN})`,
+  category: 'wedding',
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: '/',
   },
@@ -66,10 +62,10 @@ export const metadata: Metadata = {
       : undefined,
   },
   openGraph: {
-    title: '바나나웨딩 - 쉽고 빠른 모바일 청첩장',
+    title: `${SITE_NAME} - 쉽고 빠른 모바일 청첩장`,
     description: '복잡한 과정 없이 나만의 모바일 청첩장을 쉽게 만들고 공유하세요.',
     url: SITE_URL,
-    siteName: '바나나웨딩(Banana Wedding)',
+    siteName: `${SITE_NAME}(${SITE_NAME_EN})`,
     type: 'website',
     locale: 'ko_KR',
     images: [
@@ -83,7 +79,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: '바나나웨딩 - 모바일 청첩장',
+    title: `${SITE_NAME} - 모바일 청첩장`,
     description: '쉽고 간편하게 모바일 청첩장을 제작해 보세요.',
     images: ['/logo.png'],
     creator: '@hyukraeyo',
@@ -134,10 +130,10 @@ export default async function RootLayout({
               {
                 '@context': 'https://schema.org',
                 '@type': 'WebSite',
-                name: '바나나웨딩',
-                alternateName: 'Banana Wedding',
+                name: SITE_NAME,
+                alternateName: SITE_NAME_EN,
                 url: SITE_URL,
-                description: '쉽고 빠르게 모바일 청첩장을 만들 수 있는 서비스예요.',
+                description: SITE_DESCRIPTION,
                 inLanguage: 'ko-KR',
                 publisher: {
                   '@type': 'Person',
@@ -146,7 +142,7 @@ export default async function RootLayout({
                 },
                 potentialAction: {
                   '@type': 'CreateAction',
-                  target: `${SITE_URL}/builder`,
+                  target: `${SITE_URL}/setup`,
                   description: '나만의 모바일 청첩장을 제작해요.',
                 },
               },
