@@ -44,7 +44,55 @@ export default function MainScreenSectionContent() {
     }))
   );
 
-  const updateMain = (data: Partial<typeof mainScreen>) => setMainScreen(data);
+  const updateMain = React.useCallback(
+    (data: Partial<typeof mainScreen>) => {
+      setMainScreen(data);
+    },
+    [setMainScreen]
+  );
+
+  const groomFallbackName =
+    groom.lastName || groom.firstName ? `${groom.lastName}${groom.firstName}` : '신랑';
+  const brideFallbackName =
+    bride.lastName || bride.firstName ? `${bride.lastName}${bride.firstName}` : '신부';
+  const andFallbackText = '그리고';
+
+  const [isNameCustomized, setIsNameCustomized] = React.useState(() => ({
+    groomName: Boolean(mainScreen.groomName && mainScreen.groomName !== groomFallbackName),
+    andText: Boolean(mainScreen.andText && mainScreen.andText !== andFallbackText),
+    brideName: Boolean(mainScreen.brideName && mainScreen.brideName !== brideFallbackName),
+  }));
+
+  React.useEffect(() => {
+    const nextMainScreen: Partial<typeof mainScreen> = {};
+
+    if (!isNameCustomized.groomName && mainScreen.groomName !== groomFallbackName) {
+      nextMainScreen.groomName = groomFallbackName;
+    }
+
+    if (!isNameCustomized.andText && mainScreen.andText !== andFallbackText) {
+      nextMainScreen.andText = andFallbackText;
+    }
+
+    if (!isNameCustomized.brideName && mainScreen.brideName !== brideFallbackName) {
+      nextMainScreen.brideName = brideFallbackName;
+    }
+
+    if (Object.keys(nextMainScreen).length > 0) {
+      updateMain(nextMainScreen);
+    }
+  }, [
+    andFallbackText,
+    brideFallbackName,
+    groomFallbackName,
+    isNameCustomized.andText,
+    isNameCustomized.brideName,
+    isNameCustomized.groomName,
+    mainScreen.andText,
+    mainScreen.brideName,
+    mainScreen.groomName,
+    updateMain,
+  ]);
 
   const styleOptions = React.useMemo<StyleOption[]>(
     () =>
@@ -78,39 +126,34 @@ export default function MainScreenSectionContent() {
               <FormControl asChild>
                 <TextField
                   id="main-groom-name"
-                  placeholder={
-                    groom.lastName || groom.firstName
-                      ? `${groom.lastName}${groom.firstName}`
-                      : '신랑'
-                  }
+                  placeholder={groomFallbackName}
                   value={mainScreen.groomName}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    updateMain({ groomName: e.target.value })
-                  }
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setIsNameCustomized((prev) => ({ ...prev, groomName: true }));
+                    updateMain({ groomName: e.target.value });
+                  }}
                 />
               </FormControl>
               <FormControl asChild>
                 <TextField
                   id="main-and-text"
-                  placeholder="그리고"
+                  placeholder={andFallbackText}
                   value={mainScreen.andText}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    updateMain({ andText: e.target.value })
-                  }
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setIsNameCustomized((prev) => ({ ...prev, andText: true }));
+                    updateMain({ andText: e.target.value });
+                  }}
                 />
               </FormControl>
               <FormControl asChild>
                 <TextField
                   id="main-bride-name"
-                  placeholder={
-                    bride.lastName || bride.firstName
-                      ? `${bride.lastName}${bride.firstName}`
-                      : '신부'
-                  }
+                  placeholder={brideFallbackName}
                   value={mainScreen.brideName}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    updateMain({ brideName: e.target.value })
-                  }
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setIsNameCustomized((prev) => ({ ...prev, brideName: true }));
+                    updateMain({ brideName: e.target.value });
+                  }}
                 />
               </FormControl>
             </div>

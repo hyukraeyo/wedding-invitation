@@ -65,13 +65,11 @@
     box-shadow: v.$shadow-sm; // Subtle depth
 
     &:hover:not(:focus-within) {
-      border-color: v.$grey-400;
-      background-color: v.$grey-50;
+      border-color: v.$border-hover;
     }
 
     &:focus-within {
       border-color: s.$border-active;
-      // Shadow removed as requested
       z-index: 1;
     }
   }

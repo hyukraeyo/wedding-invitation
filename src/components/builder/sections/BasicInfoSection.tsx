@@ -96,7 +96,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
         <FormControl asChild>
           <TextField
             id="groom-name"
-            placeholder="이름"
+            placeholder=""
             required={isRequiredField('groomName')}
             pattern="^[가-힣a-zA-Z\s]+$" // HTML5 유효성 검사 추가 (한글/영문/공백)
             value={groomFullName}
@@ -118,7 +118,7 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
         <FormControl asChild>
           <TextField
             id="bride-name"
-            placeholder="이름"
+            placeholder=""
             required={isRequiredField('brideName')}
             pattern="^[가-힣a-zA-Z\s]+$" // HTML5 유효성 검사 추가 (한글/영문/공백)
             value={brideFullName}
@@ -130,50 +130,58 @@ const BasicInfoSection = React.memo<SectionProps>(function BasicInfoSection(prop
 
       <FormField name="groom-parents">
         <FormHeader>
-          <FormLabel>신랑 혼주</FormLabel>
+          <FormLabel>신랑 아버지</FormLabel>
         </FormHeader>
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
-          <FormControl asChild>
-            <TextField
-              id="groom-father-name"
-              placeholder="아버지 이름"
-              value={groom.parents.father.name}
-              onChange={handleGroomFatherNameChange}
-            />
-          </FormControl>
-          <FormControl asChild>
-            <TextField
-              id="groom-mother-name"
-              placeholder="어머니 이름"
-              value={groom.parents.mother.name}
-              onChange={handleGroomMotherNameChange}
-            />
-          </FormControl>
-        </div>
+        <FormControl asChild>
+          <TextField
+            id="groom-father-name"
+            placeholder=""
+            value={groom.parents.father.name}
+            onChange={handleGroomFatherNameChange}
+          />
+        </FormControl>
+      </FormField>
+
+      <FormField name="groom-parents">
+        <FormHeader>
+          <FormLabel>신랑 어머니</FormLabel>
+        </FormHeader>
+        <FormControl asChild>
+          <TextField
+            id="groom-mother-name"
+            placeholder=""
+            value={groom.parents.mother.name}
+            onChange={handleGroomMotherNameChange}
+          />
+        </FormControl>
       </FormField>
 
       <FormField name="bride-parents">
         <FormHeader>
-          <FormLabel>신부 혼주</FormLabel>
+          <FormLabel>신부 아버지</FormLabel>
         </FormHeader>
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <FormControl asChild>
-            <TextField
-              id="bride-father-name"
-              placeholder="아버지 이름"
-              value={bride.parents.father.name}
-              onChange={handleBrideFatherNameChange}
-            />
-          </FormControl>
-          <FormControl asChild>
-            <TextField
-              id="bride-mother-name"
-              placeholder="어머니 이름"
-              value={bride.parents.mother.name}
-              onChange={handleBrideMotherNameChange}
-            />
-          </FormControl>
-        </div>
+
+        <FormControl asChild>
+          <TextField
+            id="bride-father-name"
+            placeholder=""
+            value={bride.parents.father.name}
+            onChange={handleBrideFatherNameChange}
+          />
+        </FormControl>
+      </FormField>
+      <FormField name="bride-parents">
+        <FormHeader>
+          <FormLabel>신부 어머니</FormLabel>
+        </FormHeader>
+        <FormControl asChild>
+          <TextField
+            id="bride-mother-name"
+            placeholder=""
+            value={bride.parents.mother.name}
+            onChange={handleBrideMotherNameChange}
+          />
+        </FormControl>
       </FormField>
     </EditorSection>
   );

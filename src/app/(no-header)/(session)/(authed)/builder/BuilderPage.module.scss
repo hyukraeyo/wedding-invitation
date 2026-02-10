@@ -141,13 +141,6 @@
   display: flex;
   align-items: center;
   gap: v.$builder-gap-sm;
-  padding: 6px;
-  border-radius: v.$radius-lg;
-  background-color: rgba(v.$white, 0.85);
-  border: 1px solid rgba(v.$grey-200, 0.5);
-  box-shadow: v.$shadow-lg;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
   z-index: 900;
 
   transition: all 0.2s v.$ease-ios;
@@ -378,11 +371,10 @@
     transform: translateX(-50%);
     width: 138px;
     height: 5px;
-    background-color: v.$white; // Usually white on black chin or inverse
+    background-color: v.$black; // Usually white on black chin or inverse
     border-radius: 100px;
-    z-index: 100;
+    z-index: 1000;
     pointer-events: none;
-    mix-blend-mode: difference;
   }
 }
 

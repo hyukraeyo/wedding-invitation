@@ -22,7 +22,7 @@
   touch-action: manipulation;
 
   &:hover:not(:focus-within) {
-    border-color: v.$grey-300;
+    border-color: s.$border-hover;
   }
 
   &:focus-within {
