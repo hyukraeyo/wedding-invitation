@@ -25,7 +25,7 @@ const LocationSection = React.memo<SectionProps>(function LocationSection(props)
       title={<RequiredSectionTitle title="예식 장소" isComplete={isComplete} />}
       isInvalid={isInvalid}
     >
-      <LocationSectionContent onComplete={() => props.onToggle?.(false)} />
+      <LocationSectionContent />
     </EditorSection>
   );
 });

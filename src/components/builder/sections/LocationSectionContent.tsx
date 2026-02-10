@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import { useShallow } from 'zustand/react/shallow';
 import { AddressPicker } from '@/components/common/AddressPicker';
 import { KakaoIcon, NaverIcon } from '@/components/common/Icons';
-import { BottomCTA } from '@/components/common/BottomCTA';
+
 import { FormControl, FormField, FormHeader, FormLabel, FormMessage } from '@/components/ui/Form';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { SwitchRow } from '@/components/common/SwitchRow';
@@ -18,11 +18,7 @@ import styles from './LocationSection.module.scss';
 
 const KakaoSdkLoader = dynamic(() => import('./KakaoSdkLoader'), { ssr: false });
 
-interface LocationSectionContentProps {
-  onComplete?: () => void;
-}
-
-export default function LocationSectionContent({ onComplete }: LocationSectionContentProps) {
+export default function LocationSectionContent() {
   const {
     location,
     setLocation,
@@ -310,12 +306,6 @@ export default function LocationSectionContent({ onComplete }: LocationSectionCo
             <SegmentedControl.Item value="18">18</SegmentedControl.Item>
             <SegmentedControl.Item value="19">19</SegmentedControl.Item>
           </SegmentedControl>
-        </div>
-
-        <div style={{ marginTop: '12px' }}>
-          <BottomCTA.Single fixed={false} onClick={onComplete}>
-            확인
-          </BottomCTA.Single>
         </div>
       </div>
     </>

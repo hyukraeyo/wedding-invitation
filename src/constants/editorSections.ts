@@ -22,7 +22,7 @@ export const EDITOR_SECTION_META = {
   date: { sectionValue: 'date-time', label: '예식 일시', navLabel: '일시' },
   location: { sectionValue: 'location', label: '예식 장소', navLabel: '오시는길' },
   account: { sectionValue: 'accounts', label: '계좌 정보', navLabel: '계좌' },
-  closing: { sectionValue: 'closing', label: '마무리', navLabel: '안내사항' },
+  closing: { sectionValue: 'closing', label: '마무리', navLabel: '마무리' },
   kakao: { sectionValue: 'kakao-share', label: '카카오 공유', navLabel: '공유' },
 } as const satisfies Record<
   EditorSectionKey,
@@ -39,13 +39,14 @@ export const EDITOR_SECTION_LABEL: Record<EditorSectionKey, string> = EDITOR_SEC
   {} as Record<EditorSectionKey, string>
 );
 
-export const EDITOR_SECTION_NAV_LABEL: Record<EditorSectionKey, string> = EDITOR_SECTION_KEYS.reduce(
-  (acc, key) => {
-    acc[key] = EDITOR_SECTION_META[key].navLabel;
-    return acc;
-  },
-  {} as Record<EditorSectionKey, string>
-);
+export const EDITOR_SECTION_NAV_LABEL: Record<EditorSectionKey, string> =
+  EDITOR_SECTION_KEYS.reduce(
+    (acc, key) => {
+      acc[key] = EDITOR_SECTION_META[key].navLabel;
+      return acc;
+    },
+    {} as Record<EditorSectionKey, string>
+  );
 
 export const EDITOR_KEY_TO_SECTION_VALUE: Record<EditorSectionKey, BuilderSectionValue> =
   EDITOR_SECTION_KEYS.reduce(

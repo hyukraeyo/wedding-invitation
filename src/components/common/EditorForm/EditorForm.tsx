@@ -6,13 +6,13 @@ import {
   Calendar,
   CreditCard,
   Images,
-  Info,
   Layout,
   MapPin,
   MessageCircle,
   Palette,
   Share2,
   User,
+  Heart,
   type LucideIcon,
 } from 'lucide-react';
 import { clsx } from 'clsx';
@@ -77,7 +77,7 @@ const SECTION_ICONS: Record<EditorSectionKey, LucideIcon> = {
   date: Calendar,
   location: MapPin,
   account: CreditCard,
-  closing: Info,
+  closing: Heart,
   kakao: Share2,
 };
 
