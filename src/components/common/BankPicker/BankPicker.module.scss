@@ -1,0 +1,46 @@
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
+
+.modalBody {
+  @include m.wheel-picker-modal-body;
+}
+
+.pickerGrid {
+  @include m.wheel-picker-grid(24px 0);
+
+  .mask {
+    @include m.wheel-picker-mask;
+  }
+
+  .highlightLine {
+    @include m.wheel-picker-highlight;
+  }
+}
+
+.column {
+  @include m.wheel-picker-column;
+}
+
+.swiperContainer {
+  @include m.wheel-picker-swiper-container;
+}
+
+.swiperSlide {
+  @include m.wheel-picker-swiper-slide;
+}
+
+.optionItem {
+  @include m.wheel-picker-option-item;
+
+  &.active {
+    @include m.wheel-picker-option-active;
+  }
+
+  &:active {
+    opacity: 0.6;
+  }
+}
+
+.footer {
+  @include m.wheel-picker-footer;
+}

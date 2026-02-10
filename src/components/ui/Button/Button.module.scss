@@ -157,6 +157,19 @@
   }
 }
 
+// 5. Dashed / Add Variant
+.dashed {
+  background-color: transparent;
+  border: 1px dashed v.$grey-300;
+  color: v.$grey-500;
+
+  &:hover:not(:disabled) {
+    border-color: v.$primary;
+    color: v.$primary;
+    background-color: v.$primary-50;
+  }
+}
+
 .unstyled {
   border: none;
   background: transparent;

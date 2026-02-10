@@ -73,6 +73,28 @@ export const GREETING_SAMPLES: SamplePhraseItem[] = [
 ];
 
 /**
+ * 축의금 계좌 섹션 샘플 문구
+ */
+export const ACCOUNT_SAMPLES: SamplePhraseItem[] = [
+  {
+    subtitle: 'GIFT',
+    title: '마음 전하실 곳',
+    content:
+      '참석이 어려우신 분들을 위해<br>계좌번호를 안내해 드립니다.<br>너른 양해 부탁드립니다.',
+  },
+  {
+    subtitle: 'FOR YOUR HEART',
+    title: '축하의 마음',
+    content: '축하의 마음을 담아 축의금을 전달하고자 하시는 분들을 위해 계좌번호를 안내해 드려요.',
+  },
+  {
+    subtitle: 'ACCOUNT',
+    title: '계좌번호 안내',
+    content: '축하해 주시는 마음 감사히 간직하겠습니다.',
+  },
+];
+
+/**
  * 마무리 섹션 샘플 문구
  */
 export const CLOSING_SAMPLES: SamplePhraseItem[] = [

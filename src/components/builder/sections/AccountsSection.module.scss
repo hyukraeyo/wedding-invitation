@@ -1,0 +1,8 @@
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
+
+.accountList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}

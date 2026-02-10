@@ -70,8 +70,8 @@
     }
 
     &:focus-within {
-      border-color: v.$primary;
-      box-shadow: 0 0 0 3px rgba(v.$primary, 0.2); // Focus ring
+      border-color: s.$border-active;
+      // Shadow removed as requested
       z-index: 1;
     }
   }
@@ -104,8 +104,8 @@
 
     &:focus-within {
       background-color: v.$white;
-      border-color: v.$primary;
-      box-shadow: 0 0 0 3px rgba(v.$primary, 0.15);
+      border-color: s.$border-active;
+      // Shadow removed
     }
   }
 
@@ -119,8 +119,8 @@
 
     &:focus-within {
       background-color: v.$white;
-      border-color: v.$primary;
-      box-shadow: v.$shadow-sm;
+      border-color: s.$border-active;
+      // Shadow removed
     }
   }
 
@@ -135,7 +135,7 @@
     padding-left: 0; // Align left
 
     &:focus-within {
-      border-bottom-color: v.$primary;
+      border-bottom-color: s.$border-active;
     }
 
     &.invalid {

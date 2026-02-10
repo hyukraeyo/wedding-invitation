@@ -305,7 +305,7 @@ const EditorForm = React.memo(function EditorForm({ formId, onSubmit }: EditorFo
                 aria-label={`${label} 섹션으로 이동`}
                 aria-current={isActive ? 'page' : undefined}
               >
-                <Icon className={styles.navIcon} strokeWidth={isActive ? 2.5 : 2} />
+                <Icon className={styles.navIcon} strokeWidth={2} />
                 <span className={styles.navLabel}>{label}</span>
               </IconButton>
             );

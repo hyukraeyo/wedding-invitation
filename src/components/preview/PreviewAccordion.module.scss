@@ -1,88 +1,176 @@
-@use "../../styles/variables" as v;
+@use '../../styles/variables' as v;
+@use '../../styles/mixins' as m;
+@use '../../styles/semantic' as s;
+
+// ─────────────────────────────────────────
+// PreviewAccordion — Premium Accordion UI
+// Uses CSS grid-template-rows for buttery
+// smooth height animations.
+// ─────────────────────────────────────────
 
 .groupContainer {
-    width: 100%;
-    border-radius: v.$radius-md;
-    margin-bottom: 1rem;
-    transition: all v.$transition-normal;
-    overflow: hidden;
+  width: 100%;
+  border-radius: v.$radius-lg;
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition:
+    box-shadow 300ms v.$ease-ios,
+    border-color 300ms v.$ease-ios,
+    background-color 200ms ease;
 
-    &.subtle {
-        background-color: v.$grey-50;
-        border: 1px solid v.$grey-100;
-        
-        .groupTitle { 
-            color: v.$grey-900; 
-            font-weight: 600;
-        }
-        
-        .icon { 
-            color: v.$grey-400; 
-        }
+  // ── Mode: subtle ──────────────────────
+  &.subtle {
+    background-color: v.$grey-50;
+    border: 1px solid v.$grey-100;
 
-        @media (hover: hover) and (pointer: fine) {
-            &:hover {
-                background-color: v.$grey-100;
-                border-color: v.$grey-200;
-            }
-        }
-
+    .groupTitle {
+      color: v.$grey-900;
     }
 
-    &.accent {
-        background-color: var(--accent-bg);
-        .groupTitle { color: var(--accent-text); }
-        .icon { color: var(--accent-text); }
+    .icon {
+      color: v.$grey-400;
     }
 
-    &.white {
-        background-color: v.$white;
-        border: 1px solid v.$grey-200;
-        // box-shadow: 0 2px 8px rgba(v.$black, 0.04);
-        
-        .groupTitle { color: v.$grey-900; }
-        .icon { color: v.$grey-400; }
+    &.expanded {
+      border-color: s.$border-active;
+      box-shadow: v.$shadow-sm;
     }
 
-    &:last-child {
-        margin-bottom: 0;
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        border-color: v.$grey-200;
+      }
+    }
+  }
+
+  // ── Mode: accent ──────────────────────
+  &.accent {
+    background-color: var(--accent-bg);
+
+    .groupTitle {
+      color: var(--accent-text);
     }
 
-    .groupHeader {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1.25rem 1.5rem;
-        cursor: pointer;
-        background: none;
-        border: none;
-        outline: none;
-        text-align: left;
-
-        .groupTitle {
-            font-size: 0.95rem;
-            font-family: inherit;
-            letter-spacing: -0.01em;
-        }
-
-        .icon {
-            transition: transform v.$transition-normal;
-        }
+    .icon {
+      color: var(--accent-text);
+      opacity: 0.7;
     }
 
-    .groupContent {
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
-        opacity: 0;
-        
-        &.open {
-            opacity: 1;
-        }
+    &.expanded .icon {
+      opacity: 1;
+    }
+  }
+
+  // ── Mode: white ───────────────────────
+  &.white {
+    background-color: v.$white;
+    border: 1px solid v.$grey-100;
+    box-shadow: v.$shadow-sm;
+
+    .groupTitle {
+      color: v.$grey-900;
     }
 
-    .innerContent {
-        padding: 0 1.25rem 1.5rem 1.25rem;
+    .icon {
+      color: v.$grey-400;
     }
+
+    &.expanded {
+      box-shadow: v.$shadow-md;
+      border-color: s.$border-active;
+    }
+  }
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// ── Header trigger ────────────────────────
+.groupHeader {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  gap: 12px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  outline: none;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  min-height: v.$control-height-md;
+  transition: opacity 150ms ease;
+
+  @include m.focus-subtle;
+
+  &:active {
+    opacity: 0.7;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      opacity: 0.85;
+    }
+  }
+}
+
+.groupTitle {
+  font-size: v.$control-font-size-md;
+  font-family: inherit;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.4;
+  flex: 1;
+}
+
+// ── Chevron rotation ──────────────────────
+.chevronWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: v.$radius-full;
+  background-color: transparent;
+  transition:
+    transform 400ms v.$ease-ios,
+    background-color 200ms ease;
+  flex-shrink: 0;
+
+  &.chevronOpen {
+    transform: rotate(-180deg);
+  }
+}
+
+.icon {
+  transition: color 200ms ease;
+}
+
+// ── Content area (CSS grid animation) ─────
+.groupContent {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 400ms v.$ease-ios;
+  overflow: hidden;
+
+  &.open {
+    grid-template-rows: 1fr;
+  }
+}
+
+// The inner wrapper must have min-height: 0;
+// for the grid row collapse to work properly.
+.innerContent {
+  min-height: 0;
+  overflow: hidden;
+  padding: 0 20px;
+  opacity: 0;
+  transition: opacity 300ms v.$ease-ios;
+
+  .open & {
+    opacity: 1;
+    padding-bottom: 20px;
+  }
 }

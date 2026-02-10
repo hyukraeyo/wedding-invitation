@@ -1,16 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Plus, Trash2, ChevronDown, Check } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 
 import { RichTextEditor } from '@/components/common/RichTextEditor';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { IconButton } from '@/components/ui/IconButton';
-import { Button as UIButton } from '@/components/ui/Button';
+import { Button } from '@/components/ui/Button';
 import { TextField } from '@/components/ui/TextField';
 import { FormControl, FormField, FormLabel } from '@/components/ui/Form';
-import { SegmentedControl } from '@/components/ui/SegmentedControl';
-import { Dialog } from '@/components/ui/Dialog';
-import { cn } from '@/lib/utils';
+import { AccountCard } from './AccountCard';
 import styles from './AccountsSection.module.scss';
 
 export default function AccountsSectionContent() {
@@ -27,8 +24,6 @@ export default function AccountsSectionContent() {
     setAccountsGroomTitle,
     accountsBrideTitle,
     setAccountsBrideTitle,
-    accountsColorMode,
-    setAccountsColorMode,
     groom,
     bride,
   } = useInvitationStore(
@@ -45,8 +40,6 @@ export default function AccountsSectionContent() {
       setAccountsGroomTitle: state.setAccountsGroomTitle,
       accountsBrideTitle: state.accountsBrideTitle,
       setAccountsBrideTitle: state.setAccountsBrideTitle,
-      accountsColorMode: state.accountsColorMode,
-      setAccountsColorMode: state.setAccountsColorMode,
       groom: state.groom,
       bride: state.bride,
     }))
@@ -73,6 +66,9 @@ export default function AccountsSectionContent() {
 
   const handleRemoveAccount = (id: string) => {
     setAccounts((prev) => prev.filter((acc) => acc.id !== id));
+    if (expandedId === id) {
+      setExpandedId(null);
+    }
   };
 
   const getHolderName = useCallback(
@@ -153,173 +149,27 @@ export default function AccountsSectionContent() {
       {/* Account List */}
       <FormField name="accounts-list">
         <FormLabel>계좌 리스트</FormLabel>
-        <div>
-          {accounts.map((acc) => (
-            <div key={acc.id} className={styles.accountItem}>
-              <div
-                className={styles.accountHeader}
-                onClick={() => setExpandedId(expandedId === acc.id ? null : acc.id)}
-              >
-                <div className={styles.accountTitle}>
-                  <span
-                    className={cn(styles.badge, acc.type === 'groom' ? styles.groom : styles.bride)}
-                  >
-                    {acc.type === 'groom' ? '신랑측' : '신부측'}
-                  </span>
-                  <span className={styles.name}>
-                    {acc.holder || '새 계좌'} ({acc.relation})
-                  </span>
-                </div>
-                <div className={styles.headerActions}>
-                  <IconButton
-                    iconSize={20}
-                    variant="ghost"
-                    className={styles.deleteButton}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleRemoveAccount(acc.id);
-                    }}
-                    name=""
-                    aria-label="삭제"
-                  >
-                    <Trash2 size={20} />
-                  </IconButton>
-                  <ChevronDown
-                    size={18}
-                    className={cn(styles.chevron, expandedId === acc.id && styles.expanded)}
-                  />
-                </div>
-              </div>
+        {accounts.length > 0 && (
+          <div className={styles.accountList}>
+            {accounts.map((acc) => (
+              <AccountCard
+                key={acc.id}
+                account={acc}
+                isExpanded={expandedId === acc.id}
+                onToggle={() => setExpandedId(expandedId === acc.id ? null : acc.id)}
+                onUpdate={(id, data) => handleUpdateAccount(id, data)}
+                onRemove={(id) => handleRemoveAccount(id)}
+                onRelationChange={(id, rel, type) => handleRelationChange(id, rel, type)}
+                getHolderName={(rel, type) => getHolderName(rel, type)}
+              />
+            ))}
+          </div>
+        )}
 
-              {expandedId === acc.id ? (
-                <div className={styles.accountBody}>
-                  <div className={styles.fieldRow}>
-                    <div className={styles.flex3}>
-                      <SegmentedControl
-                        value={acc.type}
-                        onChange={(val: string) => {
-                          const newType = val as 'groom' | 'bride';
-                          const newHolder = getHolderName(acc.relation, newType);
-                          const updates: Record<string, string> = { type: newType };
-                          if (newHolder) {
-                            updates.holder = newHolder;
-                          }
-                          handleUpdateAccount(acc.id, updates);
-                        }}
-                        alignment="fluid"
-                      >
-                        <SegmentedControl.Item value="groom">신랑측</SegmentedControl.Item>
-                        <SegmentedControl.Item value="bride">신부측</SegmentedControl.Item>
-                      </SegmentedControl>
-                    </div>
-                    <div className={styles.flex2}>
-                      <div className={styles.flex2}>
-                        <Dialog mobileBottomSheet>
-                          <Dialog.Trigger asChild>
-                            <div className={styles.cursorPointer}>
-                              <TextField.Button
-                                value={acc.relation || '관계 선택'}
-                                placeholder="관계 선택"
-                              />
-                            </div>
-                          </Dialog.Trigger>
-                          <Dialog.Content>
-                            <Dialog.Header title="관계 선택" visuallyHidden />
-                            <Dialog.Body>
-                              <div className={styles.optionList}>
-                                {[
-                                  { label: '본인', value: '본인' },
-                                  { label: '아버지', value: '아버지' },
-                                  { label: '어머니', value: '어머니' },
-                                  { label: '직접 입력', value: 'custom' },
-                                ].map((option) => (
-                                  <Dialog.Close key={option.value} asChild>
-                                    <UIButton
-                                      variant="unstyled"
-                                      className={cn(
-                                        styles.optionItemButton,
-                                        (['본인', '아버지', '어머니'].includes(acc.relation)
-                                          ? acc.relation
-                                          : 'custom') === option.value && styles.selected
-                                      )}
-                                      onClick={() => {
-                                        if (option.value === 'custom') {
-                                          handleUpdateAccount(acc.id, { relation: '' });
-                                        } else {
-                                          handleRelationChange(acc.id, option.value, acc.type);
-                                        }
-                                      }}
-                                    >
-                                      <span>{option.label}</span>
-                                      {(['본인', '아버지', '어머니'].includes(acc.relation)
-                                        ? acc.relation
-                                        : 'custom') === option.value && (
-                                        <Check size={20} className={styles.checkIcon} />
-                                      )}
-                                    </UIButton>
-                                  </Dialog.Close>
-                                ))}
-                              </div>
-                            </Dialog.Body>
-                          </Dialog.Content>
-                        </Dialog>
-                      </div>
-                    </div>
-                  </div>
-
-                  {!['본인', '아버지', '어머니'].includes(acc.relation) ? (
-                    <TextField
-                      id={`account-relation-${acc.id}`}
-                      placeholder="관계를 직접 입력하세요 (예: 본인, 아버지)"
-                      value={acc.relation}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        handleUpdateAccount(acc.id, { relation: e.target.value })
-                      }
-                    />
-                  ) : null}
-
-                  <div className={styles.fieldRow}>
-                    <div>
-                      <TextField
-                        id={`account-bank-${acc.id}`}
-                        placeholder="예: 신한"
-                        value={acc.bank}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                          handleUpdateAccount(acc.id, { bank: e.target.value })
-                        }
-                      />
-                    </div>
-                    <div>
-                      <TextField
-                        id={`account-holder-${acc.id}`}
-                        placeholder="이름"
-                        value={acc.holder}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                          handleUpdateAccount(acc.id, { holder: e.target.value })
-                        }
-                      />
-                    </div>
-                  </div>
-
-                  <TextField
-                    id={`account-number-${acc.id}`}
-                    placeholder="계좌번호를 입력하세요"
-                    value={acc.accountNumber}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                      const value = e.target.value.replace(/[^0-9-]/g, '');
-                      handleUpdateAccount(acc.id, { accountNumber: value });
-                    }}
-                  />
-                </div>
-              ) : null}
-            </div>
-          ))}
-
-          <UIButton variant="ghost" className={styles.addAccountBtn} onClick={handleAddAccount}>
-            <Plus size={18} />
-            <span>계좌 추가하기</span>
-          </UIButton>
-        </div>
+        <Button variant="dashed" size="md" radius="md" onClick={handleAddAccount}>
+          <Plus size={18} />
+          <span>계좌 추가하기</span>
+        </Button>
       </FormField>
 
       {/* Appearance Settings */}
@@ -348,18 +198,6 @@ export default function AccountsSectionContent() {
             }
           />
         </FormControl>
-      </FormField>
-      <FormField name="accounts-color-mode">
-        <FormLabel>색상 모드</FormLabel>
-        <SegmentedControl
-          value={accountsColorMode}
-          onChange={(val: string) => setAccountsColorMode(val as 'accent' | 'subtle' | 'white')}
-          alignment="fluid"
-        >
-          <SegmentedControl.Item value="accent">강조</SegmentedControl.Item>
-          <SegmentedControl.Item value="subtle">은은하게</SegmentedControl.Item>
-          <SegmentedControl.Item value="white">화이트</SegmentedControl.Item>
-        </SegmentedControl>
       </FormField>
     </>
   );
