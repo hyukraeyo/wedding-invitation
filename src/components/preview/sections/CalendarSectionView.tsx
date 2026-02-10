@@ -17,6 +17,8 @@ interface CalendarSectionViewProps {
   showCalendar?: boolean;
   showDday?: boolean;
   animateEntrance?: boolean;
+  title?: string;
+  subtitle?: string;
 }
 
 /**
@@ -90,6 +92,8 @@ const CalendarSectionView = ({
   showCalendar = true,
   showDday = true,
   animateEntrance,
+  title = '우리가 결혼하는 날',
+  subtitle = 'DATE',
 }: CalendarSectionViewProps) => {
   const weddingDate = (() => {
     if (!date) return new Date();
@@ -196,7 +200,7 @@ const CalendarSectionView = ({
 
   return (
     <SectionContainer id={id} animateEntrance={animateEntrance}>
-      <SectionHeader title="우리가 결혼하는 날" subtitle="DATE" accentColor={accentColor} />
+      <SectionHeader title={title} subtitle={subtitle} accentColor={accentColor} />
 
       {showCalendar ? (
         <div className={styles.calendarContainer}>

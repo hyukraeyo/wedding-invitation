@@ -8,3 +8,12 @@
   width: 100%;
   gap: 12px;
 }
+
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.contentWrap {
+  padding-bottom: v.$builder-gap-md;
+}

@@ -9,9 +9,9 @@
 .FormField {
   display: grid;
   gap: 8px;
-  margin-bottom: 16px;
-  &:last-child {
-    margin-bottom: 0;
+  margin-top: 16px;
+  &:first-child {
+    margin-top: 0;
   }
 }
 

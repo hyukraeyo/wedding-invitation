@@ -50,7 +50,6 @@
   bottom: 2px;
   left: 0;
   background-color: v.$white;
-  border: 1px solid v.$primary;
   border-radius: calc(v.$radius-md - 2px); // 14px
   transition:
     transform 0.3s v.$ease-ios,

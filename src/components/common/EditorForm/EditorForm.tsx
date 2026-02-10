@@ -15,14 +15,9 @@ import {
   Heart,
   type LucideIcon,
 } from 'lucide-react';
-import { clsx } from 'clsx';
 import { useShallow } from 'zustand/react/shallow';
 
-import { AlertDialog } from '@/components/ui/AlertDialog';
-import { Button } from '@/components/ui/Button';
 import { Form } from '@/components/ui/Form';
-import { IconButton } from '@/components/ui/IconButton';
-import { Skeleton } from '@/components/ui/Skeleton';
 import AccountsSection from '@/components/builder/sections/AccountsSection';
 import BasicInfoSection from '@/components/builder/sections/BasicInfoSection';
 import ClosingSection from '@/components/builder/sections/ClosingSection';
@@ -43,14 +38,16 @@ import { validateBeforeBuilderSave } from '@/lib/builderBusinessValidation';
 import {
   collectInvalidFieldSummaries,
   findFirstInvalidElement,
-  findInvalidElementInSection,
-  getInvalidElementSectionKey,
+  INVALID_FIELD_SELECTOR,
   type InvalidFieldSummary,
 } from '@/lib/builderFormValidation';
 import { toInvitationData } from '@/lib/builderSave';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import type { SectionProps } from '@/types/builder';
 
+import { NavRail, type SectionEntry } from './NavRail';
+import { EditorLoading } from './EditorLoading';
+import { ValidationDialog } from './ValidationDialog';
 import styles from './EditorForm.module.scss';
 
 type BuilderSectionComponent = React.ComponentType<SectionProps>;
@@ -81,16 +78,23 @@ const SECTION_ICONS: Record<EditorSectionKey, LucideIcon> = {
   kakao: Share2,
 };
 
-const SECTIONS = EDITOR_SECTION_KEYS.map((key) => ({
-  key,
-  label: EDITOR_SECTION_NAV_LABEL[key],
-  icon: SECTION_ICONS[key],
-  Component: SECTION_COMPONENTS[key],
-}));
+const SECTIONS: (SectionEntry & { Component: BuilderSectionComponent })[] = EDITOR_SECTION_KEYS.map(
+  (key) => ({
+    key,
+    label: EDITOR_SECTION_NAV_LABEL[key],
+    icon: SECTION_ICONS[key],
+    Component: SECTION_COMPONENTS[key],
+  })
+);
 
 const DEFAULT_ACTIVE_SECTION: EditorSectionKey = 'mainScreen';
-const NAV_INDICATOR_OFFSET = 12;
-const NAV_ITEM_STRIDE = 72;
+const REQUIRED_FIELD_ID_SUFFIX = '-required';
+const UPLOADER_FIELD_ID_SUFFIX = '-uploader';
+const SUMMARY_FOCUS_MAX_RETRIES = 8;
+const SUMMARY_FOCUS_RETRY_DELAY_MS = 60;
+
+const normalizeValidationKey = (id: string): string =>
+  id.endsWith(REQUIRED_FIELD_ID_SUFFIX) ? id.slice(0, -REQUIRED_FIELD_ID_SUFFIX.length) : id;
 
 interface EditorFormProps {
   formId: string;
@@ -101,10 +105,9 @@ const EditorForm = React.memo(function EditorForm({ formId, onSubmit }: EditorFo
   const [isReady, setIsReady] = React.useState(false);
   const [isValidationOpen, setIsValidationOpen] = React.useState(false);
   const [invalidSummaries, setInvalidSummaries] = React.useState<InvalidFieldSummary[]>([]);
-  const [wasSubmitted, setWasSubmitted] = React.useState(false);
 
   const contentAreaRef = React.useRef<HTMLFormElement | null>(null);
-  const explicitFocusTargetRef = React.useRef<HTMLElement | null>(null);
+  const skipDialogAutoFocusRef = React.useRef(false);
 
   const { editingSection, setEditingSection, validationErrors, setValidationErrors } =
     useInvitationStore(
@@ -137,33 +140,14 @@ const EditorForm = React.memo(function EditorForm({ formId, onSubmit }: EditorFo
     [editingSection, setEditingSection]
   );
 
-  const focusInvalidField = React.useCallback(
-    (form: HTMLFormElement) => {
-      const firstInvalid = findFirstInvalidElement(form);
-      if (!firstInvalid) {
-        return;
-      }
-
-      const sectionKey = getInvalidElementSectionKey(firstInvalid);
-      if (sectionKey && sectionKey !== activeSection) {
-        handleSectionChange(sectionKey);
-        setTimeout(() => {
-          firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          firstInvalid.focus();
-        }, 150);
-        return;
-      }
-
-      firstInvalid.focus();
-    },
-    [activeSection, handleSectionChange]
-  );
+  const focusInvalidField = React.useCallback((form: HTMLFormElement) => {
+    findFirstInvalidElement(form)?.focus();
+  }, []);
 
   const handleSubmit = React.useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       const form = event.currentTarget;
-      setWasSubmitted(true);
 
       const isHtmlValid = form.checkValidity();
       const htmlSummaries = isHtmlValid ? [] : collectInvalidFieldSummaries(form);
@@ -180,9 +164,10 @@ const EditorForm = React.memo(function EditorForm({ formId, onSubmit }: EditorFo
       );
 
       const bizFieldIds = bizValidation.issues.map((issue) => issue.fieldId);
-      const htmlFieldIds = Array.from(form.querySelectorAll(':invalid'))
+      const htmlFieldIds = Array.from(form.querySelectorAll(INVALID_FIELD_SELECTOR))
         .map((element) => element.getAttribute('id'))
-        .filter((id): id is string => Boolean(id));
+        .filter((id): id is string => Boolean(id))
+        .map(normalizeValidationKey);
 
       const allInvalidKeys = Array.from(
         new Set([...allInvalidSectionKeys, ...bizFieldIds, ...htmlFieldIds])
@@ -223,101 +208,81 @@ const EditorForm = React.memo(function EditorForm({ formId, onSubmit }: EditorFo
 
   const handleInvalidSummaryClick = React.useCallback(
     (summary: InvalidFieldSummary) => {
-      const form = document.getElementById(formId) as HTMLFormElement | null;
-      if (!form) {
-        return;
-      }
-
-      let target: HTMLElement | null = summary.fieldId
-        ? document.getElementById(summary.fieldId)
-        : null;
-      if (!target) {
-        target =
-          findInvalidElementInSection(form, summary.sectionKey) ?? findFirstInvalidElement(form);
-      }
-      if (!target) {
-        return;
-      }
-
-      explicitFocusTargetRef.current = target;
+      skipDialogAutoFocusRef.current = true;
       if (activeSection !== summary.sectionKey) {
         handleSectionChange(summary.sectionKey);
       }
 
       setIsValidationOpen(false);
 
-      setTimeout(() => {
-        if (!explicitFocusTargetRef.current) {
+      const getTargetById = () => {
+        const baseId = summary.fieldId;
+        if (!baseId) {
+          return null;
+        }
+
+        const candidateIds = [
+          baseId,
+          `${baseId}${REQUIRED_FIELD_ID_SUFFIX}`,
+          `${baseId}${UPLOADER_FIELD_ID_SUFFIX}`,
+        ];
+
+        for (const candidateId of candidateIds) {
+          const target = document.getElementById(candidateId);
+          if (target) {
+            return target as HTMLElement;
+          }
+        }
+
+        return null;
+      };
+
+      const tryFocus = (attempt: number) => {
+        const form = document.getElementById(formId) as HTMLFormElement | null;
+        if (!form) {
           return;
         }
 
-        explicitFocusTargetRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        explicitFocusTargetRef.current.focus();
-        explicitFocusTargetRef.current = null;
-      }, 150);
+        const target = getTargetById() ?? findFirstInvalidElement(form);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          target.focus();
+          return;
+        }
+
+        if (attempt >= SUMMARY_FOCUS_MAX_RETRIES) {
+          return;
+        }
+
+        window.setTimeout(() => tryFocus(attempt + 1), SUMMARY_FOCUS_RETRY_DELAY_MS);
+      };
+
+      window.setTimeout(() => tryFocus(0), 0);
     },
     [activeSection, formId, handleSectionChange]
   );
 
   if (!isReady) {
-    return (
-      <div className={styles.loadingContainer}>
-        {Array.from({ length: 6 }).map((_, index) => (
-          <div key={index} className={styles.skeletonItem}>
-            <div className={styles.skeletonLeft}>
-              <Skeleton className={styles.skeletonIcon ?? ''} />
-              <div className={styles.skeletonText}>
-                <Skeleton className={styles.skeletonTitle ?? ''} />
-                <Skeleton className={styles.skeletonSubtitle ?? ''} />
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    );
+    return <EditorLoading />;
   }
 
   return (
     <>
       <div className={styles.wrapper}>
-        <nav className={styles.navRail}>
-          <div
-            className={styles.activeIndicator}
-            style={{
-              transform: `translateY(${NAV_INDICATOR_OFFSET + Math.max(activeSectionIndex, 0) * NAV_ITEM_STRIDE}px)`,
-            }}
-          />
-          {SECTIONS.map(({ key, label, icon: Icon }) => {
-            const isInvalid = validationErrors.includes(key);
-            const isActive = activeSection === key;
-
-            return (
-              <IconButton
-                key={key}
-                unstyled
-                className={clsx(
-                  styles.navItem,
-                  styles.navItemLayer,
-                  isActive && styles.active,
-                  isInvalid && styles.invalid
-                )}
-                onClick={() => handleSectionChange(key)}
-                aria-label={`${label} 섹션으로 이동`}
-                aria-current={isActive ? 'page' : undefined}
-              >
-                <Icon className={styles.navIcon} strokeWidth={2} />
-                <span className={styles.navLabel}>{label}</span>
-              </IconButton>
-            );
-          })}
-        </nav>
+        <NavRail
+          sections={SECTIONS}
+          activeSection={activeSection}
+          activeSectionIndex={activeSectionIndex}
+          validationErrors={validationErrors}
+          onSectionChange={handleSectionChange}
+        />
 
         <Form
           ref={contentAreaRef}
           id={formId}
           onSubmit={handleSubmit}
           noValidate
-          className={clsx(styles.contentArea, wasSubmitted && 'was-submitted')}
+          className={styles.contentArea}
         >
           <AnimatePresence mode="wait" initial={false}>
             {SECTIONS.map(({ key, Component }) => {
@@ -342,47 +307,14 @@ const EditorForm = React.memo(function EditorForm({ formId, onSubmit }: EditorFo
         </Form>
       </div>
 
-      <AlertDialog open={isValidationOpen} onOpenChange={setIsValidationOpen}>
-        <AlertDialog.Content
-          onCloseAutoFocus={(event) => {
-            event.preventDefault();
-            if (explicitFocusTargetRef.current) {
-              return;
-            }
-
-            const form = document.getElementById(formId) as HTMLFormElement | null;
-            if (form) {
-              findFirstInvalidElement(form)?.focus();
-            }
-          }}
-        >
-          <AlertDialog.Header>
-            <AlertDialog.Title>입력 확인</AlertDialog.Title>
-            <AlertDialog.Description>필수 항목을 확인해주세요.</AlertDialog.Description>
-            {invalidSummaries.length > 0 ? (
-              <div className={styles.invalidSummaryList}>
-                {invalidSummaries.map((summary) => (
-                  <Button
-                    key={`${summary.sectionKey}-${summary.fieldLabel}`}
-                    variant="unstyled"
-                    className={styles.invalidSummaryItem}
-                    onClick={() => handleInvalidSummaryClick(summary)}
-                  >
-                    {summary.sectionLabel} - {summary.fieldLabel}
-                  </Button>
-                ))}
-              </div>
-            ) : null}
-          </AlertDialog.Header>
-          <AlertDialog.Footer>
-            <AlertDialog.Action asChild>
-              <Button type="button" onClick={() => setIsValidationOpen(false)}>
-                확인
-              </Button>
-            </AlertDialog.Action>
-          </AlertDialog.Footer>
-        </AlertDialog.Content>
-      </AlertDialog>
+      <ValidationDialog
+        open={isValidationOpen}
+        onOpenChange={setIsValidationOpen}
+        formId={formId}
+        invalidSummaries={invalidSummaries}
+        onSummaryClick={handleInvalidSummaryClick}
+        skipDialogAutoFocusRef={skipDialogAutoFocusRef}
+      />
     </>
   );
 });

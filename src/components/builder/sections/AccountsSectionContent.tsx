@@ -1,9 +1,11 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { Plus } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
 
 import { RichTextEditor } from '@/components/common/RichTextEditor';
+import { SectionHeadingFields } from '@/components/common/SectionHeadingFields';
 import { useInvitationStore } from '@/store/useInvitationStore';
+import { htmlToPlainText } from '@/lib/richText';
 import { Button } from '@/components/ui/Button';
 import { TextField } from '@/components/ui/TextField';
 import { FormControl, FormField, FormLabel } from '@/components/ui/Form';
@@ -110,41 +112,36 @@ export default function AccountsSectionContent() {
     handleUpdateAccount(id, updates);
   };
 
+  const plainDescription = useMemo(
+    () => htmlToPlainText(accountsDescription),
+    [accountsDescription]
+  );
+
   return (
     <>
-      <FormField name="accounts-subtitle">
-        <FormLabel htmlFor="accounts-subtitle">소제목</FormLabel>
-        <FormControl asChild>
-          <TextField
-            id="accounts-subtitle"
-            placeholder="예: GIFT"
-            value={accountsSubtitle}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setAccountsSubtitle(e.target.value)
-            }
-          />
-        </FormControl>
-      </FormField>
-      <FormField name="accounts-title">
-        <FormLabel htmlFor="accounts-title">제목</FormLabel>
-        <FormControl asChild>
-          <TextField
-            id="accounts-title"
-            placeholder="예: 마음 전하실 곳"
-            value={accountsTitle}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setAccountsTitle(e.target.value)}
-          />
-        </FormControl>
-      </FormField>
-
-      <FormField name="accounts-content">
-        <FormLabel>내용</FormLabel>
-        <RichTextEditor
-          content={accountsDescription}
-          onChange={(val: string) => setAccountsDescription(val)}
-          placeholder="축하의 마음을 담아..."
-        />
-      </FormField>
+      <SectionHeadingFields
+        prefix="accounts"
+        subtitle={{
+          value: accountsSubtitle,
+          onValueChange: setAccountsSubtitle,
+          placeholder: '예: GIFT',
+        }}
+        title={{
+          value: accountsTitle,
+          onValueChange: setAccountsTitle,
+          placeholder: '예: 마음 전하실 곳',
+        }}
+        contentField={{
+          control: (
+            <RichTextEditor
+              content={accountsDescription}
+              onChange={(val: string) => setAccountsDescription(val)}
+              placeholder="축하의 마음을 담아..."
+            />
+          ),
+          hiddenValue: plainDescription,
+        }}
+      />
 
       {/* Account List */}
       <FormField name="accounts-list">

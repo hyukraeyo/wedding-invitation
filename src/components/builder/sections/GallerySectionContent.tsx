@@ -21,12 +21,12 @@ import {
 import { CSS } from '@dnd-kit/utilities';
 import { useShallow } from 'zustand/react/shallow';
 import { ImageUploader } from '@/components/common/ImageUploader';
+import { SectionHeadingFields } from '@/components/common/SectionHeadingFields';
 import { Field } from '@/components/ui/Field';
 import { FormControl, FormField, FormHeader, FormLabel, FormMessage } from '@/components/ui/Form';
 import { ImagePreview } from '@/components/ui/ImagePreview';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { SwitchRow } from '@/components/common/SwitchRow';
-import { TextField } from '@/components/ui/TextField';
 import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
 import { isRequiredField } from '@/constants/requiredFields';
 import { isBlobUrl } from '@/lib/image';
@@ -169,38 +169,12 @@ export default React.memo(function GallerySectionContent() {
   );
 
   return (
-    <div>
-      <FormField name="gallery-subtitle">
-        <FormHeader>
-          <FormLabel htmlFor="gallery-subtitle">소제목</FormLabel>
-        </FormHeader>
-        <FormControl asChild>
-          <TextField
-            id="gallery-subtitle"
-            type="text"
-            value={gallerySubtitle}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setGallerySubtitle(e.target.value)
-            }
-            placeholder="예: GALLERY"
-          />
-        </FormControl>
-      </FormField>
-
-      <FormField name="gallery-title">
-        <FormHeader>
-          <FormLabel htmlFor="gallery-title">제목</FormLabel>
-        </FormHeader>
-        <FormControl asChild>
-          <TextField
-            id="gallery-title"
-            type="text"
-            value={galleryTitle}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGalleryTitle(e.target.value)}
-            placeholder="예: 웨딩 갤러리"
-          />
-        </FormControl>
-      </FormField>
+    <>
+      <SectionHeadingFields
+        prefix="gallery"
+        subtitle={{ value: gallerySubtitle, onValueChange: setGallerySubtitle }}
+        title={{ value: galleryTitle, onValueChange: setGalleryTitle }}
+      />
 
       <FormField name="gallery">
         <FormHeader>
@@ -330,6 +304,6 @@ export default React.memo(function GallerySectionContent() {
           </FormField>
         </>
       ) : null}
-    </div>
+    </>
   );
 });

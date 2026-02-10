@@ -1,6 +1,7 @@
 import React from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { DatePicker } from '@/components/common/DatePicker';
+import { SectionHeadingFields } from '@/components/common/SectionHeadingFields';
 import { TimePicker } from '@/components/common/TimePicker';
 import { RequiredSectionTitle } from '@/components/common/RequiredSectionTitle';
 import { EditorSection } from '@/components/ui/EditorSection';
@@ -12,22 +13,37 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import { isBlank } from '@/lib/utils';
 import { useBuilderSection, useBuilderField } from '@/hooks/useBuilder';
 import type { SectionProps } from '@/types/builder';
-import styles from './DateTimeSection.module.scss';
 
 const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props) {
-  const { date, setDate, time, setTime, showCalendar, setShowCalendar, showDday, setShowDday } =
-    useInvitationStore(
-      useShallow((state) => ({
-        date: state.date,
-        setDate: state.setDate,
-        time: state.time,
-        setTime: state.setTime,
-        showCalendar: state.showCalendar,
-        setShowCalendar: state.setShowCalendar,
-        showDday: state.showDday,
-        setShowDday: state.setShowDday,
-      }))
-    );
+  const {
+    date,
+    setDate,
+    time,
+    setTime,
+    dateTimeTitle,
+    setDateTimeTitle,
+    dateTimeSubtitle,
+    setDateTimeSubtitle,
+    showCalendar,
+    setShowCalendar,
+    showDday,
+    setShowDday,
+  } = useInvitationStore(
+    useShallow((state) => ({
+      date: state.date,
+      setDate: state.setDate,
+      time: state.time,
+      setTime: state.setTime,
+      dateTimeTitle: state.dateTimeTitle,
+      setDateTimeTitle: state.setDateTimeTitle,
+      dateTimeSubtitle: state.dateTimeSubtitle,
+      setDateTimeSubtitle: state.setDateTimeSubtitle,
+      showCalendar: state.showCalendar,
+      setShowCalendar: state.setShowCalendar,
+      showDday: state.showDday,
+      setShowDday: state.setShowDday,
+    }))
+  );
 
   const isComplete = Boolean(date && time);
 
@@ -58,6 +74,11 @@ const DateTimeSection = React.memo<SectionProps>(function DateTimeSection(props)
       title={<RequiredSectionTitle title="예식 일시" isComplete={isComplete} />}
       isInvalid={isSectionInvalid}
     >
+      <SectionHeadingFields
+        prefix="date-time"
+        subtitle={{ value: dateTimeSubtitle, onValueChange: setDateTimeSubtitle }}
+        title={{ value: dateTimeTitle, onValueChange: setDateTimeTitle }}
+      />
       <FormField name="wedding-date">
         <FormHeader>
           <FormLabel htmlFor="wedding-date">예식 날짜</FormLabel>

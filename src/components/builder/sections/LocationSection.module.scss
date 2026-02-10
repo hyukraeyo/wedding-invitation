@@ -76,3 +76,9 @@
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
+
+.itemContent {
+  display: flex;
+  align-items: center;
+  gap: v.$control-slot-padding-xs;
+}

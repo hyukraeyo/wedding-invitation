@@ -18,6 +18,8 @@ export const selectBrideInfo = (state: InvitationState) => ({
 export const selectEventInfo = (state: InvitationState) => ({
   date: state.date,
   time: state.time,
+  dateTimeTitle: state.dateTimeTitle,
+  dateTimeSubtitle: state.dateTimeSubtitle,
   location: state.location,
   address: state.address,
   detailAddress: state.detailAddress,
@@ -66,6 +68,8 @@ export interface InvitationState {
   // Event Info
   date: string;
   time: string;
+  dateTimeTitle: string;
+  dateTimeSubtitle: string;
   location: string; // Wedding Hall Name e.g. "The Convention"
   address: string; // Basic Address e.g. "Seoul ..."
   detailAddress: string; // e.g. "2nd Floor"
@@ -206,6 +210,8 @@ export interface InvitationState {
   setCoordinates: (lat: number, lng: number) => void;
 
   // New Location Setters
+  setDateTimeTitle: (title: string) => void;
+  setDateTimeSubtitle: (subtitle: string) => void;
   setLocationTitle: (title: string) => void;
   setLocationSubtitle: (subtitle: string) => void;
   setLocationContact: (contact: string) => void;
@@ -352,6 +358,8 @@ export const INITIAL_STATE = {
   order: 'groom-first' as const,
   date: '',
   time: '',
+  dateTimeTitle: '우리가 결혼하는 날',
+  dateTimeSubtitle: 'DATE',
   location: '',
   address: '',
   detailAddress: '',
@@ -490,6 +498,8 @@ export const useInvitationStore = create<InvitationState>()((set) => ({
   setAddress: (address) => set({ address }),
   setDetailAddress: (detailAddress) => set({ detailAddress }),
 
+  setDateTimeTitle: (title) => set({ dateTimeTitle: title }),
+  setDateTimeSubtitle: (subtitle) => set({ dateTimeSubtitle: subtitle }),
   setLocationTitle: (title) => set({ locationTitle: title }),
   setLocationSubtitle: (subtitle) => set({ locationSubtitle: subtitle }),
   setLocationContact: (contact) => set({ locationContact: contact }),

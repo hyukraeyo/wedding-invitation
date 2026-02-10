@@ -1,5 +1,4 @@
 ﻿import {
-  EDITOR_KEY_TO_SECTION_VALUE,
   EDITOR_SECTION_LABEL,
   SECTION_VALUE_TO_EDITOR_KEY,
   type EditorSectionKey,
@@ -30,9 +29,6 @@ export const mapSectionValueToEditorKey = (
     SECTION_VALUE_TO_EDITOR_KEY[sectionValue as keyof typeof SECTION_VALUE_TO_EDITOR_KEY] ?? null
   );
 };
-
-export const mapEditorKeyToSectionValue = (sectionKey: EditorSectionKey): string =>
-  EDITOR_KEY_TO_SECTION_VALUE[sectionKey];
 
 export const getInvalidElementSectionKey = (
   invalidElement: HTMLElement
@@ -92,20 +88,4 @@ export const collectInvalidFieldSummaries = (form: HTMLFormElement): InvalidFiel
   }
 
   return summaries;
-};
-
-export const findInvalidElementInSection = (
-  form: HTMLFormElement,
-  sectionKey: EditorSectionKey
-): HTMLElement | null => {
-  const sectionValue = mapEditorKeyToSectionValue(sectionKey);
-  const sectionElement = form.querySelector<HTMLElement>(
-    `[data-radix-collection-item][data-value="${sectionValue}"]`
-  );
-
-  if (!sectionElement) {
-    return null;
-  }
-
-  return sectionElement.querySelector<HTMLElement>(INVALID_FIELD_SELECTOR);
 };

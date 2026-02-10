@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { useShallow } from 'zustand/react/shallow';
 import { AddressPicker } from '@/components/common/AddressPicker';
 import { KakaoIcon, NaverIcon } from '@/components/common/Icons';
+import { SectionHeadingFields } from '@/components/common/SectionHeadingFields';
 
 import { FormControl, FormField, FormHeader, FormLabel, FormMessage } from '@/components/ui/Form';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
@@ -110,31 +111,11 @@ export default function LocationSectionContent() {
   return (
     <>
       <KakaoSdkLoader onReady={() => setIsKakaoReady(true)} />
-      <FormField name="location-subtitle">
-        <FormLabel htmlFor="location-subtitle">부제목</FormLabel>
-        <FormControl asChild>
-          <TextField
-            id="location-subtitle"
-            placeholder="예: LOCATION"
-            value={locationSubtitle}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setLocationSubtitle(e.target.value)
-            }
-          />
-        </FormControl>
-      </FormField>
-
-      <FormField name="location-title">
-        <FormLabel htmlFor="location-title">제목</FormLabel>
-        <FormControl asChild>
-          <TextField
-            id="location-title"
-            placeholder="예: 오시는 길"
-            value={locationTitle}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setLocationTitle(e.target.value)}
-          />
-        </FormControl>
-      </FormField>
+      <SectionHeadingFields
+        prefix="location"
+        subtitle={{ value: locationSubtitle, onValueChange: setLocationSubtitle }}
+        title={{ value: locationTitle, onValueChange: setLocationTitle }}
+      />
 
       <FormField name="location-address">
         <FormHeader>
@@ -228,19 +209,13 @@ export default function LocationSectionContent() {
           onChange={(value: string) => setMapType(value as 'naver' | 'kakao')}
         >
           <SegmentedControl.Item value="naver">
-            <span
-              className={styles.itemContent}
-              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
-            >
+            <span className={styles.itemContent}>
               <NaverIcon size={18} />
               <span>네이버</span>
             </span>
           </SegmentedControl.Item>
           <SegmentedControl.Item value="kakao">
-            <span
-              className={styles.itemContent}
-              style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
-            >
+            <span className={styles.itemContent}>
               <KakaoIcon size={18} />
               <span>카카오</span>
             </span>

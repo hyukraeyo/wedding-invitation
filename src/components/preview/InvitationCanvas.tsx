@@ -53,6 +53,8 @@ type InvitationCanvasData = Pick<
   | 'bride'
   | 'date'
   | 'time'
+  | 'dateTimeTitle'
+  | 'dateTimeSubtitle'
   | 'location'
   | 'detailAddress'
   | 'greetingTitle'
@@ -109,6 +111,8 @@ const selectInvitationCanvasData = (state: InvitationData): InvitationCanvasData
   bride: state.bride,
   date: state.date,
   time: state.time,
+  dateTimeTitle: state.dateTimeTitle,
+  dateTimeSubtitle: state.dateTimeSubtitle,
   location: state.location,
   detailAddress: state.detailAddress,
   greetingTitle: state.greetingTitle,
@@ -190,6 +194,8 @@ const InvitationCanvasContent = memo(
       bride,
       date,
       time,
+      dateTimeTitle,
+      dateTimeSubtitle,
       location,
       detailAddress,
       greetingTitle,
@@ -393,6 +399,8 @@ const InvitationCanvasContent = memo(
             id="section-date"
             date={date}
             time={time}
+            title={dateTimeTitle}
+            subtitle={dateTimeSubtitle}
             accentColor={theme.accentColor}
             ddayMessage={ddayMessage}
             groom={groom}

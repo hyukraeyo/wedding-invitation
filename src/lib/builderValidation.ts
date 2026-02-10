@@ -25,6 +25,7 @@ export const REQUIRED_FIELD_KEYS = [
   'weddingTime',
   'locationVenue',
   'locationAddress',
+  'greetingSubtitle',
   'greetingTitle',
   'greetingMessage',
   'galleryImages',
@@ -117,6 +118,15 @@ export const getBuilderValidationIssues = (data: InvitationData): BuilderValidat
     });
   }
 
+  if (isBlank(data.greetingSubtitle)) {
+    issues.push({
+      sectionKey: 'message',
+      fieldId: 'greeting-subtitle',
+      fieldLabel: '소제목',
+      message: '인사말 소제목을 입력해주세요.',
+    });
+  }
+
   if (isBlank(data.greetingTitle)) {
     issues.push({
       sectionKey: 'message',
@@ -133,6 +143,64 @@ export const getBuilderValidationIssues = (data: InvitationData): BuilderValidat
       fieldId: 'greeting-message-required',
       fieldLabel: '내용',
       message: '인사말 내용을 입력해주세요.',
+    });
+  }
+
+  // Account Section Validation
+  if (isBlank(data.accountsTitle)) {
+    issues.push({
+      sectionKey: 'account',
+      fieldId: 'accounts-title',
+      fieldLabel: '제목',
+      message: '계좌 섹션 제목을 입력해주세요.',
+    });
+  }
+
+  if (isBlank(data.accountsSubtitle)) {
+    issues.push({
+      sectionKey: 'account',
+      fieldId: 'accounts-subtitle',
+      fieldLabel: '소제목',
+      message: '계좌 섹션 소제목을 입력해주세요.',
+    });
+  }
+
+  const accountsDescText = htmlToPlainText(data.accountsDescription);
+  if (isBlank(accountsDescText)) {
+    issues.push({
+      sectionKey: 'account',
+      fieldId: 'accounts-message',
+      fieldLabel: '내용',
+      message: '계좌 섹션 내용을 입력해주세요.',
+    });
+  }
+
+  // Closing Section Validation
+  if (isBlank(data.closing.title)) {
+    issues.push({
+      sectionKey: 'closing',
+      fieldId: 'closing-title',
+      fieldLabel: '제목',
+      message: '마무리 제목을 입력해주세요.',
+    });
+  }
+
+  if (isBlank(data.closing.subtitle)) {
+    issues.push({
+      sectionKey: 'closing',
+      fieldId: 'closing-subtitle',
+      fieldLabel: '소제목',
+      message: '마무리 소제목을 입력해주세요.',
+    });
+  }
+
+  const closingContentText = htmlToPlainText(data.closing.content);
+  if (isBlank(closingContentText)) {
+    issues.push({
+      sectionKey: 'closing',
+      fieldId: 'closing-message',
+      fieldLabel: '내용',
+      message: '마무리 내용을 입력해주세요.',
     });
   }
 

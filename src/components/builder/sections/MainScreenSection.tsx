@@ -9,6 +9,7 @@ import { MAIN_TITLE_SAMPLES } from '@/constants/samples';
 import type { SectionProps, SamplePhraseItem } from '@/types/builder';
 
 import MainScreenSectionContent from './MainScreenSectionContent';
+import styles from './MainScreenSection.module.scss';
 
 const MainScreenSection = React.memo<SectionProps>(function MainScreenSection(props) {
   const { imageUrl, setMainScreen } = useInvitationStore(
@@ -40,7 +41,7 @@ const MainScreenSection = React.memo<SectionProps>(function MainScreenSection(pr
         />
       }
     >
-      <div style={{ paddingBottom: '16px' }}>
+      <div className={styles.contentWrap}>
         <MainScreenSectionContent />
       </div>
     </EditorSection>
