@@ -247,7 +247,7 @@ export function BuilderClient() {
             <Button
               type="button"
               variant={action.variant}
-              size="sm"
+              size="md"
               leftIcon={action.icon}
               onClick={action.onClick}
               disabled={action.disabled}

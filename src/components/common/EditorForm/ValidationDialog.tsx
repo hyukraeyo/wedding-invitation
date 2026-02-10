@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { AlertDialog } from '@/components/ui/AlertDialog';
+import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
 import type { InvalidFieldSummary } from '@/lib/builderFormValidation';
 import { findFirstInvalidElement } from '@/lib/builderFormValidation';
@@ -42,18 +42,20 @@ const ValidationDialog = React.memo(function ValidationDialog({
   );
 
   return (
-    <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialog.Content onCloseAutoFocus={handleCloseAutoFocus}>
-        <AlertDialog.Header>
-          <AlertDialog.Title>입력 확인</AlertDialog.Title>
-          <AlertDialog.Description>필수 항목을 확인해주세요.</AlertDialog.Description>
+    <Dialog open={open} onOpenChange={onOpenChange} mobileBottomSheet>
+      <Dialog.Content onCloseAutoFocus={handleCloseAutoFocus}>
+        <Dialog.Header>
+          <Dialog.Title>입력 확인</Dialog.Title>
+          <Dialog.Description>필수 항목을 확인해주세요.</Dialog.Description>
+        </Dialog.Header>
+        <Dialog.Body>
           {invalidSummaries.length > 0 && (
             <div className={styles.invalidSummaryList}>
               {invalidSummaries.map((summary) => (
                 <Button
                   key={`${summary.sectionKey}-${summary.fieldLabel}`}
-                  variant="unstyled"
-                  className={styles.invalidSummaryItem}
+                  size="md"
+                  variant="outline"
                   onClick={() => onSummaryClick(summary)}
                 >
                   {summary.sectionLabel} - {summary.fieldLabel}
@@ -61,16 +63,9 @@ const ValidationDialog = React.memo(function ValidationDialog({
               ))}
             </div>
           )}
-        </AlertDialog.Header>
-        <AlertDialog.Footer>
-          <AlertDialog.Action asChild>
-            <Button type="button" onClick={() => onOpenChange(false)}>
-              확인
-            </Button>
-          </AlertDialog.Action>
-        </AlertDialog.Footer>
-      </AlertDialog.Content>
-    </AlertDialog>
+        </Dialog.Body>
+      </Dialog.Content>
+    </Dialog>
   );
 });
 

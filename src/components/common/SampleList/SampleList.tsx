@@ -9,13 +9,20 @@ interface SampleListProps {
   items: SamplePhraseItem[];
   onSelect: (item: SamplePhraseItem) => void;
   className?: string;
+  layout?: 'list' | 'grid';
 }
 
-export const SampleList = ({ items, onSelect, className }: SampleListProps) => {
+export const SampleList = ({ items, onSelect, className, layout = 'list' }: SampleListProps) => {
   return (
-    <div className={cn(styles.container, className)}>
+    <div className={cn(styles.container, layout === 'grid' && styles.grid, className)}>
       {items.map((item, idx) => (
-        <Button key={idx} type="button" unstyled className={styles.itemButton} onClick={() => onSelect(item)}>
+        <Button
+          key={idx}
+          type="button"
+          unstyled
+          className={styles.itemButton}
+          onClick={() => onSelect(item)}
+        >
           <div className={styles.itemContent}>
             <div className={styles.itemHeader}>
               <Badge size="sm" variant="soft" color="primary">

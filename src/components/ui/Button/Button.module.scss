@@ -232,6 +232,13 @@
   }
 }
 
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0; // Prevent line-height from affecting height
+}
+
 .loader {
   position: absolute;
   @include m.flex-center;

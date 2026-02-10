@@ -149,23 +149,6 @@
   gap: v.$builder-gap-sm;
 }
 
-.invalidSummaryItem {
-  display: inline-flex;
-  width: 100%;
-  justify-content: flex-start;
-  border: 0;
-  background: transparent;
-  color: v.$color-warning;
-  font-size: v.$font-size-sm;
-  cursor: pointer;
-  padding: 0;
-  text-align: left;
-}
-
-.invalidSummaryItem:hover {
-  text-decoration: underline;
-}
-
 .skeletonItem {
   background-color: v.$white;
   border-radius: v.$radius-md;

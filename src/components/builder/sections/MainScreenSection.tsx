@@ -38,6 +38,7 @@ const MainScreenSection = React.memo<SectionProps>(function MainScreenSection(pr
           items={MAIN_TITLE_SAMPLES}
           onSelect={handleSelectSample}
           triggerLabel="추천문구"
+          layout="grid"
         />
       }
     >

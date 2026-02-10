@@ -13,6 +13,7 @@ interface SectionSampleDialogActionProps {
   onSelect: (sample: SamplePhraseItem) => void;
   triggerLabel?: string;
   dialogTitle?: string;
+  layout?: 'list' | 'grid';
 }
 
 export function SectionSampleDialogAction({
@@ -20,6 +21,7 @@ export function SectionSampleDialogAction({
   onSelect,
   triggerLabel = '추천 문구',
   dialogTitle = '추천 문구',
+  layout = 'list',
 }: SectionSampleDialogActionProps) {
   const [open, setOpen] = React.useState(false);
 
@@ -45,9 +47,9 @@ export function SectionSampleDialogAction({
         </Button>
       </Dialog.Trigger>
       <Dialog.Content>
-        <Dialog.Header title={dialogTitle} />
+        <Dialog.Header title={dialogTitle} visuallyHidden />
         <Dialog.Body>
-          <SampleList items={items} onSelect={handleSelect} />
+          <SampleList items={items} onSelect={handleSelect} layout={layout} />
         </Dialog.Body>
       </Dialog.Content>
     </Dialog>

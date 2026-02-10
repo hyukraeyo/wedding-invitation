@@ -9,11 +9,22 @@
   overflow: hidden;
 }
 
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem; // 더 좁은 간격
+
+  .itemButton {
+    height: 100%; // 높이 맞춤
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+  }
+}
+
 .itemButton {
   width: 100%;
   padding: 1rem;
-  border: 1px solid v.$yellow-200;
-  border-radius: v.$radius-md;
   cursor: pointer;
   transition: all 0.2s v.$ease-ios;
 
@@ -35,6 +46,9 @@
   width: 100%;
   display: flex;
   flex-direction: column;
+  padding: 10px;
+  border: 1px solid v.$yellow-200;
+  border-radius: v.$radius-md;
 }
 
 .itemHeader {

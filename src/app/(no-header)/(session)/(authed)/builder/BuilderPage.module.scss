@@ -142,14 +142,6 @@
   align-items: center;
   gap: v.$builder-gap-sm;
   z-index: 900;
-
-  transition: all 0.2s v.$ease-ios;
-
-  &:hover {
-    background-color: rgba(v.$white, 0.95);
-    box-shadow: v.$shadow-xl;
-    transform: translateY(-1px);
-  }
 }
 
 .topActionButton {
