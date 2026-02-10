@@ -1,4 +1,4 @@
-const DEFAULT_SITE_URL = 'https://wedding-invitation-zeta-one.vercel.app';
+const DEFAULT_SITE_URL = 'https://banana-wedding.vercel.app';
 
 const normalizeBaseUrl = (url: string): string => {
   return url.replace(/\/+$/, '');

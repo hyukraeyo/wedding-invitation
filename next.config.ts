@@ -50,7 +50,7 @@ const nextConfig: NextConfig = {
   // 실험적 기능 및 최적화
   experimental: {
     serverActions: {
-      allowedOrigins: ['localhost:3000', 'wedding-invitation-zeta-one.vercel.app'],
+      allowedOrigins: ['localhost:3000', 'banana-wedding.vercel.app'],
     },
     // bundle-barrel-imports: barrel file 최적화 (사용하는 모듈만 로드)
     optimizePackageImports: [

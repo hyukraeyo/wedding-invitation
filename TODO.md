@@ -11,15 +11,15 @@
 ## Post-Deploy Verification
 
 - [ ] Confirm site verification meta tags are rendered in page source.
-- [ ] Verify `https://wedding-invitation-zeta-one.vercel.app/robots.txt`.
-- [ ] Verify `https://wedding-invitation-zeta-one.vercel.app/sitemap.xml`.
+- [x] Verify `https://banana-wedding.vercel.app/robots.txt`.
+- [x] Verify `https://banana-wedding.vercel.app/sitemap.xml`.
 
 ## OAuth Setup
 
 - [ ] Register Kakao Redirect URI in console.
-- [ ] Confirm `https://wedding-invitation-zeta-one.vercel.app/api/auth/callback/kakao`.
+- [x] Confirm `https://banana-wedding.vercel.app/api/auth/callback/kakao`.
 - [ ] Register Naver Redirect URI in console.
-- [ ] Confirm `https://wedding-invitation-zeta-one.vercel.app/api/auth/callback/naver`.
+- [x] Confirm `https://banana-wedding.vercel.app/api/auth/callback/naver`.
 - [ ] Run end-to-end Kakao login test.
 - [ ] Run end-to-end Naver login test.
 
@@ -33,4 +33,4 @@
 ## Hardening
 
 - [x] Resolve existing 8 lint warnings.
-- [ ] Add CI checks for `type-check`, `build`, and `check:launch`.
+- [x] Add CI checks for `type-check`, `build`, and `check:launch`.
