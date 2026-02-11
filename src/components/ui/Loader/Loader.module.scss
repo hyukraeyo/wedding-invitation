@@ -1,15 +1,27 @@
-@use "../../../styles/variables" as v;
+@use '../../../styles/variables' as v;
 
 .loader {
   display: inline-block;
   position: relative;
   width: 24px;
   height: 24px;
-  
-  &.size_sm { width: 16px; height: 16px; }
-  &.size_md { width: 24px; height: 24px; }
-  &.size_lg { width: 48px; height: 48px; }
-  &.size_xl { width: 64px; height: 64px; }
+
+  &.size_sm {
+    width: 16px;
+    height: 16px;
+  }
+  &.size_md {
+    width: 24px;
+    height: 24px;
+  }
+  &.size_lg {
+    width: 48px;
+    height: 48px;
+  }
+  &.size_xl {
+    width: 64px;
+    height: 64px;
+  }
 }
 
 .spinnerIcon {
@@ -20,7 +32,9 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 // Banana Loader (Premium)
@@ -37,7 +51,6 @@
     z-index: 100000;
     background-color: rgba(v.$white, 0.6);
     backdrop-filter: blur(12px) saturate(180%);
-    -webkit-backdrop-filter: blur(12px) saturate(180%);
   }
 
   &.full {
@@ -73,10 +86,20 @@
   z-index: 0;
 }
 
-.dec1 { top: 25%; left: 25%; }
-.dec2 { bottom: 25%; right: 25%; }
+.dec1 {
+  top: 25%;
+  left: 25%;
+}
+.dec2 {
+  bottom: 25%;
+  right: 25%;
+}
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

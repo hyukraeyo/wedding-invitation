@@ -1,10 +1,9 @@
 import type { Metadata } from 'next';
-import { HomeClient } from './(with-header)/HomeClient';
+import { HomeClient } from './HomeClient';
 import { SITE_NAME, SITE_NAME_EN, SITE_URL, absoluteUrl } from '@/lib/site';
 
 const HOME_TITLE = `${SITE_NAME} | 나만의 모바일 청첩장`;
-const HOME_DESCRIPTION =
-  `유통기한 없는 우리만의 달콤한 이야기, ${SITE_NAME}에서 3분 만에 모바일 청첩장을 제작하고 공유하세요.`;
+const HOME_DESCRIPTION = `유통기한 없는 우리만의 달콤한 이야기, ${SITE_NAME}에서 3분 만에 모바일 청첩장을 제작하고 공유하세요.`;
 const OG_IMAGE_PATH = '/assets/icons/logo-banana-heart.png';
 
 const webPageJsonLd = {

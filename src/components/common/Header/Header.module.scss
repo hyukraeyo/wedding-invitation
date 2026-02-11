@@ -2,28 +2,60 @@
 @use '../../../styles/mixins' as m;
 
 .header {
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
   width: 100%;
   height: v.$header-height;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: v.$white;
-  padding: 0 1rem; // px-4
+  background-color: transparent;
+  padding: 0 1rem;
   z-index: 50;
-  border-bottom: 1px solid v.$grey-200;
-  transition: transform v.$transition-400 cubic-bezier(0.16, 1, 0.3, 1); // ease-ios
+  border-bottom: 1px solid transparent;
+  backdrop-filter: blur(0px) saturate(100%);
+  transition:
+    background-color v.$transition-400,
+    border-bottom-color v.$transition-400,
+    backdrop-filter v.$transition-400,
+    -webkit-backdrop-filter v.$transition-400;
 
   @include m.mobile {
-    // display: none; // 모바일에서도 공통 헤더 노출을 위해 주석 처리하거나 제거
     padding: 0 1rem;
     height: v.$header-height;
-    // border-bottom: 1px solid v.$color-border;
   }
 
   @include m.desktop {
-    padding: 0 1.5rem; // md:px-6
+    padding: 0 1.5rem;
+  }
+
+  &.scrolled {
+    background-color: rgba(v.$grey-900, 0.3);
+    border-bottom-color: rgba(v.$white, 0.12);
+    backdrop-filter: blur(5px) saturate(145%);
+
+    .logoText {
+      color: v.$white;
+    }
+
+    .navLink {
+      color: rgba(v.$white, 0.7);
+
+      &:hover {
+        color: v.$white;
+        background-color: transparent;
+      }
+    }
+
+    .actionButton {
+      color: rgba(v.$white, 0.7);
+
+      &:hover {
+        color: v.$white;
+        background-color: rgba(v.$white, 0.1) !important;
+      }
+    }
   }
 
   &.hidden {
@@ -33,10 +65,20 @@
   }
 }
 
-.centerBody {
-  text-align: center;
-  word-break: keep-all;
-  line-height: 1.6;
+.center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logoText {
+  font-family: v.$font-script;
+  font-size: 1.75rem;
+  color: v.$white;
+  transition: color v.$transition-400;
 }
 
 .resetDialogContent {
@@ -55,6 +97,7 @@
 .logoLink {
   display: flex;
   align-items: center;
+  text-decoration: none;
   transition: opacity v.$transition-normal;
 
   @media (hover: hover) and (pointer: fine) {
@@ -64,16 +107,29 @@
   }
 }
 
-.logoImage {
-  width: 2.25rem; // w-9
-  height: 2.25rem; // h-9
-  object-fit: contain;
-  flex-shrink: 0;
-  aspect-ratio: 1/1;
+.desktopNav {
+  display: none;
+  align-items: center;
+  gap: 1.5rem;
+  margin-right: 1.5rem;
 
   @include m.desktop {
-    width: 2.75rem; // md:w-11
-    height: 2.75rem; // md:h-11
+    display: flex;
+  }
+}
+
+.navLink {
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: v.$grey-700;
+  white-space: nowrap;
+  transition: all v.$transition-200;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      color: v.$grey-900;
+    }
   }
 }
 
@@ -90,7 +146,7 @@
 }
 
 .actionButton {
-  transition: all v.$transition-200 v.$ease-standard;
+  transition: all v.$transition-200;
   color: v.$zinc-600;
 
   @media (hover: hover) and (pointer: fine) {
@@ -106,9 +162,8 @@
 }
 
 .profileButton {
-  margin-left: 0.25rem;
   box-shadow: 0 2px 8px rgba(v.$primary-500, 0.25);
-  transition: all v.$transition-200 v.$ease-standard;
+  transition: all v.$transition-200;
   overflow: hidden; // For profile image
   background-color: v.$primary !important;
   color: v.$white !important; // White icon on primary background
@@ -150,8 +205,6 @@
   border: 1.5px solid v.$white;
   z-index: 10;
 }
-
-// Removed old saveButton class as it's replaced by actionButton
 
 .confirmButton {
   width: 100%;
@@ -220,7 +273,7 @@
   padding: 0;
   margin-left: -8px;
   color: v.$grey-500;
-  transition: all v.$transition-200 v.$ease-standard;
+  transition: all v.$transition-200;
 
   &:active {
     transform: scale(v.$scale-press-xs);

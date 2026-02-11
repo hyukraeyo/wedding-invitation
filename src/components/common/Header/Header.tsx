@@ -1,7 +1,6 @@
 'use client';
 
 import React, { Suspense, useCallback } from 'react';
-import Image from 'next/image';
 import { LogIn, Save, Banana, Bell } from 'lucide-react';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useRouter } from 'next/navigation';
@@ -16,10 +15,12 @@ import styles from './Header.module.scss';
 import { useHeaderStore } from '@/store/useHeaderStore';
 import { useHeaderData } from './HeaderDataProvider';
 
+const HEADER_SCROLL_THRESHOLD = 1;
+
 const Logo = React.memo(() => (
   <div className={styles.logoWrapper}>
     <ViewTransitionLink href="/" className={styles.logoLink}>
-      <Image
+      {/* <Image
         src="/logo.png"
         alt="Logo"
         width={44}
@@ -27,7 +28,8 @@ const Logo = React.memo(() => (
         className={styles.logoImage}
         quality={100}
         priority
-      />
+      /> */}
+      <span className={styles.logoText}>Banana Wedding</span>
     </ViewTransitionLink>
   </div>
 ));
@@ -78,7 +80,7 @@ const HeaderActions = React.memo(
             <div className={styles.actionsRow}>
               <ViewTransitionLink href="/mypage/notifications" className={styles.notificationLink}>
                 <IconButton
-                  iconSize={20}
+                  iconSize={24}
                   variant="ghost"
                   className={styles.actionButton}
                   aria-label="알림"
@@ -90,7 +92,7 @@ const HeaderActions = React.memo(
               </ViewTransitionLink>
               <ViewTransitionLink href="/mypage" className={styles.profileLink}>
                 <IconButton
-                  iconSize={20}
+                  iconSize={24}
                   className={styles.profileButton}
                   variant="primary"
                   aria-label="마이페이지"
@@ -121,6 +123,7 @@ HeaderActions.displayName = 'HeaderActions';
 
 const HeaderContent = React.memo(() => {
   const router = useRouter();
+  const [isScrolled, setIsScrolled] = React.useState(false);
   const { user, notificationCount, authLoading } = useHeaderData();
 
   const { isUploading } = useInvitationStore(
@@ -138,6 +141,31 @@ const HeaderContent = React.memo(() => {
   );
 
   const { toast } = useToast();
+
+  React.useEffect(() => {
+    let animationFrameId: number | null = null;
+
+    const syncScrolledState = () => {
+      animationFrameId = null;
+      const nextIsScrolled = window.scrollY > HEADER_SCROLL_THRESHOLD;
+      setIsScrolled((prev) => (prev === nextIsScrolled ? prev : nextIsScrolled));
+    };
+
+    const handleScroll = () => {
+      if (animationFrameId !== null) return;
+      animationFrameId = window.requestAnimationFrame(syncScrolledState);
+    };
+
+    syncScrolledState();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      if (animationFrameId !== null) {
+        window.cancelAnimationFrame(animationFrameId);
+      }
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const handleSaveAction = useCallback(() => {
     if (isUploading) {
@@ -159,10 +187,14 @@ const HeaderContent = React.memo(() => {
 
   return (
     <>
-      <header className={cn(styles.header, 'view-transition-header')}>
+      <header
+        className={cn(styles.header, isScrolled && styles.scrolled, 'view-transition-header')}
+      >
         <div className={styles.left}>
           <Logo />
         </div>
+
+        <div className={styles.center}></div>
 
         <div className={styles.right}>
           <HeaderActions

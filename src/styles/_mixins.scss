@@ -47,7 +47,6 @@
 @mixin glass-effect($blur: 20px, $opacity: 0.8) {
   background: s.$bg-surface;
   backdrop-filter: blur($blur);
-  -webkit-backdrop-filter: blur($blur);
   border: 1px solid rgba(c.$white, 0.1);
 }
 

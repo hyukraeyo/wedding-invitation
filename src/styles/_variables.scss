@@ -38,6 +38,7 @@ $radius-md: 12px;
 $radius-lg: 16px;
 $radius-xl: 24px;
 $radius-2xl: 32px;
+$radius-3xl: 48px;
 $radius-full: 9999px;
 
 // ✨ Stitch Animation
@@ -150,12 +151,14 @@ $scale-press-xs: 0.96;
 $blue-50: c.$blue-50;
 $blue-100: c.$blue-100;
 $blue-200: c.$blue-200;
+$blue-500: c.$blue-500;
 $blue-600: c.$blue-600;
 $blue-700: c.$blue-700;
 $red-500: c.$red-500;
 $red-600: c.$red-600;
 $primary-50: c.$yellow-50;
 $primary-100: c.$yellow-100;
+$primary-500: c.$yellow-500;
 $yellow-900: c.$yellow-900;
 
 $ease-standard: ease;

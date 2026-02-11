@@ -1,96 +1,99 @@
-@use "../../../styles/variables" as v;
-@use "../../../styles/mixins" as m;
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
 .emptyState {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 6rem 2rem;
-    text-align: center;
-    background: v.$white; // v.$white
-    border-radius: 1rem; // v.$radius-lg
-    border: 1px solid v.$grey-100; // v.$zinc-100
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 2rem;
+  text-align: center;
+  background: v.$white; // v.$white
+  border-radius: 1rem; // v.$radius-lg
+  border: 1px solid v.$grey-100; // v.$zinc-100
+  width: 100%;
 }
 
 .iconWrapper {
-    width: 100px;
-    height: 100px;
-    border-radius: 2.5rem; // v.$radius-3xl
-    background: linear-gradient(135deg, v.$grey-50 0%, v.$grey-100 100%); // v.$zinc-50 v.$zinc-100
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 2rem;
-    color: v.$grey-300; // v.$zinc-300
+  width: 100px;
+  height: 100px;
+  border-radius: 2.5rem;
+  background: linear-gradient(135deg, v.$grey-50 0%, v.$grey-100 100%); // v.$zinc-50 v.$zinc-100
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  color: v.$grey-300; // v.$zinc-300
 
-    // Default animation
-    animation: floating 3s ease-in-out infinite;
+  // Default animation
+  animation: floating 3s ease-in-out infinite;
 
-    svg {
-        width: 48px;
-        height: 48px;
-    }
+  svg {
+    width: 48px;
+    height: 48px;
+  }
 
-    &.banana {
-        background: linear-gradient(135deg, v.$primary-50 0%, v.$primary-100 100%); // v.$primary-50 v.$primary-100
-        color: v.$primary-500; // v.$color-primary
-    }
+  &.banana {
+    background: linear-gradient(
+      135deg,
+      v.$primary-50 0%,
+      v.$primary-100 100%
+    ); // v.$primary-50 v.$primary-100
+    color: v.$primary-500; // v.$color-primary
+  }
 }
 
 @keyframes floating {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-5deg);
+  }
 
-    0%,
-    100% {
-        transform: translateY(0) rotate(-5deg);
-    }
-
-    50% {
-        transform: translateY(-10px) rotate(5deg);
-    }
+  50% {
+    transform: translateY(-10px) rotate(5deg);
+  }
 }
 
 .title {
-    font-size: 1.5rem; // v.$font-size-2xl
-    font-weight: 800;
-    color: v.$grey-900; // v.$zinc-900
-    margin-bottom: 0.75rem;
-    letter-spacing: -0.02em;
+  font-size: 1.5rem; // v.$font-size-2xl
+  font-weight: 800;
+  color: v.$grey-900; // v.$zinc-900
+  margin-bottom: 0.75rem;
+  letter-spacing: -0.02em;
 }
 
 .description {
-    font-size: 1rem; // v.$font-size-base
-    color: v.$grey-500; // v.$zinc-500
-    line-height: 1.7;
-    word-break: keep-all;
-    max-width: 400px;
+  font-size: 1rem; // v.$font-size-base
+  color: v.$grey-500; // v.$zinc-500
+  line-height: 1.7;
+  word-break: keep-all;
+  max-width: 400px;
 }
 
 .actionButton {
-    margin-top: 2.5rem;
-    display: inline-flex;
-    align-items: center;
-    padding: 1rem 2.5rem;
-    background-color: v.$primary-500; // v.$color-primary
-    color: v.$white; // v.$white
-    border: none;
-    border-radius: 9999px; // v.$radius-full
-    font-size: 1rem; // v.$font-size-base
-    font-weight: 800;
-    cursor: pointer;
-    transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1); // v.$transition-300 v.$ease-ios
-    text-decoration: none;
+  margin-top: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  padding: 1rem 2.5rem;
+  background-color: v.$primary-500; // v.$color-primary
+  color: v.$white; // v.$white
+  border: none;
+  border-radius: 9999px; // v.$radius-full
+  font-size: 1rem; // v.$font-size-base
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1); // v.$transition-300 v.$ease-ios
+  text-decoration: none;
 
-    &:hover {
-        background-color: v.$primary-600; // v.$color-primary-dark
-    }
+  &:hover {
+    background-color: v.$primary-600; // v.$color-primary-dark
+  }
 
-    &:active {
-        transform: scale(0.98); // v.$scale-press-lg
-    }
+  &:active {
+    transform: scale(0.98); // v.$scale-press-lg
+  }
 
-    svg {
-        margin-right: 0.5rem;
-    }
+  svg {
+    margin-right: 0.5rem;
+  }
 }
