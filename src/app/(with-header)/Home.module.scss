@@ -33,12 +33,10 @@
   inset: 0;
   z-index: 0;
   overflow: hidden;
-}
-
-.heroImage {
-  object-fit: cover;
-  object-position: center;
-  z-index: 0;
+  background-image: url('/assets/images/hero-wedding.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .heroOverlay {

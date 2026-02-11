@@ -1,0 +1,26 @@
+@use '../../../styles/variables' as v;
+
+.container {
+  display: flex;
+  gap: v.$space-sm;
+}
+
+.alignStart {
+  align-items: flex-start;
+}
+
+.alignCenter {
+  align-items: center;
+}
+
+.alignEnd {
+  align-items: flex-end;
+}
+
+.alignStretch {
+  align-items: stretch;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}

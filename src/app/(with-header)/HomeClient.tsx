@@ -2,9 +2,9 @@
 
 import * as Accordion from '@radix-ui/react-accordion';
 import { ArrowRight, ChevronDown, Palette, Smartphone, Sparkles, Zap } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
+import { ButtonGroup } from '@/components/ui/ButtonGroup';
 import styles from './Home.module.scss';
 
 const FEATURE_ITEMS = [
@@ -76,15 +76,6 @@ export function HomeClient() {
       {/* Hero Section */}
       <section className={styles.hero}>
         <div className={styles.heroMedia}>
-          <Image
-            src="/assets/images/hero-wedding.png"
-            alt="웨딩 부케를 든 신랑 신부"
-            fill
-            priority
-            quality={90}
-            className={styles.heroImage}
-            sizes="100vw"
-          />
           <div className={styles.heroOverlay} />
         </div>
 
@@ -103,17 +94,17 @@ export function HomeClient() {
             <br />
             감각적인 당신을 위한 미니멀 모바일 청첩장.
           </p>
-          <div className={styles.heroActions}>
-            <Button asChild variant="primary" size="lg" radius="full">
+          <ButtonGroup className={styles.heroActions}>
+            <Button asChild variant="primary" size="lg">
               <Link href="/setup">
                 무료로 시작하기
                 <ArrowRight size={18} />
               </Link>
             </Button>
-            <Button asChild variant="secondary" size="lg" radius="full">
+            <Button asChild variant="secondary" size="lg">
               <Link href="#features">더 알아보기</Link>
             </Button>
-          </div>
+          </ButtonGroup>
         </div>
       </section>
 
