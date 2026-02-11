@@ -1,4 +1,4 @@
-@use '@/styles/variables' as v;
+﻿@use '@/styles/variables' as v;
 @use '@/styles/mixins' as m;
 
 // ============================================
@@ -136,11 +136,11 @@
 
 .floatingTopActions {
   position: fixed;
-  top: calc(v.$builder-gap-md + env(safe-area-inset-top));
-  right: v.$builder-gap-md;
+  top: calc(v.$space-md + env(safe-area-inset-top));
+  right: v.$space-md;
   display: flex;
   align-items: center;
-  gap: v.$builder-gap-sm;
+  gap: v.$space-sm;
   z-index: 900;
 }
 
@@ -380,3 +380,4 @@
   background-color: v.$white;
   z-index: 1;
 }
+

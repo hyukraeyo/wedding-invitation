@@ -1,10 +1,10 @@
 'use client';
 
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
-import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
 import { Badge } from '@/components/ui/Badge';
-import { usePathname } from 'next/navigation';
 import { FileText, ClipboardList, HelpCircle, User, LogOut, Bell } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 import { MENU_TITLES } from '@/constants/navigation';
@@ -49,7 +49,7 @@ export function MyPageSidebar({
   return (
     <aside className={clsx(styles.sidebar, 'view-transition-sidebar')}>
       <nav className={styles.menuList}>
-        <ViewTransitionLink
+        <Link
           href="/mypage"
           className={clsx(styles.menuItem, pathname === '/mypage' && styles.active)}
         >
@@ -66,10 +66,10 @@ export function MyPageSidebar({
               {invitationCount}
             </Badge>
           )}
-        </ViewTransitionLink>
+        </Link>
 
         {isAdmin && (
-          <ViewTransitionLink
+          <Link
             href="/mypage/requests"
             className={clsx(styles.menuItem, pathname === '/mypage/requests' && styles.active)}
           >
@@ -86,18 +86,18 @@ export function MyPageSidebar({
                 {requestCount}
               </Badge>
             )}
-          </ViewTransitionLink>
+          </Link>
         )}
 
-        <ViewTransitionLink
+        <Link
           href="/mypage/account"
           className={clsx(styles.menuItem, pathname === '/mypage/account' && styles.active)}
         >
           <User size={20} className={styles.menuIcon} />
           {MENU_TITLES.ACCOUNT}
-        </ViewTransitionLink>
+        </Link>
 
-        <ViewTransitionLink
+        <Link
           href="/mypage/notifications"
           className={clsx(styles.menuItem, pathname === '/mypage/notifications' && styles.active)}
         >
@@ -114,7 +114,7 @@ export function MyPageSidebar({
               {notificationCount}
             </Badge>
           )}
-        </ViewTransitionLink>
+        </Link>
 
         <Dialog>
           <Dialog.Trigger asChild>

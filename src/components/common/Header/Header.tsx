@@ -2,10 +2,10 @@
 
 import React, { Suspense, useCallback } from 'react';
 import { LogIn, Save, Banana, Bell } from 'lucide-react';
+import Link from 'next/link';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { useRouter } from 'next/navigation';
 import type { User } from 'next-auth';
-import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
 import { IconButton, ProgressBar } from '@/components/ui';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
@@ -19,7 +19,7 @@ const HEADER_SCROLL_THRESHOLD = 1;
 
 const Logo = React.memo(() => (
   <div className={styles.logoWrapper}>
-    <ViewTransitionLink href="/" className={styles.logoLink}>
+    <Link href="/" className={styles.logoLink}>
       {/* <Image
         src="/logo.png"
         alt="Logo"
@@ -30,7 +30,7 @@ const Logo = React.memo(() => (
         priority
       /> */}
       <span className={styles.logoText}>Banana Wedding</span>
-    </ViewTransitionLink>
+    </Link>
   </div>
 ));
 Logo.displayName = 'Logo';
@@ -78,7 +78,7 @@ const HeaderActions = React.memo(
 
           {user ? (
             <div className={styles.actionsRow}>
-              <ViewTransitionLink href="/mypage/notifications" className={styles.notificationLink}>
+              <Link href="/mypage/notifications" className={styles.notificationLink}>
                 <IconButton
                   iconSize={24}
                   variant="ghost"
@@ -89,8 +89,8 @@ const HeaderActions = React.memo(
                   <Bell size={20} strokeWidth={2.5} />
                   {notificationCount > 0 && <span className={styles.notificationBadge} />}
                 </IconButton>
-              </ViewTransitionLink>
-              <ViewTransitionLink href="/mypage" className={styles.profileLink}>
+              </Link>
+              <Link href="/mypage" className={styles.profileLink}>
                 <IconButton
                   iconSize={24}
                   className={styles.profileButton}
@@ -100,7 +100,7 @@ const HeaderActions = React.memo(
                 >
                   <Banana size={20} strokeWidth={2.5} />
                 </IconButton>
-              </ViewTransitionLink>
+              </Link>
             </div>
           ) : (
             <IconButton

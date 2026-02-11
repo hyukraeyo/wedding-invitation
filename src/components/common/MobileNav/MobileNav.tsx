@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
   ClipboardList,
@@ -15,7 +16,6 @@ import {
   Eye,
   X,
 } from 'lucide-react';
-import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
 import { MENU_TITLES } from '@/constants/navigation';
 import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
@@ -73,31 +73,31 @@ export function MobileNav({
     <>
       {!isPreviewOpen && (
         <nav className={clsx(styles.mobileNav, !isVisible && !isMoreOpen && styles.navHidden)}>
-          <ViewTransitionLink
+          <Link
             href="/mypage"
             className={clsx(styles.navItem, pathname === '/mypage' && styles.active)}
           >
             <User className={styles.icon} />
             {invitationCount > 0 && <span className={styles.badge}>{invitationCount}</span>}
-          </ViewTransitionLink>
+          </Link>
 
           {isAdmin && (
-            <ViewTransitionLink
+            <Link
               href="/mypage/requests"
               className={clsx(styles.navItem, pathname === '/mypage/requests' && styles.active)}
             >
               <ClipboardList className={styles.icon} />
               {requestCount > 0 && <span className={styles.badge}>{requestCount}</span>}
-            </ViewTransitionLink>
+            </Link>
           )}
 
-          <ViewTransitionLink
+          <Link
             href="/mypage/notifications"
             className={clsx(styles.navItem, pathname === '/mypage/notifications' && styles.active)}
           >
             <Bell className={styles.icon} />
             {notificationCount > 0 && <span className={styles.badge}>{notificationCount}</span>}
-          </ViewTransitionLink>
+          </Link>
 
           {onSave && (
             <IconButton
@@ -145,14 +145,14 @@ export function MobileNav({
                 <Dialog.Header title="전체 메뉴" />
                 <Dialog.Body className={styles.drawerPadding}>
                   <div className={styles.drawerMenu}>
-                    <ViewTransitionLink
+                    <Link
                       href="/mypage/account"
                       className={styles.drawerItem}
                       onClick={handleDrawerNavClick}
                     >
                       <User size={20} className={styles.drawerIcon} />
                       <span>계정</span>
-                    </ViewTransitionLink>
+                    </Link>
                     <Dialog>
                       <Dialog.Trigger asChild>
                         <Button variant="ghost" className={styles.drawerItem}>

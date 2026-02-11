@@ -1,4 +1,4 @@
-@use '../../../styles/variables' as v;
+﻿@use '../../../styles/variables' as v;
 @use '../../../styles/mixins' as m;
 
 .wrapper {
@@ -146,7 +146,7 @@
 .invalidSummaryList {
   display: flex;
   flex-direction: column;
-  gap: v.$builder-gap-sm;
+  gap: v.$space-sm;
 }
 
 .skeletonItem {
@@ -216,3 +216,4 @@
     border: 1px solid v.$red-50;
   }
 }
+

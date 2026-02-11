@@ -6,11 +6,11 @@
   min-height: 100dvh;
   background-color: v.$white;
   color: v.$text-main;
-  padding-bottom: calc(v.$control-height-xl + v.$builder-gap-xl);
+  padding-bottom: calc(v.$control-height-xl + v.$space-xl);
   overflow-x: hidden; // Prevent horizontal scroll
 
   @include m.desktop {
-    padding-bottom: v.$builder-gap-xl;
+    padding-bottom: v.$space-xl;
   }
 }
 
@@ -23,7 +23,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: v.$builder-gap-lg;
+  gap: v.$space-lg;
   color: v.$white;
   padding: 0; // Reset padding for full screen
 }
@@ -60,8 +60,8 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: v.$builder-gap-lg;
-  padding: 0 v.$builder-gap-md;
+  gap: v.$space-lg;
+  padding: 0 v.$space-md;
   width: 100%;
   max-width: v.$canvas-max-width;
   padding-top: v.$header-height; // Account for fixed header if exists
@@ -77,8 +77,12 @@
   color: v.$white;
   font-size: v.$font-size-sm;
   font-weight: v.$font-weight-bold;
-  margin-bottom: v.$builder-gap-sm;
+  margin-bottom: v.$space-sm;
   backdrop-filter: blur(4px);
+}
+
+.heroChipIcon {
+  margin-right: v.$space-sm;
 }
 
 .heroTitle {
@@ -125,15 +129,23 @@
 .heroActions {
   display: flex;
   flex-direction: column;
-  gap: v.$builder-gap-sm;
+  gap: v.$space-sm;
   width: 100%;
   max-width: 320px;
-  margin-top: v.$builder-gap-md;
+  margin-top: v.$space-md;
+
+  > * {
+    width: 100%;
+  }
 
   @include m.desktop {
     flex-direction: row;
     width: auto;
     max-width: none;
+
+    > * {
+      width: auto;
+    }
   }
 }
 
@@ -142,10 +154,10 @@
   width: 100%;
   max-width: 1024px; // Controlled width for readability
   margin: 0 auto;
-  padding: 80px v.$builder-gap-md;
+  padding: 80px v.$space-md;
 
   @include m.desktop {
-    padding: 120px v.$builder-gap-xl;
+    padding: 120px v.$space-xl;
   }
 }
 
@@ -155,7 +167,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: v.$builder-gap-sm;
+  gap: v.$space-sm;
 }
 
 .sectionLabel {
@@ -181,14 +193,14 @@
 .sectionDescription {
   font-size: v.$font-size-base;
   color: v.$grey-500;
-  margin-top: v.$builder-gap-sm;
+  margin-top: v.$space-sm;
 }
 
 // ✨ Feature Grid (Glassmorphism)
 .featureGrid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: v.$builder-gap-lg;
+  gap: v.$space-lg;
 
   @include m.desktop {
     grid-template-columns: repeat(3, 1fr);
@@ -206,7 +218,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: v.$builder-gap-md;
+  gap: v.$space-md;
 
   &:hover {
     transform: translateY(-4px);
@@ -262,7 +274,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: v.$builder-gap-md;
+  gap: v.$space-md;
   position: relative;
 
   // Connector Line (Desktop)
@@ -320,7 +332,7 @@
 .themeGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: v.$builder-gap-md;
+  gap: v.$space-md;
 
   @include m.desktop {
     grid-template-columns: repeat(4, 1fr);
@@ -360,7 +372,7 @@
   background: rgba(0, 0, 0, 0.03);
   display: flex;
   align-items: flex-end;
-  padding: v.$builder-gap-md;
+  padding: v.$space-md;
 
   span {
     background: rgba(255, 255, 255, 0.9);
@@ -377,7 +389,7 @@
 .faqList {
   display: flex;
   flex-direction: column;
-  gap: v.$builder-gap-sm;
+  gap: v.$space-sm;
   max-width: 680px;
   margin: 0 auto;
 }
@@ -439,7 +451,7 @@
 
 // ✨ Footer
 .footer {
-  padding: 60px v.$builder-gap-md;
+  padding: 60px v.$space-md;
   text-align: center;
   border-top: 1px solid v.$grey-100;
   background: v.$white;
@@ -466,56 +478,6 @@
   color: v.$grey-400;
 }
 
-// ✨ Buttons
-.buttonPrimary {
-  height: 54px;
-  padding: 0 32px;
-  background: v.$primary;
-  color: v.$grey-900;
-  font-weight: 700; // Bold for readability
-  font-size: v.$font-size-base;
-  border-radius: v.$radius-full;
-  border: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  text-decoration: none;
-  box-shadow: v.$shadow-md;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(v.$primary, 0.4); // Glow effect
-    background: v.$white;
-  }
-}
-
-.buttonSecondary {
-  height: 54px;
-  padding: 0 32px;
-  background: rgba(255, 255, 255, 0.1); // Glassmorphic
-  backdrop-filter: blur(8px);
-  color: v.$white;
-  font-weight: 600;
-  font-size: v.$font-size-base;
-  border-radius: v.$radius-full;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.5);
-  }
-
-  // Handle case when not on hero (e.g. if reused in light section)
-  // For now we assume these buttons are primary used in Hero.
-}
-
 // Mobile Dock
 .mobileDock {
   position: fixed;
@@ -530,19 +492,5 @@
 
   @include m.desktop {
     display: none;
-  }
-
-  .dockButton {
-    width: 100%;
-    height: 52px;
-    background: v.$primary;
-    color: v.$grey-900;
-    font-weight: 700;
-    border-radius: v.$radius-xl;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    box-shadow: v.$shadow-md;
   }
 }

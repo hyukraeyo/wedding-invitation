@@ -7,7 +7,14 @@ import { Banana } from 'lucide-react';
 import s from './Button.module.scss';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'ghost' | 'outline' | 'blue' | 'hero' | 'unstyled' | 'dashed';
+  variant?:
+    | 'primary'
+    | 'secondary'
+    | 'ghost'
+    | 'outline'
+    | 'blue'
+    | 'unstyled'
+    | 'dashed';
   size?: 'xs' | 'sm' | 'md' | 'lg';
   isLoading?: boolean;
   loading?: boolean;
@@ -38,6 +45,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       disabled,
       type = 'button',
+      onClick,
       ...props
     },
     ref
@@ -47,6 +55,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const isLoading = isLoadingProp || loading;
     const fluid = fluidProp || fullWidth;
     const isDisabled = disabled || isLoading;
+    const handleAsChildClick = (event: React.MouseEvent<HTMLElement>) => {
+      if (isDisabled) {
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
+
+      onClick?.(event as unknown as React.MouseEvent<HTMLButtonElement>);
+    };
 
     if (asChild) {
       return (
@@ -68,6 +85,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           aria-disabled={isDisabled || undefined}
           data-disabled={isDisabled ? '' : undefined}
           {...props}
+          onClick={handleAsChildClick}
+          tabIndex={isDisabled ? -1 : props.tabIndex}
         >
           {children}
         </Comp>
@@ -93,6 +112,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         )}
         type={type}
         {...props}
+        onClick={onClick}
       >
         {isLoading && !unstyled && (
           <div className={s.loader}>

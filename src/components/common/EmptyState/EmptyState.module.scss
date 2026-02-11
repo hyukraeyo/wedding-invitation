@@ -72,28 +72,4 @@
 
 .actionButton {
   margin-top: 2.5rem;
-  display: inline-flex;
-  align-items: center;
-  padding: 1rem 2.5rem;
-  background-color: v.$primary-500; // v.$color-primary
-  color: v.$white; // v.$white
-  border: none;
-  border-radius: 9999px; // v.$radius-full
-  font-size: 1rem; // v.$font-size-base
-  font-weight: 800;
-  cursor: pointer;
-  transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1); // v.$transition-300 v.$ease-ios
-  text-decoration: none;
-
-  &:hover {
-    background-color: v.$primary-600; // v.$color-primary-dark
-  }
-
-  &:active {
-    transform: scale(0.98); // v.$scale-press-lg
-  }
-
-  svg {
-    margin-right: 0.5rem;
-  }
 }

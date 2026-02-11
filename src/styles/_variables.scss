@@ -183,9 +183,15 @@ $font-do-hyeon: t.$font-do-hyeon;
 $font-song-myung: t.$font-song-myung;
 $font-script: t.$font-script;
 
-// Builder Layout Tokens
-$builder-gap-sm: 8px;
-$builder-gap-md: 16px;
-$builder-gap-lg: 24px;
-$builder-gap-xl: 32px;
+// Global Spacing Tokens
+$space-sm: 8px;
+$space-md: 16px;
+$space-lg: 24px;
+$space-xl: 32px;
+
+// Builder Layout Tokens (Legacy aliases)
+$builder-gap-sm: $space-sm;
+$builder-gap-md: $space-md;
+$builder-gap-lg: $space-lg;
+$builder-gap-xl: $space-xl;
 // touch

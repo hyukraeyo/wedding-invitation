@@ -4,6 +4,7 @@ import * as Accordion from '@radix-ui/react-accordion';
 import { ArrowRight, ChevronDown, Palette, Smartphone, Sparkles, Zap } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Button } from '@/components/ui/Button';
 import styles from './Home.module.scss';
 
 const FEATURE_ITEMS = [
@@ -89,7 +90,7 @@ export function HomeClient() {
 
         <div className={styles.heroContent}>
           <div className={styles.heroChip}>
-            <Sparkles size={14} style={{ marginRight: 6 }} />
+            <Sparkles size={14} className={styles.heroChipIcon} />
             2026 New Collection
           </div>
           <h1 className={styles.heroTitle}>
@@ -103,13 +104,15 @@ export function HomeClient() {
             감각적인 당신을 위한 미니멀 모바일 청첩장.
           </p>
           <div className={styles.heroActions}>
-            <Link href="/setup" className={styles.buttonPrimary}>
-              무료로 시작하기
-              <ArrowRight size={18} />
-            </Link>
-            <Link href="#features" className={styles.buttonSecondary}>
-              더 알아보기
-            </Link>
+            <Button asChild variant="primary" size="lg" radius="full">
+              <Link href="/setup">
+                무료로 시작하기
+                <ArrowRight size={18} />
+              </Link>
+            </Button>
+            <Button asChild variant="secondary" size="lg" radius="full">
+              <Link href="#features">더 알아보기</Link>
+            </Button>
           </div>
         </div>
       </section>
@@ -222,9 +225,9 @@ export function HomeClient() {
 
       {/* Mobile Sticky Dock */}
       <div className={styles.mobileDock}>
-        <Link href="/setup" className={styles.dockButton}>
-          지금 바로 제작하기
-        </Link>
+        <Button asChild variant="primary" size="lg" fullWidth radius="lg">
+          <Link href="/setup">지금 바로 제작하기</Link>
+        </Button>
       </div>
     </div>
   );

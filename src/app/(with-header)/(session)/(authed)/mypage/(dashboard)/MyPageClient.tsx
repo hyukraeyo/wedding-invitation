@@ -2,6 +2,7 @@
 
 import React, { useMemo, useState, useCallback, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { clsx } from 'clsx';
 import { invitationService } from '@/services/invitationService';
@@ -12,7 +13,6 @@ import { useInvitationStore, INITIAL_STATE } from '@/store/useInvitationStore';
 import type { InvitationData } from '@/store/useInvitationStore';
 import { MyPageContent } from '@/components/mypage/MyPageContent';
 import { MyPageLayout } from '@/components/mypage/MyPageLayout';
-import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
 import { parseRejection } from '@/lib/rejection-helpers';
 // import { signOut } from 'next-auth/react';
 
@@ -558,9 +558,9 @@ export default function MyPageClient({
           </div>
           <h2 className={styles.authTitle}>로그인이 필요해요</h2>
           <p className={styles.authDescription}>저장된 청첩장을 보려면 먼저 로그인을 해주세요.</p>
-          <ViewTransitionLink href="/login?returnTo=/mypage" className={styles.authButton}>
+          <Link href="/login?returnTo=/mypage" className={styles.authButton}>
             로그인하기
-          </ViewTransitionLink>
+          </Link>
         </div>
       </MyPageLayout>
     );
@@ -649,7 +649,7 @@ export default function MyPageClient({
             <div className={styles.cardGrid}>
               {/* Create New Card */}
               <div className={styles.createCardWrapper}>
-                <ViewTransitionLink
+                <Link
                   href="/builder"
                   className={styles.createCard}
                   onClick={(e) => {
@@ -661,7 +661,7 @@ export default function MyPageClient({
                     <Plus size={28} />
                   </div>
                   <span className={styles.createText}>Create invitation</span>
-                </ViewTransitionLink>
+                </Link>
               </div>
 
               {/* Invitation Cards */}
@@ -702,7 +702,7 @@ export default function MyPageClient({
                 <SwiperSlide className={styles.autoWidthSlide}>
                   <div className={styles.swiperCardWrapper}>
                     <div className={styles.createCardWrapper}>
-                      <ViewTransitionLink
+                      <Link
                         href="/builder"
                         className={styles.createCard}
                         onClick={(e) => {
@@ -714,7 +714,7 @@ export default function MyPageClient({
                           <Plus size={32} />
                         </div>
                         <span className={styles.createText}>Create invitation</span>
-                      </ViewTransitionLink>
+                      </Link>
                     </div>
                   </div>
                 </SwiperSlide>

@@ -1,4 +1,4 @@
-@use '@/styles/variables' as v;
+﻿@use '@/styles/variables' as v;
 
 .container {
   display: flex;
@@ -15,17 +15,17 @@
 
   &.sm {
     font-size: v.$font-size-sm;
-    gap: v.$builder-gap-sm;
+    gap: v.$space-sm;
   }
 
   &.md {
     font-size: v.$font-size-md;
-    gap: v.$builder-gap-md;
+    gap: v.$space-md;
   }
 
   &.lg {
     font-size: v.$font-size-lg;
-    gap: v.$builder-gap-lg;
+    gap: v.$space-lg;
   }
 }
 
@@ -113,3 +113,4 @@
 .yearColumn {
   width: 80px;
 }
+

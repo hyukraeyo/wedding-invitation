@@ -1,10 +1,10 @@
 'use client';
 
 import * as React from 'react';
+import Link from 'next/link';
 
 import { clsx } from 'clsx';
 
-import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
 import { Button } from '@/components/ui/Button';
 import styles from './EmptyState.module.scss';
 
@@ -35,24 +35,26 @@ export function EmptyState({
 
     if (action.href) {
       return (
-        <ViewTransitionLink
-          href={action.href}
-          className={styles.actionButton}
-          onClick={action.onClick as React.MouseEventHandler<HTMLAnchorElement>}
-        >
-          {action.icon}
-          {action.label}
-        </ViewTransitionLink>
+        <Button asChild variant="primary" size="lg" radius="full" className={styles.actionButton}>
+          <Link
+            href={action.href}
+            onClick={action.onClick as React.MouseEventHandler<HTMLAnchorElement>}
+          >
+            {action.icon}
+            {action.label}
+          </Link>
+        </Button>
       );
     }
 
     return (
       <Button
         type="button"
-        variant="secondary"
+        variant="primary"
+        size="lg"
+        radius="full"
         className={styles.actionButton}
         onClick={action.onClick as React.MouseEventHandler<HTMLButtonElement>}
-        style={{ width: 'auto' }}
       >
         {action.icon}
         {action.label}

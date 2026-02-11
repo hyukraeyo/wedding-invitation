@@ -1,4 +1,4 @@
-@use '../../../styles/variables' as v;
+﻿@use '../../../styles/variables' as v;
 
 .root {
   width: 100%;
@@ -12,7 +12,7 @@
     position: absolute;
     top: 0;
     height: 100%;
-    width: v.$builder-gap-xl;
+    width: v.$space-xl;
     pointer-events: none;
     z-index: 2;
     opacity: 0;
@@ -264,3 +264,4 @@
     width: 50%;
   }
 }
+

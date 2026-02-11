@@ -3,11 +3,11 @@
 import React, { useMemo, useState, useEffect, useCallback, useRef } from 'react';
 
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { signIn, signOut } from 'next-auth/react';
 import type { User } from 'next-auth';
 
-import { ViewTransitionLink } from '@/components/common/ViewTransitionLink';
 import { Heading } from '@/components/ui';
 import { BananaLoader } from '@/components/ui/Loader';
 import { useToast } from '@/hooks/use-toast';
@@ -161,22 +161,22 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
           <div className={styles.footer}>
             <p>
               계속 진행함으로써 귀하께서는
-              <ViewTransitionLink href="/privacy" target="_blank" className={styles.link}>
+              <Link href="/privacy" target="_blank" className={styles.link}>
                 개인정보 처리방침
-              </ViewTransitionLink>
+              </Link>
               및{' '}
-              <ViewTransitionLink href="/terms" target="_blank" className={styles.link}>
+              <Link href="/terms" target="_blank" className={styles.link}>
                 이용약관
-              </ViewTransitionLink>
+              </Link>
               에 동의하게 됩니다.
             </p>
           </div>
 
           {/* Back to Home */}
           <div className={styles.backToHomeWrapper}>
-            <ViewTransitionLink href="/" className={styles.backToHomeLink}>
+            <Link href="/" className={styles.backToHomeLink}>
               홈으로 돌아가기
-            </ViewTransitionLink>
+            </Link>
           </div>
         </div>
       </div>

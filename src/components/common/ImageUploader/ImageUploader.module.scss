@@ -1,10 +1,10 @@
-@use '../../../styles/variables' as v;
+﻿@use '../../../styles/variables' as v;
 @use '../../../styles/mixins' as m;
 
 .container {
   display: flex;
   flex-direction: column;
-  gap: v.$builder-gap-sm;
+  gap: v.$space-sm;
   width: 100%;
 }
 
@@ -169,3 +169,4 @@
     border-color: v.$red-500;
   }
 }
+
