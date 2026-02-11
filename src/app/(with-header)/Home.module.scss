@@ -7,21 +7,25 @@
   background-color: v.$white;
   color: v.$text-main;
   padding-bottom: calc(v.$control-height-xl + v.$builder-gap-xl);
+  overflow-x: hidden; // Prevent horizontal scroll
 
   @include m.desktop {
     padding-bottom: v.$builder-gap-xl;
   }
 }
 
+// ✨ Hero Section (Full Screen with Image)
 .hero {
   position: relative;
   width: 100%;
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: v.$builder-gap-lg;
+  color: v.$white;
+  padding: 0; // Reset padding for full screen
 }
 
 .heroMedia {
@@ -43,8 +47,8 @@
   z-index: 1;
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.6) 0%,
-    rgba(0, 0, 0, 0.4) 40%,
+    rgba(0, 0, 0, 0.3) 0%,
+    rgba(0, 0, 0, 0.5) 50%,
     rgba(0, 0, 0, 0.7) 100%
   );
 }
@@ -58,311 +62,487 @@
   text-align: center;
   gap: v.$builder-gap-lg;
   padding: 0 v.$builder-gap-md;
-  max-width: calc(v.$canvas-max-width + v.$builder-gap-xl);
+  width: 100%;
+  max-width: v.$canvas-max-width;
+  padding-top: v.$header-height; // Account for fixed header if exists
+}
+
+.heroChip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 16px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: v.$radius-full;
+  color: v.$white;
+  font-size: v.$font-size-sm;
+  font-weight: v.$font-weight-bold;
+  margin-bottom: v.$builder-gap-sm;
+  backdrop-filter: blur(4px);
 }
 
 .heroTitle {
   margin: 0;
-  font-size: calc(v.$font-size-xxl + v.$builder-gap-md);
-  line-height: v.$line-height-tight;
-  letter-spacing: -0.03em;
+  font-size: 42px;
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
   color: v.$white;
   word-break: keep-all;
   text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
 
   @include m.desktop {
-    font-size: calc(v.$font-size-xxl * 2);
+    font-size: 64px;
+    line-height: 1.1;
   }
-}
 
-.heroAccent {
-  color: v.$primary;
+  span {
+    position: relative;
+    z-index: 1;
+    color: v.$primary; // Banana Yellow Accent
+
+    // Remove the previous underline for cleaner look on image
+    &::after {
+      display: none;
+    }
+  }
 }
 
 .heroDescription {
   margin: 0;
-  color: rgba(v.$white, 0.85);
+  color: rgba(v.$white, 0.9);
   font-size: v.$font-size-lg;
-  line-height: v.$line-height-relaxed;
+  line-height: 1.6;
+  max-width: 480px;
   word-break: keep-all;
-  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+
+  @include m.desktop {
+    font-size: v.$font-size-xl;
+  }
 }
 
 .heroActions {
-  position: relative;
-  z-index: 2;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: v.$builder-gap-sm;
   width: 100%;
-  max-width: calc(v.$canvas-max-width - v.$builder-gap-xl);
+  max-width: 320px;
+  margin-top: v.$builder-gap-md;
 
   @include m.desktop {
+    flex-direction: row;
     width: auto;
     max-width: none;
   }
 }
 
-.ctaButton {
-  height: v.$control-height-lg;
-  border-radius: v.$radius-full;
-  border: 1px solid transparent;
-  padding: 0 v.$control-padding-lg;
-  text-decoration: none;
-  font-size: v.$font-size-base;
-  font-weight: v.$font-weight-semibold;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: v.$builder-gap-sm;
-  transition:
-    background-color v.$transition-fast,
-    border-color v.$transition-fast,
-    color v.$transition-fast,
-    transform v.$transition-fast,
-    box-shadow v.$transition-fast;
-
-  @include m.hover {
-    transform: translateY(-1px);
-  }
-
-  &:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(v.$primary, 0.28);
-  }
-}
-
-.ctaPrimary {
-  background-color: v.$primary;
-  border-color: v.$primary;
-  color: v.$grey-900;
-  box-shadow: v.$shadow-md;
-
-  @include m.hover {
-    background-color: v.$primary-dark;
-    border-color: v.$primary-dark;
-  }
-}
-
+// ✨ Common Section Styles
 .section {
   width: 100%;
-  max-width: calc(v.$canvas-max-width * 2 + v.$builder-gap-xl * 4);
+  max-width: 1024px; // Controlled width for readability
   margin: 0 auto;
-  padding: v.$builder-gap-xl v.$builder-gap-md 0;
+  padding: 80px v.$builder-gap-md;
 
   @include m.desktop {
-    padding: calc(v.$builder-gap-xl * 1.5) v.$builder-gap-xl 0;
+    padding: 120px v.$builder-gap-xl;
   }
 }
 
 .sectionHeader {
+  text-align: center;
+  margin-bottom: 60px;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: v.$builder-gap-sm;
-  margin-bottom: v.$builder-gap-lg;
 }
 
 .sectionLabel {
-  width: fit-content;
-  height: v.$control-height-xs;
-  padding: 0 v.$control-padding-sm;
-  border-radius: v.$radius-full;
-  border: 1px solid v.$grey-200;
-  background-color: rgba(v.$white, 0.88);
-  color: v.$grey-600;
-  font-size: v.$font-size-xs;
-  font-weight: v.$font-weight-semibold;
-  display: inline-flex;
-  align-items: center;
-  letter-spacing: 0.04em;
+  font-size: v.$font-size-sm;
+  font-weight: v.$font-weight-bold;
+  color: v.$primary-dark;
   text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .sectionTitle {
-  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
   color: v.$grey-900;
-  font-size: calc(v.$font-size-xl + v.$builder-gap-sm);
-  line-height: v.$line-height-tight;
-  letter-spacing: -0.02em;
-}
-
-.sectionDescription {
+  line-height: 1.2;
   margin: 0;
-  color: v.$grey-600;
-  font-size: v.$font-size-base;
-  line-height: v.$line-height-base;
-  word-break: keep-all;
-}
-
-.coreGrid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: v.$builder-gap-md;
 
   @include m.desktop {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: v.$builder-gap-lg;
+    font-size: 40px;
   }
 }
 
-.coreCard {
-  padding: v.$builder-gap-md;
-  border-radius: v.$radius-xl;
-  border: 1px solid rgba(v.$grey-200, 0.92);
-  background-color: rgba(v.$white, 0.92);
+.sectionDescription {
+  font-size: v.$font-size-base;
+  color: v.$grey-500;
+  margin-top: v.$builder-gap-sm;
+}
+
+// ✨ Feature Grid (Glassmorphism)
+.featureGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: v.$builder-gap-lg;
+
+  @include m.desktop {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+}
+
+.featureCard {
+  background: white;
+  border-radius: v.$radius-2xl;
+  padding: 32px;
+  border: 1px solid v.$grey-100;
+  box-shadow: v.$shadow-sm;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
-  gap: v.$builder-gap-sm;
-  box-shadow: v.$shadow-md;
+  align-items: flex-start;
+  gap: v.$builder-gap-md;
 
-  @include m.hover {
-    border-color: v.$grey-300;
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: v.$shadow-xl;
+    border-color: rgba(v.$primary, 0.3);
+  }
+}
+
+.featureIconBox {
+  width: 56px;
+  height: 56px;
+  background: rgba(v.$primary, 0.1);
+  color: v.$primary-dark;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.featureTitle {
+  font-size: v.$font-size-xl;
+  font-weight: 700;
+  color: v.$grey-900;
+  margin: 0;
+}
+
+.featureDesc {
+  font-size: v.$font-size-base;
+  color: v.$grey-500;
+  line-height: 1.5;
+  margin: 0;
+}
+
+// ✨ Workflow (Simple Clean Steps)
+.workflowList {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  position: relative;
+
+  @include m.desktop {
+    flex-direction: row;
+    gap: 20px;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+}
+
+.workflowItem {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: v.$builder-gap-md;
+  position: relative;
+
+  // Connector Line (Desktop)
+  @include m.desktop {
+    &:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 24px;
+      left: calc(50% + 30px);
+      width: calc(100% - 60px);
+      height: 2px;
+      background: v.$grey-200;
+      z-index: 0;
+    }
+  }
+}
+
+.workflowNumber {
+  width: 48px;
+  height: 48px;
+  background: v.$white;
+  border: 2px solid v.$grey-100;
+  color: v.$grey-400;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 18px;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+
+  &.active {
+    border-color: v.$primary;
+    color: v.$primary-dark;
+    background: v.$primary-50;
+  }
+}
+
+.workflowContent {
+  h3 {
+    font-size: v.$font-size-lg;
+    font-weight: 700;
+    color: v.$grey-900;
+    margin-bottom: 8px;
+  }
+  p {
+    font-size: v.$font-size-sm;
+    color: v.$grey-500;
+  }
+}
+
+// ✨ Premium Theme Preview (Grid)
+.themeGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: v.$builder-gap-md;
+
+  @include m.desktop {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.themeCard {
+  aspect-ratio: 3/4;
+  background: v.$grey-100;
+  border-radius: v.$radius-xl;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-4px);
     box-shadow: v.$shadow-lg;
   }
 }
 
-.coreIcon {
-  width: v.$control-height-md;
-  height: v.$control-height-md;
-  border-radius: v.$radius-full;
-  background-color: rgba(v.$primary, 0.14);
-  color: v.$primary-dark;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.coreTitle {
-  margin: 0;
-  color: v.$grey-900;
-  font-size: v.$font-size-xl;
-  line-height: v.$line-height-tight;
-}
-
-.coreDescription {
-  margin: 0;
-  color: v.$grey-600;
-  font-size: v.$font-size-sm;
-  line-height: v.$line-height-base;
-  word-break: keep-all;
-}
-
-.flowSection {
-  margin-top: v.$builder-gap-xl;
-}
-
-.flowList {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: v.$builder-gap-sm;
-}
-
-.flowItem {
-  border-radius: v.$radius-lg;
-  border: 1px solid v.$grey-200;
-  background-color: rgba(v.$white, 0.9);
-  padding: v.$builder-gap-md;
-  display: flex;
-  align-items: flex-start;
-  gap: v.$builder-gap-sm;
-}
-
-.flowIndex {
-  width: v.$control-height-sm;
-  height: v.$control-height-sm;
-  border-radius: v.$radius-full;
-  background-color: rgba(v.$primary, 0.16);
-  color: v.$primary-dark;
-  font-size: v.$font-size-sm;
-  font-weight: v.$font-weight-bold;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.flowContent {
-  display: flex;
-  flex-direction: column;
-  gap: v.$builder-gap-sm;
-}
-
-.subTitle {
-  margin: 0;
-  color: v.$grey-900;
-  font-size: v.$font-size-lg;
-  line-height: v.$line-height-tight;
-}
-
-.subDescription {
-  margin: 0;
-  color: v.$grey-600;
-  font-size: v.$font-size-sm;
-  line-height: v.$line-height-base;
-  word-break: keep-all;
-}
-
-.footer {
+.themeImage {
   width: 100%;
-  max-width: calc(v.$canvas-max-width * 2 + v.$builder-gap-xl * 4);
-  margin: 0 auto;
-  padding: calc(v.$builder-gap-xl * 2) v.$builder-gap-md v.$builder-gap-xl;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+
+  .themeCard:hover & {
+    transform: scale(1.05);
+  }
+}
+
+.themeOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.03);
+  display: flex;
+  align-items: flex-end;
+  padding: v.$builder-gap-md;
+
+  span {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 6px 12px;
+    border-radius: v.$radius-full;
+    font-size: v.$font-size-xs;
+    font-weight: 600;
+    color: v.$grey-900;
+    backdrop-filter: blur(4px);
+  }
+}
+
+// ✨ Accordion (Q&A)
+.faqList {
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: v.$builder-gap-sm;
+  max-width: 680px;
+  margin: 0 auto;
+}
 
-  @include m.desktop {
-    padding: calc(v.$builder-gap-xl * 2) v.$builder-gap-xl v.$builder-gap-xl;
+.faqItem {
+  border: 1px solid v.$grey-200;
+  border-radius: v.$radius-lg;
+  background: v.$white;
+  overflow: hidden;
+}
+
+.faqTrigger {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  font-size: v.$font-size-lg;
+  font-weight: 600;
+  color: v.$grey-900;
+  cursor: pointer;
+  text-align: left;
+
+  &:hover {
+    background: v.$grey-50;
   }
+
+  svg {
+    color: v.$grey-400;
+    transition: transform 0.3s ease;
+  }
+
+  &[data-state='open'] svg {
+    transform: rotate(180deg);
+    color: v.$primary-dark;
+  }
+}
+
+.faqContent {
+  padding: 0 20px 20px;
+  font-size: v.$font-size-base;
+  color: v.$grey-600;
+  line-height: 1.6;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ✨ Footer
+.footer {
+  padding: 60px v.$builder-gap-md;
+  text-align: center;
+  border-top: 1px solid v.$grey-100;
+  background: v.$white;
 }
 
 .footerLinks {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: v.$builder-gap-md;
+  gap: 24px;
+  margin-bottom: 24px;
 
   a {
-    text-decoration: none;
-    color: v.$grey-600;
     font-size: v.$font-size-sm;
-    font-weight: v.$font-weight-medium;
-    transition: color v.$transition-fast;
-
-    @include m.hover {
+    color: v.$grey-500;
+    text-decoration: none;
+    &:hover {
       color: v.$grey-900;
     }
   }
 }
 
-.footerCopy {
-  margin: 0;
-  color: v.$grey-500;
+.copyright {
   font-size: v.$font-size-xs;
+  color: v.$grey-400;
 }
 
+// ✨ Buttons
+.buttonPrimary {
+  height: 54px;
+  padding: 0 32px;
+  background: v.$primary;
+  color: v.$grey-900;
+  font-weight: 700; // Bold for readability
+  font-size: v.$font-size-base;
+  border-radius: v.$radius-full;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+  box-shadow: v.$shadow-md;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(v.$primary, 0.4); // Glow effect
+    background: v.$white;
+  }
+}
+
+.buttonSecondary {
+  height: 54px;
+  padding: 0 32px;
+  background: rgba(255, 255, 255, 0.1); // Glassmorphic
+  backdrop-filter: blur(8px);
+  color: v.$white;
+  font-weight: 600;
+  font-size: v.$font-size-base;
+  border-radius: v.$radius-full;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+
+  // Handle case when not on hero (e.g. if reused in light section)
+  // For now we assume these buttons are primary used in Hero.
+}
+
+// Mobile Dock
 .mobileDock {
   position: fixed;
+  bottom: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  z-index: v.$z-overlay;
-  padding: v.$builder-gap-sm v.$builder-gap-md;
-  background: linear-gradient(
-    180deg,
-    rgba(v.$white, 0) 0%,
-    rgba(v.$white, 0.96) 46%,
-    v.$white 100%
-  );
+  padding: 16px 20px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid v.$grey-100;
+  z-index: 100;
 
   @include m.desktop {
     display: none;
   }
-}
 
-.mobileDockButton {
-  width: 100%;
+  .dockButton {
+    width: 100%;
+    height: 52px;
+    background: v.$primary;
+    color: v.$grey-900;
+    font-weight: 700;
+    border-radius: v.$radius-xl;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: v.$shadow-md;
+  }
 }

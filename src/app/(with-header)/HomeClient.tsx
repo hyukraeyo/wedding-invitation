@@ -1,77 +1,79 @@
-import {
-  ArrowRight,
-  CheckCircle2,
-  Images,
-  MapPin,
-  Palette,
-  Share2,
-  Sparkles,
-  Wallet,
-} from 'lucide-react';
+'use client';
+
+import * as Accordion from '@radix-ui/react-accordion';
+import { ArrowRight, ChevronDown, Palette, Smartphone, Sparkles, Zap } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './Home.module.scss';
 
-const COPYRIGHT_YEAR = '2026';
 const FEATURE_ITEMS = [
   {
-    title: '3분 제작 + 즉시 미리보기',
-    description:
-      '대표 이미지, 문구, 예식 정보를 입력하면 바로 결과를 확인하며 완성도를 빠르게 높일 수 있습니다.',
-    icon: Sparkles,
+    title: '압도적 속도',
+    description: '입력과 동시에 완성되는 실시간 미리보기로 제작 시간을 단축하세요.',
+    icon: Zap,
   },
   {
-    title: '사진/지도/공유를 한 화면에서',
-    description:
-      '사진 구성, 지도 안내, 카카오톡 공유까지 하객 전달에 필요한 흐름을 한 번에 정리합니다.',
-    icon: Share2,
-  },
-  {
-    title: '웨딩 갤러리 편집',
-    description: '사진 순서와 노출 방식을 조정해 분위기를 정리합니다.',
-    icon: Images,
-  },
-  {
-    title: '예식 정보 + 지도 안내',
-    description: '일시, 장소, 주소와 지도 안내를 함께 제공합니다.',
-    icon: MapPin,
-  },
-  {
-    title: '테마/스타일 설정',
-    description: '폰트와 강조색으로 두 분의 분위기를 맞춥니다.',
+    title: '감각적 디자인',
+    description: '전문 디자이너가 조율한 타이포그래피와 레이아웃을 제공합니다.',
     icon: Palette,
   },
   {
-    title: '축의금 계좌 안내',
-    description: '신랑/신부 측 정보를 분리해 깔끔하게 안내합니다.',
-    icon: Wallet,
+    title: '모바일 최적화',
+    description: '어떤 기기에서도 완벽하게 보이는 반응형 뷰어를 지원합니다.',
+    icon: Smartphone,
   },
-  {
-    title: '모바일 전달 최적화',
-    description: '하객이 모바일에서 바로 읽고 이동할 수 있도록 읽기 흐름을 최적화했습니다.',
-    icon: CheckCircle2,
-  },
-] as const;
+];
 
 const FLOW_STEPS = [
   {
-    title: '기본 정보 입력',
-    description: '예식 일시, 장소, 인사말을 먼저 정리합니다.',
+    title: '정보 입력',
+    description: '예식 정보를 입력하세요',
   },
   {
-    title: '사진/디자인 구성',
-    description: '메인·갤러리·테마를 편집하며 즉시 미리보기 합니다.',
+    title: '디자인 선택',
+    description: '취향에 맞는 테마 설정',
   },
   {
     title: '링크 공유',
-    description: '완성된 청첩장을 카카오톡과 메신저로 전달합니다.',
+    description: '카카오톡으로 바로 전달',
   },
-] as const;
+];
+
+const THEME_PLACEHOLDERS = [
+  { id: 1, name: 'Minimal Mono', color: '#f4f4f5' },
+  { id: 2, name: 'Soft Peach', color: '#fff1f2' },
+  { id: 3, name: 'Classic Navy', color: '#f0f9ff' },
+  { id: 4, name: 'Modern Green', color: '#f0fdf4' },
+];
+
+const FAQ_ITEMS = [
+  {
+    id: 'item-1',
+    question: '제작 비용은 얼마인가요?',
+    answer:
+      '바나나웨딩의 모든 기본 기능은 무료로 제공됩니다. 프리미엄 테마와 추가 기능도 합리적인 가격으로 이용하실 수 있습니다.',
+  },
+  {
+    id: 'item-2',
+    question: '수정 횟수에 제한이 있나요?',
+    answer:
+      '아니요, 예식 전까지 횟수 제한 없이 자유롭게 수정하실 수 있습니다. 변경된 내용은 실시간으로 반영됩니다.',
+  },
+  {
+    id: 'item-3',
+    question: '사진은 몇 장까지 올릴 수 있나요?',
+    answer:
+      '기본 갤러리에는 최대 30장의 고화질 사진을 업로드하실 수 있으며, 순서 변경도 자유롭습니다.',
+  },
+];
+
+const COPYRIGHT_YEAR = '2026';
 
 export function HomeClient() {
   return (
     <div className={styles.container}>
-      <section className={styles.hero} aria-labelledby="home-hero-title">
+      {/* Hero Section */}
+      <section className={styles.hero}>
         <div className={styles.heroMedia}>
           <Image
             src="/assets/images/hero-wedding.png"
@@ -84,93 +86,144 @@ export function HomeClient() {
           />
           <div className={styles.heroOverlay} />
         </div>
+
         <div className={styles.heroContent}>
-          <h1 id="home-hero-title" className={styles.heroTitle}>
-            우리만의 특별한
+          <div className={styles.heroChip}>
+            <Sparkles size={14} style={{ marginRight: 6 }} />
+            2026 New Collection
+          </div>
+          <h1 className={styles.heroTitle}>
+            가장 완벽한 시작,
             <br />
-            <span className={styles.heroAccent}>모바일 청첩장</span>
+            <span>바나나 웨딩</span>
           </h1>
           <p className={styles.heroDescription}>
-            유통기한 없는 달콤한 이야기, 3분 만에 제작하고 공유하세요.
+            복잡한 절차는 걷어내고, 오직 두 사람의 이야기에만 집중하세요.
+            <br />
+            감각적인 당신을 위한 미니멀 모바일 청첩장.
           </p>
-        </div>
-        <div className={styles.heroActions}>
-          <Link href="/setup" className={`${styles.ctaButton} ${styles.ctaPrimary}`}>
-            무료로 시작하기
-            <ArrowRight size={18} aria-hidden="true" />
-          </Link>
+          <div className={styles.heroActions}>
+            <Link href="/setup" className={styles.buttonPrimary}>
+              무료로 시작하기
+              <ArrowRight size={18} />
+            </Link>
+            <Link href="#features" className={styles.buttonSecondary}>
+              더 알아보기
+            </Link>
+          </div>
         </div>
       </section>
 
-      <section id="features" className={styles.section} aria-labelledby="home-features-title">
+      {/* Features Section */}
+      <section id="features" className={styles.section}>
         <header className={styles.sectionHeader}>
-          <span className={styles.sectionLabel}>Core Value</span>
-          <h2 id="home-features-title" className={styles.sectionTitle}>
-            복잡함을 덜어낸 핵심 기능 구성
-          </h2>
+          <span className={styles.sectionLabel}>Features</span>
+          <h2 className={styles.sectionTitle}>불필요한 기능은 뺐습니다</h2>
           <p className={styles.sectionDescription}>
-            실제로 자주 쓰는 기능만 남겨, 처음 시작해도 빠르게 초안을 완성할 수 있도록 정리했습니다.
+            가장 자주 쓰는 핵심 기능만 담아 가볍고 강력합니다.
           </p>
         </header>
 
-        <div className={styles.coreGrid}>
-          {FEATURE_ITEMS.map((item) => {
+        <div className={styles.featureGrid}>
+          {FEATURE_ITEMS.map((item, idx) => {
             const Icon = item.icon;
-
             return (
-              <article key={item.title} className={styles.coreCard}>
-                <div className={styles.coreIcon} aria-hidden="true">
-                  <Icon size={20} />
+              <div key={idx} className={styles.featureCard}>
+                <div className={styles.featureIconBox}>
+                  <Icon size={24} />
                 </div>
-                <h3 className={styles.coreTitle}>{item.title}</h3>
-                <p className={styles.coreDescription}>{item.description}</p>
-              </article>
+                <h3 className={styles.featureTitle}>{item.title}</h3>
+                <p className={styles.featureDesc}>{item.description}</p>
+              </div>
             );
           })}
         </div>
       </section>
 
-      <section
-        className={`${styles.section} ${styles.flowSection}`}
-        aria-labelledby="home-flow-title"
-      >
+      {/* Theme Preview Section */}
+      <section className={styles.section}>
         <header className={styles.sectionHeader}>
-          <span className={styles.sectionLabel}>Workflow</span>
-          <h2 id="home-flow-title" className={styles.sectionTitle}>
-            실제 제작 흐름
-          </h2>
+          <span className={styles.sectionLabel}>Design</span>
+          <h2 className={styles.sectionTitle}>취향을 담은 프리미엄 테마</h2>
+          <p className={styles.sectionDescription}>
+            단순하지만 세련된, 질리지 않는 디자인을 만나보세요.
+          </p>
         </header>
 
-        <ol className={styles.flowList}>
-          {FLOW_STEPS.map((step, index) => (
-            <li key={step.title} className={styles.flowItem}>
-              <span className={styles.flowIndex}>{index + 1}</span>
-              <div className={styles.flowContent}>
-                <h3 className={styles.subTitle}>{step.title}</h3>
-                <p className={styles.subDescription}>{step.description}</p>
+        <div className={styles.themeGrid}>
+          {THEME_PLACEHOLDERS.map((theme) => (
+            <div
+              key={theme.id}
+              className={styles.themeCard}
+              style={{ backgroundColor: theme.color }}
+            >
+              {/* Actual images would go here */}
+              <div className={styles.themeOverlay}>
+                <span>{theme.name}</span>
               </div>
-            </li>
+            </div>
           ))}
-        </ol>
+        </div>
       </section>
 
-      <footer className={styles.footer} aria-label="바나나웨딩 안내">
-        <nav className={styles.footerLinks} aria-label="주요 페이지 링크">
-          <Link href="/setup">청첩장 시작하기</Link>
+      {/* Workflow Section */}
+      <section className={styles.section}>
+        <header className={styles.sectionHeader}>
+          <span className={styles.sectionLabel}>Workflow</span>
+          <h2 className={styles.sectionTitle}>3분이면 충분합니다</h2>
+        </header>
+
+        <div className={styles.workflowList}>
+          {FLOW_STEPS.map((step, idx) => (
+            <div key={idx} className={styles.workflowItem}>
+              <div className={`${styles.workflowNumber} ${idx <= 1 ? styles.active : ''}`}>
+                {idx + 1}
+              </div>
+              <div className={styles.workflowContent}>
+                <h3>{step.title}</h3>
+                <p>{step.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className={styles.section}>
+        <header className={styles.sectionHeader}>
+          <span className={styles.sectionLabel}>Q&A</span>
+          <h2 className={styles.sectionTitle}>자주 묻는 질문</h2>
+        </header>
+
+        <Accordion.Root type="single" collapsible className={styles.faqList}>
+          {FAQ_ITEMS.map((item) => (
+            <Accordion.Item key={item.id} value={item.id} className={styles.faqItem}>
+              <Accordion.Header>
+                <Accordion.Trigger className={styles.faqTrigger}>
+                  {item.question}
+                  <ChevronDown size={20} aria-hidden />
+                </Accordion.Trigger>
+              </Accordion.Header>
+              <Accordion.Content className={styles.faqContent}>{item.answer}</Accordion.Content>
+            </Accordion.Item>
+          ))}
+        </Accordion.Root>
+      </section>
+
+      {/* Footer */}
+      <footer className={styles.footer}>
+        <nav className={styles.footerLinks}>
           <Link href="/terms">이용약관</Link>
-          <Link href="/login">로그인</Link>
           <Link href="/privacy">개인정보 처리방침</Link>
+          <Link href="/login">로그인</Link>
         </nav>
-        <p className={styles.footerCopy}>© {COPYRIGHT_YEAR} Banana Wedding. All rights reserved.</p>
+        <p className={styles.copyright}>© {COPYRIGHT_YEAR} Banana Wedding. All rights reserved.</p>
       </footer>
 
+      {/* Mobile Sticky Dock */}
       <div className={styles.mobileDock}>
-        <Link
-          href="/setup"
-          className={`${styles.ctaButton} ${styles.ctaPrimary} ${styles.mobileDockButton}`}
-        >
-          3분 안에 시작하기
-          <ArrowRight size={18} aria-hidden="true" />
+        <Link href="/setup" className={styles.dockButton}>
+          지금 바로 제작하기
         </Link>
       </div>
     </div>
