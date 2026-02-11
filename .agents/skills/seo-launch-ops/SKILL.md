@@ -14,6 +14,12 @@ description: Optimize and operate Banana Wedding SEO and search indexing across 
 5. `lint`, `type-check`, `build`를 실행해 안정성을 검증합니다.
 6. TODO 및 운영 문서를 업데이트합니다.
 
+## Cross-Skill Baseline
+
+- React/Next.js 관련 코드 변경은 항상 아래 기준 스킬을 함께 준수합니다.
+  - 기준(수정 금지): `.agent/skills/vercel-react-best-practices/SKILL.md`
+  - 미러: `.codex/skills/vercel-react-best-practices/SKILL.md`, `.cursor/skills/vercel-react-best-practices/SKILL.md`
+
 ## Project SEO Source Map
 
 - 전역 메타/검증/구조화데이터: `src/app/layout.tsx`

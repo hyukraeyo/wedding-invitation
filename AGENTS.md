@@ -3,7 +3,9 @@
 Guidance for agentic coding agents working in `wedding-invitation`.
 
 > **CRITICAL: SYNC MANDATE**
-> All guide docs (`.cursorrules`, `AGENTS.md`, `README.md`) must stay in sync. Update all when changing rules.
+> Keep all agent guidance and reference docs in sync:
+> `.agent/rules/banana-wedding.md`, `.cursorrules`, `AGENTS.md`, `README.md`, `ARCHITECTURE.md`, `.opencode/AGENTS.md`.
+> If skill paths or definitions change, sync `.agents/skills/*/SKILL.md`, `.codex/skills/*`, `.cursor/skills/*`, and `.opencode/oh-my-opencode.json` together.
 
 ## Build / Lint / Test Commands
 
@@ -204,5 +206,8 @@ src/
 
 ## Specialized Guides
 
-- `Vercel Best Practices`: `.codex/skills/vercel-react-best-practices/SKILL.md`
+- `Vercel Best Practices (Source of Truth, read-only)`: `.agent/skills/vercel-react-best-practices/SKILL.md`
+- `Vercel Best Practices Mirrors`: `.codex/skills/vercel-react-best-practices/SKILL.md`, `.cursor/skills/vercel-react-best-practices/SKILL.md`
+- `Design MD Skill`: `.agents/skills/design-md/SKILL.md`
 - `SEO Launch Ops Skill`: `.agents/skills/seo-launch-ops/SKILL.md`
+- `OpenCode Agent Profile`: `.opencode/AGENTS.md`, `.opencode/oh-my-opencode.json`

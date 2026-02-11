@@ -2,6 +2,14 @@
 
 이 문서는 바나나웨딩 프로젝트의 아키텍처 원칙과 공통 패턴을 정의합니다.
 
+## 문서/스킬 동기화 기준
+
+- 기준(수정 금지) 스킬: `.agent/skills/vercel-react-best-practices`
+- 미러 스킬: `.codex/skills/vercel-react-best-practices`, `.cursor/skills/vercel-react-best-practices`
+- 프로젝트 스킬: `.agents/skills/*/SKILL.md`
+- OpenCode 정의: `.opencode/oh-my-opencode.json`, `.opencode/AGENTS.md`
+- 규칙 문서 동기화 대상: `.agent/rules/banana-wedding.md`, `.cursorrules`, `AGENTS.md`, `README.md`, `ARCHITECTURE.md`, `.opencode/AGENTS.md`
+
 ## 1. 전역 상태 관리 (Zustand)
 
 ### **useInvitationStore**

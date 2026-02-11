@@ -3,7 +3,18 @@
 > 특별한 순간을 위한 가장 달콤한 모바일 청첩장 제작 플랫폼
 
 ## 문서 동기화 규칙
-- 규칙/가이드 변경 시 `README.md`, `AGENTS.md`, `.cursorrules`를 반드시 함께 업데이트합니다.
+- 규칙/가이드 변경 시 아래 파일을 반드시 함께 업데이트합니다.
+  - `.agent/rules/banana-wedding.md`
+  - `.cursorrules`
+  - `AGENTS.md`
+  - `README.md`
+  - `ARCHITECTURE.md`
+  - `.opencode/AGENTS.md`
+- 스킬 경로나 정의를 바꿀 때는 다음 경로도 함께 동기화합니다.
+  - 기준(수정 금지): `.agent/skills/vercel-react-best-practices`
+  - 미러: `.codex/skills/vercel-react-best-practices`, `.cursor/skills/vercel-react-best-practices`
+  - 프로젝트 스킬: `.agents/skills/*/SKILL.md`
+  - OpenCode 설정: `.opencode/oh-my-opencode.json`
 
 ## 기술 스택
 - Framework: Next.js 16.1.x (App Router, Cache Components, View Transitions)
@@ -58,7 +69,7 @@ npm run check:launch
 
 ## 프로젝트 스킬
 - `design-md`: Stitch 프로젝트 디자인 시스템 문서화
-- `vercel-react-best-practices`: React/Next 성능 최적화 가이드
+- `vercel-react-best-practices` (기준/수정 금지): `.agent/skills/vercel-react-best-practices`
 - `seo-launch-ops`: 검색 등록/색인/메타/사이트맵 점검 및 운영 절차 (신규)
 
 ## 라이선스

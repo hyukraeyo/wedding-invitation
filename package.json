@@ -27,6 +27,7 @@
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "check:encoding": "node scripts/check-encoding-corruption.mjs",
+    "sync:agents": "node scripts/sync-agent-assets.mjs",
     "check:launch": "node scripts/check_launch_readiness.js",
     "format": "prettier --write .",
     "analyze": "cross-env ANALYZE=true next build --webpack",

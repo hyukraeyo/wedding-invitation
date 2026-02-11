@@ -5,7 +5,9 @@ trigger: always_on
 # 🍌 바나나웨딩 프로젝트 개발 규칙
 
 > **CRITICAL: SYNC MANDATE**
-> 모든 설정 및 가이드 문서(`.agent`, `.codex`, `.cursor`, `.opencode`, `.cursorrules`, `AGENTS.md`, `README.md`, `ARCHITECTURE.md`)는 항상 동일한 기준을 유지하도록 함께 업데이트되어야 합니다. 한 곳의 규칙이 변경되면 언급된 모든 파일에 해당 변경 사항을 명시하고 동기화하십시오.
+> 에이전트 가이드/정의 문서는 아래 파일을 동일 기준으로 함께 업데이트합니다:
+> `.agent/rules/banana-wedding.md`, `.cursorrules`, `AGENTS.md`, `README.md`, `ARCHITECTURE.md`, `.opencode/AGENTS.md`.
+> 스킬 경로나 정의 변경 시 `.agents/skills/*/SKILL.md`, `.codex/skills/*`, `.cursor/skills/*`, `.opencode/oh-my-opencode.json`도 함께 동기화합니다.
 
 ## 프로젝트 개요
 
@@ -21,7 +23,8 @@ trigger: always_on
 ### 0. Vercel React Best Practices (최우선)
 
 - React/Next.js 관련 작업은 항상 Vercel Best Practices를 최우선으로 준수합니다.
-- 참조: `.codex/skills/vercel-react-best-practices/SKILL.md` 및 `rules/*`
+- 기준(수정 금지): `.agent/skills/vercel-react-best-practices/SKILL.md`
+- 미러: `.codex/skills/vercel-react-best-practices/SKILL.md`, `.cursor/skills/vercel-react-best-practices/SKILL.md`
 
 ### 1. Data Fetching (Strict)
 
