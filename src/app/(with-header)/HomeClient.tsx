@@ -3,6 +3,7 @@
 import * as Accordion from '@radix-ui/react-accordion';
 import { ArrowRight, ChevronDown, Palette, Smartphone, Sparkles, Zap } from 'lucide-react';
 import Link from 'next/link';
+import { BottomCTA } from '@/components/common/BottomCTA';
 import { Button } from '@/components/ui/Button';
 import { ButtonGroup } from '@/components/ui/ButtonGroup';
 import styles from './Home.module.scss';
@@ -215,11 +216,9 @@ export function HomeClient() {
       </footer>
 
       {/* Mobile Sticky Dock */}
-      <div className={styles.mobileDock}>
-        <Button asChild variant="primary" size="lg" fullWidth radius="lg">
-          <Link href="/setup">지금 바로 제작하기</Link>
-        </Button>
-      </div>
+      <BottomCTA.Single fixed transparent className={styles.mobileDock} asChild>
+        <Link href="/setup">지금 바로 제작하기</Link>
+      </BottomCTA.Single>
     </div>
   );
 }

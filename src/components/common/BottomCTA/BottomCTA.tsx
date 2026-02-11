@@ -11,7 +11,7 @@ import s from './BottomCTA.module.scss';
 export interface BottomCTAContainerProps {
   children: React.ReactNode;
   fixed?: boolean;
-  className?: string;
+  className?: string | undefined;
   transparent?: boolean;
   animated?: boolean;
   fixedAboveKeyboard?: boolean;
@@ -81,7 +81,7 @@ export interface BottomCTASingleProps extends BottomCTAContainerProps {
   onClick?: ((e: React.MouseEvent<HTMLButtonElement>) => void) | (() => void) | undefined;
   loading?: boolean;
   disabled?: boolean;
-  buttonClassName?: string;
+  buttonClassName?: string | undefined;
   type?: 'button' | 'submit' | 'reset';
   variant?: CTAButtonProps['variant'];
   color?: CTAButtonProps['color'];
