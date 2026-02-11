@@ -72,16 +72,18 @@ export function HomeClient() {
   return (
     <div className={styles.container}>
       <section className={styles.hero} aria-labelledby="home-hero-title">
-        <Image
-          src="/assets/images/hero-wedding.png"
-          alt="웨딩 부케를 든 신랑 신부"
-          fill
-          priority
-          quality={90}
-          className={styles.heroImage}
-          sizes="100vw"
-        />
-        <div className={styles.heroOverlay} />
+        <div className={styles.heroMedia}>
+          <Image
+            src="/assets/images/hero-wedding.png"
+            alt="웨딩 부케를 든 신랑 신부"
+            fill
+            priority
+            quality={90}
+            className={styles.heroImage}
+            sizes="100vw"
+          />
+          <div className={styles.heroOverlay} />
+        </div>
         <div className={styles.heroContent}>
           <h1 id="home-hero-title" className={styles.heroTitle}>
             우리만의 특별한
@@ -91,12 +93,12 @@ export function HomeClient() {
           <p className={styles.heroDescription}>
             유통기한 없는 달콤한 이야기, 3분 만에 제작하고 공유하세요.
           </p>
-          <div className={styles.heroActions}>
-            <Link href="/setup" className={`${styles.ctaButton} ${styles.ctaPrimary}`}>
-              무료로 시작하기
-              <ArrowRight size={18} aria-hidden="true" />
-            </Link>
-          </div>
+        </div>
+        <div className={styles.heroActions}>
+          <Link href="/setup" className={`${styles.ctaButton} ${styles.ctaPrimary}`}>
+            무료로 시작하기
+            <ArrowRight size={18} aria-hidden="true" />
+          </Link>
         </div>
       </section>
 
@@ -150,26 +152,6 @@ export function HomeClient() {
             </li>
           ))}
         </ol>
-      </section>
-
-      <section className={styles.section} aria-labelledby="home-cta-title">
-        <div className={styles.finalShell}>
-          <h2 id="home-cta-title" className={styles.finalTitle}>
-            지금 바로 청첩장 초안을 만들어 보세요
-          </h2>
-          <p className={styles.finalDescription}>
-            제작 후 바로 링크를 공유할 수 있도록 핵심 동선을 최소 단계로 구성했습니다.
-          </p>
-          <div className={styles.finalActions}>
-            <Link href="/setup" className={`${styles.ctaButton} ${styles.ctaPrimary}`}>
-              무료로 시작하기
-              <ArrowRight size={18} aria-hidden="true" />
-            </Link>
-            <Link href="/privacy" className={`${styles.ctaButton} ${styles.ctaGhost}`}>
-              개인정보 처리방침
-            </Link>
-          </div>
-        </div>
       </section>
 
       <footer className={styles.footer} aria-label="바나나웨딩 안내">
