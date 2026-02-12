@@ -190,10 +190,17 @@ const HeaderContent = React.memo(() => {
     router.push(`/login?returnTo=${encodeURIComponent(returnTo)}`);
   }, [router]);
 
+  const isHome = !pathname || pathname === '/' || pathname === '/home';
+
   return (
     <>
       <header
-        className={cn(styles.header, isScrolled && styles.scrolled, 'view-transition-header')}
+        className={cn(
+          styles.header,
+          isScrolled && styles.scrolled,
+          !isHome && styles.notHome,
+          'view-transition-header'
+        )}
       >
         <div className={styles.left}>
           <Logo />

@@ -58,6 +58,32 @@
     }
   }
 
+  // 🍌 Not Home (e.g. My Page) - Handling visibility on white backgrounds
+  &.notHome {
+    background-color: rgba(v.$white, 0.7);
+    border-bottom-color: v.$grey-100;
+    backdrop-filter: blur(10px) saturate(180%);
+
+    .logoText {
+      color: v.$grey-900;
+      // Tip: You can also use mix-blend-mode: difference; but explicit coloring is more stable for text
+    }
+
+    .actionButton {
+      color: v.$grey-600;
+
+      &:hover {
+        color: v.$grey-900;
+        background-color: v.$grey-100 !important;
+      }
+    }
+
+    // Secondary profile button shadow for better visibility on white
+    .profileButton {
+      box-shadow: 0 4px 12px rgba(v.$primary-500, 0.2);
+    }
+  }
+
   &.hidden {
     transform: translateY(-100%);
     visibility: hidden;

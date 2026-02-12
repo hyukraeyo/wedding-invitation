@@ -120,7 +120,7 @@
 }
 
 @mixin header-offset {
-  padding-top: 0; // Usage might imply offset logic elsewhere or just 0
+  padding-top: i.$header-height;
 }
 
 // 5. Build & Sections

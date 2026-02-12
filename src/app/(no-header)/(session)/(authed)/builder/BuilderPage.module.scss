@@ -15,7 +15,6 @@
   overflow: hidden;
   z-index: 10;
   background-color: v.$white;
-  @include m.header-offset;
 }
 
 .invitationCanvasLoading {
@@ -380,4 +379,3 @@
   background-color: v.$white;
   z-index: 1;
 }
-

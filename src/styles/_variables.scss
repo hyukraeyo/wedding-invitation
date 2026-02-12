@@ -138,7 +138,7 @@ $control-slot-padding-lg: 12px;
 $control-slot-padding-xl: 14px;
 
 // Layout
-$header-height: 56px;
+$header-height: i.$header-height;
 
 // Extended Tokens
 $control-hover-bg: rgba($grey-500, 0.05);
