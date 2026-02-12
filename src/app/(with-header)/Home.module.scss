@@ -412,66 +412,9 @@
 
 // ✨ Accordion (Q&A)
 .faqList {
-  display: flex;
-  flex-direction: column;
-  gap: v.$space-sm;
+  width: 100%;
   max-width: 680px;
   margin: 0 auto;
-}
-
-.faqItem {
-  border: 1px solid v.$grey-200;
-  border-radius: v.$radius-lg;
-  background: v.$white;
-  overflow: hidden;
-}
-
-.faqTrigger {
-  width: 100%;
-  padding: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: none;
-  border: none;
-  font-size: v.$font-size-lg;
-  font-weight: 600;
-  color: v.$grey-900;
-  cursor: pointer;
-  text-align: left;
-
-  &:hover {
-    background: v.$grey-50;
-  }
-
-  svg {
-    color: v.$grey-400;
-    transition: transform 0.3s ease;
-  }
-
-  &[data-state='open'] svg {
-    transform: rotate(180deg);
-    color: v.$primary-dark;
-  }
-}
-
-.faqContent {
-  padding: 0 20px 20px;
-  font-size: v.$font-size-base;
-  color: v.$grey-600;
-  line-height: 1.6;
-  animation: slideDown 0.3s ease-out;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 // ✨ Footer

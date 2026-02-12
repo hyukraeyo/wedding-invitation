@@ -1,7 +1,12 @@
 ﻿'use client';
 
-import * as Accordion from '@radix-ui/react-accordion';
-import { ArrowRight, ChevronDown, Palette, Smartphone, Sparkles, Zap } from 'lucide-react';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/Accordion';
+import { ArrowRight, Palette, Smartphone, Sparkles, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { BottomCTA } from '@/components/common/BottomCTA';
 import { Button } from '@/components/ui/Button';
@@ -200,19 +205,14 @@ export function HomeClient() {
           <h2 className={styles.sectionTitle}>자주 묻는 질문</h2>
         </header>
 
-        <Accordion.Root type="single" collapsible className={styles.faqList}>
+        <Accordion type="single" collapsible className={styles.faqList}>
           {FAQ_ITEMS.map((item) => (
-            <Accordion.Item key={item.id} value={item.id} className={styles.faqItem}>
-              <Accordion.Header>
-                <Accordion.Trigger className={styles.faqTrigger}>
-                  {item.question}
-                  <ChevronDown size={20} aria-hidden />
-                </Accordion.Trigger>
-              </Accordion.Header>
-              <Accordion.Content className={styles.faqContent}>{item.answer}</Accordion.Content>
-            </Accordion.Item>
+            <AccordionItem key={item.id} value={item.id}>
+              <AccordionTrigger>{item.question}</AccordionTrigger>
+              <AccordionContent>{item.answer}</AccordionContent>
+            </AccordionItem>
           ))}
-        </Accordion.Root>
+        </Accordion>
       </section>
 
       {/* Footer */}

@@ -211,7 +211,7 @@ const HeaderContent = React.memo(() => {
             onLogin={handleLogin}
             onSaveAction={handleSaveAction}
             showSave={!!onSave}
-            isHome={pathname === '/'}
+            isHome={!pathname || pathname === '/' || pathname === '/home'}
           />
         </div>
 
