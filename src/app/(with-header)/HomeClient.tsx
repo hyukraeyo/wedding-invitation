@@ -6,7 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/Accordion';
-import { ArrowRight, Palette, Smartphone, Sparkles, Zap } from 'lucide-react';
+import { ArrowRight, Palette, Smartphone, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { BottomCTA } from '@/components/common/BottomCTA';
 import { Button } from '@/components/ui/Button';
@@ -94,19 +94,12 @@ export function HomeClient() {
         </div>
 
         <div className={styles.heroContent}>
-          <div className={styles.heroChip}>
-            <Sparkles size={14} className={styles.heroChipIcon} />
-            2026 NEW COLLECTION
-          </div>
           <h1 className={styles.heroTitle}>
-            우리의 첫 인사,
-            <br />
-            <span>바나나 웨딩</span>
+            우리의 첫 인사, <span>바나나 웨딩</span>
           </h1>
           <p className={styles.heroDescription}>
-            복잡한 준비는 줄이고, 두 사람의 이야기만 담아보세요.
-            <br />
-            모바일에 최적화된 감성 청첩장을 몇 분 만에 완성할 수 있어요.
+            복잡한 준비는 줄이고 두 사람의 이야기에만 집중하세요. 모바일에 최적화된 감성 청첩장을 단
+            몇 분 만에 완성할 수 있어요.
           </p>
           <ButtonGroup className={styles.heroActions}>
             <Button asChild variant="primary" size="lg">

@@ -45,10 +45,12 @@
   z-index: 1;
   background: linear-gradient(
     180deg,
-    rgba(0, 0, 0, 0.3) 0%,
-    rgba(0, 0, 0, 0.5) 50%,
-    rgba(0, 0, 0, 0.7) 100%
+    rgba(0, 0, 0, 0.2) 0%,
+    rgba(0, 0, 0, 0.45) 60%,
+    rgba(0, 0, 0, 0.8) 100%
   );
+  // Subtle blur for a more premium editorial feel
+  backdrop-filter: brightness(0.9) contrast(1.1);
 }
 
 .heroContent {
@@ -65,62 +67,48 @@
   padding-top: v.$header-height; // Account for fixed header if exists
 }
 
-.heroChip {
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 16px;
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: v.$radius-full;
-  color: v.$white;
-  font-size: v.$font-size-sm;
-  font-weight: v.$font-weight-bold;
-  margin-bottom: v.$space-sm;
-  backdrop-filter: blur(4px);
-}
-
-.heroChipIcon {
-  margin-right: v.$space-sm;
-}
-
 .heroTitle {
   margin: 0;
-  font-size: 42px;
+  font-size: clamp(32px, 10vw, 48px);
   font-weight: 800;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+  line-height: 1.25;
+  letter-spacing: -0.04em;
   color: v.$white;
   word-break: keep-all;
-  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+  text-wrap: balance;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+  animation: fadeInUp 0.8s v.$ease-ios 0.1s both;
 
   @include m.desktop {
-    font-size: 64px;
-    line-height: 1.1;
+    font-size: 72px;
+    line-height: 1.15;
   }
 
   span {
+    color: v.$primary;
+    display: inline-block;
     position: relative;
-    z-index: 1;
-    color: v.$primary; // Banana Yellow Accent
 
-    // Remove the previous underline for cleaner look on image
-    &::after {
-      display: none;
-    }
+    // Subtle glow for the primary text
+    text-shadow: 0 0 20px rgba(v.$primary, 0.3);
   }
 }
 
 .heroDescription {
   margin: 0;
-  color: rgba(v.$white, 0.9);
-  font-size: v.$font-size-lg;
-  line-height: 1.6;
-  max-width: 480px;
+  color: rgba(v.$white, 0.85);
+  font-size: clamp(15px, 4vw, 17px);
+  line-height: 1.7;
+  max-width: 440px;
   word-break: keep-all;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  text-wrap: balance;
+  font-weight: 400;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  animation: fadeInUp 0.8s v.$ease-ios 0.2s both;
 
   @include m.desktop {
-    font-size: v.$font-size-xl;
+    font-size: 20px;
+    max-width: 600px;
   }
 }
 
@@ -447,7 +435,32 @@
   }
 }
 
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .heroTitle,
+  .heroDescription,
+  .heroChip,
   .featureCard,
   .themeCard,
   .faqTrigger svg,
