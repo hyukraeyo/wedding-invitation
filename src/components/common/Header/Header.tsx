@@ -4,7 +4,7 @@ import React, { Suspense, useCallback } from 'react';
 import { LogIn, Save, Banana, Bell } from 'lucide-react';
 import Link from 'next/link';
 import { useInvitationStore } from '@/store/useInvitationStore';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import type { User } from 'next-auth';
 import { IconButton, ProgressBar } from '@/components/ui';
 import { cn } from '@/lib/utils';
@@ -44,6 +44,7 @@ interface HeaderActionsProps {
   onLogin: () => void;
   onSaveAction: () => void;
   showSave: boolean;
+  isHome: boolean;
 }
 
 const HeaderActions = React.memo(
@@ -56,6 +57,7 @@ const HeaderActions = React.memo(
     onLogin,
     onSaveAction,
     showSave,
+    isHome,
   }: HeaderActionsProps) => (
     <div className={styles.actions}>
       {authLoading ? (
@@ -78,18 +80,20 @@ const HeaderActions = React.memo(
 
           {user ? (
             <div className={styles.actionsRow}>
-              <Link href="/mypage/notifications" className={styles.notificationLink}>
-                <IconButton
-                  iconSize={24}
-                  variant="ghost"
-                  className={styles.actionButton}
-                  aria-label="알림"
-                  name=""
-                >
-                  <Bell size={20} strokeWidth={2.5} />
-                  {notificationCount > 0 && <span className={styles.notificationBadge} />}
-                </IconButton>
-              </Link>
+              {!isHome && (
+                <Link href="/mypage/notifications" className={styles.notificationLink}>
+                  <IconButton
+                    iconSize={24}
+                    variant="ghost"
+                    className={styles.actionButton}
+                    aria-label="알림"
+                    name=""
+                  >
+                    <Bell size={20} strokeWidth={2.5} />
+                    {notificationCount > 0 && <span className={styles.notificationBadge} />}
+                  </IconButton>
+                </Link>
+              )}
               <Link href="/mypage" className={styles.profileLink}>
                 <IconButton
                   iconSize={24}
@@ -123,6 +127,7 @@ HeaderActions.displayName = 'HeaderActions';
 
 const HeaderContent = React.memo(() => {
   const router = useRouter();
+  const pathname = usePathname();
   const [isScrolled, setIsScrolled] = React.useState(false);
   const { user, notificationCount, authLoading } = useHeaderData();
 
@@ -206,6 +211,7 @@ const HeaderContent = React.memo(() => {
             onLogin={handleLogin}
             onSaveAction={handleSaveAction}
             showSave={!!onSave}
+            isHome={pathname === '/'}
           />
         </div>
 

@@ -8,6 +8,7 @@ import { IconButton } from '@/components/ui/IconButton';
 export interface ColorOption {
   value: string;
   label: string;
+  textColor?: string;
 }
 
 export interface ColorPickerProps {
@@ -30,7 +31,9 @@ export const ColorPicker = ({ value, onChange, colors, className }: ColorPickerP
           aria-label={`${color.label} 색상 선택`}
           aria-pressed={value === color.value}
         >
-          {value === color.value && <Check size={20} className={s.checkIcon} />}
+          {value === color.value && (
+            <Check size={20} className={s.checkIcon} style={{ color: color.textColor }} />
+          )}
         </IconButton>
       ))}
     </div>

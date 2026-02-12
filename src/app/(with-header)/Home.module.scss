@@ -226,6 +226,13 @@
   }
 }
 
+.featureHeader {
+  display: flex;
+  align-items: center;
+  gap: v.$space-md;
+  width: 100%;
+}
+
 .featureIconBox {
   width: 56px;
   height: 56px;

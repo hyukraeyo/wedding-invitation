@@ -14,17 +14,17 @@ import type { SectionProps } from '@/types/builder';
 import styles from './ThemeSection.module.scss';
 
 const PRESET_ACCENT_COLORS: ColorOption[] = [
-  { value: PALETTE.PRIMARY_600, label: 'Banana' },
+  { value: PALETTE.PRIMARY_400, label: 'Standard Banana', textColor: PALETTE.ON_PRIMARY }, // New Standard
   { value: PALETTE.STONE_700, label: 'Warm Dark' },
   { value: PALETTE.ROSE_400, label: 'Soft Rose' },
   { value: PALETTE.ACCENT_700, label: 'Forest Green' },
 ];
 
 const PRESET_BG_COLORS: ColorOption[] = [
-  { value: PALETTE.WHITE, label: 'Pure White' },
-  { value: PALETTE.PRIMARY_50, label: 'Cream' },
-  { value: PALETTE.STONE_100, label: 'Warm Stone' },
-  { value: PALETTE.ROSE_50, label: 'Soft Rose' },
+  { value: PALETTE.WHITE, label: 'Pure White', textColor: PALETTE.BLACK },
+  { value: PALETTE.PRIMARY_50, label: 'Banana Cream', textColor: PALETTE.BLACK }, // New Cream
+  { value: PALETTE.STONE_100, label: 'Warm Stone', textColor: PALETTE.BLACK },
+  { value: PALETTE.ROSE_50, label: 'Soft Rose', textColor: PALETTE.BLACK },
 ];
 
 const PRESET_FONT_OPTIONS = [

@@ -7,7 +7,7 @@ export const PALETTE = {
   PRIMARY_100: '#FEF3C7',
   PRIMARY_200: '#FDE68A',
   PRIMARY_300: '#FCD34D',
-  PRIMARY_400: '#FBBF24',
+  PRIMARY_400: '#FBC02D', // Official Banana Yellow
   PRIMARY_500: '#F59E0B',
   PRIMARY_600: '#D97706',
   PRIMARY_700: '#B45309',
@@ -42,4 +42,3 @@ export const PALETTE = {
   KAKAO_YELLOW_BRAND: '#FAE100',
   KAKAO_BROWN: '#3C1E1E',
 } as const;
-

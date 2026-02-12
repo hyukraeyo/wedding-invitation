@@ -23,7 +23,8 @@ const FEATURE_ITEMS = [
   },
   {
     title: '모바일 공유 최적화',
-    description: '카카오톡, 문자, 링크 어디에서 열어도 깔끔하게 보이는 모바일 화면에 최적화했습니다.',
+    description:
+      '카카오톡, 문자, 링크 어디에서 열어도 깔끔하게 보이는 모바일 화면에 최적화했습니다.',
     icon: Smartphone,
   },
 ];
@@ -132,10 +133,12 @@ export function HomeClient() {
             const Icon = item.icon;
             return (
               <div key={idx} className={styles.featureCard}>
-                <div className={styles.featureIconBox}>
-                  <Icon size={24} />
+                <div className={styles.featureHeader}>
+                  <div className={styles.featureIconBox}>
+                    <Icon size={24} />
+                  </div>
+                  <h3 className={styles.featureTitle}>{item.title}</h3>
                 </div>
-                <h3 className={styles.featureTitle}>{item.title}</h3>
                 <p className={styles.featureDesc}>{item.description}</p>
               </div>
             );
@@ -223,7 +226,14 @@ export function HomeClient() {
       </footer>
 
       {/* Mobile Sticky Dock */}
-      <BottomCTA.Single fixed transparent animated hideOnScroll className={styles.mobileDock} asChild>
+      <BottomCTA.Single
+        fixed
+        transparent
+        animated
+        hideOnScroll
+        className={styles.mobileDock}
+        asChild
+      >
         <Link href="/builder" aria-label="무료 모바일 청첩장 만들기 시작하기">
           지금 바로 시작하기
         </Link>
