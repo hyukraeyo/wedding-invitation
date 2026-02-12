@@ -105,7 +105,7 @@ export function HomeClient() {
           </p>
           <ButtonGroup className={styles.heroActions}>
             <Button asChild variant="primary" size="lg">
-              <Link href="/setup">
+              <Link href="/builder">
                 무료로 시작하기
                 <ArrowRight size={18} />
               </Link>
@@ -224,7 +224,7 @@ export function HomeClient() {
 
       {/* Mobile Sticky Dock */}
       <BottomCTA.Single fixed transparent animated hideOnScroll className={styles.mobileDock} asChild>
-        <Link href="/setup" aria-label="무료 모바일 청첩장 만들기 시작하기">
+        <Link href="/builder" aria-label="무료 모바일 청첩장 만들기 시작하기">
           지금 바로 시작하기
         </Link>
       </BottomCTA.Single>

@@ -29,6 +29,9 @@ const InvitationCanvas = dynamic(() => import('@/components/preview/InvitationCa
   loading: () => <SectionLoader height="100%" message="초대장을 구성하고 있어요" />,
 });
 
+// Temporary bypass: keep setup guard logic but disable forced redirect for now.
+const ENABLE_SETUP_REQUIRED_GUARD = false;
+
 export function BuilderClient() {
   const [isSaving, setIsSaving] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
@@ -78,7 +81,7 @@ export function BuilderClient() {
       const state = useInvitationStore.getState();
       const hasEssentialInfo = state.groom.firstName && state.bride.firstName && state.slug;
 
-      if (!hasEssentialInfo) {
+      if (ENABLE_SETUP_REQUIRED_GUARD && !hasEssentialInfo) {
         router.replace('/setup');
         return;
       }
