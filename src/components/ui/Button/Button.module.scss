@@ -52,7 +52,8 @@
 // 1. Primary Variant (Banana Identity)
 .primary {
   background-color: v.$primary;
-  color: v.$grey-900; // Contrast for Banana Yellow
+  color: v.$on-primary; // Deep Brown for Banana identity
+
   box-shadow: v.$shadow-sm;
 
   &:disabled {

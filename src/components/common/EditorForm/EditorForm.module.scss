@@ -61,7 +61,7 @@
   }
 
   &.active {
-    color: v.$grey-900;
+    color: v.$on-primary; // Deep Brown for better contrast & aesthetic
     // background-color is now handled by .activeIndicator
   }
 
@@ -81,11 +81,12 @@
   top: 0; // Base position, will be transformed
   width: 64px;
   height: 64px;
-  background-color: v.$primary-200; // was v.$primary-200
+  background-color: v.$primary; // Unified with Save button color
   border-radius: 16px;
   z-index: 0;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: none;
+  box-shadow: v.$shadow-sm; // Add depth for consistency
 }
 
 .navIcon {
@@ -216,4 +217,3 @@
     border: 1px solid v.$red-50;
   }
 }
-
