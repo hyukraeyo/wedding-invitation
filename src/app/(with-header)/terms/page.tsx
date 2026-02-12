@@ -15,6 +15,23 @@ export const metadata: Metadata = {
     type: 'article',
     locale: 'ko_KR',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: `?댁슜?쎄? | ${SITE_NAME}`,
+    description: `${SITE_NAME} ?쒕퉬???댁슜?쎄? ?덈궡 ?섏씠吏?낅땲??`,
+    images: [absoluteUrl('/assets/icons/logo-banana-heart.png')],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
 };
 
 const breadcrumbJsonLd = {

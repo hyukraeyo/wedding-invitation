@@ -1,4 +1,4 @@
-import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, absoluteUrl } from '@/lib/site';
+﻿import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, absoluteUrl } from '@/lib/site';
 
 interface RssItem {
   description: string;
@@ -7,30 +7,26 @@ interface RssItem {
   title: string;
 }
 
+const PUBLISHED_AT = 'Thu, 12 Feb 2026 00:00:00 GMT';
+
 const RSS_ITEMS: RssItem[] = [
   {
     title: `${SITE_NAME} 홈`,
     path: '/',
     description: SITE_DESCRIPTION,
-    pubDate: 'Tue, 10 Feb 2026 00:00:00 GMT',
-  },
-  {
-    title: `${SITE_NAME} 브랜드 스토리`,
-    path: '/brand-story',
-    description: '바나나웨딩의 브랜드 철학과 모바일 청첩장 제작 경험을 소개합니다.',
-    pubDate: 'Tue, 10 Feb 2026 00:00:00 GMT',
+    pubDate: PUBLISHED_AT,
   },
   {
     title: `${SITE_NAME} 개인정보 처리방침`,
     path: '/privacy',
-    description: '바나나웨딩 서비스 이용자를 위한 개인정보 처리방침입니다.',
-    pubDate: 'Tue, 10 Feb 2026 00:00:00 GMT',
+    description: `${SITE_NAME} 서비스 이용을 위한 개인정보 처리방침 안내 페이지입니다.`,
+    pubDate: PUBLISHED_AT,
   },
   {
     title: `${SITE_NAME} 이용약관`,
     path: '/terms',
-    description: '바나나웨딩 서비스 이용약관 안내 페이지입니다.',
-    pubDate: 'Tue, 10 Feb 2026 00:00:00 GMT',
+    description: `${SITE_NAME} 서비스 이용약관 안내 페이지입니다.`,
+    pubDate: PUBLISHED_AT,
   },
 ];
 
