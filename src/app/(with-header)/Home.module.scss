@@ -125,21 +125,15 @@
 }
 
 .heroActions {
-  display: flex;
-  flex-direction: column;
-  gap: v.$space-sm;
-  width: 100%;
-  max-width: 320px;
-  margin-top: v.$space-md;
-
-  > * {
-    width: 100%;
-  }
+  display: none;
 
   @include m.desktop {
+    display: flex;
     flex-direction: row;
+    gap: v.$space-sm;
     width: auto;
     max-width: none;
+    margin-top: v.$space-md;
 
     > * {
       width: auto;
@@ -448,21 +442,6 @@
 
 // Mobile Dock
 .mobileDock {
-  background: linear-gradient(
-    180deg,
-    rgba(v.$white, 0) 0%,
-    rgba(v.$white, 0.92) 45%,
-    v.$white 100%
-  );
-  padding-top: v.$space-md;
-  pointer-events: none;
-
-  a {
-    pointer-events: auto;
-    box-shadow: v.$shadow-lg;
-    min-height: v.$control-height-lg;
-  }
-
   @include m.desktop {
     display: none;
   }

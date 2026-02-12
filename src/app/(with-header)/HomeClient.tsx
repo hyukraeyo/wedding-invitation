@@ -115,9 +115,6 @@ export function HomeClient() {
                 <ArrowRight size={18} />
               </Link>
             </Button>
-            <Button asChild variant="secondary" size="lg">
-              <Link href="#features">기능 둘러보기</Link>
-            </Button>
           </ButtonGroup>
         </div>
       </section>
