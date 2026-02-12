@@ -334,8 +334,7 @@ export default function MyPageClient({
               승인 요청 중인 청첩장은 삭제할 수 없어요.
               <br />
               <br />
-              하단의 <strong>[요청 취소]</strong> 버튼을 눌러 상태를 변경한 후 다시
-              시도해 주세요.
+              하단의 <strong>[요청 취소]</strong> 버튼을 눌러 상태를 변경한 후 다시 시도해 주세요.
             </>
           ),
           targetId: null,
@@ -354,8 +353,7 @@ export default function MyPageClient({
               정말로 이 청첩장을 삭제할까요?
               <br />
               <span className={styles.deleteWarning}>
-                주의: 승인 완료된 청첩장을 삭제하면 공유 링크로 더 이상 접속할 수
-                없어요.
+                주의: 승인 완료된 청첩장을 삭제하면 공유 링크로 더 이상 접속할 수 없어요.
               </span>
               <br />
               삭제된 데이터는 복구할 수 없어요.
@@ -430,7 +428,7 @@ export default function MyPageClient({
             <>
               <strong>{profile?.full_name}</strong>({profile?.phone})으로 요청할게요.
               <br />
-              요청 후 관리자 확인 및 심사가 진행됩니다.
+              요청 후 관리자 확인 및 심사가 진행돼요.
             </>
           ),
           targetId: inv.id,
@@ -475,7 +473,7 @@ export default function MyPageClient({
         ]);
 
         toast({
-          description: '사용 신청이 완료되었습니다. 관리자 확인 후 처리됩니다.',
+          description: '사용 신청이 완료됐어요. 관리자 확인 후 처리돼요.',
         });
         // Sync sidebar counts
         router.refresh();
@@ -510,7 +508,7 @@ export default function MyPageClient({
         const newInvitations = await invitationService.getUserInvitations(userId);
         setInvitations(newInvitations);
 
-        toast({ description: '수정 모드로 전환되었습니다. 수정 후 다시 승인 신청을 해주세요.' });
+        toast({ description: '수정 모드로 전환됐어요. 수정 후 다시 승인 신청을 해주세요.' });
         router.refresh();
       } catch (error) {
         console.error('Failed to revert to draft:', error);
@@ -541,7 +539,7 @@ export default function MyPageClient({
   const handleProfileComplete = useCallback(async () => {
     setProfileModalOpen(false);
     router.refresh();
-    toast({ description: '프로필이 저장되었습니다. 다시 사용 신청을 진행해 주세요.' });
+    toast({ description: '프로필이 저장됐어요. 다시 사용 신청을 진행해 주세요.' });
   }, [router, toast]);
 
   const handleCreateNew = useCallback(() => {

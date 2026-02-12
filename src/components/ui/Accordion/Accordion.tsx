@@ -6,11 +6,19 @@ import { ChevronDown } from 'lucide-react';
 import { clsx } from 'clsx';
 import s from './Accordion.module.scss';
 
+type AccordionProps = React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root> & {
+  variant?: 'default' | 'outlined';
+};
+
 const Accordion = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root>
->(({ className, ...props }, ref) => (
-  <AccordionPrimitive.Root ref={ref} className={clsx(s.Root, className)} {...props} />
+  AccordionProps
+>(({ className, variant = 'default', ...props }, ref) => (
+  <AccordionPrimitive.Root
+    ref={ref}
+    className={clsx(s.Root, variant === 'outlined' && s.outlined, className)}
+    {...props}
+  />
 ));
 Accordion.displayName = AccordionPrimitive.Root.displayName;
 

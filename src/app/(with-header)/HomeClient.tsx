@@ -28,8 +28,7 @@ const FEATURE_ITEMS = [
   },
   {
     title: '모바일 공유 최적화',
-    description:
-      '카카오톡, 문자, 링크 어디에서 열어도 깔끔하게 보이는 모바일 화면에 최적화했습니다.',
+    description: '카카오톡, 문자, 링크 어디에서 열어도 깔끔하게 보이는 모바일 화면에 최적화했어요.',
     icon: Smartphone,
   },
 ];
@@ -61,18 +60,18 @@ const FAQ_ITEMS = [
     id: 'item-1',
     question: '시작 비용이 있나요?',
     answer:
-      '기본 기능은 무료로 사용할 수 있어요. 필요한 경우에만 프리미엄 테마와 추가 기능을 선택하면 됩니다.',
+      '기본 기능은 무료로 사용할 수 있어요. 필요한 경우에만 프리미엄 테마와 추가 기능을 선택하면 돼요.',
   },
   {
     id: 'item-2',
     question: '수정 횟수 제한이 있나요?',
-    answer: '없어요. 예식 전까지 원하는 만큼 수정할 수 있고, 변경 내용은 저장 즉시 반영됩니다.',
+    answer: '없어요. 예식 전까지 원하는 만큼 수정할 수 있고, 변경 내용은 저장 즉시 반영돼요.',
   },
   {
     id: 'item-3',
     question: '사진은 몇 장까지 넣을 수 있나요?',
     answer:
-      '기본 갤러리에는 최대 30장까지 등록할 수 있으며, 순서 변경과 교체도 자유롭게 할 수 있습니다.',
+      '기본 갤러리에는 최대 30장까지 등록할 수 있고, 순서 변경과 교체도 자유롭게 할 수 있어요.',
   },
 ];
 
@@ -127,9 +126,9 @@ export function HomeClient() {
       <section id="features" className={styles.section}>
         <header className={styles.sectionHeader}>
           <span className={styles.sectionLabel}>Features</span>
-          <h2 className={styles.sectionTitle}>결혼 준비에 꼭 필요한 기능만 담았습니다</h2>
+          <h2 className={styles.sectionTitle}>결혼 준비에 꼭 필요한 기능만 담았어요</h2>
           <p className={styles.sectionDescription}>
-            자주 사용하는 핵심 흐름을 중심으로 빠르고 안정적인 작성 경험을 제공합니다.
+            자주 사용하는 핵심 흐름을 중심으로 빠르고 안정적인 작성 경험을 제공해요.
           </p>
         </header>
 
@@ -180,7 +179,7 @@ export function HomeClient() {
       <section className={styles.section}>
         <header className={styles.sectionHeader}>
           <span className={styles.sectionLabel}>Workflow</span>
-          <h2 className={styles.sectionTitle}>3단계면 충분합니다</h2>
+          <h2 className={styles.sectionTitle}>3단계면 충분해요</h2>
         </header>
 
         <div className={styles.workflowList}>
@@ -205,7 +204,7 @@ export function HomeClient() {
           <h2 className={styles.sectionTitle}>자주 묻는 질문</h2>
         </header>
 
-        <Accordion type="single" collapsible className={styles.faqList}>
+        <Accordion type="single" collapsible className={styles.faqList} variant="outlined">
           {FAQ_ITEMS.map((item) => (
             <AccordionItem key={item.id} value={item.id}>
               <AccordionTrigger>{item.question}</AccordionTrigger>

@@ -168,7 +168,7 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
               <Link href="/terms" target="_blank" className={styles.link}>
                 이용약관
               </Link>
-              에 동의하게 됩니다.
+              에 동의하게 돼요.
             </p>
           </div>
 

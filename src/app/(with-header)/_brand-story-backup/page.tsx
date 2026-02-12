@@ -25,13 +25,13 @@ const GALLERY_IMG =
 
 export const metadata: Metadata = {
   title: `브랜드 스토리 | ${SITE_NAME}`,
-  description: `${SITE_NAME}의 철학과 모바일 청첩장 제작 경험을 소개합니다.`,
+  description: `${SITE_NAME}의 철학과 모바일 청첩장 제작 경험을 소개해요.`,
   alternates: {
     canonical: '/brand-story',
   },
   openGraph: {
     title: `브랜드 스토리 | ${SITE_NAME}`,
-    description: `${SITE_NAME}의 철학과 모바일 청첩장 제작 경험을 소개합니다.`,
+    description: `${SITE_NAME}의 철학과 모바일 청첩장 제작 경험을 소개해요.`,
     url: absoluteUrl('/brand-story'),
     siteName: `${SITE_NAME}(${SITE_NAME_EN})`,
     type: 'website',
@@ -121,7 +121,7 @@ export default function BrandStoryPage() {
             <div className={styles.featuresHeader}>
               <h2 className={styles.featuresTitle}>고급스러운 디테일</h2>
               <p className={styles.featuresSubtitle}>
-                단순한 안내장을 넘어 진심을 전하는 공간이 됩니다.
+                단순한 안내장을 넘어 진심을 전하는 공간이 돼요.
               </p>
             </div>
 
@@ -203,14 +203,14 @@ export default function BrandStoryPage() {
             <h2 className={styles.ctaSectionTitle}>
               당신의 소중한 순간,
               <br />
-              <span>바나나</span>가 함께합니다.
+              <span>바나나</span>가 함께해요.
             </h2>
             <p className={styles.ctaSectionDesc}>
-              준비는 5분이면 충분합니다.
+              준비는 5분이면 충분해요.
               <br />
               지금 바로 무료로 시작해보세요.
               <br />
-              참석 여부 기능은 현재 준비 중이며 추후 제공 예정입니다.
+              참석 여부 기능은 현재 준비 중이며 추후 제공 예정이에요.
             </p>
             <Link href="/setup" className={styles.ctaSectionButton}>
               무료로 시작하기

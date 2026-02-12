@@ -21,7 +21,7 @@ export interface SectionErrorProps {
  * 빌더나 마이페이지 등 섹션 단위에서 에러 발생 시 표시되는 공통 UI
  */
 export const SectionError = React.memo(function SectionError({
-  message = '데이터를 불러오는 중 오류가 발생했습니다.',
+  message = '데이터를 불러오는 중 오류가 발생했어요.',
   onRetry,
   height = 200,
   className,

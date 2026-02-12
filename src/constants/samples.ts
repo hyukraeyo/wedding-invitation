@@ -79,8 +79,7 @@ export const ACCOUNT_SAMPLES: SamplePhraseItem[] = [
   {
     subtitle: 'GIFT',
     title: '마음 전하실 곳',
-    content:
-      '참석이 어려우신 분들을 위해<br>계좌번호를 안내해 드립니다.<br>너른 양해 부탁드립니다.',
+    content: '참석이 어려우신 분들을 위해<br>계좌번호를 안내해 드려요.<br>너른 양해 부탁드려요.',
   },
   {
     subtitle: 'FOR YOUR HEART',
@@ -90,7 +89,7 @@ export const ACCOUNT_SAMPLES: SamplePhraseItem[] = [
   {
     subtitle: 'ACCOUNT',
     title: '계좌번호 안내',
-    content: '축하해 주시는 마음 감사히 간직하겠습니다.',
+    content: '축하해 주시는 마음 감사히 간직할게요.',
   },
 ];
 

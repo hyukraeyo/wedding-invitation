@@ -111,7 +111,7 @@ export default function RequestsPageClient({ initialLimit }: RequestsPageClientP
       return await invitationService.saveInvitation(inv.slug, updatedData, inv.user_id);
     },
     onSuccess: () => {
-      toast({ description: '사용 승인이 완료되었습니다.' });
+      toast({ description: '사용 승인이 완료됐어요.' });
       queryClient.invalidateQueries({ queryKey: ['approval-requests'] });
       router.refresh();
     },
@@ -123,7 +123,7 @@ export default function RequestsPageClient({ initialLimit }: RequestsPageClientP
       return await approvalRequestService.rejectRequest(inv.id, reason);
     },
     onSuccess: () => {
-      toast({ description: '신청이 거절되었습니다.' });
+      toast({ description: '신청이 거절됐어요.' });
       queryClient.invalidateQueries({ queryKey: ['approval-requests'] });
       router.refresh();
     },
@@ -265,7 +265,7 @@ export default function RequestsPageClient({ initialLimit }: RequestsPageClientP
                               isOpen: true,
                               type: 'APPROVE',
                               title: '청첩장 승인',
-                              description: '승인하시겠습니까?',
+                              description: '승인할까요?',
                               targetId: targetInv.id,
                               targetRecord: targetInv,
                             })
@@ -361,13 +361,13 @@ export default function RequestsPageClient({ initialLimit }: RequestsPageClientP
                 <Dialog.Body>
                   <div className={styles.rejectionDescription}>
                     <strong>{requesterName}</strong>님의{' '}
-                    {isRevoked ? '승인을 취소' : '사용 신청을 거절'}합니다.
+                    {isRevoked ? '승인을 취소' : '사용 신청을 거절'}해요.
                   </div>
                   <div className={styles.rejectionEditorWrapper}>
                     <RichTextEditor
                       content={rejectionReason.reason}
                       onChange={rejectionReason.setReason}
-                      placeholder="내용을 입력하세요…"
+                      placeholder="내용을 입력해주세요…"
                       minHeight={180}
                     />
                   </div>
