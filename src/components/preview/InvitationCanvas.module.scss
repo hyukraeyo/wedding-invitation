@@ -1,151 +1,169 @@
-@use "../../styles/variables" as v;
-@use "../../styles/mixins" as m;
+@use '../../styles/variables' as v;
+@use '../../styles/mixins' as m;
 
 .canvasWrapper {
-    width: 100%;
-    height: 100%;
-    background-color: v.$white;
-    position: relative;
-    // box-shadow: 0 25px 50px -12px rgba(v.$black, 0.25);
-    overflow: hidden;
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  min-height: 0; // Critical for flex scrolling
+  background-color: v.$white;
+  position: relative;
+  // box-shadow: 0 25px 50px -12px rgba(v.$black, 0.25);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 
-    @media (min-width: 768px) {
-        max-width: v.$max-mobile;
-        margin-inline: auto;
-    }
+  @media (min-width: 768px) {
+    max-width: v.$max-mobile;
+    margin-inline: auto;
+  }
 
-    &.fullHeight {
-        height: auto;
-        min-height: 100%;
-    }
+  &.fullHeight {
+    height: auto;
+    min-height: 100%;
+    display: block; // Restore block for full height content
+    flex: none;
+  }
 }
 
 .scrollArea {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    @include m.flex-col;
-    overflow-y: auto;
-    overflow-x: hidden;
-    @include m.scrollbar-hide;
-    transition: background-color 0.5s ease, opacity 0.2s ease;
-    padding-top: 0;
+  width: 100%;
+  height: 100%;
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  @include m.flex-col;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  // overscroll-behavior-y: contain;
+  @include m.scrollbar-hide;
 
-    &.disableScroll {
-        height: auto;
-        overflow-y: visible;
-        overflow-x: visible;
-    }
+  > * {
+    flex-shrink: 0;
+  }
+  transition:
+    background-color 0.5s ease,
+    opacity 0.2s ease;
+  padding-top: 0;
 
-    &.hasNotice {
-        padding-top: 36px;
-    }
+  &.disableScroll {
+    height: auto;
+    flex: none;
+    overflow-y: visible;
+    overflow-x: visible;
+  }
 
-    &.hidden {
-        opacity: 0;
-    }
+  &.hasNotice {
+    padding-top: 36px;
+  }
+
+  &.hidden {
+    opacity: 0;
+  }
 }
 
 .footerPadding {
-    height: 10rem;
-    @include m.flex-col;
-    @include m.flex-center;
-    font-size: 10px;
-    color: rgba(v.$black, 0.1);
-    letter-spacing: 0.2em;
-    font-weight: 300;
-    padding-bottom: 5rem;
+  height: 10rem;
+  @include m.flex-col;
+  @include m.flex-center;
+  font-size: 10px;
+  color: rgba(v.$black, 0.1);
+  letter-spacing: 0.2em;
+  font-weight: 300;
+  padding-bottom: 5rem;
 
-    .copyright {
-        margin-bottom: 1rem;
-    }
+  .copyright {
+    margin-bottom: 1rem;
+  }
 }
 
 .modalRoot {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 10005;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10005;
 }
 
 .gallerySkeleton {
-    height: 10rem;
-    width: 100%;
+  height: 10rem;
+  width: 100%;
 }
 
 .watermark {
-    position: absolute;
-    inset: -50%;
-    width: 200%;
-    height: 200%;
-    pointer-events: none;
-    z-index: 9998;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='250'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23FBC02D' fill-opacity='0.12' font-weight='900' font-family='sans-serif' font-size='24' letter-spacing='2'%3EBANANA WEDDING%3C/text%3E%3C/svg%3E");
-    background-repeat: repeat;
-    background-position: center;
-    transform: rotate(-30deg);
-    mix-blend-mode: multiply;
+  position: absolute;
+  inset: -50%;
+  width: 200%;
+  height: 200%;
+  pointer-events: none;
+  z-index: 9998;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='250'%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23FBC02D' fill-opacity='0.12' font-weight='900' font-family='sans-serif' font-size='24' letter-spacing='2'%3EBANANA WEDDING%3C/text%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-position: center;
+  transform: rotate(-30deg);
+  mix-blend-mode: multiply;
 }
 
 .freeNotice {
-    position: fixed;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: v.$max-mobile;
-    height: 36px;
-    background-color: rgba(v.$primary-500, 0.98); // Banana Yellow
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(v.$black, 0.05);
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: v.$max-mobile;
+  height: 36px;
+  background-color: rgba(v.$primary-500, 0.98); // Banana Yellow
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(v.$black, 0.05);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  z-index: 10000;
+  pointer-events: none;
+
+  .marqueeInner {
+    display: flex;
+    white-space: nowrap;
+    animation: marquee 35s linear infinite;
+    padding-left: 0;
+  }
+
+  .marqueeItem {
     display: flex;
     align-items: center;
-    overflow: hidden;
-    z-index: 10000;
-    pointer-events: none;
+    gap: 8px;
+    padding-right: 48px;
 
-    .marqueeInner {
-        display: flex;
-        white-space: nowrap;
-        animation: marquee 35s linear infinite;
-        padding-left: 0;
+    svg {
+      color: v.$zinc-900;
     }
 
-    .marqueeItem {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding-right: 48px;
-
-        svg {
-            color: v.$zinc-900;
-        }
-
-        span {
-            font-size: 13px;
-            font-weight: 700;
-            color: v.$zinc-900;
-            letter-spacing: -0.02em;
-        }
+    span {
+      font-size: 13px;
+      font-weight: 700;
+      color: v.$zinc-900;
+      letter-spacing: -0.02em;
     }
+  }
 }
 
 @keyframes marquee {
-    0% {
-        transform: translateX(0);
-    }
+  0% {
+    transform: translateX(0);
+  }
 
-    100% {
-        transform: translateX(-50%);
-    }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 @keyframes slideDown {
-    from {
-        transform: translate(-50%, -100%);
-    }
+  from {
+    transform: translate(-50%, -100%);
+  }
 
-    to {
-        transform: translate(-50%, 0);
-    }
+  to {
+    transform: translate(-50%, 0);
+  }
 }

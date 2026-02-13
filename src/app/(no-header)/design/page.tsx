@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/AlertDialog';
 import { Badge } from '@/components/ui/Badge';
 import { BottomCTA } from '@/components/common/BottomCTA';
-import { BottomSheet } from '@/components/ui/BottomSheet';
+import { Drawer } from '@/components/ui/Drawer';
 import { Button } from '@/components/ui/Button';
 import { Dialog } from '@/components/ui/Dialog';
 import { NumericSpinner } from '@/components/ui/NumericSpinner';
@@ -548,7 +548,7 @@ export default function DesignPage() {
               </AlertDialog>
 
               <Button onClick={() => setSheetOpen(true)}>바텀시트</Button>
-              <BottomSheet
+              <Drawer
                 open={sheetOpen}
                 onOpenChange={setSheetOpen}
                 header="빠른 액션"
@@ -557,7 +557,7 @@ export default function DesignPage() {
                 <div style={{ padding: '0 24px 24px' }}>
                   <p>모바일 환경에서는 하단에서 부드럽게 올라오는 바텀시트가 제공됩니다.</p>
                 </div>
-              </BottomSheet>
+              </Drawer>
               <ToastProvider swipeDirection="right">
                 <Button onClick={() => setToastOpen(true)}>토스트 실행</Button>
                 <Toast open={toastOpen} onOpenChange={setToastOpen}>

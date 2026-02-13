@@ -1,0 +1,139 @@
+@use '../../../styles/variables' as v;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-lg;
+  padding: v.$space-md;
+}
+
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-sm;
+}
+
+.title {
+  color: v.$text-primary;
+  font-size: v.$control-font-size-lg;
+  font-weight: 700;
+}
+
+.description {
+  color: v.$text-secondary;
+  font-size: v.$control-font-size-sm;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-sm;
+}
+
+.sectionTitle {
+  color: v.$text-primary;
+  font-size: v.$control-font-size-md;
+  font-weight: 600;
+}
+
+.sectionDescription {
+  color: v.$text-secondary;
+  font-size: v.$control-font-size-sm;
+}
+
+.trigger,
+.closeButton {
+  width: fit-content;
+  min-height: v.$control-height-md;
+  padding: 0 v.$control-padding-md;
+  border: 1px solid v.$grey-300;
+  border-radius: v.$radius-md;
+  background-color: v.$white;
+  color: v.$text-primary;
+  font-size: v.$control-font-size-sm;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: v.$adaptive-background-dimmed;
+  z-index: v.$z-overlay;
+}
+
+.content {
+  position: fixed;
+  z-index: v.$z-modal;
+  display: flex;
+  flex-direction: column;
+  background-color: v.$white;
+  box-shadow: v.$shadow-xl;
+  outline: none;
+}
+
+.bottom {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100dvh;
+}
+
+.top {
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 100dvh;
+}
+
+.left {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: min(100vw, #{v.$canvas-max-width});
+}
+
+.right {
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: min(100vw, #{v.$canvas-max-width});
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-sm;
+  padding: v.$space-md;
+  border-bottom: 1px solid v.$grey-200;
+}
+
+.drawerTitle {
+  color: v.$text-primary;
+  font-size: v.$control-font-size-md;
+  font-weight: 700;
+}
+
+.drawerDescription {
+  color: v.$text-secondary;
+  font-size: v.$control-font-size-sm;
+}
+
+.scrollArea {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: v.$space-md;
+}
+
+.line {
+  color: v.$text-primary;
+  font-size: v.$control-font-size-sm;
+  line-height: 1.6;
+}
+
+.footer {
+  padding: v.$space-md;
+  border-top: 1px solid v.$grey-200;
+}

@@ -369,13 +369,10 @@
   }
 }
 
-.mobilePreview {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
+.previewDrawerBody {
   height: 100%;
-  overflow: hidden;
-  background-color: v.$white;
-  z-index: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }

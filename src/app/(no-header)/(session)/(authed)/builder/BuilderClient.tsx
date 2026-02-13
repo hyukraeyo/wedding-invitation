@@ -9,9 +9,10 @@ import { useShallow } from 'zustand/react/shallow';
 
 import EditorForm from '@/components/common/EditorForm';
 import { Button } from '@/components/ui/Button';
-import { Dialog } from '@/components/ui/Dialog';
+import { Drawer } from '@/components/ui/Drawer';
 import { BananaLoader } from '@/components/ui/Loader';
 import { useAuth } from '@/hooks/useAuth';
+import { useMediaQuery } from '@/hooks/use-media-query';
 import { useToast } from '@/hooks/use-toast';
 import { validateBeforeBuilderSave } from '@/lib/builderBusinessValidation';
 import { ensureBuilderSlug, toInvitationData } from '@/lib/builderSave';
@@ -36,6 +37,7 @@ export function BuilderClient() {
   const [isSaving, setIsSaving] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isReady, setIsReady] = useState(false);
+  const isMobilePreviewViewport = useMediaQuery('(max-width: 767px)');
   const { toast } = useToast();
   const toastRef = useRef(toast);
   const { user, isProfileComplete, profileLoading, isAdmin } = useAuth();
@@ -221,6 +223,12 @@ export function BuilderClient() {
     setIsLoading(isSaving);
   }, [isSaving, setIsLoading]);
 
+  useEffect(() => {
+    if (!isMobilePreviewViewport && isPreviewOpen) {
+      setIsPreviewOpen(false);
+    }
+  }, [isMobilePreviewViewport, isPreviewOpen]);
+
   const topActions = [
     {
       key: 'back',
@@ -282,40 +290,50 @@ export function BuilderClient() {
         </div>
       </div>
 
-      <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen} fullScreen>
-        {!isPreviewOpen ? (
-          <Dialog.Trigger asChild>
-            <button
-              type="button"
-              className={clsx(styles.floatingPreview, styles.fabVisible)}
-              aria-label="Open preview"
-            >
-              <Eye className={styles.icon} />
-            </button>
-          </Dialog.Trigger>
-        ) : null}
+      {isMobilePreviewViewport ? (
+        <Drawer.Root open={isPreviewOpen} onOpenChange={setIsPreviewOpen} direction="right">
+          {!isPreviewOpen ? (
+            <Drawer.Trigger asChild>
+              <button
+                type="button"
+                className={clsx(styles.floatingPreview, styles.fabVisible)}
+                aria-label="Open preview"
+              >
+                <Eye className={styles.icon} />
+              </button>
+            </Drawer.Trigger>
+          ) : null}
 
-        <Dialog.Content surface="muted">
-          <div className={styles.mobilePreview}>
-            <InvitationCanvas
-              key="mobile-preview"
-              isPreviewMode
-              editingSection={editingSection}
-              hideWatermark
-            />
-          </div>
+          <Drawer.Portal>
+            <Drawer.Overlay />
+            <Drawer.Content aria-label="모바일 청첩장 미리보기" variant="default">
+              <Drawer.Body
+                padding={false}
+                data-vaul-no-drag="true"
+                className={styles.previewDrawerBody}
+              >
+                <InvitationCanvas
+                  key="mobile-preview"
+                  isPreviewMode
+                  editingSection={editingSection}
+                  hideWatermark
+                  disableInternalScroll
+                />
+              </Drawer.Body>
 
-          <Dialog.Close asChild>
-            <button
-              type="button"
-              className={clsx(styles.floatingPreview, styles.fabVisible, styles.previewOpenFab)}
-              aria-label="Close preview"
-            >
-              <X className={styles.icon} />
-            </button>
-          </Dialog.Close>
-        </Dialog.Content>
-      </Dialog>
+              <Drawer.Close asChild>
+                <button
+                  type="button"
+                  className={clsx(styles.floatingPreview, styles.fabVisible, styles.previewOpenFab)}
+                  aria-label="Close preview"
+                >
+                  <X className={styles.icon} />
+                </button>
+              </Drawer.Close>
+            </Drawer.Content>
+          </Drawer.Portal>
+        </Drawer.Root>
+      ) : null}
     </div>
   );
 }

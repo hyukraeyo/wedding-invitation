@@ -2,7 +2,8 @@
 
 import React, { memo, useMemo, useContext, useCallback, useRef } from 'react';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { BottomSheet } from '@/components/ui/BottomSheet';
+import { Drawer } from '@/components/ui/Drawer';
+import type { DrawerDirection } from '@/components/ui/Drawer';
 import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { cn } from '@/lib/utils';
@@ -11,13 +12,19 @@ import styles from './Dialog.module.scss';
 interface DialogContextValue {
     isBottomSheet: boolean;
     fullScreen: boolean;
+    bottomSheetDirection: DrawerDirection;
 }
 
-const DialogContext = React.createContext<DialogContextValue>({ isBottomSheet: false, fullScreen: false });
+const DialogContext = React.createContext<DialogContextValue>({
+    isBottomSheet: false,
+    fullScreen: false,
+    bottomSheetDirection: 'bottom',
+});
 
 interface DialogProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Root>,
     Omit<React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>, 'asChild'> {
     mobileBottomSheet?: boolean | undefined;
+    mobileBottomSheetDirection?: DrawerDirection | undefined;
     fullScreen?: boolean | undefined;
     surface?: 'default' | 'muted' | undefined;
 }
@@ -39,6 +46,7 @@ const hasDialogTrigger = (children: React.ReactNode): boolean => {
 const DialogRoot = ({
     children,
     mobileBottomSheet = false,
+    mobileBottomSheetDirection = 'bottom',
     fullScreen = false,
     surface = 'default',
     open,
@@ -50,7 +58,14 @@ const DialogRoot = ({
     const isMobile = useMediaQuery('(max-width: 768px)');
     const isBottomSheet = !fullScreen && mobileBottomSheet && isMobile;
 
-    const value = useMemo(() => ({ isBottomSheet, fullScreen }), [isBottomSheet, fullScreen]);
+    const value = useMemo(
+        () => ({
+            isBottomSheet,
+            fullScreen,
+            bottomSheetDirection: mobileBottomSheetDirection,
+        }),
+        [isBottomSheet, fullScreen, mobileBottomSheetDirection]
+    );
     const useComposedPattern = hasDialogTrigger(children);
     const dialogChildren = useComposedPattern ? (
         children
@@ -72,9 +87,9 @@ const DialogRoot = ({
     if (isBottomSheet) {
         return (
             <DialogContext.Provider value={value}>
-                <BottomSheet.Root {...rootProps}>
+                <Drawer.Root {...rootProps} direction={mobileBottomSheetDirection}>
                     {dialogChildren}
-                </BottomSheet.Root>
+                </Drawer.Root>
             </DialogContext.Provider>
         );
     }
@@ -90,7 +105,7 @@ const DialogRoot = ({
 
 const DialogTrigger = memo((props: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Trigger>) => {
     const { isBottomSheet } = useContext(DialogContext);
-    if (isBottomSheet) return <BottomSheet.Trigger {...props} />;
+    if (isBottomSheet) return <Drawer.Trigger {...props} />;
     return <DialogPrimitive.Trigger {...props} />;
 });
 DialogTrigger.displayName = 'DialogTrigger';
@@ -99,7 +114,7 @@ DialogTrigger.displayName = 'DialogTrigger';
 
 const DialogClose = memo((props: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Close>) => {
     const { isBottomSheet } = useContext(DialogContext);
-    if (isBottomSheet) return <BottomSheet.Close {...props} />;
+    if (isBottomSheet) return <Drawer.Close {...props} />;
     return <DialogPrimitive.Close {...props} />;
 });
 DialogClose.displayName = 'DialogClose';
@@ -112,7 +127,7 @@ const DialogOverlay = memo(React.forwardRef<
 
     if (isBottomSheet) {
         return (
-            <BottomSheet.Overlay
+            <Drawer.Overlay
                 ref={ref as React.Ref<HTMLDivElement>}
                 className={className}
                 {...props}
@@ -135,10 +150,10 @@ const DialogPortal = memo(({ children, ...props }: React.ComponentPropsWithoutRe
 
     if (isBottomSheet) {
         return (
-            <BottomSheet.Portal {...props}>
+            <Drawer.Portal {...props}>
                 <DialogOverlay />
                 {children}
-            </BottomSheet.Portal>
+            </Drawer.Portal>
         );
     }
 
@@ -166,7 +181,7 @@ const DialogContent = memo(React.forwardRef<
         surface?: 'default' | 'muted' | undefined;
     }
 >(({ className, children, surface = 'default', ...props }, ref) => {
-    const { isBottomSheet, fullScreen } = useContext(DialogContext);
+    const { isBottomSheet, fullScreen, bottomSheetDirection } = useContext(DialogContext);
     const internalRef = useRef<HTMLDivElement>(null);
 
     const setRefs = useCallback((node: HTMLDivElement | null) => {
@@ -203,15 +218,15 @@ const DialogContent = memo(React.forwardRef<
         contentElement.focus({ preventScroll: true });
     }, []);
     const content = isBottomSheet ? (
-        <BottomSheet.Content
+        <Drawer.Content
             ref={setRefs as React.Ref<HTMLDivElement>}
             className={className}
-            variant="floating"
+            variant={bottomSheetDirection === 'bottom' ? 'floating' : 'default'}
             onOpenAutoFocus={handleOpenAutoFocus}
             {...props}
         >
             {children}
-        </BottomSheet.Content>
+        </Drawer.Content>
     ) : (
         <DialogPrimitive.Content
             ref={setRefs}
@@ -268,13 +283,13 @@ const DialogHeader = memo(({
 
     if (isBottomSheet) {
         const headerContent = (
-            <BottomSheet.Header
+            <Drawer.Header
                 className={className}
                 title={title}
                 {...props}
             >
                 {children}
-            </BottomSheet.Header>
+            </Drawer.Header>
         );
 
         return visuallyHidden ? (
@@ -314,7 +329,7 @@ const DialogFooter = memo(({
     const { isBottomSheet } = useContext(DialogContext);
 
     if (isBottomSheet) {
-        return <BottomSheet.Footer className={className} {...props} />;
+        return <Drawer.Footer className={className} {...props} />;
     }
 
     return (
@@ -331,7 +346,7 @@ const DialogTitle = memo(React.forwardRef<
     React.ComponentPropsWithoutRef<typeof DialogPrimitive.Title>
 >(({ className, ...props }, ref) => {
     const { isBottomSheet } = useContext(DialogContext);
-    if (isBottomSheet) return <BottomSheet.Title ref={ref as React.Ref<HTMLHeadingElement>} className={className} {...props} />;
+    if (isBottomSheet) return <Drawer.Title ref={ref as React.Ref<HTMLHeadingElement>} className={className} {...props} />;
     return (
         <DialogPrimitive.Title
             ref={ref}
@@ -349,7 +364,7 @@ const DialogDescription = memo(React.forwardRef<
     const { isBottomSheet } = useContext(DialogContext);
     if (isBottomSheet) {
         return (
-            <BottomSheet.Description
+            <Drawer.Description
                 ref={ref as React.Ref<HTMLParagraphElement>}
                 className={className}
                 {...props}
@@ -370,16 +385,26 @@ const DialogBody = memo(({
     className,
     children,
     padding = true,
+    scrollable = true,
     align = 'left',
     ...props
 }: React.HTMLAttributes<HTMLDivElement> & {
     padding?: boolean | undefined;
+    scrollable?: boolean | undefined;
     align?: 'left' | 'center' | 'right' | undefined;
 }) => {
     const { isBottomSheet } = useContext(DialogContext);
 
     if (isBottomSheet) {
-        return <BottomSheet.Body className={className} padding={padding} {...props}>{children}</BottomSheet.Body>;
+        return (
+            <Drawer.Body
+                className={cn(!scrollable && styles.bodyStatic, className)}
+                padding={padding}
+                {...props}
+            >
+                {children}
+            </Drawer.Body>
+        );
     }
 
     return (
@@ -387,6 +412,7 @@ const DialogBody = memo(({
             className={cn(
                 styles.body,
                 !padding && styles.noPadding,
+                !scrollable && styles.bodyStatic,
                 align === 'center' && styles.bodyCenter,
                 align === 'right' && styles.bodyRight,
                 className

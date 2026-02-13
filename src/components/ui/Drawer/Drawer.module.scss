@@ -18,9 +18,7 @@
   right: 0;
   outline: none;
   z-index: 10001;
-  background-color: transparent; // vaul 하단 확장을 방지하기 위해 투명 처리
-
-  // Max width for desktop/tablet mockup
+  background-color: transparent;
   max-width: v.$canvas-max-width;
   margin: 0 auto;
 }
@@ -63,8 +61,6 @@
 }
 
 .floating {
-  // 플로팅 스타일: 하단 및 좌우 여백을 wrapper에 적용하지 않고 컨테이너 자체를 띄움
-  // 하지만 vaul의 extender 문제를 위해 wrapper에 마진을 줌
   max-height: calc(96% - 16px);
 
   .wrapper {

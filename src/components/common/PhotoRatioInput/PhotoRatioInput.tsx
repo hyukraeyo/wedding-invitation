@@ -1,7 +1,10 @@
 import * as React from 'react';
 import { CloudUpload } from 'lucide-react';
+import Image from 'next/image';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { IconButton } from '@/components/ui/IconButton';
+import { IMAGE_SIZES } from '@/constants/image';
+import { isBlobUrl } from '@/lib/image';
 import { cn } from '@/lib/utils';
 import s from './PhotoRatioInput.module.scss';
 
@@ -48,8 +51,14 @@ export const PhotoRatioInput = React.forwardRef<HTMLDivElement, PhotoRatioInputP
         >
           {image ? (
             <div className={s.preview}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={image} alt="업로드된 사진 미리보기" />
+              <Image
+                src={image}
+                alt="업로드된 사진 미리보기"
+                fill
+                sizes={IMAGE_SIZES.builder}
+                className={s.previewImage}
+                unoptimized={isBlobUrl(image)}
+              />
             </div>
           ) : (
             <>

@@ -132,6 +132,7 @@
 
 .body {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding: 24px;
   -webkit-overflow-scrolling: touch;
@@ -139,6 +140,10 @@
   &.noPadding {
     padding: 0;
   }
+}
+
+.bodyStatic {
+  overflow: hidden;
 }
 
 .bodyCenter {

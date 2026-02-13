@@ -54,6 +54,7 @@
   transition: all 0.2s v.$ease-ios;
   color: v.$grey-800;
   gap: 4px;
+  flex-shrink: 0; // Prevent shrinking on small screens to maintain alignment with activeIndicator
 
   &:not(.active):hover {
     background-color: v.$grey-50;

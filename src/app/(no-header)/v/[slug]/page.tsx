@@ -1,6 +1,7 @@
 import { invitationService } from '@/services/invitationService';
 import InvitationCanvas from '@/components/preview/InvitationCanvas';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
+import { unstable_cache } from 'next/cache';
 import { notFound } from 'next/navigation';
 import { cache } from 'react';
 import { SITE_NAME, absoluteUrl } from '@/lib/site';
@@ -9,6 +10,23 @@ import styles from './page.module.scss';
 interface Props {
   params: Promise<{ slug: string }>;
 }
+
+const INVITATION_CACHE_REVALIDATE_SECONDS = 60;
+
+const getInvitationsBySlugsCached = unstable_cache(
+  async (slugs: string[]) => {
+    if (!supabaseAdmin) {
+      throw new Error('SUPABASE_SERVICE_ROLE_KEY is required to render public invitations.');
+    }
+
+    return invitationService.getInvitationsBySlugs(slugs, supabaseAdmin);
+  },
+  ['public-invitation-by-slug'],
+  {
+    revalidate: INVITATION_CACHE_REVALIDATE_SECONDS,
+    tags: ['public-invitations'],
+  }
+);
 
 const getInvitation = cache(async (slug: string) => {
   if (!supabaseAdmin) {
@@ -33,11 +51,10 @@ const getInvitation = cache(async (slug: string) => {
     console.error('Slug decoding error:', e);
   }
 
-  // Try all variations in a single batch query for better performance
-  const invitations = await invitationService.getInvitationsBySlugs(
-    Array.from(possibleSlugs),
-    supabaseAdmin
-  );
+  const normalizedSlugs = Array.from(possibleSlugs).sort();
+
+  // Try all variations in a single batch query and reuse cached DB result across requests.
+  const invitations = await getInvitationsBySlugsCached(normalizedSlugs);
 
   if (invitations.length === 0) return null;
 
