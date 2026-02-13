@@ -1,0 +1,179 @@
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
+
+.container {
+  @include m.ui-stack(v.$space-lg);
+}
+
+.infoSpacing {
+  margin-top: v.$space-sm;
+}
+
+.bottomActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.fullPreviewBtn {
+  margin-left: auto;
+  gap: calc(v.$space-sm / 2);
+  min-height: v.$control-height-sm;
+  padding-inline: v.$control-padding-sm;
+  border-radius: v.$radius-full;
+  background-color: v.$grey-100;
+  border: 1px solid v.$grey-200;
+  color: v.$grey-700;
+
+  @include m.hover {
+    background-color: v.$grey-200;
+    border-color: v.$grey-300;
+  }
+}
+
+.previewDialogContent {
+  overflow: hidden;
+}
+
+.previewDialogHeader {
+  padding-bottom: v.$space-sm;
+}
+
+.modalBody {
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-md;
+  padding-top: 0;
+}
+
+.previewSurface {
+  border-radius: v.$radius-lg;
+  border: 1px solid v.$grey-200;
+  background: linear-gradient(180deg, rgba(v.$primary, 0.24) 0%, rgba(v.$primary, 0.08) 100%);
+  padding: calc(v.$space-sm * 1.5);
+}
+
+.previewLabel {
+  display: flex;
+  align-items: center;
+  gap: calc(v.$space-sm / 2);
+  color: v.$grey-700;
+  font-size: v.$control-font-size-sm;
+  font-weight: 600;
+}
+
+.card {
+  background-color: v.$white;
+  border: 1px solid v.$grey-200;
+  border-radius: v.$radius-lg;
+  box-shadow: v.$shadow-md;
+  overflow: hidden;
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  background-color: v.$grey-100;
+  overflow: hidden;
+
+  &.landscape {
+    aspect-ratio: 16 / 9;
+  }
+
+  &.portrait {
+    aspect-ratio: 3 / 4;
+    max-width: min(100%, calc(v.$space-xl * 11));
+    margin-inline: auto;
+  }
+}
+
+.cardImage {
+  object-fit: cover;
+}
+
+.placeholder {
+  @include m.flex-center;
+  width: 100%;
+  height: 100%;
+  color: v.$grey-400;
+  background: linear-gradient(180deg, v.$grey-100 0%, v.$grey-50 100%);
+}
+
+.placeholderIcon {
+  opacity: 0.2;
+}
+
+.cardContent {
+  @include m.ui-stack(calc(v.$space-sm / 2));
+  padding: v.$space-md;
+}
+
+.cardTitle {
+  margin: 0;
+  color: v.$grey-900;
+  font-size: v.$control-font-size-lg;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.cardDescription {
+  margin: 0;
+  color: v.$grey-600;
+  font-size: v.$control-font-size-sm;
+  line-height: 1.5;
+  white-space: pre-line;
+}
+
+.btnGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: calc(v.$space-sm / 2);
+  padding: 0 v.$space-md v.$space-md;
+}
+
+.cardBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 calc(50% - (v.$space-sm / 2));
+  min-height: v.$control-height-sm;
+  padding: 0 v.$control-padding-md;
+  border-radius: v.$radius-md;
+  border: 1px solid v.$grey-200;
+  background-color: v.$grey-50;
+  color: v.$grey-700;
+  font-size: v.$control-font-size-sm;
+  font-weight: 600;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid v.$grey-200;
+  padding: v.$space-sm v.$space-md calc(v.$space-sm * 1.5);
+  background-color: rgba(v.$primary, 0.08);
+}
+
+.footerText {
+  color: v.$grey-800;
+  font-size: v.$control-font-size-sm;
+  font-weight: 700;
+}
+
+.footerChevron {
+  color: v.$grey-500;
+}
+
+.paddedFooter {
+  padding: 0 v.$space-md v.$space-md;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+@include m.mobile {
+  .cardBtn {
+    flex-basis: 100%;
+  }
+}

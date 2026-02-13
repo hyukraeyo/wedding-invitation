@@ -12,16 +12,23 @@ import { Button } from '@/components/ui/Button';
 import { FormControl, FormField, FormLabel } from '@/components/ui/Form';
 import { useBuilderSection } from '@/hooks/useBuilder';
 import { cn } from '@/lib/utils';
-import styles from './KakaoShareSection.module.scss';
 import { KAKAO_SHARE_SAMPLES } from '@/constants/samples';
 import type { SectionProps, SamplePhraseItem } from '@/types/builder';
-
 import { Dialog } from '@/components/ui/Dialog';
+import styles from './KakaoShareSection.module.scss';
 
 export default function KakaoShareSection(props: SectionProps) {
   const kakao = useInvitationStore((state) => state.kakaoShare);
   const setKakao = useInvitationStore((state) => state.setKakao);
   const { isInvalid } = useBuilderSection(props.value);
+  const previewImageClassName = cn(
+    styles.imageWrapper,
+    kakao.imageRatio === 'portrait' ? styles.portrait : styles.landscape
+  );
+  const previewButtonType = kakao.buttonType || 'location';
+  const previewTitle = kakao.title.trim() || '우리 결혼해요';
+  const previewDescription = kakao.description.trim() || '귀한 걸음 하시어 축복해 주세요.';
+  const previewActionLabel = previewButtonType === 'location' ? '위치 안내' : '참석 여부';
 
   const handleSelectSample = (sample: SamplePhraseItem) => {
     setKakao({
@@ -40,7 +47,6 @@ export default function KakaoShareSection(props: SectionProps) {
     >
       <div className={styles.container}>
         {/* Photo Upload */}
-        {/* Photo Upload */}
         <FormField name="kakao-image">
           <FormLabel htmlFor="kakao-image">사진</FormLabel>
           <ImageUploader
@@ -56,7 +62,7 @@ export default function KakaoShareSection(props: SectionProps) {
               { label: '가로형', value: 'landscape' },
             ]}
           />
-          <div className="mt-3">
+          <div className={styles.infoSpacing}>
             <InfoMessage>카카오톡 공유 메시지에서 보여질 사진의 비율이에요.</InfoMessage>
           </div>
         </FormField>
@@ -109,24 +115,28 @@ export default function KakaoShareSection(props: SectionProps) {
         </FormField>
 
         <div className={styles.bottomActions}>
-          <Dialog>
+          <Dialog mobileBottomSheet>
             <Dialog.Trigger asChild>
               <Button type="button" variant="ghost" className={styles.fullPreviewBtn}>
                 <MessageCircle size={16} />
                 미리보기
               </Button>
             </Dialog.Trigger>
-            <Dialog.Content>
-              <Dialog.Header title="카카오톡 공유 미리보기" />
+            <Dialog.Content
+              className={styles.previewDialogContent}
+              aria-label="카카오톡 공유 미리보기"
+            >
+              <Dialog.Header title="카카오톡 공유 미리보기" className={styles.previewDialogHeader} />
               <Dialog.Body className={styles.modalBody}>
-                <div className={styles.card}>
+                <div className={styles.previewSurface}>
+                  <div className={styles.previewLabel}>
+                    <MessageCircle size={14} />
+                    <span>카카오톡 메시지 카드</span>
+                  </div>
+                </div>
+                <article className={styles.card}>
                   {kakao.imageUrl ? (
-                    <div
-                      className={cn(
-                        styles.imageWrapper,
-                        kakao.imageRatio === 'portrait' ? styles.portrait : styles.landscape
-                      )}
-                    >
+                    <div className={previewImageClassName}>
                       <Image
                         src={kakao.imageUrl}
                         alt="Kakao Preview"
@@ -136,36 +146,27 @@ export default function KakaoShareSection(props: SectionProps) {
                       />
                     </div>
                   ) : (
-                    <div
-                      className={cn(
-                        styles.imageWrapper,
-                        kakao.imageRatio === 'portrait' ? styles.portrait : styles.landscape
-                      )}
-                    >
+                    <div className={previewImageClassName}>
                       <div className={styles.placeholder}>
-                        <MessageCircle size={32} style={{ opacity: 0.2 }} />
+                        <MessageCircle size={32} className={styles.placeholderIcon} />
                       </div>
                     </div>
                   )}
                   <div className={styles.cardContent}>
-                    <h4 className={styles.cardTitle}>{kakao.title || '우리 결혼해요'}</h4>
-                    <p className={styles.cardDescription}>
-                      {kakao.description || '초대장을 보내드려요.'}
-                    </p>
+                    <h4 className={styles.cardTitle}>{previewTitle}</h4>
+                    <p className={styles.cardDescription}>{previewDescription}</p>
                   </div>
                   <div className={styles.btnGroup}>
                     <div className={styles.cardBtn}>모바일 초대장</div>
-                    {kakao.buttonType !== 'none' && (
-                      <div className={styles.cardBtn}>
-                        {kakao.buttonType === 'location' ? '위치 안내' : '참석 여부'}
-                      </div>
+                    {previewButtonType !== 'none' && (
+                      <div className={styles.cardBtn}>{previewActionLabel}</div>
                     )}
                   </div>
                   <div className={styles.cardFooter}>
                     <span className={styles.footerText}>바나나 웨딩</span>
                     <ChevronRight size={12} className={styles.footerChevron} />
                   </div>
-                </div>
+                </article>
               </Dialog.Body>
               <Dialog.Footer className={styles.paddedFooter}>
                 <Dialog.Close asChild>

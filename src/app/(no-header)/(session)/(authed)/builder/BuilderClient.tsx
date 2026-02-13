@@ -307,11 +307,7 @@ export function BuilderClient() {
           <Drawer.Portal>
             <Drawer.Overlay />
             <Drawer.Content aria-label="모바일 청첩장 미리보기" variant="default">
-              <Drawer.Body
-                padding={false}
-                data-vaul-no-drag="true"
-                className={styles.previewDrawerBody}
-              >
+              <Drawer.Body padding={false} className={styles.previewDrawerBody}>
                 <InvitationCanvas
                   key="mobile-preview"
                   isPreviewMode
