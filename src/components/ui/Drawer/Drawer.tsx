@@ -13,6 +13,7 @@ export interface DrawerRootProps {
   onClose?: (() => void) | undefined;
   onOpenChange?: ((open: boolean) => void) | undefined;
   direction?: DrawerDirection | undefined;
+  handleOnly?: boolean | undefined;
   children: React.ReactNode;
 }
 
@@ -29,7 +30,14 @@ export interface DrawerProps extends DrawerRootProps {
   variant?: 'default' | 'floating';
 }
 
-const DrawerRoot = ({ open, onClose, onOpenChange, direction = 'bottom', children }: DrawerRootProps) => {
+const DrawerRoot = ({
+  open,
+  onClose,
+  onOpenChange,
+  direction = 'bottom',
+  handleOnly = false,
+  children,
+}: DrawerRootProps) => {
   const handleOpenChange = (val: boolean) => {
     onOpenChange?.(val);
     if (!val) onClose?.();
@@ -40,6 +48,7 @@ const DrawerRoot = ({ open, onClose, onOpenChange, direction = 'bottom', childre
       {...(open !== undefined ? { open } : {})}
       onOpenChange={handleOpenChange}
       direction={direction}
+      handleOnly={handleOnly}
     >
       {children}
     </VaulDrawer.Root>
@@ -183,9 +192,16 @@ const DrawerLegacy = ({
   className,
   variant = 'floating',
   direction = 'bottom',
+  handleOnly = false,
 }: DrawerProps) => {
   return (
-    <DrawerRoot open={open} onClose={onClose} onOpenChange={onOpenChange} direction={direction}>
+    <DrawerRoot
+      open={open}
+      onClose={onClose}
+      onOpenChange={onOpenChange}
+      direction={direction}
+      handleOnly={handleOnly}
+    >
       <DrawerPortal>
         <DrawerOverlay />
         <DrawerContent className={className} variant={variant}>

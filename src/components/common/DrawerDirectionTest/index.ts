@@ -1,1 +1,1 @@
-export { default as DrawerDirectionTest } from './DrawerDirectionTest';
+export * from './DrawerDirectionTest';

@@ -1,139 +1,177 @@
 @use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
-.root {
-  display: flex;
-  flex-direction: column;
-  gap: v.$space-lg;
-  padding: v.$space-md;
+.container {
+  min-height: 100dvh;
+  padding: v.$space-xl v.$space-md;
+  background: linear-gradient(160deg, v.$grey-50 0%, v.$white 100%);
 }
 
-.heading {
+.header {
+  max-width: 1080px;
+  margin: 0 auto v.$space-lg auto;
+}
+
+.kicker {
+  margin: 0 0 v.$space-sm 0;
+  color: v.$grey-500;
+  font-size: v.$control-font-size-sm;
+  font-weight: 600;
+}
+
+.title {
+  margin: 0;
+  color: v.$grey-900;
+  font-size: v.$font-size-2xl;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.grid {
+  max-width: 1080px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: v.$space-lg;
+
+  @include m.mobile {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.card {
+  background-color: v.$white;
+  border: 1px solid v.$grey-200;
+  border-radius: v.$radius-2xl;
+  box-shadow: v.$shadow-md;
+  padding: v.$space-md;
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-md;
+}
+
+.cardHeader {
   display: flex;
   flex-direction: column;
   gap: v.$space-sm;
 }
 
-.title {
-  color: v.$text-primary;
+.cardTitle {
+  margin: 0;
+  color: v.$grey-900;
   font-size: v.$control-font-size-lg;
   font-weight: 700;
 }
 
-.description {
-  color: v.$text-secondary;
+.cardSummary {
+  margin: 0;
+  color: v.$grey-600;
   font-size: v.$control-font-size-sm;
+  line-height: 1.5;
 }
 
-.section {
+.phoneMock {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  background-color: v.$grey-100;
+  border: 1px solid v.$grey-200;
+  border-radius: v.$radius-3xl;
+  overflow: hidden;
+}
+
+.mockCanvas {
   display: flex;
   flex-direction: column;
   gap: v.$space-sm;
+  padding: v.$space-lg v.$space-md;
+  height: 100%;
 }
 
-.sectionTitle {
-  color: v.$text-primary;
-  font-size: v.$control-font-size-md;
-  font-weight: 600;
-}
-
-.sectionDescription {
-  color: v.$text-secondary;
-  font-size: v.$control-font-size-sm;
-}
-
-.trigger,
-.closeButton {
-  width: fit-content;
-  min-height: v.$control-height-md;
-  padding: 0 v.$control-padding-md;
-  border: 1px solid v.$grey-300;
-  border-radius: v.$radius-md;
+.mockField {
+  width: 100%;
+  height: v.$control-height-md;
   background-color: v.$white;
-  color: v.$text-primary;
-  font-size: v.$control-font-size-sm;
-  font-weight: 600;
-  cursor: pointer;
+  border: 1px solid v.$grey-200;
+  border-radius: v.$radius-lg;
 }
 
-.overlay {
-  position: fixed;
-  inset: 0;
-  background-color: v.$adaptive-background-dimmed;
-  z-index: v.$z-overlay;
-}
-
-.content {
-  position: fixed;
-  z-index: v.$z-modal;
-  display: flex;
-  flex-direction: column;
-  background-color: v.$white;
-  box-shadow: v.$shadow-xl;
-  outline: none;
-}
-
-.bottom {
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 100dvh;
-}
-
-.top {
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 100dvh;
-}
-
-.left {
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: min(100vw, #{v.$canvas-max-width});
-}
-
-.right {
-  top: 0;
-  bottom: 0;
-  right: 0;
-  width: min(100vw, #{v.$canvas-max-width});
-}
-
-.header {
-  display: flex;
-  flex-direction: column;
-  gap: v.$space-sm;
-  padding: v.$space-md;
-  border-bottom: 1px solid v.$grey-200;
-}
-
-.drawerTitle {
-  color: v.$text-primary;
-  font-size: v.$control-font-size-md;
-  font-weight: 700;
-}
-
-.drawerDescription {
-  color: v.$text-secondary;
-  font-size: v.$control-font-size-sm;
-}
-
-.scrollArea {
+.mockUploader {
   flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: v.$space-md;
+  border: 2px dashed v.$grey-300;
+  border-radius: v.$radius-xl;
+  background-color: v.$grey-50;
 }
 
-.line {
-  color: v.$text-primary;
-  font-size: v.$control-font-size-sm;
-  line-height: 1.6;
+.actionChip {
+  border-radius: v.$radius-full;
+  box-shadow: v.$shadow-lg;
 }
 
-.footer {
-  padding: v.$space-md;
-  border-top: 1px solid v.$grey-200;
+.actionIcon {
+  width: 22px;
+  height: 22px;
+}
+
+.railActions {
+  position: absolute;
+  right: v.$space-md;
+  bottom: v.$space-md;
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-sm;
+}
+
+.speedDial {
+  position: absolute;
+  right: v.$space-md;
+  bottom: v.$space-md;
+  width: 140px;
+  height: 140px;
+}
+
+.speedDialPrimary {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.speedDialSave {
+  position: absolute;
+  right: 0;
+  bottom: 70px;
+}
+
+.speedDialBack {
+  position: absolute;
+  right: 70px;
+  bottom: 0;
+}
+
+.bottomDock {
+  position: absolute;
+  left: v.$space-md;
+  right: v.$space-md;
+  bottom: v.$space-md;
+  border-radius: v.$radius-2xl;
+  background-color: rgba(v.$white, 0.9);
+  border: 1px solid v.$grey-200;
+  box-shadow: v.$shadow-lg;
+  padding: v.$space-sm;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: v.$space-sm;
+}
+
+.dockItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: v.$space-sm;
+}
+
+.dockLabel {
+  color: v.$grey-700;
+  font-size: v.$control-font-size-xs;
+  font-weight: 600;
 }

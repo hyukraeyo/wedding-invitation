@@ -148,47 +148,64 @@
   white-space: nowrap;
 }
 
-.floatingPreview {
-  display: none;
+.mobileActionRail {
+  position: fixed;
+  right: v.$space-lg;
+  bottom: calc(v.$space-lg + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: v.$space-sm;
+  pointer-events: none;
+  z-index: 1001;
+  isolation: isolate;
+}
 
-  @include m.mobile {
-    display: flex;
-    position: fixed;
-    bottom: calc(1.5rem + env(safe-area-inset-bottom));
-    right: 1.5rem;
-    width: 3.5rem;
-    height: 3.5rem;
-    background-color: v.$primary;
-    color: v.$grey-900;
-    border-radius: 50%;
-    align-items: center;
-    justify-content: center;
-    box-shadow: v.$shadow-lg;
-    z-index: 1000;
-    border: none;
-    transform: translateY(200%);
-    opacity: 0;
-    transition: all 0.4s v.$ease-spring;
+.mobileRailBackdrop {
+  position: fixed;
+  inset: 0;
+  border: none;
+  background-color: rgba(v.$grey-900, 0.02);
+  padding: 0;
+  margin: 0;
+  z-index: 999;
+}
 
-    &.fabVisible {
-      transform: translateY(0);
-      opacity: 1;
-    }
+.mobileRailActionList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: v.$space-sm;
+}
 
-    &.previewOpenFab {
-      background-color: v.$grey-900;
-      color: v.$white;
-    }
+.mobileRailButton {
+  border-radius: v.$radius-full;
+  box-shadow: v.$shadow-lg;
+  pointer-events: auto;
+}
 
-    &:active {
-      transform: scale(0.9);
-    }
+.mobileRailActionItem {
+  transform-origin: bottom right;
+}
 
-    .icon {
-      width: 1.5rem;
-      height: 1.5rem;
-    }
-  }
+.mobileRailCloseButton {
+  position: fixed;
+  right: v.$space-lg;
+  bottom: calc(v.$space-lg + env(safe-area-inset-bottom));
+  box-shadow: v.$shadow-lg;
+  z-index: 1000;
+}
+
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.iconMotion {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
 }
 
 /* iPhone Frame Styles - Refined for Realism */
@@ -376,5 +393,6 @@
   overflow-y: auto;
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
   overscroll-behavior-y: contain;
 }
