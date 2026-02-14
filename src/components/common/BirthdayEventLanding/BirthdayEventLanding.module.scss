@@ -1,0 +1,296 @@
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
+
+.page {
+  position: relative;
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  padding: calc(v.$space-sm + env(safe-area-inset-top)) v.$space-sm
+    calc(v.$space-sm + env(safe-area-inset-bottom));
+  background:
+    radial-gradient(circle at 14% 10%, rgba(v.$primary-300, 0.34) 0%, rgba(v.$grey-900, 0) 40%),
+    radial-gradient(circle at 84% 18%, rgba(v.$rose-200, 0.26) 0%, rgba(v.$grey-900, 0) 44%),
+    linear-gradient(185deg, v.$grey-900 0%, v.$grey-800 100%);
+}
+
+.orb {
+  position: absolute;
+  border-radius: v.$radius-full;
+  filter: blur(v.$space-md);
+  pointer-events: none;
+  opacity: 0.72;
+}
+
+.orbTop {
+  width: 64vw;
+  aspect-ratio: 1 / 1;
+  top: -28vw;
+  right: -18vw;
+  background-color: rgba(v.$primary-200, 0.46);
+  animation: orbit-float v.$duration-gentle v.$ease-ios infinite alternate;
+}
+
+.orbBottom {
+  width: 52vw;
+  aspect-ratio: 1 / 1;
+  bottom: -22vw;
+  left: -20vw;
+  background-color: rgba(v.$blue-200, 0.38);
+  animation: orbit-float v.$duration-gentle v.$ease-ios infinite alternate-reverse;
+}
+
+.mobileFrame {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: v.$max-mobile;
+  height: 100%;
+}
+
+.eventCard {
+  height: 100%;
+  border-radius: v.$radius-3xl;
+  border: 1px solid rgba(v.$white, 0.16);
+  background:
+    linear-gradient(148deg, rgba(v.$white, 0.12) 0%, rgba(v.$white, 0.08) 58%, rgba(v.$white, 0.04) 100%);
+  box-shadow: v.$shadow-xl;
+  backdrop-filter: blur(v.$space-md);
+  padding: v.$space-md;
+  font-family: v.$font-gowun-dodum;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  gap: v.$space-md;
+  animation: card-enter v.$duration-gentle v.$ease-ios both;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-sm;
+}
+
+.badgeLine {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: v.$space-sm;
+  width: fit-content;
+  padding: v.$space-sm v.$space-md;
+  border-radius: v.$radius-full;
+  border: 1px solid rgba(v.$primary-300, 0.66);
+  color: v.$primary-100;
+  background-color: rgba(v.$primary-300, 0.2);
+  font-size: v.$control-font-size-xs;
+  font-weight: v.$font-weight-semibold;
+  letter-spacing: 0.04em;
+}
+
+.badgeIcon {
+  width: v.$control-font-size-sm;
+  height: v.$control-font-size-sm;
+}
+
+.heroTitle {
+  margin: 0;
+  color: v.$white;
+  font-family: v.$font-yeon-sung;
+  font-size: clamp(v.$font-size-xl, 8vw, 36px);
+  line-height: v.$line-height-tight;
+  letter-spacing: -0.01em;
+}
+
+.heroSubTitle {
+  display: block;
+  margin-top: v.$space-sm;
+  color: v.$primary-100;
+  font-family: v.$font-gowun-batang;
+  font-size: clamp(v.$font-size-lg, 6vw, 30px);
+  font-weight: v.$font-weight-regular;
+}
+
+.heroDescription {
+  margin: 0;
+  color: rgba(v.$white, 0.8);
+  font-size: v.$control-font-size-sm;
+  line-height: v.$line-height-base;
+}
+
+.missionList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: v.$space-sm;
+}
+
+.missionItem {
+  border-radius: v.$radius-full;
+  border: 1px solid rgba(v.$white, 0.2);
+  background-color: rgba(v.$white, 0.08);
+  color: v.$white;
+  font-size: v.$control-font-size-xs;
+  font-weight: v.$font-weight-medium;
+  line-height: v.$line-height-tight;
+  padding: calc(v.$space-sm * 0.75) v.$space-sm;
+}
+
+.proposal {
+  border-radius: v.$radius-2xl;
+  border: 1px solid rgba(v.$white, 0.16);
+  background-color: rgba(v.$grey-900, 0.28);
+  padding: v.$space-sm v.$space-md;
+}
+
+.proposalLabel {
+  margin: 0;
+  color: v.$grey-200;
+  font-size: v.$control-font-size-xs;
+  font-weight: v.$font-weight-semibold;
+}
+
+.proposalTitle {
+  margin: v.$space-sm 0 0 0;
+  color: v.$primary-100;
+  font-family: v.$font-yeon-sung;
+  font-size: clamp(v.$font-size-xl, 8vw, 34px);
+  line-height: v.$line-height-tight;
+}
+
+.attemptHint {
+  margin: v.$space-sm 0 0 0;
+  color: rgba(v.$white, 0.76);
+  font-size: v.$control-font-size-sm;
+  font-weight: v.$font-weight-medium;
+  line-height: v.$line-height-base;
+}
+
+.choiceArena {
+  position: relative;
+  min-height: 0;
+  width: 100%;
+  border-radius: v.$radius-2xl;
+  border: 1px dashed rgba(v.$white, 0.24);
+  background:
+    linear-gradient(150deg, rgba(v.$white, 0.1) 0%, rgba(v.$white, 0.04) 100%);
+  overflow: hidden;
+}
+
+.yesButton {
+  position: absolute;
+  left: 50%;
+  bottom: v.$space-md;
+  width: calc(100% - (v.$space-lg * 2));
+  transform: translateX(-50%);
+  background-color: v.$primary-400;
+  color: v.$yellow-900;
+}
+
+.noButtonWrap {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition-property: transform;
+  transition-duration: v.$duration-normal;
+  transition-timing-function: cubic-bezier(0.22, 1.2, 0.32, 1);
+  will-change: transform;
+}
+
+.noButton {
+  min-width: calc(v.$control-height-lg * 2);
+  background-color: rgba(v.$white, 0.88);
+  border-color: rgba(v.$white, 0.9);
+}
+
+.footNote {
+  margin: 0;
+  color: rgba(v.$white, 0.7);
+  font-size: v.$control-font-size-xs;
+  text-align: center;
+  font-family: v.$font-gowun-batang;
+}
+
+.acceptedMessage {
+  margin: 0;
+  padding: v.$space-sm;
+  border-radius: v.$radius-xl;
+  color: v.$yellow-900;
+  background-color: rgba(v.$primary-100, 0.94);
+  border: 1px solid rgba(v.$primary-300, 0.74);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: v.$space-sm;
+  font-size: v.$control-font-size-sm;
+  font-weight: v.$font-weight-semibold;
+  animation: pulse-celebrate v.$duration-gentle v.$ease-ios infinite alternate;
+}
+
+.acceptedIcon {
+  width: v.$control-font-size-md;
+  height: v.$control-font-size-md;
+}
+
+.baseGate {
+  width: 100%;
+  max-width: v.$max-mobile;
+  margin: auto 0;
+  border-radius: v.$radius-3xl;
+  border: 1px solid rgba(v.$white, 0.24);
+  background-color: rgba(v.$grey-900, 0.58);
+  box-shadow: v.$shadow-lg;
+  padding: v.$space-lg v.$space-md;
+  text-align: center;
+}
+
+.gateTitle {
+  margin: v.$space-md 0 v.$space-sm 0;
+  color: v.$white;
+  font-size: v.$font-size-xl;
+  line-height: v.$line-height-tight;
+}
+
+.gateDescription {
+  margin: 0;
+  color: rgba(v.$white, 0.76);
+  font-size: v.$control-font-size-sm;
+  line-height: v.$line-height-base;
+}
+
+.loadingText {
+  margin: 0;
+  color: v.$white;
+  font-size: v.$control-font-size-md;
+  font-weight: v.$font-weight-semibold;
+}
+
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(v.$space-md) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes orbit-float {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, v.$space-sm, 0);
+  }
+}
+
+@keyframes pulse-celebrate {
+  from {
+    box-shadow: v.$shadow-sm;
+  }
+  to {
+    box-shadow: v.$shadow-md;
+  }
+}
