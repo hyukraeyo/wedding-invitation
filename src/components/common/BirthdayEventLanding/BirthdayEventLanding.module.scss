@@ -1,5 +1,4 @@
 @use '../../../styles/variables' as v;
-@use '../../../styles/mixins' as m;
 
 .page {
   position: relative;
@@ -12,27 +11,26 @@
   padding: env(safe-area-inset-top) v.$space-md env(safe-area-inset-bottom);
 }
 
-// Background Decorations
 .bgDecorTop {
   position: absolute;
   top: -20%;
   right: -20%;
-  width: 80vw;
-  height: 80vw;
-  background: radial-gradient(circle, rgba(v.$primary-100, 0.4) 0%, rgba(v.$white, 0) 70%);
-  filter: blur(40px);
+  width: 76vw;
+  height: 76vw;
+  background: radial-gradient(circle, rgba(v.$primary-100, 0.52) 0%, rgba(v.$white, 0) 72%);
+  filter: blur(calc(v.$space-xl + v.$space-lg));
   z-index: 0;
   pointer-events: none;
 }
 
 .bgDecorBottom {
   position: absolute;
-  bottom: -10%;
-  left: -10%;
-  width: 70vw;
-  height: 70vw;
-  background: radial-gradient(circle, rgba(v.$blue-100, 0.3) 0%, rgba(v.$white, 0) 70%);
-  filter: blur(40px);
+  bottom: -14%;
+  left: -18%;
+  width: 72vw;
+  height: 72vw;
+  background: radial-gradient(circle, rgba(v.$blue-100, 0.44) 0%, rgba(v.$white, 0) 74%);
+  filter: blur(calc(v.$space-xl + v.$space-lg));
   z-index: 0;
   pointer-events: none;
 }
@@ -53,12 +51,22 @@
   text-align: center;
 }
 
-// Loading & Gate
 .loadingText {
-  color: v.$grey-500;
+  margin: 0;
+  color: v.$grey-600;
   font-size: v.$control-font-size-md;
   font-weight: v.$font-weight-medium;
+  line-height: v.$line-height-base;
   font-family: v.$font-pretendard;
+}
+
+.badgeLine {
+  margin: 0;
+  color: v.$primary-dark;
+  font-size: v.$control-font-size-xs;
+  font-weight: v.$font-weight-bold;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .gateTitle {
@@ -70,12 +78,12 @@
 }
 
 .gateDescription {
+  margin: 0;
   color: v.$grey-600;
   font-size: v.$control-font-size-sm;
   line-height: v.$line-height-base;
 }
 
-// Intro Section
 .introSection {
   height: 100%;
   display: flex;
@@ -87,8 +95,7 @@
 .introContent {
   flex: 1;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  align-items: center;
 }
 
 .introHeader {
@@ -101,31 +108,37 @@
 .pillBadge {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 6px 12px;
+  gap: v.$space-sm;
+  width: fit-content;
+  padding: calc(v.$space-sm * 0.75) v.$control-padding-md;
   border-radius: v.$radius-full;
-  background-color: v.$grey-100;
-  color: v.$grey-600;
+  background-color: rgba(v.$primary-100, 0.6);
+  color: v.$grey-700;
   font-size: v.$control-font-size-xs;
   font-weight: v.$font-weight-semibold;
-  width: fit-content;
+}
+
+.badgeIcon {
+  width: v.$space-sm;
+  height: v.$space-sm;
+  color: v.$primary-dark;
 }
 
 .introTitle {
   margin: 0;
   color: v.$grey-900;
   font-family: v.$font-pretendard;
-  font-size: 42px; // Big modern title
+  font-size: clamp(v.$font-size-xl, 8vw, calc(v.$font-size-2xl + v.$space-sm));
   font-weight: v.$font-weight-bold;
-  line-height: 1.15;
+  line-height: v.$line-height-tight;
   letter-spacing: -0.02em;
 }
 
 .introDesc {
-  margin: v.$space-sm 0 0;
+  margin: 0;
   color: v.$grey-600;
   font-size: v.$control-font-size-md;
-  line-height: 1.6;
+  line-height: v.$line-height-relaxed;
 }
 
 .bottomAction {
@@ -136,17 +149,14 @@
 .startButton {
   width: 100%;
   border-radius: v.$radius-xl;
-  background-color: v.$grey-900; // Modern chic
-  color: v.$white;
-  font-weight: v.$font-weight-bold;
   font-size: v.$control-font-size-md;
-
-  &:hover {
-    background-color: v.$grey-800; // Hover
-  }
+  font-weight: v.$font-weight-bold;
+  background: linear-gradient(135deg, v.$grey-900 0%, v.$grey-700 100%);
+  color: v.$white;
+  border: none;
+  box-shadow: v.$shadow-lg;
 }
 
-// Main Section
 .mainSection {
   height: 100%;
   display: flex;
@@ -158,172 +168,218 @@
   display: flex;
   flex-direction: column;
   gap: v.$space-sm;
-  animation: slide-up 0.6s v.$ease-ios forwards;
 }
 
-.headerTop {
+.progressRow {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.badgeIcon {
-  width: 14px;
-  height: 14px;
-  color: v.$primary-dark;
-}
-
-.mainTitle {
-  margin: v.$space-sm 0;
-  font-family: v.$font-pretendard;
-  font-size: 28px;
-  font-weight: v.$font-weight-bold;
-  color: v.$grey-900;
-  line-height: 1.25;
-}
-
-.mainSubTitle {
-  display: block;
-  font-size: 18px;
-  font-weight: v.$font-weight-medium;
-  color: v.$grey-500;
-  margin-top: 4px;
-}
-
-.benefitRow {
-  display: flex;
-  gap: v.$space-sm;
-  flex-wrap: wrap;
-  margin-top: v.$space-sm;
-}
-
-.benefitChip {
-  padding: 8px 14px;
-  background-color: v.$white;
-  border: 1px solid v.$grey-200;
-  border-radius: v.$radius-lg;
+.progressLabel {
+  color: v.$grey-600;
   font-size: v.$control-font-size-sm;
-  color: v.$grey-700;
   font-weight: v.$font-weight-medium;
-  box-shadow: v.$shadow-sm;
 }
 
-.contentSpacer {
-  flex: 1;
+.progressValue {
+  color: v.$grey-900;
+  font-size: v.$control-font-size-sm;
+  font-weight: v.$font-weight-bold;
 }
 
-// Question Card & Interaction
-.questionCard {
-  background-color: v.$white;
-  border-radius: v.$radius-2xl;
-  padding: v.$space-lg;
-  box-shadow: v.$shadow-xl; // Lifted card look
-  border: 1px solid rgba(v.$grey-200, 0.6);
+.progressDots {
   display: flex;
-  flex-direction: column;
-  gap: v.$space-md;
+  align-items: center;
+  gap: calc(v.$space-sm * 0.75);
+}
+
+.progressDot {
+  width: v.$space-sm;
+  height: calc(v.$space-sm * 0.5);
+  border-radius: v.$radius-full;
+  background-color: rgba(v.$grey-300, 0.9);
+  transition: v.$transition-normal;
+}
+
+.progressDotActive {
+  @extend .progressDot;
+  width: v.$space-md;
+  background-color: v.$primary-dark;
+}
+
+.storyStage {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  min-height: 0;
+  margin-top: v.$space-md;
+}
+
+.storyCard,
+.finaleCard {
+  width: 100%;
+  min-height: calc(v.$space-xl * 8.5);
+  border-radius: v.$radius-2xl;
+  border: 1px solid rgba(v.$grey-200, 0.8);
+  box-shadow: v.$shadow-xl;
+  padding: v.$space-lg;
   position: relative;
   overflow: hidden;
-}
-
-.questionLabel {
-  margin: 0;
-  font-size: 11px;
-  font-weight: v.$font-weight-bold;
-  color: v.$primary-dark;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.questionTitle {
-  margin: 0;
-  font-size: 26px;
-  font-weight: v.$font-weight-bold;
-  color: v.$grey-900;
-  font-family: v.$font-pretendard;
-}
-
-.questionHint {
-  margin: 0;
-  font-size: v.$control-font-size-sm;
-  color: v.$grey-500;
-  height: 20px; // Prevent layout shift
-}
-
-.interactionArena {
-  position: relative;
-  height: 220px; // Sufficient space for running button
-  width: 100%;
-  background-color: v.$grey-50;
-  border-radius: v.$radius-xl;
-  margin-top: v.$space-sm;
-}
-
-.yesButton {
-  position: absolute;
-  bottom: v.$space-md;
-  left: v.$space-md;
-  right: v.$space-md;
-  width: calc(100% - #{v.$space-md * 2});
-  background-color: v.$primary;
-  color: v.$grey-900;
-  font-weight: v.$font-weight-bold;
-  box-shadow: v.$shadow-md;
-  border: none;
-
-  &:hover {
-    background-color: v.$primary-dark;
-  }
-}
-
-.noButtonWrap {
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 20;
-  transition-property: transform;
-  will-change: transform;
-  // transition duration is set inline in JS
-}
-
-.noButton {
-  background-color: v.$white;
-  border: 1px solid v.$grey-200;
-  color: v.$grey-600;
-  font-weight: v.$font-weight-medium;
-  box-shadow: v.$shadow-sm;
-  min-width: 80px;
-}
-
-.successMessage {
-  position: absolute;
-  inset: 0;
-  background-color: rgba(v.$white, 0.95);
-  backdrop-filter: blur(8px);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: v.$space-sm;
-  z-index: 30;
-  font-weight: v.$font-weight-bold;
-  color: v.$grey-900;
-  border-radius: v.$radius-2xl;
 }
 
-.heartIcon {
-  width: 32px;
-  height: 32px;
+.storyCard {
+  justify-content: flex-end;
+  background:
+    linear-gradient(180deg, rgba(v.$white, 0.7) 0%, rgba(v.$white, 0.95) 56%),
+    radial-gradient(circle at 14% 16%, rgba(v.$primary-100, 0.82) 0%, rgba(v.$white, 0) 56%);
+}
+
+.storyEyebrow {
+  margin: 0;
+  color: v.$primary-dark;
+  font-size: v.$control-font-size-xs;
+  font-weight: v.$font-weight-bold;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.storyTitle {
+  margin: v.$space-sm 0 0;
+  color: v.$grey-900;
+  font-size: v.$font-size-2xl;
+  font-weight: v.$font-weight-bold;
+  line-height: v.$line-height-tight;
+  letter-spacing: -0.015em;
+}
+
+.storyBody {
+  margin: v.$space-md 0 0;
+  color: v.$grey-700;
+  font-size: v.$control-font-size-lg;
+  font-weight: v.$font-weight-medium;
+  line-height: v.$line-height-relaxed;
+}
+
+.storyFootnote {
+  margin: v.$space-md 0 0;
+  color: v.$grey-500;
+  font-size: v.$control-font-size-sm;
+  line-height: v.$line-height-base;
+}
+
+.actionRow {
+  width: 100%;
+  margin-top: v.$space-lg;
+  padding-bottom: v.$space-md;
+}
+
+.nextButton {
+  width: 100%;
+  border-radius: v.$radius-xl;
+  background-color: v.$primary;
+  color: v.$grey-900;
+  font-size: v.$control-font-size-md;
+  font-weight: v.$font-weight-bold;
+  border: none;
+  box-shadow: v.$shadow-md;
+}
+
+.restartButton {
+  width: 100%;
+  border-radius: v.$radius-xl;
+  font-weight: v.$font-weight-semibold;
+  font-size: v.$control-font-size-md;
+}
+
+.finaleCard {
+  justify-content: flex-end;
+  align-items: flex-start;
+  background:
+    linear-gradient(180deg, rgba(v.$white, 0.92) 0%, rgba(v.$primary-100, 0.56) 100%),
+    radial-gradient(circle at 24% 24%, rgba(v.$blue-100, 0.9) 0%, rgba(v.$white, 0) 64%);
+}
+
+.finalePulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(v.$space-xl * 5);
+  height: calc(v.$space-xl * 5);
+  border-radius: v.$radius-full;
+  border: 1px solid rgba(v.$primary-dark, 0.5);
+  transform: translate(-50%, -50%);
+}
+
+.finaleBurst {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.burstParticle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: v.$space-sm;
+  height: v.$space-sm;
+  border-radius: v.$radius-full;
+  transform: translate(-50%, -50%);
+  box-shadow: v.$shadow-sm;
+}
+
+.burstParticle:nth-child(3n) {
+  background-color: v.$primary;
+}
+
+.burstParticle:nth-child(3n + 1) {
+  background-color: v.$blue-200;
+}
+
+.burstParticle:nth-child(3n + 2) {
+  background-color: v.$red-500;
+}
+
+.finaleIconWrap {
+  width: calc(v.$space-xl * 2);
+  height: calc(v.$space-xl * 2);
+  border-radius: v.$radius-full;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: v.$space-md;
+  background-color: rgba(v.$white, 0.78);
+  border: 1px solid rgba(v.$grey-200, 0.8);
+  box-shadow: v.$shadow-md;
+}
+
+.finaleIcon {
+  width: v.$space-lg;
+  height: v.$space-lg;
   color: v.$red-500;
 }
 
-@keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.finaleTitle {
+  margin: 0;
+  color: v.$grey-900;
+  font-size: clamp(v.$font-size-xl, 7vw, calc(v.$font-size-2xl + v.$space-sm));
+  font-weight: v.$font-weight-bold;
+  line-height: v.$line-height-tight;
+  letter-spacing: -0.02em;
+}
+
+.finaleBody {
+  margin: v.$space-md 0 0;
+  color: v.$grey-700;
+  font-size: v.$control-font-size-lg;
+  line-height: v.$line-height-relaxed;
+}
+
+.finaleSub {
+  margin: v.$space-md 0 0;
+  color: v.$grey-600;
+  font-size: v.$control-font-size-md;
+  font-weight: v.$font-weight-semibold;
 }

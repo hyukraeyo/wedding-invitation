@@ -9,87 +9,98 @@ import { isIOS, isMobile } from '@/lib/utils';
 
 import styles from './BirthdayEventLanding.module.scss';
 
-const ESCAPE_EDGE_PADDING = 10;
-const ESCAPE_BOTTOM_GUARD = 100;
-const ESCAPE_MIN_DISTANCE = 92;
-const ESCAPE_MAX_DISTANCE = 220;
-const ESCAPE_POINTER_THROTTLE_MS = 180;
-const ESCAPE_JITTER = 42;
-const ESCAPE_MIN_DURATION_MS = 240;
-const ESCAPE_MAX_DURATION_MS = 460;
-const ESCAPE_ROTATION_LIMIT = 16;
-const ESCAPE_SCALE_MIN = 0.94;
-const ESCAPE_SCALE_VARIATION = 0.12;
-
-interface NoButtonPosition {
-  left: number;
-  top: number;
+interface StoryStep {
+  id: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+  closing: string;
 }
 
-interface EscapePointerPosition {
-  clientX: number;
-  clientY: number;
+interface BurstParticle {
+  id: number;
+  x: number;
+  y: number;
+  delay: number;
+  duration: number;
+  rotate: number;
 }
 
-interface NoButtonMotion {
-  durationMs: number;
-  rotateDeg: number;
-  scale: number;
-}
+type NonEmptyArray<T> = readonly [T, ...T[]];
 
-const INITIAL_NO_BUTTON_POSITION: NoButtonPosition = {
-  left: 0,
-  top: 0,
-};
+const IOS_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
-const INITIAL_NO_BUTTON_MOTION: NoButtonMotion = {
-  durationMs: ESCAPE_MIN_DURATION_MS,
-  rotateDeg: 0,
-  scale: 1,
-};
+const STORY_STEPS: NonEmptyArray<StoryStep> = [
+  {
+    id: 'first-look',
+    eyebrow: '첫 번째 장면',
+    title: '처음 널 만난 날부터',
+    description: '평범하던 하루가 네 웃음 하나로 특별해졌어.',
+    closing: '네가 있다는 사실만으로도 나는 더 좋은 사람이 돼.',
+  },
+  {
+    id: 'daily-light',
+    eyebrow: '두 번째 장면',
+    title: '네가 내 하루를 바꿔',
+    description: '지친 날에도 네 목소리 들으면 다시 웃게 돼.',
+    closing: '내가 가장 편안한 곳은 결국 네 곁이야.',
+  },
+  {
+    id: 'gratitude',
+    eyebrow: '세 번째 장면',
+    title: '고마운 마음을 꼭 말할게',
+    description: '내 서툰 순간까지 품어줘서 진심으로 고마워.',
+    closing: '너의 다정함 덕분에 나는 사랑을 제대로 배우는 중이야.',
+  },
+  {
+    id: 'promise',
+    eyebrow: '네 번째 장면',
+    title: '앞으로의 시간도',
+    description: '오늘처럼 따뜻한 장면을 더 많이 만들고 싶어.',
+    closing: '좋은 날도, 힘든 날도 네 손 놓지 않을게.',
+  },
+  {
+    id: 'before-finale',
+    eyebrow: '다섯 번째 장면',
+    title: '그래서 오늘은',
+    description: '네 생일을 핑계로, 내 진심을 천천히 전하고 싶었어.',
+    closing: '다음 버튼을 누르면 내가 준비한 마지막 고백이 나와.',
+  },
+];
 
-const ESCAPE_HINTS = [
-  '뭐해?',
-  '누르고 싶어?',
-  'Yes 눌러.',
-  'No는 오늘 도망 모드야.',
-  '거의 잡았는데? 아쉽다.',
-  '정답 버튼은 아래쪽이야.',
-  'No 버튼: 오늘도 무사히 탈출.',
-  '힌트 하나 더. 노란 버튼 확인해.',
-  '지금은 Yes가 정답이야.',
-] as const;
+const STORY_STEP_COUNT = STORY_STEPS.length;
 
-const QUICK_MISSIONS = ['카페 데이트', '쇼핑 타임', '디너 코스'] as const;
+const BURST_PARTICLES = [
+  { id: 1, x: 0, y: -120, delay: 0.03, duration: 0.8, rotate: -10 },
+  { id: 2, x: 88, y: -88, delay: 0.08, duration: 0.82, rotate: 20 },
+  { id: 3, x: 120, y: 0, delay: 0.13, duration: 0.86, rotate: 30 },
+  { id: 4, x: 88, y: 88, delay: 0.18, duration: 0.9, rotate: 50 },
+  { id: 5, x: 0, y: 124, delay: 0.22, duration: 0.86, rotate: 70 },
+  { id: 6, x: -88, y: 88, delay: 0.26, duration: 0.88, rotate: 100 },
+  { id: 7, x: -120, y: 0, delay: 0.3, duration: 0.82, rotate: 126 },
+  { id: 8, x: -88, y: -88, delay: 0.34, duration: 0.9, rotate: 150 },
+  { id: 9, x: 56, y: -132, delay: 0.38, duration: 0.84, rotate: 170 },
+  { id: 10, x: 132, y: -48, delay: 0.42, duration: 0.9, rotate: 190 },
+  { id: 11, x: 132, y: 48, delay: 0.46, duration: 0.84, rotate: 220 },
+  { id: 12, x: 56, y: 132, delay: 0.5, duration: 0.88, rotate: 240 },
+] as const satisfies readonly BurstParticle[];
 
-function getAttemptMessage(attemptCount: number): string {
-  return ESCAPE_HINTS[attemptCount % ESCAPE_HINTS.length] ?? ESCAPE_HINTS[0];
-}
+function getProgressLabel(activeStep: number): string {
+  if (activeStep >= STORY_STEP_COUNT) {
+    return 'FINAL';
+  }
 
-function randomInRange(maxValue: number): number {
-  return Math.random() * maxValue;
-}
-
-function clampValue(value: number, minValue: number, maxValue: number): number {
-  return Math.min(Math.max(value, minValue), maxValue);
+  return `${activeStep + 1}/${STORY_STEP_COUNT}`;
 }
 
 export function BirthdayEventLanding() {
   const [isHydrated, setIsHydrated] = React.useState(false);
   const [isIphoneOnly, setIsIphoneOnly] = React.useState(false);
   const [isEventStarted, setIsEventStarted] = React.useState(false);
-  const [isAccepted, setIsAccepted] = React.useState(false);
-  const [attemptCount, setAttemptCount] = React.useState(0);
-  const [noButtonMotion, setNoButtonMotion] =
-    React.useState<NoButtonMotion>(INITIAL_NO_BUTTON_MOTION);
-  const [noButtonPosition, setNoButtonPosition] = React.useState<NoButtonPosition>(
-    INITIAL_NO_BUTTON_POSITION
-  );
+  const [activeStep, setActiveStep] = React.useState(0);
 
-  const arenaRef = React.useRef<HTMLDivElement | null>(null);
-  const noButtonWrapRef = React.useRef<HTMLDivElement | null>(null);
-  const noButtonPositionRef = React.useRef<NoButtonPosition>(INITIAL_NO_BUTTON_POSITION);
-  const lastEscapeAtRef = React.useRef(0);
+  const isFinale = activeStep >= STORY_STEP_COUNT;
+  const currentStep = STORY_STEPS[Math.min(activeStep, STORY_STEP_COUNT - 1)]!;
 
   React.useEffect(() => {
     const userAgent = window.navigator.userAgent ?? '';
@@ -99,248 +110,24 @@ export function BirthdayEventLanding() {
     setIsHydrated(true);
   }, []);
 
-  const updateNoButtonPosition = React.useCallback((nextPosition: NoButtonPosition) => {
-    noButtonPositionRef.current = nextPosition;
-    setNoButtonPosition(nextPosition);
-  }, []);
-
-  const moveNoButton = React.useCallback(
-    (pointerPosition?: EscapePointerPosition) => {
-      const arenaElement = arenaRef.current;
-      const noButtonWrapElement = noButtonWrapRef.current;
-
-      if (!arenaElement || !noButtonWrapElement) {
-        return;
-      }
-
-      const arenaRect = arenaElement.getBoundingClientRect();
-      const arenaWidth = arenaElement.clientWidth;
-      const arenaHeight = arenaElement.clientHeight;
-      const noButtonWidth = noButtonWrapElement.offsetWidth;
-      const noButtonHeight = noButtonWrapElement.offsetHeight;
-
-      const minLeft = ESCAPE_EDGE_PADDING;
-      const minTop = ESCAPE_EDGE_PADDING;
-      const maxLeft = minLeft + Math.max(arenaWidth - noButtonWidth - ESCAPE_EDGE_PADDING * 2, 0);
-      const maxTop =
-        minTop +
-        Math.max(arenaHeight - noButtonHeight - ESCAPE_EDGE_PADDING - ESCAPE_BOTTOM_GUARD, 0);
-
-      const currentLeft = clampValue(noButtonPositionRef.current.left || minLeft, minLeft, maxLeft);
-      const currentTop = clampValue(noButtonPositionRef.current.top || minTop, minTop, maxTop);
-      const currentCenterX = currentLeft + noButtonWidth / 2;
-      const currentCenterY = currentTop + noButtonHeight / 2;
-
-      const localPointerX =
-        pointerPosition?.clientX !== undefined
-          ? clampValue(pointerPosition.clientX - arenaRect.left, 0, arenaWidth)
-          : arenaWidth / 2;
-      const localPointerY =
-        pointerPosition?.clientY !== undefined
-          ? clampValue(pointerPosition.clientY - arenaRect.top, 0, arenaHeight)
-          : arenaHeight / 2;
-
-      let directionX = currentCenterX - localPointerX;
-      let directionY = currentCenterY - localPointerY;
-      const directionLength = Math.hypot(directionX, directionY);
-
-      if (directionLength < 1) {
-        const randomAngle = randomInRange(Math.PI * 2);
-        directionX = Math.cos(randomAngle);
-        directionY = Math.sin(randomAngle);
-      } else {
-        directionX /= directionLength;
-        directionY /= directionLength;
-      }
-
-      let bestLeft = currentLeft;
-      let bestTop = currentTop;
-      let bestDistance = 0;
-
-      for (let attempt = 0; attempt < 7; attempt += 1) {
-        const escapeDistance =
-          ESCAPE_MIN_DISTANCE + randomInRange(ESCAPE_MAX_DISTANCE - ESCAPE_MIN_DISTANCE);
-        const jitterX = (Math.random() - 0.5) * ESCAPE_JITTER;
-        const jitterY = (Math.random() - 0.5) * ESCAPE_JITTER;
-
-        const candidateLeft = clampValue(
-          currentLeft + directionX * escapeDistance + jitterX,
-          minLeft,
-          maxLeft
-        );
-        const candidateTop = clampValue(
-          currentTop + directionY * escapeDistance + jitterY,
-          minTop,
-          maxTop
-        );
-
-        const candidateDistance = Math.hypot(
-          candidateLeft - currentLeft,
-          candidateTop - currentTop
-        );
-
-        if (candidateDistance > bestDistance) {
-          bestLeft = candidateLeft;
-          bestTop = candidateTop;
-          bestDistance = candidateDistance;
-        }
-
-        if (candidateDistance >= ESCAPE_MIN_DISTANCE) {
-          break;
-        }
-      }
-
-      if (bestDistance < ESCAPE_MIN_DISTANCE * 0.55) {
-        bestLeft = clampValue(minLeft + randomInRange(maxLeft - minLeft), minLeft, maxLeft);
-        bestTop = clampValue(minTop + randomInRange(maxTop - minTop), minTop, maxTop);
-      }
-
-      const travelDistance = Math.hypot(bestLeft - currentLeft, bestTop - currentTop);
-      const durationMs = clampValue(
-        ESCAPE_MIN_DURATION_MS + travelDistance * 0.72,
-        ESCAPE_MIN_DURATION_MS,
-        ESCAPE_MAX_DURATION_MS
-      );
-      const rotateDeg = (Math.random() - 0.5) * ESCAPE_ROTATION_LIMIT * 2;
-      const scale = ESCAPE_SCALE_MIN + randomInRange(ESCAPE_SCALE_VARIATION);
-
-      setNoButtonMotion({
-        durationMs,
-        rotateDeg,
-        scale,
-      });
-
-      updateNoButtonPosition({
-        left: bestLeft,
-        top: bestTop,
-      });
-    },
-    [updateNoButtonPosition]
-  );
-
-  React.useEffect(() => {
-    if (!isIphoneOnly || isAccepted) {
-      return;
-    }
-
-    const frameId = window.requestAnimationFrame(() => moveNoButton());
-
-    return () => {
-      window.cancelAnimationFrame(frameId);
-    };
-  }, [isAccepted, isIphoneOnly, moveNoButton]);
-
-  React.useEffect(() => {
-    if (!isIphoneOnly || isAccepted) {
-      return;
-    }
-
-    const handleViewportChange = () => {
-      window.requestAnimationFrame(() => moveNoButton());
-    };
-
-    window.addEventListener('resize', handleViewportChange);
-    window.addEventListener('orientationchange', handleViewportChange);
-
-    return () => {
-      window.removeEventListener('resize', handleViewportChange);
-      window.removeEventListener('orientationchange', handleViewportChange);
-    };
-  }, [isAccepted, isIphoneOnly, moveNoButton]);
-
-  const runAwayNoButton = React.useCallback(
-    (pointerPosition?: EscapePointerPosition) => {
-      const now = Date.now();
-
-      if (now - lastEscapeAtRef.current < ESCAPE_POINTER_THROTTLE_MS) {
-        return;
-      }
-
-      lastEscapeAtRef.current = now;
-      setAttemptCount((previous) => previous + 1);
-      moveNoButton(pointerPosition);
-    },
-    [moveNoButton]
-  );
-
-  const handleYesClick = React.useCallback(() => {
-    setIsAccepted(true);
-  }, []);
-
   const handleStartEvent = React.useCallback(() => {
     setIsEventStarted(true);
+    setActiveStep(0);
   }, []);
 
-  const handleNoPointerDown = React.useCallback(
-    (event: React.PointerEvent<HTMLButtonElement>) => {
-      event.preventDefault();
-      event.stopPropagation();
-      runAwayNoButton({
-        clientX: event.clientX,
-        clientY: event.clientY,
-      });
-    },
-    [runAwayNoButton]
-  );
+  const handleNextStep = React.useCallback(() => {
+    setActiveStep((previous) => Math.min(previous + 1, STORY_STEP_COUNT));
+  }, []);
 
-  const handleNoTouchStart = React.useCallback(
-    (event: React.TouchEvent<HTMLButtonElement>) => {
-      event.stopPropagation();
-      const touchPoint = event.touches[0];
-
-      runAwayNoButton(
-        touchPoint
-          ? {
-              clientX: touchPoint.clientX,
-              clientY: touchPoint.clientY,
-            }
-          : undefined
-      );
-    },
-    [runAwayNoButton]
-  );
-
-  const handleNoClick = React.useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      event.preventDefault();
-      event.stopPropagation();
-      runAwayNoButton({
-        clientX: event.clientX,
-        clientY: event.clientY,
-      });
-    },
-    [runAwayNoButton]
-  );
-
-  const handleNoMouseEnter = React.useCallback(
-    (event: React.MouseEvent<HTMLButtonElement>) => {
-      runAwayNoButton({
-        clientX: event.clientX,
-        clientY: event.clientY,
-      });
-    },
-    [runAwayNoButton]
-  );
-
-  const noButtonStyle = React.useMemo<React.CSSProperties>(
-    () => ({
-      transform: `translate3d(${noButtonPosition.left}px, ${noButtonPosition.top}px, 0) rotate(${noButtonMotion.rotateDeg}deg) scale(${noButtonMotion.scale})`,
-      transitionDuration: `${noButtonMotion.durationMs}ms`,
-    }),
-    [
-      noButtonMotion.durationMs,
-      noButtonMotion.rotateDeg,
-      noButtonMotion.scale,
-      noButtonPosition.left,
-      noButtonPosition.top,
-    ]
-  );
+  const handleRestart = React.useCallback(() => {
+    setActiveStep(0);
+  }, []);
 
   if (!isHydrated) {
     return (
       <section className={styles.page}>
         <div className={styles.centerContainer}>
-          <p className={styles.loadingText}>🎀 비밀 생일 파티 준비 중...</p>
+          <p className={styles.loadingText}>🎀 우리 이야기 준비 중...</p>
         </div>
       </section>
     );
@@ -350,12 +137,12 @@ export function BirthdayEventLanding() {
     return (
       <section className={styles.page}>
         <div className={styles.centerContainer}>
-          <p className={styles.badgeLine}>Private Love Link</p>
-          <h1 className={styles.gateTitle}>아이폰에서만 열어볼 수 있어</h1>
+          <p className={styles.badgeLine}>Private Love Story</p>
+          <h1 className={styles.gateTitle}>아이폰에서 가장 예쁘게 보여줄게</h1>
           <p className={styles.gateDescription}>
-            가로 사이즈가 좁은 모바일 환경(iPhone)에서
+            세로 모바일 화면(iPhone)에서
             <br />
-            가장 완벽한 이벤트를 보여줄게.
+            감동 연출이 가장 완벽하게 실행돼.
           </p>
         </div>
       </section>
@@ -364,7 +151,6 @@ export function BirthdayEventLanding() {
 
   return (
     <section className={styles.page}>
-      {/* Background Decor */}
       <div className={styles.bgDecorTop} aria-hidden="true" />
       <div className={styles.bgDecorBottom} aria-hidden="true" />
 
@@ -376,110 +162,150 @@ export function BirthdayEventLanding() {
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, y: -20, filter: 'blur(4px)' }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.5, ease: IOS_EASE }}
           >
             <article className={styles.introSection}>
               <div className={styles.introContent}>
                 <div className={styles.introHeader}>
-                  <span className={styles.pillBadge}>To. My Favorite Person</span>
+                  <span className={styles.pillBadge}>
+                    <Sparkles className={styles.badgeIcon} />
+                    To. My Girlfriend
+                  </span>
                   <h1 className={styles.introTitle}>
-                    오늘 네 건데
+                    오늘은 너를 위해
                     <br />
-                    확인해볼래?
+                    마음을 준비했어
                   </h1>
                   <p className={styles.introDesc}>
-                    생일 축하해. 제일 빛나는 하루를 선물할게.
+                    다음 버튼을 누를 때마다
                     <br />
-                    준비한 내용을 확인해봐.
+                    내가 너에게 하고 싶던 말을 들려줄게.
                   </p>
                 </div>
               </div>
 
               <div className={styles.bottomAction}>
                 <Button className={styles.startButton} size="lg" onClick={handleStartEvent}>
-                  선물 확인하기
+                  이야기 시작하기
                 </Button>
               </div>
             </article>
           </motion.div>
         ) : (
           <motion.div
-            key="main-view"
+            key="story-view"
             className={styles.containerFrame}
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 36 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.55, ease: IOS_EASE }}
           >
             <article className={styles.mainSection}>
               <header className={styles.mainHeader}>
-                <div className={styles.headerTop}>
-                  <p className={styles.pillBadge}>
-                    <Sparkles className={styles.badgeIcon} />
-                    Happy Birthday
-                  </p>
+                <p className={styles.pillBadge}>
+                  <Sparkles className={styles.badgeIcon} />
+                  Love Letter Sequence
+                </p>
+                <div className={styles.progressRow}>
+                  <span className={styles.progressLabel}>우리 이야기</span>
+                  <span className={styles.progressValue}>{getProgressLabel(activeStep)}</span>
                 </div>
-                <h1 className={styles.mainTitle}>
-                  생일 축하해
-                  <span className={styles.mainSubTitle}>오늘의 주인공은 너야</span>
-                </h1>
-
-                <div className={styles.benefitRow}>
-                  {QUICK_MISSIONS.map((mission) => (
-                    <span key={mission} className={styles.benefitChip}>
-                      {mission}
-                    </span>
+                <div className={styles.progressDots} aria-hidden="true">
+                  {STORY_STEPS.map((step, index) => (
+                    <span
+                      key={step.id}
+                      className={index <= activeStep ? styles.progressDotActive : styles.progressDot}
+                    />
                   ))}
                 </div>
               </header>
 
-              <div className={styles.contentSpacer} />
-
-              <section className={styles.questionCard}>
-                <p className={styles.questionLabel}>LAST QUESTION</p>
-                <h2 className={styles.questionTitle}>샤넬백 사줄까?</h2>
-                <p className={styles.questionHint}>
-                  {!isAccepted
-                    ? getAttemptMessage(attemptCount)
-                    : '탁월한 선택이야. 바로 결제하러 가자.'}
-                </p>
-
-                <div ref={arenaRef} className={styles.interactionArena}>
-                  <Button className={styles.yesButton} onClick={handleYesClick} size="lg">
-                    Yes, 좋아!
-                  </Button>
-
-                  {!isAccepted ? (
-                    <div
-                      ref={noButtonWrapRef}
-                      className={styles.noButtonWrap}
-                      style={noButtonStyle}
+              <div className={styles.storyStage}>
+                <AnimatePresence mode="wait" initial={false}>
+                  {!isFinale ? (
+                    <motion.section
+                      key={currentStep.id}
+                      className={styles.storyCard}
+                      initial={{ opacity: 0, y: 24, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -18, scale: 0.98 }}
+                      transition={{ duration: 0.5, ease: IOS_EASE }}
                     >
-                      <Button
-                        variant="secondary"
-                        className={styles.noButton}
-                        onPointerDown={handleNoPointerDown}
-                        onTouchStart={handleNoTouchStart}
-                        onMouseEnter={handleNoMouseEnter}
-                        onClick={handleNoClick}
-                      >
-                        No
-                      </Button>
-                    </div>
-                  ) : null}
-                </div>
+                      <p className={styles.storyEyebrow}>{currentStep.eyebrow}</p>
+                      <h2 className={styles.storyTitle}>{currentStep.title}</h2>
+                      <p className={styles.storyBody}>{currentStep.description}</p>
+                      <p className={styles.storyFootnote}>{currentStep.closing}</p>
+                    </motion.section>
+                  ) : (
+                    <motion.section
+                      key="finale"
+                      className={styles.finaleCard}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.58, ease: IOS_EASE }}
+                    >
+                      <motion.div
+                        className={styles.finalePulse}
+                        initial={{ opacity: 0.45, scale: 0.3 }}
+                        animate={{ opacity: 0, scale: 1.28 }}
+                        transition={{ duration: 0.72, ease: IOS_EASE }}
+                        aria-hidden="true"
+                      />
+                      <div className={styles.finaleBurst} aria-hidden="true">
+                        {BURST_PARTICLES.map((particle) => (
+                          <motion.span
+                            key={particle.id}
+                            className={styles.burstParticle}
+                            initial={{ opacity: 0, x: 0, y: 0, scale: 0.35, rotate: 0 }}
+                            animate={{
+                              opacity: [0, 1, 0],
+                              x: particle.x,
+                              y: particle.y,
+                              scale: [0.35, 1, 0.8],
+                              rotate: particle.rotate,
+                            }}
+                            transition={{
+                              duration: particle.duration,
+                              delay: particle.delay,
+                              ease: IOS_EASE,
+                            }}
+                          />
+                        ))}
+                      </div>
 
-                {isAccepted && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className={styles.successMessage}
+                      <div className={styles.finaleIconWrap}>
+                        <Heart className={styles.finaleIcon} fill="currentColor" />
+                      </div>
+                      <p className={styles.storyEyebrow}>마지막 고백</p>
+                      <h2 className={styles.finaleTitle}>내 인생 최고의 선물은 너야.</h2>
+                      <p className={styles.finaleBody}>
+                        네가 웃으면 세상이 부드러워지고,
+                        <br />
+                        네가 내 옆에 있으면 모든 내일이 기대돼.
+                      </p>
+                      <p className={styles.finaleSub}>사랑해. 오늘도, 내일도, 오래오래.</p>
+                    </motion.section>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <div className={styles.actionRow}>
+                {!isFinale ? (
+                  <Button className={styles.nextButton} size="lg" onClick={handleNextStep}>
+                    {activeStep === STORY_STEP_COUNT - 1 ? '마지막 고백 보기' : '다음'}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="secondary"
+                    className={styles.restartButton}
+                    size="lg"
+                    onClick={handleRestart}
                   >
-                    <Heart className={styles.heartIcon} fill="currentColor" />
-                    <span>접수 완료! 배송지 입력해줘.</span>
-                  </motion.div>
+                    처음부터 다시 보기
+                  </Button>
                 )}
-              </section>
+              </div>
             </article>
           </motion.div>
         )}
