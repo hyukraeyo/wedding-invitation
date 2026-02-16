@@ -49,18 +49,18 @@ const INITIAL_NO_BUTTON_MOTION: NoButtonMotion = {
 };
 
 const ESCAPE_HINTS = [
-  '🙈 No 버튼은 오늘 체험형 장치라서 안 잡혀 :)',
-  '뭐해? 진짜 누를 거야? 😏',
-  '누르고 싶어? 그럴수록 더 멀어져~ 💨',
-  'No는 휴가 중! Yes에게 맡겨줘 ✨',
-  '거의 잡았는데? 아쉽다~ 😜',
-  '이쯤 되면 Yes 눌러야 하는 타이밍 💛',
-  'No 버튼: 오늘도 무사히 도망 완료 🏃',
-  '정답 버튼은 하나야. 힌트는 노란색 👀',
-  '사랑은 직진이지, No는 우회로야 💍',
+  '뭐해?',
+  '누르고 싶어?',
+  'Yes 눌러.',
+  'No는 오늘 도망 모드야.',
+  '거의 잡았는데? 아쉽다.',
+  '정답 버튼은 아래쪽이야.',
+  'No 버튼: 오늘도 무사히 탈출.',
+  '힌트 하나 더. 노란 버튼 확인해.',
+  '지금은 Yes가 정답이야.',
 ] as const;
 
-const QUICK_MISSIONS = ['🍰 케이크 한 입', '📸 사진 10컷', '🌠 소원 3개'] as const;
+const QUICK_MISSIONS = ['카페 데이트', '쇼핑 타임', '디너 코스'] as const;
 
 function getAttemptMessage(attemptCount: number): string {
   return ESCAPE_HINTS[attemptCount % ESCAPE_HINTS.length] ?? ESCAPE_HINTS[0];
@@ -77,12 +77,11 @@ function clampValue(value: number, minValue: number, maxValue: number): number {
 export function BirthdayEventLanding() {
   const [isHydrated, setIsHydrated] = React.useState(false);
   const [isIphoneOnly, setIsIphoneOnly] = React.useState(false);
-  const [isLetterOpened, setIsLetterOpened] = React.useState(false);
+  const [isEventStarted, setIsEventStarted] = React.useState(false);
   const [isAccepted, setIsAccepted] = React.useState(false);
   const [attemptCount, setAttemptCount] = React.useState(0);
-  const [noButtonMotion, setNoButtonMotion] = React.useState<NoButtonMotion>(
-    INITIAL_NO_BUTTON_MOTION
-  );
+  const [noButtonMotion, setNoButtonMotion] =
+    React.useState<NoButtonMotion>(INITIAL_NO_BUTTON_MOTION);
   const [noButtonPosition, setNoButtonPosition] = React.useState<NoButtonPosition>(
     INITIAL_NO_BUTTON_POSITION
   );
@@ -175,7 +174,10 @@ export function BirthdayEventLanding() {
           maxTop
         );
 
-        const candidateDistance = Math.hypot(candidateLeft - currentLeft, candidateTop - currentTop);
+        const candidateDistance = Math.hypot(
+          candidateLeft - currentLeft,
+          candidateTop - currentTop
+        );
 
         if (candidateDistance > bestDistance) {
           bestLeft = candidateLeft;
@@ -265,8 +267,8 @@ export function BirthdayEventLanding() {
     setIsAccepted(true);
   }, []);
 
-  const handleOpenLetter = React.useCallback(() => {
-    setIsLetterOpened(true);
+  const handleStartEvent = React.useCallback(() => {
+    setIsEventStarted(true);
   }, []);
 
   const handleNoPointerDown = React.useCallback(
@@ -310,12 +312,15 @@ export function BirthdayEventLanding() {
     [runAwayNoButton]
   );
 
-  const handleNoMouseEnter = React.useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
-    runAwayNoButton({
-      clientX: event.clientX,
-      clientY: event.clientY,
-    });
-  }, [runAwayNoButton]);
+  const handleNoMouseEnter = React.useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      runAwayNoButton({
+        clientX: event.clientX,
+        clientY: event.clientY,
+      });
+    },
+    [runAwayNoButton]
+  );
 
   const noButtonStyle = React.useMemo<React.CSSProperties>(
     () => ({
@@ -334,7 +339,7 @@ export function BirthdayEventLanding() {
   if (!isHydrated) {
     return (
       <section className={styles.page}>
-        <div className={styles.baseGate}>
+        <div className={styles.centerContainer}>
           <p className={styles.loadingText}>🎀 비밀 생일 파티 준비 중...</p>
         </div>
       </section>
@@ -344,11 +349,13 @@ export function BirthdayEventLanding() {
   if (!isIphoneOnly) {
     return (
       <section className={styles.page}>
-        <div className={styles.baseGate}>
-          <p className={styles.badgeLine}>💌 Private Birthday Link</p>
-          <h1 className={styles.gateTitle}>이 페이지는 아이폰 세로 화면 전용이에요.</h1>
+        <div className={styles.centerContainer}>
+          <p className={styles.badgeLine}>Private Love Link</p>
+          <h1 className={styles.gateTitle}>아이폰에서만 열어볼 수 있어</h1>
           <p className={styles.gateDescription}>
-            사파리에서 이 링크를 아이폰으로 열면 깜짝 이벤트가 시작됩니다.
+            가로 사이즈가 좁은 모바일 환경(iPhone)에서
+            <br />
+            가장 완벽한 이벤트를 보여줄게.
           </p>
         </div>
       </section>
@@ -357,105 +364,122 @@ export function BirthdayEventLanding() {
 
   return (
     <section className={styles.page}>
-      <span className={`${styles.orb} ${styles.orbTop}`} aria-hidden="true" />
-      <span className={`${styles.orb} ${styles.orbBottom}`} aria-hidden="true" />
+      {/* Background Decor */}
+      <div className={styles.bgDecorTop} aria-hidden="true" />
+      <div className={styles.bgDecorBottom} aria-hidden="true" />
 
       <AnimatePresence mode="wait">
-        {!isLetterOpened ? (
+        {!isEventStarted ? (
           <motion.div
-            key="letter-intro"
-            className={styles.mobileFrame}
-            initial={{ opacity: 0, y: 28, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -22, scale: 0.98 }}
-            transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+            key="intro-view"
+            className={styles.containerFrame}
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, y: -20, filter: 'blur(4px)' }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
-            <article className={styles.letterCard}>
-              <p className={styles.letterKicker}>💌 For My Favorite Person</p>
-              <h1 className={styles.letterTitle}>오늘 너에게 전하고 싶은 말이 있어</h1>
-              <p className={styles.letterBody}>
-                생일 축하해.
-                <br />
-                오늘 하루는 너만 웃으면 좋겠어.
-                <br />
-                작은 깜짝 이벤트를 준비했는데, 편지를 열어줄래?
-              </p>
-              <Button className={styles.openLetterButton} size="lg" onClick={handleOpenLetter}>
-                편지 열기 💛
-              </Button>
+            <article className={styles.introSection}>
+              <div className={styles.introContent}>
+                <div className={styles.introHeader}>
+                  <span className={styles.pillBadge}>To. My Favorite Person</span>
+                  <h1 className={styles.introTitle}>
+                    오늘 네 건데
+                    <br />
+                    확인해볼래?
+                  </h1>
+                  <p className={styles.introDesc}>
+                    생일 축하해. 제일 빛나는 하루를 선물할게.
+                    <br />
+                    준비한 내용을 확인해봐.
+                  </p>
+                </div>
+              </div>
+
+              <div className={styles.bottomAction}>
+                <Button className={styles.startButton} size="lg" onClick={handleStartEvent}>
+                  선물 확인하기
+                </Button>
+              </div>
             </article>
           </motion.div>
         ) : (
           <motion.div
-            key="love-event"
-            className={styles.mobileFrame}
-            initial={{ opacity: 0, y: 36, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
+            key="main-view"
+            className={styles.containerFrame}
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
-            <article className={styles.eventCard}>
-              <header className={styles.hero}>
-                <p className={styles.badgeLine}>
-                  <Sparkles className={styles.badgeIcon} />✨ Happy Birthday, My Love ✨
-                </p>
-                <h1 className={styles.heroTitle}>
-                  생일 축하해 🎂
-                  <span className={styles.heroSubTitle}>오늘의 주인공은 너야 💖</span>
+            <article className={styles.mainSection}>
+              <header className={styles.mainHeader}>
+                <div className={styles.headerTop}>
+                  <p className={styles.pillBadge}>
+                    <Sparkles className={styles.badgeIcon} />
+                    Happy Birthday
+                  </p>
+                </div>
+                <h1 className={styles.mainTitle}>
+                  생일 축하해
+                  <span className={styles.mainSubTitle}>오늘의 주인공은 너야</span>
                 </h1>
-                <p className={styles.heroDescription}>
-                  오늘 하루는 쟈기가 하고 싶은 것만 하자. 케이크도, 사진도, 소원도 전부 쟈기 마음대로
-                  🫶
-                </p>
 
-                <ul className={styles.missionList}>
+                <div className={styles.benefitRow}>
                   {QUICK_MISSIONS.map((mission) => (
-                    <li key={mission} className={styles.missionItem}>
+                    <span key={mission} className={styles.benefitChip}>
                       {mission}
-                    </li>
+                    </span>
                   ))}
-                </ul>
+                </div>
               </header>
 
-              <section className={styles.proposal}>
-                <p className={styles.proposalLabel}>💘 그리고 오늘의 진짜 질문</p>
-                <h2 className={styles.proposalTitle}>나랑 결혼해줘~~ 💍</h2>
-                <p className={styles.attemptHint}>
+              <div className={styles.contentSpacer} />
+
+              <section className={styles.questionCard}>
+                <p className={styles.questionLabel}>LAST QUESTION</p>
+                <h2 className={styles.questionTitle}>샤넬백 사줄까?</h2>
+                <p className={styles.questionHint}>
                   {!isAccepted
                     ? getAttemptMessage(attemptCount)
-                    : '🥹 고마워. 오늘은 평생 기억할 내 최고의 생일이야.'}
+                    : '탁월한 선택이야. 바로 결제하러 가자.'}
                 </p>
-              </section>
 
-              <div ref={arenaRef} className={styles.choiceArena}>
-                <Button className={styles.yesButton} onClick={handleYesClick} size="lg">
-                  Yes 💛
-                </Button>
+                <div ref={arenaRef} className={styles.interactionArena}>
+                  <Button className={styles.yesButton} onClick={handleYesClick} size="lg">
+                    Yes, 좋아!
+                  </Button>
 
-                {!isAccepted ? (
-                  <div ref={noButtonWrapRef} className={styles.noButtonWrap} style={noButtonStyle}>
-                    <Button
-                      variant="secondary"
-                      className={styles.noButton}
-                      onPointerDown={handleNoPointerDown}
-                      onTouchStart={handleNoTouchStart}
-                      onMouseEnter={handleNoMouseEnter}
-                      onClick={handleNoClick}
+                  {!isAccepted ? (
+                    <div
+                      ref={noButtonWrapRef}
+                      className={styles.noButtonWrap}
+                      style={noButtonStyle}
                     >
-                      No 🙈
-                    </Button>
-                  </div>
-                ) : null}
-              </div>
+                      <Button
+                        variant="secondary"
+                        className={styles.noButton}
+                        onPointerDown={handleNoPointerDown}
+                        onTouchStart={handleNoTouchStart}
+                        onMouseEnter={handleNoMouseEnter}
+                        onClick={handleNoClick}
+                      >
+                        No
+                      </Button>
+                    </div>
+                  ) : null}
+                </div>
 
-              {!isAccepted ? (
-                <p className={styles.footNote}>🫶 힌트: No를 잡으려 하지 말고 마음을 따라가.</p>
-              ) : (
-                <p className={styles.acceptedMessage}>
-                  <Heart className={styles.acceptedIcon} />
-                  오래오래 같이 행복하자. 오늘도 내일도 사랑해 💞
-                </p>
-              )}
+                {isAccepted && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={styles.successMessage}
+                  >
+                    <Heart className={styles.heartIcon} fill="currentColor" />
+                    <span>접수 완료! 배송지 입력해줘.</span>
+                  </motion.div>
+                )}
+              </section>
             </article>
           </motion.div>
         )}
