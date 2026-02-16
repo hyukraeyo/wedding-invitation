@@ -49,6 +49,52 @@
   height: 100%;
 }
 
+.letterCard {
+  height: 100%;
+  border-radius: v.$radius-3xl;
+  border: 1px solid rgba(v.$white, 0.18);
+  background:
+    linear-gradient(162deg, rgba(v.$white, 0.2) 0%, rgba(v.$white, 0.14) 54%, rgba(v.$white, 0.08) 100%);
+  box-shadow: v.$shadow-xl;
+  backdrop-filter: blur(v.$space-md);
+  padding: v.$space-lg v.$space-md;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: v.$space-md;
+  font-family: v.$font-gowun-batang;
+  text-align: center;
+}
+
+.letterKicker {
+  margin: 0;
+  color: v.$primary-100;
+  font-size: v.$control-font-size-xs;
+  font-weight: v.$font-weight-semibold;
+  letter-spacing: 0.05em;
+}
+
+.letterTitle {
+  margin: 0;
+  color: v.$white;
+  font-family: v.$font-yeon-sung;
+  font-size: clamp(v.$font-size-xl, 9vw, 38px);
+  line-height: v.$line-height-tight;
+}
+
+.letterBody {
+  margin: 0;
+  color: rgba(v.$white, 0.84);
+  font-size: v.$control-font-size-sm;
+  line-height: calc(v.$line-height-base + 0.1);
+}
+
+.openLetterButton {
+  width: 100%;
+  background-color: v.$primary-400;
+  color: v.$yellow-900;
+}
+
 .eventCard {
   height: 100%;
   border-radius: v.$radius-3xl;

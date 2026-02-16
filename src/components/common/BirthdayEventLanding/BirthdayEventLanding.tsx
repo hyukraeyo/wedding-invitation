@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Heart, Sparkles } from 'lucide-react';
 
 import { Button } from '@/components/ui/Button';
@@ -47,22 +48,22 @@ const INITIAL_NO_BUTTON_MOTION: NoButtonMotion = {
   scale: 1,
 };
 
+const ESCAPE_HINTS = [
+  '🙈 No 버튼은 오늘 체험형 장치라서 안 잡혀 :)',
+  '뭐해? 진짜 누를 거야? 😏',
+  '누르고 싶어? 그럴수록 더 멀어져~ 💨',
+  'No는 휴가 중! Yes에게 맡겨줘 ✨',
+  '거의 잡았는데? 아쉽다~ 😜',
+  '이쯤 되면 Yes 눌러야 하는 타이밍 💛',
+  'No 버튼: 오늘도 무사히 도망 완료 🏃',
+  '정답 버튼은 하나야. 힌트는 노란색 👀',
+  '사랑은 직진이지, No는 우회로야 💍',
+] as const;
+
 const QUICK_MISSIONS = ['🍰 케이크 한 입', '📸 사진 10컷', '🌠 소원 3개'] as const;
 
 function getAttemptMessage(attemptCount: number): string {
-  if (attemptCount === 0) {
-    return '🙈 No 버튼은 오늘 체험형 장치라서 안 잡혀 :)';
-  }
-
-  if (attemptCount < 3) {
-    return '💨 No가 또 도망갔어. 거의 다 왔어.';
-  }
-
-  if (attemptCount < 6) {
-    return '💛 정답은 이미 중앙에 크게 있어.';
-  }
-
-  return '✨ 이제 Yes만 누르면 오늘 이벤트 클리어.';
+  return ESCAPE_HINTS[attemptCount % ESCAPE_HINTS.length] ?? ESCAPE_HINTS[0];
 }
 
 function randomInRange(maxValue: number): number {
@@ -76,6 +77,7 @@ function clampValue(value: number, minValue: number, maxValue: number): number {
 export function BirthdayEventLanding() {
   const [isHydrated, setIsHydrated] = React.useState(false);
   const [isIphoneOnly, setIsIphoneOnly] = React.useState(false);
+  const [isLetterOpened, setIsLetterOpened] = React.useState(false);
   const [isAccepted, setIsAccepted] = React.useState(false);
   const [attemptCount, setAttemptCount] = React.useState(0);
   const [noButtonMotion, setNoButtonMotion] = React.useState<NoButtonMotion>(
@@ -263,6 +265,10 @@ export function BirthdayEventLanding() {
     setIsAccepted(true);
   }, []);
 
+  const handleOpenLetter = React.useCallback(() => {
+    setIsLetterOpened(true);
+  }, []);
+
   const handleNoPointerDown = React.useCallback(
     (event: React.PointerEvent<HTMLButtonElement>) => {
       event.preventDefault();
@@ -354,70 +360,106 @@ export function BirthdayEventLanding() {
       <span className={`${styles.orb} ${styles.orbTop}`} aria-hidden="true" />
       <span className={`${styles.orb} ${styles.orbBottom}`} aria-hidden="true" />
 
-      <div className={styles.mobileFrame}>
-        <article className={styles.eventCard}>
-          <header className={styles.hero}>
-            <p className={styles.badgeLine}>
-              <Sparkles className={styles.badgeIcon} />✨ Happy Birthday, My Love ✨
-            </p>
-            <h1 className={styles.heroTitle}>
-              생일 축하해 🎂
-              <span className={styles.heroSubTitle}>오늘의 주인공은 너야 💖</span>
-            </h1>
-            <p className={styles.heroDescription}>
-              오늘 하루는 쟈기가 하고 싶은 것만 하자. 케이크도, 사진도, 소원도 전부 쟈기 마음대로 🫶
-            </p>
+      <AnimatePresence mode="wait">
+        {!isLetterOpened ? (
+          <motion.div
+            key="letter-intro"
+            className={styles.mobileFrame}
+            initial={{ opacity: 0, y: 28, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -22, scale: 0.98 }}
+            transition={{ duration: 0.42, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <article className={styles.letterCard}>
+              <p className={styles.letterKicker}>💌 For My Favorite Person</p>
+              <h1 className={styles.letterTitle}>오늘 너에게 전하고 싶은 말이 있어</h1>
+              <p className={styles.letterBody}>
+                생일 축하해.
+                <br />
+                오늘 하루는 너만 웃으면 좋겠어.
+                <br />
+                작은 깜짝 이벤트를 준비했는데, 편지를 열어줄래?
+              </p>
+              <Button className={styles.openLetterButton} size="lg" onClick={handleOpenLetter}>
+                편지 열기 💛
+              </Button>
+            </article>
+          </motion.div>
+        ) : (
+          <motion.div
+            key="love-event"
+            className={styles.mobileFrame}
+            initial={{ opacity: 0, y: 36, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <article className={styles.eventCard}>
+              <header className={styles.hero}>
+                <p className={styles.badgeLine}>
+                  <Sparkles className={styles.badgeIcon} />✨ Happy Birthday, My Love ✨
+                </p>
+                <h1 className={styles.heroTitle}>
+                  생일 축하해 🎂
+                  <span className={styles.heroSubTitle}>오늘의 주인공은 너야 💖</span>
+                </h1>
+                <p className={styles.heroDescription}>
+                  오늘 하루는 쟈기가 하고 싶은 것만 하자. 케이크도, 사진도, 소원도 전부 쟈기 마음대로
+                  🫶
+                </p>
 
-            <ul className={styles.missionList}>
-              {QUICK_MISSIONS.map((mission) => (
-                <li key={mission} className={styles.missionItem}>
-                  {mission}
-                </li>
-              ))}
-            </ul>
-          </header>
+                <ul className={styles.missionList}>
+                  {QUICK_MISSIONS.map((mission) => (
+                    <li key={mission} className={styles.missionItem}>
+                      {mission}
+                    </li>
+                  ))}
+                </ul>
+              </header>
 
-          <section className={styles.proposal}>
-            <p className={styles.proposalLabel}>💘 그리고 오늘의 진짜 질문</p>
-            <h2 className={styles.proposalTitle}>나랑 결혼해줘~~ 💍</h2>
-            <p className={styles.attemptHint}>
-              {!isAccepted
-                ? getAttemptMessage(attemptCount)
-                : '🥹 고마워. 오늘은 평생 기억할 내 최고의 생일이야.'}
-            </p>
-          </section>
+              <section className={styles.proposal}>
+                <p className={styles.proposalLabel}>💘 그리고 오늘의 진짜 질문</p>
+                <h2 className={styles.proposalTitle}>나랑 결혼해줘~~ 💍</h2>
+                <p className={styles.attemptHint}>
+                  {!isAccepted
+                    ? getAttemptMessage(attemptCount)
+                    : '🥹 고마워. 오늘은 평생 기억할 내 최고의 생일이야.'}
+                </p>
+              </section>
 
-          <div ref={arenaRef} className={styles.choiceArena}>
-            <Button className={styles.yesButton} onClick={handleYesClick} size="lg">
-              Yes 💛
-            </Button>
-
-            {!isAccepted ? (
-              <div ref={noButtonWrapRef} className={styles.noButtonWrap} style={noButtonStyle}>
-                <Button
-                  variant="secondary"
-                  className={styles.noButton}
-                  onPointerDown={handleNoPointerDown}
-                  onTouchStart={handleNoTouchStart}
-                  onMouseEnter={handleNoMouseEnter}
-                  onClick={handleNoClick}
-                >
-                  No 🙈
+              <div ref={arenaRef} className={styles.choiceArena}>
+                <Button className={styles.yesButton} onClick={handleYesClick} size="lg">
+                  Yes 💛
                 </Button>
-              </div>
-            ) : null}
-          </div>
 
-          {!isAccepted ? (
-            <p className={styles.footNote}>🫶 힌트: No를 잡으려 하지 말고 마음을 따라가.</p>
-          ) : (
-            <p className={styles.acceptedMessage}>
-              <Heart className={styles.acceptedIcon} />
-              오래오래 같이 행복하자. 오늘도 내일도 사랑해 💞
-            </p>
-          )}
-        </article>
-      </div>
+                {!isAccepted ? (
+                  <div ref={noButtonWrapRef} className={styles.noButtonWrap} style={noButtonStyle}>
+                    <Button
+                      variant="secondary"
+                      className={styles.noButton}
+                      onPointerDown={handleNoPointerDown}
+                      onTouchStart={handleNoTouchStart}
+                      onMouseEnter={handleNoMouseEnter}
+                      onClick={handleNoClick}
+                    >
+                      No 🙈
+                    </Button>
+                  </div>
+                ) : null}
+              </div>
+
+              {!isAccepted ? (
+                <p className={styles.footNote}>🫶 힌트: No를 잡으려 하지 말고 마음을 따라가.</p>
+              ) : (
+                <p className={styles.acceptedMessage}>
+                  <Heart className={styles.acceptedIcon} />
+                  오래오래 같이 행복하자. 오늘도 내일도 사랑해 💞
+                </p>
+              )}
+            </article>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
