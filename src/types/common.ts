@@ -200,7 +200,9 @@ export type ValueOf<T> = T[keyof T];
 export type NonNullable<T> = T extends null | undefined ? never : T;
 
 // Array Utilities
-export type Head<T extends readonly unknown[]> = T extends readonly [infer H, ...unknown[]] ? H : never;
+export type Head<T extends readonly unknown[]> = T extends readonly [infer H, ...unknown[]]
+  ? H
+  : never;
 export type Tail<T extends readonly unknown[]> = T extends readonly [unknown, ...infer U] ? U : [];
 export type Length<T extends readonly unknown[]> = T['length'];
 
@@ -223,8 +225,12 @@ export type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
 export type PromiseValue<T> = T extends Promise<infer U> ? U : T;
 
 // String Literal Types
-export type Capitalize<S extends string> = S extends `${infer F}${infer R}` ? `${Uppercase<F>}${R}` : S;
-export type Uncapitalize<S extends string> = S extends `${infer F}${infer R}` ? `${Lowercase<F>}${R}` : S;
+export type Capitalize<S extends string> = S extends `${infer F}${infer R}`
+  ? `${Uppercase<F>}${R}`
+  : S;
+export type Uncapitalize<S extends string> = S extends `${infer F}${infer R}`
+  ? `${Lowercase<F>}${R}`
+  : S;
 
 // Record Utilities
 export type RecordKey = string | number | symbol;
@@ -232,4 +238,8 @@ export type StrictRecord<K extends RecordKey, V> = Record<K, V>;
 
 // Discriminated Union Helpers
 export type Discriminant<T, K extends keyof T> = T extends { [P in K]: infer D } ? D : never;
-export type ExtractByDiscriminant<T, K extends keyof T, D extends Discriminant<T, K>> = T extends { [P in K]: D } ? T : never;
+export type ExtractByDiscriminant<T, K extends keyof T, D extends Discriminant<T, K>> = T extends {
+  [P in K]: D;
+}
+  ? T
+  : never;

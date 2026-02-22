@@ -4,7 +4,7 @@
 // 직접 참조보다는 @use "variables"를 권장합니다.
 // ============================================
 
-@use "./variables" as v;
+@use './variables' as v;
 
 // Necessary exports for existing codebases
 $banana-yellow: v.$primary;

@@ -5,11 +5,9 @@ import { Text, TextProps } from '../Text';
 
 export type ParagraphProps = TextProps;
 
-const Paragraph = React.forwardRef<HTMLParagraphElement, ParagraphProps>(
-    (props, ref) => {
-        return <Text as="p" {...props} ref={ref} />;
-    }
-);
+const Paragraph = React.forwardRef<HTMLParagraphElement, ParagraphProps>((props, ref) => {
+  return <Text as="p" {...props} ref={ref} />;
+});
 
 Paragraph.displayName = 'Paragraph';
 

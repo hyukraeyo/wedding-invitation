@@ -23,7 +23,6 @@ const approveSchema = z.object({
   invitationId: z.string().uuid(),
 });
 
-
 export async function POST(request: NextRequest) {
   try {
     const bodyPromise = request.json();
@@ -32,10 +31,7 @@ export async function POST(request: NextRequest) {
     const validatedData = requestSchema.parse(body);
     const userId = session?.user?.id;
     if (!userId) {
-      return NextResponse.json(
-        { error: '로그인이 필요해요.' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: '로그인이 필요해요.' }, { status: 401 });
     }
 
     const supabase = await createSupabaseServerClient(session);
@@ -91,10 +87,7 @@ export async function POST(request: NextRequest) {
     }
 
     console.error('Unexpected error in POST /api/approval-requests:', error);
-    return NextResponse.json(
-      { error: '서버 오류가 발생했어요.' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: '서버 오류가 발생했어요.' }, { status: 500 });
   }
 }
 
@@ -103,10 +96,7 @@ export async function GET(request: NextRequest) {
     const session = await auth();
     const user = session?.user ?? null;
     if (!user) {
-      return NextResponse.json(
-        { error: '로그인이 필요해요.' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: '로그인이 필요해요.' }, { status: 401 });
     }
 
     const { searchParams } = new URL(request.url);
@@ -152,10 +142,7 @@ export async function GET(request: NextRequest) {
 
     // Admin fetching all requests (pending, rejected, approved)
     if (!isAdmin) {
-      return NextResponse.json(
-        { error: '접근 권한이 없어요.' },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: '접근 권한이 없어요.' }, { status: 403 });
     }
 
     const limit = parseInt(searchParams.get('limit') || '10');
@@ -182,10 +169,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Unexpected error in GET /api/approval-requests:', error);
-    return NextResponse.json(
-      { error: '서버 오류가 발생했어요.' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: '서버 오류가 발생했어요.' }, { status: 500 });
   }
 }
 
@@ -198,10 +182,7 @@ export async function PUT(request: NextRequest) {
     const userId = session?.user?.id;
 
     if (!userId) {
-      return NextResponse.json(
-        { error: '로그인이 필요해요.' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: '로그인이 필요해요.' }, { status: 401 });
     }
 
     const isEmailAdmin = session.user?.email === 'admin@test.com';
@@ -218,10 +199,7 @@ export async function PUT(request: NextRequest) {
     }
 
     if (!isAdmin) {
-      return NextResponse.json(
-        { error: '접근 권한이 없어요.' },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: '접근 권한이 없어요.' }, { status: 403 });
     }
 
     const db = supabaseAdmin || supabase;
@@ -256,19 +234,12 @@ export async function PUT(request: NextRequest) {
           reviewed_at: new Date().toISOString(),
         })
         .eq('id', currentRequest.id),
-      db
-        .from('invitations')
-        .select('*')
-        .eq('id', validatedData.invitationId)
-        .single(),
+      db.from('invitations').select('*').eq('id', validatedData.invitationId).single(),
     ]);
 
     if (deleteResult.error) {
       console.error('Error rejecting approval request:', deleteResult.error);
-      return NextResponse.json(
-        { error: '거절 처리에 실패했어요.' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: '거절 처리에 실패했어요.' }, { status: 500 });
     }
 
     const invData = invitationResult.data;
@@ -277,7 +248,7 @@ export async function PUT(request: NextRequest) {
         ...invData.invitation_data,
         isRequestingApproval: false,
         isApproved: false,
-        hasNewRejection: true // Mark as new rejection for notification
+        hasNewRejection: true, // Mark as new rejection for notification
       };
       await db
         .from('invitations')
@@ -286,7 +257,6 @@ export async function PUT(request: NextRequest) {
     }
 
     return NextResponse.json({ success: true });
-
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -296,10 +266,7 @@ export async function PUT(request: NextRequest) {
     }
 
     console.error('Unexpected error in PUT /api/approval-requests:', error);
-    return NextResponse.json(
-      { error: '서버 오류가 발생했어요.' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: '서버 오류가 발생했어요.' }, { status: 500 });
   }
 }
 
@@ -309,62 +276,38 @@ export async function DELETE(request: NextRequest) {
     const invitationId = searchParams.get('invitationId');
 
     if (!invitationId) {
-      return NextResponse.json(
-        { error: 'Invitation ID is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Invitation ID is required' }, { status: 400 });
     }
 
     const session = await auth();
     const userId = session?.user?.id;
     if (!userId) {
-      return NextResponse.json(
-        { error: '로그인이 필요해요.' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: '로그인이 필요해요.' }, { status: 401 });
     }
 
     const supabase = await createSupabaseServerClient(session);
     const db = supabaseAdmin || supabase;
 
     const [deleteResult, invitationResult] = await Promise.all([
-      db
-        .from('approval_requests')
-        .delete()
-        .eq('invitation_id', invitationId)
-        .eq('user_id', userId),
-      db
-        .from('invitations')
-        .select('*')
-        .eq('id', invitationId)
-        .single(),
+      db.from('approval_requests').delete().eq('invitation_id', invitationId).eq('user_id', userId),
+      db.from('invitations').select('*').eq('id', invitationId).single(),
     ]);
 
     if (deleteResult.error) {
       console.error('Error deleting approval request:', deleteResult.error);
-      return NextResponse.json(
-        { error: '신청 취소에 실패했어요.' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: '신청 취소에 실패했어요.' }, { status: 500 });
     }
 
     const invData = invitationResult.data;
     if (invData) {
       const newData = { ...invData.invitation_data, isRequestingApproval: false };
-      await db
-        .from('invitations')
-        .update({ invitation_data: newData })
-        .eq('id', invitationId);
+      await db.from('invitations').update({ invitation_data: newData }).eq('id', invitationId);
     }
 
     return NextResponse.json({ success: true });
-
   } catch (error) {
     console.error('Unexpected error in DELETE /api/approval-requests:', error);
-    return NextResponse.json(
-      { error: '서버 오류가 발생했어요.' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: '서버 오류가 발생했어요.' }, { status: 500 });
   }
 }
 
@@ -377,10 +320,7 @@ export async function PATCH(request: NextRequest) {
     const userId = session?.user?.id;
 
     if (!userId) {
-      return NextResponse.json(
-        { error: '로그인이 필요해요.' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: '로그인이 필요해요.' }, { status: 401 });
     }
 
     // Check admin
@@ -398,10 +338,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     if (!isAdmin) {
-      return NextResponse.json(
-        { error: '관리자만 사용할 수 있어요.' },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: '관리자만 사용할 수 있어요.' }, { status: 403 });
     }
 
     const db = supabaseAdmin || supabase;
@@ -417,19 +354,12 @@ export async function PATCH(request: NextRequest) {
         })
         .eq('invitation_id', validatedData.invitationId)
         .eq('status', 'pending'),
-      db
-        .from('invitations')
-        .select('*')
-        .eq('id', validatedData.invitationId)
-        .single(),
+      db.from('invitations').select('*').eq('id', validatedData.invitationId).single(),
     ]);
 
     if (updateResult.error) {
       console.error('Error approving request:', updateResult.error);
-      return NextResponse.json(
-        { error: '승인 처리에 실패했어요.' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: '승인 처리에 실패했어요.' }, { status: 500 });
     }
 
     const invData = invitationResult.data;
@@ -439,7 +369,7 @@ export async function PATCH(request: NextRequest) {
         isApproved: true,
         isRequestingApproval: false,
         hasNewRejection: false, // Clear rejection flag if approved
-        hasNewApproval: true  // Mark as new approval for notification
+        hasNewApproval: true, // Mark as new approval for notification
       };
 
       await Promise.all([
@@ -452,12 +382,11 @@ export async function PATCH(request: NextRequest) {
           .from('approval_requests')
           .delete()
           .eq('invitation_id', validatedData.invitationId)
-          .eq('status', 'rejected')
+          .eq('status', 'rejected'),
       ]);
     }
 
     return NextResponse.json({ success: true });
-
   } catch (error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -467,9 +396,6 @@ export async function PATCH(request: NextRequest) {
     }
 
     console.error('Unexpected error in PATCH /api/approval-requests:', error);
-    return NextResponse.json(
-      { error: '서버 오류가 발생했어요.' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: '서버 오류가 발생했어요.' }, { status: 500 });
   }
 }

@@ -1,22 +1,23 @@
-@use "../../styles/variables" as *;
+@use '../../styles/variables' as *;
 
 .reveal {
-    transition: transform var(--motion-duration-slow) var(--ease-ios), opacity var(--motion-duration-slow) var(--ease-ios);
-    transform: translate3d(0, var(--motion-distance), 0);
-    opacity: 0;
-    will-change: transform, opacity;
+  transition:
+    transform var(--motion-duration-slow) var(--ease-ios),
+    opacity var(--motion-duration-slow) var(--ease-ios);
+  transform: translate3d(0, var(--motion-distance), 0);
+  opacity: 0;
+  will-change: transform, opacity;
 
-    &.visible {
-        transform: translate3d(0, 0, 0);
-        opacity: 1;
-    }
+  &.visible {
+    transform: translate3d(0, 0, 0);
+    opacity: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .reveal {
-        transition: none;
-        transform: none;
-        opacity: 1;
-    }
+  .reveal {
+    transition: none;
+    transform: none;
+    opacity: 1;
+  }
 }
-

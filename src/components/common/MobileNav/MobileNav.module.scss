@@ -1,227 +1,227 @@
-@use "../../../styles/variables" as v;
-@use "../../../styles/mixins" as m;
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
 .drawerPadding {
-    padding: 8px 0;
+  padding: 8px 0;
 }
 
 .centerBody {
-    text-align: center;
-    padding: 1.5rem 24px;
+  text-align: center;
+  padding: 1.5rem 24px;
 }
 
 .eventIcon {
-    font-size: 3.5rem;
-    margin-bottom: 1rem;
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
 }
 
 .eventTitle {
-    font-weight: 600;
-    font-size: 1.1rem;
-    margin-bottom: 0.5rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
 }
 
 .eventDesc {
-    color: v.$grey-600;
-    font-size: 0.9rem;
+  color: v.$grey-600;
+  font-size: 0.9rem;
 }
 
-
 .fullWidth {
-    width: 100%;
+  width: 100%;
 }
 
 .mobileNav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-    background-color: v.$white;
-    border-top: 1px solid v.$zinc-100;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    z-index: 50;
-    transition: transform 0.3s ease-in-out;
-    padding-bottom: env(safe-area-inset-bottom);
-    box-sizing: content-box;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color: v.$white;
+  border-top: 1px solid v.$zinc-100;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 50;
+  transition: transform 0.3s ease-in-out;
+  padding-bottom: env(safe-area-inset-bottom);
+  box-sizing: content-box;
 
-    &.navHidden {
-        transform: translateY(100%);
-    }
+  &.navHidden {
+    transform: translateY(100%);
+  }
 
-    @include m.desktop {
-        display: none;
-    }
+  @include m.desktop {
+    display: none;
+  }
 }
 
 .navItem {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    color: v.$zinc-400;
-    position: relative;
-    transition: color 0.2s;
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: v.$zinc-400;
+  position: relative;
+  transition: color 0.2s;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
 
-    &.active {
-        color: v.$primary-500; // v.$primary-500
-    }
+  &.active {
+    color: v.$primary-500; // v.$primary-500
+  }
 
-    &.disabled {
-        opacity: 0.5;
-        cursor: default;
-    }
+  &.disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
 }
 
 .icon {
-    width: 24px;
-    height: 24px;
+  width: 24px;
+  height: 24px;
 }
 
 .badge {
-    position: absolute;
-    top: 12px;
-    right: calc(50% - 14px);
-    min-width: 16px;
-    height: 16px;
-    background-color: v.$error;
-    color: v.$white;
-    font-size: 10px;
-    font-weight: bold;
-    border-radius: 9999px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 4px;
+  position: absolute;
+  top: 12px;
+  right: calc(50% - 14px);
+  min-width: 16px;
+  height: 16px;
+  background-color: v.$error;
+  color: v.$white;
+  font-size: 10px;
+  font-weight: bold;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
 }
 
 .iconSwap {
-    position: relative;
-    width: 24px;
-    height: 24px;
+  position: relative;
+  width: 24px;
+  height: 24px;
 }
 
 .iconEye,
 .iconClose {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .previewButton {
+  .iconEye {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+
+  .iconClose {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+  }
+
+  &.previewOpen {
+    color: v.$zinc-900;
+
     .iconEye {
-        opacity: 1;
-        transform: rotate(0deg) scale(1);
+      opacity: 0;
+      transform: rotate(90deg) scale(0.5);
     }
 
     .iconClose {
-        opacity: 0;
-        transform: rotate(-90deg) scale(0.5);
+      opacity: 1;
+      transform: rotate(0deg) scale(1);
     }
-
-    &.previewOpen {
-        color: v.$zinc-900;
-
-        .iconEye {
-            opacity: 0;
-            transform: rotate(90deg) scale(0.5);
-        }
-
-        .iconClose {
-            opacity: 1;
-            transform: rotate(0deg) scale(1);
-        }
-    }
+  }
 }
 
 .floatingPreview {
-    position: fixed;
-    bottom: 80px;
-    right: 20px;
-    width: 56px;
-    height: 56px;
-    border-radius: 28px;
-    background-color: v.$white;
-    box-shadow: 0 4px 12px rgba(v.$black, 0.15);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 49;
-    border: none;
-    cursor: pointer;
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s;
-    opacity: 0;
-    transform: scale(0.8) translateY(20px);
-    pointer-events: none;
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 28px;
+  background-color: v.$white;
+  box-shadow: 0 4px 12px rgba(v.$black, 0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 49;
+  border: none;
+  cursor: pointer;
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    opacity 0.3s;
+  opacity: 0;
+  transform: scale(0.8) translateY(20px);
+  pointer-events: none;
 
-    &.fabVisible {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-        pointer-events: auto;
-    }
+  &.fabVisible {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: auto;
+  }
 
-    .icon {
-        width: 24px;
-        height: 24px;
-        color: v.$zinc-700;
-    }
+  .icon {
+    width: 24px;
+    height: 24px;
+    color: v.$zinc-700;
+  }
 
-    &:active {
-        transform: scale(0.95);
-    }
+  &:active {
+    transform: scale(0.95);
+  }
 
-    @include m.desktop {
-        display: none;
-    }
+  @include m.desktop {
+    display: none;
+  }
 }
 
-
 .drawerMenu {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .drawerItem {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 16px;
-    border-radius: 12px;
-    background: none;
-    border: none;
-    width: 100%;
-    text-align: left;
-    font-size: 16px;
-    color: v.$zinc-700;
-    transition: background-color 0.2s;
-    cursor: pointer;
-    text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 12px;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-size: 16px;
+  color: v.$zinc-700;
+  transition: background-color 0.2s;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    background-color: v.$zinc-50;
+  }
+
+  &.logoutButton {
+    color: v.$zinc-500;
+    margin-top: 8px;
+    border-top: 1px solid v.$zinc-100;
+    border-radius: 0;
+    padding-top: 24px;
 
     &:hover {
-        background-color: v.$zinc-50;
+      background-color: transparent;
+      color: v.$zinc-700;
     }
-
-    &.logoutButton {
-        color: v.$zinc-500;
-        margin-top: 8px;
-        border-top: 1px solid v.$zinc-100;
-        border-radius: 0;
-        padding-top: 24px;
-
-        &:hover {
-            background-color: transparent;
-            color: v.$zinc-700;
-        }
-    }
+  }
 }

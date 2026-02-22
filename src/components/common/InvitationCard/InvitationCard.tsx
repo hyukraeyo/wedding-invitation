@@ -132,65 +132,65 @@ const InvitationCard = React.memo(
             </div>
 
             <div className={styles.footer}>
-                {!isRequesting && !isApproved ? (
-                  <>
-                    <Button
-                      variant="ghost"
-                      className={clsx(styles.footerButton, styles.secondary, 'swiper-no-swiping')}
-                      loading={isLoading}
-                      disabled={isLoading}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onEdit(invitation);
-                      }}
-                      onPointerDown={(e) => e.stopPropagation()}
-                    >
-                      편집하기
-                    </Button>
-                    <Button
-                      className={clsx(styles.footerButton, styles.primary, 'swiper-no-swiping')}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handlePrimaryAction(e);
-                      }}
-                      onPointerDown={(e) => e.stopPropagation()}
-                    >
-                      사용 신청
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <Button
-                      variant="ghost"
-                      className={clsx(styles.footerButton, styles.secondary, 'swiper-no-swiping')}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handlePreview();
-                      }}
-                      onPointerDown={(e) => e.stopPropagation()}
-                    >
-                      미리보기
-                    </Button>
-                    <Button
-                      className={clsx(
-                        styles.footerButton,
-                        isApproved ? styles.share : styles.pending,
-                        'swiper-no-swiping'
-                      )}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (isApproved) {
-                          // 공유 모달은 InvitationActionMenu에서 처리
-                          return;
-                        }
-                        handlePrimaryAction(e);
-                      }}
-                      onPointerDown={(e) => e.stopPropagation()}
-                    >
-                      {isApproved ? '공유하기' : '신청 취소'}
-                    </Button>
-                  </>
-                )}
+              {!isRequesting && !isApproved ? (
+                <>
+                  <Button
+                    variant="ghost"
+                    className={clsx(styles.footerButton, styles.secondary, 'swiper-no-swiping')}
+                    loading={isLoading}
+                    disabled={isLoading}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onEdit(invitation);
+                    }}
+                    onPointerDown={(e) => e.stopPropagation()}
+                  >
+                    편집하기
+                  </Button>
+                  <Button
+                    className={clsx(styles.footerButton, styles.primary, 'swiper-no-swiping')}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handlePrimaryAction(e);
+                    }}
+                    onPointerDown={(e) => e.stopPropagation()}
+                  >
+                    사용 신청
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button
+                    variant="ghost"
+                    className={clsx(styles.footerButton, styles.secondary, 'swiper-no-swiping')}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handlePreview();
+                    }}
+                    onPointerDown={(e) => e.stopPropagation()}
+                  >
+                    미리보기
+                  </Button>
+                  <Button
+                    className={clsx(
+                      styles.footerButton,
+                      isApproved ? styles.share : styles.pending,
+                      'swiper-no-swiping'
+                    )}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (isApproved) {
+                        // 공유 모달은 InvitationActionMenu에서 처리
+                        return;
+                      }
+                      handlePrimaryAction(e);
+                    }}
+                    onPointerDown={(e) => e.stopPropagation()}
+                  >
+                    {isApproved ? '공유하기' : '신청 취소'}
+                  </Button>
+                </>
+              )}
             </div>
           </div>
         </div>

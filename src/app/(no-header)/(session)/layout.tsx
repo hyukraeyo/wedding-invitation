@@ -3,26 +3,22 @@ import { getSession } from '@/lib/auth/getSession';
 import HeaderProviders from '@/app/(with-header)/HeaderProviders';
 
 export const metadata: Metadata = {
-    robots: {
-        index: false,
-        follow: false,
-        googleBot: {
-            index: false,
-            follow: false,
-        },
+  robots: {
+    index: false,
+    follow: false,
+    googleBot: {
+      index: false,
+      follow: false,
     },
+  },
 };
 
 export default async function SessionLayout({
-    children,
+  children,
 }: Readonly<{
-    children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-    const session = await getSession();
+  const session = await getSession();
 
-    return (
-        <HeaderProviders session={session}>
-            {children}
-        </HeaderProviders>
-    );
+  return <HeaderProviders session={session}>{children}</HeaderProviders>;
 }

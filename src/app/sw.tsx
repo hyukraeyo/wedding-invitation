@@ -11,8 +11,6 @@ export default function ServiceWorkerRegistration() {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').then(
           (registration) => {
-
-
             registration.addEventListener('updatefound', () => {
               const newWorker = registration.installing;
               if (newWorker) {
@@ -48,14 +46,10 @@ export default function ServiceWorkerRegistration() {
           <p className={styles.title}>새 버전 사용 가능</p>
           <p className={styles.description}>업데이트를 적용하려면 클릭하세요</p>
         </div>
-        <button
-          onClick={handleUpdate}
-          className={styles.updateButton}
-        >
+        <button onClick={handleUpdate} className={styles.updateButton}>
           업데이트
         </button>
       </div>
     </div>
   );
 }
-

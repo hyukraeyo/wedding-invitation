@@ -1,5 +1,5 @@
-@use "../../../styles/variables" as v;
-@use "../../../styles/mixins" as m;
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
 .heading {
   margin: 0;
@@ -7,41 +7,86 @@
   color: v.$grey-900;
   line-height: 1.3;
   letter-spacing: -0.02em;
-  
+
   // Sizes (Radix UI Themes Mapping 1-9)
-  &.size_1 { font-size: 0.75rem; }    // 12px
-  &.size_2 { font-size: 0.875rem; }   // 14px
-  &.size_3 { font-size: 1rem; }       // 16px
-  &.size_4 { font-size: 1.125rem; }   // 18px
-  &.size_5 { font-size: 1.25rem; }    // 20px
-  &.size_6 { font-size: 1.5rem; }     // 24px
-  &.size_7 { font-size: 1.875rem; }   // 30px
-  &.size_8 { font-size: 2.25rem; }    // 36px
-  &.size_9 { font-size: 3rem; }       // 48px
-  
+  &.size_1 {
+    font-size: 0.75rem;
+  } // 12px
+  &.size_2 {
+    font-size: 0.875rem;
+  } // 14px
+  &.size_3 {
+    font-size: 1rem;
+  } // 16px
+  &.size_4 {
+    font-size: 1.125rem;
+  } // 18px
+  &.size_5 {
+    font-size: 1.25rem;
+  } // 20px
+  &.size_6 {
+    font-size: 1.5rem;
+  } // 24px
+  &.size_7 {
+    font-size: 1.875rem;
+  } // 30px
+  &.size_8 {
+    font-size: 2.25rem;
+  } // 36px
+  &.size_9 {
+    font-size: 3rem;
+  } // 48px
+
   // Weights
-  &.weight_light { font-weight: 300; }
-  &.weight_regular { font-weight: 400; }
-  &.weight_medium { font-weight: 500; }
-  &.weight_bold { font-weight: 700; }
-  
+  &.weight_light {
+    font-weight: 300;
+  }
+  &.weight_regular {
+    font-weight: 400;
+  }
+  &.weight_medium {
+    font-weight: 500;
+  }
+  &.weight_bold {
+    font-weight: 700;
+  }
+
   // Alignment
-  &.align_left { text-align: left; }
-  &.align_center { text-align: center; }
-  &.align_right { text-align: right; }
-  
+  &.align_left {
+    text-align: left;
+  }
+  &.align_center {
+    text-align: center;
+  }
+  &.align_right {
+    text-align: right;
+  }
+
   // High Contrast
   &.highContrast {
     color: v.$black;
   }
-  
+
   // Colors (Semantic support)
-  &.primary { color: v.$banana-yellow; }
-  &.secondary { color: v.$grey-600; }
-  &.danger { color: v.$red-600; }
-  
+  &.primary {
+    color: v.$banana-yellow;
+  }
+  &.secondary {
+    color: v.$grey-600;
+  }
+  &.danger {
+    color: v.$red-600;
+  }
+
   // Trim (Leading trim)
-  &.trim_start { margin-top: -0.2em; }
-  &.trim_end { margin-bottom: -0.2em; }
-  &.trim_both { margin-top: -0.2em; margin-bottom: -0.2em; }
+  &.trim_start {
+    margin-top: -0.2em;
+  }
+  &.trim_end {
+    margin-bottom: -0.2em;
+  }
+  &.trim_both {
+    margin-top: -0.2em;
+    margin-bottom: -0.2em;
+  }
 }

@@ -3,35 +3,44 @@
 // Based on Pretendard (iOS System Font Feel)
 // ============================================
 
-$font-main: "Pretendard", -apple-system, system-ui, sans-serif;
+$font-main:
+  'Pretendard',
+  -apple-system,
+  system-ui,
+  sans-serif;
 $font-pretendard: $font-main;
-$font-gmarket-sans: "GmarketSansMedium", sans-serif;
-$font-sans: "Inter", "Pretendard", -apple-system, system-ui, sans-serif;
-$font-serif: "Playfair Display", "Nanum Myeongjo", "Times New Roman", serif;
-$font-gowun-batang: "Gowun Batang", "Nanum Myeongjo", serif;
-$font-gowun-dodum: "Gowun Dodum", "Pretendard", sans-serif;
-$font-nanum-myeongjo: "Nanum Myeongjo", "Times New Roman", serif;
-$font-yeon-sung: "Yeon Sung", "Pretendard", cursive;
-$font-do-hyeon: "Do Hyeon", "Pretendard", sans-serif;
-$font-song-myung: "Song Myung", "Nanum Myeongjo", serif;
-$font-script: "Great Vibes", "Times New Roman", cursive;
+$font-gmarket-sans: 'GmarketSansMedium', sans-serif;
+$font-sans:
+  'Inter',
+  'Pretendard',
+  -apple-system,
+  system-ui,
+  sans-serif;
+$font-serif: 'Playfair Display', 'Nanum Myeongjo', 'Times New Roman', serif;
+$font-gowun-batang: 'Gowun Batang', 'Nanum Myeongjo', serif;
+$font-gowun-dodum: 'Gowun Dodum', 'Pretendard', sans-serif;
+$font-nanum-myeongjo: 'Nanum Myeongjo', 'Times New Roman', serif;
+$font-yeon-sung: 'Yeon Sung', 'Pretendard', cursive;
+$font-do-hyeon: 'Do Hyeon', 'Pretendard', sans-serif;
+$font-song-myung: 'Song Myung', 'Nanum Myeongjo', serif;
+$font-script: 'Great Vibes', 'Times New Roman', cursive;
 
 // Responsive Steps
-$font-size-3xs:  10px;
-$font-size-2xs:  11px;
-$font-size-xs:   12px;
-$font-size-sm:   14px;
-$font-size-md:   15px;
+$font-size-3xs: 10px;
+$font-size-2xs: 11px;
+$font-size-xs: 12px;
+$font-size-sm: 14px;
+$font-size-md: 15px;
 $font-size-base: 16px;
-$font-size-lg:   18px;
-$font-size-xl:   22px;
-$font-size-xxl:  28px;
+$font-size-lg: 18px;
+$font-size-xl: 22px;
+$font-size-xxl: 28px;
 
 $font-weight-regular: 400;
-$font-weight-medium:  500;
+$font-weight-medium: 500;
 $font-weight-semibold: 600;
-$font-weight-bold:     700;
+$font-weight-bold: 700;
 
-$line-height-tight:  1.2;
-$line-height-base:   1.5;
+$line-height-tight: 1.2;
+$line-height-base: 1.5;
 $line-height-relaxed: 1.7;

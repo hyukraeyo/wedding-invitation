@@ -1,366 +1,367 @@
-@use "@/styles/variables" as v;
-@use "@/styles/mixins" as m;
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
 
 // ============================================
 // Card Grid (MyPage 전용 스타일)
 // ============================================
 .cardGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
-    gap: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  gap: 1.5rem;
+  padding: 0 0 2rem;
+  align-items: start;
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+
+  @include m.desktop {
+    gap: 2rem;
     padding: 0 0 2rem;
-    align-items: start;
-
-    @media (max-width: 480px) {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-        gap: 1rem;
-    }
-
-    @include m.desktop {
-        gap: 2rem;
-        padding: 0 0 2rem;
-    }
+  }
 }
 
 .invitationListSection {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
 }
 
 .swiperView {
-    width: calc(100% + 2.5rem); // parent padding (1.25rem) * 2
-    margin: 0 -1.25rem;
-    overflow: hidden;
+  width: calc(100% + 2.5rem); // parent padding (1.25rem) * 2
+  margin: 0 -1.25rem;
+  overflow: hidden;
 }
 
 .dashboardSwiper {
-    padding: 0.5rem 1.25rem 4rem !important; // Padding on sides to align with content, bottom for pagination
-    overflow: visible !important;
+  padding: 0.5rem 1.25rem 4rem !important; // Padding on sides to align with content, bottom for pagination
+  overflow: visible !important;
 
-    :global(.swiper-pagination) {
-        bottom: 0.75rem !important;
-    }
+  :global(.swiper-pagination) {
+    bottom: 0.75rem !important;
+  }
 
-    :global(.swiper-pagination-bullet) {
-        background: v.$zinc-300;
-        opacity: 1;
-    }
+  :global(.swiper-pagination-bullet) {
+    background: v.$zinc-300;
+    opacity: 1;
+  }
 
-    :global(.swiper-pagination-bullet-active) {
-        background-color: v.$color-primary !important;
-        width: 16px;
-        border-radius: 4px;
-        transition: width 0.3s ease;
-    }
+  :global(.swiper-pagination-bullet-active) {
+    background-color: v.$color-primary !important;
+    width: 16px;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
 }
 
 .autoWidthSlide {
-    width: min(78vw, 360px) !important; // Match real card size on mobile
+  width: min(78vw, 360px) !important; // Match real card size on mobile
 
-    @media (max-width: 480px) {
-        width: 320px !important;
-    }
+  @media (max-width: 480px) {
+    width: 320px !important;
+  }
 }
 
 .swiperCardWrapper {
-    width: 100%;
-    transition: transform 0.3s v.$ease-ios, opacity 0.3s ease;
+  width: 100%;
+  transition:
+    transform 0.3s v.$ease-ios,
+    opacity 0.3s ease;
 }
 
 // ============================================
 // Create New Card
 // ============================================
 .createCardWrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
 .createCard {
-    aspect-ratio: 3 / 4.5;
-    border: 2px dashed v.$zinc-200;
-    border-radius: v.$radius-md;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1.25rem;
-    background: linear-gradient(135deg, v.$white 0%, v.$zinc-50 100%);
-    cursor: pointer;
-    transition: all 0.4s v.$ease-ios;
-    text-decoration: none;
-    position: relative;
-    overflow: hidden;
+  aspect-ratio: 3 / 4.5;
+  border: 2px dashed v.$zinc-200;
+  border-radius: v.$radius-md;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  background: linear-gradient(135deg, v.$white 0%, v.$zinc-50 100%);
+  cursor: pointer;
+  transition: all 0.4s v.$ease-ios;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(v.$color-primary, 0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  &:hover {
+    border-color: v.$color-primary;
+    border-style: solid;
+    background-color: v.$white;
+    box-shadow: 0 10px 24px rgba(v.$black, 0.08);
 
     &::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background: radial-gradient(circle at center, rgba(v.$color-primary, 0.1) 0%, transparent 70%);
-        opacity: 0;
-        transition: opacity 0.4s ease;
+      opacity: 1;
     }
 
-    &:hover {
-        border-color: v.$color-primary;
-        border-style: solid;
-        background-color: v.$white;
-        box-shadow: 0 10px 24px rgba(v.$black, 0.08);
-
-        &::after {
-            opacity: 1;
-        }
-
-        .createIcon {
-            transform: scale(1.1) rotate(90deg);
-            background-color: v.$color-primary;
-            color: v.$white;
-            box-shadow: 0 8px 16px rgba(v.$color-primary, 0.3);
-        }
-
-        .createText {
-            color: v.$zinc-900;
-        }
+    .createIcon {
+      transform: scale(1.1) rotate(90deg);
+      background-color: v.$color-primary;
+      color: v.$white;
+      box-shadow: 0 8px 16px rgba(v.$color-primary, 0.3);
     }
 
-    &:active {
-        transform: scale(0.98);
+    .createText {
+      color: v.$zinc-900;
     }
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
 }
 
 .createIcon {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background-color: v.$zinc-50;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: v.$zinc-400;
-    transition: all 0.4s v.$ease-ios;
-    position: relative;
-    z-index: 1;
-    border: 1px solid v.$zinc-100;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: v.$zinc-50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: v.$zinc-400;
+  transition: all 0.4s v.$ease-ios;
+  position: relative;
+  z-index: 1;
+  border: 1px solid v.$zinc-100;
 }
 
 .createText {
-    font-size: 1rem;
-    font-weight: 700;
-    color: v.$zinc-500;
-    transition: color 0.3s ease;
-    z-index: 1;
+  font-size: 1rem;
+  font-weight: 700;
+  color: v.$zinc-500;
+  transition: color 0.3s ease;
+  z-index: 1;
 }
 
 @keyframes floating {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-10deg);
+  }
 
-    0%,
-    100% {
-        transform: translateY(0) rotate(-10deg);
-    }
-
-    50% {
-        transform: translateY(-10px) rotate(-5deg);
-    }
+  50% {
+    transform: translateY(-10px) rotate(-5deg);
+  }
 }
 
 // ============================================
 // Auth Card (Login Required)
 // ============================================
 .authCard {
-    background: v.$white;
-    padding: 3rem 2rem;
-    border-radius: 1.5rem;
-    text-align: center;
-    max-width: 400px;
-    margin: 2rem auto;
+  background: v.$white;
+  padding: 3rem 2rem;
+  border-radius: 1.5rem;
+  text-align: center;
+  max-width: 400px;
+  margin: 2rem auto;
 }
 
 .authIcon {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background-color: v.$zinc-100;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.5rem;
-    color: v.$zinc-400;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: v.$zinc-100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  color: v.$zinc-400;
 }
 
 .authTitle {
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: v.$zinc-900;
-    margin-bottom: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: v.$zinc-900;
+  margin-bottom: 0.5rem;
 }
 
 .authDescription {
-    font-size: 0.9375rem;
-    color: v.$zinc-500;
-    margin-bottom: 1.5rem;
+  font-size: 0.9375rem;
+  color: v.$zinc-500;
+  margin-bottom: 1.5rem;
 }
 
 .authButton {
-    display: inline-block;
-    padding: 0.875rem 2rem;
-    background-color: v.$zinc-900;
-    color: v.$white;
-    border-radius: v.$radius-md;
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.2s ease;
+  display: inline-block;
+  padding: 0.875rem 2rem;
+  background-color: v.$zinc-900;
+  color: v.$white;
+  border-radius: v.$radius-md;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
 
-    &:hover {
-        background-color: v.$black;
-    }
+  &:hover {
+    background-color: v.$black;
+  }
 }
 
 // ============================================
 // Coming Soon Modal Content
 // ============================================
 .comingSoonContent {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem 0;
 }
 
 .comingSoonIcon {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background-color: v.$primary-100; // v.$primary-100
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1rem;
-    color: v.$primary-600;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: v.$primary-100; // v.$primary-100
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  color: v.$primary-600;
 }
 
 .comingSoonText {
-    font-size: 1rem;
-    color: v.$zinc-600;
-    line-height: 1.6;
+  font-size: 1rem;
+  color: v.$zinc-600;
+  line-height: 1.6;
 }
 
 // ============================================
 // Skeleton UI
 // ============================================
 .skeletonCard {
-    aspect-ratio: 3 / 4.5;
-    width: 100%;
-    border-radius: v.$radius-md;
+  aspect-ratio: 3 / 4.5;
+  width: 100%;
+  border-radius: v.$radius-md;
 }
 
 .skeletonCardItem {
-    position: relative;
-    border-radius: v.$radius-md;
-    overflow: hidden;
-    aspect-ratio: 3 / 4.5;
-    border: 1px solid v.$zinc-100;
-    background-color: v.$white;
-    box-shadow: v.$shadow-card;
+  position: relative;
+  border-radius: v.$radius-md;
+  overflow: hidden;
+  aspect-ratio: 3 / 4.5;
+  border: 1px solid v.$zinc-100;
+  background-color: v.$white;
+  box-shadow: v.$shadow-card;
 }
 
 .skeletonOverlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 0.75rem;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.75rem;
 }
 
 .skeletonBadge {
-    width: 4.5rem;
-    height: 1.25rem;
-    border-radius: v.$radius-sm;
+  width: 4.5rem;
+  height: 1.25rem;
+  border-radius: v.$radius-sm;
 }
 
 .skeletonTitle {
-    height: 1.25rem;
-    width: 70%;
-    border-radius: v.$radius-sm;
+  height: 1.25rem;
+  width: 70%;
+  border-radius: v.$radius-sm;
 }
 
 .skeletonFooter {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 .skeletonButton {
-    flex: 1;
-    height: 3.25rem;
-    border-radius: v.$radius-lg;
+  flex: 1;
+  height: 3.25rem;
+  border-radius: v.$radius-lg;
 }
 
 .skeletonSwiper {
-    display: flex;
-    overflow-x: auto;
-    gap: 1rem;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+  display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 
-    &::-webkit-scrollbar {
-        display: none;
-    }
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 // ============================================
 // Entrance Animation (Pop-in solution)
 // ============================================
 .contentContainer {
-    animation: page-fade-in 400ms var(--ease-ios) both;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
+  animation: page-fade-in 400ms var(--ease-ios) both;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 // ============================================
 // Rejection Notification
 // ============================================
 .rejectionMessageBox {
-    margin-bottom: 1.5rem;
-    padding: 1.25rem;
-    background-color: v.$color-danger-bg; // v.$color-danger-bg
-    border-radius: v.$radius-md;
-    border: 1px solid v.$color-danger-border; // v.$color-danger-border
-    text-align: left;
-    font-size: 0.9375rem;
-    line-height: 1.6;
-    color: v.$zinc-800;
+  margin-bottom: 1.5rem;
+  padding: 1.25rem;
+  background-color: v.$color-danger-bg; // v.$color-danger-bg
+  border-radius: v.$radius-md;
+  border: 1px solid v.$color-danger-border; // v.$color-danger-border
+  text-align: left;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: v.$zinc-800;
 
-    &.success {
-        background-color: v.$blue-50;
-        border-color: v.$blue-100;
-    }
+  &.success {
+    background-color: v.$blue-50;
+    border-color: v.$blue-100;
+  }
 }
 
 .rejectionNoticeText {
-    font-size: 0.875rem;
-    color: v.$zinc-500;
+  font-size: 0.875rem;
+  color: v.$zinc-500;
 }
 
 .deleteWarning {
-    display: block;
-    margin-top: 0.5rem;
-    font-weight: 700;
-    color: v.$red-500;
+  display: block;
+  margin-top: 0.5rem;
+  font-weight: 700;
+  color: v.$red-500;
 }
 
 .modalHeader {
-    text-align: center;
-    margin-bottom: 24px;
+  text-align: center;
+  margin-bottom: 24px;
 }
 
 .rejectionEditorWrapper {
-    margin-top: 1rem;
-    width: 100%;
-    background-color: v.$white;
-    overflow: hidden;
-    transition: all v.$transition-200 v.$ease-standard;
+  margin-top: 1rem;
+  width: 100%;
+  background-color: v.$white;
+  overflow: hidden;
+  transition: all v.$transition-200 v.$ease-standard;
 }

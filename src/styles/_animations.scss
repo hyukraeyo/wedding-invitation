@@ -1,4 +1,4 @@
-@use "interact" as i;
+@use 'interact' as i;
 
 /* Animations from globals.css */
 @keyframes fall {
@@ -103,7 +103,6 @@
 }
 
 @keyframes pulse-subtle {
-
   0%,
   100% {
     opacity: 1;
@@ -357,7 +356,6 @@
   }
 }
 
-
 // Accordion Animations
 @keyframes accordion-down {
   from {
@@ -410,7 +408,10 @@
 // Mixin for popup animation
 @mixin popup-animation {
   animation: popup-in i.$popup-duration i.$popup-easing both;
-  transform-origin: var(--radix-dropdown-menu-content-transform-origin, var(--radix-popover-content-transform-origin, top));
+  transform-origin: var(
+    --radix-dropdown-menu-content-transform-origin,
+    var(--radix-popover-content-transform-origin, top)
+  );
   will-change: transform, opacity;
 
   &[data-state='closed'] {

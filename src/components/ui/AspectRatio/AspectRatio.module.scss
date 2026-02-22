@@ -1,18 +1,18 @@
-@use "../../../styles/variables" as v;
+@use '../../../styles/variables' as v;
 
 .root {
-    overflow: hidden;
-    position: relative;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+
+  // Optional: Add subtle rounded corners if not explicitly provided by the child
+  // radius-md is 16px which is standard in this project
+  // border-radius: v.$radius-md;
+
+  :global(img),
+  :global(video) {
     width: 100%;
-
-    // Optional: Add subtle rounded corners if not explicitly provided by the child
-    // radius-md is 16px which is standard in this project
-    // border-radius: v.$radius-md;
-
-    :global(img),
-    :global(video) {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
+    height: 100%;
+    object-fit: cover;
+  }
 }

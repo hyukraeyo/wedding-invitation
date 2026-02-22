@@ -8,9 +8,9 @@ import { suppressReact19Warnings } from '@/lib/suppressWarnings';
  * 앱 최상단에서 한 번만 실행됩니다.
  */
 export function WarningSuppressionProvider({ children }: { children: React.ReactNode }) {
-    useEffect(() => {
-        suppressReact19Warnings();
-    }, []);
+  useEffect(() => {
+    suppressReact19Warnings();
+  }, []);
 
-    return <>{children}</>;
+  return <>{children}</>;
 }

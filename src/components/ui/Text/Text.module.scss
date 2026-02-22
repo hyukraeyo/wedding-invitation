@@ -1,4 +1,4 @@
-@use "../../../styles/variables" as v;
+@use '../../../styles/variables' as v;
 
 .text {
   font-family: inherit;
@@ -9,37 +9,88 @@
 
 // Sizes
 @for $i from 1 through 9 {
-  .size_#{$i} { font-size: var(--font-size-#{$i}); }
+  .size_#{$i} {
+    font-size: var(--font-size-#{$i});
+  }
 }
 
 // Typography (TDS Mapping)
-.typography_t1 { font-size: 2.25rem; font-weight: 700; }
-.typography_t2 { font-size: 1.875rem; font-weight: 700; }
-.typography_t3 { font-size: 1.5rem; font-weight: 700; }
-.typography_t4 { font-size: 1.25rem; font-weight: 700; }
-.typography_t5 { font-size: 1.125rem; font-weight: 600; }
-.typography_t6 { font-size: 1rem; font-weight: 500; }
-.typography_t7 { font-size: 0.875rem; font-weight: 400; }
+.typography_t1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+}
+.typography_t2 {
+  font-size: 1.875rem;
+  font-weight: 700;
+}
+.typography_t3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.typography_t4 {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.typography_t5 {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+.typography_t6 {
+  font-size: 1rem;
+  font-weight: 500;
+}
+.typography_t7 {
+  font-size: 0.875rem;
+  font-weight: 400;
+}
 
 // Weights
-.weight_light { font-weight: 300; }
-.weight_regular { font-weight: 400; }
-.weight_medium { font-weight: 500; }
-.weight_bold { font-weight: 700; }
+.weight_light {
+  font-weight: 300;
+}
+.weight_regular {
+  font-weight: 400;
+}
+.weight_medium {
+  font-weight: 500;
+}
+.weight_bold {
+  font-weight: 700;
+}
 
 // Alignment
-.align_left { text-align: left; }
-.align_center { text-align: center; }
-.align_right { text-align: right; }
-.align_justify { text-align: justify; }
+.align_left {
+  text-align: left;
+}
+.align_center {
+  text-align: center;
+}
+.align_right {
+  text-align: right;
+}
+.align_justify {
+  text-align: justify;
+}
 
 // Colors
-.primary { color: v.$banana-yellow; }
-.secondary { color: v.$grey-700; }
-.tertiary { color: v.$grey-500; }
-.danger { color: v.$red-600; }
-.grey { color: v.$grey-500; }
-.white { color: v.$white; }
+.primary {
+  color: v.$banana-yellow;
+}
+.secondary {
+  color: v.$grey-700;
+}
+.tertiary {
+  color: v.$grey-500;
+}
+.danger {
+  color: v.$red-600;
+}
+.grey {
+  color: v.$grey-500;
+}
+.white {
+  color: v.$white;
+}
 
 .highContrast {
   color: v.$grey-900;

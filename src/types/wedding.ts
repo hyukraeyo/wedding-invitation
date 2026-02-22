@@ -91,7 +91,14 @@ export interface ContactInfo {
 
 export interface CeremonyItem {
   id: string;
-  type: 'processional' | 'unity' | 'vows' | 'ring_exchange' | 'pronouncement' | 'recessional' | 'custom';
+  type:
+    | 'processional'
+    | 'unity'
+    | 'vows'
+    | 'ring_exchange'
+    | 'pronouncement'
+    | 'recessional'
+    | 'custom';
   title: string;
   description?: string;
   duration?: number; // in minutes

@@ -15,7 +15,9 @@ export function useScrollLock(isLocked: boolean, options: ScrollLockOptions = {}
 
     const rootElement = containerSelector ? document.querySelector(containerSelector) : null;
     const scrollContainer = rootElement
-      ? (usePreviousSibling ? rootElement.previousElementSibling : rootElement)
+      ? usePreviousSibling
+        ? rootElement.previousElementSibling
+        : rootElement
       : null;
 
     if (!isLocked) {

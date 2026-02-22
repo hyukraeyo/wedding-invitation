@@ -1,7 +1,7 @@
-@use "../../../styles/variables" as v;
-@use "../../../styles/mixins" as m;
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
-@use "sass:color";
+@use 'sass:color';
 
 .textButton {
   @include m.button-base;
@@ -14,29 +14,31 @@
   transition: all 0.2s v.$ease-ios;
   border-radius: v.$radius-sm;
   width: fit-content;
-  
+
   &.primary {
     color: v.$banana-yellow;
-    &.active { color: color.adjust(v.$banana-yellow, $lightness: -10%); }
+    &.active {
+      color: color.adjust(v.$banana-yellow, $lightness: -10%);
+    }
   }
-  
+
   &.blue {
     color: v.$blue-500;
   }
-  
+
   &.underline {
     text-decoration: underline;
   }
-  
+
   @include m.hover {
     background: v.$grey-opacity-100;
   }
-  
+
   &:active {
     transform: scale(0.96);
     background: v.$grey-opacity-200;
   }
-  
+
   &:disabled {
     opacity: 0.4;
     cursor: not-allowed;

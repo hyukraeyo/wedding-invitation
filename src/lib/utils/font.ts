@@ -1,16 +1,26 @@
-export type ThemeFont = 'pretendard' | 'gmarket' | 'gowun-batang' | 'gowun-dodum' | 'nanum-myeongjo' | 'yeon-sung' | 'do-hyeon' | 'song-myung' | 'serif' | 'sans';
+export type ThemeFont =
+  | 'pretendard'
+  | 'gmarket'
+  | 'gowun-batang'
+  | 'gowun-dodum'
+  | 'nanum-myeongjo'
+  | 'yeon-sung'
+  | 'do-hyeon'
+  | 'song-myung'
+  | 'serif'
+  | 'sans';
 
 const FONT_VAR_MAP: Record<ThemeFont, string> = {
-  'pretendard': '--font-pretendard',
-  'gmarket': '--font-gmarket-sans',
+  pretendard: '--font-pretendard',
+  gmarket: '--font-gmarket-sans',
   'gowun-batang': '--font-gowun-batang',
   'gowun-dodum': '--font-gowun-dodum',
   'nanum-myeongjo': '--font-nanum-myeongjo',
   'yeon-sung': '--font-yeon-sung',
   'do-hyeon': '--font-do-hyeon',
   'song-myung': '--font-song-myung',
-  'serif': '--font-serif',
-  'sans': '--font-sans',
+  serif: '--font-serif',
+  sans: '--font-sans',
 };
 
 const ALL_FONT_VARS = [
@@ -46,7 +56,7 @@ export function getFontStyle(
     transform: 'translate3d(0, 0, 0)',
   };
 
-  ALL_FONT_VARS.forEach(fontVar => {
+  ALL_FONT_VARS.forEach((fontVar) => {
     if (fontVar !== selectedFontVar) {
       styleOverrides[fontVar] = selectedFontValue;
     }

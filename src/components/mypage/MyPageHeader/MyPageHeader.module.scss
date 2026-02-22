@@ -1,30 +1,30 @@
-@use "../../../styles/variables" as v;
-@use "../../../styles/mixins" as m;
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
 .sectionHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
-    gap: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 
-    @include m.desktop {
-        margin-bottom: 2rem;
-    }
+  @include m.desktop {
+    margin-bottom: 2rem;
+  }
 }
 
 .sectionTitle {
-    font-size: v.$font-size-xl;
-    font-weight: 700;
-    color: v.$zinc-900;
+  font-size: v.$font-size-xl;
+  font-weight: 700;
+  color: v.$zinc-900;
 
-    @include m.desktop {
-        font-size: v.$font-size-2xl;
-    }
+  @include m.desktop {
+    font-size: v.$font-size-2xl;
+  }
 }
 
 .actions {
-    display: flex;
-    gap: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
 }

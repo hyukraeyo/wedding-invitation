@@ -82,10 +82,7 @@ const GreetingSection = React.memo<SectionProps>(function GreetingSection(props)
     fieldName: 'greeting-title',
   });
 
-  const {
-    value: messageValue,
-    onValueChange: handleMessageChange,
-  } = useBuilderField({
+  const { value: messageValue, onValueChange: handleMessageChange } = useBuilderField({
     value: message,
     onChange: setMessage,
     fieldName: 'greeting-message',

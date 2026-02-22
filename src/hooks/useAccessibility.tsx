@@ -11,10 +11,7 @@ interface SkipLinkProps {
 
 export function SkipLink({ href, children }: SkipLinkProps) {
   return (
-    <a
-      href={href}
-      className={styles.skipLink}
-    >
+    <a href={href} className={styles.skipLink}>
       {children}
     </a>
   );

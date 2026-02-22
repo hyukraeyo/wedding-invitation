@@ -6,14 +6,10 @@ import { clsx } from 'clsx';
 import s from './Label.module.scss';
 
 const Label = React.forwardRef<
-    React.ElementRef<typeof LabelPrimitive.Root>,
-    React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
+  React.ElementRef<typeof LabelPrimitive.Root>,
+  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
 >(({ className, ...props }, ref) => (
-    <LabelPrimitive.Root
-        ref={ref}
-        className={clsx(s.root, className)}
-        {...props}
-    />
+  <LabelPrimitive.Root ref={ref} className={clsx(s.root, className)} {...props} />
 ));
 Label.displayName = LabelPrimitive.Root.displayName;
 

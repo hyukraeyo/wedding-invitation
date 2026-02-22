@@ -1,4 +1,4 @@
-@use "../../../styles/variables" as v;
+@use '../../../styles/variables' as v;
 
 .root {
   display: flex;
@@ -23,16 +23,16 @@
   cursor: pointer;
   position: relative;
   transition: all 0.2s v.$ease-ios;
-  
+
   &:hover {
     color: v.$grey-900;
   }
-  
-  &[data-state="active"] {
+
+  &[data-state='active'] {
     color: v.$banana-yellow;
-    
+
     &::after {
-      content: "";
+      content: '';
       position: absolute;
       bottom: -1px;
       left: 0;

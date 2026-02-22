@@ -126,7 +126,10 @@ export default function KakaoShareSection(props: SectionProps) {
               className={styles.previewDialogContent}
               aria-label="카카오톡 공유 미리보기"
             >
-              <Dialog.Header title="카카오톡 공유 미리보기" className={styles.previewDialogHeader} />
+              <Dialog.Header
+                title="카카오톡 공유 미리보기"
+                className={styles.previewDialogHeader}
+              />
               <Dialog.Body className={styles.modalBody}>
                 <div className={styles.previewSurface}>
                   <div className={styles.previewLabel}>

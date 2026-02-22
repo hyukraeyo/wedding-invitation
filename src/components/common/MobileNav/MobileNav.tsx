@@ -222,7 +222,6 @@ export function MobileNav({
           <Eye className={styles.icon} />
         </IconButton>
       )}
-
     </>
   );
 

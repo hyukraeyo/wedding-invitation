@@ -9,7 +9,6 @@ interface ApprovalRequestPayload {
   requesterPhone: string;
 }
 
-
 export const approvalRequestService = {
   async createRequest(payload: ApprovalRequestPayload) {
     const response = await fetch('/api/approval-requests', {
@@ -25,7 +24,6 @@ export const approvalRequestService = {
     const result = await response.json();
     return result.data as ApprovalRequestSummary;
   },
-
 
   async cancelRequest(invitationId: string) {
     const response = await fetch(`/api/approval-requests?invitationId=${invitationId}`, {

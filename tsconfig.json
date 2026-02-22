@@ -2,11 +2,7 @@
   "compilerOptions": {
     // Target & Module
     "target": "ES2022",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "module": "esnext",
     "moduleResolution": "bundler",
     // JSX
@@ -50,30 +46,14 @@
     // Path Mapping
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@/components/*": [
-        "./src/components/*"
-      ],
-      "@/lib/*": [
-        "./src/lib/*"
-      ],
-      "@/types/*": [
-        "./src/types/*"
-      ],
-      "@/store/*": [
-        "./src/store/*"
-      ],
-      "@/hooks/*": [
-        "./src/hooks/*"
-      ],
-      "@/constants/*": [
-        "./src/constants/*"
-      ],
-      "@/services/*": [
-        "./src/services/*"
-      ]
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/lib/*": ["./src/lib/*"],
+      "@/types/*": ["./src/types/*"],
+      "@/store/*": ["./src/store/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/constants/*": ["./src/constants/*"],
+      "@/services/*": ["./src/services/*"]
     },
     // Next.js Plugin
     "plugins": [
@@ -90,15 +70,7 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": [
-    "node_modules",
-    ".next",
-    "out",
-    "build",
-    "dist",
-    "scripts",
-    "test-db.ts"
-  ],
+  "exclude": ["node_modules", ".next", "out", "build", "dist", "scripts", "test-db.ts"],
   "ts-node": {
     "esm": true
   }

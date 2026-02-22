@@ -29,19 +29,13 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <input
             id={inputId}
             ref={ref}
-            className={clsx(
-              s.input,
-              leftIcon && s.paddingLeft,
-              rightIcon && s.paddingRight
-            )}
+            className={clsx(s.input, leftIcon && s.paddingLeft, rightIcon && s.paddingRight)}
             {...props}
           />
           {rightIcon && <div className={s.iconRight}>{rightIcon}</div>}
         </div>
         {(error || helperText) && (
-          <p className={clsx(s.message, error && s.errorMessage)}>
-            {error || helperText}
-          </p>
+          <p className={clsx(s.message, error && s.errorMessage)}>{error || helperText}</p>
         )}
       </div>
     );

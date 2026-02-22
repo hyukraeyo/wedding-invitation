@@ -3,6 +3,7 @@
 > 특별한 순간을 위한 가장 달콤한 모바일 청첩장 제작 플랫폼
 
 ## 문서 동기화 규칙
+
 - 규칙/가이드 변경 시 아래 파일을 반드시 함께 업데이트합니다.
   - `.agent/rules/banana-wedding.md`
   - `.cursorrules`
@@ -17,6 +18,7 @@
   - OpenCode 설정: `.opencode/oh-my-opencode.json`
 
 ## 기술 스택
+
 - Framework: Next.js 16.1.x (App Router, Cache Components, View Transitions)
 - Library: React 19.2.x
 - Language: TypeScript 5 (strict)
@@ -26,6 +28,7 @@
 - Deploy: Vercel
 
 ## 개발 명령어
+
 ```bash
 npm run dev
 npm run build
@@ -39,6 +42,7 @@ npm run check:launch
 ```
 
 ## 핵심 개발 규칙
+
 - 모바일 퍼스트를 기본으로 설계합니다.
 - 스타일은 SCSS Modules만 사용합니다. (Tailwind CSS 금지)
 - UI primitive는 `src/components/ui`, 조합형 UI는 `src/components/common`에 둡니다.
@@ -46,6 +50,7 @@ npm run check:launch
 - 커밋 메시지는 한글 Conventional Commits 형식을 사용합니다.
 
 ## SEO/검색 등록 운영 규칙 (2026-02)
+
 - 공개 페이지는 `title`, `description`, `canonical`, `openGraph`, `twitter`, `robots` 메타를 정의합니다.
 - 사이트 인증 토큰은 `GOOGLE_SITE_VERIFICATION`, `NAVER_SITE_VERIFICATION` 환경 변수로 관리합니다.
 - 검색 리소스 경로를 유지합니다.
@@ -64,13 +69,16 @@ npm run check:launch
   4. Google Search Console/Naver Search Advisor에 사이트맵 제출 및 수집 요청
 
 ## 보안 규칙
+
 - `.env.local` 및 비밀키는 커밋/공유하지 않습니다.
 - 비밀값이 외부에 노출되면 즉시 해당 키를 폐기하고 재발급합니다.
 
 ## 프로젝트 스킬
+
 - `design-md`: Stitch 프로젝트 디자인 시스템 문서화
 - `vercel-react-best-practices` (기준/수정 금지): `.agent/skills/vercel-react-best-practices`
 - `seo-launch-ops`: 검색 등록/색인/메타/사이트맵 점검 및 운영 절차 (신규)
 
 ## 라이선스
+
 © 2026 Banana Wedding. All rights reserved.

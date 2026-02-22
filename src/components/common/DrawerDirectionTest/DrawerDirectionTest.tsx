@@ -83,16 +83,32 @@ const VariantPreview = React.memo(function VariantPreview({ variant }: VariantPr
 
       {variant === 'rail' ? (
         <div className={styles.railActions}>
-          <ActionChip icon={<ArrowLeft className={styles.actionIcon} />} label="뒤로가기" variant="secondary" />
-          <ActionChip icon={<Save className={styles.actionIcon} />} label="저장" variant="secondary" />
-          <ActionChip icon={<Eye className={styles.actionIcon} />} label="미리보기" variant="primary" />
+          <ActionChip
+            icon={<ArrowLeft className={styles.actionIcon} />}
+            label="뒤로가기"
+            variant="secondary"
+          />
+          <ActionChip
+            icon={<Save className={styles.actionIcon} />}
+            label="저장"
+            variant="secondary"
+          />
+          <ActionChip
+            icon={<Eye className={styles.actionIcon} />}
+            label="미리보기"
+            variant="primary"
+          />
         </div>
       ) : null}
 
       {variant === 'speed-dial' ? (
         <div className={styles.speedDial}>
           <div className={styles.speedDialPrimary}>
-            <ActionChip icon={<Eye className={styles.actionIcon} />} label="미리보기" variant="primary" />
+            <ActionChip
+              icon={<Eye className={styles.actionIcon} />}
+              label="미리보기"
+              variant="primary"
+            />
           </div>
           <div className={styles.speedDialSave}>
             <ActionChip

@@ -4,20 +4,18 @@ import { useEffect, useRef } from 'react';
 import { useHeaderData } from './HeaderDataProvider';
 
 interface HeaderNotificationSyncProps {
-    notificationCount: number;
+  notificationCount: number;
 }
 
-export default function HeaderNotificationSync({
-    notificationCount,
-}: HeaderNotificationSyncProps) {
-    const { setNotificationCount } = useHeaderData();
-    const lastNotificationRef = useRef<number | null>(null);
+export default function HeaderNotificationSync({ notificationCount }: HeaderNotificationSyncProps) {
+  const { setNotificationCount } = useHeaderData();
+  const lastNotificationRef = useRef<number | null>(null);
 
-    useEffect(() => {
-        if (lastNotificationRef.current === notificationCount) return;
-        lastNotificationRef.current = notificationCount;
-        setNotificationCount(notificationCount);
-    }, [notificationCount, setNotificationCount]);
+  useEffect(() => {
+    if (lastNotificationRef.current === notificationCount) return;
+    lastNotificationRef.current = notificationCount;
+    setNotificationCount(notificationCount);
+  }, [notificationCount, setNotificationCount]);
 
-    return null;
+  return null;
 }

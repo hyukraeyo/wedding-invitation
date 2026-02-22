@@ -292,30 +292,33 @@ export function BuilderClient() {
     [resetPreviewGesture]
   );
 
-  const handlePreviewPointerMoveCapture = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
-    const state = previewGestureRef.current;
-    if (state.pointerId !== event.pointerId) return;
+  const handlePreviewPointerMoveCapture = useCallback(
+    (event: React.PointerEvent<HTMLDivElement>) => {
+      const state = previewGestureRef.current;
+      if (state.pointerId !== event.pointerId) return;
 
-    const deltaX = event.clientX - state.startX;
-    const deltaY = event.clientY - state.startY;
-    const absX = Math.abs(deltaX);
-    const absY = Math.abs(deltaY);
+      const deltaX = event.clientX - state.startX;
+      const deltaY = event.clientY - state.startY;
+      const absX = Math.abs(deltaX);
+      const absY = Math.abs(deltaY);
 
-    if (!state.axis) {
-      if (absX < PREVIEW_GESTURE_LOCK_PX && absY < PREVIEW_GESTURE_LOCK_PX) return;
+      if (!state.axis) {
+        if (absX < PREVIEW_GESTURE_LOCK_PX && absY < PREVIEW_GESTURE_LOCK_PX) return;
 
-      const isVerticalIntent = absY >= absX + PREVIEW_VERTICAL_BIAS_PX;
-      state.axis = isVerticalIntent ? 'vertical' : 'horizontal';
-    }
+        const isVerticalIntent = absY >= absX + PREVIEW_VERTICAL_BIAS_PX;
+        state.axis = isVerticalIntent ? 'vertical' : 'horizontal';
+      }
 
-    if (state.axis === 'vertical') {
-      event.currentTarget.setAttribute('data-vaul-no-drag', 'true');
-      // Prevent Vaul from treating vertical scroll gestures as drawer drag.
-      event.stopPropagation();
-    } else {
-      event.currentTarget.removeAttribute('data-vaul-no-drag');
-    }
-  }, []);
+      if (state.axis === 'vertical') {
+        event.currentTarget.setAttribute('data-vaul-no-drag', 'true');
+        // Prevent Vaul from treating vertical scroll gestures as drawer drag.
+        event.stopPropagation();
+      } else {
+        event.currentTarget.removeAttribute('data-vaul-no-drag');
+      }
+    },
+    []
+  );
 
   const handlePreviewPointerEnd = useCallback(
     (event: React.PointerEvent<HTMLDivElement>) => {
@@ -531,7 +534,12 @@ export function BuilderClient() {
 
               <div className={clsx(styles.mobileRailButton, styles.mobileRailCloseButton)}>
                 <Drawer.Close asChild>
-                  <IconButton type="button" variant="secondary" size="xl" aria-label="미리보기 닫기">
+                  <IconButton
+                    type="button"
+                    variant="secondary"
+                    size="xl"
+                    aria-label="미리보기 닫기"
+                  >
                     <X className={styles.icon} />
                   </IconButton>
                 </Drawer.Close>

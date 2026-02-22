@@ -20,9 +20,7 @@ const ROOT_DIRECTORY = process.cwd();
 const sourceDirectory = path.resolve(ROOT_DIRECTORY, SOURCE_RELATIVE_PATH);
 
 if (!existsSync(sourceDirectory)) {
-  throw new Error(
-    `[sync:agents] Source skill directory not found: ${SOURCE_RELATIVE_PATH}`
-  );
+  throw new Error(`[sync:agents] Source skill directory not found: ${SOURCE_RELATIVE_PATH}`);
 }
 
 const normalizePath = (filePath) => filePath.replaceAll('\\', '/');
@@ -59,9 +57,7 @@ for (const targetRelativePath of TARGET_RELATIVE_PATHS) {
   const sourceStats = statSync(sourceDirectory);
 
   if (!sourceStats.isDirectory()) {
-    throw new Error(
-      `[sync:agents] Source path is not a directory: ${SOURCE_RELATIVE_PATH}`
-    );
+    throw new Error(`[sync:agents] Source path is not a directory: ${SOURCE_RELATIVE_PATH}`);
   }
 
   if (normalizePath(sourceDirectory) === normalizePath(targetDirectory)) {
@@ -91,15 +87,11 @@ for (const targetRelativePath of TARGET_RELATIVE_PATHS) {
     const sourceHash = toHash(path.join(sourceDirectory, relativePath));
     const targetHash = toHash(path.join(targetDirectory, relativePath));
     if (sourceHash !== targetHash) {
-      throw new Error(
-        `[sync:agents] Hash mismatch in ${targetRelativePath}: ${relativePath}`
-      );
+      throw new Error(`[sync:agents] Hash mismatch in ${targetRelativePath}: ${relativePath}`);
     }
   }
 
-  console.log(
-    `[sync:agents] Synced ${targetRelativePath} (${sourceFiles.length} files)`
-  );
+  console.log(`[sync:agents] Synced ${targetRelativePath} (${sourceFiles.length} files)`);
 }
 
 console.log('[sync:agents] All target skill mirrors are synchronized.');

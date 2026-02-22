@@ -1,56 +1,62 @@
-@use "../../../../styles/variables" as v;
-@use "../../../../styles/mixins" as m;
+@use '../../../../styles/variables' as v;
+@use '../../../../styles/mixins' as m;
 
 .container {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    z-index: 10001;
-    pointer-events: auto;
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 10001;
+  pointer-events: auto;
 }
 
 .trigger {
-    width: 2.75rem;
-    height: 2.75rem;
-    border-radius: 50%;
-    background-color: rgba(v.$white, 0.95);
-    backdrop-filter: blur(4px);
-    // box-shadow: 0 2px 8px rgba(v.$black, 0.06);
-    border: 1px solid rgba(v.$black, 0.03);
-    @include m.flex-center;
-    color: v.$grey-600;
-    transition: background-color v.$transition-normal, transform v.$transition-normal, box-shadow v.$transition-normal, color v.$transition-normal;
-    cursor: pointer;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background-color: rgba(v.$white, 0.95);
+  backdrop-filter: blur(4px);
+  // box-shadow: 0 2px 8px rgba(v.$black, 0.06);
+  border: 1px solid rgba(v.$black, 0.03);
+  @include m.flex-center;
+  color: v.$grey-600;
+  transition:
+    background-color v.$transition-normal,
+    transform v.$transition-normal,
+    box-shadow v.$transition-normal,
+    color v.$transition-normal;
+  cursor: pointer;
 
-    &:active {
-        transform: scale(0.9);
-        background-color: v.$white;
-    }
+  &:active {
+    transform: scale(0.9);
+    background-color: v.$white;
+  }
 
-    @media (hover: hover) and (pointer: fine) {
-        &:hover {
-            // box-shadow: 0 4px 12px rgba(v.$black, 0.1);
-            color: v.$color-primary;
-        }
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      // box-shadow: 0 4px 12px rgba(v.$black, 0.1);
+      color: v.$color-primary;
     }
+  }
 }
 
 .iconWrapper {
-    @include m.flex-center;
-    transition: transform v.$transition-normal, opacity v.$transition-normal, color v.$transition-normal;
-    color: v.$color-primary;
+  @include m.flex-center;
+  transition:
+    transform v.$transition-normal,
+    opacity v.$transition-normal,
+    color v.$transition-normal;
+  color: v.$color-primary;
 
-    &.small {
-        opacity: 0.6;
-    }
+  &.small {
+    opacity: 0.6;
+  }
 
-    &.medium {
-        opacity: 0.85;
-    }
+  &.medium {
+    opacity: 0.85;
+  }
 
-    &.large {
-        opacity: 1;
-        transform: scale(1.1);
-    }
+  &.large {
+    opacity: 1;
+    transform: scale(1.1);
+  }
 }
-

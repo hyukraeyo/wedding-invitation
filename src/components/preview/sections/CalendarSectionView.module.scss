@@ -1,154 +1,154 @@
-@use "../../../styles/variables" as v;
-@use "../../../styles/mixins" as m;
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
 .calendarContainer {
-    width: 100%;
-    max-width: 340px;
-    margin-inline: auto;
-    padding: 2rem 1.5rem;
-    container-type: inline-size;
-    container-name: calendar-section;
+  width: 100%;
+  max-width: 340px;
+  margin-inline: auto;
+  padding: 2rem 1.5rem;
+  container-type: inline-size;
+  container-name: calendar-section;
 
-    @container calendar-section (max-width: 300px) {
-        padding: 1.5rem 1rem;
+  @container calendar-section (max-width: 300px) {
+    padding: 1.5rem 1rem;
+  }
+
+  .calendarHeader {
+    text-align: center;
+    margin-bottom: 2.5rem;
+
+    .monthYear {
+      font-size: calc(1.15rem * var(--font-scale));
+      font-weight: 500;
+      color: v.$grey-900;
+      letter-spacing: 0.1em;
+      font-family: inherit;
+
+      @container calendar-section (max-width: 300px) {
+        font-size: calc(1rem * var(--font-scale));
+      }
+    }
+  }
+
+  .calendarGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 0.25rem;
+    text-align: center;
+
+    .weekday {
+      font-size: calc(0.7rem * var(--font-scale));
+      font-weight: 500;
+      color: v.$grey-400;
+      padding-bottom: 1rem;
+      letter-spacing: 0.05em;
     }
 
-    .calendarHeader {
-        text-align: center;
-        margin-bottom: 2.5rem;
+    .day {
+      aspect-ratio: 1;
+      @include m.flex-center;
+      font-size: calc(0.95rem * var(--font-scale));
+      color: v.$grey-600;
+      border-radius: v.$radius-full;
+      position: relative;
+      z-index: 1;
+      font-family: inherit;
+      font-weight: 400;
 
-        .monthYear {
-            font-size: calc(1.15rem * var(--font-scale));
-            font-weight: 500;
-            color: v.$grey-900;
-            letter-spacing: 0.1em;
-            font-family: inherit;
+      &.otherMonth {
+        color: v.$grey-200;
+      }
 
-            @container calendar-section (max-width: 300px) {
-                font-size: calc(1rem * var(--font-scale));
-            }
+      &.sunday {
+        color: v.$red-400;
+      }
+
+      &.selectedDay {
+        color: v.$white !important;
+        font-weight: 600;
+
+        .dayMarker {
+          position: absolute;
+          inset: 15%;
+          border-radius: 50%;
+          z-index: -1;
+          animation: scale-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
+      }
     }
-
-    .calendarGrid {
-        display: grid;
-        grid-template-columns: repeat(7, 1fr);
-        gap: 0.25rem;
-        text-align: center;
-
-        .weekday {
-            font-size: calc(0.7rem * var(--font-scale));
-            font-weight: 500;
-            color: v.$grey-400;
-            padding-bottom: 1rem;
-            letter-spacing: 0.05em;
-        }
-
-        .day {
-            aspect-ratio: 1;
-            @include m.flex-center;
-            font-size: calc(0.95rem * var(--font-scale));
-            color: v.$grey-600;
-            border-radius: v.$radius-full;
-            position: relative;
-            z-index: 1;
-            font-family: inherit;
-            font-weight: 400;
-
-            &.otherMonth {
-                color: v.$grey-200;
-            }
-
-            &.sunday {
-                color: v.$red-400;
-            }
-
-            &.selectedDay {
-                color: v.$white !important;
-                font-weight: 600;
-
-                .dayMarker {
-                    position: absolute;
-                    inset: 15%;
-                    border-radius: 50%;
-                    z-index: -1;
-                    animation: scale-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-                }
-            }
-        }
-    }
+  }
 }
 
 @keyframes scale-in {
-    from {
-        transform: scale(0.5);
-        opacity: 0;
-    }
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
 
-    to {
-        transform: scale(1);
-        opacity: 1;
-    }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .countdownArea {
-    margin-top: 1.5rem;
-    @include m.flex-center;
+  margin-top: 1.5rem;
+  @include m.flex-center;
 
-    .timerGrid {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
+  .timerGrid {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
 
-        .column {
-            @include m.flex-col;
-            align-items: center;
-            gap: 0.25rem;
-            min-width: 2.2rem;
+    .column {
+      @include m.flex-col;
+      align-items: center;
+      gap: 0.25rem;
+      min-width: 2.2rem;
 
-            .label {
-                font-size: calc(0.6rem * var(--font-scale));
-                color: v.$grey-400;
-                letter-spacing: 0.05em;
-                font-weight: 500;
-            }
+      .label {
+        font-size: calc(0.6rem * var(--font-scale));
+        color: v.$grey-400;
+        letter-spacing: 0.05em;
+        font-weight: 500;
+      }
 
-            .value {
-                font-size: calc(1.35rem * var(--font-scale));
-                font-weight: 500;
-                color: v.$grey-700;
-                font-family: inherit;
-            }
-        }
-
-        .divider {
-            color: v.$grey-200;
-            font-size: v.$font-size-base;
-            font-weight: 300;
-            margin-top: 0.8rem;
-        }
+      .value {
+        font-size: calc(1.35rem * var(--font-scale));
+        font-weight: 500;
+        color: v.$grey-700;
+        font-family: inherit;
+      }
     }
+
+    .divider {
+      color: v.$grey-200;
+      font-size: v.$font-size-base;
+      font-weight: 300;
+      margin-top: 0.8rem;
+    }
+  }
 }
 
 .ddaySection {
-    margin-top: 1.5rem;
-    text-align: center;
-    width: 100%;
-    // padding-inline: 1.5rem; Removed as per user request
+  margin-top: 1.5rem;
+  text-align: center;
+  width: 100%;
+  // padding-inline: 1.5rem; Removed as per user request
 
-    .sentence {
-        font-size: calc(0.95rem * var(--font-scale));
-        line-height: 1.8;
-        color: v.$grey-600;
-        word-break: keep-all;
-        font-family: inherit;
+  .sentence {
+    font-size: calc(0.95rem * var(--font-scale));
+    line-height: 1.8;
+    color: v.$grey-600;
+    word-break: keep-all;
+    font-family: inherit;
 
-        .highlight {
-            font-weight: 600;
-            color: var(--accent-color);
-            margin: 0 0.2rem;
-            padding: 0.1em 0.3em;
-            border-radius: v.$radius-md; // 16px
-        }
+    .highlight {
+      font-weight: 600;
+      color: var(--accent-color);
+      margin: 0 0.2rem;
+      padding: 0.1em 0.3em;
+      border-radius: v.$radius-md; // 16px
     }
+  }
 }

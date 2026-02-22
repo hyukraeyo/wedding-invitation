@@ -39,13 +39,7 @@ export interface FieldHelperTextProps extends React.HTMLAttributes<HTMLParagraph
 const FieldHelperText = React.forwardRef<HTMLParagraphElement, FieldHelperTextProps>(
   ({ className, error, ...props }, ref) => {
     if (!props.children) return null;
-    return (
-      <p
-        ref={ref}
-        className={clsx(s.helperText, error && s.error, className)}
-        {...props}
-      />
-    );
+    return <p ref={ref} className={clsx(s.helperText, error && s.error, className)} {...props} />;
   }
 );
 FieldHelperText.displayName = 'Field.HelperText';

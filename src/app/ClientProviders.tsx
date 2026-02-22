@@ -7,31 +7,34 @@ import { WarningSuppressionProvider } from '@/components/providers/WarningSuppre
 import { Toaster } from '@/components/ui/Toast';
 
 interface ClientProvidersProps {
-    children: React.ReactNode;
+  children: React.ReactNode;
 }
 
 export default function ClientProviders({ children }: ClientProvidersProps) {
-    useViewportHeight();
+  useViewportHeight();
 
-    const [queryClient] = useState(() => new QueryClient({
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
         defaultOptions: {
-            queries: {
-                staleTime: 60 * 1000, // 1 minute
-                gcTime: 1000 * 60 * 60 * 24, // 24 hours
-                refetchOnWindowFocus: false,
-                retry: 1,
-            },
+          queries: {
+            staleTime: 60 * 1000, // 1 minute
+            gcTime: 1000 * 60 * 60 * 24, // 24 hours
+            refetchOnWindowFocus: false,
+            retry: 1,
+          },
         },
-    }));
+      })
+  );
 
-    return (
-        <WarningSuppressionProvider>
-            <QueryClientProvider client={queryClient}>
-                <div suppressHydrationWarning style={{ display: 'contents' }}>
-                    {children}
-                    <Toaster />
-                </div>
-            </QueryClientProvider>
-        </WarningSuppressionProvider>
-    );
+  return (
+    <WarningSuppressionProvider>
+      <QueryClientProvider client={queryClient}>
+        <div suppressHydrationWarning style={{ display: 'contents' }}>
+          {children}
+          <Toaster />
+        </div>
+      </QueryClientProvider>
+    </WarningSuppressionProvider>
+  );
 }

@@ -1,35 +1,61 @@
-@use "../../../styles/variables" as v;
+@use '../../../styles/variables' as v;
 
 .Grid {
   display: grid;
 }
 
-.align-start { align-items: start; }
-.align-center { align-items: center; }
-.align-end { align-items: end; }
-.align-baseline { align-items: baseline; }
-.align-stretch { align-items: stretch; }
+.align-start {
+  align-items: start;
+}
+.align-center {
+  align-items: center;
+}
+.align-end {
+  align-items: end;
+}
+.align-baseline {
+  align-items: baseline;
+}
+.align-stretch {
+  align-items: stretch;
+}
 
-.justify-start { justify-content: start; }
-.justify-center { justify-content: center; }
-.justify-end { justify-content: end; }
-.justify-between { justify-content: space-between; }
-.justify-around { justify-content: space-around; }
+.justify-start {
+  justify-content: start;
+}
+.justify-center {
+  justify-content: center;
+}
+.justify-end {
+  justify-content: end;
+}
+.justify-between {
+  justify-content: space-between;
+}
+.justify-around {
+  justify-content: space-around;
+}
 
 $spacing: (
-  "1": 4px,
-  "2": 8px,
-  "3": 12px,
-  "4": 16px,
-  "5": 24px,
-  "6": 32px,
-  "7": 40px,
-  "8": 48px,
-  "9": 64px,
+  '1': 4px,
+  '2': 8px,
+  '3': 12px,
+  '4': 16px,
+  '5': 24px,
+  '6': 32px,
+  '7': 40px,
+  '8': 48px,
+  '9': 64px,
 );
 
 @each $key, $value in $spacing {
-  .gap-#{$key} { gap: $value; }
-  .gapX-#{$key} { column-gap: $value; }
-  .gapY-#{$key} { row-gap: $value; }
+  .gap-#{$key} {
+    gap: $value;
+  }
+  .gapX-#{$key} {
+    column-gap: $value;
+  }
+  .gapY-#{$key} {
+    row-gap: $value;
+  }
 }
