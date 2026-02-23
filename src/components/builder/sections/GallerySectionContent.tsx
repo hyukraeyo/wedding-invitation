@@ -179,13 +179,14 @@ export default React.memo(function GallerySectionContent() {
       <FormField name="gallery">
         <FormHeader>
           <FormLabel htmlFor="gallery-images-required">사진 관리</FormLabel>
-          <FormMessage
-            forceMatch={
-              validationErrors.includes('gallery-images-required') && gallery.length === 0
-            }
-          >
-            필수 항목이에요.
-          </FormMessage>
+          {validationErrors.includes('gallery-images-required') && gallery.length === 0 ? (
+            <FormMessage forceMatch>필수 항목이에요.</FormMessage>
+          ) : (
+            <span className={styles.countText}>
+              <strong style={{ color: accentColor }}>{gallery.length}</strong>
+              <span className={styles.countTotal}> / 10</span>
+            </span>
+          )}
         </FormHeader>
 
         <div className={styles.galleryManager}>
@@ -240,12 +241,6 @@ export default React.memo(function GallerySectionContent() {
             </DragOverlay>
           </DndContext>
 
-          <div className={styles.counter}>
-            <span className={styles.countText}>
-              <strong style={{ color: accentColor }}>{gallery.length}</strong>
-              <span className={styles.countTotal}> / 10</span>
-            </span>
-          </div>
           <Field.Footer>
             <Field.HelperText>
               사진을 길게 눌러 순서를 변경할 수 있어요. (첫 번째 사진이 대표 사진이에요)

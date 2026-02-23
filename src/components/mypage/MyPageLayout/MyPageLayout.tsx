@@ -39,6 +39,10 @@ export function MyPageLayout({
   notificationCount = 0,
 }: MyPageLayoutProps) {
   void _profile;
+  void isAdmin;
+  void invitationCount;
+  void requestCount;
+  void notificationCount;
   const pathname = usePathname();
   // 현재 경로에 맞는 타이틀 가져오기 (기본값은 빈 문자열)
   const currentTitle = ROUTE_TITLES[pathname] || '';

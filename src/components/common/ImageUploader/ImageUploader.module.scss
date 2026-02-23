@@ -86,10 +86,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px;
+  padding: 24px 16px;
   text-align: center;
   gap: 8px;
-  min-height: 180px;
+  height: 100%;
+  min-height: 120px;
 }
 
 .iconCircle {
@@ -100,7 +101,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 4px;
   box-shadow: v.$shadow-sm;
   color: v.$grey-400;
   transition: all v.$transition-smooth;

@@ -1,1 +1,1 @@
-export * from './InvitationOnboardingModal';
+export {};
