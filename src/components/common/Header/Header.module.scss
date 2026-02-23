@@ -172,6 +172,7 @@
 }
 
 .actionButton {
+  position: relative;
   transition: all v.$transition-200;
   color: v.$zinc-600;
 
