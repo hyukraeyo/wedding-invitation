@@ -10,6 +10,7 @@ import { Avatar } from '@/components/ui/Avatar';
 import { clsx } from 'clsx';
 import { profileService } from '@/services/profileService';
 import { useToast } from '@/hooks/use-toast';
+import { usePhoneInput } from '@/hooks/useFormInput';
 import { useRouter } from 'next/navigation';
 
 interface ProfileData {
@@ -36,6 +37,10 @@ export default function AccountPageClient({ profile, userEmail }: AccountPageCli
 
   const [formData, setFormData] = useState({
     phone: profile.phone || '',
+  });
+
+  const handlePhoneChange = usePhoneInput((phone) => {
+    setFormData((prev) => ({ ...prev, phone }));
   });
 
   const handleSavePhone = async () => {
@@ -100,9 +105,7 @@ export default function AccountPageClient({ profile, userEmail }: AccountPageCli
               <div className={styles.phoneInput}>
                 <TextField
                   value={formData.phone || ''}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setFormData({ ...formData, phone: e.target.value })
-                  }
+                  onChange={handlePhoneChange}
                   placeholder="010-0000-0000"
                 />
               </div>
