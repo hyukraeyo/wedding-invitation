@@ -4,6 +4,7 @@ import { getHeaderNotificationCount } from '@/lib/header/getHeaderNotificationCo
 import Header from '@/components/common/Header';
 import { CustomScrollbar } from '@/components/common/CustomScrollbar';
 import { HeaderDataProvider } from '@/components/common/Header/HeaderDataProvider';
+import HeaderProviders from './HeaderProviders';
 
 export default async function WithHeaderLayout({
   children,
@@ -16,17 +17,19 @@ export default async function WithHeaderLayout({
 
   return (
     <>
-      <HeaderDataProvider
-        user={session?.user ?? null}
-        authLoading={false}
-        initialNotificationCount={initialNotificationCount}
-      >
-        <Suspense fallback={null}>
-          <CustomScrollbar />
-        </Suspense>
-        <Header />
-        {children}
-      </HeaderDataProvider>
+      <HeaderProviders session={session}>
+        <HeaderDataProvider
+          user={session?.user ?? null}
+          authLoading={false}
+          initialNotificationCount={initialNotificationCount}
+        >
+          <Suspense fallback={null}>
+            <CustomScrollbar />
+          </Suspense>
+          <Header />
+          {children}
+        </HeaderDataProvider>
+      </HeaderProviders>
     </>
   );
 }

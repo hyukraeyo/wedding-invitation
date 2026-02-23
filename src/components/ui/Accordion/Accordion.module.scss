@@ -58,6 +58,74 @@
   }
 }
 
+.minimal {
+  background-color: transparent;
+  border-radius: 0;
+
+  .Item {
+    margin-top: 0;
+    border-bottom: 1px solid v.$grey-100;
+    border-radius: 0;
+    padding: v.$space-sm 0;
+
+    &:first-child {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+
+    &:last-child {
+      border-bottom: none;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+
+  .Trigger {
+    background-color: transparent;
+    padding: 12px 0;
+    height: auto;
+    box-shadow: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: v.$grey-900;
+    justify-content: space-between;
+    transition: color 0.2s v.$ease-ios;
+
+    &:hover {
+      background-color: transparent;
+      color: v.$primary-dark;
+    }
+
+    &[data-state='open'] {
+      color: v.$primary-dark;
+      & > .Chevron {
+        color: v.$primary-dark;
+      }
+    }
+  }
+
+  .TriggerContent {
+    font-weight: 600;
+  }
+
+  .Chevron {
+    color: v.$grey-400;
+    transition: all 0.3s v.$ease-ios;
+  }
+
+  .Content {
+    background-color: transparent;
+  }
+
+  .ContentText {
+    padding: 0 0 24px 0; // Removing side padding, only bottom padding
+    color: v.$grey-500;
+    font-size: 15px;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+  }
+}
+
 .Header {
   display: flex;
   margin: 0;

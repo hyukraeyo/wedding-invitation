@@ -413,10 +413,17 @@
   gap: 24px;
   margin-bottom: 24px;
 
-  a {
+  a,
+  button {
+    font-family: inherit;
     font-size: v.$font-size-sm;
     color: v.$grey-500;
     text-decoration: none;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+
     &:hover {
       color: v.$grey-900;
     }

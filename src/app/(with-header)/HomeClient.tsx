@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { BottomCTA } from '@/components/common/BottomCTA';
 import { Button } from '@/components/ui/Button';
 import { ButtonGroup } from '@/components/ui/ButtonGroup';
+import { useAuth } from '@/hooks/useAuth';
 import styles from './Home.module.scss';
 
 type ThemeTone = 'mono' | 'peach' | 'navy' | 'green';
@@ -85,6 +86,8 @@ const THEME_TONE_CLASS_MAP: Record<ThemeTone, string> = {
 };
 
 export function HomeClient() {
+  const { user, signOut } = useAuth();
+
   return (
     <div className={styles.container}>
       {/* Hero Section */}
@@ -194,7 +197,7 @@ export function HomeClient() {
           <h2 className={styles.sectionTitle}>자주 묻는 질문</h2>
         </header>
 
-        <Accordion type="single" collapsible className={styles.faqList} variant="outlined">
+        <Accordion type="single" collapsible className={styles.faqList} variant="minimal">
           {FAQ_ITEMS.map((item) => (
             <AccordionItem key={item.id} value={item.id}>
               <AccordionTrigger>{item.question}</AccordionTrigger>
@@ -209,7 +212,13 @@ export function HomeClient() {
         <nav className={styles.footerLinks}>
           <Link href="/terms">이용약관</Link>
           <Link href="/privacy">개인정보 처리방침</Link>
-          <Link href="/login">로그인</Link>
+          {user ? (
+            <button type="button" onClick={() => signOut()}>
+              로그아웃
+            </button>
+          ) : (
+            <Link href="/login">로그인</Link>
+          )}
         </nav>
         <p className={styles.copyright}>© {COPYRIGHT_YEAR} Banana Wedding. All rights reserved.</p>
       </footer>

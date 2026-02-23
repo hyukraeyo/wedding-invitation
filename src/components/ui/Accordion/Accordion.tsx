@@ -7,7 +7,7 @@ import { clsx } from 'clsx';
 import s from './Accordion.module.scss';
 
 type AccordionProps = React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Root> & {
-  variant?: 'default' | 'outlined';
+  variant?: 'default' | 'outlined' | 'minimal';
 };
 
 const Accordion = React.forwardRef<
@@ -16,7 +16,7 @@ const Accordion = React.forwardRef<
 >(({ className, variant = 'default', ...props }, ref) => (
   <AccordionPrimitive.Root
     ref={ref}
-    className={clsx(s.Root, variant === 'outlined' && s.outlined, className)}
+    className={clsx(s.Root, variant !== 'default' && s[variant], className)}
     {...props}
   />
 ));
