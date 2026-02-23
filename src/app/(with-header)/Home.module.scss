@@ -134,7 +134,7 @@
   width: 100%;
   max-width: 1024px; // Controlled width for readability
   margin: 0 auto;
-  padding: 80px v.$space-md;
+  padding: 60px v.$space-md;
   scroll-margin-top: calc(v.$header-height + v.$space-lg);
 
   @include m.desktop {
@@ -144,37 +144,53 @@
 
 .sectionHeader {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: v.$space-sm;
+  gap: 12px;
+
+  @include m.desktop {
+    margin-bottom: 60px;
+  }
 }
 
 .sectionLabel {
-  font-size: v.$font-size-sm;
-  font-weight: v.$font-weight-bold;
+  font-size: 13px;
+  font-weight: 800;
   color: v.$primary-dark;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
 }
 
 .sectionTitle {
-  font-size: 32px;
+  font-size: 24px;
   font-weight: 700;
   color: v.$grey-900;
-  line-height: 1.2;
+  line-height: 1.35;
   margin: 0;
+  letter-spacing: -0.02em;
+  word-break: keep-all;
+  text-wrap: balance;
 
   @include m.desktop {
-    font-size: 40px;
+    font-size: 32px;
   }
 }
 
 .sectionDescription {
-  font-size: v.$font-size-base;
+  font-size: 15px;
   color: v.$grey-500;
-  margin-top: v.$space-sm;
+  margin: 0;
+  line-height: 1.6;
+  max-width: 280px;
+  word-break: keep-all;
+  text-wrap: balance;
+
+  @include m.desktop {
+    font-size: 16px;
+    max-width: 100%;
+  }
 }
 
 // ✨ Feature Grid (Glassmorphism)

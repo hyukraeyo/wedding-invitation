@@ -7,6 +7,11 @@
   justify-content: center;
   padding: 1rem;
   background-color: v.$grey-50;
+
+  @media (max-width: 480px) {
+    background-color: v.$white;
+    padding: 0;
+  }
 }
 
 // Reuse overlay styles but ensure padding-top is 0
@@ -30,8 +35,9 @@
   transform-origin: center center;
 
   @media (max-width: 480px) {
-    padding: 2rem;
-    border-radius: v.$radius-md;
+    padding: 2rem 1.5rem;
+    border-radius: 0;
+    border: none;
   }
 }
 
@@ -55,24 +61,16 @@
   }
 }
 
-.header {
-  text-align: center;
-  margin-bottom: 2.5rem;
-
-  h1 {
-    font-size: 1.75rem;
-    font-weight: 700;
-    color: v.$grey-900;
-    margin-bottom: 0.75rem;
-    letter-spacing: -0.025em;
-  }
-
-  .subtitle {
-    font-size: 0.9375rem;
-    color: v.$grey-600;
-    line-height: 1.5;
-    font-weight: 400;
-  }
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 .form {
@@ -200,6 +198,7 @@
   font-size: 0.75rem;
   color: v.$grey-400;
   line-height: 1.5;
+  word-break: keep-all;
 
   .link {
     color: v.$grey-600;
@@ -213,21 +212,5 @@
         color: v.$grey-900;
       }
     }
-  }
-}
-
-.backToHomeWrapper {
-  margin-top: 1.5rem;
-  text-align: center;
-}
-
-.backToHomeLink {
-  font-size: 0.875rem;
-  color: v.$grey-600;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-
-  &:hover {
-    color: v.$grey-700;
   }
 }

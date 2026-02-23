@@ -1,6 +1,5 @@
 'use client';
 
-import { MobileNav } from '@/components/common/MobileNav';
 import { MyPageHeader } from '@/components/mypage/MyPageHeader';
 import { usePathname } from 'next/navigation';
 import { MENU_TITLES } from '@/constants/navigation';
@@ -59,12 +58,6 @@ export function MyPageLayout({
           <div className={styles.childrenWrapper}>{children}</div>
         </div>
       </div>
-      <MobileNav
-        isAdmin={isAdmin}
-        invitationCount={invitationCount}
-        requestCount={requestCount}
-        notificationCount={notificationCount}
-      />
     </div>
   );
 }

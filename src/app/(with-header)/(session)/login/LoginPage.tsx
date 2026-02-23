@@ -117,15 +117,10 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
       <div className={styles.overlay}>
         <div className={styles.modal}>
           {/* Header */}
-          <div className={styles.header}>
+          <div className={styles.srOnly}>
             <Heading as="h1" size="7" weight="bold">
               바나나웨딩 시작하기
             </Heading>
-            <p className={styles.subtitle}>
-              유통기한 없는 우리만의 특별한 시작,
-              <br />
-              바나나웨딩과 함께 쉽고 빠르게 만들어보세요.
-            </p>
           </div>
 
           <div className={styles.socialButtons}>
@@ -160,23 +155,16 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
           {/* Footer */}
           <div className={styles.footer}>
             <p>
-              계속 진행함으로써 귀하께서는
+              계속 진행함으로써 귀하께서는{' '}
               <Link href="/privacy" target="_blank" className={styles.link}>
                 개인정보 처리방침
-              </Link>
+              </Link>{' '}
               및{' '}
               <Link href="/terms" target="_blank" className={styles.link}>
                 이용약관
               </Link>
               에 동의하게 돼요.
             </p>
-          </div>
-
-          {/* Back to Home */}
-          <div className={styles.backToHomeWrapper}>
-            <Link href="/" className={styles.backToHomeLink}>
-              홈으로 돌아가기
-            </Link>
           </div>
         </div>
       </div>

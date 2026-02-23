@@ -64,7 +64,7 @@
     border: 1px solid v.$grey-300;
 
     &:hover:not(:focus-within) {
-      border-color: v.$border-hover;
+      border-color: s.$border-hover;
     }
 
     &:focus-within {
@@ -192,13 +192,13 @@
   overflow: hidden;
   border: none;
   background: transparent;
-  padding: 0 var(--input-padding, 16px);
+  padding: 0 var(--input-padding, v.$control-padding-md);
   font-family: inherit;
   font-size: inherit;
 
   // iOS Safari Auto-zoom prevention
   @include m.mobile {
-    font-size: 16px !important;
+    // Relying on inherited size instead of hardcoded 15px/16px
     line-height: normal;
   }
 

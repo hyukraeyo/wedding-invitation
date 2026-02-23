@@ -12,7 +12,7 @@
 
   // 🍌 TextField 'outline' variant style application
   background-color: v.$white;
-  border: 1px solid v.$grey-200;
+  border: 1px solid v.$grey-300;
   border-radius: v.$radius-md;
   transition: all 0.2s v.$ease-ios;
 
@@ -110,7 +110,9 @@
   :global(.ProseMirror) {
     width: 100%;
     min-height: var(--editor-min-height, 120px);
-    padding: 1.25rem 1rem;
+    max-height: var(--editor-max-height, 320px);
+    overflow-y: auto;
+    padding: v.$control-padding-md;
     outline: none;
     font-size: v.$control-font-size-md;
     font-family: v.$font-pretendard;
@@ -120,7 +122,7 @@
 
     // iOS Safari Auto-zoom prevention & match TextField size
     @include m.mobile {
-      font-size: 16px !important;
+      // Relying on inherited size instead of hardcoded 16px
     }
 
     p {

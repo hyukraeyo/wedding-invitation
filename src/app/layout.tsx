@@ -18,6 +18,8 @@ const KAKAO_CHANNEL_URL = 'https://pf.kakao.com/_KaiAX';
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
   themeColor: PALETTE.PRIMARY_50,
   interactiveWidget: 'resizes-content',
   viewportFit: 'cover',
