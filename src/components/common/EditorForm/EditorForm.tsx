@@ -90,7 +90,7 @@ const SECTIONS: (SectionEntry & { Component: BuilderSectionComponent })[] = EDIT
 const DEFAULT_ACTIVE_SECTION: EditorSectionKey = 'mainScreen';
 const REQUIRED_FIELD_ID_SUFFIX = '-required';
 const UPLOADER_FIELD_ID_SUFFIX = '-uploader';
-const SUMMARY_FOCUS_MAX_RETRIES = 8;
+const SUMMARY_FOCUS_MAX_RETRIES = 15;
 const SUMMARY_FOCUS_RETRY_DELAY_MS = 60;
 
 const normalizeValidationKey = (id: string): string =>
@@ -245,6 +245,14 @@ const EditorForm = React.memo(function EditorForm({ formId, onSubmit }: EditorFo
 
         const target = getTargetById() ?? findFirstInvalidElement(form);
         if (target) {
+          if (target.closest('[aria-hidden="true"]')) {
+            if (attempt >= SUMMARY_FOCUS_MAX_RETRIES) {
+              return;
+            }
+            window.setTimeout(() => tryFocus(attempt + 1), SUMMARY_FOCUS_RETRY_DELAY_MS);
+            return;
+          }
+
           target.scrollIntoView({ behavior: 'smooth', block: 'center' });
           target.focus();
           return;
@@ -257,7 +265,7 @@ const EditorForm = React.memo(function EditorForm({ formId, onSubmit }: EditorFo
         window.setTimeout(() => tryFocus(attempt + 1), SUMMARY_FOCUS_RETRY_DELAY_MS);
       };
 
-      window.setTimeout(() => tryFocus(0), 0);
+      window.setTimeout(() => tryFocus(0), 10);
     },
     [activeSection, formId, handleSectionChange]
   );
