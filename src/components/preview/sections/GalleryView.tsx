@@ -41,6 +41,7 @@ interface GalleryViewProps {
   galleryPopup: boolean;
   accentColor: string;
   animateEntrance?: boolean;
+  isEditing?: boolean;
 }
 
 const SWIPER_MODULES = [Navigation, Pagination, EffectFade, Autoplay];
@@ -62,6 +63,7 @@ const GalleryView = memo(
     galleryPopup,
     accentColor,
     animateEntrance,
+    isEditing = false,
   }: GalleryViewProps) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [popupIndex, setPopupIndex] = useState<number | null>(null);
@@ -149,7 +151,10 @@ const GalleryView = memo(
       }
     }, [popupIndex, modalSwiper]);
 
-    // if (!gallery.length) return <div id={id} />; // 삭제: 빈 상태라도 영역을 렌더링해야 함
+    if (gallery.length === 0 && !isEditing) {
+      return null;
+    }
+
     if (!portalElement) return null;
 
     const renderGallery = () => {

@@ -32,6 +32,7 @@ interface ClosingViewProps {
   address?: string;
   location?: string;
   slug?: string;
+  isEditing?: boolean;
 }
 
 /**
@@ -57,6 +58,7 @@ const ClosingView = memo(
     address,
     location,
     slug,
+    isEditing = false,
   }: ClosingViewProps) => {
     const { toast } = useToast();
 
@@ -150,9 +152,9 @@ const ClosingView = memo(
                 )}
               </div>
             </div>
-          ) : (
+          ) : isEditing ? (
             <Placeholder />
-          )}
+          ) : null}
 
           <div
             className={clsx(styles.message, 'rich-text-content', !imageUrl && styles.noImage) || ''}

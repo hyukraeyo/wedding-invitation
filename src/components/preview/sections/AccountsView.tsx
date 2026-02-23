@@ -30,6 +30,7 @@ interface AccountsViewProps {
   colorMode: 'accent' | 'subtle' | 'white';
   accentColor: string;
   animateEntrance?: boolean;
+  isEditing?: boolean;
 }
 
 /**
@@ -48,12 +49,18 @@ const AccountsView = memo(
     colorMode,
     accentColor,
     animateEntrance,
+    isEditing = false,
   }: AccountsViewProps) => {
     const { toast } = useToast();
 
     const groomAccounts = (accounts || []).filter((a) => a.type === 'groom');
     const brideAccounts = (accounts || []).filter((a) => a.type === 'bride');
     const hasAccounts = groomAccounts.length > 0 || brideAccounts.length > 0;
+
+    // 만약 계좌가 없고 편집 모드(account 섹션)가 아니라면 완전 숨김
+    if (!hasAccounts && !isEditing) {
+      return null;
+    }
 
     const handleCopy = (text: string) => {
       const onlyNumbers = text.replace(/[^0-9]/g, '');

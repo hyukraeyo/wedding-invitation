@@ -392,6 +392,7 @@ const InvitationCanvasContent = memo(
             galleryPopup={galleryPopup}
             accentColor={theme.accentColor}
             animateEntrance={theme.animateEntrance}
+            isEditing={editingSection === 'gallery'}
           />
 
           {/* 4. Calendar & D-Day */}
@@ -445,6 +446,7 @@ const InvitationCanvasContent = memo(
             colorMode={accountsColorMode as 'accent' | 'subtle' | 'white'}
             accentColor={theme.accentColor}
             animateEntrance={theme.animateEntrance}
+            isEditing={editingSection === 'account'}
           />
 
           {/* 8. Closing / Ending */}
@@ -466,6 +468,7 @@ const InvitationCanvasContent = memo(
             address={address}
             location={location}
             slug={slug}
+            isEditing={editingSection === 'closing'}
           />
 
           {/* Footer Padding */}
