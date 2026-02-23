@@ -1,7 +1,5 @@
 'use client';
 
-import React from 'react';
-import { MyPageSidebar } from '@/components/mypage/MyPageSidebar';
 import { MobileNav } from '@/components/common/MobileNav';
 import { MyPageHeader } from '@/components/mypage/MyPageHeader';
 import { usePathname } from 'next/navigation';
@@ -35,12 +33,13 @@ const ROUTE_TITLES: Record<string, string> = {
 
 export function MyPageLayout({
   children,
-  profile,
+  profile: _profile,
   isAdmin,
   invitationCount = 0,
   requestCount = 0,
   notificationCount = 0,
 }: MyPageLayoutProps) {
+  void _profile;
   const pathname = usePathname();
   // 현재 경로에 맞는 타이틀 가져오기 (기본값은 빈 문자열)
   const currentTitle = ROUTE_TITLES[pathname] || '';
@@ -49,13 +48,6 @@ export function MyPageLayout({
   return (
     <div className={styles.pageContainer}>
       <div className={styles.layout}>
-        <MyPageSidebar
-          profile={profile}
-          isAdmin={isAdmin}
-          invitationCount={invitationCount}
-          requestCount={requestCount}
-          notificationCount={notificationCount}
-        />
         <div className={styles.mainContent} role="main">
           {/* 공통 헤더: 레이아웃에서 통합 관리 */}
           {currentTitle && (

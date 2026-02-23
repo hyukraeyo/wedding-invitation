@@ -65,7 +65,7 @@ export default function AccountPageClient({ profile, userEmail }: AccountPageCli
           </Avatar>
         </div>
         <div className={styles.headerInfo}>
-          <h2 className={styles.headerName}>{profile.full_name || '이름 없음'}</h2>
+          <h2 className={styles.headerName}>{profile.full_name || '이름이 없어요'}</h2>
           <p className={styles.headerEmail}>{userEmail}</p>
         </div>
       </div>
@@ -127,7 +127,7 @@ export default function AccountPageClient({ profile, userEmail }: AccountPageCli
             </div>
           ) : (
             <>
-              <div className={styles.itemValue}>{formData.phone || '설정되지 않음'}</div>
+              <div className={styles.itemValue}>{formData.phone || '설정되지 않았어요'}</div>
               <button onClick={() => setIsEditingPhone(true)} className={styles.changeButton}>
                 변경
               </button>

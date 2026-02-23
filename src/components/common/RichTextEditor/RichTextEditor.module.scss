@@ -112,11 +112,16 @@
     min-height: var(--editor-min-height, 120px);
     padding: 1.25rem 1rem;
     outline: none;
-    font-size: v.$font-size-base;
-    font-family: v.$font-family-base;
+    font-size: v.$control-font-size-md;
+    font-family: v.$font-pretendard;
     font-weight: 500;
     color: v.$grey-900;
     line-height: 1.6;
+
+    // iOS Safari Auto-zoom prevention & match TextField size
+    @include m.mobile {
+      font-size: 16px !important;
+    }
 
     p {
       margin: 0;

@@ -1,6 +1,88 @@
 @use '../../../styles/variables' as v;
 @use '../../../styles/mixins' as m;
 
+.menuContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.notificationBadge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 8px;
+  height: 8px;
+  background-color: v.$color-error;
+  border-radius: 50%;
+  border: 1.5px solid v.$white;
+  z-index: 10;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 260px;
+  background-color: v.$white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border: 1px solid v.$grey-100;
+  padding: 12px;
+  z-index: v.$z-modal;
+  transform-origin: top right;
+}
+
+.menuList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 12px;
+  color: v.$grey-700;
+  font-size: 15px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: none;
+  cursor: pointer;
+
+  &:hover {
+    background-color: v.$grey-50;
+    color: v.$grey-900;
+    transform: translateX(4px);
+  }
+
+  &.active {
+    background-color: v.$grey-50;
+    color: v.$primary;
+    font-weight: 600;
+
+    .menuIcon {
+      color: v.$primary;
+    }
+  }
+}
+
+.menuIcon {
+  margin-right: 12px;
+  color: v.$grey-400;
+  transition: color 0.2s ease;
+}
+
+.divider {
+  height: 1px;
+  background-color: v.$grey-100;
+  margin: 4px 0;
+}
+
+// Dialog inside menu overrides
 .footer {
   display: flex;
   gap: 8px;
@@ -17,68 +99,6 @@
   text-align: center;
   word-break: keep-all;
   line-height: 1.6;
-}
-
-.sidebar {
-  width: 280px;
-  background-color: v.$grey-50;
-  border-right: 1px solid v.$grey-200;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  height: calc(100dvh - v.$header-height);
-  position: sticky;
-  top: v.$header-height;
-
-  @include m.mobile {
-    display: none;
-  }
-}
-
-.menuList {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  flex: 1;
-}
-
-.menuItem {
-  display: flex;
-  align-items: center;
-  padding: 0.875rem 1rem;
-  border-radius: 0.75rem;
-  color: v.$grey-600;
-  font-size: v.$font-size-base;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  width: 100%;
-  text-align: left;
-  border: none;
-  background: none;
-  cursor: pointer;
-
-  &:hover {
-    background-color: v.$white;
-    color: v.$grey-700;
-    transform: translateX(4px);
-  }
-
-  &.active {
-    background-color: v.$white;
-    color: v.$color-primary;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(v.$black, 0.05);
-
-    .menuIcon {
-      color: v.$color-primary;
-    }
-  }
-}
-
-.menuIcon {
-  margin-right: 0.75rem;
-  color: v.$grey-400;
-  transition: color 0.2s ease;
 }
 
 // Event Modal Styles

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { Suspense, useCallback } from 'react';
-import { LogIn, Save, Banana, Bell } from 'lucide-react';
+import { LogIn, Save } from 'lucide-react';
 import Link from 'next/link';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { usePathname, useRouter } from 'next/navigation';
@@ -14,6 +14,7 @@ import styles from './Header.module.scss';
 
 import { useHeaderStore } from '@/store/useHeaderStore';
 import { useHeaderData } from './HeaderDataProvider';
+import { ProfileMenu } from './ProfileMenu';
 
 const HEADER_SCROLL_THRESHOLD = 1;
 
@@ -57,7 +58,6 @@ const HeaderActions = React.memo(
     onLogin,
     onSaveAction,
     showSave,
-    isHome,
   }: HeaderActionsProps) => (
     <div className={styles.actions}>
       {authLoading ? (
@@ -80,31 +80,10 @@ const HeaderActions = React.memo(
 
           {user ? (
             <div className={styles.actionsRow}>
-              {!isHome && (
-                <Link href="/mypage/notifications" className={styles.notificationLink}>
-                  <IconButton
-                    iconSize={24}
-                    variant="ghost"
-                    className={styles.actionButton}
-                    aria-label="알림"
-                    name=""
-                  >
-                    <Bell size={20} strokeWidth={2.5} />
-                    {notificationCount > 0 && <span className={styles.notificationBadge} />}
-                  </IconButton>
-                </Link>
-              )}
-              <Link href="/mypage" className={styles.profileLink}>
-                <IconButton
-                  iconSize={24}
-                  className={styles.profileButton}
-                  variant="primary"
-                  aria-label="마이페이지"
-                  name=""
-                >
-                  <Banana size={20} strokeWidth={2.5} />
-                </IconButton>
-              </Link>
+              <ProfileMenu
+                notificationCount={notificationCount}
+                className={styles.actionButton || ''}
+              />
             </div>
           ) : (
             <IconButton

@@ -54,13 +54,6 @@ const RichTextEditor = dynamic(
   () => import('@/components/common/RichTextEditor').then((mod) => mod.RichTextEditor),
   { ssr: false }
 );
-const InvitationOnboardingModal = dynamic(
-  () =>
-    import('@/components/features/onboarding/InvitationOnboardingModal').then(
-      (mod) => mod.InvitationOnboardingModal
-    ),
-  { ssr: false }
-);
 
 interface ProfileSummary {
   full_name: string | null;
@@ -146,8 +139,6 @@ export default function MyPageClient({
     rejection?: ApprovalRequestSummary;
     isApproval?: boolean;
   } | null>(null);
-
-  const [onboardingModalOpen, setOnboardingModalOpen] = useState(false);
 
   const handleRejectionSubmit = useCallback(() => {
     // Not used in user view
@@ -328,7 +319,7 @@ export default function MyPageClient({
         setConfirmConfig({
           isOpen: true,
           type: 'INFO_ONLY',
-          title: 'Cannot delete now',
+          title: '지금은 삭제할 수 없어요',
           description: (
             <>
               승인 요청 중인 청첩장은 삭제할 수 없어요.
@@ -544,8 +535,8 @@ export default function MyPageClient({
 
   const handleCreateNew = useCallback(() => {
     reset();
-    setOnboardingModalOpen(true);
-  }, [reset]);
+    router.push('/builder');
+  }, [reset, router]);
 
   if (!userId) {
     return (
@@ -570,10 +561,10 @@ export default function MyPageClient({
         <EmptyState
           icon={<Banana />}
           variant="banana"
-          title="No invitations yet"
-          description={<>Create your first invitation to get started.</>}
+          title="아직 만든 청첩장이 없어요"
+          description={<>첫 번째 청첩장을 만들어 볼까요?</>}
           action={{
-            label: 'Create invitation',
+            label: '새 청첩장 만들기',
             href: '/builder',
             icon: <Plus size={20} />,
             onClick: (e) => {
@@ -658,7 +649,7 @@ export default function MyPageClient({
                   <div className={styles.createIcon}>
                     <Plus size={28} />
                   </div>
-                  <span className={styles.createText}>Create invitation</span>
+                  <span className={styles.createText}>새 청첩장 만들기</span>
                 </Link>
               </div>
 
@@ -711,7 +702,7 @@ export default function MyPageClient({
                         <div className={styles.createIcon}>
                           <Plus size={32} />
                         </div>
-                        <span className={styles.createText}>Create invitation</span>
+                        <span className={styles.createText}>새 청첩장 만들기</span>
                       </Link>
                     </div>
                   </div>
@@ -756,11 +747,6 @@ export default function MyPageClient({
           onComplete={handleProfileComplete}
         />
       ) : null}
-
-      <InvitationOnboardingModal
-        isOpen={onboardingModalOpen}
-        onClose={() => setOnboardingModalOpen(false)}
-      />
 
       <AlertDialog
         open={confirmConfig.isOpen}

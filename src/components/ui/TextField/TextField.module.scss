@@ -62,7 +62,6 @@
   &.outline {
     background-color: v.$white;
     border: 1px solid v.$grey-300;
-    box-shadow: v.$shadow-sm; // Subtle depth
 
     &:hover:not(:focus-within) {
       border-color: v.$border-hover;
