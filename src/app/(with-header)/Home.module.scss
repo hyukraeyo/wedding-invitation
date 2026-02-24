@@ -22,10 +22,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   gap: v.$space-lg;
   color: v.$white;
-  padding: 0; // Reset padding for full screen
+  padding: 0 0 calc(v.$space-2xl + env(safe-area-inset-bottom, 0px));
+
+  @include m.desktop {
+    padding-bottom: 80px;
+  }
 }
 
 .heroMedia {
@@ -33,7 +37,7 @@
   inset: 0;
   z-index: 0;
   overflow: hidden;
-  background-image: url('/assets/images/hero-wedding.png');
+  background-image: url('/assets/images/hero-wedding-2.jpg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -53,6 +57,10 @@
   backdrop-filter: brightness(0.9) contrast(1.1);
 }
 
+.visuallyHidden {
+  @include m.visually-hidden;
+}
+
 .heroContent {
   position: relative;
   z-index: 2;
@@ -67,53 +75,10 @@
   padding-top: v.$header-height; // Account for fixed header if exists
 }
 
-.heroTitle {
-  margin: 0;
-  font-size: clamp(32px, 10vw, 48px);
-  font-weight: 800;
-  line-height: 1.25;
-  letter-spacing: -0.04em;
-  color: v.$white;
-  word-break: keep-all;
-  text-wrap: balance;
-  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
-  animation: fadeInUp 0.8s v.$ease-ios 0.1s both;
-
-  @include m.desktop {
-    font-size: 72px;
-    line-height: 1.15;
-  }
-
-  span {
-    color: v.$primary;
-    display: inline-block;
-    position: relative;
-
-    // Subtle glow for the primary text
-    text-shadow: 0 0 20px rgba(v.$primary, 0.3);
-  }
-}
-
-.heroDescription {
-  margin: 0;
-  color: rgba(v.$white, 0.85);
-  font-size: clamp(15px, 4vw, 17px);
-  line-height: 1.7;
-  max-width: 440px;
-  word-break: keep-all;
-  text-wrap: balance;
-  font-weight: 400;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  animation: fadeInUp 0.8s v.$ease-ios 0.2s both;
-
-  @include m.desktop {
-    font-size: 20px;
-    max-width: 600px;
-  }
-}
-
 .heroActions {
-  display: none;
+  display: flex;
+  width: 100%;
+  justify-content: center;
 
   @include m.desktop {
     display: flex;
@@ -457,33 +422,7 @@
     display: none;
   }
 }
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .heroTitle,
-  .heroDescription,
-  .heroChip,
   .featureCard,
   .themeCard,
   .faqTrigger svg,

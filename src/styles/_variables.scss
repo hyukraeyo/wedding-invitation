@@ -184,10 +184,13 @@ $font-song-myung: t.$font-song-myung;
 $font-script: t.$font-script;
 
 // Global Spacing Tokens
+$space-xs: 4px;
 $space-sm: 8px;
 $space-md: 16px;
 $space-lg: 24px;
 $space-xl: 32px;
+$space-2xl: 48px;
+$space-3xl: 64px;
 
 // Builder Layout Tokens (Legacy aliases)
 $builder-gap-sm: $space-sm;

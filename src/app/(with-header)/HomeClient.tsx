@@ -104,13 +104,9 @@ export function HomeClient() {
         </div>
 
         <div className={styles.heroContent}>
-          <h1 className={styles.heroTitle}>
-            우리의 첫 인사, <span>바나나 웨딩</span>
+          <h1 className={styles.visuallyHidden}>
+            우리의 첫 인사, 바나나 웨딩 - 무료 모바일 청첩장
           </h1>
-          <p className={styles.heroDescription}>
-            복잡한 준비는 줄이고 두 사람의 이야기에만 집중하세요. 모바일에 최적화된 감성 청첩장을 단
-            몇 분 만에 완성할 수 있어요.
-          </p>
           <ButtonGroup className={styles.heroActions}>
             <Button asChild variant="primary" size="lg">
               <Link href={START_NEW_BUILDER_HREF} onClick={handleStartNew}>
