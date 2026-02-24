@@ -65,7 +65,9 @@ export function BuilderClient() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  const isEditMode = searchParams.get('mode') === 'edit';
+  const mode = searchParams.get('mode');
+  const isEditMode = mode === 'edit';
+  const isNewMode = mode === 'new';
   const profileLockRef = useRef(false);
   const initRef = useRef(false);
   const saveLockRef = useRef(false);
@@ -92,6 +94,10 @@ export function BuilderClient() {
       }
       saveLockRef.current = false;
     } else {
+      if (isNewMode) {
+        useInvitationStore.getState().reset();
+      }
+
       const state = useInvitationStore.getState();
       const hasEssentialInfo = state.groom.firstName && state.bride.firstName && state.slug;
 
@@ -108,7 +114,7 @@ export function BuilderClient() {
       setIsReady(true);
       if (isEditMode) setIsSaving(false);
     });
-  }, [isEditMode, router, searchParams]);
+  }, [isEditMode, isNewMode, router, searchParams]);
 
   useEffect(() => {
     if (user && !profileLoading && !isProfileComplete && !profileLockRef.current) {

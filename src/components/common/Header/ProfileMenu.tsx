@@ -27,6 +27,11 @@ export function ProfileMenu({ notificationCount, className }: ProfileMenuProps) 
   const pathname = usePathname();
 
   useEffect(() => {
+    // 초기 마운트 시 권한/알림 정보를 미리 불러와서, 메뉴가 열릴 때 항목이 늦게 뜨지 않도록 방지
+    getProfileCounts().then(setCounts).catch(console.error);
+  }, []);
+
+  useEffect(() => {
     if (isOpen) {
       getProfileCounts().then(setCounts).catch(console.error);
     }

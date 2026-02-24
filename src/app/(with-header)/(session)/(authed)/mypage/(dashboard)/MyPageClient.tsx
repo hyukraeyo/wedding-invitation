@@ -539,7 +539,7 @@ export default function MyPageClient({
 
   const handleCreateNew = useCallback(() => {
     reset();
-    router.push('/builder');
+    router.push('/builder?mode=new');
   }, [reset, router]);
 
   if (!userId) {
@@ -569,7 +569,7 @@ export default function MyPageClient({
           description={<>첫 번째 청첩장을 만들어 볼까요?</>}
           action={{
             label: '새 청첩장 만들기',
-            href: '/builder',
+            href: '/builder?mode=new',
             icon: <Plus size={20} />,
             onClick: (e) => {
               e.preventDefault();

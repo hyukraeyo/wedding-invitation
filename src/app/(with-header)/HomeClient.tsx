@@ -12,6 +12,7 @@ import { BottomCTA } from '@/components/common/BottomCTA';
 import { Button } from '@/components/ui/Button';
 import { ButtonGroup } from '@/components/ui/ButtonGroup';
 import { useAuth } from '@/hooks/useAuth';
+import { useInvitationStore } from '@/store/useInvitationStore';
 import styles from './Home.module.scss';
 
 type ThemeTone = 'mono' | 'peach' | 'navy' | 'green';
@@ -77,6 +78,7 @@ const FAQ_ITEMS = [
 ];
 
 const COPYRIGHT_YEAR = '2026';
+const START_NEW_BUILDER_HREF = '/builder?mode=new';
 
 const THEME_TONE_CLASS_MAP: Record<ThemeTone, string> = {
   mono: styles.themeToneMono ?? '',
@@ -87,6 +89,11 @@ const THEME_TONE_CLASS_MAP: Record<ThemeTone, string> = {
 
 export function HomeClient() {
   const { user, signOut } = useAuth();
+  const resetInvitation = useInvitationStore((state) => state.reset);
+
+  const handleStartNew = () => {
+    resetInvitation();
+  };
 
   return (
     <div className={styles.container}>
@@ -106,7 +113,7 @@ export function HomeClient() {
           </p>
           <ButtonGroup className={styles.heroActions}>
             <Button asChild variant="primary" size="lg">
-              <Link href="/builder">
+              <Link href={START_NEW_BUILDER_HREF} onClick={handleStartNew}>
                 무료로 시작하기
                 <ArrowRight size={18} />
               </Link>
@@ -232,7 +239,11 @@ export function HomeClient() {
         className={styles.mobileDock}
         asChild
       >
-        <Link href="/builder" aria-label="무료 모바일 청첩장 만들기 시작하기">
+        <Link
+          href={START_NEW_BUILDER_HREF}
+          aria-label="무료 모바일 청첩장 만들기 시작하기"
+          onClick={handleStartNew}
+        >
           지금 바로 시작하기
         </Link>
       </BottomCTA.Single>
