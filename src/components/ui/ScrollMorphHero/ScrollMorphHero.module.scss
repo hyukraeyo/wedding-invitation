@@ -1,0 +1,181 @@
+@use '../../../styles/variables' as v;
+
+.container {
+  position: relative;
+  width: 100%;
+  height: 100vh; // Give it actual height so the viewport works since it expects full view
+  background-color: v.$grey-50;
+  overflow: hidden;
+}
+
+.wrapper {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  perspective: 1000px;
+}
+
+.introTextWrapper {
+  position: absolute;
+  z-index: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.introTitle {
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  color: v.$grey-800;
+
+  @media (min-width: 768px) {
+    font-size: 36px;
+  }
+}
+
+.introSubtitle {
+  margin-top: 16px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: v.$grey-500;
+}
+
+.activeContent {
+  position: absolute;
+  top: 10%;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  pointer-events: none;
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.activeTitle {
+  font-size: 30px;
+  font-weight: 600;
+  color: v.$grey-900;
+  letter-spacing: -0.025em;
+  margin-bottom: 16px;
+
+  @media (min-width: 768px) {
+    font-size: 48px;
+  }
+}
+
+.activeText {
+  font-size: 14px;
+  color: v.$grey-600;
+  max-width: 32rem;
+  line-height: 1.625;
+
+  @media (min-width: 768px) {
+    font-size: 16px;
+  }
+}
+
+.brDesktop {
+  display: none;
+
+  @media (min-width: 768px) {
+    display: inline-block; // or block depending on semantic need, break usually inline
+  }
+}
+
+.imagesContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+// FlipCard specific
+.flipCard {
+  cursor: pointer;
+
+  &:hover {
+    .imageOverlay {
+      background-color: transparent;
+    }
+  }
+}
+
+.cardInner {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  transform-style: preserve-3d;
+}
+
+.cardFace {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  border-radius: v.$radius-lg;
+  box-shadow: v.$shadow-lg;
+  backface-visibility: hidden;
+}
+
+.frontFace {
+  background-color: v.$grey-200;
+}
+
+.cardImage {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.imageOverlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(#000, 0.1);
+  transition: background-color v.$transition-normal;
+}
+
+.backFace {
+  background-color: v.$grey-900;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  border: 1px solid v.$grey-700;
+  transform: rotateY(180deg);
+}
+
+.backTextCenter {
+  text-align: center;
+}
+
+.backTitle {
+  font-size: 8px;
+  font-weight: 700;
+  color: v.$blue-500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+
+.backSubtitle {
+  font-size: 12px;
+  font-weight: 500;
+  color: v.$white;
+}
