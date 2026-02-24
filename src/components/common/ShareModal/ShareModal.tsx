@@ -2,21 +2,23 @@
 
 import React, { useState } from 'react';
 import { Dialog } from '@/components/ui/Dialog';
-import { Button } from '@/components/ui/Button';
-import { IconButton } from '@/components/ui/IconButton';
 import { Text } from '@/components/ui/Text';
-import { Copy, Share2, Check } from 'lucide-react';
+import { Copy, MessageCircle, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { KakaoShareButton } from '../KakaoShareButton/KakaoShareButton';
+import { clsx } from 'clsx';
 import styles from './ShareModal.module.scss';
 
 interface ShareModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   invitationUrl: string;
-  invitationTitle?: string;
-  invitationDescription?: string;
-  invitationImageUrl?: string;
+  invitationTitle?: string | undefined;
+  invitationDescription?: string | undefined;
+  invitationImageUrl?: string | undefined;
+  buttonType?: 'none' | 'location' | 'rsvp' | undefined;
+  address?: string | undefined;
+  locationName?: string | undefined;
   slug: string;
 }
 
@@ -27,6 +29,9 @@ export function ShareModal({
   invitationTitle,
   invitationDescription,
   invitationImageUrl,
+  buttonType,
+  address,
+  locationName,
   slug,
 }: ShareModalProps) {
   const { toast } = useToast();
@@ -42,7 +47,12 @@ export function ShareModal({
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog
+      open={open}
+      onOpenChange={onOpenChange}
+      mobileBottomSheet
+      mobileBottomSheetDirection="bottom"
+    >
       <Dialog.Header title="청첩장 공유하기">
         <Text
           typography="t6"
@@ -55,15 +65,13 @@ export function ShareModal({
       <Dialog.Body>
         <div className={styles.shareContainer}>
           <div className={styles.shareMethod}>
-            <IconButton
+            <button
               onClick={handleLinkShare}
-              className={styles.shareButton}
+              className={clsx(styles.iconWrapper, styles.linkWrap)}
               aria-label="링크 복사"
-              variant="ghost"
-              name=""
             >
-              {copied ? <Check size={20} /> : <Copy size={20} />}
-            </IconButton>
+              {copied ? <Check size={28} /> : <Copy size={24} />}
+            </button>
             <span className={styles.shareLabel}>링크 복사</span>
           </div>
 
@@ -73,22 +81,20 @@ export function ShareModal({
               invitationTitle={invitationTitle || ''}
               invitationDescription={invitationDescription || ''}
               invitationImageUrl={invitationImageUrl || ''}
+              {...(buttonType ? { buttonType } : {})}
+              {...(address ? { address } : {})}
+              {...(locationName ? { locationName } : {})}
               slug={slug}
               onSuccess={() => onOpenChange(false)}
-              className={styles.shareButton}
+              className={clsx(styles.iconWrapper, styles.kakaoWrap)}
               aria-label="카카오톡 공유"
             >
-              <Share2 size={20} />
+              <MessageCircle size={28} fill="currentColor" />
             </KakaoShareButton>
             <span className={styles.shareLabel}>카카오톡</span>
           </div>
         </div>
       </Dialog.Body>
-      <Dialog.Footer>
-        <Button variant="ghost" onClick={() => onOpenChange(false)} size="lg">
-          닫기
-        </Button>
-      </Dialog.Footer>
     </Dialog>
   );
 }

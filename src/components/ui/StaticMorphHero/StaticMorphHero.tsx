@@ -21,13 +21,14 @@ interface FlipCardProps {
     opacity: number;
     borderRadius?: string;
   };
+  isFront?: boolean;
 }
 
 // --- FlipCard Component ---
 const IMG_WIDTH = 60; // Base width
 const IMG_HEIGHT = 85; // Base height
 
-function FlipCard({ src, index, target, phase }: FlipCardProps) {
+function FlipCard({ src, index, target, phase, isFront = false }: FlipCardProps) {
   return (
     <motion.div
       // Set initial values so it doesn't animate from { scale: 1 } on initial mount
@@ -71,7 +72,15 @@ function FlipCard({ src, index, target, phase }: FlipCardProps) {
               : { type: 'spring', stiffness: 40, damping: 15 }
           }
         >
-          <Image src={src} alt={`hero-${index}`} fill sizes="60px" className={styles.cardImage} />
+          <Image
+            src={src}
+            alt={`hero-${index}`}
+            fill
+            sizes={isFront ? '100vw' : '200px'}
+            priority={isFront}
+            quality={isFront ? 100 : 75}
+            className={styles.cardImage}
+          />
           <div className={styles.imageOverlay} />
         </motion.div>
       </motion.div>
@@ -333,6 +342,7 @@ export function StaticMorphHero() {
                   index={i}
                   phase={introPhase} // Pass intro phase for initial animations
                   target={target}
+                  isFront={i === TOTAL_IMAGES - 1}
                 />
               );
             })}

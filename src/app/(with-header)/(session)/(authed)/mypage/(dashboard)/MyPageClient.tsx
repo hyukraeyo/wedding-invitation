@@ -143,9 +143,30 @@ export default function MyPageClient({
     isApproval?: boolean;
   } | null>(null);
 
-  const handleRejectionSubmit = useCallback(() => {
-    // Not used in user view
-  }, []);
+  const { toast } = useToast();
+
+  const handleRejectionSubmit = useCallback(
+    async (reason: string) => {
+      if (!rejectionTarget || !userId) return;
+
+      startLoading('처리 중...');
+      try {
+        await approvalRequestService.rejectRequest(rejectionTarget.id, reason);
+        const newInvitations = await invitationService.getUserInvitations(userId);
+        setInvitations(newInvitations);
+
+        toast({ description: '승인이 취소됐어요.' });
+        setRejectionModalOpen(false);
+        setRejectionTarget(null);
+        router.refresh();
+      } catch {
+        toast({ variant: 'destructive', description: '승인 취소 중 오류가 발생했어요.' });
+      } finally {
+        stopLoading();
+      }
+    },
+    [rejectionTarget, userId, router, toast, startLoading, stopLoading]
+  );
 
   const rejectionReason = useRejectionReason({
     onSubmit: handleRejectionSubmit,
@@ -157,7 +178,6 @@ export default function MyPageClient({
   });
 
   const reset = useInvitationStore((state) => state.reset);
-  const { toast } = useToast();
 
   // Check for unread notifications (rejections or approvals) on load
   useEffect(() => {

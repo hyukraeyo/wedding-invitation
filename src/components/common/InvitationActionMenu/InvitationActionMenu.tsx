@@ -208,9 +208,16 @@ export const InvitationActionMenu: React.FC<InvitationActionMenuProps> = ({
         open={showShareModal}
         onOpenChange={setShowShareModal}
         invitationUrl={`${window.location.origin}/v/${slug}`}
-        invitationTitle={title || ''}
-        invitationDescription={`${data?.date || ''} ${data?.location || ''}`.trim() || ''}
-        invitationImageUrl={imageUrl || ''}
+        invitationTitle={data?.kakaoShare?.title || title || ''}
+        invitationDescription={
+          data?.kakaoShare?.description ||
+          `${data?.date || ''} ${data?.location || ''}`.trim() ||
+          ''
+        }
+        invitationImageUrl={data?.kakaoShare?.imageUrl || imageUrl || ''}
+        buttonType={data?.kakaoShare?.buttonType || 'location'}
+        address={data?.address}
+        locationName={data?.location}
         slug={slug}
       />
 

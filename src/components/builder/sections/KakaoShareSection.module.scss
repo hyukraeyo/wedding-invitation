@@ -2,7 +2,8 @@
 @use '../../../styles/mixins' as m;
 
 .container {
-  @include m.ui-stack(v.$space-lg);
+  display: flex;
+  flex-direction: column;
 }
 
 .infoSpacing {

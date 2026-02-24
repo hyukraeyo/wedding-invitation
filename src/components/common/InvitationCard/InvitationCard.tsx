@@ -12,6 +12,7 @@ import { Badge } from '@/components/ui/Badge';
 import { Dialog } from '@/components/ui/Dialog';
 import { useInvitationStatus } from '@/hooks/useInvitationStatus';
 import { InvitationActionMenu } from '@/components/common/InvitationActionMenu';
+import { ShareModal } from '@/components/common/ShareModal';
 import { clsx } from 'clsx';
 import { AspectRatio } from '@/components/ui/AspectRatio';
 
@@ -47,6 +48,7 @@ const InvitationCard = React.memo(
     });
 
     const [showRejectionModal, setShowRejectionModal] = useState(false);
+    const [showShareModal, setShowShareModal] = useState(false);
 
     const handlePreview = () => {
       window.open(`/v/${slug}`, '_blank');
@@ -176,7 +178,7 @@ const InvitationCard = React.memo(
                     onClick={(e) => {
                       e.stopPropagation();
                       if (isApproved) {
-                        // 공유 모달은 InvitationActionMenu에서 처리
+                        setShowShareModal(true);
                         return;
                       }
                       handlePrimaryAction(e);
@@ -219,6 +221,30 @@ const InvitationCard = React.memo(
               </Dialog.Footer>
             </Dialog.Content>
           </Dialog>
+        )}
+
+        {/* Share Modal */}
+        {isApproved && (
+          <ShareModal
+            open={showShareModal}
+            onOpenChange={setShowShareModal}
+            invitationUrl={
+              typeof window !== 'undefined' ? `${window.location.origin}/v/${slug}` : ''
+            }
+            invitationTitle={invitation.invitation_data?.kakaoShare?.title || title || ''}
+            invitationDescription={
+              invitation.invitation_data?.kakaoShare?.description ||
+              `${invitation.invitation_data?.date || ''} ${
+                invitation.invitation_data?.location || ''
+              }`.trim() ||
+              ''
+            }
+            invitationImageUrl={invitation.invitation_data?.kakaoShare?.imageUrl || imageUrl || ''}
+            buttonType={invitation.invitation_data?.kakaoShare?.buttonType || 'location'}
+            address={invitation.invitation_data?.address}
+            locationName={invitation.invitation_data?.location}
+            slug={slug}
+          />
         )}
       </div>
     );

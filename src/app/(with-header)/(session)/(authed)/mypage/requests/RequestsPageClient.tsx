@@ -116,9 +116,9 @@ export default function RequestsPageClient({ initialLimit }: RequestsPageClientP
       };
       return await invitationService.saveInvitation(inv.slug, updatedData, inv.user_id);
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       toast({ description: '사용 승인이 완료됐어요.' });
-      queryClient.invalidateQueries({ queryKey: ['approval-requests'] });
+      await queryClient.invalidateQueries({ queryKey: ['approval-requests'] });
       router.refresh();
     },
     onError: () => toast({ variant: 'destructive', description: '승인 처리 중 오류 발생' }),
@@ -130,9 +130,9 @@ export default function RequestsPageClient({ initialLimit }: RequestsPageClientP
     mutationFn: async ({ inv, reason }: { inv: InvitationSummaryRecord; reason: string }) => {
       return await approvalRequestService.rejectRequest(inv.id, reason);
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       toast({ description: '신청이 거절됐어요.' });
-      queryClient.invalidateQueries({ queryKey: ['approval-requests'] });
+      await queryClient.invalidateQueries({ queryKey: ['approval-requests'] });
       router.refresh();
     },
     onError: () => toast({ variant: 'destructive', description: '거절 처리 중 오류 발생' }),

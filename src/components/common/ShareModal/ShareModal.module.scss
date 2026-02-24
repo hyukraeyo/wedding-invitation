@@ -1,45 +1,66 @@
+@use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
+
 .shareContainer {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 24px;
-  padding: 24px 0;
+  justify-content: center;
+  gap: 32px;
+  padding: 32px 0 24px;
 }
 
 .shareMethod {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  width: 100%;
+  gap: 12px;
 }
 
-.shareButton {
+.iconWrapper {
   width: 64px;
   height: 64px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 8px;
-  background: var(--color-bg-surface);
-  border: 1px solid var(--color-border-default);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
-  appearance: none;
-  color: var(--color-text-primary);
+  border: none;
+  outline: none;
 
-  &:hover {
-    background: var(--color-bg-hover);
+  @include m.hover {
+    transform: translateY(-2px);
   }
 
-  &:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
+  &:active {
+    transform: scale(0.95);
+  }
+
+  &.linkWrap {
+    background-color: v.$grey-100;
+    color: v.$grey-700;
+    border: 1px solid v.$grey-200;
+
+    @include m.hover {
+      background-color: v.$grey-200;
+    }
+  }
+
+  &.kakaoWrap {
+    background-color: #fee500;
+    color: #000000;
+    border: 1px solid #fee500;
+
+    @include m.hover {
+      background-color: #fdd800;
+    }
   }
 }
 
 .shareLabel {
-  font-size: 0.875rem;
-  color: var(--color-text-secondary);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: v.$grey-600;
   text-align: center;
 }

@@ -5,9 +5,12 @@ import { normalizeImageUrl, sendKakaoShare } from '@/lib/kakao-share';
 
 interface KakaoShareButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   invitationUrl: string;
-  invitationTitle?: string;
-  invitationDescription?: string;
-  invitationImageUrl?: string;
+  invitationTitle?: string | undefined;
+  invitationDescription?: string | undefined;
+  invitationImageUrl?: string | undefined;
+  buttonType?: 'none' | 'location' | 'rsvp' | undefined;
+  address?: string | undefined;
+  locationName?: string | undefined;
   slug: string;
   onSuccess?: () => void;
   onError?: (error: unknown) => void;
@@ -18,6 +21,9 @@ export function KakaoShareButton({
   invitationTitle = '',
   invitationDescription = '',
   invitationImageUrl = '',
+  buttonType = 'location',
+  address,
+  locationName,
   slug,
   onSuccess,
   onError,
@@ -37,7 +43,9 @@ export function KakaoShareButton({
         title: shareTitle,
         description: shareDesc,
         imageUrl: normalizeImageUrl(shareImageUrl, origin),
-        buttonType: 'location',
+        buttonType,
+        address,
+        location: locationName,
       },
       slug,
       onSuccess: onSuccess || (() => undefined),
@@ -48,6 +56,9 @@ export function KakaoShareButton({
     invitationImageUrl,
     invitationTitle,
     invitationUrl,
+    buttonType,
+    address,
+    locationName,
     onError,
     onSuccess,
     slug,
