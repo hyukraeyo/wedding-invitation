@@ -48,8 +48,8 @@
 - **필수 사항**: Named Export 사용, `displayName` 설정, SCSS 변수 활용.
 
 ## 5. 운영 및 협업 규칙
-- **커밋 메시지**: 반드시 **한글**로 작성하며 Conventional Commits 형식을 따름.
-  - 예: `feat: 새로운 기능 추가`, `fix: 버그 수정`, `refactor: 코드 리팩토링`
+- **커밋 메시지 (AI Generation Strict Rule)**: 반드시 **한글**로만 생성합니다. (Generate the commit message entirely in Korean. NEVER use English for the commit description.)
+  - 예: `feat: 새로운 기능 추가`, `fix: 버그 수정`, `refactor: 모프 애니메이션 컴포넌트 스택 추가`
 - **타입스크립트**: Strict Mode 준수, `any` 사용 엄격히 금지.
 - **빌드 및 린트**: 코드 작성 후 반드시 빌드 에러 및 린트 오류 확인 (Pre-Push 체크).
 - **에러 처리**: 도구 실행 실패 시 즉시 자가 수정(Self-Correction).

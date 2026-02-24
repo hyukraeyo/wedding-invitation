@@ -47,7 +47,7 @@ npm run check:launch
 - 스타일은 SCSS Modules만 사용합니다. (Tailwind CSS 금지)
 - UI primitive는 `src/components/ui`, 조합형 UI는 `src/components/common`에 둡니다.
 - 스타일 값(색상/간격/폰트)은 `src/styles` 토큰을 검색해 사용하고 하드코딩하지 않습니다.
-- 커밋 메시지는 한글 Conventional Commits 형식을 사용합니다.
+- **커밋 메시지 (AI Generation Strict Rule)**: 반드시 **한글**로만 생성합니다. (Generate the commit message entirely in Korean. NEVER use English for the commit description.)
 
 ## SEO/검색 등록 운영 규칙 (2026-02)
 

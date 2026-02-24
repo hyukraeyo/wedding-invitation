@@ -18,9 +18,17 @@ interface FlipCardProps {
 const IMG_WIDTH = 60; // Base width
 const IMG_HEIGHT = 85; // Base height
 
-function FlipCard({ src, index, target }: FlipCardProps) {
+function FlipCard({ src, index, target, phase }: FlipCardProps) {
   return (
     <motion.div
+      // Set initial values so it doesn't animate from { scale: 1 } on initial mount
+      initial={{
+        x: target.x,
+        y: target.y,
+        rotate: target.rotation,
+        scale: target.scale,
+        opacity: target.opacity,
+      }}
       // Smoothly animate to the coordinates defined by the parent
       animate={{
         x: target.x,
@@ -29,11 +37,9 @@ function FlipCard({ src, index, target }: FlipCardProps) {
         scale: target.scale,
         opacity: target.opacity,
       }}
-      transition={{
-        type: 'spring',
-        stiffness: 40,
-        damping: 15,
-      }}
+      transition={
+        phase === 'fullscreen' ? { duration: 0 } : { type: 'spring', stiffness: 40, damping: 15 }
+      }
       // Initial style
       style={{
         position: 'absolute',
@@ -75,34 +81,25 @@ function FlipCard({ src, index, target }: FlipCardProps) {
 }
 
 // --- Main Hero Component ---
-const TOTAL_IMAGES = 20;
+const TOTAL_IMAGES = 11;
 
-// Unsplash Images
+// Unsplash Images (Replaced with local images for test-2)
 const IMAGES = [
-  'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=300&q=80',
-  'https://images.unsplash.com/photo-1519710164239-da123dc03ef4?w=300&q=80',
-  'https://images.unsplash.com/photo-1497366216548-37526070297c?w=300&q=80',
-  'https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=300&q=80',
-  'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=300&q=80',
-  'https://images.unsplash.com/photo-1506765515384-028b60a970df?w=300&q=80',
-  'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=300&q=80',
-  'https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=300&q=80',
-  'https://images.unsplash.com/photo-1500485035595-cbe6f645feb1?w=300&q=80',
-  'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=300&q=80',
-  'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=300&q=80',
-  'https://images.unsplash.com/photo-1518020382113-a7e8fc38eac9?w=300&q=80',
-  'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=300&q=80',
-  'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?w=300&q=80',
-  'https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=300&q=80',
-  'https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?w=300&q=80',
-  'https://images.unsplash.com/photo-1483729558449-99ef09a8c325?w=300&q=80',
-  'https://images.unsplash.com/photo-1518173946687-a4c8892bbd9f?w=300&q=80',
-  'https://images.unsplash.com/photo-1523961131990-5ea7c61b2107?w=300&q=80',
-  'https://images.unsplash.com/photo-1496568816309-51d7c20e3b21?w=300&q=80',
+  '/images/test-2/image-01.png',
+  '/images/test-2/image-02.png',
+  '/images/test-2/image-03.png',
+  '/images/test-2/image-04.jpg',
+  '/images/test-2/image-05.jpg',
+  '/images/test-2/image-06.jpg',
+  '/images/test-2/image-07.jpg',
+  '/images/test-2/image-08.jpg',
+  '/images/test-2/image-09.jpg',
+  '/images/test-2/image-10.png',
+  '/images/test-2/image-11.png',
 ];
 
 export function StaticMorphHero() {
-  const [introPhase, setIntroPhase] = useState<AnimationPhase>('scatter');
+  const [introPhase, setIntroPhase] = useState<AnimationPhase>('fullscreen');
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -154,11 +151,19 @@ export function StaticMorphHero() {
 
   // --- Intro Sequence ---
   useEffect(() => {
-    const timer1 = setTimeout(() => setIntroPhase('line'), 500);
-    const timer2 = setTimeout(() => setIntroPhase('circle'), 2500);
+    // 1. Start as fullscreen, hold briefly, then shrink to stack
+    const timer1 = setTimeout(() => setIntroPhase('stack'), 1000);
+    // 2. Explode outwards
+    const timer2 = setTimeout(() => setIntroPhase('scatter'), 1800);
+    // 3. Form a line
+    const timer3 = setTimeout(() => setIntroPhase('line'), 2800);
+    // 4. Form a circle
+    const timer4 = setTimeout(() => setIntroPhase('circle'), 4000);
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
+      clearTimeout(timer3);
+      clearTimeout(timer4);
     };
   }, []);
 
@@ -198,7 +203,7 @@ export function StaticMorphHero() {
             transition={{ duration: 1 }}
             className={styles.introTitle}
           >
-            The future is built on AI.
+            3분 완성 모바일 청첩장
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
@@ -206,7 +211,7 @@ export function StaticMorphHero() {
             transition={{ duration: 1, delay: 0.2 }}
             className={styles.introSubtitle}
           >
-            EXPLORE THE VISION
+            바나나웨딩과 함께 시작하세요
           </motion.p>
         </div>
 
@@ -217,8 +222,33 @@ export function StaticMorphHero() {
 
             let target = { x: 0, y: 0, rotation: 0, scale: 1, opacity: 1 };
 
-            // 1. Intro Phases (Scatter -> Line)
-            if (introPhase === 'scatter') {
+            // 1. Intro Phases
+            if (introPhase === 'fullscreen') {
+              // Only scale up the front-most image to save performance
+              const isFrontCard = i === TOTAL_IMAGES - 1;
+              let fillScale = 20; // safe fallback for SSR
+              if (containerSize.width > 0 && containerSize.height > 0) {
+                fillScale = Math.max(containerSize.width / 60, containerSize.height / 85);
+              }
+
+              target = {
+                x: 0,
+                y: 0,
+                rotation: 0,
+                scale: isFrontCard ? fillScale : isMobile ? 0.65 : 1.2,
+                opacity: isFrontCard ? 1 : 0,
+              };
+            } else if (introPhase === 'stack') {
+              // Shrink naturally to center
+              const randomRot = (scatterPositions[i]?.rotation || 0) * 0.05;
+              target = {
+                x: 0,
+                y: 0,
+                rotation: randomRot,
+                scale: isMobile ? 0.65 : 1.2,
+                opacity: 1,
+              };
+            } else if (introPhase === 'scatter') {
               target = scatterPositions[i] || target;
             } else if (introPhase === 'line') {
               const activeTotal = TOTAL_IMAGES;

@@ -30,5 +30,6 @@
     {
       "text": "[CRITICAL] All commit messages MUST be written entirely in Korean (한국어). Never write the description in English. (예: feat: 모프 히어로 애니메이션 컴포넌트 추가)"
     }
-  ]
+  ],
+  "github.copilot.chat.localeOverride": "ko"
 }

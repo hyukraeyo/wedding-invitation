@@ -5,7 +5,13 @@ import { motion, useTransform, useSpring, useMotionValue } from 'framer-motion';
 import styles from './ScrollMorphHero.module.scss';
 
 // --- Types ---
-export type AnimationPhase = 'scatter' | 'line' | 'circle' | 'bottom-strip';
+export type AnimationPhase =
+  | 'fullscreen'
+  | 'stack'
+  | 'scatter'
+  | 'line'
+  | 'circle'
+  | 'bottom-strip';
 
 interface FlipCardProps {
   src: string;

@@ -127,7 +127,7 @@ npx shadcn@latest add [component]
 
 ### 6. Git & Commit Convention (Strict)
 
-- **한글 사용 필수**: 커밋 메시지 생성(Generation) 시 반드시 **한글**을 사용합니다.
+- **한글 사용 필수 (AI Generation Strict Rule)**: 커밋 메시지 생성(Generation) 시 반드시 **한글**을 사용합니다. (Generate the commit message entirely in Korean. NEVER use English for the commit description.)
 - **컨벤션**: [Conventional Commits](https://www.conventionalcommits.org/) 형식을 따릅니다.
   - 예: `feat: 새로운 기능 추가`, `fix: 버그 수정`, `refactor: 코드 리팩토링`
 
