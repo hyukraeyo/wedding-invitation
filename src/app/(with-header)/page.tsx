@@ -1,5 +1,5 @@
 ﻿import type { Metadata } from 'next';
-import { HomeClient } from './HomeClient';
+import { StaticMorphHero } from '@/components/ui/StaticMorphHero';
 import { SITE_NAME, SITE_NAME_EN, SITE_URL, absoluteUrl } from '@/lib/site';
 
 const HOME_TITLE = `${SITE_NAME} | 3분 완성 모바일 청첩장`;
@@ -114,7 +114,9 @@ export default function HomePage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
-      <HomeClient />
+      <main style={{ width: '100%', height: '100dvh', overflow: 'hidden' }}>
+        <StaticMorphHero />
+      </main>
     </>
   );
 }
