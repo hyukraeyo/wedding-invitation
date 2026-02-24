@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { motion, useSpring, useMotionValue } from 'framer-motion';
+import { motion, useSpring, useMotionValue, useTransform } from 'framer-motion';
 // Reusing SCSS from ScrollMorphHero
 import styles from '../ScrollMorphHero/ScrollMorphHero.module.scss';
 import { type AnimationPhase } from '../ScrollMorphHero/ScrollMorphHero';
@@ -11,7 +11,14 @@ interface FlipCardProps {
   index: number;
   total: number;
   phase: AnimationPhase;
-  target: { x: number; y: number; rotation: number; scale: number; opacity: number };
+  target: {
+    x: number;
+    y: number;
+    rotation: number;
+    scale: number;
+    opacity: number;
+    borderRadius?: string;
+  };
 }
 
 // --- FlipCard Component ---
@@ -50,31 +57,21 @@ function FlipCard({ src, index, target, phase }: FlipCardProps) {
       }}
       className={styles.flipCard}
     >
-      <motion.div
-        className={styles.cardInner}
-        style={{ transformStyle: 'preserve-3d' }}
-        transition={{ duration: 0.6, type: 'spring', stiffness: 260, damping: 20 }}
-        whileHover={{ rotateY: 180 }}
-      >
+      <motion.div className={styles.cardInner}>
         {/* Front Face */}
-        <div
+        <motion.div
           className={`${styles.cardFace} ${styles.frontFace}`}
-          style={{ backfaceVisibility: 'hidden' }}
+          initial={{ borderRadius: target.borderRadius || '16px' }}
+          animate={{ borderRadius: target.borderRadius || '16px' }}
+          transition={
+            phase === 'fullscreen'
+              ? { duration: 0 }
+              : { type: 'spring', stiffness: 40, damping: 15 }
+          }
         >
           <img src={src} alt={`hero-${index}`} className={styles.cardImage} />
           <div className={styles.imageOverlay} />
-        </div>
-
-        {/* Back Face */}
-        <div
-          className={`${styles.cardFace} ${styles.backFace}`}
-          style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
-        >
-          <div className={styles.backTextCenter}>
-            <p className={styles.backTitle}>View</p>
-            <p className={styles.backSubtitle}>Details</p>
-          </div>
-        </div>
+        </motion.div>
       </motion.div>
     </motion.div>
   );
@@ -82,6 +79,8 @@ function FlipCard({ src, index, target, phase }: FlipCardProps) {
 
 // --- Main Hero Component ---
 const TOTAL_IMAGES = 11;
+const SCALE_MOBILE = 0.65;
+const SCALE_PC = 1.8;
 
 // Unsplash Images (Replaced with local images for test-2)
 const IMAGES = [
@@ -173,19 +172,10 @@ export function StaticMorphHero() {
       x: (Math.random() - 0.5) * 1500,
       y: (Math.random() - 0.5) * 1000,
       rotation: (Math.random() - 0.5) * 180,
-      scale: 0.6,
-      opacity: 0,
     }));
   }, []);
 
-  const [parallaxValue, setParallaxValue] = useState(0);
-
-  useEffect(() => {
-    const unsubscribeParallax = smoothMouseX.on('change', setParallaxValue);
-    return () => {
-      unsubscribeParallax();
-    };
-  }, [smoothMouseX]);
+  const parallaxX = useTransform(smoothMouseX, (v) => v * 0.2);
 
   return (
     <div ref={containerRef} className={styles.container}>
@@ -215,87 +205,129 @@ export function StaticMorphHero() {
           </motion.p>
         </div>
 
-        {/* Main Container */}
-        <div className={styles.imagesContainer}>
-          {IMAGES.slice(0, TOTAL_IMAGES).map((src, i) => {
-            const isMobile = containerSize.width > 0 && containerSize.width < 768;
+        {/* Parallax Wrapper */}
+        <motion.div
+          style={{ x: parallaxX, width: '100%', height: '100%', position: 'absolute', inset: 0 }}
+        >
+          {/* Main Container */}
+          <motion.div
+            className={styles.imagesContainer}
+            initial={{ opacity: 0, rotate: 0 }}
+            animate={{
+              opacity: 1,
+              rotate: introPhase === 'circle' ? 360 : 0,
+            }}
+            transition={{
+              opacity: { duration: 1.2, ease: 'easeOut' },
+              rotate:
+                introPhase === 'circle'
+                  ? { duration: 80, repeat: Infinity, ease: 'linear' }
+                  : { duration: 1, ease: 'easeInOut' },
+            }}
+          >
+            {IMAGES.slice(0, TOTAL_IMAGES).map((src, i) => {
+              const isMobile = containerSize.width > 0 && containerSize.width < 768;
 
-            let target = { x: 0, y: 0, rotation: 0, scale: 1, opacity: 1 };
-
-            // 1. Intro Phases
-            if (introPhase === 'fullscreen') {
-              // Only scale up the front-most image to save performance
-              const isFrontCard = i === TOTAL_IMAGES - 1;
-              let fillScale = 20; // safe fallback for SSR
-              if (containerSize.width > 0 && containerSize.height > 0) {
-                fillScale = Math.max(containerSize.width / 60, containerSize.height / 85);
-              }
-
-              target = {
+              let target: FlipCardProps['target'] = {
                 x: 0,
                 y: 0,
                 rotation: 0,
-                scale: isFrontCard ? fillScale : isMobile ? 0.65 : 1.2,
-                opacity: isFrontCard ? 1 : 0,
-              };
-            } else if (introPhase === 'stack') {
-              // Shrink naturally to center
-              const randomRot = (scatterPositions[i]?.rotation || 0) * 0.05;
-              target = {
-                x: 0,
-                y: 0,
-                rotation: randomRot,
-                scale: isMobile ? 0.65 : 1.2,
+                scale: 1,
                 opacity: 1,
+                borderRadius: '16px',
               };
-            } else if (introPhase === 'scatter') {
-              target = scatterPositions[i] || target;
-            } else if (introPhase === 'line') {
-              const activeTotal = TOTAL_IMAGES;
-              const activeIndex = i;
 
-              const lineSpacing = isMobile ? 40 : 70; // Tightened for 20 small images
-              const lineTotalWidth = activeTotal * lineSpacing;
-              const lineX = activeIndex * lineSpacing - lineTotalWidth / 2;
-              target = { x: lineX, y: 0, rotation: 0, scale: isMobile ? 0.65 : 1, opacity: 1 };
-            } else {
-              // 2. Circle Phase (Static, no Scroll morph)
+              // 1. Intro Phases
+              if (introPhase === 'fullscreen') {
+                // Only scale up the front-most image to save performance
+                const isFrontCard = i === TOTAL_IMAGES - 1;
+                let fillScale = 10; // safe fallback for SSR (prevents huge flicker on PC/Mobile)
+                if (containerSize.width > 0 && containerSize.height > 0) {
+                  const maxScale = Math.max(containerSize.width / 60, containerSize.height / 85);
+                  // On PC, cap the initial size to avoid pixelation (e.g., max scale of 10 = 600x850)
+                  fillScale = isMobile ? maxScale : Math.min(maxScale, 10);
+                }
 
-              // Responsive Calculations
-              const minDimension = Math.min(containerSize.width, containerSize.height);
+                target = {
+                  ...target,
+                  scale: isFrontCard ? fillScale : isMobile ? SCALE_MOBILE : SCALE_PC,
+                  opacity: isFrontCard ? 1 : 0,
+                  borderRadius: isFrontCard ? '0px' : '16px',
+                };
+              } else if (introPhase === 'stack') {
+                // Shrink naturally to center
+                const randomRot = (scatterPositions[i]?.rotation || 0) * 0.05;
+                target = {
+                  x: 0,
+                  y: 0,
+                  rotation: randomRot,
+                  scale: isMobile ? SCALE_MOBILE : SCALE_PC,
+                  opacity: 1,
+                  borderRadius: '16px',
+                };
+              } else if (introPhase === 'scatter') {
+                target = {
+                  ...target,
+                  ...scatterPositions[i],
+                  scale: isMobile ? SCALE_MOBILE : SCALE_PC,
+                  opacity: 1,
+                  borderRadius: '16px',
+                };
+              } else if (introPhase === 'line') {
+                const activeTotal = TOTAL_IMAGES;
+                const activeIndex = i;
 
-              // Calculate Circle Position
-              const circleRadius = isMobile
-                ? Math.min(minDimension * 0.45, 180)
-                : Math.min(minDimension * 0.35, 350);
+                const lineSpacing = isMobile ? 40 : SCALE_PC * 64; // Spaced based on scale
+                const lineTotalWidth = activeTotal * lineSpacing;
+                const lineX = activeIndex * lineSpacing - lineTotalWidth / 2;
+                target = {
+                  x: lineX,
+                  y: 0,
+                  rotation: 0,
+                  scale: isMobile ? SCALE_MOBILE : SCALE_PC,
+                  opacity: 1,
+                  borderRadius: '16px',
+                };
+              } else {
+                // 2. Circle Phase (Static, no Scroll morph)
 
-              const activeTotal = TOTAL_IMAGES;
-              const activeIndex = i;
+                // Responsive Calculations
+                const minDimension = Math.min(containerSize.width, containerSize.height);
 
-              const circleAngle = (activeIndex / activeTotal) * 360;
-              const circleRad = (circleAngle * Math.PI) / 180;
+                // Calculate Circle Position
+                const circleRadius = isMobile
+                  ? Math.min(minDimension * 0.45, 180)
+                  : Math.min(minDimension * 0.35, SCALE_PC * 170); // Wider circle for larger PC cards
 
-              target = {
-                x: Math.cos(circleRad) * circleRadius + parallaxValue * 0.2,
-                y: Math.sin(circleRad) * circleRadius,
-                rotation: circleAngle + 90,
-                scale: isMobile ? 0.65 : 1.2, // Drastically reduced for 20 cards on mobile
-                opacity: 1,
-              };
-            }
+                const activeTotal = TOTAL_IMAGES;
+                const activeIndex = i;
 
-            return (
-              <FlipCard
-                key={i}
-                src={src}
-                index={i}
-                total={TOTAL_IMAGES}
-                phase={introPhase} // Pass intro phase for initial animations
-                target={target}
-              />
-            );
-          })}
-        </div>
+                const circleAngle = (activeIndex / activeTotal) * 360;
+                const circleRad = (circleAngle * Math.PI) / 180;
+
+                target = {
+                  x: Math.cos(circleRad) * circleRadius,
+                  y: Math.sin(circleRad) * circleRadius,
+                  rotation: circleAngle + 90,
+                  scale: isMobile ? SCALE_MOBILE : SCALE_PC,
+                  opacity: 1,
+                  borderRadius: '16px',
+                };
+              }
+
+              return (
+                <FlipCard
+                  key={i}
+                  src={src}
+                  index={i}
+                  total={TOTAL_IMAGES}
+                  phase={introPhase} // Pass intro phase for initial animations
+                  target={target}
+                />
+              );
+            })}
+          </motion.div>
+        </motion.div>
       </div>
     </div>
   );
