@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, useTransform, useSpring, useMotionValue } from 'framer-motion';
+import Image from 'next/image';
 import styles from './ScrollMorphHero.module.scss';
 
 // --- Types ---
@@ -16,8 +17,6 @@ export type AnimationPhase =
 interface FlipCardProps {
   src: string;
   index: number;
-  total: number;
-  phase: AnimationPhase;
   target: { x: number; y: number; rotation: number; scale: number; opacity: number };
 }
 
@@ -25,7 +24,7 @@ interface FlipCardProps {
 const IMG_WIDTH = 80; // Increased base width
 const IMG_HEIGHT = 115; // Increased base height
 
-function FlipCard({ src, index, total, phase, target }: FlipCardProps) {
+function FlipCard({ src, index, target }: FlipCardProps) {
   return (
     <motion.div
       // Smoothly animate to the coordinates defined by the parent
@@ -62,7 +61,13 @@ function FlipCard({ src, index, total, phase, target }: FlipCardProps) {
           className={`${styles.cardFace} ${styles.frontFace}`}
           style={{ backfaceVisibility: 'hidden' }}
         >
-          <img src={src} alt={`hero-${index}`} className={styles.cardImage} />
+          <Image
+            src={src}
+            alt={`hero-${index}`}
+            fill
+            sizes="(max-width: 768px) 60px, 80px"
+            className={styles.cardImage}
+          />
           <div className={styles.imageOverlay} />
         </div>
 
@@ -111,6 +116,17 @@ const IMAGES = [
 
 // Helper for linear interpolation
 const lerp = (start: number, end: number, t: number) => start * (1 - t) + end * t;
+const getDeterministicRandom = (index: number, seed: number) => {
+  const value = Math.sin(index * 12.9898 + seed * 78.233) * 43758.5453;
+  return value - Math.floor(value);
+};
+const scatterPositions = IMAGES.map((_, index) => ({
+  x: (getDeterministicRandom(index, 1) - 0.5) * 1500,
+  y: (getDeterministicRandom(index, 2) - 0.5) * 1000,
+  rotation: (getDeterministicRandom(index, 3) - 0.5) * 180,
+  scale: 0.6,
+  opacity: 0,
+}));
 
 export function ScrollMorphHero() {
   const [introPhase, setIntroPhase] = useState<AnimationPhase>('scatter');
@@ -225,17 +241,6 @@ export function ScrollMorphHero() {
       clearTimeout(timer1);
       clearTimeout(timer2);
     };
-  }, []);
-
-  // --- Random Scatter Positions ---
-  const scatterPositions = useMemo(() => {
-    return IMAGES.map(() => ({
-      x: (Math.random() - 0.5) * 1500,
-      y: (Math.random() - 0.5) * 1000,
-      rotation: (Math.random() - 0.5) * 180,
-      scale: 0.6,
-      opacity: 0,
-    }));
   }, []);
 
   // --- Render Loop (Manual Calculation for Morph) ---
@@ -390,8 +395,6 @@ export function ScrollMorphHero() {
                 key={i}
                 src={src}
                 index={i}
-                total={TOTAL_IMAGES}
-                phase={introPhase} // Pass intro phase for initial animations
                 target={target}
               />
             );

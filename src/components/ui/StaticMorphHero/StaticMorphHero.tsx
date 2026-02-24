@@ -1,7 +1,10 @@
 'use client';
 
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, useSpring, useMotionValue, useTransform } from 'framer-motion';
+import Image from 'next/image';
+import Link from 'next/link';
+import { Button } from '@/components/ui/Button';
 // Reusing SCSS from ScrollMorphHero
 import styles from '../ScrollMorphHero/ScrollMorphHero.module.scss';
 import { type AnimationPhase } from '../ScrollMorphHero/ScrollMorphHero';
@@ -9,7 +12,6 @@ import { type AnimationPhase } from '../ScrollMorphHero/ScrollMorphHero';
 interface FlipCardProps {
   src: string;
   index: number;
-  total: number;
   phase: AnimationPhase;
   target: {
     x: number;
@@ -69,7 +71,7 @@ function FlipCard({ src, index, target, phase }: FlipCardProps) {
               : { type: 'spring', stiffness: 40, damping: 15 }
           }
         >
-          <img src={src} alt={`hero-${index}`} className={styles.cardImage} />
+          <Image src={src} alt={`hero-${index}`} fill sizes="60px" className={styles.cardImage} />
           <div className={styles.imageOverlay} />
         </motion.div>
       </motion.div>
@@ -79,7 +81,7 @@ function FlipCard({ src, index, target, phase }: FlipCardProps) {
 
 // --- Main Hero Component ---
 const TOTAL_IMAGES = 11;
-const SCALE_MOBILE = 0.65;
+const SCALE_MOBILE = 0.75;
 const SCALE_PC = 1.8;
 
 // Unsplash Images (Replaced with local images for test-2)
@@ -166,13 +168,19 @@ export function StaticMorphHero() {
     };
   }, []);
 
-  // --- Random Scatter Positions ---
-  const scatterPositions = useMemo(() => {
-    return IMAGES.map(() => ({
-      x: (Math.random() - 0.5) * 1500,
-      y: (Math.random() - 0.5) * 1000,
-      rotation: (Math.random() - 0.5) * 180,
-    }));
+  const [scatterPositions, setScatterPositions] = useState<
+    { x: number; y: number; rotation: number }[]
+  >([]);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setScatterPositions(
+      IMAGES.map(() => ({
+        x: (Math.random() - 0.5) * 1500,
+        y: (Math.random() - 0.5) * 1000,
+        rotation: (Math.random() - 0.5) * 180,
+      }))
+    );
   }, []);
 
   const parallaxX = useTransform(smoothMouseX, (v) => v * 0.2);
@@ -182,7 +190,7 @@ export function StaticMorphHero() {
       {/* Container */}
       <div className={styles.wrapper}>
         {/* Intro Text */}
-        <div className={styles.introTextWrapper}>
+        <div className={styles.introTextWrapper} style={{ zIndex: 20 }}>
           <motion.h1
             initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
             animate={
@@ -195,14 +203,17 @@ export function StaticMorphHero() {
           >
             3분 완성 모바일 청첩장
           </motion.h1>
-          <motion.p
+          <motion.div
             initial={{ opacity: 0 }}
-            animate={introPhase === 'circle' ? { opacity: 0.5 } : { opacity: 0 }}
+            animate={introPhase === 'circle' ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
             className={styles.introSubtitle}
+            style={{ pointerEvents: introPhase === 'circle' ? 'auto' : 'none', marginTop: '24px' }}
           >
-            바나나웨딩과 함께 시작하세요
-          </motion.p>
+            <Button radius="full" size="lg" style={{ padding: '0 32px' }} asChild>
+              <Link href="/builder?mode=new">만들기</Link>
+            </Button>
+          </motion.div>
         </div>
 
         {/* Parallax Wrapper */}
@@ -320,7 +331,6 @@ export function StaticMorphHero() {
                   key={i}
                   src={src}
                   index={i}
-                  total={TOTAL_IMAGES}
                   phase={introPhase} // Pass intro phase for initial animations
                   target={target}
                 />

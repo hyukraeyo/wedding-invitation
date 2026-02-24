@@ -98,7 +98,7 @@
 .logoText {
   font-family: v.$font-script;
   font-size: 1.75rem;
-  color: v.$white;
+  color: v.$grey-900;
   transition: color v.$transition-400;
 }
 
@@ -169,12 +169,12 @@
 .actionButton {
   position: relative;
   transition: all v.$transition-200;
-  color: v.$white !important;
+  color: v.$grey-600 !important;
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {
-      background-color: rgba(v.$white, 0.1) !important;
-      color: v.$white !important;
+      background-color: v.$grey-100 !important;
+      color: v.$grey-900 !important;
     }
   }
 
