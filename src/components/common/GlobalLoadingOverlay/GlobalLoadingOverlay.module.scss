@@ -1,0 +1,46 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.4); /* Slight blur/overlay look */
+  backdrop-filter: blur(2px);
+  z-index: 999999; /* Ensure it stays on top of everything including Radix portals */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all; /* Blocks interactions with elements beneath it */
+}
+
+.spinnerWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  background: white;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  color: #fbc02d; /* Primary color */
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.message {
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+  margin: 0;
+}

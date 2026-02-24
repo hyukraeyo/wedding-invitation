@@ -162,7 +162,7 @@ const CalendarSectionView = ({
     return days;
   })();
 
-  const d_day_display = (() => {
+  const ddayInfo = (() => {
     const now = new Date();
     const targetMidnight = new Date(weddingDate);
     targetMidnight.setHours(0, 0, 0, 0);
@@ -172,9 +172,9 @@ const CalendarSectionView = ({
     // If it's 99 days and 1 hour left, it's D-100.
     const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
 
-    if (days === 0) return '오늘';
-    if (days > 0) return `${days}일`;
-    return `+${Math.abs(days)}일`;
+    if (days === 0) return { display: '오늘', status: 'today' as const };
+    if (days > 0) return { display: `${days}일`, status: 'future' as const };
+    return { display: `+${Math.abs(days)}일`, status: 'past' as const };
   })();
 
   const monthNames = [
@@ -248,9 +248,13 @@ const CalendarSectionView = ({
                 className={styles.highlight}
                 style={{ color: accentColor, backgroundColor: `${accentColor}26` }}
               >
-                {`${d_day_display}`}
+                {ddayInfo.display}
               </span>
-              {parsedDdayMessage.suffix}
+              {ddayInfo.status === 'today'
+                ? '이에요'
+                : ddayInfo.status === 'past'
+                  ? '지났어요'
+                  : parsedDdayMessage.suffix}
             </p>
           </div>
         </>

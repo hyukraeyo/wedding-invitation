@@ -251,29 +251,58 @@ const InvitationCanvasContent = memo(
         targetId = 'mainScreen';
       }
 
+      // Find the nearest scrollable ancestor when internal scroll is disabled.
+      // In mobile Drawer preview, the scrollArea has overflow:visible and
+      // the Drawer.Body is the real scroll container.
+      const getScrollContainer = (): HTMLElement | null => {
+        if (!scrollContainerRef.current) return null;
+        if (!disableInternalScroll) return scrollContainerRef.current;
+
+        // Walk up the DOM to find the nearest scrollable ancestor
+        let parent = scrollContainerRef.current.parentElement;
+        while (parent) {
+          const style = window.getComputedStyle(parent);
+          const overflowY = style.overflowY;
+          if (overflowY === 'auto' || overflowY === 'scroll') {
+            return parent;
+          }
+          parent = parent.parentElement;
+        }
+        return null;
+      };
+
       const performScroll = (behavior: ScrollBehavior) => {
         try {
-          if (!scrollContainerRef.current) return false;
+          const container = getScrollContainer();
+          if (!container) return false;
 
           if (targetId === 'mainScreen') {
-            scrollContainerRef.current.scrollTo({
+            container.scrollTo({
               top: 0,
               behavior,
             });
             return true;
           }
 
-          const element = scrollContainerRef.current.querySelector(`#section-${targetId}`);
+          // Search inside the scrollContainerRef (our content wrapper) for the section
+          const searchRoot = scrollContainerRef.current ?? container;
+          const element = searchRoot.querySelector(`#section-${targetId}`);
           if (element instanceof HTMLElement) {
-            // Using offsetTop is much more stable than getBoundingClientRect
-            // because it's relative to the scroll container, not the viewport.
-            // This prevents jitter while the drawer is animating/moving.
-            const scrollTarget = element.offsetTop;
+            if (disableInternalScroll) {
+              // When internal scroll is disabled, use scrollIntoView which
+              // automatically targets the nearest scrollable ancestor.
+              element.scrollIntoView({ behavior, block: 'start' });
+            } else {
+              // Using offsetTop is much more stable than getBoundingClientRect
+              // because it's relative to the scroll container, not the viewport.
+              // This prevents jitter while the drawer is animating/moving.
+              const scrollTarget = element.offsetTop;
 
-            scrollContainerRef.current.scrollTo({
-              top: scrollTarget,
-              behavior,
-            });
+              container.scrollTo({
+                top: scrollTarget,
+                behavior,
+              });
+            }
             return true;
           }
         } catch (error) {
@@ -286,10 +315,11 @@ const InvitationCanvasContent = memo(
         let attempts = 0;
         const tryInitialScroll = () => {
           // We need to ensure the element exists and has layout
+          const searchRoot = scrollContainerRef.current;
           const element =
             targetId === 'mainScreen'
-              ? scrollContainerRef.current
-              : scrollContainerRef.current?.querySelector(`#section-${targetId}`);
+              ? searchRoot
+              : searchRoot?.querySelector(`#section-${targetId}`);
 
           if (element && performScroll('auto')) {
             initialScrollDone.current = true;
@@ -317,7 +347,7 @@ const InvitationCanvasContent = memo(
         const t = setTimeout(() => performScroll('smooth'), 50);
         return () => clearTimeout(t);
       }
-    }, [editingSection, isPreviewMode]);
+    }, [editingSection, isPreviewMode, disableInternalScroll]);
 
     const canvasStyle = useMemo(
       () => getFontStyle(theme.font, localFontScale, theme.backgroundColor),
@@ -497,9 +527,6 @@ const InvitationCanvasContent = memo(
             <div className={styles.watermark} />
           </>
         ) : null}
-
-        {/* Portal Root for Dialogs (to keep them inside the mockup) */}
-        <div id="invitation-dialog-root" className={styles.modalRoot} />
 
         {/* Font Size UX/UI */}
         {theme.allowFontScale && (

@@ -18,6 +18,7 @@ import { EmptyState } from '@/components/common/EmptyState';
 import { parseRejection } from '@/lib/rejection-helpers';
 import { Dialog } from '@/components/ui/Dialog';
 import { Button } from '@/components/ui/Button';
+import { useGlobalLoadingStore } from '@/store/useGlobalLoadingStore';
 const RichTextEditor = dynamic(
   () =>
     import('@/components/common/RichTextEditor/RichTextEditor').then((mod) => mod.RichTextEditor),
@@ -57,6 +58,9 @@ export default function RequestsPageClient({ initialLimit }: RequestsPageClientP
   const queryClient = useQueryClient();
   const router = useRouter();
   const { toast } = useToast();
+
+  const startLoading = useGlobalLoadingStore((state) => state.startLoading);
+  const stopLoading = useGlobalLoadingStore((state) => state.stopLoading);
 
   // 1. 초대장 정보 캐시 (매번 fetch하지 않도록)
   const [invitationCache, setInvitationCache] = useState<Record<string, InvitationSummaryRecord>>(
@@ -98,6 +102,8 @@ export default function RequestsPageClient({ initialLimit }: RequestsPageClientP
 
   // 3. 승인/거절 뮤테이션
   const approveMutation = useMutation({
+    onMutate: () => startLoading('승인 처리 중...'),
+    onSettled: () => stopLoading(),
     mutationFn: async (inv: InvitationSummaryRecord) => {
       await approvalRequestService.approveRequest(inv.id);
       const fullInv = await invitationService.getInvitation(inv.slug);
@@ -119,6 +125,8 @@ export default function RequestsPageClient({ initialLimit }: RequestsPageClientP
   });
 
   const rejectMutation = useMutation({
+    onMutate: () => startLoading('처리 중...'),
+    onSettled: () => stopLoading(),
     mutationFn: async ({ inv, reason }: { inv: InvitationSummaryRecord; reason: string }) => {
       return await approvalRequestService.rejectRequest(inv.id, reason);
     },
@@ -160,7 +168,7 @@ export default function RequestsPageClient({ initialLimit }: RequestsPageClientP
   const rejectionReason = useRejectionReason({
     onSubmit: handleRejectionSubmit,
     onClose: () => setRejectionTarget(null),
-    loading: rejectMutation.isPending,
+    loading: false,
   });
 
   if (status === 'pending') {
@@ -246,7 +254,6 @@ export default function RequestsPageClient({ initialLimit }: RequestsPageClientP
                           setRejectionTarget(targetInv);
                         }}
                         className={styles.revokeButton}
-                        disabled={approveMutation.isPending || rejectMutation.isPending}
                       >
                         승인 취소
                       </button>
@@ -255,7 +262,6 @@ export default function RequestsPageClient({ initialLimit }: RequestsPageClientP
                         <button
                           onClick={() => setRejectionTarget(targetInv)}
                           className={styles.rejectButton}
-                          disabled={approveMutation.isPending || rejectMutation.isPending}
                         >
                           거절
                         </button>
@@ -271,14 +277,8 @@ export default function RequestsPageClient({ initialLimit }: RequestsPageClientP
                             })
                           }
                           className={styles.approveButton}
-                          disabled={approveMutation.isPending || rejectMutation.isPending}
                         >
-                          {approveMutation.isPending &&
-                          approveMutation.variables?.id === targetInv.id ? (
-                            <Banana className={styles.spin} size={14} />
-                          ) : (
-                            '승인'
-                          )}
+                          승인
                         </button>
                       </>
                     )}
@@ -324,17 +324,11 @@ export default function RequestsPageClient({ initialLimit }: RequestsPageClientP
                 variant="ghost"
                 size="lg"
                 onClick={() => setConfirmConfig((prev) => ({ ...prev, isOpen: false }))}
-                disabled={approveMutation.isPending}
               >
                 취소
               </Button>
             )}
-            <Button
-              size="lg"
-              loading={approveMutation.isPending}
-              disabled={approveMutation.isPending}
-              onClick={handleConfirmAction}
-            >
+            <Button size="lg" onClick={handleConfirmAction}>
               승인
             </Button>
           </Dialog.Footer>
@@ -373,17 +367,11 @@ export default function RequestsPageClient({ initialLimit }: RequestsPageClientP
                   </div>
                 </Dialog.Body>
                 <Dialog.Footer>
-                  <Button
-                    variant="ghost"
-                    size="lg"
-                    onClick={rejectionReason.handleClose}
-                    disabled={rejectMutation.isPending}
-                  >
+                  <Button variant="ghost" size="lg" onClick={rejectionReason.handleClose}>
                     취소
                   </Button>
                   <Button
                     size="lg"
-                    loading={rejectMutation.isPending}
                     disabled={rejectionReason.isSubmitDisabled}
                     onClick={rejectionReason.handleSubmit}
                   >

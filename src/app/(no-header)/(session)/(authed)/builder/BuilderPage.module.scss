@@ -194,6 +194,15 @@
   bottom: calc(v.$space-lg + env(safe-area-inset-bottom));
   box-shadow: v.$shadow-lg;
   z-index: 1000;
+  transition:
+    opacity v.$duration-fast v.$ease-ios,
+    visibility v.$duration-fast v.$ease-ios;
+}
+
+:global(body[data-gallery-fullscreen-open='true']) .mobileRailCloseButton {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .icon {

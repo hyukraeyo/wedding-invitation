@@ -44,16 +44,6 @@ interface TopActionItem {
   disabled: boolean;
 }
 
-interface PreviewGestureState {
-  pointerId: number | null;
-  startX: number;
-  startY: number;
-  axis: 'horizontal' | 'vertical' | null;
-}
-
-const PREVIEW_GESTURE_LOCK_PX = 8;
-const PREVIEW_VERTICAL_BIAS_PX = 2;
-
 export function BuilderClient() {
   const [isSaving, setIsSaving] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
@@ -79,12 +69,6 @@ export function BuilderClient() {
   const profileLockRef = useRef(false);
   const initRef = useRef(false);
   const saveLockRef = useRef(false);
-  const previewGestureRef = useRef<PreviewGestureState>({
-    pointerId: null,
-    startX: 0,
-    startY: 0,
-    axis: null,
-  });
 
   useEffect(() => {
     toastRef.current = toast;
@@ -262,72 +246,6 @@ export function BuilderClient() {
       setIsMobileActionsExpanded(false);
     }
   }, [isMobilePreviewViewport, isPreviewOpen]);
-
-  const resetPreviewGesture = useCallback((element?: HTMLDivElement | null) => {
-    if (element) {
-      element.removeAttribute('data-vaul-no-drag');
-    }
-
-    previewGestureRef.current = {
-      pointerId: null,
-      startX: 0,
-      startY: 0,
-      axis: null,
-    };
-  }, []);
-
-  const handlePreviewPointerDown = useCallback(
-    (event: React.PointerEvent<HTMLDivElement>) => {
-      if (event.pointerType === 'mouse' && event.button !== 0) return;
-
-      resetPreviewGesture(event.currentTarget);
-
-      previewGestureRef.current = {
-        pointerId: event.pointerId,
-        startX: event.clientX,
-        startY: event.clientY,
-        axis: null,
-      };
-    },
-    [resetPreviewGesture]
-  );
-
-  const handlePreviewPointerMoveCapture = useCallback(
-    (event: React.PointerEvent<HTMLDivElement>) => {
-      const state = previewGestureRef.current;
-      if (state.pointerId !== event.pointerId) return;
-
-      const deltaX = event.clientX - state.startX;
-      const deltaY = event.clientY - state.startY;
-      const absX = Math.abs(deltaX);
-      const absY = Math.abs(deltaY);
-
-      if (!state.axis) {
-        if (absX < PREVIEW_GESTURE_LOCK_PX && absY < PREVIEW_GESTURE_LOCK_PX) return;
-
-        const isVerticalIntent = absY >= absX + PREVIEW_VERTICAL_BIAS_PX;
-        state.axis = isVerticalIntent ? 'vertical' : 'horizontal';
-      }
-
-      if (state.axis === 'vertical') {
-        event.currentTarget.setAttribute('data-vaul-no-drag', 'true');
-        // Prevent Vaul from treating vertical scroll gestures as drawer drag.
-        event.stopPropagation();
-      } else {
-        event.currentTarget.removeAttribute('data-vaul-no-drag');
-      }
-    },
-    []
-  );
-
-  const handlePreviewPointerEnd = useCallback(
-    (event: React.PointerEvent<HTMLDivElement>) => {
-      const state = previewGestureRef.current;
-      if (state.pointerId !== null && state.pointerId !== event.pointerId) return;
-      resetPreviewGesture(event.currentTarget);
-    },
-    [resetPreviewGesture]
-  );
 
   const topActions: TopActionItem[] = [
     {
@@ -515,14 +433,7 @@ export function BuilderClient() {
           <Drawer.Portal>
             <Drawer.Overlay />
             <Drawer.Content aria-label="모바일 청첩장 미리보기" variant="default">
-              <Drawer.Body
-                padding={false}
-                className={styles.previewDrawerBody}
-                onPointerDown={handlePreviewPointerDown}
-                onPointerMoveCapture={handlePreviewPointerMoveCapture}
-                onPointerUp={handlePreviewPointerEnd}
-                onPointerCancel={handlePreviewPointerEnd}
-              >
+              <Drawer.Body padding={false} className={styles.previewDrawerBody}>
                 <InvitationCanvas
                   key="mobile-preview"
                   isPreviewMode

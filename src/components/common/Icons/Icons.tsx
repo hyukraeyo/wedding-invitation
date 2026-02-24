@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 import Image from 'next/image';
 import { PALETTE } from '@/constants/palette';
 
@@ -90,28 +90,31 @@ interface IconProps {
   className?: string;
 }
 
-export const NaverIcon = ({ size = 24, className }: IconProps) => (
-  <svg
-    width={size}
-    height={size}
-    viewBox="0 0 512 512"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-  >
-    <defs>
-      <linearGradient id="naver_map_grad" x1="0.5" y1="0" x2="0.5" y2="1">
-        <stop offset="0" stopColor="#1585F6" />
-        <stop offset="1" stopColor="#00C73C" />
-      </linearGradient>
-    </defs>
-    <path
-      d="M256 20C145.5 20 56 109.5 56 220C56 345 256 492 256 492C256 492 456 345 456 220C456 109.5 366.5 20 256 20Z"
-      fill="url(#naver_map_grad)"
-    />
-    <path d="M175 310V130H223L289 233.5V130H337V310H289L223 206.5V310H175Z" fill="white" />
-  </svg>
-);
+export const NaverIcon = ({ size = 24, className }: IconProps) => {
+  const gradientId = useId();
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 512 512"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+    >
+      <defs>
+        <linearGradient id={gradientId} x1="0.5" y1="0" x2="0.5" y2="1">
+          <stop offset="0" stopColor="#1585F6" />
+          <stop offset="1" stopColor="#00C73C" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M256 20C145.5 20 56 109.5 56 220C56 345 256 492 256 492C256 492 456 345 456 220C456 109.5 366.5 20 256 20Z"
+        fill={`url(#${gradientId})`}
+      />
+      <path d="M175 310V130H223L289 233.5V130H337V310H289L223 206.5V310H175Z" fill="white" />
+    </svg>
+  );
+};
 
 export const KakaoIcon = ({ size = 24, className }: IconProps) => (
   <svg

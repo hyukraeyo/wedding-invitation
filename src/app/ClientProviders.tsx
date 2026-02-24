@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useViewportHeight } from '@/hooks/use-viewport-height';
 import { WarningSuppressionProvider } from '@/components/providers/WarningSuppressionProvider';
 import { Toaster } from '@/components/ui/Toast';
+import { GlobalLoadingOverlay } from '@/components/common/GlobalLoadingOverlay';
 
 interface ClientProvidersProps {
   children: React.ReactNode;
@@ -33,6 +34,7 @@ export default function ClientProviders({ children }: ClientProvidersProps) {
         <div suppressHydrationWarning style={{ display: 'contents' }}>
           {children}
           <Toaster />
+          <GlobalLoadingOverlay />
         </div>
       </QueryClientProvider>
     </WarningSuppressionProvider>

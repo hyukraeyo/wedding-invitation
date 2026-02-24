@@ -11,6 +11,7 @@ import type { ApprovalRequestSummary } from '@/services/approvalRequestService';
 import type { InvitationSummaryRecord } from '@/lib/invitation-summary';
 import { useInvitationStore, INITIAL_STATE } from '@/store/useInvitationStore';
 import type { InvitationData } from '@/store/useInvitationStore';
+import { useGlobalLoadingStore } from '@/store/useGlobalLoadingStore';
 import { MyPageContent } from '@/components/mypage/MyPageContent';
 import { MyPageLayout } from '@/components/mypage/MyPageLayout';
 import { parseRejection } from '@/lib/rejection-helpers';
@@ -97,12 +98,14 @@ export default function MyPageClient({
   const router = useRouter();
   const pathname = usePathname();
 
-  const [actionLoadingId, setActionLoadingId] = useState<string | null>(null);
+  const startLoading = useGlobalLoadingStore((state) => state.startLoading);
+  const stopLoading = useGlobalLoadingStore((state) => state.stopLoading);
+  const isLoading = useGlobalLoadingStore((state) => state.isLoading);
 
   // 탭/페이지 이동 시 로딩 상태 초기화
   useEffect(() => {
-    setActionLoadingId(null);
-  }, [pathname]);
+    stopLoading();
+  }, [pathname, stopLoading]);
 
   const [invitations, setInvitations] = useState<InvitationSummaryRecord[]>(initialInvitations);
   const [rejectedRequests] = useState<ApprovalRequestSummary[]>(initialRejectedRequests);
@@ -150,7 +153,7 @@ export default function MyPageClient({
       setRejectionModalOpen(false);
       setRejectionTarget(null);
     },
-    loading: !!actionLoadingId,
+    loading: isLoading,
   });
 
   const reset = useInvitationStore((state) => state.reset);
@@ -225,9 +228,9 @@ export default function MyPageClient({
 
   const handleEdit = useCallback(
     async (inv: InvitationSummaryRecord) => {
-      if (actionLoadingId === inv.id) return;
+      if (isLoading) return;
 
-      setActionLoadingId(inv.id);
+      startLoading('데이터를 불러오고 있어요...');
       try {
         const fullData = await fetchFullInvitationData(inv.slug);
 
@@ -254,17 +257,17 @@ export default function MyPageClient({
       } finally {
         // 편집 페이지 이동이 시작될 시간을 주고 버튼 로딩 상태 해제 (이동 중 깜빡임 방지)
         // 이동 후 다시 이 페이지로 돌아왔을 때 버튼이 계속 눌려 있는 현상 방지
-        setTimeout(() => setActionLoadingId(null), 1000);
+        setTimeout(() => stopLoading(), 1000);
       }
     },
-    [fetchFullInvitationData, router, toast, actionLoadingId]
+    [fetchFullInvitationData, router, toast, isLoading, startLoading, stopLoading]
   );
 
   // --- Action Executors ---
 
   const executeDelete = useCallback(
     async (targetId: string) => {
-      setActionLoadingId(targetId);
+      startLoading('삭제 중이에요...');
       try {
         await invitationService.deleteInvitation(targetId);
         // Parallelize re-fetch
@@ -278,16 +281,16 @@ export default function MyPageClient({
           description: '삭제 중 오류가 발생했어요.',
         });
       } finally {
-        setActionLoadingId(null);
+        stopLoading();
         setConfirmConfig((prev) => ({ ...prev, isOpen: false }));
       }
     },
-    [userId, toast, router]
+    [userId, toast, router, startLoading, stopLoading]
   );
 
   const executeCancelRequest = useCallback(
     async (invitationId: string) => {
-      setActionLoadingId(invitationId);
+      startLoading('신청을 취소하고 있어요...');
       try {
         await approvalRequestService.cancelRequest(invitationId);
         // Parallelize re-fetch
@@ -299,11 +302,11 @@ export default function MyPageClient({
       } catch {
         toast({ variant: 'destructive', description: '취소 처리에 실패했어요.' });
       } finally {
-        setActionLoadingId(null);
+        stopLoading();
         setConfirmConfig((prev) => ({ ...prev, isOpen: false }));
       }
     },
-    [userId, toast, router]
+    [userId, toast, router, startLoading, stopLoading]
   );
 
   // --- Action Initiators ---
@@ -441,7 +444,7 @@ export default function MyPageClient({
     async (inv: InvitationSummaryRecord) => {
       if (!userId || !profile?.full_name || !profile?.phone) return;
 
-      setActionLoadingId(inv.id);
+      startLoading('요청 중이에요...');
       try {
         // async-api-routes pattern: start operation
         await approvalRequestService.createRequest({
@@ -474,17 +477,17 @@ export default function MyPageClient({
           description: '신청 처리 중 오류가 발생했어요.',
         });
       } finally {
-        setActionLoadingId(null);
+        stopLoading();
         setConfirmConfig((prev) => ({ ...prev, isOpen: false }));
       }
     },
-    [fetchFullInvitationData, profile, toast, userId, router]
+    [fetchFullInvitationData, profile, toast, userId, router, startLoading, stopLoading]
   );
 
   const executeRevertToDraft = useCallback(
     async (inv: InvitationSummaryRecord) => {
       if (!userId) return;
-      setActionLoadingId(inv.id);
+      startLoading('전환 중이에요...');
       try {
         const fullData = await fetchFullInvitationData(inv.slug);
         const updatedData = {
@@ -505,16 +508,17 @@ export default function MyPageClient({
         console.error('Failed to revert to draft:', error);
         toast({ variant: 'destructive', description: '수정 모드 전환에 실패했어요.' });
       } finally {
-        setActionLoadingId(null);
+        stopLoading();
       }
     },
-    [userId, fetchFullInvitationData, toast, router]
+    [userId, fetchFullInvitationData, toast, router, startLoading, stopLoading]
   );
 
   const handleConfirmAction = useCallback(() => {
     const { type, targetId, targetRecord } = confirmConfig;
+    setConfirmConfig((prev) => ({ ...prev, isOpen: false }));
+
     if (!type || type === 'INFO_ONLY') {
-      setConfirmConfig((prev) => ({ ...prev, isOpen: false }));
       return;
     }
 
@@ -578,15 +582,25 @@ export default function MyPageClient({
           <MyPageHeader
             title={MENU_TITLES.DASHBOARD}
             actions={
-              <IconButton
-                onClick={() => handleViewModeChange(viewMode === 'grid' ? 'swiper' : 'grid')}
-                variant="ghost"
-                iconSize={20}
-                aria-label={viewMode === 'grid' ? '슬라이드 보기' : '그리드 보기'}
-                name=""
-              >
-                {viewMode === 'grid' ? <GalleryHorizontal size={20} /> : <LayoutGrid size={20} />}
-              </IconButton>
+              <div className={styles.headerActions}>
+                <Button
+                  onClick={handleCreateNew}
+                  size="sm"
+                  variant="primary"
+                  leftIcon={<Plus size={16} />}
+                >
+                  새 청첩장
+                </Button>
+                <IconButton
+                  onClick={() => handleViewModeChange(viewMode === 'grid' ? 'swiper' : 'grid')}
+                  variant="ghost"
+                  iconSize={20}
+                  aria-label={viewMode === 'grid' ? '슬라이드 보기' : '그리드 보기'}
+                  name=""
+                >
+                  {viewMode === 'grid' ? <GalleryHorizontal size={20} /> : <LayoutGrid size={20} />}
+                </IconButton>
+              </div>
             }
           />
 
@@ -594,7 +608,7 @@ export default function MyPageClient({
             viewMode === 'grid' ? (
               <div className={styles.cardGrid}>
                 {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className={styles.createCardWrapper}>
+                  <div key={i} className={styles.skeletonCardWrapper}>
                     <div className={styles.skeletonCardItem}>
                       <Skeleton className={styles.skeletonCard ?? ''} />
                       <div className={styles.skeletonOverlay}>
@@ -615,7 +629,7 @@ export default function MyPageClient({
                   {[1, 2, 3].map((i) => (
                     <div key={i} className={styles.autoWidthSlide}>
                       <div className={styles.swiperCardWrapper}>
-                        <div className={styles.createCardWrapper}>
+                        <div className={styles.skeletonCardWrapper}>
                           <div className={styles.skeletonCardItem}>
                             <Skeleton className={styles.skeletonCard ?? ''} />
                             <div className={styles.skeletonOverlay}>
@@ -636,23 +650,6 @@ export default function MyPageClient({
             )
           ) : viewMode === 'grid' ? (
             <div className={styles.cardGrid}>
-              {/* Create New Card */}
-              <div className={styles.createCardWrapper}>
-                <Link
-                  href="/builder"
-                  className={styles.createCard}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleCreateNew();
-                  }}
-                >
-                  <div className={styles.createIcon}>
-                    <Plus size={28} />
-                  </div>
-                  <span className={styles.createText}>새 청첩장 만들기</span>
-                </Link>
-              </div>
-
               {/* Invitation Cards */}
               {invitations.map((inv, index) => {
                 const rejectionData =
@@ -670,7 +667,6 @@ export default function MyPageClient({
                     onCancelRequest={handleCancelRequestClick}
                     onRevokeApproval={handleAdminRevokeClick}
                     onRevertToDraft={executeRevertToDraft}
-                    isLoading={actionLoadingId === inv.id}
                     layout="grid"
                   />
                 );
@@ -687,27 +683,6 @@ export default function MyPageClient({
                 className={styles.dashboardSwiper}
                 grabCursor={true}
               >
-                {/* Create New Card slide */}
-                <SwiperSlide className={styles.autoWidthSlide}>
-                  <div className={styles.swiperCardWrapper}>
-                    <div className={styles.createCardWrapper}>
-                      <Link
-                        href="/builder"
-                        className={styles.createCard}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleCreateNew();
-                        }}
-                      >
-                        <div className={styles.createIcon}>
-                          <Plus size={32} />
-                        </div>
-                        <span className={styles.createText}>새 청첩장 만들기</span>
-                      </Link>
-                    </div>
-                  </div>
-                </SwiperSlide>
-
                 {invitations.map((inv, index) => {
                   const rejectionData =
                     rejectedRequests.find((req) => req.invitation_id === inv.id) || null;
@@ -725,7 +700,6 @@ export default function MyPageClient({
                           onCancelRequest={handleCancelRequestClick}
                           onRevokeApproval={handleAdminRevokeClick}
                           onRevertToDraft={executeRevertToDraft}
-                          isLoading={actionLoadingId === inv.id}
                           layout="swiper"
                         />
                       </div>
@@ -766,7 +740,6 @@ export default function MyPageClient({
                   variant="secondary"
                   size="lg"
                   onClick={() => setConfirmConfig((prev) => ({ ...prev, isOpen: false }))}
-                  disabled={!!actionLoadingId}
                 >
                   취소
                 </Button>
@@ -775,8 +748,6 @@ export default function MyPageClient({
             <AlertDialogAction asChild>
               <Button
                 size="lg"
-                loading={!!actionLoadingId}
-                disabled={!!actionLoadingId}
                 onClick={(e) => {
                   e.preventDefault(); // Prevent default since we handle async actions
                   if (confirmConfig.type !== 'INFO_ONLY') {
@@ -814,17 +785,11 @@ export default function MyPageClient({
               </div>
             </Dialog.Body>
             <Dialog.Footer>
-              <Button
-                variant="secondary"
-                size="lg"
-                onClick={rejectionReason.handleClose}
-                disabled={!!actionLoadingId}
-              >
+              <Button variant="secondary" size="lg" onClick={rejectionReason.handleClose}>
                 취소
               </Button>
               <Button
                 size="lg"
-                loading={!!actionLoadingId}
                 disabled={rejectionReason.isSubmitDisabled}
                 onClick={rejectionReason.handleSubmit}
               >

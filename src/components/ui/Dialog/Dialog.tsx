@@ -13,12 +13,16 @@ interface DialogContextValue {
   isBottomSheet: boolean;
   fullScreen: boolean;
   bottomSheetDirection: DrawerDirection;
+  container: HTMLElement | null;
+  type?: 'default' | 'fullScreen';
 }
 
 const DialogContext = React.createContext<DialogContextValue>({
   isBottomSheet: false,
   fullScreen: false,
   bottomSheetDirection: 'bottom',
+  container: null,
+  type: 'default',
 });
 
 interface DialogProps
@@ -28,20 +32,26 @@ interface DialogProps
   mobileBottomSheet?: boolean | undefined;
   mobileBottomSheetDirection?: DrawerDirection | undefined;
   fullScreen?: boolean | undefined;
+  type?: 'default' | 'fullScreen' | undefined;
   surface?: 'default' | 'muted' | undefined;
+  container?: HTMLElement | null | undefined;
 }
 
-const hasDialogTrigger = (children: React.ReactNode): boolean => {
+const hasDialogComposedPattern = (children: React.ReactNode): boolean => {
   return React.Children.toArray(children).some((child) => {
     if (!React.isValidElement(child)) return false;
 
     const childType = child.type as { displayName?: string; name?: string };
     const childName = childType.displayName ?? childType.name;
-    if (childName === 'DialogTrigger') {
+    if (
+      childName === 'DialogTrigger' ||
+      childName === 'DialogContent' ||
+      childName === 'DialogPortal'
+    ) {
       return true;
     }
 
-    return hasDialogTrigger((child.props as { children?: React.ReactNode }).children);
+    return hasDialogComposedPattern((child.props as { children?: React.ReactNode }).children);
   });
 };
 
@@ -50,7 +60,9 @@ const DialogRoot = ({
   mobileBottomSheet = false,
   mobileBottomSheetDirection = 'bottom',
   fullScreen = false,
+  type = 'default',
   surface = 'default',
+  container,
   open,
   defaultOpen,
   onOpenChange,
@@ -65,10 +77,12 @@ const DialogRoot = ({
       isBottomSheet,
       fullScreen,
       bottomSheetDirection: mobileBottomSheetDirection,
+      container: container ?? null,
+      type,
     }),
-    [isBottomSheet, fullScreen, mobileBottomSheetDirection]
+    [isBottomSheet, fullScreen, mobileBottomSheetDirection, container, type]
   );
-  const useComposedPattern = hasDialogTrigger(children);
+  const useComposedPattern = hasDialogComposedPattern(children);
   const dialogChildren = useComposedPattern ? (
     children
   ) : (
@@ -124,7 +138,7 @@ const DialogOverlay = memo(
     React.ElementRef<typeof DialogPrimitive.Overlay>,
     React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
   >(({ className, ...props }, ref) => {
-    const { isBottomSheet } = useContext(DialogContext);
+    const { isBottomSheet, type } = useContext(DialogContext);
 
     if (isBottomSheet) {
       return (
@@ -133,7 +147,11 @@ const DialogOverlay = memo(
     }
 
     return (
-      <DialogPrimitive.Overlay ref={ref} className={cn(styles.overlay, className)} {...props} />
+      <DialogPrimitive.Overlay
+        ref={ref}
+        className={cn(styles.overlay, type === 'fullScreen' && styles.overlayFullScreen, className)}
+        {...props}
+      />
     );
   })
 );
@@ -141,11 +159,12 @@ DialogOverlay.displayName = 'DialogOverlay';
 
 const DialogPortal = memo(
   ({ children, ...props }: React.ComponentPropsWithoutRef<typeof DialogPrimitive.Portal>) => {
-    const { isBottomSheet } = useContext(DialogContext);
+    const { isBottomSheet, container } = useContext(DialogContext);
+    const portalContainer = props.container ?? container ?? undefined;
 
     if (isBottomSheet) {
       return (
-        <Drawer.Portal {...props}>
+        <Drawer.Portal {...props} container={portalContainer}>
           <DialogOverlay />
           {children}
         </Drawer.Portal>
@@ -153,7 +172,7 @@ const DialogPortal = memo(
     }
 
     return (
-      <DialogPrimitive.Portal {...props}>
+      <DialogPrimitive.Portal {...props} container={portalContainer}>
         <DialogOverlay />
         {children}
       </DialogPrimitive.Portal>
@@ -178,7 +197,7 @@ const DialogContent = memo(
       surface?: 'default' | 'muted' | undefined;
     }
   >(({ className, children, surface = 'default', ...props }, ref) => {
-    const { isBottomSheet, fullScreen, bottomSheetDirection } = useContext(DialogContext);
+    const { isBottomSheet, fullScreen, bottomSheetDirection, type } = useContext(DialogContext);
     const internalRef = useRef<HTMLDivElement>(null);
 
     const setRefs = useCallback(
@@ -234,6 +253,7 @@ const DialogContent = memo(
           styles.content,
           styles.dialogContent,
           fullScreen && styles.fullPageRight,
+          type === 'fullScreen' && styles.fullScreenType,
           surface === 'muted' && styles.surfaceMuted,
           className
         )}

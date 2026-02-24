@@ -27,7 +27,6 @@ interface InvitationCardProps {
   onRevertToDraft?: (inv: InvitationSummaryRecord) => void;
   index?: number;
   layout?: 'grid' | 'swiper';
-  isLoading?: boolean;
 }
 
 const InvitationCard = React.memo(
@@ -41,7 +40,6 @@ const InvitationCard = React.memo(
     index,
     rejectionData = null,
     onRevokeApproval,
-    isLoading = false,
   }: InvitationCardProps) => {
     const { isApproved, isRequesting, isRejected, imageUrl, title, slug } = useInvitationStatus({
       invitation,
@@ -137,8 +135,6 @@ const InvitationCard = React.memo(
                   <Button
                     variant="ghost"
                     className={clsx(styles.footerButton, styles.secondary, 'swiper-no-swiping')}
-                    loading={isLoading}
-                    disabled={isLoading}
                     onClick={(e) => {
                       e.stopPropagation();
                       onEdit(invitation);
