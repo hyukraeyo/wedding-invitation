@@ -23,6 +23,12 @@ const RSS_ITEMS: RssItem[] = [
     pubDate: PUBLISHED_AT,
   },
   {
+    title: `${SITE_NAME} 브랜드 스토리`,
+    path: '/brand-story',
+    description: `${SITE_NAME}의 철학과 제품 방향을 소개하는 페이지입니다.`,
+    pubDate: PUBLISHED_AT,
+  },
+  {
     title: `${SITE_NAME} 이용약관`,
     path: '/terms',
     description: `${SITE_NAME} 서비스 이용약관 안내 페이지입니다.`,

@@ -18,7 +18,7 @@ const toValidAbsoluteUrl = (url: string): string => {
 export const SITE_NAME = '바나나웨딩';
 export const SITE_NAME_EN = 'Banana Wedding';
 export const SITE_DESCRIPTION =
-  '복잡한 과정 없이 바로 시작하는 모바일 청첩장 제작, 바나나웨딩에서 지금 만들어보세요.';
+  '복잡한 과정 없이 바로 시작하는 모바일 청첩장 제작, 바나나웨딩(바나나 웨딩)에서 지금 만들어보세요.';
 export const SITE_URL = toValidAbsoluteUrl(process.env.NEXT_PUBLIC_BASE_URL || DEFAULT_SITE_URL);
 
 export const absoluteUrl = (path: string = '/'): string => {

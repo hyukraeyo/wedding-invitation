@@ -1,0 +1,96 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+
+.article {
+  max-width: v.$canvas-max-width;
+  margin: 0 auto;
+  padding: calc(v.$header-height + v.$space-lg) v.$space-md v.$space-3xl;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-md;
+}
+
+.title {
+  margin: 0;
+  color: v.$grey-900;
+  font-size: v.$font-size-xxl;
+  font-weight: v.$font-weight-bold;
+  line-height: v.$line-height-tight;
+  word-break: keep-all;
+}
+
+.lead {
+  margin: 0;
+  color: v.$grey-700;
+  font-size: v.$font-size-md;
+  line-height: v.$line-height-relaxed;
+  word-break: keep-all;
+}
+
+.section {
+  margin-top: v.$space-2xl;
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-md;
+}
+
+.sectionTitle {
+  margin: 0;
+  color: v.$grey-900;
+  font-size: v.$font-size-xl;
+  font-weight: v.$font-weight-semibold;
+  line-height: v.$line-height-tight;
+}
+
+.paragraph {
+  margin: 0;
+  color: v.$grey-700;
+  font-size: v.$font-size-md;
+  line-height: v.$line-height-relaxed;
+  word-break: keep-all;
+}
+
+.list {
+  margin: 0;
+  padding-left: v.$space-lg;
+  color: v.$grey-700;
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-sm;
+  font-size: v.$font-size-md;
+  line-height: v.$line-height-relaxed;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: v.$space-sm;
+}
+
+.primaryAction,
+.secondaryAction {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: v.$control-height-md;
+  padding: 0 v.$space-md;
+  border-radius: v.$radius-full;
+  font-size: v.$control-font-size-md;
+  font-weight: v.$font-weight-semibold;
+  text-decoration: none;
+  transition: v.$transition-normal;
+}
+
+.primaryAction {
+  color: v.$grey-900;
+  background-color: v.$primary;
+}
+
+.secondaryAction {
+  color: v.$grey-700;
+  background-color: v.$white;
+  border: 1px solid v.$grey-300;
+}
