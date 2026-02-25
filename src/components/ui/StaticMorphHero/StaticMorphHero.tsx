@@ -76,7 +76,7 @@ function FlipCard({ src, index, target, phase, isFront = false }: FlipCardProps)
             src={src}
             alt={`hero-${index}`}
             fill
-            sizes={isFront ? '100vw' : '200px'}
+            sizes={isFront ? '(max-width: 768px) 100vw, 600px' : '200px'}
             priority={isFront}
             quality={isFront ? 100 : 75}
             className={styles.cardImage}
@@ -93,19 +93,19 @@ const TOTAL_IMAGES = 11;
 const SCALE_MOBILE = 0.75;
 const SCALE_PC = 1.8;
 
-// Unsplash Images (Replaced with local images for test-2)
+// Unsplash Images (Replaced with local images)
 const IMAGES = [
-  '/images/test-2/image-01.png',
-  '/images/test-2/image-02.png',
-  '/images/test-2/image-03.png',
-  '/images/test-2/image-04.jpg',
-  '/images/test-2/image-05.jpg',
-  '/images/test-2/image-06.jpg',
-  '/images/test-2/image-07.jpg',
-  '/images/test-2/image-08.jpg',
-  '/images/test-2/image-09.jpg',
-  '/images/test-2/image-10.png',
-  '/images/test-2/image-11.png',
+  '/images/hero/image-01.png',
+  '/images/hero/image-02.png',
+  '/images/hero/image-03.png',
+  '/images/hero/image-04.jpg',
+  '/images/hero/image-05.jpg',
+  '/images/hero/image-06.jpg',
+  '/images/hero/image-07.jpg',
+  '/images/hero/image-08.jpg',
+  '/images/hero/image-09.jpg',
+  '/images/hero/image-10.png',
+  '/images/hero/image-11.png',
 ];
 
 export function StaticMorphHero() {

@@ -170,6 +170,7 @@ $transition-normal: 250ms ease;
 
 // Typo Compatibility
 $font-size-2xl: t.$font-size-xxl;
+$font-size-3xl: t.$font-size-3xl;
 $font-pretendard: t.$font-pretendard;
 $font-family-base: t.$font-main;
 $font-gmarket-sans: t.$font-gmarket-sans;
@@ -191,6 +192,7 @@ $space-lg: 24px;
 $space-xl: 32px;
 $space-2xl: 48px;
 $space-3xl: 64px;
+$space-4xl: 96px;
 
 // Builder Layout Tokens (Legacy aliases)
 $builder-gap-sm: $space-sm;
