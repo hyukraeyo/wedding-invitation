@@ -221,6 +221,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    padding: 0 var(--input-padding, v.$control-padding-md);
 
     &.placeholder {
       color: v.$grey-400;
