@@ -17,6 +17,7 @@ interface ShareModalProps {
   invitationDescription?: string | undefined;
   invitationImageUrl?: string | undefined;
   buttonType?: 'none' | 'location' | 'rsvp' | undefined;
+  imageRatio?: 'portrait' | 'landscape' | undefined;
   address?: string | undefined;
   locationName?: string | undefined;
   slug: string;
@@ -30,6 +31,7 @@ export function ShareModal({
   invitationDescription,
   invitationImageUrl,
   buttonType,
+  imageRatio,
   address,
   locationName,
   slug,
@@ -82,6 +84,7 @@ export function ShareModal({
               invitationDescription={invitationDescription || ''}
               invitationImageUrl={invitationImageUrl || ''}
               {...(buttonType ? { buttonType } : {})}
+              {...(imageRatio ? { imageRatio } : {})}
               {...(address ? { address } : {})}
               {...(locationName ? { locationName } : {})}
               slug={slug}

@@ -7,6 +7,7 @@ export interface KakaoShareOptions {
   description: string;
   imageUrl: string;
   buttonType: 'none' | 'location' | 'rsvp';
+  imageRatio?: 'portrait' | 'landscape';
   address?: string | undefined;
   location?: string | undefined;
 }
@@ -153,12 +154,17 @@ export function sendKakaoShare({
       options.location
     );
 
+    const imageWidth = options.imageRatio === 'portrait' ? 600 : 800;
+    const imageHeight = options.imageRatio === 'portrait' ? 800 : 400;
+
     window.Kakao.Share.sendDefault({
       objectType: 'feed',
       content: {
         title: options.title,
         description: options.description,
         imageUrl,
+        imageWidth,
+        imageHeight,
         link: {
           mobileWebUrl: canonicalUrl,
           webUrl: canonicalUrl,

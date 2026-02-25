@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
       .select(APPROVAL_REQUEST_SUMMARY_SELECT)
       .eq('invitation_id', validatedData.invitationId)
       .eq('status', 'pending')
-      .single();
+      .maybeSingle();
 
     if (existingRequest) {
       return NextResponse.json(
@@ -51,6 +51,13 @@ export async function POST(request: NextRequest) {
         { status: 200 }
       );
     }
+
+    // 기존 승인, 혹은 거절/취소된 내역이 있다면 삭제하여 리스트에 중복으로 노출되지 않도록 함
+    await db
+      .from('approval_requests')
+      .delete()
+      .eq('invitation_id', validatedData.invitationId)
+      .in('status', ['rejected', 'approved']);
 
     const { data, error } = await db
       .from('approval_requests')

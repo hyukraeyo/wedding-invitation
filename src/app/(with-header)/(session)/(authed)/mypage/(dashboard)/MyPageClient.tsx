@@ -108,7 +108,18 @@ export default function MyPageClient({
   }, [pathname, stopLoading]);
 
   const [invitations, setInvitations] = useState<InvitationSummaryRecord[]>(initialInvitations);
-  const [rejectedRequests] = useState<ApprovalRequestSummary[]>(initialRejectedRequests);
+  const [rejectedRequests, setRejectedRequests] =
+    useState<ApprovalRequestSummary[]>(initialRejectedRequests);
+
+  // 서버 컴포넌트에서 내려주는 최신 데이터(props)로 로컬 상태 동기화
+  // router.refresh() 또는 페이지 이동 시 캐시된 state 대신 최신 데이터를 즉각 반영하기 위함
+  useEffect(() => {
+    setInvitations(initialInvitations);
+  }, [initialInvitations]);
+
+  useEffect(() => {
+    setRejectedRequests(initialRejectedRequests);
+  }, [initialRejectedRequests]);
   const [viewMode, setViewMode] = useState<'grid' | 'swiper'>('swiper');
   const [isViewModeReady, setIsViewModeReady] = useState(false);
 

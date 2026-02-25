@@ -135,6 +135,22 @@
   }
 }
 
+// 4.5. Soft Variant (Solid minimal style)
+.soft {
+  background-color: v.$grey-100;
+  color: v.$grey-700;
+
+  &:disabled {
+    background-color: v.$grey-50;
+    color: v.$grey-300;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: v.$grey-200;
+    color: v.$grey-900;
+  }
+}
+
 // 5. Dashed / Add Variant
 .dashed {
   background-color: transparent;

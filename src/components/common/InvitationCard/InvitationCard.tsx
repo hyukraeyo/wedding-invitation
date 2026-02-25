@@ -206,7 +206,7 @@ const InvitationCard = React.memo(
                 />
               </Dialog.Body>
               <Dialog.Footer>
-                <Button variant="ghost" size="lg" onClick={() => setShowRejectionModal(false)}>
+                <Button variant="soft" size="lg" onClick={() => setShowRejectionModal(false)}>
                   닫기
                 </Button>
                 <Button
@@ -241,6 +241,7 @@ const InvitationCard = React.memo(
             }
             invitationImageUrl={invitation.invitation_data?.kakaoShare?.imageUrl || imageUrl || ''}
             buttonType={invitation.invitation_data?.kakaoShare?.buttonType || 'location'}
+            imageRatio={invitation.invitation_data?.kakaoShare?.imageRatio || 'landscape'}
             address={invitation.invitation_data?.address}
             locationName={invitation.invitation_data?.location}
             slug={slug}

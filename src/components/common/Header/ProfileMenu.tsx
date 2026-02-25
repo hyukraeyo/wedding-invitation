@@ -246,7 +246,7 @@ export function ProfileMenu({ notificationCount, className }: ProfileMenuProps) 
                   </Dialog.Body>
                   <Dialog.Footer className={styles.footer}>
                     <Dialog.Close asChild>
-                      <Button variant="ghost" size="lg">
+                      <Button variant="soft" size="lg">
                         닫기
                       </Button>
                     </Dialog.Close>

@@ -36,6 +36,7 @@ export interface InvitationSummaryData {
     title?: string;
     description?: string;
     imageUrl?: string | null;
+    imageRatio?: 'portrait' | 'landscape';
     buttonType?: 'none' | 'location' | 'rsvp';
   };
 }
@@ -68,6 +69,7 @@ export interface InvitationSummaryRow {
     title?: string;
     description?: string;
     imageUrl?: string | null;
+    imageRatio?: 'portrait' | 'landscape';
     buttonType?: 'none' | 'location' | 'rsvp';
   } | null;
 }

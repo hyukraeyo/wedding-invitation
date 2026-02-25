@@ -6,62 +6,6 @@
   flex-direction: column;
 }
 
-.infoSpacing {
-  margin-top: v.$space-sm;
-}
-
-.bottomActions {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.fullPreviewBtn {
-  margin-left: auto;
-  gap: calc(v.$space-sm / 2);
-  min-height: v.$control-height-sm;
-  padding-inline: v.$control-padding-sm;
-  border-radius: v.$radius-full;
-  background-color: v.$grey-100;
-  border: 1px solid v.$grey-200;
-  color: v.$grey-700;
-
-  @include m.hover {
-    background-color: v.$grey-200;
-    border-color: v.$grey-300;
-  }
-}
-
-.previewDialogContent {
-  overflow: hidden;
-}
-
-.previewDialogHeader {
-  padding-bottom: v.$space-sm;
-}
-
-.modalBody {
-  display: flex;
-  flex-direction: column;
-  gap: v.$space-md;
-  padding-top: 0;
-}
-
-.previewSurface {
-  border-radius: v.$radius-lg;
-  border: 1px solid v.$grey-200;
-  background: linear-gradient(180deg, rgba(v.$primary, 0.24) 0%, rgba(v.$primary, 0.08) 100%);
-  padding: calc(v.$space-sm * 1.5);
-}
-
-.previewLabel {
-  display: flex;
-  align-items: center;
-  gap: calc(v.$space-sm / 2);
-  color: v.$grey-700;
-  font-size: v.$control-font-size-sm;
-  font-weight: 600;
-}
-
 .card {
   background-color: v.$white;
   border: 1px solid v.$grey-200;
@@ -82,8 +26,6 @@
 
   &.portrait {
     aspect-ratio: 3 / 4;
-    max-width: min(100%, calc(v.$space-xl * 11));
-    margin-inline: auto;
   }
 }
 
@@ -111,22 +53,29 @@
 .cardTitle {
   margin: 0;
   color: v.$grey-900;
-  font-size: v.$control-font-size-lg;
-  font-weight: 700;
+  font-size: 15px; // Matches Kakao's title approx size
+  font-weight: 600;
+  line-height: 1.4;
   letter-spacing: -0.01em;
 }
 
 .cardDescription {
   margin: 0;
   color: v.$grey-600;
-  font-size: v.$control-font-size-sm;
-  line-height: 1.5;
+  font-size: 13px; // Kakao description is smaller
+  line-height: 1.4;
+  margin-top: calc(v.$space-sm / 2);
   white-space: pre-line;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .btnGroup {
   display: flex;
-  flex-wrap: wrap;
   gap: calc(v.$space-sm / 2);
   padding: 0 v.$space-md v.$space-md;
 }
@@ -135,15 +84,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 1 1 calc(50% - (v.$space-sm / 2));
-  min-height: v.$control-height-sm;
-  padding: 0 v.$control-padding-md;
+  flex: 1;
+  height: 40px;
   border-radius: v.$radius-md;
   border: 1px solid v.$grey-200;
-  background-color: v.$grey-50;
-  color: v.$grey-700;
-  font-size: v.$control-font-size-sm;
-  font-weight: 600;
+  background-color: v.$grey-50; // light gray
+  color: v.$grey-900;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .cardFooter {
@@ -151,22 +99,29 @@
   align-items: center;
   justify-content: space-between;
   border-top: 1px solid v.$grey-200;
-  padding: v.$space-sm v.$space-md calc(v.$space-sm * 1.5);
-  background-color: rgba(v.$primary, 0.08);
+  padding: calc(v.$space-sm * 1.5) v.$space-md;
+  background-color: v.$grey-50;
+}
+
+.footerBrand {
+  display: flex;
+  align-items: center;
+  gap: calc(v.$space-sm / 2);
+}
+
+.footerLogo {
+  border-radius: calc(v.$radius-sm / 2);
+  overflow: hidden;
 }
 
 .footerText {
-  color: v.$grey-800;
-  font-size: v.$control-font-size-sm;
-  font-weight: 700;
+  color: v.$grey-600;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .footerChevron {
-  color: v.$grey-500;
-}
-
-.paddedFooter {
-  padding: 0 v.$space-md v.$space-md;
+  color: v.$grey-400;
 }
 
 .fullWidth {

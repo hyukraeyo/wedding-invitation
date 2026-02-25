@@ -5,7 +5,7 @@ import { MessageCircle, ChevronRight } from 'lucide-react';
 import { EditorSection } from '@/components/ui/EditorSection';
 import { TextField } from '@/components/ui/TextField';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
-import { InfoMessage } from '@/components/ui/InfoMessage';
+import { Field } from '@/components/ui/Field';
 import { ImageUploader } from '@/components/common/ImageUploader';
 import { SectionSampleDialogAction } from '@/components/common/SectionSampleDialogAction';
 import { Button } from '@/components/ui/Button';
@@ -33,7 +33,7 @@ export default function KakaoShareSection(props: SectionProps) {
   const handleSelectSample = (sample: SamplePhraseItem) => {
     setKakao({
       title: sample.title,
-      description: sample.content || '', // Map content to description
+      description: sample.subtitle || sample.content || '', // Map subtitle or content to description
     });
   };
 
@@ -62,9 +62,9 @@ export default function KakaoShareSection(props: SectionProps) {
               { label: '가로형', value: 'landscape' },
             ]}
           />
-          <div className={styles.infoSpacing}>
-            <InfoMessage>카카오톡 공유 메시지에서 보여질 사진의 비율이에요.</InfoMessage>
-          </div>
+          <Field.Footer>
+            <Field.HelperText>카카오톡 공유 메시지에서 보여질 사진의 비율이에요.</Field.HelperText>
+          </Field.Footer>
         </FormField>
 
         <FormField name="kakao-title">
@@ -113,30 +113,16 @@ export default function KakaoShareSection(props: SectionProps) {
             <SegmentedControl.Item value="none">사용 안함</SegmentedControl.Item>
           </SegmentedControl>
         </FormField>
-
-        <div className={styles.bottomActions}>
+        <FormField name="kakao-button-type">
           <Dialog mobileBottomSheet>
             <Dialog.Trigger asChild>
-              <Button type="button" variant="ghost" className={styles.fullPreviewBtn}>
-                <MessageCircle size={16} />
+              <Button type="button" variant="secondary" fullWidth>
                 미리보기
               </Button>
             </Dialog.Trigger>
-            <Dialog.Content
-              className={styles.previewDialogContent}
-              aria-label="카카오톡 공유 미리보기"
-            >
-              <Dialog.Header
-                title="카카오톡 공유 미리보기"
-                className={styles.previewDialogHeader}
-              />
-              <Dialog.Body className={styles.modalBody}>
-                <div className={styles.previewSurface}>
-                  <div className={styles.previewLabel}>
-                    <MessageCircle size={14} />
-                    <span>카카오톡 메시지 카드</span>
-                  </div>
-                </div>
+            <Dialog.Content aria-label="카카오톡 공유 미리보기">
+              <Dialog.Header title="카카오톡 공유 미리보기" />
+              <Dialog.Body>
                 <article className={styles.card}>
                   {kakao.imageUrl ? (
                     <div className={previewImageClassName}>
@@ -166,21 +152,30 @@ export default function KakaoShareSection(props: SectionProps) {
                     )}
                   </div>
                   <div className={styles.cardFooter}>
-                    <span className={styles.footerText}>바나나 웨딩</span>
+                    <div className={styles.footerBrand}>
+                      <Image
+                        src="/logo.png"
+                        alt="logo"
+                        width={14}
+                        height={14}
+                        className={styles.footerLogo}
+                      />
+                      <span className={styles.footerText}>바나나 웨딩</span>
+                    </div>
                     <ChevronRight size={12} className={styles.footerChevron} />
                   </div>
                 </article>
               </Dialog.Body>
-              <Dialog.Footer className={styles.paddedFooter}>
+              <Dialog.Footer>
                 <Dialog.Close asChild>
-                  <Button variant="ghost" className={styles.fullWidth}>
+                  <Button variant="soft" className={styles.fullWidth}>
                     닫기
                   </Button>
                 </Dialog.Close>
               </Dialog.Footer>
             </Dialog.Content>
           </Dialog>
-        </div>
+        </FormField>
       </div>
     </EditorSection>
   );

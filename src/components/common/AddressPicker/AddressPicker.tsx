@@ -122,7 +122,7 @@ const AddressPickerRaw = (
         </Dialog.Body>
         <Dialog.Footer className={styles.footer}>
           <Dialog.Close asChild>
-            <Button variant="ghost">닫기</Button>
+            <Button variant="soft">닫기</Button>
           </Dialog.Close>
         </Dialog.Footer>
       </Dialog.Content>

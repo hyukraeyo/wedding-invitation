@@ -9,6 +9,7 @@ interface KakaoShareButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEle
   invitationDescription?: string | undefined;
   invitationImageUrl?: string | undefined;
   buttonType?: 'none' | 'location' | 'rsvp' | undefined;
+  imageRatio?: 'portrait' | 'landscape' | undefined;
   address?: string | undefined;
   locationName?: string | undefined;
   slug: string;
@@ -22,6 +23,7 @@ export function KakaoShareButton({
   invitationDescription = '',
   invitationImageUrl = '',
   buttonType = 'location',
+  imageRatio = 'landscape',
   address,
   locationName,
   slug,
@@ -44,6 +46,7 @@ export function KakaoShareButton({
         description: shareDesc,
         imageUrl: normalizeImageUrl(shareImageUrl, origin),
         buttonType,
+        imageRatio,
         address,
         location: locationName,
       },
@@ -57,6 +60,7 @@ export function KakaoShareButton({
     invitationTitle,
     invitationUrl,
     buttonType,
+    imageRatio,
     address,
     locationName,
     onError,

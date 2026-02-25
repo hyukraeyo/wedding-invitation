@@ -79,6 +79,7 @@ const ClosingView = memo(
       const shareDesc = kakaoShare?.description || `${date} ${time}`;
       const shareImageUrl = kakaoShare?.imageUrl || mainImageUrl || `${baseUrl}/logo.png`;
       const buttonType = kakaoShare?.buttonType ?? 'location';
+      const imageRatio = kakaoShare?.imageRatio ?? 'landscape';
 
       // 카카오 공유 유틸리티 사용
       import('@/lib/kakao-share')
@@ -90,6 +91,7 @@ const ClosingView = memo(
               description: shareDesc,
               imageUrl: normalizeImageUrl(shareImageUrl, baseUrl),
               buttonType,
+              imageRatio,
               address,
               location,
             },
