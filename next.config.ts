@@ -148,68 +148,6 @@ const nextConfig: NextConfig = {
       use: ['@svgr/webpack'],
     });
 
-    // Production optimization
-    if (config.name === 'client') {
-      config.optimization = {
-        ...config.optimization,
-        // Tree shaking optimization
-        sideEffects: false,
-        usedExports: true,
-        // Module concatenation for better scope hoisting
-        concatenateModules: true,
-        // Chunk splitting strategy
-        splitChunks: {
-          chunks: 'all',
-          minSize: 20000,
-          maxSize: 244000,
-          minChunks: 1,
-          maxAsyncRequests: 30,
-          maxInitialRequests: 30,
-          cacheGroups: {
-            // React core libraries (highest priority)
-            react: {
-              test: /[\\/]node_modules[\\/](react|react-dom|react-jsx)[\\/]/,
-              name: 'react-core',
-              chunks: 'all',
-              priority: 40,
-              enforce: true,
-            },
-            // Data fetching & state
-            data: {
-              test: /[\\/]node_modules[\\/](@tanstack|zustand|zod)[\\/]/,
-              name: 'data',
-              chunks: 'all',
-              priority: 25,
-            },
-            // Editor & DnD (heavy components)
-            editor: {
-              test: /[\\/]node_modules[\\/](@tiptap|@dnd-kit)[\\/]/,
-              name: 'editor',
-              chunks: 'async',
-              priority: 20,
-            },
-            // General vendors
-            vendor: {
-              test: /[\\/]node_modules[\\/]/,
-              name: 'vendors',
-              chunks: 'all',
-              priority: 10,
-              reuseExistingChunk: true,
-            },
-            // Common shared code
-            common: {
-              name: 'common',
-              minChunks: 2,
-              chunks: 'all',
-              priority: 5,
-              enforce: true,
-              reuseExistingChunk: true,
-            },
-          },
-        },
-      };
-    }
-
     return config;
   },
 };

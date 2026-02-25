@@ -148,7 +148,7 @@ export default async function RootLayout({
                 },
                 potentialAction: {
                   '@type': 'CreateAction',
-                  target: `${SITE_URL}/setup`,
+                  target: `${SITE_URL}/builder?mode=new`,
                   description: '나만의 모바일 청첩장을 제작해요.',
                 },
               },

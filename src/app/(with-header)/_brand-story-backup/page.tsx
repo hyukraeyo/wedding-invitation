@@ -89,7 +89,7 @@ export default function BrandStoryPage() {
                 시작을 준비하세요.
               </p>
               <div className={styles.heroActionGroup}>
-                <Link href="/setup" className={styles.heroPrimaryBtn}>
+                <Link href="/builder?mode=new" className={styles.heroPrimaryBtn}>
                   지금 만들기
                 </Link>
                 <a href="#brand-story-features" className={styles.heroSecondaryBtn}>
@@ -212,7 +212,7 @@ export default function BrandStoryPage() {
               <br />
               참석 여부 기능은 현재 준비 중이며 추후 제공 예정이에요.
             </p>
-            <Link href="/setup" className={styles.ctaSectionButton}>
+            <Link href="/builder?mode=new" className={styles.ctaSectionButton}>
               무료로 시작하기
               <ArrowRight size={20} aria-hidden="true" />
             </Link>

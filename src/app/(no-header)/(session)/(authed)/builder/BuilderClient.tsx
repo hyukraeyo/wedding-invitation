@@ -32,9 +32,6 @@ const InvitationCanvas = dynamic(() => import('@/components/preview/InvitationCa
   loading: () => <SectionLoader height="100%" message="초대장을 구성하고 있어요" />,
 });
 
-// Temporary bypass: keep setup guard logic but disable forced redirect for now.
-const ENABLE_SETUP_REQUIRED_GUARD = false;
-
 interface TopActionItem {
   key: 'back' | 'save';
   variant: 'secondary' | 'primary';
@@ -96,14 +93,6 @@ export function BuilderClient() {
     } else {
       if (isNewMode) {
         useInvitationStore.getState().reset();
-      }
-
-      const state = useInvitationStore.getState();
-      const hasEssentialInfo = state.groom.firstName && state.bride.firstName && state.slug;
-
-      if (ENABLE_SETUP_REQUIRED_GUARD && !hasEssentialInfo) {
-        router.replace('/setup');
-        return;
       }
 
       sessionStorage.removeItem('builder-draft-slug');

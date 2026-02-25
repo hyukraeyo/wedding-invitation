@@ -127,7 +127,7 @@ export function BrandStoryContent() {
         </p>
 
         <div className={styles.actions}>
-          <Link href="/setup" className={styles.primaryAction}>
+          <Link href="/builder?mode=new" className={styles.primaryAction}>
             3분 만에 시작하기
             <ArrowRight className={styles.actionIcon} />
           </Link>

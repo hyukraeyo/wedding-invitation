@@ -10,7 +10,6 @@ const DISALLOW_PATHS = [
   '/preview',
   '/design',
   '/login',
-  '/setup',
   '/cal-ui-test',
 ];
 

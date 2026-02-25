@@ -95,7 +95,7 @@ export function FeaturesSection() {
           viewport={{ once: true }}
           variants={itemVariants}
         >
-          <Link href="/setup" className={styles.primaryLink}>
+          <Link href="/builder?mode=new" className={styles.primaryLink}>
             3분 만에 시작하기
             <ArrowRight className={styles.linkIcon} />
           </Link>
