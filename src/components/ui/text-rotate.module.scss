@@ -1,0 +1,37 @@
+@use '@/styles/mixins' as m;
+
+.main {
+  display: flex;
+  flex-wrap: wrap;
+  white-space: pre-wrap;
+  align-items: center;
+}
+
+.srOnly {
+  @include m.visually-hidden;
+}
+
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.groupLines {
+  flex-direction: column;
+  width: 100%;
+}
+
+.word {
+  display: inline-flex;
+  align-items: center;
+}
+
+.character {
+  display: inline-block;
+  line-height: 1;
+}
+
+.space {
+  white-space: pre;
+}

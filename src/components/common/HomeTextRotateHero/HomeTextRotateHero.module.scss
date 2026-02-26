@@ -1,0 +1,137 @@
+@use '@/styles/variables' as v;
+@use '@/styles/mixins' as m;
+@use '@/styles/interact' as i;
+
+.hero {
+  position: relative;
+  width: 100%;
+  min-height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: calc(v.$header-height + v.$space-2xl) v.$space-md v.$space-3xl;
+  isolation: isolate;
+}
+
+.backgroundLayer {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 16% 18%, rgba(v.$primary, 0.32), rgba(v.$primary, 0) 52%),
+    radial-gradient(circle at 84% 74%, rgba(v.$blue-200, 0.35), rgba(v.$blue-200, 0) 48%),
+    linear-gradient(156deg, v.$grey-100 0%, v.$white 58%, v.$blue-50 100%);
+  background-size: 120% 120%, 120% 120%, 100% 100%;
+  animation: hero-background-drift 8s i.$ease-ios infinite alternate;
+  z-index: -2;
+}
+
+.content {
+  position: relative;
+  width: 100%;
+  max-width: v.$canvas-max-width;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: v.$space-xl;
+  z-index: 1;
+}
+
+.rotateLine {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: row;
+  white-space: pre;
+  color: v.$grey-900;
+  font-size: v.$font-size-xl;
+  font-weight: v.$font-weight-regular;
+  line-height: v.$line-height-tight;
+  letter-spacing: -0.02em;
+  word-break: keep-all;
+  opacity: 0;
+  transform: translate3d(0, v.$space-sm, 0);
+  animation: hero-line-in i.$duration-gentle i.$ease-ios forwards;
+}
+
+.rotatePrefix {
+  display: inline-flex;
+  align-items: center;
+  padding-top: v.$space-xs;
+}
+
+.rotateMain {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: v.$white;
+  line-height: 1;
+  padding: v.$space-xs v.$space-md;
+  border-radius: v.$radius-lg;
+  background-color: v.$red-500;
+  overflow: hidden;
+  box-shadow: v.$shadow-md;
+}
+
+.rotateSplitLevel {
+  overflow: hidden;
+}
+
+@keyframes hero-background-drift {
+  from {
+    background-position: 0% 0%, 100% 100%, 50% 50%;
+  }
+
+  to {
+    background-position: 8% 6%, 92% 94%, 50% 50%;
+  }
+}
+
+@keyframes hero-line-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, v.$space-sm, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@include m.desktop {
+  .hero {
+    padding-top: calc(v.$header-height + v.$space-3xl);
+  }
+
+  .rotateLine {
+    font-size: v.$font-size-3xl;
+  }
+
+  .rotatePrefix {
+    padding-top: v.$space-sm;
+  }
+
+  .rotateMain {
+    padding: v.$space-sm v.$space-lg;
+    border-radius: v.$radius-xl;
+  }
+
+  .rotateSplitLevel {
+    padding-bottom: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backgroundLayer,
+  .rotateLine {
+    animation: none;
+    transition: none;
+  }
+
+  .rotateLine {
+    opacity: 1;
+    transform: none;
+  }
+}
