@@ -6,6 +6,7 @@ import { createSupabaseServerClient } from '@/lib/supabase/server';
 export interface ProfileSummary {
   full_name: string | null;
   phone: string | null;
+  is_profile_complete?: boolean | null;
 }
 
 export interface ProfileState {
@@ -22,13 +23,19 @@ export async function getProfileForSession(): Promise<ProfileState | null> {
   const supabase = await createSupabaseServerClient(session);
   const { data } = await supabase
     .from('profiles')
-    .select('full_name, phone')
+    .select('full_name, phone, is_profile_complete')
     .eq('id', userId)
     .single();
 
-  const profile = data ? { full_name: data.full_name, phone: data.phone } : null;
+  const profile = data
+    ? {
+        full_name: data.full_name,
+        phone: data.phone,
+        is_profile_complete: data.is_profile_complete,
+      }
+    : null;
   return {
     profile,
-    isComplete: !!(profile?.full_name && profile?.phone),
+    isComplete: !!(profile?.is_profile_complete || (profile?.full_name && profile?.phone)),
   };
 }

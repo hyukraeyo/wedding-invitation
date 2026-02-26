@@ -24,6 +24,13 @@ const ValidationDialog = React.memo(function ValidationDialog({
   onSummaryClick,
   skipDialogAutoFocusRef,
 }: ValidationDialogProps) {
+  const contentRef = React.useRef<HTMLDivElement | null>(null);
+
+  const handleOpenAutoFocus = React.useCallback((event: Event) => {
+    event.preventDefault();
+    contentRef.current?.focus({ preventScroll: true });
+  }, []);
+
   const handleCloseAutoFocus = React.useCallback(
     (event: Event) => {
       event.preventDefault();
@@ -43,7 +50,12 @@ const ValidationDialog = React.memo(function ValidationDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange} mobileBottomSheet>
-      <Dialog.Content onCloseAutoFocus={handleCloseAutoFocus}>
+      <Dialog.Content
+        ref={contentRef}
+        tabIndex={-1}
+        onOpenAutoFocus={handleOpenAutoFocus}
+        onCloseAutoFocus={handleCloseAutoFocus}
+      >
         <Dialog.Header>
           <Dialog.Title>입력 확인</Dialog.Title>
           <Dialog.Description>필수 항목을 확인해주세요.</Dialog.Description>
@@ -56,6 +68,7 @@ const ValidationDialog = React.memo(function ValidationDialog({
                   key={`${summary.sectionKey}-${summary.fieldLabel}`}
                   size="md"
                   variant="outline"
+                  className={styles.invalidSummaryButton}
                   onClick={() => onSummaryClick(summary)}
                 >
                   {summary.sectionLabel} - {summary.fieldLabel}
