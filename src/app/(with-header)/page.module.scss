@@ -5,6 +5,18 @@
   width: 100%;
 }
 
+.heroFeaturesFlow {
+  width: 100%;
+  background: linear-gradient(
+    180deg,
+    v.$grey-100 0%,
+    v.$white 32%,
+    v.$blue-50 56%,
+    v.$grey-50 70%,
+    v.$grey-50 100%
+  );
+}
+
 .heroSection {
   width: 100%;
   min-height: 100dvh;

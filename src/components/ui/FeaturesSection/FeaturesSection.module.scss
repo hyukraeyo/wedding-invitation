@@ -4,8 +4,7 @@
 .section {
   width: 100%;
   padding: v.$space-3xl v.$space-md;
-  background-color: v.$grey-50;
-  border-top: 1px solid v.$grey-100;
+  background-color: transparent;
   display: flex;
   justify-content: center;
 }

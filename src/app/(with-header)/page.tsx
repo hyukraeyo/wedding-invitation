@@ -120,10 +120,12 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       <main className={styles.main}>
-        <section className={styles.heroSection} aria-label="바나나웨딩 홈 히어로">
-          <HomeTextRotateHero />
-        </section>
-        <FeaturesSection />
+        <div className={styles.heroFeaturesFlow}>
+          <section className={styles.heroSection} aria-label="바나나웨딩 홈 히어로">
+            <HomeTextRotateHero />
+          </section>
+          <FeaturesSection />
+        </div>
       </main>
     </>
   );
