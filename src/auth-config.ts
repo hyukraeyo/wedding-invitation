@@ -135,6 +135,90 @@ export const authConfig = {
         };
       },
     }),
+    Credentials({
+      id: 'toss',
+      name: 'Toss',
+      credentials: {
+        authorizationCode: { label: 'Code', type: 'text' },
+        referrer: { label: 'Referrer', type: 'text' },
+      },
+      async authorize(credentials) {
+        if (
+          typeof credentials?.authorizationCode !== 'string' ||
+          typeof credentials?.referrer !== 'string'
+        ) {
+          return null;
+        }
+
+        try {
+          // Dynamic import to avoid issues in some environments if needed, but standard import is fine here
+          const { getTossAccessToken, getTossUserInfo, decryptTossData } =
+            await import('./lib/toss');
+
+          // 1. 토큰 교환
+          const { accessToken } = await getTossAccessToken(
+            credentials.authorizationCode,
+            credentials.referrer
+          );
+
+          // 2. 사용자 정보 조회
+          const userInfo = await getTossUserInfo(accessToken);
+
+          // 3. 사용자 식별자 및 기본 정보 설정
+          // 토스는 CI 등을 암호화해서 주므로, 복호화가 필요함.
+          // 복호화 키가 없으면 식별자로 userKey를 사용.
+          const userKey = String(userInfo.userKey);
+          let name = '토스 사용자';
+          let email = `${userKey}@toss.user`;
+
+          try {
+            if (userInfo.name) name = decryptTossData(userInfo.name);
+            if (userInfo.email) email = userInfo.email;
+          } catch (e) {
+            console.warn('Toss data decryption failed, using defaults', e);
+          }
+
+          // 4. DB 사용자 연동 (기존 이메일 체크)
+          const { data: existingUser } = await nextAuthClient
+            .from('users')
+            .select('*')
+            .eq('email', email)
+            .maybeSingle();
+
+          if (existingUser) {
+            return {
+              id: existingUser.id,
+              email: existingUser.email,
+              name: existingUser.name ?? name,
+              image: existingUser.image ?? null,
+            };
+          }
+
+          // 5. 신규 사용자 생성
+          const { data: newUser, error } = await nextAuthClient
+            .from('users')
+            .insert({
+              email,
+              name,
+              emailVerified: new Date().toISOString(),
+            })
+            .select()
+            .single();
+
+          if (error || !newUser) return null;
+
+          return {
+            id: newUser.id,
+            email: newUser.email,
+            name: newUser.name,
+            image: newUser.image ?? null,
+          };
+        } catch (error) {
+          console.error('[TOSS_AUTH_ERROR]', error);
+          return null;
+        }
+      },
+    }),
   ],
   pages: {
     signIn: '/login',
@@ -156,20 +240,18 @@ export const authConfig = {
 
       // Admin Credentials Check
       if (provider === 'credentials') {
-        if (!user.email || !adminEmails.length) return false;
-        const isAdmin = adminEmails.includes(user.email.toLowerCase());
-        if (!isAdmin) return false;
+        // Admin or Toss Credentials
+        const isAdmin = !!(user.email && adminEmails.includes(user.email.toLowerCase()));
 
         try {
           await publicClient.from('profiles').upsert({
             id: user.id,
-            full_name: user.name ?? 'Admin',
-            is_admin: true,
+            full_name: user.name ?? (isAdmin ? 'Admin' : '토스 사용자'),
+            is_admin: isAdmin,
           });
         } catch (error) {
-          console.error('Error saving admin profile during sign in:', error);
+          console.error('Error saving profile during credentials sign in:', error);
         }
-
         return true;
       }
 

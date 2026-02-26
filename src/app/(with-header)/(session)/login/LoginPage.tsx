@@ -85,9 +85,49 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
     [toast, callbackUrl]
   );
 
-  const shouldShowProfileModal = !!userId && !isProfileComplete;
+  const [isTossLoading, setIsTossLoading] = useState(false);
+
+  const handleTossLogin = useCallback(async () => {
+    if (isTossLoading) return;
+    setIsTossLoading(true);
+    try {
+      const { appLogin } = await import('@apps-in-toss/web-framework');
+      const { authorizationCode, referrer } = await appLogin();
+
+      const result = await signIn('toss', {
+        authorizationCode,
+        referrer,
+        callbackUrl,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        toast({
+          title: '토스 로그인 실패',
+          description: '잠시 후 다시 시도해 주세요.',
+          variant: 'destructive',
+        });
+      } else {
+        router.refresh();
+      }
+    } catch (error) {
+      console.error('Toss login error:', error);
+      // 에러 무시 (사용자가 직접 버튼 누를 수 있게 함)
+    } finally {
+      setIsTossLoading(false);
+    }
+  }, [callbackUrl, router, toast, isTossLoading]);
+
+  // 토스 환경 진입 시 자동 로그인 시도
+  useEffect(() => {
+    if (isToss && !userId && !isTossLoading) {
+      handleTossLogin();
+    }
+  }, [isToss, userId, handleTossLogin, isTossLoading]);
 
   if (user && isProfileComplete) return null;
+
+  const shouldShowProfileModal = !!userId && !isProfileComplete;
 
   if (shouldShowProfileModal) {
     return (
@@ -111,9 +151,9 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
     );
   }
 
-  // 토스 환경: 카카오/네이버 로그인 대신 안내 메시지 표시
+  // 토스 환경: 카카오/네이버 로그인 대신 안내 메시지 표시 (프로덕션 환경에서만)
   // 비게임 검수 가이드: "토스 로그인이 아닌 자사 로그인이나 기타 로그인 방식은 제공하지 않아요"
-  if (isToss) {
+  if (isToss && process.env.NODE_ENV === 'production') {
     return (
       <div className={styles.overlay}>
         <div className={styles.modal}>
@@ -133,10 +173,29 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
                 wordBreak: 'keep-all',
               }}
             >
-              토스 앱에서 자동으로 로그인돼요.
+              {isTossLoading
+                ? '토스 앱에서 로그인 중입니다...'
+                : '토스 앱에서 자동으로 로그인돼요.'}
               <br />
               잠시만 기다려주세요.
             </p>
+            {!isTossLoading && (
+              <button
+                type="button"
+                onClick={handleTossLogin}
+                style={{
+                  width: '100%',
+                  padding: '12px',
+                  backgroundColor: '#3182F6',
+                  color: 'white',
+                  borderRadius: '12px',
+                  fontWeight: '600',
+                  marginTop: '10px',
+                }}
+              >
+                토스로 로그인하기
+              </button>
+            )}
           </div>
         </div>
       </div>

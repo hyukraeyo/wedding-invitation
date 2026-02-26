@@ -217,8 +217,8 @@ export function HomeClient() {
         <nav className={styles.footerLinks}>
           <Link href="/terms">이용약관</Link>
           <Link href="/privacy">개인정보 처리방침</Link>
-          {/* 토스 환경에서는 소셜 로그인/로그아웃 버튼 숨김 (검수 가이드 준수) */}
-          {!isToss &&
+          {/* 토스 환경에서는 소셜 로그인/로그아웃 버튼 숨김 (검수 가이드 준수), 단 개발 중에는 허용 */}
+          {!(isToss && process.env.NODE_ENV === 'production') &&
             (user ? (
               <button type="button" onClick={() => signOut()}>
                 로그아웃

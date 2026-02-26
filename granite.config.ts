@@ -8,7 +8,7 @@ export default defineConfig({
     icon: 'https://static.toss.im/appsintoss/15407/b02e2dc.png',
   },
   web: {
-    host: 'localhost',
+    host: '192.168.1.223',
     port: 3000,
     commands: {
       dev: 'npm run dev:next',
