@@ -11,6 +11,7 @@ import type { User } from 'next-auth';
 import { Heading } from '@/components/ui';
 import { BananaLoader } from '@/components/ui/Loader';
 import { useToast } from '@/hooks/use-toast';
+import { useTossEnvironment } from '@/hooks/useTossEnvironment';
 import styles from './LoginPage.module.scss';
 import { getProfileForSession, type ProfileState, type ProfileSummary } from './actions';
 
@@ -31,6 +32,7 @@ interface LoginPageProps {
 export default function LoginPage({ initialProfileState, initialUser }: LoginPageProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const isToss = useTossEnvironment();
   const callbackUrl = useMemo(() => {
     return searchParams.get('callbackUrl') || searchParams.get('returnTo') || '/';
   }, [searchParams]);
@@ -105,6 +107,38 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
             router.push('/');
           }}
         />
+      </div>
+    );
+  }
+
+  // 토스 환경: 카카오/네이버 로그인 대신 안내 메시지 표시
+  // 비게임 검수 가이드: "토스 로그인이 아닌 자사 로그인이나 기타 로그인 방식은 제공하지 않아요"
+  if (isToss) {
+    return (
+      <div className={styles.overlay}>
+        <div className={styles.modal}>
+          <div className={styles.srOnly}>
+            <Heading as="h1" size="7" weight="bold">
+              바나나웨딩
+            </Heading>
+          </div>
+          <div className={styles.socialButtons}>
+            <p
+              style={{
+                textAlign: 'center',
+                color: '#666',
+                fontSize: '15px',
+                lineHeight: '1.6',
+                padding: '20px 0',
+                wordBreak: 'keep-all',
+              }}
+            >
+              토스 앱에서 자동으로 로그인돼요.
+              <br />
+              잠시만 기다려주세요.
+            </p>
+          </div>
+        </div>
       </div>
     );
   }

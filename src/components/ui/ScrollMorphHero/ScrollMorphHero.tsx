@@ -390,14 +390,7 @@ export function ScrollMorphHero() {
               };
             }
 
-            return (
-              <FlipCard
-                key={i}
-                src={src}
-                index={i}
-                target={target}
-              />
-            );
+            return <FlipCard key={i} src={src} index={i} target={target} />;
           })}
         </div>
       </div>

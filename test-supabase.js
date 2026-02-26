@@ -10,10 +10,7 @@ async function test() {
     { db: { schema: 'next_auth' } }
   );
 
-  const { data, error } = await supabase
-    .from('sessions')
-    .select('*, users(*)')
-    .limit(1);
+  const { data, error } = await supabase.from('sessions').select('*, users(*)').limit(1);
 
   console.log('Data:', data);
   console.log('Error:', error);

@@ -20,9 +20,15 @@
   ],
   "scripts": {
     "dev": "next dev --turbo",
+    "dev:next": "next dev --turbo",
     "dev:turbo": "next dev --turbo",
     "build": "next build --webpack",
+    "build:next": "next build --webpack",
+    "build:toss": "cross-env TOSS_BUILD=true next build --webpack",
     "build:turbo": "next build --turbo",
+    "toss:dev": "granite dev",
+    "toss:build": "granite build",
+    "toss:deploy": "ait deploy",
     "start": "next start",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
@@ -30,11 +36,12 @@
     "sync:agents": "node scripts/sync-agent-assets.mjs",
     "check:launch": "node scripts/check_launch_readiness.js",
     "format": "prettier --write .",
-    "analyze": "cross-env ANALYZE=true next build --webpack",
+    "analyze": "cross-env ANALYZE=true npm run build:next",
     "type-check": "tsc --noEmit",
     "clean": "rimraf .next out dist"
   },
   "dependencies": {
+    "@apps-in-toss/web-framework": "^1.14.0",
     "@auth/supabase-adapter": "^1.11.1",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
@@ -77,6 +84,8 @@
     "@tiptap/extension-text-style": "^3.15.3",
     "@tiptap/react": "^3.15.3",
     "@tiptap/starter-kit": "^3.15.3",
+    "@toss/tds-mobile": "^2.2.1",
+    "@toss/tds-mobile-ait": "^2.2.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "date-holidays": "^3.26.8",
@@ -119,6 +128,14 @@
   },
   "overrides": {
     "react-naver-maps": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@toss/tds-mobile": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@toss/tds-mobile-ait": {
       "react": "$react",
       "react-dom": "$react-dom"
     }

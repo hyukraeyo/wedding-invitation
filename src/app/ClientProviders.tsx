@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useViewportHeight } from '@/hooks/use-viewport-height';
 import { WarningSuppressionProvider } from '@/components/providers/WarningSuppressionProvider';
+import { TossProvider } from '@/components/providers/TossProvider';
 import { Toaster } from '@/components/ui/Toast';
 import { GlobalLoadingOverlay } from '@/components/common/GlobalLoadingOverlay';
 
@@ -29,14 +30,16 @@ export default function ClientProviders({ children }: ClientProvidersProps) {
   );
 
   return (
-    <WarningSuppressionProvider>
-      <QueryClientProvider client={queryClient}>
-        <div suppressHydrationWarning style={{ display: 'contents' }}>
-          {children}
-          <Toaster />
-          <GlobalLoadingOverlay />
-        </div>
-      </QueryClientProvider>
-    </WarningSuppressionProvider>
+    <TossProvider>
+      <WarningSuppressionProvider>
+        <QueryClientProvider client={queryClient}>
+          <div suppressHydrationWarning style={{ display: 'contents' }}>
+            {children}
+            <Toaster />
+            <GlobalLoadingOverlay />
+          </div>
+        </QueryClientProvider>
+      </WarningSuppressionProvider>
+    </TossProvider>
   );
 }

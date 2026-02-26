@@ -287,3 +287,17 @@ button {
 .view-transition-sidebar {
   view-transition-name: page-sidebar;
 }
+
+/* ============================================
+   앱인토스 환경 최적화 (data-toss 속성으로 감지)
+   TossProvider가 document.documentElement에 data-toss="true"를 추가
+   ============================================ */
+:root[data-toss='true'] {
+  // 토스 내비게이션 바가 Header를 대체하므로 header 관련 여백 제거
+  --header-height-override: 0px;
+
+  // 토스 환경에서 CustomScrollbar 숨김 (모바일 환경)
+  .custom-scrollbar {
+    display: none !important;
+  }
+}

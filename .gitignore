@@ -60,3 +60,5 @@ node_modules_list.txt
 check_exports*
 *.sql
 !supabase/migrations/*.sql
+
+.granite
