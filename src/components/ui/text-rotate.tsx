@@ -200,7 +200,7 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
       >
         <span className={styles.srOnly}>{safeTexts[activeTextIndex]}</span>
         <AnimatePresence mode={animatePresenceMode} initial={animatePresenceInitial}>
-          <motion.div
+          <motion.span
             key={activeTextIndex}
             className={cn(styles.group, splitBy === 'lines' && styles.groupLines)}
             layout
@@ -239,7 +239,7 @@ const TextRotate = forwardRef<TextRotateRef, TextRotateProps>(
                 </span>
               );
             })}
-          </motion.div>
+          </motion.span>
         </AnimatePresence>
       </motion.span>
     );
