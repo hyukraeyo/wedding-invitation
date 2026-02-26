@@ -94,7 +94,7 @@ export const profileService = {
     const profile = await this.getProfile(userId);
     if (!profile) return false;
 
-    return !!(profile.full_name && profile.phone);
+    return !!(profile.is_profile_complete || (profile.full_name && profile.phone));
   },
 
   /**

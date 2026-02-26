@@ -39,7 +39,7 @@ export function useAuth() {
   const profile = sessionUser ? (profileData ?? null) : null;
   const isAdmin = !!sessionUser && !!profile?.is_admin;
 
-  const isProfileComplete = !!(profile?.full_name && profile?.phone);
+  const isProfileComplete = !!(profile?.is_profile_complete || (profile?.full_name && profile?.phone));
 
   return {
     user: sessionUser as User | null,

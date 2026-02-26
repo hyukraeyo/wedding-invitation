@@ -14,6 +14,7 @@ export interface DrawerRootProps {
   onOpenChange?: ((open: boolean) => void) | undefined;
   direction?: DrawerDirection | undefined;
   handleOnly?: boolean | undefined;
+  autoFocus?: boolean | undefined;
   children: React.ReactNode;
 }
 
@@ -36,6 +37,7 @@ const DrawerRoot = ({
   onOpenChange,
   direction = 'bottom',
   handleOnly = false,
+  autoFocus,
   children,
 }: DrawerRootProps) => {
   const handleOpenChange = (val: boolean) => {
@@ -49,6 +51,7 @@ const DrawerRoot = ({
       onOpenChange={handleOpenChange}
       direction={direction}
       handleOnly={handleOnly}
+      {...(autoFocus !== undefined ? { autoFocus } : {})}
     >
       {children}
     </VaulDrawer.Root>
@@ -193,6 +196,7 @@ const DrawerLegacy = ({
   variant = 'floating',
   direction = 'bottom',
   handleOnly = false,
+  autoFocus,
 }: DrawerProps) => {
   return (
     <DrawerRoot
@@ -201,6 +205,7 @@ const DrawerLegacy = ({
       onOpenChange={onOpenChange}
       direction={direction}
       handleOnly={handleOnly}
+      autoFocus={autoFocus}
     >
       <DrawerPortal>
         <DrawerOverlay />

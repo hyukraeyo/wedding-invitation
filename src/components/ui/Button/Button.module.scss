@@ -20,6 +20,14 @@
   -webkit-tap-highlight-color: transparent;
   text-decoration: none;
 
+  &:link,
+  &:visited,
+  &:hover,
+  &:active,
+  &:focus-visible {
+    text-decoration: none;
+  }
+
   // Stitch Animation
   transition:
     background-color 0.2s v.$ease-ios,
