@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { StaticMorphHero } from '@/components/ui/StaticMorphHero';
+import { HomeTextRotateHero } from '@/components/common/HomeTextRotateHero';
 import { FeaturesSection } from '@/components/ui/FeaturesSection';
 import { SITE_NAME, SITE_NAME_EN, SITE_URL, absoluteUrl } from '@/lib/site';
 import styles from './page.module.scss';
@@ -121,7 +121,7 @@ export default function HomePage() {
       />
       <main className={styles.main}>
         <section className={styles.heroSection} aria-label="바나나웨딩 홈 히어로">
-          <StaticMorphHero />
+          <HomeTextRotateHero />
         </section>
         <FeaturesSection />
       </main>

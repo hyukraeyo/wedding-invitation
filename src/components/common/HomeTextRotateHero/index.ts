@@ -1,0 +1,1 @@
+export { HomeTextRotateHero } from './HomeTextRotateHero';
