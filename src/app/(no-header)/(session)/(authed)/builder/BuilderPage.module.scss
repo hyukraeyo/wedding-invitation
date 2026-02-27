@@ -205,6 +205,32 @@
   pointer-events: none;
 }
 
+.previewFallbackBackdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(v.$black, 0.36);
+  z-index: 1001;
+}
+
+.previewFallbackPanel {
+  position: fixed;
+  inset: 0;
+  background-color: v.$white;
+  z-index: 1002;
+  display: flex;
+  flex-direction: column;
+}
+
+.previewFallbackBody {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  overscroll-behavior-y: contain;
+}
+
 .icon {
   width: 1.5rem;
   height: 1.5rem;

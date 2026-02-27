@@ -5,6 +5,7 @@ import Kakao from 'next-auth/providers/kakao';
 import Naver from 'next-auth/providers/naver';
 import { SupabaseAdapter } from '@auth/supabase-adapter';
 import { createClient } from '@supabase/supabase-js';
+import { isTossAuthReferrer } from '@/lib/toss';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -28,12 +29,15 @@ const adminEmails = (process.env.ADMIN_EMAILS ?? '')
   .map((email) => email.trim().toLowerCase())
   .filter(Boolean);
 
+const GUEST_EMAIL_DOMAIN = 'guest.local';
+const UUID_V4_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
 export const authConfig = {
   adapter: SupabaseAdapter({
     url: supabaseUrl,
     secret: supabaseServiceRoleKey,
   }),
-  session: { strategy: 'database' },
+  session: { strategy: 'jwt' },
   trustHost: true,
   providers: [
     Naver({
@@ -136,6 +140,61 @@ export const authConfig = {
       },
     }),
     Credentials({
+      id: 'guest',
+      name: 'Guest',
+      credentials: {
+        guestId: { label: 'Guest ID', type: 'text' },
+      },
+      async authorize(credentials) {
+        const guestId = typeof credentials?.guestId === 'string' ? credentials.guestId.trim() : '';
+
+        if (!UUID_V4_REGEX.test(guestId)) {
+          console.warn('[GUEST_AUTH_INVALID_INPUT] guestId is missing or invalid');
+          return null;
+        }
+
+        const guestEmail = `guest+${guestId}@${GUEST_EMAIL_DOMAIN}`;
+
+        const { data: existingUser } = await nextAuthClient
+          .from('users')
+          .select('*')
+          .eq('id', guestId)
+          .maybeSingle();
+
+        if (existingUser) {
+          return {
+            id: existingUser.id,
+            email: existingUser.email,
+            name: existingUser.name ?? '게스트 사용자',
+            image: existingUser.image ?? null,
+          };
+        }
+
+        const { data: newUser, error } = await nextAuthClient
+          .from('users')
+          .insert({
+            id: guestId,
+            email: guestEmail,
+            name: '게스트 사용자',
+            emailVerified: new Date().toISOString(),
+          })
+          .select()
+          .single();
+
+        if (error || !newUser) {
+          console.error('[GUEST_AUTH_CREATE_USER_FAILED]', error);
+          return null;
+        }
+
+        return {
+          id: newUser.id,
+          email: newUser.email,
+          name: newUser.name ?? '게스트 사용자',
+          image: newUser.image ?? null,
+        };
+      },
+    }),
+    Credentials({
       id: 'toss',
       name: 'Toss',
       credentials: {
@@ -143,23 +202,26 @@ export const authConfig = {
         referrer: { label: 'Referrer', type: 'text' },
       },
       async authorize(credentials) {
-        if (
-          typeof credentials?.authorizationCode !== 'string' ||
-          typeof credentials?.referrer !== 'string'
-        ) {
+        const authorizationCode =
+          typeof credentials?.authorizationCode === 'string'
+            ? credentials.authorizationCode.trim()
+            : '';
+        const rawReferrer =
+          typeof credentials?.referrer === 'string' ? credentials.referrer.trim().toUpperCase() : '';
+        const referrer = isTossAuthReferrer(rawReferrer) ? rawReferrer : '';
+
+        if (!authorizationCode || !referrer) {
+          console.warn('[TOSS_AUTH_INVALID_INPUT] authorizationCode/referrer missing or invalid');
           return null;
         }
 
         try {
-          // Dynamic import to avoid issues in some environments if needed, but standard import is fine here
-          const { getTossAccessToken, getTossUserInfo, decryptTossData } =
-            await import('./lib/toss');
+          const { decryptTossData, getTossAccessToken, getTossUserInfo } = await import(
+            '@/lib/tossServer'
+          );
 
           // 1. 토큰 교환
-          const { accessToken } = await getTossAccessToken(
-            credentials.authorizationCode,
-            credentials.referrer
-          );
+          const { accessToken } = await getTossAccessToken(authorizationCode, referrer);
 
           // 2. 사용자 정보 조회
           const userInfo = await getTossUserInfo(accessToken);
@@ -205,7 +267,10 @@ export const authConfig = {
             .select()
             .single();
 
-          if (error || !newUser) return null;
+          if (error || !newUser) {
+            console.error('[TOSS_AUTH_CREATE_USER_FAILED]', error);
+            return null;
+          }
 
           return {
             id: newUser.id,
@@ -214,7 +279,10 @@ export const authConfig = {
             image: newUser.image ?? null,
           };
         } catch (error) {
-          console.error('[TOSS_AUTH_ERROR]', error);
+          console.error('[TOSS_AUTH_ERROR]', {
+            error,
+            referrer,
+          });
           return null;
         }
       },
@@ -229,6 +297,10 @@ export const authConfig = {
       const isProtected =
         nextUrl.pathname.startsWith('/builder') || nextUrl.pathname.startsWith('/mypage');
 
+      console.log(
+        `[AUTH_CHECK] path=${nextUrl.pathname} isLoggedIn=${isLoggedIn} userId=${auth?.user?.id}`
+      );
+
       if (isProtected) {
         if (isLoggedIn) return true;
         return false; // Triggers redirect to pages.signIn
@@ -237,10 +309,10 @@ export const authConfig = {
     },
     async signIn({ user, account, profile }) {
       const provider = account?.provider;
+      console.log(`[SIGN_IN] provider=${provider} userId=${user?.id} email=${user?.email}`);
 
       // Admin Credentials Check
       if (provider === 'credentials') {
-        // Admin or Toss Credentials
         const isAdmin = !!(user.email && adminEmails.includes(user.email.toLowerCase()));
 
         try {
@@ -309,6 +381,11 @@ export const authConfig = {
           profilePayload.is_profile_complete = !!(fullName && phone);
         }
 
+        // Toss/Guest: Skip profile completion in Toss Sandbox environment to avoid redirect issues
+        if (provider === 'toss' || provider === 'guest') {
+          profilePayload.is_profile_complete = true;
+        }
+
         await publicClient.from('profiles').upsert(profilePayload);
       } catch (error) {
         console.error('Error saving profile during sign in:', error);
@@ -317,9 +394,9 @@ export const authConfig = {
 
       return true;
     },
-    async session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id;
+    async session({ session, token }) {
+      if (session.user && token.sub) {
+        session.user.id = token.sub;
       }
       return session;
     },

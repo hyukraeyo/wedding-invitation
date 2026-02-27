@@ -70,6 +70,7 @@
 - [x] **소셜 로그인(카카오/네이버) 토스 환경에서 숨김** (`LoginPage.tsx`)
 - [x] **Footer 로그인/로그아웃 버튼 토스 환경에서 숨김** (`HomeClient.tsx`)
 - [x] 토스 로그인 안내 메시지 표시
+- [x] 토스 로그인 미사용 시 게스트 자동 입장 지원 (`NEXT_PUBLIC_ENABLE_TOSS_GUEST_MODE=true`)
 
 ### 기타
 
@@ -83,7 +84,8 @@
 
 - [ ] 앱인토스 콘솔에서 앱 등록 (`appName: 'banana-wedding'`)
 - [ ] 앱 아이콘 업로드 → `granite.config.ts` `icon` URL 교체
-- [ ] 토스 로그인 SDK 연동 (선택 — 로그인 필요 기능 제공 시)
+- [ ] 토스 로그인 연동에서 `oauth2ClientId` 설정 완료 (미설정 시 `appLogin()` 실패)
+- [ ] 토스 콘솔에서 발급받은 복호화 키를 `TOSS_SECRET_KEY`로 설정
 
 ### 테스트
 

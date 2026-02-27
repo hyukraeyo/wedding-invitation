@@ -1,1 +1,0 @@
-export { StaticMorphHero } from './StaticMorphHero';

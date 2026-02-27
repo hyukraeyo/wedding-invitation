@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { isTossEnvironment } from '@/lib/toss';
+import { getTossOperationalEnvironment, isTossEnvironment } from '@/lib/toss';
 
 /**
  * 토스 앱인토스 환경 여부를 감지하는 React Hook
@@ -20,8 +20,20 @@ export function useTossEnvironment(): boolean {
   const [isToss, setIsToss] = useState(false);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setIsToss(isTossEnvironment());
+    let isMounted = true;
+
+    void (async () => {
+      const environment = await getTossOperationalEnvironment();
+      const detectedByHint = isTossEnvironment();
+      const nextValue = environment !== null || detectedByHint;
+
+      if (!isMounted) return;
+      setIsToss((prev) => (prev === nextValue ? prev : nextValue));
+    })();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return isToss;

@@ -11,6 +11,9 @@ const nextConfig: NextConfig = {
   // Cache Components / PPR
   cacheComponents: true,
 
+  // 개발 환경에서의 크로스 오리진 요청 허용 (Toss Sandbox)
+  allowedDevOrigins: ['localhost:3000', '192.168.1.223:3000', '192.168.1.223:8081'],
+
   // TypeScript 설정
   typescript: {
     ignoreBuildErrors: false,
@@ -54,6 +57,8 @@ const nextConfig: NextConfig = {
     serverActions: {
       allowedOrigins: [
         'localhost:3000',
+        '192.168.1.223:3000',
+        '192.168.1.223:8081',
         'banana-wedding.vercel.app',
         // 앱인토스 WebView에서의 Server Actions 호출 허용
         '*.toss.im',

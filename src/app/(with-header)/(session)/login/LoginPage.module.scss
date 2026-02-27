@@ -150,6 +150,44 @@
   margin-bottom: 2rem;
 }
 
+.tossLoginNotice {
+  text-align: center;
+  color: v.$grey-600;
+  font-size: v.$control-font-size-md;
+  line-height: 1.6;
+  padding: v.$space-lg 0;
+  word-break: keep-all;
+}
+
+.tossLoginButton {
+  width: 100%;
+  height: v.$control-height-md;
+  border-radius: v.$radius-md;
+  border: none;
+  background-color: v.$blue-500;
+  color: v.$white;
+  font-size: v.$control-font-size-md;
+  font-weight: 600;
+  margin-top: v.$space-sm;
+  cursor: pointer;
+  transition: v.$transition-200;
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: v.$blue-600;
+    }
+  }
+}
+
+.tossLoginError {
+  margin-top: v.$space-sm;
+  color: v.$red-500;
+  font-size: v.$control-font-size-sm;
+  line-height: 1.5;
+  text-align: center;
+  word-break: keep-all;
+}
+
 .socialButton {
   width: 100%;
   height: 3rem;

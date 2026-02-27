@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useCallback } from 'react';
+import { loadTossWebFramework } from '@/lib/toss';
 import { useTossEnvironment } from './useTossEnvironment';
 
 /**
@@ -26,7 +27,7 @@ import { useTossEnvironment } from './useTossEnvironment';
 export function useTossBackEvent(handler: () => boolean | void, enabled: boolean = true) {
   const isToss = useTossEnvironment();
 
-  const stableHandler = useCallback(handler, [handler]);
+  const stableHandler = useCallback(() => handler(), [handler]);
 
   useEffect(() => {
     if (!enabled) return;
@@ -35,7 +36,7 @@ export function useTossBackEvent(handler: () => boolean | void, enabled: boolean
       // 토스 웹뷰 환경: granite SDK의 backEvent 사용
       let unsubscribe: (() => void) | undefined;
 
-      import('@apps-in-toss/web-framework')
+      void loadTossWebFramework()
         .then(({ graniteEvent }) => {
           unsubscribe = graniteEvent.addEventListener('backEvent', {
             onEvent: () => {

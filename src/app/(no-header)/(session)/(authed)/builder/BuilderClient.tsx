@@ -15,6 +15,7 @@ import { IconButton } from '@/components/ui/IconButton';
 import { BananaLoader } from '@/components/ui/Loader';
 import { useAuth } from '@/hooks/useAuth';
 import { useMediaQuery } from '@/hooks/use-media-query';
+import { useTossEnvironment } from '@/hooks/useTossEnvironment';
 import { useToast } from '@/hooks/use-toast';
 import { validateBeforeBuilderSave } from '@/lib/builderBusinessValidation';
 import { ensureBuilderSlug, toInvitationData } from '@/lib/builderSave';
@@ -47,9 +48,10 @@ export function BuilderClient() {
   const [isMobileActionsExpanded, setIsMobileActionsExpanded] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const isMobilePreviewViewport = useMediaQuery('(max-width: 767px)');
+  const isToss = useTossEnvironment();
   const { toast } = useToast();
   const toastRef = useRef(toast);
-  const { user, isProfileComplete, profileLoading, isAdmin } = useAuth();
+  const { user, profile, isProfileComplete, profileLoading, isAdmin } = useAuth();
   const { editingSection, setValidationErrors, isUploading } = useInvitationStore(
     useShallow((state) => ({
       editingSection: state.editingSection,
@@ -106,10 +108,11 @@ export function BuilderClient() {
   }, [isEditMode, isNewMode, router, searchParams]);
 
   useEffect(() => {
-    if (user && !profileLoading && !isProfileComplete && !profileLockRef.current) {
+    if (user && profile && !profileLoading && !isProfileComplete && !profileLockRef.current) {
+      profileLockRef.current = true;
       router.replace(getLoginUrl());
     }
-  }, [user, profileLoading, isProfileComplete, router, getLoginUrl]);
+  }, [user, profile, profileLoading, isProfileComplete, router, getLoginUrl]);
 
   const handleLogin = useCallback(() => {
     router.push(getLoginUrl());
@@ -267,6 +270,110 @@ export function BuilderClient() {
     setIsMobileActionsExpanded((prev) => !prev);
   }, []);
 
+  const renderMobileActionRail = () => {
+    if (isPreviewOpen) return null;
+
+    return (
+      <div className={styles.mobileActionRail}>
+        <AnimatePresence initial={false}>
+          {hasExpandableMobileActions && isMobileActionsExpanded ? (
+            <motion.div
+              id="builder-mobile-rail-actions"
+              className={styles.mobileRailActionList}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.14, ease: [0.16, 1, 0.3, 1] }}
+            >
+              {topActions.map((action, index) => (
+                <motion.div
+                  key={action.key}
+                  className={clsx(styles.mobileRailButton, styles.mobileRailActionItem)}
+                  initial={{ opacity: 0, y: 18, scale: 0.64 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 14, scale: 0.78 }}
+                  transition={{
+                    type: 'spring',
+                    stiffness: 520,
+                    damping: 30,
+                    mass: 0.72,
+                    delay: index * 0.055,
+                  }}
+                >
+                  <IconButton
+                    type="button"
+                    variant={action.variant}
+                    size="xl"
+                    aria-label={action.label}
+                    onClick={() => {
+                      setIsMobileActionsExpanded(false);
+                      action.onClick();
+                    }}
+                    disabled={action.disabled}
+                  >
+                    <action.icon className={styles.icon} />
+                  </IconButton>
+                </motion.div>
+              ))}
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
+
+        {hasExpandableMobileActions ? (
+          <div className={styles.mobileRailButton}>
+            <IconButton
+              type="button"
+              variant="secondary"
+              size="xl"
+              aria-label={isMobileActionsExpanded ? '더보기 닫기' : '더보기 열기'}
+              aria-controls="builder-mobile-rail-actions"
+              aria-expanded={isMobileActionsExpanded}
+              onClick={handleMobileMoreToggle}
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                {isMobileActionsExpanded ? (
+                  <motion.span
+                    key="expanded"
+                    className={styles.iconMotion}
+                    initial={{ opacity: 0, rotate: -90, scale: 0.56 }}
+                    animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                    exit={{ opacity: 0, rotate: 90, scale: 0.56 }}
+                    transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    <X className={styles.icon} />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="collapsed"
+                    className={styles.iconMotion}
+                    initial={{ opacity: 0, rotate: 90, scale: 0.56 }}
+                    animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                    exit={{ opacity: 0, rotate: -90, scale: 0.56 }}
+                    transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                  >
+                    <MoreHorizontal className={styles.icon} />
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            </IconButton>
+          </div>
+        ) : null}
+
+        <div className={styles.mobileRailButton}>
+          <IconButton
+            type="button"
+            variant="primary"
+            size="xl"
+            aria-label="미리보기 열기"
+            onClick={() => setIsPreviewOpen(true)}
+          >
+            <Eye className={styles.icon} />
+          </IconButton>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div className={styles.container}>
       {isSaving ? <BananaLoader variant="fixed" /> : null}
@@ -313,146 +420,124 @@ export function BuilderClient() {
       </div>
 
       {isMobilePreviewViewport ? (
-        <Drawer.Root open={isPreviewOpen} onOpenChange={setIsPreviewOpen} direction="right">
-          <AnimatePresence>
-            {isMobileActionsExpanded ? (
-              <motion.button
-                type="button"
-                className={styles.mobileRailBackdrop}
-                aria-label="액션 메뉴 닫기"
-                onClick={() => setIsMobileActionsExpanded(false)}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
-              />
-            ) : null}
-          </AnimatePresence>
+        isToss ? (
+          <>
+            <AnimatePresence>
+              {isMobileActionsExpanded ? (
+                <motion.button
+                  type="button"
+                  className={styles.mobileRailBackdrop}
+                  aria-label="액션 메뉴 닫기"
+                  onClick={() => setIsMobileActionsExpanded(false)}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
+                />
+              ) : null}
+            </AnimatePresence>
 
-          {!isPreviewOpen ? (
-            <div className={styles.mobileActionRail}>
-              <AnimatePresence initial={false}>
-                {hasExpandableMobileActions && isMobileActionsExpanded ? (
+            {renderMobileActionRail()}
+
+            <AnimatePresence>
+              {isPreviewOpen ? (
+                <>
                   <motion.div
-                    id="builder-mobile-rail-actions"
-                    className={styles.mobileRailActionList}
+                    className={styles.previewFallbackBackdrop}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.14, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                    onClick={() => setIsPreviewOpen(false)}
+                  />
+                  <motion.div
+                    className={styles.previewFallbackPanel}
+                    initial={{ x: '100%' }}
+                    animate={{ x: 0 }}
+                    exit={{ x: '100%' }}
+                    transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label="모바일 청첩장 미리보기"
                   >
-                    {topActions.map((action, index) => (
-                      <motion.div
-                        key={action.key}
-                        className={clsx(styles.mobileRailButton, styles.mobileRailActionItem)}
-                        initial={{ opacity: 0, y: 18, scale: 0.64 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 14, scale: 0.78 }}
-                        transition={{
-                          type: 'spring',
-                          stiffness: 520,
-                          damping: 30,
-                          mass: 0.72,
-                          delay: index * 0.055,
-                        }}
+                    <div className={styles.previewFallbackBody}>
+                      <InvitationCanvas
+                        key="mobile-preview-fallback"
+                        isPreviewMode
+                        editingSection={editingSection}
+                        hideWatermark
+                        disableInternalScroll
+                      />
+                    </div>
+
+                    <div className={clsx(styles.mobileRailButton, styles.mobileRailCloseButton)}>
+                      <IconButton
+                        type="button"
+                        variant="secondary"
+                        size="xl"
+                        aria-label="미리보기 닫기"
+                        onClick={() => setIsPreviewOpen(false)}
                       >
-                        <IconButton
-                          type="button"
-                          variant={action.variant}
-                          size="xl"
-                          aria-label={action.label}
-                          onClick={() => {
-                            setIsMobileActionsExpanded(false);
-                            action.onClick();
-                          }}
-                          disabled={action.disabled}
-                        >
-                          <action.icon className={styles.icon} />
-                        </IconButton>
-                      </motion.div>
-                    ))}
+                        <X className={styles.icon} />
+                      </IconButton>
+                    </div>
                   </motion.div>
-                ) : null}
-              </AnimatePresence>
-
-              {hasExpandableMobileActions ? (
-                <div className={styles.mobileRailButton}>
-                  <IconButton
-                    type="button"
-                    variant="secondary"
-                    size="xl"
-                    aria-label={isMobileActionsExpanded ? '더보기 닫기' : '더보기 열기'}
-                    aria-controls="builder-mobile-rail-actions"
-                    aria-expanded={isMobileActionsExpanded}
-                    onClick={handleMobileMoreToggle}
-                  >
-                    <AnimatePresence mode="wait" initial={false}>
-                      {isMobileActionsExpanded ? (
-                        <motion.span
-                          key="expanded"
-                          className={styles.iconMotion}
-                          initial={{ opacity: 0, rotate: -90, scale: 0.56 }}
-                          animate={{ opacity: 1, rotate: 0, scale: 1 }}
-                          exit={{ opacity: 0, rotate: 90, scale: 0.56 }}
-                          transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-                        >
-                          <X className={styles.icon} />
-                        </motion.span>
-                      ) : (
-                        <motion.span
-                          key="collapsed"
-                          className={styles.iconMotion}
-                          initial={{ opacity: 0, rotate: 90, scale: 0.56 }}
-                          animate={{ opacity: 1, rotate: 0, scale: 1 }}
-                          exit={{ opacity: 0, rotate: -90, scale: 0.56 }}
-                          transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-                        >
-                          <MoreHorizontal className={styles.icon} />
-                        </motion.span>
-                      )}
-                    </AnimatePresence>
-                  </IconButton>
-                </div>
+                </>
               ) : null}
-
-              <div className={styles.mobileRailButton}>
-                <Drawer.Trigger asChild>
-                  <IconButton type="button" variant="primary" size="xl" aria-label="미리보기 열기">
-                    <Eye className={styles.icon} />
-                  </IconButton>
-                </Drawer.Trigger>
-              </div>
-            </div>
-          ) : null}
-
-          <Drawer.Portal>
-            <Drawer.Overlay />
-            <Drawer.Content aria-label="모바일 청첩장 미리보기" variant="default">
-              <Drawer.Body padding={false} className={styles.previewDrawerBody}>
-                <InvitationCanvas
-                  key="mobile-preview"
-                  isPreviewMode
-                  editingSection={editingSection}
-                  hideWatermark
-                  disableInternalScroll
+            </AnimatePresence>
+          </>
+        ) : (
+          <Drawer.Root
+            open={isPreviewOpen}
+            onOpenChange={setIsPreviewOpen}
+            direction="right"
+            autoFocus={false}
+          >
+            <AnimatePresence>
+              {isMobileActionsExpanded ? (
+                <motion.button
+                  type="button"
+                  className={styles.mobileRailBackdrop}
+                  aria-label="액션 메뉴 닫기"
+                  onClick={() => setIsMobileActionsExpanded(false)}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
                 />
-              </Drawer.Body>
+              ) : null}
+            </AnimatePresence>
 
-              <div className={clsx(styles.mobileRailButton, styles.mobileRailCloseButton)}>
-                <Drawer.Close asChild>
+            {renderMobileActionRail()}
+
+            <Drawer.Portal>
+              <Drawer.Overlay />
+              <Drawer.Content aria-label="모바일 청첩장 미리보기" variant="default">
+                <Drawer.Body padding={false} className={styles.previewDrawerBody}>
+                  <InvitationCanvas
+                    key="mobile-preview"
+                    isPreviewMode
+                    editingSection={editingSection}
+                    hideWatermark
+                    disableInternalScroll
+                  />
+                </Drawer.Body>
+
+                <div className={clsx(styles.mobileRailButton, styles.mobileRailCloseButton)}>
                   <IconButton
                     type="button"
                     variant="secondary"
                     size="xl"
                     aria-label="미리보기 닫기"
+                    onClick={() => setIsPreviewOpen(false)}
                   >
                     <X className={styles.icon} />
                   </IconButton>
-                </Drawer.Close>
-              </div>
-            </Drawer.Content>
-          </Drawer.Portal>
-        </Drawer.Root>
+                </div>
+              </Drawer.Content>
+            </Drawer.Portal>
+          </Drawer.Root>
+        )
       ) : null}
     </div>
   );
