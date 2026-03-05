@@ -17,8 +17,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: `?댁슜?쎄? | ${SITE_NAME}`,
-    description: `${SITE_NAME} ?쒕퉬???댁슜?쎄? ?덈궡 ?섏씠吏?낅땲??`,
+    title: `이용약관 | ${SITE_NAME}`,
+    description: `${SITE_NAME} 서비스 이용약관 안내 페이지입니다.`,
     images: [absoluteUrl('/assets/icons/logo-banana-heart.png')],
   },
   robots: {
@@ -81,8 +81,8 @@ export default function TermsPage() {
             <strong>이용자</strong>: 본 약관에 따라 서비스를 이용하는 회원 및 비회원을 말합니다.
           </li>
           <li>
-            <strong>회원</strong>: 소셜 로그인(카카오/네이버 등)을 통해 계정을 생성하고 지속적으로
-            서비스를 이용하는 자를 말합니다.
+            <strong>회원</strong>: 소셜 로그인(카카오/네이버) 또는 토스 로그인을 통해 계정을
+            생성하고 지속적으로 서비스를 이용하는 자를 말합니다.
           </li>
           <li>
             <strong>콘텐츠</strong>: 이용자가 서비스에 업로드 또는 입력한 이미지, 문구, 계좌 정보 등
@@ -148,7 +148,7 @@ export default function TermsPage() {
         </p>
 
         <hr className={styles.divider} />
-        <p className={styles.footerNote}>시행일자: 2026년 2월 10일</p>
+        <p className={styles.footerNote}>시행일자: 2026년 3월 5일</p>
       </div>
     </>
   );

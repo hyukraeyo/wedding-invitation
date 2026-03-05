@@ -17,8 +17,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: `媛쒖씤?뺣낫 泥섎━諛⑹묠 | ${SITE_NAME}`,
-    description: `${SITE_NAME} 媛쒖씤?뺣낫 泥섎━諛⑹묠 ?덈궡 ?섏씠吏?낅땲??`,
+    title: `개인정보 처리방침 | ${SITE_NAME}`,
+    description: `${SITE_NAME} 개인정보 처리방침 안내 페이지입니다.`,
     images: [absoluteUrl('/assets/icons/logo-banana-heart.png')],
   },
   robots: {
@@ -77,8 +77,9 @@ export default function PrivacyPage() {
         </p>
         <ul className={styles.list}>
           <li>
-            <strong>회원 가입 및 관리:</strong> 네이버/카카오 소셜 로그인을 통한 본인 식별·인증,
-            회원자격 유지·관리, 서비스 부정이용 방지, 각종 고지·통지 등을 목적으로 합니다.
+            <strong>회원 가입 및 관리:</strong> 네이버/카카오 소셜 로그인 또는 토스 로그인을 통한
+            본인 식별·인증, 회원자격 유지·관리, 서비스 부정이용 방지, 각종 고지·통지 등을 목적으로
+            합니다.
           </li>
           <li>
             <strong>서비스 제공:</strong> 모바일 청첩장 생성, 수정, 보관 및 게시된 콘텐츠의 관리,
@@ -91,18 +92,25 @@ export default function PrivacyPage() {
         <div className={styles.noteBox}>
           <ul className={styles.list}>
             <li>
-              <strong>필수 수집 항목:</strong> 소셜 계정 고유 식별값(네이버/카카오 ID), 이름,
-              이메일, 별명(닉네임), 프로필 사진, 성별, 생일, 출생연도, 휴대전화 번호
+              <strong>필수 수집 항목 (카카오/네이버 로그인):</strong> 소셜 계정 고유
+              식별값(네이버/카카오 ID), 이름, 이메일, 별명(닉네임), 프로필 사진, 성별, 생일,
+              출생연도, 휴대전화 번호
             </li>
             <li>
-              <strong>수집 방법:</strong> 소셜 로그인 연동 및 회원 가입 시 이용자의 직접 입력
+              <strong>필수 수집 항목 (토스 로그인):</strong> 토스 사용자 고유 식별값(userKey), 이름,
+              이메일, 휴대전화 번호
+            </li>
+            <li>
+              <strong>수집 방법:</strong> 소셜 로그인 연동, 토스 로그인 연동, 및 회원 가입 시
+              이용자의 직접 입력
             </li>
           </ul>
         </div>
         <p className={styles.smallNote}>
           * 수집된 휴대폰 번호는 중복 가입 방지 및 1인 1계정 원칙 준수를 위한 본인 확인 용도로만
           사용되며, 광고성 마케팅 목적으로 활용되지 않습니다. 네이버 로그인 API를 통해 제공받는
-          식별값은 안전한 암호화 알고리즘으로 보호됩니다.
+          식별값은 안전한 암호화 알고리즘으로 보호됩니다. 토스 로그인을 통해 수집하는 사용자 정보는
+          AES-256-GCM으로 암호화되어 전송되며, 서버에서 복호화 후 안전하게 저장됩니다.
         </p>
 
         <h3 className={styles.sectionTitle}>3. 개인정보의 보유 및 이용 기간</h3>
@@ -157,7 +165,7 @@ export default function PrivacyPage() {
         </div>
 
         <hr className={styles.divider} />
-        <p className={styles.footerNote}>시행일자: 2024년 1월 1일</p>
+        <p className={styles.footerNote}>시행일자: 2026년 3월 5일</p>
       </div>
     </>
   );

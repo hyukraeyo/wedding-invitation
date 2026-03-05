@@ -29,9 +29,6 @@ const adminEmails = (process.env.ADMIN_EMAILS ?? '')
   .map((email) => email.trim().toLowerCase())
   .filter(Boolean);
 
-const GUEST_EMAIL_DOMAIN = 'guest.local';
-const UUID_V4_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
 export const authConfig = {
   adapter: SupabaseAdapter({
     url: supabaseUrl,
@@ -139,61 +136,7 @@ export const authConfig = {
         };
       },
     }),
-    Credentials({
-      id: 'guest',
-      name: 'Guest',
-      credentials: {
-        guestId: { label: 'Guest ID', type: 'text' },
-      },
-      async authorize(credentials) {
-        const guestId = typeof credentials?.guestId === 'string' ? credentials.guestId.trim() : '';
 
-        if (!UUID_V4_REGEX.test(guestId)) {
-          console.warn('[GUEST_AUTH_INVALID_INPUT] guestId is missing or invalid');
-          return null;
-        }
-
-        const guestEmail = `guest+${guestId}@${GUEST_EMAIL_DOMAIN}`;
-
-        const { data: existingUser } = await nextAuthClient
-          .from('users')
-          .select('*')
-          .eq('id', guestId)
-          .maybeSingle();
-
-        if (existingUser) {
-          return {
-            id: existingUser.id,
-            email: existingUser.email,
-            name: existingUser.name ?? '게스트 사용자',
-            image: existingUser.image ?? null,
-          };
-        }
-
-        const { data: newUser, error } = await nextAuthClient
-          .from('users')
-          .insert({
-            id: guestId,
-            email: guestEmail,
-            name: '게스트 사용자',
-            emailVerified: new Date().toISOString(),
-          })
-          .select()
-          .single();
-
-        if (error || !newUser) {
-          console.error('[GUEST_AUTH_CREATE_USER_FAILED]', error);
-          return null;
-        }
-
-        return {
-          id: newUser.id,
-          email: newUser.email,
-          name: newUser.name ?? '게스트 사용자',
-          image: newUser.image ?? null,
-        };
-      },
-    }),
     Credentials({
       id: 'toss',
       name: 'Toss',
@@ -207,7 +150,9 @@ export const authConfig = {
             ? credentials.authorizationCode.trim()
             : '';
         const rawReferrer =
-          typeof credentials?.referrer === 'string' ? credentials.referrer.trim().toUpperCase() : '';
+          typeof credentials?.referrer === 'string'
+            ? credentials.referrer.trim().toUpperCase()
+            : '';
         const referrer = isTossAuthReferrer(rawReferrer) ? rawReferrer : '';
 
         if (!authorizationCode || !referrer) {
@@ -216,9 +161,8 @@ export const authConfig = {
         }
 
         try {
-          const { decryptTossData, getTossAccessToken, getTossUserInfo } = await import(
-            '@/lib/tossServer'
-          );
+          const { decryptTossData, getTossAccessToken, getTossUserInfo } =
+            await import('@/lib/tossServer');
 
           // 1. 토큰 교환
           const { accessToken } = await getTossAccessToken(authorizationCode, referrer);
@@ -227,14 +171,16 @@ export const authConfig = {
           const userInfo = await getTossUserInfo(accessToken);
 
           // 3. 사용자 식별자 및 기본 정보 설정
-          // 토스는 CI 등을 암호화해서 주므로, 복호화가 필요함.
-          // 복호화 키가 없으면 식별자로 userKey를 사용.
+          // 문서: name, phone, birthday, ci, gender 등 모든 개인정보는 암호화됨
+          // email은 null로 내려올 수 있음
           const userKey = String(userInfo.userKey);
           let name = '토스 사용자';
+          let phone: string | null = null;
           let email = `${userKey}@toss.user`;
 
           try {
             if (userInfo.name) name = decryptTossData(userInfo.name);
+            if (userInfo.phone) phone = decryptTossData(userInfo.phone);
             if (userInfo.email) email = userInfo.email;
           } catch (e) {
             console.warn('Toss data decryption failed, using defaults', e);
@@ -253,7 +199,8 @@ export const authConfig = {
               email: existingUser.email,
               name: existingUser.name ?? name,
               image: existingUser.image ?? null,
-            };
+              phone,
+            } as Record<string, unknown>;
           }
 
           // 5. 신규 사용자 생성
@@ -277,7 +224,8 @@ export const authConfig = {
             email: newUser.email,
             name: newUser.name,
             image: newUser.image ?? null,
-          };
+            phone,
+          } as Record<string, unknown>;
         } catch (error) {
           console.error('[TOSS_AUTH_ERROR]', {
             error,
@@ -311,6 +259,31 @@ export const authConfig = {
       const provider = account?.provider;
       console.log(`[SIGN_IN] provider=${provider} userId=${user?.id} email=${user?.email}`);
 
+      // Toss Credentials: 별도 프로필 처리
+      if (provider === 'toss') {
+        const isAdmin = !!(user.email && adminEmails.includes(user.email.toLowerCase()));
+        const tossPhone = (user as Record<string, unknown>).phone as string | null;
+
+        try {
+          const profilePayload: Record<string, string | boolean | null | undefined> = {
+            id: user.id,
+            full_name: user.name ?? '토스 사용자',
+            avatar_url: user.image ?? null,
+            is_admin: isAdmin,
+            is_profile_complete: true,
+          };
+
+          if (tossPhone) {
+            profilePayload.phone = tossPhone;
+          }
+
+          await publicClient.from('profiles').upsert(profilePayload);
+        } catch (error) {
+          console.error('Error saving profile during toss sign in:', error);
+        }
+        return true;
+      }
+
       // Admin Credentials Check
       if (provider === 'credentials') {
         const isAdmin = !!(user.email && adminEmails.includes(user.email.toLowerCase()));
@@ -318,7 +291,7 @@ export const authConfig = {
         try {
           await publicClient.from('profiles').upsert({
             id: user.id,
-            full_name: user.name ?? (isAdmin ? 'Admin' : '토스 사용자'),
+            full_name: user.name ?? (isAdmin ? 'Admin' : '사용자'),
             is_admin: isAdmin,
           });
         } catch (error) {
@@ -379,11 +352,6 @@ export const authConfig = {
         if (phone) {
           profilePayload.phone = phone;
           profilePayload.is_profile_complete = !!(fullName && phone);
-        }
-
-        // Toss/Guest: Skip profile completion in Toss Sandbox environment to avoid redirect issues
-        if (provider === 'toss' || provider === 'guest') {
-          profilePayload.is_profile_complete = true;
         }
 
         await publicClient.from('profiles').upsert(profilePayload);

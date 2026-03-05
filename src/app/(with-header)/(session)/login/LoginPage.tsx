@@ -24,49 +24,19 @@ const ProfileCompletionModal = dynamic(
 
 /**
  * LoginPage: 소셜 로그인 전용 페이지
+ *
+ * - 토스 인앱 환경: 토스 로그인만 표시 (appLogin → signIn('toss'))
+ * - 일반 웹 환경: 카카오/네이버 소셜 로그인 표시
  */
 interface LoginPageProps {
   initialProfileState?: ProfileState | null;
   initialUser: User | null;
 }
 
-const GUEST_ID_STORAGE_KEY = 'banana_wedding_guest_id';
-const ENABLE_TOSS_GUEST_MODE = process.env.NEXT_PUBLIC_ENABLE_TOSS_GUEST_MODE !== 'false';
-const UUID_V4_REGEX =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-
-function createFallbackGuestId(): string {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (char) => {
-    const random = (Math.random() * 16) | 0;
-    const value = char === 'x' ? random : (random & 0x3) | 0x8;
-    return value.toString(16);
-  });
-}
-
-function getOrCreateGuestId(): string {
-  if (typeof window === 'undefined') {
-    return createFallbackGuestId();
-  }
-
-  const existing = window.localStorage.getItem(GUEST_ID_STORAGE_KEY);
-  if (existing && UUID_V4_REGEX.test(existing)) {
-    return existing;
-  }
-
-  const nextGuestId =
-    typeof window.crypto?.randomUUID === 'function'
-      ? window.crypto.randomUUID()
-      : createFallbackGuestId();
-
-  window.localStorage.setItem(GUEST_ID_STORAGE_KEY, nextGuestId);
-  return nextGuestId;
-}
-
 export default function LoginPage({ initialProfileState, initialUser }: LoginPageProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const isToss = useTossEnvironment();
-  const useTossGuestMode = isToss && ENABLE_TOSS_GUEST_MODE;
   const callbackUrl = useMemo(() => {
     return searchParams.get('callbackUrl') || searchParams.get('returnTo') || '/';
   }, [searchParams]);
@@ -141,7 +111,10 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
     ) {
       return '샌드박스 앱에 먼저 로그인한 뒤 다시 시도해 주세요.';
     }
-    if (rawMessage.includes('지원하지 않는 앱 버전') || normalizedMessage.includes('not supported')) {
+    if (
+      rawMessage.includes('지원하지 않는 앱 버전') ||
+      normalizedMessage.includes('not supported')
+    ) {
       return '토스 앱을 최신 버전으로 업데이트한 뒤 다시 시도해 주세요.';
     }
     if (normalizedMessage.includes('cancel') || rawMessage.includes('취소')) {
@@ -160,36 +133,24 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
     setTossErrorMessage(null);
 
     try {
-      const result = useTossGuestMode
-        ? await signIn('guest', {
-            guestId: getOrCreateGuestId(),
-            callbackUrl,
-            redirect: false,
-          })
-        : await (async () => {
-            const { appLogin } = await loadTossWebFramework();
-            const { authorizationCode, referrer } = await appLogin();
-            return signIn('toss', {
-              authorizationCode,
-              referrer,
-              callbackUrl,
-              redirect: false,
-            });
-          })();
+      const { appLogin } = await loadTossWebFramework();
+      const { authorizationCode, referrer } = await appLogin();
+      const result = await signIn('toss', {
+        authorizationCode,
+        referrer,
+        callbackUrl,
+        redirect: false,
+      });
 
       if (result?.error) {
         const message =
           result.error === 'CredentialsSignin'
-            ? useTossGuestMode
-              ? '게스트 입장 세션 생성에 실패했어요. 잠시 후 다시 시도해 주세요.'
-              : '토스 로그인 검증에 실패했어요. 토스 콘솔 로그인 설정을 확인해 주세요.'
-            : useTossGuestMode
-              ? '게스트 입장에 실패했어요. 잠시 후 다시 시도해 주세요.'
-              : '토스 로그인에 실패했어요. 잠시 후 다시 시도해 주세요.';
+            ? '토스 로그인 검증에 실패했어요. 잠시 후 다시 시도해 주세요.'
+            : '토스 로그인에 실패했어요. 잠시 후 다시 시도해 주세요.';
 
         setTossErrorMessage(message);
         toast({
-          title: useTossGuestMode ? '게스트 입장 실패' : '토스 로그인 실패',
+          title: '토스 로그인 실패',
           description: message,
           variant: 'destructive',
         });
@@ -207,7 +168,7 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
 
       setTossErrorMessage(message);
       toast({
-        title: useTossGuestMode ? '게스트 입장 실패' : '토스 로그인 실패',
+        title: '토스 로그인 실패',
         description: message,
         variant: 'destructive',
       });
@@ -216,7 +177,7 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
       tossLoginInFlightRef.current = false;
       setIsTossLoading(false);
     }
-  }, [callbackUrl, getTossErrorMessage, router, toast, useTossGuestMode]);
+  }, [callbackUrl, getTossErrorMessage, router, toast]);
 
   // 토스 환경 진입 시 자동 로그인 시도
   useEffect(() => {
@@ -266,8 +227,8 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
     );
   }
 
-  // 토스 환경: 카카오/네이버 로그인 대신 토스 전용 UI 표시
-  // 비게임 검수 가이드: "토스 로그인이 아닌 자사 로그인이나 기타 로그인 방식은 제공하지 않아요"
+  // 토스 환경: 카카오/네이버 로그인 대신 토스 전용 로그인 UI 표시
+  // 미니앱 검수 가이드: "토스 로그인이 아닌 자사 로그인이나 기타 로그인 방식은 제공하지 않아요"
   if (isToss) {
     return (
       <div className={styles.overlay}>
@@ -278,21 +239,30 @@ export default function LoginPage({ initialProfileState, initialUser }: LoginPag
             </Heading>
           </div>
           <div className={styles.socialButtons}>
-            <p className={styles.tossLoginNotice}>
-              {isTossLoading
-                ? useTossGuestMode
-                  ? '앱에서 게스트 입장 중입니다...'
-                  : '토스 앱에서 로그인 중입니다...'
-                : useTossGuestMode
-                  ? '로그인 없이 바로 시작할 수 있어요.'
-                  : '토스 앱에서 자동으로 로그인돼요.'}
-              <br />
-              잠시만 기다려주세요.
-            </p>
-            {!isTossLoading && (
-              <button type="button" onClick={handleTossLogin} className={styles.tossLoginButton}>
-                {useTossGuestMode ? '로그인 없이 시작하기' : '토스로 로그인하기'}
-              </button>
+            {isTossLoading ? (
+              <>
+                <div className={styles.tossLoaderWrapper}>
+                  <BananaLoader />
+                </div>
+                <p className={styles.tossLoginNotice}>
+                  토스 계정으로 로그인 중이에요.
+                  <br />
+                  잠시만 기다려주세요.
+                </p>
+              </>
+            ) : (
+              <>
+                <p className={styles.tossLoginNotice}>토스 계정으로 간편하게 시작하세요.</p>
+                <button type="button" onClick={handleTossLogin} className={styles.tossLoginButton}>
+                  <svg viewBox="0 0 24 24" className={styles.tossIcon} fill="none">
+                    <path
+                      d="M2 7.5h5.2v1.3H4.8V12h2.1v1.3H4.8v3.2H3.3V8.8H2V7.5zm5.8 0H10c1.5 0 2.5.4 2.5 2 0 .9-.4 1.5-1.1 1.8.8.3 1.3 1 1.3 2 0 1.7-1.1 2.2-2.7 2.2H7.8V7.5zm1.4 3.3h.7c.8 0 1.2-.3 1.2-1s-.4-1-1.2-1h-.7v2zm0 3.6h.8c.9 0 1.3-.3 1.3-1.1 0-.7-.5-1.1-1.3-1.1h-.8v2.2zm5.6-4.5c0-1.5 1.2-2.6 2.7-2.6s2.7 1.1 2.7 2.6v3.7c0 1.5-1.2 2.6-2.7 2.6s-2.7-1.1-2.7-2.6V9.9zm1.4 3.8c0 .7.5 1.2 1.3 1.2.7 0 1.3-.5 1.3-1.2V9.8c0-.7-.5-1.2-1.3-1.2-.7 0-1.3.5-1.3 1.2v3.9z"
+                      fill="currentColor"
+                    />
+                  </svg>
+                  토스로 시작하기
+                </button>
+              </>
             )}
             {tossErrorMessage ? <p className={styles.tossLoginError}>{tossErrorMessage}</p> : null}
           </div>

@@ -150,33 +150,52 @@
   margin-bottom: 2rem;
 }
 
+.tossLoaderWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: v.$space-lg 0;
+}
+
 .tossLoginNotice {
   text-align: center;
   color: v.$grey-600;
   font-size: v.$control-font-size-md;
   line-height: 1.6;
-  padding: v.$space-lg 0;
+  padding: v.$space-md 0;
   word-break: keep-all;
 }
 
 .tossLoginButton {
   width: 100%;
-  height: v.$control-height-md;
+  height: v.$control-height-lg;
   border-radius: v.$radius-md;
   border: none;
   background-color: v.$blue-500;
   color: v.$white;
   font-size: v.$control-font-size-md;
   font-weight: 600;
-  margin-top: v.$space-sm;
   cursor: pointer;
   transition: v.$transition-200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 
   @media (hover: hover) and (pointer: fine) {
     &:hover {
       background-color: v.$blue-600;
     }
   }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+.tossIcon {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .tossLoginError {
