@@ -9,5 +9,9 @@ interface HeaderProvidersProps {
 }
 
 export default function HeaderProviders({ children, session }: HeaderProvidersProps) {
-  return <SessionProvider session={session ?? null}>{children}</SessionProvider>;
+  return (
+    <SessionProvider session={session ?? null} refetchInterval={0} refetchOnWindowFocus={false}>
+      {children}
+    </SessionProvider>
+  );
 }

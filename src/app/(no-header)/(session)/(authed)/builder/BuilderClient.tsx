@@ -108,8 +108,14 @@ export function BuilderClient() {
   }, [isEditMode, isNewMode, router, searchParams]);
 
   useEffect(() => {
-    if (user && profile && !profileLoading && !isProfileComplete && !profileLockRef.current) {
-      profileLockRef.current = true;
+    // 프로필 완성 여부는 최초 프로필 로드 완료 시 1회만 확인
+    // react-query 리패치로 인한 재평가 → 리다이렉트 루프 방지
+    if (profileLockRef.current) return;
+    if (!user || profileLoading) return;
+
+    profileLockRef.current = true;
+
+    if (profile && !isProfileComplete) {
       router.replace(getLoginUrl());
     }
   }, [user, profile, profileLoading, isProfileComplete, router, getLoginUrl]);

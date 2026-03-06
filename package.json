@@ -20,7 +20,7 @@
   ],
   "scripts": {
     "dev": "next dev --turbo",
-    "dev:next": "next dev --turbo",
+    "dev:next": "next dev",
     "dev:turbo": "next dev --turbo",
     "build": "next build --webpack",
     "build:next": "next build --webpack",

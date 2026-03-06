@@ -23,7 +23,8 @@ export function useAuth() {
       return profileService.getProfile(sessionUser.id);
     },
     enabled: !!sessionUser?.id,
-    staleTime: 60 * 1000,
+    staleTime: 5 * 60 * 1000, // 5분: 빌더 사용 중 불필요한 리패치 방지
+    refetchOnWindowFocus: false, // 모바일/WebView 앱 전환 시 리패치 방지
   });
 
   const refreshProfile = useCallback(async () => {
@@ -39,7 +40,10 @@ export function useAuth() {
   const profile = sessionUser ? (profileData ?? null) : null;
   const isAdmin = !!sessionUser && !!profile?.is_admin;
 
-  const isProfileComplete = !!(profile?.is_profile_complete || (profile?.full_name && profile?.phone));
+  const isProfileComplete = !!(
+    profile?.is_profile_complete ||
+    (profile?.full_name && profile?.phone)
+  );
 
   return {
     user: sessionUser as User | null,
