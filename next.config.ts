@@ -11,6 +11,16 @@ const nextConfig: NextConfig = {
   // Cache Components / PPR
   cacheComponents: true,
 
+  // 개발 환경에서의 크로스 오리진 요청 허용 (Toss Sandbox)
+  allowedDevOrigins: [
+    'localhost:3000',
+    '192.168.1.223',
+    '192.168.1.223:3000',
+    '192.168.1.223:8081',
+    '*.toss.im',
+    'developers-apps-in-toss.toss.im',
+  ],
+
   // TypeScript 설정
   typescript: {
     ignoreBuildErrors: false,
@@ -52,7 +62,15 @@ const nextConfig: NextConfig = {
   // 실험적 기능 및 최적화
   experimental: {
     serverActions: {
-      allowedOrigins: ['localhost:3000', 'banana-wedding.vercel.app'],
+      allowedOrigins: [
+        'localhost:3000',
+        '192.168.1.223:3000',
+        '192.168.1.223:8081',
+        'banana-wedding.vercel.app',
+        // 앱인토스 WebView에서의 Server Actions 호출 허용
+        '*.toss.im',
+        '*.toss.co.kr',
+      ],
     },
     // bundle-barrel-imports: barrel file 최적화 (사용하는 모듈만 로드)
     optimizePackageImports: [
@@ -117,7 +135,7 @@ const nextConfig: NextConfig = {
       object-src 'none';
       base-uri 'self';
       form-action 'self' https://sharer.kakao.com;
-      frame-ancestors 'none';
+      frame-ancestors 'self' https://*.toss.im https://*.toss.co.kr;
     `
       .replace(/\s{2,}/g, ' ')
       .trim();
@@ -127,7 +145,7 @@ const nextConfig: NextConfig = {
         source: '/(.*)',
         headers: [
           { key: 'Content-Security-Policy', value: cspHeader },
-          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'X-DNS-Prefetch-Control', value: 'on' },

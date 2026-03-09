@@ -15,6 +15,7 @@ import styles from './Header.module.scss';
 import { useHeaderStore } from '@/store/useHeaderStore';
 import { useHeaderData } from './HeaderDataProvider';
 import { ProfileMenu } from './ProfileMenu';
+import { useTossEnvironment } from '@/hooks/useTossEnvironment';
 
 const HEADER_SCROLL_THRESHOLD = 1;
 
@@ -226,7 +227,17 @@ export default function Header() {
         </header>
       }
     >
-      <HeaderContent />
+      <TossAwareHeader />
     </Suspense>
   );
+}
+
+/** 토스 환경에서는 Header를 숨긴다. 토스 비게임 내비게이션 바가 대체. */
+function TossAwareHeader() {
+  const isToss = useTossEnvironment();
+
+  // 토스 앱인토스 환경: 내비게이션 바가 이미 브랜드 로고/뒤로가기/더보기를 제공
+  if (isToss) return null;
+
+  return <HeaderContent />;
 }

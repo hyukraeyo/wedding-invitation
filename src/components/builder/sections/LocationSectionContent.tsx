@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useShallow } from 'zustand/react/shallow';
-import { AddressPicker } from '@/components/common/AddressPicker';
+import { AddressPicker, type AddressPickerSelection } from '@/components/common/AddressPicker';
 import { KakaoIcon, NaverIcon } from '@/components/common/Icons';
 import { SectionHeadingFields } from '@/components/common/SectionHeadingFields';
 
@@ -18,6 +18,51 @@ import { useInvitationStore } from '@/store/useInvitationStore';
 import styles from './LocationSection.module.scss';
 
 const KakaoSdkLoader = dynamic(() => import('./KakaoSdkLoader'), { ssr: false });
+
+function normalizeSearchAddress(value: string) {
+  return value
+    .replace(/\s*\([^)]*\)\s*/g, ' ')
+    .replace(/,\s*.*$/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function buildAddressCandidates(address: string, searchValue?: string) {
+  const candidates = [searchValue, address, normalizeSearchAddress(searchValue ?? address)].filter(
+    (candidate): candidate is string => Boolean(candidate && candidate.trim())
+  );
+
+  return Array.from(new Set(candidates));
+}
+
+async function geocodeAddressCandidates(queries: string[]) {
+  if (typeof window === 'undefined' || !window.kakao?.maps?.services) return null;
+
+  const geocoder = new window.kakao.maps.services.Geocoder();
+
+  for (const query of queries) {
+    const result = await new Promise<kakao.maps.GeocoderResult[] | null>((resolve) => {
+      geocoder.addressSearch(query, (items, status) => {
+        if (status !== window.kakao.maps.services.Status.OK || items.length === 0) {
+          resolve(null);
+          return;
+        }
+
+        resolve(items);
+      });
+    });
+
+    const firstResult = result?.[0];
+    if (!firstResult) continue;
+
+    return {
+      lat: Number(firstResult.y),
+      lng: Number(firstResult.x),
+    };
+  }
+
+  return null;
+}
 
 export default function LocationSectionContent() {
   const {
@@ -86,23 +131,42 @@ export default function LocationSectionContent() {
   const coordinateLat = coordinates?.lat ?? 0;
   const coordinateLng = coordinates?.lng ?? 0;
 
-  React.useEffect(() => {
-    if (!isKakaoReady) return;
-    if (!address || typeof window === 'undefined' || !window.kakao?.maps?.services) return;
+  const syncCoordinates = React.useCallback(
+    async (selection?: AddressPickerSelection) => {
+      const baseAddress = selection?.searchValue || address;
 
-    const geocoder = new window.kakao.maps.services.Geocoder();
-    geocoder.addressSearch(address, (result, status) => {
-      if (status !== window.kakao.maps.services.Status.OK || result.length === 0) return;
-      const firstResult = result[0];
-      if (!firstResult) return;
-
-      const lat = parseFloat(firstResult.y);
-      const lng = parseFloat(firstResult.x);
-      if (Math.abs(coordinateLat - lat) > 0.0001 || Math.abs(coordinateLng - lng) > 0.0001) {
-        setCoordinates(lat, lng);
+      if (
+        selection?.lat !== undefined &&
+        selection?.lng !== undefined &&
+        (Math.abs(coordinateLat - selection.lat) > 0.0001 ||
+          Math.abs(coordinateLng - selection.lng) > 0.0001)
+      ) {
+        setCoordinates(selection.lat, selection.lng);
+        return;
       }
-    });
-  }, [address, coordinateLat, coordinateLng, isKakaoReady, setCoordinates]);
+
+      if (!isKakaoReady || !baseAddress) return;
+
+      const nextCoordinates = await geocodeAddressCandidates(
+        buildAddressCandidates(baseAddress, selection?.searchValue)
+      );
+
+      if (!nextCoordinates) return;
+
+      if (
+        Math.abs(coordinateLat - nextCoordinates.lat) > 0.0001 ||
+        Math.abs(coordinateLng - nextCoordinates.lng) > 0.0001
+      ) {
+        setCoordinates(nextCoordinates.lat, nextCoordinates.lng);
+      }
+    },
+    [address, coordinateLat, coordinateLng, isKakaoReady, setCoordinates]
+  );
+
+  React.useEffect(() => {
+    if (!address) return;
+    void syncCoordinates();
+  }, [address, syncCoordinates]);
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLocationContact(formatPhoneNumber(e.target.value));
@@ -133,6 +197,9 @@ export default function LocationSectionContent() {
           onChange={(val) => {
             setAddress(val);
             removeValidationError('location-address');
+          }}
+          onSelectResult={(selection) => {
+            void syncCoordinates(selection);
           }}
           error={validationErrors.includes('location-address')}
         />

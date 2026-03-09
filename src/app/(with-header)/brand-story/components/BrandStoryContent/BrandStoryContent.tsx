@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import Link from 'next/link';
 import { Sparkles, Zap, Heart, ArrowRight, Share2 } from 'lucide-react';
 import styles from './BrandStoryContent.module.scss';

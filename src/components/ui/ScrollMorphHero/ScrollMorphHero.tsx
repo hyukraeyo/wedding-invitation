@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, useTransform, useSpring, useMotionValue } from 'framer-motion';
+import { motion, useTransform, useSpring, useMotionValue } from 'motion/react';
 import Image from 'next/image';
 import styles from './ScrollMorphHero.module.scss';
 
@@ -390,14 +390,7 @@ export function ScrollMorphHero() {
               };
             }
 
-            return (
-              <FlipCard
-                key={i}
-                src={src}
-                index={i}
-                target={target}
-              />
-            );
+            return <FlipCard key={i} src={src} index={i} target={target} />;
           })}
         </div>
       </div>

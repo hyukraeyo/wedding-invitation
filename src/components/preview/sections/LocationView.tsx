@@ -5,6 +5,8 @@ import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { Copy, Phone } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useTossEnvironment } from '@/hooks/useTossEnvironment';
+import { loadTossWebFramework } from '@/lib/toss';
 import SectionContainer from '../SectionContainer';
 import SectionHeader from '../SectionHeader';
 import { NaverIcon, KakaoIcon } from '../../common/Icons';
@@ -72,14 +74,26 @@ const LocationView = memo(
     mapHeight = 'default',
   }: LocationViewProps) => {
     const { toast } = useToast();
+    const isToss = useTossEnvironment();
 
-    const handleNavClick = (type: 'kakao' | 'naver') => {
+    const handleNavClick = async (type: 'kakao' | 'naver') => {
       const query = encodeURIComponent(address);
       const url =
         type === 'kakao'
           ? `https://map.kakao.com/link/search/${query}`
           : `https://map.naver.com/v5/search/${query}`;
-      window.open(url, '_blank');
+
+      if (isToss) {
+        try {
+          const { openURL } = await loadTossWebFramework();
+          await openURL(url);
+          return;
+        } catch (error) {
+          console.error('[LOCATION_NAV_OPEN_ERROR]', error);
+        }
+      }
+
+      window.open(url, '_blank', 'noopener,noreferrer');
     };
 
     const handleCopyAddress = () => {
@@ -136,7 +150,7 @@ const LocationView = memo(
           <div className={styles.navLinks}>
             <Button
               variant="ghost"
-              onClick={() => handleNavClick('kakao')}
+              onClick={() => void handleNavClick('kakao')}
               className={styles.navButton}
               style={{
                 display: 'flex',
@@ -154,7 +168,7 @@ const LocationView = memo(
             </Button>
             <Button
               variant="ghost"
-              onClick={() => handleNavClick('naver')}
+              onClick={() => void handleNavClick('naver')}
               className={styles.navButton}
               style={{
                 display: 'flex',

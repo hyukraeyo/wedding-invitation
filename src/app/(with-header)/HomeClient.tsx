@@ -12,6 +12,7 @@ import { BottomCTA } from '@/components/common/BottomCTA';
 import { Button } from '@/components/ui/Button';
 import { ButtonGroup } from '@/components/ui/ButtonGroup';
 import { useAuth } from '@/hooks/useAuth';
+import { useTossEnvironment } from '@/hooks/useTossEnvironment';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import styles from './Home.module.scss';
 
@@ -90,6 +91,7 @@ const THEME_TONE_CLASS_MAP: Record<ThemeTone, string> = {
 export function HomeClient() {
   const { user, signOut } = useAuth();
   const resetInvitation = useInvitationStore((state) => state.reset);
+  const isToss = useTossEnvironment();
 
   const handleStartNew = () => {
     resetInvitation();
@@ -215,13 +217,15 @@ export function HomeClient() {
         <nav className={styles.footerLinks}>
           <Link href="/terms">이용약관</Link>
           <Link href="/privacy">개인정보 처리방침</Link>
-          {user ? (
-            <button type="button" onClick={() => signOut()}>
-              로그아웃
-            </button>
-          ) : (
-            <Link href="/login">로그인</Link>
-          )}
+          {/* 토스 환경에서는 소셜 로그인/로그아웃 버튼 숨김 (검수 가이드 준수) */}
+          {!isToss &&
+            (user ? (
+              <button type="button" onClick={() => signOut()}>
+                로그아웃
+              </button>
+            ) : (
+              <Link href="/login">로그인</Link>
+            ))}
         </nav>
         <p className={styles.copyright}>© {COPYRIGHT_YEAR} Banana Wedding. All rights reserved.</p>
       </footer>

@@ -377,7 +377,7 @@ export const INITIAL_STATE = {
   sketchUrl: null,
   sketchRatio: 'fixed' as const,
 
-  coordinates: { lat: 37.5665, lng: 126.978 }, // Default: Seoul City Hall
+  coordinates: null,
   greetingTitle: '저희 두 사람 결혼해요',
   greetingSubtitle: 'INVITATION',
   message:

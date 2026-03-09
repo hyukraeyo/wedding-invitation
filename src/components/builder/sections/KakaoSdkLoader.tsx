@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { useKakaoLoader } from 'react-kakao-maps-sdk';
+import { KAKAO_LOADER_OPTIONS } from '@/lib/kakaoLoader';
 
 interface KakaoSdkLoaderProps {
   onReady?: () => void;
@@ -10,10 +11,7 @@ interface KakaoSdkLoaderProps {
 
 export default function KakaoSdkLoader({ onReady, onError }: KakaoSdkLoaderProps) {
   const hasNotifiedRef = useRef(false);
-  const [loading, error] = useKakaoLoader({
-    appkey: process.env.NEXT_PUBLIC_KAKAO_APP_KEY || '',
-    libraries: ['services', 'clusterer'],
-  });
+  const [loading, error] = useKakaoLoader(KAKAO_LOADER_OPTIONS);
 
   useEffect(() => {
     if (hasNotifiedRef.current) return;

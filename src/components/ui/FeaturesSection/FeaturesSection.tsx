@@ -2,7 +2,7 @@
 
 import { Timer, Palette, MessageCircle, Smartphone, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import styles from './FeaturesSection.module.scss';
 
 const features = [

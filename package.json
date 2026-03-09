@@ -20,9 +20,15 @@
   ],
   "scripts": {
     "dev": "next dev --turbo",
+    "dev:next": "next dev",
     "dev:turbo": "next dev --turbo",
     "build": "next build --webpack",
+    "build:next": "next build --webpack",
+    "build:toss": "cross-env TOSS_BUILD=true next build --webpack && mkdir -p dist/web && echo '<!DOCTYPE html><html><head><meta charset=\"utf-8\"><script>window.location.replace(\"http://192.168.1.223:3000\" + window.location.search + window.location.hash);</script></head><body>Redirecting to local dev server...</body></html>' > dist/web/index.html",
     "build:turbo": "next build --turbo",
+    "toss:dev": "granite dev",
+    "toss:build": "granite build",
+    "toss:deploy": "ait deploy",
     "start": "next start",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
@@ -30,11 +36,12 @@
     "sync:agents": "node scripts/sync-agent-assets.mjs",
     "check:launch": "node scripts/check_launch_readiness.js",
     "format": "prettier --write .",
-    "analyze": "cross-env ANALYZE=true next build --webpack",
+    "analyze": "cross-env ANALYZE=true npm run build:next",
     "type-check": "tsc --noEmit",
     "clean": "rimraf .next out dist"
   },
   "dependencies": {
+    "@apps-in-toss/web-framework": "^1.14.0",
     "@auth/supabase-adapter": "^1.11.1",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
@@ -68,7 +75,6 @@
     "@radix-ui/react-toggle": "^1.1.10",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@radix-ui/react-visually-hidden": "^1.2.4",
-    "@radix-ui/themes": "^3.2.1",
     "@supabase/supabase-js": "^2.90.1",
     "@tanstack/react-query": "^5.90.16",
     "@tiptap/extension-color": "^3.15.3",
@@ -77,13 +83,15 @@
     "@tiptap/extension-text-style": "^3.15.3",
     "@tiptap/react": "^3.15.3",
     "@tiptap/starter-kit": "^3.15.3",
+    "@toss/tds-mobile": "^2.2.1",
+    "@toss/tds-mobile-ait": "^2.2.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "date-holidays": "^3.26.8",
-    "framer-motion": "^12.33.0",
     "idb-keyval": "^6.2.2",
     "jose": "^6.1.3",
     "lucide-react": "^0.562.0",
+    "motion": "^12.35.1",
     "next": "^16.1.6",
     "next-auth": "^5.0.0-beta.30",
     "next-pwa": "^5.6.0",
@@ -119,6 +127,14 @@
   },
   "overrides": {
     "react-naver-maps": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@toss/tds-mobile": {
+      "react": "$react",
+      "react-dom": "$react-dom"
+    },
+    "@toss/tds-mobile-ait": {
       "react": "$react",
       "react-dom": "$react-dom"
     }

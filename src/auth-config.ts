@@ -5,6 +5,7 @@ import Kakao from 'next-auth/providers/kakao';
 import Naver from 'next-auth/providers/naver';
 import { SupabaseAdapter } from '@auth/supabase-adapter';
 import { createClient } from '@supabase/supabase-js';
+import { isTossAuthReferrer } from '@/lib/toss';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -33,7 +34,7 @@ export const authConfig = {
     url: supabaseUrl,
     secret: supabaseServiceRoleKey,
   }),
-  session: { strategy: 'database' },
+  session: { strategy: 'jwt' },
   trustHost: true,
   providers: [
     Naver({
@@ -135,6 +136,105 @@ export const authConfig = {
         };
       },
     }),
+
+    Credentials({
+      id: 'toss',
+      name: 'Toss',
+      credentials: {
+        authorizationCode: { label: 'Code', type: 'text' },
+        referrer: { label: 'Referrer', type: 'text' },
+      },
+      async authorize(credentials) {
+        const authorizationCode =
+          typeof credentials?.authorizationCode === 'string'
+            ? credentials.authorizationCode.trim()
+            : '';
+        const rawReferrer =
+          typeof credentials?.referrer === 'string'
+            ? credentials.referrer.trim().toUpperCase()
+            : '';
+        const referrer = isTossAuthReferrer(rawReferrer) ? rawReferrer : '';
+
+        if (!authorizationCode || !referrer) {
+          console.warn('[TOSS_AUTH_INVALID_INPUT] authorizationCode/referrer missing or invalid');
+          return null;
+        }
+
+        try {
+          const { decryptTossData, getTossAccessToken, getTossUserInfo } =
+            await import('@/lib/tossServer');
+
+          // 1. 토큰 교환
+          const { accessToken } = await getTossAccessToken(authorizationCode, referrer);
+
+          // 2. 사용자 정보 조회
+          const userInfo = await getTossUserInfo(accessToken);
+
+          // 3. 사용자 식별자 및 기본 정보 설정
+          // 문서: name, phone, birthday, ci, gender 등 모든 개인정보는 암호화됨
+          // email은 null로 내려올 수 있음
+          const userKey = String(userInfo.userKey);
+          let name = '토스 사용자';
+          let phone: string | null = null;
+          let email = `${userKey}@toss.user`;
+
+          try {
+            if (userInfo.name) name = decryptTossData(userInfo.name);
+            if (userInfo.phone) phone = decryptTossData(userInfo.phone);
+            if (userInfo.email) email = userInfo.email;
+          } catch (e) {
+            console.warn('Toss data decryption failed, using defaults', e);
+          }
+
+          // 4. DB 사용자 연동 (기존 이메일 체크)
+          const { data: existingUser } = await nextAuthClient
+            .from('users')
+            .select('*')
+            .eq('email', email)
+            .maybeSingle();
+
+          if (existingUser) {
+            return {
+              id: existingUser.id,
+              email: existingUser.email,
+              name: existingUser.name ?? name,
+              image: existingUser.image ?? null,
+              phone,
+            } as Record<string, unknown>;
+          }
+
+          // 5. 신규 사용자 생성
+          const { data: newUser, error } = await nextAuthClient
+            .from('users')
+            .insert({
+              email,
+              name,
+              emailVerified: new Date().toISOString(),
+            })
+            .select()
+            .single();
+
+          if (error || !newUser) {
+            console.error('[TOSS_AUTH_CREATE_USER_FAILED]', error);
+            return null;
+          }
+
+          return {
+            id: newUser.id,
+            email: newUser.email,
+            name: newUser.name,
+            image: newUser.image ?? null,
+            phone,
+          } as Record<string, unknown>;
+        } catch (error) {
+          console.error('[TOSS_AUTH_ERROR]', {
+            error,
+            referrer,
+          });
+          return null;
+        }
+      },
+    }),
   ],
   pages: {
     signIn: '/login',
@@ -145,6 +245,10 @@ export const authConfig = {
       const isProtected =
         nextUrl.pathname.startsWith('/builder') || nextUrl.pathname.startsWith('/mypage');
 
+      console.log(
+        `[AUTH_CHECK] path=${nextUrl.pathname} isLoggedIn=${isLoggedIn} userId=${auth?.user?.id}`
+      );
+
       if (isProtected) {
         if (isLoggedIn) return true;
         return false; // Triggers redirect to pages.signIn
@@ -153,23 +257,46 @@ export const authConfig = {
     },
     async signIn({ user, account, profile }) {
       const provider = account?.provider;
+      console.log(`[SIGN_IN] provider=${provider} userId=${user?.id} email=${user?.email}`);
+
+      // Toss Credentials: 별도 프로필 처리
+      if (provider === 'toss') {
+        const isAdmin = !!(user.email && adminEmails.includes(user.email.toLowerCase()));
+        const tossPhone = (user as Record<string, unknown>).phone as string | null;
+
+        try {
+          const profilePayload: Record<string, string | boolean | null | undefined> = {
+            id: user.id,
+            full_name: user.name ?? '토스 사용자',
+            avatar_url: user.image ?? null,
+            is_admin: isAdmin,
+            is_profile_complete: true,
+          };
+
+          if (tossPhone) {
+            profilePayload.phone = tossPhone;
+          }
+
+          await publicClient.from('profiles').upsert(profilePayload);
+        } catch (error) {
+          console.error('Error saving profile during toss sign in:', error);
+        }
+        return true;
+      }
 
       // Admin Credentials Check
       if (provider === 'credentials') {
-        if (!user.email || !adminEmails.length) return false;
-        const isAdmin = adminEmails.includes(user.email.toLowerCase());
-        if (!isAdmin) return false;
+        const isAdmin = !!(user.email && adminEmails.includes(user.email.toLowerCase()));
 
         try {
           await publicClient.from('profiles').upsert({
             id: user.id,
-            full_name: user.name ?? 'Admin',
-            is_admin: true,
+            full_name: user.name ?? (isAdmin ? 'Admin' : '사용자'),
+            is_admin: isAdmin,
           });
         } catch (error) {
-          console.error('Error saving admin profile during sign in:', error);
+          console.error('Error saving profile during credentials sign in:', error);
         }
-
         return true;
       }
 
@@ -235,9 +362,9 @@ export const authConfig = {
 
       return true;
     },
-    async session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id;
+    async session({ session, token }) {
+      if (session.user && token.sub) {
+        session.user.id = token.sub;
       }
       return session;
     },

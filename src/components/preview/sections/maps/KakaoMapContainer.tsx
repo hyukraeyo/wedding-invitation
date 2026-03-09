@@ -4,6 +4,7 @@ import React from 'react';
 import { Map as KakaoMap, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk';
 import { Banana } from 'lucide-react';
 import { Skeleton } from '@/components/ui/Skeleton';
+import { KAKAO_LOADER_OPTIONS } from '@/lib/kakaoLoader';
 import styles from './KakaoMapContainer.module.scss';
 
 interface KakaoMapContainerProps {
@@ -14,10 +15,7 @@ interface KakaoMapContainerProps {
 }
 
 export default function KakaoMapContainer({ lat, lng, mapZoom, lockMap }: KakaoMapContainerProps) {
-  const [loading, error] = useKakaoLoader({
-    appkey: process.env.NEXT_PUBLIC_KAKAO_APP_KEY || '',
-    libraries: ['services', 'clusterer'],
-  });
+  const [loading, error] = useKakaoLoader(KAKAO_LOADER_OPTIONS);
 
   const kakaoMapLevel = Math.max(1, Math.min(14, 20 - mapZoom));
 

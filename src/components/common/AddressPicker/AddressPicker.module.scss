@@ -1,10 +1,20 @@
 @use '../../../styles/variables' as v;
+@use '../../../styles/mixins' as m;
 
 .body {
   height: 560px;
   min-height: 560px;
   width: 100%;
   overflow: hidden;
+
+  @include m.mobile {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+    max-height: calc((var(--vh, 1vh) * 100) - v.$space-4xl);
+  }
 }
 
 .embedWrapper {
@@ -14,7 +24,7 @@
 }
 
 .footer {
-  padding: 16px;
+  padding: v.$space-md;
   border-top: 1px solid v.$grey-100;
 }
 
@@ -25,4 +35,86 @@
   justify-content: center;
   color: v.$text-sub;
   font-size: v.$font-size-base;
+}
+
+.mobileSearch {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: v.$space-md;
+  min-height: 0;
+  padding: v.$space-md;
+  padding-bottom: calc(v.$space-md + env(safe-area-inset-bottom, 0px));
+}
+
+.mobileSearchField {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  flex-shrink: 0;
+  background-color: v.$white;
+}
+
+.mobileSearchFieldRoot {
+  width: 100%;
+}
+
+.mobileSearchHint {
+  margin: 0;
+  flex-shrink: 0;
+  color: v.$text-sub;
+  font-size: v.$control-font-size-sm;
+  line-height: 1.5;
+}
+
+.mobileResultList {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: v.$space-sm;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobileStatus {
+  padding: v.$space-lg v.$space-md;
+  border: 1px solid v.$grey-100;
+  border-radius: v.$radius-lg;
+  background-color: v.$grey-50;
+  color: v.$text-sub;
+  font-size: v.$control-font-size-sm;
+  text-align: center;
+}
+
+.mobileResultButton {
+  @include m.button-base;
+
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-xs;
+  width: 100%;
+  padding: v.$space-md;
+  border: 1px solid v.$grey-100;
+  border-radius: v.$radius-lg;
+  background-color: v.$white;
+  box-shadow: v.$shadow-sm;
+  text-align: left;
+
+  @include m.focus-subtle;
+  @include m.haptic-active(v.$scale-press-xs);
+}
+
+.mobileResultTitle {
+  color: v.$text-main;
+  font-size: v.$control-font-size-md;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.mobileResultDescription {
+  color: v.$text-sub;
+  font-size: v.$control-font-size-sm;
+  line-height: 1.5;
 }

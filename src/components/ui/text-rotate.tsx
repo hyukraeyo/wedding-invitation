@@ -14,7 +14,7 @@ import {
   motion,
   type MotionProps,
   type Transition,
-} from 'framer-motion';
+} from 'motion/react';
 import { cn } from '@/lib/utils';
 import styles from './text-rotate.module.scss';
 

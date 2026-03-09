@@ -25,7 +25,6 @@ interface GalleryLightboxProps {
   releaseVaulPointerCapture: (e: React.PointerEvent) => void;
 }
 
-const LIGHTBOX_MODULES = [Navigation, Pagination];
 
 const GalleryLightbox = memo(function GalleryLightbox({
   isOpen,
@@ -84,6 +83,7 @@ const GalleryLightbox = memo(function GalleryLightbox({
     [onOpenChange, resetZoom]
   );
 
+  const lightboxModules = React.useMemo(() => [Navigation, Pagination], []);
   const safeActiveIndex = gallery.length > 0 ? Math.min(activeIndex, gallery.length - 1) : 0;
 
   return (
@@ -115,7 +115,7 @@ const GalleryLightbox = memo(function GalleryLightbox({
         >
           <Swiper
             initialSlide={safeActiveIndex}
-            modules={LIGHTBOX_MODULES}
+            modules={lightboxModules}
             slidesPerView={1}
             spaceBetween={0}
             observer={true}
@@ -130,10 +130,20 @@ const GalleryLightbox = memo(function GalleryLightbox({
             resistanceRatio={0.85}
             followFinger={true}
             allowTouchMove={!isModalZoomed}
-            onSwiper={setModalSwiper}
-            onSlideChange={handleModalSlideChange}
+            onSwiper={(swiper) => {
+              if (swiper && !swiper.destroyed) {
+                setModalSwiper(swiper);
+              }
+            }}
+            onSlideChange={(swiper) => {
+              if (swiper && !swiper.destroyed) {
+                handleModalSlideChange(swiper);
+              }
+            }}
             onTouchStart={(swiper) => {
-              swiper.allowTouchMove = !isZoomed();
+              if (swiper && !swiper.destroyed) {
+                swiper.allowTouchMove = !isZoomed();
+              }
             }}
             className={styles.lightboxSwiper}
           >
