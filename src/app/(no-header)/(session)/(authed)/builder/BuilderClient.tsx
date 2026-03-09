@@ -1,8 +1,8 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
-import { ArrowLeft, Eye, MoreHorizontal, Save, X, type LucideIcon } from 'lucide-react';
+import { ArrowLeft, Eye, MoreHorizontal, Save, X, User, type LucideIcon } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
 import { clsx } from 'clsx';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -34,7 +34,7 @@ const InvitationCanvas = dynamic(() => import('@/components/preview/InvitationCa
 });
 
 interface TopActionItem {
-  key: 'back' | 'save';
+  key: 'back' | 'save' | 'mypage';
   variant: 'secondary' | 'primary';
   icon: LucideIcon;
   label: string;
@@ -259,6 +259,14 @@ export function BuilderClient() {
       icon: ArrowLeft,
       label: '뒤로가기',
       onClick: handleBack,
+      disabled: isSaving,
+    },
+    {
+      key: 'mypage',
+      variant: 'secondary' as const,
+      icon: User,
+      label: '마이페이지',
+      onClick: () => router.push('/mypage'),
       disabled: isSaving,
     },
     {
