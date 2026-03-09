@@ -75,10 +75,10 @@ const eslintConfig = defineConfig([
     '.next/**',
     'out/**',
     'build/**',
+    'dist/**',
+    'public/**',
     'next-env.d.ts',
     'scripts/**',
-    'public/sw.js',
-    'public/workbox-*.js',
   ]),
   prettierConfig,
 ]);

@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import { useGlobalLoadingStore } from '@/store/useGlobalLoadingStore';
 import { Banana } from 'lucide-react';
 import styles from './GlobalLoadingOverlay.module.scss';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 
 export const GlobalLoadingOverlay = () => {
   const { isLoading, message } = useGlobalLoadingStore();

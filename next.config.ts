@@ -12,7 +12,14 @@ const nextConfig: NextConfig = {
   cacheComponents: true,
 
   // 개발 환경에서의 크로스 오리진 요청 허용 (Toss Sandbox)
-  allowedDevOrigins: ['localhost:3000', '192.168.1.223:3000', '192.168.1.223:8081'],
+  allowedDevOrigins: [
+    'localhost:3000',
+    '192.168.1.223',
+    '192.168.1.223:3000',
+    '192.168.1.223:8081',
+    '*.toss.im',
+    'developers-apps-in-toss.toss.im',
+  ],
 
   // TypeScript 설정
   typescript: {

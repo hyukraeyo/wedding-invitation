@@ -3,7 +3,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { ArrowLeft, Eye, MoreHorizontal, Save, X, type LucideIcon } from 'lucide-react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 import { clsx } from 'clsx';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useShallow } from 'zustand/react/shallow';
@@ -47,6 +47,7 @@ export function BuilderClient() {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isMobileActionsExpanded, setIsMobileActionsExpanded] = useState(false);
   const [isReady, setIsReady] = useState(false);
+  const [hasOpenedPreviewOnce, setHasOpenedPreviewOnce] = useState(false);
   const isMobilePreviewViewport = useMediaQuery('(max-width: 767px)');
   const isToss = useTossEnvironment();
   const { toast } = useToast();
@@ -63,6 +64,7 @@ export function BuilderClient() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const searchParamsString = searchParams.toString();
 
   const mode = searchParams.get('mode');
   const isEditMode = mode === 'edit';
@@ -76,10 +78,9 @@ export function BuilderClient() {
   }, [toast]);
 
   const getLoginUrl = useCallback(() => {
-    const search = searchParams.toString();
-    const returnTo = `${pathname}${search ? `?${search}` : ''}`;
+    const returnTo = `${pathname}${searchParamsString ? `?${searchParamsString}` : ''}`;
     return `/login?returnTo=${encodeURIComponent(returnTo)}`;
-  }, [pathname, searchParams]);
+  }, [pathname, searchParamsString]);
 
   useEffect(() => {
     if (initRef.current) return;
@@ -276,54 +277,72 @@ export function BuilderClient() {
     setIsMobileActionsExpanded((prev) => !prev);
   }, []);
 
-  const renderMobileActionRail = () => {
-    if (isPreviewOpen) return null;
+  const updatePreviewOpen = useCallback((nextOpen: boolean) => {
+    setIsPreviewOpen(nextOpen);
 
+    if (nextOpen) {
+      setHasOpenedPreviewOnce(true);
+    }
+  }, []);
+
+  const handlePreviewOpen = useCallback(() => {
+    updatePreviewOpen(true);
+  }, [updatePreviewOpen]);
+
+  const handlePreviewClose = useCallback(() => {
+    updatePreviewOpen(false);
+  }, [updatePreviewOpen]);
+
+  const renderMobileActionRail = () => {
     return (
-      <div className={styles.mobileActionRail}>
-        <AnimatePresence initial={false}>
-          {hasExpandableMobileActions && isMobileActionsExpanded ? (
-            <motion.div
-              id="builder-mobile-rail-actions"
-              className={styles.mobileRailActionList}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.14, ease: [0.16, 1, 0.3, 1] }}
-            >
-              {topActions.map((action, index) => (
-                <motion.div
-                  key={action.key}
-                  className={clsx(styles.mobileRailButton, styles.mobileRailActionItem)}
-                  initial={{ opacity: 0, y: 18, scale: 0.64 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 14, scale: 0.78 }}
-                  transition={{
-                    type: 'spring',
-                    stiffness: 520,
-                    damping: 30,
-                    mass: 0.72,
-                    delay: index * 0.055,
+      <div
+        className={clsx(styles.mobileActionRail)}
+        style={{
+          opacity: isPreviewOpen ? 0 : 1,
+          pointerEvents: isPreviewOpen ? 'none' : 'auto',
+          visibility: isPreviewOpen ? 'hidden' : 'visible',
+          transition: 'opacity 0.2s ease-in-out',
+        }}
+      >
+        {hasExpandableMobileActions && isMobileActionsExpanded ? (
+          <motion.div
+            id="builder-mobile-rail-actions"
+            className={styles.mobileRailActionList}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.14, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {topActions.map((action, index) => (
+              <motion.div
+                key={action.key}
+                className={clsx(styles.mobileRailButton, styles.mobileRailActionItem)}
+                initial={{ opacity: 0, y: 18, scale: 0.64 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{
+                  type: 'spring',
+                  stiffness: 520,
+                  damping: 30,
+                  mass: 0.72,
+                  delay: index * 0.055,
+                }}
+              >
+                <IconButton
+                  type="button"
+                  variant={action.variant}
+                  size="xl"
+                  aria-label={action.label}
+                  onClick={() => {
+                    setIsMobileActionsExpanded(false);
+                    action.onClick();
                   }}
+                  disabled={action.disabled}
                 >
-                  <IconButton
-                    type="button"
-                    variant={action.variant}
-                    size="xl"
-                    aria-label={action.label}
-                    onClick={() => {
-                      setIsMobileActionsExpanded(false);
-                      action.onClick();
-                    }}
-                    disabled={action.disabled}
-                  >
-                    <action.icon className={styles.icon} />
-                  </IconButton>
-                </motion.div>
-              ))}
-            </motion.div>
-          ) : null}
-        </AnimatePresence>
+                  <action.icon className={styles.icon} />
+                </IconButton>
+              </motion.div>
+            ))}
+          </motion.div>
+        ) : null}
 
         {hasExpandableMobileActions ? (
           <div className={styles.mobileRailButton}>
@@ -336,31 +355,27 @@ export function BuilderClient() {
               aria-expanded={isMobileActionsExpanded}
               onClick={handleMobileMoreToggle}
             >
-              <AnimatePresence mode="wait" initial={false}>
-                {isMobileActionsExpanded ? (
-                  <motion.span
-                    key="expanded"
-                    className={styles.iconMotion}
-                    initial={{ opacity: 0, rotate: -90, scale: 0.56 }}
-                    animate={{ opacity: 1, rotate: 0, scale: 1 }}
-                    exit={{ opacity: 0, rotate: 90, scale: 0.56 }}
-                    transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    <X className={styles.icon} />
-                  </motion.span>
-                ) : (
-                  <motion.span
-                    key="collapsed"
-                    className={styles.iconMotion}
-                    initial={{ opacity: 0, rotate: 90, scale: 0.56 }}
-                    animate={{ opacity: 1, rotate: 0, scale: 1 }}
-                    exit={{ opacity: 0, rotate: -90, scale: 0.56 }}
-                    transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-                  >
-                    <MoreHorizontal className={styles.icon} />
-                  </motion.span>
-                )}
-              </AnimatePresence>
+              {isMobileActionsExpanded ? (
+                <motion.span
+                  key="expanded"
+                  className={styles.iconMotion}
+                  initial={{ opacity: 0, rotate: -90, scale: 0.56 }}
+                  animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                  transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <X className={styles.icon} />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="collapsed"
+                  className={styles.iconMotion}
+                  initial={{ opacity: 0, rotate: 90, scale: 0.56 }}
+                  animate={{ opacity: 1, rotate: 0, scale: 1 }}
+                  transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <MoreHorizontal className={styles.icon} />
+                </motion.span>
+              )}
             </IconButton>
           </div>
         ) : null}
@@ -371,7 +386,7 @@ export function BuilderClient() {
             variant="primary"
             size="xl"
             aria-label="미리보기 열기"
-            onClick={() => setIsPreviewOpen(true)}
+            onClick={handlePreviewOpen}
           >
             <Eye className={styles.icon} />
           </IconButton>
@@ -411,26 +426,29 @@ export function BuilderClient() {
           </div>
         </div>
 
-        <div className={styles.previewArea}>
-          <div className={styles.backgroundPattern} />
-          <div className={styles.previewContent}>
-            <IPhoneFrame>
-              <InvitationCanvas
-                key="desktop-preview"
-                editingSection={editingSection}
-                hideWatermark
-              />
-            </IPhoneFrame>
+        {isReady && !isMobilePreviewViewport && (
+          <div className={styles.previewArea}>
+            <div className={styles.backgroundPattern} />
+            <div className={styles.previewContent}>
+              <IPhoneFrame>
+                <InvitationCanvas
+                  key="desktop-preview"
+                  editingSection={editingSection}
+                  hideWatermark
+                />
+              </IPhoneFrame>
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {isMobilePreviewViewport ? (
         isToss ? (
           <>
-            <AnimatePresence>
-              {isMobileActionsExpanded ? (
+            <AnimatePresence mode="wait">
+              {isMobileActionsExpanded && (
                 <motion.button
+                  key="mobile-rail-backdrop"
                   type="button"
                   className={styles.mobileRailBackdrop}
                   aria-label="액션 메뉴 닫기"
@@ -440,68 +458,70 @@ export function BuilderClient() {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
                 />
-              ) : null}
+              )}
             </AnimatePresence>
 
             {renderMobileActionRail()}
 
-            <AnimatePresence>
-              {isPreviewOpen ? (
-                <>
-                  <motion.div
-                    className={styles.previewFallbackBackdrop}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                    onClick={() => setIsPreviewOpen(false)}
-                  />
-                  <motion.div
-                    className={styles.previewFallbackPanel}
-                    initial={{ x: '100%' }}
-                    animate={{ x: 0 }}
-                    exit={{ x: '100%' }}
-                    transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-                    role="dialog"
-                    aria-modal="true"
-                    aria-label="모바일 청첩장 미리보기"
-                  >
-                    <div className={styles.previewFallbackBody}>
-                      <InvitationCanvas
-                        key="mobile-preview-fallback"
-                        isPreviewMode
-                        editingSection={editingSection}
-                        hideWatermark
-                        disableInternalScroll
-                      />
-                    </div>
+            {hasOpenedPreviewOnce ? (
+              <>
+                <button
+                  type="button"
+                  className={clsx(
+                    styles.previewFallbackBackdrop,
+                    isPreviewOpen && styles.previewFallbackBackdropOpen
+                  )}
+                  aria-label="미리보기 닫기"
+                  aria-hidden={!isPreviewOpen}
+                  tabIndex={isPreviewOpen ? 0 : -1}
+                  onClick={handlePreviewClose}
+                />
 
-                    <div className={clsx(styles.mobileRailButton, styles.mobileRailCloseButton)}>
-                      <IconButton
-                        type="button"
-                        variant="secondary"
-                        size="xl"
-                        aria-label="미리보기 닫기"
-                        onClick={() => setIsPreviewOpen(false)}
-                      >
-                        <X className={styles.icon} />
-                      </IconButton>
-                    </div>
-                  </motion.div>
-                </>
-              ) : null}
-            </AnimatePresence>
+                <div
+                  className={clsx(
+                    styles.previewFallbackPanel,
+                    isPreviewOpen && styles.previewFallbackPanelOpen
+                  )}
+                  role={isPreviewOpen ? 'dialog' : undefined}
+                  aria-hidden={!isPreviewOpen}
+                  aria-modal={isPreviewOpen || undefined}
+                >
+                  <div className={styles.previewFallbackBody}>
+                    <InvitationCanvas
+                      key="mobile-preview-fallback"
+                      isPreviewMode
+                      editingSection={editingSection}
+                      hideWatermark
+                      disableInternalScroll
+                    />
+                  </div>
+
+                  <div className={clsx(styles.mobileRailButton, styles.mobileRailCloseButton)}>
+                    <IconButton
+                      type="button"
+                      variant="secondary"
+                      size="xl"
+                      aria-label="미리보기 닫기"
+                      onClick={handlePreviewClose}
+                    >
+                      <X className={styles.icon} />
+                    </IconButton>
+                  </div>
+                </div>
+              </>
+            ) : null}
           </>
         ) : (
           <Drawer.Root
             open={isPreviewOpen}
-            onOpenChange={setIsPreviewOpen}
+            onOpenChange={updatePreviewOpen}
             direction="right"
             autoFocus={false}
           >
             <AnimatePresence>
-              {isMobileActionsExpanded ? (
+              {isMobileActionsExpanded && (
                 <motion.button
+                  key="mobile-rail-backdrop-drawer"
                   type="button"
                   className={styles.mobileRailBackdrop}
                   aria-label="액션 메뉴 닫기"
@@ -511,7 +531,7 @@ export function BuilderClient() {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.16, ease: [0.16, 1, 0.3, 1] }}
                 />
-              ) : null}
+              )}
             </AnimatePresence>
 
             {renderMobileActionRail()}
@@ -535,7 +555,7 @@ export function BuilderClient() {
                     variant="secondary"
                     size="xl"
                     aria-label="미리보기 닫기"
-                    onClick={() => setIsPreviewOpen(false)}
+                    onClick={handlePreviewClose}
                   >
                     <X className={styles.icon} />
                   </IconButton>

@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { motion, useMotionValue, useTransform, animate, PanInfo, MotionValue } from 'framer-motion';
+import { motion, useMotionValue, useTransform, animate, PanInfo, MotionValue } from 'motion/react';
 import s from './DateWheelPicker.module.scss';
 import clsx from 'clsx';
 

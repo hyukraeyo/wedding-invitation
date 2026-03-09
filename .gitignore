@@ -62,3 +62,5 @@ check_exports*
 !supabase/migrations/*.sql
 
 .granite
+/dist/
+*.ait

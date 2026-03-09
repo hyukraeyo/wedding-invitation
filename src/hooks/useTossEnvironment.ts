@@ -23,8 +23,15 @@ export function useTossEnvironment(): boolean {
     let isMounted = true;
 
     void (async () => {
-      const environment = await getTossOperationalEnvironment();
       const detectedByHint = isTossEnvironment();
+
+      if (!detectedByHint) {
+        if (!isMounted) return;
+        setIsToss(false);
+        return;
+      }
+
+      const environment = await getTossOperationalEnvironment();
       const nextValue = environment !== null || detectedByHint;
 
       if (!isMounted) return;

@@ -11,7 +11,7 @@ import { signOut } from 'next-auth/react';
 import { MENU_TITLES } from '@/constants/navigation';
 import { IconButton } from '@/components/ui';
 import { getProfileCounts } from '@/app/actions/profile';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 import { clsx } from 'clsx';
 import styles from './ProfileMenu.module.scss';
 

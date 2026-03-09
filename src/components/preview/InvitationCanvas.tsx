@@ -1,6 +1,6 @@
 'use client';
 
-import React, { memo, useMemo, useEffect } from 'react';
+import React, { memo, useMemo, useEffect, useLayoutEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { Banana } from 'lucide-react';
 import { useShallow } from 'zustand/react/shallow';
@@ -41,6 +41,45 @@ interface InvitationCanvasProps {
   hideWatermark?: boolean;
   disableInternalScroll?: boolean;
   data?: InvitationData; // Allow passing raw data to bypass global store
+}
+
+const EDITING_SECTION_TO_PREVIEW_ID: Record<string, string> = {
+  basic: 'section-mainScreen',
+  theme: 'section-mainScreen',
+  mainScreen: 'section-mainScreen',
+  message: 'section-message',
+  gallery: 'section-gallery',
+  date: 'section-date',
+  location: 'section-location',
+  account: 'section-account',
+  closing: 'section-closing',
+  kakao: 'section-closing',
+};
+
+function resolveScrollHost(
+  scrollContainer: HTMLDivElement | null,
+  targetElement: HTMLElement,
+  disableInternalScroll: boolean
+): HTMLElement | null {
+  if (!disableInternalScroll) {
+    return scrollContainer;
+  }
+
+  let currentElement = targetElement.parentElement;
+
+  while (currentElement) {
+    const { overflowY, overflow } = window.getComputedStyle(currentElement);
+    const isScrollable =
+      /(auto|scroll)/.test(overflowY) || /(auto|scroll)/.test(overflow);
+
+    if (isScrollable && currentElement.scrollHeight > currentElement.clientHeight) {
+      return currentElement;
+    }
+
+    currentElement = currentElement.parentElement;
+  }
+
+  return document.scrollingElement instanceof HTMLElement ? document.scrollingElement : null;
 }
 
 type InvitationCanvasData = Pick<
@@ -173,17 +212,58 @@ const InvitationCanvasContent = memo(
     data,
   }: InvitationCanvasContentProps) => {
     const [isReady, setIsReady] = React.useState(!isPreviewMode);
-    const initialScrollDone = React.useRef(false);
+    const isMounted = React.useRef(true);
     const scrollContainerRef = React.useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+      isMounted.current = true;
+      return () => {
+        isMounted.current = false;
+      };
+    }, []);
+
+    useEffect(() => {
+      if (isReady) return undefined;
+
+      const frameId = requestAnimationFrame(() => {
+        if (isMounted.current) {
+          setIsReady(true);
+        }
+      });
+
+      return () => cancelAnimationFrame(frameId);
+    }, [isReady]);
+
+    useLayoutEffect(() => {
+      if (!isReady || !editingSection) return undefined;
+
+      const targetId = EDITING_SECTION_TO_PREVIEW_ID[editingSection];
+      if (!targetId) return undefined;
+
+      const targetElement = document.getElementById(targetId);
+      if (!targetElement) return undefined;
+
+      const scrollHost = resolveScrollHost(scrollContainerRef.current, targetElement, disableInternalScroll);
+      if (!scrollHost) return undefined;
+
+      if (scrollHost === document.documentElement || scrollHost === document.body) {
+        const nextScrollTop = targetElement.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo(0, Math.max(nextScrollTop, 0));
+        return undefined;
+      }
+
+      const hostRect = scrollHost.getBoundingClientRect();
+      const targetRect = targetElement.getBoundingClientRect();
+      const nextScrollTop = targetRect.top - hostRect.top + scrollHost.scrollTop;
+
+      scrollHost.scrollTop = Math.max(nextScrollTop, 0);
+
+      return undefined;
+    }, [disableInternalScroll, editingSection, isReady]);
 
     // Local font scale for transient changes (guest view or preview testing)
     // This ensures "Default cannot be set in the preview"
     const [localFontScale, setLocalFontScale] = React.useState(data.theme.fontScale || 1);
-
-    // Sync local scale when the "Default" from store/props changes
-    useEffect(() => {
-      setLocalFontScale(data.theme.fontScale || 1);
-    }, [data.theme.fontScale]);
 
     const {
       theme,
@@ -196,7 +276,7 @@ const InvitationCanvasContent = memo(
       time,
       dateTimeTitle,
       dateTimeSubtitle,
-      location,
+      location: locationLabel,
       detailAddress,
       greetingTitle,
       greetingSubtitle,
@@ -243,116 +323,19 @@ const InvitationCanvasContent = memo(
       mapHeight,
     } = data;
 
-    // Scroll to editing section
+    // Sync local scale when the "Default" from store/props changes
     useEffect(() => {
-      let timer: NodeJS.Timeout;
-      let targetId = editingSection;
-      if (!targetId || targetId === 'theme' || targetId === 'kakao' || targetId === 'basic') {
-        targetId = 'mainScreen';
+      if (isMounted.current) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- Preview-only override must reset when the source font scale changes.
+        setLocalFontScale(data.theme.fontScale || 1);
       }
-
-      // Find the nearest scrollable ancestor when internal scroll is disabled.
-      // In mobile Drawer preview, the scrollArea has overflow:visible and
-      // the Drawer.Body is the real scroll container.
-      const getScrollContainer = (): HTMLElement | null => {
-        if (!scrollContainerRef.current) return null;
-        if (!disableInternalScroll) return scrollContainerRef.current;
-
-        // Walk up the DOM to find the nearest scrollable ancestor
-        let parent = scrollContainerRef.current.parentElement;
-        while (parent) {
-          const style = window.getComputedStyle(parent);
-          const overflowY = style.overflowY;
-          if (overflowY === 'auto' || overflowY === 'scroll') {
-            return parent;
-          }
-          parent = parent.parentElement;
-        }
-        return null;
-      };
-
-      const performScroll = (behavior: ScrollBehavior) => {
-        try {
-          const container = getScrollContainer();
-          if (!container) return false;
-
-          if (targetId === 'mainScreen') {
-            container.scrollTo({
-              top: 0,
-              behavior,
-            });
-            return true;
-          }
-
-          // Search inside the scrollContainerRef (our content wrapper) for the section
-          const searchRoot = scrollContainerRef.current ?? container;
-          const element = searchRoot.querySelector(`#section-${targetId}`);
-          if (element instanceof HTMLElement) {
-            if (disableInternalScroll) {
-              // When internal scroll is disabled, use scrollIntoView which
-              // automatically targets the nearest scrollable ancestor.
-              element.scrollIntoView({ behavior, block: 'start' });
-            } else {
-              // Using offsetTop is much more stable than getBoundingClientRect
-              // because it's relative to the scroll container, not the viewport.
-              // This prevents jitter while the drawer is animating/moving.
-              const scrollTarget = element.offsetTop;
-
-              container.scrollTo({
-                top: scrollTarget,
-                behavior,
-              });
-            }
-            return true;
-          }
-        } catch (error) {
-          console.warn('Scroll to section failed:', error);
-        }
-        return false;
-      };
-
-      if (isPreviewMode && !initialScrollDone.current) {
-        let attempts = 0;
-        const tryInitialScroll = () => {
-          // We need to ensure the element exists and has layout
-          const searchRoot = scrollContainerRef.current;
-          const element =
-            targetId === 'mainScreen'
-              ? searchRoot
-              : searchRoot?.querySelector(`#section-${targetId}`);
-
-          if (element && performScroll('auto')) {
-            initialScrollDone.current = true;
-            // Increased delay to ~350ms to match the Sheet animation duration.
-            // This ensures the content is revealed ONLY after the motion has stopped,
-            // eliminating the "jolt" caused by heavy layout paints during translation.
-            setTimeout(() => setIsReady(true), 350);
-          } else if (attempts < 20) {
-            attempts++;
-            requestAnimationFrame(tryInitialScroll);
-          } else {
-            // Fallback: just show it if we can't find the section after many tries
-            setIsReady(true);
-          }
-        };
-
-        // Initial delay to let the Sheet portal mount
-        timer = setTimeout(tryInitialScroll, 50);
-        return () => {
-          if (timer) clearTimeout(timer);
-        };
-      } else {
-        // Normal behavior for desktop edits or subsequent mobile updates
-        // Using a small timeout to ensure DOM has updated if the component just re-rendered
-        const t = setTimeout(() => performScroll('smooth'), 50);
-        return () => clearTimeout(t);
-      }
-    }, [editingSection, isPreviewMode, disableInternalScroll]);
+    }, [data.theme.fontScale]);
 
     const canvasStyle = useMemo(
       () => getFontStyle(theme.font, localFontScale, theme.backgroundColor),
       [theme.font, localFontScale, theme.backgroundColor]
     );
+    const enableSectionEntrance = theme.animateEntrance && !editingSection;
 
     return (
       <div
@@ -376,7 +359,7 @@ const InvitationCanvasContent = memo(
           <EffectsOverlay effect={theme.effect} effectOnlyOnMain={theme.effectOnlyOnMain} />
 
           {/* 1. Main Screen */}
-          <ScrollReveal id="section-mainScreen" animateEntrance={theme.animateEntrance}>
+          <ScrollReveal id="section-mainScreen" animateEntrance={enableSectionEntrance}>
             <MainScreenView
               mainScreen={mainScreen}
               imageUrl={imageUrl || undefined}
@@ -385,7 +368,7 @@ const InvitationCanvasContent = memo(
               bride={bride}
               date={date}
               time={time}
-              location={location}
+              location={locationLabel}
               detailAddress={detailAddress}
               accentColor={theme.accentColor}
               backgroundColor={theme.backgroundColor}
@@ -407,23 +390,24 @@ const InvitationCanvasContent = memo(
             groom={groom}
             bride={bride}
             accentColor={theme.accentColor}
-            animateEntrance={theme.animateEntrance}
+            animateEntrance={enableSectionEntrance}
           />
 
           {/* 3. Gallery (Moved) */}
-          <GalleryView
-            id="section-gallery"
-            gallery={gallery}
-            galleryTitle={galleryTitle}
-            gallerySubtitle={gallerySubtitle}
-            galleryType={galleryType}
-            galleryFade={galleryFade}
-            galleryAutoplay={galleryAutoplay}
-            galleryPopup={galleryPopup}
-            accentColor={theme.accentColor}
-            animateEntrance={theme.animateEntrance}
-            isEditing={editingSection === 'gallery'}
-          />
+          <div id="section-gallery">
+            <GalleryView
+              gallery={gallery}
+              galleryTitle={galleryTitle}
+              gallerySubtitle={gallerySubtitle}
+              galleryType={galleryType}
+              galleryFade={galleryFade}
+              galleryAutoplay={galleryAutoplay}
+              galleryPopup={galleryPopup}
+              accentColor={theme.accentColor}
+              animateEntrance={enableSectionEntrance}
+              isEditing={editingSection === 'gallery'}
+            />
+          </div>
 
           {/* 4. Calendar & D-Day */}
           <CalendarSectionView
@@ -438,68 +422,71 @@ const InvitationCanvasContent = memo(
             bride={bride}
             showCalendar={showCalendar}
             showDday={showDday}
-            animateEntrance={theme.animateEntrance}
+            animateEntrance={enableSectionEntrance}
           />
 
           {/* 5. Location */}
-          <LocationView
-            id="section-location"
-            title={locationTitle}
-            subtitle={locationSubtitle}
-            location={location}
-            lat={coordinates?.lat || 37.5665}
-            lng={coordinates?.lng || 126.978}
-            address={address}
-            detailAddress={detailAddress}
-            accentColor={theme.accentColor}
-            mapZoom={mapZoom}
-            showMap={showMap}
-            showNavigation={showNavigation}
-            sketchUrl={sketchUrl || undefined}
-            sketchRatio={sketchRatio}
-            lockMap={lockMap}
-            mapType={mapType}
-            locationContact={locationContact}
-            animateEntrance={theme.animateEntrance}
-            mapHeight={mapHeight}
-          />
+          <div id="section-location">
+            <LocationView
+              title={locationTitle}
+              subtitle={locationSubtitle}
+              location={locationLabel}
+              lat={coordinates?.lat ?? 0}
+              lng={coordinates?.lng ?? 0}
+              address={address}
+              detailAddress={detailAddress}
+              accentColor={theme.accentColor}
+              mapZoom={mapZoom}
+              showMap={showMap && coordinates !== null}
+              showNavigation={showNavigation}
+              sketchUrl={sketchUrl || undefined}
+              sketchRatio={sketchRatio}
+              lockMap={lockMap}
+              mapType={mapType}
+              locationContact={locationContact}
+              animateEntrance={enableSectionEntrance}
+              mapHeight={mapHeight}
+            />
+          </div>
 
           {/* 7. Accounts */}
-          <AccountsView
-            id="section-account"
-            accounts={accounts}
-            title={accountsTitle}
-            subtitle={accountsSubtitle}
-            description={accountsDescription}
-            groomTitle={accountsGroomTitle}
-            brideTitle={accountsBrideTitle}
-            colorMode={accountsColorMode as 'accent' | 'subtle' | 'white'}
-            accentColor={theme.accentColor}
-            animateEntrance={theme.animateEntrance}
-            isEditing={editingSection === 'account'}
-          />
+          <div id="section-account">
+            <AccountsView
+              accounts={accounts}
+              title={accountsTitle}
+              subtitle={accountsSubtitle}
+              description={accountsDescription}
+              groomTitle={accountsGroomTitle}
+              brideTitle={accountsBrideTitle}
+              colorMode={accountsColorMode as 'accent' | 'subtle' | 'white'}
+              accentColor={theme.accentColor}
+              animateEntrance={enableSectionEntrance}
+              isEditing={editingSection === 'account'}
+            />
+          </div>
 
           {/* 8. Closing / Ending */}
-          <ClosingView
-            id="section-closing"
-            title={closing.title}
-            subtitle={closing.subtitle}
-            closingMessage={closing.content}
-            imageUrl={closing.imageUrl}
-            ratio={closing.ratio}
-            accentColor={theme.accentColor}
-            kakaoShare={kakaoShare}
-            groom={groom}
-            bride={bride}
-            date={date}
-            time={time}
-            mainImageUrl={imageUrl}
-            animateEntrance={theme.animateEntrance}
-            address={address}
-            location={location}
-            slug={slug}
-            isEditing={editingSection === 'closing'}
-          />
+          <div id="section-closing">
+            <ClosingView
+              title={closing.title}
+              subtitle={closing.subtitle}
+              closingMessage={closing.content}
+              imageUrl={closing.imageUrl}
+              ratio={closing.ratio}
+              accentColor={theme.accentColor}
+              kakaoShare={kakaoShare}
+              groom={groom}
+              bride={bride}
+              date={date}
+              time={time}
+              mainImageUrl={imageUrl}
+              animateEntrance={enableSectionEntrance}
+              address={address}
+              location={locationLabel}
+              slug={slug}
+              isEditing={editingSection === 'closing'}
+            />
+          </div>
 
           {/* Footer Padding */}
           <div className={styles.footerPadding}>

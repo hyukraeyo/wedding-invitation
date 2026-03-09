@@ -86,7 +86,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: `${SITE_NAME} - 모바일 청첩장`,
-    description: '쉽고 간편하게 모바일 청첩장을 제작해 보세요.',
+    description: '쉽고 간편하게 모바일 청첩장을 제ㄴ작해 보세요.',
     images: ['/logo.png'],
     creator: '@hyukraeyo',
   },

@@ -1,7 +1,21 @@
 type TossWindow = Window & {
-  __granite__?: unknown;
-  __granite?: unknown;
-  __GRANITE_NATIVE_EMITTER?: unknown;
+  __granite__?: {
+    app?: {
+      scheme?: string;
+    };
+  };
+  __granite?: {
+    app?: {
+      scheme?: string;
+    };
+  };
+  __GRANITE_NATIVE_EMITTER?: {
+    on?: unknown;
+  };
+  __CONSTANT_HANDLER_MAP?: Record<string, unknown>;
+  ReactNativeWebView?: {
+    postMessage?: unknown;
+  };
 };
 
 type TossFrameworkModule = typeof import('@apps-in-toss/web-framework');
@@ -11,6 +25,7 @@ export type TossAuthReferrer = 'DEFAULT' | 'SANDBOX';
 
 const TOSS_UA_IDENTIFIERS = ['TOSS_WEBVIEW', 'APPSINTOSS'];
 const TOSS_ROOT_DATA_KEY = 'data-toss';
+const TOSS_OPERATIONAL_ENVIRONMENT_KEY = 'getOperationalEnvironment';
 
 let tossFrameworkPromise: Promise<TossFrameworkModule> | null = null;
 let tossOperationalEnvironmentPromise: Promise<TossOperationalEnvironment | null> | null = null;
@@ -21,12 +36,33 @@ function hasTossUserAgentHint(userAgent: string): boolean {
 }
 
 function hasTossBridgeHint(win: TossWindow): boolean {
-  return '__granite__' in win || '__granite' in win || '__GRANITE_NATIVE_EMITTER' in win;
+  const graniteApp = win.__granite__?.app ?? win.__granite?.app;
+  if (graniteApp?.scheme === 'intoss') {
+    return true;
+  }
+
+  const hasReactNativeWebView = typeof win.ReactNativeWebView?.postMessage === 'function';
+  if (!hasReactNativeWebView) {
+    return false;
+  }
+
+  const constantHandlerMap = win.__CONSTANT_HANDLER_MAP;
+  if (!constantHandlerMap) {
+    return false;
+  }
+
+  return TOSS_OPERATIONAL_ENVIRONMENT_KEY in constantHandlerMap;
 }
 
 function hasTossDocumentHint(): boolean {
   if (typeof document === 'undefined') return false;
   return document.documentElement.getAttribute(TOSS_ROOT_DATA_KEY) === 'true';
+}
+
+function hasTossRuntimeHint(win: TossWindow, userAgent: string): boolean {
+  if (hasTossDocumentHint()) return true;
+  if (hasTossUserAgentHint(userAgent)) return true;
+  return hasTossBridgeHint(win);
 }
 
 /**
@@ -41,9 +77,7 @@ function hasTossDocumentHint(): boolean {
 export function isTossEnvironment(): boolean {
   if (typeof window === 'undefined') return false;
 
-  if (hasTossDocumentHint()) return true;
-  if (hasTossUserAgentHint(navigator.userAgent)) return true;
-  return hasTossBridgeHint(window as TossWindow);
+  return hasTossRuntimeHint(window as TossWindow, navigator.userAgent);
 }
 
 /**
@@ -67,6 +101,12 @@ export function isTossAuthReferrer(value: string): value is TossAuthReferrer {
  */
 export async function getTossOperationalEnvironment(): Promise<TossOperationalEnvironment | null> {
   if (typeof window === 'undefined') return null;
+  const win = window as TossWindow;
+  const runtimeHint = hasTossRuntimeHint(win, navigator.userAgent);
+
+  if (!runtimeHint) {
+    return null;
+  }
 
   if (!tossOperationalEnvironmentPromise) {
     tossOperationalEnvironmentPromise = (async () => {
@@ -80,7 +120,7 @@ export async function getTossOperationalEnvironment(): Promise<TossOperationalEn
         // no-op: 공식 브릿지 감지가 불가능한 일반 웹 환경에서는 fallback 감지를 사용합니다.
       }
 
-      return isTossEnvironment() ? 'toss' : null;
+      return hasTossRuntimeHint(win, navigator.userAgent) ? 'toss' : null;
     })();
   }
 

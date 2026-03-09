@@ -1,6 +1,24 @@
 import 'server-only';
 import { createDecipheriv } from 'node:crypto';
+import https from 'node:https';
+import fs from 'node:fs';
+import path from 'node:path';
 import type { TossAuthReferrer } from '@/lib/toss';
+
+let tossHttpsAgent: https.Agent | null = null;
+function getTossHttpsAgent() {
+  if (!tossHttpsAgent) {
+    try {
+      const cert = fs.readFileSync(path.join(process.cwd(), 'toss-cert.pem'));
+      const key = fs.readFileSync(path.join(process.cwd(), 'toss-key.pem'));
+      tossHttpsAgent = new https.Agent({ cert, key, keepAlive: true });
+    } catch (e) {
+      console.warn('[TOSS_mTLS] Failed to load cert/key files, falling back to default agent', e);
+      tossHttpsAgent = new https.Agent();
+    }
+  }
+  return tossHttpsAgent;
+}
 
 const TOSS_API_BASE_URL = 'https://apps-in-toss-api.toss.im/api-partner';
 const TOSS_API_TIMEOUT_MS = 10_000;
@@ -62,19 +80,47 @@ function buildTossApiError(
   return new Error(`[${context}] status=${response.status}${codeText} reason=${reasonText}`);
 }
 
-async function requestTossApi(context: string, path: string, init: RequestInit): Promise<Response> {
-  try {
-    return await fetch(`${TOSS_API_BASE_URL}${path}`, {
-      ...init,
-      cache: 'no-store',
-      signal: AbortSignal.timeout(TOSS_API_TIMEOUT_MS),
+async function requestTossApi(
+  context: string,
+  apiPath: string,
+  init: RequestInit
+): Promise<Response> {
+  return new Promise((resolve, reject) => {
+    const urlObj = new URL(`${TOSS_API_BASE_URL}${apiPath}`);
+    const options: https.RequestOptions = {
+      method: init.method || 'GET',
+      headers: init.headers as Record<string, string>,
+      agent: getTossHttpsAgent(),
+      timeout: TOSS_API_TIMEOUT_MS,
+    };
+
+    const req = https.request(urlObj, options, (res) => {
+      const chunks: Buffer[] = [];
+      res.on('data', (chunk) => chunks.push(chunk));
+      res.on('end', () => {
+        const body = Buffer.concat(chunks).toString('utf-8');
+        resolve({
+          ok: res.statusCode ? res.statusCode >= 200 && res.statusCode < 300 : false,
+          status: res.statusCode || 500,
+          text: async () => body,
+        } as unknown as Response);
+      });
     });
-  } catch (error) {
-    if (error instanceof Error && (error.name === 'AbortError' || error.name === 'TimeoutError')) {
-      throw new Error(`[${context}] Request timed out after ${TOSS_API_TIMEOUT_MS}ms`);
+
+    req.on('error', (error) => {
+      reject(new Error(`[${context}] Request failed: ${error.message}`));
+    });
+
+    req.on('timeout', () => {
+      req.destroy();
+      reject(new Error(`[${context}] Request timed out after ${TOSS_API_TIMEOUT_MS}ms`));
+    });
+
+    if (init.body) {
+      req.write(init.body);
     }
-    throw error;
-  }
+    req.end();
+  });
 }
 
 export async function getTossAccessToken(authorizationCode: string, referrer: TossAuthReferrer) {

@@ -9,7 +9,6 @@ import { clsx } from 'clsx';
 import type { GalleryItem } from './types';
 import styles from '../GalleryView.module.scss';
 
-const SWIPER_MODULES = [Navigation, Pagination, EffectFade, Autoplay];
 
 interface SwiperGalleryProps {
   gallery: GalleryItem[];
@@ -38,6 +37,7 @@ const SwiperGallery = memo(function SwiperGallery({
   blockDrawerGestureStart,
   releaseVaulPointerCapture,
 }: SwiperGalleryProps) {
+  const swiperModules = React.useMemo(() => [Navigation, Pagination, EffectFade, Autoplay], []);
   const safeActiveIndex = gallery.length > 0 ? Math.min(activeIndex, gallery.length - 1) : 0;
 
   return (
@@ -54,7 +54,7 @@ const SwiperGallery = memo(function SwiperGallery({
       >
         <Swiper
           key={`swiper-${gallery.length}-${galleryFade}`}
-          modules={SWIPER_MODULES}
+          modules={swiperModules}
           spaceBetween={galleryFade ? 0 : 20}
           slidesPerView={galleryFade ? 1 : 1.18}
           centeredSlides={!galleryFade}
@@ -70,8 +70,16 @@ const SwiperGallery = memo(function SwiperGallery({
           touchAngle={45}
           grabCursor={true}
           threshold={5}
-          onSwiper={onSwiper}
-          onSlideChange={(swiper) => onSlideChange(swiper.realIndex)}
+          onSwiper={(swiper) => {
+            if (swiper && !swiper.destroyed) {
+              onSwiper(swiper);
+            }
+          }}
+          onSlideChange={(swiper) => {
+            if (swiper && !swiper.destroyed) {
+              onSlideChange(swiper.realIndex);
+            }
+          }}
           className={styles.swiperMain}
         >
           {gallery.map((img, index) => (
