@@ -2,16 +2,19 @@
 @use '../../../styles/mixins' as m;
 
 .body {
-  height: 560px;
-  min-height: 560px;
+  display: flex;
+  flex: 1 1 560px;
+  flex-direction: column;
+  min-height: 0;
   width: 100%;
   overflow: hidden;
 
+  @include m.desktop {
+    max-height: 560px;
+  }
+
   @include m.mobile {
-    display: flex;
     flex: 1;
-    flex-direction: column;
-    min-height: 0;
     max-height: none;
   }
 }
@@ -36,24 +39,9 @@
   }
 }
 
-.embedWrapper {
-  height: 560px;
-  width: 100%;
-  background-color: v.$white;
-}
-
 .footer {
   padding: v.$space-md;
   border-top: 1px solid v.$grey-100;
-}
-
-.loading {
-  height: 560px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: v.$text-sub;
-  font-size: v.$font-size-base;
 }
 
 .mobileSearch {
@@ -100,9 +88,12 @@
   position: relative;
   flex: 1;
   min-height: 0;
+  overflow: hidden;
 }
 
 .mobileResultList {
+  --address-picker-edge-fade-size: #{v.$space-lg};
+
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -113,6 +104,53 @@
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   padding-bottom: v.$space-xs;
+}
+
+.mobileResultListFadeTop {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    rgba(v.$grey-900, 1) var(--address-picker-edge-fade-size),
+    rgba(v.$grey-900, 1) 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    rgba(v.$grey-900, 1) var(--address-picker-edge-fade-size),
+    rgba(v.$grey-900, 1) 100%
+  );
+}
+
+.mobileResultListFadeBottom {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(v.$grey-900, 1) 0,
+    rgba(v.$grey-900, 1) calc(100% - var(--address-picker-edge-fade-size)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(v.$grey-900, 1) 0,
+    rgba(v.$grey-900, 1) calc(100% - var(--address-picker-edge-fade-size)),
+    transparent 100%
+  );
+}
+
+.mobileResultListFadeBoth {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    rgba(v.$grey-900, 1) var(--address-picker-edge-fade-size),
+    rgba(v.$grey-900, 1) calc(100% - var(--address-picker-edge-fade-size)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    rgba(v.$grey-900, 1) var(--address-picker-edge-fade-size),
+    rgba(v.$grey-900, 1) calc(100% - var(--address-picker-edge-fade-size)),
+    transparent 100%
+  );
 }
 
 .mobileResultMeta {
@@ -150,37 +188,6 @@
 
 .mobileLoadMore {
   padding-top: v.$space-xs;
-}
-
-.mobileResultEdgeMask {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: v.$space-xl;
-  pointer-events: none;
-  z-index: 2;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-}
-
-.mobileResultEdgeMaskTop {
-  top: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(v.$white, 0.98) 0%,
-    rgba(v.$white, 0.86) 55%,
-    rgba(v.$white, 0.08) 100%
-  );
-}
-
-.mobileResultEdgeMaskBottom {
-  bottom: 0;
-  background: linear-gradient(
-    to top,
-    rgba(v.$white, 0.98) 0%,
-    rgba(v.$white, 0.86) 55%,
-    rgba(v.$white, 0.08) 100%
-  );
 }
 
 .mobileStatePanel {

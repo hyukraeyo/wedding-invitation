@@ -1,10 +1,9 @@
 'use client';
 
 import * as React from 'react';
-import { Search } from 'lucide-react';
+import { clsx } from 'clsx';
 import { AnimatePresence, motion } from 'framer-motion';
-import dynamic from 'next/dynamic';
-import type { Address } from 'react-daum-postcode';
+import { Search } from 'lucide-react';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { searchKakaoAddresses, type MobileSearchResult } from '@/app/actions/kakaoSearch';
 import { Dialog } from '@/components/ui/Dialog';
@@ -12,14 +11,6 @@ import { TextField } from '@/components/ui/TextField';
 import { Button } from '@/components/ui/Button';
 import { SectionLoader } from '@/components/ui/SectionLoader';
 import styles from './AddressPicker.module.scss';
-
-const DaumPostcodeEmbed = dynamic(
-  () => import('react-daum-postcode').then((mod) => mod.DaumPostcodeEmbed),
-  {
-    ssr: false,
-    loading: () => <SectionLoader height={460} message="주소 검색창을 불러오고 있어요" />,
-  }
-);
 
 const MOBILE_FOCUS_DELAY_MS = 180;
 
@@ -51,27 +42,6 @@ interface AddressPickerProps {
   id?: string | undefined;
   error?: string | boolean | undefined;
   onClick?: React.MouseEventHandler<HTMLButtonElement> | undefined;
-}
-
-function buildDisplayAddress(data: Address) {
-  let fullAddress = data.address;
-  let extraAddress = '';
-
-  if (data.addressType === 'R') {
-    if (data.bname !== '') {
-      extraAddress += data.bname;
-    }
-    if (data.buildingName !== '') {
-      extraAddress += extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName;
-    }
-    fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
-  }
-
-  return fullAddress;
-}
-
-function buildSearchAddress(data: Address) {
-  return data.roadAddress || data.jibunAddress || data.address;
 }
 
 function dedupeMobileSearchResults(results: MobileSearchResult[]) {
@@ -126,6 +96,8 @@ const AddressPickerRaw = (
   const mobileInputRef = React.useRef<HTMLInputElement>(null);
   const mobileResultListRef = React.useRef<HTMLDivElement>(null);
   const mobileSearchRequestIdRef = React.useRef(0);
+  const mobileMaskAnimationFrameRef = React.useRef<number | null>(null);
+  const mobileMaskStateRef = React.useRef({ top: false, bottom: false });
   const isOpen = externalOpen !== undefined ? externalOpen : internalOpen;
   const trimmedMobileQuery = mobileQuery.trim();
   const canSearchMobile = trimmedMobileQuery.length >= 2;
@@ -150,21 +122,62 @@ const AddressPickerRaw = (
   }, []);
 
   const updateMobileResultMasks = React.useCallback(() => {
-    const element = mobileResultListRef.current;
-
-    if (!element) {
-      setShowMobileResultTopMask(false);
-      setShowMobileResultBottomMask(false);
-      return;
+    if (mobileMaskAnimationFrameRef.current !== null) {
+      window.cancelAnimationFrame(mobileMaskAnimationFrameRef.current);
     }
 
-    const maxScrollTop = Math.max(0, element.scrollHeight - element.clientHeight);
-    setShowMobileResultTopMask(element.scrollTop > 2);
-    setShowMobileResultBottomMask(maxScrollTop - element.scrollTop > 2);
+    mobileMaskAnimationFrameRef.current = window.requestAnimationFrame(() => {
+      mobileMaskAnimationFrameRef.current = null;
+
+      const element = mobileResultListRef.current;
+
+      if (!element) {
+        if (mobileMaskStateRef.current.top || mobileMaskStateRef.current.bottom) {
+          mobileMaskStateRef.current = { top: false, bottom: false };
+          setShowMobileResultTopMask(false);
+          setShowMobileResultBottomMask(false);
+        }
+        return;
+      }
+
+      const maxScrollTop = Math.max(0, element.scrollHeight - element.clientHeight);
+      const nextTop = element.scrollTop > 2;
+      const nextBottom = maxScrollTop - element.scrollTop > 2;
+
+      if (
+        mobileMaskStateRef.current.top === nextTop &&
+        mobileMaskStateRef.current.bottom === nextBottom
+      ) {
+        return;
+      }
+
+      mobileMaskStateRef.current = { top: nextTop, bottom: nextBottom };
+      setShowMobileResultTopMask(nextTop);
+      setShowMobileResultBottomMask(nextBottom);
+    });
+  }, []);
+
+  const resetMobileResultMasks = React.useCallback(() => {
+    if (mobileMaskAnimationFrameRef.current !== null) {
+      window.cancelAnimationFrame(mobileMaskAnimationFrameRef.current);
+      mobileMaskAnimationFrameRef.current = null;
+    }
+
+    mobileMaskStateRef.current = { top: false, bottom: false };
+    setShowMobileResultTopMask(false);
+    setShowMobileResultBottomMask(false);
   }, []);
 
   React.useEffect(() => {
-    if (!isOpen || !isMobile) return;
+    return () => {
+      if (mobileMaskAnimationFrameRef.current !== null) {
+        window.cancelAnimationFrame(mobileMaskAnimationFrameRef.current);
+      }
+    };
+  }, []);
+
+  React.useEffect(() => {
+    if (!isOpen) return;
 
     setMobileQuery(value);
     setMobileResults([]);
@@ -181,28 +194,21 @@ const AddressPickerRaw = (
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [focusMobileInput, isMobile, isOpen, value]);
+  }, [focusMobileInput, isOpen, value]);
 
   React.useEffect(() => {
-    if (!isOpen || !isMobile || isSearchingMobile || mobileResults.length === 0) {
-      setShowMobileResultTopMask(false);
-      setShowMobileResultBottomMask(false);
+    if (!isOpen || isSearchingMobile || mobileResults.length === 0) {
+      resetMobileResultMasks();
       return;
     }
 
-    const frameId = window.requestAnimationFrame(() => {
-      updateMobileResultMasks();
-    });
-
-    return () => {
-      window.cancelAnimationFrame(frameId);
-    };
-  }, [isMobile, isOpen, isSearchingMobile, mobileResults.length, updateMobileResultMasks]);
+    updateMobileResultMasks();
+  }, [isOpen, isSearchingMobile, mobileResults.length, resetMobileResultMasks, updateMobileResultMasks]);
 
   React.useEffect(() => {
     const element = mobileResultListRef.current;
 
-    if (!isOpen || !isMobile || !element || isSearchingMobile || mobileResults.length === 0) {
+    if (!isOpen || !element || isSearchingMobile || mobileResults.length === 0) {
       return;
     }
 
@@ -220,36 +226,16 @@ const AddressPickerRaw = (
     return () => {
       observer.disconnect();
     };
-  }, [isMobile, isOpen, isSearchingMobile, mobileResults.length, updateMobileResultMasks]);
-
-  const handleAddressComplete = (data: Address) => {
-    const fullAddress = buildDisplayAddress(data);
-    const searchValue = buildSearchAddress(data);
-
-    onChange(fullAddress);
-    onSelectResult?.({
-      value: fullAddress,
-      searchValue,
-      source: 'postcode',
-      ...(data.buildingName ? { title: data.buildingName } : {}),
-    });
-    setIsOpen(false);
-    onComplete?.();
-  };
+  }, [isOpen, isSearchingMobile, mobileResults.length, updateMobileResultMasks]);
 
   const handleTriggerClick = React.useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
       onClick?.(event);
       if (event.defaultPrevented || disabled) return;
 
-      if (isMobile) {
-        setIsOpen(true);
-        return;
-      }
-
       setIsOpen(true);
     },
-    [disabled, isMobile, onClick, setIsOpen]
+    [disabled, onClick, setIsOpen]
   );
 
   const handleMobileQueryChange = React.useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -270,8 +256,7 @@ const AddressPickerRaw = (
       if (mode === 'replace') {
         setIsSearchingMobile(true);
         setMobileSearchedQuery(trimmedMobileQuery);
-        setShowMobileResultTopMask(false);
-        setShowMobileResultBottomMask(false);
+        resetMobileResultMasks();
         mobileInputRef.current?.blur();
         mobileResultListRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
@@ -316,7 +301,7 @@ const AddressPickerRaw = (
         }
       }
     },
-    [canSearchMobile, mobileResults, trimmedMobileQuery]
+    [canSearchMobile, mobileResults, resetMobileResultMasks, trimmedMobileQuery]
   );
 
   const handleMobileSearch = React.useCallback(async () => {
@@ -374,169 +359,152 @@ const AddressPickerRaw = (
         <Dialog.Content
           className={styles.sheetContent}
           onOpenAutoFocus={(event) => {
-            if (!isMobile) return;
             event.preventDefault();
           }}
         >
           <Dialog.Header title="주소 검색" className={styles.sheetHeader} />
-          <Dialog.Body className={styles.body} padding={false} scrollable={!isMobile}>
-            {isMobile ? (
-              <div className={styles.mobileSearch}>
-                <div className={styles.mobileSearchField}>
-                  <TextField
-                    ref={mobileInputRef}
-                    type="search"
-                    value={mobileQuery}
-                    onChange={handleMobileQueryChange}
-                    onKeyDown={handleMobileQueryKeyDown}
-                    onCompositionStart={() => setIsMobileComposing(true)}
-                    onCompositionEnd={() => setIsMobileComposing(false)}
-                    placeholder="예식장명 또는 주소를 입력해 주세요"
-                    enterKeyHint="search"
-                    autoCapitalize="none"
-                    autoCorrect="off"
-                  />
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="md"
-                    disabled={!canSearchMobile || isSearchingMobile}
-                    onClick={() => void handleMobileSearch()}
-                    aria-label="주소 검색"
-                  >
-                    <Search size={18} />
-                  </Button>
-                </div>
-
-                <div className={styles.mobileResultViewport}>
-                  <AnimatePresence mode="wait" initial={false}>
-                    {isSearchingMobile ? (
-                      <motion.div
-                        key="loader"
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        transition={{ duration: 0.2 }}
-                        className={styles.mobileStatePanel}
-                      >
-                        <SectionLoader height={240} message="주소를 찾고 있어요" />
-                      </motion.div>
-                    ) : hasMobileResults ? (
-                      <motion.div
-                        key={mobileSearchedQuery || 'results'}
-                        initial={{ opacity: 0, y: 12 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 8 }}
-                        transition={{ duration: 0.22 }}
-                        className={styles.mobileResultGroup}
-                      >
-                        <div className={styles.mobileResultMeta}>
-                          <span className={styles.mobileResultCount}>
-                            {mobileResults.length}개 표시
-                          </span>
-                          <span className={styles.mobileResultQuery}>
-                            &ldquo;{mobileSearchedQuery}&rdquo;
-                          </span>
-                        </div>
-                        <div className={styles.mobileResultScrollerWrap}>
-                          <div
-                            ref={mobileResultListRef}
-                            className={styles.mobileResultList}
-                            onScroll={updateMobileResultMasks}
-                          >
-                            <div className={styles.mobileResultItems}>
-                              {mobileResults.map((result, index) => (
-                                <motion.button
-                                  key={result.id}
-                                  layout
-                                  initial={{ opacity: 0, y: 15 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                  exit={{ opacity: 0, scale: 0.95 }}
-                                  transition={{ duration: 0.2, delay: Math.min(index * 0.03, 0.18) }}
-                                  type="button"
-                                  className={styles.mobileResultButton}
-                                  onClick={() => handleMobileResultSelect(result)}
-                                >
-                                  <span className={styles.mobileResultTitle}>
-                                    {result.title || result.value}
-                                  </span>
-                                  {result.description ? (
-                                    <span className={styles.mobileResultDescription}>
-                                      {result.description}
-                                    </span>
-                                  ) : null}
-                                </motion.button>
-                              ))}
-                              {canLoadMoreMobileResults ? (
-                                <div className={styles.mobileLoadMore}>
-                                  <Button
-                                    type="button"
-                                    variant="soft"
-                                    size="md"
-                                    fullWidth
-                                    loading={isLoadingMoreMobile}
-                                    onClick={() => void handleMobileLoadMore()}
-                                  >
-                                    더보기
-                                  </Button>
-                                </div>
-                              ) : null}
-                            </div>
-                          </div>
-                          {showMobileResultTopMask ? (
-                            <div
-                              className={`${styles.mobileResultEdgeMask} ${styles.mobileResultEdgeMaskTop}`}
-                              aria-hidden="true"
-                            />
-                          ) : null}
-                          {showMobileResultBottomMask ? (
-                            <div
-                              className={`${styles.mobileResultEdgeMask} ${styles.mobileResultEdgeMaskBottom}`}
-                              aria-hidden="true"
-                            />
-                          ) : null}
-                        </div>
-                      </motion.div>
-                    ) : (
-                      <motion.div
-                        key={mobileSearchState}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 6 }}
-                        transition={{ duration: 0.2 }}
-                        className={styles.mobileStatePanel}
-                      >
-                        <div className={styles.mobileStateCopy}>
-                          <strong className={styles.mobileStateTitle}>
-                            {mobileSearchState === 'error'
-                              ? '검색 중 문제가 발생했어요'
-                              : mobileSearchState === 'empty'
-                                ? '검색 결과가 없어요'
-                                : '주소를 검색해 주세요'}
-                          </strong>
-                          <p className={styles.mobileStateDescription}>
-                            {mobileSearchState === 'error'
-                              ? mobileStatusMessage || '잠시 후 다시 시도해 주세요.'
-                              : mobileSearchState === 'empty'
-                                ? mobileStatusMessage || '다른 키워드로 다시 찾아보세요.'
-                                : '예식장명 또는 도로명 주소를 입력하면 결과가 여기에 표시돼요.'}
-                          </p>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </div>
-            ) : isOpen ? (
-              <div className={styles.embedWrapper}>
-                <DaumPostcodeEmbed
-                  onComplete={handleAddressComplete}
-                  focusInput
-                  style={{ height: '560px', width: '100%' }}
-                  autoClose={false}
+          <Dialog.Body className={styles.body} padding={false} scrollable={false}>
+            <div className={styles.mobileSearch}>
+              <div className={styles.mobileSearchField}>
+                <TextField
+                  ref={mobileInputRef}
+                  type="search"
+                  value={mobileQuery}
+                  onChange={handleMobileQueryChange}
+                  onKeyDown={handleMobileQueryKeyDown}
+                  onCompositionStart={() => setIsMobileComposing(true)}
+                  onCompositionEnd={() => setIsMobileComposing(false)}
+                  placeholder="예식장명 또는 주소를 입력해 주세요"
+                  enterKeyHint="search"
+                  autoCapitalize="none"
+                  autoCorrect="off"
                 />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="md"
+                  disabled={!canSearchMobile || isSearchingMobile}
+                  onClick={() => void handleMobileSearch()}
+                  aria-label="주소 검색"
+                >
+                  <Search size={18} />
+                </Button>
               </div>
-            ) : null}
+
+              <div className={styles.mobileResultViewport}>
+                <AnimatePresence mode="wait" initial={false}>
+                  {isSearchingMobile ? (
+                    <motion.div
+                      key="loader"
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.2 }}
+                      className={styles.mobileStatePanel}
+                    >
+                      <SectionLoader height={240} message="주소를 찾고 있어요" />
+                    </motion.div>
+                  ) : hasMobileResults ? (
+                    <motion.div
+                      key={mobileSearchedQuery || 'results'}
+                      initial={{ opacity: 0, y: 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 8 }}
+                      transition={{ duration: 0.22 }}
+                      className={styles.mobileResultGroup}
+                    >
+                      <div className={styles.mobileResultMeta}>
+                        <span className={styles.mobileResultCount}>{mobileResults.length}개 표시</span>
+                        <span className={styles.mobileResultQuery}>&ldquo;{mobileSearchedQuery}&rdquo;</span>
+                      </div>
+                      <div className={styles.mobileResultScrollerWrap}>
+                        <div
+                          ref={mobileResultListRef}
+                          className={clsx(
+                            styles.mobileResultList,
+                            showMobileResultTopMask &&
+                              showMobileResultBottomMask &&
+                              styles.mobileResultListFadeBoth,
+                            showMobileResultTopMask &&
+                              !showMobileResultBottomMask &&
+                              styles.mobileResultListFadeTop,
+                            !showMobileResultTopMask &&
+                              showMobileResultBottomMask &&
+                              styles.mobileResultListFadeBottom
+                          )}
+                          onScroll={updateMobileResultMasks}
+                        >
+                          <div className={styles.mobileResultItems}>
+                            {mobileResults.map((result, index) => (
+                              <motion.button
+                                key={result.id}
+                                layout
+                                initial={{ opacity: 0, y: 15 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.95 }}
+                                transition={{ duration: 0.2, delay: Math.min(index * 0.03, 0.18) }}
+                                type="button"
+                                className={styles.mobileResultButton}
+                                onClick={() => handleMobileResultSelect(result)}
+                              >
+                                <span className={styles.mobileResultTitle}>
+                                  {result.title || result.value}
+                                </span>
+                                {result.description ? (
+                                  <span className={styles.mobileResultDescription}>
+                                    {result.description}
+                                  </span>
+                                ) : null}
+                              </motion.button>
+                            ))}
+                            {canLoadMoreMobileResults ? (
+                              <div className={styles.mobileLoadMore}>
+                                <Button
+                                  type="button"
+                                  variant="soft"
+                                  size="md"
+                                  fullWidth
+                                  loading={isLoadingMoreMobile}
+                                  onClick={() => void handleMobileLoadMore()}
+                                >
+                                  더보기
+                                </Button>
+                              </div>
+                            ) : null}
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key={mobileSearchState}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 6 }}
+                      transition={{ duration: 0.2 }}
+                      className={styles.mobileStatePanel}
+                    >
+                      <div className={styles.mobileStateCopy}>
+                        <strong className={styles.mobileStateTitle}>
+                          {mobileSearchState === 'error'
+                            ? '검색 중 문제가 발생했어요'
+                            : mobileSearchState === 'empty'
+                              ? '검색 결과가 없어요'
+                              : '주소를 검색해 주세요'}
+                        </strong>
+                        <p className={styles.mobileStateDescription}>
+                          {mobileSearchState === 'error'
+                            ? mobileStatusMessage || '잠시 후 다시 시도해 주세요.'
+                            : mobileSearchState === 'empty'
+                              ? mobileStatusMessage || '다른 키워드로 다시 찾아보세요.'
+                              : '예식장명 또는 도로명 주소를 입력하면 결과가 여기에 표시돼요.'}
+                        </p>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
           </Dialog.Body>
           {!isMobile ? (
             <Dialog.Footer className={styles.footer}>
