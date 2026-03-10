@@ -13,7 +13,6 @@
     flex-direction: column;
     height: auto;
     min-height: 0;
-    max-height: calc((var(--vh, 1vh) * 100) - v.$space-4xl);
   }
 }
 
@@ -117,4 +116,22 @@
   color: v.$text-sub;
   font-size: v.$control-font-size-sm;
   line-height: 1.5;
+}
+
+.mobileClose {
+  position: absolute;
+  top: 50%;
+  right: v.$space-md;
+  transform: translateY(-50%);
+  color: v.$text-secondary;
+  background: transparent;
+  border: none;
+  padding: v.$space-xs;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: v.$radius-full;
+  
+  @include m.focus-subtle;
+  @include m.haptic-active(v.$scale-press-xs);
 }
