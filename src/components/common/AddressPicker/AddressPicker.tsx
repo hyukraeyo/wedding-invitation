@@ -6,13 +6,11 @@ import { AnimatePresence, motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import type { Address } from 'react-daum-postcode';
 import { useMediaQuery } from '@/hooks/use-media-query';
-import { useTossEnvironment } from '@/hooks/useTossEnvironment';
 import { searchKakaoAddresses, type MobileSearchResult } from '@/app/actions/kakaoSearch';
 import { Dialog } from '@/components/ui/Dialog';
 import { TextField } from '@/components/ui/TextField';
 import { Button } from '@/components/ui/Button';
 import { SectionLoader } from '@/components/ui/SectionLoader';
-import { cn } from '@/lib/utils';
 import styles from './AddressPicker.module.scss';
 
 const DaumPostcodeEmbed = dynamic(
@@ -112,7 +110,6 @@ const AddressPickerRaw = (
   ref: React.Ref<HTMLButtonElement>
 ) => {
   const isMobile = useMediaQuery('(max-width: 768px)');
-  const isToss = useTossEnvironment();
   const [internalOpen, setInternalOpen] = React.useState(false);
   const [mobileQuery, setMobileQuery] = React.useState(value);
   const [mobileResults, setMobileResults] = React.useState<MobileSearchResult[]>([]);
@@ -134,16 +131,7 @@ const AddressPickerRaw = (
   const canSearchMobile = trimmedMobileQuery.length >= 2;
   const canLoadMoreMobileResults =
     hasMoreMobileResults && mobileSearchedQuery.length > 0 && mobileSearchedQuery === trimmedMobileQuery;
-  const shouldShowMobileStatusCard =
-    mobileSearchState === 'empty' || mobileSearchState === 'error';
   const hasMobileResults = mobileResults.length > 0;
-  const shouldRenderMobileResultViewport =
-    isSearchingMobile || hasMobileResults || shouldShowMobileStatusCard;
-  const shouldUseExpandedMobileLayout = hasMobileResults;
-  const dialogContentKey =
-    isMobile && isToss
-      ? `address-picker-sheet-${shouldUseExpandedMobileLayout ? 'expanded' : 'compact'}`
-      : 'address-picker-sheet';
 
   const setIsOpen = React.useCallback(
     (open: boolean) => {
@@ -233,22 +221,6 @@ const AddressPickerRaw = (
       observer.disconnect();
     };
   }, [isMobile, isOpen, isSearchingMobile, mobileResults.length, updateMobileResultMasks]);
-
-  React.useEffect(() => {
-    if (!isOpen || !isMobile || !isToss || !shouldUseExpandedMobileLayout) {
-      return;
-    }
-
-    const frameId = window.requestAnimationFrame(() => {
-      window.dispatchEvent(new Event('resize'));
-    });
-
-    return () => {
-      window.cancelAnimationFrame(frameId);
-    };
-  }, [isMobile, isOpen, isToss, shouldUseExpandedMobileLayout]);
-
-
 
   const handleAddressComplete = (data: Address) => {
     const fullAddress = buildDisplayAddress(data);
@@ -400,7 +372,6 @@ const AddressPickerRaw = (
       />
       <Dialog open={isOpen} onOpenChange={setIsOpen} mobileBottomSheet>
         <Dialog.Content
-          key={dialogContentKey}
           className={styles.sheetContent}
           onOpenAutoFocus={(event) => {
             if (!isMobile) return;
@@ -408,23 +379,9 @@ const AddressPickerRaw = (
           }}
         >
           <Dialog.Header title="주소 검색" className={styles.sheetHeader} />
-          <Dialog.Body
-            className={cn(
-              styles.body,
-              isMobile && (shouldUseExpandedMobileLayout ? styles.bodyExpanded : styles.bodyCompact)
-            )}
-            padding={false}
-            scrollable={!isMobile}
-          >
+          <Dialog.Body className={styles.body} padding={false} scrollable={!isMobile}>
             {isMobile ? (
-              <div
-                className={cn(
-                  styles.mobileSearch,
-                  shouldUseExpandedMobileLayout
-                    ? styles.mobileSearchExpanded
-                    : styles.mobileSearchCompact
-                )}
-              >
+              <div className={styles.mobileSearch}>
                 <div className={styles.mobileSearchField}>
                   <TextField
                     ref={mobileInputRef}
@@ -451,128 +408,124 @@ const AddressPickerRaw = (
                   </Button>
                 </div>
 
-                {shouldRenderMobileResultViewport ? (
-                  <div
-                    className={cn(
-                      styles.mobileResultViewport,
-                      shouldUseExpandedMobileLayout
-                        ? styles.mobileResultViewportExpanded
-                        : styles.mobileResultViewportCompact
-                    )}
-                  >
-                    <AnimatePresence mode="wait" initial={false}>
-                      {isSearchingMobile ? (
-                        <motion.div
-                          key="loader"
-                          initial={{ opacity: 0, scale: 0.95 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          exit={{ opacity: 0, scale: 0.95 }}
-                          transition={{ duration: 0.2 }}
-                        >
-                          <SectionLoader height={240} message="주소를 찾고 있어요" />
-                        </motion.div>
-                      ) : hasMobileResults ? (
-                        <motion.div
-                          key={mobileSearchedQuery || 'results'}
-                          initial={{ opacity: 0, y: 12 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 8 }}
-                          transition={{ duration: 0.22 }}
-                          className={styles.mobileResultGroup}
-                        >
-                          <div className={styles.mobileResultMeta}>
-                            <span className={styles.mobileResultCount}>
-                              {mobileResults.length}개 표시
-                            </span>
-                            <span className={styles.mobileResultQuery}>
-                              &ldquo;{mobileSearchedQuery}&rdquo;
-                            </span>
-                          </div>
-                          <div className={styles.mobileResultScrollerWrap}>
-                            <div
-                              ref={mobileResultListRef}
-                              className={styles.mobileResultList}
-                              onScroll={updateMobileResultMasks}
-                            >
-                              <div className={styles.mobileResultItems}>
-                                {mobileResults.map((result, index) => (
-                                  <motion.button
-                                    key={result.id}
-                                    layout
-                                    initial={{ opacity: 0, y: 15 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, scale: 0.95 }}
-                                    transition={{ duration: 0.2, delay: Math.min(index * 0.03, 0.18) }}
-                                    type="button"
-                                    className={styles.mobileResultButton}
-                                    onClick={() => handleMobileResultSelect(result)}
-                                  >
-                                    <span className={styles.mobileResultTitle}>
-                                      {result.title || result.value}
+                <div className={styles.mobileResultViewport}>
+                  <AnimatePresence mode="wait" initial={false}>
+                    {isSearchingMobile ? (
+                      <motion.div
+                        key="loader"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                        className={styles.mobileStatePanel}
+                      >
+                        <SectionLoader height={240} message="주소를 찾고 있어요" />
+                      </motion.div>
+                    ) : hasMobileResults ? (
+                      <motion.div
+                        key={mobileSearchedQuery || 'results'}
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 8 }}
+                        transition={{ duration: 0.22 }}
+                        className={styles.mobileResultGroup}
+                      >
+                        <div className={styles.mobileResultMeta}>
+                          <span className={styles.mobileResultCount}>
+                            {mobileResults.length}개 표시
+                          </span>
+                          <span className={styles.mobileResultQuery}>
+                            &ldquo;{mobileSearchedQuery}&rdquo;
+                          </span>
+                        </div>
+                        <div className={styles.mobileResultScrollerWrap}>
+                          <div
+                            ref={mobileResultListRef}
+                            className={styles.mobileResultList}
+                            onScroll={updateMobileResultMasks}
+                          >
+                            <div className={styles.mobileResultItems}>
+                              {mobileResults.map((result, index) => (
+                                <motion.button
+                                  key={result.id}
+                                  layout
+                                  initial={{ opacity: 0, y: 15 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  exit={{ opacity: 0, scale: 0.95 }}
+                                  transition={{ duration: 0.2, delay: Math.min(index * 0.03, 0.18) }}
+                                  type="button"
+                                  className={styles.mobileResultButton}
+                                  onClick={() => handleMobileResultSelect(result)}
+                                >
+                                  <span className={styles.mobileResultTitle}>
+                                    {result.title || result.value}
+                                  </span>
+                                  {result.description ? (
+                                    <span className={styles.mobileResultDescription}>
+                                      {result.description}
                                     </span>
-                                    {result.description ? (
-                                      <span className={styles.mobileResultDescription}>
-                                        {result.description}
-                                      </span>
-                                    ) : null}
-                                  </motion.button>
-                                ))}
-                                {canLoadMoreMobileResults ? (
-                                  <div className={styles.mobileLoadMore}>
-                                    <Button
-                                      type="button"
-                                      variant="soft"
-                                      size="md"
-                                      fullWidth
-                                      loading={isLoadingMoreMobile}
-                                      onClick={() => void handleMobileLoadMore()}
-                                    >
-                                      더보기
-                                    </Button>
-                                  </div>
-                                ) : null}
-                              </div>
+                                  ) : null}
+                                </motion.button>
+                              ))}
+                              {canLoadMoreMobileResults ? (
+                                <div className={styles.mobileLoadMore}>
+                                  <Button
+                                    type="button"
+                                    variant="soft"
+                                    size="md"
+                                    fullWidth
+                                    loading={isLoadingMoreMobile}
+                                    onClick={() => void handleMobileLoadMore()}
+                                  >
+                                    더보기
+                                  </Button>
+                                </div>
+                              ) : null}
                             </div>
-                            {showMobileResultTopMask ? (
-                              <div
-                                className={`${styles.mobileResultEdgeMask} ${styles.mobileResultEdgeMaskTop}`}
-                                aria-hidden="true"
-                              />
-                            ) : null}
-                            {showMobileResultBottomMask ? (
-                              <div
-                                className={`${styles.mobileResultEdgeMask} ${styles.mobileResultEdgeMaskBottom}`}
-                                aria-hidden="true"
-                              />
-                            ) : null}
                           </div>
-                        </motion.div>
-                      ) : shouldShowMobileStatusCard ? (
-                        <motion.div
-                          key={mobileSearchState}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: 6 }}
-                          transition={{ duration: 0.2 }}
-                          className={styles.mobileStatusCard}
-                        >
-                          <div className={styles.mobileStatusIcon}>
-                            <Search size={20} />
-                          </div>
-                          <strong className={styles.mobileStatusTitle}>
+                          {showMobileResultTopMask ? (
+                            <div
+                              className={`${styles.mobileResultEdgeMask} ${styles.mobileResultEdgeMaskTop}`}
+                              aria-hidden="true"
+                            />
+                          ) : null}
+                          {showMobileResultBottomMask ? (
+                            <div
+                              className={`${styles.mobileResultEdgeMask} ${styles.mobileResultEdgeMaskBottom}`}
+                              aria-hidden="true"
+                            />
+                          ) : null}
+                        </div>
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key={mobileSearchState}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 6 }}
+                        transition={{ duration: 0.2 }}
+                        className={styles.mobileStatePanel}
+                      >
+                        <div className={styles.mobileStateCopy}>
+                          <strong className={styles.mobileStateTitle}>
                             {mobileSearchState === 'error'
                               ? '검색 중 문제가 발생했어요'
-                              : '검색 결과가 없어요'}
+                              : mobileSearchState === 'empty'
+                                ? '검색 결과가 없어요'
+                                : '주소를 검색해 주세요'}
                           </strong>
-                          <p className={styles.mobileStatusDescription}>
-                            {mobileStatusMessage ||
-                              '예식장명 또는 도로명 주소를 두 글자 이상 입력하면 더 정확하게 찾을 수 있어요.'}
+                          <p className={styles.mobileStateDescription}>
+                            {mobileSearchState === 'error'
+                              ? mobileStatusMessage || '잠시 후 다시 시도해 주세요.'
+                              : mobileSearchState === 'empty'
+                                ? mobileStatusMessage || '다른 키워드로 다시 찾아보세요.'
+                                : '예식장명 또는 도로명 주소를 입력하면 결과가 여기에 표시돼요.'}
                           </p>
-                        </motion.div>
-                      ) : null}
-                    </AnimatePresence>
-                  </div>
-                ) : null}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
             ) : isOpen ? (
               <div className={styles.embedWrapper}>

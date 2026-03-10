@@ -9,29 +9,24 @@
 
   @include m.mobile {
     display: flex;
-    flex-direction: column;
-    height: auto;
-    max-height: none;
-  }
-}
-
-.bodyExpanded {
-  @include m.mobile {
     flex: 1;
-    @include m.min-vh(56);
-  }
-}
-
-.bodyCompact {
-  @include m.mobile {
-    flex: 0 0 auto;
-    min-height: auto;
+    flex-direction: column;
+    min-height: 0;
+    max-height: none;
   }
 }
 
 .sheetContent {
   @include m.mobile {
-    max-height: calc(100dvh - v.$space-xl);
+    bottom: var(--keyboard-offset, 0px);
+    height: calc((var(--vh, 1vh) * 100) - #{v.$space-4xl});
+    min-height: calc((var(--vh, 1vh) * 100) - #{v.$space-4xl});
+    max-height: calc((var(--vh, 1vh) * 100) - #{v.$space-4xl});
+    transition:
+      bottom 240ms v.$ease-ios,
+      height 240ms v.$ease-ios,
+      min-height 240ms v.$ease-ios,
+      max-height 240ms v.$ease-ios;
   }
 }
 
@@ -64,18 +59,11 @@
 .mobileSearch {
   display: flex;
   flex-direction: column;
+  flex: 1;
   gap: v.$space-md;
+  min-height: 0;
   padding: v.$space-sm v.$space-lg v.$space-lg;
   padding-bottom: calc(v.$space-md + env(safe-area-inset-bottom, 0px));
-}
-
-.mobileSearchExpanded {
-  flex: 1;
-  min-height: 0;
-}
-
-.mobileSearchCompact {
-  flex: 0 0 auto;
 }
 
 .mobileSearchField {
@@ -95,16 +83,9 @@
 .mobileResultViewport {
   position: relative;
   display: flex;
-}
-
-.mobileResultViewportExpanded {
+  flex-direction: column;
   flex: 1;
   min-height: 0;
-}
-
-.mobileResultViewportCompact {
-  flex: 0 0 auto;
-  min-height: auto;
 }
 
 .mobileResultGroup {
@@ -202,41 +183,31 @@
   );
 }
 
-.mobileStatusCard {
+.mobileStatePanel {
   display: flex;
-  flex: 0 0 auto;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: v.$space-sm;
-  width: 100%;
-  padding: v.$space-lg;
-  border: 1px solid v.$grey-100;
-  border-radius: v.$radius-lg;
-  background:
-    linear-gradient(180deg, rgba(v.$primary, 0.08) 0%, rgba(v.$white, 0.98) 100%),
-    v.$white;
-  align-self: flex-start;
-}
-
-.mobileStatusIcon {
-  display: flex;
+  flex: 1;
   align-items: center;
   justify-content: center;
-  width: v.$control-height-md;
-  height: v.$control-height-md;
-  border-radius: v.$radius-full;
-  background-color: rgba(v.$primary, 0.16);
-  color: v.$primary-dark;
+  padding: v.$space-lg;
+  text-align: center;
 }
 
-.mobileStatusTitle {
+.mobileStateCopy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: v.$space-sm;
+  max-width: v.$canvas-max-width;
+}
+
+.mobileStateTitle {
   color: v.$text-main;
   font-size: v.$control-font-size-md;
   font-weight: 700;
   line-height: 1.4;
 }
 
-.mobileStatusDescription {
+.mobileStateDescription {
   margin: 0;
   color: v.$text-sub;
   font-size: v.$control-font-size-sm;
