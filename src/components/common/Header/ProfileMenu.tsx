@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/Badge';
 import { Menu, FileText, ClipboardList, HelpCircle, User, LogOut, Bell } from 'lucide-react';
 import { signOut } from 'next-auth/react';
 import { MENU_TITLES } from '@/constants/navigation';
-import { IconButton } from '@/components/ui';
+import { IconButton } from '@/components/ui/IconButton';
 import { getProfileCounts } from '@/app/actions/profile';
 import { AnimatePresence, motion } from 'motion/react';
 import { clsx } from 'clsx';

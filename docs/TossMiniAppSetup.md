@@ -6,8 +6,6 @@
 
 ```
 @apps-in-toss/web-framework  ^1.14.0  # 앱인토스 프레임워크 (기존 설치)
-@toss/tds-mobile              ^2.2.1   # TDS (Toss Design System) 컴포넌트
-@toss/tds-mobile-ait          ^2.2.1   # TDS 앱인토스 WebView Provider
 ```
 
 ## 🏗️ 아키텍처: 듀얼 모드 전략
@@ -18,11 +16,9 @@
 │  ┌───────────────────────────────────────────────────┐  │
 │  │                 TossProvider                       │  │
 │  │  (토스 환경)                                        │  │
-│  │  ├ TDSMobileAITProvider 활성화 (lazy-load)          │  │
-│  │  ├ --header-height: 0px (토스 내비게이션바 대체)       │  │
 │  │  └ data-toss="true" 속성 추가                       │  │
 │  │                                                     │  │
-│  │  (일반 웹): 패스스루, TDS 미로드                       │  │
+│  │  (일반 웹): 패스스루                                  │  │
 │  └───────────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────────┘
 ```
@@ -32,30 +28,24 @@
 | 파일                                     | 역할                        |
 | ---------------------------------------- | --------------------------- |
 | `src/lib/toss.ts`                        | 토스 환경 감지 유틸리티     |
-| `src/lib/toss-adapters.tsx`              | TDS/웹 자동 전환 어댑터     |
+| `src/lib/requestEnvironment.ts`          | UA 기반 서버 환경 감지      |
 | `src/hooks/useTossEnvironment.ts`        | React Hook (환경 감지)      |
-| `src/hooks/useTossBackEvent.ts`          | 뒤로가기 이벤트 처리 Hook   |
-| `src/components/providers/TossProvider/` | TDS Provider + CSS override |
+| `src/components/providers/TossProvider/` | 토스 data 속성 Provider     |
 | `granite.config.ts`                      | 앱인토스 설정               |
 
 ## ✅ 비게임 검수 가이드 대응 현황
-
-### 접속 및 앱 내 기능
-
-- [x] 뒤로가기 버튼 정상 동작 (`useTossBackEvent` Hook)
 
 ### 내비게이션 바
 
 - [x] 앱인토스 비게임 내비게이션 바 사용 (`webViewProps.type: 'partner'`)
 - [x] 브랜드 로고/이름 노출 (`brand.displayName: '바나나 웨딩'`)
 - [x] **자체 Header 숨김** — 토스 내비게이션 바와 중복 방지 (`Header.tsx`)
-- [x] `--header-height: 0px` 설정으로 패딩 자동 조정
+- [x] 서버 User-Agent 힌트로 첫 렌더부터 토스 전용 UI 분기 적용
 
 ### 서비스 이용 동작
 
 - [x] 제스처 확대·축소 비활성화 (`maximumScale: 1, userScalable: false`)
 - [x] 라이트 모드 전용 (다크모드 미구현)
-- [x] TDS 모달 사용 (`TossConfirmDialog` 어댑터)
 - [x] 외부 스킴 규칙 (`intoss-private://` 미사용)
 - [x] CSP `frame-ancestors`에 토스 도메인 허용
 - [x] Server Actions `allowedOrigins`에 토스 도메인 추가
@@ -68,7 +58,7 @@
 ### 토스 로그인
 
 - [x] **소셜 로그인(카카오/네이버) 토스 환경에서 숨김** (`LoginPage.tsx`)
-- [x] **Footer 로그인/로그아웃 버튼 토스 환경에서 숨김** (`HomeClient.tsx`)
+- [x] 토스 웹뷰 진입 시 로그인 화면을 서버 힌트로 즉시 토스 전용 UI로 분기
 - [x] 토스 로그인 안내 메시지 표시
 - [x] 토스 로그인 미사용 시 게스트 자동 입장 지원 (`NEXT_PUBLIC_ENABLE_TOSS_GUEST_MODE=true`)
 

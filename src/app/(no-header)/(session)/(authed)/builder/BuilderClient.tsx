@@ -42,14 +42,22 @@ interface TopActionItem {
   disabled: boolean;
 }
 
-export function BuilderClient() {
+interface BuilderClientProps {
+  initialIsMobile?: boolean;
+  initialIsToss?: boolean;
+}
+
+export function BuilderClient({
+  initialIsMobile = false,
+  initialIsToss = false,
+}: BuilderClientProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isMobileActionsExpanded, setIsMobileActionsExpanded] = useState(false);
   const [isReady, setIsReady] = useState(false);
   const [hasOpenedPreviewOnce, setHasOpenedPreviewOnce] = useState(false);
-  const isMobilePreviewViewport = useMediaQuery('(max-width: 767px)');
-  const isToss = useTossEnvironment();
+  const isMobilePreviewViewport = useMediaQuery('(max-width: 767px)', initialIsMobile);
+  const isToss = useTossEnvironment(initialIsToss);
   const { toast } = useToast();
   const toastRef = useRef(toast);
   const { user, profile, isProfileComplete, profileLoading, isAdmin } = useAuth();
@@ -524,7 +532,6 @@ export function BuilderClient() {
             open={isPreviewOpen}
             onOpenChange={updatePreviewOpen}
             direction="right"
-            autoFocus={false}
           >
             <AnimatePresence>
               {isMobileActionsExpanded && (

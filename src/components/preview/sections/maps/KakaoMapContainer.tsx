@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import * as React from 'react';
 import { Map as KakaoMap, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk';
 import { Banana } from 'lucide-react';
 import { Skeleton } from '@/components/ui/Skeleton';
@@ -12,12 +12,29 @@ interface KakaoMapContainerProps {
   lng: number;
   mapZoom: number;
   lockMap: boolean;
+  onAuthError?: () => void;
 }
 
-export default function KakaoMapContainer({ lat, lng, mapZoom, lockMap }: KakaoMapContainerProps) {
+export default function KakaoMapContainer({
+  lat,
+  lng,
+  mapZoom,
+  lockMap,
+  onAuthError,
+}: KakaoMapContainerProps) {
   const [loading, error] = useKakaoLoader(KAKAO_LOADER_OPTIONS);
+  const hasNotifiedRef = React.useRef(false);
 
   const kakaoMapLevel = Math.max(1, Math.min(14, 20 - mapZoom));
+
+  React.useEffect(() => {
+    if (!error || hasNotifiedRef.current) {
+      return;
+    }
+
+    hasNotifiedRef.current = true;
+    onAuthError?.();
+  }, [error, onAuthError]);
 
   if (loading) {
     return (

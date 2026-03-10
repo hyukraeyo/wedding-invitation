@@ -9,10 +9,35 @@
 
   @include m.mobile {
     display: flex;
-    flex: 1;
     flex-direction: column;
     height: auto;
-    min-height: 0;
+    max-height: none;
+  }
+}
+
+.bodyExpanded {
+  @include m.mobile {
+    flex: 1;
+    @include m.min-vh(56);
+  }
+}
+
+.bodyCompact {
+  @include m.mobile {
+    flex: 0 0 auto;
+    min-height: auto;
+  }
+}
+
+.sheetContent {
+  @include m.mobile {
+    max-height: calc(100dvh - v.$space-xl);
+  }
+}
+
+.sheetHeader {
+  @include m.mobile {
+    padding: v.$space-sm v.$space-lg v.$space-sm;
   }
 }
 
@@ -39,52 +64,183 @@
 .mobileSearch {
   display: flex;
   flex-direction: column;
-  flex: 1;
   gap: v.$space-md;
-  min-height: 0;
-  padding: v.$space-md;
+  padding: v.$space-sm v.$space-lg v.$space-lg;
   padding-bottom: calc(v.$space-md + env(safe-area-inset-bottom, 0px));
+}
+
+.mobileSearchExpanded {
+  flex: 1;
+  min-height: 0;
+}
+
+.mobileSearchCompact {
+  flex: 0 0 auto;
 }
 
 .mobileSearchField {
   position: sticky;
   top: 0;
   z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: v.$space-sm;
   flex-shrink: 0;
-  background-color: v.$white;
+  padding-bottom: v.$space-xs;
+  background: linear-gradient(180deg, rgba(v.$white, 0.98) 0%, rgba(v.$white, 0.88) 100%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
-.mobileSearchFieldRoot {
-  width: 100%;
+.mobileResultViewport {
+  position: relative;
+  display: flex;
 }
 
-.mobileSearchHint {
-  margin: 0;
-  flex-shrink: 0;
-  color: v.$text-sub;
-  font-size: v.$control-font-size-sm;
-  line-height: 1.5;
+.mobileResultViewportExpanded {
+  flex: 1;
+  min-height: 0;
+}
+
+.mobileResultViewportCompact {
+  flex: 0 0 auto;
+  min-height: auto;
+}
+
+.mobileResultGroup {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: v.$space-sm;
+  min-height: 0;
+}
+
+.mobileResultScrollerWrap {
+  position: relative;
+  flex: 1;
+  min-height: 0;
 }
 
 .mobileResultList {
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: v.$space-sm;
   min-height: 0;
+  height: 100%;
   overflow-y: auto;
+  overflow-x: hidden;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
+  padding-bottom: v.$space-xs;
 }
 
-.mobileStatus {
-  padding: v.$space-lg v.$space-md;
-  border: 1px solid v.$grey-100;
-  border-radius: v.$radius-lg;
-  background-color: v.$grey-50;
+.mobileResultMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: v.$space-sm;
+  flex-shrink: 0;
+  padding: 0 v.$space-xs;
+}
+
+.mobileResultCount {
+  color: v.$text-main;
+  font-size: v.$control-font-size-sm;
+  font-weight: 700;
+}
+
+.mobileResultQuery {
+  min-width: 0;
   color: v.$text-sub;
   font-size: v.$control-font-size-sm;
-  text-align: center;
+  line-height: 1.5;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mobileResultItems {
+  display: flex;
+  flex-direction: column;
+  gap: v.$space-sm;
+  padding: v.$space-xs 0;
+}
+
+.mobileLoadMore {
+  padding-top: v.$space-xs;
+}
+
+.mobileResultEdgeMask {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: v.$space-xl;
+  pointer-events: none;
+  z-index: 2;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.mobileResultEdgeMaskTop {
+  top: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(v.$white, 0.98) 0%,
+    rgba(v.$white, 0.86) 55%,
+    rgba(v.$white, 0.08) 100%
+  );
+}
+
+.mobileResultEdgeMaskBottom {
+  bottom: 0;
+  background: linear-gradient(
+    to top,
+    rgba(v.$white, 0.98) 0%,
+    rgba(v.$white, 0.86) 55%,
+    rgba(v.$white, 0.08) 100%
+  );
+}
+
+.mobileStatusCard {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: v.$space-sm;
+  width: 100%;
+  padding: v.$space-lg;
+  border: 1px solid v.$grey-100;
+  border-radius: v.$radius-lg;
+  background:
+    linear-gradient(180deg, rgba(v.$primary, 0.08) 0%, rgba(v.$white, 0.98) 100%),
+    v.$white;
+  align-self: flex-start;
+}
+
+.mobileStatusIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: v.$control-height-md;
+  height: v.$control-height-md;
+  border-radius: v.$radius-full;
+  background-color: rgba(v.$primary, 0.16);
+  color: v.$primary-dark;
+}
+
+.mobileStatusTitle {
+  color: v.$text-main;
+  font-size: v.$control-font-size-md;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.mobileStatusDescription {
+  margin: 0;
+  color: v.$text-sub;
+  font-size: v.$control-font-size-sm;
+  line-height: 1.6;
 }
 
 .mobileResultButton {
@@ -96,9 +252,8 @@
   width: 100%;
   padding: v.$space-md;
   border: 1px solid v.$grey-100;
-  border-radius: v.$radius-lg;
+  border-radius: v.$radius-md;
   background-color: v.$white;
-  box-shadow: v.$shadow-sm;
   text-align: left;
 
   @include m.focus-subtle;
@@ -116,22 +271,4 @@
   color: v.$text-sub;
   font-size: v.$control-font-size-sm;
   line-height: 1.5;
-}
-
-.mobileClose {
-  position: absolute;
-  top: 50%;
-  right: v.$space-md;
-  transform: translateY(-50%);
-  color: v.$text-secondary;
-  background: transparent;
-  border: none;
-  padding: v.$space-xs;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: v.$radius-full;
-  
-  @include m.focus-subtle;
-  @include m.haptic-active(v.$scale-press-xs);
 }

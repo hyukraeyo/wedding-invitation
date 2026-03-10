@@ -1,21 +1,22 @@
 'use client';
 
-import React, { memo } from 'react';
+import * as React from 'react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
+import { clsx } from 'clsx';
 import { Copy, Phone } from 'lucide-react';
+import { AspectRatio } from '@/components/ui/AspectRatio';
+import { Button } from '@/components/ui/Button';
+import { SectionLoader } from '@/components/ui/SectionLoader';
 import { useToast } from '@/hooks/use-toast';
 import { useTossEnvironment } from '@/hooks/useTossEnvironment';
-import { loadTossWebFramework } from '@/lib/toss';
-import SectionContainer from '../SectionContainer';
-import SectionHeader from '../SectionHeader';
-import { NaverIcon, KakaoIcon } from '../../common/Icons';
-import { clsx } from 'clsx';
-import { Button } from '@/components/ui/Button';
-import styles from './LocationView.module.scss';
 import { IMAGE_SIZES } from '@/constants/image';
 import { isBlobUrl } from '@/lib/image';
-import { AspectRatio } from '@/components/ui/AspectRatio';
+import { loadTossWebFramework } from '@/lib/toss';
+import { NaverIcon, KakaoIcon } from '../../common/Icons';
+import SectionContainer from '../SectionContainer';
+import SectionHeader from '../SectionHeader';
+import styles from './LocationView.module.scss';
 
 interface LocationViewProps {
   id?: string | undefined;
@@ -39,8 +40,6 @@ interface LocationViewProps {
   mapHeight?: 'default' | 'expanded';
 }
 
-import { SectionLoader } from '@/components/ui/SectionLoader';
-
 const KakaoMapContainer = dynamic(() => import('./maps/KakaoMapContainer'), {
   ssr: false,
   loading: () => <SectionLoader height={320} message="지도를 불러오고 있어요" />,
@@ -51,7 +50,14 @@ const NaverMapContainer = dynamic(() => import('./maps/NaverMapContainer'), {
   loading: () => <SectionLoader height={320} message="지도를 불러오고 있어요" />,
 });
 
-const LocationView = memo(
+type MapProvider = 'naver' | 'kakao';
+
+const MAP_PROVIDER_FALLBACK: Record<MapProvider, MapProvider> = {
+  naver: 'kakao',
+  kakao: 'naver',
+};
+
+const LocationView = React.memo(
   ({
     id,
     title,
@@ -75,6 +81,38 @@ const LocationView = memo(
   }: LocationViewProps) => {
     const { toast } = useToast();
     const isToss = useTossEnvironment();
+    const [activeMapProvider, setActiveMapProvider] = React.useState<MapProvider>(mapType);
+    const [failedMapProviders, setFailedMapProviders] = React.useState<MapProvider[]>([]);
+
+    React.useEffect(() => {
+      setActiveMapProvider(mapType);
+      setFailedMapProviders([]);
+    }, [lat, lng, mapType]);
+
+    React.useEffect(() => {
+      if (!failedMapProviders.includes(activeMapProvider)) {
+        return;
+      }
+
+      const fallbackProvider = MAP_PROVIDER_FALLBACK[activeMapProvider];
+      if (failedMapProviders.includes(fallbackProvider)) {
+        return;
+      }
+
+      setActiveMapProvider(fallbackProvider);
+    }, [activeMapProvider, failedMapProviders]);
+
+    const handleMapAuthError = React.useCallback((provider: MapProvider) => {
+      setFailedMapProviders((previousProviders) => {
+        if (previousProviders.includes(provider)) {
+          return previousProviders;
+        }
+
+        return [...previousProviders, provider];
+      });
+    }, []);
+
+    const isMapUnavailable = failedMapProviders.length === 2;
 
     const handleNavClick = async (type: 'kakao' | 'naver') => {
       const query = encodeURIComponent(address);
@@ -125,13 +163,18 @@ const LocationView = memo(
         {showMap ? (
           <div className={clsx(styles.mapContainer, mapHeight === 'expanded' && styles.expanded)}>
             <AspectRatio ratio={mapHeight === 'expanded' ? 1.25 : 16 / 10}>
-              {mapType === 'naver' ? (
+              {isMapUnavailable ? (
+                <div className={styles.mapPlaceholder}>
+                  지도를 불러오지 못했어요. 아래 버튼으로 지도를 열어 주세요.
+                </div>
+              ) : activeMapProvider === 'naver' ? (
                 <NaverMapContainer
                   key={`naver-${lat}-${lng}`}
                   lat={lat}
                   lng={lng}
                   mapZoom={mapZoom}
                   lockMap={lockMap}
+                  onAuthError={() => handleMapAuthError('naver')}
                 />
               ) : (
                 <KakaoMapContainer
@@ -140,6 +183,7 @@ const LocationView = memo(
                   lng={lng}
                   mapZoom={mapZoom}
                   lockMap={lockMap}
+                  onAuthError={() => handleMapAuthError('kakao')}
                 />
               )}
             </AspectRatio>

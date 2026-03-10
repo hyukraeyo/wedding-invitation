@@ -7,6 +7,7 @@ import type { DrawerDirection } from '@/components/ui/Drawer';
 import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
 import { useMediaQuery } from '@/hooks/use-media-query';
 import { cn } from '@/lib/utils';
+import { handleOpenAutoFocusFallback } from './focusManagement';
 import styles from './Dialog.module.scss';
 
 interface DialogContextValue {
@@ -181,22 +182,13 @@ const DialogPortal = memo(
 );
 DialogPortal.displayName = 'DialogPortal';
 
-const FOCUSABLE_SELECTOR = [
-  'button:not([disabled])',
-  '[href]:not([aria-disabled="true"])',
-  'input:not([disabled]):not([type="hidden"])',
-  'select:not([disabled])',
-  'textarea:not([disabled])',
-  '[tabindex]:not([tabindex="-1"]):not([disabled])',
-].join(', ');
-
 const DialogContent = memo(
   React.forwardRef<
     React.ElementRef<typeof DialogPrimitive.Content>,
     React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & {
       surface?: 'default' | 'muted' | undefined;
     }
-  >(({ className, children, surface = 'default', ...props }, ref) => {
+  >(({ className, children, surface = 'default', onOpenAutoFocus, ...props }, ref) => {
     const { isBottomSheet, fullScreen, bottomSheetDirection, type } = useContext(DialogContext);
     const internalRef = useRef<HTMLDivElement>(null);
 
@@ -212,43 +204,29 @@ const DialogContent = memo(
       [ref]
     );
 
-    const handleOpenAutoFocus = useCallback((event: Event) => {
-      event.preventDefault();
-      const contentElement = internalRef.current;
-      if (!contentElement) return;
+    const handleOpenAutoFocus = useCallback(
+      (event: Event) => {
+        handleOpenAutoFocusFallback(event, internalRef.current, {
+          onOpenAutoFocus,
+        });
+      },
+      [onOpenAutoFocus]
+    );
 
-      const firstFocusableElement = Array.from(
-        contentElement.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
-      ).find((element) => {
-        if (element.getAttribute('aria-hidden') === 'true') return false;
-        if (element.closest('[aria-hidden="true"]')) return false;
-        if (element.closest('[inert]')) return false;
-        return true;
-      });
-
-      if (firstFocusableElement) {
-        firstFocusableElement.focus({ preventScroll: true });
-        return;
-      }
-
-      if (!contentElement.hasAttribute('tabindex')) {
-        contentElement.setAttribute('tabindex', '-1');
-      }
-      contentElement.focus({ preventScroll: true });
-    }, []);
     const content = isBottomSheet ? (
       <Drawer.Content
         ref={setRefs as React.Ref<HTMLDivElement>}
-        className={className}
         variant={bottomSheetDirection === 'bottom' ? 'floating' : 'default'}
-        onOpenAutoFocus={handleOpenAutoFocus}
         {...props}
+        className={className}
+        onOpenAutoFocus={onOpenAutoFocus}
       >
         {children}
       </Drawer.Content>
     ) : (
       <DialogPrimitive.Content
         ref={setRefs}
+        {...props}
         className={cn(
           styles.content,
           styles.dialogContent,
@@ -258,7 +236,6 @@ const DialogContent = memo(
           className
         )}
         onOpenAutoFocus={handleOpenAutoFocus}
-        {...props}
       >
         {/* Accessibility: Always provide Title and Description */}
         {!children?.toString().includes('DialogTitle') &&

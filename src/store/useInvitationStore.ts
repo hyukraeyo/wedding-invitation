@@ -418,7 +418,7 @@ export const INITIAL_STATE = {
   theme: {
     font: 'gowun-dodum' as const,
     backgroundColor: PALETTE.WHITE,
-    accentColor: PALETTE.PRIMARY_600,
+    accentColor: PALETTE.PRIMARY_400,
     fontScale: 1,
     allowFontScale: false,
     pattern: 'none' as const,

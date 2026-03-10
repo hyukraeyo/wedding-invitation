@@ -7,6 +7,7 @@ import RequestsPageClient from './RequestsPageClient';
 import { APPROVAL_REQUEST_SUMMARY_SELECT } from '@/lib/approval-request-summary';
 import { supabaseAdmin } from '@/lib/supabaseAdmin';
 import { headers } from 'next/headers';
+import { detectRequestEnvironment } from '@/lib/requestEnvironment';
 
 export const metadata = {
   title: '신청 관리 | 바나나웨딩',
@@ -49,7 +50,7 @@ async function RequestsDataLayer({ session, userId }: { session: Session | null;
   // 2. 초기 리미트 결정 (기기 환경에 따라)
   const headerList = await headers();
   const userAgent = headerList.get('user-agent') || '';
-  const isMobile = /mobile/i.test(userAgent);
+  const { isMobile } = detectRequestEnvironment(userAgent);
   const initialLimit = isMobile ? 5 : 10;
 
   // 3. TanStack Query 프리페칭

@@ -3,6 +3,8 @@ import LoginPage from './LoginPage';
 import { getProfileForSession } from './actions';
 import { getSession } from '@/lib/auth/getSession';
 import { redirect } from 'next/navigation';
+import { detectRequestEnvironment } from '@/lib/requestEnvironment';
+import { headers } from 'next/headers';
 
 export const metadata: Metadata = {
   title: '로그인 | 바나나웨딩',
@@ -36,6 +38,8 @@ export default async function Page({
   const callbackUrl = Array.isArray(callbackParam)
     ? (callbackParam[0] ?? '/')
     : (callbackParam ?? '/');
+  const headerList = await headers();
+  const { isToss } = detectRequestEnvironment(headerList.get('user-agent') || '');
 
   const session = await getSession();
   const initialProfileState = await getProfileForSession();
@@ -44,7 +48,11 @@ export default async function Page({
   }
   return (
     <Suspense fallback={<BananaLoader />}>
-      <LoginPage initialProfileState={initialProfileState} initialUser={session?.user ?? null} />
+      <LoginPage
+        initialProfileState={initialProfileState}
+        initialUser={session?.user ?? null}
+        initialIsToss={isToss}
+      />
     </Suspense>
   );
 }

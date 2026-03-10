@@ -1,3 +1,5 @@
+import { isTossUserAgent } from '@/lib/requestEnvironment';
+
 type TossWindow = Window & {
   __granite__?: {
     app?: {
@@ -23,17 +25,14 @@ type TossFrameworkModule = typeof import('@apps-in-toss/web-framework');
 export type TossOperationalEnvironment = 'toss' | 'sandbox';
 export type TossAuthReferrer = 'DEFAULT' | 'SANDBOX';
 
-const TOSS_UA_IDENTIFIERS = ['TOSS_WEBVIEW', 'APPSINTOSS'];
 const TOSS_ROOT_DATA_KEY = 'data-toss';
 const TOSS_OPERATIONAL_ENVIRONMENT_KEY = 'getOperationalEnvironment';
 
 let tossFrameworkPromise: Promise<TossFrameworkModule> | null = null;
 let tossOperationalEnvironmentPromise: Promise<TossOperationalEnvironment | null> | null = null;
-
-function hasTossUserAgentHint(userAgent: string): boolean {
-  const normalizedUa = userAgent.toUpperCase();
-  return TOSS_UA_IDENTIFIERS.some((identifier) => normalizedUa.includes(identifier));
-}
+let tossEnvironmentDetectionStarted = false;
+let tossEnvironmentSnapshot = false;
+const tossEnvironmentListeners = new Set<() => void>();
 
 function hasTossBridgeHint(win: TossWindow): boolean {
   const graniteApp = win.__granite__?.app ?? win.__granite?.app;
@@ -61,8 +60,23 @@ function hasTossDocumentHint(): boolean {
 
 function hasTossRuntimeHint(win: TossWindow, userAgent: string): boolean {
   if (hasTossDocumentHint()) return true;
-  if (hasTossUserAgentHint(userAgent)) return true;
+  if (isTossUserAgent(userAgent)) return true;
   return hasTossBridgeHint(win);
+}
+
+function emitTossEnvironmentChange() {
+  for (const listener of tossEnvironmentListeners) {
+    listener();
+  }
+}
+
+function setTossEnvironmentSnapshot(nextValue: boolean) {
+  if (tossEnvironmentSnapshot === nextValue) {
+    return;
+  }
+
+  tossEnvironmentSnapshot = nextValue;
+  emitTossEnvironmentChange();
 }
 
 /**
@@ -78,6 +92,42 @@ export function isTossEnvironment(): boolean {
   if (typeof window === 'undefined') return false;
 
   return hasTossRuntimeHint(window as TossWindow, navigator.userAgent);
+}
+
+export function subscribeTossEnvironment(listener: () => void) {
+  tossEnvironmentListeners.add(listener);
+
+  return () => {
+    tossEnvironmentListeners.delete(listener);
+  };
+}
+
+export function getTossEnvironmentSnapshot(): boolean {
+  return tossEnvironmentSnapshot;
+}
+
+export function ensureTossEnvironmentDetection(initialValue: boolean = false) {
+  if (initialValue) {
+    setTossEnvironmentSnapshot(true);
+  }
+
+  if (typeof window === 'undefined' || tossEnvironmentDetectionStarted) {
+    return;
+  }
+
+  tossEnvironmentDetectionStarted = true;
+
+  void (async () => {
+    const detectedByHint = isTossEnvironment();
+
+    if (!detectedByHint) {
+      setTossEnvironmentSnapshot(false);
+      return;
+    }
+
+    const environment = await getTossOperationalEnvironment();
+    setTossEnvironmentSnapshot(environment !== null || detectedByHint);
+  })();
 }
 
 /**

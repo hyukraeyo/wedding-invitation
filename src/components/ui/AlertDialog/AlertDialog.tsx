@@ -3,6 +3,7 @@
 import React from 'react';
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog';
 import { cn } from '@/lib/utils';
+import { handleOpenAutoFocusFallback } from '@/components/ui/Dialog/focusManagement';
 import { Button } from '../Button';
 import styles from './AlertDialog.module.scss';
 
@@ -23,7 +24,7 @@ const AlertDialogContent = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Content> & {
     onPointerDownOutside?: (event: CustomEvent<{ originalEvent: PointerEvent }>) => void;
   }
->(({ className, children, onPointerDownOutside, ...props }, ref) => {
+>(({ className, children, onOpenAutoFocus, onPointerDownOutside, ...props }, ref) => {
   const [isShaking, setIsShaking] = React.useState(false);
   const [isStabilized, setIsStabilized] = React.useState(false);
   const shakeTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
@@ -41,15 +42,14 @@ const AlertDialogContent = React.forwardRef<
     [ref]
   );
 
-  const handleOpenAutoFocus = React.useCallback((event: Event) => {
-    event.preventDefault();
-    const focusableElements = contentRef.current?.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    if (focusableElements?.length) {
-      (focusableElements[0] as HTMLElement).focus();
-    }
-  }, []);
+  const handleOpenAutoFocus = React.useCallback(
+    (event: Event) => {
+      handleOpenAutoFocusFallback(event, contentRef.current, {
+        onOpenAutoFocus,
+      });
+    },
+    [onOpenAutoFocus]
+  );
 
   const handleInvalidInteraction = (event: Event | React.SyntheticEvent) => {
     event.preventDefault();
@@ -75,6 +75,7 @@ const AlertDialogContent = React.forwardRef<
       <AlertDialogOverlay onClick={(e) => handleInvalidInteraction(e)} />
       <AlertDialogPrimitive.Content
         ref={setRefs}
+        {...props}
         onOpenAutoFocus={handleOpenAutoFocus}
         className={cn(
           styles.content,
@@ -87,7 +88,6 @@ const AlertDialogContent = React.forwardRef<
           handleInvalidInteraction(e);
           onPointerDownOutside?.(e);
         }}
-        {...props}
       >
         {children}
       </AlertDialogPrimitive.Content>

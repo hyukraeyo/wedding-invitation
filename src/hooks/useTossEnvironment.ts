@@ -1,7 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { getTossOperationalEnvironment, isTossEnvironment } from '@/lib/toss';
+import { useEffect, useSyncExternalStore } from 'react';
+import {
+  ensureTossEnvironmentDetection,
+  getTossEnvironmentSnapshot,
+  subscribeTossEnvironment,
+} from '@/lib/toss';
 
 /**
  * 토스 앱인토스 환경 여부를 감지하는 React Hook
@@ -16,32 +20,14 @@ import { getTossOperationalEnvironment, isTossEnvironment } from '@/lib/toss';
  * return isToss ? <TDSButton>버튼</TDSButton> : <Button>버튼</Button>;
  * ```
  */
-export function useTossEnvironment(): boolean {
-  const [isToss, setIsToss] = useState(false);
-
+export function useTossEnvironment(initialValue: boolean = false): boolean {
   useEffect(() => {
-    let isMounted = true;
+    ensureTossEnvironmentDetection(initialValue);
+  }, [initialValue]);
 
-    void (async () => {
-      const detectedByHint = isTossEnvironment();
-
-      if (!detectedByHint) {
-        if (!isMounted) return;
-        setIsToss(false);
-        return;
-      }
-
-      const environment = await getTossOperationalEnvironment();
-      const nextValue = environment !== null || detectedByHint;
-
-      if (!isMounted) return;
-      setIsToss((prev) => (prev === nextValue ? prev : nextValue));
-    })();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  return isToss;
+  return useSyncExternalStore(
+    subscribeTossEnvironment,
+    getTossEnvironmentSnapshot,
+    () => initialValue
+  );
 }

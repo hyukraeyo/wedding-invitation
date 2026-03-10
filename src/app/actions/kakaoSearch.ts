@@ -11,21 +11,38 @@ export interface MobileSearchResult {
   source: 'postcode' | 'place' | 'address';
 }
 
-const KAKAO_REST_API_KEY = process.env.KAKAO_CLIENT_ID;
+export interface MobileSearchResponse {
+  results: MobileSearchResult[];
+  hasMore: boolean;
+  page: number;
+}
 
-export async function searchKakaoAddresses(query: string): Promise<MobileSearchResult[]> {
+const KAKAO_REST_API_KEY = process.env.KAKAO_CLIENT_ID;
+const MOBILE_SEARCH_PAGE_SIZE = 8;
+
+export async function searchKakaoAddresses(
+  query: string,
+  page = 1
+): Promise<MobileSearchResponse> {
   if (!KAKAO_REST_API_KEY) {
     console.error('KAKAO_CLIENT_ID is not set. Cannot use Kakao Local API.');
-    return [];
+    return { results: [], hasMore: false, page };
   }
 
   try {
     const encodedQuery = encodeURIComponent(query);
     const headers = { Authorization: `KakaoAK ${KAKAO_REST_API_KEY}` };
+    const safePage = Math.max(1, page);
 
     const [addressResponse, keywordResponse] = await Promise.all([
-      fetch(`https://dapi.kakao.com/v2/local/search/address.json?query=${encodedQuery}&size=10`, { headers }),
-      fetch(`https://dapi.kakao.com/v2/local/search/keyword.json?query=${encodedQuery}&size=10`, { headers }),
+      fetch(
+        `https://dapi.kakao.com/v2/local/search/address.json?query=${encodedQuery}&page=${safePage}&size=${MOBILE_SEARCH_PAGE_SIZE}`,
+        { headers }
+      ),
+      fetch(
+        `https://dapi.kakao.com/v2/local/search/keyword.json?query=${encodedQuery}&page=${safePage}&size=${MOBILE_SEARCH_PAGE_SIZE}`,
+        { headers }
+      ),
     ]);
 
     const addressData = await addressResponse.json();
@@ -76,9 +93,16 @@ export async function searchKakaoAddresses(query: string): Promise<MobileSearchR
       );
     });
 
-    return deduped.slice(0, 8);
+    const addressHasMore = !(addressData.meta?.is_end ?? true);
+    const keywordHasMore = !(keywordData.meta?.is_end ?? true);
+
+    return {
+      results: deduped,
+      hasMore: addressHasMore || keywordHasMore,
+      page: safePage,
+    };
   } catch (error) {
     console.error('[searchKakaoAddresses] error:', error);
-    return [];
+    return { results: [], hasMore: false, page };
   }
 }

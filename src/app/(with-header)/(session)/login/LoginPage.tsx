@@ -31,12 +31,17 @@ const ProfileCompletionModal = dynamic(
 interface LoginPageProps {
   initialProfileState?: ProfileState | null;
   initialUser: User | null;
+  initialIsToss?: boolean;
 }
 
-export default function LoginPage({ initialProfileState, initialUser }: LoginPageProps) {
+export default function LoginPage({
+  initialProfileState,
+  initialUser,
+  initialIsToss = false,
+}: LoginPageProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const isToss = useTossEnvironment();
+  const isToss = useTossEnvironment(initialIsToss);
   const callbackUrl = useMemo(() => {
     return searchParams.get('callbackUrl') || searchParams.get('returnTo') || '/';
   }, [searchParams]);

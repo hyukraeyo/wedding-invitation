@@ -4,6 +4,8 @@ import { getHeaderNotificationCount } from '@/lib/header/getHeaderNotificationCo
 import Header from '@/components/common/Header';
 import { CustomScrollbar } from '@/components/common/CustomScrollbar';
 import { HeaderDataProvider } from '@/components/common/Header/HeaderDataProvider';
+import { detectRequestEnvironment } from '@/lib/requestEnvironment';
+import { headers } from 'next/headers';
 import HeaderProviders from './HeaderProviders';
 
 export default async function WithHeaderLayout({
@@ -12,6 +14,8 @@ export default async function WithHeaderLayout({
   children: React.ReactNode;
 }>) {
   const session = await getSession();
+  const headerList = await headers();
+  const { isToss } = detectRequestEnvironment(headerList.get('user-agent') || '');
 
   const initialNotificationCount = await getHeaderNotificationCount(session);
 
@@ -23,10 +27,12 @@ export default async function WithHeaderLayout({
           authLoading={false}
           initialNotificationCount={initialNotificationCount}
         >
-          <Suspense fallback={null}>
-            <CustomScrollbar />
-          </Suspense>
-          <Header />
+          {!isToss ? (
+            <Suspense fallback={null}>
+              <CustomScrollbar />
+            </Suspense>
+          ) : null}
+          <Header initialIsToss={isToss} />
           {children}
         </HeaderDataProvider>
       </HeaderProviders>

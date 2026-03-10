@@ -4,6 +4,7 @@ import * as React from 'react';
 import { Drawer as VaulDrawer } from 'vaul';
 import { clsx } from 'clsx';
 import { VisuallyHidden } from '@/components/ui/VisuallyHidden';
+import { handleOpenAutoFocusFallback } from '@/components/ui/Dialog/focusManagement';
 import s from './Drawer.module.scss';
 
 export type DrawerDirection = 'top' | 'bottom' | 'left' | 'right';
@@ -71,7 +72,7 @@ DrawerOverlay.displayName = 'DrawerOverlay';
 const DrawerContent = React.forwardRef<
   HTMLDivElement,
   DrawerContentProps & React.ComponentPropsWithoutRef<typeof VaulDrawer.Content>
->(({ className, variant = 'floating', children, ...props }, ref) => {
+>(({ className, variant = 'floating', children, onOpenAutoFocus, ...props }, ref) => {
   const internalRef = React.useRef<HTMLDivElement>(null);
 
   const setRefs = React.useCallback(
@@ -113,11 +114,21 @@ const DrawerContent = React.forwardRef<
     return () => observer.disconnect();
   }, []);
 
+  const handleOpenAutoFocus = React.useCallback(
+    (event: Event) => {
+      handleOpenAutoFocusFallback(event, internalRef.current, {
+        onOpenAutoFocus,
+      });
+    },
+    [onOpenAutoFocus]
+  );
+
   return (
     <VaulDrawer.Content
       ref={setRefs}
-      className={clsx(s.content, variant === 'floating' && s.floating, className)}
       {...props}
+      className={clsx(s.content, variant === 'floating' && s.floating, className)}
+      onOpenAutoFocus={handleOpenAutoFocus}
     >
       <div className={s.wrapper}>
         <div className={s.handle} />

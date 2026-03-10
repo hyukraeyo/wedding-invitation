@@ -7,19 +7,24 @@ import {
   NaverMap,
   Marker as NaverMarker,
 } from 'react-naver-maps';
-import { useTossEnvironment } from '@/hooks/useTossEnvironment';
-import KakaoMapContainer from './KakaoMapContainer';
 
 interface NaverMapContainerProps {
   lat: number;
   lng: number;
   mapZoom: number;
   lockMap: boolean;
+  onAuthError?: () => void;
 }
 
-export default function NaverMapContainer({ lat, lng, mapZoom, lockMap }: NaverMapContainerProps) {
-  const isToss = useTossEnvironment();
+export default function NaverMapContainer({
+  lat,
+  lng,
+  mapZoom,
+  lockMap,
+  onAuthError,
+}: NaverMapContainerProps) {
   const [hasAuthFailure, setHasAuthFailure] = React.useState(false);
+  const hasNotifiedRef = React.useRef(false);
 
   React.useLayoutEffect(() => {
     const previousAuthFailureHandler = window.navermap_authFailure;
@@ -39,9 +44,14 @@ export default function NaverMapContainer({ lat, lng, mapZoom, lockMap }: NaverM
     };
   }, []);
 
-  if (isToss && hasAuthFailure) {
-    return <KakaoMapContainer lat={lat} lng={lng} mapZoom={mapZoom} lockMap={lockMap} />;
-  }
+  React.useEffect(() => {
+    if (!hasAuthFailure || hasNotifiedRef.current) {
+      return;
+    }
+
+    hasNotifiedRef.current = true;
+    onAuthError?.();
+  }, [hasAuthFailure, onAuthError]);
 
   return (
     <NavermapsProvider ncpKeyId={process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID || 'dh0fr7vx5q'}>

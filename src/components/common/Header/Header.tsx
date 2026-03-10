@@ -6,7 +6,8 @@ import Link from 'next/link';
 import { useInvitationStore } from '@/store/useInvitationStore';
 import { usePathname, useRouter } from 'next/navigation';
 import type { User } from 'next-auth';
-import { IconButton, ProgressBar } from '@/components/ui';
+import { IconButton } from '@/components/ui/IconButton';
+import { ProgressBar } from '@/components/ui/ProgressBar';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { useShallow } from 'zustand/react/shallow';
@@ -213,28 +214,34 @@ const HeaderContent = React.memo(() => {
 });
 HeaderContent.displayName = 'HeaderContent';
 
-export default function Header() {
+interface HeaderProps {
+  initialIsToss?: boolean;
+}
+
+export default function Header({ initialIsToss = false }: HeaderProps) {
   return (
     <Suspense
       fallback={
-        <header className={cn(styles.header, 'view-transition-header')}>
-          <div className={styles.left}>
-            <Logo />
-          </div>
-          <div className={styles.right}>
-            <div className={styles.actionPlaceholder} />
-          </div>
-        </header>
+        initialIsToss ? null : (
+          <header className={cn(styles.header, 'view-transition-header')}>
+            <div className={styles.left}>
+              <Logo />
+            </div>
+            <div className={styles.right}>
+              <div className={styles.actionPlaceholder} />
+            </div>
+          </header>
+        )
       }
     >
-      <TossAwareHeader />
+      <TossAwareHeader initialIsToss={initialIsToss} />
     </Suspense>
   );
 }
 
 /** 토스 환경에서는 Header를 숨긴다. 토스 비게임 내비게이션 바가 대체. */
-function TossAwareHeader() {
-  const isToss = useTossEnvironment();
+function TossAwareHeader({ initialIsToss = false }: HeaderProps) {
+  const isToss = useTossEnvironment(initialIsToss);
 
   // 토스 앱인토스 환경: 내비게이션 바가 이미 브랜드 로고/뒤로가기/더보기를 제공
   if (isToss) return null;

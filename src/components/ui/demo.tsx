@@ -1,18 +1,14 @@
 import { AnimatedMarqueeHero } from '@/components/ui/hero-3';
 
 const DEMO_IMAGES = [
-  'https://images.unsplash.com/photo-1520854221256-17451cc331bf?w=900&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=900&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=900&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1519741497674-611481863552?w=900&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=900&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=900&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=900&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1529636798458-92182e662485?w=900&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=900&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1465495976277-4387d4b0e4a6?w=900&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1507504031003-b417219a0fde?w=900&auto=format&fit=crop&q=60',
-  'https://images.unsplash.com/photo-1473177104440-ffee2f376098?w=900&auto=format&fit=crop&q=60',
+  '/images/hero/image-01.png',
+  '/images/hero/image-02.png',
+  '/images/hero/image-03.png',
+  '/images/hero/image-04.jpg',
+  '/images/hero/image-05.jpg',
+  '/images/hero/image-06.jpg',
+  '/images/hero/image-07.jpg',
+  '/images/hero/image-08.jpg',
 ];
 
 export default function AnimatedHeroDemo() {

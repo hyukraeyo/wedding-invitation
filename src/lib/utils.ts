@@ -412,21 +412,3 @@ export function setQueryParam(key: string, value: string): void {
   url.searchParams.set(key, value);
   window.history.pushState({}, '', url.toString());
 }
-
-// Device Detection
-export function isMobile(): boolean {
-  if (typeof window === 'undefined') return false;
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-    window.navigator.userAgent
-  );
-}
-
-export function isIOS(): boolean {
-  if (typeof window === 'undefined') return false;
-  return /iPad|iPhone|iPod/.test(window.navigator.userAgent);
-}
-
-export function isAndroid(): boolean {
-  if (typeof window === 'undefined') return false;
-  return /Android/.test(window.navigator.userAgent);
-}
