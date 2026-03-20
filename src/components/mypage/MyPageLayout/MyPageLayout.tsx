@@ -3,6 +3,9 @@
 import { MyPageHeader } from '@/components/mypage/MyPageHeader';
 import { usePathname } from 'next/navigation';
 import { MENU_TITLES } from '@/constants/navigation';
+import { MyPageBottomNav } from '@/components/mypage/MyPageBottomNav';
+import { useTossEnvironment } from '@/hooks/useTossEnvironment';
+import { clsx } from 'clsx';
 import styles from './Layout.module.scss';
 
 interface ProfileSummary {
@@ -39,17 +42,15 @@ export function MyPageLayout({
   notificationCount = 0,
 }: MyPageLayoutProps) {
   void _profile;
-  void isAdmin;
-  void invitationCount;
-  void requestCount;
-  void notificationCount;
   const pathname = usePathname();
+  const isToss = useTossEnvironment();
+
   // 현재 경로에 맞는 타이틀 가져오기 (기본값은 빈 문자열)
   const currentTitle = ROUTE_TITLES[pathname] || '';
 
   // Sync notification count with global header store
   return (
-    <div className={styles.pageContainer}>
+    <div className={clsx(styles.pageContainer, isToss && styles.hasBottomNav)}>
       <div className={styles.layout}>
         <div className={styles.mainContent} role="main">
           {/* 공통 헤더: 레이아웃에서 통합 관리 */}
@@ -62,6 +63,16 @@ export function MyPageLayout({
           <div className={styles.childrenWrapper}>{children}</div>
         </div>
       </div>
+      
+      {/* 토스 환경용 전용 탭바 컴포넌트 */}
+      {isToss && (
+        <MyPageBottomNav
+          isAdmin={isAdmin}
+          invitationCount={invitationCount}
+          requestCount={requestCount}
+          notificationCount={notificationCount}
+        />
+      )}
     </div>
   );
 }

@@ -191,13 +191,7 @@ export default function LoginPage({
     }
 
     autoLoginAttemptedRef.current = true;
-    const timer = setTimeout(() => {
-      void handleTossLogin();
-    }, 500);
-
-    return () => {
-      clearTimeout(timer);
-    };
+    void handleTossLogin();
   }, [isToss, userId, handleTossLogin, isTossLoading]);
 
   useEffect(() => {
@@ -232,9 +226,15 @@ export default function LoginPage({
     );
   }
 
-  // 토스 환경: 카카오/네이버 로그인 대신 토스 전용 로그인 UI 표시
-  // 미니앱 검수 가이드: "토스 로그인이 아닌 자사 로그인이나 기타 로그인 방식은 제공하지 않아요"
+  // 토스 환경: 미니앱 검수 가이드에 따라 자사 로그인 방식 미제공
+  // 에러 없이 로그인 대기 중일 때는 커스텀 UI(가짜 버튼 등)를 전부 숨기고, 즉시 즉각적인 로딩 UI만 표시하여 
+  // 네이티브 토스 로그인 바텀시트가 자연스럽게 뜨도록 유도합니다.
   if (isToss) {
+    if (!tossErrorMessage) {
+      return <BananaLoader />;
+    }
+
+    // 로그인 취소나 에러 발생 등으로 재시도가 필요한 경우에만 버튼 노출
     return (
       <div className={styles.overlay}>
         <div className={styles.modal}>
@@ -244,26 +244,11 @@ export default function LoginPage({
             </Heading>
           </div>
           <div className={styles.socialButtons}>
-            {isTossLoading ? (
-              <>
-                <div className={styles.tossLoaderWrapper}>
-                  <BananaLoader />
-                </div>
-                <p className={styles.tossLoginNotice}>
-                  토스 계정으로 로그인 중이에요.
-                  <br />
-                  잠시만 기다려주세요.
-                </p>
-              </>
-            ) : (
-              <>
-                <p className={styles.tossLoginNotice}>토스 계정으로 간편하게 시작하세요.</p>
-                {/* eslint-disable-next-line no-restricted-syntax */}
-                <Button type="button" onClick={handleTossLogin} className={styles.tossLoginButton}>
-                  토스로 시작하기
-                </Button>
-              </>
-            )}
+            <p className={styles.tossLoginNotice}>토스 계정으로 로그인해 주세요.</p>
+            {/* eslint-disable-next-line no-restricted-syntax */}
+            <Button type="button" onClick={handleTossLogin} className={styles.tossLoginButton}>
+              토스로 로그인 재시도
+            </Button>
             {tossErrorMessage ? <p className={styles.tossLoginError}>{tossErrorMessage}</p> : null}
           </div>
         </div>

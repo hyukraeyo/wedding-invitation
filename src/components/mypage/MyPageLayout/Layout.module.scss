@@ -8,6 +8,10 @@
   @include m.min-vh(100);
   background-color: v.$color-bg-page;
   @include m.header-offset;
+
+  &.hasBottomNav {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 64px);
+  }
 }
 
 .layout {
