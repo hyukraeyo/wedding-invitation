@@ -235,37 +235,41 @@ export default function RequestsPageClient({ initialLimit }: RequestsPageClientP
 
                 {targetInv && (
                   <div className={styles.adminButtonGroup}>
-                    <button
+                    <Button
                       onClick={() => window.open(`/v/${targetInv.slug}`, '_blank')}
-                      className={styles.previewButton}
+                      variant="outline"
+                      size="sm"
                     >
                       미리보기
-                    </button>
+                    </Button>
                     {isRejected ? (
-                      <button
+                      <Button
                         onClick={() => setViewRejectionData(request)}
-                        className={styles.viewReasonButton}
+                        variant="soft"
+                        size="sm"
                       >
                         이유 확인
-                      </button>
+                      </Button>
                     ) : isApproved ? (
-                      <button
+                      <Button
                         onClick={() => {
                           setRejectionTarget(targetInv);
                         }}
-                        className={styles.revokeButton}
+                        variant="secondary"
+                        size="sm"
                       >
                         승인 취소
-                      </button>
+                      </Button>
                     ) : (
                       <>
-                        <button
+                        <Button
                           onClick={() => setRejectionTarget(targetInv)}
-                          className={styles.rejectButton}
+                          variant="secondary"
+                          size="sm"
                         >
                           거절
-                        </button>
-                        <button
+                        </Button>
+                        <Button
                           onClick={() =>
                             setConfirmConfig({
                               isOpen: true,
@@ -276,10 +280,11 @@ export default function RequestsPageClient({ initialLimit }: RequestsPageClientP
                               targetRecord: targetInv,
                             })
                           }
-                          className={styles.approveButton}
+                          variant="primary"
+                          size="sm"
                         >
                           승인
-                        </button>
+                        </Button>
                       </>
                     )}
                   </div>
@@ -290,13 +295,15 @@ export default function RequestsPageClient({ initialLimit }: RequestsPageClientP
 
           {hasNextPage && (
             <div className={styles.loadMoreWrapper}>
-              <button
+              <Button
                 onClick={() => fetchNextPage()}
                 disabled={isFetchingNextPage}
-                className={styles.loadMoreButton}
+                variant="secondary"
+                size="md"
+                radius="full"
               >
                 {isFetchingNextPage ? <Banana className={styles.spin} /> : '더 보기'}
-              </button>
+              </Button>
             </div>
           )}
         </div>

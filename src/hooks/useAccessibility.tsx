@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { FOCUSABLE_SELECTOR } from '@/lib/a11y';
+import { Button } from '@/components/ui/Button';
 import styles from './useAccessibility.module.scss';
 
 interface SkipLinkProps {
@@ -11,9 +12,9 @@ interface SkipLinkProps {
 
 export function SkipLink({ href, children }: SkipLinkProps) {
   return (
-    <a href={href} className={styles.skipLink}>
-      {children}
-    </a>
+    <Button asChild unstyled className={styles.skipLink}>
+      <a href={href}>{children}</a>
+    </Button>
   );
 }
 

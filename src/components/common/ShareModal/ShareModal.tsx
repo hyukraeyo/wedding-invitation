@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Dialog } from '@/components/ui/Dialog';
 import { Text } from '@/components/ui/Text';
+import { Button } from '@/components/ui/Button';
 import { Copy, MessageCircle, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { KakaoShareButton } from '../KakaoShareButton/KakaoShareButton';
@@ -67,13 +68,13 @@ export function ShareModal({
       <Dialog.Body>
         <div className={styles.shareContainer}>
           <div className={styles.shareMethod}>
-            <button
+            <Button
               onClick={handleLinkShare}
               className={clsx(styles.iconWrapper, styles.linkWrap)}
               aria-label="링크 복사"
             >
               {copied ? <Check size={28} /> : <Copy size={24} />}
-            </button>
+            </Button>
             <span className={styles.shareLabel}>링크 복사</span>
           </div>
 

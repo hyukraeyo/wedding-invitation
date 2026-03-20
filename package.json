@@ -24,7 +24,7 @@
     "dev:turbo": "next dev --turbo",
     "build": "next build --webpack",
     "build:next": "next build --webpack",
-    "build:toss": "cross-env TOSS_BUILD=true next build --webpack && mkdir -p dist/web && echo '<!DOCTYPE html><html><head><meta charset=\"utf-8\"><script>window.location.replace(\"http://192.168.1.223:3000\" + window.location.search + window.location.hash);</script></head><body>Redirecting to local dev server...</body></html>' > dist/web/index.html",
+    "build:toss": "cross-env TOSS_BUILD=true next build --webpack && mkdir -p dist/web && echo '<!DOCTYPE html><html><head><meta charset=\"utf-8\"><script>window.location.replace(\"https://banana-wedding.vercel.app\" + window.location.search + window.location.hash);</script></head><body>Redirecting to Banana Wedding...</body></html>' > dist/web/index.html",
     "build:turbo": "next build --turbo",
     "toss:dev": "granite dev",
     "toss:build": "granite build",

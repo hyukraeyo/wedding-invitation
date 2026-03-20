@@ -128,9 +128,9 @@ export default function AccountPageClient({ profile, userEmail }: AccountPageCli
           ) : (
             <>
               <div className={styles.itemValue}>{formData.phone || '설정되지 않았어요'}</div>
-              <button onClick={() => setIsEditingPhone(true)} className={styles.changeButton}>
+              <Button onClick={() => setIsEditingPhone(true)} variant="soft" size="sm">
                 변경
-              </button>
+              </Button>
             </>
           )}
         </div>

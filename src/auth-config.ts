@@ -151,12 +151,24 @@ export const authConfig = {
             : '';
         const rawReferrer =
           typeof credentials?.referrer === 'string'
-            ? credentials.referrer.trim().toUpperCase()
+            ? credentials.referrer.trim()
             : '';
-        const referrer = isTossAuthReferrer(rawReferrer) ? rawReferrer : '';
+        // 검증은 대소문자 무시, API 전달은 원본 그대로 (토스 API 요구사항)
+        const referrer = isTossAuthReferrer(rawReferrer.toUpperCase()) ? rawReferrer : '';
+
+        console.log('[TOSS_AUTH] authorize called', {
+          hasCode: !!authorizationCode,
+          codeLength: authorizationCode.length,
+          rawReferrer,
+          referrer,
+        });
 
         if (!authorizationCode || !referrer) {
-          console.warn('[TOSS_AUTH_INVALID_INPUT] authorizationCode/referrer missing or invalid');
+          console.warn('[TOSS_AUTH_INVALID_INPUT] authorizationCode/referrer missing or invalid', {
+            hasCode: !!authorizationCode,
+            hasReferrer: !!referrer,
+            rawReferrer,
+          });
           return null;
         }
 
@@ -165,14 +177,21 @@ export const authConfig = {
             await import('@/lib/tossServer');
 
           // 1. 토큰 교환
+          console.log('[TOSS_AUTH] Step 1: Exchanging authorization code for token...');
           const { accessToken } = await getTossAccessToken(authorizationCode, referrer);
+          console.log('[TOSS_AUTH] Step 1 OK: Got access token', { tokenLength: accessToken.length });
 
           // 2. 사용자 정보 조회
+          console.log('[TOSS_AUTH] Step 2: Fetching user info...');
           const userInfo = await getTossUserInfo(accessToken);
+          console.log('[TOSS_AUTH] Step 2 OK: Got user info', {
+            userKey: userInfo.userKey,
+            hasName: !!userInfo.name,
+            hasPhone: !!userInfo.phone,
+            hasEmail: !!userInfo.email,
+          });
 
           // 3. 사용자 식별자 및 기본 정보 설정
-          // 문서: name, phone, birthday, ci, gender 등 모든 개인정보는 암호화됨
-          // email은 null로 내려올 수 있음
           const userKey = String(userInfo.userKey);
           let name = '토스 사용자';
           let phone: string | null = null;
@@ -182,11 +201,13 @@ export const authConfig = {
             if (userInfo.name) name = decryptTossData(userInfo.name);
             if (userInfo.phone) phone = decryptTossData(userInfo.phone);
             if (userInfo.email) email = userInfo.email;
+            console.log('[TOSS_AUTH] Step 3 OK: Decrypted user data', { name, hasPhone: !!phone, email });
           } catch (e) {
-            console.warn('Toss data decryption failed, using defaults', e);
+            console.warn('[TOSS_AUTH] Step 3 WARN: Decryption failed, using defaults', e);
           }
 
-          // 4. DB 사용자 연동 (기존 이메일 체크)
+          // 4. DB 사용자 연동
+          console.log('[TOSS_AUTH] Step 4: Looking up existing user by email...');
           const { data: existingUser } = await nextAuthClient
             .from('users')
             .select('*')
@@ -194,6 +215,7 @@ export const authConfig = {
             .maybeSingle();
 
           if (existingUser) {
+            console.log('[TOSS_AUTH] Step 4 OK: Found existing user', { userId: existingUser.id });
             return {
               id: existingUser.id,
               email: existingUser.email,
@@ -204,6 +226,7 @@ export const authConfig = {
           }
 
           // 5. 신규 사용자 생성
+          console.log('[TOSS_AUTH] Step 5: Creating new user...');
           const { data: newUser, error } = await nextAuthClient
             .from('users')
             .insert({
@@ -219,6 +242,7 @@ export const authConfig = {
             return null;
           }
 
+          console.log('[TOSS_AUTH] Step 5 OK: Created new user', { userId: newUser.id });
           return {
             id: newUser.id,
             email: newUser.email,
@@ -228,7 +252,8 @@ export const authConfig = {
           } as Record<string, unknown>;
         } catch (error) {
           console.error('[TOSS_AUTH_ERROR]', {
-            error,
+            message: error instanceof Error ? error.message : String(error),
+            stack: error instanceof Error ? error.stack : undefined,
             referrer,
           });
           return null;

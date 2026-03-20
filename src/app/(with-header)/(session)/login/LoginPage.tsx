@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useMemo, useState, useEffect, useCallback, useRef } from 'react';
 
@@ -8,7 +8,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { signIn, signOut } from 'next-auth/react';
 import type { User } from 'next-auth';
 
-import { Heading } from '@/components/ui';
+import { Heading, Button } from '@/components/ui';
 import { BananaLoader } from '@/components/ui/Loader';
 import { loadTossWebFramework } from '@/lib/toss';
 import { useToast } from '@/hooks/use-toast';
@@ -258,15 +258,10 @@ export default function LoginPage({
             ) : (
               <>
                 <p className={styles.tossLoginNotice}>토스 계정으로 간편하게 시작하세요.</p>
-                <button type="button" onClick={handleTossLogin} className={styles.tossLoginButton}>
-                  <svg viewBox="0 0 24 24" className={styles.tossIcon} fill="none">
-                    <path
-                      d="M2 7.5h5.2v1.3H4.8V12h2.1v1.3H4.8v3.2H3.3V8.8H2V7.5zm5.8 0H10c1.5 0 2.5.4 2.5 2 0 .9-.4 1.5-1.1 1.8.8.3 1.3 1 1.3 2 0 1.7-1.1 2.2-2.7 2.2H7.8V7.5zm1.4 3.3h.7c.8 0 1.2-.3 1.2-1s-.4-1-1.2-1h-.7v2zm0 3.6h.8c.9 0 1.3-.3 1.3-1.1 0-.7-.5-1.1-1.3-1.1h-.8v2.2zm5.6-4.5c0-1.5 1.2-2.6 2.7-2.6s2.7 1.1 2.7 2.6v3.7c0 1.5-1.2 2.6-2.7 2.6s-2.7-1.1-2.7-2.6V9.9zm1.4 3.8c0 .7.5 1.2 1.3 1.2.7 0 1.3-.5 1.3-1.2V9.8c0-.7-.5-1.2-1.3-1.2-.7 0-1.3.5-1.3 1.2v3.9z"
-                      fill="currentColor"
-                    />
-                  </svg>
+                {/* eslint-disable-next-line no-restricted-syntax */}
+                <Button type="button" onClick={handleTossLogin} className={styles.tossLoginButton}>
                   토스로 시작하기
-                </button>
+                </Button>
               </>
             )}
             {tossErrorMessage ? <p className={styles.tossLoginError}>{tossErrorMessage}</p> : null}
@@ -291,12 +286,8 @@ export default function LoginPage({
           </div>
 
           <div className={styles.socialButtons}>
-            <button
-              className={`${styles.socialButton} ${styles.kakao}`}
-              onClick={() => handleOAuthLogin('kakao')}
-              disabled={!!loadingProvider}
-              type="button"
-            >
+            {/* eslint-disable-next-line no-restricted-syntax */}
+            <Button className={`${styles.socialButton} ${styles.kakao}`} onClick={() => handleOAuthLogin('kakao')} disabled={!!loadingProvider} type="button">
               <svg viewBox="0 0 24 24" className={styles.icon}>
                 <path
                   fill="currentColor"
@@ -304,19 +295,15 @@ export default function LoginPage({
                 />
               </svg>
               <span>카카오로 시작하기</span>
-            </button>
+            </Button>
 
-            <button
-              className={`${styles.socialButton} ${styles.naver}`}
-              onClick={() => handleOAuthLogin('naver')}
-              disabled={!!loadingProvider}
-              type="button"
-            >
+            {/* eslint-disable-next-line no-restricted-syntax */}
+            <Button className={`${styles.socialButton} ${styles.naver}`} onClick={() => handleOAuthLogin('naver')} disabled={!!loadingProvider} type="button">
               <svg viewBox="0 0 24 24" className={styles.icon} fill="currentColor">
                 <path d="M16.273 12.845L7.376 0H0v24h7.726V11.156L16.624 24H24V0h-7.727v12.845z" />
               </svg>
               <span>네이버로 시작하기</span>
-            </button>
+            </Button>
           </div>
 
           {/* Footer */}

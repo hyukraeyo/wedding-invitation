@@ -3,17 +3,42 @@ import { createDecipheriv } from 'node:crypto';
 import https from 'node:https';
 import fs from 'node:fs';
 import path from 'node:path';
-import type { TossAuthReferrer } from '@/lib/toss';
+
 
 let tossHttpsAgent: https.Agent | null = null;
 function getTossHttpsAgent() {
   if (!tossHttpsAgent) {
-    try {
-      const cert = fs.readFileSync(path.join(process.cwd(), 'toss-cert.pem'));
-      const key = fs.readFileSync(path.join(process.cwd(), 'toss-key.pem'));
+    let cert: Buffer | null = null;
+    let key: Buffer | null = null;
+
+    // 1. 환경 변수 우선 (Vercel 등 서버리스 환경)
+    const envCert = process.env.TOSS_CERT;
+    const envKey = process.env.TOSS_KEY;
+    if (envCert && envKey) {
+      try {
+        cert = Buffer.from(envCert, 'base64');
+        key = Buffer.from(envKey, 'base64');
+        console.log('[TOSS_mTLS] Loaded cert/key from environment variables');
+      } catch (e) {
+        console.warn('[TOSS_mTLS] Failed to decode cert/key from env vars', e);
+      }
+    }
+
+    // 2. 파일 fallback (로컬 개발 환경)
+    if (!cert || !key) {
+      try {
+        cert = fs.readFileSync(path.join(process.cwd(), 'toss-cert.pem'));
+        key = fs.readFileSync(path.join(process.cwd(), 'toss-key.pem'));
+        console.log('[TOSS_mTLS] Loaded cert/key from filesystem');
+      } catch (e) {
+        console.warn('[TOSS_mTLS] Failed to load cert/key files', e);
+      }
+    }
+
+    if (cert && key) {
       tossHttpsAgent = new https.Agent({ cert, key, keepAlive: true });
-    } catch (e) {
-      console.warn('[TOSS_mTLS] Failed to load cert/key files, falling back to default agent', e);
+    } else {
+      console.error('[TOSS_mTLS] ⚠ No mTLS cert/key available! Toss API calls will fail.');
       tossHttpsAgent = new https.Agent();
     }
   }
@@ -87,9 +112,14 @@ async function requestTossApi(
 ): Promise<Response> {
   return new Promise((resolve, reject) => {
     const urlObj = new URL(`${TOSS_API_BASE_URL}${apiPath}`);
+    const reqHeaders = { ...(init.headers as Record<string, string>) };
+    if (init.body && typeof init.body === 'string') {
+      reqHeaders['Content-Length'] = Buffer.byteLength(init.body).toString();
+    }
+
     const options: https.RequestOptions = {
       method: init.method || 'GET',
-      headers: init.headers as Record<string, string>,
+      headers: reqHeaders,
       agent: getTossHttpsAgent(),
       timeout: TOSS_API_TIMEOUT_MS,
     };
@@ -123,7 +153,7 @@ async function requestTossApi(
   });
 }
 
-export async function getTossAccessToken(authorizationCode: string, referrer: TossAuthReferrer) {
+export async function getTossAccessToken(authorizationCode: string, referrer: string) {
   const response = await requestTossApi(
     'TOSS_TOKEN_EXCHANGE',
     '/v1/apps-in-toss/user/oauth2/generate-token',

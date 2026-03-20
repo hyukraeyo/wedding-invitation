@@ -3,6 +3,7 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { PALETTE } from '@/constants/palette';
+import { Button } from '@/components/ui/Button';
 import styles from './PreviewAccordion.module.scss';
 import { clsx } from 'clsx';
 
@@ -59,8 +60,9 @@ export default function PreviewAccordion({
         } as React.CSSProperties
       }
     >
-      <button
+      <Button
         type="button"
+        unstyled
         className={styles.groupHeader}
         onClick={handleToggle}
         aria-expanded={isOpen}
@@ -69,7 +71,7 @@ export default function PreviewAccordion({
         <span className={clsx(styles.chevronWrap, isOpen && styles.chevronOpen)}>
           <ChevronDown size={18} className={styles.icon} strokeWidth={2.5} />
         </span>
-      </button>
+      </Button>
 
       <div
         ref={contentRef}

@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { normalizeImageUrl, sendKakaoShare } from '@/lib/kakao-share';
+import { Button } from '@/components/ui/Button';
 
 interface KakaoShareButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   invitationUrl: string;
@@ -69,8 +70,8 @@ export function KakaoShareButton({
   ]);
 
   return (
-    <button type={type} onClick={handleClick} {...buttonProps}>
+    <Button type={type as 'button' | 'submit' | 'reset'} onClick={handleClick} {...buttonProps}>
       {children}
-    </button>
+    </Button>
   );
 }

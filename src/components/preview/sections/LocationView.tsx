@@ -153,10 +153,12 @@ const LocationView = React.memo(
             {detailAddress ? <div className={styles.detailAddress}>{detailAddress}</div> : null}
           </div>
           {locationContact ? (
-            <a href={`tel:${locationContact.replace(/[^0-9]/g, '')}`} className={styles.contact}>
-              <Phone size={14} />
-              {locationContact}
-            </a>
+            <Button asChild unstyled className={styles.contact}>
+              <a href={`tel:${locationContact.replace(/[^0-9]/g, '')}`}>
+                <Phone size={14} />
+                {locationContact}
+              </a>
+            </Button>
           ) : null}
         </div>
 
