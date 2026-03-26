@@ -66,7 +66,7 @@ export function AnimatedMarqueeHero({
     <section className={cn(styles.section, className)}>
       <div className={styles.content}>
         <motion.div
-          initial="hidden"
+          initial={false}
           animate="show"
           variants={FADE_IN_ANIMATION_VARIANTS}
           className={styles.tagline}
@@ -75,7 +75,7 @@ export function AnimatedMarqueeHero({
         </motion.div>
 
         <motion.h1
-          initial="hidden"
+          initial={false}
           animate="show"
           variants={{
             hidden: {},
@@ -97,7 +97,7 @@ export function AnimatedMarqueeHero({
         </motion.h1>
 
         <motion.p
-          initial="hidden"
+          initial={false}
           animate="show"
           variants={FADE_IN_ANIMATION_VARIANTS}
           transition={{ delay: 0.5 }}
@@ -108,7 +108,7 @@ export function AnimatedMarqueeHero({
 
         <motion.div
           className={styles.ctaWrap}
-          initial="hidden"
+          initial={false}
           animate="show"
           variants={FADE_IN_ANIMATION_VARIANTS}
           transition={{ delay: 0.6 }}
