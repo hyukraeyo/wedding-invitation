@@ -65,53 +65,40 @@ export function AnimatedMarqueeHero({
   return (
     <section className={cn(styles.section, className)}>
       <div className={styles.content}>
-        <motion.div
-          initial={false}
-          animate="show"
-          variants={FADE_IN_ANIMATION_VARIANTS}
-          className={styles.tagline}
+        <div
+          className={cn(styles.tagline, styles.animateIn, styles['delay-1'])}
         >
           {tagline}
-        </motion.div>
+        </div>
 
-        <motion.h1
-          initial={false}
-          animate="show"
-          variants={{
-            hidden: {},
-            show: {
-              transition: {
-                staggerChildren: 0.1,
-              },
-            },
-          }}
-          className={styles.title}
+        <h1
+          className={cn(
+            styles.title,
+            typeof title !== 'string' && styles.animateIn,
+            typeof title !== 'string' && styles['delay-2']
+          )}
         >
           {typeof title === 'string'
             ? title.split(' ').map((word, index) => (
-                <motion.span key={`${word}-${index}`} variants={FADE_IN_ANIMATION_VARIANTS} className={styles.word}>
+                <span
+                  key={`${word}-${index}`}
+                  className={cn(styles.word, styles.animateIn)}
+                  style={{ animationDelay: `${0.2 + (index * 0.1)}s` }}
+                >
                   {word}&nbsp;
-                </motion.span>
+                </span>
               ))
             : title}
-        </motion.h1>
+        </h1>
 
-        <motion.p
-          initial={false}
-          animate="show"
-          variants={FADE_IN_ANIMATION_VARIANTS}
-          transition={{ delay: 0.5 }}
-          className={styles.description}
+        <p
+          className={cn(styles.description, styles.animateIn, styles['delay-3'])}
         >
           {description}
-        </motion.p>
+        </p>
 
         <motion.div
-          className={styles.ctaWrap}
-          initial={false}
-          animate="show"
-          variants={FADE_IN_ANIMATION_VARIANTS}
-          transition={{ delay: 0.6 }}
+          className={cn(styles.ctaWrap, styles.animateIn, styles['delay-4'])}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
@@ -119,18 +106,8 @@ export function AnimatedMarqueeHero({
         </motion.div>
       </div>
 
-      <div className={styles.marquee}>
-        <motion.div
-          className={styles.marqueeTrack}
-          animate={{
-            x: ['0%', '-50%'],
-            transition: {
-              ease: 'linear',
-              duration: 40,
-              repeat: Infinity,
-            },
-          }}
-        >
+      <div className={cn(styles.marquee, styles.animateIn, styles['delay-5'])}>
+        <div className={styles.marqueeTrack}>
           {duplicatedImages.map((src, index) => (
             <div
               key={`${src}-${index}`}
@@ -146,7 +123,7 @@ export function AnimatedMarqueeHero({
               />
             </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   );

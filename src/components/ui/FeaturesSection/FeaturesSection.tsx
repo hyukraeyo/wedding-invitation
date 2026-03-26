@@ -57,7 +57,7 @@ export function FeaturesSection() {
       <div className={styles.container}>
         <motion.div
           className={styles.header}
-          initial="visible"
+          initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-100px' }}
           variants={itemVariants}
@@ -75,7 +75,7 @@ export function FeaturesSection() {
         <motion.div
           className={styles.grid}
           variants={containerVariants}
-          initial="visible"
+          initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-50px' }}
         >
@@ -90,7 +90,7 @@ export function FeaturesSection() {
 
         <motion.div
           className={styles.actions}
-          initial="visible"
+          initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={itemVariants}

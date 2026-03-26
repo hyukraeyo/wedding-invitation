@@ -121,9 +121,9 @@ export default function HomePage() {
       />
       <main className={styles.main}>
         <div className={styles.heroFeaturesFlow}>
-          <section className={styles.heroSection} aria-label="바나나웨딩 홈 히어로">
+          <div className={styles.heroSection} aria-label="바나나웨딩 홈 히어로">
             <AnimatedHeroDemo />
-          </section>
+          </div>
           <FeaturesSection />
         </div>
       </main>
